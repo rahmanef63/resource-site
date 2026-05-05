@@ -83,6 +83,9 @@ export function ThreeColumnLayoutAdvanced(rawProps: ThreeColumnLayoutAdvancedPro
   const centerLabel = rawProps.centerLabel ?? presetConfig.centerLabel ?? "Main Content"
   const rightLabel = rawProps.rightLabel ?? presetConfig.rightLabel ?? "Right Panel"
 
+  // Hierarchy tone (default "feature" so plain usage is unchanged).
+  const tone = rawProps.tone ?? "feature"
+
   // Responsive - use defaults if not provided
   const collapseLeftAt =
     rawProps.collapseLeftAt ?? presetConfig.collapseLeftAt ?? DEFAULT_COLLAPSE_LEFT_AT
@@ -379,6 +382,7 @@ export function ThreeColumnLayoutAdvanced(rawProps: ThreeColumnLayoutAdvancedPro
                   label={leftLabel}
                   onClick={toggleLeft}
                   width={collapsedWidth}
+                  tone={tone}
                 />
               ) : (
                 <>
@@ -392,6 +396,7 @@ export function ThreeColumnLayoutAdvanced(rawProps: ThreeColumnLayoutAdvancedPro
                         onToggle={toggleLeft}
                         label={leftLabel}
                         showButton={effectiveShowLeftCollapseButton}
+                        tone={tone}
                       >
                         {leftLabel}
                       </PanelHeader>
@@ -469,6 +474,7 @@ export function ThreeColumnLayoutAdvanced(rawProps: ThreeColumnLayoutAdvancedPro
                   label={rightLabel}
                   onClick={toggleRight}
                   width={collapsedWidth}
+                  tone={tone}
                 />
               ) : (
                 <>
@@ -482,6 +488,7 @@ export function ThreeColumnLayoutAdvanced(rawProps: ThreeColumnLayoutAdvancedPro
                         onToggle={toggleRight}
                         label={rightLabel}
                         showButton={effectiveShowRightCollapseButton}
+                        tone={tone}
                       >
                         {rightLabel}
                       </PanelHeader>

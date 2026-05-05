@@ -15,6 +15,7 @@ import {
   buildInitCommand,
 } from "@/lib/build/command-builder";
 import { useFeatureContext, useFeatureManifest } from "@/components/site/feature-context";
+import { ThreeColumnLayoutAdvanced } from "@/components/previews/three-column/ThreeColumnLayout";
 import { TemplatePicker, type TemplateOption } from "./template-picker";
 import { FeaturePicker, type FeatureOption } from "./feature-picker";
 import { LivePreview } from "./live-preview";
@@ -22,10 +23,19 @@ import { BuildInspector } from "./build-inspector";
 import { type ParsedRr } from "./existing-rr-uploader";
 
 /**
- * Page-level state container. Renders nothing visible — work happens via the
- * feature-manifest registered with DocsShell. The DocsShell three-column then
- * wraps everything; left = DocsSidebar (untouched), center = builder canvas,
- * right = consolidated inspector (project form / skills / command output).
+ * Page-level state container for /build.
+ *
+ * Layout hierarchy (color-coded so users don't conflate the two):
+ *
+ *   OUTER 3-col (DocsShell, tone="layout" → blue):
+ *     left  = DocsSidebar (docs nav)
+ *     center = BuilderCenter (this file's nested 3-col below)
+ *     right = BuildInspector (project form / skills tabs / sticky command)
+ *
+ *   INNER 3-col (BuilderCenter, tone="feature" → muted):
+ *     left  = TemplatePicker
+ *     center = LivePreview
+ *     right = FeaturePicker
  */
 export function BuildShell() {
   const [mode, setMode] = React.useState<"new" | "existing">("new");
@@ -61,7 +71,6 @@ export function BuildShell() {
     [],
   );
 
-  // Hydrate selections from uploaded rr.json when in existing mode.
   React.useEffect(() => {
     if (!rr || mode !== "existing") return;
     setSel({
@@ -86,7 +95,6 @@ export function BuildShell() {
     }));
   }, []);
 
-  // Compute command blocks per mode — passed into the inspector.
   const newBlocks = React.useMemo(() => [buildInitCommand(sel), buildAgentPrompt(sel)], [sel]);
   const additions: BuildSelection = React.useMemo(() => {
     const haveFeatures = new Set((rr?.features ?? []).map((f) => f.slug));
@@ -143,8 +151,6 @@ export function BuildShell() {
 
   useFeatureManifest(manifest);
 
-  // Default-open the right inspector on /build — it holds the primary controls
-  // (project form / skills / command output). Run once on mount.
   const { setRightOpen } = useFeatureContext();
   React.useEffect(() => {
     setRightOpen(true);
@@ -154,7 +160,7 @@ export function BuildShell() {
   return null;
 }
 
-// ─── Center pane — 2 vertical sections: pickers (top) + preview (bottom) ──
+// ─── Inner nested 3-col canvas ────────────────────────────────────────────
 
 function BuilderCenter({
   mode, setMode,
@@ -174,47 +180,58 @@ function BuilderCenter({
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      {/* Top bar — mode tabs + pickers in compact 2-col strip */}
-      <div className="border-b bg-background">
-        <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
-          <Tabs value={mode} onValueChange={(v) => setMode(v as "new" | "existing")}>
-            <TabsList>
-              <TabsTrigger value="new" className="gap-1.5">
-                <Wand2 className="size-3.5" /> New project
-              </TabsTrigger>
-              <TabsTrigger value="existing" className="gap-1.5">
-                <Sparkles className="size-3.5" /> Existing project
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
-          <p className="text-[11px] text-muted-foreground">
-            Pickers below ↓ · Setup &amp; Skills in the right panel ↦
-          </p>
-        </div>
+      {/* Mode tabs sit ABOVE the inner 3-col, full width of center */}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b bg-background px-4 py-2 sm:px-6">
+        <Tabs value={mode} onValueChange={(v) => setMode(v as "new" | "existing")}>
+          <TabsList className="h-8">
+            <TabsTrigger value="new" className="h-7 gap-1.5 text-[11px]">
+              <Wand2 className="size-3.5" /> New project
+            </TabsTrigger>
+            <TabsTrigger value="existing" className="h-7 gap-1.5 text-[11px]">
+              <Sparkles className="size-3.5" /> Existing project
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+        <p className="text-[11px] text-muted-foreground">
+          Templates ← preview → Features · setup &amp; skills in the right panel ↦
+        </p>
+      </div>
 
-        {/* Pickers row — collapsible accordion lists, side-by-side on wide screens. */}
-        <div className="grid grid-cols-1 gap-3 border-t bg-muted/10 px-4 py-3 sm:px-6 lg:grid-cols-2">
-          <TemplatePicker
+      {/* Inner 3-column. tone="feature" → muted headers (default). */}
+      <div className="min-h-0 flex-1">
+        <ThreeColumnLayoutAdvanced
+          left={<div className="p-3"><TemplatePicker
             templates={templates}
             selected={sel.template}
             onSelect={(slug) => setSel((s) => ({ ...s, template: slug }))}
-          />
-          <FeaturePicker
+          /></div>}
+          center={(
+            <div className="h-full overflow-auto p-3 sm:p-4">
+              <LivePreview
+                templateSlug={sel.template}
+                publicPath={tplMeta?.previewPath}
+                adminPath={tplMeta?.adminPreviewPath}
+                defaultSurface={tplMeta?.defaultSurface}
+              />
+            </div>
+          )}
+          right={<div className="p-3"><FeaturePicker
             features={featureOptions}
             selected={sel.features}
             highlightTemplate={sel.template}
             onToggle={toggleFeature}
-          />
-        </div>
-      </div>
-
-      {/* Live preview takes the rest of the canvas */}
-      <div className="min-h-0 flex-1 overflow-auto p-4 sm:p-6">
-        <LivePreview
-          templateSlug={sel.template}
-          publicPath={tplMeta?.previewPath}
-          adminPath={tplMeta?.adminPreviewPath}
-          defaultSurface={tplMeta?.defaultSurface}
+          /></div>}
+          leftLabel="Templates"
+          rightLabel="Features"
+          leftWidth={260}
+          rightWidth={260}
+          centerMinWidth={320}
+          showCollapseButtons
+          resizable
+          persistState
+          storageKey="builder-inner-v1"
+          tone="feature"
+          className="h-full"
         />
       </div>
     </div>

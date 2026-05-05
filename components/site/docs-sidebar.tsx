@@ -84,7 +84,7 @@ export function DocsSidebar() {
                       item.disabled
                         ? "pointer-events-none opacity-50"
                         : active
-                          ? "bg-accent font-medium text-foreground"
+                          ? "bg-blue-500/15 font-medium text-blue-700 dark:text-blue-300"
                           : "text-muted-foreground hover:bg-accent/40 hover:text-foreground",
                     )}
                   >

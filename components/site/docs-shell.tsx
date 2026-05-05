@@ -76,6 +76,7 @@ function DocsShellInner({ children }: { children: React.ReactNode }) {
         resizable
         persistState
         storageKey="docs-shell-v1"
+        tone="layout"
         className="h-full"
       />
     </div>

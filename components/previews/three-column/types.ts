@@ -117,6 +117,13 @@ export interface ThreeColumnLayoutAdvancedProps {
    * - null: hides the header entirely (use when left content has its own header)
    */
   mobileLeftHeader?: ReactNode
+
+  /**
+   * Tone for left/right panel headers + collapsed indicators. "layout" applies
+   * a blue accent to mark the top-level (outer) shell. "feature" is the default
+   * muted look for nested inner shells. Lets users tell which 3-col they're in.
+   */
+  tone?: PanelTone
 }
 
 export interface ThreeColumnContextValue {
@@ -133,12 +140,22 @@ export interface CollapseButtonProps {
   label?: string
 }
 
+/**
+ * Tone signals which level of nesting a panel belongs to:
+ *   "layout"  → outer page shell (DocsShell). Blue accent so user
+ *               recognizes it as the top-level chrome.
+ *   "feature" → inner / nested 3-col inside a feature page (e.g. /build).
+ *               Default muted styling so the inner level reads as secondary.
+ */
+export type PanelTone = "layout" | "feature"
+
 export interface PanelHeaderProps {
   side: "left" | "right"
   collapsed: boolean
   onToggle: () => void
   label?: string
   showButton: boolean
+  tone?: PanelTone
   children?: ReactNode
 }
 
@@ -147,6 +164,7 @@ export interface CollapsedPanelProps {
   label?: string
   onClick: () => void
   width: number
+  tone?: PanelTone
 }
 
 export interface PanelProps {
