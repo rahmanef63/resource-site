@@ -23,8 +23,8 @@ export function LivePreview({
 
   React.useEffect(() => { setSurface(defaultSurface); }, [defaultSurface, templateSlug]);
 
-  // Blank template = no preview, but features/skills can still be picked.
-  const isBlank = templateSlug === "blank";
+  // "Existing project" mode — user uploads their own rr.json. No live preview.
+  const isExisting = templateSlug === "_existing";
 
   if (!templateSlug) {
     return (
@@ -32,21 +32,23 @@ export function LivePreview({
         <Eye className="size-6 text-muted-foreground" />
         <p className="mt-3 text-sm font-medium">Pick a template to preview</p>
         <p className="mt-1 max-w-xs text-xs text-muted-foreground">
-          Or pick the <span className="font-medium text-foreground">Blank</span> template to use
-          features &amp; skills only — no scaffold.
+          Or pick <span className="font-medium text-foreground">Existing project</span> to extend
+          an rr.json you already have.
         </p>
       </div>
     );
   }
 
-  if (isBlank) {
+  if (isExisting) {
     return (
       <div className="flex h-[480px] flex-col items-center justify-center rounded-xl border border-dashed bg-muted/20 p-6 text-center">
         <Eye className="size-6 text-muted-foreground" />
-        <p className="mt-3 text-sm font-medium">Blank — no template preview</p>
+        <p className="mt-3 text-sm font-medium">Existing project — no preview</p>
         <p className="mt-1 max-w-xs text-xs text-muted-foreground">
-          Pick features and skills on the left. <code className="rounded bg-muted px-1">rr.json</code>{" "}
-          will scaffold without pulling a template folder.
+          Upload your <code className="rounded bg-muted px-1">rr.json</code> in the{" "}
+          <span className="font-medium text-foreground">Project</span> tab. Pick features and
+          skills on the left — the right panel emits the right{" "}
+          <code className="rounded bg-muted px-1">add</code> commands.
         </p>
       </div>
     );
