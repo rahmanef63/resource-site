@@ -23,13 +23,30 @@ export function LivePreview({
 
   React.useEffect(() => { setSurface(defaultSurface); }, [defaultSurface, templateSlug]);
 
+  // Blank template = no preview, but features/skills can still be picked.
+  const isBlank = templateSlug === "blank";
+
   if (!templateSlug) {
     return (
       <div className="flex h-[480px] flex-col items-center justify-center rounded-xl border border-dashed bg-muted/20 p-6 text-center">
         <Eye className="size-6 text-muted-foreground" />
         <p className="mt-3 text-sm font-medium">Pick a template to preview</p>
         <p className="mt-1 max-w-xs text-xs text-muted-foreground">
-          Live iframe of the public + admin surfaces. Resize, rotate, switch device.
+          Or pick the <span className="font-medium text-foreground">Blank</span> template to use
+          features &amp; skills only — no scaffold.
+        </p>
+      </div>
+    );
+  }
+
+  if (isBlank) {
+    return (
+      <div className="flex h-[480px] flex-col items-center justify-center rounded-xl border border-dashed bg-muted/20 p-6 text-center">
+        <Eye className="size-6 text-muted-foreground" />
+        <p className="mt-3 text-sm font-medium">Blank — no template preview</p>
+        <p className="mt-1 max-w-xs text-xs text-muted-foreground">
+          Pick features and skills on the left. <code className="rounded bg-muted px-1">rr.json</code>{" "}
+          will scaffold without pulling a template folder.
         </p>
       </div>
     );
@@ -58,7 +75,13 @@ export function LivePreview({
         )}
       </div>
       {src ? (
-        <PreviewFrame src={src} defaultView="desktop" defaultZoom={0.55} className="h-[520px]" />
+        <PreviewFrame
+          src={src}
+          defaultView="desktop"
+          defaultZoom={0.55}
+          viewControls="dropdown"
+          className="h-[520px]"
+        />
       ) : (
         <div className="flex h-[400px] items-center justify-center rounded-xl border border-dashed text-xs text-muted-foreground">
           No {surface} preview available for this template.

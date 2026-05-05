@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Sparkles, Wand2 } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator";
 import { layouts } from "@/lib/content/layouts";
 import { features as featureCatalog } from "@/lib/content/features";
 import {
@@ -10,6 +11,7 @@ import {
   type BuildSelection,
 } from "@/lib/build/types";
 import {
+  BLANK_TEMPLATE_SLUG,
   buildAgentPrompt,
   buildExistingCommands,
   buildInitCommand,
@@ -22,27 +24,36 @@ import { LivePreview } from "./live-preview";
 import { BuildInspector } from "./build-inspector";
 import { type ParsedRr } from "./existing-rr-uploader";
 
+/** "Blank" placeholder template — lets users pick features/skills only without
+ *  breaking the rr.json constraint that requires a template entry. */
+const BLANK_TEMPLATE: TemplateOption = {
+  slug: BLANK_TEMPLATE_SLUG,
+  title: "Blank (no template)",
+  description: "Start without a template. rr.json scaffolds with features + skills only.",
+  category: "blank",
+};
+
 /**
  * Page-level state container for /build.
  *
- * Layout hierarchy (color-coded so users don't conflate the two):
+ * Layout hierarchy (color-coded):
  *
  *   OUTER 3-col (DocsShell, tone="layout" → blue):
  *     left  = DocsSidebar (docs nav)
- *     center = BuilderCenter (this file's nested 3-col below)
- *     right = BuildInspector (project form / skills tabs / sticky command)
+ *     center = BuilderCenter (nested feature-level 3-col below)
+ *     right = (HIDDEN — no inspector at layout level)
  *
  *   INNER 3-col (BuilderCenter, tone="feature" → muted):
- *     left  = TemplatePicker
- *     center = LivePreview
- *     right = FeaturePicker
+ *     left  = TemplatePicker, plus FeaturePicker once a template is selected
+ *     center = LivePreview iframe (responsive picker = dropdown)
+ *     right = BuildInspector (project form / skills tabs / sticky command output)
  */
 export function BuildShell() {
   const [mode, setMode] = React.useState<"new" | "existing">("new");
   const [sel, setSel] = React.useState<BuildSelection>(EMPTY_SELECTION);
   const [rr, setRr] = React.useState<ParsedRr | null>(null);
 
-  const templates: TemplateOption[] = React.useMemo(
+  const realTemplates: TemplateOption[] = React.useMemo(
     () =>
       layouts
         .filter((l) => l.category === "website-template")
@@ -57,6 +68,12 @@ export function BuildShell() {
           tags: l.tags,
         })),
     [],
+  );
+
+  // Blank first → quick path for features-only flow.
+  const templates: TemplateOption[] = React.useMemo(
+    () => [BLANK_TEMPLATE, ...realTemplates],
+    [realTemplates],
   );
 
   const featureOptions: FeatureOption[] = React.useMemo(
@@ -108,6 +125,9 @@ export function BuildShell() {
   }, [sel, rr]);
   const existingBlocks = React.useMemo(() => [buildExistingCommands(additions)], [additions]);
 
+  // Manifest exposes ONLY the center tab — no inspector. The right outer panel
+  // stays collapsed/hidden so layout-level chrome (blue) and feature-level
+  // config (muted) don't get visually conflated.
   const manifest = React.useMemo(
     () => ({
       title: "Bundle Builder",
@@ -121,29 +141,20 @@ export function BuildShell() {
               setMode={setMode}
               sel={sel}
               setSel={setSel}
+              rr={rr}
+              setRr={setRr}
               templates={templates}
               featureOptions={featureOptions}
               toggleFeature={toggleFeature}
+              toggleSkill={toggleSkill}
+              commandBlocks={mode === "new" ? newBlocks : existingBlocks}
+              filename={mode === "new" ? "scaffold.sh" : "add-to-existing.sh"}
             />
           ),
         },
       ],
       defaultTab: "builder",
-      inspector: {
-        title: "Setup",
-        render: () => (
-          <BuildInspector
-            mode={mode}
-            sel={sel}
-            setSel={setSel}
-            rr={rr}
-            setRr={setRr}
-            toggleSkill={toggleSkill}
-            commandBlocks={mode === "new" ? newBlocks : existingBlocks}
-            filename={mode === "new" ? "scaffold.sh" : "add-to-existing.sh"}
-          />
-        ),
-      },
+      // No `inspector` → DocsShell hides the outer right panel on /build.
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [mode, sel, rr, templates, featureOptions, toggleFeature, toggleSkill, newBlocks, existingBlocks],
@@ -151,9 +162,10 @@ export function BuildShell() {
 
   useFeatureManifest(manifest);
 
+  // Make sure the layout-level right panel is closed (we don't use it here).
   const { setRightOpen } = useFeatureContext();
   React.useEffect(() => {
-    setRightOpen(true);
+    setRightOpen(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -165,22 +177,74 @@ export function BuildShell() {
 function BuilderCenter({
   mode, setMode,
   sel, setSel,
+  rr, setRr,
   templates, featureOptions,
-  toggleFeature,
+  toggleFeature, toggleSkill,
+  commandBlocks, filename,
 }: {
   mode: "new" | "existing";
   setMode: (m: "new" | "existing") => void;
   sel: BuildSelection;
   setSel: React.Dispatch<React.SetStateAction<BuildSelection>>;
+  rr: ParsedRr | null;
+  setRr: (rr: ParsedRr | null) => void;
   templates: TemplateOption[];
   featureOptions: FeatureOption[];
   toggleFeature: (slug: string) => void;
+  toggleSkill: (slug: string) => void;
+  commandBlocks: import("@/lib/build/command-builder").CommandBlock[];
+  filename: string;
 }) {
   const tplMeta = templates.find((t) => t.slug === sel.template) ?? null;
+  const templateChosen = sel.template !== null;
+
+  const innerLeft = (
+    <div className="space-y-4 p-3">
+      <TemplatePicker
+        templates={templates}
+        selected={sel.template}
+        onSelect={(slug) => setSel((s) => ({ ...s, template: slug }))}
+      />
+      {templateChosen && (
+        <>
+          <Separator />
+          <FeaturePicker
+            features={featureOptions}
+            selected={sel.features}
+            highlightTemplate={sel.template === BLANK_TEMPLATE_SLUG ? null : sel.template}
+            onToggle={toggleFeature}
+          />
+        </>
+      )}
+    </div>
+  );
+
+  const innerCenter = (
+    <div className="h-full overflow-auto p-3 sm:p-4">
+      <LivePreview
+        templateSlug={sel.template}
+        publicPath={tplMeta?.previewPath}
+        adminPath={tplMeta?.adminPreviewPath}
+        defaultSurface={tplMeta?.defaultSurface}
+      />
+    </div>
+  );
+
+  const innerRight = (
+    <BuildInspector
+      mode={mode}
+      sel={sel}
+      setSel={setSel}
+      rr={rr}
+      setRr={setRr}
+      toggleSkill={toggleSkill}
+      commandBlocks={commandBlocks}
+      filename={filename}
+    />
+  );
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      {/* Mode tabs sit ABOVE the inner 3-col, full width of center */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b bg-background px-4 py-2 sm:px-6">
         <Tabs value={mode} onValueChange={(v) => setMode(v as "new" | "existing")}>
           <TabsList className="h-8">
@@ -193,38 +257,19 @@ function BuilderCenter({
           </TabsList>
         </Tabs>
         <p className="text-[11px] text-muted-foreground">
-          Templates ← preview → Features · setup &amp; skills in the right panel ↦
+          Templates &amp; Features ← preview → Setup &amp; Skills
         </p>
       </div>
 
-      {/* Inner 3-column. tone="feature" → muted headers (default). */}
       <div className="min-h-0 flex-1">
         <ThreeColumnLayoutAdvanced
-          left={<div className="p-3"><TemplatePicker
-            templates={templates}
-            selected={sel.template}
-            onSelect={(slug) => setSel((s) => ({ ...s, template: slug }))}
-          /></div>}
-          center={(
-            <div className="h-full overflow-auto p-3 sm:p-4">
-              <LivePreview
-                templateSlug={sel.template}
-                publicPath={tplMeta?.previewPath}
-                adminPath={tplMeta?.adminPreviewPath}
-                defaultSurface={tplMeta?.defaultSurface}
-              />
-            </div>
-          )}
-          right={<div className="p-3"><FeaturePicker
-            features={featureOptions}
-            selected={sel.features}
-            highlightTemplate={sel.template}
-            onToggle={toggleFeature}
-          /></div>}
+          left={innerLeft}
+          center={innerCenter}
+          right={innerRight}
           leftLabel="Templates"
-          rightLabel="Features"
-          leftWidth={260}
-          rightWidth={260}
+          rightLabel="Setup"
+          leftWidth={280}
+          rightWidth={340}
           centerMinWidth={320}
           showCollapseButtons
           resizable

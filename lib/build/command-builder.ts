@@ -12,11 +12,14 @@ export type CommandBlock = {
   script: string;
 };
 
+export const BLANK_TEMPLATE_SLUG = "blank";
+
 export function buildInitCommand(sel: BuildSelection): CommandBlock {
   const { project, template, features, skills } = sel;
   const app = sanitize(project.appName) || "my-app";
   const parts = [`npx rahman-resources@latest init ${app}`];
-  if (template) parts.push(`--template ${template}`);
+  // Treat "blank" template as no real template — only the rr.json scaffold.
+  if (template && template !== BLANK_TEMPLATE_SLUG) parts.push(`--template ${template}`);
   if (features.length) parts.push(`--features ${features.join(",")}`);
   if (skills.length) parts.push(`--skills ${skills.join(",")}`);
   const script = parts.join(" \\\n  ");
@@ -28,7 +31,9 @@ export function buildExistingCommands(sel: BuildSelection): CommandBlock {
     "# Run from inside an existing rr.json project (root of your app).",
     "# Each command patches rr.json + installs into the right slice folder.",
   ];
-  if (sel.template) lines.push(`npx rahman-resources@latest add ${sel.template}`);
+  if (sel.template && sel.template !== BLANK_TEMPLATE_SLUG) {
+    lines.push(`npx rahman-resources@latest add ${sel.template}`);
+  }
   for (const f of sel.features) lines.push(`npx rahman-resources@latest add ${f}`);
   for (const s of sel.skills) lines.push(`npx rahman-resources@latest add-skill ${s}`);
   if (lines.length === 2) lines.push("# (no items selected)");

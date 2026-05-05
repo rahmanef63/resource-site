@@ -20,6 +20,13 @@ import {
   ZoomOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import {
   PREVIEW_PRESETS,
@@ -51,6 +58,12 @@ type Props = {
   maxZoom?: number;
   className?: string;
   compact?: boolean;
+  /**
+   * Render style for the responsive view picker.
+   * - "buttons" (default): inline icon-button strip.
+   * - "dropdown": single Select — matches the canvas pattern at /layouts/[slug].
+   */
+  viewControls?: "buttons" | "dropdown";
 };
 
 export function PreviewFrame({
@@ -61,6 +74,7 @@ export function PreviewFrame({
   maxZoom = 1.5,
   className,
   compact = false,
+  viewControls = "buttons",
 }: Props) {
   const [view, setView] = React.useState<PreviewView>(defaultView);
   const [orientation, setOrientation] = React.useState<PreviewOrientation>("portrait");
@@ -78,7 +92,7 @@ export function PreviewFrame({
     <>
       <div className={cn("overflow-hidden rounded-xl border bg-card", className)}>
         <div className="flex flex-wrap items-center justify-between gap-2 border-b bg-muted/30 px-3 py-2">
-          {!compact && (
+          {!compact && viewControls === "buttons" && (
             <div className="flex items-center gap-0.5 rounded-md border bg-background p-0.5">
               {PREVIEW_VIEW_ORDER.map((k) => {
                 const Icon = VIEW_ICONS[k];
@@ -101,6 +115,31 @@ export function PreviewFrame({
                 );
               })}
             </div>
+          )}
+
+          {!compact && viewControls === "dropdown" && (
+            <Select value={view} onValueChange={(v) => setView(v as PreviewView)}>
+              <SelectTrigger className="h-7 w-[170px] gap-1.5 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {PREVIEW_VIEW_ORDER.map((k) => {
+                  const Icon = VIEW_ICONS[k];
+                  const p = PREVIEW_PRESETS[k];
+                  return (
+                    <SelectItem key={k} value={k} className="text-xs">
+                      <div className="flex w-full items-center gap-2">
+                        <Icon className="size-3.5 text-muted-foreground" />
+                        <span>{p.label}</span>
+                        <span className="ml-auto pl-3 font-mono text-[10px] text-muted-foreground">
+                          {p.width}×{p.height}
+                        </span>
+                      </div>
+                    </SelectItem>
+                  );
+                })}
+              </SelectContent>
+            </Select>
           )}
 
           <div className="flex items-center gap-1.5">
