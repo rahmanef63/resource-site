@@ -220,6 +220,7 @@ function CodeTab({
   const repo = "resource-site";
   const branch = "main";
   const pulls = pullPaths && pullPaths.length > 0 ? pullPaths : [`cookbook/layouts/${slug}`];
+  const initCmd = `npx rahman-resources init my-app\ncd my-app`;
   const cliCmd = `npx rahman-resources add ${slug} my-app`;
   const degitCmd = pulls
     .map((p) => `npx tiged --force ${owner}/${repo}/${p}#${branch} my-app/${p}`)
@@ -235,7 +236,17 @@ function CodeTab({
     <div className="h-full space-y-4 overflow-auto p-4">
       <section>
         <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-          One-shot install (auto-pulls deps)
+          Fresh project — scaffold first
+        </p>
+        <CodeBlock code={initCmd} language="bash" filename="bootstrap.sh" />
+        <p className="mt-1 text-[10px] text-muted-foreground">
+          Skip if you already have a Next 16 project.
+        </p>
+      </section>
+
+      <section>
+        <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+          Then drop in this template (auto-pulls deps)
         </p>
         <CodeBlock code={cliCmd} language="bash" filename="install.sh" />
       </section>

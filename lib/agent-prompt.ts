@@ -54,6 +54,24 @@ export function buildAgentPrompt({
     pullPaths = [`cookbook/layouts/${layoutSlug}`];
   }
 
+  // Step 0 — fresh project (optional)
+  lines.push(`## 0. (Fresh project only) Scaffold via \`init\``);
+  lines.push("");
+  lines.push("Skip this section if you already have a Next 16 project.");
+  lines.push("");
+  lines.push("```bash");
+  lines.push(`npx rahman-resources init ${projectName}`);
+  lines.push(`cd ${projectName}`);
+  lines.push("cp .env.example .env.local   # fill NEXT_PUBLIC_CONVEX_URL");
+  lines.push("npm install --legacy-peer-deps");
+  lines.push("npx convex dev --once         # generates convex/_generated");
+  lines.push("```");
+  lines.push("");
+  lines.push(
+    "`init` ships a minimal Next 16 + React 19 + Tailwind 4 + Convex + shadcn/ui skeleton (~18 files).",
+  );
+  lines.push("");
+
   // Step 1 — pull explicit folders
   lines.push(`## 1. Pull only these folders`);
   lines.push("");
