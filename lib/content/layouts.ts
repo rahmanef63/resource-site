@@ -1,9 +1,13 @@
 import type { PreviewView } from "@/lib/preview-presets";
 
+export type LayoutStatus = "stable" | "draft" | "coming-soon";
+
 export type LayoutEntry = {
   slug: string;
   title: string;
   category: "marketing" | "dashboard" | "cms" | "template" | "website-template";
+  /** Build-readiness signal. Defaults to "stable" when omitted. */
+  status?: LayoutStatus;
   description: string;
   source: string;
   repoPath: string;
@@ -462,6 +466,120 @@ export default function Layout({ children }) {
 }`,
     agentRecipe:
       "Port kitab-core slices/cms-lite/ into your project's app/(cms)/ route group. Fetch products/pages from Convex via api.cmsLite.* queries.",
+  },
+  {
+    slug: "saas-marketing-os",
+    title: "SaaS Marketing OS",
+    category: "website-template",
+    status: "stable",
+    description:
+      "Public-only marketing site for a SaaS product — landing, pricing, features, blog, changelog, about, contact. MDX-driven blog + changelog. No admin (CMS via MDX files in repo).",
+    source: "synthesized + mdx-blog feature",
+    repoPath: "app/preview/saas-marketing-os",
+    primaryFile: "app/preview/saas-marketing-os/public/page.tsx",
+    tags: ["template", "saas", "marketing", "mdx", "blog", "changelog"],
+    previewPath: "/preview/saas-marketing-os/public",
+    defaultSurface: "public",
+    pullPaths: [
+      "app/preview/saas-marketing-os",
+      "components/templates/_shared",
+      "components/templates/saas-marketing",
+    ],
+    files: [
+      "app/preview/saas-marketing-os/public/layout.tsx",
+      "app/preview/saas-marketing-os/public/page.tsx",
+      "app/preview/saas-marketing-os/public/pricing/page.tsx",
+      "app/preview/saas-marketing-os/public/features/page.tsx",
+      "app/preview/saas-marketing-os/public/blog/page.tsx",
+      "app/preview/saas-marketing-os/public/blog/[slug]/page.tsx",
+      "app/preview/saas-marketing-os/public/changelog/page.tsx",
+      "app/preview/saas-marketing-os/public/about/page.tsx",
+      "app/preview/saas-marketing-os/public/contact/page.tsx",
+      "components/templates/saas-marketing/shared/site-config.ts",
+      "components/templates/saas-marketing/shared/nav-config.ts",
+      "components/templates/saas-marketing/shared/types.ts",
+      "components/templates/saas-marketing/shared/store.tsx",
+      "components/templates/saas-marketing/shared/seed.ts",
+      "components/templates/saas-marketing/slices/home/HomePage.tsx",
+      "components/templates/saas-marketing/slices/pricing/PricingPage.tsx",
+      "components/templates/saas-marketing/slices/features/FeaturesPage.tsx",
+      "components/templates/saas-marketing/slices/blog/BlogList.tsx",
+      "components/templates/saas-marketing/slices/blog/BlogDetail.tsx",
+      "components/templates/saas-marketing/slices/changelog/ChangelogPage.tsx",
+      "components/templates/saas-marketing/slices/about/AboutPage.tsx",
+      "components/templates/saas-marketing/slices/contact/ContactPage.tsx",
+    ],
+    dependencies: [
+      "next@^16",
+      "react@^19",
+      "react-dom@^19",
+      "lucide-react",
+      "sonner",
+      "next-themes",
+      "tailwindcss@^4",
+      "@radix-ui/react-slot",
+    ],
+    exampleCode: `// app/(public)/page.tsx
+import { HomePage } from "@/components/templates/saas-marketing/slices/home/HomePage";
+export default function Page() { return <HomePage />; }`,
+    agentRecipe:
+      "SaaS Marketing OS = public-only marketing template. Blog + changelog use MDX (add the mdx-blog feature). Edit components/templates/saas-marketing/shared/site-config.ts to set product name, tagline, pricing tiers, contact email.",
+  },
+  {
+    slug: "kreator-studio-os",
+    title: "Kreator Studio OS",
+    category: "website-template",
+    status: "coming-soon",
+    description:
+      "Creator/influencer studio — newsletter-first public site + admin for posts, drops, audience segments. Resend + Midtrans tip jar. Coming soon.",
+    source: "synthesized",
+    repoPath: "app/preview/kreator-studio-os",
+    primaryFile: "README.md",
+    tags: ["template", "creator", "newsletter", "coming-soon"],
+    exampleCode: `// coming soon`,
+    agentRecipe: "Coming soon — track at /build for updates.",
+  },
+  {
+    slug: "konsultan-os",
+    title: "Konsultan OS",
+    category: "website-template",
+    status: "coming-soon",
+    description:
+      "Consultancy site — services catalog, case studies, booking via Cal.com, Midtrans deposits. Public + lightweight admin. Coming soon.",
+    source: "synthesized",
+    repoPath: "app/preview/konsultan-os",
+    primaryFile: "README.md",
+    tags: ["template", "consultant", "booking", "coming-soon"],
+    exampleCode: `// coming soon`,
+    agentRecipe: "Coming soon — track at /build for updates.",
+  },
+  {
+    slug: "wirausaha-os",
+    title: "Wirausaha OS",
+    category: "website-template",
+    status: "coming-soon",
+    description:
+      "Indonesian SMB toolkit — public storefront + admin (catalog, orders, Midtrans + QRIS, leads). Bahasa Indonesia first. Coming soon.",
+    source: "synthesized",
+    repoPath: "app/preview/wirausaha-os",
+    primaryFile: "README.md",
+    tags: ["template", "smb", "ecommerce", "midtrans", "indonesia", "coming-soon"],
+    exampleCode: `// coming soon`,
+    agentRecipe: "Coming soon — track at /build for updates.",
+  },
+  {
+    slug: "riset-kit",
+    title: "Riset Kit",
+    category: "website-template",
+    status: "coming-soon",
+    description:
+      "Research / knowledge-base template — Convex vector search + MDX + threaded comments. Public reading + admin authoring. Coming soon.",
+    source: "synthesized",
+    repoPath: "app/preview/riset-kit",
+    primaryFile: "README.md",
+    tags: ["template", "research", "knowledge-base", "vector-search", "coming-soon"],
+    exampleCode: `// coming soon`,
+    agentRecipe: "Coming soon — track at /build for updates.",
   },
 ];
 

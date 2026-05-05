@@ -17,6 +17,7 @@ export type TemplateOption = {
   title: string;
   description: string;
   category: string;
+  status?: "stable" | "draft" | "coming-soon";
   previewPath?: string;
   adminPreviewPath?: string;
   defaultSurface?: "public" | "admin";
@@ -57,18 +58,21 @@ export function TemplatePicker({
       <ul className="space-y-1">
         {templates.map((t) => {
           const on = selected === t.slug;
+          const disabled = t.status === "coming-soon";
           return (
             <li key={t.slug}>
               <div
                 className={cn(
                   "rounded-md border bg-card transition-colors",
                   on && "border-foreground/40 bg-accent/30",
+                  disabled && "opacity-60",
                 )}
               >
                 <button
                   type="button"
+                  disabled={disabled}
                   onClick={() => onSelect(on ? null : t.slug)}
-                  className="flex w-full items-center gap-2 px-2.5 py-1.5 text-left"
+                  className="flex w-full items-center gap-2 px-2.5 py-1.5 text-left disabled:cursor-not-allowed"
                 >
                   <span
                     aria-hidden
@@ -82,6 +86,20 @@ export function TemplatePicker({
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-xs font-medium">{t.title}</span>
                   </span>
+                  {t.status && t.status !== "stable" && (
+                    <Badge
+                      variant="outline"
+                      className={cn(
+                        "rounded-full text-[9px]",
+                        t.status === "coming-soon" &&
+                          "border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300",
+                        t.status === "draft" &&
+                          "border-blue-500/40 bg-blue-500/10 text-blue-700 dark:text-blue-300",
+                      )}
+                    >
+                      {t.status === "coming-soon" ? "soon" : "draft"}
+                    </Badge>
+                  )}
                   <Badge variant="outline" className="rounded-full text-[9px]">{t.category}</Badge>
                 </button>
 

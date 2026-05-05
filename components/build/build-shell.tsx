@@ -12,6 +12,7 @@ import {
   buildCommands,
   isExistingMode,
 } from "@/lib/build/command-builder";
+import { collectWarnings } from "@/lib/build/compat";
 import { useFeatureContext, useFeatureManifest } from "@/components/site/feature-context";
 import { ThreeColumnLayoutAdvanced } from "@/components/previews/three-column/ThreeColumnLayout";
 import { TemplatePicker, type TemplateOption } from "./template-picker";
@@ -60,6 +61,7 @@ export function BuildShell() {
           title: l.title,
           description: l.description,
           category: l.category,
+          status: l.status ?? "stable",
           previewPath: l.previewPath,
           adminPreviewPath: l.adminPreviewPath,
           defaultSurface: l.defaultSurface,
@@ -113,6 +115,10 @@ export function BuildShell() {
 
   const blocks = React.useMemo(() => buildCommands(sel, rr ?? undefined), [sel, rr]);
   const filename = isExistingMode(sel) ? "add-to-existing.sh" : "scaffold.sh";
+  const warnings = React.useMemo(
+    () => (isExistingMode(sel) ? [] : collectWarnings(sel.template, sel.features)),
+    [sel],
+  );
 
   // Manifest — single tab, no inspector. Outer right panel hidden on /build.
   const manifest = React.useMemo(
@@ -134,6 +140,7 @@ export function BuildShell() {
               toggleSkill={toggleSkill}
               commandBlocks={blocks}
               filename={filename}
+              warnings={warnings}
             />
           ),
         },
@@ -141,7 +148,7 @@ export function BuildShell() {
       defaultTab: "builder",
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [sel, rr, templates, featureOptions, toggleFeature, toggleSkill, blocks, filename],
+    [sel, rr, templates, featureOptions, toggleFeature, toggleSkill, blocks, filename, warnings],
   );
 
   useFeatureManifest(manifest);
@@ -162,7 +169,7 @@ function BuilderCenter({
   rr, setRr,
   templates, featureOptions,
   toggleFeature, toggleSkill,
-  commandBlocks, filename,
+  commandBlocks, filename, warnings,
 }: {
   sel: BuildSelection;
   setSel: React.Dispatch<React.SetStateAction<BuildSelection>>;
@@ -174,6 +181,7 @@ function BuilderCenter({
   toggleSkill: (slug: string) => void;
   commandBlocks: import("@/lib/build/command-builder").CommandBlock[];
   filename: string;
+  warnings: import("@/lib/build/compat").CompatWarning[];
 }) {
   const tplMeta = templates.find((t) => t.slug === sel.template) ?? null;
 
@@ -203,7 +211,7 @@ function BuilderCenter({
 
   const innerRight = (
     <div className="h-full overflow-auto p-3">
-      <CommandOutput blocks={commandBlocks} filename={filename} />
+      <CommandOutput blocks={commandBlocks} filename={filename} warnings={warnings} />
     </div>
   );
 

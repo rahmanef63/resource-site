@@ -1,19 +1,22 @@
 "use client";
 
 import * as React from "react";
-import { Check, Copy, Terminal } from "lucide-react";
+import { AlertTriangle, Check, Copy, Terminal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CodeBlock } from "@/components/site/code-block";
 import type { CommandBlock } from "@/lib/build/command-builder";
+import type { CompatWarning } from "@/lib/build/compat";
 
 export function CommandOutput({
   blocks,
   language = "bash",
   filename = "scaffold.sh",
+  warnings = [],
 }: {
   blocks: CommandBlock[];
   language?: string;
   filename?: string;
+  warnings?: CompatWarning[];
 }) {
   const [copiedIdx, setCopiedIdx] = React.useState<number | null>(null);
   return (
@@ -22,6 +25,22 @@ export function CommandOutput({
         <Terminal className="size-4 text-muted-foreground" />
         <h3 className="text-sm font-semibold">Command</h3>
       </div>
+      {warnings.length > 0 && (
+        <div className="space-y-1.5 rounded-md border border-amber-500/40 bg-amber-500/10 p-2.5">
+          <div className="flex items-center gap-1.5 text-[11px] font-semibold text-amber-700 dark:text-amber-300">
+            <AlertTriangle className="size-3" />
+            {warnings.length} compatibility note{warnings.length === 1 ? "" : "s"}
+          </div>
+          <ul className="space-y-1 text-[10.5px] text-amber-900/90 dark:text-amber-200/90">
+            {warnings.map((w) => (
+              <li key={w.featureSlug}>
+                <span className="font-medium">{w.featureTitle}</span>
+                {w.note ? <> — {w.note}</> : null}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       {blocks.map((b, i) => (
         <div key={`${b.heading}-${i}`} className="space-y-1.5">
           <div className="flex items-center justify-between">

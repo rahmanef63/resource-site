@@ -1,0 +1,90 @@
+// Template × Feature compatibility matrix.
+//
+// Hand-curated. Not every pair is exhaustive — only entries that diverge
+// from the default "compatible" baseline appear here.
+//
+//   native       — feature is part of template's default stack (already wired)
+//   recommended  — feature pairs especially well; encourage selection
+//   warn         — works, but needs manual wiring / extra config
+//   incompatible — pair conflicts (e.g. clashing auth strategies)
+//
+// Used by build-shell to surface warnings in CommandOutput + dim conflicting
+// feature checkboxes in FeaturePicker.
+
+import { features as featureCatalog } from "@/lib/content/features";
+import { layouts } from "@/lib/content/layouts";
+
+export type CompatStatus = "native" | "recommended" | "warn" | "incompatible";
+
+export type CompatEntry = {
+  status: CompatStatus;
+  note?: string;
+};
+
+type Matrix = Record<string, Record<string, CompatEntry>>;
+
+/** template-slug → feature-slug → entry. Missing = "compatible" (silent OK). */
+const MATRIX: Matrix = {
+  "personal-brand-os": {
+    "convex-auth": { status: "native", note: "Admin shell already gated by @convex-dev/auth." },
+    "broadcast-channel-sync": { status: "native", note: "Public ↔ Admin live sync wired in StoreProvider." },
+    "mdx-blog": { status: "recommended", note: "Blog slice expects MDX bodies in Convex posts table." },
+    "ai-sdk-openrouter": { status: "recommended", note: "Chatbot + post-draft assistant compose on top." },
+    "resend-newsletter": { status: "recommended", note: "Newsletter slice already calls Resend Audiences API." },
+    "cal-com-booking": { status: "recommended", note: "Services slice has a booking placeholder slot." },
+    "midtrans-payment": { status: "warn", note: "Personal-brand has no checkout slice; you'll add one manually." },
+  },
+  "agency-studio-os": {
+    "convex-auth": { status: "native" },
+    "resend-newsletter": { status: "recommended", note: "Leads → broadcast wired through admin." },
+    "cal-com-booking": { status: "recommended", note: "Project intake form pairs with Cal.com." },
+    "mdx-blog": { status: "warn", note: "Agency template ships no blog slice — bring your own route." },
+    "midtrans-payment": { status: "warn", note: "B2B template; payment slice not included." },
+    "broadcast-channel-sync": { status: "warn", note: "Demo-only; not used by agency template by default." },
+  },
+  "saas-marketing-os": {
+    "convex-auth": { status: "recommended" },
+    "resend-newsletter": { status: "recommended" },
+    "mdx-blog": { status: "native", note: "Blog + changelog slices both render MDX." },
+    "ai-sdk-openrouter": { status: "warn", note: "Marketing site has no AI surface by default." },
+    "cal-com-booking": { status: "recommended", note: "Demo-request form can swap to Cal.com." },
+  },
+};
+
+export function getCompat(templateSlug: string | null, featureSlug: string): CompatEntry | null {
+  if (!templateSlug) return null;
+  return MATRIX[templateSlug]?.[featureSlug] ?? null;
+}
+
+export type CompatWarning = {
+  featureSlug: string;
+  featureTitle: string;
+  templateSlug: string;
+  templateTitle: string;
+  status: CompatStatus;
+  note?: string;
+};
+
+/** Collect actionable warnings for current selection — incompatible + warn only. */
+export function collectWarnings(templateSlug: string | null, selectedFeatures: string[]): CompatWarning[] {
+  if (!templateSlug) return [];
+  const tpl = layouts.find((l) => l.slug === templateSlug);
+  if (!tpl) return [];
+
+  const out: CompatWarning[] = [];
+  for (const slug of selectedFeatures) {
+    const c = getCompat(templateSlug, slug);
+    if (!c || (c.status !== "warn" && c.status !== "incompatible")) continue;
+    const f = featureCatalog.find((x) => x.slug === slug);
+    if (!f) continue;
+    out.push({
+      featureSlug: slug,
+      featureTitle: f.title,
+      templateSlug,
+      templateTitle: tpl.title,
+      status: c.status,
+      note: c.note,
+    });
+  }
+  return out;
+}
