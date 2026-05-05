@@ -1,0 +1,50 @@
+// Claude Skills inventory — mirror of packages/cli/lib/skills.json.
+// Source of truth for the builder UI's skills checklist + the MCP server's
+// rr_list_skills tool. Keep in sync with the CLI side when new skills land
+// in anthropics/skills.
+
+export type SkillCategory =
+  | "creative"
+  | "design"
+  | "development"
+  | "documents"
+  | "enterprise";
+
+export type ClaudeSkill = {
+  slug: string;
+  title: string;
+  category: SkillCategory;
+  source: "anthropics" | "rahman" | "custom";
+  /** Path inside the source repo (anthropics/skills/<path>). */
+  path: string;
+  description: string;
+};
+
+export const CLAUDE_SKILLS: ClaudeSkill[] = [
+  { slug: "algorithmic-art",      title: "Algorithmic Art",      category: "creative",   source: "anthropics", path: "skills/algorithmic-art",      description: "Generate generative-art pieces (p5.js, processing-style algorithms)." },
+  { slug: "brand-guidelines",     title: "Brand Guidelines",     category: "design",     source: "anthropics", path: "skills/brand-guidelines",     description: "Apply a brand's visual language consistently across artifacts." },
+  { slug: "canvas-design",        title: "Canvas Design",        category: "design",     source: "anthropics", path: "skills/canvas-design",        description: "Design canvas layouts (Canva-style) — slides, posters, social posts." },
+  { slug: "claude-api",           title: "Claude API",           category: "development", source: "anthropics", path: "skills/claude-api",           description: "Call the Claude API correctly — auth, models, tools, streaming patterns." },
+  { slug: "doc-coauthoring",      title: "Doc Co-authoring",     category: "enterprise", source: "anthropics", path: "skills/doc-coauthoring",      description: "Collaborate on long-form documents with section-aware editing." },
+  { slug: "docx",                 title: "DOCX",                 category: "documents",  source: "anthropics", path: "skills/docx",                 description: "Read, write, and edit Microsoft Word .docx files." },
+  { slug: "frontend-design",      title: "Frontend Design",      category: "development", source: "anthropics", path: "skills/frontend-design",      description: "Design and build polished frontend UIs with modern patterns." },
+  { slug: "internal-comms",       title: "Internal Comms",       category: "enterprise", source: "anthropics", path: "skills/internal-comms",       description: "Draft internal company communications (announcements, memos, all-hands)." },
+  { slug: "mcp-builder",          title: "MCP Builder",          category: "development", source: "anthropics", path: "skills/mcp-builder",          description: "Build Model Context Protocol servers — tools, resources, transports." },
+  { slug: "pdf",                  title: "PDF",                  category: "documents",  source: "anthropics", path: "skills/pdf",                  description: "Read, fill, and generate PDF files." },
+  { slug: "pptx",                 title: "PPTX",                 category: "documents",  source: "anthropics", path: "skills/pptx",                 description: "Read, write, and edit Microsoft PowerPoint .pptx files." },
+  { slug: "skill-creator",        title: "Skill Creator",        category: "development", source: "anthropics", path: "skills/skill-creator",        description: "Create new Claude Skills — scaffold SKILL.md, references, scripts." },
+  { slug: "slack-gif-creator",    title: "Slack GIF Creator",    category: "creative",   source: "anthropics", path: "skills/slack-gif-creator",    description: "Make small animated GIFs for Slack reactions and team messaging." },
+  { slug: "theme-factory",        title: "Theme Factory",        category: "design",     source: "anthropics", path: "skills/theme-factory",        description: "Generate cohesive design-system themes (colors, typography, spacing)." },
+  { slug: "web-artifacts-builder", title: "Web Artifacts Builder", category: "development", source: "anthropics", path: "skills/web-artifacts-builder", description: "Build self-contained web artifacts (HTML/CSS/JS) for Claude artifacts surface." },
+  { slug: "webapp-testing",       title: "Webapp Testing",       category: "development", source: "anthropics", path: "skills/webapp-testing",       description: "Test web applications — Playwright/Puppeteer flows, snapshot, a11y." },
+  { slug: "xlsx",                 title: "XLSX",                 category: "documents",  source: "anthropics", path: "skills/xlsx",                 description: "Read, write, and edit Microsoft Excel .xlsx files." },
+  { slug: "rahman-resources",     title: "Rahman Resources",     category: "development", source: "rahman",     path: "skills/rahman-resources",     description: "Use the Rahman Resources kitab — discover templates, features, recipes; assemble bundles; emit npx commands." },
+];
+
+export const SKILL_CATEGORIES: SkillCategory[] = [
+  "development",
+  "design",
+  "documents",
+  "creative",
+  "enterprise",
+];

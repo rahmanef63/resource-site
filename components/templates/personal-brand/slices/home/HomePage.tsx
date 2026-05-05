@@ -8,8 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { fmtDate, usePortfolio, usePublishedPosts, useServices } from "../../shared/store";
-import { SectionHead } from "../../shared/ui/section-head";
-import { PUBLIC_BASE } from "../../shared/ui/site-nav";
+import { SectionHead } from "@/components/templates/_shared/ui/section-head";
+import { PUBLIC_BASE } from "../../shared/nav-config";
 import { NewsletterBlock } from "./NewsletterBlock";
 
 const HERO_IMG =

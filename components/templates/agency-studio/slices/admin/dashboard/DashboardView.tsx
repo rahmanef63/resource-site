@@ -5,7 +5,7 @@ import { ArrowRight, Briefcase, Inbox, Sparkles, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { fmtDate, useStore } from "../../../shared/store";
-import { ADMIN_BASE } from "../shell/admin-sidebar";
+import { ADMIN_BASE } from "../../../shared/nav-config";
 
 export function DashboardView() {
   const { state } = useStore();

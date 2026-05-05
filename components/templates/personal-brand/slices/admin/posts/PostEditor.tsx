@@ -13,8 +13,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { nid, slugify, useStore } from "../../../shared/store";
 import type { Post, PostStatus } from "../../../shared/types";
-import { ADMIN_BASE } from "../shell/admin-sidebar";
-import { PUBLIC_BASE } from "../../../shared/ui/site-nav";
+import { ADMIN_BASE } from "../../../shared/nav-config";
+import { PUBLIC_BASE } from "../../../shared/nav-config";
 
 const COVERS = [
   "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1400&q=70",

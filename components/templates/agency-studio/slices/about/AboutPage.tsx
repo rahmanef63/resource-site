@@ -2,7 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { DEFAULT_SITE_CONFIG } from "../../shared/site-config";
-import { SectionHead } from "../../shared/ui/section-head";
+import { SectionHead } from "@/components/templates/_shared/ui/section-head";
 
 const TEAM = [
   { name: "Asti R.",   role: "Studio principal", initials: "AR" },

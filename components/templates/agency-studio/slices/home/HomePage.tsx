@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { DEFAULT_SITE_CONFIG } from "../../shared/site-config";
 import { useFeaturedProjects, useServices } from "../../shared/store";
-import { SectionHead } from "../../shared/ui/section-head";
-import { PUBLIC_BASE } from "../../shared/ui/site-nav";
+import { SectionHead } from "@/components/templates/_shared/ui/section-head";
+import { PUBLIC_BASE } from "../../shared/nav-config";
 
 export function HomePage() {
   const c = DEFAULT_SITE_CONFIG;

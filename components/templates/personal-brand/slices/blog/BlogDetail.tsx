@@ -21,7 +21,7 @@ import {
   usePublishedPosts,
   useStore,
 } from "../../shared/store";
-import { PUBLIC_BASE } from "../../shared/ui/site-nav";
+import { PUBLIC_BASE } from "../../shared/nav-config";
 import { NewsletterBlock } from "../home/NewsletterBlock";
 
 export function BlogDetail({ slug }: { slug: string }) {

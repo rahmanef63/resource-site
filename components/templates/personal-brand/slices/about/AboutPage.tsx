@@ -6,7 +6,7 @@ import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { PUBLIC_BASE } from "../../shared/ui/site-nav";
+import { PUBLIC_BASE } from "../../shared/nav-config";
 
 const TIMELINE = [
   { year: "2026", milestone: "Founder, Lorem Studio. Mentor Y Combinator W22 cohort." },

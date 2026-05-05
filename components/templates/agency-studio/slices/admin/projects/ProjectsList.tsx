@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { fmtDate, useStore } from "../../../shared/store";
-import { ADMIN_BASE } from "../shell/admin-sidebar";
+import { ADMIN_BASE } from "../../../shared/nav-config";
 
 const STATUS_LABELS: Record<string, string> = {
   discovery: "Discovery",

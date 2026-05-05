@@ -13,8 +13,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { nid, slugify, useStore } from "../../../shared/store";
 import type { PortfolioItem } from "../../../shared/types";
-import { ADMIN_BASE } from "../shell/admin-sidebar";
-import { PUBLIC_BASE } from "../../../shared/ui/site-nav";
+import { ADMIN_BASE } from "../../../shared/nav-config";
+import { PUBLIC_BASE } from "../../../shared/nav-config";
 
 const COVERS = [
   "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=1600&q=70",

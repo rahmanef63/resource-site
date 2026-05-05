@@ -9,8 +9,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { rel, usePosts, useStore } from "../../../shared/store";
-import { ADMIN_BASE } from "../shell/admin-sidebar";
-import { PUBLIC_BASE } from "../../../shared/ui/site-nav";
+import { ADMIN_BASE } from "../../../shared/nav-config";
+import { PUBLIC_BASE } from "../../../shared/nav-config";
 
 export function PostsList() {
   const { dispatch } = useStore();

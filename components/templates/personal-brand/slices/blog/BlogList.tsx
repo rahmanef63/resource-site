@@ -9,7 +9,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { fmtDate, usePublishedPosts } from "../../shared/store";
-import { PUBLIC_BASE } from "../../shared/ui/site-nav";
+import { PUBLIC_BASE } from "../../shared/nav-config";
 
 export function BlogList() {
   const posts = usePublishedPosts();

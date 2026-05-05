@@ -9,8 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
 import { fmtDate, usePortfolio, useStore } from "../../../shared/store";
-import { ADMIN_BASE } from "../shell/admin-sidebar";
-import { PUBLIC_BASE } from "../../../shared/ui/site-nav";
+import { ADMIN_BASE } from "../../../shared/nav-config";
+import { PUBLIC_BASE } from "../../../shared/nav-config";
 
 export function PortfolioListAdmin() {
   const items = usePortfolio();

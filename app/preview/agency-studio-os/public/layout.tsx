@@ -1,9 +1,15 @@
 import type { Metadata } from "next";
 import { Suspense, type ReactNode } from "react";
+import { SiteShell } from "@/components/templates/_shared/ui/site-shell";
 import { StoreProvider } from "@/components/templates/agency-studio/shared/store";
-import { SiteNav } from "@/components/templates/agency-studio/shared/ui/site-nav";
-import { SiteFooter } from "@/components/templates/agency-studio/shared/ui/site-footer";
 import { DEFAULT_SITE_CONFIG } from "@/components/templates/agency-studio/shared/site-config";
+import {
+  FOOTER_COLUMNS,
+  FOOTER_TAGLINE,
+  PUBLIC_BASE,
+  PUBLIC_CTA,
+  PUBLIC_NAV,
+} from "@/components/templates/agency-studio/shared/nav-config";
 
 const c = DEFAULT_SITE_CONFIG;
 
@@ -29,11 +35,17 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
   return (
     <Suspense fallback={null}>
       <StoreProvider>
-        <div className="min-h-screen bg-background text-foreground">
-          <SiteNav />
-          <main>{children}</main>
-          <SiteFooter />
-        </div>
+        <SiteShell
+          brand={DEFAULT_SITE_CONFIG}
+          homeHref={PUBLIC_BASE}
+          navItems={PUBLIC_NAV}
+          cta={PUBLIC_CTA}
+          footerColumns={FOOTER_COLUMNS}
+          footerTagline={FOOTER_TAGLINE}
+          copyrightHolder={DEFAULT_SITE_CONFIG.studioName}
+        >
+          {children}
+        </SiteShell>
       </StoreProvider>
     </Suspense>
   );

@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { useProjects } from "../../shared/store";
-import { SectionHead } from "../../shared/ui/section-head";
-import { PUBLIC_BASE } from "../../shared/ui/site-nav";
+import { SectionHead } from "@/components/templates/_shared/ui/section-head";
+import { PUBLIC_BASE } from "../../shared/nav-config";
 
 export function PortfolioListPage() {
   const projects = useProjects().filter((p) => p.status !== "archived");

@@ -1,11 +1,9 @@
 "use client";
 
 import * as React from "react";
+import { createTemplateStore } from "@/components/templates/_shared/hooks/create-template-store";
 import type { Action, State } from "./types";
 import { SEED_STATE } from "./seed";
-
-const STORAGE_KEY = "pbos:state:v1";
-const CHANNEL = "pbos:sync";
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
@@ -128,66 +126,15 @@ function reducer(state: State, action: Action): State {
   }
 }
 
-type Ctx = { state: State; dispatch: (a: Action) => void; ready: boolean };
-const StoreCtx = React.createContext<Ctx | null>(null);
+const { Provider, useStore } = createTemplateStore<State, Action>({
+  storageKey: "pbos:state:v1",
+  channel: "pbos:sync",
+  seed: SEED_STATE,
+  reducer,
+});
 
-export function StoreProvider({ children }: { children: React.ReactNode }) {
-  const [state, baseDispatch] = React.useReducer(reducer, SEED_STATE);
-  const [ready, setReady] = React.useState(false);
-  const channelRef = React.useRef<BroadcastChannel | null>(null);
-
-  // Hydrate from localStorage + open broadcast channel.
-  React.useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const saved = JSON.parse(raw) as State;
-        baseDispatch({ type: "hydrate", state: saved });
-      }
-    } catch {
-      // ignore corrupted storage
-    }
-    setReady(true);
-
-    const ch = new BroadcastChannel(CHANNEL);
-    channelRef.current = ch;
-    ch.onmessage = (e) => {
-      const action = e.data as Action;
-      if (!action || typeof action !== "object" || !("type" in action)) return;
-      baseDispatch(action);
-    };
-    return () => {
-      ch.close();
-      channelRef.current = null;
-    };
-  }, []);
-
-  // Persist on every state change.
-  React.useEffect(() => {
-    if (!ready) return;
-    try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch {
-      // storage might be full / disabled
-    }
-  }, [state, ready]);
-
-  const dispatch = React.useCallback((action: Action) => {
-    baseDispatch(action);
-    channelRef.current?.postMessage(action);
-  }, []);
-
-  const value = React.useMemo<Ctx>(() => ({ state, dispatch, ready }), [state, dispatch, ready]);
-
-  return <StoreCtx.Provider value={value}>{children}</StoreCtx.Provider>;
-}
-
-export function useStore() {
-  const c = React.useContext(StoreCtx);
-  if (!c) throw new Error("useStore must be inside <StoreProvider>");
-  return c;
-}
+export const StoreProvider = Provider;
+export { useStore };
 
 // Convenience derived selectors.
 
@@ -243,51 +190,13 @@ export function useChatSessions() {
   return state.chatSessions;
 }
 
-// ID helper — short readable random.
-export function nid(prefix: string) {
-  return `${prefix}-${Math.random().toString(36).slice(2, 8)}`;
-}
+// Re-export shared utils so existing T1 imports keep working.
+export { nid, slugify, fmtDate, rel } from "@/components/templates/_shared/utils";
 
-// Slug helper.
-export function slugify(s: string) {
-  return s
-    .toLowerCase()
-    .normalize("NFKD")
-    .replace(/[^\w\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "")
-    .slice(0, 64);
-}
-
-// Naive AI moderation flag — used by comment form.
+// Naive AI moderation flag — used by comment form (T1-specific business logic).
 export function aiFlag(body: string): "spam" | "toxic" | null {
   const lower = body.toLowerCase();
   if (/(buy|cheap|http|https|crypto|loan|viagra|followers)/.test(lower)) return "spam";
   if (/(idiot|stupid|hate you|moron)/.test(lower)) return "toxic";
   return null;
-}
-
-// Relative time (e.g. "12 min ago").
-export function rel(ts: number): string {
-  if (!ts) return "—";
-  const diff = Date.now() - ts;
-  if (diff < 0) {
-    const future = Math.abs(diff);
-    if (future < 60_000) return "in a few seconds";
-    if (future < 60 * 60_000) return `in ${Math.round(future / 60_000)} min`;
-    if (future < 24 * 60 * 60_000) return `in ${Math.round(future / (60 * 60_000))} h`;
-    return new Date(ts).toLocaleDateString("id-ID", { day: "numeric", month: "short" });
-  }
-  if (diff < 60_000) return "just now";
-  if (diff < 60 * 60_000) return `${Math.round(diff / 60_000)} min ago`;
-  if (diff < 24 * 60 * 60_000) return `${Math.round(diff / (60 * 60_000))} h ago`;
-  if (diff < 7 * 24 * 60 * 60_000) return `${Math.round(diff / (24 * 60 * 60_000))}d ago`;
-  return new Date(ts).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
-}
-
-// Format date.
-export function fmtDate(ts: number): string {
-  if (!ts) return "—";
-  return new Date(ts).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
 }

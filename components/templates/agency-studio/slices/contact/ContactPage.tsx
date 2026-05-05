@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { DEFAULT_SITE_CONFIG } from "../../shared/site-config";
 import { nid, useStore } from "../../shared/store";
-import { SectionHead } from "../../shared/ui/section-head";
+import { SectionHead } from "@/components/templates/_shared/ui/section-head";
 
 export function ContactPage() {
   const c = DEFAULT_SITE_CONFIG;

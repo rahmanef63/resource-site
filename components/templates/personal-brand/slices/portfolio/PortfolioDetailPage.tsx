@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { fmtDate, usePortfolio, usePortfolioItem } from "../../shared/store";
-import { PUBLIC_BASE } from "../../shared/ui/site-nav";
+import { PUBLIC_BASE } from "../../shared/nav-config";
 
 export function PortfolioDetailPage({ slug }: { slug: string }) {
   const item = usePortfolioItem(slug);

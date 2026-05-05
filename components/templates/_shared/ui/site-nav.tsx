@@ -6,32 +6,40 @@ import { usePathname } from "next/navigation";
 import { ArrowRight, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { DEFAULT_SITE_CONFIG } from "../site-config";
+import type { Brand, Cta, NavItem } from "../types/common";
 
-export const PUBLIC_BASE = "/preview/personal-brand-os/public";
-
-export const PUBLIC_NAV = [
-  { label: "About", href: `${PUBLIC_BASE}/about` },
-  { label: "Blog", href: `${PUBLIC_BASE}/blog` },
-  { label: "Portfolio", href: `${PUBLIC_BASE}/portfolio` },
-  { label: "Services", href: `${PUBLIC_BASE}/services` },
-  { label: "Resources", href: `${PUBLIC_BASE}/resources` },
-  { label: "Contact", href: `${PUBLIC_BASE}/contact` },
-];
-
-export function SiteNav() {
-  const c = DEFAULT_SITE_CONFIG;
+/**
+ * Shared public site nav. Per-template config:
+ * - `brand`   : brand identity (letter + name)
+ * - `homeHref`: link target for the brand mark
+ * - `items`   : nav items
+ * - `cta`     : optional CTA button on the right
+ * - `extras`  : optional extra buttons rendered before CTA (e.g. ID/EN toggle)
+ */
+export function SiteNav({
+  brand,
+  homeHref,
+  items,
+  cta,
+  extras,
+}: {
+  brand: Pick<Brand, "brandLetter" | "brandName">;
+  homeHref: string;
+  items: NavItem[];
+  cta?: Cta;
+  extras?: React.ReactNode;
+}) {
   const pathname = usePathname() ?? "";
   const [open, setOpen] = React.useState(false);
   return (
     <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-3">
-        <Link href={PUBLIC_BASE} className="flex items-center gap-2 font-semibold tracking-tight">
-          <span className="grid size-7 place-items-center rounded-md bg-foreground text-background">{c.brandLetter}</span>
-          <span>{c.brandName}</span>
+        <Link href={homeHref} className="flex items-center gap-2 font-semibold tracking-tight">
+          <span className="grid size-7 place-items-center rounded-md bg-foreground text-background">{brand.brandLetter}</span>
+          <span>{brand.brandName}</span>
         </Link>
         <nav className="hidden items-center gap-1 text-sm md:flex">
-          {PUBLIC_NAV.map((n) => {
+          {items.map((n) => {
             const on = pathname === n.href || pathname.startsWith(n.href + "/");
             return (
               <Link
@@ -48,14 +56,14 @@ export function SiteNav() {
           })}
         </nav>
         <div className="flex items-center gap-1.5">
-          <Button variant="ghost" size="sm" className="hidden sm:inline-flex">
-            ID / EN
-          </Button>
-          <Button asChild size="sm">
-            <Link href={`${PUBLIC_BASE}/services`}>
-              Book a call <ArrowRight className="size-3.5" />
-            </Link>
-          </Button>
+          {extras}
+          {cta && (
+            <Button asChild size="sm">
+              <Link href={cta.href}>
+                {cta.label} <ArrowRight className="size-3.5" />
+              </Link>
+            </Button>
+          )}
           <Button
             variant="ghost"
             size="icon"
@@ -70,7 +78,7 @@ export function SiteNav() {
       {open && (
         <div className="border-t border-border/60 bg-background md:hidden">
           <nav className="mx-auto flex max-w-6xl flex-col px-6 py-2">
-            {PUBLIC_NAV.map((n) => (
+            {items.map((n) => (
               <Link
                 key={n.href}
                 href={n.href}

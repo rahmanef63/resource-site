@@ -7,7 +7,7 @@ import { ArrowUpRight, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { usePortfolio } from "../../shared/store";
-import { PUBLIC_BASE } from "../../shared/ui/site-nav";
+import { PUBLIC_BASE } from "../../shared/nav-config";
 
 export function PortfolioListPage() {
   const items = usePortfolio();

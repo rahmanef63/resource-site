@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import type { Project, ProjectStatus } from "../../../shared/types";
 import { nid, useProjects, useStore } from "../../../shared/store";
-import { ADMIN_BASE } from "../shell/admin-sidebar";
+import { ADMIN_BASE } from "../../../shared/nav-config";
 
 const STATUSES: ProjectStatus[] = ["discovery", "design", "build", "delivered", "archived"];
 
