@@ -1,0 +1,14 @@
+{
+  "name": "resource-site",
+  "owner": {
+    "name": "Rahman",
+    "url": "https://rahmanef.com"
+  },
+  "plugins": [
+    {
+      "name": "rresource",
+      "source": "./plugins/rresource",
+      "description": "Kitab features + layouts + recipes as Claude Code skills. Run /rresource:<id> to scaffold any vendored template (3column, hero-carousel, cv-generator, auth, etc.) into the current project."
+    }
+  ]
+}
