@@ -2,29 +2,31 @@
 
 import * as React from "react";
 import { Sparkles, Wand2 } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { layouts } from "@/lib/content/layouts";
 import { features as featureCatalog } from "@/lib/content/features";
 import {
   EMPTY_SELECTION,
   type BuildSelection,
-  type ProjectForm as ProjectFormShape,
 } from "@/lib/build/types";
 import {
   buildAgentPrompt,
   buildExistingCommands,
   buildInitCommand,
 } from "@/lib/build/command-builder";
-import { useFeatureManifest } from "@/components/site/feature-context";
+import { useFeatureContext, useFeatureManifest } from "@/components/site/feature-context";
 import { TemplatePicker, type TemplateOption } from "./template-picker";
 import { FeaturePicker, type FeatureOption } from "./feature-picker";
-import { SkillsInspector } from "./skills-inspector";
-import { ProjectForm } from "./project-form";
 import { LivePreview } from "./live-preview";
-import { CommandOutput } from "./command-output";
-import { ExistingRrUploader, type ParsedRr } from "./existing-rr-uploader";
+import { BuildInspector } from "./build-inspector";
+import { type ParsedRr } from "./existing-rr-uploader";
 
-/** Page-level state container. Renders nothing visible — work happens via feature-manifest. */
+/**
+ * Page-level state container. Renders nothing visible — work happens via the
+ * feature-manifest registered with DocsShell. The DocsShell three-column then
+ * wraps everything; left = DocsSidebar (untouched), center = builder canvas,
+ * right = consolidated inspector (project form / skills / command output).
+ */
 export function BuildShell() {
   const [mode, setMode] = React.useState<"new" | "existing">("new");
   const [sel, setSel] = React.useState<BuildSelection>(EMPTY_SELECTION);
@@ -59,7 +61,7 @@ export function BuildShell() {
     [],
   );
 
-  // Existing-mode hydration from uploaded rr.json
+  // Hydrate selections from uploaded rr.json when in existing mode.
   React.useEffect(() => {
     if (!rr || mode !== "existing") return;
     setSel({
@@ -84,8 +86,20 @@ export function BuildShell() {
     }));
   }, []);
 
-  // Register the manifest so DocsShell switches to full-width center + opens Inspector slot.
-  // Memoize on the data the renderers actually read.
+  // Compute command blocks per mode — passed into the inspector.
+  const newBlocks = React.useMemo(() => [buildInitCommand(sel), buildAgentPrompt(sel)], [sel]);
+  const additions: BuildSelection = React.useMemo(() => {
+    const haveFeatures = new Set((rr?.features ?? []).map((f) => f.slug));
+    const haveSkills = new Set((rr?.skills ?? []).map((s) => s.slug));
+    return {
+      template: !rr?.template?.slug && sel.template ? sel.template : null,
+      features: sel.features.filter((s) => !haveFeatures.has(s)),
+      skills: sel.skills.filter((s) => !haveSkills.has(s)),
+      project: sel.project,
+    };
+  }, [sel, rr]);
+  const existingBlocks = React.useMemo(() => [buildExistingCommands(additions)], [additions]);
+
   const manifest = React.useMemo(
     () => ({
       title: "Bundle Builder",
@@ -99,8 +113,6 @@ export function BuildShell() {
               setMode={setMode}
               sel={sel}
               setSel={setSel}
-              rr={rr}
-              setRr={setRr}
               templates={templates}
               featureOptions={featureOptions}
               toggleFeature={toggleFeature}
@@ -110,24 +122,43 @@ export function BuildShell() {
       ],
       defaultTab: "builder",
       inspector: {
-        title: "Claude Skills",
-        render: () => <SkillsInspector selected={sel.skills} onToggle={toggleSkill} />,
+        title: "Setup",
+        render: () => (
+          <BuildInspector
+            mode={mode}
+            sel={sel}
+            setSel={setSel}
+            rr={rr}
+            setRr={setRr}
+            toggleSkill={toggleSkill}
+            commandBlocks={mode === "new" ? newBlocks : existingBlocks}
+            filename={mode === "new" ? "scaffold.sh" : "add-to-existing.sh"}
+          />
+        ),
       },
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [mode, sel, rr, templates, featureOptions, toggleFeature, toggleSkill],
+    [mode, sel, rr, templates, featureOptions, toggleFeature, toggleSkill, newBlocks, existingBlocks],
   );
 
   useFeatureManifest(manifest);
+
+  // Default-open the right inspector on /build — it holds the primary controls
+  // (project form / skills / command output). Run once on mount.
+  const { setRightOpen } = useFeatureContext();
+  React.useEffect(() => {
+    setRightOpen(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return null;
 }
 
-// ─── Center pane (full-width inside DocsShell) ───────────────────────────
+// ─── Center pane — 2 vertical sections: pickers (top) + preview (bottom) ──
 
 function BuilderCenter({
   mode, setMode,
   sel, setSel,
-  rr, setRr,
   templates, featureOptions,
   toggleFeature,
 }: {
@@ -135,37 +166,17 @@ function BuilderCenter({
   setMode: (m: "new" | "existing") => void;
   sel: BuildSelection;
   setSel: React.Dispatch<React.SetStateAction<BuildSelection>>;
-  rr: ParsedRr | null;
-  setRr: (rr: ParsedRr | null) => void;
   templates: TemplateOption[];
   featureOptions: FeatureOption[];
   toggleFeature: (slug: string) => void;
 }) {
   const tplMeta = templates.find((t) => t.slug === sel.template) ?? null;
 
-  const newBlocks = React.useMemo(
-    () => [buildInitCommand(sel), buildAgentPrompt(sel)],
-    [sel],
-  );
-
-  const additions: BuildSelection = React.useMemo(() => {
-    const haveFeatures = new Set((rr?.features ?? []).map((f) => f.slug));
-    const haveSkills = new Set((rr?.skills ?? []).map((s) => s.slug));
-    return {
-      template: !rr?.template?.slug && sel.template ? sel.template : null,
-      features: sel.features.filter((s) => !haveFeatures.has(s)),
-      skills: sel.skills.filter((s) => !haveSkills.has(s)),
-      project: sel.project,
-    };
-  }, [sel, rr]);
-
-  const existingBlocks = React.useMemo(() => [buildExistingCommands(additions)], [additions]);
-
   return (
     <div className="flex h-full min-h-0 flex-col">
-      {/* Top header — mode tabs + soft hint */}
-      <div className="border-b bg-background px-4 py-3 sm:px-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+      {/* Top bar — mode tabs + pickers in compact 2-col strip */}
+      <div className="border-b bg-background">
+        <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <Tabs value={mode} onValueChange={(v) => setMode(v as "new" | "existing")}>
             <TabsList>
               <TabsTrigger value="new" className="gap-1.5">
@@ -177,18 +188,12 @@ function BuilderCenter({
             </TabsList>
           </Tabs>
           <p className="text-[11px] text-muted-foreground">
-            Pick a template, check features.{" "}
-            <span className="text-foreground">Skills</span> live in the right inspector.
+            Pickers below ↓ · Setup &amp; Skills in the right panel ↦
           </p>
         </div>
-      </div>
 
-      {/* Body — three inner columns. Pickers | Preview | Form/Output */}
-      <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 overflow-auto p-4 sm:p-6 xl:grid-cols-[280px_minmax(0,1fr)_360px]">
-        <div className="space-y-4">
-          {mode === "existing" && (
-            <ExistingRrUploader onParsed={setRr} />
-          )}
+        {/* Pickers row — collapsible accordion lists, side-by-side on wide screens. */}
+        <div className="grid grid-cols-1 gap-3 border-t bg-muted/10 px-4 py-3 sm:px-6 lg:grid-cols-2">
           <TemplatePicker
             templates={templates}
             selected={sel.template}
@@ -201,28 +206,16 @@ function BuilderCenter({
             onToggle={toggleFeature}
           />
         </div>
+      </div>
 
-        <div className="space-y-4">
-          <LivePreview
-            templateSlug={sel.template}
-            publicPath={tplMeta?.previewPath}
-            adminPath={tplMeta?.adminPreviewPath}
-            defaultSurface={tplMeta?.defaultSurface}
-          />
-        </div>
-
-        <div className="space-y-4">
-          {mode === "new" && (
-            <ProjectForm
-              value={sel.project}
-              onChange={(project: ProjectFormShape) => setSel((s) => ({ ...s, project }))}
-            />
-          )}
-          <CommandOutput
-            blocks={mode === "new" ? newBlocks : existingBlocks}
-            filename={mode === "new" ? "scaffold.sh" : "add-to-existing.sh"}
-          />
-        </div>
+      {/* Live preview takes the rest of the canvas */}
+      <div className="min-h-0 flex-1 overflow-auto p-4 sm:p-6">
+        <LivePreview
+          templateSlug={sel.template}
+          publicPath={tplMeta?.previewPath}
+          adminPath={tplMeta?.adminPreviewPath}
+          defaultSurface={tplMeta?.defaultSurface}
+        />
       </div>
     </div>
   );
