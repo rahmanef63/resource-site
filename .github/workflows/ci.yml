@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  typecheck-and-build:
+    name: typecheck + build (deployed kitab)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: install
+        run: npm ci --legacy-peer-deps
+
+      - name: typecheck
+        run: npm run typecheck
+
+      - name: build
+        run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+
+  cli-prepublish:
+    name: CLI prepublish gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: packages/cli
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install --no-audit --no-fund
+      - name: sync-skills check
+        run: node scripts/sync-skills.mjs --check
+      - name: validate manifest
+        run: node scripts/validate.mjs
+
+  audit:
+    name: high-severity vuln gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install --legacy-peer-deps --no-audit --no-fund
+      - name: audit (high)
+        run: npm audit --audit-level=high --omit=dev
+      - name: audit cli (high)
+        working-directory: packages/cli
+        run: npm install --no-audit --no-fund && npm audit --audit-level=high --omit=dev
