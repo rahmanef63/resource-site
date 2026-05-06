@@ -11,7 +11,7 @@ Chronological session log. Each entry is dated and lists what landed + outstandi
 | Deployed kitab Docker build | ❌ failing on `cookbook/`/`recipes/`/`template-base/` typecheck | ✅ green, 120 prerendered routes |
 | Docker build context | 14.95 MB | 1.4 MB (10.7× smaller) |
 | Studio extraction tsc errors | 53 | **0** |
-| Template-base internal tsc errors | 1108 | **207 (−81%)** |
+| Template-base internal tsc errors | 1108 | **109 (−90%)** |
 | `"latest"` deps in package.json | 79 (root + template-base) | 0 |
 | High-severity npm vulns (CLI) | 4 (tar via tiged) | **0** |
 | GitHub Actions CI | none | typecheck + build + audit gate |
@@ -34,6 +34,7 @@ Chronological session log. Each entry is dated and lists what landed + outstandi
 8. `ci: add typecheck + build + audit GitHub Actions workflow`.
 9. `fix(template-base): backfill from superspace + stub libs (-135 tsc errors)` — auth/RBAC + audit schemas backfilled, workspace + invitations + mock-data + hooks/components copied, generic `use-file-upload` / `image-convert` / `auth-context` stubs created.
 10. `fix(template-base): selective backfill chat/ai/menus/social/database (-86 tsc errors)` — comprehensive feature schemas composed into root, `industryTemplates`, `invitations`, `workspaceLinks`, `systemNotifications`, `exampleItems` selectively spread.
+11. `fix(template-base): bucket cleanup recharts/resizable/workspace/stubs (-98 tsc errors)` — pinned recharts v2 + react-resizable-panels v3 (the kitab wrappers expect those API surfaces), extended workspace schema with hierarchy fields, backfilled export-registry + ai-assistant + componentFactory + rightPanelStore from superspace, set noImplicitAny:false while api stub is hand-written, created stubs for session-info / toolbar / use-mobile.
 
 ### Critical fixes
 
@@ -66,11 +67,12 @@ The deployed showcase site has no `convex` dep — it's a static catalog UI. Fix
 
 #### Lower priority, documented for later
 
-- **207 template-base internal tsc errors** — categorized in `template-base/STATUS.md`. Four buckets:
-  1. Recharts API drift (~18) — pin `recharts@^2` or rewrite chart wrappers.
-  2. Workspace schema extensions (~30) — HierarchySettings + WorkspaceSwitcher reference fields not in kitab schema.
-  3. Slice-config aggregator (~15) — re-run config-aggregator script against actual kitab slices.
-  4. Misc one-offs (~145) — file-by-file as needed.
+- **109 template-base internal tsc errors** — categorized in `template-base/STATUS.md`. Five buckets:
+  1. AI session-info / agent-registry surface (~15) — backfill real AI runtime from superspace OR delete AgentChatContainer.
+  2. Notion port residue (~10) — BlockEditor + comment mutations need final Vite→Next port.
+  3. File upload stub gaps (~10) — extend stub OR backfill superspace useFileUpload.
+  4. Convex feature mutation field drift (~12) — notion mutations insert fields not in unified schema.
+  5. Misc one-offs (~62) — file-by-file as needed.
 
   None of these block the deployed kitab, the CLI, or the MCP. Use template-base as a copy-source per-subtree (studio + builder + notion subtrees typecheck clean against the kitab schema).
 

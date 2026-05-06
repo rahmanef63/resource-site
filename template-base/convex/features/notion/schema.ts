@@ -6,11 +6,42 @@ import { authTables } from "@convex-dev/auth/server";
 // alongside other features (e.g. studio). Default export retained for any
 // caller that still wants the standalone schema definition.
 export const notionTables = {
+  // Notion's minimal workspace shape extended with hierarchy / display
+  // fields the workspace UI (EnhancedWorkspaceSwitcher, HierarchySettings)
+  // expects from superspace. All hierarchy fields optional so notion's
+  // own workspace inserts (just userId/name/emoji) keep working.
   workspaces: defineTable({
     userId: v.id("users"),
     name: v.string(),
     emoji: v.string(),
-  }).index("by_user", ["userId"]),
+    // Hierarchy + display extensions
+    type: v.optional(
+      v.union(
+        v.literal("organization"),
+        v.literal("institution"),
+        v.literal("group"),
+        v.literal("family"),
+        v.literal("personal"),
+      ),
+    ),
+    icon: v.optional(v.string()),
+    color: v.optional(v.string()),
+    slug: v.optional(v.string()),
+    description: v.optional(v.string()),
+    isPublic: v.optional(v.boolean()),
+    parentWorkspaceId: v.optional(v.id("workspaces")),
+    isMainWorkspace: v.optional(v.boolean()),
+    depth: v.optional(v.number()),
+    materializedPath: v.optional(v.string()),
+    lastActiveAt: v.optional(v.number()),
+    organizationId: v.optional(v.string()),
+    logo: v.optional(v.string()),
+    logoStorageId: v.optional(v.id("_storage")),
+    themePreset: v.optional(v.string()),
+  })
+    .index("by_user", ["userId"])
+    .index("by_parent", ["parentWorkspaceId"])
+    .index("by_main", ["userId", "isMainWorkspace"]),
 
   pages: defineTable({
     userId: v.id("users"),
