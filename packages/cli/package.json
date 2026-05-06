@@ -1,0 +1,44 @@
+{
+  "name": "rahman-resources",
+  "version": "0.4.2",
+  "description": "Scaffolder + installer for Rahman Resources kitab — npx rahman-resources init <app>; add <template>; list; info",
+  "type": "module",
+  "license": "MIT",
+  "author": "Rahman <casadezian@gmail.com>",
+  "homepage": "https://github.com/rahmanef63/resource-site",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rahmanef63/resource-site.git",
+    "directory": "packages/cli"
+  },
+  "bin": {
+    "rahman-resources": "bin/cli.js"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "gen": "node scripts/gen-manifest.mjs",
+    "validate": "node scripts/validate.mjs",
+    "sync:skills": "node scripts/sync-skills.mjs",
+    "sync:skills:check": "node scripts/sync-skills.mjs --check",
+    "prepublishOnly": "node scripts/sync-skills.mjs --check && node scripts/validate.mjs"
+  },
+  "dependencies": {
+    "kleur": "^4.1.5",
+    "tiged": "^2.12.7"
+  },
+  "keywords": [
+    "rahman",
+    "kitab",
+    "template",
+    "installer",
+    "nextjs",
+    "convex"
+  ]
+}
