@@ -8,6 +8,8 @@
 import { defineSchema } from "convex/server";
 import { authTables } from "@convex-dev/auth/server";
 
+import { authRbacTables } from "./auth/schema";
+import { auditTables } from "./lib/audit/schema";
 import { notionTables } from "./features/notion/schema";
 import { studioTables } from "./features/studio/api/schema";
 import { studioAgentTables } from "./features/studio/api/agentConfig.schema";
@@ -25,6 +27,8 @@ import searchSchema from "./shared/search/schema";
 
 export default defineSchema({
   ...authTables,
+  ...authRbacTables,
+  ...auditTables,
   ...notionTables,
   ...studioTables,
   ...studioAgentTables,

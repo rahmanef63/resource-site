@@ -1,4 +1,4 @@
-import { mutation } from "../../_generated/server";
+import { mutation } from "../../../../_generated/server";
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { buildSearchText } from "./lib";
 

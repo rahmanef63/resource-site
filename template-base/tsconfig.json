@@ -21,12 +21,19 @@
       "@convex/_generated/*": ["./convex/_generated/*"],
       "@notion/*": ["./frontend/slices/notion/*"],
       "@notionConvex/*": ["./convex/features/notion/*"],
-      "@/shared/builder": ["./frontend/shared/builder"],
-      "@/shared/foundation": ["./frontend/shared/foundation"],
-      "@/shared/settings": ["./frontend/shared/settings"],
-      "@/shared/communications": ["./frontend/shared/communications"],
-      "@/shared/theme": ["./frontend/shared/theme"],
-      "@/shared/ui": ["./frontend/shared/ui"]
+      "@/shared/builder/*": ["./frontend/shared/builder/*"],
+      "@/shared/foundation/*": ["./frontend/shared/foundation/*"],
+      "@/shared/settings/*": ["./frontend/shared/settings/*"],
+      "@/shared/communications/*": ["./frontend/shared/communications/*"],
+      "@/shared/theme/*": ["./frontend/shared/theme/*"],
+      "@/shared/lib/*": ["./frontend/shared/lib/*"],
+      "@/shared/ui/*": [
+        "./frontend/shared/ui/components/*",
+        "./frontend/shared/ui/motion/*",
+        "./frontend/shared/ui/*",
+        "./components/ui/*"
+      ],
+      "@/shared/*": ["./frontend/shared/*"]
     }
   },
   "include": [

@@ -34,6 +34,28 @@ export async function getCurrentUser(
   return db.get(userId);
 }
 
+/**
+ * Compat shim for legacy clerk-style external-id lookup. Superspace called
+ * this with `identity.subject` (a clerk user id). In the kitab the auth
+ * subject IS the @convex-dev/auth user doc _id, so we resolve via direct
+ * `db.get` — the externalId argument is treated as Id<"users">.
+ *
+ * Existing call sites (e.g. convex/shared/favorites) keep working without
+ * edits; on re-merge to superspace, swap this back to the real implementation.
+ */
+export async function getUserByExternalId(
+  ctx: AnyConvexCtx,
+  externalId: string,
+): Promise<Doc<"users"> | null> {
+  if (!externalId) return null;
+  const db = dbFromCtx(ctx);
+  try {
+    return await db.get(externalId as Id<"users">);
+  } catch {
+    return null;
+  }
+}
+
 export type MembershipInfo = {
   userId: string;
   userDocId: Id<"users">;
