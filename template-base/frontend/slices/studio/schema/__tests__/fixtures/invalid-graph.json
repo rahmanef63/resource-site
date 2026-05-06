@@ -1,0 +1,26 @@
+{
+  "version": "0.5",
+  "root": ["missing-root", "page-a"],
+  "nodes": {
+    "page-a": {
+      "type": "div",
+      "props": { "display": "flex", "flexDirection": "column" },
+      "children": ["child-x", "child-y"]
+    },
+    "child-x": {
+      "type": "text",
+      "props": { "content": "Hello" },
+      "children": ["page-a"]
+    },
+    "child-y": {
+      "type": "text",
+      "props": { "content": "World" },
+      "children": []
+    },
+    "orphan-node": {
+      "type": "button",
+      "props": { "text": "Never rendered" },
+      "children": []
+    }
+  }
+}

@@ -1,0 +1,395 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>AI Command Center Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2b8cee",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for webkit browsers */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #101922; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2b8cee; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #1a5bb0; 
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-white antialiased overflow-hidden">
+<div class="flex h-screen w-full flex-row overflow-hidden">
+<!-- Side Navigation -->
+<aside class="flex w-64 flex-col border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111418] shrink-0 z-20 transition-all duration-300">
+<div class="flex h-full flex-col justify-between p-4">
+<div class="flex flex-col gap-6">
+<!-- Brand -->
+<div class="flex items-center gap-3 px-2">
+<div class="flex items-center justify-center bg-primary/20 rounded-lg size-10 text-primary">
+<span class="material-symbols-outlined" style="font-size: 24px;">hub</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-white text-base font-bold leading-tight tracking-tight" style="">AI Nexus</h1>
+<p class="text-slate-500 dark:text-[#9dabb9] text-xs font-medium" style="">v2.4.0 (Stable)</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary text-white shadow-sm shadow-primary/20 transition-all group" href="#" style="">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform" style="font-size: 20px;">dashboard</span>
+<span class="text-sm font-medium" style="">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-[#9dabb9] hover:bg-slate-100 dark:hover:bg-[#1c2127] hover:text-slate-900 dark:hover:text-white transition-colors group" href="#" style="">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform" style="font-size: 20px;">smart_toy</span>
+<span class="text-sm font-medium" style="">Agents</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-[#9dabb9] hover:bg-slate-100 dark:hover:bg-[#1c2127] hover:text-slate-900 dark:hover:text-white transition-colors group" href="#" style="">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform" style="font-size: 20px;">menu_book</span>
+<span class="text-sm font-medium" style="">Knowledge<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-[#9dabb9] hover:bg-slate-100 dark:hover:bg-[#1c2127] hover:text-slate-900 dark:hover:text-white transition-colors group" href="https://app-companion-430619.appspot.com/projects/1066880693357531312?usegapi=1&amp;jsh=m%3B%2F_%2Fscs%2Fabc-static%2F_%2Fjs%2Fk%3Dgapi.lb.en.PJsh2cctCQI.O%2Fd%3D1%2Frs%3DAHpOoo_QlMhY2cycn60Rs8eI1WInRwuahw%2Fm%3D__features__#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform" style="font-size: 20px;">description</span>
+</a><a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-[#9dabb9] hover:bg-slate-100 dark:hover:bg-[#1c2127] hover:text-slate-900 dark:hover:text-white transition-colors group" href="https://app-companion-430619.appspot.com/projects/1066880693357531312?usegapi=1&amp;jsh=m%3B%2F_%2Fscs%2Fabc-static%2F_%2Fjs%2Fk%3Dgapi.lb.en.PJsh2cctCQI.O%2Fd%3D1%2Frs%3DAHpOoo_QlMhY2cycn60Rs8eI1WInRwuahw%2Fm%3D__features__#" style="font-size: 0.875rem; display: inline !important;"><span class="text-sm font-medium cursor-text" spellcheck="false" data-stitch-added-classes="cursor-text" style="display: inline !important;">Logs</span></a>&nbsp;Base</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-[#9dabb9] hover:bg-slate-100 dark:hover:bg-[#1c2127] hover:text-slate-900 dark:hover:text-white transition-colors group" href="#" style="">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform" style="font-size: 20px;">tune</span>
+<span class="text-sm font-medium" style="">Menu Config</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-[#9dabb9] hover:bg-slate-100 dark:hover:bg-[#1c2127] hover:text-slate-900 dark:hover:text-white transition-colors group" href="#" style="">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform" style="font-size: 20px;">description</span>
+<span class="text-sm font-medium" style="">Logs</span>
+</a>
+</nav>
+</div>
+<!-- Bottom User Profile -->
+<div class="border-t border-slate-200 dark:border-slate-800 pt-4 px-2">
+<div class="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-[#1c2127] cursor-pointer transition-colors">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8" data-alt="Portrait of user administrator" style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDeqpYL5ngAhXENe9g2FJddit6rmjf7lg0ymevVmNgjlQKmyTyeTrOqZ-UHPBHlQHrYhmYFtq46tuaPJZbZD5Gj9q8fpRVaa2R2Qz1D_PcakPMjlmQXCopAZVv6O1qE6XaptxkAZJwxrgEm7V0AY2yO2z3Ywr3mVZtwczKmouyA80N3nU6598i2PZPgUrjeWXDv7wjG-Rz3Q7KgPpgvHNmLC4gMpAIWEJrKQROWlJK9SAmzaYkCUBZ24LK7U4LzLMbmNksJPcNRbxE&quot;);"></div>
+<div class="flex flex-col overflow-hidden">
+<span class="text-sm font-medium text-slate-900 dark:text-white truncate" style="">Sarah Connor</span>
+<span class="text-xs text-slate-500 dark:text-[#9dabb9] truncate" style="">Admin</span>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-full overflow-hidden bg-background-light dark:bg-background-dark relative">
+<!-- Top Navigation Bar -->
+<header class="h-16 flex items-center justify-between px-6 border-b border-slate-200 dark:border-[#283039] bg-white/80 dark:bg-[#111418]/80 backdrop-blur-md sticky top-0 z-10 shrink-0">
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center gap-2 text-slate-900 dark:text-white px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-[#283039] border border-slate-200 dark:border-transparent cursor-pointer hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-primary" style="font-size: 20px;">workspaces</span>
+<span class="text-sm font-semibold" style="">Workspace: Operations</span>
+<span class="material-symbols-outlined text-slate-400" style="font-size: 18px;">expand_more</span>
+</div>
+<!-- Search Bar -->
+<div class="relative w-64 md:w-96 group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-slate-400 group-focus-within:text-primary transition-colors" style="font-size: 20px;">search</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-2 border-none rounded-lg leading-5 bg-slate-100 dark:bg-[#1c2127] text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/50 sm:text-sm transition-all" placeholder="Search agents, logs, or commands..." type="text">
+<div class="absolute inset-y-0 right-0 pr-2 flex items-center">
+<span class="text-xs text-slate-400 border border-slate-300 dark:border-slate-600 rounded px-1.5 py-0.5" style="">⌘K</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="relative p-2 text-slate-500 hover:text-primary dark:text-[#9dabb9] dark:hover:text-white transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-[#283039]" style="">
+<span class="material-symbols-outlined" style="font-size: 24px;">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border-2 border-white dark:border-[#111418]"></span>
+</button>
+<button class="p-2 text-slate-500 hover:text-primary dark:text-[#9dabb9] dark:hover:text-white transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-[#283039]" style="">
+<span class="material-symbols-outlined" style="font-size: 24px;">settings</span>
+</button>
+<button class="p-2 text-slate-500 hover:text-primary dark:text-[#9dabb9] dark:hover:text-white transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-[#283039]" style="">
+<span class="material-symbols-outlined" style="font-size: 24px;">help</span>
+</button>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto p-6 md:p-8 scroll-smooth">
+<div class="max-w-7xl mx-auto flex flex-col gap-8">
+<!-- Stats Grid -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="flex flex-col gap-1 p-5 rounded-xl border border-slate-200 dark:border-[#283039] bg-white dark:bg-[#1c2127] shadow-sm relative overflow-hidden group hover:border-primary/30 transition-all">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-primary" style="font-size: 64px;">smart_toy</span>
+</div>
+<p class="text-slate-500 dark:text-[#9dabb9] text-sm font-medium" style="">Total Agents</p>
+<div class="flex items-baseline gap-2">
+<h3 class="text-3xl font-bold text-slate-900 dark:text-white" style="">12</h3>
+<span class="text-xs font-medium text-emerald-500 bg-emerald-500/10 px-1.5 py-0.5 rounded" style="">+2 new</span>
+</div>
+</div>
+<div class="flex flex-col gap-1 p-5 rounded-xl border border-red-200 dark:border-red-900/30 bg-red-50 dark:bg-red-900/10 shadow-sm relative overflow-hidden group hover:border-red-500/50 transition-all">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-red-500" style="font-size: 64px;">warning</span>
+</div>
+<p class="text-red-600 dark:text-red-400 text-sm font-medium" style="">Active Alerts</p>
+<div class="flex items-baseline gap-2">
+<h3 class="text-3xl font-bold text-slate-900 dark:text-white" style="">2</h3>
+<span class="text-xs font-medium text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/30 px-1.5 py-0.5 rounded" style="">Critical</span>
+</div>
+</div>
+<div class="flex flex-col gap-1 p-5 rounded-xl border border-slate-200 dark:border-[#283039] bg-white dark:bg-[#1c2127] shadow-sm relative overflow-hidden group hover:border-primary/30 transition-all">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-primary" style="font-size: 64px;">memory</span>
+</div>
+<p class="text-slate-500 dark:text-[#9dabb9] text-sm font-medium" style="">Running Jobs</p>
+<div class="flex items-baseline gap-2">
+<h3 class="text-3xl font-bold text-slate-900 dark:text-white" style="">8</h3>
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400" style="">98% load</span>
+</div>
+</div>
+<div class="flex flex-col gap-1 p-5 rounded-xl border border-slate-200 dark:border-[#283039] bg-white dark:bg-[#1c2127] shadow-sm relative overflow-hidden group hover:border-primary/30 transition-all">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-primary" style="font-size: 64px;">database</span>
+</div>
+<p class="text-slate-500 dark:text-[#9dabb9] text-sm font-medium" style="">KB Entries</p>
+<div class="flex items-baseline gap-2">
+<h3 class="text-3xl font-bold text-slate-900 dark:text-white" style="">14,205</h3>
+<span class="text-xs font-medium text-primary bg-primary/10 px-1.5 py-0.5 rounded" style="">Updated 1m ago</span>
+</div>
+</div>
+</section>
+<!-- Split View: Agent Status Grid & Activity Log -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+<!-- Agent Status Grid (Takes up 2/3 width on large screens) -->
+<div class="xl:col-span-2 flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2" style="">
+<span class="material-symbols-outlined text-primary" style="">grid_view</span>
+                                    Agent Status Grid
+                                </h2>
+<button class="text-sm font-medium text-primary hover:text-primary/80" style="">View All Agents</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+<!-- Card 1: Processing -->
+<div class="flex flex-col justify-between gap-3 rounded-xl border border-slate-200 dark:border-[#283039] bg-white dark:bg-[#1c2127] p-4 hover:shadow-md hover:border-primary/40 transition-all cursor-pointer group">
+<div class="flex items-start justify-between">
+<div class="p-2 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400">
+<span class="material-symbols-outlined" style="font-size: 24px;">psychology</span>
+</div>
+<span class="relative flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
+</span>
+</div>
+<div>
+<h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors" style="">Agent Alpha</h3>
+<p class="text-xs font-medium text-slate-500 dark:text-[#9dabb9] mt-1" style="">Processing</p>
+<p class="text-sm text-slate-600 dark:text-slate-300 mt-2 line-clamp-1" style="">Scraping Documentation</p>
+</div>
+<div class="h-1 w-full bg-slate-100 dark:bg-slate-800 rounded-full mt-2 overflow-hidden">
+<div class="h-full bg-blue-500 w-3/4 rounded-full"></div>
+</div>
+</div>
+<!-- Card 2: Idle -->
+<div class="flex flex-col justify-between gap-3 rounded-xl border border-slate-200 dark:border-[#283039] bg-white dark:bg-[#1c2127] p-4 hover:shadow-md hover:border-primary/40 transition-all cursor-pointer group">
+<div class="flex items-start justify-between">
+<div class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined" style="font-size: 24px;">coffee</span>
+</div>
+<span class="relative flex h-3 w-3">
+<span class="relative inline-flex rounded-full h-3 w-3 bg-slate-400"></span>
+</span>
+</div>
+<div>
+<h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors" style="">Agent Beta</h3>
+<p class="text-xs font-medium text-slate-500 dark:text-[#9dabb9] mt-1" style="">Idle</p>
+<p class="text-sm text-slate-600 dark:text-slate-300 mt-2 line-clamp-1" style="">Waiting for Task</p>
+</div>
+<div class="h-1 w-full bg-slate-100 dark:bg-slate-800 rounded-full mt-2 overflow-hidden">
+<div class="h-full bg-slate-400 w-0 rounded-full"></div>
+</div>
+</div>
+<!-- Card 3: Alert -->
+<div class="flex flex-col justify-between gap-3 rounded-xl border border-red-200 dark:border-red-900/30 bg-red-50/50 dark:bg-[#1c2127] p-4 hover:shadow-md hover:border-red-500/50 transition-all cursor-pointer group">
+<div class="flex items-start justify-between">
+<div class="p-2 rounded-lg bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400">
+<span class="material-symbols-outlined" style="font-size: 24px;">error</span>
+</div>
+<span class="relative flex h-3 w-3">
+<span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+</span>
+</div>
+<div>
+<h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-red-500 transition-colors" style="">Agent Gamma</h3>
+<p class="text-xs font-medium text-red-500 mt-1" style="">Error</p>
+<p class="text-sm text-slate-600 dark:text-slate-300 mt-2 line-clamp-1" style="">Rate Limit Exceeded</p>
+</div>
+<div class="h-1 w-full bg-slate-100 dark:bg-slate-800 rounded-full mt-2 overflow-hidden">
+<div class="h-full bg-red-500 w-full rounded-full"></div>
+</div>
+</div>
+<!-- Card 4: Processing -->
+<div class="flex flex-col justify-between gap-3 rounded-xl border border-slate-200 dark:border-[#283039] bg-white dark:bg-[#1c2127] p-4 hover:shadow-md hover:border-primary/40 transition-all cursor-pointer group">
+<div class="flex items-start justify-between">
+<div class="p-2 rounded-lg bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400">
+<span class="material-symbols-outlined" style="font-size: 24px;">database</span>
+</div>
+<span class="relative flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-purple-500"></span>
+</span>
+</div>
+<div>
+<h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors" style="">Agent Delta</h3>
+<p class="text-xs font-medium text-slate-500 dark:text-[#9dabb9] mt-1" style="">Processing</p>
+<p class="text-sm text-slate-600 dark:text-slate-300 mt-2 line-clamp-1" style="">Data Mining</p>
+</div>
+<div class="h-1 w-full bg-slate-100 dark:bg-slate-800 rounded-full mt-2 overflow-hidden">
+<div class="h-full bg-purple-500 w-1/2 rounded-full"></div>
+</div>
+</div>
+<!-- Card 5: Idle -->
+<div class="flex flex-col justify-between gap-3 rounded-xl border border-slate-200 dark:border-[#283039] bg-white dark:bg-[#1c2127] p-4 hover:shadow-md hover:border-primary/40 transition-all cursor-pointer group">
+<div class="flex items-start justify-between">
+<div class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined" style="font-size: 24px;">pause_circle</span>
+</div>
+<span class="relative flex h-3 w-3">
+<span class="relative inline-flex rounded-full h-3 w-3 bg-slate-400"></span>
+</span>
+</div>
+<div>
+<h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors" style="">Agent Epsilon</h3>
+<p class="text-xs font-medium text-slate-500 dark:text-[#9dabb9] mt-1" style="">Standby</p>
+<p class="text-sm text-slate-600 dark:text-slate-300 mt-2 line-clamp-1" style="">Ready for assignment</p>
+</div>
+<div class="h-1 w-full bg-slate-100 dark:bg-slate-800 rounded-full mt-2 overflow-hidden">
+<div class="h-full bg-slate-400 w-0 rounded-full"></div>
+</div>
+</div>
+<!-- Card 6: Processing -->
+<div class="flex flex-col justify-between gap-3 rounded-xl border border-slate-200 dark:border-[#283039] bg-white dark:bg-[#1c2127] p-4 hover:shadow-md hover:border-primary/40 transition-all cursor-pointer group">
+<div class="flex items-start justify-between">
+<div class="p-2 rounded-lg bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400">
+<span class="material-symbols-outlined" style="font-size: 24px;">description</span>
+</div>
+<span class="relative flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-orange-500"></span>
+</span>
+</div>
+<div>
+<h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors" style="">Agent Zeta</h3>
+<p class="text-xs font-medium text-slate-500 dark:text-[#9dabb9] mt-1" style="">Processing</p>
+<p class="text-sm text-slate-600 dark:text-slate-300 mt-2 line-clamp-1" style="">Text Summarization</p>
+</div>
+<div class="h-1 w-full bg-slate-100 dark:bg-slate-800 rounded-full mt-2 overflow-hidden">
+<div class="h-full bg-orange-500 w-5/6 rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Activity Log (1/3 width) -->
+<div class="xl:col-span-1 flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2" style="">
+<span class="material-symbols-outlined text-primary" style="">history</span>
+                                    Recent Activity
+                                </h2>
+<button class="text-sm font-medium text-primary hover:text-primary/80" style="">View Logs</button>
+</div>
+<div class="bg-white dark:bg-[#1c2127] rounded-xl border border-slate-200 dark:border-[#283039] p-2 h-full min-h-[400px]">
+<ul class="flex flex-col">
+<!-- Log Item 1 -->
+<li class="relative pl-6 py-4 border-l border-slate-200 dark:border-slate-700 ml-4 hover:bg-slate-50 dark:hover:bg-[#283039]/50 rounded-r-lg transition-colors group" style="">
+<div class="absolute -left-[5px] top-6 h-2.5 w-2.5 rounded-full border border-white dark:border-[#1c2127] bg-primary"></div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-start">
+<span class="text-sm font-bold text-slate-900 dark:text-white" style="">File Indexing Complete</span>
+<span class="text-xs font-mono text-slate-400" style="">10:02 AM</span>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-300" style="">Agent Alpha successfully indexed <span class="text-primary font-medium" style="">50 files</span> into Vector DB.</p>
+</div>
+</li>
+<!-- Log Item 2 -->
+<li class="relative pl-6 py-4 border-l border-slate-200 dark:border-slate-700 ml-4 hover:bg-slate-50 dark:hover:bg-[#283039]/50 rounded-r-lg transition-colors group" style="">
+<div class="absolute -left-[5px] top-6 h-2.5 w-2.5 rounded-full border border-white dark:border-[#1c2127] bg-emerald-500"></div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-start">
+<span class="text-sm font-bold text-slate-900 dark:text-white" style="">System Health Check</span>
+<span class="text-xs font-mono text-slate-400" style="">10:00 AM</span>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-300" style="">Routine diagnostics passed. All services operational.</p>
+</div>
+</li>
+<!-- Log Item 3 -->
+<li class="relative pl-6 py-4 border-l border-slate-200 dark:border-slate-700 ml-4 hover:bg-slate-50 dark:hover:bg-[#283039]/50 rounded-r-lg transition-colors group" style="">
+<div class="absolute -left-[5px] top-6 h-2.5 w-2.5 rounded-full border border-white dark:border-[#1c2127] bg-blue-400"></div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-start">
+<span class="text-sm font-bold text-slate-900 dark:text-white" style="">Policy Update</span>
+<span class="text-xs font-mono text-slate-400" style="">09:55 AM</span>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-300" style="">Admin <span class="font-medium text-slate-900 dark:text-white" style="">J.Doe</span> updated Access Control policies.</p>
+</div>
+</li>
+<!-- Log Item 4 -->
+<li class="relative pl-6 py-4 border-l border-slate-200 dark:border-slate-700 ml-4 hover:bg-slate-50 dark:hover:bg-[#283039]/50 rounded-r-lg transition-colors group" style="">
+<div class="absolute -left-[5px] top-6 h-2.5 w-2.5 rounded-full border border-white dark:border-[#1c2127] bg-red-500"></div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-start">
+<span class="text-sm font-bold text-slate-900 dark:text-white" style="">API Warning</span>
+<span class="text-xs font-mono text-slate-400" style="">09:42 AM</span>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-300" style="">External API latency detected on Endpoint /v1/chat.</p>
+</div>
+</li>
+<!-- Log Item 5 -->
+<li class="relative pl-6 py-4 border-l border-slate-200 dark:border-slate-700 ml-4 hover:bg-slate-50 dark:hover:bg-[#283039]/50 rounded-r-lg transition-colors group" style="">
+<div class="absolute -left-[5px] top-6 h-2.5 w-2.5 rounded-full border border-white dark:border-[#1c2127] bg-slate-400"></div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-start">
+<span class="text-sm font-bold text-slate-900 dark:text-white" style="">Agent Standby</span>
+<span class="text-xs font-mono text-slate-400" style="">09:30 AM</span>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-300" style="">Agent Epsilon entered low-power standby mode.</p>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Footer / Additional Info -->
+<footer class="mt-8 border-t border-slate-200 dark:border-[#283039] pt-6 pb-2">
+<div class="flex flex-col md:flex-row justify-between items-center text-xs text-slate-400 dark:text-[#9dabb9]">
+<p class="" style="">© 2023 AI Nexus Command Center. All rights reserved.</p>
+<div class="flex gap-4 mt-2 md:mt-0">
+<a class="hover:text-primary" href="#" style="">System Status</a>
+<a class="hover:text-primary" href="#" style="">Privacy Policy</a>
+<a class="hover:text-primary" href="#" style="">Documentation</a>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</main>
+</div>
+</body></html>

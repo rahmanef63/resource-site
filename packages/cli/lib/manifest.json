@@ -1,0 +1,838 @@
+{
+  "version": 2,
+  "generatedAt": "2026-05-06T02:25:42.416Z",
+  "repo": "rahmanef63/resource-site",
+  "branch": "main",
+  "layouts": [
+    {
+      "slug": "personal-brand-os",
+      "title": "Personal Brand OS",
+      "category": "website-template",
+      "description": "Full-app personal site — public landing (hero, blog, portfolio, services, resources, contact) + admin dashboard (posts, leads, chatbot, comments). Inspired by saudivisuals.com + cescadesigns. Fill-in-the-blank with lorem ipsum.",
+      "source": "saudivisuals.com + cescadesigns",
+      "repoPath": "app/preview/personal-brand-os",
+      "pullPaths": [
+        "app/preview/personal-brand-os",
+        "components/templates/_shared",
+        "components/templates/personal-brand",
+        "convex/templates/personal-brand-os"
+      ],
+      "files": [
+        "app/preview/personal-brand-os/robots.ts",
+        "app/preview/personal-brand-os/sitemap.ts",
+        "app/preview/personal-brand-os/opengraph-image.tsx",
+        "app/preview/personal-brand-os/public/layout.tsx",
+        "app/preview/personal-brand-os/public/page.tsx",
+        "app/preview/personal-brand-os/public/blog/page.tsx",
+        "app/preview/personal-brand-os/public/blog/[slug]/page.tsx",
+        "app/preview/personal-brand-os/public/portfolio/page.tsx",
+        "app/preview/personal-brand-os/public/portfolio/[slug]/page.tsx",
+        "app/preview/personal-brand-os/public/services/page.tsx",
+        "app/preview/personal-brand-os/public/resources/page.tsx",
+        "app/preview/personal-brand-os/public/contact/page.tsx",
+        "app/preview/personal-brand-os/public/about/page.tsx",
+        "app/preview/personal-brand-os/admin/layout.tsx",
+        "app/preview/personal-brand-os/admin/page.tsx",
+        "app/preview/personal-brand-os/admin/posts/page.tsx",
+        "app/preview/personal-brand-os/admin/posts/new/page.tsx",
+        "app/preview/personal-brand-os/admin/posts/[id]/page.tsx",
+        "app/preview/personal-brand-os/admin/portfolio/page.tsx",
+        "app/preview/personal-brand-os/admin/portfolio/new/page.tsx",
+        "app/preview/personal-brand-os/admin/portfolio/[id]/page.tsx",
+        "app/preview/personal-brand-os/admin/services/page.tsx",
+        "app/preview/personal-brand-os/admin/resources/page.tsx",
+        "app/preview/personal-brand-os/admin/leads/page.tsx",
+        "app/preview/personal-brand-os/admin/comments/page.tsx",
+        "app/preview/personal-brand-os/admin/chatbot/page.tsx",
+        "app/preview/personal-brand-os/admin/newsletter/page.tsx",
+        "app/preview/personal-brand-os/admin/analytics/page.tsx",
+        "app/preview/personal-brand-os/admin/settings/site/page.tsx",
+        "app/preview/personal-brand-os/admin/settings/team/page.tsx",
+        "app/preview/personal-brand-os/admin/settings/ai/page.tsx",
+        "components/templates/_shared/index.ts",
+        "components/templates/_shared/types/common.ts",
+        "components/templates/_shared/utils/index.ts",
+        "components/templates/_shared/hooks/create-template-store.tsx",
+        "components/templates/_shared/ui/section-head.tsx",
+        "components/templates/_shared/ui/site-nav.tsx",
+        "components/templates/_shared/ui/site-footer.tsx",
+        "components/templates/_shared/ui/site-shell.tsx",
+        "components/templates/_shared/ui/admin-sidebar.tsx",
+        "components/templates/_shared/ui/admin-topbar.tsx",
+        "components/templates/_shared/ui/admin-shell.tsx",
+        "components/templates/_shared/ui/stat-card.tsx",
+        "components/templates/personal-brand/shared/types.ts",
+        "components/templates/personal-brand/shared/store.tsx",
+        "components/templates/personal-brand/shared/seed.ts",
+        "components/templates/personal-brand/shared/site-config.ts",
+        "components/templates/personal-brand/shared/nav-config.ts",
+        "components/templates/personal-brand/shared/ui/chat-fab.tsx",
+        "components/templates/personal-brand/slices/home/HomePage.tsx",
+        "components/templates/personal-brand/slices/home/NewsletterBlock.tsx",
+        "components/templates/personal-brand/slices/blog/BlogList.tsx",
+        "components/templates/personal-brand/slices/blog/BlogDetail.tsx",
+        "components/templates/personal-brand/slices/portfolio/PortfolioListPage.tsx",
+        "components/templates/personal-brand/slices/portfolio/PortfolioDetailPage.tsx",
+        "components/templates/personal-brand/slices/services/ServicesPage.tsx",
+        "components/templates/personal-brand/slices/resources/ResourcesPage.tsx",
+        "components/templates/personal-brand/slices/about/AboutPage.tsx",
+        "components/templates/personal-brand/slices/contact/ContactPage.tsx",
+        "app/preview/personal-brand-os/admin/admin-shell-client.tsx",
+        "components/templates/personal-brand/slices/admin/dashboard/DashboardView.tsx",
+        "components/templates/personal-brand/slices/admin/posts/PostsList.tsx",
+        "components/templates/personal-brand/slices/admin/posts/PostEditor.tsx",
+        "components/templates/personal-brand/slices/admin/portfolio/PortfolioListAdmin.tsx",
+        "components/templates/personal-brand/slices/admin/portfolio/PortfolioEditor.tsx",
+        "components/templates/personal-brand/slices/admin/services/ServicesAdminView.tsx",
+        "components/templates/personal-brand/slices/admin/resources/ResourcesAdminView.tsx",
+        "components/templates/personal-brand/slices/admin/leads/LeadsView.tsx",
+        "components/templates/personal-brand/slices/admin/comments/CommentsView.tsx",
+        "components/templates/personal-brand/slices/admin/chatbot/ChatbotAdminView.tsx",
+        "components/templates/personal-brand/slices/admin/newsletter/NewsletterView.tsx",
+        "components/templates/personal-brand/slices/admin/analytics/AnalyticsView.tsx",
+        "components/templates/personal-brand/slices/admin/settings/SettingsView.tsx",
+        "convex/templates/personal-brand-os/schema.ts",
+        "convex/templates/personal-brand-os/posts.ts",
+        "convex/templates/personal-brand-os/portfolio.ts",
+        "convex/templates/personal-brand-os/services.ts",
+        "convex/templates/personal-brand-os/resources.ts",
+        "convex/templates/personal-brand-os/leads.ts",
+        "convex/templates/personal-brand-os/comments.ts",
+        "convex/templates/personal-brand-os/subscribers.ts",
+        "convex/templates/personal-brand-os/chat.ts",
+        "convex/templates/personal-brand-os/README.md"
+      ],
+      "dependencies": [
+        "next@^16",
+        "react@^19",
+        "react-dom@^19",
+        "lucide-react",
+        "@tabler/icons-react",
+        "sonner",
+        "next-themes",
+        "tailwindcss@^4",
+        "convex",
+        "@convex-dev/auth",
+        "@radix-ui/react-avatar",
+        "@radix-ui/react-dialog",
+        "@radix-ui/react-dropdown-menu",
+        "@radix-ui/react-label",
+        "@radix-ui/react-scroll-area",
+        "@radix-ui/react-select",
+        "@radix-ui/react-separator",
+        "@radix-ui/react-slot",
+        "@radix-ui/react-tabs"
+      ],
+      "agentRecipe": "Personal Brand OS = full-app template (public + admin). 1) Move app/preview/personal-brand-os/{robots,sitemap,opengraph-image}.* to app root. 2) Copy app/preview/personal-brand-os/public into app/(public)/, app/preview/personal-brand-os/admin into app/(admin)/. 3) Edit components/templates/personal-brand/shared/site-config.ts — set brandName, ownerName, baseUrl, twitter, email. 4) Wire convex/templates/personal-brand-os/* to convex/_generated and add @convex-dev/auth on admin routes. 5) Replace localStorage StoreProvider with Convex queries (schema mirrors localStorage shape).",
+      "tags": [
+        "template",
+        "personal-brand",
+        "blog",
+        "portfolio",
+        "admin",
+        "saas"
+      ],
+      "primaryFile": "app/preview/personal-brand-os/public/page.tsx"
+    },
+    {
+      "slug": "agency-studio-os",
+      "title": "Agency Studio OS",
+      "category": "website-template",
+      "description": "Full-app B2B agency / studio site — public (home, services, work + project detail, about, contact) + admin (dashboard, projects pipeline, clients, services, leads, settings). Inspired by saudivisuals.com + cescadesigns.",
+      "source": "saudivisuals.com + cescadesigns",
+      "repoPath": "app/preview/agency-studio-os",
+      "pullPaths": [
+        "app/preview/agency-studio-os",
+        "components/templates/_shared",
+        "components/templates/agency-studio",
+        "convex/templates/agency-studio-os"
+      ],
+      "files": [
+        "app/preview/agency-studio-os/robots.ts",
+        "app/preview/agency-studio-os/sitemap.ts",
+        "app/preview/agency-studio-os/opengraph-image.tsx",
+        "app/preview/agency-studio-os/public/layout.tsx",
+        "app/preview/agency-studio-os/public/page.tsx",
+        "app/preview/agency-studio-os/public/services/page.tsx",
+        "app/preview/agency-studio-os/public/portfolio/page.tsx",
+        "app/preview/agency-studio-os/public/portfolio/[slug]/page.tsx",
+        "app/preview/agency-studio-os/public/about/page.tsx",
+        "app/preview/agency-studio-os/public/contact/page.tsx",
+        "app/preview/agency-studio-os/admin/layout.tsx",
+        "app/preview/agency-studio-os/admin/page.tsx",
+        "app/preview/agency-studio-os/admin/projects/page.tsx",
+        "app/preview/agency-studio-os/admin/projects/new/page.tsx",
+        "app/preview/agency-studio-os/admin/projects/[id]/page.tsx",
+        "app/preview/agency-studio-os/admin/clients/page.tsx",
+        "app/preview/agency-studio-os/admin/services/page.tsx",
+        "app/preview/agency-studio-os/admin/leads/page.tsx",
+        "app/preview/agency-studio-os/admin/settings/page.tsx",
+        "components/templates/agency-studio/shared/types.ts",
+        "components/templates/agency-studio/shared/store.tsx",
+        "components/templates/agency-studio/shared/seed.ts",
+        "components/templates/agency-studio/shared/site-config.ts",
+        "components/templates/agency-studio/shared/nav-config.ts",
+        "components/templates/agency-studio/slices/home/HomePage.tsx",
+        "components/templates/agency-studio/slices/services/ServicesPage.tsx",
+        "components/templates/agency-studio/slices/portfolio/PortfolioListPage.tsx",
+        "components/templates/agency-studio/slices/portfolio/PortfolioDetailPage.tsx",
+        "components/templates/agency-studio/slices/about/AboutPage.tsx",
+        "components/templates/agency-studio/slices/contact/ContactPage.tsx",
+        "app/preview/agency-studio-os/admin/admin-shell-client.tsx",
+        "components/templates/agency-studio/slices/admin/dashboard/DashboardView.tsx",
+        "components/templates/agency-studio/slices/admin/projects/ProjectsList.tsx",
+        "components/templates/agency-studio/slices/admin/projects/ProjectEditor.tsx",
+        "components/templates/agency-studio/slices/admin/clients/ClientsList.tsx",
+        "components/templates/agency-studio/slices/admin/services/ServicesAdminView.tsx",
+        "components/templates/agency-studio/slices/admin/leads/LeadsView.tsx",
+        "components/templates/agency-studio/slices/admin/settings/SettingsView.tsx",
+        "convex/templates/agency-studio-os/schema.ts",
+        "convex/templates/agency-studio-os/projects.ts",
+        "convex/templates/agency-studio-os/clients.ts",
+        "convex/templates/agency-studio-os/services.ts",
+        "convex/templates/agency-studio-os/leads.ts",
+        "convex/templates/agency-studio-os/README.md"
+      ],
+      "dependencies": [
+        "next@^16",
+        "react@^19",
+        "react-dom@^19",
+        "lucide-react",
+        "@tabler/icons-react",
+        "sonner",
+        "next-themes",
+        "tailwindcss@^4",
+        "convex",
+        "@convex-dev/auth",
+        "@radix-ui/react-avatar",
+        "@radix-ui/react-dialog",
+        "@radix-ui/react-label",
+        "@radix-ui/react-separator",
+        "@radix-ui/react-slot"
+      ],
+      "agentRecipe": "Agency Studio OS = full-app B2B agency template (public + admin). 1) Move app/preview/agency-studio-os/{robots,sitemap,opengraph-image}.* to app root. 2) Copy public into app/(public)/, admin into app/(admin)/. 3) Edit components/templates/agency-studio/shared/site-config.ts — set studioName, brandName, baseUrl, twitter, email. 4) Wire convex/templates/agency-studio-os/* to convex/_generated and add @convex-dev/auth on admin routes. 5) Replace localStorage StoreProvider with Convex queries.",
+      "tags": [
+        "template",
+        "agency",
+        "studio",
+        "portfolio",
+        "b2b",
+        "admin",
+        "saas"
+      ],
+      "primaryFile": "app/preview/agency-studio-os/public/page.tsx"
+    },
+    {
+      "slug": "landing-hero-carousel",
+      "title": "Landing — Hero Carousel",
+      "category": "marketing",
+      "description": "Full-width image carousel hero with auto-fade + dot indicators. Originally CMS-driven via Convex. Best for visual brands.",
+      "source": "cescadesigns",
+      "repoPath": "cookbook/layouts/landing-hero-carousel",
+      "pullPaths": [
+        "app/preview/landing-hero-carousel"
+      ],
+      "files": [],
+      "dependencies": [],
+      "agentRecipe": "Mount the HeroSection from cookbook/layouts/landing-hero-carousel as the hero of the marketing route group. Provide image array via props or wire to Convex api.heroImages.list.",
+      "tags": [
+        "marketing",
+        "carousel",
+        "image",
+        "cms"
+      ],
+      "primaryFile": "src/HeroSection.tsx"
+    },
+    {
+      "slug": "landing-asymmetric-masonry",
+      "title": "Landing — Asymmetric Masonry",
+      "category": "marketing",
+      "description": "8-slot repeating asymmetric grid. Intersection-observer staggered scroll-reveal. Lifted from rahmanef.com portfolio.",
+      "source": "rahmanef.com",
+      "repoPath": "cookbook/layouts/landing-asymmetric-masonry",
+      "pullPaths": [
+        "app/preview/landing-asymmetric-masonry"
+      ],
+      "files": [],
+      "dependencies": [],
+      "agentRecipe": "Use PortfolioGrid for case-study or portfolio pages. Items array shape: { id, title, cover, href, category }. The 8-slot pattern repeats; supply at least 8 items for the layout to bloom.",
+      "tags": [
+        "marketing",
+        "portfolio",
+        "masonry",
+        "scroll-reveal"
+      ],
+      "primaryFile": "src/PortfolioGrid.tsx"
+    },
+    {
+      "slug": "landing-bento",
+      "title": "Landing — Bento Grid",
+      "category": "marketing",
+      "description": "Feature-grid marketing landing. Compose Card + Magnetic + KineticHeading. Modern SaaS feel.",
+      "source": "synthesized",
+      "repoPath": "cookbook/layouts/landing-bento",
+      "pullPaths": [
+        "app/preview/landing-bento"
+      ],
+      "files": [],
+      "dependencies": [],
+      "agentRecipe": "Compose a 3-column CSS grid with explicit area assignments per feature. Mix Card sizes (1x1, 1x2, 2x1, 2x2) for visual rhythm.",
+      "tags": [
+        "marketing",
+        "bento",
+        "features"
+      ],
+      "primaryFile": "README.md"
+    },
+    {
+      "slug": "landing-kinetic-text",
+      "title": "Landing — Kinetic Text",
+      "category": "marketing",
+      "description": "Brand-forward landing. Letter-stagger headings + magnetic CTAs + marquee strips. Motion-heavy.",
+      "source": "rahmanef.com",
+      "repoPath": "cookbook/layouts/landing-kinetic-text",
+      "pullPaths": [
+        "app/preview/landing-kinetic-text"
+      ],
+      "files": [],
+      "dependencies": [],
+      "agentRecipe": "Use motion primitives marquee, kinetic-heading, magnetic from components/motion (already imported into the kitab from rahmanef.com). All respect prefers-reduced-motion automatically.",
+      "tags": [
+        "marketing",
+        "motion",
+        "type"
+      ],
+      "primaryFile": "README.md"
+    },
+    {
+      "slug": "dashboard-three-column",
+      "title": "Dashboard — Three Column",
+      "category": "dashboard",
+      "description": "Kitab flagship. Left tree / main / right inspector. Resizable, collapsible, mobile drawer fallback. Used by Database, Tasks, Contacts.",
+      "source": "kitab-core",
+      "repoPath": "cookbook/layouts/dashboard-three-column",
+      "pullPaths": [
+        "app/preview/dashboard-three-column"
+      ],
+      "files": [],
+      "dependencies": [],
+      "agentRecipe": "Mount inside app/dashboard/<slice>/page.tsx. Wrap with the kitab's <ThreeColumnLayout>. Slot in slice-specific sidebars and inspectors. Mobile auto-collapses to drawers.",
+      "tags": [
+        "dashboard",
+        "three-column",
+        "resizable",
+        "responsive"
+      ],
+      "primaryFile": "template-base/frontend/shared/ui/layout/container/three-column/ThreeColumnLayout.tsx"
+    },
+    {
+      "slug": "dashboard-ide",
+      "title": "Dashboard — IDE",
+      "category": "dashboard",
+      "description": "Activity bar + tabs + editor + bottom panel. Editor-first apps (notion, code, doc tools).",
+      "source": "synthesized",
+      "repoPath": "cookbook/layouts/dashboard-ide",
+      "pullPaths": [
+        "app/preview/dashboard-ide"
+      ],
+      "files": [],
+      "dependencies": [],
+      "agentRecipe": "Compose grid: 48px activity bar + tabs row + editor/inspector flex row + bottom console. Wire activity bar items to dispatch into tabs/inspector store.",
+      "tags": [
+        "dashboard",
+        "ide",
+        "editor"
+      ],
+      "primaryFile": "README.md"
+    },
+    {
+      "slug": "dashboard-mobile-dock",
+      "title": "Dashboard — Mobile Dock",
+      "category": "dashboard",
+      "description": "Mobile-first auth app. MobileTopBar + content + MobileDashboardDock bottom nav. Native-app feel on mobile, sidebar on desktop.",
+      "source": "kitab-core",
+      "repoPath": "cookbook/layouts/dashboard-mobile-dock",
+      "pullPaths": [
+        "app/preview/dashboard-mobile-dock"
+      ],
+      "files": [],
+      "dependencies": [],
+      "agentRecipe": "Use ResponsiveDashboardShell which branches desktop (sidebar) vs mobile (dock). Customize MobileDashboardDock items and MobileTopBar workspace switcher to your domain.",
+      "tags": [
+        "dashboard",
+        "mobile",
+        "pwa"
+      ],
+      "primaryFile": "template-base/frontend/shared/ui/layout/dashboard/MobileDashboardShell.tsx"
+    },
+    {
+      "slug": "cms-public-storefront",
+      "title": "CMS — Public Storefront",
+      "category": "cms",
+      "description": "E-commerce / blog public storefront. Convex read-only. Cart context + currency selector + i18n.",
+      "source": "kitab-core cms-lite",
+      "repoPath": "cookbook/layouts/cms-public-storefront",
+      "pullPaths": [
+        "app/preview/cms-public-storefront"
+      ],
+      "files": [],
+      "dependencies": [],
+      "agentRecipe": "Port kitab-core slices/cms-lite/ into your project's app/(cms)/ route group. Fetch products/pages from Convex via api.cmsLite.* queries.",
+      "tags": [
+        "cms",
+        "ecommerce",
+        "storefront"
+      ],
+      "primaryFile": "README.md"
+    },
+    {
+      "slug": "saas-marketing-os",
+      "title": "SaaS Marketing OS",
+      "category": "website-template",
+      "description": "Public-only marketing site for a SaaS product — landing, pricing, features, blog, changelog, about, contact. MDX-driven blog + changelog. No admin (CMS via MDX files in repo).",
+      "source": "synthesized + mdx-blog feature",
+      "repoPath": "app/preview/saas-marketing-os",
+      "pullPaths": [
+        "app/preview/saas-marketing-os",
+        "components/templates/_shared",
+        "components/templates/saas-marketing"
+      ],
+      "files": [
+        "app/preview/saas-marketing-os/public/layout.tsx",
+        "app/preview/saas-marketing-os/public/page.tsx",
+        "app/preview/saas-marketing-os/public/pricing/page.tsx",
+        "app/preview/saas-marketing-os/public/features/page.tsx",
+        "app/preview/saas-marketing-os/public/blog/page.tsx",
+        "app/preview/saas-marketing-os/public/blog/[slug]/page.tsx",
+        "app/preview/saas-marketing-os/public/changelog/page.tsx",
+        "app/preview/saas-marketing-os/public/about/page.tsx",
+        "app/preview/saas-marketing-os/public/contact/page.tsx",
+        "components/templates/saas-marketing/shared/site-config.ts",
+        "components/templates/saas-marketing/shared/nav-config.ts",
+        "components/templates/saas-marketing/shared/types.ts",
+        "components/templates/saas-marketing/shared/store.tsx",
+        "components/templates/saas-marketing/shared/seed.ts",
+        "components/templates/saas-marketing/slices/home/HomePage.tsx",
+        "components/templates/saas-marketing/slices/pricing/PricingPage.tsx",
+        "components/templates/saas-marketing/slices/features/FeaturesPage.tsx",
+        "components/templates/saas-marketing/slices/blog/BlogList.tsx",
+        "components/templates/saas-marketing/slices/blog/BlogDetail.tsx",
+        "components/templates/saas-marketing/slices/changelog/ChangelogPage.tsx",
+        "components/templates/saas-marketing/slices/about/AboutPage.tsx",
+        "components/templates/saas-marketing/slices/contact/ContactPage.tsx"
+      ],
+      "dependencies": [
+        "next@^16",
+        "react@^19",
+        "react-dom@^19",
+        "lucide-react",
+        "sonner",
+        "next-themes",
+        "tailwindcss@^4",
+        "@radix-ui/react-slot"
+      ],
+      "agentRecipe": "SaaS Marketing OS = public-only marketing template. Blog + changelog use MDX (add the mdx-blog feature). Edit components/templates/saas-marketing/shared/site-config.ts to set product name, tagline, pricing tiers, contact email.",
+      "tags": [
+        "template",
+        "saas",
+        "marketing",
+        "mdx",
+        "blog",
+        "changelog"
+      ],
+      "primaryFile": "app/preview/saas-marketing-os/public/page.tsx"
+    },
+    {
+      "slug": "kreator-studio-os",
+      "title": "Kreator Studio OS",
+      "category": "website-template",
+      "description": "Creator/influencer studio — newsletter-first public site + admin for posts, drops, audience segments. Resend + Midtrans tip jar. Coming soon.",
+      "source": "synthesized",
+      "repoPath": "app/preview/kreator-studio-os",
+      "pullPaths": [],
+      "files": [],
+      "dependencies": [],
+      "agentRecipe": "Coming soon — track at /build for updates.",
+      "tags": [
+        "template",
+        "creator",
+        "newsletter",
+        "coming-soon"
+      ],
+      "primaryFile": "README.md"
+    },
+    {
+      "slug": "konsultan-os",
+      "title": "Konsultan OS",
+      "category": "website-template",
+      "description": "Consultancy site — services catalog, case studies, booking via Cal.com, Midtrans deposits. Public + lightweight admin. Coming soon.",
+      "source": "synthesized",
+      "repoPath": "app/preview/konsultan-os",
+      "pullPaths": [],
+      "files": [],
+      "dependencies": [],
+      "agentRecipe": "Coming soon — track at /build for updates.",
+      "tags": [
+        "template",
+        "consultant",
+        "booking",
+        "coming-soon"
+      ],
+      "primaryFile": "README.md"
+    },
+    {
+      "slug": "wirausaha-os",
+      "title": "Wirausaha OS",
+      "category": "website-template",
+      "description": "Indonesian SMB toolkit — public storefront + admin (catalog, orders, Midtrans + QRIS, leads). Bahasa Indonesia first. Coming soon.",
+      "source": "synthesized",
+      "repoPath": "app/preview/wirausaha-os",
+      "pullPaths": [],
+      "files": [],
+      "dependencies": [],
+      "agentRecipe": "Coming soon — track at /build for updates.",
+      "tags": [
+        "template",
+        "smb",
+        "ecommerce",
+        "midtrans",
+        "indonesia",
+        "coming-soon"
+      ],
+      "primaryFile": "README.md"
+    },
+    {
+      "slug": "riset-kit",
+      "title": "Riset Kit",
+      "category": "website-template",
+      "description": "Research / knowledge-base template — Convex vector search + MDX + threaded comments. Public reading + admin authoring. Coming soon.",
+      "source": "synthesized",
+      "repoPath": "app/preview/riset-kit",
+      "pullPaths": [],
+      "files": [],
+      "dependencies": [],
+      "agentRecipe": "Coming soon — track at /build for updates.",
+      "tags": [
+        "template",
+        "research",
+        "knowledge-base",
+        "vector-search",
+        "coming-soon"
+      ],
+      "primaryFile": "README.md"
+    }
+  ],
+  "recipes": [
+    {
+      "slug": "block-editor",
+      "title": "Notion-Style Block Editor",
+      "description": "21-block contenteditable editor with slash command menu, markdown shortcuts, drag handles. Real-time via Convex.",
+      "source": "notion-page-clone",
+      "files": [
+        "frontend/slices/notion/slices/editor/BlockEditor.tsx",
+        "frontend/slices/notion/slices/editor/SlashMenu.tsx",
+        "frontend/slices/notion/slices/editor/blockSpecs.ts"
+      ],
+      "exampleCode": "import { BlockEditor } from \"@/frontend/slices/notion/slices/editor/BlockEditor\";\n\n<BlockEditor pageId={pageId} />",
+      "agentRecipe": "Already copied at frontend/slices/notion/slices/editor/. See PORT-NOTION.md for Vite→Next port checklist (routing rewrite, use-client markers, Convex API surface rename).",
+      "tags": [
+        "editor",
+        "notion",
+        "blocks",
+        "real-time"
+      ]
+    },
+    {
+      "slug": "page-tree-sidebar",
+      "title": "Page Tree Sidebar",
+      "description": "Hierarchical workspace sidebar with @dnd-kit drag-drop reordering, favorites, recents.",
+      "source": "notion-page-clone",
+      "files": [
+        "frontend/slices/notion/slices/workspace-sidebar/components/WorkspaceSidebar.tsx",
+        "frontend/slices/notion/slices/workspace-sidebar/components/SortablePageRow.tsx"
+      ],
+      "exampleCode": "import { WorkspaceSidebar } from \"@/frontend/slices/notion/slices/workspace-sidebar/components/WorkspaceSidebar\";\n\n<WorkspaceSidebar />",
+      "agentRecipe": "Mount WorkspaceSidebar inside the left slot of <ThreeColumnLayout>. State backed by Zustand store at frontend/slices/notion/shared/lib/store.tsx.",
+      "tags": [
+        "sidebar",
+        "tree",
+        "dnd-kit",
+        "navigation"
+      ]
+    },
+    {
+      "slug": "multi-block-selection",
+      "title": "Multi-Block Selection",
+      "description": "Marquee + click+shift selection of editor blocks with floating toolbar. Bulk actions: delete, duplicate, convert.",
+      "source": "notion-page-clone",
+      "files": [
+        "frontend/slices/notion/slices/block-selection/components/BlockSelectionProvider.tsx",
+        "frontend/slices/notion/slices/block-selection/components/MarqueeOverlay.tsx"
+      ],
+      "exampleCode": "import { BlockSelectionProvider } from \"@/frontend/slices/notion/slices/block-selection/components/BlockSelectionProvider\";\n\n<BlockSelectionProvider>\n  <BlockEditor />\n</BlockSelectionProvider>",
+      "agentRecipe": "Wrap BlockEditor with BlockSelectionProvider. The marquee overlay attaches to document; toolbar floats above the selection bounding box.",
+      "tags": [
+        "selection",
+        "editor",
+        "bulk",
+        "marquee"
+      ]
+    },
+    {
+      "slug": "database-views",
+      "title": "Database Views (11 types)",
+      "description": "Properties+rows database with 11 view types: table, board, calendar, timeline, chart, gallery, map. Per-view filter/sort/group.",
+      "source": "notion-page-clone",
+      "files": [
+        "frontend/slices/notion/slices/databases/DatabaseBlock.tsx",
+        "frontend/slices/notion/slices/databases/views/TableView.tsx",
+        "frontend/slices/notion/slices/databases/views/BoardView.tsx"
+      ],
+      "exampleCode": "import { DatabaseBlock } from \"@/frontend/slices/notion/slices/databases/DatabaseBlock\";\n\n<DatabaseBlock databaseId={dbId} />",
+      "agentRecipe": "DatabaseBlock auto-routes to the active view component. Add custom property types by extending PropertyCell.tsx.",
+      "tags": [
+        "database",
+        "views",
+        "table",
+        "kanban",
+        "calendar"
+      ]
+    },
+    {
+      "slug": "command-palette",
+      "title": "Command Palette (⌘K)",
+      "description": "Cmd+K modal: feature navigation, workspace switching, theme, sign-out, custom commands. Auto-builds from feature registry.",
+      "source": "kitab-core + notion-page-clone",
+      "files": [
+        "frontend/shared/foundation/utils/system/command-menu/components.tsx"
+      ],
+      "exampleCode": "import { CommandMenu } from \"@/frontend/shared/foundation/utils/system/command-menu/components\";\n\n<CommandMenu actions={customActions} />",
+      "agentRecipe": "Mount CommandMenu once at the app shell level. It listens for Cmd+K globally. Pass extra commands via the actions prop or register via the command-registry.",
+      "tags": [
+        "palette",
+        "cmd-k",
+        "navigation"
+      ]
+    },
+    {
+      "slug": "comments-threaded",
+      "title": "Threaded Comments",
+      "description": "Page + block-level threaded comments with resolved state. Real-time via Convex.",
+      "source": "notion-page-clone",
+      "files": [
+        "frontend/slices/notion/slices/comments/components/BlockCommentsPopover.tsx",
+        "frontend/slices/notion/slices/comments/hooks/useComments.ts"
+      ],
+      "exampleCode": "import { BlockCommentsPopover } from \"@/frontend/slices/notion/slices/comments/components/BlockCommentsPopover\";\n\n<BlockCommentsPopover blockId={blockId} pageId={pageId} />",
+      "agentRecipe": "Anchor comments by passing pageId (always) and optional blockId. Use useComments(blockId) hook for the reactive list.",
+      "tags": [
+        "comments",
+        "real-time",
+        "threading"
+      ]
+    },
+    {
+      "slug": "theme-preset-switcher",
+      "title": "Theme Preset Switcher",
+      "description": "Runtime theme swap (colors + fonts + shadows + tracking). OKLch CSS vars per preset. Persists to localStorage + Convex.",
+      "source": "rahmanef.com",
+      "files": [
+        "frontend/shared/theme/theme-presets.ts",
+        "frontend/shared/ui/components/theme-preset-switcher.tsx"
+      ],
+      "exampleCode": "import { ThemePresetSwitcher } from \"@/frontend/shared/ui/components/theme-preset-switcher\";\n\n<ThemePresetSwitcher />",
+      "agentRecipe": "Add a new preset by appending a CSS block in app/globals.css with [data-theme=\"<name>\"], then register in preset-groups.ts.",
+      "tags": [
+        "theme",
+        "presets",
+        "oklch",
+        "design-system"
+      ]
+    },
+    {
+      "slug": "contact-form-resend",
+      "title": "Contact Form + Resend",
+      "description": "Contact form posting to Resend email API. Server Action + Zod input validation.",
+      "source": "cescadesigns",
+      "files": [
+        "recipes/contact-form-resend/src/page.tsx"
+      ],
+      "exampleCode": "// app/api/contact/route.ts\nimport { Resend } from \"resend\";\nconst resend = new Resend(process.env.RESEND_API_KEY!);\n\nexport async function POST(req: Request) {\n  const data = await req.formData();\n  await resend.emails.send({\n    from: \"form@yourdomain.com\",\n    to: \"you@yourdomain.com\",\n    subject: `From ${data.get(\"name\")}`,\n    html: `<p>${data.get(\"message\")}</p>`,\n  });\n  return Response.json({ ok: true });\n}",
+      "agentRecipe": "Wire ContactForm.tsx (form action /api/contact) to the route handler. Always validate inputs with Zod server-side.",
+      "tags": [
+        "form",
+        "email",
+        "resend",
+        "server-action"
+      ]
+    }
+  ],
+  "features": [
+    {
+      "slug": "ai-sdk-openrouter",
+      "title": "AI SDK — OpenRouter Router",
+      "category": "ai",
+      "description": "Tier-routed LLM calls via OpenRouter. Nano (Haiku/4o-mini) for classification, mid (Sonnet/4o) for drafting, flagship (Opus) for deep reasoning. Cost log + retry baked in.",
+      "source": "@openrouter/ai-sdk-provider + ai",
+      "docsUrl": "https://sdk.vercel.ai/docs",
+      "install": "npm i ai @openrouter/ai-sdk-provider",
+      "npmPackages": [
+        "ai",
+        "@openrouter/ai-sdk-provider"
+      ],
+      "exampleCode": "// convex/shared/ai/router.ts\nimport { action } from \"./_generated/server\";\nimport { v } from \"convex/values\";\nimport { generateText } from \"ai\";\nimport { createOpenRouter } from \"@openrouter/ai-sdk-provider\";\n\nconst router = createOpenRouter({ apiKey: process.env.OPENROUTER_API_KEY! });\n\nconst TIER_TO_MODEL = {\n  nano: \"anthropic/claude-haiku-4-5\",\n  mid: \"anthropic/claude-sonnet-4-6\",\n  flagship: \"anthropic/claude-opus-4-7\",\n};\n\nexport const callModel = action({\n  args: {\n    feature: v.string(),\n    prompt: v.string(),\n    tier: v.union(v.literal(\"nano\"), v.literal(\"mid\"), v.literal(\"flagship\")),\n  },\n  handler: async (ctx, { feature, prompt, tier }) => {\n    const { text, usage } = await generateText({\n      model: router(TIER_TO_MODEL[tier]),\n      prompt,\n    });\n    await ctx.runMutation(internal.ai.logUsage, { feature, tier, usage });\n    return text;\n  },\n});",
+      "agentRecipe": "Wrap every AI call through ai-router action. Pick tier based on workload: nano for spam-flag/headline-suggest, mid for chat/draft, flagship for methodology-review. Log token usage to ai_usage table for cost dashboard.",
+      "tags": [
+        "ai",
+        "llm",
+        "openrouter",
+        "vercel-ai-sdk"
+      ]
+    },
+    {
+      "slug": "convex-auth",
+      "title": "Convex Auth — Email Magic Link",
+      "category": "auth",
+      "description": "@convex-dev/auth with email magic link only. No Clerk, no NextAuth. Self-hosted Convex friendly. Hard mandate per kitab CLAUDE.md.",
+      "source": "@convex-dev/auth",
+      "docsUrl": "https://labs.convex.dev/auth",
+      "install": "npm i @convex-dev/auth @auth/core resend",
+      "npmPackages": [
+        "@convex-dev/auth",
+        "@auth/core",
+        "resend"
+      ],
+      "exampleCode": "// convex/auth.ts\nimport { convexAuth } from \"@convex-dev/auth/server\";\nimport { ResendOTP } from \"./auth/ResendOTP\";\n\nexport const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({\n  providers: [ResendOTP],\n});\n\n// app/proxy.ts (Next 16 — NOT middleware.ts)\nimport { convexAuthNextjsMiddleware } from \"@convex-dev/auth/nextjs/server\";\nexport default convexAuthNextjsMiddleware();",
+      "agentRecipe": "Mount auth in convex/auth.ts. Wire ResendOTP for magic-link delivery. Use convexAuthNextjsMiddleware in app/proxy.ts (Next 16 renamed middleware.ts → proxy.ts). Forbid Clerk per CLAUDE.md.",
+      "tags": [
+        "auth",
+        "convex",
+        "email-magic-link",
+        "no-clerk"
+      ]
+    },
+    {
+      "slug": "broadcast-channel-sync",
+      "title": "BroadcastChannel — Cross-iframe Live Sync",
+      "category": "realtime",
+      "description": "Same-origin iframe live sync without backend. Used in T1 split preview tab — submit form di Public, action propagates ke Admin secara realtime via window.BroadcastChannel.",
+      "source": "Web Platform — BroadcastChannel API",
+      "docsUrl": "https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API",
+      "install": "// no install — Web Platform API",
+      "npmPackages": [],
+      "exampleCode": "\"use client\";\nimport * as React from \"react\";\n\nexport function StoreProvider({ children }) {\n  const [state, baseDispatch] = React.useReducer(reducer, SEED_STATE);\n  const channelRef = React.useRef<BroadcastChannel | null>(null);\n\n  React.useEffect(() => {\n    const ch = new BroadcastChannel(\"pbos:sync\");\n    channelRef.current = ch;\n    ch.onmessage = (e) => baseDispatch(e.data);\n    return () => ch.close();\n  }, []);\n\n  const dispatch = React.useCallback((action) => {\n    baseDispatch(action);\n    channelRef.current?.postMessage(action);\n  }, []);\n\n  return <Ctx.Provider value={{ state, dispatch }}>{children}</Ctx.Provider>;\n}",
+      "agentRecipe": "Use BroadcastChannel only for demo / cross-iframe state mirroring. Production data still goes through Convex realtime. The channel does not echo to the sender so no loop.",
+      "tags": [
+        "realtime",
+        "broadcast-channel",
+        "cross-iframe",
+        "demo-pattern"
+      ]
+    },
+    {
+      "slug": "convex-vector-search",
+      "title": "Convex Vector Index — Semantic Search",
+      "category": "search",
+      "description": "Built-in vector index on any Convex table. Embed via OpenAI text-embedding-3-small (1536-dim), query via vectorIndex().",
+      "source": "convex (built-in)",
+      "docsUrl": "https://docs.convex.dev/database/vector-search",
+      "install": "npm i openai",
+      "npmPackages": [
+        "openai"
+      ],
+      "exampleCode": "// convex/schema.ts\nposts: defineTable({\n  title: v.string(),\n  body: v.string(),\n  embedding: v.array(v.float64()),\n}).vectorIndex(\"by_embedding\", {\n  vectorField: \"embedding\",\n  dimensions: 1536,\n  filterFields: [\"workspaceId\", \"status\"],\n}),\n\n// convex/posts.ts\nexport const search = action({\n  args: { query: v.string(), workspaceId: v.id(\"workspaces\") },\n  handler: async (ctx, args) => {\n    const emb = await embed(args.query);\n    return await ctx.vectorSearch(\"posts\", \"by_embedding\", {\n      vector: emb,\n      limit: 10,\n      filter: (q) => q.eq(\"workspaceId\", args.workspaceId),\n    });\n  },\n});",
+      "agentRecipe": "Add embedding field + vectorIndex per searchable table. Re-embed on upsert via Convex action. Cache embeddings — don't re-call OpenAI on every read.",
+      "tags": [
+        "search",
+        "vector",
+        "convex",
+        "rag"
+      ]
+    },
+    {
+      "slug": "resend-newsletter",
+      "title": "Resend — Transactional & Newsletter",
+      "category": "email",
+      "description": "Transactional email + newsletter blast via Resend. Double opt-in flow + audience segmentation. Magic-link delivery for Convex Auth.",
+      "source": "resend + react-email",
+      "docsUrl": "https://resend.com/docs",
+      "install": "npm i resend react-email @react-email/components",
+      "npmPackages": [
+        "resend",
+        "react-email",
+        "@react-email/components"
+      ],
+      "exampleCode": "// convex/shared/email/resend.ts\nimport { Resend } from \"resend\";\nimport { action } from \"../../_generated/server\";\n\nconst resend = new Resend(process.env.RESEND_API_KEY!);\n\nexport const sendNewsletter = action({\n  args: { audienceId: v.string(), subject: v.string(), html: v.string() },\n  handler: async (_, args) => {\n    await resend.broadcasts.create({\n      audienceId: args.audienceId,\n      from: \"lorem.dev <hi@lorem.dev>\",\n      subject: args.subject,\n      html: args.html,\n    });\n  },\n});",
+      "agentRecipe": "Use Resend Audiences API for newsletter — store subscriber emails in Convex too for segmentation. Double opt-in: subscriber.create with status 'pending' → click link → status 'confirmed'.",
+      "tags": [
+        "email",
+        "resend",
+        "newsletter",
+        "transactional"
+      ]
+    },
+    {
+      "slug": "midtrans-payment",
+      "title": "Midtrans — Indonesia Payment",
+      "category": "payment",
+      "description": "Pembayaran lokal Indonesia via Midtrans Snap (BCA, Mandiri, BRI, e-wallet GoPay/OVO/Dana, QRIS). Webhook untuk konfirmasi.",
+      "source": "midtrans-client",
+      "docsUrl": "https://docs.midtrans.com",
+      "install": "npm i midtrans-client",
+      "npmPackages": [
+        "midtrans-client"
+      ],
+      "exampleCode": "// convex/shared/billing/midtrans.ts\nimport midtransClient from \"midtrans-client\";\nimport { action } from \"../../_generated/server\";\n\nconst snap = new midtransClient.Snap({\n  isProduction: false,\n  serverKey: process.env.MIDTRANS_SERVER_KEY!,\n});\n\nexport const createPayment = action({\n  args: { orderId: v.string(), amount: v.number(), customer: v.any() },\n  handler: async (_, args) => {\n    const tx = await snap.createTransaction({\n      transaction_details: { order_id: args.orderId, gross_amount: args.amount },\n      customer_details: args.customer,\n    });\n    return tx.redirect_url;\n  },\n});",
+      "agentRecipe": "Midtrans Snap untuk pembayaran instant. Webhook ke Convex HTTP action /api/midtrans-callback untuk update order status. Ingat: PPN 11% sudah included di amount, jangan double-count.",
+      "tags": [
+        "payment",
+        "midtrans",
+        "indonesia",
+        "qris"
+      ]
+    },
+    {
+      "slug": "mdx-blog",
+      "title": "MDX — Blog Content",
+      "category": "content",
+      "description": "Markdown-with-JSX untuk blog post. Auto-generate ToC, reading-time, syntax highlight, plus embed React components inline.",
+      "source": "next-mdx-remote",
+      "docsUrl": "https://github.com/hashicorp/next-mdx-remote",
+      "install": "npm i next-mdx-remote rehype-pretty-code remark-gfm reading-time",
+      "npmPackages": [
+        "next-mdx-remote",
+        "rehype-pretty-code",
+        "remark-gfm",
+        "reading-time"
+      ],
+      "exampleCode": "// app/blog/[slug]/page.tsx\nimport { MDXRemote } from \"next-mdx-remote/rsc\";\nimport readingTime from \"reading-time\";\n\nexport default async function Page({ params }) {\n  const { slug } = await params;\n  const post = await getPost(slug);\n  const stats = readingTime(post.body);\n\n  return (\n    <article>\n      <h1>{post.title}</h1>\n      <p>{stats.text}</p>\n      <MDXRemote\n        source={post.body}\n        options={{ mdxOptions: { rehypePlugins: [rehypePrettyCode], remarkPlugins: [remarkGfm] } }}\n      />\n    </article>\n  );\n}",
+      "agentRecipe": "Store post body sebagai markdown di Convex. Render dengan MDXRemote di [slug]/page.tsx. Auto-extract headings ke ToC via remark plugin custom.",
+      "tags": [
+        "mdx",
+        "markdown",
+        "blog",
+        "content"
+      ]
+    },
+    {
+      "slug": "cal-com-booking",
+      "title": "Cal.com — Booking Embed",
+      "category": "data",
+      "description": "Embed Cal.com booking widget di halaman Services. Self-hosted atau cloud. Webhook ke Convex untuk sync booking ke leads table.",
+      "source": "@calcom/embed-react",
+      "docsUrl": "https://cal.com/docs/integrations/web-app/embed",
+      "install": "npm i @calcom/embed-react",
+      "npmPackages": [
+        "@calcom/embed-react"
+      ],
+      "exampleCode": "\"use client\";\nimport Cal from \"@calcom/embed-react\";\n\nexport function CalEmbed({ eventType }: { eventType: string }) {\n  return (\n    <Cal\n      calLink={`lorem/${eventType}`}\n      style={{ width: \"100%\", height: \"600px\", overflow: \"scroll\" }}\n      config={{ layout: \"month_view\", theme: \"dark\" }}\n    />\n  );\n}",
+      "agentRecipe": "Embed Cal.com via @calcom/embed-react di halaman services. Configure webhook di Cal.com dashboard → POST ke /api/cal-webhook → create lead di Convex.",
+      "tags": [
+        "booking",
+        "cal-com",
+        "scheduling",
+        "embed"
+      ]
+    }
+  ]
+}

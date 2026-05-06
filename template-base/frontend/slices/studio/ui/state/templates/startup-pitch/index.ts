@@ -1,0 +1,72 @@
+/* eslint-disable max-lines */
+
+import { createTemplate } from '../shared';
+
+const createStartupPitchTemplate = () => createTemplate({
+    'page': { type: 'section', props: { path: '/', className: 'bg-neutral-950 text-white' }, children: ['wrap'] },
+    'wrap': { type: 'div', props: { className: 'flex flex-col' }, children: ['nav', 'hero', 'problem', 'solution', 'traction', 'cta'] },
+    'nav': { type: 'div', props: { className: 'max-w-6xl mx-auto w-full flex flex-row items-center justify-between px-8 py-6' }, children: ['brand', 'nav-copy', 'nav-cta'] },
+    'brand': { type: 'text', props: { tag: 'span', content: 'NEXLAYER', className: 'text-sm font-black tracking-[0.32em] text-lime-300' }, children: [] },
+    'nav-copy': { type: 'text', props: { tag: 'span', content: 'Seed deck narrative in landing-page form', className: 'text-sm text-neutral-500' }, children: [] },
+    'nav-cta': { type: 'button', props: { text: 'Request Investor Memo', variant: 'outline', className: 'border-neutral-700 text-white hover:bg-neutral-900' }, children: [] },
+
+    'hero': { type: 'div', props: { className: 'px-8 py-16' }, children: ['hero-shell'] },
+    'hero-shell': { type: 'div', props: { className: 'max-w-6xl mx-auto grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-start' }, children: ['hero-copy', 'hero-side'] },
+    'hero-copy': { type: 'div', props: { className: 'flex flex-col gap-6' }, children: ['hero-kicker', 'hero-title', 'hero-body', 'hero-actions', 'hero-strip'] },
+    'hero-kicker': { type: 'text', props: { tag: 'span', content: 'The workflow infrastructure layer for ops teams', className: 'text-xs uppercase tracking-[0.28em] text-lime-300' }, children: [] },
+    'hero-title': { type: 'text', props: { tag: 'h1', content: 'We turn operational playbooks into software that actually executes itself.', className: 'text-5xl md:text-6xl font-black leading-[1.02] tracking-tight max-w-3xl' }, children: [] },
+    'hero-body': { type: 'text', props: { tag: 'p', content: 'Nexlayer gives growth and operations teams a way to convert scattered SOPs into structured automations with human approvals, live observability, and audit-ready output.', className: 'max-w-2xl text-lg leading-8 text-neutral-400' }, children: [] },
+    'hero-actions': { type: 'div', props: { className: 'flex flex-row gap-4 flex-wrap' }, children: ['hero-primary', 'hero-secondary'] },
+    'hero-primary': { type: 'button', props: { text: 'Join Private Beta', size: 'lg', className: 'bg-lime-300 text-neutral-950 hover:bg-lime-200 font-semibold px-8' }, children: [] },
+    'hero-secondary': { type: 'button', props: { text: 'See Product Thesis', variant: 'ghost', size: 'lg', className: 'text-neutral-300 hover:text-white px-6' }, children: [] },
+    'hero-strip': { type: 'grid', props: { columns: '3', gap: 'sm', className: '' }, children: ['strip-1', 'strip-2', 'strip-3'] },
+    'strip-1': { type: 'card', props: { title: '$420k', description: 'LOIs tied to pilot-ready workflows.', className: 'bg-neutral-900 border border-neutral-800 rounded-[1.75rem] p-5 h-full' }, children: [] },
+    'strip-2': { type: 'card', props: { title: '9 design partners', description: 'Across fintech, ops services, and internal tooling.', className: 'bg-neutral-900 border border-neutral-800 rounded-[1.75rem] p-5 h-full' }, children: [] },
+    'strip-3': { type: 'card', props: { title: '4 weeks', description: 'Median time from workflow brief to production.', className: 'bg-neutral-900 border border-neutral-800 rounded-[1.75rem] p-5 h-full' }, children: [] },
+    'hero-side': { type: 'div', props: { className: 'rounded-[2rem] border border-neutral-800 bg-neutral-900 p-6 flex flex-col gap-5' }, children: ['hero-side-img', 'hero-side-card'] },
+    'hero-side-img': { type: 'image', props: { src: 'https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=900&q=80', alt: 'Product proof screen', className: 'w-full rounded-[1.5rem] object-cover' }, children: [] },
+    'hero-side-card': { type: 'card', props: { title: 'Why now', description: 'AI makes execution cheaper, but teams still lack the structured operating layer to run safely and consistently.', className: 'bg-neutral-950 border border-neutral-800 rounded-[1.5rem] p-5' }, children: [] },
+
+    'problem': { type: 'div', props: { className: 'px-8 py-20 border-t border-neutral-900' }, children: ['problem-inner'] },
+    'problem-inner': { type: 'div', props: { className: 'max-w-6xl mx-auto flex flex-col gap-10' }, children: ['problem-head', 'problem-grid'] },
+    'problem-head': { type: 'div', props: { className: 'max-w-3xl flex flex-col gap-4' }, children: ['problem-label', 'problem-title', 'problem-copy'] },
+    'problem-label': { type: 'text', props: { tag: 'span', content: 'The gap', className: 'text-xs uppercase tracking-[0.24em] text-lime-300' }, children: [] },
+    'problem-title': { type: 'text', props: { tag: 'h2', content: 'Playbooks still live in docs, not in systems that can enforce them.', className: 'text-4xl font-black tracking-tight' }, children: [] },
+    'problem-copy': { type: 'text', props: { tag: 'p', content: 'Teams have SOPs, prompts, tickets, approvals, and dashboards. They do not have one orchestration layer that connects all of them without custom engineering.', className: 'text-lg text-neutral-400 leading-8' }, children: [] },
+    'problem-grid': { type: 'grid', props: { columns: '3', gap: 'md', className: '' }, children: ['problem-1', 'problem-2', 'problem-3'] },
+    'problem-1': { type: 'card', props: { title: 'Execution drift', description: 'The same process runs differently across operators, regions, and tools.', className: 'bg-neutral-900 border border-neutral-800 rounded-[2rem] p-6 h-full' }, children: [] },
+    'problem-2': { type: 'card', props: { title: 'No observability', description: 'Leaders can see outcomes but not where the workflow actually broke.', className: 'bg-neutral-900 border border-neutral-800 rounded-[2rem] p-6 h-full' }, children: [] },
+    'problem-3': { type: 'card', props: { title: 'Unsafe automation', description: 'Teams avoid automation because approval logic and auditability are usually bolted on later.', className: 'bg-neutral-900 border border-neutral-800 rounded-[2rem] p-6 h-full' }, children: [] },
+
+    'solution': { type: 'div', props: { className: 'px-8 py-20 bg-lime-300 text-neutral-950' }, children: ['solution-inner'] },
+    'solution-inner': { type: 'div', props: { className: 'max-w-6xl mx-auto grid lg:grid-cols-[0.85fr_1.15fr] gap-10 items-start' }, children: ['solution-copy', 'solution-grid'] },
+    'solution-copy': { type: 'div', props: { className: 'flex flex-col gap-4' }, children: ['solution-label', 'solution-title', 'solution-body'] },
+    'solution-label': { type: 'text', props: { tag: 'span', content: 'Product', className: 'text-xs uppercase tracking-[0.24em] text-neutral-700' }, children: [] },
+    'solution-title': { type: 'text', props: { tag: 'h2', content: 'A workflow runtime with approvals, observability, and structured AI execution built in.', className: 'text-4xl font-black tracking-tight' }, children: [] },
+    'solution-body': { type: 'text', props: { tag: 'p', content: 'Operators model the workflow once, attach guardrails, and let the system coordinate humans, APIs, and AI with clear state transitions and accountable output.', className: 'text-lg leading-8 text-neutral-800' }, children: [] },
+    'solution-grid': { type: 'grid', props: { columns: '3', gap: 'sm', className: '' }, children: ['solution-1', 'solution-2', 'solution-3'] },
+    'solution-1': { type: 'card', props: { title: 'Structured runtime', description: 'Every execution step has typed input, output, fallback, and ownership.', className: 'bg-white rounded-[1.75rem] p-5 h-full border-0' }, children: [] },
+    'solution-2': { type: 'card', props: { title: 'Human checkpoints', description: 'Approvals and escalations are first-class, not afterthoughts.', className: 'bg-white rounded-[1.75rem] p-5 h-full border-0' }, children: [] },
+    'solution-3': { type: 'card', props: { title: 'Operational graph', description: 'See runtime health, bottlenecks, and SLA breaches as they happen.', className: 'bg-white rounded-[1.75rem] p-5 h-full border-0' }, children: [] },
+
+    'traction': { type: 'div', props: { className: 'px-8 py-20 border-t border-neutral-900' }, children: ['traction-inner'] },
+    'traction-inner': { type: 'div', props: { className: 'max-w-6xl mx-auto grid lg:grid-cols-[1fr_1fr] gap-8 items-start' }, children: ['traction-grid', 'traction-note'] },
+    'traction-grid': { type: 'grid', props: { columns: '2', gap: 'md', className: '' }, children: ['traction-1', 'traction-2', 'traction-3', 'traction-4'] },
+    'traction-1': { type: 'card', props: { title: '4.7x faster', description: 'Pilot teams moved from SOP brief to deployed workflow.', className: 'bg-neutral-900 border border-neutral-800 rounded-[2rem] p-6 h-full' }, children: [] },
+    'traction-2': { type: 'card', props: { title: '63%', description: 'Reduction in manual follow-up across pilot workflows.', className: 'bg-neutral-900 border border-neutral-800 rounded-[2rem] p-6 h-full' }, children: [] },
+    'traction-3': { type: 'card', props: { title: '0 lost context', description: 'Every run keeps a full state and decision log.', className: 'bg-neutral-900 border border-neutral-800 rounded-[2rem] p-6 h-full' }, children: [] },
+    'traction-4': { type: 'card', props: { title: '3 verticals', description: 'Fintech ops, service delivery, and internal platform teams.', className: 'bg-neutral-900 border border-neutral-800 rounded-[2rem] p-6 h-full' }, children: [] },
+    'traction-note': { type: 'div', props: { className: 'rounded-[2rem] border border-neutral-800 bg-neutral-900 p-8 flex flex-col gap-4' }, children: ['traction-note-label', 'traction-note-body', 'traction-note-author'] },
+    'traction-note-label': { type: 'text', props: { tag: 'span', content: 'Founder note', className: 'text-xs uppercase tracking-[0.24em] text-lime-300' }, children: [] },
+    'traction-note-body': { type: 'text', props: { tag: 'p', content: '"The next generation of internal software is not another dashboard. It is a runtime that understands process, policy, and who must stay in the loop."', className: 'text-2xl leading-10 font-semibold' }, children: [] },
+    'traction-note-author': { type: 'text', props: { tag: 'p', content: 'Alya Prameswari, Founder & CEO', className: 'text-sm text-neutral-400' }, children: [] },
+
+    'cta': { type: 'div', props: { className: 'px-8 py-24' }, children: ['cta-inner'] },
+    'cta-inner': { type: 'div', props: { className: 'max-w-6xl mx-auto rounded-[2.5rem] border border-neutral-800 bg-neutral-900 p-10 md:p-14 flex flex-col md:flex-row gap-8 justify-between items-start md:items-center' }, children: ['cta-copy', 'cta-button'] },
+    'cta-copy': { type: 'div', props: { className: 'max-w-2xl flex flex-col gap-4' }, children: ['cta-title', 'cta-body'] },
+    'cta-title': { type: 'text', props: { tag: 'h2', content: 'Looking for design partners, pilot operators, and the first thesis-aligned investors.', className: 'text-4xl font-black tracking-tight' }, children: [] },
+    'cta-body': { type: 'text', props: { tag: 'p', content: 'If you believe internal software should execute policy instead of documenting it, let us show you the private beta.', className: 'text-lg text-neutral-400 leading-8' }, children: [] },
+    'cta-button': { type: 'button', props: { text: 'Request Access', size: 'lg', className: 'bg-lime-300 text-neutral-950 hover:bg-lime-200 font-semibold px-8' }, children: [] },
+  });
+
+export default createStartupPitchTemplate;
