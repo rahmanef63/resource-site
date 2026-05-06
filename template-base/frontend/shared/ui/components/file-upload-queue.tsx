@@ -55,7 +55,8 @@ const STATUS_ORDER: QueueStatus[] = [
   "error",
 ];
 
-function formatSize(bytes: number): string {
+function formatSize(bytes: number | undefined): string {
+  if (bytes === undefined) return "—";
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
@@ -248,7 +249,7 @@ export function FileUploadQueue({
     ).length;
     const savedBytes = items.reduce((sum, i) => {
       if (!i.result || !i.result.converted) return sum;
-      return sum + Math.max(0, i.result.originalSize - i.result.fileSize);
+      return sum + Math.max(0, (i.result.originalSize ?? 0) - (i.result.fileSize ?? 0));
     }, 0);
     return { done, failed, total, busy, savedBytes };
   }, [items]);

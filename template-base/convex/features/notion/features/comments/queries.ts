@@ -8,7 +8,7 @@ export const listForPage = query({
     const userId = await getAuthUserId(ctx);
     if (!userId) return [];
     return await ctx.db
-      .query("comments")
+      .query("notionComments")
       .withIndex("by_page", (q) => q.eq("pageId", args.pageId))
       .collect();
   },
@@ -20,7 +20,7 @@ export const listForBlock = query({
     const userId = await getAuthUserId(ctx);
     if (!userId) return [];
     return await ctx.db
-      .query("comments")
+      .query("notionComments")
       .withIndex("by_block", (q) => q.eq("blockId", args.blockId))
       .collect();
   },

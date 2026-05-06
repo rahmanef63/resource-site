@@ -50,12 +50,12 @@ export async function applyCropToImage(
  */
 export function describeConversion(
   optionsOrOriginalSize: ImageConvertOptions | number | undefined = {},
-  convertedSize?: number,
+  convertedSize?: number | undefined,
 ): string {
-  if (typeof optionsOrOriginalSize === "number") {
-    const orig = optionsOrOriginalSize;
+  if (typeof optionsOrOriginalSize === "number" || optionsOrOriginalSize === undefined) {
+    const orig = (typeof optionsOrOriginalSize === "number" ? optionsOrOriginalSize : 0) ?? 0;
     const conv = convertedSize ?? orig;
-    if (orig === 0 || conv === orig) return `${(orig / 1024).toFixed(1)} KB`;
+    if (!orig || conv === orig) return `${(orig / 1024).toFixed(1)} KB`;
     const pct = Math.round((1 - conv / orig) * 100);
     return `${(orig / 1024).toFixed(1)} KB → ${(conv / 1024).toFixed(1)} KB (${pct}%)`;
   }

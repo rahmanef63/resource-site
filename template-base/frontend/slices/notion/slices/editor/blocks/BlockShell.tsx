@@ -9,8 +9,11 @@ interface Props {
   style?: CSSProperties;
   isDragging?: boolean;
   isOver?: boolean;
-  attributes?: Record<string, unknown>;
-  listeners?: Record<string, unknown>;
+  // dnd-kit's DraggableAttributes / SyntheticListenerMap aren't strictly
+  // assignable to Record<string, unknown>; widen so callers can forward
+  // dnd-kit's hooks output without per-callsite casts.
+  attributes?: Record<string, any>;
+  listeners?: Record<string, any>;
   /** Top-level block id — when present, the shell participates in multi-select. */
   blockId?: string;
 }

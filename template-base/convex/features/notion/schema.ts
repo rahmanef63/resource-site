@@ -38,6 +38,10 @@ export const notionTables = {
     logo: v.optional(v.string()),
     logoStorageId: v.optional(v.id("_storage")),
     themePreset: v.optional(v.string()),
+    createdBy: v.optional(v.id("users")),
+    updatedBy: v.optional(v.id("users")),
+    createdAt: v.optional(v.number()),
+    updatedAt: v.optional(v.number()),
   })
     .index("by_user", ["userId"])
     .index("by_parent", ["parentWorkspaceId"])
@@ -151,8 +155,11 @@ export const notionTables = {
     .index("by_user_unread", ["userId", "read"])
     .index("by_workspace", ["workspaceId"]),
 
-  // === comments ===
-  comments: defineTable({
+  // === notion-specific comments (page-block scoped) ===
+  // Renamed from `comments` to coexist with the generic
+  // `convex/shared/comments` table (workspace + entityType scoped, used by
+  // other features). Notion comments are tightly bound to a page + block.
+  notionComments: defineTable({
     userId: v.id("users"),                  // author
     pageId: v.string(),
     blockId: v.optional(v.string()),        // null = page-level comment

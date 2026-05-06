@@ -56,7 +56,8 @@ type FileUploadProps = {
 
 const ACCEPT_DEFAULT = "image/jpeg,image/png,image/webp,application/pdf";
 
-function formatSize(bytes: number): string {
+function formatSize(bytes: number | undefined): string {
+  if (bytes === undefined) return "—";
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
@@ -147,7 +148,7 @@ export function FileUpload({
     }
   };
 
-  const isImage = info ? info.fileType.startsWith("image/") : false;
+  const isImage = info && info.fileType ? info.fileType.startsWith("image/") : false;
   const phaseLabel = phaseToLabel(phase);
 
   const progressInline = !floating && isUploading;

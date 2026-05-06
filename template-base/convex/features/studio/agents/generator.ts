@@ -64,7 +64,7 @@ export const generateWorkflow = action({
 
       if (!definition) {
         // Heuristic generation based on keywords
-        const steps = [];
+        const steps: Array<{ id: string; type: string; config: any }> = [];
         const lowerPrompt = args.prompt.toLowerCase();
         
         steps.push({

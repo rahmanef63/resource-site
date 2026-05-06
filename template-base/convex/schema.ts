@@ -5,8 +5,38 @@
  * Add a feature: import its tables map and spread it below.
  */
 
-import { defineSchema } from "convex/server";
+import { defineSchema, defineTable } from "convex/server";
+import { v } from "convex/values";
 import { authTables } from "@convex-dev/auth/server";
+
+// Extend the @convex-dev/auth users table with the indexes + fields RBAC
+// helpers expect. authTables.users ships only by_email / by_phone; the
+// kitab's RBAC layer (convex/lib/rbac/permissions.ts) looks users up by
+// auth subject, so we add `subject` + `clerkId` (legacy) + an index. All
+// fields optional so existing inserts via @convex-dev/auth don't break.
+const extendedAuthTables = {
+  ...authTables,
+  users: defineTable({
+    name: v.optional(v.string()),
+    email: v.optional(v.string()),
+    phone: v.optional(v.string()),
+    image: v.optional(v.string()),
+    emailVerificationTime: v.optional(v.number()),
+    phoneVerificationTime: v.optional(v.number()),
+    isAnonymous: v.optional(v.boolean()),
+    // Custom extensions
+    subject: v.optional(v.string()),
+    clerkId: v.optional(v.string()),
+    metadata: v.optional(v.record(v.string(), v.any())),
+    avatarUrl: v.optional(v.string()),
+    status: v.optional(v.string()),
+    workspaceId: v.optional(v.id("workspaces")),
+  })
+    .index("email", ["email"])
+    .index("phone", ["phone"])
+    .index("by_auth_subject", ["subject"])
+    .index("by_clerk_id", ["clerkId"]),
+};
 
 import { authRbacTables } from "./auth/schema";
 import { auditTables } from "./lib/audit/schema";
@@ -37,7 +67,7 @@ import favoritesSchema from "./shared/favorites/schema";
 import searchSchema from "./shared/search/schema";
 
 export default defineSchema({
-  ...authTables,
+  ...extendedAuthTables,
   ...authRbacTables,
   ...auditTables,
   ...chatTables,

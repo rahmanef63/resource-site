@@ -15,7 +15,7 @@ export const create = mutation({
     const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not authenticated");
     const now = Date.now();
-    return await ctx.db.insert("comments", {
+    return await ctx.db.insert("notionComments", {
       userId,
       pageId: args.pageId,
       blockId: args.blockId,
@@ -34,9 +34,9 @@ export const update = mutation({
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not authenticated");
-    const c = await ctx.db.get(args.id as Id<"comments">);
+    const c = await ctx.db.get(args.id as Id<"notionComments">);
     if (!c || c.userId !== userId) throw new Error("Not found");
-    await ctx.db.patch(args.id as Id<"comments">, {
+    await ctx.db.patch(args.id as Id<"notionComments">, {
       text: args.text,
       updatedAt: Date.now(),
     });
@@ -48,9 +48,9 @@ export const resolve = mutation({
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not authenticated");
-    const c = await ctx.db.get(args.id as Id<"comments">);
+    const c = await ctx.db.get(args.id as Id<"notionComments">);
     if (!c || c.userId !== userId) throw new Error("Not found");
-    await ctx.db.patch(args.id as Id<"comments">, {
+    await ctx.db.patch(args.id as Id<"notionComments">, {
       resolved: args.resolved,
       updatedAt: Date.now(),
     });
@@ -62,8 +62,8 @@ export const remove = mutation({
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not authenticated");
-    const c = await ctx.db.get(args.id as Id<"comments">);
+    const c = await ctx.db.get(args.id as Id<"notionComments">);
     if (!c || c.userId !== userId) return;
-    await ctx.db.delete(args.id as Id<"comments">);
+    await ctx.db.delete(args.id as Id<"notionComments">);
   },
 });
