@@ -39,6 +39,11 @@
   "exclude": [
     "node_modules",
     "plugins/**",
-    "convex/**"
+    "convex/**",
+    "cookbook/**",
+    "recipes/**",
+    "template-base/**",
+    "packages/**",
+    "site/**"
   ]
 }

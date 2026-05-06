@@ -1,0 +1,23 @@
+node_modules
+.next
+.git
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+.vscode
+.idea
+coverage
+.turbo
+*.tsbuildinfo
+
+# Kitab pull-source dirs (not part of the deployed showcase site).
+# These are CLI/MCP source content; they live in the repo so `tiged` can pull
+# them into projects scaffolded by `npx rahman-resources init`, but they must
+# not be type-checked nor copied into the runtime image.
+cookbook
+recipes
+template-base
+packages
+site
