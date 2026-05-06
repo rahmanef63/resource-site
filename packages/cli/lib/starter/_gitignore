@@ -1,0 +1,12 @@
+node_modules
+.next
+.turbo
+out
+dist
+.env*.local
+.env
+*.tsbuildinfo
+next-env.d.ts
+convex/_generated
+.vercel
+.DS_Store
