@@ -1,6 +1,6 @@
 {
   "name": "rahman-resources",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Scaffolder + installer for Rahman Resources kitab — npx rahman-resources init <app>; add <template>; list; info",
   "type": "module",
   "license": "MIT",
@@ -32,6 +32,9 @@
   "dependencies": {
     "kleur": "^4.1.5",
     "tiged": "^2.12.7"
+  },
+  "overrides": {
+    "tar": "^7.5.0"
   },
   "keywords": [
     "rahman",

@@ -1,9 +1,13 @@
 #!/usr/bin/env node
 /**
- * Sync skills from site → CLI.
+ * Sync skills from kitab → CLI.
  *
- * Source of truth: site/lib/content/claude-skills.ts (CLAUDE_SKILLS array).
- * Target:          packages/cli/lib/skills.json
+ * Source of truth: lib/content/claude-skills.ts at the kitab repo root
+ * (CLAUDE_SKILLS array). Pre-restructure this lived at
+ * site/lib/content/claude-skills.ts; the published kitab site moved to
+ * root in commit b481f11..aebb99a, so the script falls back to the
+ * legacy path for older monorepo checkouts.
+ * Target: packages/cli/lib/skills.json
  *
  * Why: the site keeps an editable TS file (good DX in IDE, tied to the
  * builder UI), the CLI ships a JSON file (no TS toolchain in the published
@@ -16,13 +20,16 @@
  * --check exits non-zero if the JSON would change (useful for CI).
  */
 
+import { existsSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = resolve(HERE, "../../..");
-const SRC = resolve(REPO, "site/lib/content/claude-skills.ts");
+const ROOT_SRC = resolve(REPO, "lib/content/claude-skills.ts");
+const LEGACY_SRC = resolve(REPO, "site/lib/content/claude-skills.ts");
+const SRC = existsSync(ROOT_SRC) ? ROOT_SRC : LEGACY_SRC;
 const DST = resolve(REPO, "packages/cli/lib/skills.json");
 const checkMode = process.argv.includes("--check");
 

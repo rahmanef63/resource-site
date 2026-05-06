@@ -2,12 +2,17 @@
 // Skips over strings + template literals + comments, so example code
 // containing literal `export function ...` doesn't fool us.
 
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-export const SITE = path.resolve(__dirname, "../../../site");
+const REPO = path.resolve(__dirname, "../../..");
+// Pre-restructure the kitab site lived at REPO/site/. Post-restructure (commit
+// b481f11..aebb99a) it was hoisted to REPO root. Resolve to whichever exists
+// so the script works in old + new checkouts.
+const ROOT_SRC = path.resolve(REPO, "lib/content/layouts.ts");
+export const SITE = existsSync(ROOT_SRC) ? REPO : path.resolve(REPO, "site");
 
 function extractArrayLiteral(src, exportName) {
   const re = new RegExp(`export\\s+const\\s+${exportName}\\b[^=]*=\\s*\\[`, "m");
