@@ -3,7 +3,7 @@
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import { cn } from "@/shared/lib/cn";
+import { cn } from "@/lib/utils";
 
 type LightboxProps = {
   open: boolean;

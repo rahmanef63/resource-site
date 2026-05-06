@@ -31,7 +31,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/ui/dialog";
-import { cn } from "@/shared/lib/cn";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 // Lazy-load react-easy-crop so it only ships when a slice uses <FileUpload crop>.

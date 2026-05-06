@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "@/shared/lib/cn";
+import { cn } from "@/lib/utils";
 
 type Level = 1 | 2 | 3 | 4;
 

@@ -1,4 +1,4 @@
-import { cn } from "@/shared/lib/cn";
+import { cn } from "@/lib/utils";
 
 export function Separator({
   orientation = "horizontal",

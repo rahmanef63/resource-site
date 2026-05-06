@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef } from "react";
 import { useMutation, useQuery } from "convex/react";
-import { api } from "@/convex/features/notion/_generated/api";
+import { api } from "@/convex/_generated/api";
 import type { Page, PageSnapshot } from "@notion/shared/types/domain";
 
 export function useSnapshots(authorName: string) {

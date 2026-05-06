@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { ArrowDown, ArrowUp, ExternalLink, Link as LinkIcon, Plus, X } from "lucide-react";
-import { cn } from "@/shared/lib/cn";
+import { cn } from "@/lib/utils";
 
 export type AdminLinkItem = { label: string; url: string };
 

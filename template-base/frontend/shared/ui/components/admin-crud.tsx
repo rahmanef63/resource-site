@@ -5,7 +5,7 @@ import { Pencil, Trash2, Plus, X, Save, Search, Inbox, ArrowUpDown, ExternalLink
 import dynamic from "next/dynamic";
 import { Badge } from "@/shared/ui/badge";
 import { SkeletonFormField } from "@/shared/ui/skeletons";
-import { cn } from "@/shared/lib/cn";
+import { cn } from "@/lib/utils";
 
 // Form-only field editors — lazy so list browsing doesn't pull in
 // the file-upload pipeline (FileUpload + crop + queue) until user

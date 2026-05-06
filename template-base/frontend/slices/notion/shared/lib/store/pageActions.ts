@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from "react";
 import { useMutation } from "convex/react";
-import { api } from "@/convex/features/notion/_generated/api";
+import { api } from "@/convex/_generated/api";
 import type { Block, BlockType, Page, Preferences } from "@notion/shared/types/domain";
 
 const uid = () => Math.random().toString(36).slice(2, 10);

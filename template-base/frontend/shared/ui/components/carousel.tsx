@@ -3,7 +3,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { cn } from "@/shared/lib/cn";
+import { cn } from "@/lib/utils";
 
 function isExternalImage(src: string): boolean {
   return /^https?:\/\//.test(src);

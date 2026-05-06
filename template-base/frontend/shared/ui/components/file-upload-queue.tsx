@@ -21,7 +21,7 @@ import {
   type UploadResult,
 } from "@/shared/lib/use-file-upload";
 import { describeConversion } from "@/shared/lib/image-convert";
-import { cn } from "@/shared/lib/cn";
+import { cn } from "@/lib/utils";
 
 type QueueStatus = UploadPhase | "pending";
 

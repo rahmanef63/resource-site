@@ -21,7 +21,7 @@ import {
   Sparkles,
   Loader2,
 } from "lucide-react";
-import { cn } from "@/shared/lib/cn";
+import { cn } from "@/lib/utils";
 
 export type Mode = "richtext" | "html" | "refiner";
 

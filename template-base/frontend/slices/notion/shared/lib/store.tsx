@@ -4,7 +4,7 @@ import {
 } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { useAuthActions } from "@convex-dev/auth/react";
-import { api } from "@/convex/features/notion/_generated/api";
+import { api } from "@/convex/_generated/api";
 import type {
   Block, BlockType, Page, Workspace, UserProfile, Preferences, Database,
   DatabaseViewConfig, Property, PropertyType, PropertyValue, PageSnapshot, SelectOption,

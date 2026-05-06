@@ -21,7 +21,7 @@ import {
 } from "@/shared/lib/use-file-upload";
 import { describeConversion } from "@/shared/lib/image-convert";
 import { useAuth } from "@/shared/lib/auth-context";
-import { cn } from "@/shared/lib/cn";
+import { cn } from "@/lib/utils";
 
 type Props = {
   value: string[] | undefined | null;

@@ -13,7 +13,7 @@ import {
   type PresetFull,
 } from "@/shared/lib/theme-presets";
 import { groupPresets } from "@/shared/lib/preset-groups";
-import { cn } from "@/shared/lib/cn";
+import { cn } from "@/lib/utils";
 
 type Group = {
   id: string;

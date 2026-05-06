@@ -1,6 +1,6 @@
 import { createContext, useContext, useMemo, type ReactNode } from "react";
 import { useQuery, useMutation } from "convex/react";
-import { api } from "@/convex/features/notion/_generated/api";
+import { api } from "@/convex/_generated/api";
 import type { Comment } from "../types";
 
 interface CommentMutations {

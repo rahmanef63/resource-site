@@ -10,108 +10,12 @@
 
 import type { FeatureConfig } from './defineFeature'
 
-import overviewConfig from '@/frontend/slices/overview/config'
-import communicationsConfig from '@/frontend/slices/communications/config'
-import statusConfig from '@/frontend/slices/status/config'
-import aiConfig from '@/frontend/slices/ai/config'
-import contactsConfig from '@/frontend/slices/contacts/config'
-import knowledgeConfig from '@/frontend/slices/knowledge/config'
-import workspaceStoreConfig from '@/frontend/slices/workspace-store/config'
-import databaseConfig from '@/frontend/slices/database/config'
-import documentsConfig from '@/frontend/slices/documents/config'
-import menusConfig from '@/frontend/slices/menus/config'
-import calendarConfig from '@/frontend/slices/calendar/config'
-import reportsConfig from '@/frontend/slices/reports/config'
-import userManagementConfig from '@/frontend/slices/user-management/config'
-import tasksConfig from '@/frontend/slices/tasks/config'
-import formsConfig from '@/frontend/slices/forms/config'
-import approvalsConfig from '@/frontend/slices/approvals/config'
-import supportConfig from '@/frontend/slices/support/config'
-import projectsConfig from '@/frontend/slices/projects/config'
-import auditLogConfig from '@/frontend/slices/audit-log/config'
-import importExportConfig from '@/frontend/slices/import-export/config'
-import integrationsConfig from '@/frontend/slices/integrations/config'
-import posConfig from '@/frontend/slices/pos/config'
 import studioConfig from '@/frontend/slices/studio/config'
-import marketingConfig from '@/frontend/slices/marketing/config'
-import analyticsConfig from '@/frontend/slices/analytics/config'
-import biConfig from '@/frontend/slices/bi/config'
-import salesConfig from '@/frontend/slices/sales/config'
-import guestBookingConfig from '@/frontend/slices/guest-booking/config'
-import staffOperationsConfig from '@/frontend/slices/staff-operations/config'
-import ownerAnalyticsConfig from '@/frontend/slices/owner-analytics/config'
-import industryTemplatesConfig from '@/frontend/slices/industry-templates/config'
-import hrConfig from '@/frontend/slices/hr/config'
-import contentConfig from '@/frontend/slices/content/config'
-import cmsLiteConfig from '@/frontend/slices/cms-lite/config'
-import pettyCashConfig from '@/frontend/slices/petty-cash/config'
-import accountingConfig from '@/frontend/slices/accounting/config'
-import dailyClosingConfig from '@/frontend/slices/daily-closing/config'
-import kpiThresholdsConfig from '@/frontend/slices/kpi-thresholds/config'
-import damageReportsConfig from '@/frontend/slices/damage-reports/config'
-import ownerTransfersConfig from '@/frontend/slices/owner-transfers/config'
-import customerLoyaltyConfig from '@/frontend/slices/customer-loyalty/config'
-import assetManagementConfig from '@/frontend/slices/asset-management/config'
-import cashFlowForecastConfig from '@/frontend/slices/cash-flow-forecast/config'
-import operationalChecklistConfig from '@/frontend/slices/operational-checklist/config'
-import branchHealthScoringConfig from '@/frontend/slices/branch-health-scoring/config'
-import maintenanceSchedulingConfig from '@/frontend/slices/maintenance-scheduling/config'
-import inventoryConfig from '@/frontend/slices/inventory/config'
-import crmConfig from '@/frontend/slices/crm/config'
 import exampleConfig from '@/frontend/slices/example/config'
-import platformAdminConfig from '@/frontend/slices/platform-admin/config'
 
 const featureConfigs: FeatureConfig[] = [
-  overviewConfig,
-  communicationsConfig,
-  statusConfig,
-  aiConfig,
-  contactsConfig,
-  knowledgeConfig,
-  workspaceStoreConfig,
-  databaseConfig,
-  documentsConfig,
-  menusConfig,
-  calendarConfig,
-  reportsConfig,
-  userManagementConfig,
-  tasksConfig,
-  formsConfig,
-  approvalsConfig,
-  supportConfig,
-  projectsConfig,
-  auditLogConfig,
-  importExportConfig,
-  integrationsConfig,
-  posConfig,
   studioConfig,
-  marketingConfig,
-  analyticsConfig,
-  biConfig,
-  salesConfig,
-  guestBookingConfig,
-  staffOperationsConfig,
-  ownerAnalyticsConfig,
-  industryTemplatesConfig,
-  hrConfig,
-  contentConfig,
-  cmsLiteConfig,
-  pettyCashConfig,
-  accountingConfig,
-  dailyClosingConfig,
-  kpiThresholdsConfig,
-  damageReportsConfig,
-  ownerTransfersConfig,
-  customerLoyaltyConfig,
-  assetManagementConfig,
-  cashFlowForecastConfig,
-  operationalChecklistConfig,
-  branchHealthScoringConfig,
-  maintenanceSchedulingConfig,
-  inventoryConfig,
-  crmConfig,
   exampleConfig,
-  platformAdminConfig,
 ]
 /**
  * Extract and validate all discovered features

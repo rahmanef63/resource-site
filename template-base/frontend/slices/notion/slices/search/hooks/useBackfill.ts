@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useMutation } from "convex/react";
-import { api } from "@/convex/features/notion/_generated/api";
+import { api } from "@/convex/_generated/api";
 
 const FLAG = "search_backfill_v1";
 

@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { useFileUpload } from "@/shared/lib/use-file-upload";
 import { useAuth } from "@/shared/lib/auth-context";
-import { cn } from "@/shared/lib/cn";
+import { cn } from "@/lib/utils";
 
 const TENANT_ID = "admin";
 const ACCEPT = "image/jpeg,image/png,image/webp,image/svg+xml,application/pdf";
