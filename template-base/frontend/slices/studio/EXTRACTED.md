@@ -28,11 +28,28 @@ This deviates from manifest §9 step 5 (which suggested seding out the calls). J
 
 ## Receiving-side gaps that need follow-up
 
-1. **Convex root schema** — `convex/schema.ts` does not exist in template-base. The studio schema fragments (`convex/features/studio/api/schema.ts` exporting `studioTables`, `convex/features/studio/api/agentConfig.schema.ts` exporting `studioAgentTables`) need to be merged into whatever root schema this project ends up with. Unblocks `convex dev` codegen + `_generated/` imports across studio.
-2. **`useWorkspaceId`** — exists at `frontend/shared/foundation/workspaces/hooks/useWorkspaceId.ts`; relies on `ConvexWorkspaceContext`. Both ported but assume a `workspaces` table — same blocker as #1.
-3. **shadcn `components.json`** — primitives are vendored but `components.json` not refreshed; if `pnpm dlx shadcn-ui add` is used later it may renumber/clash.
-4. **Tests** — `describe.skip` markers in all 4 files. Un-skip when real RBAC is back.
-5. **UIUX001 / UIUX013** — known issues per manifest §8.6, deferred to stabilization.
+### Wired during extraction (no longer blockers)
+
+- **Convex root schema** — `convex/schema.ts` now composes `authTables + notionTables + studioTables + studioAgentTables`. Notion's per-feature `schema.ts` was lightly refactored to also export a named `notionTables` const alongside its default `defineSchema(...)` (zero behavioral impact — nothing imported the default).
+- **`_generated/` stubs** — hand-written placeholders at `convex/_generated/{api,server,dataModel}.{d.ts,js}` so `tsc --noEmit` runs without an authenticated Convex deployment. These files are **overwritten on first `npx convex dev`**. Runtime is intentionally broken until that happens (api/internal proxies throw on access).
+- **Vendored peer deps** — `reactflow`, `react-syntax-highlighter`, `@types/react-syntax-highlighter`, `html-to-image`, `ajv`, `ajv-formats`, `react-markdown`, `zustand` added to `package.json`.
+- **UI barrel** — `frontend/shared/ui/index.ts` exports `ResponsiveDialog`, `SharedCanvas`, `CMSPreview`, `AutomationPreview`. Extend if more callers land.
+- **`hasWorkspaceAccess`** — stub at `convex/features/database/utils.ts` returns `true` once auth is present (single-tenant).
+
+### Remaining tsc errors (51 in studio code, all stabilization-class)
+
+`npx tsc --noEmit` reports 51 errors localized to studio. Categorized:
+
+1. **Schema fit (~30 errors)** — studio's executor / queries / sla reference tables that don't exist in template-base's schema: `tasks`, `dbTables`, `dbRows`, `documents`, plus a `notifications.workspaceId` field and a `workflows.assigneeId` field. In SuperSpace those tables exist via other features. Resolution: either (a) add minimal stub tables to root schema; or (b) refactor studio's executor to be schema-agnostic (gated behind capability checks). Defer — picks during stabilization.
+2. **Builder enum widening (3 errors)** — `frontend/shared/builder/canvas/core/SharedCanvasProvider.tsx` types `canvasMode` as `'cms' | 'automation' | 'database'`, but studio passes `'studio'`. Same in `UnifiedLibrary.currentFeature`. Pre-existing in superspace too — never raised because TS suppression patterns covered it. Resolution: widen builder type to `... | 'studio'` once studio is the primary consumer.
+3. **`@testing-library/react` API drift (8 errors)** — co-located test files at `frontend/slices/studio/ui/{hooks,slices/renderer/components}/__tests__/` import `waitFor` / `screen`. v16 moved them under `@testing-library/dom`. Resolution: either downgrade testing-library or rewrite imports. These tests are inside the slice (not in `tests/features/studio/`) so they were never in the "skip suite".
+4. **Misc (~10 errors)** — small TS2339/TS2345 fallout from #1.
+
+### Other follow-ups
+
+- **shadcn `components.json`** — primitives are vendored but `components.json` not refreshed; if `pnpm dlx shadcn-ui add` is used later it may renumber/clash.
+- **Tests** — `describe.skip` markers in all 4 files at `tests/features/studio/`. Un-skip when real RBAC is back.
+- **UIUX001 / UIUX013** — known issues per manifest §8.6, deferred to stabilization.
 
 ## Re-merge contract (future)
 

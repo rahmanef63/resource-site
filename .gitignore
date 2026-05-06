@@ -10,7 +10,5 @@ dist/
 .DS_Store
 .vscode/
 .turbo/
-
-# Auto-generated
+.pnpm-store/
 *.tsbuildinfo
-next-env.d.ts
