@@ -21,3 +21,6 @@ recipes
 template-base
 packages
 site
+convex
+plugins
+docs
