@@ -1,0 +1,69 @@
+version: "3.9"
+
+# Dokploy compose: Next.js + self-hosted Convex + Postgres.
+# Set domains in Dokploy. Volumes persist across redeploys.
+
+services:
+  app:
+    build: .
+    image: ${APP_NAME:-template-base}:latest
+    restart: unless-stopped
+    environment:
+      NEXT_PUBLIC_CONVEX_URL: ${CONVEX_CLOUD_ORIGIN}
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
+      NEXT_SERVER_ACTIONS_ENCRYPTION_KEY: ${NEXT_SERVER_ACTIONS_ENCRYPTION_KEY}
+      NEXT_DEPLOYMENT_ID: ${NEXT_DEPLOYMENT_ID}
+      AUTH_GITHUB_ID: ${AUTH_GITHUB_ID}
+      AUTH_GITHUB_SECRET: ${AUTH_GITHUB_SECRET}
+      AUTH_GOOGLE_ID: ${AUTH_GOOGLE_ID}
+      AUTH_GOOGLE_SECRET: ${AUTH_GOOGLE_SECRET}
+      RESEND_API_KEY: ${RESEND_API_KEY}
+    depends_on:
+      - convex-backend
+    ports:
+      - "3000:3000"
+
+  convex-backend:
+    image: ghcr.io/get-convex/convex-backend:c1a7ac393fbd0e3f15ac17feb2d7e3d65d2eb4c3
+    restart: unless-stopped
+    environment:
+      INSTANCE_NAME: ${INSTANCE_NAME:-prod}
+      INSTANCE_SECRET: ${INSTANCE_SECRET}
+      CONVEX_CLOUD_ORIGIN: ${CONVEX_CLOUD_ORIGIN}
+      CONVEX_SITE_ORIGIN: ${CONVEX_SITE_ORIGIN}
+      DATABASE_URL: ${POSTGRES_URL}
+      DISABLE_BEACON: "true"
+      REDACT_LOGS_TO_CLIENT: "true"
+      DO_NOT_REQUIRE_SSL: "false"
+      RUST_LOG: info
+    volumes:
+      - convex-data:/convex/data
+    ports:
+      - "3210:3210"   # cloud (API)
+      - "3211:3211"   # site (HTTP actions)
+    depends_on:
+      - postgres
+
+  convex-dashboard:
+    image: ghcr.io/get-convex/convex-dashboard:c1a7ac393fbd0e3f15ac17feb2d7e3d65d2eb4c3
+    restart: unless-stopped
+    environment:
+      NEXT_PUBLIC_DEPLOYMENT_URL: ${CONVEX_CLOUD_ORIGIN}
+    ports:
+      - "6791:6791"
+    depends_on:
+      - convex-backend
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: convex
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: convex
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  convex-data:
+  postgres-data:

@@ -1,0 +1,351 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Theme preset: neo-brutalism default (from superspace/public/r/registry.json)
+
+  Var taxonomy (mirror of tweakcn preset shape):
+    • colors  — oklch triplets "L C H" (no wrapper).
+    • chart   — oklch triplets for data viz.
+    • shadow  — 6 atoms + 8 pre-composed sizes (raw CSS).
+    • tracking — letter-spacing cascade.
+    • geometry — radius, spacing.
+    • fonts — font-sans/serif/mono stacks; preset loader prepends
+              next/font CSS vars when the preset family matches loaded ones.
+    • density — section vertical rhythm.
+    • border-width — infra var for preset families to override.
+*/
+
+@layer base {
+  :root {
+    /* core colors */
+    --background: 1 0 0;
+    --foreground: 0 0 0;
+    --card: 1 0 0;
+    --card-foreground: 0 0 0;
+    --popover: 1 0 0;
+    --popover-foreground: 0 0 0;
+    --primary: 0.65 0.24 26.97;
+    --primary-foreground: 1 0 0;
+    --secondary: 0.97 0.21 109.77;
+    --secondary-foreground: 0 0 0;
+    --muted: 0.96 0 0;
+    --muted-foreground: 0.32 0 0;
+    --accent: 0.56 0.24 260.82;
+    --accent-foreground: 1 0 0;
+    --destructive: 0 0 0;
+    --destructive-foreground: 1 0 0;
+    --border: 0 0 0;
+    --input: 0 0 0;
+    --ring: 0.65 0.24 26.97;
+
+    /* chart */
+    --chart-1: 0.65 0.24 26.97;
+    --chart-2: 0.97 0.21 109.77;
+    --chart-3: 0.56 0.24 260.82;
+    --chart-4: 0.73 0.25 142.50;
+    --chart-5: 0.59 0.27 328.36;
+
+    /* brutalist extras */
+    --highlight: 0.97 0.21 109.77;
+    --block-dark: 0 0 0;
+    --block-light: 1 0 0;
+    --grid-line: 0 0 0;
+
+    /* sidebar */
+    --sidebar: 0.96 0 0;
+    --sidebar-foreground: 0 0 0;
+    --sidebar-primary: 0.65 0.24 26.97;
+    --sidebar-primary-foreground: 1 0 0;
+    --sidebar-accent: 0.56 0.24 260.82;
+    --sidebar-accent-foreground: 1 0 0;
+    --sidebar-border: 0 0 0;
+    --sidebar-ring: 0.65 0.24 26.97;
+
+    /* geometry */
+    --radius: 0rem;
+    --spacing: 0.25rem;
+    --density-y: 3rem;
+    --border-width: 2px;
+
+    /* typography (tracking-brutal* with fallback; presets may override) */
+    --letter-spacing: 0em;
+    --tracking-brutal: 0.2em;
+    --tracking-brutal-sm: 0.15em;
+    --tracking-normal: var(--letter-spacing);
+    --tracking-tighter: calc(var(--tracking-normal) - 0.05em);
+    --tracking-tight: calc(var(--tracking-normal) - 0.025em);
+    --tracking-wide: calc(var(--tracking-normal) + 0.025em);
+    --tracking-wider: calc(var(--tracking-normal) + 0.05em);
+    --tracking-widest: calc(var(--tracking-normal) + 0.1em);
+
+    /* font stacks — defaults point to next/font loaded vars; preset rewrites these */
+    --font-sans: var(--font-inter), system-ui, sans-serif;
+    --font-serif: var(--font-cormorant), Georgia, serif;
+    --font-mono: var(--font-jb-mono), ui-monospace, monospace;
+
+    /* shadow atoms */
+    --shadow-color: 0 0% 0%;
+    --shadow-opacity: 1;
+    --shadow-blur: 0px;
+    --shadow-spread: 0px;
+    --shadow-offset-x: 4px;
+    --shadow-offset-y: 4px;
+
+    /* shadow sizes (neo-brutalism defaults) */
+    --shadow-2xs: 4px 4px 0 0 hsl(0 0% 0% / 0.5);
+    --shadow-xs: 4px 4px 0 0 hsl(0 0% 0% / 0.5);
+    --shadow-sm: 4px 4px 0 0 hsl(0 0% 0% / 1), 4px 1px 2px -1px hsl(0 0% 0% / 1);
+    --shadow: 4px 4px 0 0 hsl(0 0% 0% / 1), 4px 1px 2px -1px hsl(0 0% 0% / 1);
+    --shadow-md: 4px 4px 0 0 hsl(0 0% 0% / 1), 4px 2px 4px -1px hsl(0 0% 0% / 1);
+    --shadow-lg: 4px 4px 0 0 hsl(0 0% 0% / 1), 4px 4px 6px -1px hsl(0 0% 0% / 1);
+    --shadow-xl: 4px 4px 0 0 hsl(0 0% 0% / 1), 4px 8px 10px -1px hsl(0 0% 0% / 1);
+    --shadow-2xl: 4px 4px 0 0 hsl(0 0% 0% / 2.5);
+
+    /* site-specific brutalist shadow tokens */
+    --shadow-brutal: 4px 4px 0 0 oklch(var(--foreground));
+    --shadow-brutal-lg: 8px 8px 0 0 oklch(var(--foreground));
+  }
+
+  .dark {
+    --background: 0 0 0;
+    --foreground: 1 0 0;
+    --card: 0.32 0 0;
+    --card-foreground: 1 0 0;
+    --popover: 0.32 0 0;
+    --popover-foreground: 1 0 0;
+    --primary: 0.70 0.19 23.19;
+    --primary-foreground: 0 0 0;
+    --secondary: 0.97 0.20 109.62;
+    --secondary-foreground: 0 0 0;
+    --muted: 0.32 0 0;
+    --muted-foreground: 0.85 0 0;
+    --accent: 0.68 0.18 252.26;
+    --accent-foreground: 0 0 0;
+    --destructive: 1 0 0;
+    --destructive-foreground: 0 0 0;
+    --border: 1 0 0;
+    --input: 1 0 0;
+    --ring: 0.70 0.19 23.19;
+
+    --chart-1: 0.70 0.19 23.19;
+    --chart-2: 0.97 0.20 109.62;
+    --chart-3: 0.68 0.18 252.26;
+    --chart-4: 0.74 0.23 142.85;
+    --chart-5: 0.61 0.25 328.07;
+
+    --highlight: 0.97 0.20 109.62;
+    --block-dark: 1 0 0;
+    --block-light: 0 0 0;
+    --grid-line: 1 0 0;
+
+    --sidebar: 0 0 0;
+    --sidebar-foreground: 1 0 0;
+    --sidebar-primary: 0.70 0.19 23.19;
+    --sidebar-primary-foreground: 0 0 0;
+    --sidebar-accent: 0.68 0.18 252.26;
+    --sidebar-accent-foreground: 0 0 0;
+    --sidebar-border: 1 0 0;
+    --sidebar-ring: 0.70 0.19 23.19;
+
+    --shadow-brutal: 4px 4px 0 0 oklch(var(--foreground));
+    --shadow-brutal-lg: 8px 8px 0 0 oklch(var(--foreground));
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    font-family: var(--font-sans);
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    letter-spacing: var(--letter-spacing);
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-serif);
+  }
+
+  code, pre, kbd, samp {
+    font-family: var(--font-mono);
+  }
+}
+
+/*
+  Preset-swap transition pulse. Class added to <html> for ~260ms when
+  applyPreset/previewPreset fires. Applies to all elements so color,
+  border, radius, and shadow morph smoothly without JS animation loop.
+*/
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition-property: background-color, color, border-color, border-radius,
+    box-shadow, letter-spacing, font-family !important;
+  transition-duration: 220ms !important;
+  transition-timing-function: ease !important;
+}
+
+::selection {
+  background: oklch(var(--foreground));
+  color: oklch(var(--background));
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: oklch(var(--background));
+  border-left: 1px solid oklch(var(--border));
+}
+
+::-webkit-scrollbar-thumb {
+  background: oklch(var(--foreground));
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: oklch(var(--muted-foreground));
+}
+
+@layer base {
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid oklch(var(--foreground));
+    outline-offset: 2px;
+  }
+
+  /* Respect reduced-motion preference — disable transforms/anims. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* =============================================================
+   View Transitions — opt-in cross-document morph. Named sources
+   come from PortfolioGrid / Carousel heroName. Keep default UA
+   transition for everything else.
+   ============================================================= */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 260ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+}
+
+/* =============================================================
+   Interactive hover utilities — DRY, theme-token driven.
+   Pick ONE utility per element; avoid mixing duplicated classes
+   like hover:-translate-y-0.5 hover:shadow-md inline everywhere.
+   ============================================================= */
+@layer components {
+  /* Card / tile / button — vertical lift + shadow growth. */
+  .hover-lift {
+    @apply transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm motion-reduce:hover:translate-y-0 motion-reduce:hover:shadow-none;
+  }
+  .hover-lift-lg {
+    @apply transition-all duration-200 hover:-translate-y-1 hover:shadow-lg active:translate-y-0 motion-reduce:hover:translate-y-0;
+  }
+
+  /* Color-swap — bg ↔ text. Common for ghost buttons. */
+  .hover-swap {
+    @apply transition-colors duration-150 hover:bg-foreground hover:text-background;
+  }
+  .hover-swap-invert {
+    @apply transition-colors duration-150 hover:bg-background hover:text-foreground;
+  }
+
+  /* Muted tint hover (sidebar nav, list rows, menu items). */
+  .hover-tint {
+    @apply transition-colors duration-150 hover:bg-accent hover:text-accent-foreground;
+  }
+
+  /* Focus / keyboard ring emphasis. */
+  .hover-ring {
+    @apply transition-shadow duration-150 hover:ring-2 hover:ring-foreground hover:ring-offset-2 hover:ring-offset-background;
+  }
+
+  /* Image reveal — grayscale → color. Cost: `transition-[filter]`. */
+  .image-hover-reveal {
+    @apply transition-[filter] duration-500 grayscale hover:grayscale-0 motion-reduce:grayscale-0;
+  }
+
+  /* Scale nudge — good for icon buttons, small chips. */
+  .hover-scale {
+    @apply transition-transform duration-150 hover:scale-105 active:scale-95 motion-reduce:hover:scale-100;
+  }
+
+  /* Underline-slide animation for text links. */
+  .link-underline {
+    @apply relative inline after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-current after:transition-[width] after:duration-300 hover:after:w-full motion-reduce:after:transition-none;
+  }
+
+  /* Prebuilt composed cards/buttons. */
+  .card-interactive {
+    @apply border-2 border-foreground rounded-lg bg-card shadow-sm cursor-pointer hover-lift;
+  }
+  .button-inverted {
+    /* Primary CTA pattern — bg-foreground → swap on hover. */
+    @apply inline-flex items-center gap-2 border-2 border-foreground rounded-md shadow-xs bg-foreground text-background px-4 py-2 text-xs uppercase tracking-brutal-sm font-medium hover-lift hover-swap-invert;
+  }
+  .button-outline {
+    /* Secondary CTA pattern. */
+    @apply inline-flex items-center gap-2 border-2 border-foreground rounded-md bg-background text-foreground px-4 py-2 text-xs uppercase tracking-brutal-sm font-medium hover-lift hover-swap;
+  }
+
+  /* Admin-authored lesson / course HTML containment.
+     Wrapper creates a containing block (transform) + new stacking context
+     (isolate) + paint containment. Together these prevent admin-pasted
+     HTML — particularly Claude artifacts with full <html> bodies — from
+     escaping the lesson area to overlay the site chrome. */
+  .classroom-lesson-body {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+  .classroom-lesson-body iframe,
+  .classroom-lesson-body video,
+  .classroom-lesson-body img,
+  .classroom-lesson-body canvas {
+    max-width: 100%;
+  }
+}
+
+/* Print stylesheet — strip nav/footer/animations when paper-printing
+   blog posts and classroom lessons. Article body keeps prose styles. */
+@media print {
+  header, footer, nav,
+  [class*="Grain"],
+  .print\:hidden,
+  [aria-hidden="true"][class*="fixed"] {
+    display: none !important;
+  }
+  body { background: white !important; color: black !important; }
+  .prose { max-width: 100% !important; }
+  a { color: black !important; text-decoration: underline; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; color: #555; }
+  .classroom-lesson-body iframe,
+  .classroom-lesson-body video,
+  .classroom-lesson-body canvas { display: none !important; }
+}

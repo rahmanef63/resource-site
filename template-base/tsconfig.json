@@ -1,0 +1,45 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [{ "name": "next" }],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@/convex/*": ["./convex/*"],
+      "@convex/_generated/*": ["./convex/_generated/*"],
+      "@notion/*": ["./frontend/slices/notion/*"],
+      "@notionConvex/*": ["./convex/features/notion/*"],
+      "@/shared/builder": ["./frontend/shared/builder"],
+      "@/shared/foundation": ["./frontend/shared/foundation"],
+      "@/shared/settings": ["./frontend/shared/settings"],
+      "@/shared/communications": ["./frontend/shared/communications"],
+      "@/shared/theme": ["./frontend/shared/theme"],
+      "@/shared/ui": ["./frontend/shared/ui"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.d.ts",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.legacy",
+    "archive",
+    "frontend/slices/notion/app-fragments"
+  ]
+}
