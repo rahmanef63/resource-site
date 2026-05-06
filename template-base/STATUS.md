@@ -6,7 +6,7 @@
 
 ## Session 2026-05-06 progress
 
-**1108 → 87 tsc errors (−92%, −1021 errors)** via:
+**1108 → 49 tsc errors (−95.6%, −1059 errors)** via:
 
 - 53 → 0 studio extraction errors (all 4 EXTRACTED.md categories cleared)
 - Composed 6 cross-feature shared schemas into root (activity, attachments, comments, customFields, favorites, search)
@@ -35,30 +35,35 @@
 - All chart/recharts wrappers typecheck against pinned recharts v2
 - All resizable.tsx wrappers typecheck against pinned react-resizable-panels v3
 
-## What's still broken (~87 tsc errors, all internal)
+## What's still broken (~49 tsc errors, all internal)
 
-| File | # | Why |
-|---|---:|---|
-| `frontend/slices/notion/slices/editor/BlockEditor.tsx` | 6 | Vite→Next port residue — block render context API drift. |
-| `convex/features/notion/features/comments/mutations.ts` | 6 | Notion's comments table shape collides with `convex/shared/comments` shape; only one wins at root. The mutations target notion's intended fields (userId/pageId/blockId/text/resolved); the resolved schema has the shared shape (workspaceId/parentId/authorId/entityType). Collision: deferred until a unification pass. |
-| `frontend/shared/ui/components/data-views/gantt/index.tsx` | 5 | Gantt visualization narrowing fails on `never` from generic widget — needs explicit type param at call site. |
-| `convex/lib/rbac/permissions.ts` | 5 | Uses `by_auth_subject` index on users table that isn't part of `@convex-dev/auth`'s authTables (only by_email + by_phone). Either extend users with that index or refactor RBAC to use direct lookup. |
-| `convex/features/studio/agents/generator.ts` | 4 | Studio agent generator references AI features that aren't exposed in the kitab's `api.studio` surface. |
-| `convex/features/notion/features/comments/queries.ts` | 4 | Same collision as comments mutations. |
-| `frontend/shared/ui/layout/dashboard/mobile/MobileWorkspaceLauncher.tsx` | 3 | Mobile launcher references workspace fields not in current schema. |
-| (~54 more, scattered, ≤3 errors each) | ~54 | Notion slice port residue, AI agent registry unwiring, foundation-utils config aggregator imports. |
+Distribution is now scattered, max 3 errors per file. All clusters with ≥4
+errors per file (BlockEditor, gantt, rbac, studio agents, comments) are
+fixed. Remaining errors are file-specific edge cases.
 
-By directory:
+Top files:
 
-```
-55 frontend/shared
-14 convex/features
-10 frontend/slices
- 5 convex/lib
- 1 instrumentation.ts (next.js types)
- 1 convex/auth.ts
- 1 components/ui
-```
+| File | # |
+|---|---:|
+| `frontend/shared/ui/layout/dashboard/mobile/MobileWorkspaceLauncher.tsx` | 3 |
+| `frontend/shared/lib/features/examples/reports-feature-example.ts` | 3 |
+| `frontend/shared/builder/elements/FormField/FormField.wrapper.tsx` | 3 |
+| `frontend/shared/ai/hooks/useSubAgentRouter.ts` | 3 |
+| `frontend/shared/ui/layout/sidebar/components/site-header.tsx` | 2 |
+| `frontend/shared/ui/layout/container/three-column/FeatureThreeColumnLayout.tsx` | 2 |
+| `frontend/shared/ui/components/{theme-preset-switcher,admin-gallery-field,admin-file-field}.tsx` | 6 |
+| `frontend/shared/foundation/workspaces/lib/formatFeatureLabel.ts` | 2 |
+| (~25 more files, ≤2 errors each) | ~25 |
+
+Remaining missing modules (all 1-2 occurrences):
+- `@/frontend/slices/industry-templates/hooks/useIndustryTemplates` (2)
+- `@auth/core/providers/password` (1)
+- `@/shared/types/domain` (1)
+- `@/shared/lib/{theme-presets,preset-groups}` (1 each)
+- `@/lib/workspaces/{templates,featureLabels}` (1 each)
+- `@/frontend/slices/reports/{views/ReportsPage,types,hooks/useReports}` (3)
+
+These need file-by-file decisions (extend stubs vs delete consumers vs backfill from another source).
 
 ## How to use template-base today
 

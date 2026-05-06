@@ -11,7 +11,7 @@ Chronological session log. Each entry is dated and lists what landed + outstandi
 | Deployed kitab Docker build | ❌ failing on `cookbook/`/`recipes/`/`template-base/` typecheck | ✅ green, 120 prerendered routes |
 | Docker build context | 14.95 MB | 1.4 MB (10.7× smaller) |
 | Studio extraction tsc errors | 53 | **0** |
-| Template-base internal tsc errors | 1108 | **87 (−92%)** |
+| Template-base internal tsc errors | 1108 | **49 (−95.6%)** |
 | `"latest"` deps in package.json | 79 (root + template-base) | 0 |
 | High-severity npm vulns (CLI) | 4 (tar via tiged) | **0** |
 | GitHub Actions CI | none | typecheck + build + audit gate |
@@ -36,6 +36,7 @@ Chronological session log. Each entry is dated and lists what landed + outstandi
 10. `fix(template-base): selective backfill chat/ai/menus/social/database (-86 tsc errors)` — comprehensive feature schemas composed into root, `industryTemplates`, `invitations`, `workspaceLinks`, `systemNotifications`, `exampleItems` selectively spread.
 11. `fix(template-base): bucket cleanup recharts/resizable/workspace/stubs (-98 tsc errors)` — pinned recharts v2 + react-resizable-panels v3 (the kitab wrappers expect those API surfaces), extended workspace schema with hierarchy fields, backfilled export-registry + ai-assistant + componentFactory + rightPanelStore from superspace, set noImplicitAny:false while api stub is hand-written, created stubs for session-info / toolbar / use-mobile.
 12. `fix(template-base): extend stubs + barrels (-22 tsc errors)` — extended use-file-upload stub with 4-arg upload + flexible performUpload config object, describeConversion accepts (origSize, convSize) pair, session-info DebugStore now exposes addAgentTrace/completeAgentTrace/log overload, backfilled components/{registry,search-bar} + utils/index from superspace.
+13. `fix(template-base): table rename + RBAC users index + array typing (-34 tsc errors)` — renamed notion's `comments` → `notionComments` to coexist with shared/comments. Extended @convex-dev/auth users with `by_auth_subject` + `by_clerk_id` indexes + optional kitab fields (subject, clerkId, metadata, avatarUrl, status, workspaceId). Workspaces gain optional createdBy/updatedBy/createdAt/updatedAt. Typed `featureWithPositions` + `steps` arrays explicitly. Widened BlockShell `attributes`/`listeners` to `Record<string, any>` for dnd-kit compat. File-upload null-safety (`?? 0` defaults, `formatSize(undefined)` accepts). Backfilled column-layout from superspace + agent-registry.generated stub.
 
 ### Critical fixes
 
@@ -68,13 +69,10 @@ The deployed showcase site has no `convex` dep — it's a static catalog UI. Fix
 
 #### Lower priority, documented for later
 
-- **87 template-base internal tsc errors** — categorized in `template-base/STATUS.md`. Concentrated in:
-  1. Comments table collision (10) — notion's `comments` shape vs shared `commentsSchema` shape. Inherent collision requiring unification.
-  2. Notion BlockEditor port residue (6) — Vite→Next render context drift.
-  3. RBAC permissions (5) — uses `by_auth_subject` index not in @convex-dev/auth's user table.
-  4. Gantt narrowing (5) — generic `never` inference; needs explicit type param.
-  5. Studio agents generator (4) — references AI features not in kitab `api` surface.
-  6. Misc one-offs (~57) — file-by-file as needed.
+- **49 template-base internal tsc errors** — distribution now scattered (max 3 per file). All clusters with ≥4 errors per file fixed. Remaining are file-specific edge cases with clear shape:
+  - ~25 files with 1-3 errors each
+  - 11 unique missing modules, all 1-2 occurrences (industryTemplates hook, theme-presets, reports slice, etc.)
+  - Each requires a per-file decision: extend stub vs delete consumer vs backfill from another source.
 
   None of these block the deployed kitab, the CLI, or the MCP. Use template-base as a copy-source per-subtree (studio + builder + notion subtrees typecheck clean against the kitab schema).
 
