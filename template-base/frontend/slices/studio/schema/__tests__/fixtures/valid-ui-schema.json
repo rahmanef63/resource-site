@@ -1,0 +1,55 @@
+{
+  "version": "0.5",
+  "root": ["page-root"],
+  "nodes": {
+    "page-root": {
+      "type": "section",
+      "props": { "display": "flex", "flexDirection": "column", "gap": "1.5rem", "padding": "2rem", "path": "/home", "title": "Home" },
+      "children": ["hero-row", "metrics-grid"]
+    },
+    "hero-row": {
+      "type": "div",
+      "props": { "display": "flex", "flexDirection": "row", "gap": "1rem", "alignItems": "center" },
+      "children": ["hero-heading", "hero-cta"]
+    },
+    "hero-heading": {
+      "type": "text",
+      "props": { "content": "Welcome to SuperSpace", "fontSize": "2xl", "fontWeight": "700" },
+      "children": []
+    },
+    "hero-cta": {
+      "type": "button",
+      "props": { "text": "Get Started", "variant": "default" },
+      "children": []
+    },
+    "metrics-grid": {
+      "type": "grid",
+      "props": { "columns": "4", "gap": "1rem" },
+      "children": ["metric-1", "metric-2", "metric-3", "metric-4"]
+    },
+    "metric-1": {
+      "type": "metricCardBlock",
+      "props": { "title": "Revenue", "value": "$45,231", "trend": { "value": 12.5, "direction": "up" } },
+      "children": []
+    },
+    "metric-2": {
+      "type": "metricCardBlock",
+      "props": { "title": "Users", "value": "2,350", "trend": { "value": 5.2, "direction": "up" } },
+      "children": []
+    },
+    "metric-3": {
+      "type": "metricCardBlock",
+      "props": { "title": "Orders", "value": "1,247", "trend": { "value": 2.1, "direction": "down" } },
+      "children": []
+    },
+    "metric-4": {
+      "type": "metricCardBlock",
+      "props": { "title": "Growth", "value": "18.2%", "trend": { "value": 3.7, "direction": "up" } },
+      "children": []
+    }
+  },
+  "metadata": {
+    "name": "Dashboard Home",
+    "createdAt": "2026-04-06T00:00:00.000Z"
+  }
+}

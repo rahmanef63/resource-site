@@ -1,0 +1,21 @@
+{
+  "version": "0.5",
+  "root": ["page"],
+  "nodes": {
+    "page": {
+      "type": "section",
+      "props": { "display": "flex", "flexDirection": "col", "gap": "16", "path": "/home", "title": "Home" },
+      "children": ["outer-block"]
+    },
+    "outer-block": {
+      "type": "kanbanBlock",
+      "props": { "title": "Outer Kanban" },
+      "children": ["inner-block"]
+    },
+    "inner-block": {
+      "type": "chartBlock",
+      "props": { "title": "Nested Chart" },
+      "children": []
+    }
+  }
+}
