@@ -6,7 +6,7 @@
 
 ## Session 2026-05-06 progress
 
-**1108 → 109 tsc errors (−90%, −999 errors)** via:
+**1108 → 87 tsc errors (−92%, −1021 errors)** via:
 
 - 53 → 0 studio extraction errors (all 4 EXTRACTED.md categories cleared)
 - Composed 6 cross-feature shared schemas into root (activity, attachments, comments, customFields, favorites, search)
@@ -35,27 +35,29 @@
 - All chart/recharts wrappers typecheck against pinned recharts v2
 - All resizable.tsx wrappers typecheck against pinned react-resizable-panels v3
 
-## What's still broken (~109 tsc errors, all internal)
+## What's still broken (~87 tsc errors, all internal)
 
 | File | # | Why |
 |---|---:|---|
-| `frontend/shared/ui/ai-assistant/chat/AgentChatContainer.tsx` | 9 | Pulls properties off backfilled session-info stub that the stub doesn't implement (UI surface drift). |
 | `frontend/slices/notion/slices/editor/BlockEditor.tsx` | 6 | Vite→Next port residue — block render context API drift. |
-| `convex/features/notion/features/comments/mutations.ts` | 6 | Notion sub-feature mutation references comments schema that was extracted but not fully wired with all the inserter/updater fields. |
-| `frontend/shared/ui/components/{file-upload,file-upload-queue}.tsx` | 10 | Residual API drift between use-file-upload stub and original superspace API. |
-| `frontend/shared/ui/components/data-views/gantt/index.tsx` | 5 | Gantt visualization missing peer dep. |
-| `convex/lib/rbac/permissions.ts` | 5 | RBAC permission resolution references members of legacy clerk-style identity. |
-| (~70 more, scattered, ≤4 errors each) | ~70 | Notion slice port residue, AI agent registry unwiring, foundation-utils config aggregator imports. |
+| `convex/features/notion/features/comments/mutations.ts` | 6 | Notion's comments table shape collides with `convex/shared/comments` shape; only one wins at root. The mutations target notion's intended fields (userId/pageId/blockId/text/resolved); the resolved schema has the shared shape (workspaceId/parentId/authorId/entityType). Collision: deferred until a unification pass. |
+| `frontend/shared/ui/components/data-views/gantt/index.tsx` | 5 | Gantt visualization narrowing fails on `never` from generic widget — needs explicit type param at call site. |
+| `convex/lib/rbac/permissions.ts` | 5 | Uses `by_auth_subject` index on users table that isn't part of `@convex-dev/auth`'s authTables (only by_email + by_phone). Either extend users with that index or refactor RBAC to use direct lookup. |
+| `convex/features/studio/agents/generator.ts` | 4 | Studio agent generator references AI features that aren't exposed in the kitab's `api.studio` surface. |
+| `convex/features/notion/features/comments/queries.ts` | 4 | Same collision as comments mutations. |
+| `frontend/shared/ui/layout/dashboard/mobile/MobileWorkspaceLauncher.tsx` | 3 | Mobile launcher references workspace fields not in current schema. |
+| (~54 more, scattered, ≤3 errors each) | ~54 | Notion slice port residue, AI agent registry unwiring, foundation-utils config aggregator imports. |
 
 By directory:
 
 ```
-77 frontend/shared
-15 convex/features
+55 frontend/shared
+14 convex/features
 10 frontend/slices
  5 convex/lib
  1 instrumentation.ts (next.js types)
  1 convex/auth.ts
+ 1 components/ui
 ```
 
 ## How to use template-base today

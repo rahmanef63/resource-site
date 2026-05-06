@@ -51,7 +51,12 @@ export function useFileUpload(_options: UseFileUploadOptions = {}) {
     setStorageId(null);
   }, []);
 
-  const upload = useCallback(async (file: File): Promise<UploadResult> => {
+  const upload = useCallback(async (
+    file: File,
+    _uploadedBy?: unknown,
+    _tenantId?: unknown,
+    extras?: { originalSize?: number },
+  ): Promise<UploadResult> => {
     setIsUploading(true);
     setPhase("preparing");
     setProgress(0);
@@ -65,7 +70,16 @@ export function useFileUpload(_options: UseFileUploadOptions = {}) {
       });
       setPhase("done");
       setProgress(100);
-      return { url, fileName: file.name, mimeType: file.type, size: file.size };
+      return {
+        url,
+        fileName: file.name,
+        mimeType: file.type,
+        fileType: file.type,
+        size: file.size,
+        fileSize: file.size,
+        originalSize: extras?.originalSize ?? file.size,
+        converted: false,
+      };
     } catch (e) {
       const err = e instanceof Error ? e : new Error(String(e));
       setError(err);
@@ -82,18 +96,50 @@ export function useFileUpload(_options: UseFileUploadOptions = {}) {
 /**
  * Imperative variant — same effect as `upload(file)` from useFileUpload
  * but callable outside a React component (queue workers, batch jobs).
+ *
+ * Accepts a flexible config object so the queue runner (file-upload-queue)
+ * can pass `{ file, uploadedBy, tenantId, mutations, callbacks }` without
+ * each kitab app having to implement an entire async upload pipeline.
  */
+export interface PerformUploadConfig {
+  file: File;
+  uploadedBy?: unknown;
+  tenantId?: unknown;
+  mutations?: { generateUploadUrl?: () => Promise<string>; recordUpload?: (...args: any[]) => Promise<unknown> };
+  callbacks?: {
+    onPhase?: (phase: UploadPhase) => void;
+    onProgress?: (pct: number) => void;
+  };
+  originalSize?: number;
+}
+
 export async function performUpload(
-  file: File,
+  arg: File | PerformUploadConfig,
   _options: UseFileUploadOptions = {},
 ): Promise<UploadResult> {
+  const isConfig = arg instanceof File ? false : typeof arg === "object";
+  const file = isConfig ? (arg as PerformUploadConfig).file : (arg as File);
+  const cfg: PerformUploadConfig | undefined = isConfig ? (arg as PerformUploadConfig) : undefined;
+
+  cfg?.callbacks?.onPhase?.("preparing");
   const reader = new FileReader();
   const url = await new Promise<string>((resolve, reject) => {
     reader.onload = () => resolve(reader.result as string);
     reader.onerror = () => reject(reader.error);
     reader.readAsDataURL(file);
   });
-  return { url, fileName: file.name, mimeType: file.type, fileType: file.type, size: file.size, fileSize: file.size };
+  cfg?.callbacks?.onPhase?.("done");
+  cfg?.callbacks?.onProgress?.(100);
+  return {
+    url,
+    fileName: file.name,
+    mimeType: file.type,
+    fileType: file.type,
+    size: file.size,
+    fileSize: file.size,
+    originalSize: cfg?.originalSize ?? file.size,
+    converted: false,
+  };
 }
 
 /**

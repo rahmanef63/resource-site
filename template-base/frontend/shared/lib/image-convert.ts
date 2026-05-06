@@ -44,11 +44,20 @@ export async function applyCropToImage(
 
 /**
  * Stub: returns a short label describing the planned conversion. Used
- * by file-upload UI to show "PNG → WebP @ 80%" etc. Real impl would
- * format from `_options`.
+ * by file-upload UI to show "PNG → WebP @ 80%" etc. Accepts either an
+ * options object or a (originalSize, convertedSize) pair (the latter
+ * is what file-upload.tsx passes in).
  */
 export function describeConversion(
-  _options: ImageConvertOptions = {},
+  optionsOrOriginalSize: ImageConvertOptions | number | undefined = {},
+  convertedSize?: number,
 ): string {
+  if (typeof optionsOrOriginalSize === "number") {
+    const orig = optionsOrOriginalSize;
+    const conv = convertedSize ?? orig;
+    if (orig === 0 || conv === orig) return `${(orig / 1024).toFixed(1)} KB`;
+    const pct = Math.round((1 - conv / orig) * 100);
+    return `${(orig / 1024).toFixed(1)} KB → ${(conv / 1024).toFixed(1)} KB (${pct}%)`;
+  }
   return "no conversion (kitab stub)";
 }
