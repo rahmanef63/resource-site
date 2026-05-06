@@ -12,3 +12,6 @@ dist/
 .turbo/
 .pnpm-store/
 *.tsbuildinfo
+
+# generator backups
+*.backup
