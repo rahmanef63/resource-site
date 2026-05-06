@@ -1,0 +1,273 @@
+#!/usr/bin/env node
+// rahman-resources-mcp — Model Context Protocol server for the Rahman kitab.
+// Stdio transport — wire into Claude Code / Cursor / Cline via:
+//
+//   {
+//     "mcpServers": {
+//       "rahman-resources": {
+//         "command": "npx",
+//         "args": ["-y", "rahman-resources-mcp"]
+//       }
+//     }
+//   }
+//
+// Tools (read-only):
+//   rr_list_templates              — full-app website-templates
+//   rr_list_features               — backend/integration features
+//   rr_list_recipes                — UI patterns
+//   rr_list_skills                 — Claude skills inventory
+//   rr_search                      — fuzzy across all kinds
+//   rr_get                         — full entry by slug (any kind)
+//   rr_compose_init_command        — emit the npx init command for a selection
+//   rr_compose_add_commands        — emit add-commands for an existing project
+//
+// Resources:
+//   rr://manifest                  — full kitab manifest
+//   rr://templates/{slug}          — one template
+//   rr://features/{slug}           — one feature
+//   rr://recipes/{slug}            — one recipe
+//   rr://skills/{slug}             — one skill
+
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import {
+  CallToolRequestSchema,
+  ListResourcesRequestSchema,
+  ListToolsRequestSchema,
+  ReadResourceRequestSchema,
+} from "@modelcontextprotocol/sdk/types.js";
+
+import { findEntry, getManifest, getSkills, searchAll } from "../src/data-loader.mjs";
+
+const server = new Server(
+  { name: "rahman-resources", version: "0.1.0" },
+  { capabilities: { tools: {}, resources: {} } },
+);
+
+// ─── Tool definitions ─────────────────────────────────────────────────────
+
+const TOOLS = [
+  {
+    name: "rr_list_templates",
+    description: "List Rahman website-template layouts (full-app templates) — slug, title, category, tags.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        tag: { type: "string", description: "Optional tag filter (e.g. 'admin', 'blog')." },
+      },
+    },
+  },
+  {
+    name: "rr_list_features",
+    description: "List Rahman features (backend/integration capabilities templates compose).",
+    inputSchema: {
+      type: "object",
+      properties: {
+        category: { type: "string", description: "Optional category filter (ai|auth|data|payment|email|realtime|storage|search|content)." },
+        usedBy: { type: "string", description: "Optional template slug — list features that template already uses." },
+      },
+    },
+  },
+  {
+    name: "rr_list_recipes",
+    description: "List Rahman recipes (UI/UX patterns to copy manually).",
+    inputSchema: { type: "object", properties: {} },
+  },
+  {
+    name: "rr_list_skills",
+    description: "List available Claude Skills (anthropics/skills repo + Rahman extras). Used by add-skill / builder UI.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        category: { type: "string", description: "Optional category (creative|design|development|documents|enterprise)." },
+      },
+    },
+  },
+  {
+    name: "rr_search",
+    description: "Fuzzy search across templates, features, recipes, and Claude skills. Returns ranked hits with kind + slug.",
+    inputSchema: {
+      type: "object",
+      required: ["query"],
+      properties: { query: { type: "string", description: "Free-text query." } },
+    },
+  },
+  {
+    name: "rr_get",
+    description: "Get full metadata for one entry by slug (template, feature, recipe, or skill).",
+    inputSchema: {
+      type: "object",
+      required: ["slug"],
+      properties: { slug: { type: "string" } },
+    },
+  },
+  {
+    name: "rr_compose_init_command",
+    description:
+      "Build the npx rahman-resources init command for a chosen template + features + skills. Returns the shell command as a string.",
+    inputSchema: {
+      type: "object",
+      required: ["appName"],
+      properties: {
+        appName: { type: "string" },
+        template: { type: "string" },
+        features: { type: "array", items: { type: "string" } },
+        skills: { type: "array", items: { type: "string" } },
+      },
+    },
+  },
+  {
+    name: "rr_compose_add_commands",
+    description:
+      "Build add / add-skill commands for an existing rr.json project. Returns a multi-line shell script.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        features: { type: "array", items: { type: "string" } },
+        skills: { type: "array", items: { type: "string" } },
+        template: { type: "string", description: "Optional — only set if the project hasn't picked a template yet." },
+      },
+    },
+  },
+];
+
+server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools: TOOLS }));
+
+// ─── Tool dispatch ────────────────────────────────────────────────────────
+
+server.setRequestHandler(CallToolRequestSchema, async (req) => {
+  const { name, arguments: args = {} } = req.params;
+  switch (name) {
+    case "rr_list_templates": return ok(listTemplates(args));
+    case "rr_list_features":  return ok(listFeatures(args));
+    case "rr_list_recipes":   return ok(listRecipes());
+    case "rr_list_skills":    return ok(listSkills(args));
+    case "rr_search":         return ok(searchAll(args.query));
+    case "rr_get":            return ok(getOne(args.slug));
+    case "rr_compose_init_command": return text(composeInit(args));
+    case "rr_compose_add_commands": return text(composeAdd(args));
+    default:
+      return errorResp(`Unknown tool: ${name}`);
+  }
+});
+
+function listTemplates({ tag } = {}) {
+  const m = getManifest();
+  return (m.layouts ?? [])
+    .filter((l) => l.category === "website-template")
+    .filter((l) => !tag || (l.tags ?? []).includes(tag))
+    .map(({ slug, title, category, description, tags, previewPath, adminPreviewPath }) => ({
+      slug, title, category, description, tags, previewPath, adminPreviewPath,
+    }));
+}
+
+function listFeatures({ category, usedBy } = {}) {
+  const m = getManifest();
+  return (m.features ?? [])
+    .filter((f) => !category || f.category === category)
+    .filter((f) => !usedBy || (f.usedBy ?? []).includes(usedBy))
+    .map(({ slug, title, category: c, description, tags, npmPackages }) => ({
+      slug, title, category: c, description, tags, npmPackages,
+    }));
+}
+
+function listRecipes() {
+  const m = getManifest();
+  return (m.recipes ?? []).map(({ slug, title, description, source, tags }) => ({ slug, title, description, source, tags }));
+}
+
+function listSkills({ category } = {}) {
+  const skills = (getSkills().skills ?? []);
+  return skills
+    .filter((s) => !category || s.category === category)
+    .map(({ slug, title, category: c, description, source, path }) => ({ slug, title, category: c, description, source, path }));
+}
+
+function getOne(slug) {
+  const found = findEntry(slug);
+  if (!found) return { error: `Not found: ${slug}` };
+  return found;
+}
+
+function composeInit({ appName, template, features = [], skills = [] }) {
+  const safe = String(appName ?? "my-app").replace(/[^a-z0-9-_]/gi, "-").toLowerCase() || "my-app";
+  const parts = [`npx rahman-resources@latest init ${safe}`];
+  if (template) parts.push(`--template ${template}`);
+  if (features.length) parts.push(`--features ${features.join(",")}`);
+  if (skills.length) parts.push(`--skills ${skills.join(",")}`);
+  return parts.join(" \\\n  ");
+}
+
+function composeAdd({ template, features = [], skills = [] }) {
+  const lines = ["# Run from the root of an existing rr.json project."];
+  if (template) lines.push(`npx rahman-resources@latest add ${template}`);
+  for (const f of features) lines.push(`npx rahman-resources@latest add ${f}`);
+  for (const s of skills) lines.push(`npx rahman-resources@latest add-skill ${s}`);
+  if (lines.length === 1) lines.push("# (no items selected)");
+  return lines.join("\n");
+}
+
+// ─── Resources ────────────────────────────────────────────────────────────
+
+server.setRequestHandler(ListResourcesRequestSchema, async () => {
+  const m = getManifest();
+  const skills = getSkills().skills ?? [];
+  const resources = [
+    { uri: "rr://manifest", name: "Rahman Resources manifest", description: "Full kitab manifest (templates + features + recipes).", mimeType: "application/json" },
+  ];
+  for (const t of m.layouts ?? []) {
+    resources.push({ uri: `rr://templates/${t.slug}`, name: t.title, description: t.description, mimeType: "application/json" });
+  }
+  for (const f of m.features ?? []) {
+    resources.push({ uri: `rr://features/${f.slug}`, name: f.title, description: f.description, mimeType: "application/json" });
+  }
+  for (const r of m.recipes ?? []) {
+    resources.push({ uri: `rr://recipes/${r.slug}`, name: r.title, description: r.description, mimeType: "application/json" });
+  }
+  for (const s of skills) {
+    resources.push({ uri: `rr://skills/${s.slug}`, name: s.title, description: s.description, mimeType: "application/json" });
+  }
+  return { resources };
+});
+
+server.setRequestHandler(ReadResourceRequestSchema, async (req) => {
+  const uri = req.params.uri;
+  if (uri === "rr://manifest") {
+    return resourceJson(uri, getManifest());
+  }
+  const m = uri.match(/^rr:\/\/(templates|features|recipes|skills)\/(.+)$/);
+  if (!m) return resourceError(uri, `Unknown resource URI: ${uri}`);
+  const [, kind, slug] = m;
+  if (kind === "skills") {
+    const sk = (getSkills().skills ?? []).find((s) => s.slug === slug);
+    if (!sk) return resourceError(uri, `Skill not found: ${slug}`);
+    return resourceJson(uri, sk);
+  }
+  const list = getManifest()[kind] ?? [];
+  const e = list.find((x) => x.slug === slug);
+  if (!e) return resourceError(uri, `${kind} not found: ${slug}`);
+  return resourceJson(uri, e);
+});
+
+// ─── helpers ──────────────────────────────────────────────────────────────
+
+function ok(value) {
+  return { content: [{ type: "text", text: JSON.stringify(value, null, 2) }] };
+}
+function text(value) {
+  return { content: [{ type: "text", text: value }] };
+}
+function errorResp(message) {
+  return { content: [{ type: "text", text: `Error: ${message}` }], isError: true };
+}
+function resourceJson(uri, value) {
+  return { contents: [{ uri, mimeType: "application/json", text: JSON.stringify(value, null, 2) }] };
+}
+function resourceError(uri, message) {
+  return { contents: [{ uri, mimeType: "text/plain", text: `Error: ${message}` }] };
+}
+
+// ─── boot ─────────────────────────────────────────────────────────────────
+
+const transport = new StdioServerTransport();
+await server.connect(transport);

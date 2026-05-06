@@ -7,7 +7,17 @@ Public showcase for the [resources/](https://github.com/rahmanef63/resources) ki
 - `/llms.txt` + `/api/knowledge` for AI agents
 - "Install with Agent" prompt builder (copy → paste into Claude Code / Cursor)
 
-## Stack
+```
+resources/
+├── template-base/   # canonical copy-from template (lean)
+├── cookbook/        # opinionated layout variants (landing, dashboard)
+├── recipes/         # feature drop-ins (block-editor, command-palette, ...)
+├── site/            # Next 16 site — kitab browser + Bundle Builder (/build)
+├── packages/
+│   ├── cli/         # `rahman-resources` — npx scaffolder + add + add-skill + doctor
+│   └── mcp/         # `rahman-resources-mcp` — stdio MCP for Claude Code / agents
+└── docs/            # the kitab itself
+```
 
 Next.js 16 + React 19 + Tailwind 4 + shadcn/ui. No backend.
 
@@ -21,14 +31,8 @@ npm run dev
 
 Open http://localhost:3000.
 
-## Deploy
-
-```bash
-cd site
-node $HOME/.agents/skills/si-coder/scripts/deploy.js \
-  "$DOKPLOY_API_URL" "$DOKPLOY_API_KEY" \
-  "rahmanef-resources" "resource-site" \
-  "$GITHUB_TOKEN" "resource.rahmanef.com"
+```json
+{ "mcpServers": { "rahman-resources": { "command": "npx", "args": ["rahman-resources-mcp"] } } }
 ```
 
 8 tools (rr_list_*, rr_search, rr_get, rr_compose_*) + `rr://` resources. See `packages/mcp/README.md`.

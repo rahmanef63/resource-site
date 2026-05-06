@@ -1,0 +1,38 @@
+{
+  "name": "rahman-resources-mcp",
+  "version": "0.1.0",
+  "description": "Model Context Protocol server for the Rahman Resources kitab — exposes templates, features, recipes, and Claude skills as MCP tools/resources.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Rahman <casadezian@gmail.com>",
+  "homepage": "https://github.com/rahmanef63/resource-site",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rahmanef63/resource-site.git",
+    "directory": "packages/mcp"
+  },
+  "bin": {
+    "rahman-resources-mcp": "bin/server.mjs"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "rahman-resources": "^0.4.1"
+  },
+  "keywords": [
+    "rahman",
+    "kitab",
+    "mcp",
+    "model-context-protocol",
+    "claude",
+    "templates",
+    "scaffolder"
+  ]
+}
