@@ -86,8 +86,46 @@ export const workflowExecutions = defineTable({
   .index("by_workspace", ["workspaceId"])
   .index("by_status", ["status"]);
 
+/**
+ * Workflow tasks — discrete to-do items spawned by workflow steps. Studio's
+ * executor and SLA escalation logic both manage rows in this table.
+ */
+export const tasks = defineTable({
+  workspaceId: v.id("workspaces"),
+  title: v.string(),
+  description: v.optional(v.string()),
+  status: v.string(),
+  priority: v.optional(v.string()),
+  assigneeId: v.optional(v.id("users")),
+  dueDate: v.optional(v.number()),
+  createdAt: v.number(),
+  createdBy: v.id("users"),
+  updatedAt: v.optional(v.number()),
+  updatedBy: v.optional(v.id("users")),
+})
+  .index("by_workspace", ["workspaceId"])
+  .index("by_workspace_status", ["workspaceId", "status"])
+  .index("by_assignee", ["assigneeId"]);
+
+/**
+ * CMS collections — schema definitions for studio's CMS canvas mode.
+ * useConvexCMSPersistence persists the field schema + label per collection.
+ */
+export const cms_collections = defineTable({
+  workspaceId: v.id("workspaces"),
+  slug: v.optional(v.string()),
+  label: v.string(),
+  fields: v.any(),
+  draftsEnabled: v.optional(v.boolean()),
+  createdBy: v.optional(v.id("users")),
+  updatedBy: v.optional(v.id("users")),
+})
+  .index("by_workspace", ["workspaceId"]);
+
 export const studioTables = {
   workflows,
   workflowTemplates,
   workflowExecutions,
+  tasks,
+  cms_collections,
 };

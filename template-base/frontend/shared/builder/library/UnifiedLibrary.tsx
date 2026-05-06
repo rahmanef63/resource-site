@@ -33,8 +33,10 @@ const CATEGORY_THUMB_TEXT: Record<string, string> = {
 };
 
 interface UnifiedLibraryProps {
-  currentFeature: 'cms' | 'automation' | 'database';
+  currentFeature: 'cms' | 'automation' | 'database' | 'studio';
   onAdd?: (componentKey: string, category: string) => void;
+  /** Optional per-feature tab icon override map. Studio passes its own. */
+  tabIcons?: Record<string, React.ComponentType<{ className?: string }>>;
 }
 
 export const UnifiedLibrary: React.FC<UnifiedLibraryProps> = ({ currentFeature, onAdd }) => {

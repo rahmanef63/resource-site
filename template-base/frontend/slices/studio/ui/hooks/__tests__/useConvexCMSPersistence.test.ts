@@ -7,7 +7,9 @@
  * @vitest-environment jsdom
  */
 
-import { renderHook, waitFor, act } from '@testing-library/react';
+import '@testing-library/jest-dom/vitest';
+import { renderHook, act } from '@testing-library/react';
+import { waitFor } from '@testing-library/dom';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import React from 'react';
 

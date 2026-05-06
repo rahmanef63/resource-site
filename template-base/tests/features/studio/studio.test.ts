@@ -988,7 +988,8 @@ describe.skip("Studio Feature", () => {
     });
 
     it("getWorkflowExecutions should default limit to 20 when not provided", () => {
-      const limit = undefined ?? 20;
+      const args: { limit?: number } = {};
+      const limit = args.limit ?? 20;
       expect(limit).toBe(20);
     });
 

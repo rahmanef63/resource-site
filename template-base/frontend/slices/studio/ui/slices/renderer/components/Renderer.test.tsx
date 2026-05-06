@@ -1,5 +1,7 @@
+import '@testing-library/jest-dom/vitest';
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
+import { screen } from '@testing-library/dom';
 import { describe, expect, it, vi } from 'vitest';
 import { Renderer } from './Renderer';
 import { instantiateDefaultTemplate } from '@/frontend/slices/studio/ui/state/templateStore';

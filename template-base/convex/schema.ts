@@ -11,10 +11,14 @@ import { authTables } from "@convex-dev/auth/server";
 import { notionTables } from "./features/notion/schema";
 import { studioTables } from "./features/studio/api/schema";
 import { studioAgentTables } from "./features/studio/api/agentConfig.schema";
+import { databaseTables } from "./features/database/schema";
+import { documentsTables } from "./features/documents/schema";
 
 export default defineSchema({
   ...authTables,
   ...notionTables,
   ...studioTables,
   ...studioAgentTables,
+  ...databaseTables,
+  ...documentsTables,
 });

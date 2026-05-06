@@ -176,9 +176,11 @@ const fromSchema = (
   return { nodes, edges };
 };
 
+type CanvasMode = 'cms' | 'automation' | 'database' | 'studio';
+
 interface SharedCanvasContextType {
-  canvasMode: 'cms' | 'automation' | 'database';
-  setCanvasMode: (mode: 'cms' | 'automation' | 'database') => void;
+  canvasMode: CanvasMode;
+  setCanvasMode: (mode: CanvasMode) => void;
   nodes: Node<any>[];
   setNodes: React.Dispatch<React.SetStateAction<Node<any>[]>>;
   edges: Edge[];
@@ -273,7 +275,7 @@ const newNode = (comp: string, pos = { x: 0, y: 0 }, widgetConfigGetter?: Widget
 
 export const SharedCanvasProvider: React.FC<{
   children: React.ReactNode;
-  initialMode?: 'cms' | 'automation' | 'database';
+  initialMode?: CanvasMode;
   /** Injectable widget config getter. Other consumers can pass their own or omit. */
   widgetConfigGetter?: WidgetConfigGetter;
   /** Initial schema to load. Defaults to empty canvas. */

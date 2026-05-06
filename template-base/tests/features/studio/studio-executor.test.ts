@@ -732,7 +732,8 @@ describe.skip("Studio Executor", () => {
     });
 
     it("should handle 'Unknown error' when error has no message", () => {
-      const errorMessage = undefined || "Unknown error";
+      const error: { message?: string } = {};
+      const errorMessage = error.message || "Unknown error";
       expect(errorMessage).toBe("Unknown error");
     });
 

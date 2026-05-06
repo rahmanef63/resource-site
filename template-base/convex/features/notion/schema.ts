@@ -93,20 +93,32 @@ export const notionTables = {
   }).index("by_user", ["userId"]),
 
   // === inbox ===
+  // Unified inbox table. Notion uses {kind, body, read, createdAt, pageId,
+  // blockId, actor*}; studio uses {workspaceId, type, message, isRead,
+  // createdBy}. Required only what both share (userId, title); the rest is
+  // optional so each producer can populate its own subset.
   notifications: defineTable({
     userId: v.id("users"),
-    kind: v.string(),                       // "mention" | "comment" | "share" | "system" | "update"
     title: v.string(),
+    // notion shape
+    kind: v.optional(v.string()),
     body: v.optional(v.string()),
     pageId: v.optional(v.string()),
     blockId: v.optional(v.string()),
     actorName: v.optional(v.string()),
     actorIcon: v.optional(v.string()),
-    read: v.boolean(),
-    createdAt: v.number(),
+    read: v.optional(v.boolean()),
+    createdAt: v.optional(v.number()),
+    // studio shape
+    workspaceId: v.optional(v.id("workspaces")),
+    type: v.optional(v.string()),
+    message: v.optional(v.string()),
+    isRead: v.optional(v.boolean()),
+    createdBy: v.optional(v.id("users")),
   })
     .index("by_user", ["userId"])
-    .index("by_user_unread", ["userId", "read"]),
+    .index("by_user_unread", ["userId", "read"])
+    .index("by_workspace", ["workspaceId"]),
 
   // === comments ===
   comments: defineTable({

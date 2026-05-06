@@ -141,7 +141,7 @@ export const TemplatesGallery: React.FC<TemplatesGalleryProps> = ({ onImport }) 
                         No templates found
                     </div>
                 ) : (
-                    filteredTemplates.map(template => {
+                    filteredTemplates.map((template: any) => {
                         const Icon = categoryIcons[template.category] || Database;
                         const colorClass = categoryColors[template.category] || 'text-gray-500 bg-gray-500/10';
                         const tags = Array.isArray((template as any).tags) ? (template as any).tags : [];
