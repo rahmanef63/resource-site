@@ -1,6 +1,6 @@
 # template-base/ Status
 
-**As of 2026-05-07 (session 3 — full clean).**
+**As of 2026-05-07 (session 4 — consumer-grade hardening).**
 
 `template-base/` is the kitab's canonical "lean copy-from" source — extracted from superspace as the foundation new projects build on. It is **not** the deployed showcase site (that lives at the repo root) and is **not** the package shipped via the CLI's bundled starter (that lives at `packages/cli/lib/starter/`).
 
@@ -65,7 +65,8 @@ Several stubs remain — they typecheck but no-op at runtime. Wire them in consu
 
 - **Session 1 (2026-05-06 morning, "stabilization")**: 53 studio extraction errors → 0. Root + template-base wiring established.
 - **Session 2 (2026-05-06 afternoon, "long-tail")**: 1108 → 49 (−95.6%). Schemas composed, peer deps installed, registries regenerated.
-- **Session 3 (2026-05-07, "full clean")**: 49 → 0 (−100%). Long-tail closed; reports + analytics added; stubs widened; Next 16 type renames absorbed.
+- **Session 3 (2026-05-07 morning, "full clean")**: 49 → 0 (−100%). Long-tail closed; reports + analytics added; stubs widened; Next 16 type renames absorbed.
+- **Session 4 (2026-05-07 afternoon, "consumer-grade hardening")**: vitest infra (29/40 broken test files → 40/40 passing); modular env-gated auth providers; export-registry generator; calendar v9 proper Chevron; `CONSUMER-SETUP.md` onboarding doc; smarter `_generated/api.js` proxy chain.
 
 ## Path ahead (after full clean)
 

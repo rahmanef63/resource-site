@@ -63,6 +63,7 @@ export type FeatureMenuItemType = (typeof FEATURE_MENU_ITEM_TYPES)[number];
 export const FEATURE_PACKAGE_SOURCES = [
   "builtin",
   "external",
+  "studio",
 ] as const;
 
 export type FeaturePackageSource = (typeof FEATURE_PACKAGE_SOURCES)[number];

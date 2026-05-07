@@ -1,8 +1,9 @@
 /**
- * AUTO-GENERATED-STYLE binding map for feature export/import configs.
+ * AUTO-GENERATED — do not edit. Run `npx tsx scripts/features/generate-export-registry.ts`.
  *
- * Empty in template-base — slices land their own export-config and the
- * registry gets regenerated against the actual slice set.
+ * Source of truth: `frontend/slices/<slug>/data/export-config.ts`.
  */
 
-export const featureExportConfigImporters: Record<string, () => Promise<any>> = {};
+export const featureExportConfigImporters: Record<string, () => Promise<any>> = {
+  "features/_templates/data/export-config": () => import("@/frontend/slices/_templates/data/export-config"),
+};

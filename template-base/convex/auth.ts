@@ -1,17 +1,19 @@
 /**
  * Canonical Convex auth setup using @convex-dev/auth.
- * Replace auth entirely. Add OAuth providers as needed.
+ *
+ * Provider list lives in `./auth/providers.ts` so consumers add/remove
+ * providers without touching this file. Each OAuth provider is gated on
+ * its env vars — missing creds = provider silently dropped, never breaks
+ * the build.
  */
 
 import { convexAuth } from "@convex-dev/auth/server";
-import { Password } from "@convex-dev/auth/providers/Password";
-import GitHub from "@auth/core/providers/github";
-import Google from "@auth/core/providers/google";
+import { authProviders } from "./auth/providers";
 import { query } from "./_generated/server";
 import { getAuthUserId } from "@convex-dev/auth/server";
 
 export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
-  providers: [Password, GitHub, Google],
+  providers: authProviders,
 });
 
 /**
