@@ -23,6 +23,7 @@ const STATIC: NavSection[] = [
       { title: "Directory", href: "/directory" },
       { title: "Install with Agent", href: "/agents", badge: "new" },
       { title: "Bundle Builder", href: "/build", badge: "new" },
+      { title: "MCP server", href: "/mcp", badge: "new" },
     ],
   },
 ];

@@ -5,7 +5,7 @@ import { recipes } from "@/lib/content/recipes";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  const staticUrls = ["", "/installation", "/architecture", "/stack", "/layouts", "/recipes"];
+  const staticUrls = ["", "/installation", "/architecture", "/stack", "/layouts", "/recipes", "/mcp", "/agents", "/build", "/templates", "/features", "/directory"];
   const fromStatic = staticUrls.map((p) => ({ url: `${site.url}${p}`, lastModified: now }));
   const fromLayouts = layouts.map((l) => ({
     url: `${site.url}/layouts/${l.slug}`,
