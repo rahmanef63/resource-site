@@ -3,15 +3,15 @@ import { Badge } from "@/components/ui/badge";
 import { CodeBlock } from "@/components/site/code-block";
 import { RepoLink } from "@/components/site/repo-link";
 import { site } from "@/lib/content/site";
+import { PACKAGE_VERSIONS } from "@/lib/content/package-versions";
 
 export const metadata = {
   title: "MCP — rahman-resources-mcp",
   description:
-    "Model Context Protocol server for the Rahman Resources kitab. Exposes templates, features, recipes, and Claude Skills as MCP tools/resources to Claude Code, Cursor, and Cline.",
+    "Model Context Protocol server for the Rahman Resources kitab. Exposes templates, features, recipes, Claude Skills, and CRUD workflows as MCP tools/resources to Claude Code, Cursor, and Cline.",
 };
 
 const NPM_PACKAGE = "rahman-resources-mcp";
-const NPM_VERSION = "0.1.0";
 const NPM_URL = `https://www.npmjs.com/package/${NPM_PACKAGE}`;
 const REPO_PATH = `${site.repo}/tree/main/packages/mcp`;
 
@@ -78,6 +78,15 @@ const TOOLS: Tool[] = [
     purpose: "Emit `add` / `add-skill` commands for an existing rr.json project. Use this when extending an installed kitab.",
     args: "{ features?, skills?, template? }",
   },
+  {
+    name: "rr_list_workflows",
+    purpose: "List the CRUD workflow kinds the kitab documents (templates, features, recipes, skills). Returns slugs the agent can pass to rr_get_workflow.",
+  },
+  {
+    name: "rr_get_workflow",
+    purpose: "Get the full Create / Read / Update / Delete workflow doc for one kind. Includes the npm publish step. Use when the user asks how to add/edit/remove a kitab item.",
+    args: "{ kind: 'templates'|'features'|'recipes'|'skills' }",
+  },
 ];
 
 const RESOURCES: { uri: string; purpose: string }[] = [
@@ -86,6 +95,7 @@ const RESOURCES: { uri: string; purpose: string }[] = [
   { uri: "rr://features/{slug}", purpose: "One feature entry." },
   { uri: "rr://recipes/{slug}", purpose: "One recipe entry." },
   { uri: "rr://skills/{slug}", purpose: "One Claude Skill entry." },
+  { uri: "rr://workflow/{kind}", purpose: "CRUD workflow markdown. `kind` ∈ templates|features|recipes|skills. Includes Create/Read/Update/Delete + the npm publish step." },
 ];
 
 export default function McpDocsPage() {
@@ -111,7 +121,7 @@ export default function McpDocsPage() {
           <span className="font-mono text-xs">npm</span>
           <span className="font-medium">{NPM_PACKAGE}</span>
           <Badge variant="secondary" className="font-mono text-[10px]">
-            v{NPM_VERSION}
+            v{PACKAGE_VERSIONS.mcp}
           </Badge>
         </a>
         <a
@@ -243,6 +253,69 @@ export default function McpDocsPage() {
       </section>
 
       <section className="mt-12 space-y-4">
+        <h2 className="text-2xl font-semibold tracking-tight">Workflows (CRUD)</h2>
+        <p className="text-muted-foreground">
+          The MCP also ships <em>workflow docs</em> — markdown that teaches an agent
+          how to <strong>Create / Read / Update / Delete</strong> each kitab item kind,
+          including the npm publish step. Wire them via{" "}
+          <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">rr_get_workflow</code>{" "}
+          (or read the resources directly).
+        </p>
+        <div className="overflow-x-auto rounded-md border">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-muted/50">
+              <tr>
+                <th className="px-3 py-2 font-mono text-xs uppercase tracking-wider">Resource</th>
+                <th className="px-3 py-2 font-mono text-xs uppercase tracking-wider">Covers</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-t align-top">
+                <td className="px-3 py-3 font-mono text-xs">rr://workflow/templates</td>
+                <td className="px-3 py-3 text-muted-foreground">
+                  Add / edit / remove a website-template. Wires{" "}
+                  <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">lib/content/layouts.ts</code>{" "}
+                  + <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">app/preview/{`<slug>`}/</code>{" "}
+                  + <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">components/templates/{`<base>`}/</code>{" "}
+                  + manifest regen + CLI publish.
+                </td>
+              </tr>
+              <tr className="border-t align-top">
+                <td className="px-3 py-3 font-mono text-xs">rr://workflow/features</td>
+                <td className="px-3 py-3 text-muted-foreground">
+                  Add / edit / remove a feature. Wires{" "}
+                  <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">convex/features/{`<slug>`}/</code>{" "}
+                  + <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">frontend/slices/{`<slug>`}/</code>{" "}
+                  + 3 registry generators + CLI publish.
+                </td>
+              </tr>
+              <tr className="border-t align-top">
+                <td className="px-3 py-3 font-mono text-xs">rr://workflow/recipes</td>
+                <td className="px-3 py-3 text-muted-foreground">
+                  Add / edit / remove a UI-only recipe. Lower-friction — no slice / convex deps required.
+                </td>
+              </tr>
+              <tr className="border-t align-top">
+                <td className="px-3 py-3 font-mono text-xs">rr://workflow/skills</td>
+                <td className="px-3 py-3 text-muted-foreground">
+                  Add / edit / remove a Claude Skill. Wires{" "}
+                  <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">claude-skills.ts</code>{" "}
+                  + <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">sync-skills.mjs</code>{" "}
+                  + <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">~/.agents/skills/{`<slug>`}/SKILL.md</code>{" "}
+                  + CLI publish.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-sm text-muted-foreground">
+          Source of truth: the markdown lives at{" "}
+          <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">packages/cli/lib/workflows/{`<kind>`}.md</code>{" "}
+          and ships in the CLI tarball — same single-source-of-truth pattern as the manifest.
+        </p>
+      </section>
+
+      <section className="mt-12 space-y-4">
         <h2 className="text-2xl font-semibold tracking-tight">Example — agent flow</h2>
         <p className="text-muted-foreground">
           A typical session in Claude Code looks like:
@@ -296,23 +369,28 @@ node scripts/gen-manifest.mjs`}
 
       <section className="mt-12 space-y-4">
         <h2 className="text-2xl font-semibold tracking-tight">Versioning</h2>
+        <p className="text-sm text-muted-foreground">
+          Versions read at build time from the monorepo&apos;s{" "}
+          <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">package.json</code> —
+          this badge always matches the current repo state.
+        </p>
         <ul className="list-disc space-y-2 pl-6 text-sm">
           <li>
             <strong>{NPM_PACKAGE}</strong> — current{" "}
             <Badge variant="secondary" className="font-mono text-[10px]">
-              v{NPM_VERSION}
+              v{PACKAGE_VERSIONS.mcp}
             </Badge>
           </li>
           <li>
             <strong>rahman-resources (CLI)</strong> — current{" "}
             <Badge variant="secondary" className="font-mono text-[10px]">
-              v0.4.3
+              v{PACKAGE_VERSIONS.cli}
             </Badge>{" "}
-            (the manifest source)
+            (the manifest + workflow source)
           </li>
           <li>
-            Tools are stable from v0.1.0. Adding new tools = minor bump; removing or
-            renaming = major bump.
+            Adding new tools or resource kinds = minor bump. Removing or renaming
+            tools = major bump. Workflow markdown content = patch.
           </li>
         </ul>
       </section>

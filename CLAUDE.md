@@ -108,6 +108,29 @@ Visual picker: template + features + skills + project form → emits `npx` comma
 
 Compatibility hints come from `site/lib/build/compat.ts` — hand-curated template×feature matrix. Add entries when new templates land.
 
+### Publishing (npm)
+
+The CLI + MCP packages are **the distribution channel** — consumers `npx rahman-resources …` against the published tarball, not against the repo. Forgetting to publish = stale manifests for everyone.
+
+Trigger a publish suggestion in the response when ALL hold:
+
+1. Files under `packages/cli/` OR `packages/mcp/` modified.
+2. `version` in the package.json bumped above `npm view <pkg> version`.
+3. `npx tsc --noEmit` passes from repo root.
+4. Change committed + pushed to `main`.
+
+When all four hold, end the response with a one-liner:
+
+```
+Saatnya publish — cd packages/cli && npm publish --otp=…
+```
+
+(or the MCP equivalent). The user runs the OTP step. Don't run `npm publish` yourself.
+
+If version wasn't bumped but content changed, suggest the bump first ("CLI baru belum di-version, bump ke vX.Y.Z?").
+
+If versions match the registry, the package is already shipped — say so explicitly.
+
 ### Skills sync (CLI ↔ site)
 
 Skills source of truth lives in `site/lib/content/claude-skills.ts`. After editing it run:

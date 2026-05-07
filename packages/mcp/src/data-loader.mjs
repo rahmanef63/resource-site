@@ -1,9 +1,9 @@
-// Loads Rahman Resources data — manifest (templates/features/recipes) + skills.
-// Reuses the CLI's lib/manifest.json + lib/skills.json so there's a single
-// source of truth shared between the CLI, the builder UI, and this MCP server.
+// Loads Rahman Resources data — manifest (templates/features/recipes) + skills + workflows.
+// Reuses the CLI's lib/manifest.json + lib/skills.json + lib/workflows/*.md so there's a
+// single source of truth shared between the CLI, the builder UI, and this MCP server.
 
 import { createRequire } from "node:module";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -26,6 +26,27 @@ function resolveCliFile(file) {
 
 const manifestPath = resolveCliFile("manifest.json");
 const skillsPath = resolveCliFile("skills.json");
+
+// Workflow markdown files live at lib/workflows/<kind>.md inside the CLI bundle.
+// Resolved lazily — same fallback strategy as manifest/skills.
+function resolveWorkflowFile(kind) {
+  return resolveCliFile(`workflows/${kind}.md`);
+}
+
+export const WORKFLOW_KINDS = ["templates", "features", "recipes", "skills"];
+
+const _workflowCache = {};
+
+export function getWorkflow(kind) {
+  if (!WORKFLOW_KINDS.includes(kind)) {
+    throw new Error(`rahman-resources-mcp: unknown workflow kind "${kind}". Use one of: ${WORKFLOW_KINDS.join(", ")}.`);
+  }
+  if (_workflowCache[kind]) return _workflowCache[kind];
+  const filePath = resolveWorkflowFile(kind);
+  const md = readFileSync(filePath, "utf-8");
+  _workflowCache[kind] = md;
+  return md;
+}
 
 let _manifest = null;
 let _skills = null;

@@ -20,6 +20,8 @@
 //   rr_get                         — full entry by slug (any kind)
 //   rr_compose_init_command        — emit the npx init command for a selection
 //   rr_compose_add_commands        — emit add-commands for an existing project
+//   rr_get_workflow                — full CRUD workflow doc for one kind
+//   rr_list_workflows              — list all workflow kinds (templates/features/recipes/skills)
 //
 // Resources:
 //   rr://manifest                  — full kitab manifest
@@ -27,6 +29,7 @@
 //   rr://features/{slug}           — one feature
 //   rr://recipes/{slug}            — one recipe
 //   rr://skills/{slug}             — one skill
+//   rr://workflow/{kind}           — CRUD workflow markdown (kind = templates|features|recipes|skills)
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
@@ -37,10 +40,14 @@ import {
   ReadResourceRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 
-import { findEntry, getManifest, getSkills, searchAll } from "../src/data-loader.mjs";
+import { findEntry, getManifest, getSkills, searchAll, getWorkflow, WORKFLOW_KINDS } from "../src/data-loader.mjs";
+import { createRequire } from "node:module";
+
+const require = createRequire(import.meta.url);
+const PKG = require("../package.json");
 
 const server = new Server(
-  { name: "rahman-resources", version: "0.1.0" },
+  { name: "rahman-resources", version: PKG.version },
   { capabilities: { tools: {}, resources: {} } },
 );
 
@@ -129,6 +136,28 @@ const TOOLS = [
       },
     },
   },
+  {
+    name: "rr_list_workflows",
+    description:
+      "List the CRUD workflow kinds the kitab documents (templates, features, recipes, skills). Returns slugs the agent can pass to rr_get_workflow.",
+    inputSchema: { type: "object", properties: {} },
+  },
+  {
+    name: "rr_get_workflow",
+    description:
+      "Get the full CRUD workflow doc for one kitab item kind. Returns markdown with Create / Read / Update / Delete sections — including the npm publish step. Use this when the user asks how to add/edit/remove a template/feature/recipe/skill.",
+    inputSchema: {
+      type: "object",
+      required: ["kind"],
+      properties: {
+        kind: {
+          type: "string",
+          enum: ["templates", "features", "recipes", "skills"],
+          description: "Which kind of kitab item the workflow covers.",
+        },
+      },
+    },
+  },
 ];
 
 server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools: TOOLS }));
@@ -146,6 +175,8 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
     case "rr_get":            return ok(getOne(args.slug));
     case "rr_compose_init_command": return text(composeInit(args));
     case "rr_compose_add_commands": return text(composeAdd(args));
+    case "rr_list_workflows":       return ok(WORKFLOW_KINDS.map((k) => ({ kind: k, uri: `rr://workflow/${k}` })));
+    case "rr_get_workflow":         return text(getWorkflow(args.kind));
     default:
       return errorResp(`Unknown tool: ${name}`);
   }
@@ -227,6 +258,14 @@ server.setRequestHandler(ListResourcesRequestSchema, async () => {
   for (const s of skills) {
     resources.push({ uri: `rr://skills/${s.slug}`, name: s.title, description: s.description, mimeType: "application/json" });
   }
+  for (const k of WORKFLOW_KINDS) {
+    resources.push({
+      uri: `rr://workflow/${k}`,
+      name: `Workflow — ${k}`,
+      description: `CRUD workflow for kitab ${k} (Create / Read / Update / Delete + publish step).`,
+      mimeType: "text/markdown",
+    });
+  }
   return { resources };
 });
 
@@ -234,6 +273,14 @@ server.setRequestHandler(ReadResourceRequestSchema, async (req) => {
   const uri = req.params.uri;
   if (uri === "rr://manifest") {
     return resourceJson(uri, getManifest());
+  }
+  const wf = uri.match(/^rr:\/\/workflow\/(templates|features|recipes|skills)$/);
+  if (wf) {
+    try {
+      return resourceMarkdown(uri, getWorkflow(wf[1]));
+    } catch (e) {
+      return resourceError(uri, e.message);
+    }
   }
   const m = uri.match(/^rr:\/\/(templates|features|recipes|skills)\/(.+)$/);
   if (!m) return resourceError(uri, `Unknown resource URI: ${uri}`);
@@ -262,6 +309,9 @@ function errorResp(message) {
 }
 function resourceJson(uri, value) {
   return { contents: [{ uri, mimeType: "application/json", text: JSON.stringify(value, null, 2) }] };
+}
+function resourceMarkdown(uri, markdown) {
+  return { contents: [{ uri, mimeType: "text/markdown", text: markdown }] };
 }
 function resourceError(uri, message) {
   return { contents: [{ uri, mimeType: "text/plain", text: `Error: ${message}` }] };
