@@ -33,6 +33,25 @@ jobs:
         env:
           NEXT_TELEMETRY_DISABLED: "1"
 
+  template-base-typecheck:
+    name: typecheck (template-base copy-source)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: template-base
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: template-base/package-lock.json
+      - name: install
+        run: npm ci --legacy-peer-deps --no-audit --no-fund
+      - name: typecheck
+        run: npx tsc --noEmit
+
   cli-prepublish:
     name: CLI prepublish gate
     runs-on: ubuntu-latest

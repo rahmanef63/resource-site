@@ -17,6 +17,7 @@ import type { FeaturePreviewDefinition } from "./types"
 type PreviewImporter = () => Promise<{ default: FeaturePreviewDefinition }>
 
 const PREVIEW_IMPORTERS: Record<string, PreviewImporter> = {
+  "reports": () => import("@/frontend/slices/reports/features-preview/index"),
   "studio": () => import("@/frontend/slices/studio/features-preview/index"),
   "example": () => import("@/frontend/slices/example/features-preview/index"),
   "user-settings": () => import("@/frontend/shared/settings/user-settings/features-preview/index"),

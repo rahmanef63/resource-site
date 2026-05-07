@@ -8,6 +8,7 @@
  *   pnpm run sync:all
  */
 
+import ReportsPreview from '@/frontend/slices/reports/features-preview/index'
 import StudioPreview from '@/frontend/slices/studio/features-preview/index'
 import ExamplePreview from '@/frontend/slices/example/features-preview/index'
 import UserSettingsPreview from '@/frontend/shared/settings/user-settings/features-preview/index'
@@ -21,6 +22,7 @@ import type { FeaturePreviewDefinition } from '@/frontend/shared/preview/types'
 // Importing each preview module is enough because defineFeaturePreview()
 // self-registers the preview in the shared registry on module evaluation.
 const allPreviews: FeaturePreviewDefinition[] = [
+  ReportsPreview,
   StudioPreview,
   ExamplePreview,
   UserSettingsPreview,
@@ -29,6 +31,7 @@ const allPreviews: FeaturePreviewDefinition[] = [
 export { getFeaturePreview, getAllFeaturePreviews }
 
 export {
+  ReportsPreview,
   StudioPreview,
   ExamplePreview,
   UserSettingsPreview,

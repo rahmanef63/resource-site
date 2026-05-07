@@ -36,14 +36,14 @@ This deviates from manifest §9 step 5 (which suggested seding out the calls). J
 - **UI barrel** — `frontend/shared/ui/index.ts` exports `ResponsiveDialog`, `SharedCanvas`, `CMSPreview`, `AutomationPreview`. Extend if more callers land.
 - **`hasWorkspaceAccess`** — stub at `convex/features/database/utils.ts` returns `true` once auth is present (single-tenant).
 
-### Remaining tsc errors (51 in studio code, all stabilization-class)
+### Remaining tsc errors (resolved 2026-05-06 — 51 → 0)
 
-`npx tsc --noEmit` reports 51 errors localized to studio. Categorized:
+All four stabilization categories closed. Status preserved here for re-merge mapping:
 
-1. **Schema fit (~30 errors)** — studio's executor / queries / sla reference tables that don't exist in template-base's schema: `tasks`, `dbTables`, `dbRows`, `documents`, plus a `notifications.workspaceId` field and a `workflows.assigneeId` field. In SuperSpace those tables exist via other features. Resolution: either (a) add minimal stub tables to root schema; or (b) refactor studio's executor to be schema-agnostic (gated behind capability checks). Defer — picks during stabilization.
-2. **Builder enum widening (3 errors)** — `frontend/shared/builder/canvas/core/SharedCanvasProvider.tsx` types `canvasMode` as `'cms' | 'automation' | 'database'`, but studio passes `'studio'`. Same in `UnifiedLibrary.currentFeature`. Pre-existing in superspace too — never raised because TS suppression patterns covered it. Resolution: widen builder type to `... | 'studio'` once studio is the primary consumer.
-3. **`@testing-library/react` API drift (8 errors)** — co-located test files at `frontend/slices/studio/ui/{hooks,slices/renderer/components}/__tests__/` import `waitFor` / `screen`. v16 moved them under `@testing-library/dom`. Resolution: either downgrade testing-library or rewrite imports. These tests are inside the slice (not in `tests/features/studio/`) so they were never in the "skip suite".
-4. **Misc (~10 errors)** — small TS2339/TS2345 fallout from #1.
+1. **Schema fit (~30 errors)** — RESOLVED. Root schema now composes `tasks`, `cms_collections`, `dbTables`, `dbRows`, `documents`, `analyticsReports`, plus widened `notifications` (supports both notion + studio shape) and `workflows.assigneeId` field. Re-merge note: superspace's per-feature schemas are the canonical owners; the kitab's root `convex/schema.ts` just spreads them.
+2. **Builder enum widening (3 errors)** — RESOLVED. `SharedCanvasProvider.canvasMode` type widened to include `'studio'`. Same for `UnifiedLibrary.currentFeature`.
+3. **`@testing-library/react` API drift (8 errors)** — RESOLVED. Tests now import `screen`/`waitFor` from `@testing-library/dom` and matchers from `@testing-library/jest-dom/vitest`.
+4. **Misc fallout (~10 errors)** — RESOLVED via category #1.
 
 ### Other follow-ups
 

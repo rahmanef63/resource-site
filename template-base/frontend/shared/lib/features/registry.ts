@@ -10,10 +10,12 @@
 
 import type { FeatureConfig } from './defineFeature'
 
+import reportsConfig from '@/frontend/slices/reports/config'
 import studioConfig from '@/frontend/slices/studio/config'
 import exampleConfig from '@/frontend/slices/example/config'
 
 const featureConfigs: FeatureConfig[] = [
+  reportsConfig,
   studioConfig,
   exampleConfig,
 ]
