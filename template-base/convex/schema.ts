@@ -49,6 +49,7 @@ import { studioTables } from "./features/studio/api/schema";
 import { studioAgentTables } from "./features/studio/api/agentConfig.schema";
 import { databaseTables } from "./features/database/schema";
 import { documentsTables } from "./features/documents/schema";
+import { analyticsTables } from "./features/analytics/schema";
 
 // Selective imports — each feature exports many tables but we cherry-pick
 // only the ones that don't collide with other feature schemas.
@@ -79,6 +80,7 @@ export default defineSchema({
   ...studioAgentTables,
   ...databaseTables,
   ...documentsTables,
+  ...analyticsTables,
   invitations,
   workspaceLinks,
   systemNotifications,

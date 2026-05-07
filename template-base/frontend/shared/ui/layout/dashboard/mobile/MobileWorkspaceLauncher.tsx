@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useMemo, useState, type ReactNode } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { Check, ChevronRight, Search, Sparkles, Plus } from "lucide-react"
 import type { Id } from "@/convex/_generated/dataModel"
@@ -300,7 +300,7 @@ export function MobileWorkspaceLauncher({
       return []
     }
 
-    const items = []
+    const items: Array<{ value: string; title: ReactNode; content: ReactNode }> = []
 
     if (overflowRootTiles.length > 0) {
       items.push({

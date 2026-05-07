@@ -2,6 +2,7 @@
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
+import type { ReactElement } from "react";
 import { useState } from "react";
 
 export const HoverEffect = ({
@@ -12,7 +13,7 @@ export const HoverEffect = ({
     title: string;
     description: string;
     link: string;
-    icon?: JSX.Element;
+    icon?: ReactElement;
   }[];
   className?: string;
 }) => {

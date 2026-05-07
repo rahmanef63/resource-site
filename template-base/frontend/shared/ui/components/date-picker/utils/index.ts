@@ -98,7 +98,7 @@ export function generateTimeSlots(
   endHour: number = 17,
   interval: number = 15
 ) {
-  const slots = [];
+  const slots: Array<{ time: string; available: boolean }> = [];
   const totalMinutes = (endHour - startHour) * 60;
   const numberOfSlots = Math.floor(totalMinutes / interval);
   

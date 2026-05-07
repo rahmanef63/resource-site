@@ -22,3 +22,8 @@ export function useAuthUser(): AuthUser | null {
 export function useIsAuthenticated(): boolean {
   return Boolean(useAuthUser());
 }
+
+export function useAuth(): { user: AuthUser | null; isAuthenticated: boolean } {
+  const user = useAuthUser();
+  return { user, isAuthenticated: Boolean(user) };
+}

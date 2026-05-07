@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "^3.0.61",
-    "@auth/core": "^0.34.3",
+    "@auth/core": "^0.37.4",
     "@blocknote/core": "^0.38.0",
     "@blocknote/mantine": "^0.38.0",
     "@blocknote/react": "^0.38.0",
@@ -106,6 +106,7 @@
     "highlight.js": "^11.11.1",
     "html-to-image": "^1.11.13",
     "input-otp": "^1.4.2",
+    "isomorphic-dompurify": "^3.12.0",
     "jotai": "^2.20.0",
     "katex": "^0.16.45",
     "little-date": "^1.2.1",

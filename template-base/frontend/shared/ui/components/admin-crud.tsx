@@ -339,7 +339,7 @@ export function AdminCrud<T extends { _id: string }>({
                       {f.render ? (
                         f.render((row as any)[f.key], row)
                       ) : f.type === "boolean" ? (
-                        <Badge variant={(row as any)[f.key] ? "inverted" : "muted"}>
+                        <Badge variant={(row as any)[f.key] ? "default" : "secondary"}>
                           {(row as any)[f.key] ? "Yes" : "No"}
                         </Badge>
                       ) : f.type === "array" ? (

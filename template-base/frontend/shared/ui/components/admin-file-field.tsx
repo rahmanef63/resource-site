@@ -64,7 +64,7 @@ export function AdminFileField({ value, onChange, placeholder, className }: Prop
   const handleFile = async (file: File) => {
     try {
       const r = await upload(file, uploader, TENANT_ID);
-      setPendingStorageId(r.storageId);
+      setPendingStorageId(r.storageId ?? null);
     } catch {
       /* error already in hook state */
     }

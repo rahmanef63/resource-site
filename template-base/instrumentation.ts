@@ -9,7 +9,7 @@ export async function register() {
   // Keep it lightweight; this runs once per server start.
 }
 
-export const onRequestError: import("next/dist/server/instrumentation/types").OnRequestErrorHook = async (
+export const onRequestError: import("next/dist/server/instrumentation/types").InstrumentationOnRequestError = async (
   error,
   request,
   context,
@@ -22,6 +22,6 @@ export const onRequestError: import("next/dist/server/instrumentation/types").On
     routePath: context.routePath,
     routeType: context.routeType,
     method: request.method,
-    url: request.url,
+    path: request.path,
   });
 };

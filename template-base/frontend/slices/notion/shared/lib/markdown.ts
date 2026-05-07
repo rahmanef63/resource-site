@@ -1,4 +1,4 @@
-import { Block, Page } from "./types";
+import type { Block, Page } from "../types/domain";
 
 const uid = () => Math.random().toString(36).slice(2, 10);
 

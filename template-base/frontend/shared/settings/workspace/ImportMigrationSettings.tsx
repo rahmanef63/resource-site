@@ -6,7 +6,7 @@ import {
     FileSpreadsheet,
     FileCode,
     BookType,
-    Trello,
+    KanbanSquare as Trello,
     Workflow,
     Notebook,
     Layout,

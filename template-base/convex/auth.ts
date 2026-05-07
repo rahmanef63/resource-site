@@ -4,7 +4,7 @@
  */
 
 import { convexAuth } from "@convex-dev/auth/server";
-import Password from "@auth/core/providers/password";
+import { Password } from "@convex-dev/auth/providers/Password";
 import GitHub from "@auth/core/providers/github";
 import Google from "@auth/core/providers/google";
 import { query } from "./_generated/server";

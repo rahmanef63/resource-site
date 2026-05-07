@@ -85,7 +85,7 @@ export function AdminGalleryField({ value, onChange, className }: Props) {
           `${result.fileName} — ${describeConversion(result.originalSize, result.fileSize)}`,
         );
       }
-      setPendingIds((ids) => [...ids, result.storageId]);
+      if (result.storageId) setPendingIds((ids) => [...ids, result.storageId!]);
     } catch (e) {
       toast.error(`${file.name}: ${(e as Error).message}`);
     } finally {

@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { internalMutation } from "../../_generated/server";
 import { internal } from "../../_generated/api";
+import type { Id } from "../../_generated/dataModel";
 import { logAuditEvent } from "../../shared/audit";
 
 /**
@@ -17,7 +18,7 @@ export const triggerBulkWorkflow = internalMutation({
     if (!workflow) throw new Error("Workflow not found");
 
     const now = Date.now();
-    const executionIds = [];
+    const executionIds: Array<Id<"workflowExecutions">> = [];
 
     // Create an execution for each item
     for (const item of args.items) {

@@ -135,8 +135,8 @@ interface Props {
   style?: CSSProperties;
   isDragging?: boolean;
   isOver?: boolean;
-  attributes?: Record<string, unknown>;
-  listeners?: Record<string, unknown>;
+  attributes?: Record<string, any>;
+  listeners?: Record<string, any>;
   convertTo: (t: BlockType) => void;
 }
 

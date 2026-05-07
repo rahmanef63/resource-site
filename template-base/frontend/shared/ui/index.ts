@@ -8,3 +8,18 @@ export { ResponsiveDialog } from "./components/ResponsiveDialog";
 export { SharedCanvas } from "./components/canvas/SharedCanvas";
 export { CMSPreview } from "./components/preview/CMSPreview";
 export { AutomationPreview } from "./components/preview/AutomationPreview";
+export {
+  getFeatureIcon,
+  getCategoryIcon,
+  FeatureIcon,
+  CategoryIcon,
+  getFeatureIconName,
+  getCategoryIconName,
+} from "./icons/dynamic-icon";
+export {
+  textProp,
+  booleanProp,
+  selectProp,
+} from "./components/utils/componentFactory";
+export { FeatureBadge } from "./components/feature-badge";
+export { FeatureNotReady } from "./components/feature-not-ready";

@@ -162,7 +162,7 @@ export function CsvImportDialog({ db, open, onOpenChange }: Props) {
                 //    each created Property object so subsequent value coercion has
                 //    the freshest definition (incl. seeded options).
                 const resolved: Record<number, string> = { ...mapping };
-                const createdProps = new Map<string, import("@/shared/types/domain").Property>();
+                const createdProps = new Map<string, import("@/frontend/slices/notion/shared/types/domain").Property>();
                 for (let i = 0; i < parsed.headers.length; i++) {
                   const target = resolved[i];
                   if (!target?.startsWith(NEW_PREFIX)) continue;

@@ -2,6 +2,55 @@
 
 Chronological session log. Each entry is dated and lists what landed + outstanding work.
 
+## 2026-05-07 — Long-tail closeout (49 → 0)
+
+### Outcome
+
+| Surface | Before | After |
+|---|---|---|
+| `template-base/` tsc errors | 49 | **0** |
+| Root tsc | 0 | 0 (still green) |
+| `template-base/` files with errors | 33 | 0 |
+| Stub modules backfilled from superspace/rahmanef | — | 11 |
+| Stub APIs widened to consumer-shape | — | 4 (DebugStore, toolbar, auth-context, file-upload) |
+
+### What landed (commits to main, in order)
+
+1. `chore(docs): correct STATUS.md residual "109" → "49"` — drift cleanup before resuming.
+2. `feat(template-base): close long-tail (49 → 0)` — single squash; everything described in `template-base/STATUS.md` session-3 block. Extended `frontend/shared/ui` barrel; backfilled theme presets + workspaces lib + industry-templates hook + reports + analytics + actions + chrome + feature-shell + rich-text + feature-badge + feature-not-ready; widened DebugStore + toolbar + auth-context stubs; absorbed Next 16 + react-day-picker v9 + lucide-react icon renames; deleted consumer-territory test.
+
+### Critical fixes
+
+**Convex auth provider** — `@auth/core/providers/password` doesn't exist; the canonical kitab provider is `@convex-dev/auth/providers/Password`. Switched the import. Also bumped `@auth/core` to `^0.37.0` to satisfy the `@convex-dev/auth` peer.
+
+**Reports slice schema gap** — `analyticsReports` table missing from root composition. Copied superspace `convex/features/analytics/schema.ts` and spread `analyticsTables` into the root.
+
+**Toolbar enum-as-value** — `toolType` was a string union (type-only), but callers (FeatureThreeColumnLayout, related tests) used `toolType.sort` as a runtime value. Converted to const-object enum + `ToolKind` type-alias. `UniversalToolbar` now accepts `Array<ToolDescriptor | ToolKind>` so both old caller-shapes typecheck.
+
+**DebugStore zustand-shape** — sub-agent router code calls `useSessionDebugStore.getState()` and reads `isDebugging` / `addToolCallTrace` / `completeToolCall`. Widened the stub: hook is now a callable with `getState/setState/subscribe` attached, plus the missing fields/methods.
+
+### What's still outstanding
+
+#### High value, blocked by user action
+
+- **CLI 0.4.3 publish** — `npm publish --otp=…` from `packages/cli/`. Brings tar override + post-restructure script fixes to registry.
+- **Re-trigger Dokploy deploy** — push automatic if webhook configured, else manual via Dokploy UI or `deploy.js`. Build is green.
+
+#### Optional next moves (not blocking anything)
+
+- **Real convex codegen** — `template-base/convex/_generated/*` are hand-written stubs. First `npx convex dev --once` in a consumer overwrites them with real codegen. After that, flip `tsconfig.json` `noImplicitAny` back to `true`.
+- **react-day-picker v9 IconLeft/IconRight** — currently cast to `any` in `notion/shared/ui/calendar.tsx`. Migrate to v9's `Chevron` prop when notion lands as a real consumer slice.
+- **Stubs → real impls** — `use-file-upload`, `image-convert`, `session-info DebugStore`, `toolbar`, `auth-context useAuth` are typed but no-op. Wire to the consumer's backend when needed.
+
+### Files of note
+
+- `template-base/STATUS.md` — granular status, full session-3 changelog, stub-vs-real list.
+- `template-base/frontend/slices/studio/EXTRACTED.md` — studio extraction contract.
+- `docs/studio-extraction.md` — kitab-level pointer to EXTRACTED.md.
+- `.github/workflows/ci.yml` — typecheck + build + audit gate.
+
+---
+
 ## 2026-05-06 — Autonomous remediation session
 
 ### Outcome
