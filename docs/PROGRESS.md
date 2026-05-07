@@ -2,6 +2,78 @@
 
 Chronological session log. Each entry is dated and lists what landed + outstanding work.
 
+## 2026-05-07 (evening) — 4 templates promoted from coming-soon → shipped
+
+The four website-templates that had been registered as `status: "coming-soon"` in `lib/content/layouts.ts` (Kreator Studio OS, Konsultan OS, Wirausaha OS, Riset Kit) now ship full UI/UX scaffolds — public site + admin panel for each. Pattern adheres to the personal-brand-os gold reference.
+
+### Outcome
+
+| Template | App routes | Component files | Total |
+|---|---:|---:|---:|
+| `riset-kit` (T2) | 16 | 15 | 31 |
+| `kreator-studio-os` (T3) | 19 | 18 | 37 |
+| `wirausaha-os` (T4) | 17 | 16 | 33 |
+| `konsultan-os` (T5) | 17 | 16 | 33 |
+| **Total** | **69** | **65** | **134** |
+
+### Build verification
+
+| Metric | Before | After |
+|---|---:|---:|
+| Prerendered routes | 120 | **169** (+49) |
+| Tsc errors (root) | 0 | **0** |
+| Templates `status: "coming-soon"` | 4 | **0** |
+| Templates with both public + admin | 3 | **7** |
+
+### Per-template scope
+
+**Riset Kit (T2)** — Research workspace
+- Public: `/`, `/library`, `/about`
+- Admin: `/`, `/documents`, `/notes`, `/citations`, `/ai-reader`, `/lit-review`, `/settings`
+- Domain: Document, Note, Citation, LitReview, AiReaderSession
+
+**Kreator Studio (T3)** — Multi-channel content hub
+- Public: `/`, `/posts`, `/about`
+- Admin: `/`, `/planner`, `/voice`, `/scripts`, `/carousels`, `/assets`, `/performance`, `/newsletter`, `/comments`, `/settings`
+- Domain: ContentItem, VoiceProfile, Script, Carousel, Asset, NewsletterIssue, PerformanceMetric, CommentDraft
+
+**Wirausaha OS (T4)** — Indonesian UKM ops
+- Public: `/`, `/services`, `/contact`
+- Admin: `/`, `/businesses`, `/inventory`, `/orders`, `/customers`, `/finance`, `/staff`, `/settings`
+- Domain: Business, Product, Order, Customer, FinanceRecord, StaffMember
+
+**Konsultan OS (T5)** — Consulting workspace
+- Public: `/`, `/case-studies`, `/contact`
+- Admin: `/`, `/clients`, `/proposals`, `/contracts`, `/projects`, `/billing`, `/documents`, `/settings`
+- Domain: Client, Proposal, Contract, Project, Invoice, ConsultDoc
+
+### DRY adherence (si-coder consumer-mindset)
+
+- All chrome reused from `_shared/ui/*` (SiteShell, AdminShell, SectionHead, StatCard, SiteNav, AdminSidebar, AdminTopbar, SiteFooter). Zero new chrome components.
+- All UI uses shadcn primitives (Card, Button, Badge, Input, Label, Textarea, Tabs, Table, Select) + lucide-react icons.
+- All copy in Bahasa Indonesia (templates target ID market).
+- State persists via `createTemplateStore` (localStorage + BroadcastChannel cross-iframe sync). Per-template storage keys: `riset:state:v1`, `kreator:state:v1`, `wirausaha:state:v1`, `konsultan:state:v1`.
+- No Convex code — consumer wires it via the `agentRecipe` per-template guidance.
+- Each `<slug>/shared/site-config.ts` is the single edit-surface for branding (brandName, ownerName, baseUrl, twitter, email).
+
+### `lib/content/layouts.ts` updates
+
+Each of the 4 entries replaced:
+- `status: "coming-soon"` → removed (status field no longer applicable)
+- `primaryFile: "README.md"` → `app/preview/<slug>/public/page.tsx`
+- Empty `previewPath`/`adminPreviewPath` → real routes
+- `defaultSurface: "admin"` per docs spec
+- Real `pullPaths` + `files` arrays (~30 entries each) so the `npx rahman-resources init --template <slug>` flow can copy the right tree
+- `agentRecipe` rewritten with concrete consumer-side wiring steps (Convex swap, Resend wiring, Midtrans/QRIS, ai-router tier picks)
+
+### Files of note (this session)
+
+- `app/preview/{kreator-studio-os,konsultan-os,wirausaha-os,riset-kit}/{public,admin}/**/*` — 134 new files
+- `components/templates/{kreator-studio,konsultan,wirausaha,research}/` — per-template shared + slices
+- `lib/content/layouts.ts` — 4 entries promoted from coming-soon to full-shipped
+
+---
+
 ## 2026-05-07 (afternoon) — Consumer-grade hardening
 
 After the 49 → 0 closeout this morning + the 10-item audit, took a
