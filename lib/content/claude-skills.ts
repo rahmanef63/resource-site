@@ -39,6 +39,7 @@ export const CLAUDE_SKILLS: ClaudeSkill[] = [
   { slug: "webapp-testing",       title: "Webapp Testing",       category: "development", source: "anthropics", path: "skills/webapp-testing",       description: "Test web applications — Playwright/Puppeteer flows, snapshot, a11y." },
   { slug: "xlsx",                 title: "XLSX",                 category: "documents",  source: "anthropics", path: "skills/xlsx",                 description: "Read, write, and edit Microsoft Excel .xlsx files." },
   { slug: "rahman-resources",     title: "Rahman Resources",     category: "development", source: "rahman",     path: "skills/rahman-resources",     description: "Use the Rahman Resources kitab — discover templates, features, recipes; assemble bundles; emit npx commands." },
+  { slug: "rr",                   title: "rr — Slice/Template Author",     category: "development", source: "rahman",     path: ".claude/skills/rr",            description: "CRUD slices and templates inside the kitab — scaffold, modify, port from superspace, validate, prep publish. Wires npm run new:slice / modify:slice / new:template plus the npx CLI." },
 ];
 
 export const SKILL_CATEGORIES: SkillCategory[] = [

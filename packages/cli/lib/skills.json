@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "description": "Claude Skills inventory — 18 entries (sync'd from site/lib/content/claude-skills.ts). Used by CLI add-skill + builder UI + MCP server.",
+    "description": "Claude Skills inventory — 19 entries (sync'd from site/lib/content/claude-skills.ts). Used by CLI add-skill + builder UI + MCP server.",
     "anthropicsRepo": "anthropics/skills",
     "branch": "main",
-    "lastSynced": "2026-05-05"
+    "lastSynced": "2026-05-09"
   },
   "skills": [
     {
@@ -149,6 +149,14 @@
       "source": "rahman",
       "path": "skills/rahman-resources",
       "description": "Use the Rahman Resources kitab — discover templates, features, recipes; assemble bundles; emit npx commands."
+    },
+    {
+      "slug": "rr",
+      "title": "rr — Slice/Template Author",
+      "category": "development",
+      "source": "rahman",
+      "path": ".claude/skills/rr",
+      "description": "CRUD slices and templates inside the kitab — scaffold, modify, port from superspace, validate, prep publish. Wires npm run new:slice / modify:slice / new:template plus the npx CLI."
     }
   ]
 }

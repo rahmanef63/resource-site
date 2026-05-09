@@ -12,7 +12,11 @@
     "validate:slices": "node packages/cli/scripts/validate-slice.mjs",
     "audit:slices": "node scripts/validation/audit-slice.mjs",
     "validate:compose": "node scripts/validation/validate-compose.mjs",
-    "slices:check": "npm run validate:slices && npm run audit:slices && npm run gen:slices:check"
+    "slices:check": "npm run validate:slices && npm run audit:slices && npm run gen:slices:check",
+    "new:slice": "node scripts/features/scaffold-slice.mjs",
+    "new:template": "node scripts/features/scaffold-template.mjs",
+    "modify:slice": "node scripts/features/modify-slice.mjs",
+    "manifest:sync": "node packages/cli/scripts/gen-manifest.mjs"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",

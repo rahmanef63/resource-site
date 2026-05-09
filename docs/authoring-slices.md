@@ -2,13 +2,39 @@
 
 A slice is a portable vertical feature unit. One folder, copy-paste anywhere it compiles. See [`slice-architecture.md`](./slice-architecture.md) for the full plan + contract.
 
-## Quick path
+## Quick path (kitab maintainer — scaffold + register)
 
 ```bash
-npx rahman-resources scaffold-slice my-feature --category data
+npm run new:slice -- --slug my-feature --category data --title "My Feature"
 ```
 
-This pulls the reference at `frontend/slices/_templates/example-feature/` + `convex/features/example-feature/` into your project, rewriting identifiers + setting the category in `slice.json`.
+This (script: `scripts/features/scaffold-slice.mjs`):
+1. Copies `frontend/slices/_templates/example-feature/` → `frontend/slices/<slug>/`
+2. Copies `convex/features/example-feature/` → `convex/features/<slug>/`
+3. Rewrites every identifier (`example-feature` / `exampleFeature` / `ExampleFeature`) to your slug
+4. Patches `slice.json` (category, title, description)
+5. Appends a stub `SliceEntry` to `lib/content/slices.ts`
+6. Runs `npm run slices:check` — fails fast if anything regressed
+
+After scaffolding: replace stub UI/backend with real code, fill rich metadata in `lib/content/slices.ts`, run `npm run manifest:sync`, commit.
+
+For the comprehensive checklist (especially when porting from superspace/external sources), see [`lifting-features.md`](./lifting-features.md). Drive the whole flow with the `/rr` Claude skill (at `.claude/skills/rr/SKILL.md`).
+
+## Quick path (downstream consumer — install in your app)
+
+```bash
+npx rahman-resources add <slug>          # pull a published slice
+npx rahman-resources scaffold-slice <slug> --category data   # scaffold a new slice in your project
+npx rahman-resources lift superspace:frontend/slices/<x>     # lift directly from superspace
+```
+
+## Modify an existing slice's metadata
+
+```bash
+npm run modify:slice -- --slug <slug> --add-npm "pkg@^1" --add-shadcn dialog --bump minor
+```
+
+Patches both `slice.json` AND `lib/content/slices.ts` in one pass. See `node scripts/features/modify-slice.mjs` for all flags.
 
 ## Manual path
 
