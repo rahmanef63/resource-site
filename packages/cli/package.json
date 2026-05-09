@@ -25,9 +25,10 @@
   "scripts": {
     "gen": "node scripts/gen-manifest.mjs",
     "validate": "node scripts/validate.mjs",
+    "validate:slices": "node scripts/validate-slice.mjs",
     "sync:skills": "node scripts/sync-skills.mjs",
     "sync:skills:check": "node scripts/sync-skills.mjs --check",
-    "prepublishOnly": "node scripts/sync-skills.mjs --check && node scripts/validate.mjs"
+    "prepublishOnly": "node scripts/sync-skills.mjs --check && node scripts/validate.mjs && node scripts/validate-slice.mjs --check"
   },
   "dependencies": {
     "kleur": "^4.1.5",

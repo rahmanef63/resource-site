@@ -69,6 +69,9 @@ jobs:
         run: node scripts/sync-skills.mjs --check
       - name: validate manifest
         run: node scripts/validate.mjs
+      - name: validate slices
+        working-directory: .
+        run: node packages/cli/scripts/validate-slice.mjs --check
 
   audit:
     name: high-severity vuln gate

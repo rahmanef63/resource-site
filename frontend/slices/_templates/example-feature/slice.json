@@ -1,0 +1,28 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "example-feature",
+  "version": "0.1.0",
+  "category": "data",
+  "title": "Example Feature",
+  "description": "Reference slice — minimal CRUD over a single Convex table. Copy this folder when scaffolding a new slice manually; or run `npx rahman-resources scaffold-slice <slug>` once Phase 1 lands.",
+  "namespace": "@/features/example-feature",
+  "convex": {
+    "tablesExport": "exampleFeatureTables",
+    "schemaPath": "convex/features/example-feature/schema.ts",
+    "rootPaths": ["convex/features/example-feature"]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/_templates/example-feature",
+    "configExport": "exampleFeatureConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": ["button", "card", "input", "label"],
+    "env": [],
+    "peers": []
+  },
+  "registers": ["registry"],
+  "audit": ["bp:public-fn-validator"],
+  "license": "MIT",
+  "tags": ["reference", "starter", "crud"]
+}
