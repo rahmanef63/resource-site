@@ -4,8 +4,56 @@
 import { registerFeatures } from "./registerFeature";
 import type { RegisteredSlice } from "./registry";
 
-export const REGISTERED_SLICES: RegisteredSlice[] = [
+import { aiRouterConfig } from "@/features/ai-router/config";
+import { broadcastChannelSyncConfig } from "@/features/broadcast-channel-sync/config";
+import { calComBookingConfig } from "@/features/cal-com-booking/config";
+import { convexAuthConfig } from "@/features/convex-auth/config";
+import { mdxBlogConfig } from "@/features/mdx-blog/config";
+import { midtransPaymentConfig } from "@/features/midtrans-payment/config";
+import { resendNewsletterConfig } from "@/features/resend-newsletter/config";
+import { vectorSearchConfig } from "@/features/vector-search/config";
 
+export const REGISTERED_SLICES: RegisteredSlice[] = [
+  {
+    ...aiRouterConfig,
+    importPath: "@/features/ai-router/config",
+    version: "0.1.0",
+  },
+  {
+    ...broadcastChannelSyncConfig,
+    importPath: "@/features/broadcast-channel-sync/config",
+    version: "0.1.0",
+  },
+  {
+    ...calComBookingConfig,
+    importPath: "@/features/cal-com-booking/config",
+    version: "0.1.0",
+  },
+  {
+    ...convexAuthConfig,
+    importPath: "@/features/convex-auth/config",
+    version: "0.1.0",
+  },
+  {
+    ...mdxBlogConfig,
+    importPath: "@/features/mdx-blog/config",
+    version: "0.1.0",
+  },
+  {
+    ...midtransPaymentConfig,
+    importPath: "@/features/midtrans-payment/config",
+    version: "0.1.0",
+  },
+  {
+    ...resendNewsletterConfig,
+    importPath: "@/features/resend-newsletter/config",
+    version: "0.1.0",
+  },
+  {
+    ...vectorSearchConfig,
+    importPath: "@/features/vector-search/config",
+    version: "0.1.0",
+  },
 ];
 
 registerFeatures(REGISTERED_SLICES);

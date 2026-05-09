@@ -1,0 +1,23 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "broadcast-channel-sync",
+  "version": "0.1.0",
+  "category": "realtime",
+  "title": "BroadcastChannel Sync",
+  "description": "Cross-tab + cross-iframe state sync via BroadcastChannel + localStorage fallback. Tiny, no backend.",
+  "namespace": "@/features/broadcast-channel-sync",
+  "frontend": {
+    "slicePath": "frontend/slices/broadcast-channel-sync",
+    "configExport": "broadcastChannelSyncConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": ["registry"],
+  "audit": [],
+  "license": "MIT",
+  "tags": ["realtime", "cross-tab", "broadcast-channel"]
+}

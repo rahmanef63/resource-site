@@ -61,6 +61,10 @@ async function main() {
       return runAddSkill(rest);
     case "scaffold-slice":
       return runScaffoldSlice(rest);
+    case "lift":
+      return runLift(rest);
+    case "publish-slice":
+      return runPublishSlice(rest);
     case "list":
     case "ls":
       return runList(rest);
@@ -101,6 +105,8 @@ ${kleur.bold("Usage:")}
   npx rahman-resources add <slug> [target-dir] [--at root|preview] [--with-shadcn-all]
   npx rahman-resources add-skill <slug> [target-dir]
   npx rahman-resources scaffold-slice <slug> [--category <cat>] [--target <dir>]
+  npx rahman-resources lift <source>:<path> [--target <dir>] [--dry-run]
+  npx rahman-resources publish-slice <local-slice-dir> [--open-pr]
   npx rahman-resources list [layouts|recipes|features|skills|slices]
   npx rahman-resources info <slug>
   npx rahman-resources doctor
@@ -820,6 +826,202 @@ function rewriteSlugInTree(dir, fromSlug, toSlug, newCategory) {
     }
     if (body !== before) writeFileSync(full, body);
   }
+}
+
+// ─── lift ─────────────────────────────────────────────────────────────────
+//
+// `npx rr lift <source>:<path>` pulls a slice tree (and its convex pair, when
+// known) from one of three source kinds:
+//
+//   rahman:<slug>            — kitab manifest entry (uses `slices.ts`)
+//   superspace:<sub-path>    — local ~/projects/superspace/<sub-path>
+//   github:<owner>/<repo>/<sub-path>  — arbitrary tiged pull
+//
+// Flags:
+//   --target <dir>  — destination project root (default cwd)
+//   --dry-run       — show what would be pulled, write nothing
+
+async function runLift(rest) {
+  const { positional, flags } = parseFlags(rest);
+  const [src] = positional;
+  if (!src) {
+    throw new Error("Usage: rahman-resources lift <source>:<path> [--target <dir>] [--dry-run]");
+  }
+  const target = path.resolve(process.cwd(), typeof flags.target === "string" ? flags.target : ".");
+  const dryRun = !!flags["dry-run"];
+
+  const parsed = parseLiftSource(src);
+  console.log(kleur.bold(`\n→ Lift ${kleur.cyan(src)} ${dryRun ? kleur.yellow("(dry-run)") : ""}\n`));
+
+  const plan = await resolveLiftPlan(parsed, target);
+
+  for (const step of plan.steps) {
+    console.log(`  ${kleur.dim(step.from)} → ${kleur.cyan(step.toRel)}`);
+  }
+  if (plan.peers.length > 0) {
+    console.log(`\n  Peers required:`);
+    for (const p of plan.peers) console.log(`    · ${kleur.cyan(p.slug)} ${kleur.dim(p.range)}`);
+  }
+  if (plan.npm.length > 0) console.log(`\n  npm: ${plan.npm.join(" ")}`);
+  if (plan.shadcn.length > 0) console.log(`  shadcn: ${plan.shadcn.join(" ")}`);
+  if (plan.env.length > 0) {
+    console.log(`\n  env vars to set:`);
+    for (const e of plan.env) console.log(`    ${e.scope === "next-public" ? "NEXT_PUBLIC_" : ""}${e.name}=…  ${kleur.dim(`(${e.scope})`)}`);
+  }
+
+  if (dryRun) {
+    console.log(`\n${kleur.yellow("dry-run — no changes written.")}\n`);
+    return;
+  }
+
+  for (const step of plan.steps) {
+    process.stdout.write(`\n  pulling ${kleur.dim(step.from)} ... `);
+    if (parsed.kind === "superspace-local") {
+      copyLocalTree(step.localFromAbs, step.toAbs);
+    } else {
+      await pull(step.from, step.toAbs);
+    }
+    console.log(kleur.green("ok"));
+  }
+
+  if (plan.npm.length > 0 && hasPackageJson(target)) {
+    const pm = detectPM(target);
+    console.log(kleur.bold(`\n→ Installing ${plan.npm.length} npm dep(s) via ${kleur.cyan(pm)}\n`));
+    await runPM(pm, plan.npm, target);
+  }
+  if (plan.shadcn.length > 0 && hasPackageJson(target)) {
+    await maybeRunShadcnAdd({ slug: parsed.slug ?? "lifted", shadcnComponents: plan.shadcn }, target, false);
+  }
+
+  console.log(`\n${kleur.green("✓")} Lift complete.`);
+  if (plan.env.length > 0) {
+    console.log(`${kleur.bold("Don't forget:")} set the env vars listed above before running.\n`);
+  }
+}
+
+function parseLiftSource(src) {
+  const m = src.match(/^(rahman|superspace|github):(.+)$/);
+  if (!m) {
+    throw new Error(`lift: source must look like "rahman:<slug>" or "superspace:<path>" or "github:<owner>/<repo>/<path>"`);
+  }
+  const [, scheme, rest] = m;
+  if (scheme === "rahman") {
+    return { kind: "rahman", slug: rest };
+  }
+  if (scheme === "superspace") {
+    return { kind: "superspace-local", subPath: rest };
+  }
+  // github:<owner>/<repo>/<sub-path>
+  const gh = rest.match(/^([^/]+)\/([^/]+)\/(.+)$/);
+  if (!gh) throw new Error(`lift: github source must be "<owner>/<repo>/<sub-path>"`);
+  return { kind: "github", owner: gh[1], repo: gh[2], subPath: gh[3] };
+}
+
+async function resolveLiftPlan(parsed, target) {
+  const steps = [];
+  const peers = [];
+  const npm = [];
+  const shadcn = [];
+  const env = [];
+
+  if (parsed.kind === "rahman") {
+    const slice = (manifest.slices ?? []).find((s) => s.slug === parsed.slug);
+    if (!slice) {
+      throw new Error(`Slice not found in manifest: ${parsed.slug}. Run 'list slices'.`);
+    }
+    steps.push({
+      from: slice.slicePath,
+      toRel: slice.slicePath,
+      toAbs: path.join(target, slice.slicePath),
+    });
+    for (const cp of slice.convexPaths ?? []) {
+      steps.push({ from: cp, toRel: cp, toAbs: path.join(target, cp) });
+    }
+    npm.push(...(slice.npm ?? []));
+    shadcn.push(...(slice.shadcn ?? []));
+    env.push(...(slice.env ?? []));
+    peers.push(...(slice.peers ?? []));
+  } else if (parsed.kind === "superspace-local") {
+    const SUPERSPACE = process.env.RAHMAN_SUPERSPACE_PATH ?? path.join(process.env.HOME ?? "", "projects/superspace");
+    const localFromAbs = path.join(SUPERSPACE, parsed.subPath);
+    if (!existsSync(localFromAbs)) {
+      throw new Error(`superspace local source not found: ${localFromAbs}\n  set RAHMAN_SUPERSPACE_PATH to override.`);
+    }
+    steps.push({
+      from: `~/projects/superspace/${parsed.subPath}`,
+      toRel: parsed.subPath,
+      toAbs: path.join(target, parsed.subPath),
+      localFromAbs,
+    });
+  } else if (parsed.kind === "github") {
+    steps.push({
+      from: `${parsed.owner}/${parsed.repo}/${parsed.subPath}`,
+      toRel: parsed.subPath,
+      toAbs: path.join(target, parsed.subPath),
+    });
+  }
+  return { steps, peers, npm, shadcn, env };
+}
+
+function copyLocalTree(srcDir, destDir) {
+  const stat = statSync(srcDir);
+  if (!stat.isDirectory()) {
+    mkdirSync(path.dirname(destDir), { recursive: true });
+    writeFileSync(destDir, readFileSync(srcDir));
+    return;
+  }
+  mkdirSync(destDir, { recursive: true });
+  for (const name of readdirSync(srcDir)) {
+    if (name === "node_modules" || name === ".next" || name === "dist") continue;
+    copyLocalTree(path.join(srcDir, name), path.join(destDir, name));
+  }
+}
+
+// ─── publish-slice ────────────────────────────────────────────────────────
+//
+// Validate a local slice and (optionally) open a PR upstream to add it to
+// the kitab. Default dry-run; pass --open-pr to actually create the PR.
+
+async function runPublishSlice(rest) {
+  const { positional, flags } = parseFlags(rest);
+  const [sliceDir] = positional;
+  if (!sliceDir) {
+    throw new Error("Usage: rahman-resources publish-slice <local-slice-dir> [--open-pr]");
+  }
+  const abs = path.resolve(process.cwd(), sliceDir);
+  if (!existsSync(abs) || !existsSync(path.join(abs, "slice.json"))) {
+    throw new Error(`Not a slice dir (no slice.json): ${abs}`);
+  }
+  console.log(kleur.bold(`\n→ Validating ${kleur.cyan(abs)}\n`));
+
+  // Run the validator script as a subprocess so any user-side override holds.
+  await new Promise((resolve, reject) => {
+    const ps = spawn(
+      "node",
+      [path.join(__dirname, "../scripts/validate-slice.mjs"), path.join(abs, "slice.json")],
+      { stdio: "inherit", shell: true },
+    );
+    ps.on("error", reject);
+    ps.on("exit", (code) => (code === 0 ? resolve() : reject(new Error(`validate-slice exited ${code}`))));
+  });
+
+  if (!flags["open-pr"]) {
+    console.log(`\n${kleur.yellow("dry-run — pass --open-pr to actually open a PR upstream.")}`);
+    return;
+  }
+
+  // Open a PR. We don't push branches automatically — instruct the user.
+  console.log(`\n${kleur.bold("Opening PR upstream:")}`);
+  console.log(`
+  1. Fork ${kleur.cyan("https://github.com/rahmanef63/resource-site")} (if not already).
+  2. Clone your fork, copy this slice into ${kleur.cyan(`frontend/slices/<slug>/`)} and the
+     convex half into ${kleur.cyan(`convex/features/<slug>/`)}.
+  3. Add an entry to ${kleur.cyan("lib/content/slices.ts")}.
+  4. Run ${kleur.cyan("npm run slices:check")} locally.
+  5. ${kleur.cyan(`gh pr create --title "feat(slices): add <slug>" --body "..."`)}.
+
+  (Auto-PR via gh CLI not yet implemented — coming in a future release.)
+`);
 }
 
 // ─── helpers ──────────────────────────────────────────────────────────────

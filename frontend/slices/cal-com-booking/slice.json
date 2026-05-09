@@ -1,0 +1,31 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "cal-com-booking",
+  "version": "0.1.0",
+  "category": "data",
+  "title": "Cal.com Booking",
+  "description": "Embedded Cal.com booking widget + webhook receiver to mirror bookings into Convex.",
+  "namespace": "@/features/cal-com-booking",
+  "convex": {
+    "tablesExport": "bookingsTables",
+    "schemaPath": "convex/features/bookings/schema.ts",
+    "rootPaths": ["convex/features/bookings"]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/cal-com-booking",
+    "configExport": "calComBookingConfig"
+  },
+  "deps": {
+    "npm": ["@calcom/embed-react@^1.5.0"],
+    "shadcn": ["card"],
+    "env": [
+      { "name": "NEXT_PUBLIC_CALCOM_USERNAME", "scope": "next-public", "required": true },
+      { "name": "CALCOM_WEBHOOK_SECRET", "scope": "convex", "required": true }
+    ],
+    "peers": []
+  },
+  "registers": ["registry"],
+  "audit": ["bp:public-fn-validator"],
+  "license": "MIT",
+  "tags": ["data", "scheduling", "cal-com", "bookings"]
+}

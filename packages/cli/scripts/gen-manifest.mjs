@@ -13,6 +13,7 @@ import {
   loadLayouts,
   loadRecipes,
   loadFeatures,
+  loadSlices,
   parseNpmPackages,
 } from "./parse-content.mjs";
 
@@ -91,14 +92,38 @@ const features = loadFeatures().map((f) => {
   };
 });
 
-// Slug uniqueness across kinds (CLI dispatches by slug)
+const slices = loadSlices().map((s) => ({
+  slug: s.slug,
+  title: s.title,
+  category: s.category,
+  version: s.version,
+  description: s.description,
+  source: s.source ?? "",
+  slicePath: s.slicePath,
+  convexPaths: s.convexPaths ?? [],
+  npm: s.npm ?? [],
+  shadcn: s.shadcn ?? [],
+  env: s.env ?? [],
+  peers: s.peers ?? [],
+  providers: s.providers ?? [],
+  tags: s.tags ?? [],
+  agentRecipe: s.agentRecipe ?? "",
+}));
+
+// Slug uniqueness across kinds (CLI dispatches by slug). NOTE: features and
+// slices CAN share a slug — slice supersedes feature (deeper tier-3 rep of
+// the same concept). CLI add-flow tries slice first, falls back to feature.
 const allSlugs = new Map();
-for (const [kind, list] of [["layout", layouts], ["recipe", recipes], ["feature", features]]) {
+for (const [kind, list] of [["layout", layouts], ["recipe", recipes], ["feature", features], ["slice", slices]]) {
   for (const e of list) {
-    if (allSlugs.has(e.slug)) {
-      errors.push(
-        `Duplicate slug "${e.slug}" in ${kind} — also in ${allSlugs.get(e.slug)}`,
-      );
+    const owner = allSlugs.get(e.slug);
+    if (owner) {
+      const allowed = (owner === "feature" && kind === "slice") || (owner === "slice" && kind === "feature");
+      if (!allowed) {
+        errors.push(
+          `Duplicate slug "${e.slug}" in ${kind} — also in ${owner}`,
+        );
+      }
     }
     allSlugs.set(e.slug, kind);
   }
@@ -112,12 +137,13 @@ const manifest = {
   layouts,
   recipes,
   features,
+  slices,
 };
 
 writeFileSync(OUT, JSON.stringify(manifest, null, 2) + "\n");
 
 console.log(
-  `Wrote ${layouts.length} layouts + ${recipes.length} recipes + ${features.length} features → ${path.relative(process.cwd(), OUT)}`,
+  `Wrote ${layouts.length} layouts + ${recipes.length} recipes + ${features.length} features + ${slices.length} slices → ${path.relative(process.cwd(), OUT)}`,
 );
 
 if (warnings.length > 0) {

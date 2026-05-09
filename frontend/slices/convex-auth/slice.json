@@ -1,0 +1,33 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "convex-auth",
+  "version": "0.1.0",
+  "category": "auth",
+  "title": "Convex Auth — Email Magic Link",
+  "description": "@convex-dev/auth with email magic link via Resend. Self-hosted Convex friendly. Hard mandate per kitab CLAUDE.md (no Clerk).",
+  "namespace": "@/features/convex-auth",
+  "convex": {
+    "tablesExport": "authTablesExt",
+    "schemaPath": "convex/features/auth/schema.ts",
+    "rootPaths": ["convex/features/auth"]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/convex-auth",
+    "configExport": "convexAuthConfig"
+  },
+  "deps": {
+    "npm": ["@convex-dev/auth@^0.0.84", "@auth/core@^0.37.0", "resend@^4.0.0"],
+    "shadcn": ["button", "card", "input", "label", "dropdown-menu", "avatar"],
+    "env": [
+      { "name": "AUTH_RESEND_KEY", "scope": "convex", "description": "Resend API key for magic-link sender." },
+      { "name": "JWT_PRIVATE_KEY", "scope": "convex", "description": "Auth signing key. Self-hosted: also push via REST update_environment_variables." },
+      { "name": "JWKS", "scope": "convex" },
+      { "name": "SITE_URL", "scope": "convex", "description": "Public site origin for magic-link callback." }
+    ],
+    "peers": []
+  },
+  "registers": ["registry"],
+  "audit": ["bp:public-fn-validator"],
+  "license": "MIT",
+  "tags": ["auth", "convex", "magic-link", "no-clerk"]
+}

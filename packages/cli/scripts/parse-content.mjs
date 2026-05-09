@@ -90,6 +90,14 @@ function load(file, exportName) {
 export const loadLayouts = () => load("lib/content/layouts.ts", "layouts");
 export const loadRecipes = () => load("lib/content/recipes.ts", "recipes");
 export const loadFeatures = () => load("lib/content/features.ts", "features");
+export const loadSlices = () => {
+  // slices.ts is optional (initially empty array); allow missing file.
+  try {
+    return load("lib/content/slices.ts", "slices");
+  } catch {
+    return [];
+  }
+};
 
 export function parseNpmPackages(install) {
   if (!install || install.trim().startsWith("//")) return [];

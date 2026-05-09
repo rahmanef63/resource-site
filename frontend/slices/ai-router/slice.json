@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "ai-router",
+  "version": "0.1.0",
+  "category": "ai",
+  "title": "AI Router (OpenRouter)",
+  "description": "Tier-routed LLM access via OpenRouter — nano (Haiku) for classification, mid (Sonnet) for chat, flagship (Opus) for deep reasoning. Per-call usage log.",
+  "namespace": "@/features/ai-router",
+  "convex": {
+    "tablesExport": "aiTables",
+    "schemaPath": "convex/features/ai/schema.ts",
+    "rootPaths": ["convex/features/ai"]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/ai-router",
+    "configExport": "aiRouterConfig"
+  },
+  "deps": {
+    "npm": ["ai@^4.0.0", "@openrouter/ai-sdk-provider@^0.0.5"],
+    "shadcn": ["button"],
+    "env": [
+      { "name": "OPENROUTER_API_KEY", "scope": "convex", "required": true }
+    ],
+    "peers": []
+  },
+  "registers": ["registry"],
+  "audit": ["bp:public-fn-validator"],
+  "license": "MIT",
+  "tags": ["ai", "llm", "openrouter", "tier-routing"]
+}

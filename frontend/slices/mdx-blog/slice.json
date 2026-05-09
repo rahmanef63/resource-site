@@ -1,0 +1,23 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "mdx-blog",
+  "version": "0.1.0",
+  "category": "content",
+  "title": "MDX Blog",
+  "description": "File-based MDX blog under content/blog/*.mdx. List + detail page + RSS feed. No backend.",
+  "namespace": "@/features/mdx-blog",
+  "frontend": {
+    "slicePath": "frontend/slices/mdx-blog",
+    "configExport": "mdxBlogConfig"
+  },
+  "deps": {
+    "npm": ["@next/mdx@^16.0.0", "gray-matter@^4.0.3", "rehype-pretty-code@^0.14.0"],
+    "shadcn": ["card"],
+    "env": [],
+    "peers": []
+  },
+  "registers": ["registry"],
+  "audit": [],
+  "license": "MIT",
+  "tags": ["content", "blog", "mdx", "static"]
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "resend-newsletter",
+  "version": "0.1.0",
+  "category": "email",
+  "title": "Resend Newsletter",
+  "description": "Newsletter subscribe form + admin send-broadcast pipeline via Resend.",
+  "namespace": "@/features/resend-newsletter",
+  "convex": {
+    "tablesExport": "newsletterTables",
+    "schemaPath": "convex/features/newsletter/schema.ts",
+    "rootPaths": ["convex/features/newsletter"]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/resend-newsletter",
+    "configExport": "resendNewsletterConfig"
+  },
+  "deps": {
+    "npm": ["resend@^4.0.0"],
+    "shadcn": ["button", "card", "input", "label", "textarea"],
+    "env": [
+      { "name": "RESEND_API_KEY", "scope": "convex", "required": true },
+      { "name": "RESEND_FROM", "scope": "convex", "required": true, "description": "Verified sender, e.g., \"hello@yourdomain.com\"." }
+    ],
+    "peers": []
+  },
+  "registers": ["registry"],
+  "audit": ["bp:public-fn-validator"],
+  "license": "MIT",
+  "tags": ["email", "newsletter", "resend"]
+}
