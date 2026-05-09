@@ -6,6 +6,7 @@
 2. **All UI = shadcn primitives** or composed from shadcn. Forbid raw `<button>`, `<dialog>`, `<input type=date|file>`. Use `ResponsiveDialog`, `DateField`, `FileUpload`.
 3. **Copy-first flow.** Never greenfield. `cp -r` from source → adjust import aliases → strip business-specific bits.
 4. **Stack**: Next 16 + React 19 + Tailwind 4 + Convex self-hosted + TS strict.
+5. **Slice contract.** Every new vertical feature ships as a tier-3 slice — `frontend/slices/<slug>/` (with `slice.json` + `config.ts`) + `convex/features/<slug>/` (with `<slug>Tables` schema export). See [`docs/authoring-slices.md`](./docs/authoring-slices.md). Imports inside a slice MUST resolve via `@/components/ui/*`, `@/shared/*`, `@/features/<own-slug>/*`, `@convex/*`, or relative-within-slice. No deep `../../` reaching out. Audit-bp gates this in CI (`npm run audit:slices`).
 
 ## Source Map (where to copy from)
 

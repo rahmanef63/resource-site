@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { layouts, type LayoutEntry } from "@/lib/content/layouts";
 import { recipes } from "@/lib/content/recipes";
 import { features, type FeatureCategory, type FeatureEntry } from "@/lib/content/features";
+import { slices, type SliceEntry } from "@/lib/content/slices";
 import { cn } from "@/lib/utils";
 
 // 3-tier nav model:
@@ -63,6 +64,8 @@ function buildSections(): NavSection[] {
     (l) => l.category as Exclude<LayoutEntry["category"], "website-template">,
   );
   const featuresByCat = groupByCategory(features, (f) => f.category);
+  const slicesByCat = groupByCategory(slices, (s) => s.category as string);
+  const SLICE_CATEGORY_ORDER = ["auth", "payment", "ai", "email", "data", "search", "realtime", "content", "storage", "ui", "infra"];
 
   return [
     {
@@ -98,6 +101,25 @@ function buildSections(): NavSection[] {
             title: LAYOUT_CATEGORY_TITLE[cat as keyof typeof LAYOUT_CATEGORY_TITLE] ?? cat,
             items: list.map((l) => ({ kind: "leaf", title: l.title, href: `/layouts/${l.slug}` })),
           })),
+      ],
+    },
+    {
+      label: "Slices",
+      items: [
+        { kind: "leaf", title: "All slices", href: "/slices", badge: "new" },
+        ...SLICE_CATEGORY_ORDER.filter((cat) => slicesByCat[cat]?.length).map(
+          (cat): NavBranch => ({
+            kind: "branch",
+            title: cat.charAt(0).toUpperCase() + cat.slice(1),
+            items: slicesByCat[cat].map(
+              (s: SliceEntry): NavLeaf => ({
+                kind: "leaf",
+                title: s.title,
+                href: `/features/${s.slug}`,
+              }),
+            ),
+          }),
+        ),
       ],
     },
     {

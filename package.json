@@ -11,6 +11,7 @@
     "gen:slices:check": "node scripts/features/gen-slice-registries.mjs --check",
     "validate:slices": "node packages/cli/scripts/validate-slice.mjs",
     "audit:slices": "node scripts/validation/audit-slice.mjs",
+    "validate:compose": "node scripts/validation/validate-compose.mjs",
     "slices:check": "npm run validate:slices && npm run audit:slices && npm run gen:slices:check"
   },
   "dependencies": {

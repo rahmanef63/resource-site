@@ -38,7 +38,7 @@ const REPO = manifest.repo ?? "rahmanef63/resource-site";
 const BRANCH = manifest.branch ?? "main";
 const SKILLS_REPO = "anthropics/skills";
 
-const KINDS = /** @type {const} */ (["layout", "recipe", "feature"]);
+const KINDS = /** @type {const} */ (["slice", "layout", "recipe", "feature"]);
 
 const [, , cmd, ...rest] = process.argv;
 
@@ -163,7 +163,7 @@ function csv(s) {
 
 function findEntry(slug) {
   for (const kind of KINDS) {
-    const list = manifest[kind + "s"];
+    const list = manifest[kind + "s"] ?? [];
     const e = list.find((x) => x.slug === slug);
     if (e) return { kind, entry: e };
   }
@@ -179,7 +179,7 @@ function findSkill(slug) {
 function runList([filter]) {
   const groups = filter
     ? [filter]
-    : ["layouts", "recipes", "features", "skills"];
+    : ["slices", "layouts", "recipes", "features", "skills"];
   for (const g of groups) {
     if (g === "skills") {
       console.log(`\n${kleur.bold("SKILLS")} ${kleur.dim(`(${skillsInventory.skills.length})`)}\n`);
@@ -238,6 +238,22 @@ ${t.description}
   } else if (kind === "recipe") {
     console.log(`${kleur.bold("Files:")}`);
     console.log(t.files.map((f) => `  · ${f}`).join("\n"));
+  } else if (kind === "slice") {
+    console.log(`${kleur.bold("Pulls:")}`);
+    console.log(`  · ${t.slicePath}`);
+    for (const cp of t.convexPaths ?? []) console.log(`  · ${cp}`);
+    if (t.npm?.length) console.log(`\n${kleur.bold("npm:")}\n  ${t.npm.join(" ")}`);
+    if (t.shadcn?.length) console.log(`\n${kleur.bold("shadcn:")}\n  ${t.shadcn.join(" ")}`);
+    if (t.env?.length) {
+      console.log(`\n${kleur.bold("env:")}`);
+      for (const e of t.env) console.log(`  · ${e.name} ${kleur.dim(`(${e.scope})`)}${e.required === false ? kleur.dim(" optional") : ""}`);
+    }
+    if (t.peers?.length) {
+      console.log(`\n${kleur.bold("peers:")}`);
+      for (const p of t.peers) console.log(`  · ${p.slug} ${p.range}`);
+    }
+    if (t.providers?.length) console.log(`\n${kleur.bold("providers:")} ${t.providers.join(", ")}`);
+    console.log(`\n${kleur.bold("Install:")} ${kleur.cyan(`npx rahman-resources add ${t.slug}`)}`);
   }
   if (t.docsUrl) console.log(`\n${kleur.dim(`Docs: ${t.docsUrl}`)}`);
   console.log(`${kleur.dim(`Source: ${t.source ?? "—"}`)}\n`);
@@ -412,6 +428,7 @@ async function runAdd(rest) {
   const { kind, entry } = found;
   const target = path.resolve(process.cwd(), targetArg);
 
+  if (kind === "slice") return runLift([`rahman:${entry.slug}`, ...(targetArg !== "." ? ["--target", targetArg] : [])]);
   if (kind === "layout") return addLayout(entry, target, targetArg, flags);
   if (kind === "feature") return addFeature(entry, target, targetArg);
   if (kind === "recipe") return addRecipe(entry);

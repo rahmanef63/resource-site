@@ -2,6 +2,59 @@
 
 Chronological session log. Each entry is dated and lists what landed + outstanding work.
 
+## 2026-05-09 — Slice architecture rollout (Phases 0–6)
+
+Comprehensive 7-phase adaptation of the superspace vertical-slice pattern into the kitab. Master plan: [`slice-architecture.md`](./slice-architecture.md). Authoring guide: [`authoring-slices.md`](./authoring-slices.md).
+
+### Outcome
+
+| Surface | Before | After |
+|---|---|---|
+| Tier-3 portable feature units | none (only shallow features.ts) | **8 structural slices** (auth/payment/email/ai/search/content/data/realtime) |
+| Slice contract | none | `packages/cli/lib/slice-schema.json` + validator |
+| Slice runtime | none | `lib/shared/features/{defineFeature,registry,registerFeature}.ts` |
+| Registry generators | none | `scripts/features/gen-slice-registries.mjs` (3 outputs from one script) |
+| audit-bp port | none | `scripts/validation/audit-slice.mjs` (naming + imports + schema-clash + config-agreement) |
+| Compat matrix | template×feature only | + `SLICE_COMPAT` (peers/conflicts) + `validate-compose.mjs` |
+| CLI subcommands | init/add/list/info/doctor/mcp | + `scaffold-slice`, `lift`, `publish-slice` |
+| MCP tools | 10 | **13** (+rr_list_slices, rr_get_slice, rr_compose_app) |
+| MCP resources | + workflow markdowns | + `rr://slices/<slug>` |
+| Docs sidebar | 4 groups (no Slices) | **5 groups** with Slices branched by category |
+| Docs pages | /templates /features etc | + **/slices** catalog |
+| Path aliases | `@/*` only | + `@/shared/*`, `@/features/*`, `@convex/*` (additive) |
+| Versions | CLI 0.6.0 / MCP 0.3.0 | **CLI 0.7.0 / MCP 0.4.0** (minor — additive surface) |
+
+### Phases (commit hashes)
+
+- **Phase 0** (`5db2901`) — slice contract foundation: `slice-architecture.md`, `slice-schema.json`, `validate-slice.mjs`, reference slice at `frontend/slices/_templates/example-feature/` + `convex/features/example-feature/`, CI gate.
+- **Phase 1** (`cca76e3`) — runtime + generators + chrome + scaffold-slice + audit-bp port.
+- **Phase 2+3** (`65465e1`) — 8 portable slices land + lift/publish-slice CLI commands.
+- **Phase 4–6** (this commit) — CLI add-slice routing, MCP tools, /slices catalog, sidebar Slices group, compat matrix + validate-compose, authoring docs.
+
+### How features map onto slices (tier 1↔3 bridge)
+
+`lib/content/features.ts` (shallow) entries pointed at by `lib/content/slices.ts` (deep) entries via shared slug. CLI `add` tries slice first, falls back to feature. Manifest gen-script slug-uniqueness relaxed to allow this overlap.
+
+### Outstanding (defer / future)
+
+- Real provider impls per slice — current slices are STRUCTURAL (slice.json + config + schema + stub UI). Production-ready Midtrans webhook handler / Resend send action / Cal.com webhook receiver / OpenRouter chat fab UI all need filling in. Use `npx rr lift superspace:frontend/slices/<slug>` once superspace ships them.
+- Auto-PR via `gh` CLI in `publish-slice` — currently prints fork-and-PR steps, doesn't auto-execute.
+- Bundle Builder UI Slices tab — `/build` page extension.
+- `rr doctor --slices` — runs validate-compose against the consumer's `rr.json`.
+- `rr_audit_slice` MCP tool — invoke audit-slice.mjs as subprocess.
+- Lift superspace's full DashboardShell + AppSidebar variants — kitab ships a registry-driven minimal sidebar; the heavier multi-workspace navigation stays in superspace until needed.
+
+### Verification
+
+- `npm run slices:check` → ✓ 8 slices validated, 8 audited, registries up to date
+- `npx tsc --noEmit` → 0 errors
+- `npm run build` → ✓ Compiled (incl. `/slices` route)
+- `node packages/mcp/bin/server.mjs` → loads cleanly (13 tools, slices resources)
+- `node scripts/validation/validate-compose.mjs midtrans-payment convex-auth` → ✓ pass
+- `node scripts/validation/validate-compose.mjs midtrans-payment` → ✖ "missing peer convex-auth"
+
+---
+
 ## 2026-05-08 — `kam` build postmortem (init CLI gaps)
 
 First end-to-end consumer build of `npx rahman-resources@latest init` against `personal-brand-os` template + Dokploy self-hosted Convex deploy at `karya.azzahrah.site`. Required many manual fixes before live. Captured in [`init-cli-postmortem-kam.md`](./init-cli-postmortem-kam.md).

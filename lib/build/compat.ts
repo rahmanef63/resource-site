@@ -65,6 +65,34 @@ export type CompatWarning = {
   note?: string;
 };
 
+// ─── Slice × Slice compat (peers + conflicts) ─────────────────────────────
+//
+// Peers come from each slice's `slice.json.deps.peers` (mirrored in
+// lib/content/slices.ts). Conflicts are declared here for slices that are
+// mutually exclusive (e.g., two payment providers competing for the same
+// `paymentOrders.provider` discriminator behavior).
+
+export type SliceCompat = {
+  /** Other slice slugs this one CONFLICTS with (mutually exclusive). */
+  conflicts?: string[];
+  /** Other slice slugs that pair especially well (informational). */
+  enhances?: string[];
+};
+
+export const SLICE_COMPAT: Record<string, SliceCompat> = {
+  // Future: doku-payment + midtrans-payment will both want this entry.
+  "midtrans-payment": {
+    conflicts: ["stripe-payment", "doku-payment"],
+    enhances: ["convex-auth"],
+  },
+  "convex-auth": {
+    enhances: ["midtrans-payment", "resend-newsletter", "ai-router"],
+  },
+  "resend-newsletter": {
+    enhances: ["mdx-blog"],
+  },
+};
+
 /** Collect actionable warnings for current selection — incompatible + warn only. */
 export function collectWarnings(templateSlug: string | null, selectedFeatures: string[]): CompatWarning[] {
   if (!templateSlug) return [];
