@@ -50,7 +50,7 @@ export default function SlicesPage() {
             </h2>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {items.map((s) => (
-                <Link key={s.slug} href={`/features/${s.slug}`}>
+                <Link key={s.slug} href={`/slices/${s.slug}`}>
                   <Card className="group h-full transition hover:border-primary/40 hover:shadow-sm">
                     <CardHeader>
                       <div className="flex items-start justify-between gap-3">

@@ -36,6 +36,7 @@ export const DEFAULT_RR = {
   },
   template: null,
   features: [],
+  slices: [],
   skills: [],
   auth: { provider: "convex-auth" },
   convex: { self_hosted: true },
@@ -91,6 +92,23 @@ export function addFeature(rr, slug, version = "main") {
   return rr;
 }
 
+export function addSlice(rr, slug, opts = {}) {
+  rr.slices = rr.slices ?? [];
+  const existing = rr.slices.find((s) => s.slug === slug);
+  if (existing) {
+    if (opts.version) existing.version = opts.version;
+    if (opts.category) existing.category = opts.category;
+    return rr;
+  }
+  rr.slices.push({ slug, version: opts.version ?? "main", category: opts.category, addedAt: today() });
+  return rr;
+}
+
+export function removeSlice(rr, slug) {
+  rr.slices = (rr.slices ?? []).filter((s) => s.slug !== slug);
+  return rr;
+}
+
 export function addSkill(rr, slug, source = "anthropics", version = "main") {
   rr.skills = rr.skills ?? [];
   if (rr.skills.find((s) => s.slug === slug && s.source === source)) return rr;
@@ -125,6 +143,7 @@ export function validateRr(rr) {
     issues.push(`layout.kind must be vertical-slice|feature-folders (got ${rr.layout.kind})`);
   }
   if (rr.features && !Array.isArray(rr.features)) issues.push("features must be an array");
+  if (rr.slices && !Array.isArray(rr.slices)) issues.push("slices must be an array");
   if (rr.skills && !Array.isArray(rr.skills)) issues.push("skills must be an array");
   return issues;
 }

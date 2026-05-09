@@ -23,6 +23,8 @@ const ALLOWED_IMPORT_PREFIXES = [
   "@/components/ui/",
   "@/components/shared/",
   "@/lib/shared/",
+  "@/lib/utils",
+  "@/lib/utils.ts",
   "@/shared/",
   // Convex barrels
   "@convex/",

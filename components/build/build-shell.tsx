@@ -106,6 +106,13 @@ export function BuildShell() {
     }));
   }, []);
 
+  const toggleSlice = React.useCallback((slug: string) => {
+    setSel((s) => ({
+      ...s,
+      slices: s.slices.includes(slug) ? s.slices.filter((x) => x !== slug) : [...s.slices, slug],
+    }));
+  }, []);
+
   const toggleSkill = React.useCallback((slug: string) => {
     setSel((s) => ({
       ...s,
@@ -137,6 +144,7 @@ export function BuildShell() {
               templates={templates}
               featureOptions={featureOptions}
               toggleFeature={toggleFeature}
+              toggleSlice={toggleSlice}
               toggleSkill={toggleSkill}
               commandBlocks={blocks}
               filename={filename}
@@ -148,7 +156,7 @@ export function BuildShell() {
       defaultTab: "builder",
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [sel, rr, templates, featureOptions, toggleFeature, toggleSkill, blocks, filename, warnings],
+    [sel, rr, templates, featureOptions, toggleFeature, toggleSlice, toggleSkill, blocks, filename, warnings],
   );
 
   useFeatureManifest(manifest);
@@ -168,7 +176,7 @@ function BuilderCenter({
   sel, setSel,
   rr, setRr,
   templates, featureOptions,
-  toggleFeature, toggleSkill,
+  toggleFeature, toggleSlice, toggleSkill,
   commandBlocks, filename, warnings,
 }: {
   sel: BuildSelection;
@@ -178,6 +186,7 @@ function BuilderCenter({
   templates: TemplateOption[];
   featureOptions: FeatureOption[];
   toggleFeature: (slug: string) => void;
+  toggleSlice: (slug: string) => void;
   toggleSkill: (slug: string) => void;
   commandBlocks: import("@/lib/build/command-builder").CommandBlock[];
   filename: string;
@@ -194,6 +203,7 @@ function BuilderCenter({
       rr={rr}
       setRr={setRr}
       toggleFeature={toggleFeature}
+      toggleSlice={toggleSlice}
       toggleSkill={toggleSkill}
     />
   );

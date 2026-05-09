@@ -2,6 +2,50 @@
 
 Chronological session log. Each entry is dated and lists what landed + outstanding work.
 
+## 2026-05-09 (post-publish) — R-series outstanding closeout
+
+After publishing CLI 0.7.0 + MCP 0.4.0 to npm, closed the remaining/imperfect items from the slice rollout. CLI 0.8.0 + MCP 0.5.0 ship next.
+
+### Outcome
+
+| Surface | Before | After |
+|---|---|---|
+| Slice provider impls | structural stubs only | **4 real impls** (Midtrans webhook+mutations, Resend send action, Cal.com webhook, AI router chat-fab UI) |
+| `/slices/<slug>` detail page | dead link (sidebar pointed at /features/<slug>) | **detail page live** with deps/peers/providers visualization |
+| Bundle Builder | 4 tabs (Tmpl/Feat/Proj/Skl) | **5 tabs — Slices added** with in-tab peer-warning + conflict detection |
+| `rr doctor` | rr.json shape only | + `--slices` flag — peer transitivity + convex table-collision check |
+| MCP tools | 13 | **14** (+ `rr_audit_slice`) |
+| `publish-slice --open-pr` | printed manual steps | detects `gh` CLI; emits ready-to-run `gh pr create` command with prefilled title/body |
+| `rr.json` schema | features+skills | + `slices: []` array; `lift rahman:<slug>` auto-registers |
+| Versions | CLI 0.7.0 / MCP 0.4.0 | **CLI 0.8.0 / MCP 0.5.0** |
+
+### Real provider impls
+
+- `convex/features/payment/http.ts` — Midtrans webhook with SHA-512 signature verify, idempotent paid/failed/expired mapping. `mutations.ts` extended with `recordWebhookEvent`, `markPaidByWebhook`, `markFailedByWebhook`.
+- `convex/features/newsletter/actions/send.ts` — Resend broadcast action; lazy-imports `resend`, fans out to active subscribers, swallows per-recipient errors. `queries.ts` (`getIssue`, `activeSubscribers`) + `mutations.ts` (`subscribe`, `markSending`, `markSent`).
+- `convex/features/bookings/http.ts` — Cal.com webhook with HMAC-SHA-256 verify (constant-time compare), upserts via `calBookingId`. `mutations.ts` (`upsertFromWebhook`).
+- `frontend/slices/ai-router/components/chat-fab.tsx` — full chat popover (open/close, message list, async send, scroll-to-bottom, error surfacing). Stub call-site swap-target documented in comments.
+
+### CLI / MCP additions
+
+- `npx rr doctor --slices` validates: slices on disk, slice.json present, convex paths exist, peers transitively present, no convex table-name collisions.
+- `lib/rr.mjs` + `addSlice`/`removeSlice` helpers + slice tracking in default `rr.json`.
+- `lift rahman:<slug>` auto-registers the slice in consumer's rr.json.
+- MCP `rr_audit_slice({ slices })` returns `{ errors, warnings, ok }` for an arbitrary slice combination — agents call BEFORE composing.
+- `publish-slice --open-pr`: detects `gh` CLI; if present, emits ready-to-run `gh pr create` command pre-filled from slice metadata; if absent, prints install hint + manual fallback.
+
+### audit-slice allowlist tweak
+
+Added `@/lib/utils` (cn helper) to ALLOWED_IMPORT_PREFIXES — universally needed by shadcn-styled components.
+
+### Verification
+
+- `npm run slices:check` → ✓ 8 slices validated, audited, registries up to date
+- `npx tsc --noEmit` → 0 errors
+- `npm run build` → ✓ Compiled (incl. `/slices/[slug]` static-rendered)
+
+---
+
 ## 2026-05-09 — Slice architecture rollout (Phases 0–6)
 
 Comprehensive 7-phase adaptation of the superspace vertical-slice pattern into the kitab. Master plan: [`slice-architecture.md`](./slice-architecture.md). Authoring guide: [`authoring-slices.md`](./authoring-slices.md).

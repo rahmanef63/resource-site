@@ -25,6 +25,7 @@ import {
   rrExists,
   validateRr,
   addFeature as rrAddFeature,
+  addSlice as rrAddSlice,
   addSkill as rrAddSkill,
 } from "../lib/rr.mjs";
 import { runPostInit } from "../lib/post-init.mjs";
@@ -714,7 +715,7 @@ async function installSkill(slug, target) {
 
 // ─── doctor ───────────────────────────────────────────────────────────────
 
-function runDoctor() {
+function runDoctor(rest = []) {
   const target = process.cwd();
   if (!rrExists(target)) {
     console.log(kleur.yellow("⚠ No rr.json found in cwd. Run 'rahman-resources init <app>' first."));
@@ -722,16 +723,102 @@ function runDoctor() {
   }
   const rr = readRr(target);
   const issues = validateRr(rr);
-  if (issues.length === 0) {
-    console.log(kleur.green("✓ rr.json is valid."));
-    console.log(`  template:  ${kleur.cyan(rr.template?.slug ?? "(none)")}`);
-    console.log(`  features:  ${kleur.cyan(rr.features?.length ?? 0)}`);
-    console.log(`  skills:    ${kleur.cyan(rr.skills?.length ?? 0)}`);
+  const sliceCheck = rest.includes("--slices");
+
+  if (issues.length > 0) {
+    console.log(kleur.red(`✖ rr.json has ${issues.length} issue(s):`));
+    for (const i of issues) console.log(`  · ${i}`);
+    process.exit(1);
+  }
+
+  console.log(kleur.green("✓ rr.json is valid."));
+  console.log(`  template:  ${kleur.cyan(rr.template?.slug ?? "(none)")}`);
+  console.log(`  features:  ${kleur.cyan(rr.features?.length ?? 0)}`);
+  console.log(`  slices:    ${kleur.cyan(rr.slices?.length ?? 0)}`);
+  console.log(`  skills:    ${kleur.cyan(rr.skills?.length ?? 0)}`);
+
+  if (sliceCheck) doctorSlices(target, rr);
+}
+
+function doctorSlices(target, rr) {
+  console.log(kleur.bold(`\n→ Slice composition check\n`));
+  const installed = rr.slices ?? [];
+  if (installed.length === 0) {
+    console.log(kleur.dim("  (no slices installed — nothing to check)"));
     return;
   }
-  console.log(kleur.red(`✖ rr.json has ${issues.length} issue(s):`));
-  for (const i of issues) console.log(`  · ${i}`);
-  process.exit(1);
+
+  const errors = [];
+  const warnings = [];
+  const sliceMap = new Map((manifest.slices ?? []).map((s) => [s.slug, s]));
+  const present = new Set(installed.map((s) => s.slug));
+
+  for (const inst of installed) {
+    const def = sliceMap.get(inst.slug);
+    if (!def) {
+      warnings.push(`${inst.slug}: not in kitab manifest (custom slice — skipping peer check)`);
+      continue;
+    }
+
+    // 1. Slice path exists locally
+    const slicePath = path.join(target, def.slicePath);
+    if (!existsSync(slicePath)) {
+      errors.push(`${inst.slug}: missing on disk at ${def.slicePath}`);
+    }
+    const sliceJsonPath = path.join(slicePath, "slice.json");
+    if (existsSync(slicePath) && !existsSync(sliceJsonPath)) {
+      errors.push(`${inst.slug}: slice.json missing at ${def.slicePath}/slice.json`);
+    }
+
+    // 2. Convex paths exist locally (when declared)
+    for (const cp of def.convexPaths ?? []) {
+      const cpAbs = path.join(target, cp);
+      if (!existsSync(cpAbs)) {
+        warnings.push(`${inst.slug}: convex path missing at ${cp} (lift again with 'npx rr add ${inst.slug}')`);
+      }
+    }
+
+    // 3. Peers transitively present
+    for (const peer of def.peers ?? []) {
+      if (!present.has(peer.slug)) {
+        errors.push(`${inst.slug} requires peer ${peer.slug} ${peer.range} — not installed`);
+      }
+    }
+  }
+
+  // 4. Convex table-name collision across installed slices
+  const tableOwners = new Map();
+  for (const inst of installed) {
+    const def = sliceMap.get(inst.slug);
+    if (!def) continue;
+    for (const cp of def.convexPaths ?? []) {
+      const schemaFile = path.join(target, cp, "schema.ts");
+      if (!existsSync(schemaFile)) continue;
+      const body = readFileSync(schemaFile, "utf8");
+      const matches = [...body.matchAll(/^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*:\s*defineTable\(/gm)];
+      for (const m of matches) {
+        const tName = m[1];
+        if (tableOwners.has(tName)) {
+          errors.push(`convex table "${tName}" declared by both ${tableOwners.get(tName)} and ${inst.slug}`);
+        } else {
+          tableOwners.set(tName, inst.slug);
+        }
+      }
+    }
+  }
+
+  if (warnings.length > 0) {
+    console.log(kleur.yellow(`  ⚠ ${warnings.length} warning(s):`));
+    for (const w of warnings) console.log(`    · ${w}`);
+  }
+  if (errors.length > 0) {
+    console.log(kleur.red(`\n  ✖ ${errors.length} error(s):`));
+    for (const e of errors) console.log(`    · ${e}`);
+    process.exit(1);
+  }
+  if (errors.length === 0 && warnings.length === 0) {
+    console.log(kleur.green(`  ✓ ${installed.length} slice(s) — composition healthy`));
+  }
 }
 
 function runMcpHint() {
@@ -910,6 +997,17 @@ async function runLift(rest) {
     await maybeRunShadcnAdd({ slug: parsed.slug ?? "lifted", shadcnComponents: plan.shadcn }, target, false);
   }
 
+  // Register the slice in the consumer's rr.json (if present).
+  if (parsed.kind === "rahman" && rrExists(target)) {
+    const slice = (manifest.slices ?? []).find((s) => s.slug === parsed.slug);
+    if (slice) {
+      const rr = readRr(target);
+      rrAddSlice(rr, parsed.slug, { version: slice.version, category: slice.category });
+      writeRr(rr, target);
+      console.log(kleur.dim(`  rr.json: slices += ${parsed.slug}@${slice.version}`));
+    }
+  }
+
   console.log(`\n${kleur.green("✓")} Lift complete.`);
   if (plan.env.length > 0) {
     console.log(`${kleur.bold("Don't forget:")} set the env vars listed above before running.\n`);
@@ -1022,23 +1120,70 @@ async function runPublishSlice(rest) {
     ps.on("exit", (code) => (code === 0 ? resolve() : reject(new Error(`validate-slice exited ${code}`))));
   });
 
+  // Read the slice's metadata so we can prefill the PR title + body.
+  const sliceMeta = JSON.parse(readFileSync(path.join(abs, "slice.json"), "utf8"));
+
   if (!flags["open-pr"]) {
-    console.log(`\n${kleur.yellow("dry-run — pass --open-pr to actually open a PR upstream.")}`);
+    console.log(`\n${kleur.yellow("dry-run — pass --open-pr to scaffold the PR command.")}`);
     return;
   }
 
-  // Open a PR. We don't push branches automatically — instruct the user.
-  console.log(`\n${kleur.bold("Opening PR upstream:")}`);
-  console.log(`
-  1. Fork ${kleur.cyan("https://github.com/rahmanef63/resource-site")} (if not already).
-  2. Clone your fork, copy this slice into ${kleur.cyan(`frontend/slices/<slug>/`)} and the
-     convex half into ${kleur.cyan(`convex/features/<slug>/`)}.
-  3. Add an entry to ${kleur.cyan("lib/content/slices.ts")}.
-  4. Run ${kleur.cyan("npm run slices:check")} locally.
-  5. ${kleur.cyan(`gh pr create --title "feat(slices): add <slug>" --body "..."`)}.
+  const ghAvailable = await checkGhInstalled();
 
-  (Auto-PR via gh CLI not yet implemented — coming in a future release.)
+  if (!ghAvailable) {
+    console.log(`\n${kleur.yellow("⚠ `gh` CLI not found.")}`);
+    console.log(`Install it: ${kleur.cyan("https://cli.github.com")} then re-run with --open-pr.`);
+    console.log(`Manual fallback steps:`);
+    console.log(`
+  1. Fork ${kleur.cyan("https://github.com/rahmanef63/resource-site")} on GitHub.
+  2. Clone your fork: ${kleur.cyan("git clone https://github.com/<you>/resource-site && cd resource-site")}
+  3. Copy slice: ${kleur.cyan(`cp -r ${abs} frontend/slices/${sliceMeta.slug}`)}
+  4. Copy convex half: ${kleur.cyan(`cp -r ${abs.replace("frontend/slices", "convex/features")} convex/features/${sliceMeta.slug}`)} (if exists)
+  5. Add entry to ${kleur.cyan("lib/content/slices.ts")}
+  6. ${kleur.cyan("npm run slices:check")}
+  7. ${kleur.cyan(`git checkout -b feat/slice-${sliceMeta.slug} && git add -A && git commit -m "feat(slices): add ${sliceMeta.slug}" && git push -u origin feat/slice-${sliceMeta.slug}`)}
+  8. Open PR via GitHub UI.
 `);
+    return;
+  }
+
+  // gh installed — emit ready-to-run gh commands.
+  const branchName = `feat/slice-${sliceMeta.slug}`;
+  const title = `feat(slices): add ${sliceMeta.slug}`;
+  const body = [
+    `Adds the **${sliceMeta.title}** slice (${sliceMeta.category}, v${sliceMeta.version}).`,
+    "",
+    sliceMeta.description,
+    "",
+    "Validated locally with `npm run slices:check`.",
+    "",
+    "🤖 Generated with [`rahman-resources publish-slice`](https://github.com/rahmanef63/resource-site)",
+  ].join("\n");
+
+  console.log(`\n${kleur.bold("✓")} ${kleur.green("gh CLI detected.")} Run these from inside YOUR fork of the kitab repo:`);
+  console.log(`
+  # Inside your forked clone of rahmanef63/resource-site, copy the slice in:
+  ${kleur.cyan(`cp -r ${abs} frontend/slices/${sliceMeta.slug}`)}
+  ${kleur.cyan(`# Add ${sliceMeta.slug} entry to lib/content/slices.ts`)}
+  ${kleur.cyan(`npm run slices:check`)}
+
+  # Then open the PR (gh handles fork + push):
+  ${kleur.cyan(`git checkout -b ${branchName}`)}
+  ${kleur.cyan(`git add -A && git commit -m "${title}"`)}
+  ${kleur.cyan(`gh pr create --repo rahmanef63/resource-site \\
+    --title "${title}" \\
+    --body ${JSON.stringify(body)}`)}
+
+  ${kleur.dim("(If you haven't forked yet, run `gh repo fork rahmanef63/resource-site --clone` first.)")}
+`);
+}
+
+async function checkGhInstalled() {
+  return new Promise((resolve) => {
+    const ps = spawn("gh", ["--version"], { stdio: "ignore", shell: true });
+    ps.on("error", () => resolve(false));
+    ps.on("exit", (code) => resolve(code === 0));
+  });
 }
 
 // ─── helpers ──────────────────────────────────────────────────────────────

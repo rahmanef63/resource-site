@@ -1,15 +1,17 @@
 "use client";
 
 import * as React from "react";
-import { Boxes, FileJson, Layers, Settings2, Sparkles } from "lucide-react";
+import { Boxes, FileJson, Layers, Puzzle, Settings2, Sparkles } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { CLAUDE_SKILLS } from "@/lib/content/claude-skills";
+import { slices as sliceCatalog } from "@/lib/content/slices";
 import { EXISTING_PROJECT_SLUG } from "@/lib/build/command-builder";
 import type { BuildSelection, ProjectForm as ProjectFormShape } from "@/lib/build/types";
 import { TemplatePicker, type TemplateOption } from "./template-picker";
 import { FeaturePicker, type FeatureOption } from "./feature-picker";
+import { SlicePicker } from "./slice-picker";
 import { ProjectForm } from "./project-form";
 import { ExistingRrUploader, type ParsedRr } from "./existing-rr-uploader";
 import { SkillsInspector } from "./skills-inspector";
@@ -29,6 +31,7 @@ export function InputsPanel({
   rr,
   setRr,
   toggleFeature,
+  toggleSlice,
   toggleSkill,
 }: {
   templates: TemplateOption[];
@@ -38,6 +41,7 @@ export function InputsPanel({
   rr: ParsedRr | null;
   setRr: (rr: ParsedRr | null) => void;
   toggleFeature: (slug: string) => void;
+  toggleSlice: (slug: string) => void;
   toggleSkill: (slug: string) => void;
 }) {
   const isExisting = sel.template === EXISTING_PROJECT_SLUG;
@@ -46,7 +50,7 @@ export function InputsPanel({
   return (
     <div className="flex h-full min-h-0 flex-col">
       <Tabs defaultValue="templates" className="flex min-h-0 flex-1 flex-col">
-        <TabsList className="m-2 grid grid-cols-4">
+        <TabsList className="m-2 grid grid-cols-5">
           <TabTrigger
             value="templates"
             icon={<Layers className="size-3" />}
@@ -61,6 +65,13 @@ export function InputsPanel({
             disabled={!templateChosen}
           />
           <TabTrigger
+            value="slices"
+            icon={<Puzzle className="size-3" />}
+            label="Slc"
+            count={sel.slices.length}
+            countTotal={sliceCatalog.length}
+          />
+          <TabTrigger
             value="project"
             icon={isExisting ? <FileJson className="size-3" /> : <Settings2 className="size-3" />}
             label="Proj"
@@ -69,7 +80,7 @@ export function InputsPanel({
           <TabTrigger
             value="skills"
             icon={<Sparkles className="size-3" />}
-            label="Skill"
+            label="Skl"
             count={sel.skills.length}
             countTotal={CLAUDE_SKILLS.length}
           />
@@ -94,6 +105,10 @@ export function InputsPanel({
           ) : (
             <EmptyHint>Pick a template first — features attach to a template's slice tree.</EmptyHint>
           )}
+        </TabsContent>
+
+        <TabsContent value="slices" className="m-0 flex-1 overflow-auto px-3 pb-3">
+          <SlicePicker selected={sel.slices} onToggle={toggleSlice} />
         </TabsContent>
 
         <TabsContent value="project" className="m-0 flex-1 overflow-auto px-3 pb-3">

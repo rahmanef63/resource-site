@@ -7,6 +7,8 @@ export type BuildSelection = {
   template: string | null;
   /** Selected feature slugs. */
   features: string[];
+  /** Selected tier-3 slice slugs. */
+  slices: string[];
   /** Selected Claude skill slugs. */
   skills: string[];
   /** Project form fields — only used in "new" mode. */
@@ -22,6 +24,7 @@ export type ProjectForm = {
 export const EMPTY_SELECTION: BuildSelection = {
   template: null,
   features: [],
+  slices: [],
   skills: [],
   project: { appName: "my-app", brandName: "", ownerEmail: "" },
 };

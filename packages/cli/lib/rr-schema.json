@@ -64,6 +64,20 @@
         }
       }
     },
+    "slices": {
+      "type": "array",
+      "description": "Tier-3 portable slice references — each entry mirrors a slice that has been lifted into this project.",
+      "items": {
+        "type": "object",
+        "required": ["slug"],
+        "properties": {
+          "slug": { "type": "string" },
+          "version": { "type": "string" },
+          "category": { "type": "string" },
+          "addedAt": { "type": "string", "format": "date" }
+        }
+      }
+    },
     "skills": {
       "type": "array",
       "items": {

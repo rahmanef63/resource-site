@@ -178,6 +178,18 @@ const TOOLS = [
     },
   },
   {
+    name: "rr_audit_slice",
+    description:
+      "Validate one or more slice slugs against the kitab's peer/conflict matrix + convex table-name collision detection. Use BEFORE composing to catch broken combinations early. Returns { errors, warnings } — empty errors = clean.",
+    inputSchema: {
+      type: "object",
+      required: ["slices"],
+      properties: {
+        slices: { type: "array", items: { type: "string" }, description: "Slice slugs to validate together." },
+      },
+    },
+  },
+  {
     name: "rr_list_workflows",
     description:
       "List the CRUD workflow kinds the kitab documents (templates, features, recipes, skills). Returns slugs the agent can pass to rr_get_workflow.",
@@ -219,6 +231,7 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
     case "rr_list_slices":          return ok(listSlices(args));
     case "rr_get_slice":            return ok(getSlice(args.slug));
     case "rr_compose_app":          return text(composeApp(args));
+    case "rr_audit_slice":          return ok(auditSlices(args));
     case "rr_list_workflows":       return ok(WORKFLOW_KINDS.map((k) => ({ kind: k, uri: `rr://workflow/${k}` })));
     case "rr_get_workflow":         return text(getWorkflow(args.kind));
     default:
@@ -305,6 +318,40 @@ function composeApp({ app, template, slices = [] }) {
     out += `\n\nℹ Auto-added peers: ${implicit.join(", ")}`;
   }
   return out;
+}
+
+// SLICE_COMPAT mirror — keep in sync with site/lib/build/compat.ts.
+const SLICE_COMPAT = {
+  "midtrans-payment": { conflicts: ["stripe-payment", "doku-payment"] },
+};
+
+function auditSlices({ slices = [] }) {
+  const m = getManifest();
+  const sliceMap = new Map((m.slices ?? []).map((s) => [s.slug, s]));
+  const errors = [];
+  const warnings = [];
+  const present = new Set(slices);
+
+  for (const slug of slices) {
+    const s = sliceMap.get(slug);
+    if (!s) {
+      warnings.push(`unknown slice: ${slug} (not in kitab manifest)`);
+      continue;
+    }
+    for (const p of s.peers ?? []) {
+      if (!present.has(p.slug) && sliceMap.has(p.slug)) {
+        errors.push(`${slug} requires peer ${p.slug} ${p.range} — missing from selection`);
+      }
+    }
+  }
+  for (const slug of slices) {
+    const compat = SLICE_COMPAT[slug];
+    if (!compat?.conflicts) continue;
+    for (const c of compat.conflicts) {
+      if (present.has(c)) errors.push(`${slug} conflicts with ${c}`);
+    }
+  }
+  return { errors, warnings, ok: errors.length === 0 };
 }
 
 function listSkills({ category } = {}) {
