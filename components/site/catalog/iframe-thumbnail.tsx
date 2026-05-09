@@ -65,6 +65,12 @@ export function IframeThumbnail({
           loading="lazy"
           aria-hidden
           tabIndex={-1}
+          // Defense-in-depth — preview routes are first-party but
+          // sandbox blocks form submission, popups, top-nav escape.
+          // allow-scripts + allow-same-origin needed for the preview to
+          // render React/Next chrome and read its own bundle.
+          sandbox="allow-scripts allow-same-origin"
+          referrerPolicy="no-referrer"
           onLoad={() => setLoaded(true)}
           className="pointer-events-none absolute origin-top-left border-0"
           style={{

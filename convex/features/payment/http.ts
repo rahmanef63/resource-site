@@ -17,6 +17,7 @@
 
 import { httpAction } from "../../_generated/server";
 import { internal } from "../../_generated/api";
+import { constantTimeEqual, sha512Hex } from "../../_shared/crypto";
 
 type MidtransNotification = {
   order_id: string;
@@ -42,10 +43,10 @@ export const midtransWebhook = httpAction(async (ctx, req) => {
     return new Response("Invalid JSON", { status: 400 });
   }
 
-  const expected = await sha512(
+  const expected = await sha512Hex(
     `${body.order_id}${body.status_code}${body.gross_amount}${serverKey}`,
   );
-  if (expected !== body.signature_key) {
+  if (!constantTimeEqual(expected, body.signature_key ?? "")) {
     return new Response("Signature mismatch", { status: 401 });
   }
 
@@ -84,9 +85,3 @@ export const midtransWebhook = httpAction(async (ctx, req) => {
     headers: { "Content-Type": "application/json" },
   });
 });
-
-async function sha512(input: string): Promise<string> {
-  const buf = new TextEncoder().encode(input);
-  const hash = await crypto.subtle.digest("SHA-512", buf);
-  return [...new Uint8Array(hash)].map((b) => b.toString(16).padStart(2, "0")).join("");
-}

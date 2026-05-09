@@ -40,11 +40,12 @@ if (!args.slug || !args.from) {
 
 const slug = args.slug;
 const fromSlug = args.from;
+if (!/^[a-z0-9][a-z0-9-]*[a-z0-9]$/.test(slug)) fail(`Slug must be kebab-case (got "${slug}").`);
+if (!/^[a-z0-9][a-z0-9-]*[a-z0-9]$/.test(fromSlug)) fail(`--from must be kebab-case (got "${fromSlug}").`);
 const newBase = args.base ?? slug.replace(/-os$/, "");
 const fromBase = inferBase(fromSlug);
 const title = args.title ?? toTitleCase(slug);
 
-if (!/^[a-z0-9][a-z0-9-]*[a-z0-9]$/.test(slug)) fail(`Slug must be kebab-case (got "${slug}").`);
 if (!/^[a-z0-9][a-z0-9-]*[a-z0-9]$/.test(newBase)) fail(`Base must be kebab-case (got "${newBase}").`);
 
 const fromPreview = path.join(PREVIEW_ROOT, fromSlug);

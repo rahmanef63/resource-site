@@ -982,6 +982,8 @@ async function runLift(rest) {
     process.stdout.write(`\n  pulling ${kleur.dim(step.from)} ... `);
     if (parsed.kind === "superspace-local") {
       copyLocalTree(step.localFromAbs, step.toAbs);
+    } else if (parsed.kind === "github") {
+      await pullFromRepo(step.githubRepo, step.githubSubPath, "main", step.toAbs);
     } else {
       await pull(step.from, step.toAbs);
     }
@@ -1073,6 +1075,9 @@ async function resolveLiftPlan(parsed, target) {
       from: `${parsed.owner}/${parsed.repo}/${parsed.subPath}`,
       toRel: parsed.subPath,
       toAbs: path.join(target, parsed.subPath),
+      // Mark the full repo so pull dispatcher targets the correct repo, not the kitab.
+      githubRepo: `${parsed.owner}/${parsed.repo}`,
+      githubSubPath: parsed.subPath,
     });
   }
   return { steps, peers, npm, shadcn, env };
@@ -1109,12 +1114,13 @@ async function runPublishSlice(rest) {
   }
   console.log(kleur.bold(`\n→ Validating ${kleur.cyan(abs)}\n`));
 
-  // Run the validator script as a subprocess so any user-side override holds.
+  // Run the validator script as a subprocess. Direct binary, no shell — args
+  // pass through Node's argv, no /bin/sh metachar re-parse.
   await new Promise((resolve, reject) => {
     const ps = spawn(
-      "node",
+      process.execPath,
       [path.join(__dirname, "../scripts/validate-slice.mjs"), path.join(abs, "slice.json")],
-      { stdio: "inherit", shell: true },
+      { stdio: "inherit" },
     );
     ps.on("error", reject);
     ps.on("exit", (code) => (code === 0 ? resolve() : reject(new Error(`validate-slice exited ${code}`))));
@@ -1180,7 +1186,8 @@ async function runPublishSlice(rest) {
 
 async function checkGhInstalled() {
   return new Promise((resolve) => {
-    const ps = spawn("gh", ["--version"], { stdio: "ignore", shell: true });
+    // Direct binary — no shell. PATH lookup happens in spawn itself.
+    const ps = spawn("gh", ["--version"], { stdio: "ignore" });
     ps.on("error", () => resolve(false));
     ps.on("exit", (code) => resolve(code === 0));
   });
@@ -1190,6 +1197,11 @@ async function checkGhInstalled() {
 
 async function pull(repoPath, dest) {
   const emitter = tiged(`${REPO}/${repoPath}#${BRANCH}`, { cache: false, force: true, verbose: false });
+  await emitter.clone(dest);
+}
+
+async function pullFromRepo(repo, subPath, branch, dest) {
+  const emitter = tiged(`${repo}/${subPath}#${branch}`, { cache: false, force: true, verbose: false });
   await emitter.clone(dest);
 }
 

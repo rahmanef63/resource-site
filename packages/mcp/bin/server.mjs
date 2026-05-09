@@ -278,7 +278,22 @@ function getSlice(slug) {
   return (m.slices ?? []).find((s) => s.slug === slug) ?? null;
 }
 
+// Strip everything outside [a-z0-9-_] to render shell-safe args inside
+// the npx command strings. Lossy by design — we'd rather mangle the slug
+// than emit a `; rm -rf /` payload into the user's terminal.
+function sanitizeShellArg(s) {
+  return String(s).replace(/[^a-z0-9-_]/gi, "-");
+}
+
 function composeApp({ app, template, slices = [] }) {
+  // Sanitize app + template for shell-safety in the rendered command (user
+  // copy-pastes this into a real shell). composeInit applies the same
+  // pattern via .replace(/[^a-z0-9-_]/gi, "-").
+  const safeApp = sanitizeShellArg(String(app ?? "my-app"));
+  const safeTemplate = template ? sanitizeShellArg(String(template)) : null;
+  if (!Array.isArray(slices)) {
+    return `⚠ slices must be an array (got ${typeof slices})`;
+  }
   const m = getManifest();
   const sliceMap = new Map((m.slices ?? []).map((s) => [s.slug, s]));
   const requested = slices.filter((s) => sliceMap.has(s));
@@ -300,13 +315,13 @@ function composeApp({ app, template, slices = [] }) {
   for (const s of requested) visit(s);
 
   const lines = [];
-  const initCmd = template
-    ? `npx rahman-resources init ${app} --template ${template}`
-    : `npx rahman-resources init ${app}`;
+  const initCmd = safeTemplate
+    ? `npx rahman-resources init ${safeApp} --template ${safeTemplate}`
+    : `npx rahman-resources init ${safeApp}`;
   lines.push(initCmd);
-  lines.push(`cd ${app}`);
+  lines.push(`cd ${safeApp}`);
   for (const slug of ordered) {
-    lines.push(`npx rahman-resources add ${slug}`);
+    lines.push(`npx rahman-resources add ${sanitizeShellArg(slug)}`);
   }
   let out = lines.map((l) => `  ${l}`).join("\n");
   if (missing.length > 0) {
@@ -326,6 +341,9 @@ const SLICE_COMPAT = {
 };
 
 function auditSlices({ slices = [] }) {
+  if (!Array.isArray(slices)) {
+    return { errors: [`slices must be an array (got ${typeof slices})`], warnings: [], ok: false };
+  }
   const m = getManifest();
   const sliceMap = new Map((m.slices ?? []).map((s) => [s.slug, s]));
   const errors = [];

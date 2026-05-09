@@ -10,6 +10,7 @@
 
 import { httpAction } from "../../_generated/server";
 import { internal } from "../../_generated/api";
+import { constantTimeEqual, hmacSha256Hex } from "../../_shared/crypto";
 
 type CalEvent =
   | "BOOKING_CREATED"
@@ -75,23 +76,3 @@ export const calWebhook = httpAction(async (ctx, req) => {
     headers: { "Content-Type": "application/json" },
   });
 });
-
-async function hmacSha256Hex(secret: string, message: string): Promise<string> {
-  const enc = new TextEncoder();
-  const key = await crypto.subtle.importKey(
-    "raw",
-    enc.encode(secret),
-    { name: "HMAC", hash: "SHA-256" },
-    false,
-    ["sign"],
-  );
-  const sig = await crypto.subtle.sign("HMAC", key, enc.encode(message));
-  return [...new Uint8Array(sig)].map((b) => b.toString(16).padStart(2, "0")).join("");
-}
-
-function constantTimeEqual(a: string, b: string): boolean {
-  if (a.length !== b.length) return false;
-  let r = 0;
-  for (let i = 0; i < a.length; i++) r |= a.charCodeAt(i) ^ b.charCodeAt(i);
-  return r === 0;
-}

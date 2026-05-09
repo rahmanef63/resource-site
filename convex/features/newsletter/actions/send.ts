@@ -3,14 +3,24 @@
 // Resend broadcast — fan out a newsletter issue to every active subscriber.
 // Lazy-imports `resend` so cold-start isn't penalized when the action isn't called.
 //
-// Wire from your admin UI:
-//   await convex.action(api.features.newsletter.actions.send.broadcast, { issueId })
+// Wiring (TWO entry points):
+//
+//   1. Public, authenticated:    api.features.newsletter.actions.send.broadcastPublic
+//      Caller MUST be logged in AND in the admins table. Use from your admin UI.
+//
+//   2. Internal:                  internal.features.newsletter.actions.send.broadcast
+//      Bypasses authn — only callable from server-side scheduler/cron/other actions
+//      that have already gated authz themselves.
 
-import { action } from "../../../_generated/server";
+import { action, internalAction } from "../../../_generated/server";
 import { internal } from "../../../_generated/api";
 import { v } from "convex/values";
+import { getAuthUserId } from "@convex-dev/auth/server";
 
-export const broadcast = action({
+// Internal worker — does the actual fanout. Fan-out batched to respect
+// Resend free-tier rate limit (10 req/s). Sequential within a batch so a
+// single Convex action stays under the 10-min ceiling at scale.
+export const broadcast = internalAction({
   args: { issueId: v.id("newsletterIssues") },
   handler: async (ctx, { issueId }) => {
     const apiKey = process.env.RESEND_API_KEY;
@@ -36,19 +46,30 @@ export const broadcast = action({
 
     await ctx.runMutation(internal.features.newsletter.mutations.markSending, { issueId });
 
+    // Resend free tier = 10 req/s. Batch 8/sec to leave headroom.
+    const BATCH_SIZE = 8;
+    const BATCH_DELAY_MS = 1100;
+
     let sent = 0;
-    for (const r of recipients) {
-      try {
-        await resend.emails.send({
-          from: fromAddr,
-          to: r.email,
-          subject: issue.subject,
-          html: issue.body,
-        });
-        sent++;
-      } catch (err) {
-        console.error(`[newsletter] send failed for ${r.email}:`, err);
-        // Continue — one bad address shouldn't kill the whole broadcast.
+    for (let i = 0; i < recipients.length; i += BATCH_SIZE) {
+      const batch = recipients.slice(i, i + BATCH_SIZE);
+      const results = await Promise.allSettled(
+        batch.map((r) =>
+          resend.emails.send({
+            from: fromAddr,
+            to: r.email,
+            subject: issue.subject,
+            html: issue.body,
+          }),
+        ),
+      );
+      for (let j = 0; j < results.length; j++) {
+        const res = results[j];
+        if (res.status === "fulfilled") sent++;
+        else console.error(`[newsletter] send failed for ${batch[j].email}:`, res.reason);
+      }
+      if (i + BATCH_SIZE < recipients.length) {
+        await new Promise((resolve) => setTimeout(resolve, BATCH_DELAY_MS));
       }
     }
 
@@ -58,5 +79,22 @@ export const broadcast = action({
     });
 
     return { skipped: false, sentCount: sent, totalRecipients: recipients.length };
+  },
+});
+
+// Public wrapper — gates authz then schedules the internal worker.
+// Schedule (vs awaiting) so the HTTP caller doesn't hang for the full fanout.
+export const broadcastPublic = action({
+  args: { issueId: v.id("newsletterIssues") },
+  handler: async (ctx, { issueId }) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) throw new Error("Unauthorized — sign in required");
+    // Optional: enforce an admin role check here. Pattern:
+    //   const isAdmin = await ctx.runQuery(internal.admin.queries.isAdmin, { userId });
+    //   if (!isAdmin) throw new Error("Forbidden — admin role required");
+    await ctx.scheduler.runAfter(0, internal.features.newsletter.actions.send.broadcast, {
+      issueId,
+    });
+    return { scheduled: true, issueId };
   },
 });

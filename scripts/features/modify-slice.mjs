@@ -42,6 +42,9 @@ if (!args.slug) {
 }
 
 const slug = args.slug;
+if (!/^[a-z0-9][a-z0-9-]*[a-z0-9]$/.test(slug)) {
+  fail(`Slug must be kebab-case (got "${slug}").`);
+}
 const sliceJsonPath = path.join(REPO, "frontend/slices", slug, "slice.json");
 if (!existsSync(sliceJsonPath)) fail(`No slice at frontend/slices/${slug}/slice.json. Run 'npm run new:slice' first.`);
 
@@ -189,10 +192,15 @@ function locateEntry(src, slug) {
 
 function patchArrayField(body, field, values) {
   const literal = `[${values.map((v) => JSON.stringify(v)).join(", ")}]`;
-  const re = new RegExp(`(\\b${field}\\s*:\\s*)\\[[^\\]]*\\]`, "m");
-  if (re.test(body)) return body.replace(re, `$1${literal}`);
-  // Insert before closing `}`.
-  return insertField(body, `${field}: ${literal}`);
+  // Use bracket walker so values containing `]` (escaped strings, nested
+  // arrays) don't short-circuit. Mirror patchObjectArrayField shape.
+  const startRe = new RegExp(`\\b${field}\\s*:\\s*\\[`);
+  const m = body.match(startRe);
+  if (!m) return insertField(body, `${field}: ${literal}`);
+  const start = m.index + m[0].length - 1;
+  const end = matchBracket(body, start, "[", "]");
+  if (end === -1) return insertField(body, `${field}: ${literal}`);
+  return body.slice(0, start) + literal + body.slice(end + 1);
 }
 
 function patchObjectArrayField(body, field, values) {
