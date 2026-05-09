@@ -1,65 +1,86 @@
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { LayoutGrid } from "lucide-react";
 import { layouts } from "@/lib/content/layouts";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { CatalogCard } from "@/components/site/catalog/catalog-card";
+import { CatalogSearch, type CatalogSearchItem } from "@/components/site/catalog/catalog-search";
+import { IframeThumbnail } from "@/components/site/catalog/iframe-thumbnail";
+import { MockThumbnail } from "@/components/site/catalog/mock-thumbnail";
 
-const categoryLabel: Record<string, string> = {
+const CATEGORY_LABEL: Record<string, string> = {
   marketing: "Marketing",
   dashboard: "Dashboard",
   cms: "CMS",
 };
 
+const GROUP_ORDER = ["marketing", "dashboard", "cms"];
+
 export const metadata = { title: "Layouts" };
 
 export default function LayoutsPage() {
-  const items = layouts.filter((l) => l.category !== "website-template");
-  const groups = Array.from(new Set(items.map((l) => l.category)));
+  const sources = layouts.filter((l) => l.category !== "website-template");
+
+  const tagFreq = new Map<string, number>();
+  for (const t of sources) for (const tag of t.tags ?? []) tagFreq.set(tag, (tagFreq.get(tag) ?? 0) + 1);
+  const topTags = [...tagFreq.entries()].sort((a, b) => b[1] - a[1]).slice(0, 14).map(([t]) => t);
+
+  const items: CatalogSearchItem[] = sources.map((l) => ({
+    key: l.slug,
+    search: `${l.title} ${l.description} ${(l.tags ?? []).join(" ")}`.toLowerCase(),
+    tags: l.tags,
+    group: l.category,
+    node: (
+      <CatalogCard
+        href={`/layouts/${l.slug}`}
+        title={l.title}
+        description={l.description}
+        tags={l.tags}
+        meta={<span className="font-mono">{l.source}</span>}
+        thumbnail={
+          l.previewPath ? (
+            <IframeThumbnail src={l.previewPath} />
+          ) : (
+            <MockThumbnail
+              kind={
+                l.category === "marketing"
+                  ? "marketing"
+                  : l.category === "cms"
+                    ? "cms"
+                    : "dashboard"
+              }
+              category={l.category as string}
+              label={l.slug}
+            />
+          )
+        }
+      />
+    ),
+  }));
+
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
       <div>
         <p className="text-sm font-medium text-muted-foreground">Catalog</p>
-        <h1 className="mt-2 text-3xl font-bold tracking-tight">Layouts</h1>
-        <p className="mt-3 text-muted-foreground">
-          {items.length} cookbook layouts — marketing, dashboard, and CMS shapes.
-          For full apps, see <Link href="/templates" className="underline hover:text-foreground">website templates</Link>.
+        <div className="mt-2 flex items-center gap-2">
+          <LayoutGrid className="size-6 text-muted-foreground" />
+          <h1 className="text-3xl font-bold tracking-tight">Layouts</h1>
+        </div>
+        <p className="mt-3 max-w-2xl text-muted-foreground">
+          {sources.length} cookbook layouts — marketing, dashboard, and CMS shapes. For full apps,
+          see{" "}
+          <Link href="/templates" className="underline hover:text-foreground">
+            website templates
+          </Link>
+          .
         </p>
       </div>
-      {groups.map((group) => (
-        <section key={group} className="mb-12">
-          <h2 className="mb-4 text-sm font-medium uppercase tracking-wider text-muted-foreground">
-            {categoryLabel[group] ?? group}
-          </h2>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {items
-              .filter((l) => l.category === group)
-              .map((l) => (
-                <Link key={l.slug} href={`/layouts/${l.slug}`}>
-                  <Card className="group h-full transition hover:border-primary/40 hover:shadow-sm">
-                    <CardHeader>
-                      <div className="flex items-start justify-between gap-3">
-                        <CardTitle className="text-base">{l.title}</CardTitle>
-                        <ArrowUpRight className="size-4 shrink-0 text-muted-foreground transition group-hover:text-foreground" />
-                      </div>
-                      <CardDescription className="line-clamp-3">
-                        {l.description}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex flex-wrap gap-1.5">
-                        {l.tags.slice(0, 4).map((t) => (
-                          <Badge key={t} variant="secondary" className="rounded-full text-xs">
-                            {t}
-                          </Badge>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
-          </div>
-        </section>
-      ))}
+
+      <CatalogSearch
+        items={items}
+        allTags={topTags}
+        placeholder="Cari layout…"
+        groupOrder={GROUP_ORDER}
+        groupLabel={CATEGORY_LABEL}
+      />
     </div>
   );
 }

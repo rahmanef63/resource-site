@@ -1,47 +1,73 @@
-import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import {
+  BookOpen,
+  Command,
+  Edit3,
+  GitFork,
+  Mail,
+  MessageSquare,
+  MousePointer2,
+  Palette,
+  Table,
+  type LucideIcon,
+} from "lucide-react";
 import { recipes } from "@/lib/content/recipes";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { CatalogCard } from "@/components/site/catalog/catalog-card";
+import { CatalogSearch, type CatalogSearchItem } from "@/components/site/catalog/catalog-search";
+import { MockThumbnail } from "@/components/site/catalog/mock-thumbnail";
 
 export const metadata = { title: "Recipes" };
 
+const RECIPE_ICON: Record<string, LucideIcon> = {
+  "block-editor": Edit3,
+  "page-tree-sidebar": GitFork,
+  "multi-block-selection": MousePointer2,
+  "database-views": Table,
+  "command-palette": Command,
+  "comments-threaded": MessageSquare,
+  "theme-preset-switcher": Palette,
+  "contact-form-resend": Mail,
+};
+
 export default function RecipesPage() {
+  const tagFreq = new Map<string, number>();
+  for (const r of recipes) for (const t of r.tags ?? []) tagFreq.set(t, (tagFreq.get(t) ?? 0) + 1);
+  const topTags = [...tagFreq.entries()].sort((a, b) => b[1] - a[1]).slice(0, 12).map(([t]) => t);
+
+  const items: CatalogSearchItem[] = recipes.map((r) => {
+    const Icon = RECIPE_ICON[r.slug] ?? BookOpen;
+    return {
+      key: r.slug,
+      search: `${r.title} ${r.description} ${(r.tags ?? []).join(" ")}`.toLowerCase(),
+      tags: r.tags,
+      node: (
+        <CatalogCard
+          href={`/recipes/${r.slug}`}
+          title={r.title}
+          description={r.description}
+          tags={r.tags}
+          meta={<span className="font-mono">{r.source}</span>}
+          thumbnail={
+            <MockThumbnail kind="recipe" category="content" icon={Icon} label={r.slug} />
+          }
+        />
+      ),
+    };
+  });
+
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
       <div>
         <p className="text-sm font-medium text-muted-foreground">Catalog</p>
-        <h1 className="mt-2 text-3xl font-bold tracking-tight">Recipes</h1>
-        <p className="mt-3 text-muted-foreground">
-          {recipes.length} feature drop-ins. Real code from production apps.
+        <div className="mt-2 flex items-center gap-2">
+          <BookOpen className="size-6 text-muted-foreground" />
+          <h1 className="text-3xl font-bold tracking-tight">Recipes</h1>
+        </div>
+        <p className="mt-3 max-w-2xl text-muted-foreground">
+          {recipes.length} feature drop-ins. Real code patterns from production apps.
         </p>
       </div>
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {recipes.map((r) => (
-          <Link key={r.slug} href={`/recipes/${r.slug}`}>
-            <Card className="group h-full transition hover:border-primary/40 hover:shadow-sm">
-              <CardHeader>
-                <div className="flex items-start justify-between gap-3">
-                  <CardTitle className="text-base">{r.title}</CardTitle>
-                  <ArrowUpRight className="size-4 shrink-0 text-muted-foreground transition group-hover:text-foreground" />
-                </div>
-                <CardDescription className="line-clamp-3">
-                  {r.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-1.5">
-                  {r.tags.slice(0, 4).map((t) => (
-                    <Badge key={t} variant="secondary" className="rounded-full text-xs">
-                      {t}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
-      </div>
+
+      <CatalogSearch items={items} allTags={topTags} placeholder="Cari recipe…" />
     </div>
   );
 }

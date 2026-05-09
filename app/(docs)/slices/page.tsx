@@ -1,26 +1,95 @@
 import Link from "next/link";
-import { ArrowUpRight, Layers } from "lucide-react";
+import {
+  Bot,
+  CalendarClock,
+  CreditCard,
+  Database,
+  FileText,
+  Layers,
+  Mail,
+  Radio,
+  Search as SearchIcon,
+  ShieldCheck,
+  type LucideIcon,
+} from "lucide-react";
 import { slices } from "@/lib/content/slices";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { CatalogCard } from "@/components/site/catalog/catalog-card";
+import { CatalogSearch, type CatalogSearchItem } from "@/components/site/catalog/catalog-search";
+import { MockThumbnail } from "@/components/site/catalog/mock-thumbnail";
 
 export const metadata = {
   title: "Slices — portable feature units",
   description: "Tier-3 portable vertical slices: lift one folder, drop it into any project.",
 };
 
-const CATEGORY_ORDER = ["auth", "payment", "ai", "email", "data", "search", "realtime", "content", "storage", "ui", "infra"] as const;
+const CATEGORY_ORDER = [
+  "auth", "payment", "ai", "email", "data", "search", "realtime", "content", "storage", "ui", "infra",
+];
+
+const CATEGORY_ICON: Record<string, LucideIcon> = {
+  auth: ShieldCheck,
+  payment: CreditCard,
+  ai: Bot,
+  email: Mail,
+  data: CalendarClock,
+  search: SearchIcon,
+  realtime: Radio,
+  content: FileText,
+  storage: Database,
+};
+
+function stripVersion(npmSpec: string): string {
+  const at = npmSpec.lastIndexOf("@");
+  return at > 0 ? npmSpec.slice(0, at) : npmSpec;
+}
 
 export default function SlicesPage() {
-  const grouped = new Map<string, typeof slices>();
-  for (const s of slices) {
-    if (!grouped.has(s.category)) grouped.set(s.category, []);
-    grouped.get(s.category)!.push(s);
-  }
-  const orderedGroups = CATEGORY_ORDER.filter((c) => grouped.has(c));
+  const tagFreq = new Map<string, number>();
+  for (const s of slices) for (const t of s.tags ?? []) tagFreq.set(t, (tagFreq.get(t) ?? 0) + 1);
+  const topTags = [...tagFreq.entries()].sort((a, b) => b[1] - a[1]).slice(0, 14).map(([t]) => t);
+
+  const items: CatalogSearchItem[] = slices.map((s) => {
+    const Icon = CATEGORY_ICON[s.category] ?? Layers;
+    const accents = s.providers?.length
+      ? s.providers
+      : (s.npm ?? []).slice(0, 3).map((p) => stripVersion(p));
+    return {
+      key: s.slug,
+      search: `${s.title} ${s.description} ${(s.tags ?? []).join(" ")}`.toLowerCase(),
+      tags: s.tags,
+      group: s.category,
+      node: (
+        <CatalogCard
+          href={`/slices/${s.slug}`}
+          title={s.title}
+          description={s.description}
+          tags={s.tags}
+          meta={
+            <div className="flex items-center gap-2">
+              <Badge variant="secondary" className="text-[9px]">v{s.version}</Badge>
+              {s.peers && s.peers.length > 0 && (
+                <span className="text-[10px]">
+                  peers: {s.peers.map((p) => p.slug).join(", ")}
+                </span>
+              )}
+            </div>
+          }
+          thumbnail={
+            <MockThumbnail
+              kind="slice"
+              category={s.category as string}
+              icon={Icon}
+              accents={accents}
+            />
+          }
+        />
+      ),
+    };
+  });
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
       <div>
         <p className="text-sm font-medium text-muted-foreground">Catalog</p>
         <div className="mt-2 flex items-center gap-2">
@@ -41,49 +110,12 @@ export default function SlicesPage() {
         </div>
       </div>
 
-      {orderedGroups.map((cat) => {
-        const items = grouped.get(cat)!;
-        return (
-          <section key={cat} className="space-y-3">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-              {cat} <span className="font-normal text-muted-foreground/60">({items.length})</span>
-            </h2>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {items.map((s) => (
-                <Link key={s.slug} href={`/slices/${s.slug}`}>
-                  <Card className="group h-full transition hover:border-primary/40 hover:shadow-sm">
-                    <CardHeader>
-                      <div className="flex items-start justify-between gap-3">
-                        <CardTitle className="text-base">{s.title}</CardTitle>
-                        <ArrowUpRight className="size-4 shrink-0 text-muted-foreground transition group-hover:text-foreground" />
-                      </div>
-                      <CardDescription className="line-clamp-3">{s.description}</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-2">
-                      <div className="flex flex-wrap gap-1.5">
-                        <Badge variant="secondary" className="text-[10px]">v{s.version}</Badge>
-                        {s.peers && s.peers.length > 0 && (
-                          <Badge variant="outline" className="text-[10px]">
-                            peers: {s.peers.map((p) => p.slug).join(", ")}
-                          </Badge>
-                        )}
-                        {s.providers && s.providers.length > 0 && (
-                          <Badge variant="outline" className="text-[10px]">
-                            providers: {s.providers.join(", ")}
-                          </Badge>
-                        )}
-                      </div>
-                      <code className="block truncate rounded bg-muted px-2 py-1 text-[11px] text-muted-foreground">
-                        {s.slicePath}
-                      </code>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
-            </div>
-          </section>
-        );
-      })}
+      <CatalogSearch
+        items={items}
+        allTags={topTags}
+        placeholder="Cari slice…"
+        groupOrder={CATEGORY_ORDER}
+      />
     </div>
   );
 }
