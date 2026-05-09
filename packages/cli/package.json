@@ -1,7 +1,7 @@
 {
   "name": "rahman-resources",
-  "version": "0.5.0",
-  "description": "Scaffolder + installer for Rahman Resources kitab — npx rahman-resources init <app>; add <template>; list; info. Bundles manifest + skills + CRUD workflows.",
+  "version": "0.6.0",
+  "description": "Scaffolder + installer for Rahman Resources kitab — npx rahman-resources init <app>; add <template> [--at root|preview] [--with-shadcn-all]; list; info. Bundles manifest + skills + CRUD workflows.",
   "type": "module",
   "license": "MIT",
   "author": "Rahman <casadezian@gmail.com>",

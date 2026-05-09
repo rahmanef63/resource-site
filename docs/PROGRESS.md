@@ -2,6 +2,21 @@
 
 Chronological session log. Each entry is dated and lists what landed + outstanding work.
 
+## 2026-05-08 — `kam` build postmortem (init CLI gaps)
+
+First end-to-end consumer build of `npx rahman-resources@latest init` against `personal-brand-os` template + Dokploy self-hosted Convex deploy at `karya.azzahrah.site`. Required many manual fixes before live. Captured in [`init-cli-postmortem-kam.md`](./init-cli-postmortem-kam.md).
+
+Highest-impact gaps to close before next consumer build:
+- `convex/_generated` not produced by init AND ignored by default `.gitignore`. Self-hosted deploys can't regenerate inside Docker.
+- `@auth/core` peer dep + ~8 shadcn UI components missing from generated `package.json` / `components/ui/` despite template importing them.
+- `convex/templates/` lives inside `convex/` bundle root → `npx convex deploy` fails because scaffold files import non-existent `_generated/server`.
+- Default `ConvexAuthNextjsProvider` crashes during SSG under `cacheComponents: true`. Need `ConvexAuthProvider` (`@convex-dev/auth/react`) + client-only mount + `<Suspense>` wrap.
+- Manifest writes template to `app/preview/<slug>/` while `rr.json` says `app/(public)` + `app/(admin)`. Config vs delivery mismatch — user thinks template is broken when root URL is placeholder.
+- `(admin)` route group collides with `(public)` for shared dynamic segments (`/portfolio/[id]` vs `/portfolio/[slug]`). Admin must live at `app/admin/` (folder, not group).
+- Self-hosted Convex JWT/JWKS env must be pushed to backend runtime via REST `update_environment_variables`, not just Dokploy compose env. JWKS served on `site-` subdomain, not `api-`.
+
+See postmortem doc for full list, fixes applied, recommended init-flow rewrite, and a verification checklist for new builds.
+
 ## 2026-05-07 (evening) — 4 templates promoted from coming-soon → shipped
 
 The four website-templates that had been registered as `status: "coming-soon"` in `lib/content/layouts.ts` (Kreator Studio OS, Konsultan OS, Wirausaha OS, Riset Kit) now ship full UI/UX scaffolds — public site + admin panel for each. Pattern adheres to the personal-brand-os gold reference.

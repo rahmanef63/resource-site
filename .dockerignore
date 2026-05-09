@@ -22,5 +22,6 @@ template-base
 packages
 site
 convex
+convex-templates
 plugins
 docs

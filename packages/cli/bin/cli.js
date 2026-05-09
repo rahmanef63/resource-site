@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // rahman-resources — installer for the Rahman kitab.
 // Usage:
-//   npx rahman-resources init <app-name> [--template <slug>] [--features a,b] [--skills x,y]
-//   npx rahman-resources add <slug> [target-dir]
+//   npx rahman-resources init <app-name> [--template <slug>] [--features a,b] [--skills x,y] [--with-shadcn-all]
+//   npx rahman-resources add <slug> [target-dir] [--at root|preview] [--with-shadcn-all]
 //   npx rahman-resources add-skill <slug> [target-dir]
 //   npx rahman-resources list [layouts|recipes|features|skills]
 //   npx rahman-resources info <slug>
@@ -11,7 +11,7 @@
 
 import { createRequire } from "node:module";
 import { spawn } from "node:child_process";
-import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, rmSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -94,8 +94,8 @@ ${kleur.bold("rahman-resources")} — scaffold + install templates, recipes, fea
 
 ${kleur.bold("Usage:")}
   npx rahman-resources init <app-name> [--template <slug>] [--features a,b] [--skills x,y]
-                                       [--no-install] [--with-shadcn-reinit]
-  npx rahman-resources add <slug> [target-dir]
+                                       [--no-install] [--with-shadcn-reinit] [--with-shadcn-all]
+  npx rahman-resources add <slug> [target-dir] [--at root|preview] [--with-shadcn-all]
   npx rahman-resources add-skill <slug> [target-dir]
   npx rahman-resources list [layouts|recipes|features|skills]
   npx rahman-resources info <slug>
@@ -105,12 +105,21 @@ ${kleur.bold("Usage:")}
 ${kleur.bold("Init flags:")}
   --no-install            skip 'npm install' step (faster scaffolds; you run it manually)
   --with-shadcn-reinit    delete starter components.json + run 'npx shadcn init -y -d' (canonical shadcn flow)
+  --with-shadcn-all       run 'npx shadcn add --all' instead of the per-template list
+                          (heavy; ~50 components — use only if you'll customize beyond the template)
+
+${kleur.bold("Add flags:")}
+  --at root               install template AT app/(public)/ + app/admin/ (recommended; rewrites
+                          /preview/<slug> path constants in nav-config/robots/sitemap)
+  --at preview            install template AT app/preview/<slug>/ (default — sandbox style)
+  --with-shadcn-all       same as init flag
 
 ${kleur.bold("Examples:")}
   npx rahman-resources init my-app
   npx rahman-resources init my-app --template personal-brand-os --skills frontend-design,mcp-builder
   npx rahman-resources init my-app --no-install
-  npx rahman-resources add personal-brand-os .
+  npx rahman-resources add personal-brand-os . --at root
+  npx rahman-resources add personal-brand-os . --with-shadcn-all
   npx rahman-resources add-skill webapp-testing
   npx rahman-resources list skills
 `);
@@ -339,6 +348,20 @@ async function runInit(rest) {
       await pull(p, dest);
       console.log(kleur.green("ok"));
     }
+    if (!skipInstall) {
+      await maybeRunShadcnAdd(t, target, !!flags["with-shadcn-all"]);
+    } else {
+      console.log(kleur.dim(`\n  (skipping shadcn add — --no-install)`));
+    }
+    // Strip the placeholder app/page.tsx — the template owns the root route.
+    const placeholder = path.join(target, "app", "page.tsx");
+    if (existsSync(placeholder)) {
+      try { rmSync(placeholder); console.log(`  ${kleur.dim("removed placeholder")} app/page.tsx`); } catch {}
+    }
+  }
+
+  if (!skipInstall) {
+    await runOfflineConvexCodegen(target);
   }
 
   if (skills.length) {
@@ -366,7 +389,9 @@ function runShell(cmd, args, cwd) {
 
 // ─── add (template / feature / recipe) ────────────────────────────────────
 
-async function runAdd([slug, targetArg = "."]) {
+async function runAdd(rest) {
+  const { positional, flags } = parseFlags(rest);
+  const [slug, targetArg = "."] = positional;
   if (!slug) {
     console.error(kleur.red("Missing slug."));
     printHelp();
@@ -377,16 +402,21 @@ async function runAdd([slug, targetArg = "."]) {
   const { kind, entry } = found;
   const target = path.resolve(process.cwd(), targetArg);
 
-  if (kind === "layout") return addLayout(entry, target, targetArg);
+  if (kind === "layout") return addLayout(entry, target, targetArg, flags);
   if (kind === "feature") return addFeature(entry, target, targetArg);
   if (kind === "recipe") return addRecipe(entry);
 }
 
-async function addLayout(t, target, targetArg) {
+async function addLayout(t, target, targetArg, flags = {}) {
   console.log(kleur.bold(`\n→ Installing ${kleur.cyan(t.title)} into ${kleur.dim(target)}\n`));
   if (!t.pullPaths || t.pullPaths.length === 0) {
     throw new Error(`Layout "${t.slug}" has no valid pullPaths in manifest.`);
   }
+  const at = typeof flags.at === "string" ? flags.at : "preview";
+  if (!["root", "preview"].includes(at)) {
+    throw new Error(`--at must be "root" or "preview" (got "${at}").`);
+  }
+
   for (const p of t.pullPaths) {
     const dest = path.join(target, p);
     process.stdout.write(`  pulling ${kleur.dim(p)} ... `);
@@ -405,6 +435,12 @@ async function addLayout(t, target, targetArg) {
     }
   }
 
+  await maybeRunShadcnAdd(t, target, !!flags["with-shadcn-all"]);
+
+  if (at === "root") {
+    promoteToRoot(t, target);
+  }
+
   if (rrExists(target)) {
     const rr = readRr(target);
     rr.template = { slug: t.slug, version: "main" };
@@ -413,6 +449,160 @@ async function addLayout(t, target, targetArg) {
 
   console.log(`\n${kleur.green("✓")} Done. ${kleur.bold(t.title)} installed.`);
   if (t.agentRecipe) console.log(`\n${kleur.bold("Next:")}\n${indent(t.agentRecipe, 2)}\n`);
+}
+
+// ─── offline convex codegen ───────────────────────────────────────────────
+//
+// Self-hosted deploys (Dokploy etc) can't run codegen inside Docker because
+// they have no Convex auth context. Postmortem 1.2: the workaround is to
+// generate types locally with a dummy admin key + typecheck disabled, then
+// commit `convex/_generated/` so the Docker build can typecheck against it.
+async function runOfflineConvexCodegen(target) {
+  const convexDir = path.join(target, "convex");
+  if (!existsSync(convexDir)) return;
+  const generated = path.join(convexDir, "_generated");
+  if (existsSync(generated)) {
+    console.log(kleur.dim(`\n  (convex/_generated already present — skipping codegen)`));
+    return;
+  }
+  console.log(kleur.bold(`\n→ Generating convex/_generated (offline)\n`));
+  try {
+    await new Promise((resolve, reject) => {
+      const ps = spawn(
+        "npx",
+        ["convex", "codegen", "--typecheck=disable"],
+        {
+          cwd: target,
+          stdio: "inherit",
+          shell: true,
+          env: {
+            ...process.env,
+            CONVEX_SELF_HOSTED_URL: "http://localhost:3210",
+            CONVEX_SELF_HOSTED_ADMIN_KEY: "x|x",
+          },
+        },
+      );
+      ps.on("error", reject);
+      ps.on("exit", (code) => (code === 0 ? resolve() : reject(new Error(`convex codegen exited ${code}`))));
+    });
+  } catch (err) {
+    console.log(kleur.yellow(`  ⚠ codegen failed (${err.message}). Run later: CONVEX_SELF_HOSTED_URL=http://localhost:3210 CONVEX_SELF_HOSTED_ADMIN_KEY="x|x" npx convex codegen --typecheck=disable`));
+  }
+}
+
+// ─── shadcn auto-add ──────────────────────────────────────────────────────
+
+async function maybeRunShadcnAdd(t, target, all) {
+  if (!hasPackageJson(target)) {
+    console.log(kleur.dim(`\n  (skipping shadcn add — no package.json in target)`));
+    return;
+  }
+  const componentsJson = path.join(target, "components.json");
+  if (!existsSync(componentsJson)) {
+    console.log(kleur.yellow(`\n  ⚠ components.json missing — run 'npx shadcn init' first, then re-add.`));
+    return;
+  }
+  const list = all ? ["--all"] : (t.shadcnComponents ?? []);
+  if (list.length === 0) {
+    console.log(kleur.dim(`\n  (skipping shadcn add — no shadcnComponents declared for ${t.slug})`));
+    return;
+  }
+  console.log(kleur.bold(`\n→ Installing shadcn components ${all ? "(--all)" : `(${list.length})`}\n`));
+  console.log(kleur.dim(`  ${list.join(" ")}\n`));
+  try {
+    await runShell("npx", ["shadcn@latest", "add", ...list, "--yes", "--overwrite"], target);
+  } catch (err) {
+    console.log(kleur.yellow(`  ⚠ shadcn add failed (${err.message}). Run manually: npx shadcn@latest add ${list.join(" ")}`));
+  }
+}
+
+// ─── promote-to-root: move template files out of app/preview/<slug>/ into
+//      app/(public)/ + app/admin/, then rewrite hardcoded /preview/<slug>
+//      path constants in nav-config / robots / sitemap / site-config. ────────
+
+function promoteToRoot(t, target) {
+  const previewDir = path.join(target, "app", "preview", t.slug);
+  if (!existsSync(previewDir)) {
+    console.log(kleur.dim(`\n  (--at root: ${previewDir} not found — skipping promote)`));
+    return;
+  }
+  console.log(kleur.bold(`\n→ Promoting to app/(public)/ + app/admin/ (--at root)\n`));
+
+  const publicSrc = path.join(previewDir, "public");
+  const adminSrc = path.join(previewDir, "admin");
+  const publicDest = path.join(target, "app", "(public)");
+  const adminDest = path.join(target, "app", "admin");
+
+  if (existsSync(publicSrc)) {
+    mvTree(publicSrc, publicDest);
+    console.log(`  ${kleur.green("+")} app/(public)/`);
+  }
+  if (existsSync(adminSrc)) {
+    mvTree(adminSrc, adminDest);
+    console.log(`  ${kleur.green("+")} app/admin/`);
+  }
+  // Move robots/sitemap/og from app/preview/<slug>/ to app/
+  for (const stub of ["robots.ts", "sitemap.ts", "opengraph-image.tsx"]) {
+    const src = path.join(previewDir, stub);
+    if (existsSync(src)) {
+      const dest = path.join(target, "app", stub);
+      writeFileSync(dest, readFileSync(src, "utf8"));
+      console.log(`  ${kleur.green("+")} app/${stub}`);
+    }
+  }
+
+  rewritePreviewPaths(target, t.slug);
+
+  // Best-effort cleanup of now-empty preview dir
+  try { rmSync(previewDir, { recursive: true, force: true }); } catch {}
+}
+
+function mvTree(src, dest) {
+  mkdirSync(dest, { recursive: true });
+  for (const entry of readdirSync(src)) {
+    const sFull = path.join(src, entry);
+    const dFull = path.join(dest, entry);
+    const stat = statSync(sFull);
+    if (stat.isDirectory()) {
+      mvTree(sFull, dFull);
+    } else {
+      writeFileSync(dFull, readFileSync(sFull, "utf8"));
+    }
+  }
+}
+
+// Rewrite hardcoded /preview/<slug>/{public,admin} → "" / "/admin" in known files
+// (nav-config, robots, sitemap, site-config, plus any *Page.tsx that hardcodes them).
+function rewritePreviewPaths(target, slug) {
+  const previewBase = `/preview/${slug}`;
+  const candidates = [
+    path.join(target, "app", "robots.ts"),
+    path.join(target, "app", "sitemap.ts"),
+  ];
+  // also components/templates/<base>/shared/{site-config,nav-config}.ts
+  const tplShared = path.join(target, "components", "templates");
+  if (existsSync(tplShared)) {
+    for (const baseDir of readdirSync(tplShared)) {
+      const sharedDir = path.join(tplShared, baseDir, "shared");
+      if (!existsSync(sharedDir)) continue;
+      for (const f of ["site-config.ts", "nav-config.ts"]) {
+        const p = path.join(sharedDir, f);
+        if (existsSync(p)) candidates.push(p);
+      }
+    }
+  }
+  for (const f of candidates) {
+    if (!existsSync(f)) continue;
+    const before = readFileSync(f, "utf8");
+    const after = before
+      .replaceAll(`${previewBase}/public`, "")
+      .replaceAll(`${previewBase}/admin`, "/admin")
+      .replaceAll(previewBase, "");
+    if (after !== before) {
+      writeFileSync(f, after);
+      console.log(`  ${kleur.dim("rewrote")} ${path.relative(target, f)}`);
+    }
+  }
 }
 
 async function addFeature(t, target, targetArg) {

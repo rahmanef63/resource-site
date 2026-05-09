@@ -55,6 +55,7 @@ const layouts = loadLayouts().map((l) => {
     pullPaths: validPaths,
     files: l.files ?? [],
     dependencies: l.dependencies ?? [],
+    shadcnComponents: l.shadcnComponents ?? [],
     agentRecipe: l.agentRecipe ?? "",
     tags: l.tags ?? [],
     primaryFile: l.primaryFile,

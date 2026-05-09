@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-07T11:40:38.537Z",
+  "generatedAt": "2026-05-09T08:54:40.672Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -15,7 +15,7 @@
         "app/preview/personal-brand-os",
         "components/templates/_shared",
         "components/templates/personal-brand",
-        "convex/templates/personal-brand-os"
+        "convex-templates/personal-brand-os"
       ],
       "files": [
         "app/preview/personal-brand-os/robots.ts",
@@ -91,16 +91,16 @@
         "components/templates/personal-brand/slices/admin/newsletter/NewsletterView.tsx",
         "components/templates/personal-brand/slices/admin/analytics/AnalyticsView.tsx",
         "components/templates/personal-brand/slices/admin/settings/SettingsView.tsx",
-        "convex/templates/personal-brand-os/schema.ts",
-        "convex/templates/personal-brand-os/posts.ts",
-        "convex/templates/personal-brand-os/portfolio.ts",
-        "convex/templates/personal-brand-os/services.ts",
-        "convex/templates/personal-brand-os/resources.ts",
-        "convex/templates/personal-brand-os/leads.ts",
-        "convex/templates/personal-brand-os/comments.ts",
-        "convex/templates/personal-brand-os/subscribers.ts",
-        "convex/templates/personal-brand-os/chat.ts",
-        "convex/templates/personal-brand-os/README.md"
+        "convex-templates/personal-brand-os/schema.ts",
+        "convex-templates/personal-brand-os/posts.ts",
+        "convex-templates/personal-brand-os/portfolio.ts",
+        "convex-templates/personal-brand-os/services.ts",
+        "convex-templates/personal-brand-os/resources.ts",
+        "convex-templates/personal-brand-os/leads.ts",
+        "convex-templates/personal-brand-os/comments.ts",
+        "convex-templates/personal-brand-os/subscribers.ts",
+        "convex-templates/personal-brand-os/chat.ts",
+        "convex-templates/personal-brand-os/README.md"
       ],
       "dependencies": [
         "next@^16",
@@ -113,6 +113,7 @@
         "tailwindcss@^4",
         "convex",
         "@convex-dev/auth",
+        "@auth/core@^0.37.0",
         "@radix-ui/react-avatar",
         "@radix-ui/react-dialog",
         "@radix-ui/react-dropdown-menu",
@@ -123,7 +124,18 @@
         "@radix-ui/react-slot",
         "@radix-ui/react-tabs"
       ],
-      "agentRecipe": "Personal Brand OS = full-app template (public + admin). 1) Move app/preview/personal-brand-os/{robots,sitemap,opengraph-image}.* to app root. 2) Copy app/preview/personal-brand-os/public into app/(public)/, app/preview/personal-brand-os/admin into app/(admin)/. 3) Edit components/templates/personal-brand/shared/site-config.ts — set brandName, ownerName, baseUrl, twitter, email. 4) Wire convex/templates/personal-brand-os/* to convex/_generated and add @convex-dev/auth on admin routes. 5) Replace localStorage StoreProvider with Convex queries (schema mirrors localStorage shape).",
+      "shadcnComponents": [
+        "badge",
+        "button",
+        "card",
+        "dialog",
+        "input",
+        "separator",
+        "sheet",
+        "tabs",
+        "textarea"
+      ],
+      "agentRecipe": "Personal Brand OS = full-app template (public + admin). 1) Move app/preview/personal-brand-os/{robots,sitemap,opengraph-image}.* to app root. 2) Copy app/preview/personal-brand-os/public into app/(public)/, app/preview/personal-brand-os/admin into app/(admin)/. 3) Edit components/templates/personal-brand/shared/site-config.ts — set brandName, ownerName, baseUrl, twitter, email. 4) Wire convex-templates/personal-brand-os/* into your convex/ (kitab ships them outside `convex/` so the bundler doesn't try to compile scaffolds without _generated) and add @convex-dev/auth on admin routes. 5) Replace localStorage StoreProvider with Convex queries (schema mirrors localStorage shape).",
       "tags": [
         "template",
         "personal-brand",
@@ -145,7 +157,7 @@
         "app/preview/agency-studio-os",
         "components/templates/_shared",
         "components/templates/agency-studio",
-        "convex/templates/agency-studio-os"
+        "convex-templates/agency-studio-os"
       ],
       "files": [
         "app/preview/agency-studio-os/robots.ts",
@@ -186,12 +198,12 @@
         "components/templates/agency-studio/slices/admin/services/ServicesAdminView.tsx",
         "components/templates/agency-studio/slices/admin/leads/LeadsView.tsx",
         "components/templates/agency-studio/slices/admin/settings/SettingsView.tsx",
-        "convex/templates/agency-studio-os/schema.ts",
-        "convex/templates/agency-studio-os/projects.ts",
-        "convex/templates/agency-studio-os/clients.ts",
-        "convex/templates/agency-studio-os/services.ts",
-        "convex/templates/agency-studio-os/leads.ts",
-        "convex/templates/agency-studio-os/README.md"
+        "convex-templates/agency-studio-os/schema.ts",
+        "convex-templates/agency-studio-os/projects.ts",
+        "convex-templates/agency-studio-os/clients.ts",
+        "convex-templates/agency-studio-os/services.ts",
+        "convex-templates/agency-studio-os/leads.ts",
+        "convex-templates/agency-studio-os/README.md"
       ],
       "dependencies": [
         "next@^16",
@@ -204,13 +216,24 @@
         "tailwindcss@^4",
         "convex",
         "@convex-dev/auth",
+        "@auth/core@^0.37.0",
         "@radix-ui/react-avatar",
         "@radix-ui/react-dialog",
         "@radix-ui/react-label",
         "@radix-ui/react-separator",
         "@radix-ui/react-slot"
       ],
-      "agentRecipe": "Agency Studio OS = full-app B2B agency template (public + admin). 1) Move app/preview/agency-studio-os/{robots,sitemap,opengraph-image}.* to app root. 2) Copy public into app/(public)/, admin into app/(admin)/. 3) Edit components/templates/agency-studio/shared/site-config.ts — set studioName, brandName, baseUrl, twitter, email. 4) Wire convex/templates/agency-studio-os/* to convex/_generated and add @convex-dev/auth on admin routes. 5) Replace localStorage StoreProvider with Convex queries.",
+      "shadcnComponents": [
+        "badge",
+        "button",
+        "card",
+        "input",
+        "label",
+        "separator",
+        "sheet",
+        "textarea"
+      ],
+      "agentRecipe": "Agency Studio OS = full-app B2B agency template (public + admin). 1) Move app/preview/agency-studio-os/{robots,sitemap,opengraph-image}.* to app root. 2) Copy public into app/(public)/, admin into app/(admin)/. 3) Edit components/templates/agency-studio/shared/site-config.ts — set studioName, brandName, baseUrl, twitter, email. 4) Wire convex-templates/agency-studio-os/* into your convex/ (kitab ships them outside `convex/` so the bundler doesn't try to compile scaffolds without _generated) and add @convex-dev/auth on admin routes. 5) Replace localStorage StoreProvider with Convex queries.",
       "tags": [
         "template",
         "agency",
@@ -234,6 +257,7 @@
       ],
       "files": [],
       "dependencies": [],
+      "shadcnComponents": [],
       "agentRecipe": "Mount the HeroSection from cookbook/layouts/landing-hero-carousel as the hero of the marketing route group. Provide image array via props or wire to Convex api.heroImages.list.",
       "tags": [
         "marketing",
@@ -255,6 +279,7 @@
       ],
       "files": [],
       "dependencies": [],
+      "shadcnComponents": [],
       "agentRecipe": "Use PortfolioGrid for case-study or portfolio pages. Items array shape: { id, title, cover, href, category }. The 8-slot pattern repeats; supply at least 8 items for the layout to bloom.",
       "tags": [
         "marketing",
@@ -276,6 +301,7 @@
       ],
       "files": [],
       "dependencies": [],
+      "shadcnComponents": [],
       "agentRecipe": "Compose a 3-column CSS grid with explicit area assignments per feature. Mix Card sizes (1x1, 1x2, 2x1, 2x2) for visual rhythm.",
       "tags": [
         "marketing",
@@ -296,6 +322,7 @@
       ],
       "files": [],
       "dependencies": [],
+      "shadcnComponents": [],
       "agentRecipe": "Use motion primitives marquee, kinetic-heading, magnetic from components/motion (already imported into the kitab from rahmanef.com). All respect prefers-reduced-motion automatically.",
       "tags": [
         "marketing",
@@ -316,6 +343,7 @@
       ],
       "files": [],
       "dependencies": [],
+      "shadcnComponents": [],
       "agentRecipe": "Mount inside app/dashboard/<slice>/page.tsx. Wrap with the kitab's <ThreeColumnLayout>. Slot in slice-specific sidebars and inspectors. Mobile auto-collapses to drawers.",
       "tags": [
         "dashboard",
@@ -337,6 +365,7 @@
       ],
       "files": [],
       "dependencies": [],
+      "shadcnComponents": [],
       "agentRecipe": "Compose grid: 48px activity bar + tabs row + editor/inspector flex row + bottom console. Wire activity bar items to dispatch into tabs/inspector store.",
       "tags": [
         "dashboard",
@@ -357,6 +386,7 @@
       ],
       "files": [],
       "dependencies": [],
+      "shadcnComponents": [],
       "agentRecipe": "Use ResponsiveDashboardShell which branches desktop (sidebar) vs mobile (dock). Customize MobileDashboardDock items and MobileTopBar workspace switcher to your domain.",
       "tags": [
         "dashboard",
@@ -377,6 +407,7 @@
       ],
       "files": [],
       "dependencies": [],
+      "shadcnComponents": [],
       "agentRecipe": "Port kitab-core slices/cms-lite/ into your project's app/(cms)/ route group. Fetch products/pages from Convex via api.cmsLite.* queries.",
       "tags": [
         "cms",
@@ -427,10 +458,22 @@
         "react@^19",
         "react-dom@^19",
         "lucide-react",
+        "@tabler/icons-react",
         "sonner",
         "next-themes",
         "tailwindcss@^4",
+        "@radix-ui/react-label",
+        "@radix-ui/react-separator",
         "@radix-ui/react-slot"
+      ],
+      "shadcnComponents": [
+        "badge",
+        "button",
+        "input",
+        "label",
+        "separator",
+        "sheet",
+        "textarea"
       ],
       "agentRecipe": "SaaS Marketing OS = public-only marketing template. Blog + changelog use MDX (add the mdx-blog feature). Edit components/templates/saas-marketing/shared/site-config.ts to set product name, tagline, pricing tiers, contact email.",
       "tags": [
@@ -499,7 +542,20 @@
         "react@^19",
         "react-dom@^19",
         "lucide-react",
-        "tailwindcss@^4"
+        "@tabler/icons-react",
+        "tailwindcss@^4",
+        "@radix-ui/react-label",
+        "@radix-ui/react-separator",
+        "@radix-ui/react-slot"
+      ],
+      "shadcnComponents": [
+        "badge",
+        "button",
+        "card",
+        "input",
+        "label",
+        "separator",
+        "sheet"
       ],
       "agentRecipe": "Kreator Studio OS = full-app content-creator template (public newsletter + 9-tab admin). 1) Edit components/templates/kreator-studio/shared/site-config.ts (brandName, ownerName, baseUrl, twitter). 2) Replace localStorage StoreProvider with Convex queries (state shape mirrors localStorage). 3) Wire Resend for newsletter + Midtrans tip-jar on public CTA. 4) Voice/Scripts/Carousels admin views are scaffolds — wire to ai-router (mid tier for voice-train/voice-apply, nano for shortform script).",
       "tags": [
@@ -564,7 +620,21 @@
         "react@^19",
         "react-dom@^19",
         "lucide-react",
-        "tailwindcss@^4"
+        "@tabler/icons-react",
+        "tailwindcss@^4",
+        "@radix-ui/react-label",
+        "@radix-ui/react-separator",
+        "@radix-ui/react-slot"
+      ],
+      "shadcnComponents": [
+        "badge",
+        "button",
+        "card",
+        "input",
+        "label",
+        "separator",
+        "sheet",
+        "textarea"
       ],
       "agentRecipe": "Konsultan OS = full-app consultancy template (public services + 7-tab admin). 1) Edit components/templates/konsultan/shared/site-config.ts (brandName, ownerName, baseUrl). 2) Replace localStorage StoreProvider with Convex queries. 3) Add @convex-dev/auth + RBAC on /admin routes. 4) Wire Resend for proposal email + e-sign provider for contracts. 5) Billing view is PajakAware-ready — connect to Midtrans + Indonesian-tax calc on invoice generation.",
       "tags": [
@@ -629,7 +699,21 @@
         "react@^19",
         "react-dom@^19",
         "lucide-react",
-        "tailwindcss@^4"
+        "@tabler/icons-react",
+        "tailwindcss@^4",
+        "@radix-ui/react-label",
+        "@radix-ui/react-separator",
+        "@radix-ui/react-slot"
+      ],
+      "shadcnComponents": [
+        "badge",
+        "button",
+        "card",
+        "input",
+        "label",
+        "separator",
+        "sheet",
+        "textarea"
       ],
       "agentRecipe": "Wirausaha OS = full-app UKM template (mobile-first public storefront + 8-tab admin). 1) Edit components/templates/wirausaha/shared/site-config.ts. 2) Replace localStorage StoreProvider with Convex queries. 3) Wire Midtrans + QRIS for orders. 4) Add WhatsApp-bot for order confirmations. 5) Finance view scaffolds AI-laporan — connect to ai-router (mid tier) for narrative generation from monthly aggregates.",
       "tags": [
@@ -693,7 +777,20 @@
         "react@^19",
         "react-dom@^19",
         "lucide-react",
-        "tailwindcss@^4"
+        "@tabler/icons-react",
+        "tailwindcss@^4",
+        "@radix-ui/react-label",
+        "@radix-ui/react-separator",
+        "@radix-ui/react-slot"
+      ],
+      "shadcnComponents": [
+        "badge",
+        "button",
+        "card",
+        "input",
+        "label",
+        "separator",
+        "sheet"
       ],
       "agentRecipe": "Riset Kit = full-app research template (public KB reader + 6-tab admin). 1) Edit components/templates/research/shared/site-config.ts. 2) Replace localStorage StoreProvider with Convex queries. 3) Add @convex-dev/auth on /admin (single owner suffices). 4) Document library expects pdf-extract + vector-search — wire convex-vector-search component. 5) AI Reader wires ai-router (mid tier) for QA over uploaded PDFs. 6) Lit-review matrix is a scaffold — wire AI summarizer per cell.",
       "tags": [

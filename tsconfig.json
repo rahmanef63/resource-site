@@ -40,6 +40,7 @@
     "node_modules",
     "plugins/**",
     "convex/**",
+    "convex-templates/**",
     "cookbook/**",
     "recipes/**",
     "template-base/**",

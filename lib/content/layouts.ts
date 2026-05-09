@@ -22,6 +22,10 @@ export type LayoutEntry = {
   files?: string[];
   /** npm packages this template needs (extras beyond the base shadcn stack). */
   dependencies?: string[];
+  /** shadcn primitives this template imports from `@/components/ui/*`.
+   *  CLI runs `npx shadcn add <list>` after pulling files so the template
+   *  compiles cleanly without the user hand-installing each component. */
+  shadcnComponents?: string[];
   /** Optional path to a live in-site demo (rendered in iframe on the detail page). */
   previewPath?: string;
   /** Optional second preview surface — admin/dashboard side of a full-app template. */
@@ -50,7 +54,7 @@ export const layouts: LayoutEntry[] = [
       "app/preview/personal-brand-os",
       "components/templates/_shared",
       "components/templates/personal-brand",
-      "convex/templates/personal-brand-os",
+      "convex-templates/personal-brand-os",
     ],
     files: [
       "app/preview/personal-brand-os/robots.ts",
@@ -126,16 +130,16 @@ export const layouts: LayoutEntry[] = [
       "components/templates/personal-brand/slices/admin/newsletter/NewsletterView.tsx",
       "components/templates/personal-brand/slices/admin/analytics/AnalyticsView.tsx",
       "components/templates/personal-brand/slices/admin/settings/SettingsView.tsx",
-      "convex/templates/personal-brand-os/schema.ts",
-      "convex/templates/personal-brand-os/posts.ts",
-      "convex/templates/personal-brand-os/portfolio.ts",
-      "convex/templates/personal-brand-os/services.ts",
-      "convex/templates/personal-brand-os/resources.ts",
-      "convex/templates/personal-brand-os/leads.ts",
-      "convex/templates/personal-brand-os/comments.ts",
-      "convex/templates/personal-brand-os/subscribers.ts",
-      "convex/templates/personal-brand-os/chat.ts",
-      "convex/templates/personal-brand-os/README.md",
+      "convex-templates/personal-brand-os/schema.ts",
+      "convex-templates/personal-brand-os/posts.ts",
+      "convex-templates/personal-brand-os/portfolio.ts",
+      "convex-templates/personal-brand-os/services.ts",
+      "convex-templates/personal-brand-os/resources.ts",
+      "convex-templates/personal-brand-os/leads.ts",
+      "convex-templates/personal-brand-os/comments.ts",
+      "convex-templates/personal-brand-os/subscribers.ts",
+      "convex-templates/personal-brand-os/chat.ts",
+      "convex-templates/personal-brand-os/README.md",
     ],
     dependencies: [
       "next@^16",
@@ -148,6 +152,7 @@ export const layouts: LayoutEntry[] = [
       "tailwindcss@^4",
       "convex",
       "@convex-dev/auth",
+      "@auth/core@^0.37.0",
       "@radix-ui/react-avatar",
       "@radix-ui/react-dialog",
       "@radix-ui/react-dropdown-menu",
@@ -157,6 +162,10 @@ export const layouts: LayoutEntry[] = [
       "@radix-ui/react-separator",
       "@radix-ui/react-slot",
       "@radix-ui/react-tabs",
+    ],
+    shadcnComponents: [
+      "badge", "button", "card", "dialog", "input",
+      "separator", "sheet", "tabs", "textarea",
     ],
     exampleCode: `// app/(public)/page.tsx — minimal compose
 import { HeroSection } from "@/templates/personal-brand/sections/hero";
@@ -181,7 +190,7 @@ export default function HomePage() {
   );
 }`,
     agentRecipe:
-      "Personal Brand OS = full-app template (public + admin). 1) Move app/preview/personal-brand-os/{robots,sitemap,opengraph-image}.* to app root. 2) Copy app/preview/personal-brand-os/public into app/(public)/, app/preview/personal-brand-os/admin into app/(admin)/. 3) Edit components/templates/personal-brand/shared/site-config.ts — set brandName, ownerName, baseUrl, twitter, email. 4) Wire convex/templates/personal-brand-os/* to convex/_generated and add @convex-dev/auth on admin routes. 5) Replace localStorage StoreProvider with Convex queries (schema mirrors localStorage shape).",
+      "Personal Brand OS = full-app template (public + admin). 1) Move app/preview/personal-brand-os/{robots,sitemap,opengraph-image}.* to app root. 2) Copy app/preview/personal-brand-os/public into app/(public)/, app/preview/personal-brand-os/admin into app/(admin)/. 3) Edit components/templates/personal-brand/shared/site-config.ts — set brandName, ownerName, baseUrl, twitter, email. 4) Wire convex-templates/personal-brand-os/* into your convex/ (kitab ships them outside `convex/` so the bundler doesn't try to compile scaffolds without _generated) and add @convex-dev/auth on admin routes. 5) Replace localStorage StoreProvider with Convex queries (schema mirrors localStorage shape).",
   },
   {
     slug: "agency-studio-os",
@@ -200,7 +209,7 @@ export default function HomePage() {
       "app/preview/agency-studio-os",
       "components/templates/_shared",
       "components/templates/agency-studio",
-      "convex/templates/agency-studio-os",
+      "convex-templates/agency-studio-os",
     ],
     files: [
       "app/preview/agency-studio-os/robots.ts",
@@ -241,12 +250,12 @@ export default function HomePage() {
       "components/templates/agency-studio/slices/admin/services/ServicesAdminView.tsx",
       "components/templates/agency-studio/slices/admin/leads/LeadsView.tsx",
       "components/templates/agency-studio/slices/admin/settings/SettingsView.tsx",
-      "convex/templates/agency-studio-os/schema.ts",
-      "convex/templates/agency-studio-os/projects.ts",
-      "convex/templates/agency-studio-os/clients.ts",
-      "convex/templates/agency-studio-os/services.ts",
-      "convex/templates/agency-studio-os/leads.ts",
-      "convex/templates/agency-studio-os/README.md",
+      "convex-templates/agency-studio-os/schema.ts",
+      "convex-templates/agency-studio-os/projects.ts",
+      "convex-templates/agency-studio-os/clients.ts",
+      "convex-templates/agency-studio-os/services.ts",
+      "convex-templates/agency-studio-os/leads.ts",
+      "convex-templates/agency-studio-os/README.md",
     ],
     dependencies: [
       "next@^16",
@@ -259,11 +268,16 @@ export default function HomePage() {
       "tailwindcss@^4",
       "convex",
       "@convex-dev/auth",
+      "@auth/core@^0.37.0",
       "@radix-ui/react-avatar",
       "@radix-ui/react-dialog",
       "@radix-ui/react-label",
       "@radix-ui/react-separator",
       "@radix-ui/react-slot",
+    ],
+    shadcnComponents: [
+      "badge", "button", "card", "input", "label",
+      "separator", "sheet", "textarea",
     ],
     exampleCode: `// app/(public)/page.tsx — minimal compose
 import { HomePage } from "@/components/templates/agency-studio/slices/home/HomePage";
@@ -272,7 +286,7 @@ export default function Page() {
   return <HomePage />;
 }`,
     agentRecipe:
-      "Agency Studio OS = full-app B2B agency template (public + admin). 1) Move app/preview/agency-studio-os/{robots,sitemap,opengraph-image}.* to app root. 2) Copy public into app/(public)/, admin into app/(admin)/. 3) Edit components/templates/agency-studio/shared/site-config.ts — set studioName, brandName, baseUrl, twitter, email. 4) Wire convex/templates/agency-studio-os/* to convex/_generated and add @convex-dev/auth on admin routes. 5) Replace localStorage StoreProvider with Convex queries.",
+      "Agency Studio OS = full-app B2B agency template (public + admin). 1) Move app/preview/agency-studio-os/{robots,sitemap,opengraph-image}.* to app root. 2) Copy public into app/(public)/, admin into app/(admin)/. 3) Edit components/templates/agency-studio/shared/site-config.ts — set studioName, brandName, baseUrl, twitter, email. 4) Wire convex-templates/agency-studio-os/* into your convex/ (kitab ships them outside `convex/` so the bundler doesn't try to compile scaffolds without _generated) and add @convex-dev/auth on admin routes. 5) Replace localStorage StoreProvider with Convex queries.",
   },
   {
     slug: "landing-hero-carousel",
@@ -514,10 +528,17 @@ export default function Layout({ children }) {
       "react@^19",
       "react-dom@^19",
       "lucide-react",
+      "@tabler/icons-react",
       "sonner",
       "next-themes",
       "tailwindcss@^4",
+      "@radix-ui/react-label",
+      "@radix-ui/react-separator",
       "@radix-ui/react-slot",
+    ],
+    shadcnComponents: [
+      "badge", "button", "input", "label",
+      "separator", "sheet", "textarea",
     ],
     exampleCode: `// app/(public)/page.tsx
 import { HomePage } from "@/components/templates/saas-marketing/slices/home/HomePage";
@@ -587,7 +608,15 @@ export default function Page() { return <HomePage />; }`,
       "react@^19",
       "react-dom@^19",
       "lucide-react",
+      "@tabler/icons-react",
       "tailwindcss@^4",
+      "@radix-ui/react-label",
+      "@radix-ui/react-separator",
+      "@radix-ui/react-slot",
+    ],
+    shadcnComponents: [
+      "badge", "button", "card", "input", "label",
+      "separator", "sheet",
     ],
     exampleCode: `// app/preview/kreator-studio-os/public/page.tsx
 import { HomePage } from "@/components/templates/kreator-studio/slices/home/HomePage";
@@ -653,7 +682,15 @@ export default function Page() { return <HomePage />; }`,
       "react@^19",
       "react-dom@^19",
       "lucide-react",
+      "@tabler/icons-react",
       "tailwindcss@^4",
+      "@radix-ui/react-label",
+      "@radix-ui/react-separator",
+      "@radix-ui/react-slot",
+    ],
+    shadcnComponents: [
+      "badge", "button", "card", "input", "label",
+      "separator", "sheet", "textarea",
     ],
     exampleCode: `// app/preview/konsultan-os/public/page.tsx
 import { HomePage } from "@/components/templates/konsultan/slices/home/HomePage";
@@ -719,7 +756,15 @@ export default function Page() { return <HomePage />; }`,
       "react@^19",
       "react-dom@^19",
       "lucide-react",
+      "@tabler/icons-react",
       "tailwindcss@^4",
+      "@radix-ui/react-label",
+      "@radix-ui/react-separator",
+      "@radix-ui/react-slot",
+    ],
+    shadcnComponents: [
+      "badge", "button", "card", "input", "label",
+      "separator", "sheet", "textarea",
     ],
     exampleCode: `// app/preview/wirausaha-os/public/page.tsx
 import { HomePage } from "@/components/templates/wirausaha/slices/home/HomePage";
@@ -783,7 +828,15 @@ export default function Page() { return <HomePage />; }`,
       "react@^19",
       "react-dom@^19",
       "lucide-react",
+      "@tabler/icons-react",
       "tailwindcss@^4",
+      "@radix-ui/react-label",
+      "@radix-ui/react-separator",
+      "@radix-ui/react-slot",
+    ],
+    shadcnComponents: [
+      "badge", "button", "card", "input", "label",
+      "separator", "sheet",
     ],
     exampleCode: `// app/preview/riset-kit/public/page.tsx
 import { HomePage } from "@/components/templates/research/slices/home/HomePage";
