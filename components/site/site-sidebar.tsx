@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/sidebar";
 import { layouts } from "@/lib/content/layouts";
 import { recipes } from "@/lib/content/recipes";
-import { features } from "@/lib/content/features";
+import { slices } from "@/lib/content/slices";
 import { site } from "@/lib/content/site";
 
 const docsItems = [
@@ -186,26 +186,26 @@ export function SiteSidebar() {
 
         <SidebarGroup>
           <SidebarGroupLabel className="flex items-center gap-2">
-            <Wand2 className="size-3.5" /> Features
+            <Wand2 className="size-3.5" /> Slices
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={pathname === "/features"}>
-                  <Link href="/features">
-                    <span className="font-medium">All features</span>
+                <SidebarMenuButton asChild isActive={pathname === "/slices"}>
+                  <Link href="/slices">
+                    <span className="font-medium">All slices</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-              {features.map((f) => (
-                <SidebarMenuItem key={f.slug}>
+              {slices.map((s) => (
+                <SidebarMenuItem key={s.slug}>
                   <SidebarMenuButton
                     asChild
-                    isActive={pathname === `/features/${f.slug}`}
+                    isActive={pathname === `/slices/${s.slug}`}
                     size="sm"
                   >
-                    <Link href={`/features/${f.slug}`}>
-                      <span className="truncate text-sm">{f.title}</span>
+                    <Link href={`/slices/${s.slug}`}>
+                      <span className="truncate text-sm">{s.title}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

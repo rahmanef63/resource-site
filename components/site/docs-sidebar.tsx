@@ -7,7 +7,6 @@ import { ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { layouts, type LayoutEntry } from "@/lib/content/layouts";
 import { recipes } from "@/lib/content/recipes";
-import { features, type FeatureCategory, type FeatureEntry } from "@/lib/content/features";
 import { slices, type SliceEntry } from "@/lib/content/slices";
 import { cn } from "@/lib/utils";
 
@@ -31,22 +30,6 @@ const LAYOUT_CATEGORY_TITLE: Record<Exclude<LayoutEntry["category"], "website-te
   template: "Templates",
 };
 
-const FEATURE_CATEGORY_TITLE: Record<FeatureCategory, string> = {
-  ai: "AI",
-  auth: "Auth",
-  data: "Data",
-  payment: "Payment",
-  email: "Email",
-  realtime: "Realtime",
-  storage: "Storage",
-  search: "Search",
-  content: "Content",
-};
-
-const FEATURE_CATEGORY_ORDER: FeatureCategory[] = [
-  "ai", "auth", "payment", "email", "data", "realtime", "search", "storage", "content",
-];
-
 function groupByCategory<T, K extends string>(items: T[], key: (t: T) => K): Record<K, T[]> {
   const out = {} as Record<K, T[]>;
   for (const it of items) {
@@ -63,7 +46,6 @@ function buildSections(): NavSection[] {
     otherLayouts,
     (l) => l.category as Exclude<LayoutEntry["category"], "website-template">,
   );
-  const featuresByCat = groupByCategory(features, (f) => f.category);
   const slicesByCat = groupByCategory(slices, (s) => s.category as string);
   const SLICE_CATEGORY_ORDER = ["auth", "payment", "ai", "email", "data", "search", "realtime", "content", "storage", "ui", "infra"];
 
@@ -115,7 +97,7 @@ function buildSections(): NavSection[] {
               (s: SliceEntry): NavLeaf => ({
                 kind: "leaf",
                 title: s.title,
-                href: `/features/${s.slug}`,
+                href: `/slices/${s.slug}`,
               }),
             ),
           }),
@@ -128,25 +110,6 @@ function buildSections(): NavSection[] {
         { kind: "leaf", title: "All recipes", href: "/recipes" },
         ...recipes.map(
           (r): NavLeaf => ({ kind: "leaf", title: r.title, href: `/recipes/${r.slug}` }),
-        ),
-      ],
-    },
-    {
-      label: "Features",
-      items: [
-        { kind: "leaf", title: "All features", href: "/features", badge: "new" },
-        ...FEATURE_CATEGORY_ORDER.filter((cat) => featuresByCat[cat]?.length).map(
-          (cat): NavBranch => ({
-            kind: "branch",
-            title: FEATURE_CATEGORY_TITLE[cat],
-            items: featuresByCat[cat].map(
-              (f: FeatureEntry): NavLeaf => ({
-                kind: "leaf",
-                title: f.title,
-                href: `/features/${f.slug}`,
-              }),
-            ),
-          }),
         ),
       ],
     },

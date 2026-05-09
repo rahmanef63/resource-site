@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 export type ParsedRr = {
   template?: { slug: string };
   features?: { slug: string }[];
+  slices?: { slug: string }[];
   skills?: { slug: string }[];
 };
 

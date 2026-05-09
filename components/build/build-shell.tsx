@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { layouts } from "@/lib/content/layouts";
-import { features as featureCatalog } from "@/lib/content/features";
+import { slices as sliceCatalog } from "@/lib/content/slices";
 import {
   EMPTY_SELECTION,
   type BuildSelection,
@@ -76,24 +76,17 @@ export function BuildShell() {
     [realTemplates],
   );
 
-  const featureOptions: FeatureOption[] = React.useMemo(
-    () =>
-      featureCatalog.map((f) => ({
-        slug: f.slug,
-        title: f.title,
-        description: f.description,
-        category: f.category,
-        usedBy: f.usedBy,
-      })),
-    [],
-  );
+  // Legacy "features" tab is deprecated — slices are the canonical tier-3
+  // unit. We keep an empty featureOptions array so the InputsPanel API stays
+  // stable; the Features tab has been removed (see inputs-panel.tsx).
+  const featureOptions: FeatureOption[] = React.useMemo(() => [], []);
 
   // Hydrate selections from uploaded rr.json when in existing mode.
   React.useEffect(() => {
     if (!rr || !isExistingMode(sel)) return;
     setSel((s) => ({
       ...s,
-      features: Array.from(new Set([...(rr.features ?? []).map((f) => f.slug), ...s.features])),
+      slices: Array.from(new Set([...(rr.slices ?? []).map((sl) => sl.slug), ...s.slices])),
       skills: Array.from(new Set([...(rr.skills ?? []).map((s2) => s2.slug), ...s.skills])),
     }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -123,7 +116,7 @@ export function BuildShell() {
   const blocks = React.useMemo(() => buildCommands(sel, rr ?? undefined), [sel, rr]);
   const filename = isExistingMode(sel) ? "add-to-existing.sh" : "scaffold.sh";
   const warnings = React.useMemo(
-    () => (isExistingMode(sel) ? [] : collectWarnings(sel.template, sel.features)),
+    () => (isExistingMode(sel) ? [] : collectWarnings(sel.template, sel.slices)),
     [sel],
   );
 

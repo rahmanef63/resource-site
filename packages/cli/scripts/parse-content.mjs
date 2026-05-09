@@ -89,14 +89,29 @@ function load(file, exportName) {
 
 export const loadLayouts = () => load("lib/content/layouts.ts", "layouts");
 export const loadRecipes = () => load("lib/content/recipes.ts", "recipes");
-export const loadFeatures = () => load("lib/content/features.ts", "features");
-export const loadSlices = () => {
-  // slices.ts is optional (initially empty array); allow missing file.
-  try {
-    return load("lib/content/slices.ts", "slices");
-  } catch {
-    return [];
-  }
+export const loadSlices = () => load("lib/content/slices.ts", "slices");
+
+// Legacy alias — features.ts was deleted 2026-05-09 (DRY consolidation).
+// We derive a "features" view from slices.ts so old CLI consumers using
+// --features and old MCP rr_list_features still receive a useful payload.
+// Each slice's slug becomes the feature slug; install line + exampleCode
+// + agentRecipe carried through verbatim.
+export const loadFeatures = () => {
+  const slices = loadSlices();
+  return slices.map((s) => ({
+    slug: s.slug,
+    title: s.title,
+    category: s.category,
+    description: s.description,
+    source: s.source,
+    docsUrl: s.docsUrl,
+    dependencies: [],
+    install: s.install ?? `npx rahman-resources add ${s.slug}`,
+    exampleCode: s.exampleCode ?? "",
+    agentRecipe: s.agentRecipe ?? "",
+    tags: s.tags ?? [],
+    usedBy: s.usedBy ?? [],
+  }));
 };
 
 export function parseNpmPackages(install) {

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Boxes, FileJson, Layers, Puzzle, Settings2, Sparkles } from "lucide-react";
+import { FileJson, Layers, Puzzle, Settings2, Sparkles } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -10,7 +10,7 @@ import { slices as sliceCatalog } from "@/lib/content/slices";
 import { EXISTING_PROJECT_SLUG } from "@/lib/build/command-builder";
 import type { BuildSelection, ProjectForm as ProjectFormShape } from "@/lib/build/types";
 import { TemplatePicker, type TemplateOption } from "./template-picker";
-import { FeaturePicker, type FeatureOption } from "./feature-picker";
+import { type FeatureOption } from "./feature-picker";
 import { SlicePicker } from "./slice-picker";
 import { ProjectForm } from "./project-form";
 import { ExistingRrUploader, type ParsedRr } from "./existing-rr-uploader";
@@ -50,7 +50,7 @@ export function InputsPanel({
   return (
     <div className="flex h-full min-h-0 flex-col">
       <Tabs defaultValue="templates" className="flex min-h-0 flex-1 flex-col">
-        <TabsList className="m-2 grid grid-cols-5">
+        <TabsList className="m-2 grid grid-cols-4">
           <TabTrigger
             value="templates"
             icon={<Layers className="size-3" />}
@@ -58,16 +58,9 @@ export function InputsPanel({
             count={sel.template ? 1 : 0}
           />
           <TabTrigger
-            value="features"
-            icon={<Boxes className="size-3" />}
-            label="Feat"
-            count={sel.features.length}
-            disabled={!templateChosen}
-          />
-          <TabTrigger
             value="slices"
             icon={<Puzzle className="size-3" />}
-            label="Slc"
+            label="Slices"
             count={sel.slices.length}
             countTotal={sliceCatalog.length}
           />
@@ -80,7 +73,7 @@ export function InputsPanel({
           <TabTrigger
             value="skills"
             icon={<Sparkles className="size-3" />}
-            label="Skl"
+            label="Skills"
             count={sel.skills.length}
             countTotal={CLAUDE_SKILLS.length}
           />
@@ -92,19 +85,6 @@ export function InputsPanel({
             selected={sel.template}
             onSelect={(slug) => setSel((s) => ({ ...s, template: slug }))}
           />
-        </TabsContent>
-
-        <TabsContent value="features" className="m-0 flex-1 overflow-auto px-3 pb-3">
-          {templateChosen ? (
-            <FeaturePicker
-              features={featureOptions}
-              selected={sel.features}
-              highlightTemplate={isExisting ? null : sel.template}
-              onToggle={toggleFeature}
-            />
-          ) : (
-            <EmptyHint>Pick a template first — features attach to a template's slice tree.</EmptyHint>
-          )}
         </TabsContent>
 
         <TabsContent value="slices" className="m-0 flex-1 overflow-auto px-3 pb-3">

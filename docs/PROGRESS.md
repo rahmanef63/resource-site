@@ -2,6 +2,45 @@
 
 Chronological session log. Each entry is dated and lists what landed + outstanding work.
 
+## 2026-05-09 (DRY consolidation) — features.ts → slices.ts
+
+User flagged: features.ts and slices.ts ship the same 8 concepts with drifted slugs (`ai-router` vs `ai-sdk-openrouter`, `vector-search` vs `convex-vector-search`). Two registries, two MCP tools, two sidebar groups, two Builder tabs — clear DRY violation. Collapsed.
+
+### Outcome
+
+| Surface | Before | After |
+|---|---|---|
+| Tier-3 registry files | features.ts + slices.ts (8 entries each, drifted slugs) | **slices.ts only** (single source of truth) |
+| Sidebar groups | 5 (incl. Features + Slices) | **4** — Slices replaces Features |
+| Bundle Builder tabs | 5 (Tmpl/Feat/Slc/Proj/Skl) | **4** — Slices replaces Features |
+| /features routes | live + dead links from sidebar | **deleted** + 308 permanent redirect to /slices |
+| MCP `rr_list_features` | first-class | derived view from slices (back-compat) |
+| Versions | CLI 0.8.0 / MCP 0.5.0 | **CLI 0.9.0 / MCP 0.6.0** |
+
+### Migration
+
+- Rich fields (`docsUrl`, `install`, `exampleCode`, `agentRecipe`, `usedBy`) merged from features.ts entries into the matching slices.ts entries.
+- Slug winners: kept slice slugs (`ai-router`, `vector-search`) — already published, shorter, namespace-clean.
+- `parse-content.mjs.loadFeatures()` now derives a feature-shaped view from slices.ts, so legacy CLI consumers using `--features` and MCP `rr_list_features` keep working without breaking.
+- compat.ts converted from template×feature to template×slice. `featureSlug`/`featureTitle` field names retained on `CompatWarning` for downstream API back-compat (semantics unchanged: same data, different conceptual layer).
+- `next.config.mjs` redirects: `/features` → `/slices` and `/features/:slug` → `/slices/:slug` (308 permanent).
+- sitemap.ts adds `/slices/<slug>` URLs for the 8 detail pages.
+- existing-rr-uploader's `ParsedRr` type extended with `slices` field; build-shell hydrates from `rr.json.slices` not `rr.json.features` in existing mode.
+
+### Files removed
+
+- `lib/content/features.ts` (311 lines)
+- `app/(docs)/features/page.tsx`
+- `app/(docs)/features/[slug]/page.tsx`
+
+### Verification
+
+- `npm run slices:check` → ✓ 8 slices validated/audited/up-to-date
+- `npx tsc --noEmit` → 0 errors
+- `npm run build` → ✓ Compiled (no /features routes, /slices/[slug] x8 prerendered, redirects active)
+
+---
+
 ## 2026-05-09 (post-publish) — R-series outstanding closeout
 
 After publishing CLI 0.7.0 + MCP 0.4.0 to npm, closed the remaining/imperfect items from the slice rollout. CLI 0.8.0 + MCP 0.5.0 ship next.

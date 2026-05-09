@@ -1,8 +1,11 @@
-// Tier-3 slice registry — pointers to portable vertical slices shipped at
-// `frontend/slices/<slug>/` + `convex/features/<slug>/`.
+// Tier-3 slice registry — single source of truth.
 //
-// Source-of-truth single file for: npm tarball manifest, /slices catalog
-// page, Bundle Builder UI, and the MCP `rr_list_slices` tool.
+// Was duplicated by the deprecated lib/content/features.ts (same 8 concepts,
+// drifted slugs). Consolidated 2026-05-09: features.ts deleted, slices.ts
+// now carries the rich docsUrl/install/exampleCode/usedBy fields too.
+//
+// Consumed by: npm tarball manifest, /slices catalog page, Bundle Builder UI,
+// MCP `rr_list_slices`/`rr_get_slice`, sidebar Slices group.
 
 import type { SliceCategory } from "@/lib/shared/features/defineFeature";
 
@@ -29,6 +32,15 @@ export type SliceEntry = {
   peers?: SlicePeer[];
   providers?: string[];
   tags?: string[];
+  /** Upstream docs (vendor or platform). */
+  docsUrl?: string;
+  /** Plain copy-paste install line — kept for the catalog page snippet. */
+  install?: string;
+  /** Inline example code shown on the slice detail page. */
+  exampleCode?: string;
+  /** Templates that ship with this slice pre-wired. */
+  usedBy?: string[];
+  /** Brief recipe for an AI agent installing the slice manually. */
   agentRecipe?: string;
 };
 
@@ -40,6 +52,8 @@ export const slices: SliceEntry[] = [
     version: "0.1.0",
     description: "@convex-dev/auth with email magic link via Resend. Self-hosted Convex friendly. Hard mandate per kitab CLAUDE.md (no Clerk).",
     source: "rahmanef63/resource-site",
+    docsUrl: "https://labs.convex.dev/auth",
+    install: "npm i @convex-dev/auth @auth/core resend",
     slicePath: "frontend/slices/convex-auth",
     convexPaths: ["convex/features/auth"],
     npm: ["@convex-dev/auth@^0.0.84", "@auth/core@^0.37.0", "resend@^4.0.0"],
@@ -52,15 +66,29 @@ export const slices: SliceEntry[] = [
     ],
     peers: [],
     tags: ["auth", "convex", "magic-link", "no-clerk"],
+    usedBy: ["personal-brand-os", "wirausaha-os", "konsultan-os"],
     agentRecipe: "Run `rr add convex-auth`. Then create convex/auth.ts using the kitab pattern (Resend provider). Set env via `npx convex env set` for self-hosted.",
+    exampleCode: `// convex/auth.ts
+import { convexAuth } from "@convex-dev/auth/server";
+import Resend from "@convex-dev/auth/providers/Resend";
+
+export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
+  providers: [Resend({ from: "auth@yourdomain.com" })],
+});
+
+// app/proxy.ts (Next 16 — NOT middleware.ts)
+import { convexAuthNextjsMiddleware } from "@convex-dev/auth/nextjs/server";
+export default convexAuthNextjsMiddleware();`,
   },
   {
     slug: "midtrans-payment",
-    title: "Midtrans Payment",
+    title: "Midtrans — Indonesia Payment",
     category: "payment",
     version: "0.1.0",
-    description: "Midtrans Snap checkout + webhook + transaction history. Provider-isolated under components/providers/midtrans + actions/midtrans so Doku/Stripe land as siblings.",
+    description: "Pembayaran lokal Indonesia via Midtrans Snap (BCA, Mandiri, BRI, e-wallet GoPay/OVO/Dana, QRIS). Webhook untuk konfirmasi. Provider-isolated under components/providers/midtrans + actions/midtrans so Doku/Stripe land as siblings.",
     source: "rahmanef63/resource-site",
+    docsUrl: "https://docs.midtrans.com",
+    install: "npm i midtrans-client",
     slicePath: "frontend/slices/midtrans-payment",
     convexPaths: ["convex/features/payment"],
     npm: ["midtrans-client@^1.4.2"],
@@ -73,14 +101,18 @@ export const slices: SliceEntry[] = [
     peers: [{ slug: "convex-auth", range: "^0.1", reason: "Order ownership requires authenticated user." }],
     providers: ["midtrans"],
     tags: ["payment", "midtrans", "indonesia", "qris", "snap"],
+    usedBy: ["wirausaha-os", "konsultan-os", "kreator-studio-os"],
+    agentRecipe: "Midtrans Snap untuk pembayaran instant. Webhook ke Convex HTTP action /api/midtrans-callback untuk update order status. Ingat: PPN 11% sudah included di amount, jangan double-count.",
   },
   {
     slug: "resend-newsletter",
-    title: "Resend Newsletter",
+    title: "Resend — Transactional & Newsletter",
     category: "email",
     version: "0.1.0",
-    description: "Subscribe form + admin send-broadcast pipeline via Resend.",
+    description: "Transactional email + newsletter blast via Resend. Double opt-in flow + audience segmentation. Magic-link delivery for Convex Auth.",
     source: "rahmanef63/resource-site",
+    docsUrl: "https://resend.com/docs",
+    install: "npm i resend react-email @react-email/components",
     slicePath: "frontend/slices/resend-newsletter",
     convexPaths: ["convex/features/newsletter"],
     npm: ["resend@^4.0.0"],
@@ -91,6 +123,8 @@ export const slices: SliceEntry[] = [
     ],
     peers: [],
     tags: ["email", "newsletter", "resend"],
+    usedBy: ["personal-brand-os", "kreator-studio-os", "wirausaha-os"],
+    agentRecipe: "Use Resend Audiences API for newsletter — store subscriber emails in Convex too for segmentation. Double opt-in: subscriber.create with status 'pending' → click link → status 'confirmed'.",
   },
   {
     slug: "ai-router",
@@ -99,6 +133,8 @@ export const slices: SliceEntry[] = [
     version: "0.1.0",
     description: "Tier-routed LLM access via OpenRouter — nano (Haiku) for classification, mid (Sonnet) for chat, flagship (Opus) for deep reasoning. Per-call usage log.",
     source: "rahmanef63/resource-site",
+    docsUrl: "https://sdk.vercel.ai/docs",
+    install: "npm i ai @openrouter/ai-sdk-provider",
     slicePath: "frontend/slices/ai-router",
     convexPaths: ["convex/features/ai"],
     npm: ["ai@^4.0.0", "@openrouter/ai-sdk-provider@^0.0.5"],
@@ -106,29 +142,37 @@ export const slices: SliceEntry[] = [
     env: [{ name: "OPENROUTER_API_KEY", scope: "convex", required: true }],
     peers: [],
     tags: ["ai", "llm", "openrouter", "tier-routing"],
+    usedBy: ["personal-brand-os"],
+    agentRecipe: "Wrap every AI call through ai-router action. Pick tier based on workload: nano for spam-flag/headline-suggest, mid for chat/draft, flagship for methodology-review. Log token usage to ai_usage table for cost dashboard.",
   },
   {
     slug: "vector-search",
     title: "Convex Vector Search",
     category: "search",
     version: "0.1.0",
-    description: "Embeddings-based search via @convex-dev/vector-search. Embed on insert, query by vector similarity.",
+    description: "Embeddings-based search via Convex's built-in vector index. Embed via OpenAI text-embedding-3-small (1536-dim), query via vectorIndex().",
     source: "rahmanef63/resource-site",
+    docsUrl: "https://docs.convex.dev/database/vector-search",
+    install: "npm i openai",
     slicePath: "frontend/slices/vector-search",
     convexPaths: ["convex/features/search"],
     npm: ["@convex-dev/vector-search@^0.0.5"],
     shadcn: ["card", "input"],
     env: [{ name: "OPENAI_API_KEY", scope: "convex", required: true }],
     peers: [],
-    tags: ["search", "vector", "embeddings", "convex"],
+    tags: ["search", "vector", "embeddings", "convex", "rag"],
+    usedBy: ["personal-brand-os", "riset-kit"],
+    agentRecipe: "Add embedding field + vectorIndex per searchable table. Re-embed on upsert via Convex action. Cache embeddings — don't re-call OpenAI on every read.",
   },
   {
     slug: "mdx-blog",
     title: "MDX Blog",
     category: "content",
     version: "0.1.0",
-    description: "File-based MDX blog under content/blog/*.mdx. List + detail page + RSS feed. No backend.",
+    description: "Markdown-with-JSX untuk blog post. File-based under content/blog/*.mdx. Auto-generate ToC, reading-time, syntax highlight, plus embed React components inline.",
     source: "rahmanef63/resource-site",
+    docsUrl: "https://github.com/hashicorp/next-mdx-remote",
+    install: "npm i next-mdx-remote rehype-pretty-code remark-gfm reading-time",
     slicePath: "frontend/slices/mdx-blog",
     convexPaths: [],
     npm: ["@next/mdx@^16.0.0", "gray-matter@^4.0.3", "rehype-pretty-code@^0.14.0"],
@@ -136,6 +180,8 @@ export const slices: SliceEntry[] = [
     env: [],
     peers: [],
     tags: ["content", "blog", "mdx", "static"],
+    usedBy: ["personal-brand-os", "konsultan-os", "saas-marketing-os"],
+    agentRecipe: "Store post body sebagai markdown di content/blog/*.mdx. Render dengan MDXRemote di [slug]/page.tsx. Auto-extract headings ke ToC via remark plugin custom.",
   },
   {
     slug: "cal-com-booking",
@@ -144,6 +190,8 @@ export const slices: SliceEntry[] = [
     version: "0.1.0",
     description: "Embedded Cal.com booking widget + webhook receiver to mirror bookings into Convex.",
     source: "rahmanef63/resource-site",
+    docsUrl: "https://cal.com/docs/integrations/web-app/embed",
+    install: "npm i @calcom/embed-react",
     slicePath: "frontend/slices/cal-com-booking",
     convexPaths: ["convex/features/bookings"],
     npm: ["@calcom/embed-react@^1.5.0"],
@@ -154,21 +202,27 @@ export const slices: SliceEntry[] = [
     ],
     peers: [],
     tags: ["data", "scheduling", "cal-com", "bookings"],
+    usedBy: ["personal-brand-os", "konsultan-os"],
+    agentRecipe: "Embed Cal.com via @calcom/embed-react di halaman services. Configure webhook di Cal.com dashboard → POST ke /api/cal-webhook → upsert booking di Convex.",
   },
   {
     slug: "broadcast-channel-sync",
-    title: "BroadcastChannel Sync",
+    title: "BroadcastChannel — Cross-tab Sync",
     category: "realtime",
     version: "0.1.0",
-    description: "Cross-tab + cross-iframe state sync via BroadcastChannel + localStorage fallback. Tiny, no backend.",
-    source: "rahmanef63/resource-site",
+    description: "Same-origin cross-tab + cross-iframe state sync via BroadcastChannel API. Tiny, no backend, no install.",
+    source: "Web Platform — BroadcastChannel API",
+    docsUrl: "https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API",
+    install: "// no install — Web Platform API",
     slicePath: "frontend/slices/broadcast-channel-sync",
     convexPaths: [],
     npm: [],
     shadcn: [],
     env: [],
     peers: [],
-    tags: ["realtime", "cross-tab", "broadcast-channel"],
+    tags: ["realtime", "cross-tab", "broadcast-channel", "demo-pattern"],
+    usedBy: ["personal-brand-os"],
+    agentRecipe: "Use BroadcastChannel only for demo / cross-iframe state mirroring. Production data still goes through Convex realtime. Use the useBroadcastSync(channelName, initial) hook from @/features/broadcast-channel-sync.",
   },
 ];
 

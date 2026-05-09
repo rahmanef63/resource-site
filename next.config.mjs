@@ -19,5 +19,13 @@ const nextConfig = {
       { protocol: "https", hostname: "images.unsplash.com" },
     ],
   },
+  async redirects() {
+    return [
+      // /features consolidated into /slices on 2026-05-09 (DRY cleanup).
+      // Permanent — old links from PRs, docs, social posts must keep working.
+      { source: "/features", destination: "/slices", permanent: true },
+      { source: "/features/:slug", destination: "/slices/:slug", permanent: true },
+    ];
+  },
 };
 export default nextConfig;
