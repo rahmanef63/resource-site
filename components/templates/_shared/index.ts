@@ -12,3 +12,8 @@ export * from "./ui/admin-sidebar";
 export * from "./ui/admin-topbar";
 export * from "./ui/admin-shell";
 export * from "./ui/stat-card";
+export * from "./ui/hero-block";
+export * from "./ui/cta-band";
+export * from "./ui/feature-grid";
+export * from "./ui/metric-row";
+export * from "./ui/empty-state";

@@ -6,7 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { DEFAULT_SITE_CONFIG } from "../../shared/site-config";
 import { useFeaturedProjects, useServices } from "../../shared/store";
-import { SectionHead } from "@/components/templates/_shared/ui/section-head";
+import {
+  HeroBlock,
+  SectionHead,
+  CtaBand,
+  MetricRow,
+} from "@/components/templates/_shared";
 import { PUBLIC_BASE } from "../../shared/nav-config";
 
 export function HomePage() {
@@ -16,40 +21,40 @@ export function HomePage() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="border-b border-border/60">
-        <div className="mx-auto grid max-w-6xl gap-8 px-6 py-20 md:grid-cols-12 md:py-28">
-          <div className="md:col-span-8">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{c.studioName}</p>
-            <h1 className="mt-3 text-4xl font-semibold tracking-tight md:text-6xl">{c.tagline}</h1>
-            <p className="mt-5 max-w-2xl text-base text-muted-foreground md:text-lg">{c.description}</p>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button asChild size="lg">
-                <Link href={`${PUBLIC_BASE}/contact`}>Start a project <ArrowRight className="size-4" /></Link>
-              </Button>
-              <Button asChild variant="outline" size="lg">
-                <Link href={`${PUBLIC_BASE}/portfolio`}>See work</Link>
-              </Button>
-            </div>
-          </div>
-          <div className="md:col-span-4">
-            <Card className="border-border/60">
-              <CardContent className="space-y-3 p-6">
-                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Selected stats</p>
-                <Stat k="Active clients" v="14" />
-                <Stat k="Projects shipped" v="86+" />
-                <Stat k="Avg engagement" v="6 weeks" />
-                <Stat k="NPS" v="72" />
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
+      <HeroBlock
+        variant="split"
+        eyebrow={c.studioName}
+        title={c.tagline}
+        subtitle={c.description}
+        primaryCta={{ label: "Start a project", href: `${PUBLIC_BASE}/contact` }}
+        secondaryCta={{ label: "See work", href: `${PUBLIC_BASE}/portfolio` }}
+        sidekick={
+          <Card className="border-border/60">
+            <CardContent className="space-y-3 p-6">
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Selected stats
+              </p>
+              <MetricRow
+                rows={[
+                  { k: "Active clients", v: "14" },
+                  { k: "Projects shipped", v: "86+" },
+                  { k: "Avg engagement", v: "6 weeks" },
+                  { k: "NPS", v: "72" },
+                ]}
+              />
+            </CardContent>
+          </Card>
+        }
+      />
 
       {/* Featured work */}
       <section className="border-b border-border/60">
-        <div className="mx-auto max-w-6xl px-6 py-16">
-          <SectionHead eyebrow="Featured work" title="Recent client engagements" subtitle="A peek at what we've shipped lately." />
+        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
+          <SectionHead
+            eyebrow="Featured work"
+            title="Recent client engagements"
+            subtitle="A peek at what we've shipped lately."
+          />
           <div className="mt-10 grid gap-6 md:grid-cols-2">
             {featured.slice(0, 4).map((p) => (
               <Link
@@ -62,7 +67,9 @@ export function HomePage() {
                   style={{ backgroundImage: `url(${p.cover})` }}
                 />
                 <div className="p-5">
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{p.category}</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    {p.category}
+                  </p>
                   <h3 className="mt-1 text-lg font-medium group-hover:underline">{p.title}</h3>
                   <p className="mt-1 text-sm text-muted-foreground">{p.client}</p>
                   <p className="mt-3 text-sm text-muted-foreground line-clamp-2">{p.blurb}</p>
@@ -72,7 +79,9 @@ export function HomePage() {
           </div>
           <div className="mt-8 text-center">
             <Button asChild variant="ghost">
-              <Link href={`${PUBLIC_BASE}/portfolio`}>All work <ArrowRight className="size-4" /></Link>
+              <Link href={`${PUBLIC_BASE}/portfolio`}>
+                All work <ArrowRight className="size-4" />
+              </Link>
             </Button>
           </div>
         </div>
@@ -80,8 +89,12 @@ export function HomePage() {
 
       {/* Services strip */}
       <section className="border-b border-border/60 bg-muted/30">
-        <div className="mx-auto max-w-6xl px-6 py-16">
-          <SectionHead eyebrow="What we do" title="Productized + retainer engagements" subtitle="Pick a sprint, a system build, or an embedded retainer." />
+        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
+          <SectionHead
+            eyebrow="What we do"
+            title="Productized + retainer engagements"
+            subtitle="Pick a sprint, a system build, or an embedded retainer."
+          />
           <div className="mt-10 grid gap-4 md:grid-cols-2">
             {services.map((s) => (
               <Link
@@ -104,25 +117,11 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section>
-        <div className="mx-auto max-w-3xl px-6 py-20 text-center">
-          <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">Brief us — get a proposal in 5 days.</h2>
-          <p className="mt-3 text-muted-foreground">No commitment. We respond within 24h.</p>
-          <Button asChild size="lg" className="mt-6">
-            <Link href={`${PUBLIC_BASE}/contact`}>Send the brief <ArrowRight className="size-4" /></Link>
-          </Button>
-        </div>
-      </section>
+      <CtaBand
+        title="Brief us — get a proposal in 5 days."
+        subtitle="No commitment. We respond within 24h."
+        cta={{ label: "Send the brief", href: `${PUBLIC_BASE}/contact` }}
+      />
     </>
-  );
-}
-
-function Stat({ k, v }: { k: string; v: string }) {
-  return (
-    <div className="flex items-baseline justify-between">
-      <span className="text-sm text-muted-foreground">{k}</span>
-      <span className="text-xl font-semibold tracking-tight">{v}</span>
-    </div>
   );
 }
