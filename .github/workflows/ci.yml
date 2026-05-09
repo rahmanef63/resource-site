@@ -28,6 +28,9 @@ jobs:
       - name: typecheck
         run: npm run typecheck
 
+      - name: slices check (validate + audit + gen-drift)
+        run: npm run slices:check
+
       - name: build
         run: npm run build
         env:

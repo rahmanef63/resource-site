@@ -4,7 +4,8 @@
 //   npx rahman-resources init <app-name> [--template <slug>] [--features a,b] [--skills x,y] [--with-shadcn-all]
 //   npx rahman-resources add <slug> [target-dir] [--at root|preview] [--with-shadcn-all]
 //   npx rahman-resources add-skill <slug> [target-dir]
-//   npx rahman-resources list [layouts|recipes|features|skills]
+//   npx rahman-resources scaffold-slice <slug> [--category <cat>] [--target <dir>]
+//   npx rahman-resources list [layouts|recipes|features|skills|slices]
 //   npx rahman-resources info <slug>
 //   npx rahman-resources doctor
 //   npx rahman-resources mcp                # not implemented in CLI; install rahman-resources-mcp
@@ -58,6 +59,8 @@ async function main() {
       return runAdd(rest);
     case "add-skill":
       return runAddSkill(rest);
+    case "scaffold-slice":
+      return runScaffoldSlice(rest);
     case "list":
     case "ls":
       return runList(rest);
@@ -97,7 +100,8 @@ ${kleur.bold("Usage:")}
                                        [--no-install] [--with-shadcn-reinit] [--with-shadcn-all]
   npx rahman-resources add <slug> [target-dir] [--at root|preview] [--with-shadcn-all]
   npx rahman-resources add-skill <slug> [target-dir]
-  npx rahman-resources list [layouts|recipes|features|skills]
+  npx rahman-resources scaffold-slice <slug> [--category <cat>] [--target <dir>]
+  npx rahman-resources list [layouts|recipes|features|skills|slices]
   npx rahman-resources info <slug>
   npx rahman-resources doctor
   npx rahman-resources mcp
@@ -724,6 +728,98 @@ ${kleur.cyan(`{
 
 Then in Claude Code: ${kleur.cyan("/mcp")} to see available rr_* tools.
 `);
+}
+
+// ─── scaffold-slice ───────────────────────────────────────────────────────
+//
+// Creates a new slice from the kitab's `frontend/slices/_templates/example-feature/`
+// reference. Pulls both the frontend half + the convex backend half, then
+// rewrites the slug + camelCase identifiers everywhere they appear.
+
+const VALID_CATEGORIES = ["ai", "auth", "data", "payment", "email", "realtime", "storage", "search", "content", "ui", "infra"];
+
+async function runScaffoldSlice(rest) {
+  const { positional, flags } = parseFlags(rest);
+  const [slug] = positional;
+  if (!slug) {
+    throw new Error("Usage: rahman-resources scaffold-slice <slug> [--category <cat>] [--target <dir>]");
+  }
+  if (!/^[a-z0-9][a-z0-9-]*[a-z0-9]$/.test(slug)) {
+    throw new Error(`Slug must be kebab-case (got "${slug}").`);
+  }
+  const category = typeof flags.category === "string" ? flags.category : "data";
+  if (!VALID_CATEGORIES.includes(category)) {
+    throw new Error(`--category must be one of: ${VALID_CATEGORIES.join(", ")}`);
+  }
+  const target = path.resolve(process.cwd(), typeof flags.target === "string" ? flags.target : ".");
+
+  const frontendDest = path.join(target, "frontend", "slices", slug);
+  const convexDest = path.join(target, "convex", "features", slug);
+  if (existsSync(frontendDest)) {
+    throw new Error(`Already exists: ${frontendDest}`);
+  }
+  if (existsSync(convexDest)) {
+    throw new Error(`Already exists: ${convexDest}`);
+  }
+
+  console.log(kleur.bold(`\n→ Scaffolding slice ${kleur.cyan(slug)} (${category})\n`));
+
+  process.stdout.write(`  pulling frontend half ... `);
+  await pull("frontend/slices/_templates/example-feature", frontendDest);
+  console.log(kleur.green("ok"));
+
+  process.stdout.write(`  pulling convex half ... `);
+  await pull("convex/features/example-feature", convexDest);
+  console.log(kleur.green("ok"));
+
+  process.stdout.write(`  rewriting identifiers ... `);
+  rewriteSlugInTree(frontendDest, "example-feature", slug, category);
+  rewriteSlugInTree(convexDest, "example-feature", slug, category);
+  console.log(kleur.green("ok"));
+
+  console.log(`\n${kleur.green("✓")} Slice ${kleur.bold(slug)} scaffolded.`);
+  console.log(`\n${kleur.bold("Next:")}`);
+  console.log(`  1. Edit ${kleur.cyan(`frontend/slices/${slug}/slice.json`)} — set description, deps, peers.`);
+  console.log(`  2. Replace stub UI in ${kleur.cyan(`frontend/slices/${slug}/{page,components}`)}.`);
+  console.log(`  3. Define your backend in ${kleur.cyan(`convex/features/${slug}/{schema,queries,mutations}.ts`)}.`);
+  console.log(`  4. Spread tables in ${kleur.cyan(`convex/schema.ts`)}: ${kleur.dim(`...${camelCase(slug)}Tables`)}`);
+  console.log(`  5. Run ${kleur.cyan("npm run gen:slices && node packages/cli/scripts/validate-slice.mjs")}.\n`);
+}
+
+function camelCase(slug) {
+  return slug.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+}
+
+function pascalCase(slug) {
+  const cc = camelCase(slug);
+  return cc.charAt(0).toUpperCase() + cc.slice(1);
+}
+
+function rewriteSlugInTree(dir, fromSlug, toSlug, newCategory) {
+  const fromCamel = camelCase(fromSlug);
+  const fromPascal = pascalCase(fromSlug);
+  const toCamel = camelCase(toSlug);
+  const toPascal = pascalCase(toSlug);
+
+  for (const entry of readdirSync(dir)) {
+    const full = path.join(dir, entry);
+    const stat = statSync(full);
+    if (stat.isDirectory()) {
+      rewriteSlugInTree(full, fromSlug, toSlug, newCategory);
+      continue;
+    }
+    let body = readFileSync(full, "utf8");
+    const before = body;
+    body = body
+      .replaceAll(fromSlug, toSlug)
+      .replaceAll(fromPascal, toPascal)
+      .replaceAll(fromCamel, toCamel);
+    // slice.json: also patch category if user passed one
+    if (entry === "slice.json" && newCategory) {
+      body = body.replace(/"category"\s*:\s*"[^"]*"/, `"category": "${newCategory}"`);
+    }
+    if (body !== before) writeFileSync(full, body);
+  }
 }
 
 // ─── helpers ──────────────────────────────────────────────────────────────

@@ -24,9 +24,10 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"],
+      "@/shared/*": ["./components/shared/*", "./lib/shared/*"],
+      "@/features/*": ["./frontend/slices/*"],
+      "@convex/*": ["./convex/*"]
     }
   },
   "include": [
