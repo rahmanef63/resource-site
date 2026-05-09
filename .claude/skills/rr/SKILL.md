@@ -15,17 +15,57 @@ You are the kitab author's pair-programmer. The user typed `/rr` because they wa
 4. Stack: Next 16 + React 19 + Tailwind 4 + Convex self-hosted + TS strict.
 5. Slice imports MUST resolve via `@/components/ui/*`, `@/components/shared/*`, `@/lib/shared/*`, `@/lib/utils`, `@/shared/*`, `@convex/*`, common npm libs, or relative-within-slice. Anything else fails `audit:slices`.
 
-## Decide what the user wants — five entry points
+## Decide what the user wants — six entry points
 
 | User intent | Action |
 |---|---|
-| "buat slice baru" / "create new slice" | `Create slice` flow below |
+| "list" / "ls" / "lihat templates / slices / recipes / skills" | `List` flow below |
+| "buat slice baru" / "create new slice" | `Create slice` flow |
 | "modify slice X" / "tambah env / npm / peer ke X" | `Modify slice` flow |
 | "port from superspace" / "ambil feature dari superspace" | `Port slice` flow |
 | "buat template baru" / "clone template" | `Create template` flow |
 | "siap publish" / "ready to publish" | `Publish prep` flow |
 
-If the user is vague, ask one targeted question. Don't survey — pick the most likely intent from context (the file they're looking at, the recent git diff, the slice they just touched).
+Args parsing: `/rr <verb> [filter]`. Verbs the skill recognizes: `list`/`ls`, `info`/`show`, `new`/`create`, `modify`/`edit`, `port`, `publish`. If the user is vague, ask one targeted question. Don't survey — pick the most likely intent from context (the file they're looking at, the recent git diff, the slice they just touched).
+
+## Flow Z — List / discover
+
+User typed `/rr list`, `/rr ls`, `/rr list templates`, `/rr list slices`, `/rr list recipes`, `/rr list skills`, `/rr list layouts`, or just asked "apa saja yang ada di kitab".
+
+Run the CLI's list command — it reads from `packages/cli/lib/manifest.json` (auto-synced from `lib/content/{layouts,slices,recipes}.ts` via `npm run manifest:sync`):
+
+```bash
+node packages/cli/bin/cli.js list                # all categories
+node packages/cli/bin/cli.js list slices         # only slices
+node packages/cli/bin/cli.js list layouts        # layouts (cookbook shapes — marketing/dashboard/cms)
+node packages/cli/bin/cli.js list templates      # full website templates (subset of layouts where category=website-template)
+node packages/cli/bin/cli.js list recipes        # frontend-only patterns
+node packages/cli/bin/cli.js list skills         # Claude skills (anthropics + rahman)
+```
+
+Note: the published CLI surface is `npx rahman-resources list ...` — but inside the kitab repo the local `node packages/cli/bin/cli.js` form runs against the just-edited manifest without needing a publish.
+
+Note 2: the CLI's `list` does NOT have a separate `templates` filter — it lumps templates under `layouts` (since `LayoutEntry.category === "website-template"`). To see only website templates:
+
+```bash
+node -e 'const m=require("./packages/cli/lib/manifest.json");console.table(m.layouts.filter(l=>l.category==="website-template").map(l=>({slug:l.slug,title:l.title,source:l.source})))'
+```
+
+After listing, if the user asks for detail on one item, run:
+
+```bash
+node packages/cli/bin/cli.js info <slug>
+```
+
+This shows the full record — pullPaths, deps, env, peers, exampleCode snippet, agentRecipe.
+
+If the manifest looks stale (you just edited `lib/content/*.ts`), regenerate first:
+
+```bash
+npm run manifest:sync
+```
+
+Then re-list.
 
 ## Flow A — Create slice (greenfield)
 
