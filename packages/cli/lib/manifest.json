@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-10T04:09:55.146Z",
+  "generatedAt": "2026-05-10T18:34:49.502Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -929,6 +929,32 @@
         "presets",
         "oklch",
         "design-system"
+      ]
+    },
+    {
+      "slug": "icon-picker",
+      "title": "Notion-Style Icon Picker",
+      "description": "Emoji + lucide icon picker with search, 10-color Notion palette, Twemoji/native toggle. One string stores emoji OR lucide:Name OR with ?c=hex tint — backwards-compat with raw-emoji fields.",
+      "source": "notion-page-clone",
+      "files": [
+        "frontend/slices/notion/slices/icon-picker/components/IconPicker.tsx",
+        "frontend/slices/notion/slices/icon-picker/components/DynamicIcon.tsx",
+        "frontend/slices/notion/slices/icon-picker/lib/parse.ts",
+        "frontend/slices/notion/slices/icon-picker/lib/colors.ts",
+        "frontend/slices/notion/slices/icon-picker/lib/emoji-catalog.ts",
+        "frontend/slices/notion/slices/icon-picker/lib/lucide-catalog.ts",
+        "frontend/slices/notion/slices/icon-picker/lib/twemoji.ts",
+        "frontend/slices/notion/slices/icon-picker/lib/style-pref.ts"
+      ],
+      "exampleCode": "import { IconPickerPopover, DynamicIcon } from \"@/frontend/slices/notion/slices/icon-picker\";\n\n<IconPickerPopover value={page.icon} onChange={(v) => updateIcon(v)} onClear={() => updateIcon(\"\")} />\n<DynamicIcon value={page.icon} className=\"text-2xl\" />",
+      "agentRecipe": "Single icon field stores emoji or 'lucide:Name' plus optional '?c=hex'. parseIconValue() decodes; lucideValue()/withColor() build. Add 'icon: v.string()' to Convex table — no migration needed for existing emoji fields. Popover variant for inline UI, Inline for sheets/dialogs.",
+      "tags": [
+        "icon",
+        "emoji",
+        "lucide",
+        "picker",
+        "twemoji",
+        "notion"
       ]
     },
     {

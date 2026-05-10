@@ -141,6 +141,31 @@ export const recipes: RecipeEntry[] = [
       "Add a new preset by appending a CSS block in app/globals.css with [data-theme=\"<name>\"], then register in preset-groups.ts.",
   },
   {
+    slug: "icon-picker",
+    title: "Notion-Style Icon Picker",
+    description:
+      "Emoji + lucide icon picker with search, 10-color Notion palette, Twemoji/native toggle. One string stores emoji OR lucide:Name OR with ?c=hex tint — backwards-compat with raw-emoji fields.",
+    source: "notion-page-clone",
+    repoPath: "recipes/icon-picker",
+    files: [
+      "frontend/slices/notion/slices/icon-picker/components/IconPicker.tsx",
+      "frontend/slices/notion/slices/icon-picker/components/DynamicIcon.tsx",
+      "frontend/slices/notion/slices/icon-picker/lib/parse.ts",
+      "frontend/slices/notion/slices/icon-picker/lib/colors.ts",
+      "frontend/slices/notion/slices/icon-picker/lib/emoji-catalog.ts",
+      "frontend/slices/notion/slices/icon-picker/lib/lucide-catalog.ts",
+      "frontend/slices/notion/slices/icon-picker/lib/twemoji.ts",
+      "frontend/slices/notion/slices/icon-picker/lib/style-pref.ts",
+    ],
+    tags: ["icon", "emoji", "lucide", "picker", "twemoji", "notion"],
+    exampleCode: `import { IconPickerPopover, DynamicIcon } from "@/frontend/slices/notion/slices/icon-picker";
+
+<IconPickerPopover value={page.icon} onChange={(v) => updateIcon(v)} onClear={() => updateIcon("")} />
+<DynamicIcon value={page.icon} className="text-2xl" />`,
+    agentRecipe:
+      "Single icon field stores emoji or 'lucide:Name' plus optional '?c=hex'. parseIconValue() decodes; lucideValue()/withColor() build. Add 'icon: v.string()' to Convex table — no migration needed for existing emoji fields. Popover variant for inline UI, Inline for sheets/dialogs.",
+  },
+  {
     slug: "contact-form-resend",
     title: "Contact Form + Resend",
     description:
