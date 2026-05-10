@@ -1,6 +1,8 @@
 # Theme Preset System (Infrastructure)
 
 > **Portability tier:** L — not a slice, but a self-contained platform layer (provider + lib + CSS + Tailwind tokens). Two orthogonal axes (mode + preset) layered on top of OKLCH CSS variables.
+>
+> **Already ported into kitab v2** at flat paths (`lib/theme/*`, `components/site/theme-preset-{provider,switcher}.tsx`, `public/r/registry.json`). See [`recipes/theme-preset-switcher.md`](../recipes/theme-preset-switcher.md) for the kitab-flat layout cp recipe. The deep dive below uses CareerPack's `frontend/src/shared/...` paths.
 
 ## Tujuan
 

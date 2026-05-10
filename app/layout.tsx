@@ -5,6 +5,7 @@ import { Toaster } from "sonner";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { SiteShell } from "@/components/site/site-shell";
+import { ThemePresetProvider } from "@/components/site/theme-preset-provider";
 import { site } from "@/lib/content/site";
 import "./globals.css";
 
@@ -48,11 +49,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${GeistSans.variable} ${GeistMono.variable}`}
     >
       <body className="min-h-screen bg-background font-sans antialiased">
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-          <Suspense fallback={null}>
-            <SiteShell>{children}</SiteShell>
-          </Suspense>
-          <Toaster richColors position="bottom-right" />
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          <ThemePresetProvider>
+            <Suspense fallback={null}>
+              <SiteShell>{children}</SiteShell>
+            </Suspense>
+            <Toaster richColors position="bottom-right" />
+          </ThemePresetProvider>
         </ThemeProvider>
       </body>
     </html>

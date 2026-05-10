@@ -8,7 +8,7 @@ import { Menu, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { CommandPalette } from "./command-palette";
-import { ThemeToggle } from "./theme-toggle";
+import { ThemePresetSwitcher } from "./theme-preset-switcher";
 import { site } from "@/lib/content/site";
 import { cn } from "@/lib/utils";
 
@@ -85,7 +85,7 @@ export function TopNavbar() {
           >
             <Github className="size-4" />
           </Link>
-          <ThemeToggle />
+          <ThemePresetSwitcher />
           <Button asChild size="sm" className="hidden gap-1 sm:inline-flex">
             <Link href="/agents">
               <Plus className="size-3.5" />

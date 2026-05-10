@@ -94,3 +94,18 @@ body {
 html {
   scroll-behavior: smooth;
 }
+
+/* Pulsed by lib/theme/theme-presets.ts during preset swap. */
+html.theme-transition,
+html.theme-transition body,
+html.theme-transition * {
+  transition:
+    background-color 260ms ease,
+    color 260ms ease,
+    border-color 260ms ease,
+    fill 260ms ease,
+    stroke 260ms ease,
+    box-shadow 260ms ease,
+    border-radius 260ms ease,
+    letter-spacing 260ms ease !important;
+}
