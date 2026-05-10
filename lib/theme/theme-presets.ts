@@ -1,8 +1,12 @@
 // Theme preset loader — sources theme definitions from
 // `/r/registry.json` (verbatim copy of the tweakcn theme registry, 36 items).
 //
-// 1. Fetch registry.json once, cache in module state.
+// 1. Fetch registry.json once, cache in module state. If the fetch
+//    fails (404, network error), fall back to EMBEDDED_FALLBACK so the
+//    switcher still renders with at least one preset.
 // 2. Build CSS block: `:root { --x: …; }` + `.dark { --x: …; }`.
+//    Color values pass through verbatim (kitab Tailwind v4 `@theme inline`
+//    expects full `oklch(L C H)` strings — DO NOT strip the wrapper).
 // 3. Inject as a single `<style id="theme-preset-vars">` tag in <head>.
 // 4. Pulse `html.theme-transition` class for 260 ms around every swap.
 // 5. Entry points: applyPreset (commit + persist), previewPreset (hover),
@@ -104,18 +108,6 @@ const PASSTHROUGH_TOKENS = [
 
 const FONT_TOKENS = ["font-sans", "font-serif", "font-mono"] as const;
 
-const OKLCH_RX = /^oklch\(\s*([^)]+?)\s*\)\s*$/i;
-const HSL_RX = /^hsl\(\s*([^)]+?)\s*\)\s*$/i;
-
-function stripColorWrapper(value: string): string {
-  const trimmed = value.trim();
-  const oklch = trimmed.match(OKLCH_RX);
-  if (oklch) return oklch[1].trim();
-  const hsl = trimmed.match(HSL_RX);
-  if (hsl) return hsl[1].replace(/,/g, " ").trim();
-  return trimmed;
-}
-
 function buildBlock(
   selector: string,
   vars: Record<string, string>,
@@ -125,9 +117,9 @@ function buildBlock(
     const v = vars[key];
     if (!v) continue;
     const outKey = COLOR_ALIAS[key] ?? key;
-    lines.push(`  --${outKey}: ${stripColorWrapper(v)};`);
+    lines.push(`  --${outKey}: ${v};`);
     if (COLOR_ALIAS[key]) {
-      lines.push(`  --${key}: ${stripColorWrapper(v)};`);
+      lines.push(`  --${key}: ${v};`);
     }
   }
   for (const key of PASSTHROUGH_TOKENS) {
@@ -141,6 +133,66 @@ function buildBlock(
   if (!lines.length) return null;
   return `${selector} {\n${lines.join("\n")}\n}`;
 }
+
+// Embedded fallback — used when /r/registry.json fails to load (404,
+// network error, CSP block). Mirrors kitab's baseline globals.css so
+// the switcher still has at least the default preset to display, and
+// applyPreset() never throws even offline.
+const EMBEDDED_FALLBACK: ThemeRegistry = {
+  name: "rahman-resources-fallback",
+  items: [
+    {
+      name: DEFAULT_PRESET_NAME,
+      title: "Modern Minimal (fallback)",
+      cssVars: {
+        light: {
+          background: "oklch(1 0 0)",
+          foreground: "oklch(0.145 0 0)",
+          card: "oklch(1 0 0)",
+          "card-foreground": "oklch(0.145 0 0)",
+          popover: "oklch(1 0 0)",
+          "popover-foreground": "oklch(0.145 0 0)",
+          primary: "oklch(0.205 0 0)",
+          "primary-foreground": "oklch(0.985 0 0)",
+          secondary: "oklch(0.97 0 0)",
+          "secondary-foreground": "oklch(0.205 0 0)",
+          muted: "oklch(0.97 0 0)",
+          "muted-foreground": "oklch(0.45 0 0)",
+          accent: "oklch(0.97 0 0)",
+          "accent-foreground": "oklch(0.205 0 0)",
+          destructive: "oklch(0.577 0.245 27.325)",
+          "destructive-foreground": "oklch(0.985 0 0)",
+          border: "oklch(0.92 0 0)",
+          input: "oklch(0.92 0 0)",
+          ring: "oklch(0.708 0 0)",
+          radius: "0.5rem",
+        },
+        dark: {
+          background: "oklch(0.141 0.005 285.823)",
+          foreground: "oklch(0.985 0 0)",
+          card: "oklch(0.18 0.006 285.5)",
+          "card-foreground": "oklch(0.985 0 0)",
+          popover: "oklch(0.18 0.006 285.5)",
+          "popover-foreground": "oklch(0.985 0 0)",
+          primary: "oklch(0.985 0 0)",
+          "primary-foreground": "oklch(0.205 0 0)",
+          secondary: "oklch(0.235 0.006 285.5)",
+          "secondary-foreground": "oklch(0.985 0 0)",
+          muted: "oklch(0.235 0.006 285.5)",
+          "muted-foreground": "oklch(0.708 0.011 286.067)",
+          accent: "oklch(0.235 0.006 285.5)",
+          "accent-foreground": "oklch(0.985 0 0)",
+          destructive: "oklch(0.396 0.141 25.723)",
+          "destructive-foreground": "oklch(0.985 0 0)",
+          border: "oklch(0.275 0.008 286)",
+          input: "oklch(0.275 0.008 286)",
+          ring: "oklch(0.439 0 0)",
+          radius: "0.5rem",
+        },
+      },
+    },
+  ],
+};
 
 let registryCache: ThemeRegistry | null = null;
 let registryPromise: Promise<ThemeRegistry> | null = null;
@@ -158,6 +210,12 @@ export async function loadRegistry(): Promise<ThemeRegistry> {
         (i) => i.cssVars?.light && i.cssVars?.dark,
       );
       registryCache = { ...data, items };
+      return registryCache;
+    })
+    .catch(() => {
+      // Network/parse failure → serve the embedded fallback so the UI
+      // still renders. Cached so we don't re-attempt the failed fetch.
+      registryCache = EMBEDDED_FALLBACK;
       return registryCache;
     });
   return registryPromise;
