@@ -166,6 +166,86 @@ export const recipes: RecipeEntry[] = [
       "Single icon field stores emoji or 'lucide:Name' plus optional '?c=hex'. parseIconValue() decodes; lucideValue()/withColor() build. Add 'icon: v.string()' to Convex table — no migration needed for existing emoji fields. Popover variant for inline UI, Inline for sheets/dialogs.",
   },
   {
+    slug: "rbac-roles",
+    title: "RBAC — Tiered System Roles",
+    description:
+      "Workspace-scoped RBAC with 6 system roles (owner/admin/manager/staff/client/guest) and three tier presets — solo, influencer, organization. Env-based platform admin bypass via PLATFORM_ADMIN_EMAILS. checkPermission / requirePermission helpers, role seeding mutation, @convex-dev/auth aware (no Clerk).",
+    source: "superspace",
+    repoPath: "recipes/rbac-roles",
+    files: [
+      "template-base/convex/lib/rbac/perms.ts",
+      "template-base/convex/lib/rbac/role-templates.ts",
+      "template-base/convex/lib/rbac/platform-admin.ts",
+      "template-base/convex/lib/rbac/permissions.ts",
+      "template-base/convex/lib/rbac/seed.ts",
+      "template-base/convex/auth/schema.ts",
+    ],
+    tags: ["rbac", "auth", "permissions", "roles", "workspaces", "owner"],
+    exampleCode: `import { seedWorkspaceRoles } from "@/convex/lib/rbac/seed";
+import { requirePermission } from "@/convex/lib/rbac/permissions";
+
+// In workspace-create mutation:
+const wsId = await ctx.db.insert("workspaces", { ... });
+await seedWorkspaceRoles(ctx, wsId, "solo"); // or "influencer" | "organization"
+
+// In any mutation:
+await requirePermission(ctx, args.workspaceId, "content.create");`,
+    agentRecipe:
+      "Three tier presets pick which system roles to seed: solo (owner+admin) for personal-brand-os, influencer (+manager) for creator+VA, organization (6 roles) for company/institution. Platform admin via env PLATFORM_ADMIN_EMAILS bypasses all checks. Resolution order: platform admin → workspace owner row → membership.additionalPermissions → role.permissions. Workspaces.userId is the owner field for the notion-port schema; .createdBy for superspace-style. Helpers handle both.",
+  },
+  {
+    slug: "admin-panel",
+    title: "Admin Panel — Unified Product Admin",
+    description:
+      "17-section admin surface (events, funnels, attribution, users, A/B, flags, pricing, CMS, email, audit, ...) gated by RBAC. Auto-filters sidebar by tier (solo/influencer/organization) and user permissions. Single backend resolver (getMyAdminAccess) mirrors frontend gate so UI can never leak.",
+    source: "superspace + spec",
+    repoPath: "recipes/admin-panel",
+    files: [
+      "template-base/frontend/slices/admin/config.ts",
+      "template-base/frontend/slices/admin/page.tsx",
+      "template-base/frontend/slices/admin/README.md",
+      "template-base/frontend/slices/admin/components/AdminShell.tsx",
+      "template-base/frontend/slices/admin/components/AccessGate.tsx",
+      "template-base/frontend/slices/admin/hooks/useAdminAccess.ts",
+      "template-base/frontend/slices/admin/index.ts",
+      "template-base/convex/features/admin/access.ts",
+    ],
+    tags: ["admin", "owner", "platform", "rbac", "instrumentation", "panel"],
+    exampleCode: `import { AdminPage } from "@/frontend/slices/admin";
+
+// app/admin/page.tsx
+export default function Page() {
+  const ws = useCurrentWorkspace();
+  if (!ws) return null;
+  return <AdminPage workspaceId={ws._id} tier={ws.tier ?? "solo"} />;
+}`,
+    agentRecipe:
+      "Wrap pages with <AdminPage workspaceId tier> — AccessGate hides UI for non-admins, AdminShell renders 2-col layout with sidebar filtered by tier+perms. ADMIN_SECTIONS registry in config.ts is single source of truth (17 entries, each with tiers + required perm + P0/P1/P2 priority). Personal-brand-os = tier 'solo' = owner sees everything via owner bypass. Set PLATFORM_ADMIN_EMAILS for cross-workspace superadmin. Depends on rbac-roles recipe — seed roles in your workspace-create mutation first.",
+  },
+  {
+    slug: "event-tracking",
+    title: "Event Tracking — P0 Instrumentation",
+    description:
+      "Client SDK + Convex ingestion endpoint for structured product events. Auto-captures page_view/signup/login + UTM/referrer/first-touch attribution. Batched flush via requestIdleCallback, re-queue on failure. Targets <100ms p99 ingestion. Required before any funnel/activation/A-B feature.",
+    source: "spec + superspace analytics",
+    repoPath: "recipes/event-tracking",
+    files: [
+      "template-base/frontend/slices/admin/slices/events/lib/track-event.ts",
+      "template-base/convex/features/admin/events.ts",
+      "template-base/convex/features/analytics/schema.ts",
+    ],
+    tags: ["events", "analytics", "instrumentation", "attribution", "utm", "p0"],
+    exampleCode: `import { initEventTracking, trackEvent, trackPageView } from "@/frontend/slices/admin";
+
+// app/layout.tsx — once at app root
+useEffect(() => { initEventTracking(convex); }, [convex]);
+
+// anywhere
+trackEvent({ eventType: "cv_generated", productId: "careerpack", properties: { template: "modern" } });`,
+    agentRecipe:
+      "Writes to existing analyticsEvents table (no new schema). Anonymous page_view allowed (pre-signup funnel); other events require workspaceId. Session id per tab (sessionStorage), first-touch UTM in localStorage. Flush batched every ~500ms via requestIdleCallback. Cap retry queue at 500. Backend ingest mutation accepts batched array — keep flush under one request.",
+  },
+  {
     slug: "contact-form-resend",
     title: "Contact Form + Resend",
     description:

@@ -7,7 +7,7 @@ import { Button } from "@/shared/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/shared/ui/tabs";
 import { ScrollArea } from "@/shared/ui/scroll-area";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
-import { cn } from "@/shared/lib/utils";
+import { cn } from "@/lib/utils";
 import { EMOJI_GROUPS, ALL_EMOJIS } from "../lib/emoji-catalog";
 import { LUCIDE_GROUPS, ALL_LUCIDE } from "../lib/lucide-catalog";
 import { ICON_COLORS } from "../lib/colors";

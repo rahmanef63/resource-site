@@ -3,7 +3,7 @@
 import * as React from "react";
 import * as LucideIcons from "lucide-react";
 import { FileText } from "lucide-react";
-import { cn } from "@/shared/lib/utils";
+import { cn } from "@/lib/utils";
 import { parseIconValue } from "../lib/parse";
 import { twemojiUrl } from "../lib/twemoji";
 import { useIconStyle } from "../lib/style-pref";

@@ -30,6 +30,9 @@
 | Database views (11) | `/home/rahman/projects/notion-page-clone/src/slices/databases/` |
 | Command palette | `/home/rahman/projects/notion-page-clone/src/slices/command-palette/` |
 | Comments threaded | `/home/rahman/projects/notion-page-clone/src/slices/comments/` |
+| RBAC roles (6 system roles + tier presets) | `/home/rahman/projects/superspace/convex/workspace/{permissions,roles.config}.ts` + `convex/lib/platformAdmin.ts` |
+| Admin panel (17-section shell + access gate) | `template-base/frontend/slices/admin/` + `superspace/frontend/slices/platform-admin/` |
+| Event tracking SDK (P0 instrumentation) | `template-base/frontend/slices/admin/slices/events/` |
 
 ## Notion Slice Convention
 
