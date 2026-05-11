@@ -1,10 +1,11 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, ExternalLink, Layers } from "lucide-react";
+import { ArrowLeft, ExternalLink, Layers, Eye } from "lucide-react";
 import { slices, getSlice } from "@/lib/content/slices";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { PreviewFrame } from "@/components/site/preview-frame";
 
 export function generateStaticParams() {
   return slices.map((s) => ({ slug: s.slug }));
@@ -43,9 +44,44 @@ export default async function SliceDetailPage({ params }: { params: Promise<{ sl
           <h1 className="text-3xl font-bold tracking-tight">{slice.title}</h1>
           <Badge variant="secondary" className="text-[10px]">v{slice.version}</Badge>
           <Badge variant="outline" className="text-[10px] capitalize">{slice.category}</Badge>
+          {slice.kind && (
+            <Badge
+              className={
+                "text-[10px] uppercase " +
+                (slice.kind === "ui"
+                  ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                  : slice.kind === "backend"
+                    ? "bg-blue-500/10 text-blue-700 dark:text-blue-300"
+                    : "bg-purple-500/10 text-purple-700 dark:text-purple-300")
+              }
+            >
+              {slice.kind}
+            </Badge>
+          )}
         </div>
         <p className="mt-3 max-w-2xl text-muted-foreground">{slice.description}</p>
       </div>
+
+      {slice.previewPath && (
+        <Card>
+          <CardContent className="space-y-3 p-4">
+            <div className="flex items-baseline justify-between">
+              <h2 className="flex items-center gap-1.5 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                <Eye className="size-3.5" /> Live preview
+              </h2>
+              <a
+                href={slice.previewPath}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+              >
+                Open standalone <ExternalLink className="size-3" />
+              </a>
+            </div>
+            <PreviewFrame src={slice.previewPath} defaultView="desktop" defaultZoom={0.65} />
+          </CardContent>
+        </Card>
+      )}
 
       <Card>
         <CardContent className="space-y-4 p-6">

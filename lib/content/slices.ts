@@ -62,6 +62,9 @@ export type SliceEntry = {
   usedBy?: string[];
   /** Brief recipe for an AI agent installing the slice manually. */
   agentRecipe?: string;
+  /** Live preview route, e.g. "/preview/slices/full-width-toggle". When set,
+   *  the slice detail page renders a PreviewFrame iframing this URL. */
+  previewPath?: string;
 };
 
 export const slices: SliceEntry[] = [
@@ -89,6 +92,7 @@ export const slices: SliceEntry[] = [
     tags: ["auth", "convex", "magic-link", "no-clerk"],
     usedBy: ["personal-brand-os", "wirausaha-os", "konsultan-os"],
     agentRecipe: "Run `rr add convex-auth`. Then create convex/auth.ts using the kitab pattern (Resend provider). Set env via `npx convex env set` for self-hosted.",
+    previewPath: "/preview/slices/convex-auth",
     exampleCode: `// convex/auth.ts
 import { convexAuth } from "@convex-dev/auth/server";
 import Resend from "@convex-dev/auth/providers/Resend";
@@ -126,6 +130,7 @@ export default convexAuthNextjsMiddleware();`,
     tags: ["payment", "doku", "indonesia", "qris", "virtual-account", "ewallet", "checkout"],
     usedBy: ["personal-brand-os", "konsultan-os", "wirausaha-os", "kreator-studio-os", "riset-kit", "agency-studio-os", "cms-public-storefront"],
     agentRecipe: "DOKU dual-mode: Checkout (hosted, all channels) atau Direct (single channel, returns VA/QRIS/deeplink). Webhook di /webhooks/doku verify HMAC-SHA256 (canonical: Client-Id + Request-Id + Request-Timestamp + Request-Target + Digest). Idempotency by request_id index. Server-only — no NEXT_PUBLIC_*. Sandbox default (api-sandbox.doku.com); flip DOKU_IS_PRODUCTION=true for live.",
+    previewPath: "/preview/slices/doku-payment",
   },
   {
     slug: "midtrans-payment",
@@ -151,6 +156,7 @@ export default convexAuthNextjsMiddleware();`,
     tags: ["payment", "midtrans", "indonesia", "qris", "snap"],
     usedBy: ["wirausaha-os", "konsultan-os", "kreator-studio-os"],
     agentRecipe: "Midtrans Snap untuk pembayaran instant. Webhook ke Convex HTTP action /api/midtrans-callback untuk update order status. Ingat: PPN 11% sudah included di amount, jangan double-count.",
+    previewPath: "/preview/slices/midtrans-payment",
   },
   {
     slug: "resend-newsletter",
@@ -174,6 +180,7 @@ export default convexAuthNextjsMiddleware();`,
     tags: ["email", "newsletter", "resend"],
     usedBy: ["personal-brand-os", "kreator-studio-os", "wirausaha-os"],
     agentRecipe: "Use Resend Audiences API for newsletter — store subscriber emails in Convex too for segmentation. Double opt-in: subscriber.create with status 'pending' → click link → status 'confirmed'.",
+    previewPath: "/preview/slices/resend-newsletter",
   },
   {
     slug: "ai-router",
@@ -194,6 +201,7 @@ export default convexAuthNextjsMiddleware();`,
     tags: ["ai", "llm", "openrouter", "tier-routing"],
     usedBy: ["personal-brand-os"],
     agentRecipe: "Wrap every AI call through ai-router action. Pick tier based on workload: nano for spam-flag/headline-suggest, mid for chat/draft, flagship for methodology-review. Log token usage to ai_usage table for cost dashboard.",
+    previewPath: "/preview/slices/ai-router",
   },
   {
     slug: "vector-search",
@@ -214,6 +222,7 @@ export default convexAuthNextjsMiddleware();`,
     tags: ["search", "vector", "embeddings", "convex", "rag"],
     usedBy: ["personal-brand-os", "riset-kit"],
     agentRecipe: "Add embedding field + vectorIndex per searchable table. Re-embed on upsert via Convex action. Cache embeddings — don't re-call OpenAI on every read.",
+    previewPath: "/preview/slices/vector-search",
   },
   {
     slug: "mdx-blog",
@@ -234,6 +243,7 @@ export default convexAuthNextjsMiddleware();`,
     tags: ["content", "blog", "mdx", "static"],
     usedBy: ["personal-brand-os", "konsultan-os", "saas-marketing-os"],
     agentRecipe: "Store post body sebagai markdown di content/blog/*.mdx. Render dengan MDXRemote di [slug]/page.tsx. Auto-extract headings ke ToC via remark plugin custom.",
+    previewPath: "/preview/slices/mdx-blog",
   },
   {
     slug: "cal-com-booking",
@@ -257,6 +267,7 @@ export default convexAuthNextjsMiddleware();`,
     tags: ["data", "scheduling", "cal-com", "bookings"],
     usedBy: ["personal-brand-os", "konsultan-os"],
     agentRecipe: "Embed Cal.com via @calcom/embed-react di halaman services. Configure webhook di Cal.com dashboard → POST ke /api/cal-webhook → upsert booking di Convex.",
+    previewPath: "/preview/slices/cal-com-booking",
   },
   {
     slug: "full-width-toggle",
@@ -277,6 +288,7 @@ export default convexAuthNextjsMiddleware();`,
     tags: ["ui", "layout", "preference", "localstorage", "dashboard"],
     usedBy: ["personal-brand-os", "agency-studio-os", "konsultan-os", "wirausaha-os", "kreator-studio-os", "saas-marketing-os", "riset-kit", "cms-public-storefront"],
     agentRecipe: "Drop <WidthContainer> around page content, <FullWidthToggle variant='icon' /> in topbar. Variant 'segment' best for settings page. Hook useFullWidth() returns [mode, setMode, cycle]. SSR-safe — defaults to 'contained' until hydrate.",
+    previewPath: "/preview/slices/full-width-toggle",
   },
   {
     slug: "command-menu",
@@ -297,6 +309,7 @@ export default convexAuthNextjsMiddleware();`,
     tags: ["ui", "palette", "cmd-k", "navigation", "keyboard"],
     usedBy: ["personal-brand-os", "agency-studio-os", "konsultan-os", "wirausaha-os", "kreator-studio-os", "saas-marketing-os", "riset-kit", "cms-public-storefront"],
     agentRecipe: "Mount <CommandMenu actions={...} /> once at the dashboard shell level. Listens for Cmd+K globally. Actions auto-build from feature registry + workspace + theme/sign-out. Add custom commands via actions prop or by registering in command-registry.ts.",
+    previewPath: "/preview/slices/command-menu",
   },
   {
     slug: "motion-primitives",
@@ -317,6 +330,7 @@ export default convexAuthNextjsMiddleware();`,
     tags: ["ui", "motion", "animation", "marquee", "framer-motion"],
     usedBy: ["personal-brand-os", "agency-studio-os", "kreator-studio-os", "saas-marketing-os"],
     agentRecipe: "Each primitive is independently importable from @/features/motion-primitives. Use marquee for logo strips, kinetic-heading for hero text, magnetic for CTA buttons, cursor-spotlight for hover-reveal panels, stat-counter for animated numbers, reading-progress for blog top bar, grain for film texture, lightbox for image gallery.",
+    previewPath: "/preview/slices/motion-primitives",
   },
   {
     slug: "responsive-dialog",
@@ -337,6 +351,7 @@ export default convexAuthNextjsMiddleware();`,
     tags: ["ui", "dialog", "modal", "sheet", "responsive", "primitive"],
     usedBy: ["personal-brand-os", "agency-studio-os", "konsultan-os", "wirausaha-os", "kreator-studio-os", "saas-marketing-os", "riset-kit", "cms-public-storefront"],
     agentRecipe: "Drop-in for shadcn Dialog. Use <ResponsiveDialog><ResponsiveDialogTrigger>…</ResponsiveDialogTrigger><ResponsiveDialogContent>…</ResponsiveDialogContent></ResponsiveDialog>. On mobile renders as Sheet sliding from bottom; on desktop as centered Dialog. Threshold via useMediaQuery('(min-width: 768px)').",
+    previewPath: "/preview/slices/responsive-dialog",
   },
   {
     slug: "dashboard-shell",
@@ -357,6 +372,7 @@ export default convexAuthNextjsMiddleware();`,
     tags: ["ui", "layout", "dashboard", "sidebar", "topbar", "responsive"],
     usedBy: ["personal-brand-os", "agency-studio-os", "konsultan-os", "wirausaha-os", "kreator-studio-os", "riset-kit", "cms-public-storefront"],
     agentRecipe: "Wraps app/(admin) routes. <ResponsiveDashboardShell sidebar={<AppSidebar />} topbar={<TopBar />}>{children}</ResponsiveDashboardShell>. Mobile: sidebar collapses to <Sheet>. Desktop: persistent sidebar + topbar. Embed FullWidthToggle in topbar for instant container resize.",
+    previewPath: "/preview/slices/dashboard-shell",
   },
   {
     slug: "broadcast-channel-sync",
@@ -377,6 +393,7 @@ export default convexAuthNextjsMiddleware();`,
     tags: ["realtime", "cross-tab", "broadcast-channel", "demo-pattern"],
     usedBy: ["personal-brand-os"],
     agentRecipe: "Use BroadcastChannel only for demo / cross-iframe state mirroring. Production data still goes through Convex realtime. Use the useBroadcastSync(channelName, initial) hook from @/features/broadcast-channel-sync.",
+    previewPath: "/preview/slices/broadcast-channel-sync",
   },
 ];
 
