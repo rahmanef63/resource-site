@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 640">
-  <rect width="1920" height="640" fill="#0A0A0A"/>
-  <g transform="translate(134,223.5) scale(1.1556)">    <path fill="#FFFFFF" fill-rule="evenodd"  d="M 43,47 L 42,77 L 45,87 L 57,102 L 73,109 L 95,109 L 99,106 L 100,101 L 97,97 L 75,97 L 67,94 L 60,88 L 53,70 L 56,47 L 62,39 L 72,33 L 116,32 L 128,41 L 129,53 L 121,63 L 115,65 L 88,66 L 89,72 L 119,103 L 132,109 L 193,109 L 200,104 L 201,95 L 170,59 L 168,54 L 169,43 L 173,37 L 182,32 L 220,32 L 231,39 L 234,46 L 233,54 L 224,64 L 208,66 L 204,70 L 204,77 L 233,109 L 246,109 L 246,104 L 221,78 L 233,73 L 240,67 L 246,52 L 246,45 L 241,32 L 234,25 L 223,20 L 176,21 L 167,26 L 157,40 L 157,60 L 163,71 L 186,95 L 185,97 L 135,97 L 127,93 L 113,78 L 130,72 L 137,65 L 141,57 L 142,46 L 137,32 L 122,21 L 70,21 L 56,28 L 50,34 Z"/></g>
-  <text x="542.8" y="300.8" font-family="'Poppins',Arial,sans-serif" font-size="128.0" font-weight="600" fill="#FFFFFF">RAHMAN RESOURCE</text>
-  <text x="542.8" y="441.6" font-family="'Poppins',Arial,sans-serif" font-size="53.8" font-weight="300" fill="#B4B4B4">free resource for nextjs and convex projects only</text>
-</svg>
