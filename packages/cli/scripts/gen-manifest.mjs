@@ -92,23 +92,31 @@ const features = loadFeatures().map((f) => {
   };
 });
 
-const slices = loadSlices().map((s) => ({
-  slug: s.slug,
-  title: s.title,
-  category: s.category,
-  version: s.version,
-  description: s.description,
-  source: s.source ?? "",
-  slicePath: s.slicePath,
-  convexPaths: s.convexPaths ?? [],
-  npm: s.npm ?? [],
-  shadcn: s.shadcn ?? [],
-  env: s.env ?? [],
-  peers: s.peers ?? [],
-  providers: s.providers ?? [],
-  tags: s.tags ?? [],
-  agentRecipe: s.agentRecipe ?? "",
-}));
+const slices = loadSlices().map((s) => {
+  // Derive `kind` if not explicit. backend = has convex, no slicePath bits;
+  // ui = slicePath present, convexPaths empty; full = both.
+  const hasFrontend = !!s.slicePath;
+  const hasBackend = (s.convexPaths ?? []).length > 0;
+  const inferred = hasFrontend && hasBackend ? "full" : hasBackend ? "backend" : "ui";
+  return {
+    slug: s.slug,
+    title: s.title,
+    category: s.category,
+    kind: s.kind ?? inferred,
+    version: s.version,
+    description: s.description,
+    source: s.source ?? "",
+    slicePath: s.slicePath,
+    convexPaths: s.convexPaths ?? [],
+    npm: s.npm ?? [],
+    shadcn: s.shadcn ?? [],
+    env: s.env ?? [],
+    peers: s.peers ?? [],
+    providers: s.providers ?? [],
+    tags: s.tags ?? [],
+    agentRecipe: s.agentRecipe ?? "",
+  };
+});
 
 // Slug uniqueness across kinds (CLI dispatches by slug). NOTE: features and
 // slices CAN share a slug — slice supersedes feature (deeper tier-3 rep of

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "full-width-toggle",
+  "version": "0.1.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "Full Width Toggle",
+  "description": "Page-container width toggle (contained / wide / full). Per-device localStorage with cross-tab sync. Three components: useFullWidth hook, FullWidthToggle button (icon / button / segment variants), WidthContainer wrapper. Drop in app shell.",
+  "namespace": "@/features/full-width-toggle",
+  "convex": { "tablesExport": "", "schemaPath": "", "rootPaths": [] },
+  "frontend": {
+    "slicePath": "frontend/slices/full-width-toggle",
+    "configExport": ""
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": ["button"],
+    "env": [],
+    "peers": []
+  },
+  "registers": [],
+  "license": "MIT",
+  "tags": ["ui", "layout", "preference", "localstorage", "dashboard"],
+  "providers": []
+}

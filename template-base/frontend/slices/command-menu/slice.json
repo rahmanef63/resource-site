@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "command-menu",
+  "version": "0.1.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "Command Menu (⌘K)",
+  "description": "Facade slice over shared/foundation/utils/system/command-menu/. Global Cmd+K palette built on cmdk, auto-discovers feature registry entries.",
+  "namespace": "@/features/command-menu",
+  "convex": { "tablesExport": "", "schemaPath": "", "rootPaths": [] },
+  "frontend": { "slicePath": "frontend/slices/command-menu", "configExport": "" },
+  "deps": {
+    "npm": ["cmdk@^1.0.0"],
+    "shadcn": ["command", "dialog"],
+    "env": [],
+    "peers": []
+  },
+  "registers": [],
+  "license": "MIT",
+  "tags": ["ui", "palette", "cmd-k", "navigation", "keyboard"],
+  "providers": []
+}
