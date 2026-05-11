@@ -36,6 +36,7 @@ const MATRIX: Matrix = {
     "resend-newsletter": { status: "recommended", note: "Newsletter slice already calls Resend Audiences API." },
     "cal-com-booking": { status: "recommended", note: "Services slice has a booking placeholder slot." },
     "midtrans-payment": { status: "warn", note: "Personal-brand has no checkout slice; you'll add one manually." },
+    "doku-payment": { status: "recommended", note: "Pairs with services/digital-product flow. Mount checkout-page at /checkout." },
   },
   "agency-studio-os": {
     "convex-auth": { status: "native" },
@@ -43,6 +44,7 @@ const MATRIX: Matrix = {
     "cal-com-booking": { status: "recommended", note: "Project intake form pairs with Cal.com." },
     "mdx-blog": { status: "warn", note: "Agency template ships no blog slice — bring your own route." },
     "midtrans-payment": { status: "warn", note: "B2B template; payment slice not included." },
+    "doku-payment": { status: "recommended", note: "Invoice payment via VA — Direct mode fits B2B flow." },
     "broadcast-channel-sync": { status: "warn", note: "Demo-only; not used by agency template by default." },
   },
   "saas-marketing-os": {
@@ -51,6 +53,36 @@ const MATRIX: Matrix = {
     "mdx-blog": { status: "native", note: "Blog + changelog slices both render MDX." },
     "ai-router": { status: "warn", note: "Marketing site has no AI surface by default." },
     "cal-com-booking": { status: "recommended", note: "Demo-request form can swap to Cal.com." },
+    "doku-payment": { status: "warn", note: "SaaS biasanya butuh recurring billing — DOKU best untuk one-time. Pakai Stripe untuk subscription." },
+    "midtrans-payment": { status: "warn", note: "SaaS biasanya butuh recurring billing — Midtrans Snap untuk one-time only." },
+  },
+  "konsultan-os": {
+    "convex-auth": { status: "native" },
+    "cal-com-booking": { status: "recommended", note: "Konsultasi booking wajib — Cal.com embed di services page." },
+    "mdx-blog": { status: "recommended", note: "Konten ahli sebagai SEO funnel." },
+    "doku-payment": { status: "recommended", note: "Pembayaran sesi konsultasi — Checkout mode untuk paket bundling." },
+    "midtrans-payment": { status: "recommended", note: "Alternative Indonesian gateway." },
+  },
+  "wirausaha-os": {
+    "convex-auth": { status: "native" },
+    "doku-payment": { status: "recommended", note: "Multi-channel commerce — VA + QRIS + e-Wallet untuk customer pilih sendiri." },
+    "midtrans-payment": { status: "recommended", note: "Alternative Indonesian gateway." },
+  },
+  "kreator-studio-os": {
+    "convex-auth": { status: "native" },
+    "doku-payment": { status: "recommended", note: "Digital product / coaching purchase — Checkout mode redirect to DOKU page." },
+    "midtrans-payment": { status: "recommended", note: "Alternative Indonesian gateway." },
+    "ai-router": { status: "recommended", note: "AI chatbot bisa generate payment link via DOKU MCP — set DOKU MCP di .claude/mcp.json." },
+  },
+  "riset-kit": {
+    "convex-auth": { status: "native" },
+    "doku-payment": { status: "recommended", note: "Paid research bundle — one-time Checkout flow." },
+    "vector-search": { status: "native", note: "Research kit pakai embedding search untuk konten." },
+  },
+  "cms-public-storefront": {
+    "convex-auth": { status: "recommended" },
+    "doku-payment": { status: "recommended", note: "Cart checkout — Direct mode untuk control UI atau Checkout untuk quick wins." },
+    "midtrans-payment": { status: "recommended", note: "Alternative Indonesian gateway." },
   },
 };
 
@@ -89,11 +121,18 @@ export const SLICE_COMPAT: Record<string, SliceCompat> = {
     conflicts: ["stripe-payment", "doku-payment"],
     enhances: ["convex-auth"],
   },
+  "doku-payment": {
+    conflicts: ["midtrans-payment", "stripe-payment"],
+    enhances: ["convex-auth", "ai-router"],
+  },
   "convex-auth": {
-    enhances: ["midtrans-payment", "resend-newsletter", "ai-router"],
+    enhances: ["midtrans-payment", "doku-payment", "resend-newsletter", "ai-router"],
   },
   "resend-newsletter": {
     enhances: ["mdx-blog"],
+  },
+  "ai-router": {
+    enhances: ["doku-payment"],
   },
 };
 

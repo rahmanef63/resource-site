@@ -33,6 +33,8 @@
 | RBAC roles (6 system roles + tier presets) | `/home/rahman/projects/superspace/convex/workspace/{permissions,roles.config}.ts` + `convex/lib/platformAdmin.ts` |
 | Admin panel (17-section shell + access gate) | `template-base/frontend/slices/admin/` + `superspace/frontend/slices/platform-admin/` |
 | Event tracking SDK (P0 instrumentation) | `template-base/frontend/slices/admin/slices/events/` |
+| DOKU payment (Checkout + Direct + webhook) | `frontend/slices/doku-payment/` + `convex/features/payment/{doku,actions/doku.ts,http.ts}` |
+| DOKU MCP wiring | `docs/integrations/doku-mcp.md` + `scripts/setup-doku-mcp.mjs` |
 
 ## Notion Slice Convention
 

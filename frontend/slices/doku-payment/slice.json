@@ -1,0 +1,36 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "doku-payment",
+  "version": "0.1.0",
+  "category": "payment",
+  "title": "DOKU — Indonesia Payment",
+  "description": "Pembayaran lokal Indonesia via DOKU — Checkout (hosted page) + Direct (VA / QRIS / e-Wallet / PayLater / Minimarket / CC). Sibling slice to midtrans-payment, sharing the same paymentOrders schema. HMAC-signed REST calls + signature-verified webhook + idempotent retry handling.",
+  "namespace": "@/features/doku-payment",
+  "convex": {
+    "tablesExport": "paymentTables",
+    "schemaPath": "convex/features/payment/schema.ts",
+    "rootPaths": ["convex/features/payment"]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/doku-payment",
+    "configExport": "dokuPaymentConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": ["card", "button", "dialog", "input", "label", "select", "badge", "skeleton"],
+    "env": [
+      { "name": "DOKU_CLIENT_ID", "scope": "convex", "required": true, "description": "Merchant Client-Id from DOKU dashboard." },
+      { "name": "DOKU_SECRET_KEY", "scope": "convex", "required": true, "description": "HMAC secret for outbound signing + inbound verification." },
+      { "name": "DOKU_IS_PRODUCTION", "scope": "convex", "required": false, "description": "true|false; defaults false (sandbox)." },
+      { "name": "DOKU_NOTIFY_PATH", "scope": "convex", "required": false, "description": "Path component DOKU calls; defaults /webhooks/doku." }
+    ],
+    "peers": [
+      { "slug": "convex-auth", "range": "^0.1", "reason": "Order ownership requires authenticated user." }
+    ]
+  },
+  "registers": ["registry"],
+  "audit": ["bp:public-fn-validator"],
+  "license": "MIT",
+  "tags": ["payment", "doku", "indonesia", "qris", "virtual-account", "ewallet", "checkout"],
+  "providers": ["doku"]
+}

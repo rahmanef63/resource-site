@@ -21,9 +21,14 @@ export const paymentTables = {
     ),
     providerTransactionId: v.optional(v.string()),
     snapToken: v.optional(v.string()),
+    // Doku-specific: hosted checkout URL or VA/QRIS instructions for direct.
+    checkoutUrl: v.optional(v.string()),
+    paymentChannel: v.optional(v.string()), // "VIRTUAL_ACCOUNT_BCA", "QRIS", "EMONEY_GOPAY", ...
+    paymentInstructions: v.optional(v.any()), // { vaNumber?, qrString?, deeplink?, expiresAt? }
     metadata: v.optional(v.any()),
     createdAt: v.number(),
     paidAt: v.optional(v.number()),
+    expiresAt: v.optional(v.number()),
   })
     .index("by_user", ["userId"])
     .index("by_orderId", ["orderId"])
@@ -32,8 +37,13 @@ export const paymentTables = {
   paymentWebhookEvents: defineTable({
     provider: v.string(),
     eventType: v.string(),
+    // Provider-supplied unique id for idempotency (e.g. Doku request_id,
+    // Midtrans transaction_id). Indexed so duplicate webhooks short-circuit.
+    requestId: v.optional(v.string()),
     payload: v.any(),
     receivedAt: v.number(),
     processed: v.boolean(),
-  }).index("by_provider_received", ["provider", "receivedAt"]),
+  })
+    .index("by_provider_received", ["provider", "receivedAt"])
+    .index("by_provider_request", ["provider", "requestId"]),
 };

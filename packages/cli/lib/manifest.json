@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-11T07:24:44.338Z",
+  "generatedAt": "2026-05-11T11:20:15.951Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -1070,6 +1070,27 @@
       ]
     },
     {
+      "slug": "doku-payment",
+      "title": "DOKU — Indonesia Payment",
+      "category": "payment",
+      "description": "Pembayaran lokal Indonesia via DOKU — Checkout (hosted) + Direct (VA / QRIS / e-Wallet / PayLater / Minimarket / Kartu). HMAC-signed REST + signature-verified webhook + idempotent retries. Sibling slice to midtrans-payment dengan paymentOrders schema yang dishare.",
+      "source": "rahmanef63/resource-site",
+      "docsUrl": "https://sandbox.doku.com/integration",
+      "install": "",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "DOKU dual-mode: Checkout (hosted, all channels) atau Direct (single channel, returns VA/QRIS/deeplink). Webhook di /webhooks/doku verify HMAC-SHA256 (canonical: Client-Id + Request-Id + Request-Timestamp + Request-Target + Digest). Idempotency by request_id index. Server-only — no NEXT_PUBLIC_*. Sandbox default (api-sandbox.doku.com); flip DOKU_IS_PRODUCTION=true for live.",
+      "tags": [
+        "payment",
+        "doku",
+        "indonesia",
+        "qris",
+        "virtual-account",
+        "ewallet",
+        "checkout"
+      ]
+    },
+    {
       "slug": "midtrans-payment",
       "title": "Midtrans — Indonesia Payment",
       "category": "payment",
@@ -1267,6 +1288,69 @@
         "no-clerk"
       ],
       "agentRecipe": "Run `rr add convex-auth`. Then create convex/auth.ts using the kitab pattern (Resend provider). Set env via `npx convex env set` for self-hosted."
+    },
+    {
+      "slug": "doku-payment",
+      "title": "DOKU — Indonesia Payment",
+      "category": "payment",
+      "version": "0.1.0",
+      "description": "Pembayaran lokal Indonesia via DOKU — Checkout (hosted) + Direct (VA / QRIS / e-Wallet / PayLater / Minimarket / Kartu). HMAC-signed REST + signature-verified webhook + idempotent retries. Sibling slice to midtrans-payment dengan paymentOrders schema yang dishare.",
+      "source": "rahmanef63/resource-site",
+      "slicePath": "frontend/slices/doku-payment",
+      "convexPaths": [
+        "convex/features/payment"
+      ],
+      "npm": [],
+      "shadcn": [
+        "card",
+        "button",
+        "dialog",
+        "input",
+        "label",
+        "select",
+        "badge",
+        "skeleton"
+      ],
+      "env": [
+        {
+          "name": "DOKU_CLIENT_ID",
+          "scope": "convex",
+          "required": true
+        },
+        {
+          "name": "DOKU_SECRET_KEY",
+          "scope": "convex",
+          "required": true
+        },
+        {
+          "name": "DOKU_IS_PRODUCTION",
+          "scope": "convex"
+        },
+        {
+          "name": "DOKU_NOTIFY_PATH",
+          "scope": "convex"
+        }
+      ],
+      "peers": [
+        {
+          "slug": "convex-auth",
+          "range": "^0.1",
+          "reason": "Order ownership requires authenticated user."
+        }
+      ],
+      "providers": [
+        "doku"
+      ],
+      "tags": [
+        "payment",
+        "doku",
+        "indonesia",
+        "qris",
+        "virtual-account",
+        "ewallet",
+        "checkout"
+      ],
+      "agentRecipe": "DOKU dual-mode: Checkout (hosted, all channels) atau Direct (single channel, returns VA/QRIS/deeplink). Webhook di /webhooks/doku verify HMAC-SHA256 (canonical: Client-Id + Request-Id + Request-Timestamp + Request-Target + Digest). Idempotency by request_id index. Server-only — no NEXT_PUBLIC_*. Sandbox default (api-sandbox.doku.com); flip DOKU_IS_PRODUCTION=true for live."
     },
     {
       "slug": "midtrans-payment",
