@@ -2,6 +2,15 @@
 
 Chronological session log. Each entry is dated and lists what landed + outstanding work.
 
+## 2026-05-12 (structure docs) — ideal structure + refactor plan
+
+User flagged spaghetti structure. Landed two design docs:
+
+- `docs/STRUCTURE.md` — target end-state. Single canonical home per concern, 3 taxonomies max (templates/layouts/slices), one preview component, slice.json as SSOT, anti-spaghetti checklist.
+- `docs/REFACTOR-PLAN.md` — 6-phase migration tracker. Preview unify → slice home unify → recipes/features → slices → compat per slice → slice.json SSOT → CI enforcement.
+
+No code refactor yet. Next: Phase 1 (preview unify) — collapse PreviewFrame + PreviewPane, extract shared SegmentedFrame.
+
 ## 2026-05-09 (DRY consolidation) — features.ts → slices.ts
 
 User flagged: features.ts and slices.ts ship the same 8 concepts with drifted slugs (`ai-router` vs `ai-sdk-openrouter`, `vector-search` vs `convex-vector-search`). Two registries, two MCP tools, two sidebar groups, two Builder tabs — clear DRY violation. Collapsed.
