@@ -1,0 +1,29 @@
+# Dokploy app spec for rahman-resources-mcp HTTP service.
+#
+# Dokploy reads this when the app's build context = packages/mcp/.
+# Subdomain (e.g. mcp-resource.rahmanef.com) is wired via Traefik labels
+# from Dokploy's app config UI — not duplicated here.
+#
+# Env:
+#   MCP_BEARER_TOKEN   optional — set to require Bearer auth on /mcp.
+#                      Unset = open (read-only public manifest).
+
+services:
+  mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - HOST=0.0.0.0
+      - PORT=8000
+      - MCP_BEARER_TOKEN=${MCP_BEARER_TOKEN:-}
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s

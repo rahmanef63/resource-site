@@ -1,7 +1,7 @@
 {
   "name": "rahman-resources-mcp",
-  "version": "0.8.1",
-  "description": "Model Context Protocol server for the Rahman Resources kitab — exposes templates, features, recipes, Claude skills, and CRUD workflows as MCP tools/resources.",
+  "version": "0.9.0",
+  "description": "Model Context Protocol server for the Rahman Resources kitab — stdio + HTTP transports. Exposes templates, slices, features, recipes, Claude skills, and CRUD workflows as MCP tools/resources.",
   "type": "module",
   "license": "MIT",
   "author": "Rahman <casadezian@gmail.com>",
@@ -17,6 +17,8 @@
   "files": [
     "bin",
     "src",
+    "Dockerfile",
+    "docker-compose.yml",
     "README.md"
   ],
   "engines": {

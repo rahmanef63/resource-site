@@ -1,9 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { Terminal, Code2, Bot, AlertTriangle } from "lucide-react";
+import { Terminal, Code2, Bot, AlertTriangle, Cloud, Wrench } from "lucide-react";
 import { CodeBlock } from "@/components/site/code-block";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+const HOSTED_URL = "https://mcp-resource.rahmanef.com/mcp";
 
 const CLAUDE_CONFIG = `{
   "mcpServers": {
@@ -77,85 +79,123 @@ export function McpInstallTabs() {
         </TabsContent>
 
         <TabsContent value="chatgpt" className="space-y-4 pt-4">
-          <div className="flex items-start gap-2 rounded-md border border-amber-500/30 bg-amber-500/5 p-3 text-xs">
-            <AlertTriangle className="mt-0.5 size-4 shrink-0 text-amber-500" />
-            <div className="space-y-1">
-              <p className="font-medium text-foreground">stdio server + no auth — bridge needed</p>
-              <p className="text-muted-foreground">
-                <code className="rounded bg-muted px-1 font-mono text-[10px]">rahman-resources-mcp</code>{" "}
-                ships as a stdio Node CLI. ChatGPT Apps SDK expects{" "}
-                <span className="font-medium text-foreground">Streamable HTTP at <code className="font-mono">/mcp</code></span>.
-                Run a local stdio→HTTP bridge + public tunnel.
-                Auth is <a href="https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization" target="_blank" rel="noreferrer" className="underline">OPTIONAL per MCP spec</a> —
-                this server doesn&apos;t enforce any. Endpoint stays open while
-                tunneled — solo/dev use only.
+          <Tabs defaultValue="hosted" className="w-full">
+            <TabsList className="h-auto">
+              <TabsTrigger value="hosted" className="gap-1.5">
+                <Cloud className="size-3.5" /> Hosted (recommended)
+              </TabsTrigger>
+              <TabsTrigger value="self" className="gap-1.5">
+                <Wrench className="size-3.5" /> Self-host / local dev
+              </TabsTrigger>
+            </TabsList>
+
+            {/* HOSTED — 2 steps total */}
+            <TabsContent value="hosted" className="space-y-4 pt-4">
+              <div className="rounded-md border border-emerald-500/30 bg-emerald-500/5 p-3 text-xs">
+                <p className="font-medium text-foreground">Public read-only endpoint — paste &amp; go</p>
+                <p className="mt-1 text-muted-foreground">
+                  <code className="rounded bg-muted px-1 font-mono text-[10px]">{HOSTED_URL}</code>{" "}
+                  serves the kitab manifest via Streamable HTTP. No auth, no setup.
+                  Auth is{" "}
+                  <a href="https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization" target="_blank" rel="noreferrer" className="underline">OPTIONAL per MCP spec</a>{" "}
+                  — manifest is the same data shown on this site.
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <p className="text-sm font-medium">1. Enable ChatGPT Developer Mode</p>
+                <p className="text-xs text-muted-foreground">
+                  Settings → <span className="font-medium text-foreground">Apps &amp; Connectors</span>{" "}
+                  → <span className="font-medium text-foreground">Advanced settings</span>{" "}
+                  → toggle{" "}
+                  <span className="font-medium text-foreground">Developer mode</span>.
+                  Custom connectors on all plans since 2025-11-13.
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <p className="text-sm font-medium">2. Create the connector</p>
+                <ol className="ml-4 list-decimal space-y-1 text-xs text-muted-foreground">
+                  <li>Settings → Connectors → <span className="font-medium">Create</span></li>
+                  <li>Name: <code className="rounded bg-muted px-1 py-0.5 font-mono text-[10px]">rahman-resources</code></li>
+                  <li>Connector URL: <code className="rounded bg-muted px-1 py-0.5 font-mono text-[10px]">{HOSTED_URL}</code></li>
+                  <li>Authentication: <span className="font-medium text-foreground">None</span></li>
+                  <li>Save — 14 read-only tools list appears</li>
+                  <li>New chat → <span className="font-mono text-foreground">+</span> → More → pick connector → prompt the model</li>
+                </ol>
+                <p className="pt-1 text-xs text-muted-foreground">
+                  Try:{" "}
+                  <em>&ldquo;What kitab templates ship public + admin combos?&rdquo;</em>{" "}
+                  — ChatGPT calls{" "}
+                  <code className="rounded bg-muted px-1 py-0.5 font-mono text-[10px]">rr_list_templates</code>{" "}
+                  on the hosted server.
+                </p>
+              </div>
+
+              <p className="text-xs text-muted-foreground">
+                Refs:{" "}
+                <a href="https://developers.openai.com/apps-sdk/deploy/connect-chatgpt" target="_blank" rel="noreferrer" className="underline">Apps SDK — Connect from ChatGPT</a>{" "}
+                ·{" "}
+                <a href="https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization" target="_blank" rel="noreferrer" className="underline">MCP authorization spec</a>
               </p>
-            </div>
-          </div>
+            </TabsContent>
 
-          <div className="space-y-2">
-            <p className="text-sm font-medium">1. Run the bridge (stdio → Streamable HTTP)</p>
-            <CodeBlock code={BRIDGE_CMD} language="bash" filename="terminal A" />
-          </div>
+            {/* SELF-HOST */}
+            <TabsContent value="self" className="space-y-4 pt-4">
+              <div className="flex items-start gap-2 rounded-md border border-amber-500/30 bg-amber-500/5 p-3 text-xs">
+                <AlertTriangle className="mt-0.5 size-4 shrink-0 text-amber-500" />
+                <div className="space-y-1">
+                  <p className="font-medium text-foreground">Run your own HTTP MCP endpoint</p>
+                  <p className="text-muted-foreground">
+                    Two options: (a) run{" "}
+                    <code className="rounded bg-muted px-1 font-mono text-[10px]">rahman-resources-mcp --http</code>{" "}
+                    directly, or (b) bridge stdio via supergateway. Both produce
+                    Streamable HTTP at <code className="font-mono">/mcp</code>.
+                    Expose via cloudflared / ngrok for ChatGPT.
+                  </p>
+                </div>
+              </div>
 
-          <div className="space-y-2">
-            <p className="text-sm font-medium">2. Expose via tunnel</p>
-            <CodeBlock code={TUNNEL_CMD} language="bash" filename="terminal B" />
-            <p className="text-xs text-muted-foreground">
-              Copy the public URL (e.g.{" "}
-              <code className="rounded bg-muted px-1 py-0.5 font-mono text-[10px]">https://abc.trycloudflare.com</code>).
-            </p>
-          </div>
+              <div className="space-y-2">
+                <p className="text-sm font-medium">Option A — native HTTP mode (v0.9.0+)</p>
+                <CodeBlock
+                  code={`npx -y rahman-resources-mcp --http --port 8000
+# endpoint: http://localhost:8000/mcp
+# optional auth: MCP_BEARER_TOKEN=<secret> npx -y rahman-resources-mcp --http`}
+                  language="bash"
+                  filename="terminal A"
+                />
+              </div>
 
-          <div className="space-y-2">
-            <p className="text-sm font-medium">3. Enable ChatGPT Developer Mode</p>
-            <p className="text-xs text-muted-foreground">
-              Settings → <span className="font-medium text-foreground">Apps &amp; Connectors</span>{" "}
-              → <span className="font-medium text-foreground">Advanced settings</span>{" "}
-              → toggle{" "}
-              <span className="font-medium text-foreground">Developer mode</span>.
-              Custom connectors live on <span className="font-medium text-foreground">all plans</span>{" "}
-              since 2025-11-13 (Free / Plus / Pro / Business / Enterprise / Edu).
-            </p>
-          </div>
+              <div className="space-y-2">
+                <p className="text-sm font-medium">Option B — stdio → HTTP bridge</p>
+                <CodeBlock code={BRIDGE_CMD} language="bash" filename="terminal A" />
+              </div>
 
-          <div className="space-y-2">
-            <p className="text-sm font-medium">4. Create the connector</p>
-            <ol className="ml-4 list-decimal space-y-1 text-xs text-muted-foreground">
-              <li>Settings → Connectors → <span className="font-medium">Create</span></li>
-              <li>Name: <code className="rounded bg-muted px-1 py-0.5 font-mono text-[10px]">rahman-resources</code></li>
-              <li>Connector URL: <code className="rounded bg-muted px-1 py-0.5 font-mono text-[10px]">https://&lt;tunnel-url&gt;/mcp</code></li>
-              <li>Authentication: <span className="font-medium text-foreground">None</span></li>
-              <li>Save — advertised tools list appears (8 read-only tools)</li>
-              <li>New chat → <span className="font-mono text-foreground">+</span> → More → pick connector → prompt the model</li>
-            </ol>
-            <p className="pt-1 text-xs text-muted-foreground">
-              Try:{" "}
-              <em>&ldquo;What kitab templates ship public + admin combos?&rdquo;</em>{" "}
-              — ChatGPT calls{" "}
-              <code className="rounded bg-muted px-1 py-0.5 font-mono text-[10px]">rr_list_templates</code>{" "}
-              via the bridge.
-            </p>
-          </div>
+              <div className="space-y-2">
+                <p className="text-sm font-medium">Tunnel to public URL</p>
+                <CodeBlock code={TUNNEL_CMD} language="bash" filename="terminal B" />
+                <p className="text-xs text-muted-foreground">
+                  Copy the public URL (e.g.{" "}
+                  <code className="rounded bg-muted px-1 py-0.5 font-mono text-[10px]">https://abc.trycloudflare.com</code>).
+                  Then enable Developer Mode + create connector pointing at{" "}
+                  <code className="rounded bg-muted px-1 py-0.5 font-mono text-[10px]">https://&lt;tunnel&gt;/mcp</code>.
+                </p>
+              </div>
 
-          <div className="rounded-md border bg-muted/30 p-3 text-xs">
-            <p className="font-medium">Limitations</p>
-            <ul className="mt-1 list-disc space-y-0.5 pl-5 text-muted-foreground">
-              <li>Tunnel + bridge terminal must stay up — close = connector disconnects</li>
-              <li>No auth = anyone with the URL can call your tools (read-only manifest, but exposed)</li>
-              <li>For prod: deploy the bridge with a real OAuth flow + protected <code className="rounded bg-muted px-0.5 font-mono">/mcp</code>. MCP spec allows{" "}
-                <a href="https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization#client-registration-approaches" target="_blank" rel="noreferrer" className="underline">3 client-registration approaches</a>{" "}
-                (Client ID Metadata Docs / Pre-registration / Dynamic Client Reg).
-              </li>
-            </ul>
-          </div>
-
-          <p className="text-xs text-muted-foreground">
-            Refs:{" "}
-            <a href="https://developers.openai.com/apps-sdk/deploy/connect-chatgpt" target="_blank" rel="noreferrer" className="underline">Apps SDK — Connect from ChatGPT</a>{" "}
-            ·{" "}
-            <a href="https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization" target="_blank" rel="noreferrer" className="underline">MCP authorization spec</a>
-          </p>
+              <div className="rounded-md border bg-muted/30 p-3 text-xs">
+                <p className="font-medium">Limitations</p>
+                <ul className="mt-1 list-disc space-y-0.5 pl-5 text-muted-foreground">
+                  <li>Bridge + tunnel terminals must stay up</li>
+                  <li>Without <code className="rounded bg-muted px-0.5 font-mono">MCP_BEARER_TOKEN</code>, endpoint is open — read-only manifest, but exposed</li>
+                  <li>For prod auth: MCP spec allows{" "}
+                    <a href="https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization#client-registration-approaches" target="_blank" rel="noreferrer" className="underline">3 client-registration approaches</a>{" "}
+                    (Client ID Metadata Docs / Pre-registration / Dynamic Client Reg). Bearer is a quick interim.
+                  </li>
+                </ul>
+              </div>
+            </TabsContent>
+          </Tabs>
         </TabsContent>
       </Tabs>
     </section>

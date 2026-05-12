@@ -33,6 +33,7 @@
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import {
   CallToolRequestSchema,
   ListResourcesRequestSchema,
@@ -40,6 +41,7 @@ import {
   ReadResourceRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 
+import { createServer } from "node:http";
 import { findEntry, getManifest, getSkills, searchAll, getWorkflow, WORKFLOW_KINDS } from "../src/data-loader.mjs";
 import { createRequire } from "node:module";
 
@@ -489,5 +491,100 @@ function resourceError(uri, message) {
 
 // ─── boot ─────────────────────────────────────────────────────────────────
 
-const transport = new StdioServerTransport();
-await server.connect(transport);
+function getArg(name) {
+  const i = process.argv.indexOf(name);
+  return i >= 0 ? process.argv[i + 1] : undefined;
+}
+
+function readJsonBody(req) {
+  return new Promise((resolve, reject) => {
+    let raw = "";
+    req.on("data", (chunk) => { raw += chunk; });
+    req.on("end", () => {
+      if (!raw) { resolve(undefined); return; }
+      try { resolve(JSON.parse(raw)); } catch (e) { reject(e); }
+    });
+    req.on("error", reject);
+  });
+}
+
+const useHttp = process.argv.includes("--http") || process.env.MCP_HTTP === "1";
+
+if (useHttp) {
+  const port = parseInt(getArg("--port") ?? process.env.PORT ?? "8000", 10);
+  const host = getArg("--host") ?? process.env.HOST ?? "0.0.0.0";
+  // Optional bearer auth. When unset, server is open (read-only public manifest).
+  // MCP spec 2025-11-25: "Authorization is OPTIONAL".
+  const bearer = process.env.MCP_BEARER_TOKEN || null;
+
+  const transport = new StreamableHTTPServerTransport({
+    sessionIdGenerator: undefined, // stateless — fits read-only tools
+  });
+  await server.connect(transport);
+
+  const httpServer = createServer(async (req, res) => {
+    // CORS — allow any origin (read-only public manifest, no cookies).
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Mcp-Session-Id, Last-Event-ID");
+    res.setHeader("Access-Control-Expose-Headers", "Mcp-Session-Id");
+    if (req.method === "OPTIONS") {
+      res.statusCode = 204;
+      res.end();
+      return;
+    }
+
+    // Health probe for Dokploy / docker liveness.
+    if (req.url === "/health" || req.url === "/") {
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ ok: true, name: "rahman-resources-mcp", version: PKG.version, endpoint: "/mcp" }));
+      return;
+    }
+
+    // MCP endpoint.
+    const isMcp = req.url === "/mcp" || (req.url && req.url.startsWith("/mcp?"));
+    if (!isMcp) {
+      res.statusCode = 404;
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ error: "not_found", hint: "POST /mcp" }));
+      return;
+    }
+
+    // Optional bearer auth — when MCP_BEARER_TOKEN is set, require it.
+    if (bearer) {
+      const auth = req.headers["authorization"];
+      if (auth !== `Bearer ${bearer}`) {
+        res.statusCode = 401;
+        res.setHeader("WWW-Authenticate", "Bearer");
+        res.setHeader("Content-Type", "application/json");
+        res.end(JSON.stringify({ error: "unauthorized" }));
+        return;
+      }
+    }
+
+    try {
+      const body = req.method === "POST" ? await readJsonBody(req) : undefined;
+      await transport.handleRequest(req, res, body);
+    } catch (err) {
+      console.error("[mcp/http] handleRequest error:", err);
+      if (!res.headersSent) {
+        res.statusCode = 500;
+        res.setHeader("Content-Type", "application/json");
+        res.end(JSON.stringify({ error: "internal_error", message: String(err?.message ?? err) }));
+      }
+    }
+  });
+
+  httpServer.listen(port, host, () => {
+    console.error(`rahman-resources-mcp v${PKG.version} — HTTP transport`);
+    console.error(`  listening:  http://${host}:${port}`);
+    console.error(`  endpoint:   POST /mcp  (Streamable HTTP, stateless)`);
+    console.error(`  health:     GET /health`);
+    console.error(`  auth:       ${bearer ? "Bearer (MCP_BEARER_TOKEN)" : "none — open (read-only manifest)"}`);
+  });
+} else {
+  // Default stdio transport for Claude Code / Cursor / Cline.
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+}

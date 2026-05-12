@@ -1,8 +1,12 @@
 # rahman-resources-mcp
 
-Model Context Protocol server for the Rahman Resources kitab. Exposes templates, features, recipes, and Claude Skills to any MCP-aware client (Claude Code, Cursor, Cline).
+Model Context Protocol server for the Rahman Resources kitab. Exposes templates, slices, features, recipes, and Claude Skills to any MCP-aware client.
 
-## Install
+Two transports:
+- **stdio** (default) — Claude Code, Cursor, Cline
+- **Streamable HTTP** (`--http`, v0.9.0+) — ChatGPT Apps SDK, browser clients
+
+## Install — stdio (Claude Code / Cursor / Cline)
 
 Wire into Claude Code (`~/.claude/mcp.json` or project `.claude/mcp.json`):
 
@@ -18,6 +22,29 @@ Wire into Claude Code (`~/.claude/mcp.json` or project `.claude/mcp.json`):
 ```
 
 Then in Claude Code: `/mcp` to see the available `rr_*` tools.
+
+## Install — HTTP (ChatGPT, hosted)
+
+Public read-only endpoint (no auth — manifest is public, same data shown on the docs site):
+
+```
+https://mcp-resource.rahmanef.com/mcp
+```
+
+ChatGPT: Settings → Apps & Connectors → Advanced settings → enable **Developer mode** → Connectors → **Create** → paste URL → Auth: None.
+
+## Install — HTTP (self-host)
+
+```bash
+# native HTTP mode (v0.9.0+)
+npx -y rahman-resources-mcp --http --port 8000
+# endpoint: http://localhost:8000/mcp
+
+# optional bearer auth
+MCP_BEARER_TOKEN=secret npx -y rahman-resources-mcp --http
+```
+
+Or build the published `packages/mcp/Dockerfile` — stateless Streamable HTTP at `/mcp`, health probe at `/health`.
 
 ## Tools
 
