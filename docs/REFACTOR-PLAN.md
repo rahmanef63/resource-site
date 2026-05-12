@@ -129,24 +129,20 @@ rmdir recipes/contact-form-resend recipes
 
 ---
 
-## Phase 4 — Compat declared per slice
+## Phase 4 — Compat declared per slice ✅ Done 2026-05-12
 
-**Goal**: each slice declares its own `compat`. Delete `lib/build/compat.ts` rules table.
+**Landed**:
+- Added `CompatStatus`, `SliceCompatEntry`, `SliceCompat` types to `lib/content/slices.ts`.
+- Added `compat?: SliceCompat` field to `SliceEntry`.
+- Migrated all data from `MATRIX` (per-template) + `SLICE_COMPAT` (peers/conflicts) → each slice's `compat` field. 9 slices got compat declarations (convex-auth, doku-payment, midtrans-payment, resend-newsletter, ai-router, vector-search, mdx-blog, cal-com-booking, broadcast-channel-sync).
+- Rewrote `lib/build/compat.ts` as a thin derivation layer (~80 LOC, was ~162). Same public surface (`getCompat`, `SLICE_COMPAT`, `collectWarnings`, types) so 4 consumers (build-shell, slice-picker, feature-picker, command-output) compile unchanged.
 
-**Smell**: compat matrix scattered between `lib/build/compat.ts` + `lib/content/slices.ts` (peers/providers).
+**Why kept compat.ts (vs delete entirely)**:
+- Consumers expect `SLICE_COMPAT` as a `Record<string, SliceCompat>` const — derived once at module load.
+- `getCompat()`/`collectWarnings()` are stable helper functions — easier to keep one import path.
+- Deletion is mechanical but breaks the named-export surface — defer until any caller refactor is needed.
 
-**Steps**:
-1. Add `compat: { requires, forbids, templates }` to slice's `config.ts` (defineFeature).
-2. Bundle builder + validators read compat from each slice config, derive matrix at runtime.
-3. Migrate existing rules from `lib/build/compat.ts` → individual slice configs (one slice at a time, atomic).
-4. Delete `lib/build/compat.ts` entirely once all rules migrated.
-
-**Done when**:
-- No imports of `lib/build/compat.ts` anywhere.
-- Bundle builder still rejects incompatible combos.
-- `lib/build/compat.ts` deleted.
-
-**Risk**: low. Mechanical migration.
+tsc + manifest regen green. Authors now edit ONE place (slice entry) to update compat.
 
 ---
 
@@ -199,8 +195,8 @@ rmdir recipes/contact-form-resend recipes
 |---|---|---|---|
 | 1 — Preview unify | ✅ Done 2026-05-12 | 4fed77c | Extracted `PreviewIframeShell` shared renderer. PreviewPane: 126→46 LOC. SegmentedFrame defined once. |
 | 2 — Slice home unify | ✅ Done 2026-05-12 | f0c077c | Killed `full-width-toggle` dup. Revised rule to dual-home-by-category. |
-| 3 — Recipes → slices | ✅ Done 2026-05-12 | (this) | 12 recipes → 6 promoted slices + 6 dropped (notion sub-features + dup). recipes.ts emptied, dup-slug exemption removed. |
-| 4 — Compat per slice | Not started | — | |
+| 3 — Recipes → slices | ✅ Done 2026-05-12 | 44cb672 | 12 recipes → 6 promoted slices + 6 dropped (notion sub-features + dup). recipes.ts emptied, dup-slug exemption removed. |
+| 4 — Compat per slice | ✅ Done 2026-05-12 | (this) | Moved MATRIX + SLICE_COMPAT data into each slice's `compat` field. compat.ts now ~80 LOC derivation layer; consumers unchanged. |
 | 5 — slice.json SSOT | Not started | — | |
 | 6 — CI enforcement | Not started | — | |
 

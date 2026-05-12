@@ -34,6 +34,24 @@ export type SliceEnvVar = {
  */
 export type SliceKind = "ui" | "backend" | "full";
 
+/** Compat status per (template × slice) or (slice × slice) pairing. */
+export type CompatStatus = "native" | "recommended" | "warn" | "incompatible";
+export type SliceCompatEntry = { status: CompatStatus; note?: string };
+
+/**
+ * Compat declared per slice. Moved here from `lib/build/compat.ts` matrix
+ * (Phase 4 of REFACTOR-PLAN.md, 2026-05-12). Single source of truth.
+ *
+ *   templates  — per-template compatibility. Missing = silent compatible.
+ *   conflicts  — slices this one is MUTUALLY EXCLUSIVE with.
+ *   enhances   — slices this one pairs well with (informational).
+ */
+export type SliceCompat = {
+  templates?: Record<string, SliceCompatEntry>;
+  conflicts?: string[];
+  enhances?: string[];
+};
+
 export type SliceEntry = {
   slug: string;
   title: string;
@@ -65,6 +83,9 @@ export type SliceEntry = {
   /** Live preview route, e.g. "/preview/slices/full-width-toggle". When set,
    *  the slice detail page renders a PreviewFrame iframing this URL. */
   previewPath?: string;
+  /** Compatibility: per-template status + slice peer/conflict declarations.
+   *  Was hand-curated in lib/build/compat.ts pre-Phase-4. */
+  compat?: SliceCompat;
 };
 
 export const slices: SliceEntry[] = [
@@ -93,6 +114,19 @@ export const slices: SliceEntry[] = [
     usedBy: ["personal-brand-os", "wirausaha-os", "konsultan-os"],
     agentRecipe: "Run `rr add convex-auth`. Then create convex/auth.ts using the kitab pattern (Resend provider). Set env via `npx convex env set` for self-hosted.",
     previewPath: "/preview/slices/convex-auth",
+    compat: {
+      templates: {
+        "personal-brand-os": { status: "native" },
+        "agency-studio-os": { status: "native" },
+        "konsultan-os": { status: "native" },
+        "wirausaha-os": { status: "native" },
+        "kreator-studio-os": { status: "native" },
+        "riset-kit": { status: "native" },
+        "saas-marketing-os": { status: "recommended" },
+        "cms-public-storefront": { status: "recommended" },
+      },
+      enhances: ["midtrans-payment", "doku-payment", "resend-newsletter", "ai-router"],
+    },
     exampleCode: `// convex/auth.ts
 import { convexAuth } from "@convex-dev/auth/server";
 import Resend from "@convex-dev/auth/providers/Resend";
@@ -131,6 +165,20 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os", "konsultan-os", "wirausaha-os", "kreator-studio-os", "riset-kit", "agency-studio-os", "cms-public-storefront"],
     agentRecipe: "DOKU dual-mode: Checkout (hosted, all channels) atau Direct (single channel, returns VA/QRIS/deeplink). Webhook di /webhooks/doku verify HMAC-SHA256 (canonical: Client-Id + Request-Id + Request-Timestamp + Request-Target + Digest). Idempotency by request_id index. Server-only — no NEXT_PUBLIC_*. Sandbox default (api-sandbox.doku.com); flip DOKU_IS_PRODUCTION=true for live.",
     previewPath: "/preview/slices/doku-payment",
+    compat: {
+      templates: {
+        "personal-brand-os": { status: "recommended", note: "Pairs with services/digital-product flow. Mount checkout-page at /checkout." },
+        "agency-studio-os": { status: "recommended", note: "Invoice payment via VA — Direct mode fits B2B flow." },
+        "saas-marketing-os": { status: "warn", note: "SaaS biasanya butuh recurring billing — DOKU best untuk one-time. Pakai Stripe untuk subscription." },
+        "konsultan-os": { status: "recommended", note: "Pembayaran sesi konsultasi — Checkout mode untuk paket bundling." },
+        "wirausaha-os": { status: "recommended", note: "Multi-channel commerce — VA + QRIS + e-Wallet untuk customer pilih sendiri." },
+        "kreator-studio-os": { status: "recommended", note: "Digital product / coaching purchase — Checkout mode redirect to DOKU page." },
+        "riset-kit": { status: "recommended", note: "Paid research bundle — one-time Checkout flow." },
+        "cms-public-storefront": { status: "recommended", note: "Cart checkout — Direct mode untuk control UI atau Checkout untuk quick wins." },
+      },
+      conflicts: ["midtrans-payment", "stripe-payment"],
+      enhances: ["convex-auth", "ai-router"],
+    },
   },
   {
     slug: "midtrans-payment",
@@ -157,6 +205,19 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["wirausaha-os", "konsultan-os", "kreator-studio-os"],
     agentRecipe: "Midtrans Snap untuk pembayaran instant. Webhook ke Convex HTTP action /api/midtrans-callback untuk update order status. Ingat: PPN 11% sudah included di amount, jangan double-count.",
     previewPath: "/preview/slices/midtrans-payment",
+    compat: {
+      templates: {
+        "personal-brand-os": { status: "warn", note: "Personal-brand has no checkout slice; you'll add one manually." },
+        "agency-studio-os": { status: "warn", note: "B2B template; payment slice not included." },
+        "saas-marketing-os": { status: "warn", note: "SaaS biasanya butuh recurring billing — Midtrans Snap untuk one-time only." },
+        "konsultan-os": { status: "recommended", note: "Alternative Indonesian gateway." },
+        "wirausaha-os": { status: "recommended", note: "Alternative Indonesian gateway." },
+        "kreator-studio-os": { status: "recommended", note: "Alternative Indonesian gateway." },
+        "cms-public-storefront": { status: "recommended", note: "Alternative Indonesian gateway." },
+      },
+      conflicts: ["stripe-payment", "doku-payment"],
+      enhances: ["convex-auth"],
+    },
   },
   {
     slug: "resend-newsletter",
@@ -181,6 +242,14 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os", "kreator-studio-os", "wirausaha-os"],
     agentRecipe: "Use Resend Audiences API for newsletter — store subscriber emails in Convex too for segmentation. Double opt-in: subscriber.create with status 'pending' → click link → status 'confirmed'.",
     previewPath: "/preview/slices/resend-newsletter",
+    compat: {
+      templates: {
+        "personal-brand-os": { status: "recommended", note: "Newsletter slice already calls Resend Audiences API." },
+        "agency-studio-os": { status: "recommended", note: "Leads → broadcast wired through admin." },
+        "saas-marketing-os": { status: "recommended" },
+      },
+      enhances: ["mdx-blog"],
+    },
   },
   {
     slug: "ai-router",
@@ -202,6 +271,14 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os"],
     agentRecipe: "Wrap every AI call through ai-router action. Pick tier based on workload: nano for spam-flag/headline-suggest, mid for chat/draft, flagship for methodology-review. Log token usage to ai_usage table for cost dashboard.",
     previewPath: "/preview/slices/ai-router",
+    compat: {
+      templates: {
+        "personal-brand-os": { status: "recommended", note: "Chatbot + post-draft assistant compose on top." },
+        "kreator-studio-os": { status: "recommended", note: "AI chatbot bisa generate payment link via DOKU MCP — set DOKU MCP di .claude/mcp.json." },
+        "saas-marketing-os": { status: "warn", note: "Marketing site has no AI surface by default." },
+      },
+      enhances: ["doku-payment"],
+    },
   },
   {
     slug: "vector-search",
@@ -223,6 +300,11 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os", "riset-kit"],
     agentRecipe: "Add embedding field + vectorIndex per searchable table. Re-embed on upsert via Convex action. Cache embeddings — don't re-call OpenAI on every read.",
     previewPath: "/preview/slices/vector-search",
+    compat: {
+      templates: {
+        "riset-kit": { status: "native", note: "Research kit pakai embedding search untuk konten." },
+      },
+    },
   },
   {
     slug: "mdx-blog",
@@ -244,6 +326,14 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os", "konsultan-os", "saas-marketing-os"],
     agentRecipe: "Store post body sebagai markdown di content/blog/*.mdx. Render dengan MDXRemote di [slug]/page.tsx. Auto-extract headings ke ToC via remark plugin custom.",
     previewPath: "/preview/slices/mdx-blog",
+    compat: {
+      templates: {
+        "saas-marketing-os": { status: "native", note: "Blog + changelog slices both render MDX." },
+        "personal-brand-os": { status: "recommended", note: "Blog slice expects MDX bodies in Convex posts table." },
+        "konsultan-os": { status: "recommended", note: "Konten ahli sebagai SEO funnel." },
+        "agency-studio-os": { status: "warn", note: "Agency template ships no blog slice — bring your own route." },
+      },
+    },
   },
   {
     slug: "cal-com-booking",
@@ -268,6 +358,14 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os", "konsultan-os"],
     agentRecipe: "Embed Cal.com via @calcom/embed-react di halaman services. Configure webhook di Cal.com dashboard → POST ke /api/cal-webhook → upsert booking di Convex.",
     previewPath: "/preview/slices/cal-com-booking",
+    compat: {
+      templates: {
+        "personal-brand-os": { status: "recommended", note: "Services slice has a booking placeholder slot." },
+        "agency-studio-os": { status: "recommended", note: "Project intake form pairs with Cal.com." },
+        "saas-marketing-os": { status: "recommended", note: "Demo-request form can swap to Cal.com." },
+        "konsultan-os": { status: "recommended", note: "Konsultasi booking wajib — Cal.com embed di services page." },
+      },
+    },
   },
   {
     slug: "full-width-toggle",
@@ -394,6 +492,12 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os"],
     agentRecipe: "Use BroadcastChannel only for demo / cross-iframe state mirroring. Production data still goes through Convex realtime. Use the useBroadcastSync(channelName, initial) hook from @/features/broadcast-channel-sync.",
     previewPath: "/preview/slices/broadcast-channel-sync",
+    compat: {
+      templates: {
+        "personal-brand-os": { status: "native", note: "Public ↔ Admin live sync wired in StoreProvider." },
+        "agency-studio-os": { status: "warn", note: "Demo-only; not used by agency template by default." },
+      },
+    },
   },
   // ------------------------------------------------------------------
   // Promoted from recipes.ts (Phase 3 of docs/REFACTOR-PLAN.md, 2026-05-12).
