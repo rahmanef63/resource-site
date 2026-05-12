@@ -118,20 +118,19 @@ const slices = loadSlices().map((s) => {
   };
 });
 
-// Slug uniqueness across kinds (CLI dispatches by slug). NOTE: features and
-// slices CAN share a slug — slice supersedes feature (deeper tier-3 rep of
-// the same concept). CLI add-flow tries slice first, falls back to feature.
+// Slug uniqueness across kinds (CLI dispatches by slug). After Phase 3
+// of docs/REFACTOR-PLAN.md (2026-05-12): recipes.ts emptied, features
+// derived from slices — feature↔slice slug overlap is now expected
+// (same source), so they share an entry. Strict uniqueness across
+// layout / slice. Features skip the check (derived view).
 const allSlugs = new Map();
-for (const [kind, list] of [["layout", layouts], ["recipe", recipes], ["feature", features], ["slice", slices]]) {
+for (const [kind, list] of [["layout", layouts], ["recipe", recipes], ["slice", slices]]) {
   for (const e of list) {
     const owner = allSlugs.get(e.slug);
     if (owner) {
-      const allowed = (owner === "feature" && kind === "slice") || (owner === "slice" && kind === "feature");
-      if (!allowed) {
-        errors.push(
-          `Duplicate slug "${e.slug}" in ${kind} — also in ${owner}`,
-        );
-      }
+      errors.push(
+        `Duplicate slug "${e.slug}" in ${kind} — also in ${owner}`,
+      );
     }
     allSlugs.set(e.slug, kind);
   }

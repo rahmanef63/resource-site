@@ -62,7 +62,48 @@ Both = deep restructure violating "hindari rewrite, update imports saja". Real s
 
 ---
 
-## Phase 3 — Recipes & features → slices
+## Phase 3 — Recipes & features → slices ✅ Done 2026-05-12
+
+**Landed**:
+
+Categorized 12 recipes:
+
+| Recipe | Action | Slice destination |
+|---|---|---|
+| rbac-roles | Promoted | `rbac-roles` (backend, slicePath empty, convexPaths → template-base/convex/lib/rbac) |
+| admin-panel | Promoted | `admin-panel` (full, template-base/frontend/slices/admin) |
+| event-tracking | Promoted | `event-tracking` (full, lives under admin slice) |
+| theme-preset-switcher | Promoted | `theme-preset-switcher` (ui, template-base/frontend/shared/theme) |
+| icon-picker | Promoted | `icon-picker` (ui, template-base/frontend/slices/notion/slices/icon-picker) |
+| contact-form-resend | Promoted + moved | `contact-form-resend` (full, template-base/frontend/slices/contact-form-resend — was `recipes/contact-form-resend/src/`) |
+| command-palette | Dropped (dup) | covered by existing `command-menu` slice |
+| doku-payment | Dropped (dup) | already a slice |
+| block-editor, page-tree-sidebar, multi-block-selection, database-views, comments-threaded | Dropped | notion sub-features — live INSIDE `notion` slice, not portable standalone |
+
+**Terminal ops**:
+```bash
+git mv recipes/contact-form-resend/src/{page.tsx,components} → frontend/slices/contact-form-resend/ → template-base/frontend/slices/contact-form-resend/
+git rm -r recipes/{admin-panel,block-editor,command-palette,comments-threaded,database-views,doku-payment,event-tracking,icon-picker,multi-block-selection,page-tree-sidebar,rbac-roles,theme-preset-switcher}
+rmdir recipes/contact-form-resend recipes
+```
+
+(Moved contact-form-resend twice: into root portable, then into template-base when tsc revealed convex/react + framer-motion deps. Matches dual-home-by-category rule.)
+
+**Edits**:
+- `lib/content/slices.ts` — appended 6 new slice entries.
+- `lib/content/recipes.ts` — emptied. Type + getRecipe stub kept for back-compat with 14 importers (sitemap, llms.txt, sidebar, command-palette, hero, admin export, knowledge API, etc.).
+- `next.config.mjs` — 14 new `/recipes/*` → `/slices/*` redirects.
+- `packages/cli/scripts/gen-manifest.mjs` — removed feature↔slice duplicate-slug exemption (dead code: features derived from slices).
+
+**Post-state**: manifest now `15 layouts + 0 recipes + 20 features + 20 slices`. tsc green.
+
+**Deferred**:
+- Delete recipes.ts entirely + remove all 14 import sites — Phase 6 (CI structural-check pass).
+- Manifest schema bump v2 → v3 — Phase 6 (needs CLI/MCP coordination).
+
+---
+
+## ~~Phase 3 — Recipes & features → slices~~ (original plan, superseded)
 
 **Goal**: collapse `recipes` + `features` collections into `slices` with `kind: ui`.
 
@@ -157,8 +198,8 @@ Both = deep restructure violating "hindari rewrite, update imports saja". Real s
 | Phase | Status | PR | Notes |
 |---|---|---|---|
 | 1 — Preview unify | ✅ Done 2026-05-12 | 4fed77c | Extracted `PreviewIframeShell` shared renderer. PreviewPane: 126→46 LOC. SegmentedFrame defined once. |
-| 2 — Slice home unify | ✅ Done 2026-05-12 | (this) | Killed `full-width-toggle` dup. Revised rule to dual-home-by-category. |
-| 3 — Recipes → slices | Not started | — | |
+| 2 — Slice home unify | ✅ Done 2026-05-12 | f0c077c | Killed `full-width-toggle` dup. Revised rule to dual-home-by-category. |
+| 3 — Recipes → slices | ✅ Done 2026-05-12 | (this) | 12 recipes → 6 promoted slices + 6 dropped (notion sub-features + dup). recipes.ts emptied, dup-slug exemption removed. |
 | 4 — Compat per slice | Not started | — | |
 | 5 — slice.json SSOT | Not started | — | |
 | 6 — CI enforcement | Not started | — | |

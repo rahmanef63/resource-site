@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-12T07:54:34.473Z",
+  "generatedAt": "2026-05-12T08:04:41.916Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -804,248 +804,7 @@
       "primaryFile": "app/preview/riset-kit/public/page.tsx"
     }
   ],
-  "recipes": [
-    {
-      "slug": "block-editor",
-      "title": "Notion-Style Block Editor",
-      "description": "21-block contenteditable editor with slash command menu, markdown shortcuts, drag handles. Real-time via Convex.",
-      "source": "notion-page-clone",
-      "files": [
-        "frontend/slices/notion/slices/editor/BlockEditor.tsx",
-        "frontend/slices/notion/slices/editor/SlashMenu.tsx",
-        "frontend/slices/notion/slices/editor/blockSpecs.ts"
-      ],
-      "exampleCode": "import { BlockEditor } from \"@/frontend/slices/notion/slices/editor/BlockEditor\";\n\n<BlockEditor pageId={pageId} />",
-      "agentRecipe": "Already copied at frontend/slices/notion/slices/editor/. See PORT-NOTION.md for Vite→Next port checklist (routing rewrite, use-client markers, Convex API surface rename).",
-      "tags": [
-        "editor",
-        "notion",
-        "blocks",
-        "real-time"
-      ]
-    },
-    {
-      "slug": "page-tree-sidebar",
-      "title": "Page Tree Sidebar",
-      "description": "Hierarchical workspace sidebar with @dnd-kit drag-drop reordering, favorites, recents.",
-      "source": "notion-page-clone",
-      "files": [
-        "frontend/slices/notion/slices/workspace-sidebar/components/WorkspaceSidebar.tsx",
-        "frontend/slices/notion/slices/workspace-sidebar/components/SortablePageRow.tsx"
-      ],
-      "exampleCode": "import { WorkspaceSidebar } from \"@/frontend/slices/notion/slices/workspace-sidebar/components/WorkspaceSidebar\";\n\n<WorkspaceSidebar />",
-      "agentRecipe": "Mount WorkspaceSidebar inside the left slot of <ThreeColumnLayout>. State backed by Zustand store at frontend/slices/notion/shared/lib/store.tsx.",
-      "tags": [
-        "sidebar",
-        "tree",
-        "dnd-kit",
-        "navigation"
-      ]
-    },
-    {
-      "slug": "multi-block-selection",
-      "title": "Multi-Block Selection",
-      "description": "Marquee + click+shift selection of editor blocks with floating toolbar. Bulk actions: delete, duplicate, convert.",
-      "source": "notion-page-clone",
-      "files": [
-        "frontend/slices/notion/slices/block-selection/components/BlockSelectionProvider.tsx",
-        "frontend/slices/notion/slices/block-selection/components/MarqueeOverlay.tsx"
-      ],
-      "exampleCode": "import { BlockSelectionProvider } from \"@/frontend/slices/notion/slices/block-selection/components/BlockSelectionProvider\";\n\n<BlockSelectionProvider>\n  <BlockEditor />\n</BlockSelectionProvider>",
-      "agentRecipe": "Wrap BlockEditor with BlockSelectionProvider. The marquee overlay attaches to document; toolbar floats above the selection bounding box.",
-      "tags": [
-        "selection",
-        "editor",
-        "bulk",
-        "marquee"
-      ]
-    },
-    {
-      "slug": "database-views",
-      "title": "Database Views (11 types)",
-      "description": "Properties+rows database with 11 view types: table, board, calendar, timeline, chart, gallery, map. Per-view filter/sort/group.",
-      "source": "notion-page-clone",
-      "files": [
-        "frontend/slices/notion/slices/databases/DatabaseBlock.tsx",
-        "frontend/slices/notion/slices/databases/views/TableView.tsx",
-        "frontend/slices/notion/slices/databases/views/BoardView.tsx"
-      ],
-      "exampleCode": "import { DatabaseBlock } from \"@/frontend/slices/notion/slices/databases/DatabaseBlock\";\n\n<DatabaseBlock databaseId={dbId} />",
-      "agentRecipe": "DatabaseBlock auto-routes to the active view component. Add custom property types by extending PropertyCell.tsx.",
-      "tags": [
-        "database",
-        "views",
-        "table",
-        "kanban",
-        "calendar"
-      ]
-    },
-    {
-      "slug": "command-palette",
-      "title": "Command Palette (⌘K)",
-      "description": "Cmd+K modal: feature navigation, workspace switching, theme, sign-out, custom commands. Auto-builds from feature registry.",
-      "source": "kitab-core + notion-page-clone",
-      "files": [
-        "frontend/shared/foundation/utils/system/command-menu/components.tsx"
-      ],
-      "exampleCode": "import { CommandMenu } from \"@/frontend/shared/foundation/utils/system/command-menu/components\";\n\n<CommandMenu actions={customActions} />",
-      "agentRecipe": "Mount CommandMenu once at the app shell level. It listens for Cmd+K globally. Pass extra commands via the actions prop or register via the command-registry.",
-      "tags": [
-        "palette",
-        "cmd-k",
-        "navigation"
-      ]
-    },
-    {
-      "slug": "comments-threaded",
-      "title": "Threaded Comments",
-      "description": "Page + block-level threaded comments with resolved state. Real-time via Convex.",
-      "source": "notion-page-clone",
-      "files": [
-        "frontend/slices/notion/slices/comments/components/BlockCommentsPopover.tsx",
-        "frontend/slices/notion/slices/comments/hooks/useComments.ts"
-      ],
-      "exampleCode": "import { BlockCommentsPopover } from \"@/frontend/slices/notion/slices/comments/components/BlockCommentsPopover\";\n\n<BlockCommentsPopover blockId={blockId} pageId={pageId} />",
-      "agentRecipe": "Anchor comments by passing pageId (always) and optional blockId. Use useComments(blockId) hook for the reactive list.",
-      "tags": [
-        "comments",
-        "real-time",
-        "threading"
-      ]
-    },
-    {
-      "slug": "theme-preset-switcher",
-      "title": "Theme Preset Switcher",
-      "description": "Runtime theme swap (colors + fonts + shadows + tracking). OKLch CSS vars per preset. Persists to localStorage + Convex.",
-      "source": "rahmanef.com",
-      "files": [
-        "frontend/shared/theme/theme-presets.ts",
-        "frontend/shared/ui/components/theme-preset-switcher.tsx"
-      ],
-      "exampleCode": "import { ThemePresetSwitcher } from \"@/frontend/shared/ui/components/theme-preset-switcher\";\n\n<ThemePresetSwitcher />",
-      "agentRecipe": "Add a new preset by appending a CSS block in app/globals.css with [data-theme=\"<name>\"], then register in preset-groups.ts.",
-      "tags": [
-        "theme",
-        "presets",
-        "oklch",
-        "design-system"
-      ]
-    },
-    {
-      "slug": "icon-picker",
-      "title": "Notion-Style Icon Picker",
-      "description": "Emoji + lucide icon picker with search, 10-color Notion palette, Twemoji/native toggle. One string stores emoji OR lucide:Name OR with ?c=hex tint — backwards-compat with raw-emoji fields.",
-      "source": "notion-page-clone",
-      "files": [
-        "frontend/slices/notion/slices/icon-picker/components/IconPicker.tsx",
-        "frontend/slices/notion/slices/icon-picker/components/DynamicIcon.tsx",
-        "frontend/slices/notion/slices/icon-picker/lib/parse.ts",
-        "frontend/slices/notion/slices/icon-picker/lib/colors.ts",
-        "frontend/slices/notion/slices/icon-picker/lib/emoji-catalog.ts",
-        "frontend/slices/notion/slices/icon-picker/lib/lucide-catalog.ts",
-        "frontend/slices/notion/slices/icon-picker/lib/twemoji.ts",
-        "frontend/slices/notion/slices/icon-picker/lib/style-pref.ts"
-      ],
-      "exampleCode": "import { IconPickerPopover, DynamicIcon } from \"@/frontend/slices/notion/slices/icon-picker\";\n\n<IconPickerPopover value={page.icon} onChange={(v) => updateIcon(v)} onClear={() => updateIcon(\"\")} />\n<DynamicIcon value={page.icon} className=\"text-2xl\" />",
-      "agentRecipe": "Single icon field stores emoji or 'lucide:Name' plus optional '?c=hex'. parseIconValue() decodes; lucideValue()/withColor() build. Add 'icon: v.string()' to Convex table — no migration needed for existing emoji fields. Popover variant for inline UI, Inline for sheets/dialogs.",
-      "tags": [
-        "icon",
-        "emoji",
-        "lucide",
-        "picker",
-        "twemoji",
-        "notion"
-      ]
-    },
-    {
-      "slug": "rbac-roles",
-      "title": "RBAC — Tiered System Roles",
-      "description": "Workspace-scoped RBAC with 6 system roles (owner/admin/manager/staff/client/guest) and three tier presets — solo, influencer, organization. Env-based platform admin bypass via PLATFORM_ADMIN_EMAILS. checkPermission / requirePermission helpers, role seeding mutation, @convex-dev/auth aware (no Clerk).",
-      "source": "superspace",
-      "files": [
-        "template-base/convex/lib/rbac/perms.ts",
-        "template-base/convex/lib/rbac/role-templates.ts",
-        "template-base/convex/lib/rbac/platform-admin.ts",
-        "template-base/convex/lib/rbac/permissions.ts",
-        "template-base/convex/lib/rbac/seed.ts",
-        "template-base/convex/auth/schema.ts"
-      ],
-      "exampleCode": "import { seedWorkspaceRoles } from \"@/convex/lib/rbac/seed\";\nimport { requirePermission } from \"@/convex/lib/rbac/permissions\";\n\n// In workspace-create mutation:\nconst wsId = await ctx.db.insert(\"workspaces\", { ... });\nawait seedWorkspaceRoles(ctx, wsId, \"solo\"); // or \"influencer\" | \"organization\"\n\n// In any mutation:\nawait requirePermission(ctx, args.workspaceId, \"content.create\");",
-      "agentRecipe": "Three tier presets pick which system roles to seed: solo (owner+admin) for personal-brand-os, influencer (+manager) for creator+VA, organization (6 roles) for company/institution. Platform admin via env PLATFORM_ADMIN_EMAILS bypasses all checks. Resolution order: platform admin → workspace owner row → membership.additionalPermissions → role.permissions. Workspaces.userId is the owner field for the notion-port schema; .createdBy for superspace-style. Helpers handle both.",
-      "tags": [
-        "rbac",
-        "auth",
-        "permissions",
-        "roles",
-        "workspaces",
-        "owner"
-      ]
-    },
-    {
-      "slug": "admin-panel",
-      "title": "Admin Panel — Unified Product Admin",
-      "description": "17-section admin surface (events, funnels, attribution, users, A/B, flags, pricing, CMS, email, audit, ...) gated by RBAC. Auto-filters sidebar by tier (solo/influencer/organization) and user permissions. Single backend resolver (getMyAdminAccess) mirrors frontend gate so UI can never leak.",
-      "source": "superspace + spec",
-      "files": [
-        "template-base/frontend/slices/admin/config.ts",
-        "template-base/frontend/slices/admin/page.tsx",
-        "template-base/frontend/slices/admin/README.md",
-        "template-base/frontend/slices/admin/components/AdminShell.tsx",
-        "template-base/frontend/slices/admin/components/AccessGate.tsx",
-        "template-base/frontend/slices/admin/hooks/useAdminAccess.ts",
-        "template-base/frontend/slices/admin/index.ts",
-        "template-base/convex/features/admin/access.ts"
-      ],
-      "exampleCode": "import { AdminPage } from \"@/frontend/slices/admin\";\n\n// app/admin/page.tsx\nexport default function Page() {\n  const ws = useCurrentWorkspace();\n  if (!ws) return null;\n  return <AdminPage workspaceId={ws._id} tier={ws.tier ?? \"solo\"} />;\n}",
-      "agentRecipe": "Wrap pages with <AdminPage workspaceId tier> — AccessGate hides UI for non-admins, AdminShell renders 2-col layout with sidebar filtered by tier+perms. ADMIN_SECTIONS registry in config.ts is single source of truth (17 entries, each with tiers + required perm + P0/P1/P2 priority). Personal-brand-os = tier 'solo' = owner sees everything via owner bypass. Set PLATFORM_ADMIN_EMAILS for cross-workspace superadmin. Depends on rbac-roles recipe — seed roles in your workspace-create mutation first.",
-      "tags": [
-        "admin",
-        "owner",
-        "platform",
-        "rbac",
-        "instrumentation",
-        "panel"
-      ]
-    },
-    {
-      "slug": "event-tracking",
-      "title": "Event Tracking — P0 Instrumentation",
-      "description": "Client SDK + Convex ingestion endpoint for structured product events. Auto-captures page_view/signup/login + UTM/referrer/first-touch attribution. Batched flush via requestIdleCallback, re-queue on failure. Targets <100ms p99 ingestion. Required before any funnel/activation/A-B feature.",
-      "source": "spec + superspace analytics",
-      "files": [
-        "template-base/frontend/slices/admin/slices/events/lib/track-event.ts",
-        "template-base/convex/features/admin/events.ts",
-        "template-base/convex/features/analytics/schema.ts"
-      ],
-      "exampleCode": "import { initEventTracking, trackEvent, trackPageView } from \"@/frontend/slices/admin\";\n\n// app/layout.tsx — once at app root\nuseEffect(() => { initEventTracking(convex); }, [convex]);\n\n// anywhere\ntrackEvent({ eventType: \"cv_generated\", productId: \"careerpack\", properties: { template: \"modern\" } });",
-      "agentRecipe": "Writes to existing analyticsEvents table (no new schema). Anonymous page_view allowed (pre-signup funnel); other events require workspaceId. Session id per tab (sessionStorage), first-touch UTM in localStorage. Flush batched every ~500ms via requestIdleCallback. Cap retry queue at 500. Backend ingest mutation accepts batched array — keep flush under one request.",
-      "tags": [
-        "events",
-        "analytics",
-        "instrumentation",
-        "attribution",
-        "utm",
-        "p0"
-      ]
-    },
-    {
-      "slug": "contact-form-resend",
-      "title": "Contact Form + Resend",
-      "description": "Contact form posting to Resend email API. Server Action + Zod input validation.",
-      "source": "cescadesigns",
-      "files": [
-        "recipes/contact-form-resend/src/page.tsx"
-      ],
-      "exampleCode": "// app/api/contact/route.ts\nimport { Resend } from \"resend\";\nconst resend = new Resend(process.env.RESEND_API_KEY!);\n\nexport async function POST(req: Request) {\n  const data = await req.formData();\n  await resend.emails.send({\n    from: \"form@yourdomain.com\",\n    to: \"you@yourdomain.com\",\n    subject: `From ${data.get(\"name\")}`,\n    html: `<p>${data.get(\"message\")}</p>`,\n  });\n  return Response.json({ ok: true });\n}",
-      "agentRecipe": "Wire ContactForm.tsx (form action /api/contact) to the route handler. Always validate inputs with Zod server-side.",
-      "tags": [
-        "form",
-        "email",
-        "resend",
-        "server-action"
-      ]
-    }
-  ],
+  "recipes": [],
   "features": [
     {
       "slug": "convex-auth",
@@ -1334,6 +1093,115 @@
         "cross-tab",
         "broadcast-channel",
         "demo-pattern"
+      ]
+    },
+    {
+      "slug": "rbac-roles",
+      "title": "RBAC — Tiered System Roles",
+      "category": "auth",
+      "description": "Workspace-scoped RBAC with 6 system roles (owner/admin/manager/staff/client/guest) and three tier presets — solo, influencer, organization. Env-based platform admin bypass via PLATFORM_ADMIN_EMAILS. checkPermission / requirePermission helpers, role seeding mutation, @convex-dev/auth aware (no Clerk).",
+      "source": "superspace",
+      "install": "npx rahman-resources add rbac-roles",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Three tier presets pick which system roles to seed: solo (owner+admin), influencer (+manager), organization (6 roles). Platform admin via env PLATFORM_ADMIN_EMAILS bypasses all checks. Resolution: platform admin → workspace owner → membership.additionalPermissions → role.permissions.",
+      "tags": [
+        "rbac",
+        "auth",
+        "permissions",
+        "roles",
+        "workspaces"
+      ]
+    },
+    {
+      "slug": "admin-panel",
+      "title": "Admin Panel — Unified Product Admin",
+      "category": "infra",
+      "description": "17-section admin surface (events, funnels, attribution, users, A/B, flags, pricing, CMS, email, audit, ...) gated by RBAC. Auto-filters sidebar by tier (solo/influencer/organization) and user permissions. Single backend resolver (getMyAdminAccess) mirrors frontend gate so UI can never leak.",
+      "source": "superspace + spec",
+      "install": "npx rahman-resources add admin-panel",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Wrap pages with <AdminPage workspaceId tier>. AccessGate hides UI for non-admins, AdminShell renders 2-col layout with sidebar filtered by tier+perms. ADMIN_SECTIONS in config.ts is SSOT (17 entries). Personal-brand-os = tier 'solo' = owner sees everything.",
+      "tags": [
+        "admin",
+        "owner",
+        "platform",
+        "rbac",
+        "instrumentation",
+        "panel"
+      ]
+    },
+    {
+      "slug": "event-tracking",
+      "title": "Event Tracking — P0 Instrumentation",
+      "category": "data",
+      "description": "Client SDK + Convex ingestion endpoint for structured product events. Auto-captures page_view/signup/login + UTM/referrer/first-touch attribution. Batched flush via requestIdleCallback. Targets <100ms p99 ingestion.",
+      "source": "spec + superspace analytics",
+      "install": "npx rahman-resources add event-tracking",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Writes to analyticsEvents table (no new schema). Anonymous page_view allowed pre-signup; other events require workspaceId. Session id per tab (sessionStorage), first-touch UTM in localStorage. Flush every ~500ms via requestIdleCallback. Cap retry queue at 500.",
+      "tags": [
+        "events",
+        "analytics",
+        "instrumentation",
+        "attribution",
+        "utm",
+        "p0"
+      ]
+    },
+    {
+      "slug": "theme-preset-switcher",
+      "title": "Theme Preset Switcher",
+      "category": "ui",
+      "description": "Runtime theme swap (colors + fonts + shadows + tracking). OKLch CSS vars per preset. Persists to localStorage + Convex. Add a new preset by appending a CSS block in app/globals.css with [data-theme=\"<name>\"], then register in preset-groups.ts.",
+      "source": "rahmanef.com",
+      "install": "npx rahman-resources add theme-preset-switcher",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Import ThemePresetSwitcher from @/frontend/shared/ui/components/theme-preset-switcher and mount in the topbar. Presets live in theme-presets.ts; preset-groups.ts groups them for the picker UI.",
+      "tags": [
+        "theme",
+        "presets",
+        "oklch",
+        "design-system"
+      ]
+    },
+    {
+      "slug": "icon-picker",
+      "title": "Notion-Style Icon Picker",
+      "category": "ui",
+      "description": "Emoji + lucide icon picker with search, 10-color Notion palette, Twemoji/native toggle. One string stores emoji OR lucide:Name OR with ?c=hex tint — backwards-compat with raw-emoji fields. Single icon field stores emoji or 'lucide:Name' plus optional '?c=hex'.",
+      "source": "notion-page-clone",
+      "install": "npx rahman-resources add icon-picker",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "parseIconValue() decodes; lucideValue()/withColor() build. Add 'icon: v.string()' to Convex table — no migration needed for existing emoji fields. Popover variant for inline UI, Inline for sheets/dialogs.",
+      "tags": [
+        "icon",
+        "emoji",
+        "lucide",
+        "picker",
+        "twemoji",
+        "notion"
+      ]
+    },
+    {
+      "slug": "contact-form-resend",
+      "title": "Contact Form + Resend",
+      "category": "email",
+      "description": "Contact form posting to Resend email API. Server Action + Zod input validation. Convex mutation for storage + Resend send.",
+      "source": "cescadesigns",
+      "install": "npx rahman-resources add contact-form-resend",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Wire contactMessages.send mutation in convex/. Server emails via Resend from form@yourdomain.com. Always validate inputs with Zod or v.* server-side. Anonymous allowed.",
+      "tags": [
+        "form",
+        "email",
+        "resend",
+        "convex"
       ]
     }
   ],
@@ -1864,6 +1732,211 @@
         "demo-pattern"
       ],
       "agentRecipe": "Use BroadcastChannel only for demo / cross-iframe state mirroring. Production data still goes through Convex realtime. Use the useBroadcastSync(channelName, initial) hook from @/features/broadcast-channel-sync."
+    },
+    {
+      "slug": "rbac-roles",
+      "title": "RBAC — Tiered System Roles",
+      "category": "auth",
+      "kind": "backend",
+      "version": "0.1.0",
+      "description": "Workspace-scoped RBAC with 6 system roles (owner/admin/manager/staff/client/guest) and three tier presets — solo, influencer, organization. Env-based platform admin bypass via PLATFORM_ADMIN_EMAILS. checkPermission / requirePermission helpers, role seeding mutation, @convex-dev/auth aware (no Clerk).",
+      "source": "superspace",
+      "slicePath": "",
+      "convexPaths": [
+        "template-base/convex/lib/rbac"
+      ],
+      "npm": [],
+      "shadcn": [],
+      "env": [
+        {
+          "name": "PLATFORM_ADMIN_EMAILS",
+          "scope": "convex",
+          "description": "Comma-separated emails granted cross-workspace admin."
+        }
+      ],
+      "peers": [
+        {
+          "slug": "convex-auth",
+          "range": "^0.1",
+          "reason": "RBAC checks the authed user identity."
+        }
+      ],
+      "providers": [],
+      "tags": [
+        "rbac",
+        "auth",
+        "permissions",
+        "roles",
+        "workspaces"
+      ],
+      "agentRecipe": "Three tier presets pick which system roles to seed: solo (owner+admin), influencer (+manager), organization (6 roles). Platform admin via env PLATFORM_ADMIN_EMAILS bypasses all checks. Resolution: platform admin → workspace owner → membership.additionalPermissions → role.permissions."
+    },
+    {
+      "slug": "admin-panel",
+      "title": "Admin Panel — Unified Product Admin",
+      "category": "infra",
+      "kind": "full",
+      "version": "0.1.0",
+      "description": "17-section admin surface (events, funnels, attribution, users, A/B, flags, pricing, CMS, email, audit, ...) gated by RBAC. Auto-filters sidebar by tier (solo/influencer/organization) and user permissions. Single backend resolver (getMyAdminAccess) mirrors frontend gate so UI can never leak.",
+      "source": "superspace + spec",
+      "slicePath": "template-base/frontend/slices/admin",
+      "convexPaths": [
+        "template-base/convex/features/admin"
+      ],
+      "npm": [],
+      "shadcn": [
+        "card",
+        "badge",
+        "button"
+      ],
+      "env": [],
+      "peers": [
+        {
+          "slug": "rbac-roles",
+          "range": "^0.1",
+          "reason": "Admin sections require RBAC perms — must seed roles first."
+        }
+      ],
+      "providers": [],
+      "tags": [
+        "admin",
+        "owner",
+        "platform",
+        "rbac",
+        "instrumentation",
+        "panel"
+      ],
+      "agentRecipe": "Wrap pages with <AdminPage workspaceId tier>. AccessGate hides UI for non-admins, AdminShell renders 2-col layout with sidebar filtered by tier+perms. ADMIN_SECTIONS in config.ts is SSOT (17 entries). Personal-brand-os = tier 'solo' = owner sees everything."
+    },
+    {
+      "slug": "event-tracking",
+      "title": "Event Tracking — P0 Instrumentation",
+      "category": "data",
+      "kind": "full",
+      "version": "0.1.0",
+      "description": "Client SDK + Convex ingestion endpoint for structured product events. Auto-captures page_view/signup/login + UTM/referrer/first-touch attribution. Batched flush via requestIdleCallback. Targets <100ms p99 ingestion.",
+      "source": "spec + superspace analytics",
+      "slicePath": "template-base/frontend/slices/admin/slices/events",
+      "convexPaths": [
+        "template-base/convex/features/admin",
+        "template-base/convex/features/analytics"
+      ],
+      "npm": [],
+      "shadcn": [],
+      "env": [],
+      "peers": [
+        {
+          "slug": "admin-panel",
+          "range": "^0.1",
+          "reason": "Lives under admin slice events subfolder."
+        }
+      ],
+      "providers": [],
+      "tags": [
+        "events",
+        "analytics",
+        "instrumentation",
+        "attribution",
+        "utm",
+        "p0"
+      ],
+      "agentRecipe": "Writes to analyticsEvents table (no new schema). Anonymous page_view allowed pre-signup; other events require workspaceId. Session id per tab (sessionStorage), first-touch UTM in localStorage. Flush every ~500ms via requestIdleCallback. Cap retry queue at 500."
+    },
+    {
+      "slug": "theme-preset-switcher",
+      "title": "Theme Preset Switcher",
+      "category": "ui",
+      "kind": "ui",
+      "version": "0.1.0",
+      "description": "Runtime theme swap (colors + fonts + shadows + tracking). OKLch CSS vars per preset. Persists to localStorage + Convex. Add a new preset by appending a CSS block in app/globals.css with [data-theme=\"<name>\"], then register in preset-groups.ts.",
+      "source": "rahmanef.com",
+      "slicePath": "template-base/frontend/shared/theme",
+      "convexPaths": [],
+      "npm": [],
+      "shadcn": [],
+      "env": [],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "theme",
+        "presets",
+        "oklch",
+        "design-system"
+      ],
+      "agentRecipe": "Import ThemePresetSwitcher from @/frontend/shared/ui/components/theme-preset-switcher and mount in the topbar. Presets live in theme-presets.ts; preset-groups.ts groups them for the picker UI."
+    },
+    {
+      "slug": "icon-picker",
+      "title": "Notion-Style Icon Picker",
+      "category": "ui",
+      "kind": "ui",
+      "version": "0.1.0",
+      "description": "Emoji + lucide icon picker with search, 10-color Notion palette, Twemoji/native toggle. One string stores emoji OR lucide:Name OR with ?c=hex tint — backwards-compat with raw-emoji fields. Single icon field stores emoji or 'lucide:Name' plus optional '?c=hex'.",
+      "source": "notion-page-clone",
+      "slicePath": "template-base/frontend/slices/notion/slices/icon-picker",
+      "convexPaths": [],
+      "npm": [],
+      "shadcn": [
+        "popover",
+        "button",
+        "input"
+      ],
+      "env": [],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "icon",
+        "emoji",
+        "lucide",
+        "picker",
+        "twemoji",
+        "notion"
+      ],
+      "agentRecipe": "parseIconValue() decodes; lucideValue()/withColor() build. Add 'icon: v.string()' to Convex table — no migration needed for existing emoji fields. Popover variant for inline UI, Inline for sheets/dialogs."
+    },
+    {
+      "slug": "contact-form-resend",
+      "title": "Contact Form + Resend",
+      "category": "email",
+      "kind": "full",
+      "version": "0.1.0",
+      "description": "Contact form posting to Resend email API. Server Action + Zod input validation. Convex mutation for storage + Resend send.",
+      "source": "cescadesigns",
+      "slicePath": "template-base/frontend/slices/contact-form-resend",
+      "convexPaths": [],
+      "npm": [
+        "resend@^4.0.0",
+        "framer-motion@^11.0.0"
+      ],
+      "shadcn": [
+        "card",
+        "button",
+        "input",
+        "label",
+        "textarea"
+      ],
+      "env": [
+        {
+          "name": "RESEND_API_KEY",
+          "scope": "convex",
+          "required": true
+        }
+      ],
+      "peers": [
+        {
+          "slug": "convex-auth",
+          "range": "^0.1",
+          "reason": "Optional — anonymous submission works without auth."
+        }
+      ],
+      "providers": [],
+      "tags": [
+        "form",
+        "email",
+        "resend",
+        "convex"
+      ],
+      "agentRecipe": "Wire contactMessages.send mutation in convex/. Server emails via Resend from form@yourdomain.com. Always validate inputs with Zod or v.* server-side. Anonymous allowed."
     }
   ]
 }
