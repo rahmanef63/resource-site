@@ -43,6 +43,11 @@
         "infra"
       ]
     },
+    "kind": {
+      "type": "string",
+      "enum": ["ui", "backend", "full"],
+      "description": "Slice shape — ui (no convex), backend (no UI), full (both)."
+    },
     "title": { "type": "string", "minLength": 3 },
     "description": { "type": "string", "minLength": 10 },
     "namespace": {
@@ -53,12 +58,11 @@
     "convex": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["rootPaths"],
       "properties": {
         "tablesExport": {
           "type": "string",
-          "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$",
-          "description": "Name of the table-fragment export in schema.ts (e.g., midtransTables)."
+          "pattern": "^([a-zA-Z][a-zA-Z0-9_]*)?$",
+          "description": "Name of the table-fragment export in schema.ts (e.g., midtransTables). Empty for ui-only slices."
         },
         "schemaPath": {
           "type": "string",
@@ -66,25 +70,25 @@
         },
         "rootPaths": {
           "type": "array",
-          "minItems": 1,
           "items": { "type": "string" },
-          "description": "Convex folders the lift pulls into the consumer's convex/."
+          "description": "Convex folders the lift pulls into the consumer's convex/. Empty for ui-only slices."
         }
       }
     },
     "frontend": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["slicePath", "configExport"],
+      "required": ["slicePath"],
       "properties": {
         "slicePath": {
           "type": "string",
-          "pattern": "^frontend/slices/[a-z0-9_/-]+$"
+          "pattern": "^(template-base/)?frontend/slices/[a-z0-9_/-]+$",
+          "description": "Portable home → frontend/slices/<slug>. Foundation home → template-base/frontend/slices/<slug>."
         },
         "configExport": {
           "type": "string",
-          "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$",
-          "description": "Name of the defineFeature(...) export the registry generators look for."
+          "pattern": "^([a-zA-Z][a-zA-Z0-9_]*)?$",
+          "description": "Name of the defineFeature(...) export the registry generators look for. Empty for ui-only slices."
         }
       }
     },

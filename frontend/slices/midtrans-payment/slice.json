@@ -3,7 +3,7 @@
   "slug": "midtrans-payment",
   "version": "0.1.0",
   "category": "payment",
-  "title": "Midtrans Payment",
+  "title": "Midtrans — Indonesia Payment",
   "description": "Midtrans Snap checkout + webhook handler + transaction history. Provider-isolated under components/providers/midtrans + actions/midtrans so Doku/Stripe can land as siblings without API churn.",
   "namespace": "@/features/midtrans-payment",
   "convex": {

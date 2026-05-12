@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "category": "ui",
   "kind": "ui",
-  "title": "Responsive Dialog",
+  "title": "Responsive Dialog (Sheet ↔ Modal)",
   "description": "Facade slice over shared/ui/components/ResponsiveDialog.tsx. Sheet on mobile, Dialog on desktop, same API. Replaces raw <dialog> everywhere (kitab rule #2).",
   "namespace": "@/features/responsive-dialog",
   "convex": { "tablesExport": "", "schemaPath": "", "rootPaths": [] },

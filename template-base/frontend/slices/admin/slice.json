@@ -1,0 +1,27 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "admin-panel",
+  "version": "0.1.0",
+  "category": "infra",
+  "kind": "full",
+  "title": "Admin Panel — Unified Product Admin",
+  "description": "17-section admin surface (events, funnels, attribution, users, A/B, flags, pricing, CMS, email, audit, ...) gated by RBAC. Auto-filters sidebar by tier (solo/influencer/organization) and user permissions. Single backend resolver (getMyAdminAccess) mirrors frontend gate so UI can never leak.",
+  "namespace": "@/features/admin",
+  "convex": { "tablesExport": "", "schemaPath": "", "rootPaths": ["template-base/convex/features/admin"] },
+  "frontend": {
+    "slicePath": "template-base/frontend/slices/admin",
+    "configExport": ""
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": ["card", "badge", "button"],
+    "env": [],
+    "peers": [
+      { "slug": "rbac-roles", "range": "^0.1", "reason": "Admin sections require RBAC perms — must seed roles first." }
+    ]
+  },
+  "registers": ["registry"],
+  "license": "MIT",
+  "tags": ["admin", "owner", "platform", "rbac", "instrumentation", "panel"],
+  "providers": []
+}

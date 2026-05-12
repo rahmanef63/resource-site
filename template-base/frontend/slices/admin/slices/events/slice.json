@@ -1,0 +1,27 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "event-tracking",
+  "version": "0.1.0",
+  "category": "data",
+  "kind": "full",
+  "title": "Event Tracking — P0 Instrumentation",
+  "description": "Client SDK + Convex ingestion endpoint for structured product events. Auto-captures page_view/signup/login + UTM/referrer/first-touch attribution. Batched flush via requestIdleCallback. Targets <100ms p99 ingestion.",
+  "namespace": "@/features/event-tracking",
+  "convex": { "tablesExport": "", "schemaPath": "", "rootPaths": ["template-base/convex/features/admin", "template-base/convex/features/analytics"] },
+  "frontend": {
+    "slicePath": "template-base/frontend/slices/admin/slices/events",
+    "configExport": ""
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": [
+      { "slug": "admin-panel", "range": "^0.1", "reason": "Lives under admin slice events subfolder." }
+    ]
+  },
+  "registers": [],
+  "license": "MIT",
+  "tags": ["events", "analytics", "instrumentation", "attribution", "utm", "p0"],
+  "providers": []
+}

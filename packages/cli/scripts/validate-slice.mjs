@@ -83,8 +83,13 @@ function collectSliceFiles(targets) {
       }
     }
   } else {
-    const slicesRoot = path.join(REPO, "frontend", "slices");
-    if (existsSync(slicesRoot)) walkSlices(slicesRoot, out);
+    // Scan both homes (Phase 2 dual-home-by-category rule).
+    for (const root of [
+      path.join(REPO, "frontend", "slices"),
+      path.join(REPO, "template-base", "frontend", "slices"),
+    ]) {
+      if (existsSync(root)) walkSlices(root, out);
+    }
   }
   return out;
 }

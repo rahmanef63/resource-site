@@ -352,7 +352,21 @@ When adding new code, ask:
 - [ ] Am I creating a second home for an existing concept? (If yes, stop.)
 - [ ] Is the import alias the canonical one for this concern?
 - [ ] If preview, am I using `PreviewFrame`? If preview page, is it bare?
-- [ ] If slice, does it have `slice.json` with `compat` declared locally?
-- [ ] Did I avoid importing `convex/react` inside slice components?
+- [ ] If slice, does it have `slice.json` with shared fields matching the TS entry?
+- [ ] If portable slice (root `frontend/slices/`), did I avoid `convex/react` imports? (Props-driven rule.)
+- [ ] Did I declare `compat` inside the TS slice entry rather than `lib/build/compat.ts`?
 
 Fail any check → revisit before merging.
+
+## CI enforcement (Phase 6 — 2026-05-12)
+
+Run `cd packages/cli && npm run validate:all` to gate everything in one shot. Wired into `prepublishOnly` so the CLI cannot publish with drift. The checks:
+
+| Script | Purpose | Rule(s) |
+|---|---|---|
+| `validate.mjs` | gen-manifest with `--strict` — every path in slices/layouts/recipes resolves on disk | layout/recipe path existence |
+| `validate-slice.mjs --check` | JSON-Schema validate every `slice.json` (root + template-base) | shape contract |
+| `validate-slice-parity.mjs` | TS `SliceEntry` ↔ disk `slice.json` shared fields must agree | no metadata drift |
+| `validate-structure.mjs` | anti-spaghetti rules | R1 dual-home, R2 path-exists, R3 props-driven, R4 slug-uniqueness, R5 recipes-empty |
+
+If any of these fail, fix the offender or update the rule + add a comment explaining the exception. Never bypass.
