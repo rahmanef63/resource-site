@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { CodeBlock } from "@/components/site/code-block";
+import { McpInstallTabs } from "@/components/site/mcp-install-tabs";
 import { RepoLink } from "@/components/site/repo-link";
 import { site } from "@/lib/content/site";
 import { PACKAGE_VERSIONS } from "@/lib/content/package-versions";
@@ -14,23 +15,6 @@ export const metadata = {
 const NPM_PACKAGE = "rahman-resources-mcp";
 const NPM_URL = `https://www.npmjs.com/package/${NPM_PACKAGE}`;
 const REPO_PATH = `${site.repo}/tree/main/packages/mcp`;
-
-const MCP_CONFIG_JSON = `{
-  "mcpServers": {
-    "rahman-resources": {
-      "command": "npx",
-      "args": ["-y", "rahman-resources-mcp"]
-    }
-  }
-}`;
-
-const CURSOR_CONFIG_JSON = `// Cursor: Settings → MCP → New MCP Server
-{
-  "name": "rahman-resources",
-  "command": "npx",
-  "args": ["-y", "rahman-resources-mcp"],
-  "transport": "stdio"
-}`;
 
 type Tool = {
   name: string;
@@ -161,32 +145,7 @@ export default function McpDocsPage() {
         </ul>
       </section>
 
-      <section className="mt-12 space-y-4">
-        <h2 className="text-2xl font-semibold tracking-tight">Install (Claude Code)</h2>
-        <p className="text-muted-foreground">
-          Add to{" "}
-          <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">~/.claude/mcp.json</code>{" "}
-          (global) or{" "}
-          <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">
-            .claude/mcp.json
-          </code>{" "}
-          (per-project):
-        </p>
-        <CodeBlock code={MCP_CONFIG_JSON} language="json" filename="mcp.json" />
-        <p className="text-sm text-muted-foreground">
-          Then run <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">/mcp</code>{" "}
-          inside Claude Code — you should see <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">rahman-resources</code>{" "}
-          in the connected list with 8 tools.
-        </p>
-      </section>
-
-      <section className="mt-12 space-y-4">
-        <h2 className="text-2xl font-semibold tracking-tight">Install (Cursor / Cline)</h2>
-        <p className="text-muted-foreground">
-          Same stdio command — wire via the editor&apos;s MCP UI.
-        </p>
-        <CodeBlock code={CURSOR_CONFIG_JSON} language="json" filename="cursor mcp settings" />
-      </section>
+      <McpInstallTabs />
 
       <section className="mt-12 space-y-4">
         <h2 className="text-2xl font-semibold tracking-tight">Quick wire (CLI helper)</h2>
