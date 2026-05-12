@@ -42,6 +42,7 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 
 import { createServer } from "node:http";
+import { timingSafeEqual } from "node:crypto";
 import { findEntry, getManifest, getSkills, searchAll, getWorkflow, WORKFLOW_KINDS } from "../src/data-loader.mjs";
 import { createRequire } from "node:module";
 
@@ -508,17 +509,49 @@ function getArg(name) {
   return i >= 0 ? process.argv[i + 1] : undefined;
 }
 
+// Cap body size to prevent memory DoS via large POST. 1 MiB is far more than
+// any legit JSON-RPC request needs (tools/list responses are ~5 KiB).
+const MAX_BODY_BYTES = 1 * 1024 * 1024;
+
 function readJsonBody(req) {
   return new Promise((resolve, reject) => {
     let raw = "";
-    req.on("data", (chunk) => { raw += chunk; });
+    let bytes = 0;
+    let killed = false;
+    req.on("data", (chunk) => {
+      if (killed) return;
+      bytes += chunk.length;
+      if (bytes > MAX_BODY_BYTES) {
+        killed = true;
+        const err = new Error("body too large");
+        err.statusCode = 413;
+        req.destroy();
+        reject(err);
+        return;
+      }
+      raw += chunk;
+    });
     req.on("end", () => {
+      if (killed) return;
       if (!raw) { resolve(undefined); return; }
       try { resolve(JSON.parse(raw)); } catch (e) { reject(e); }
     });
     req.on("error", reject);
   });
 }
+
+// Constant-time bearer compare to defeat timing attacks. Length check first
+// avoids leaking length via early-return timing.
+function bearerMatches(provided, expected) {
+  if (typeof provided !== "string" || !provided.startsWith("Bearer ")) return false;
+  const token = provided.slice(7);
+  const a = Buffer.from(token);
+  const b = Buffer.from(expected);
+  if (a.length !== b.length) return false;
+  return timingSafeEqual(a, b);
+}
+
+const IS_PROD = process.env.NODE_ENV === "production";
 
 const useHttp = process.argv.includes("--http") || process.env.MCP_HTTP === "1";
 
@@ -567,9 +600,13 @@ if (useHttp) {
     // Optional bearer auth — when MCP_BEARER_TOKEN is set, require it.
     if (bearer) {
       const auth = req.headers["authorization"];
-      if (auth !== `Bearer ${bearer}`) {
+      if (!bearerMatches(auth, bearer)) {
         res.statusCode = 401;
-        res.setHeader("WWW-Authenticate", "Bearer");
+        // MCP spec 2025-11-25 §"WWW-Authenticate Header": include realm + resource_metadata.
+        res.setHeader(
+          "WWW-Authenticate",
+          `Bearer realm="rahman-resources-mcp", resource_metadata="${req.headers.host ? `https://${req.headers.host}` : ""}/.well-known/oauth-protected-resource"`,
+        );
         res.setHeader("Content-Type", "application/json");
         res.end(JSON.stringify({ error: "unauthorized" }));
         return;
@@ -594,21 +631,37 @@ if (useHttp) {
     } catch (err) {
       console.error("[mcp/http] handleRequest error:", err);
       if (!res.headersSent) {
-        res.statusCode = 500;
+        const status = err?.statusCode ?? 500;
+        res.statusCode = status;
         res.setHeader("Content-Type", "application/json");
-        res.end(JSON.stringify({ error: "internal_error", message: String(err?.message ?? err) }));
+        // In prod, never leak err.message (may contain fs paths, env hints,
+        // stack frames). Return opaque error code. Devs get full detail in
+        // stderr/Dokploy logs.
+        const payload = IS_PROD
+          ? { error: status === 413 ? "payload_too_large" : "internal_error" }
+          : { error: "internal_error", message: String(err?.message ?? err) };
+        res.end(JSON.stringify(payload));
       }
       try { perReqTransport?.close?.(); } catch {}
       try { perReqServer?.close?.(); } catch {}
     }
   });
 
+  // Anti-slowloris: drop sockets that don't make progress.
+  //   requestTimeout — max wall time per request (including body upload)
+  //   headersTimeout — max time to receive complete headers
+  //   keepAliveTimeout — idle keep-alive socket close
+  httpServer.requestTimeout = 30_000;
+  httpServer.headersTimeout = 10_000;
+  httpServer.keepAliveTimeout = 5_000;
+
   httpServer.listen(port, host, () => {
     console.error(`rahman-resources-mcp v${PKG.version} — HTTP transport`);
     console.error(`  listening:  http://${host}:${port}`);
     console.error(`  endpoint:   POST /mcp  (Streamable HTTP, stateless)`);
     console.error(`  health:     GET /health`);
-    console.error(`  auth:       ${bearer ? "Bearer (MCP_BEARER_TOKEN)" : "none — open (read-only manifest)"}`);
+    console.error(`  auth:       ${bearer ? "Bearer (MCP_BEARER_TOKEN, constant-time)" : "none — open (read-only manifest)"}`);
+    console.error(`  limits:     body=${MAX_BODY_BYTES}B req=${httpServer.requestTimeout}ms hdr=${httpServer.headersTimeout}ms`);
   });
 } else {
   // Default stdio transport for Claude Code / Cursor / Cline.
