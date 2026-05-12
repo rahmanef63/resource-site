@@ -22,7 +22,9 @@ ENV PORT=8000
 EXPOSE 8000
 
 # Liveness — Dokploy / docker swarm probe.
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD wget -qO- http://localhost:8000/health > /dev/null || exit 1
+# Use 127.0.0.1 (not "localhost") — busybox wget resolves localhost to ::1 first
+# on alpine, which fails because node's "0.0.0.0" listen binds IPv4 only.
+HEALTHCHECK --interval=15s --timeout=5s --start-period=5s --retries=3 \
+  CMD wget -qO- http://127.0.0.1:8000/health > /dev/null || exit 1
 
 CMD ["node", "bin/server.mjs", "--http"]
