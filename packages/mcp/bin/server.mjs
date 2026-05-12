@@ -667,7 +667,10 @@ if (useHttp) {
         name: "rahman-resources-mcp",
         version: PKG.version,
         endpoint: "/mcp",
-        oauth: !!oauthKey,
+        // /mcp is open unless operator sets MCP_BEARER_TOKEN.
+        mcp_open: !bearer,
+        // OAuth endpoints serve (for ChatGPT form compat) but tokens are not enforced.
+        oauth_endpoints: !!oauthKey,
       }));
       return;
     }
@@ -858,26 +861,24 @@ if (useHttp) {
       return;
     }
 
-    // Auth check.
-    //   - If OAuth is enabled (signing key set), /mcp REQUIRES bearer:
-    //       env MCP_BEARER_TOKEN OR an OAuth access token.
-    //   - If only MCP_BEARER_TOKEN set, require the env bearer (old behavior).
-    //   - If neither, /mcp is open (today's default for public read-only kitab).
-    const authRequired = !!(oauthKey || bearer);
-    if (authRequired) {
+    // Auth check. /mcp is OPEN BY DEFAULT — the kitab manifest is the same
+    // public data shown on resource.rahmanef.com. The whole point of this
+    // server is to help users discover + compose kitab artifacts; gating
+    // it behind auth adds friction without protecting anything.
+    //
+    //   - MCP_BEARER_TOKEN set → operator escape hatch for private forks
+    //     (e.g. internal mirror). Standard kitab deploy leaves it unset.
+    //   - OAuth tokens (minted by /oauth/* when MCP_OAUTH_SIGNING_KEY is set)
+    //     are NOT validated here. The OAuth flow exists purely so ChatGPT's
+    //     custom-app form has somewhere to point — the issued token is
+    //     paperwork. ChatGPT can still bind a Bearer header; we ignore it.
+    if (bearer) {
       const auth = req.headers["authorization"];
-      let ok = false;
-      // 1. Match env bearer (operator escape hatch).
-      if (bearer && bearerMatches(auth, bearer)) ok = true;
-      // 2. Match OAuth-issued token.
-      if (!ok && oauthKey && typeof auth === "string" && auth.startsWith("Bearer ")) {
-        ok = !!verifyAccessToken(auth.slice(7), oauthKey);
-      }
-      if (!ok) {
+      if (!bearerMatches(auth, bearer)) {
         res.statusCode = 401;
         res.setHeader(
           "WWW-Authenticate",
-          `Bearer realm="rahman-resources-mcp", resource_metadata="${reqOrigin}/.well-known/oauth-protected-resource"`,
+          `Bearer realm="rahman-resources-mcp"`,
         );
         res.setHeader("Content-Type", "application/json");
         res.end(JSON.stringify({ error: "unauthorized" }));
@@ -932,15 +933,13 @@ if (useHttp) {
     console.error(`  listening:  http://${host}:${port}`);
     console.error(`  endpoint:   POST /mcp  (Streamable HTTP, stateless)`);
     console.error(`  health:     GET /health`);
-    const authModes = [];
-    if (bearer) authModes.push("env-Bearer");
-    if (oauthKey) authModes.push("OAuth2.1+PKCE");
-    console.error(`  auth:       ${authModes.length ? authModes.join(" + ") : "none — open (read-only manifest)"}`);
+    console.error(`  /mcp auth:  ${bearer ? "env-Bearer (MCP_BEARER_TOKEN, constant-time)" : "OPEN — public read-only kitab manifest"}`);
     if (oauthKey) {
+      console.error(`  /oauth:     enabled (ceremonial — tokens issued, not enforced on /mcp)`);
       console.error(`  oauth as:   ${publicBase || "(derive from Host)"} — /oauth/authorize + /api/oauth/token`);
       console.error(`  discovery:  /.well-known/oauth-{authorization-server,protected-resource}`);
     } else {
-      console.error(`  oauth:      disabled — set MCP_OAUTH_SIGNING_KEY to enable ChatGPT custom-app flow`);
+      console.error(`  /oauth:     disabled — set MCP_OAUTH_SIGNING_KEY to expose ceremonial OAuth for ChatGPT form`);
     }
     console.error(`  limits:     body=${MAX_BODY_BYTES}B req=${httpServer.requestTimeout}ms hdr=${httpServer.headersTimeout}ms`);
   });
