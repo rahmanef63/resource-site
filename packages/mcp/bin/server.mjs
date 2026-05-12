@@ -48,11 +48,6 @@ import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 const PKG = require("../package.json");
 
-const server = new Server(
-  { name: "rahman-resources", version: PKG.version },
-  { capabilities: { tools: {}, resources: {} } },
-);
-
 // ─── Tool definitions ─────────────────────────────────────────────────────
 
 const TOOLS = [
@@ -215,11 +210,14 @@ const TOOLS = [
   },
 ];
 
-server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools: TOOLS }));
+// Handler bodies as plain async fns so they can be wired onto any Server
+// instance (stdio uses one long-lived Server; stateless HTTP mints a fresh
+// Server + Transport per request, which is required by the SDK to avoid
+// "Stateless transport cannot be reused across requests" errors).
 
-// ─── Tool dispatch ────────────────────────────────────────────────────────
+const handleListTools = async () => ({ tools: TOOLS });
 
-server.setRequestHandler(CallToolRequestSchema, async (req) => {
+const handleCallTool = async (req) => {
   const { name, arguments: args = {} } = req.params;
   switch (name) {
     case "rr_list_templates": return ok(listTemplates(args));
@@ -239,7 +237,7 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
     default:
       return errorResp(`Unknown tool: ${name}`);
   }
-});
+};
 
 function listTemplates({ tag } = {}) {
   const m = getManifest();
@@ -407,7 +405,7 @@ function composeAdd({ template, features = [], skills = [] }) {
 
 // ─── Resources ────────────────────────────────────────────────────────────
 
-server.setRequestHandler(ListResourcesRequestSchema, async () => {
+const handleListResources = async () => {
   const m = getManifest();
   const skills = getSkills().skills ?? [];
   const resources = [
@@ -437,9 +435,9 @@ server.setRequestHandler(ListResourcesRequestSchema, async () => {
     });
   }
   return { resources };
-});
+};
 
-server.setRequestHandler(ReadResourceRequestSchema, async (req) => {
+const handleReadResource = async (req) => {
   const uri = req.params.uri;
   if (uri === "rr://manifest") {
     return resourceJson(uri, getManifest());
@@ -466,7 +464,21 @@ server.setRequestHandler(ReadResourceRequestSchema, async (req) => {
   const e = list.find((x) => x.slug === slug);
   if (!e) return resourceError(uri, `${kind} not found: ${slug}`);
   return resourceJson(uri, e);
-});
+};
+
+// Build a fresh MCP Server with all handlers wired. Used per-request in
+// stateless HTTP mode and once at boot in stdio mode.
+function makeServer() {
+  const s = new Server(
+    { name: "rahman-resources", version: PKG.version },
+    { capabilities: { tools: {}, resources: {} } },
+  );
+  s.setRequestHandler(ListToolsRequestSchema, handleListTools);
+  s.setRequestHandler(CallToolRequestSchema, handleCallTool);
+  s.setRequestHandler(ListResourcesRequestSchema, handleListResources);
+  s.setRequestHandler(ReadResourceRequestSchema, handleReadResource);
+  return s;
+}
 
 // ─── helpers ──────────────────────────────────────────────────────────────
 
@@ -517,10 +529,11 @@ if (useHttp) {
   // MCP spec 2025-11-25: "Authorization is OPTIONAL".
   const bearer = process.env.MCP_BEARER_TOKEN || null;
 
-  const transport = new StreamableHTTPServerTransport({
-    sessionIdGenerator: undefined, // stateless — fits read-only tools
-  });
-  await server.connect(transport);
+  // NOTE: In stateless mode, the SDK requires a FRESH transport per request
+  // (otherwise it throws "Stateless transport cannot be reused across requests").
+  // We also build a fresh Server per request because Server↔Transport are paired.
+  // Tool/resource handlers come from the shared TOOLS array + dispatch fns, so
+  // per-request construction is cheap (no manifest reload, no IO).
 
   const httpServer = createServer(async (req, res) => {
     // CORS — allow any origin (read-only public manifest, no cookies).
@@ -563,9 +576,21 @@ if (useHttp) {
       }
     }
 
+    // Stateless: a fresh Server + Transport per request. The SDK throws
+    // "Stateless transport cannot be reused across requests" otherwise.
+    let perReqTransport;
+    let perReqServer;
     try {
       const body = req.method === "POST" ? await readJsonBody(req) : undefined;
-      await transport.handleRequest(req, res, body);
+      perReqTransport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
+      perReqServer = makeServer();
+      await perReqServer.connect(perReqTransport);
+      // Clean up when the underlying HTTP response finishes streaming.
+      res.on("close", () => {
+        perReqTransport?.close?.();
+        perReqServer?.close?.();
+      });
+      await perReqTransport.handleRequest(req, res, body);
     } catch (err) {
       console.error("[mcp/http] handleRequest error:", err);
       if (!res.headersSent) {
@@ -573,6 +598,8 @@ if (useHttp) {
         res.setHeader("Content-Type", "application/json");
         res.end(JSON.stringify({ error: "internal_error", message: String(err?.message ?? err) }));
       }
+      try { perReqTransport?.close?.(); } catch {}
+      try { perReqServer?.close?.(); } catch {}
     }
   });
 
@@ -586,5 +613,6 @@ if (useHttp) {
 } else {
   // Default stdio transport for Claude Code / Cursor / Cline.
   const transport = new StdioServerTransport();
+  const server = makeServer();
   await server.connect(transport);
 }
