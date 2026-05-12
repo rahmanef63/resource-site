@@ -89,16 +89,15 @@ export function McpInstallTabs() {
               </TabsTrigger>
             </TabsList>
 
-            {/* HOSTED — 2 steps total */}
+            {/* HOSTED — OAuth 2.1 + PKCE */}
             <TabsContent value="hosted" className="space-y-4 pt-4">
               <div className="rounded-md border border-emerald-500/30 bg-emerald-500/5 p-3 text-xs">
-                <p className="font-medium text-foreground">Public read-only endpoint — paste &amp; go</p>
+                <p className="font-medium text-foreground">Public hosted MCP — OAuth 2.1 + PKCE</p>
                 <p className="mt-1 text-muted-foreground">
-                  <code className="rounded bg-muted px-1 font-mono text-[10px]">{HOSTED_URL}</code>{" "}
-                  serves the kitab manifest via Streamable HTTP. No auth, no setup.
-                  Auth is{" "}
-                  <a href="https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization" target="_blank" rel="noreferrer" className="underline">OPTIONAL per MCP spec</a>{" "}
-                  — manifest is the same data shown on this site.
+                  ChatGPT custom-app form only offers OAuth — even for public
+                  read-only data. The flow is ceremonial: paste the URLs, click
+                  Authorize once, ChatGPT gets a token. No account needed; data
+                  is the same kitab manifest shown on this site.
                 </p>
               </div>
 
@@ -114,29 +113,60 @@ export function McpInstallTabs() {
               </div>
 
               <div className="space-y-2">
-                <p className="text-sm font-medium">2. Create the connector</p>
-                <ol className="ml-4 list-decimal space-y-1 text-xs text-muted-foreground">
-                  <li>Settings → Connectors → <span className="font-medium">Create</span></li>
-                  <li>Name: <code className="rounded bg-muted px-1 py-0.5 font-mono text-[10px]">rahman-resources</code></li>
-                  <li>Connector URL: <code className="rounded bg-muted px-1 py-0.5 font-mono text-[10px]">{HOSTED_URL}</code></li>
-                  <li>Authentication: <span className="font-medium text-foreground">None</span></li>
-                  <li>Save — 14 read-only tools list appears</li>
-                  <li>New chat → <span className="font-mono text-foreground">+</span> → More → pick connector → prompt the model</li>
-                </ol>
-                <p className="pt-1 text-xs text-muted-foreground">
-                  Try:{" "}
-                  <em>&ldquo;What kitab templates ship public + admin combos?&rdquo;</em>{" "}
-                  — ChatGPT calls{" "}
-                  <code className="rounded bg-muted px-1 py-0.5 font-mono text-[10px]">rr_list_templates</code>{" "}
-                  on the hosted server.
+                <p className="text-sm font-medium">2. Create the connector — paste these fields verbatim</p>
+                <div className="overflow-x-auto rounded-md border">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-muted/50">
+                      <tr>
+                        <th className="px-2 py-1.5 font-mono text-[10px] uppercase tracking-wider">ChatGPT field</th>
+                        <th className="px-2 py-1.5 font-mono text-[10px] uppercase tracking-wider">Value</th>
+                      </tr>
+                    </thead>
+                    <tbody className="text-muted-foreground">
+                      <tr className="border-t"><td className="px-2 py-1.5">MCP Server URL</td><td className="px-2 py-1.5 font-mono"><code>https://mcp-resource.rahmanef.com/mcp</code></td></tr>
+                      <tr className="border-t"><td className="px-2 py-1.5">Authentication</td><td className="px-2 py-1.5"><span className="font-medium text-foreground">OAuth</span></td></tr>
+                      <tr className="border-t"><td className="px-2 py-1.5">Registration method</td><td className="px-2 py-1.5"><span className="font-medium text-foreground">User-Defined OAuth Client</span></td></tr>
+                      <tr className="border-t"><td className="px-2 py-1.5">Client ID</td><td className="px-2 py-1.5 font-mono"><code>chatgpt-rahman</code> (any string)</td></tr>
+                      <tr className="border-t"><td className="px-2 py-1.5">Client Secret</td><td className="px-2 py-1.5"><em>empty</em></td></tr>
+                      <tr className="border-t"><td className="px-2 py-1.5">Token endpoint auth method</td><td className="px-2 py-1.5 font-mono"><code>none</code></td></tr>
+                      <tr className="border-t"><td className="px-2 py-1.5">Auth URL</td><td className="px-2 py-1.5 font-mono"><code>https://mcp-resource.rahmanef.com/oauth/authorize</code></td></tr>
+                      <tr className="border-t"><td className="px-2 py-1.5">Token URL</td><td className="px-2 py-1.5 font-mono"><code>https://mcp-resource.rahmanef.com/api/oauth/token</code></td></tr>
+                      <tr className="border-t"><td className="px-2 py-1.5">Authorization server base</td><td className="px-2 py-1.5 font-mono"><code>https://mcp-resource.rahmanef.com</code></td></tr>
+                      <tr className="border-t"><td className="px-2 py-1.5">Resource</td><td className="px-2 py-1.5 font-mono"><code>https://mcp-resource.rahmanef.com/mcp</code></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <p className="text-sm font-medium">3. Authorize</p>
+                <p className="text-xs text-muted-foreground">
+                  Save → ChatGPT opens the consent page → click{" "}
+                  <span className="font-medium text-foreground">Authorize</span>{" "}
+                  → token issued (1-year TTL) → 14 tools list. New chat →{" "}
+                  <span className="font-mono text-foreground">+</span> → More → pick connector → ask
+                  things like{" "}
+                  <em>&ldquo;Which kitab templates ship a public + admin combo?&rdquo;</em>
                 </p>
+              </div>
+
+              <div className="rounded-md border bg-muted/30 p-3 text-xs">
+                <p className="font-medium">Tech detail</p>
+                <ul className="mt-1 list-disc space-y-0.5 pl-5 text-muted-foreground">
+                  <li>PKCE S256 required (RFC 7636); auth codes single-use, 5-min TTL</li>
+                  <li>Access tokens = HMAC-signed opaque strings, stateless; revocation by rotating server signing key</li>
+                  <li>Discovery at <code className="font-mono">/.well-known/oauth-authorization-server</code> (RFC 8414) + <code className="font-mono">/.well-known/oauth-protected-resource</code> (RFC 9728)</li>
+                  <li>Anonymous consent — no user account; the kitab is public read-only</li>
+                </ul>
               </div>
 
               <p className="text-xs text-muted-foreground">
                 Refs:{" "}
                 <a href="https://developers.openai.com/apps-sdk/deploy/connect-chatgpt" target="_blank" rel="noreferrer" className="underline">Apps SDK — Connect from ChatGPT</a>{" "}
                 ·{" "}
-                <a href="https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization" target="_blank" rel="noreferrer" className="underline">MCP authorization spec</a>
+                <a href="https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization#client-registration-approaches" target="_blank" rel="noreferrer" className="underline">MCP authorization (User-Defined Client)</a>{" "}
+                ·{" "}
+                <a href="https://datatracker.ietf.org/doc/html/rfc7636" target="_blank" rel="noreferrer" className="underline">RFC 7636 PKCE</a>
               </p>
             </TabsContent>
 

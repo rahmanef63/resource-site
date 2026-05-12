@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://resources.rahmanef.com/schema/slice.manifest.v1.json",
+  "title": "Slice Manifest v1",
+  "description": "Contract for a portable Rahman Resources slice. Lives at frontend/slices/<name>/slice.manifest.json.",
+  "type": "object",
+  "required": ["name", "version", "deps"],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "Slice slug, kebab-case. Must match directory name."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[a-z0-9.-]+)?$",
+      "description": "Semver. Bump on breaking deps, schema, or API changes."
+    },
+    "description": {
+      "type": "string",
+      "description": "One-line summary. Shown in `rahman-resources list slices`."
+    },
+    "category": {
+      "type": "string",
+      "enum": ["auth", "content", "commerce", "ai", "data", "ui", "infra", "social", "misc"],
+      "description": "Grouping for discovery."
+    },
+    "stability": {
+      "type": "string",
+      "enum": ["experimental", "beta", "stable", "deprecated"],
+      "default": "experimental"
+    },
+    "homepage": {
+      "type": "string",
+      "format": "uri",
+      "description": "Optional docs URL."
+    },
+    "deps": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "shared": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Paths inside resources/shared/ that this slice imports (e.g. 'ui/ResponsiveDialog', 'lib/format', 'hooks/useDebounce'). The CLI ensures @rahman/shared exposes these or fails."
+        },
+        "slices": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*(@[0-9]+\\.[0-9]+\\.[0-9]+)?$" },
+          "description": "Other slices required. Format: '<name>' or '<name>@<semver>'. CLI recursively copies."
+        },
+        "convexFeatures": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Convex feature dirs required at convex/features/<name>. CLI copies these too."
+        },
+        "npm": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Runtime npm deps. Merged into consumer's package.json dependencies."
+        },
+        "npmDev": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Dev-only npm deps."
+        },
+        "env": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+              "required": { "type": "boolean", "default": true },
+              "description": { "type": "string" },
+              "example": { "type": "string" },
+              "scope": { "type": "string", "enum": ["public", "server", "build"], "default": "server" }
+            }
+          },
+          "description": "Env vars consumed by this slice. Appended to .env.example by CLI."
+        }
+      }
+    },
+    "files": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "include": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["**/*"],
+          "description": "Glob patterns for files to copy. Relative to slice root."
+        },
+        "exclude": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["test.tsx", "*.test.ts", "*.spec.ts"],
+          "description": "Glob patterns to skip."
+        }
+      }
+    },
+    "convexFiles": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "include": { "type": "array", "items": { "type": "string" }, "default": ["**/*.ts"] },
+        "exclude": { "type": "array", "items": { "type": "string" }, "default": ["*.test.ts"] }
+      },
+      "description": "Globs for convex/features/<name>/ when convexFeatures lists this slice's name."
+    },
+    "hooks": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "postInstall": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Shell commands to run after copy. Cwd = consumer project root. e.g. 'pnpm install', 'pnpm sync:slices'."
+        },
+        "preInstall": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Shell commands to run before copy. e.g. baseline check."
+        },
+        "checks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "command"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string" },
+              "command": { "type": "string" },
+              "phase": { "type": "string", "enum": ["pre", "post"], "default": "post" }
+            }
+          },
+          "description": "Named verification commands. Failure aborts (post) or warns (pre)."
+        }
+      }
+    },
+    "permissions": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*\\.[a-z][a-z0-9-]*$" },
+      "description": "RBAC permission strings introduced (format: '<feature>.<action>')."
+    },
+    "schemaTables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
+          "namespaced": { "type": "boolean", "default": true, "description": "If true, CLI may prefix with slice name to avoid collision." },
+          "indexes": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "description": "Convex tables defined by this slice. Used by CLI to detect collision."
+    },
+    "compatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "next": { "type": "string", "description": "Semver range, e.g. '>=15 <17'" },
+        "react": { "type": "string", "description": "Semver range." },
+        "convex": { "type": "string", "description": "Semver range." },
+        "tailwind": { "type": "string", "enum": ["3", "4", "3||4"], "default": "4" },
+        "auth": { "type": "string", "enum": ["convex-auth", "clerk", "custom-pbkdf2", "any"], "default": "convex-auth" }
+      }
+    },
+    "notes": {
+      "type": "string",
+      "description": "Freeform integration notes shown post-install."
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

@@ -42,7 +42,7 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 
 import { createServer } from "node:http";
-import { timingSafeEqual } from "node:crypto";
+import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { findEntry, getManifest, getSkills, searchAll, getWorkflow, WORKFLOW_KINDS } from "../src/data-loader.mjs";
 import { createRequire } from "node:module";
 
@@ -553,6 +553,73 @@ function bearerMatches(provided, expected) {
 
 const IS_PROD = process.env.NODE_ENV === "production";
 
+// ─── OAuth 2.1 + PKCE ─────────────────────────────────────────────────────
+//
+// Minimum-viable OAuth for ChatGPT custom-app connector. ChatGPT's form
+// only offers OAuth dropdown — bearer/none isn't selectable. Per MCP spec
+// 2025-11-25 §"Authorization" + RFC 7636 (PKCE) + RFC 8414 (AS metadata)
+// + RFC 9728 (Protected Resource metadata).
+//
+// Stripped-down design choices:
+//   - data is PUBLIC read-only (kitab manifest), so consent page is NOT
+//     gated by admin login. Anyone who visits /oauth/authorize can mint
+//     a token by clicking Authorize. The OAuth flow is ceremonial — its
+//     job is to satisfy ChatGPT's connector form.
+//   - access tokens are stateless HMAC-signed strings (no DB). Format:
+//     `<random>.<exp_seconds>.<hmac(random.exp, SIGNING_KEY)>`.
+//   - auth codes live in an in-memory Map with TTL (5 min). Container
+//     restart drops mid-flow codes — user re-clicks Authorize. Tradeoff
+//     accepted (PKCE state is small + short-lived).
+//   - revocation = rotate SIGNING_KEY (invalidates all tokens at once).
+//     Per-token revocation needs DB; out of scope for read-only public.
+
+function b64url(buf) {
+  return Buffer.from(buf).toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+function sha256B64Url(s) {
+  return b64url(createHash("sha256").update(s).digest());
+}
+
+// HMAC-bound opaque access token. JWT-shaped without the JOSE header
+// overhead — we control both sides, no interop concern.
+function mintAccessToken(signingKey, ttlSeconds = 365 * 24 * 60 * 60) {
+  const random = b64url(randomBytes(32));
+  const exp = Math.floor(Date.now() / 1000) + ttlSeconds;
+  const payload = `${random}.${exp}`;
+  const sig = b64url(createHmac("sha256", signingKey).update(payload).digest());
+  return `${payload}.${sig}`;
+}
+function verifyAccessToken(token, signingKey) {
+  if (typeof token !== "string") return null;
+  const parts = token.split(".");
+  if (parts.length !== 3) return null;
+  const [random, expStr, sig] = parts;
+  if (!random || !expStr || !sig) return null;
+  const exp = Number(expStr);
+  if (!Number.isFinite(exp) || exp <= Math.floor(Date.now() / 1000)) return null;
+  const payload = `${random}.${expStr}`;
+  const expected = b64url(createHmac("sha256", signingKey).update(payload).digest());
+  const a = Buffer.from(sig);
+  const b = Buffer.from(expected);
+  if (a.length !== b.length) return null;
+  if (!timingSafeEqual(a, b)) return null;
+  return { exp, jti: random };
+}
+
+// Auth code store. Map<code, { challenge, method, redirectUri, clientId, scope, resource, exp }>.
+const authCodes = new Map();
+const AUTH_CODE_TTL_MS = 5 * 60 * 1000;
+setInterval(() => {
+  const now = Date.now();
+  for (const [code, rec] of authCodes) if (rec.exp <= now) authCodes.delete(code);
+}, 60_000).unref?.();
+
+function verifyPkce({ verifier, challenge, method }) {
+  if (method !== "S256") return false; // refuse 'plain' per spec
+  if (typeof verifier !== "string" || verifier.length < 43 || verifier.length > 128) return false;
+  return sha256B64Url(verifier) === challenge;
+}
+
 const useHttp = process.argv.includes("--http") || process.env.MCP_HTTP === "1";
 
 if (useHttp) {
@@ -561,6 +628,14 @@ if (useHttp) {
   // Optional bearer auth. When unset, server is open (read-only public manifest).
   // MCP spec 2025-11-25: "Authorization is OPTIONAL".
   const bearer = process.env.MCP_BEARER_TOKEN || null;
+  // OAuth signing key — enables /oauth/* + /.well-known/* routes when set.
+  // Generate with: openssl rand -hex 32. Persist via Dokploy env so tokens
+  // survive redeploys. Rotating this key revokes all issued tokens.
+  const oauthKey = process.env.MCP_OAUTH_SIGNING_KEY || null;
+  // Public origin for discovery metadata (https://mcp-resource.rahmanef.com).
+  // Auto-derived from request Host if unset, but RFC 8414 metadata is cached
+  // so set explicitly in prod.
+  const publicBase = process.env.MCP_BASE_URL || null;
 
   // NOTE: In stateless mode, the SDK requires a FRESH transport per request
   // (otherwise it throws "Stateless transport cannot be reused across requests").
@@ -580,11 +655,197 @@ if (useHttp) {
       return;
     }
 
+    // Resolve the effective public origin once per request (for discovery metadata + redirects).
+    const reqOrigin = publicBase || (req.headers.host ? `https://${req.headers.host}` : "");
+
     // Health probe for Dokploy / docker liveness.
     if (req.url === "/health" || req.url === "/") {
       res.statusCode = 200;
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ ok: true, name: "rahman-resources-mcp", version: PKG.version, endpoint: "/mcp" }));
+      res.end(JSON.stringify({
+        ok: true,
+        name: "rahman-resources-mcp",
+        version: PKG.version,
+        endpoint: "/mcp",
+        oauth: !!oauthKey,
+      }));
+      return;
+    }
+
+    // ── OAuth 2.1 + PKCE routes (enabled when MCP_OAUTH_SIGNING_KEY set) ──
+    if (oauthKey && req.url?.startsWith("/.well-known/oauth-authorization-server")) {
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.setHeader("Cache-Control", "public, max-age=3600");
+      res.end(JSON.stringify({
+        // RFC 8414 — OAuth 2.0 Authorization Server Metadata
+        issuer: reqOrigin,
+        authorization_endpoint: `${reqOrigin}/oauth/authorize`,
+        token_endpoint: `${reqOrigin}/api/oauth/token`,
+        response_types_supported: ["code"],
+        grant_types_supported: ["authorization_code"],
+        code_challenge_methods_supported: ["S256"],
+        token_endpoint_auth_methods_supported: ["none"],
+        scopes_supported: ["mcp"],
+      }));
+      return;
+    }
+    if (oauthKey && req.url?.startsWith("/.well-known/oauth-protected-resource")) {
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.setHeader("Cache-Control", "public, max-age=3600");
+      res.end(JSON.stringify({
+        // RFC 9728 — OAuth 2.0 Protected Resource Metadata
+        resource: `${reqOrigin}/mcp`,
+        authorization_servers: [reqOrigin],
+        scopes_supported: ["mcp"],
+        bearer_methods_supported: ["header"],
+      }));
+      return;
+    }
+
+    if (oauthKey && req.url?.startsWith("/oauth/authorize") && (req.method === "GET" || req.method === "POST")) {
+      const url = new URL(req.url, reqOrigin || "http://localhost");
+      const params = url.searchParams;
+      const clientId = params.get("client_id");
+      const redirectUri = params.get("redirect_uri");
+      const responseType = params.get("response_type");
+      const codeChallenge = params.get("code_challenge");
+      const codeChallengeMethod = params.get("code_challenge_method") || "S256";
+      const state = params.get("state") || "";
+      const scope = params.get("scope") || "mcp";
+      const resource = params.get("resource") || `${reqOrigin}/mcp`;
+
+      // Validate query
+      const errs = [];
+      if (responseType !== "code") errs.push("response_type must be 'code'");
+      if (!clientId) errs.push("client_id required");
+      if (!redirectUri) errs.push("redirect_uri required");
+      try { const u = new URL(redirectUri); if (u.protocol !== "https:" && u.hostname !== "localhost" && u.hostname !== "127.0.0.1") errs.push("redirect_uri must be HTTPS (or localhost)"); } catch { errs.push("redirect_uri invalid URL"); }
+      if (!codeChallenge) errs.push("code_challenge required");
+      if (codeChallengeMethod !== "S256") errs.push("code_challenge_method must be S256");
+      if (errs.length > 0) {
+        res.statusCode = 400;
+        res.setHeader("Content-Type", "text/html; charset=utf-8");
+        res.end(`<!doctype html><meta charset=utf-8><title>OAuth error</title><pre>${errs.map((e) => e.replace(/[<>&]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;" }[c]))).join("\n")}</pre>`);
+        return;
+      }
+
+      if (req.method === "POST") {
+        // Consent granted → mint single-use code.
+        const code = b64url(randomBytes(24));
+        authCodes.set(code, {
+          challenge: codeChallenge,
+          method: codeChallengeMethod,
+          redirectUri,
+          clientId,
+          scope,
+          resource,
+          exp: Date.now() + AUTH_CODE_TTL_MS,
+        });
+        const sep = redirectUri.includes("?") ? "&" : "?";
+        const loc = `${redirectUri}${sep}code=${encodeURIComponent(code)}${state ? `&state=${encodeURIComponent(state)}` : ""}`;
+        res.statusCode = 302;
+        res.setHeader("Location", loc);
+        res.end();
+        return;
+      }
+
+      // GET — render minimal consent page. Echo all PKCE params via hidden form
+      // so POST re-receives them (the auth code MAC binds to the challenge).
+      const esc = (s) => String(s ?? "").replace(/[<>&"']/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;", "'": "&#39;" }[c]));
+      const hidden = Object.fromEntries(params.entries());
+      const inputs = Object.entries(hidden).map(([k, v]) => `<input type="hidden" name="${esc(k)}" value="${esc(v)}">`).join("");
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.end(`<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Authorize ${esc(clientId)} — rahman-resources-mcp</title>
+<style>
+  *{box-sizing:border-box}body{font:14px/1.5 system-ui,sans-serif;margin:0;background:#0a0a0a;color:#fafafa;display:grid;place-items:center;min-height:100vh;padding:24px}
+  .card{max-width:480px;width:100%;background:#171717;border:1px solid #262626;border-radius:12px;padding:32px}
+  h1{margin:0 0 8px;font-size:18px}h2{margin:0 0 4px;font-size:13px;color:#a3a3a3;font-weight:500;text-transform:uppercase;letter-spacing:0.04em}
+  p{margin:8px 0;color:#d4d4d4}.client{font-family:ui-monospace,monospace;background:#262626;padding:2px 6px;border-radius:4px;font-size:12px}
+  ul{margin:8px 0;padding-left:20px;color:#d4d4d4;font-size:13px}
+  .actions{margin-top:24px;display:flex;gap:12px}
+  button{flex:1;padding:10px 16px;border-radius:6px;border:1px solid #404040;background:#262626;color:#fafafa;font:inherit;cursor:pointer}
+  button[type=submit]{background:#10b981;border-color:#10b981;color:#0a0a0a;font-weight:600}
+  button:hover{filter:brightness(1.1)}
+  .meta{margin-top:16px;font-size:11px;color:#737373;font-family:ui-monospace,monospace;word-break:break-all}
+</style></head><body>
+<form method="POST" class="card">
+  <h2>OAuth authorization</h2>
+  <h1>Authorize <span class="client">${esc(clientId)}</span></h1>
+  <p>This will let the app call <strong>rahman-resources-mcp</strong> on your behalf.</p>
+  <ul>
+    <li>Read-only access to the kitab manifest (templates, slices, recipes, skills)</li>
+    <li>14 tools available — all return public data already shown on <a href="https://resource.rahmanef.com" style="color:#10b981">resource.rahmanef.com</a></li>
+    <li>No personal data, no writes</li>
+  </ul>
+  ${inputs}
+  <div class="actions">
+    <button type="button" onclick="window.location='${esc(redirectUri)}${redirectUri.includes("?") ? "&" : "?"}error=access_denied${state ? `&state=${esc(state)}` : ""}'">Deny</button>
+    <button type="submit">Authorize</button>
+  </div>
+  <div class="meta">redirect: ${esc(redirectUri)}<br>resource: ${esc(resource)}<br>scope: ${esc(scope)}</div>
+</form></body></html>`);
+      return;
+    }
+
+    if (oauthKey && req.url === "/api/oauth/token" && req.method === "POST") {
+      const ctype = String(req.headers["content-type"] || "");
+      let raw = "";
+      let bytes = 0;
+      let killed = false;
+      const body = await new Promise((resolve, reject) => {
+        req.on("data", (chunk) => {
+          if (killed) return;
+          bytes += chunk.length;
+          if (bytes > 64 * 1024) { killed = true; req.destroy(); reject(Object.assign(new Error("body too large"), { statusCode: 413 })); return; }
+          raw += chunk;
+        });
+        req.on("end", () => { if (!killed) resolve(raw); });
+        req.on("error", reject);
+      });
+      let parsed = {};
+      try {
+        if (ctype.includes("application/json")) parsed = JSON.parse(raw || "{}");
+        else for (const [k, v] of new URLSearchParams(raw)) parsed[k] = v;
+      } catch {
+        res.statusCode = 400;
+        res.setHeader("Content-Type", "application/json");
+        res.end(JSON.stringify({ error: "invalid_request", error_description: "malformed body" }));
+        return;
+      }
+      const { grant_type, code, code_verifier, redirect_uri, client_id } = parsed;
+      const failJson = (status, err, desc) => {
+        res.statusCode = status;
+        res.setHeader("Content-Type", "application/json");
+        res.setHeader("Cache-Control", "no-store");
+        res.end(JSON.stringify({ error: err, ...(desc ? { error_description: desc } : {}) }));
+      };
+      if (grant_type !== "authorization_code") return failJson(400, "unsupported_grant_type", "expected authorization_code");
+      if (!code || !code_verifier || !redirect_uri || !client_id) return failJson(400, "invalid_request", "missing field");
+      const rec = authCodes.get(code);
+      if (!rec) return failJson(400, "invalid_grant", "code unknown");
+      // Atomic single-use: delete BEFORE issuing token (defeats retry double-mint).
+      authCodes.delete(code);
+      if (rec.exp <= Date.now()) return failJson(400, "invalid_grant", "code expired");
+      if (rec.clientId !== client_id) return failJson(400, "invalid_grant", "client_id mismatch");
+      if (rec.redirectUri !== redirect_uri) return failJson(400, "invalid_grant", "redirect_uri mismatch");
+      if (!verifyPkce({ verifier: code_verifier, challenge: rec.challenge, method: rec.method })) {
+        return failJson(400, "invalid_grant", "PKCE verifier mismatch");
+      }
+      const access_token = mintAccessToken(oauthKey);
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.setHeader("Cache-Control", "no-store");
+      res.end(JSON.stringify({
+        access_token,
+        token_type: "Bearer",
+        expires_in: 365 * 24 * 60 * 60,
+        scope: rec.scope,
+      }));
       return;
     }
 
@@ -597,15 +858,26 @@ if (useHttp) {
       return;
     }
 
-    // Optional bearer auth — when MCP_BEARER_TOKEN is set, require it.
-    if (bearer) {
+    // Auth check.
+    //   - If OAuth is enabled (signing key set), /mcp REQUIRES bearer:
+    //       env MCP_BEARER_TOKEN OR an OAuth access token.
+    //   - If only MCP_BEARER_TOKEN set, require the env bearer (old behavior).
+    //   - If neither, /mcp is open (today's default for public read-only kitab).
+    const authRequired = !!(oauthKey || bearer);
+    if (authRequired) {
       const auth = req.headers["authorization"];
-      if (!bearerMatches(auth, bearer)) {
+      let ok = false;
+      // 1. Match env bearer (operator escape hatch).
+      if (bearer && bearerMatches(auth, bearer)) ok = true;
+      // 2. Match OAuth-issued token.
+      if (!ok && oauthKey && typeof auth === "string" && auth.startsWith("Bearer ")) {
+        ok = !!verifyAccessToken(auth.slice(7), oauthKey);
+      }
+      if (!ok) {
         res.statusCode = 401;
-        // MCP spec 2025-11-25 §"WWW-Authenticate Header": include realm + resource_metadata.
         res.setHeader(
           "WWW-Authenticate",
-          `Bearer realm="rahman-resources-mcp", resource_metadata="${req.headers.host ? `https://${req.headers.host}` : ""}/.well-known/oauth-protected-resource"`,
+          `Bearer realm="rahman-resources-mcp", resource_metadata="${reqOrigin}/.well-known/oauth-protected-resource"`,
         );
         res.setHeader("Content-Type", "application/json");
         res.end(JSON.stringify({ error: "unauthorized" }));
@@ -660,7 +932,16 @@ if (useHttp) {
     console.error(`  listening:  http://${host}:${port}`);
     console.error(`  endpoint:   POST /mcp  (Streamable HTTP, stateless)`);
     console.error(`  health:     GET /health`);
-    console.error(`  auth:       ${bearer ? "Bearer (MCP_BEARER_TOKEN, constant-time)" : "none — open (read-only manifest)"}`);
+    const authModes = [];
+    if (bearer) authModes.push("env-Bearer");
+    if (oauthKey) authModes.push("OAuth2.1+PKCE");
+    console.error(`  auth:       ${authModes.length ? authModes.join(" + ") : "none — open (read-only manifest)"}`);
+    if (oauthKey) {
+      console.error(`  oauth as:   ${publicBase || "(derive from Host)"} — /oauth/authorize + /api/oauth/token`);
+      console.error(`  discovery:  /.well-known/oauth-{authorization-server,protected-resource}`);
+    } else {
+      console.error(`  oauth:      disabled — set MCP_OAUTH_SIGNING_KEY to enable ChatGPT custom-app flow`);
+    }
     console.error(`  limits:     body=${MAX_BODY_BYTES}B req=${httpServer.requestTimeout}ms hdr=${httpServer.headersTimeout}ms`);
   });
 } else {

@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
+    "lint": "next lint",
     "gen:slices": "node scripts/features/gen-slice-registries.mjs",
     "gen:slices:check": "node scripts/features/gen-slice-registries.mjs --check",
     "validate:slices": "node packages/cli/scripts/validate-slice.mjs",
@@ -52,6 +53,8 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "autoprefixer": "^10.5.0",
+    "eslint": "^9",
+    "eslint-config-next": "^16.0.0",
     "postcss": "^8.5.13",
     "tailwindcss": "^4.0.0",
     "typescript": "^5.6.0"
