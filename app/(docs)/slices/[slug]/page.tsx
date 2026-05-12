@@ -78,7 +78,7 @@ export default async function SliceDetailPage({ params }: { params: Promise<{ sl
                 Open standalone <ExternalLink className="size-3" />
               </a>
             </div>
-            <PreviewFrame src={slice.previewPath} defaultView="desktop" defaultZoom={0.65} />
+            <PreviewFrame src={slice.previewPath} defaultView="desktop" defaultZoom={1} />
           </CardContent>
         </Card>
       )}
