@@ -83,7 +83,9 @@ resources/
 │   ├── app/                             # minimal app shell, providers, layout
 │   ├── frontend/
 │   │   ├── shared/                      # foundation: lib, ui, theme, motion, settings
-│   │   └── slices/                      # EMPTY by default — slices added by `rr add`
+│   │   └── slices/                      # ★ FOUNDATION slices (re-export from shared/)
+│   │                                    #   + baked-in tier-2 slices (admin/notion/studio/...)
+│   │                                    #   portable slices NOT here — they live at root
 │   ├── convex/                          # minimal: auth, schema, _generated stubs
 │   ├── components/ui/                   # shadcn primitives
 │   ├── lib/utils.ts
@@ -131,16 +133,26 @@ resources/
 
 ### R1 — One home per concern
 
+Slices have **two valid homes by category** — never both, never the wrong one:
+
+| Slice category | Home | When |
+|---|---|---|
+| **Portable** | `frontend/slices/<slug>/` (root) | Self-contained. No `@/frontend/shared/*` imports. Works in any consumer. |
+| **Foundation** | `template-base/frontend/slices/<slug>/` | Facade / re-export over `template-base/frontend/shared/*`. Alias only resolves inside template-base. |
+
+Rule: each slug lives in EXACTLY ONE directory. If you find the same slug in both, delete the foundation copy (root wins for portables) or the root copy (template-base wins for foundations).
+
+Other concerns:
+
 | Concern | Home | Forbidden elsewhere |
 |---|---|---|
-| Slice source code | `frontend/slices/<slug>/` | NOT `template-base/frontend/slices/` (must be empty) |
 | Slice backend code | `convex/features/<slug>/` | NOT `template-base/convex/features/<slug>/` |
 | Shared UI / utils ship-to-consumer | `template-base/frontend/shared/` | NOT root `frontend/shared/` |
 | Site-only UI | `components/site/` | NOT mixed into kitab slices |
 | Slice metadata | `lib/content/slices.ts` SSOT | NOT scattered across template-base |
 | Compat rules (X requires Y, X forbids Z) | inside each slice's `config.ts` | NOT `lib/build/compat.ts` (delete it) |
 
-Rationale: dual-home = path resolution roulette. Pick one.
+Rationale: dual-home for a single slug = path resolution roulette. Portable vs foundation split = honest reflection of dependency reality.
 
 ### R2 — Three taxonomies max
 

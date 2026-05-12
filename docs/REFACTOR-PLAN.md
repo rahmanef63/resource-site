@@ -32,27 +32,33 @@ Forcing both into one component requires "controller" plumbing that doesn't pay 
 
 ---
 
-## Phase 2 — Slice home unification
+## Phase 2 — Slice home unification ✅ Done 2026-05-12
 
-**Goal**: slices live at `frontend/slices/<slug>/` ONLY. `template-base/frontend/slices/` empty.
+**Goal**: kill same-slug-in-two-homes ambiguity. Define category-based home rule.
 
-**Smell**: facade slices at `template-base/frontend/slices/{command-menu,motion-primitives,responsive-dialog,dashboard-shell}/` re-exporting from `template-base/frontend/shared/`. Two homes for one concept.
+**What changed from original plan**: After investigation, found that moving foundation slices (command-menu, motion-primitives, responsive-dialog, dashboard-shell) to root would require:
+- Moving `template-base/frontend/shared/*` to root, OR
+- Rewriting facade re-exports + adding cross-tree path aliases
 
-**Steps**:
-1. Identify each facade slice. List dependencies on `template-base/frontend/shared/<x>`.
-2. For each facade slice, choose:
-   - **(a) Promote shared → self-contained**: move source code from `template-base/frontend/shared/<x>` into `frontend/slices/<slug>/`. Update slice's `slicePath` to root. Remove from template-base/shared.
-   - **(b) Keep shared, drop slice**: if the capability is already part of template-base's foundation (e.g., shadcn dialog), delete the slice entry entirely.
-3. Update `lib/content/slices.ts` slicePath to point to root for all slices.
-4. Delete empty `template-base/frontend/slices/` subdirs.
-5. Regenerate manifest.
+Both = deep restructure violating "hindari rewrite, update imports saja". Real spaghetti was the BYTE-IDENTICAL DUP of `full-width-toggle` in both homes. Killed that; revised rule to acknowledge two valid categories.
 
-**Done when**:
-- `template-base/frontend/slices/` contains only `_templates/` + `example/`.
-- All slice `slicePath` fields point to `frontend/slices/<slug>/`.
-- `npx rahman-resources add <slug>` works for every slice (smoke test 2-3).
+**Categories**:
+- **Portable slice**: self-contained, no `@/frontend/shared/*` imports → root `frontend/slices/<slug>/`
+- **Foundation slice**: facade over `template-base/frontend/shared/*` → `template-base/frontend/slices/<slug>/`
+- Each slug lives in EXACTLY one directory.
 
-**Risk**: medium. Path moves break consumer projects pulling from these slugs — coordinate version bump.
+**Landed**:
+- `git rm -r template-base/frontend/slices/full-width-toggle` (byte-identical dup, root is canonical because self-contained).
+- Manifest regen passes (14 slices, no dup-slug errors).
+- `tsc --noEmit` green.
+- `docs/STRUCTURE.md` R1 updated to reflect category split + dual-home-by-category rule.
+
+**Post-state**:
+- template-base/frontend/slices: `_templates, admin, command-menu, dashboard-shell, example, industry-templates, motion-primitives, notion, reports, responsive-dialog, studio` (foundation + tier-2 baked-in)
+- frontend/slices: `_templates, ai-router, broadcast-channel-sync, cal-com-booking, convex-auth, doku-payment, full-width-toggle, mdx-blog, midtrans-payment, resend-newsletter, vector-search` (portable)
+- Zero overlap.
+
+**Deferred to Phase 6 CI**: `scripts/validate-slice-homes.mjs` to enforce no-dup + category-correct placement.
 
 ---
 
@@ -150,8 +156,8 @@ Forcing both into one component requires "controller" plumbing that doesn't pay 
 
 | Phase | Status | PR | Notes |
 |---|---|---|---|
-| 1 — Preview unify | ✅ Done 2026-05-12 | (commit) | Extracted `PreviewIframeShell` shared renderer. PreviewPane: 126→46 LOC. SegmentedFrame defined once. |
-| 2 — Slice home unify | Not started | — | |
+| 1 — Preview unify | ✅ Done 2026-05-12 | 4fed77c | Extracted `PreviewIframeShell` shared renderer. PreviewPane: 126→46 LOC. SegmentedFrame defined once. |
+| 2 — Slice home unify | ✅ Done 2026-05-12 | (this) | Killed `full-width-toggle` dup. Revised rule to dual-home-by-category. |
 | 3 — Recipes → slices | Not started | — | |
 | 4 — Compat per slice | Not started | — | |
 | 5 — slice.json SSOT | Not started | — | |
