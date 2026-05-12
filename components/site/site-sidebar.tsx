@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Layers,
-  PackagePlus,
   BookOpen,
   Rocket,
   Layout,
@@ -30,7 +29,6 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { layouts } from "@/lib/content/layouts";
-import { recipes } from "@/lib/content/recipes";
 import { slices } from "@/lib/content/slices";
 import { site } from "@/lib/content/site";
 
@@ -154,35 +152,7 @@ export function SiteSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <SidebarGroup>
-          <SidebarGroupLabel className="flex items-center gap-2">
-            <PackagePlus className="size-3.5" /> Recipes
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={pathname === "/recipes"}>
-                  <Link href="/recipes">
-                    <span className="font-medium">All recipes</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              {recipes.map((r) => (
-                <SidebarMenuItem key={r.slug}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={pathname === `/recipes/${r.slug}`}
-                    size="sm"
-                  >
-                    <Link href={`/recipes/${r.slug}`}>
-                      <span className="truncate text-sm">{r.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {/* Recipes group removed 2026-05-12 — migrated to slices (Phase 3 of REFACTOR-PLAN.md). */}
 
         <SidebarGroup>
           <SidebarGroupLabel className="flex items-center gap-2">

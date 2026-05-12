@@ -2,23 +2,20 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ArrowRight, Box, ChefHat, FileCode, Layout, Settings } from "lucide-react";
+import { ArrowRight, Box, FileCode, Layout, Settings } from "lucide-react";
 import { layouts } from "@/lib/content/layouts";
-import { recipes } from "@/lib/content/recipes";
 import { sources } from "@/lib/content/sources";
 import { useAdminState } from "@/lib/admin/storage";
 
 const CARDS = [
   { label: "Site", href: "/admin/site", icon: Settings, desc: "Name, tagline, repo URL." },
   { label: "Layouts", href: "/admin/layouts", icon: Layout, desc: "Add/edit page shells." },
-  { label: "Recipes", href: "/admin/recipes", icon: ChefHat, desc: "Add/edit feature drop-ins." },
   { label: "Sources", href: "/admin/sources", icon: Box, desc: "Source projects + attribution." },
   { label: "Export", href: "/admin/export", icon: FileCode, desc: "Generate TS files to commit." },
 ];
 
 export default function AdminOverviewPage() {
   const [layoutsState] = useAdminState("layouts", layouts);
-  const [recipesState] = useAdminState("recipes", recipes);
   const [sourcesState] = useAdminState("sources", sources);
 
   return (
@@ -34,14 +31,10 @@ export default function AdminOverviewPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-3 gap-3 text-center">
+      <div className="grid grid-cols-2 gap-3 text-center">
         <div className="rounded-lg border bg-card p-4">
           <p className="text-2xl font-bold">{layoutsState.length}</p>
           <p className="mt-1 text-xs text-muted-foreground">Layouts</p>
-        </div>
-        <div className="rounded-lg border bg-card p-4">
-          <p className="text-2xl font-bold">{recipesState.length}</p>
-          <p className="mt-1 text-xs text-muted-foreground">Recipes</p>
         </div>
         <div className="rounded-lg border bg-card p-4">
           <p className="text-2xl font-bold">{sourcesState.length}</p>
