@@ -11,33 +11,24 @@ One atomic PR per phase. No bundling. Each phase must:
 - Update `docs/PROGRESS.md` with phase done.
 - Leave repo in a working state (no half-migrations).
 
-## Phase 1 — Preview unification
+## Phase 1 — Preview unification ✅ Done 2026-05-12
 
-**Goal**: ONE iframe preview component.
+**Goal**: kill duplicate iframe shell rendering.
 
-**Smell**: `components/site/preview-frame.tsx` + `components/site/preview-pane.tsx` near-duplicate logic. `SegmentedFrame` (preview-frame) ≈ `SegmentedIframe` (preview-pane).
+**Outcome**: Extract `PreviewIframeShell` (pure renderer) as the single home for {viewport-sized iframe + scaled transform + segmented hinge overlay}. Both `PreviewFrame` (self-chromed) and `PreviewPane` (context-driven) consume it.
 
-**Steps**:
-1. Extract `SegmentedFrame` to `components/site/preview-segmented.tsx`. Both files import from there.
-2. Add optional `controller` prop to `PreviewFrame`:
-   ```ts
-   type Controller = {
-     view: PreviewView; setView: (v: PreviewView) => void;
-     orientation: PreviewOrientation; setOrientation: (o: PreviewOrientation) => void;
-     zoom: number; setZoom: (z: number) => void;
-   };
-   ```
-   If `controller` provided, use it. Else use local state (current behavior).
-3. Rewrite `PreviewPane` as thin wrapper: build controller from `feature-context`, pass to `PreviewFrame`. Mark `@deprecated`, target removal next phase.
-4. Migrate `components/site/template-detail.tsx` from `PreviewPane` → `PreviewFrame` with controller.
-5. Delete `preview-pane.tsx` + `split-preview-pane.tsx` (or refactor split to use two PreviewFrames).
+**Why not delete PreviewPane**: After reading code, the two components serve LEGITIMATELY different page patterns:
+- `PreviewFrame` — self-chromed: own toolbar with view/zoom/fullscreen. Used by slice docs + bundle builder + standalone previews.
+- `PreviewPane` — headless context-driven: state lives in `feature-context`, chrome rendered globally by `feature-bar` for template-detail's tab UI.
 
-**Done when**:
-- Only `PreviewFrame` imports across `app/` + `components/`.
-- `tsc --noEmit` green.
-- Template detail + slice detail + bundle builder all render previews correctly.
+Forcing both into one component requires "controller" plumbing that doesn't pay off. The duplicate logic was the iframe shell rendering — that's deduped.
 
-**Risk**: low. Pure UI refactor, behavior preserved.
+**Landed**:
+- `components/site/preview-shell.tsx` — new, `PreviewIframeShell` (149 LOC, includes single SegmentedFrame).
+- `components/site/preview-frame.tsx` — uses shell. Inline `SegmentedFrame` deleted.
+- `components/site/preview-pane.tsx` — 126→46 LOC. Inline `SegmentedIframe` deleted.
+
+**Future option**: if context-driven mode is no longer needed (e.g., template-detail moves to inline chrome), revisit deleting PreviewPane in a later phase.
 
 ---
 
@@ -159,7 +150,7 @@ One atomic PR per phase. No bundling. Each phase must:
 
 | Phase | Status | PR | Notes |
 |---|---|---|---|
-| 1 — Preview unify | Not started | — | |
+| 1 — Preview unify | ✅ Done 2026-05-12 | (commit) | Extracted `PreviewIframeShell` shared renderer. PreviewPane: 126→46 LOC. SegmentedFrame defined once. |
 | 2 — Slice home unify | Not started | — | |
 | 3 — Recipes → slices | Not started | — | |
 | 4 — Compat per slice | Not started | — | |
