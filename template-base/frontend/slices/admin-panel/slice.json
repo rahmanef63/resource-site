@@ -6,10 +6,10 @@
   "kind": "full",
   "title": "Admin Panel — Unified Product Admin",
   "description": "17-section admin surface (events, funnels, attribution, users, A/B, flags, pricing, CMS, email, audit, ...) gated by RBAC. Auto-filters sidebar by tier (solo/influencer/organization) and user permissions. Single backend resolver (getMyAdminAccess) mirrors frontend gate so UI can never leak.",
-  "namespace": "@/features/admin",
-  "convex": { "tablesExport": "", "schemaPath": "", "rootPaths": ["template-base/convex/features/admin"] },
+  "namespace": "@/features/admin-panel",
+  "convex": { "tablesExport": "", "schemaPath": "", "rootPaths": ["template-base/convex/features/admin-panel"] },
   "frontend": {
-    "slicePath": "template-base/frontend/slices/admin",
+    "slicePath": "template-base/frontend/slices/admin-panel",
     "configExport": ""
   },
   "deps": {

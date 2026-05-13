@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-12T10:41:35.098Z",
+  "generatedAt": "2026-05-13T13:35:41.304Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -1779,9 +1779,9 @@
       "version": "0.1.0",
       "description": "17-section admin surface (events, funnels, attribution, users, A/B, flags, pricing, CMS, email, audit, ...) gated by RBAC. Auto-filters sidebar by tier (solo/influencer/organization) and user permissions. Single backend resolver (getMyAdminAccess) mirrors frontend gate so UI can never leak.",
       "source": "superspace + spec",
-      "slicePath": "template-base/frontend/slices/admin",
+      "slicePath": "template-base/frontend/slices/admin-panel",
       "convexPaths": [
-        "template-base/convex/features/admin"
+        "template-base/convex/features/admin-panel"
       ],
       "npm": [],
       "shadcn": [
@@ -1816,9 +1816,9 @@
       "version": "0.1.0",
       "description": "Client SDK + Convex ingestion endpoint for structured product events. Auto-captures page_view/signup/login + UTM/referrer/first-touch attribution. Batched flush via requestIdleCallback. Targets <100ms p99 ingestion.",
       "source": "spec + superspace analytics",
-      "slicePath": "template-base/frontend/slices/admin/slices/events",
+      "slicePath": "template-base/frontend/slices/admin-panel/slices/events",
       "convexPaths": [
-        "template-base/convex/features/admin",
+        "template-base/convex/features/admin-panel",
         "template-base/convex/features/analytics"
       ],
       "npm": [],

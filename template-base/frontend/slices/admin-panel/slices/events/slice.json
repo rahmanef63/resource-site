@@ -7,9 +7,9 @@
   "title": "Event Tracking — P0 Instrumentation",
   "description": "Client SDK + Convex ingestion endpoint for structured product events. Auto-captures page_view/signup/login + UTM/referrer/first-touch attribution. Batched flush via requestIdleCallback. Targets <100ms p99 ingestion.",
   "namespace": "@/features/event-tracking",
-  "convex": { "tablesExport": "", "schemaPath": "", "rootPaths": ["template-base/convex/features/admin", "template-base/convex/features/analytics"] },
+  "convex": { "tablesExport": "", "schemaPath": "", "rootPaths": ["template-base/convex/features/admin-panel", "template-base/convex/features/analytics"] },
   "frontend": {
-    "slicePath": "template-base/frontend/slices/admin/slices/events",
+    "slicePath": "template-base/frontend/slices/admin-panel/slices/events",
     "configExport": ""
   },
   "deps": {

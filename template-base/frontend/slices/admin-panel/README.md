@@ -18,7 +18,7 @@ Unified product admin surface. One panel, many products. Tier-aware:
 | `denied` | — | Panel hidden from sidebar |
 
 Resolution order — first match wins. Frontend (`useAdminAccess`) +
-backend (`convex/features/admin/access.ts`) share the same logic so a
+backend (`convex/features/admin-panel/access.ts`) share the same logic so a
 client can never see UI it can't action.
 
 ### Personal-brand-os flow
@@ -64,7 +64,7 @@ See `config.ts → ADMIN_SECTIONS` for the live registry — each entry has
 
 ### P0 — Instrumentation (blocking)
 
-1. **Events** — schema `{userId, productId, eventType, properties, timestamp, sessionId, source}`. Ingest via `convex/features/admin/events.ts:ingest`. Client SDK `trackEvent()` in `slices/events/lib/track-event.ts`. Reactive last-100 stream via `recent` query.
+1. **Events** — schema `{userId, productId, eventType, properties, timestamp, sessionId, source}`. Ingest via `convex/features/admin-panel/events.ts:ingest`. Client SDK `trackEvent()` in `slices/events/lib/track-event.ts`. Reactive last-100 stream via `recent` query.
 2. **Funnels** — ordered steps per product. <2s render on 30d / <100k events. Drill-down per step.
 3. **Attribution** — UTM auto-capture, first-touch + last-touch on user record. Source breakdown table.
 4. **Activation** — per-product "value moment" event. Activation rate metric, time-to-activation histogram, stuck-users list.
@@ -105,7 +105,7 @@ table. Indexes: `by_workspace`, `by_workspace_type`, `by_workspace_timestamp`,
 
 - [ ] Schema: confirm `analyticsEvents` indexed (already is).
 - [ ] Seed: call `seedWorkspaceRoles(ctx, wsId, tier)` in your workspace-create mutation.
-- [ ] Backend: `convex/features/admin/{access,events}.ts` registered.
+- [ ] Backend: `convex/features/admin-panel/{access,events}.ts` registered.
 - [ ] Frontend: mount `<AdminPage workspaceId={ws.id} tier={ws.tier} />` at `app/admin/page.tsx`.
 - [ ] Client SDK: call `initEventTracking(convex)` once in `app/layout.tsx`.
 - [ ] Env: set `PLATFORM_ADMIN_EMAILS` via `npx convex env set`.
