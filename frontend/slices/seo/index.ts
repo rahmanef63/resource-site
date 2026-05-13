@@ -1,0 +1,1 @@
+export { seoConfig } from "./config"

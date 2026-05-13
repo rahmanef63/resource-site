@@ -216,16 +216,49 @@ For each: extract → normalize imports to `@rahman/shared` → write `slice.man
 
 ---
 
-## 4. Open Questions
+## 4. Decisions (RESOLVED 2026-05-12)
 
-| Q | Options | Recommend |
-|---|---------|-----------|
-| Where to host `@rahman/shared`? | Verdaccio self-host / GitHub Packages / npm public | GitHub Packages (free, private, integrated) |
-| Auth: keep Clerk in superspace? | Yes (enterprise) / migrate to convex-auth | Migrate — single source easier |
-| Shared CSS tokens? | CSS vars in `shared/` / per-project | CSS vars in `shared/` w/ overrides |
-| Convex schema collision? | Namespaced tables / shared workspace model | Namespaced (`<slice>_<table>`) |
-| Versioning slices? | Per-slice / monorepo lock | Per-slice (semver in manifest) |
-| Studio (superspace) lifted to resources? | Yes / no | Yes, as opt-in slice |
+| Q | Decision | Notes |
+|---|----------|-------|
+| Where to host `@rahman/shared`? | **GitHub Packages** | Free private, integrated, `.npmrc` + `publishConfig` |
+| Auth: keep Clerk in superspace? | **Drop Clerk** | Data-preserving migration in Phase 5.5, Google `sub` join key |
+| Convex schema collision? | **Namespaced `<slice>_<table>`** mandatory | CLI validates, manifest declares |
+| Versioning slices? | **Per-slice semver** | In manifest, enforced by CLI |
+| Studio lift to resources? | **DEFERRED** | Revisit post-Phase 5 based on demand |
+| Shared CSS tokens? | CSS vars in `shared/` + per-project override | OKLCH base + tweakcn presets |
+
+## 4.5. Phase 5.5 — Clerk → Convex Auth Migration (superspace only)
+
+**Status**: separate operator-only phase, never autonomous-loop.
+
+**Why operator-only**: production user data + active OAuth sessions + RBAC mappings at risk.
+
+**Zero-data-loss invariant**: Google OAuth `sub` (subject ID) is preserved across providers. Same Google client ID + secret used by Clerk → Convex Auth. User Google login → Convex matches by `authAccounts.providerAccountId === sub` → user lands on pre-synced data row.
+
+**Steps** (operator runs each manually with verification):
+
+1. **Export** Clerk users (Backend API) → JSON. Fields: id, primaryEmail, externalAccounts[google].providerUserId, name, image, metadata, createdAt.
+2. **Schema** additions to Convex `users`: `clerkUserId` (string), `migratedAt` (number). Index on `clerkUserId`.
+3. **Sync script** (`scripts/clerk/sync-to-convex.mjs`): upsert `users` row + `authAccounts` row (provider='google', providerAccountId=sub). Idempotent.
+4. **Staging dry-run**: sync to staging Convex, verify counts match.
+5. **Nightly cron** Clerk→Convex during dual period to catch new signups.
+6. **Same OAuth config**: confirm Google Cloud client ID + secret reused between Clerk and Convex.
+7. **Mount Convex Auth alongside Clerk** (feature-flagged off).
+8. **Dual-read code path**: every server fn that reads `clerkUserId` ALSO accepts `convexUserId`. Behind `AUTH_PROVIDER` env var.
+9. **Staging cutover**: flip flag, smoke test with real Google account, verify existing data accessible.
+10. **Production cutover** (announced 7 days prior):
+    - Flip `AUTH_PROVIDER=convex`
+    - Frontend: replace `<ClerkProvider>` with `<ConvexAuthProvider>`
+    - All active Clerk sessions → logout once, re-login via Google
+    - Monitor login error rate
+11. **Non-Google users** (Clerk password): send password-reset email flow via Resend, link to Convex password setup.
+12. **Webhooks rewire**: Clerk `/api/webhooks/clerk` → Convex `http.ts` endpoints.
+13. **30-day grace**: Clerk subscription stays active. Rollback = flip flag back, re-mount ClerkProvider.
+14. **Cleanup** (post-grace): remove Clerk SDK from package.json, cancel subscription.
+
+**Rollback at every step**: feature flag, NOT destructive removal until step 14.
+
+**Existing data NEVER deleted** during migration. New table additive only.
 
 ---
 
