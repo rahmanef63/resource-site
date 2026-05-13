@@ -58,6 +58,9 @@ async function main() {
       return runInit(rest);
     case "add":
       return runAdd(rest);
+    case "update":
+    case "update-slice":
+      return runUpdate(rest);
     case "add-skill":
       return runAddSkill(rest);
     case "scaffold-slice":
@@ -433,6 +436,35 @@ async function runAdd(rest) {
   if (kind === "layout") return addLayout(entry, target, targetArg, flags);
   if (kind === "feature") return addFeature(entry, target, targetArg);
   if (kind === "recipe") return addRecipe(entry);
+}
+
+/**
+ * `update <slug> [target] [--dry-run]` — re-pull a slice from the kitab into
+ * an existing consumer directory. Use after `@rahman/shared` bumps or when
+ * the source slice has shipped patches. `--dry-run` previews changes via
+ * `runLift`'s built-in diff.
+ *
+ * For slices only (not layouts/features/recipes — those use `add`).
+ */
+async function runUpdate(rest) {
+  const { positional, flags } = parseFlags(rest);
+  const [slug, targetArg = "."] = positional;
+  if (!slug) {
+    console.error(kleur.red("Missing slug. Usage: rahman-resources update <slug> [target] [--dry-run]"));
+    process.exit(1);
+  }
+  const found = findEntry(slug);
+  if (!found) throw new Error(`"${slug}" not found. Run ${kleur.cyan("npx rahman-resources list slices")}.`);
+  const { kind, entry } = found;
+  if (kind !== "slice") {
+    console.error(kleur.red(`update only supported for slices. "${slug}" is a ${kind} — use \`add\` instead.`));
+    process.exit(1);
+  }
+  console.log(kleur.bold(`\n→ Re-pulling ${kleur.cyan(entry.slug)} into ${kleur.dim(targetArg)}\n`));
+  const liftArgs = [`rahman:${entry.slug}`];
+  if (targetArg !== ".") liftArgs.push("--target", targetArg);
+  if (flags["dry-run"]) liftArgs.push("--dry-run");
+  return runLift(liftArgs);
 }
 
 async function addLayout(t, target, targetArg, flags = {}) {
