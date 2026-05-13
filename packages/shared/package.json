@@ -1,0 +1,37 @@
+{
+  "name": "@rahman/shared",
+  "version": "0.1.0",
+  "description": "Shared UI primitives, hooks, and utils for the rahman/resources kitab — installable via GitHub Packages.",
+  "license": "MIT",
+  "author": "Rahman Fakhrul Aziz",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rahmanef63/resource-site.git",
+    "directory": "packages/shared"
+  },
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./ui/*": "./src/ui/*.ts",
+    "./hooks/*": "./src/hooks/*.ts",
+    "./lib/*": "./src/lib/*.ts"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
+  "peerDependencies": {
+    "react": "^19",
+    "react-dom": "^19",
+    "next": ">=15 <17"
+  },
+  "scripts": {
+    "publish:dry": "npm publish --dry-run --registry=https://npm.pkg.github.com"
+  }
+}
