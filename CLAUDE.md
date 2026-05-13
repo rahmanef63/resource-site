@@ -21,6 +21,23 @@ Why split? Components need consumer-side Tailwind config + theme tokens + logic 
 2. `cd packages/shared && npm publish` (operator OTP via browser)
 3. Consumers `pnpm update rahman-shared` when ready
 
+**Bottom-up harvest flow** (consumer perfects feature → push UP to kitab):
+
+Use the global skill `/send-to-resource` from inside a consumer project. It:
+- Detects current consumer (notion/superspace/CareerPack/content/rahmanef)
+- Copies feature into `frontend/slices/<slug>/` or `template-base/frontend/slices/<slug>/`
+- Sanitizes imports → `rahman-shared/*` + `@/features/<slug>/*`
+- Strips Clerk coupling (kitab is convex-auth only)
+- Namespaces Convex tables `<slug>_*`, adds `by_workspace` index, gates with `requirePermission`
+- Creates/updates `slice.manifest.json`
+- Updates `lib/content/slices.ts` + regenerates `packages/cli/lib/manifest.json`
+- Runs validators (R1-R5 + slice-parity)
+- Branch + commit + PR
+
+CREATE mode (slug new) vs UPDATE mode (slug exists, bump version).
+
+Skill location: `~/.agents/skills/send-to-resource/SKILL.md`. Wrapper: `/send-to-resource`.
+
 ## Hard Rules
 
 1. **NO Clerk.** Auth = `@convex-dev/auth`. Si-coder dokploy mandate.
