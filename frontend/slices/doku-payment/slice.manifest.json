@@ -1,0 +1,76 @@
+{
+  "$schema": "../../../docs/slice.manifest.schema.json",
+  "name": "doku-payment",
+  "version": "0.1.0",
+  "description": "DOKU Indonesia payment — hosted Checkout + Direct (VA/QRIS/eWallet/PayLater/Minimarket/CC). HMAC-signed REST + signature-verified webhook + idempotent retry. Sibling provider to midtrans-payment.",
+  "category": "commerce",
+  "stability": "beta",
+  "deps": {
+    "shared": [],
+    "slices": ["convex-auth"],
+    "convexFeatures": ["payment"],
+    "npm": {},
+    "env": [
+      {
+        "name": "DOKU_CLIENT_ID",
+        "required": true,
+        "scope": "server",
+        "description": "Merchant Client-Id from DOKU dashboard."
+      },
+      {
+        "name": "DOKU_SECRET_KEY",
+        "required": true,
+        "scope": "server",
+        "description": "HMAC secret for outbound signing + inbound webhook verification."
+      },
+      {
+        "name": "DOKU_IS_PRODUCTION",
+        "required": false,
+        "scope": "server",
+        "description": "true|false; defaults false (sandbox)."
+      },
+      {
+        "name": "DOKU_NOTIFY_PATH",
+        "required": false,
+        "scope": "server",
+        "description": "Path component DOKU calls; defaults /webhooks/doku."
+      }
+    ]
+  },
+  "files": {
+    "include": ["**/*"],
+    "exclude": ["*.test.ts", "*.test.tsx", "*.spec.ts"]
+  },
+  "convexFiles": {
+    "include": ["**/*.ts"],
+    "exclude": ["*.test.ts"]
+  },
+  "permissions": [
+    "payment.create-order",
+    "payment.view-order",
+    "payment.cancel-order",
+    "payment.refund",
+    "payment.webhook-process"
+  ],
+  "schemaTables": [
+    {
+      "name": "doku_payment_orders",
+      "namespaced": true,
+      "indexes": ["by_workspace", "by_workspace_user", "by_workspace_orderId", "by_workspace_status_createdAt"]
+    },
+    {
+      "name": "doku_payment_webhook_events",
+      "namespaced": true,
+      "indexes": ["by_workspace_received", "by_workspace_request"]
+    }
+  ],
+  "compatibility": {
+    "next": ">=15 <17",
+    "react": "^19",
+    "convex": "^1.36",
+    "tailwind": "4",
+    "auth": "convex-auth"
+  },
+  "tags": ["payment", "commerce", "doku", "indonesia", "qris", "virtual-account", "ewallet", "checkout", "webhook"],
+  "notes": "Existing `convex/features/payment/schema.ts` declares shared `paymentOrders`/`paymentWebhookEvents` across doku + midtrans — collides with 2026-05-12 namespace decision. Operator migration: split into provider-owned `doku_payment_*` + `midtrans_payment_*` tables OR introduce shared `payment-core` slice owning generic tables. Webhook handler at convex/features/payment/http.ts; verify HMAC via DOKU_SECRET_KEY before insert."
+}
