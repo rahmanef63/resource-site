@@ -1,0 +1,47 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", ":semanticCommits"],
+  "timezone": "Asia/Jakarta",
+  "schedule": ["after 9pm every weekday", "before 5am every weekday", "every weekend"],
+  "labels": ["deps"],
+  "rangeStrategy": "bump",
+  "packageRules": [
+    {
+      "description": "Auto-merge minor + patch updates after CI green",
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": true
+    },
+    {
+      "description": "Batch major bumps per-week for manual review",
+      "matchUpdateTypes": ["major"],
+      "schedule": ["before 5am on Monday"],
+      "groupName": "weekly major bumps",
+      "labels": ["deps", "major"]
+    },
+    {
+      "description": "Group React + Next.js + Convex framework bumps",
+      "matchPackageNames": ["react", "react-dom", "next", "convex", "@convex-dev/auth"],
+      "groupName": "framework core"
+    },
+    {
+      "description": "Group shadcn / Radix UI primitives",
+      "matchPackagePatterns": ["^@radix-ui/", "^@hookform/"],
+      "groupName": "ui primitives"
+    },
+    {
+      "description": "Pin shared primitive peers — bumps require explicit MAJOR review",
+      "matchPackageNames": ["react", "react-dom"],
+      "matchUpdateTypes": ["major"],
+      "automerge": false,
+      "labels": ["deps", "major", "peer-pin"]
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": ["security"]
+  },
+  "prHourlyLimit": 4,
+  "prConcurrentLimit": 8
+}
