@@ -55,6 +55,8 @@ import { ResponsiveDialog, SmartLink, FileUpload } from "rahman-shared/ui"
 - Updates via `pnpm up rahman-shared`
 - **Why**: primitives stable, want auto-bugfix propagation
 
+> **Status 2026-05-13 — Phase 5 ACHIEVED**: `rahman-shared@0.2.0` LIVE on **public npm** (unscoped — `@rahman` scope didn't exist; matched `rahman-resources` + `rahman-resources-mcp` pattern). Current shape is **utils + hooks only** (cn, formatDate, sanitizeHtml, useDebounce, useClickOutside, useResponsive). UI components (ResponsiveDialog, SmartLink, DateField, etc.) distributed via **CLI scaffold** (`npx rahman-resources add <slug>`) — consumer owns the file locally and customizes Tailwind classes. Distribution split formalized in `resources/CLAUDE.md`. 4/5 consumers adopted via skill `/use-adopt-rahman-shared`. superspace pending Phase 5.5.
+
 ### B. Features (slices) → CLI copy
 
 ```bash

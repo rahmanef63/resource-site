@@ -1,5 +1,26 @@
 # CLAUDE.md — resources/ kitab
 
+## Published Packages (npm — public registry)
+
+| Package | Version | Purpose |
+|---|---|---|
+| `rahman-resources` | 0.11.1 | CLI (init/add/list/info/scaffold/mcp) — `packages/cli/` |
+| `rahman-resources-mcp` | 0.9.0 | MCP server (8 tools + 45 resources) — `packages/mcp/` |
+| `rahman-shared` | 0.2.0 | npm utils + hooks (cn, formatDate, sanitizeHtml, useDebounce, useClickOutside, useResponsive) — `packages/shared/` |
+
+**Distribution model** (CRITICAL — don't mix):
+- **npm install** (`rahman-shared`): pure utils + hooks. Consumer imports from `node_modules/`, no local copy.
+- **CLI copy** (`npx rahman-resources add <slug>`): UI components (ResponsiveDialog/DateField/SharedDatePicker/FileUpload). Consumer OWNS the file, customizes Tailwind classes + theme tokens.
+
+Why split? Components need consumer-side Tailwind config + theme tokens + logic tweaks. Pure functions don't. npm distribution would force one-size-fits-all surface.
+
+**Adoption pattern across consumers**: skill `/use-adopt-rahman-shared` (`~/.agents/skills/adopt-rahman-shared/SKILL.md`). 4 consumers adopted 2026-05-13 (content/rahmanef/notion/CareerPack). superspace pending (waits Phase 5.5 cutover).
+
+**Re-publish flow** (after content change in `packages/shared/src/`):
+1. Bump `version` in `packages/shared/package.json`
+2. `cd packages/shared && npm publish` (operator OTP via browser)
+3. Consumers `pnpm update rahman-shared` when ready
+
 ## Hard Rules
 
 1. **NO Clerk.** Auth = `@convex-dev/auth`. Si-coder dokploy mandate.
