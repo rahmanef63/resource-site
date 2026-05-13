@@ -1,7 +1,7 @@
 {
   "name": "rahman-shared",
-  "version": "0.1.0",
-  "description": "Shared UI primitives, hooks, and utils for the rahman/resources kitab — installable via npm.",
+  "version": "0.2.0",
+  "description": "Shared UI utils, hooks, and helpers for the rahman/resources kitab. Pure utilities only (cn, formatDate, sanitizeHtml, useDebounce, etc.) — UI components are distributed via the rahman-resources CLI scaffolder.",
   "license": "MIT",
   "author": "Rahman Fakhrul Aziz",
   "repository": {
@@ -14,7 +14,6 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
-    "./ui/*": "./src/ui/*.ts",
     "./hooks/*": "./src/hooks/*.ts",
     "./lib/*": "./src/lib/*.ts"
   },
@@ -25,10 +24,15 @@
   "publishConfig": {
     "access": "public"
   },
+  "dependencies": {
+    "clsx": "^2.1.0",
+    "tailwind-merge": "^2.5.0",
+    "date-fns": "^4.1.0",
+    "sanitize-html": "^2.13.0"
+  },
   "peerDependencies": {
     "react": "^19",
-    "react-dom": "^19",
-    "next": ">=15 <17"
+    "react-dom": "^19"
   },
   "scripts": {
     "publish:dry": "npm publish --dry-run"
