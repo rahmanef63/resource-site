@@ -30,7 +30,7 @@ resources/                              ← KITAB (canonical source)
 ├── packages/
 │   ├── cli/                            ← `npx rahman-resources`
 │   ├── mcp/                            ← MCP server
-│   └── shared/                         ← `@rahman/shared` npm package
+│   └── shared/                         ← `rahman-shared` npm package
 ├── template-base/                      ← Greenfield starter
 ├── cookbook/                           ← Integration recipes (Resend, Cal, Midtrans)
 └── docs/
@@ -40,19 +40,19 @@ resources/                              ← KITAB (canonical source)
 
 ## 2. Distribution Model — Hybrid
 
-### A. Shared primitives → npm package (`@rahman/shared`)
+### A. Shared primitives → npm package (`rahman-shared`)
 
 ```bash
 # In consumer project
-pnpm add @rahman/shared
+pnpm add rahman-shared
 ```
 
 ```tsx
-import { ResponsiveDialog, SmartLink, FileUpload } from "@rahman/shared/ui"
+import { ResponsiveDialog, SmartLink, FileUpload } from "rahman-shared/ui"
 ```
 
 - Semver pinned, opaque module
-- Updates via `pnpm up @rahman/shared`
+- Updates via `pnpm up rahman-shared`
 - **Why**: primitives stable, want auto-bugfix propagation
 
 ### B. Features (slices) → CLI copy
@@ -145,7 +145,7 @@ npx rahman-resources init my-new-app
 
 **Validate**: write unit tests for each primitive in `resources/shared/ui/<Name>/test.tsx`.
 
-**Publish**: `pnpm --filter @rahman/shared publish` to private npm registry (Verdaccio or GitHub Packages).
+**Publish**: `pnpm --filter rahman-shared publish` to private npm registry (Verdaccio or GitHub Packages).
 
 ---
 
@@ -170,7 +170,7 @@ Priority slices (most reusable):
 | admin-crud | rahmanef.com | Generic CRUD shell |
 | audit-log | superspace | RBAC + audit |
 
-For each: extract → normalize imports to `@rahman/shared` → write `slice.manifest.json` → add test.
+For each: extract → normalize imports to `rahman-shared` → write `slice.manifest.json` → add test.
 
 ---
 
@@ -198,8 +198,8 @@ For each: extract → normalize imports to `@rahman/shared` → write `slice.man
 5. **superspace** (Week 15-16) — biggest, Clerk decision needed
 
 **Per-project process**:
-1. `pnpm add @rahman/shared`
-2. Replace local primitives with imports from `@rahman/shared`
+1. `pnpm add rahman-shared`
+2. Replace local primitives with imports from `rahman-shared`
 3. For each existing slice → either: keep custom (project-specific) OR migrate to `npx rahman-resources add slice <name>`
 4. Run validators
 5. Deploy to staging
@@ -210,7 +210,7 @@ For each: extract → normalize imports to `@rahman/shared` → write `slice.man
 
 ### Phase 6 — Ongoing Maintenance
 - `resources/` releases follow semver
-- `@rahman/shared` major bumps gate behind RFC
+- `rahman-shared` major bumps gate behind RFC
 - Slice changes flow: bug → fix in `resources/` first, then propagate to consumers via `rahman-resources update`
 - CI in `resources/`: every PR must pass `audit-bp` + slice validation
 
@@ -220,7 +220,7 @@ For each: extract → normalize imports to `@rahman/shared` → write `slice.man
 
 | Q | Decision | Notes |
 |---|----------|-------|
-| Where to host `@rahman/shared`? | **GitHub Packages** | Free private, integrated, `.npmrc` + `publishConfig` |
+| Where to host `rahman-shared`? | **GitHub Packages** | Free private, integrated, `.npmrc` + `publishConfig` |
 | Auth: keep Clerk in superspace? | **Drop Clerk** | Data-preserving migration in Phase 5.5, Google `sub` join key |
 | Convex schema collision? | **Namespaced `<slice>_<table>`** mandatory | CLI validates, manifest declares |
 | Versioning slices? | **Per-slice semver** | In manifest, enforced by CLI |
@@ -267,7 +267,7 @@ For each: extract → normalize imports to `@rahman/shared` → write `slice.man
 | Risk | Mitigation |
 |------|-----------|
 | Lift-and-shift breaks production | Stage in `resources/` first, run audit-bp, smoke test before consumer migration |
-| `@rahman/shared` becomes blocker | Keep API thin; complex things stay as slices |
+| `rahman-shared` becomes blocker | Keep API thin; complex things stay as slices |
 | Convex schema collision | Mandatory table prefix in slice manifest |
 | Drift returns after migration | CI gate: `rahman-resources doctor` runs in each consumer CI |
 | Project-specific customization needed | Slices copied (not linked) — customize freely; only `shared/` is opaque |
@@ -278,7 +278,7 @@ For each: extract → normalize imports to `@rahman/shared` → write `slice.man
 ## 6. Success Metrics
 
 - All 6 projects share same `package.json` engines + tooling versions
-- Each project imports primitives from `@rahman/shared` (zero local copies)
+- Each project imports primitives from `rahman-shared` (zero local copies)
 - New project setup: `npx rahman-resources init` → working app in <5 min
 - Add new feature: `npx rahman-resources add slice <name>` → working in <2 min
 - Bug in primitive fixed once, propagates via `pnpm up`

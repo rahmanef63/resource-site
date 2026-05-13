@@ -1,7 +1,7 @@
-# `@rahman/shared` — Kitab Shared Primitives
+# `rahman-shared` — Kitab Shared Primitives
 
 > SSOT for reusable primitives consumed by all Rahman projects via npm package.
-> Published as `@rahman/shared` on GitHub Packages.
+> Published as `rahman-shared` on GitHub Packages.
 
 ## Status
 
@@ -39,15 +39,15 @@ shared/
 Consumer install:
 
 ```bash
-pnpm add @rahman/shared
+pnpm add rahman-shared
 ```
 
 Consumer usage:
 
 ```tsx
-import { ResponsiveDialog, SmartLink, FileUpload } from "@rahman/shared/ui";
-import { cn, formatDate } from "@rahman/shared/lib";
-import { useDebounce } from "@rahman/shared/hooks";
+import { ResponsiveDialog, SmartLink, FileUpload } from "rahman-shared/ui";
+import { cn, formatDate } from "rahman-shared/lib";
+import { useDebounce } from "rahman-shared/hooks";
 ```
 
 ## Versioning
@@ -82,5 +82,5 @@ Once published, consumer ESLint rules reject:
 
 - [ ] Phase 2 — harvest primitives from superspace
 - [ ] Phase 3 — write per-primitive tests (Vitest + @testing-library)
-- [ ] Phase 4 — publish `@rahman/shared@0.1.0` to GitHub Packages
-- [ ] Phase 5 — migrate consumer projects to import from `@rahman/shared`
+- [ ] Phase 4 — publish `rahman-shared@0.1.0` to GitHub Packages
+- [ ] Phase 5 — migrate consumer projects to import from `rahman-shared`

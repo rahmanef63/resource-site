@@ -1,4 +1,4 @@
-# `@rahman/shared/ui`
+# `rahman-shared/ui`
 
 React component primitives. Each subdir is one primitive with:
 - `index.tsx` — public API export

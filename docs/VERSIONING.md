@@ -7,10 +7,10 @@ This document defines semver semantics for slices and shared primitives in this 
 | Track | Where versioned | Cadence |
 |---|---|---|
 | **Slice manifest** | `frontend/slices/<slug>/slice.manifest.json` `version` | Per-slice changes |
-| **`@rahman/shared` package** | `packages/shared/package.json` `version` | Per shared primitive change |
+| **`rahman-shared` package** | `packages/shared/package.json` `version` | Per shared primitive change |
 
 Slices and the shared package version independently. A consumer can pin
-`@rahman/shared@0.3.2` while pulling slices `auth@0.1.0` + `comments@0.2.0`.
+`rahman-shared@0.3.2` while pulling slices `auth@0.1.0` + `comments@0.2.0`.
 
 ## Semver semantics
 
@@ -58,7 +58,7 @@ Before bumping a slice manifest `version`:
 5. **Update manifest** — single edit to `version` field.
 6. **Tag commit** — `git tag slice/<slug>/v<version>` (optional but recommended).
 
-## `@rahman/shared` bump checklist
+## `rahman-shared` bump checklist
 
 Before bumping `packages/shared/package.json` `version`:
 
@@ -89,7 +89,7 @@ When a slice or export is deprecated:
 
 ## Renovate / Dependabot
 
-Automated dependency PRs target `@rahman/shared` consumers. See
+Automated dependency PRs target `rahman-shared` consumers. See
 [`.github/renovate.json`](../.github/renovate.json) for the grouping policy
 (major bumps batched per-week, minor/patch auto-merged after CI green).
 

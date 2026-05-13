@@ -1,4 +1,4 @@
-# `@rahman/shared/types`
+# `rahman-shared/types`
 
 Cross-primitive shared TypeScript types.
 

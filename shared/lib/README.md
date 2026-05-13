@@ -1,4 +1,4 @@
-# `@rahman/shared/lib`
+# `rahman-shared/lib`
 
 Framework-agnostic utilities. NO React, NO Next, NO Convex imports here. Pure TS.
 
