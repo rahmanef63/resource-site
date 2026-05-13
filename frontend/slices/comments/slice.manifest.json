@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../docs/slice.manifest.schema.json",
+  "name": "comments",
+  "version": "0.1.0",
+  "description": "Workspace-scoped threaded comments anchored to pages or blocks. Soft-delete + resolve semantics. useComments(opts) hook returns items + openCount + CRUD mutations.",
+  "category": "content",
+  "stability": "beta",
+  "deps": {
+    "shared": [],
+    "slices": ["convex-auth"],
+    "convexFeatures": ["comments"],
+    "npm": {},
+    "env": []
+  },
+  "files": {
+    "include": ["**/*"],
+    "exclude": ["*.test.ts", "*.test.tsx", "*.spec.ts"]
+  },
+  "convexFiles": {
+    "include": ["**/*.ts"],
+    "exclude": ["*.test.ts"]
+  },
+  "permissions": ["comments.create", "comments.update", "comments.resolve", "comments.delete", "comments.list"],
+  "schemaTables": [
+    {
+      "name": "comments_threads",
+      "namespaced": true,
+      "indexes": ["by_workspace", "by_workspace_page", "by_workspace_block", "by_workspace_user"]
+    }
+  ],
+  "compatibility": {
+    "next": ">=15 <17",
+    "react": "^19",
+    "convex": "^1.36",
+    "tailwind": "4",
+    "auth": "convex-auth"
+  },
+  "tags": ["content", "social", "comments", "threaded", "annotations"],
+  "notes": "Page-level comments leave blockId undefined; block-anchored comments set blockId. resolvedAt!=null = thread closed but visible. UI components deferred (notion-coupled to PageCommentsContext). Consumer authors panels. Original `comments` → namespaced `comments_threads`."
+}

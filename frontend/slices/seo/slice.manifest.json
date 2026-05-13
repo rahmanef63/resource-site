@@ -1,0 +1,47 @@
+{
+  "$schema": "../../../docs/slice.manifest.schema.json",
+  "name": "seo",
+  "version": "0.1.0",
+  "description": "Service slice for SEO metadata generation — Anthropic-backed action with per-user 24h cost guard. No public route. Backend exposes generate + generateAndApply mutations gated by requireAdmin.",
+  "category": "content",
+  "stability": "beta",
+  "deps": {
+    "shared": [],
+    "slices": ["convex-auth"],
+    "convexFeatures": ["seo"],
+    "npm": {},
+    "env": [
+      {
+        "name": "ANTHROPIC_API_KEY",
+        "required": true,
+        "scope": "server",
+        "description": "Anthropic API key for Claude metadata generation."
+      }
+    ]
+  },
+  "files": {
+    "include": ["**/*"],
+    "exclude": ["*.test.ts", "*.test.tsx", "*.spec.ts"]
+  },
+  "convexFiles": {
+    "include": ["**/*.ts"],
+    "exclude": ["*.test.ts"]
+  },
+  "permissions": ["seo.generate", "seo.apply", "seo.view-usage"],
+  "schemaTables": [
+    {
+      "name": "seo_generator_calls",
+      "namespaced": true,
+      "indexes": ["by_workspace_user_time"]
+    }
+  ],
+  "compatibility": {
+    "next": ">=15 <17",
+    "react": "^19",
+    "convex": "^1.36",
+    "tailwind": "4",
+    "auth": "convex-auth"
+  },
+  "tags": ["content", "seo", "ai", "anthropic", "metadata-generator"],
+  "notes": "Cost guard: callsInWindow query rate-limits per-user calls within 24h. generateAndApply combines AI generation + applyGenerated mutation in one action. requireAdmin guard on mutations. Original table `seoGeneratorCalls` → namespaced `seo_generator_calls` per 2026-05-12 decision."
+}

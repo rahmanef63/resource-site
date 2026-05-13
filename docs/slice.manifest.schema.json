@@ -7,6 +7,10 @@
   "required": ["name", "version", "deps"],
   "additionalProperties": false,
   "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional JSON Schema reference (for IDE hints)."
+    },
     "name": {
       "type": "string",
       "pattern": "^[a-z][a-z0-9-]*$",
