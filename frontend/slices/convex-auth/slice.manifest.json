@@ -1,0 +1,113 @@
+{
+  "$schema": "../../../docs/slice.manifest.schema.json",
+  "name": "convex-auth",
+  "version": "0.1.0",
+  "description": "@convex-dev/auth with email magic link (Resend) + optional Google OAuth. Hard SSOT mandate per kitab — no Clerk.",
+  "category": "auth",
+  "stability": "beta",
+  "deps": {
+    "shared": [],
+    "slices": [],
+    "convexFeatures": ["auth"],
+    "npm": {
+      "@convex-dev/auth": "^0.0.92",
+      "@auth/core": "^0.37.4",
+      "resend": "^4.0.0"
+    },
+    "env": [
+      {
+        "name": "AUTH_RESEND_KEY",
+        "required": false,
+        "scope": "server",
+        "description": "Resend API key for magic-link sender. Optional if only OAuth used."
+      },
+      {
+        "name": "JWT_PRIVATE_KEY",
+        "required": true,
+        "scope": "server",
+        "description": "Auth signing key. Self-hosted: push via Convex REST update_environment_variables."
+      },
+      {
+        "name": "JWKS",
+        "required": true,
+        "scope": "server",
+        "description": "Public JSON Web Key Set. Convex Auth generates both this + JWT_PRIVATE_KEY."
+      },
+      {
+        "name": "SITE_URL",
+        "required": true,
+        "scope": "server",
+        "description": "Public site origin for magic-link callback."
+      },
+      {
+        "name": "AUTH_GOOGLE_ID",
+        "required": false,
+        "scope": "server",
+        "description": "Google OAuth client ID. Required only when Google provider enabled."
+      },
+      {
+        "name": "AUTH_GOOGLE_SECRET",
+        "required": false,
+        "scope": "server",
+        "description": "Google OAuth client secret. SAME key as any existing Clerk app during migration so `sub` join works (per Phase 5.5)."
+      }
+    ]
+  },
+  "files": {
+    "include": ["**/*"],
+    "exclude": ["*.test.ts", "*.test.tsx"]
+  },
+  "convexFiles": {
+    "include": ["**/*.ts"],
+    "exclude": ["*.test.ts"]
+  },
+  "permissions": [
+    "auth.sign-in",
+    "auth.sign-out",
+    "auth.manage-account"
+  ],
+  "schemaTables": [
+    {
+      "name": "auth_users",
+      "namespaced": true,
+      "indexes": ["by_email", "by_external_id"]
+    },
+    {
+      "name": "auth_accounts",
+      "namespaced": true,
+      "indexes": ["by_provider", "by_provider_account_id", "by_user"]
+    },
+    {
+      "name": "auth_sessions",
+      "namespaced": true,
+      "indexes": ["by_user", "by_token"]
+    },
+    {
+      "name": "auth_verifiers",
+      "namespaced": true,
+      "indexes": ["by_user", "by_identifier"]
+    }
+  ],
+  "compatibility": {
+    "next": ">=15 <17",
+    "react": "^19",
+    "convex": "^1.36",
+    "tailwind": "4",
+    "auth": "convex-auth"
+  },
+  "hooks": {
+    "postInstall": [
+      "echo 'Run: npx @convex-dev/auth init  (generates JWT_PRIVATE_KEY + JWKS)'",
+      "echo 'Add SITE_URL + AUTH_RESEND_KEY to Convex env'"
+    ],
+    "checks": [
+      {
+        "name": "env-vars-present",
+        "command": "node -e \"['JWT_PRIVATE_KEY','JWKS','SITE_URL'].forEach(k=>{if(!process.env[k]&&!require('fs').readFileSync('.env.example','utf8').includes(k))process.exit(1)})\"",
+        "phase": "post"
+      }
+    ]
+  },
+  "tags": ["auth", "convex-auth", "magic-link", "oauth", "google", "no-clerk"],
+  "notes": "Pre-migration: if consumer has Clerk, use same Google client ID + secret to preserve user identity via Google `sub` join key. See Phase 5.5 in SSOT_MIGRATION_PLAN.md. Convex Auth tables intentionally namespaced (auth_*) to avoid collision with consumer's existing `users` table during dual-auth period."
+}
