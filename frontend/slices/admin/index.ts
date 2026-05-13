@@ -1,0 +1,1 @@
+export { adminConfig } from "./config"
