@@ -1,4 +1,4 @@
-# `@rahman/shared/hooks`
+# `rahman-shared/hooks`
 
 React hooks shared across primitives + consumer slices.
 

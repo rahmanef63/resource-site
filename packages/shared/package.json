@@ -1,7 +1,7 @@
 {
-  "name": "@rahman/shared",
+  "name": "rahman-shared",
   "version": "0.1.0",
-  "description": "Shared UI primitives, hooks, and utils for the rahman/resources kitab — installable via GitHub Packages.",
+  "description": "Shared UI primitives, hooks, and utils for the rahman/resources kitab — installable via npm.",
   "license": "MIT",
   "author": "Rahman Fakhrul Aziz",
   "repository": {
@@ -23,8 +23,7 @@
     "README.md"
   ],
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
-    "access": "restricted"
+    "access": "public"
   },
   "peerDependencies": {
     "react": "^19",
@@ -32,6 +31,6 @@
     "next": ">=15 <17"
   },
   "scripts": {
-    "publish:dry": "npm publish --dry-run --registry=https://npm.pkg.github.com"
+    "publish:dry": "npm publish --dry-run"
   }
 }

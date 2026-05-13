@@ -47,7 +47,7 @@
         "shared": {
           "type": "array",
           "items": { "type": "string" },
-          "description": "Paths inside resources/shared/ that this slice imports (e.g. 'ui/ResponsiveDialog', 'lib/format', 'hooks/useDebounce'). The CLI ensures @rahman/shared exposes these or fails."
+          "description": "Paths inside resources/shared/ that this slice imports (e.g. 'ui/ResponsiveDialog', 'lib/format', 'hooks/useDebounce'). The CLI ensures rahman-shared exposes these or fails."
         },
         "slices": {
           "type": "array",
