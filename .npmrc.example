@@ -1,0 +1,4 @@
+# Copy to .npmrc and fill in GITHUB_TOKEN (read:packages scope).
+# .npmrc is gitignored — never commit auth tokens.
+@rahman:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
