@@ -17,7 +17,9 @@
     "new:slice": "node scripts/features/scaffold-slice.mjs",
     "new:template": "node scripts/features/scaffold-template.mjs",
     "modify:slice": "node scripts/features/modify-slice.mjs",
-    "manifest:sync": "node packages/cli/scripts/gen-manifest.mjs"
+    "manifest:sync": "node packages/cli/scripts/gen-manifest.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",
@@ -53,9 +55,11 @@
     "@eslint/eslintrc": "^3.3.5",
     "@next/eslint-plugin-next": "^16.2.6",
     "@tailwindcss/postcss": "^4.0.0",
+    "@testing-library/react": "^16.3.2",
     "@types/node": "^25.6.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^6.0.1",
     "autoprefixer": "^10.5.0",
     "eslint": "^9",
     "eslint-config-next": "^16.0.0",
