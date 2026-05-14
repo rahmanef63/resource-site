@@ -125,7 +125,7 @@ ${kleur.bold("Usage:")}
   npx rahman-resources info <slug>
   npx rahman-resources doctor
   npx rahman-resources graph [slug] [--all] [--json]
-  npx rahman-resources compose <slug>... [--json] [--rr-path <path>] [--no-deps]
+  npx rahman-resources compose <slug>... [--json] [--rr-path <path>] [--no-deps] [--strict]
   npx rahman-resources update <slug> [--apply] [--force] [--rr-path P] [--json]
   npx rahman-resources migrate <slug> --from <v1> [--to <v2>] [--json] [--write-files] [--force-overwrite]
   npx rahman-resources mcp
@@ -141,6 +141,8 @@ ${kleur.bold("Add flags:")}
                           /preview/<slug> path constants in nav-config/robots/sitemap)
   --at preview            install template AT app/preview/<slug>/ (default — sandbox style)
   --with-shadcn-all       same as init flag
+  --strict                enforce strict compose pre-flight (uncontracted/env-missing → blocker)
+  --force                 skip compose pre-flight entirely
 
 ${kleur.bold("Examples:")}
   npx rahman-resources init my-app
@@ -471,7 +473,7 @@ async function runAdd(rest) {
   if (!flags.force && existsSync(path.join(target, "rr.json"))) {
     try {
       const repoRoot = findRepoRoot(__dirname);
-      const { result } = await composePreflight(slug, repoRoot, target);
+      const { result } = await composePreflight(slug, repoRoot, target, { strict: !!flags.strict });
       const blockers = result.conflicts.filter((c) => c.severity === "blocker");
       if (blockers.length > 0) {
         console.error(kleur.red(`\n✖ compose pre-flight blocked "${slug}".`));
