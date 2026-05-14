@@ -113,7 +113,7 @@ function regexLoadContract(src) {
   const m = src.match(/defineSliceContract\s*\(\s*(\{[\s\S]*?\})\s*\)\s*;?\s*$/m);
   if (!m) return undefined;
   // Replace single quotes, strip trailing commas, quote keys.
-  let body = m[1]
+  const body = m[1]
     .replace(/'([^'\\]*)'/g, '"$1"')
     .replace(/,(\s*[}\]])/g, "$1")
     .replace(/([{,]\s*)([A-Za-z_$][A-Za-z0-9_$]*)\s*:/g, '$1"$2":')

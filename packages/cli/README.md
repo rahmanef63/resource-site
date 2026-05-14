@@ -104,6 +104,24 @@ The companion `rahman-resources-mcp` server exposes the same data:
 
 Files matching `.kitab/lineage/*.local.json` are gitignored, so contributors can stage experimental DNA without committing it. Promote to `<slug>.dna.json` to ship it.
 
+## Bidirectional Sync
+
+Most slice registries push updates one-way (registry → consumer). The kitab is bidirectional: when an upstream slice improves, consumers can pull the update via 3-way semantic merge — file-level + contract-surface — without losing local customizations.
+
+```bash
+npx rahman-resources update <slug>                # dry-run preview (default)
+npx rahman-resources update <slug> --apply        # write merged files
+npx rahman-resources update <slug> --apply --force  # apply even with conflicts (kitab wins)
+npx rahman-resources update <slug> --json         # machine-readable report
+npx rahman-resources update <slug> --rr-path P    # point at an rr.json outside cwd
+```
+
+The engine emits a `MergeReport` with per-element outcomes (`auto-merged`, `consumer-wins-clean`, `kitab-wins-clean`, `conflict`, `identical`), a summary, and `driftAfterMerge` (0-100). When the merge is clean it also produces a ready-to-write `mergedSnapshot`.
+
+Conflicts surface a `conflictHint` describing why (e.g. _"kitab dropped `paymentOrders`; consumer still relies on it"_). Re-sync activity is appended as a `3-way-merge` lineage entry, and the consumer's `drift_score` is updated so `rr graph` reflects reality.
+
+See [docs/bidir-sync.md](../../docs/bidir-sync.md) for the full algorithm + drift-score formula.
+
 ## Updating the manifest
 
 The manifest is generated from `site/lib/content/layouts.ts`. To regenerate:

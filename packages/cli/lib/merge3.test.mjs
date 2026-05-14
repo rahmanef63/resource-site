@@ -4,7 +4,7 @@
 // arithmetic and the applyMerge guard.
 
 import { describe, it, expect } from "vitest";
-import { mkdtempSync, readFileSync, existsSync, rmSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
