@@ -46,6 +46,7 @@
     "recipes/**",
     "template-base/**",
     "packages/**",
-    "site/**"
+    "site/**",
+    "frontend/slices/**/slice.contract.ts"
   ]
 }
