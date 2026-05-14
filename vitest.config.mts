@@ -7,7 +7,11 @@ export default defineConfig({
   test: {
     environment: "happy-dom",
     globals: true,
-    include: ["shared/**/*.test.{ts,tsx}", "lib/**/*.test.{ts,tsx}"],
+    include: [
+      "shared/**/*.test.{ts,tsx}",
+      "lib/**/*.test.{ts,tsx}",
+      "packages/cli/lib/**/*.test.mjs",
+    ],
     setupFiles: [],
   },
   resolve: {
