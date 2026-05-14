@@ -72,5 +72,5 @@
     "auth": "convex-auth"
   },
   "tags": ["payment", "commerce", "doku", "indonesia", "qris", "virtual-account", "ewallet", "checkout", "webhook"],
-  "notes": "Existing `convex/features/payment/schema.ts` declares shared `paymentOrders`/`paymentWebhookEvents` across doku + midtrans — collides with 2026-05-12 namespace decision. Operator migration: split into provider-owned `doku_payment_*` + `midtrans_payment_*` tables OR introduce shared `payment-core` slice owning generic tables. Webhook handler at convex/features/payment/http.ts; verify HMAC via DOKU_SECRET_KEY before insert."
+  "notes": "Webhook handler at convex/features/payment/http.ts; verify HMAC via DOKU_SECRET_KEY before insert. Namespace collision with midtrans-payment RESOLVED 2026-05-14 via convex/migrations/M-doku-namespace-2026-05.ts (rename paymentOrders → doku_orders, paymentWebhookEvents → doku_webhook_events). Both contracts now use disjoint Convex prefixes (doku_ / midtrans_) so the compose-solver accepts them together."
 }
