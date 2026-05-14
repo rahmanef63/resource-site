@@ -9,7 +9,9 @@ name: contracts-drift
 #   npm run contracts:drift
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [main]
+
 permissions:
   contents: read
   issues: write
