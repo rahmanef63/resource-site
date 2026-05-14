@@ -1,0 +1,33 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "admin",
+  "version": "0.1.0",
+  "category": "infra",
+  "title": "Admin — Generic Shell",
+  "description": "Landing page scaffold + Convex admin probe (isAdmin / counts). Consumer composes feature panels into the grid. Gated by requireAdmin on Convex side; superadmin email gate via SUPER_ADMIN_EMAIL env.",
+  "namespace": "@/features/admin",
+  "kind": "full",
+  "convex": {
+    "tablesExport": "",
+    "schemaPath": "convex/features/admin/schema.ts",
+    "rootPaths": ["convex/features/admin"]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/admin",
+    "configExport": "adminConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": ["card", "button"],
+    "env": [
+      { "name": "SUPER_ADMIN_EMAIL", "scope": "convex", "required": false, "description": "Single-person super-admin email gate." }
+    ],
+    "peers": [
+      { "slug": "convex-auth", "range": "^0.1", "reason": "requireAdmin gate uses convex-auth user identity." }
+    ]
+  },
+  "registers": ["registry"],
+  "audit": ["bp:public-fn-validator"],
+  "license": "MIT",
+  "tags": ["infra", "admin", "shell", "crud"]
+}

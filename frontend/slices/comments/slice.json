@@ -1,0 +1,31 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "comments",
+  "version": "0.1.0",
+  "category": "content",
+  "title": "Comments — Threaded",
+  "description": "Workspace-scoped threaded comments anchored to pages or blocks. Soft-delete + resolve semantics. useComments(opts) hook returns items + openCount + CRUD mutations.",
+  "namespace": "@/features/comments",
+  "kind": "full",
+  "convex": {
+    "tablesExport": "commentsTables",
+    "schemaPath": "convex/features/comments/schema.ts",
+    "rootPaths": ["convex/features/comments"]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/comments",
+    "configExport": "commentsConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": ["button", "textarea", "avatar"],
+    "env": [],
+    "peers": [
+      { "slug": "convex-auth", "range": "^0.1", "reason": "Comment author identity from convex-auth." }
+    ]
+  },
+  "registers": ["registry"],
+  "audit": ["bp:public-fn-validator"],
+  "license": "MIT",
+  "tags": ["content", "social", "comments", "threaded", "annotations"]
+}
