@@ -1,0 +1,17 @@
+{
+  "id": "midtrans-payment",
+  "created_at": "2026-05-14T09:43:34.090Z",
+  "lineage": [
+    {
+      "from": "contract:midtrans-payment@0.9.0",
+      "to": "kitab:0.1.0",
+      "at": "2026-05-14T09:43:34.090Z",
+      "transforms": [
+        "migration-applied",
+        "namespace-rename-2026-05"
+      ],
+      "actor": "apply-midtrans-collision-fix"
+    }
+  ],
+  "consumers": {}
+}

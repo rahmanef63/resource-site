@@ -6,22 +6,42 @@
       "from": "superspace:convex/features/payment/doku",
       "to": "kitab:0.1.0",
       "at": "2026-05-01T14:00:00.000Z",
-      "transforms": ["alias-rewrite", "rbac-gate-add", "by-workspace-index"],
+      "transforms": [
+        "alias-rewrite",
+        "rbac-gate-add",
+        "by-workspace-index"
+      ],
       "actor": "rr-send"
     },
     {
       "from": "superspace:frontend/slices/doku-payment",
       "to": "kitab:0.1.0",
       "at": "2026-05-01T14:05:00.000Z",
-      "transforms": ["alias-rewrite", "clerk-strip"],
+      "transforms": [
+        "alias-rewrite",
+        "clerk-strip"
+      ],
       "actor": "rr-send"
     },
     {
       "from": "kitab:doku-payment@0.1.0",
       "to": "kitab:0.1.1",
       "at": "2026-05-08T11:00:00.000Z",
-      "transforms": ["table-namespace-split", "midtrans-collision-fix"],
+      "transforms": [
+        "table-namespace-split",
+        "midtrans-collision-fix"
+      ],
       "actor": "rahman"
+    },
+    {
+      "from": "contract:doku-payment@0.9.0",
+      "to": "kitab:0.1.0",
+      "at": "2026-05-14T09:43:32.520Z",
+      "transforms": [
+        "migration-applied",
+        "namespace-rename-2026-05"
+      ],
+      "actor": "apply-midtrans-collision-fix"
     }
   ],
   "consumers": {
