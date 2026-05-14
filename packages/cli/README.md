@@ -70,6 +70,40 @@ Run `npx rahman-resources list` to see the live catalog. Highlights:
 | `cms-public-storefront` | cms | E-commerce / blog storefront |
 | `landing-*` | marketing | Hero/bento/masonry/kinetic landings |
 
+## DNA Graph
+
+The kitab tracks slice **lineage** (where a slice came from and how it was transformed) and **adoption** (which downstream consumers picked it up and how much they drifted) in `.kitab/lineage/<slug>.dna.json` files. Together they form a directed graph traversable by humans and Claude (via MCP).
+
+Each DNA file has three sections:
+
+- `id`, `created_at` — slice identity
+- `lineage[]` — `{ from, to?, at, transforms[], actor? }` rows recording every harvest hop. `from`/`to` use `<sourceRepo>:<path>` syntax (e.g. `superspace:frontend/slices/auth` → `kitab:0.1.0`). Transforms are tags like `alias-rewrite`, `clerk-strip`, `namespace-rename`.
+- `consumers{}` — keyed by consumer name (notion, superspace, careerpack, content, rahmanef, cescadesigns). Each entry records `adopted_at`, `version`, `drift_score` (0-100), and optionally `last_synced_at`.
+
+### `rr graph` command
+
+```bash
+npx rahman-resources graph                  # ASCII summary + adoption matrix across all slices
+npx rahman-resources graph --all            # same as above (explicit)
+npx rahman-resources graph convex-auth      # full lineage tree + consumer rows for one slice
+npx rahman-resources graph --json           # machine-readable graph JSON
+npx rahman-resources graph convex-auth --json
+```
+
+The summary highlights drift: green <15%, yellow 15-39%, red ≥40%. A red cell signals the consumer copy diverged enough that a re-sync from the kitab will conflict — time to lift improvements back UP via `/rr-prep` + `/rr-send`.
+
+### MCP surface
+
+The companion `rahman-resources-mcp` server exposes the same data:
+
+- `rr://graph/lineage` — full graph payload (`{ slices, graph: { nodes, edges } }`)
+- `rr://graph/lineage/<slug>` — single slice DNA
+- `rr://graph/consumers/<consumer-name>` — every slice that consumer adopted, with version + drift
+
+### Local-only shards
+
+Files matching `.kitab/lineage/*.local.json` are gitignored, so contributors can stage experimental DNA without committing it. Promote to `<slug>.dna.json` to ship it.
+
 ## Updating the manifest
 
 The manifest is generated from `site/lib/content/layouts.ts`. To regenerate:

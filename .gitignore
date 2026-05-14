@@ -16,3 +16,6 @@ dist/
 # generator backups
 *.backup
 .npmrc
+
+# Slice-DNA lineage — committed shards are *.dna.json, *.local.json is per-user
+.kitab/lineage/*.local.json

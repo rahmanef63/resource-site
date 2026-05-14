@@ -30,6 +30,9 @@
 //   rr://recipes/{slug}            — one recipe
 //   rr://skills/{slug}             — one skill
 //   rr://workflow/{kind}           — CRUD workflow markdown (kind = templates|features|recipes|skills)
+//   rr://graph/lineage             — full slice-DNA lineage graph
+//   rr://graph/lineage/{slug}      — one slice's DNA (lineage + adoption)
+//   rr://graph/consumers/{name}    — every slice a consumer adopted
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
@@ -44,6 +47,7 @@ import {
 import { createServer } from "node:http";
 import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { findEntry, getManifest, getSkills, searchAll, getWorkflow, WORKFLOW_KINDS } from "../src/data-loader.mjs";
+import { listLineageResources, readLineageResource, LINEAGE_URI_PREFIX } from "../src/resources/lineage.mjs";
 import { createRequire } from "node:module";
 
 const require = createRequire(import.meta.url);
@@ -435,6 +439,13 @@ const handleListResources = async () => {
       mimeType: "text/markdown",
     });
   }
+  // Slice-DNA lineage resources (rr://graph/*) — see src/resources/lineage.mjs.
+  try {
+    const lineage = await listLineageResources();
+    for (const r of lineage) resources.push(r);
+  } catch (err) {
+    console.error("[mcp] failed to enumerate lineage resources:", err?.message ?? err);
+  }
   return { resources };
 };
 
@@ -442,6 +453,14 @@ const handleReadResource = async (req) => {
   const uri = req.params.uri;
   if (uri === "rr://manifest") {
     return resourceJson(uri, getManifest());
+  }
+  // Slice-DNA lineage URIs (rr://graph/...) — delegated to lineage.mjs.
+  if (typeof uri === "string" && uri.startsWith(LINEAGE_URI_PREFIX)) {
+    const result = await readLineageResource(uri);
+    if (result.match) {
+      if (result.error) return resourceError(uri, result.error);
+      return resourceJson(uri, result.payload);
+    }
   }
   const wf = uri.match(/^rr:\/\/workflow\/(templates|features|recipes|skills)$/);
   if (wf) {

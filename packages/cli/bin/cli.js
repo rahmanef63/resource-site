@@ -29,6 +29,7 @@ import {
   addSkill as rrAddSkill,
 } from "../lib/rr.mjs";
 import { runPostInit } from "../lib/post-init.mjs";
+import { runGraph } from "./graph.mjs";
 
 const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -76,6 +77,8 @@ async function main() {
       return runInfo(rest);
     case "doctor":
       return runDoctor(rest);
+    case "graph":
+      return runGraph(rest);
     case "mcp":
       return runMcpHint();
     case undefined:
@@ -114,6 +117,7 @@ ${kleur.bold("Usage:")}
   npx rahman-resources list [layouts|recipes|features|skills|slices]
   npx rahman-resources info <slug>
   npx rahman-resources doctor
+  npx rahman-resources graph [slug] [--all] [--json]
   npx rahman-resources mcp
 
 ${kleur.bold("Init flags:")}
