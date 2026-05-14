@@ -32,6 +32,7 @@ import { runPostInit } from "../lib/post-init.mjs";
 import { runGraph } from "./graph.mjs";
 import { runCompose, preflight as composePreflight } from "./compose.mjs";
 import { runUpdate as runUpdate3Way } from "./update.mjs";
+import { runMigrate } from "./migrate.mjs";
 
 const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -83,6 +84,8 @@ async function main() {
       return runGraph(rest);
     case "compose":
       return runCompose(rest);
+    case "migrate":
+      return runMigrate(rest);
     case "mcp":
       return runMcpHint();
     case undefined:
@@ -124,6 +127,7 @@ ${kleur.bold("Usage:")}
   npx rahman-resources graph [slug] [--all] [--json]
   npx rahman-resources compose <slug>... [--json] [--rr-path <path>] [--no-deps]
   npx rahman-resources update <slug> [--apply] [--force] [--rr-path P] [--json]
+  npx rahman-resources migrate <slug> --from <v1> [--to <v2>] [--json] [--write-files] [--force-overwrite]
   npx rahman-resources mcp
 
 ${kleur.bold("Init flags:")}
