@@ -19,7 +19,7 @@
 
 Why split? Components need consumer-side Tailwind config + theme tokens + logic tweaks. Pure functions don't. npm distribution would force one-size-fits-all surface.
 
-**Adoption pattern across consumers**: skill `/use-adopt-rahman-shared` (`~/.agents/skills/adopt-rahman-shared/SKILL.md`). 4 consumers adopted 2026-05-13 (content/rahmanef/notion/CareerPack). superspace pending (waits Phase 5.5 cutover).
+**Adoption pattern across consumers**: skill `/rr-adopt` (`~/.agents/skills/rr-adopt/SKILL.md`). 4 consumers adopted 2026-05-13 (content/rahmanef/notion/CareerPack). superspace pending (waits Phase 5.5 cutover).
 
 **Re-publish flow** (after content change in `packages/shared/src/`):
 1. Bump `version` in `packages/shared/package.json`
@@ -30,12 +30,12 @@ Why split? Components need consumer-side Tailwind config + theme tokens + logic 
 
 Two-step pipeline. Always run prep first.
 
-**Step 1 — `/prep-for-resource <slug> --fix`** (inside the consumer project)
+**Step 1 — `/rr-prep <slug> --fix`** (inside the consumer project)
 Audits the feature against kitab hard rules (Clerk imports, file size ≤500 LOC, cross-slice imports, raw HTML primitives, Convex RBAC + workspace-isolation, hard-coded IDs). Applies safe auto-fixes (import rewrites, README scaffold). Emits `<feature>/.harvest/{prep-report.md, slice.manifest.draft.json, inventory.json, audit-flags.json}`. Final report says **READY / NEEDS FIX (n) / BLOCKED**. Do not proceed to step 2 unless READY.
 
-Skill: `~/.agents/skills/prep-for-resource/SKILL.md`. Wrapper: `/prep-for-resource`.
+Skill: `~/.agents/skills/rr-prep/SKILL.md`. Wrapper: `/rr-prep`.
 
-**Step 2 — `/send-to-resource <slug>`** (still inside the consumer project)
+**Step 2 — `/rr-send <slug>`** (still inside the consumer project)
 Consumes `.harvest/` from step 1, then:
 - Detects current consumer (notion/superspace/CareerPack/content/rahmanef)
 - Copies feature into `frontend/slices/<slug>/` or `template-base/frontend/slices/<slug>/`
@@ -49,7 +49,7 @@ Consumes `.harvest/` from step 1, then:
 
 CREATE mode (slug new) vs UPDATE mode (slug exists, bump version).
 
-Skill: `~/.agents/skills/send-to-resource/SKILL.md`. Wrapper: `/send-to-resource`.
+Skill: `~/.agents/skills/rr-send/SKILL.md`. Wrapper: `/rr-send`.
 
 ## Hard Rules
 
