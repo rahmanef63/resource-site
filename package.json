@@ -17,13 +17,15 @@
     "validate:manifests:check": "node scripts/validation/validate-manifests.mjs --check",
     "validate:contracts": "node scripts/validation/validate-contract.mjs",
     "validate:contracts:check": "node scripts/validation/validate-contract.mjs --check",
+    "contracts:drift": "node scripts/validation/check-contract-drift.mjs",
     "slices:check": "npm run validate:slices && npm run audit:slices && npm run gen:slices:check && npm run validate:manifests && npm run validate:contracts",
     "new:slice": "node scripts/features/scaffold-slice.mjs",
     "new:template": "node scripts/features/scaffold-template.mjs",
     "modify:slice": "node scripts/features/modify-slice.mjs",
     "manifest:sync": "node packages/cli/scripts/gen-manifest.mjs",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "prepare": "git config core.hooksPath .githooks 2>/dev/null || true"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
