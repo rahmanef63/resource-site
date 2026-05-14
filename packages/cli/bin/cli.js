@@ -30,6 +30,7 @@ import {
 } from "../lib/rr.mjs";
 import { runPostInit } from "../lib/post-init.mjs";
 import { runGraph } from "./graph.mjs";
+import { runUpdate as runUpdate3Way } from "./update.mjs";
 
 const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -118,6 +119,7 @@ ${kleur.bold("Usage:")}
   npx rahman-resources info <slug>
   npx rahman-resources doctor
   npx rahman-resources graph [slug] [--all] [--json]
+  npx rahman-resources update <slug> [--apply] [--force] [--rr-path P] [--json]
   npx rahman-resources mcp
 
 ${kleur.bold("Init flags:")}
@@ -451,24 +453,30 @@ async function runAdd(rest) {
  * For slices only (not layouts/features/recipes — those use `add`).
  */
 async function runUpdate(rest) {
+  // Bidirectional sync via 3-way merge engine (Phase D). The legacy
+  // raw-tiged re-pull path is reachable via `update --legacy <slug>` for
+  // back-compat with older docs that piggybacked on `runLift`.
   const { positional, flags } = parseFlags(rest);
-  const [slug, targetArg = "."] = positional;
-  if (!slug) {
-    console.error(kleur.red("Missing slug. Usage: rahman-resources update <slug> [target] [--dry-run]"));
-    process.exit(1);
+  if (flags.legacy) {
+    const [slug, targetArg = "."] = positional;
+    if (!slug) {
+      console.error(kleur.red("Missing slug. Usage: rahman-resources update <slug> [--apply] [--json]"));
+      process.exit(1);
+    }
+    const found = findEntry(slug);
+    if (!found) throw new Error(`"${slug}" not found. Run ${kleur.cyan("npx rahman-resources list slices")}.`);
+    const { kind, entry } = found;
+    if (kind !== "slice") {
+      console.error(kleur.red(`update --legacy only supported for slices. "${slug}" is a ${kind}.`));
+      process.exit(1);
+    }
+    console.log(kleur.bold(`\n→ (legacy) Re-pulling ${kleur.cyan(entry.slug)} into ${kleur.dim(targetArg)}\n`));
+    const liftArgs = [`rahman:${entry.slug}`];
+    if (targetArg !== ".") liftArgs.push("--target", targetArg);
+    if (flags["dry-run"]) liftArgs.push("--dry-run");
+    return runLift(liftArgs);
   }
-  const found = findEntry(slug);
-  if (!found) throw new Error(`"${slug}" not found. Run ${kleur.cyan("npx rahman-resources list slices")}.`);
-  const { kind, entry } = found;
-  if (kind !== "slice") {
-    console.error(kleur.red(`update only supported for slices. "${slug}" is a ${kind} — use \`add\` instead.`));
-    process.exit(1);
-  }
-  console.log(kleur.bold(`\n→ Re-pulling ${kleur.cyan(entry.slug)} into ${kleur.dim(targetArg)}\n`));
-  const liftArgs = [`rahman:${entry.slug}`];
-  if (targetArg !== ".") liftArgs.push("--target", targetArg);
-  if (flags["dry-run"]) liftArgs.push("--dry-run");
-  return runLift(liftArgs);
+  return runUpdate3Way(rest);
 }
 
 async function addLayout(t, target, targetArg, flags = {}) {
