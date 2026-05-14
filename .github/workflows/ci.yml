@@ -9,26 +9,55 @@ on:
 permissions:
   contents: read
 
-jobs:
-  typecheck-and-build:
-    name: typecheck + build (deployed kitab)
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
-      - uses: actions/setup-node@v4
+jobs:
+  gate:
+    name: gate (typecheck + lint + test + slices + build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
         with:
-          node-version: 20
-          cache: npm
+          # audit-bp needs HEAD~15 for --changed scope; full history is also
+          # useful for the contracts-drift post-merge workflow.
+          fetch-depth: 0
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: package-lock.json
+
+      - name: cache .next/cache
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-next-${{ hashFiles('package-lock.json') }}-${{ hashFiles('app/**/*.{ts,tsx,js,jsx}', 'components/**/*.{ts,tsx,js,jsx}', 'frontend/**/*.{ts,tsx,js,jsx}') }}
+          restore-keys: |
+            ${{ runner.os }}-next-${{ hashFiles('package-lock.json') }}-
+            ${{ runner.os }}-next-
 
       - name: install
-        run: npm ci --legacy-peer-deps
+        run: npm ci --legacy-peer-deps --no-audit --no-fund
 
       - name: typecheck
         run: npm run typecheck
 
-      - name: slices check (validate + audit + gen-drift)
+      - name: lint
+        run: npm run lint
+
+      - name: test
+        run: npm run test
+
+      # slices:check chain = validate:slices -> audit:slices -> gen:slices:check
+      #                    -> validate:manifests -> validate:contracts
+      # (covers the Phase A contract validator already)
+      - name: slices check
         run: npm run slices:check
 
       - name: build
@@ -47,7 +76,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: "22"
           cache: npm
           cache-dependency-path: template-base/package-lock.json
       - name: install
@@ -66,7 +95,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: "22"
       - run: npm install --no-audit --no-fund
       - name: sync-skills check
         run: node scripts/sync-skills.mjs --check
@@ -84,7 +113,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: "22"
       - run: npm install --legacy-peer-deps --no-audit --no-fund
       - name: audit (high)
         run: npm audit --audit-level=high --omit=dev
