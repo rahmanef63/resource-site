@@ -27,6 +27,13 @@ export interface RrJsonState {
   slicesInstalled?: string[];
   /** Convex table names already in target schema. */
   convexTablesExisting?: string[];
+  /**
+   * When `true` (default), a desired slug with no registered contract is
+   * surfaced as an `uncontracted` warning and accepted with a `note`. When
+   * `false` (e.g. `--strict`), it becomes a blocker `missing-dep`. Useful for
+   * gradual migrations where most slices are still un-contracted.
+   */
+  allowUnknownSlices?: boolean;
 }
 
 /** Input bundle for {@link compose}. */
@@ -46,16 +53,24 @@ export interface ComposeRequest {
  *
  * - `auth-mismatch` — slice requires auth X, target has Y. **blocker**.
  * - `table-collision` — same table declared by 2 candidates, OR slice
- *   declares a table already in `state.convexTablesExisting`. **blocker**.
+ *   declares a table already in `state.convexTablesExisting`. **blocker**
+ *   (between two new candidates → arbitrated, not reject-both).
  * - `rbac-collision` — 2 candidates declare same RBAC permission.
  *   **warning** — operator can decide if sharing is OK.
  * - `missing-dep` — slice declares `requires.deps[X]` but X is neither
- *   in the candidate set nor in `state.slicesInstalled`; ALSO emitted
- *   for desired slugs whose contract is unknown. **blocker**.
+ *   in the candidate set nor in `state.slicesInstalled`. **blocker**.
+ *   ALSO emitted for desired slugs whose contract is unknown **only in
+ *   strict mode** (`state.allowUnknownSlices === false`).
  * - `env-missing` — `requires.env[]` ⊄ `state.envExisting`. **warning**.
  * - `explicit-conflict` — slice's `conflicts: ["<other>:<key>.<value>"]`
  *   matched `<other>`'s `provides.<key>` when both are in the candidate
- *   set. **blocker**.
+ *   set. **blocker** (arbitrated, not reject-both).
+ * - `uncontracted` — desired slug had no registered contract while
+ *   `state.allowUnknownSlices` was true. **warning** — the slice is
+ *   accepted but its surface is not inspected.
+ * - `both-installed-conflict` — an explicit-conflict / table-collision
+ *   surfaced between two slices BOTH already in `state.slicesInstalled`.
+ *   **warning** — neither is dropped, operator is told to clean up.
  */
 export type ConflictType =
   | "auth-mismatch"
@@ -63,7 +78,9 @@ export type ConflictType =
   | "rbac-collision"
   | "missing-dep"
   | "env-missing"
-  | "explicit-conflict";
+  | "explicit-conflict"
+  | "uncontracted"
+  | "both-installed-conflict";
 
 /** A single conflict finding, surfaced in {@link ComposeResult.conflicts}. */
 export interface Conflict {
@@ -81,12 +98,27 @@ export interface Conflict {
   severity: "blocker" | "warning";
 }
 
+/**
+ * A single arbitration decision — when two candidates collide the solver
+ * ranks them by "most dependers wins" and drops the loser.
+ */
+export interface Arbitration {
+  /** The conflict that triggered the arbitration. */
+  conflict: Conflict;
+  /** Slug that survived. */
+  winner: string;
+  /** Slug that was dropped. */
+  loser: string;
+  /** Why this side won (dep-count + tie-break note). */
+  reason: string;
+}
+
 /** Output bundle from {@link compose}. */
 export interface ComposeResult {
   /** Slugs the solver would install (in BFS-discovery order). */
   accepted: string[];
   /** Slugs the solver rejected, with the reasons attached. */
-  rejected: { slug: string; reasons: Conflict[] }[];
+  rejected: { slug: string; reasons: Conflict[]; note?: string }[];
   /** All conflicts surfaced, including warning-level. */
   conflicts: Conflict[];
   /** Union of `requires.env` from accepted slices not in `state.envExisting`. */
@@ -97,6 +129,17 @@ export interface ComposeResult {
   tablesAdded: { slug: string; tables: string[] }[];
   /** Human-readable trace of every decision the solver made. */
   proof: string[];
+  /**
+   * Conflict arbitration outcomes — populated when two new candidates collide
+   * and the solver picks a winner via dep-count ranking. Omitted when no such
+   * arbitration was needed.
+   */
+  arbitrations?: Arbitration[];
+  /**
+   * Per-slice notes (e.g. "uncontracted", "both-installed-conflict") attached
+   * to the corresponding `accepted` slug. Keyed by slug.
+   */
+  notes?: Record<string, string>;
 }
 
 /**
@@ -113,18 +156,22 @@ export function loadAllContracts(
  * Greedy compose solver. Pure — no I/O. Returns a fresh {@link ComposeResult};
  * does not mutate `req` or `contracts`.
  *
- * Algorithm: BFS resolve transitive deps (capped depth 16; throws on cycle),
- * then run conflict checks against state + sibling candidates. When a blocker
- * pair appears, both candidates are rejected unless one is already in
- * `state.slicesInstalled` (in which case the installed slice wins and only
- * the new one is rejected).
+ * Algorithm: BFS resolve transitive deps (visited-set; throws on cycle with
+ * the full path in the message), then run conflict checks against state +
+ * sibling candidates. When a `table-collision` or `explicit-conflict` between
+ * two candidates is detected, the solver ranks them by dependers-count and
+ * drops the loser only (records an `Arbitration` entry). Slugs already in
+ * `state.slicesInstalled` win against new candidates; if BOTH sides of a
+ * conflict are installed, neither is dropped — instead a `both-installed-
+ * conflict` warning is surfaced.
  *
- * Limitations of v1: greedy reject-both is not optimal — a smarter version
- * would rank candidates by "most-dependers-first" and drop the loser only.
- * For now this is acceptable; the operator can re-run with a smaller
- * `desired` set after seeing the proof.
+ * Un-contracted slugs in `desired` are accepted with an `uncontracted`
+ * warning when `state.allowUnknownSlices` is true (the default). Set it to
+ * false (or pass `--strict` from the CLI) to escalate them to blocker
+ * `missing-dep`.
  *
- * @throws Error when a dep cycle is detected (message includes "cycle").
+ * @throws Error when a dep cycle is detected — message includes the full
+ *   cycle path, e.g. `"dependency cycle detected: a → b → c → a"`.
  */
 export function compose(
   req: ComposeRequest,

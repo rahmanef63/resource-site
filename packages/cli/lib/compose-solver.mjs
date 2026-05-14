@@ -1,10 +1,13 @@
 // compose-solver.mjs — Phase B of the Slice Composition Compiler.
 //
 // Given a target project's rr.json state plus a list of desired slice slugs,
-// computes a compatible subset (or rejects with detailed conflicts). The
-// solver is intentionally greedy + conflict-driven (not full CSP) — when a
-// blocker pair is hit, both sides are rejected unless one is already
-// installed (then the installed slice wins).
+// computes a compatible subset (or rejects with detailed conflicts).
+//
+// v2 highlights (Track I of Wave N+1):
+//   - rank-by-dependers conflict arbitration (was: reject-both).
+//   - uncontracted slugs accepted with warning by default; --strict escalates.
+//   - cycle detection prints the real path (no depth-cap heuristic).
+//   - new ConflictTypes: `uncontracted`, `both-installed-conflict`.
 //
 // Public API + types live in compose-solver.d.ts.
 //
@@ -96,8 +99,6 @@ function loadContractFile(repoRoot, filePath) {
 // Public — compose
 // ---------------------------------------------------------------------------
 
-const MAX_DEP_DEPTH = 16;
-
 /**
  * Pure solver. See compose-solver.d.ts for the full type contract.
  *
@@ -109,6 +110,7 @@ export function compose(req, contracts) {
   const state = req?.state ?? {};
   const desired = Array.isArray(req?.desired) ? [...req.desired] : [];
   const resolveDeps = req?.resolveDeps !== false; // default true
+  const allowUnknownSlices = state.allowUnknownSlices !== false; // default true
 
   const installed = new Set(state.slicesInstalled ?? []);
   const envExisting = new Set(state.envExisting ?? []);
@@ -121,6 +123,12 @@ export function compose(req, contracts) {
   const allConflicts = [];
   /** @type {Map<string, import("./compose-solver").Conflict[]>} */
   const blockersBySlug = new Map();
+  /** @type {import("./compose-solver").Arbitration[]} */
+  const arbitrations = [];
+  /** @type {Map<string, string>} */
+  const notes = new Map();
+  /** @type {Set<string>} */
+  const uncontractedDesired = new Set();
 
   // Helper: record a conflict and (if blocker) attribute it to a slug.
   function record(conflict, attributeTo = conflict.slug) {
@@ -139,21 +147,39 @@ export function compose(req, contracts) {
   /** @type {Set<string>} */
   const userTyped = new Set(desired);
 
-  // First, fold in each desired slug. Unknown contracts are blocker-rejected.
+  // First, fold in each desired slug. Unknown contracts are blocker-rejected
+  // (strict mode) or warning-accepted (default, `allowUnknownSlices: true`).
   for (const slug of desired) {
     if (candidateSet.has(slug)) continue;
     const contract = contracts.get(slug);
     if (!contract) {
-      record(
-        {
-          type: "missing-dep",
+      if (allowUnknownSlices) {
+        record(
+          {
+            type: "uncontracted",
+            slug,
+            detail: `Slice "${slug}" has no registered slice.contract.ts — accepted under allowUnknownSlices, but conflict checks are skipped for it.`,
+            severity: "warning",
+          },
           slug,
-          detail: `Contract not found for "${slug}" — no slice.contract.ts registered.`,
-          severity: "blocker",
-        },
-        slug,
-      );
-      proof.push(`- ${slug}: rejected (no contract found)`);
+        );
+        uncontractedDesired.add(slug);
+        candidateSet.add(slug);
+        candidateOrder.push(slug);
+        notes.set(slug, "uncontracted");
+        proof.push(`! ${slug}: accepted as uncontracted (no slice.contract.ts; skipping conflict checks)`);
+      } else {
+        record(
+          {
+            type: "missing-dep",
+            slug,
+            detail: `Contract not found for "${slug}" — no slice.contract.ts registered (strict mode).`,
+            severity: "blocker",
+          },
+          slug,
+        );
+        proof.push(`- ${slug}: rejected (no contract found, strict mode)`);
+      }
       continue;
     }
     candidateSet.add(slug);
@@ -161,26 +187,22 @@ export function compose(req, contracts) {
   }
 
   if (resolveDeps) {
-    // BFS over requires.deps[]. We track depth to catch cycles.
-    /** @type {Array<{ slug: string; depth: number; chain: string[] }>} */
-    const queue = candidateOrder.map((slug) => ({ slug, depth: 0, chain: [slug] }));
+    // BFS over requires.deps[]. We use a proper visited-path map per starting
+    // root so we can print the full cycle when one is encountered.
+    /** @type {Array<{ slug: string; chain: string[] }>} */
+    const queue = candidateOrder
+      .filter((s) => contracts.has(s))
+      .map((slug) => ({ slug, chain: [slug] }));
     while (queue.length > 0) {
-      const { slug, depth, chain } = queue.shift();
-      if (depth > MAX_DEP_DEPTH) {
-        throw new Error(
-          `compose: dep cycle detected (depth > ${MAX_DEP_DEPTH}) along ${chain.join(" -> ")}`,
-        );
-      }
+      const { slug, chain } = queue.shift();
       const contract = contracts.get(slug);
       const deps = contract?.requires?.deps ?? [];
       for (const dep of deps) {
         if (chain.includes(dep)) {
-          throw new Error(
-            `compose: dep cycle detected — ${[...chain, dep].join(" -> ")}`,
-          );
+          const cyclePath = [...chain.slice(chain.indexOf(dep)), dep].join(" → ");
+          throw new Error(`dependency cycle detected: ${cyclePath}`);
         }
         if (installed.has(dep)) {
-          // Already installed — no need to recurse.
           continue;
         }
         if (candidateSet.has(dep)) continue;
@@ -202,11 +224,10 @@ export function compose(req, contracts) {
         candidateSet.add(dep);
         candidateOrder.push(dep);
         proof.push(`+ ${dep}: pulled in as transitive dep of ${slug}`);
-        queue.push({ slug: dep, depth: depth + 1, chain: [...chain, dep] });
+        queue.push({ slug: dep, chain: [...chain, dep] });
       }
     }
   } else {
-    // --no-deps: surface unresolved deps as blockers without recursing.
     for (const slug of candidateOrder) {
       const deps = contracts.get(slug)?.requires?.deps ?? [];
       for (const dep of deps) {
@@ -225,12 +246,28 @@ export function compose(req, contracts) {
     }
   }
 
+  // Build a dependers-count map: for each candidate, count how many OTHER
+  // candidates list it in their `requires.deps[]`. Used for arbitration
+  // ranking in Step 2.
+  /** @type {Map<string, number>} */
+  const dependersCount = new Map();
+  for (const slug of candidateOrder) dependersCount.set(slug, 0);
+  for (const slug of candidateOrder) {
+    const c = contracts.get(slug);
+    if (!c) continue;
+    for (const d of c.requires?.deps ?? []) {
+      if (dependersCount.has(d)) {
+        dependersCount.set(d, (dependersCount.get(d) ?? 0) + 1);
+      }
+    }
+  }
+
   // ── Step 2: conflict checks. ────────────────────────────────────────────
   for (const slug of candidateOrder) {
+    if (uncontractedDesired.has(slug)) continue;
     const contract = contracts.get(slug);
-    if (!contract) continue; // already rejected at step 1
+    if (!contract) continue;
 
-    // 2a. auth-mismatch vs target state.
     const wantAuth = contract.requires?.auth;
     if (wantAuth && state.auth && wantAuth !== state.auth && wantAuth !== "none") {
       record(
@@ -244,7 +281,6 @@ export function compose(req, contracts) {
       );
     }
 
-    // 2b. table-collision vs target state.
     const provTables = contract.provides?.tables ?? [];
     for (const t of provTables) {
       if (tablesExisting.has(t)) {
@@ -260,7 +296,6 @@ export function compose(req, contracts) {
       }
     }
 
-    // 2c. env-missing vs target state — warning only.
     const reqEnv = contract.requires?.env ?? [];
     for (const e of reqEnv) {
       if (!envExisting.has(e)) {
@@ -277,17 +312,84 @@ export function compose(req, contracts) {
     }
   }
 
-  // 2d. pairwise checks across candidates.
   // Build provides lookup once.
   /** @type {Map<string, { tables: Set<string>; rbac: Set<string> }>} */
   const lookup = new Map();
   for (const slug of candidateOrder) {
+    if (uncontractedDesired.has(slug)) continue;
     const c = contracts.get(slug);
     if (!c) continue;
     lookup.set(slug, {
       tables: new Set(c.provides?.tables ?? []),
       rbac: new Set(c.requires?.rbac ?? []),
     });
+  }
+
+  /**
+   * Pair-conflict arbitration helper.
+   *
+   * @param {string} a
+   * @param {string} b
+   * @param {import("./compose-solver").ConflictType} type
+   * @param {string} detailA
+   * @param {string} detailB
+   */
+  function arbitratePair(a, b, type, detailA, detailB) {
+    const ca = /** @type {import("./compose-solver").Conflict} */ ({
+      type, slug: a, withSlug: b, detail: detailA, severity: "blocker",
+    });
+    const cb = /** @type {import("./compose-solver").Conflict} */ ({
+      type, slug: b, withSlug: a, detail: detailB, severity: "blocker",
+    });
+    const bothInstalled = installed.has(a) && installed.has(b);
+    if (bothInstalled) {
+      allConflicts.push({ ...ca, severity: "warning", type: "both-installed-conflict" });
+      allConflicts.push({ ...cb, severity: "warning", type: "both-installed-conflict" });
+      notes.set(a, notes.get(a) ?? "both-installed-conflict");
+      notes.set(b, notes.get(b) ?? "both-installed-conflict");
+      proof.push(`! ${a} ↔ ${b}: both already installed — conflict surfaced as warning, neither dropped`);
+      return;
+    }
+    if (installed.has(a) && !installed.has(b)) {
+      record(cb, b);
+      arbitrations.push({
+        conflict: cb, winner: a, loser: b,
+        reason: `"${a}" already installed — installed slice wins`,
+      });
+      proof.push(`- ${b}: arbitrated against ${a} (installed wins)`);
+      return;
+    }
+    if (installed.has(b) && !installed.has(a)) {
+      record(ca, a);
+      arbitrations.push({
+        conflict: ca, winner: b, loser: a,
+        reason: `"${b}" already installed — installed slice wins`,
+      });
+      proof.push(`- ${a}: arbitrated against ${b} (installed wins)`);
+      return;
+    }
+    const depA = dependersCount.get(a) ?? 0;
+    const depB = dependersCount.get(b) ?? 0;
+    let winner, loser, conflictForLoser, reason;
+    if (depA !== depB) {
+      if (depA > depB) {
+        winner = a; loser = b; conflictForLoser = cb;
+        reason = `"${a}" has ${depA} dependers vs "${b}" with ${depB} — most-dependers wins`;
+      } else {
+        winner = b; loser = a; conflictForLoser = ca;
+        reason = `"${b}" has ${depB} dependers vs "${a}" with ${depA} — most-dependers wins`;
+      }
+    } else {
+      const later = a > b ? a : b;
+      const earlier = a > b ? b : a;
+      winner = earlier;
+      loser = later;
+      conflictForLoser = later === a ? ca : cb;
+      reason = `tie at ${depA} dependers — alphabetical tiebreak drops "${later}"`;
+    }
+    record(conflictForLoser, loser);
+    arbitrations.push({ conflict: conflictForLoser, winner, loser, reason });
+    proof.push(`- ${loser}: arbitrated against ${winner} (${reason})`);
   }
 
   for (let i = 0; i < candidateOrder.length; i++) {
@@ -298,34 +400,12 @@ export function compose(req, contracts) {
       const lb = lookup.get(b);
       if (!la || !lb) continue;
 
-      // table-collision between two candidates.
-      for (const t of la.tables) {
-        if (lb.tables.has(t)) {
-          // Mutual blocker — attribute to BOTH (symmetric detail string).
-          const detail = `Slices "${a}" and "${b}" both declare table "${t}".`;
-          record(
-            {
-              type: "table-collision",
-              slug: a,
-              withSlug: b,
-              detail,
-              severity: "blocker",
-            },
-            a,
-          );
-          record(
-            {
-              type: "table-collision",
-              slug: b,
-              withSlug: a,
-              detail,
-              severity: "blocker",
-            },
-            b,
-          );
-        }
+      const tableHits = [];
+      for (const t of la.tables) if (lb.tables.has(t)) tableHits.push(t);
+      if (tableHits.length > 0) {
+        const detail = `Slices "${a}" and "${b}" both declare table${tableHits.length > 1 ? "s" : ""} ${tableHits.map((t) => `"${t}"`).join(", ")}.`;
+        arbitratePair(a, b, "table-collision", detail, detail);
       }
-      // rbac-collision — warning only.
       for (const p of la.rbac) {
         if (lb.rbac.has(p)) {
           allConflicts.push({
@@ -342,6 +422,7 @@ export function compose(req, contracts) {
 
   // 2e. explicit-conflict — slice declares conflicts: ["<other>:<key>.<value>"].
   for (const slug of candidateOrder) {
+    if (uncontractedDesired.has(slug)) continue;
     const c = contracts.get(slug);
     if (!c) continue;
     const conflicts = c.conflicts ?? [];
@@ -352,49 +433,31 @@ export function compose(req, contracts) {
       const otherSlug = cf.slice(0, colon);
       const key = cf.slice(colon + 1, dot);
       const value = cf.slice(dot + 1);
-      if (!candidateSet.has(otherSlug)) continue; // dormant — other not in compose set
+      if (!candidateSet.has(otherSlug)) continue;
+      if (uncontractedDesired.has(otherSlug)) continue;
       const other = contracts.get(otherSlug);
       if (!other) continue;
       const provided = other.provides?.[key];
       if (Array.isArray(provided) && provided.includes(value)) {
-        const ca = {
-          type: /** @type {const} */ ("explicit-conflict"),
-          slug,
-          withSlug: otherSlug,
-          detail: `Slice "${slug}" declares explicit conflict with "${otherSlug}" on ${key}.${value}.`,
-          severity: /** @type {const} */ ("blocker"),
-        };
-        const cb = {
-          type: /** @type {const} */ ("explicit-conflict"),
-          slug: otherSlug,
-          withSlug: slug,
-          detail: `Slice "${otherSlug}" is the target of "${slug}"'s explicit conflict on ${key}.${value}.`,
-          severity: /** @type {const} */ ("blocker"),
-        };
-        record(ca, slug);
-        record(cb, otherSlug);
+        const detailA = `Slice "${slug}" declares explicit conflict with "${otherSlug}" on ${key}.${value}.`;
+        const detailB = `Slice "${otherSlug}" is the target of "${slug}"'s explicit conflict on ${key}.${value}.`;
+        arbitratePair(slug, otherSlug, "explicit-conflict", detailA, detailB);
       }
     }
   }
 
   // ── Step 3: decide accepted / rejected. ─────────────────────────────────
-  // Greedy rule: a candidate with any blocker is rejected UNLESS it's already
-  // in `state.slicesInstalled` — in which case the installed slice wins and
-  // we strip its blockers from peers (they keep their other-side blockers).
   /** @type {Set<string>} */
   const finalRejected = new Set();
   for (const [slug, blocks] of blockersBySlug) {
-    if (installed.has(slug)) {
-      // Installed wins — peers attribution stays; do not reject installed.
-      continue;
-    }
+    if (installed.has(slug)) continue;
     if (blocks.length > 0) finalRejected.add(slug);
   }
 
   // ── Step 4: assemble result. ────────────────────────────────────────────
   /** @type {string[]} */
   const accepted = [];
-  /** @type {{ slug: string; reasons: import("./compose-solver").Conflict[] }[]} */
+  /** @type {{ slug: string; reasons: import("./compose-solver").Conflict[]; note?: string }[]} */
   const rejected = [];
   /** @type {{ slug: string; tables: string[] }[]} */
   const tablesAdded = [];
@@ -404,8 +467,12 @@ export function compose(req, contracts) {
   for (const slug of candidateOrder) {
     const contract = contracts.get(slug);
     if (!contract) {
-      // Unknown desired slug — already produced a missing-dep blocker.
-      rejected.push({ slug, reasons: blockersBySlug.get(slug) ?? [] });
+      if (uncontractedDesired.has(slug)) {
+        accepted.push(slug);
+        proof.push(`+ ${slug}: accepted (uncontracted, no contract surface checked)`);
+      } else {
+        rejected.push({ slug, reasons: blockersBySlug.get(slug) ?? [] });
+      }
       continue;
     }
     if (finalRejected.has(slug)) {
@@ -424,7 +491,6 @@ export function compose(req, contracts) {
       if (!rbacExisting.has(p)) rbacToCreateSet.add(p);
     }
 
-    // Proof line: accepted with a quick recap of why it cleared the bar.
     const detail = [];
     if (contract.requires?.auth) detail.push(`auth=${contract.requires.auth}`);
     if (tables.length > 0) detail.push(`tables=${tables.join("+")}`);
@@ -433,15 +499,16 @@ export function compose(req, contracts) {
     proof.push(`+ ${slug}: accepted (${detail.join(", ")})`);
   }
 
-  // Re-handle desired slugs whose contract is missing (they were never put
-  // into candidateOrder, so the for-loop above didn't surface them in
-  // `rejected`).
+  // Re-handle desired slugs whose contract is missing AND strict-rejected.
   for (const slug of desired) {
     if (contracts.has(slug)) continue;
+    if (uncontractedDesired.has(slug)) continue;
     if (rejected.some((r) => r.slug === slug)) continue;
+    if (accepted.includes(slug)) continue;
     rejected.push({ slug, reasons: blockersBySlug.get(slug) ?? [] });
   }
 
+  const notesObj = notes.size > 0 ? Object.fromEntries(notes) : undefined;
   return {
     accepted,
     rejected,
@@ -450,5 +517,7 @@ export function compose(req, contracts) {
     rbacToCreate: [...rbacToCreateSet],
     tablesAdded,
     proof,
+    ...(arbitrations.length > 0 ? { arbitrations } : {}),
+    ...(notesObj ? { notes: notesObj } : {}),
   };
 }

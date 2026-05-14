@@ -69,8 +69,8 @@ describe("compose() — auth-mismatch", () => {
   });
 });
 
-describe("compose() — explicit-conflict", () => {
-  it("doku + midtrans collide on paymentOrders → both rejected", () => {
+describe("compose() — explicit-conflict (v2 arbitration)", () => {
+  it("doku + midtrans collide on paymentOrders → arbitration drops loser only", () => {
     const contracts = makeContracts([
       {
         id: "doku-payment",
@@ -96,18 +96,21 @@ describe("compose() — explicit-conflict", () => {
       { state: { auth: "convex" }, desired: ["doku-payment", "midtrans-payment"] },
       contracts,
     );
-    expect(result.accepted).toEqual([]);
-    const rejectedSlugs = result.rejected.map((r) => r.slug).sort();
-    expect(rejectedSlugs).toEqual(["doku-payment", "midtrans-payment"]);
+    // Equal dependers (0 each) → alphabetical tiebreak drops "midtrans-payment".
+    expect(result.accepted).toEqual(["doku-payment"]);
+    expect(result.rejected.map((r) => r.slug)).toEqual(["midtrans-payment"]);
     const explicit = result.conflicts.filter((c) => c.type === "explicit-conflict");
-    expect(explicit.length).toBeGreaterThanOrEqual(2); // mirrored attribution
+    expect(explicit.length).toBeGreaterThanOrEqual(1);
+    expect(result.arbitrations).toBeDefined();
+    expect(result.arbitrations[0].winner).toBe("doku-payment");
+    expect(result.arbitrations[0].loser).toBe("midtrans-payment");
   });
 });
 
 describe("compose() — missing dep", () => {
-  it("desired contract not found → blocker missing-dep", () => {
+  it("desired contract not found (strict) → blocker missing-dep", () => {
     const result = compose(
-      { state: {}, desired: ["nonexistent"] },
+      { state: { allowUnknownSlices: false }, desired: ["nonexistent"] },
       makeContracts([]),
     );
     expect(result.accepted).toEqual([]);
@@ -267,5 +270,214 @@ describe("compose() — rbacToCreate aggregation", () => {
     );
     expect(result.accepted).toEqual(["convex-auth"]);
     expect(result.rbacToCreate).toEqual(["auth.sign-out"]);
+  });
+});
+
+// ─── v2 — arbitration by dependers ──────────────────────────────────────────
+
+describe("compose() — arbitration: most-dependers wins", () => {
+  it("two slices conflict, A has more dependers than B → A accepted, B rejected", () => {
+    // a is pulled in as transitive dep by `client1` and `client2`; b has zero
+    // dependers. They conflict on a shared table → a wins.
+    const contracts = makeContracts([
+      {
+        id: "a",
+        version: "0.1.0",
+        requires: { auth: "convex" },
+        provides: { tables: ["shared_table"] },
+      },
+      {
+        id: "b",
+        version: "0.1.0",
+        requires: { auth: "convex" },
+        provides: { tables: ["shared_table"] },
+      },
+      {
+        id: "client1",
+        version: "0.1.0",
+        requires: { auth: "convex", deps: ["a"] },
+        provides: {},
+      },
+      {
+        id: "client2",
+        version: "0.1.0",
+        requires: { auth: "convex", deps: ["a"] },
+        provides: {},
+      },
+    ]);
+    const result = compose(
+      { state: { auth: "convex" }, desired: ["a", "b", "client1", "client2"] },
+      contracts,
+    );
+    expect(result.accepted).toContain("a");
+    expect(result.accepted).toContain("client1");
+    expect(result.accepted).toContain("client2");
+    expect(result.rejected.map((r) => r.slug)).toEqual(["b"]);
+    expect(result.arbitrations).toBeDefined();
+    expect(result.arbitrations[0].winner).toBe("a");
+    expect(result.arbitrations[0].loser).toBe("b");
+    expect(result.arbitrations[0].reason).toMatch(/dependers/);
+  });
+});
+
+describe("compose() — arbitration: alphabetical tiebreak", () => {
+  it("equal dependers → drop lex-later slug", () => {
+    const contracts = makeContracts([
+      {
+        id: "alpha",
+        version: "0.1.0",
+        requires: { auth: "convex" },
+        provides: { tables: ["t"] },
+      },
+      {
+        id: "zeta",
+        version: "0.1.0",
+        requires: { auth: "convex" },
+        provides: { tables: ["t"] },
+      },
+    ]);
+    const result = compose(
+      { state: { auth: "convex" }, desired: ["alpha", "zeta"] },
+      contracts,
+    );
+    expect(result.accepted).toEqual(["alpha"]);
+    expect(result.rejected.map((r) => r.slug)).toEqual(["zeta"]);
+    expect(result.arbitrations[0].reason).toMatch(/alphabetical/);
+  });
+});
+
+describe("compose() — arbitration: both installed", () => {
+  it("both slices already installed and in conflict → kept with warning, no arbitration drop", () => {
+    const contracts = makeContracts([
+      {
+        id: "a",
+        version: "0.1.0",
+        requires: { auth: "convex" },
+        provides: { tables: ["t"] },
+      },
+      {
+        id: "b",
+        version: "0.1.0",
+        requires: { auth: "convex" },
+        provides: { tables: ["t"] },
+      },
+    ]);
+    const result = compose(
+      {
+        state: { auth: "convex", slicesInstalled: ["a", "b"] },
+        desired: ["a", "b"],
+      },
+      contracts,
+    );
+    expect(result.accepted.sort()).toEqual(["a", "b"]);
+    expect(result.rejected).toEqual([]);
+    expect(result.arbitrations).toBeUndefined();
+    const both = result.conflicts.filter((c) => c.type === "both-installed-conflict");
+    expect(both.length).toBeGreaterThan(0);
+    expect(both[0].severity).toBe("warning");
+    expect(result.notes?.a).toBe("both-installed-conflict");
+    expect(result.notes?.b).toBe("both-installed-conflict");
+  });
+});
+
+// ─── v2 — uncontracted slices ───────────────────────────────────────────────
+
+describe("compose() — uncontracted slice (default allowUnknownSlices=true)", () => {
+  it("desired slug with no contract → accepted with uncontracted warning", () => {
+    const result = compose(
+      { state: {}, desired: ["nonexistent-slice"] },
+      makeContracts([]),
+    );
+    expect(result.accepted).toEqual(["nonexistent-slice"]);
+    expect(result.rejected).toEqual([]);
+    const warn = result.conflicts.find((c) => c.type === "uncontracted");
+    expect(warn).toBeDefined();
+    expect(warn.severity).toBe("warning");
+    expect(result.notes?.["nonexistent-slice"]).toBe("uncontracted");
+  });
+
+  it("strict mode (allowUnknownSlices: false) flips uncontracted to blocker missing-dep", () => {
+    const result = compose(
+      { state: { allowUnknownSlices: false }, desired: ["nonexistent-slice"] },
+      makeContracts([]),
+    );
+    expect(result.accepted).toEqual([]);
+    expect(result.rejected.map((r) => r.slug)).toEqual(["nonexistent-slice"]);
+    const blocker = result.conflicts.find((c) => c.type === "missing-dep");
+    expect(blocker?.severity).toBe("blocker");
+  });
+});
+
+// ─── v2 — cycle path printing ───────────────────────────────────────────────
+
+describe("compose() — cycle detection prints full path", () => {
+  it("a → b → c → a throws with full cycle in message", () => {
+    const contracts = makeContracts([
+      { id: "a", version: "0.1.0", requires: { deps: ["b"] }, provides: {} },
+      { id: "b", version: "0.1.0", requires: { deps: ["c"] }, provides: {} },
+      { id: "c", version: "0.1.0", requires: { deps: ["a"] }, provides: {} },
+    ]);
+    expect(() => compose({ state: {}, desired: ["a"] }, contracts)).toThrowError(
+      /dependency cycle detected: a → b → c → a/,
+    );
+  });
+});
+
+// ─── v2 — strict mode escalates warnings ────────────────────────────────────
+
+describe("compose() — strict mode flips env-missing warning to blocker", () => {
+  // The solver itself doesn't auto-elevate severity (that's a CLI concern),
+  // but strict-mode state propagation must still surface env-missing so the
+  // CLI wrapper can re-classify. The CLI test (hand-test) covers elevation.
+  it("strict mode still surfaces env-missing — CLI elevates to blocker", () => {
+    const contracts = makeContracts([
+      {
+        id: "doku",
+        version: "0.1.0",
+        requires: { auth: "convex", env: ["DOKU_CLIENT_ID"] },
+        provides: {},
+      },
+    ]);
+    const result = compose(
+      {
+        state: { auth: "convex", envExisting: [], allowUnknownSlices: false },
+        desired: ["doku"],
+      },
+      contracts,
+    );
+    // The slice itself has a registered contract — strict doesn't block it.
+    expect(result.accepted).toEqual(["doku"]);
+    // env-missing is still a warning at the solver layer; CLI will elevate it
+    // when --strict is set.
+    const envWarn = result.conflicts.find((c) => c.type === "env-missing");
+    expect(envWarn).toBeDefined();
+    expect(envWarn.severity).toBe("warning");
+  });
+});
+
+// ─── v2 — pair-collision arbitration on plain table-collision ───────────────
+
+describe("compose() — table-collision arbitration vs reject-both", () => {
+  it("two new candidates with shared table → loser dropped, winner kept", () => {
+    const contracts = makeContracts([
+      {
+        id: "a",
+        version: "0.1.0",
+        requires: { auth: "convex" },
+        provides: { tables: ["shared"] },
+      },
+      {
+        id: "b",
+        version: "0.1.0",
+        requires: { auth: "convex" },
+        provides: { tables: ["shared"] },
+      },
+    ]);
+    const result = compose(
+      { state: { auth: "convex" }, desired: ["a", "b"] },
+      contracts,
+    );
+    expect(result.accepted).toEqual(["a"]);
+    expect(result.rejected.map((r) => r.slug)).toEqual(["b"]);
   });
 });
