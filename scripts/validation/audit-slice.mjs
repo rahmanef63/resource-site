@@ -46,6 +46,7 @@ const ALLOWED_IMPORT_PREFIXES = [
 
 const slices = discoverSlices();
 const tableNames = new Map(); // name → owning slug
+const schemasSeen = new Set(); // schemaPath → first slice that audited it (co-located providers share schemas)
 
 const errors = [];
 const warnings = [];
@@ -85,15 +86,23 @@ for (const slice of slices) {
   }
 
   // 3. schema clash
-  const tables = extractTables(slice);
-  for (const t of tables) {
-    if (tableNames.has(t)) {
-      errors.push(
-        `[${slice.folder}] convex table "${t}" already declared by slice "${tableNames.get(t)}"`,
-      );
-    } else {
-      tableNames.set(t, slice.folder);
+  // Co-located provider slices (e.g. doku-payment + midtrans-payment) share one
+  // schema file under convex/features/<group>/. Skip the collision check when a
+  // slice points at a schemaPath that was already audited by a sibling — the
+  // tables are the SAME declarations, not separate ones.
+  const sharedSchema = slice.convexSchemaPath && schemasSeen.has(slice.convexSchemaPath);
+  if (!sharedSchema) {
+    const tables = extractTables(slice);
+    for (const t of tables) {
+      if (tableNames.has(t)) {
+        errors.push(
+          `[${slice.folder}] convex table "${t}" already declared by slice "${tableNames.get(t)}"`,
+        );
+      } else {
+        tableNames.set(t, slice.folder);
+      }
     }
+    if (slice.convexSchemaPath) schemasSeen.add(slice.convexSchemaPath);
   }
 
   // 4. config.ts agreement
@@ -155,6 +164,7 @@ function discoverSlices() {
       categoryFromJson: meta.category,
       configExport: meta.frontend?.configExport,
       tablesExport: meta.convex?.tablesExport,
+      convexSchemaPath: meta.convex?.schemaPath,
       convexRootPaths: meta.convex?.rootPaths ?? [],
     });
   }
