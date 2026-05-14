@@ -10,7 +10,7 @@ export default defineConfig({
     include: [
       "shared/**/*.test.{ts,tsx}",
       "lib/**/*.test.{ts,tsx}",
-      "packages/cli/lib/**/*.test.mjs",
+      "packages/cli/lib/**/*.test.{mjs,ts}",
     ],
     setupFiles: [],
   },
