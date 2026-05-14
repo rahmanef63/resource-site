@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   cacheComponents: true,
+  // Pin a stable deploymentId so rolling deploys keep Server Action / RSC
+  // payloads valid across instances. Override via DEPLOYMENT_ID env in CI.
+  deploymentId: process.env.DEPLOYMENT_ID,
   experimental: {
     optimizePackageImports: [
       "lucide-react",

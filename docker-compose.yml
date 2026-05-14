@@ -47,6 +47,10 @@ services:
     # accidentally exposing 3210 directly if proxy/firewall mis-configured.
     ports:
       - "127.0.0.1:3210:3210"
+    # DATABASE: default is SQLite at /convex/data (durable via convex_data volume).
+    # For production multi-instance or high-throughput, set POSTGRES_URL or
+    # MYSQL_URL via Dokploy env override; the backend auto-switches on boot.
+    # Example: POSTGRES_URL=postgres://user:pass@postgres:5432/convex
     volumes:
       - convex_data:/convex/data
     # /version is the canonical readiness probe. If backend is wedged

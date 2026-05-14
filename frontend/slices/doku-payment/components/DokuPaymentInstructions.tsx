@@ -11,6 +11,7 @@
  */
 
 import * as React from "react";
+import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { groupVa, timeLeft } from "../lib/format";
@@ -69,7 +70,12 @@ export function DokuPaymentInstructions({ channel, instructions, expiresAt }: Pr
         <EwalletBlock deeplink={instructions.deeplink} webUrl={instructions.webUrl} />
       )}
       {instructions.paymentUrl && !instructions.deeplink && !instructions.vaNumber && (
-        <a href={instructions.paymentUrl} className="underline">
+        <a
+          href={instructions.paymentUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline"
+        >
           Lanjut ke halaman pembayaran →
         </a>
       )}
@@ -118,8 +124,14 @@ function QrisBlock({ imageUrl, qrString }: { imageUrl?: string; qrString?: strin
   return (
     <div className="flex flex-col items-center gap-2">
       {imageUrl ? (
-        // eslint-disable-next-line @next/next/no-img-element -- remote QRIS URL, dims unknown at SSR
-        <img src={imageUrl} alt="QRIS" className="h-56 w-56 rounded-md border" />
+        <Image
+          src={imageUrl}
+          alt="QRIS"
+          width={224}
+          height={224}
+          unoptimized
+          className="h-56 w-56 rounded-md border"
+        />
       ) : (
         <pre className="max-w-full overflow-x-auto rounded-md border bg-muted p-3 text-[10px]">
           {qrString}
@@ -137,7 +149,9 @@ function EwalletBlock({ deeplink, webUrl }: { deeplink?: string; webUrl?: string
     <div className="flex flex-col gap-2">
       {deeplink && (
         <Button asChild>
-          <a href={deeplink}>Buka aplikasi e-Wallet</a>
+          <a href={deeplink} target="_blank" rel="noopener noreferrer">
+            Buka aplikasi e-Wallet
+          </a>
         </Button>
       )}
       {webUrl && (
