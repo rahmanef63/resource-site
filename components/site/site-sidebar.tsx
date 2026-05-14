@@ -197,10 +197,10 @@ export function SiteSidebar() {
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <a href="/llms.txt" target="_blank" rel="noopener noreferrer">
+              <Link href="/llms.txt" target="_blank" rel="noopener noreferrer">
                 <BookOpen className="size-4" />
                 <span>llms.txt</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

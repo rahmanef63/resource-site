@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { IconBrandGithub as Github } from "@tabler/icons-react";
@@ -25,17 +26,21 @@ function BrandMark({ className }: { className?: string }) {
   return (
     <>
       {/* white mark on dark theme */}
-      <img
+      <Image
         src="/brand-assets/logo-mark-fill-white.svg"
         alt=""
         aria-hidden
+        width={24}
+        height={24}
         className={cn("hidden size-6 dark:block", className)}
       />
       {/* black mark on light theme */}
-      <img
+      <Image
         src="/brand-assets/logo-mark-fill-black.svg"
         alt=""
         aria-hidden
+        width={24}
+        height={24}
         className={cn("size-6 dark:hidden", className)}
       />
     </>
