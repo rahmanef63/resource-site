@@ -97,7 +97,7 @@ export function SiteSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === "/templates"}>
                   <Link href="/templates">
-                    <span className="font-medium">All website templates</span>
+                    <span className="font-semibold">All website templates</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -111,7 +111,7 @@ export function SiteSidebar() {
                       size="sm"
                     >
                       <Link href={`/layouts/${l.slug}`}>
-                        <span className="truncate text-sm">{l.title}</span>
+                        <span className="truncate text-xs text-muted-foreground/80 group-data-[active=true]/menu-button:text-foreground">{l.title}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -129,7 +129,7 @@ export function SiteSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === "/layouts"}>
                   <Link href="/layouts">
-                    <span className="font-medium">All layouts</span>
+                    <span className="font-semibold">All layouts</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -143,7 +143,7 @@ export function SiteSidebar() {
                       size="sm"
                     >
                       <Link href={`/layouts/${l.slug}`}>
-                        <span className="truncate text-sm">{l.title}</span>
+                        <span className="truncate text-xs text-muted-foreground/80 group-data-[active=true]/menu-button:text-foreground">{l.title}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -163,7 +163,7 @@ export function SiteSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === "/slices"}>
                   <Link href="/slices">
-                    <span className="font-medium">All slices</span>
+                    <span className="font-semibold">All slices</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -175,7 +175,7 @@ export function SiteSidebar() {
                     size="sm"
                   >
                     <Link href={`/slices/${s.slug}`}>
-                      <span className="truncate text-sm">{s.title}</span>
+                      <span className="truncate text-xs text-muted-foreground/80 group-data-[active=true]/menu-button:text-foreground">{s.title}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
