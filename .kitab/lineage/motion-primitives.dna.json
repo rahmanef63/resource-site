@@ -1,0 +1,41 @@
+{
+  "id": "motion-primitives",
+  "created_at": "2026-04-28T00:00:00.000Z",
+  "lineage": [
+    {
+      "from": "rahmanef.com:frontend/shared/ui/marquee",
+      "to": "kitab:0.1.0",
+      "at": "2026-04-28T13:00:00.000Z",
+      "transforms": ["alias-rewrite", "framer-to-motion-rename"],
+      "actor": "rr-send"
+    },
+    {
+      "from": "rahmanef.com:frontend/shared/ui/kinetic-heading",
+      "to": "kitab:0.1.0",
+      "at": "2026-04-28T13:02:00.000Z",
+      "transforms": ["alias-rewrite"],
+      "actor": "rr-send"
+    },
+    {
+      "from": "rahmanef.com:frontend/shared/ui/{magnetic,cursor-spotlight,stat-counter,reading-progress,grain,lightbox}",
+      "to": "kitab:0.1.0",
+      "at": "2026-04-28T13:08:00.000Z",
+      "transforms": ["alias-rewrite", "facade-bundle"],
+      "actor": "rr-send"
+    }
+  ],
+  "consumers": {
+    "rahmanef": {
+      "adopted_at": "2026-05-13T10:15:00.000Z",
+      "version": "0.1.0",
+      "drift_score": 3,
+      "last_synced_at": "2026-05-13T10:15:00.000Z"
+    },
+    "cescadesigns": {
+      "adopted_at": "2026-05-14T08:00:00.000Z",
+      "version": "0.1.0",
+      "drift_score": 41,
+      "last_synced_at": "2026-05-14T08:00:00.000Z"
+    }
+  }
+}
