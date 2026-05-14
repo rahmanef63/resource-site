@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# pre-commit hook — Track J / local-first quality gate.
+#
+# Runs the two fastest authoritative checks before letting a commit land:
+#   1. npm run typecheck           — tsc --noEmit, ~5-10s incremental
+#   2. npm run validate:contracts:check — Phase A contract validator
+#
+# Heavier checks (lint, vitest, build, audit-bp) run only in CI to keep the
+# local commit loop fast.
+#
+# Bypass: `git commit --no-verify`
+#
+# Activation: `npm install` runs the package.json `prepare` script which
+# points core.hooksPath at this directory. To activate manually:
+#   git config core.hooksPath .githooks
+
+set -e
+
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+
+echo "pre-commit: typecheck + contracts:check"
+
+if ! npm run --silent typecheck; then
+  echo ""
+  echo "pre-commit: typecheck FAILED — fix tsc errors or bypass with --no-verify" >&2
+  exit 1
+fi
+
+if ! npm run --silent validate:contracts:check; then
+  echo ""
+  echo "pre-commit: contract validator FAILED — fix slice.contract.ts or bypass with --no-verify" >&2
+  exit 1
+fi
+
+echo "pre-commit: ok"
+exit 0
