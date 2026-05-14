@@ -2,6 +2,81 @@
 
 A slice is a portable vertical feature unit. One folder, copy-paste anywhere it compiles. See [`slice-architecture.md`](./slice-architecture.md) for the full plan + contract.
 
+## Contract (preferred)
+
+Phase A of the **Slice Composition Compiler** introduces a typed DSL — `slice.contract.ts` — that replaces `slice.manifest.json` as the primary spec for new slices. The JSON manifest stays in the tree for back-compat with the npm CLI manifest pipeline, but new authoring should ship a contract.
+
+A contract is a single `.ts` file at the slice root:
+
+```ts
+// frontend/slices/<slug>/slice.contract.ts
+import { defineSliceContract } from "../../../packages/cli/lib/contract";
+
+export const contract = defineSliceContract({
+  id: "doku-payment",                 // kebab-case, must match folder name
+  version: "0.1.0",                   // semver
+  requires: {
+    auth: "convex",                   // "convex" | "clerk" | "next-auth" | "none"
+    rbac: ["payment.create-order"],   // "<domain>.<action>" template literal
+    env: ["DOKU_CLIENT_ID", "DOKU_SECRET_KEY"],
+    convex: {
+      prefix: "doku_",                // every table the slice owns starts with this
+      tables: ["doku_orders", "doku_webhook_events"],
+    },
+    deps: ["convex-auth"],            // other slice ids this depends on
+  },
+  provides: {
+    routes:     ["/checkout/doku"],
+    hooks:      ["useDokuCheckout"],
+    tables:     ["doku_orders", "doku_webhook_events"],
+    events:     ["payment.captured", "payment.failed"],
+    components: ["DokuCheckoutButton"],
+  },
+  conflicts: [
+    // "<slug>:<routes|hooks|tables|events|components>.<value>"
+    "midtrans-payment:tables.paymentOrders",
+  ],
+  migrationFrom: { "0.0.x": "doku-payment-0.1.0-rename-tables" },
+});
+```
+
+### Invariants enforced at runtime
+
+`defineSliceContract()` throws (with a descriptive message) when any of these fail:
+
+- `id` must be kebab-case.
+- `version` must be semver (`MAJOR.MINOR.PATCH` + optional pre-release/build).
+- Every entry in `requires.convex.tables` must start with `requires.convex.prefix`.
+- Every entry in `provides.tables` (when `requires.convex` is set) must also start with the prefix.
+- Every `conflicts[]` entry must match `<slug>:<key>.<value>` where `<key>` is one of `routes | hooks | tables | events | components`.
+- Every `requires.rbac[]` entry must be a `domain.action` pair (exactly one dot).
+
+### Cross-slice validator
+
+```
+node scripts/validation/validate-contract.mjs            # human-friendly
+node scripts/validation/validate-contract.mjs --check    # CI mode (non-zero on fail)
+```
+
+Wired into `npm run slices:check` and exposed as `npm run validate:contracts`. The validator:
+
+1. Scans `frontend/slices/*/slice.contract.ts` and `template-base/frontend/slices/*/slice.contract.ts`.
+2. Loads each via `tsx` (falls back to regex shape-check when tsx is unavailable).
+3. Re-runs the same shape checks as `defineSliceContract()` (defensive against drift).
+4. **Cross-slice conflict detection** — when slice A declares `conflicts: ["slice-b:tables.foo"]` AND slice B's `provides.tables` contains `"foo"`, the validator surfaces a P0 finding:
+
+```
+not ok 5 - frontend/slices/doku-payment/slice.contract.ts: conflict with midtrans-payment on tables.paymentOrders
+```
+
+This catches the documented `paymentOrders` collision between the sibling DOKU and Midtrans payment slices.
+
+### Coexistence with `slice.manifest.json`
+
+- New slices: author both. The contract is the typed source of truth; the JSON manifest stays for the CLI's `packages/cli/lib/manifest.json` pipeline.
+- Existing slices: nothing breaks — `slice.manifest.json` continues to drive the `validate:manifests` step.
+- The two specs must stay coherent. A future Phase B compiler will generate the JSON manifest from the contract automatically.
+
 ## Quick path (kitab maintainer — scaffold + register)
 
 ```bash
