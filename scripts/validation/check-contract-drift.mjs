@@ -76,19 +76,32 @@ async function main() {
     if (entry.name.startsWith("_")) continue;
     const slug = entry.name;
     const manifestPath = join(SLICES_DIR, slug, "slice.manifest.json");
+    const sliceJsonPath = join(SLICES_DIR, slug, "slice.json");
     const contractPath = join(SLICES_DIR, slug, "slice.contract.ts");
-    const hasManifest = existsSync(manifestPath);
+    const hasLegacyManifest = existsSync(manifestPath);
+    const hasSliceJson = existsSync(sliceJsonPath);
+    const hasManifest = hasLegacyManifest || hasSliceJson;
     const hasContract = existsSync(contractPath);
 
     let manifestName = null;
     let contractId = null;
     let status = "ok";
 
-    if (hasManifest) {
+    if (hasLegacyManifest) {
       try {
         const raw = await readFile(manifestPath, "utf8");
         const json = JSON.parse(raw);
         manifestName = json.name ?? json.id ?? null;
+      } catch {
+        manifestName = null;
+        status = "manifest-parse-error";
+      }
+    } else if (hasSliceJson) {
+      try {
+        const raw = await readFile(sliceJsonPath, "utf8");
+        const json = JSON.parse(raw);
+        // new schema uses `slug`, fallback to name/id for forward-compat
+        manifestName = json.slug ?? json.name ?? json.id ?? null;
       } catch {
         manifestName = null;
         status = "manifest-parse-error";
