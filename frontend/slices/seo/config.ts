@@ -4,7 +4,7 @@ import { defineFeature } from "@/lib/shared/features/defineFeature"
 // Backend exposes AI generator action + cost-guard log (see convex/features/seo/).
 export const seoConfig = defineFeature({
   slug: "seo",
-  title: "SEO",
+  title: "SEO — AI Metadata Generator",
   category: "content",
   routes: [],
   nav: { label: "SEO", group: "tools", order: 99 },

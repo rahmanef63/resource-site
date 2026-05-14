@@ -1,0 +1,31 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "audit-log",
+  "version": "0.1.0",
+  "category": "infra",
+  "title": "Audit Log — Workspace Events",
+  "description": "Workspace-scoped audit event recorder. Canonical logAuditEvent helper for mutations + actions; supports entity tracking, before/after diff, IP/user-agent capture.",
+  "namespace": "@/features/audit-log",
+  "kind": "backend",
+  "convex": {
+    "tablesExport": "auditLogTables",
+    "schemaPath": "convex/features/audit-log/schema.ts",
+    "rootPaths": ["convex/features/audit-log"]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/audit-log",
+    "configExport": ""
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": [
+      { "slug": "convex-auth", "range": "^0.1", "reason": "Event actor resolved via authenticated user." }
+    ]
+  },
+  "registers": ["registry"],
+  "audit": ["bp:public-fn-validator"],
+  "license": "MIT",
+  "tags": ["infra", "audit", "compliance", "logging"]
+}
