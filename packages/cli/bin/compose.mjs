@@ -27,18 +27,20 @@ export async function runCompose(rest) {
   const slugs = positional.filter(Boolean);
   if (slugs.length === 0) {
     process.stderr.write(
-      "Usage: rahman-resources compose <slug1> [<slug2> ...] [--json] [--rr-path <path>] [--no-deps]\n",
+      "Usage: rahman-resources compose <slug1> [<slug2> ...] [--json] [--rr-path <path>] [--no-deps] [--strict]\n",
     );
     process.exit(1);
   }
   const asJson = !!flags.json;
   const resolveDeps = !flags["no-deps"];
+  const strict = !!flags.strict;
 
   // Locate rr.json (optional — solver tolerates an empty state).
   const rrPath = typeof flags["rr-path"] === "string"
     ? path.resolve(process.cwd(), flags["rr-path"])
     : path.resolve(process.cwd(), "rr.json");
   const state = readStateFromRr(rrPath);
+  if (strict) state.allowUnknownSlices = false;
 
   // Walk up from packages/cli/bin/ to the kitab repo root.
   const repoRoot = findRepoRoot(__dirname);
@@ -51,6 +53,10 @@ export async function runCompose(rest) {
     process.stderr.write(kleur.red(`compose: ${err.message ?? err}\n`));
     process.exit(1);
   }
+
+  // In strict mode, elevate ALL warnings → blockers and re-derive
+  // accepted / rejected so CI gates flag every soft issue.
+  if (strict) result = applyStrictMode(result);
 
   if (asJson) {
     process.stdout.write(JSON.stringify(result, null, 2) + "\n");
@@ -235,12 +241,47 @@ function printHuman(result, { rrPath, repoRoot }) {
  * @param {string} slug
  * @param {string} repoRoot
  * @param {string} targetDir Directory holding rr.json (cwd by default).
+ * @param {{ strict?: boolean }} [opts]
  * @returns {Promise<{ result: import("../lib/compose-solver").ComposeResult; rrPath: string }>}
  */
-export async function preflight(slug, repoRoot, targetDir = process.cwd()) {
+export async function preflight(slug, repoRoot, targetDir = process.cwd(), opts = {}) {
   const rrPath = path.join(targetDir, "rr.json");
   const state = readStateFromRr(rrPath);
+  if (opts.strict) state.allowUnknownSlices = false;
   const contracts = await loadAllContracts(repoRoot);
-  const result = compose({ state, desired: [slug], resolveDeps: true }, contracts);
+  let result = compose({ state, desired: [slug], resolveDeps: true }, contracts);
+  if (opts.strict) result = applyStrictMode(result);
   return { result, rrPath };
+}
+
+/**
+ * Elevate every `warning`-level conflict to `blocker`, then re-derive the
+ * accepted / rejected sets so the slice that triggered any warning gets
+ * rejected. Used for `--strict` / CI gating.
+ *
+ * @param {import("../lib/compose-solver").ComposeResult} result
+ * @returns {import("../lib/compose-solver").ComposeResult}
+ */
+function applyStrictMode(result) {
+  const conflicts = result.conflicts.map((c) =>
+    c.severity === "warning" ? { ...c, severity: "blocker" } : c,
+  );
+  const blockersBySlug = new Map();
+  for (const c of conflicts) {
+    if (c.severity !== "blocker") continue;
+    const cur = blockersBySlug.get(c.slug) ?? [];
+    cur.push(c);
+    blockersBySlug.set(c.slug, cur);
+  }
+  const newRejected = [...result.rejected];
+  const newAccepted = [];
+  for (const slug of result.accepted) {
+    const bl = blockersBySlug.get(slug);
+    if (bl && bl.length > 0) {
+      newRejected.push({ slug, reasons: bl, note: "strict-mode" });
+    } else {
+      newAccepted.push(slug);
+    }
+  }
+  return { ...result, conflicts, accepted: newAccepted, rejected: newRejected };
 }
