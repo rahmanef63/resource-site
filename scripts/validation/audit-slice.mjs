@@ -67,6 +67,10 @@ for (const slice of slices) {
   // 2. imports
   const tsFiles = findTsFiles(slice.dir);
   for (const file of tsFiles) {
+    // slice.contract.ts is the Phase-A contract DSL — by design it imports
+    // `defineSliceContract` from packages/cli/lib/contract. Skip the import
+    // walk for that single file.
+    if (path.basename(file) === "slice.contract.ts") continue;
     const body = readFileSync(file, "utf8");
     const imports = [...body.matchAll(/^\s*import[^"']*["']([^"']+)["']/gm)].map((m) => m[1]);
     for (const spec of imports) {
