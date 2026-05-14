@@ -151,6 +151,23 @@ Conflicts surface a `conflictHint` describing why (e.g. _"kitab dropped `payment
 
 See [docs/bidir-sync.md](../../docs/bidir-sync.md) for the full algorithm + drift-score formula.
 
+## Migration Planner
+
+When a slice contract changes shape between versions, `rr migrate` generates a concrete, risk-scored migration plan — Convex schema deltas, env adds, RBAC patches — including ready-to-paste artifacts and ready-to-write `convex/migrations/*.ts` files.
+
+```bash
+npx rahman-resources migrate <slug> --from <v1> [--to <v2>]              # ASCII plan
+npx rahman-resources migrate <slug> --from <v1> --json                   # machine-readable
+npx rahman-resources migrate <slug> --from <v1> --write-files            # materialize convex/migrations/
+npx rahman-resources migrate <slug> --from <v1> --write-files --force-overwrite
+```
+
+Step kinds: `convex-schema-{add,drop,rename}-table`, `env-{add,remove}`, `rbac-{add,remove}-permission`, `route-{add,remove}` (info-only). Each step carries `risk` (low/medium/high), `reversible` (bool), and pre-rendered artifacts (Convex schema snippet, full migration body, env line, RBAC patch).
+
+Rename detection: when the new contract declares `migrationFrom: { "<old-version>": "<marker>" }`, the planner pairs single-sided table additions/removals positionally and emits a single reversible `convex-schema-rename-table` step instead of a destructive drop+add. The marker string is opaque — only its presence matters. See [docs/migration-planner.md](../../docs/migration-planner.md) for the full algorithm and the DOKU rename proof.
+
+On `--write-files` the CLI appends a DNA lineage entry (`transforms: ["migration-applied", "<step-ids>"]`) so `rr graph` reflects the migration.
+
 ## Updating the manifest
 
 The manifest is generated from `site/lib/content/layouts.ts`. To regenerate:

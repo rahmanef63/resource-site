@@ -39,4 +39,11 @@ export const contract = defineSliceContract({
     "midtrans-payment:tables.paymentOrders",
     "midtrans-payment:tables.paymentWebhookEvents",
   ],
+  // 2026-05-12 namespace decision (Phase E migration planner): when migrating
+  // from the pre-namespace shape (paymentOrders / paymentWebhookEvents) the
+  // planner pairs old → new names rather than emitting a destructive
+  // drop+add. The marker string is opaque — only its presence matters.
+  migrationFrom: {
+    "0.9.0": "namespace-rename-2026-05",
+  },
 });
