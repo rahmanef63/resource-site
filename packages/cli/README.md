@@ -110,26 +110,33 @@ Phase B of the Slice Composition Compiler. The `compose` subcommand takes the pr
 
 ```bash
 npx rahman-resources compose doku-payment mdx-blog
-npx rahman-resources compose doku-payment midtrans-payment   # shows the documented collision
+npx rahman-resources compose doku-payment midtrans-payment   # arbitrates the conflict
 npx rahman-resources compose doku-payment --json             # machine-readable
 npx rahman-resources compose doku-payment --rr-path ./apps/x/rr.json
 npx rahman-resources compose doku-payment --no-deps          # disable transitive dep resolution
+npx rahman-resources compose doku-payment --strict           # CI gate: uncontracted + warnings → blockers
 ```
 
 The solver enforces:
 
 - **auth-mismatch** (blocker) — slice requires auth X, rr.json has Y.
-- **table-collision** (blocker) — two slices declare the same Convex table, or a slice's table is already in the target's schema.
-- **explicit-conflict** (blocker) — `contract.conflicts: ["<other>:tables.<value>"]` matches `<other>.provides.tables`.
-- **missing-dep** (blocker) — slice's `requires.deps[]` missing from both the candidate set and `slicesInstalled`, or the desired slug itself isn't registered.
+- **table-collision** (blocker) — two slices declare the same Convex table, or a slice's table is already in the target's schema. Pair collisions are **arbitrated**: the slice with fewer dependers (or, on ties, the lex-later slug) is dropped — both are no longer rejected.
+- **explicit-conflict** (blocker) — `contract.conflicts: ["<other>:tables.<value>"]` matches `<other>.provides.tables`. Also arbitrated.
+- **missing-dep** (blocker) — slice's `requires.deps[]` missing from both the candidate set and `slicesInstalled`. Also fires for desired slugs without a contract **only in `--strict` mode**.
+- **uncontracted** (warning) — desired slug with no `slice.contract.ts` registered. Accepted by default; flip to blocker with `--strict`.
+- **both-installed-conflict** (warning) — both colliding slices are already in `state.slicesInstalled`; neither is dropped.
 - **rbac-collision** (warning) — two slices declare the same permission. Surfaced; never blocks.
-- **env-missing** (warning) — `requires.env[]` not in the target's `envExisting`. Surfaced; never blocks.
+- **env-missing** (warning) — `requires.env[]` not in the target's `envExisting`. Surfaced; never blocks (elevated to blocker in `--strict`).
 
-Transitive deps are pulled in automatically (BFS, depth capped at 16, throws on cycle).
+Transitive deps are pulled in automatically (BFS with proper visited-set; throws with the full path on cycle, e.g. `dependency cycle detected: a → b → c → a`).
+
+### Strict mode (`--strict`)
+
+Pass `--strict` to either `compose` or `add` to flip into CI-gate behavior: every warning is elevated to a blocker, and uncontracted slugs are rejected with `missing-dep`. Use this in CI; use the default for day-to-day operator runs where most slices still ship without contracts.
 
 ### Pre-flight gate on `rr add`
 
-`rr add <slug>` runs the same solver against `[slug]` before any file copy. If any blocker conflicts surface, `add` aborts and prints the proof. Pass `--force` to skip the gate (a warning is logged).
+`rr add <slug>` runs the same solver against `[slug]` before any file copy. If any blocker conflicts surface, `add` aborts and prints the proof. Pass `--force` to skip the gate (a warning is logged), or `--strict` to enforce strict-mode checking.
 
 A full algorithm walkthrough with worked examples lives in [`docs/compose-solver.md`](../../docs/compose-solver.md).
 

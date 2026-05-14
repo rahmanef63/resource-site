@@ -30,12 +30,13 @@ The CLI dispatcher fills these from the parsed `rr.json` — `envExisting` / `rb
 
 ```
 1.  for each desired slug:
-       lookup contract  → unknown? blocker: missing-dep, skip.
+       lookup contract → unknown?
+         allowUnknownSlices (default true) → warning: uncontracted, accept with note
+         strict mode                       → blocker: missing-dep, skip
        else add to candidate set.
 
-2.  BFS over requires.deps[] (depth ≤ 16):
-       depth > 16     → throw "cycle detected"
-       chain revisits → throw "cycle detected"
+2.  BFS over requires.deps[] (visited-set per root):
+       chain revisits → throw "dependency cycle detected: a → b → c → a"
        dep installed  → skip (already in target)
        dep unknown    → blocker: missing-dep on parent slice
        dep new        → pull into candidate set, recurse
@@ -46,25 +47,68 @@ The CLI dispatcher fills these from the parsed `rr.json` — `envExisting` / `rb
        requires.env  ⊄ state.env    → warning: env-missing
 
 4.  for each candidate-pair (A,B):
-       provides.tables(A) ∩ provides.tables(B)  → blocker: table-collision on BOTH
+       provides.tables(A) ∩ provides.tables(B)  → arbitrate (see below)
        requires.rbac(A)  ∩ requires.rbac(B)     → warning: rbac-collision
 
 5.  for each candidate's conflicts: ["<other>:<key>.<value>"]:
-       if other is in candidates AND other.provides[key].includes(value):
-          → blocker: explicit-conflict on BOTH
+       if other in candidates AND other.provides[key].includes(value):
+          → arbitrate (see below)
 
-6.  decide accepted / rejected:
-       any blocker on a slug → reject UNLESS slug ∈ state.slicesInstalled
-       (installed wins: peers keep their blockers, installed stays accepted)
+6.  arbitration:
+       both A,B installed              → warning: both-installed-conflict; KEEP both
+       exactly one installed           → installed wins; drop the new candidate
+       neither installed, depA ≠ depB  → drop the one with fewer dependers
+       neither installed, depA = depB  → drop the lex-later slug
+       record outcome in arbitrations[].
 
-7.  assemble result struct + proof[] trace.
+7.  decide accepted / rejected:
+       any blocker on a slug → reject UNLESS slug ∈ state.slicesInstalled.
+
+8.  assemble result struct + proof[] trace.
 ```
 
-### Why greedy reject-both?
+## Conflict Arbitration
 
-When two new candidates collide, the solver v1 rejects both rather than pick a winner. The smarter ranked variant ("drop the candidate with fewer dependers") is on the roadmap but adds non-trivial CSP plumbing for marginal gain on the current ~20-slice catalog. Operators can re-run `rr compose` with a smaller `desired` set after seeing the proof.
+When two new candidates collide on `table-collision` or `explicit-conflict`, the solver does **not** reject both. Instead it picks a winner using a two-level rank:
 
-The one exception is when **one of the colliders is already installed**. The installed slice wins (mid-flight uninstall is out of scope), and only the new colliding candidate is rejected.
+1. **Most dependers wins.** For each colliding slice, count how many OTHER candidates list it in `requires.deps[]`. The slice with more dependers stays; the other is dropped.
+2. **Alphabetical tiebreak.** Equal dependers → drop the slice whose slug sorts later. Deterministic, so CI runs reproducibly.
+
+Every arbitration lands as an entry in `result.arbitrations[]`:
+
+```ts
+{ conflict, winner: "doku-payment", loser: "midtrans-payment",
+  reason: "tie at 0 dependers — alphabetical tiebreak drops \"midtrans-payment\"" }
+```
+
+The proof trace echoes the same decision:
+
+```
+- midtrans-payment: arbitrated against doku-payment (tie at 0 dependers — alphabetical tiebreak drops "midtrans-payment")
+```
+
+### When both colliders are already installed
+
+If both sides of the conflict are in `state.slicesInstalled`, **neither is dropped** — the solver records a `both-installed-conflict` **warning** so the operator knows the project already has a mess to clean up, but doesn't break the build mid-compose. Both slices stay in `accepted` with a `notes.<slug> = "both-installed-conflict"` marker.
+
+### When one collider is installed
+
+The installed slice wins (mid-flight uninstall is out of scope) and the new candidate is dropped. This rule is preserved from v1.
+
+## Uncontracted Slices
+
+Most slices in the current catalog don't have a `slice.contract.ts` yet — they pre-date Phase A. By default the solver treats this as the **common case**: a desired slug with no registered contract is accepted with an `uncontracted` warning, but its surface is not inspected for conflicts (the solver simply has nothing to inspect).
+
+This makes `rr compose` and the `rr add` pre-flight gate usable during migration. Operators can opt back into the old strict behaviour with `--strict` (see below).
+
+## Strict Mode
+
+Pass `--strict` to either `rr compose` or `rr add` to flip the solver into CI-gate mode:
+
+- `state.allowUnknownSlices = false` — uncontracted slugs become **blocker** `missing-dep`.
+- Every `warning` (env-missing, rbac-collision, both-installed-conflict, etc.) is elevated to **blocker** at the CLI layer, so the affected slice moves into `rejected[]`.
+
+Use `--strict` in CI to catch every soft issue. Use the default mode for day-to-day operator runs.
 
 ## Output
 
@@ -120,7 +164,7 @@ conflicts: [
 ],
 ```
 
-If a `midtrans-payment` contract ships with `provides.tables: ["paymentOrders", ...]`, the solver fires `explicit-conflict` on **both** sides and rejects them both:
+If a `midtrans-payment` contract ships with `provides.tables: ["paymentOrders", ...]`, the solver fires `explicit-conflict` and runs the arbitration. With equal dependers the alphabetical tiebreak drops `midtrans-payment` (later than `doku-payment`):
 
 ```bash
 $ npx rahman-resources compose doku-payment midtrans-payment
@@ -129,23 +173,20 @@ $ npx rahman-resources compose doku-payment midtrans-payment
 
 Proof
   + convex-auth: pulled in as transitive dep of doku-payment
-  - doku-payment: rejected (explicit-conflict, explicit-conflict)
-  - midtrans-payment: rejected (explicit-conflict, explicit-conflict)
+  - midtrans-payment: arbitrated against doku-payment (tie at 0 dependers — alphabetical tiebreak drops "midtrans-payment")
+  + doku-payment: accepted (auth=convex, tables=doku_orders+..., user-requested)
   + convex-auth: accepted (auth=convex, tables=auth_users+..., transitive dep)
 
-Accepted (1)
+Accepted (2)
+  doku-payment
   convex-auth
 
-Rejected (2)
-  doku-payment
-    [explicit-conflict]  Slice "doku-payment" declares explicit conflict with "midtrans-payment" on tables.paymentOrders.
-    [explicit-conflict]  Slice "doku-payment" declares explicit conflict with "midtrans-payment" on tables.paymentWebhookEvents.
+Rejected (1)
   midtrans-payment
     [explicit-conflict]  Slice "midtrans-payment" is the target of "doku-payment"'s explicit conflict on tables.paymentOrders.
-    [explicit-conflict]  Slice "midtrans-payment" is the target of "doku-payment"'s explicit conflict on tables.paymentWebhookEvents.
 ```
 
-Note that `convex-auth` (the transitive dep) is still accepted — only the colliders are rejected. The exit code is non-zero so CI / `rr add`'s pre-flight gate can short-circuit.
+The exit code is non-zero so CI / `rr add`'s pre-flight gate can short-circuit. Operators who want the loser back can re-run with the slugs reversed or pass `--strict` to refuse any composition with arbitration-level fallout.
 
 ## Pre-flight gate on `rr add`
 
@@ -156,8 +197,8 @@ Note that `convex-auth` (the transitive dep) is still accepted — only the coll
 
 A single blocker conflict aborts `add` with the proof printed and `exit 1`. The gate is a no-op for fresh dirs (no `rr.json` yet) so `rr init` flows are unaffected.
 
-## Limitations (v1)
+## Known boundaries
 
 - The candidate-pair conflict check is **O(n²)**. Fine for ~20 slices, untested past 200.
-- The "installed wins" rule does not currently strip mirrored blocker attribution from the candidate side — the proof line for the new candidate still lists the conflict, but the installed slice stays accepted. Operator-friendly enough; auto-tooling that ingests the JSON output should always filter by `accepted[]` not by `conflicts[].slug`.
 - `loadAllContracts` swallows individual contract-load failures (so one broken file doesn't take down the whole solver). The dedicated `npm run validate:contracts` script is the place to surface those errors.
+- The cycle detector throws as soon as the first cycle is hit; if a request would contain multiple disjoint cycles only the first one is reported.
