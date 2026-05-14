@@ -1,0 +1,14 @@
+{
+  "id": "comments",
+  "created_at": "2026-05-14T00:00:00Z",
+  "lineage": [
+    {
+      "from": "notion-page-clone:src/slices/comments",
+      "to": "kitab:0.1.0",
+      "at": "2026-05-14T00:00:00Z",
+      "transforms": ["contract-backfill", "slice-json-schema"],
+      "actor": "rahman"
+    }
+  ],
+  "consumers": {}
+}
