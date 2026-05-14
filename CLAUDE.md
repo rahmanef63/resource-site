@@ -5,8 +5,13 @@
 | Package | Version | Purpose |
 |---|---|---|
 | `rahman-resources` | 0.11.1 | CLI (init/add/list/info/scaffold/mcp) — `packages/cli/` |
-| `rahman-resources-mcp` | 0.9.0 | MCP server (8 tools + 45 resources) — `packages/mcp/` |
+| `rahman-resources-mcp` | 0.9.1 | MCP server (14 tools + ~70 dynamic resources) — `packages/mcp/` |
 | `rahman-shared` | 0.2.0 | npm utils + hooks (cn, formatDate, sanitizeHtml, useDebounce, useClickOutside, useResponsive) — `packages/shared/` |
+
+### Slice Residency
+
+- `frontend/slices/*` — kitab-side **portable tier-3** slices (have slice.manifest.json, distributable via `npx rahman-resources add <slug>`).
+- `template-base/frontend/slices/*` — **scaffold-base** slices, copied wholesale during `init`. R1 tier (copy + customize), not individually addable.
 
 **Distribution model** (CRITICAL — don't mix):
 - **npm install** (`rahman-shared`): pure utils + hooks. Consumer imports from `node_modules/`, no local copy.
@@ -14,7 +19,7 @@
 
 Why split? Components need consumer-side Tailwind config + theme tokens + logic tweaks. Pure functions don't. npm distribution would force one-size-fits-all surface.
 
-**Adoption pattern across consumers**: skill `/use-adopt-rahman-shared` (`~/.agents/skills/adopt-rahman-shared/SKILL.md`). 4 consumers adopted 2026-05-13 (content/rahmanef/notion/CareerPack). superspace pending (waits Phase 5.5 cutover).
+**Adoption pattern across consumers**: skill `/rr-adopt` (`~/.agents/skills/rr-adopt/SKILL.md`). 4 consumers adopted 2026-05-13 (content/rahmanef/notion/CareerPack). superspace pending (waits Phase 5.5 cutover).
 
 **Re-publish flow** (after content change in `packages/shared/src/`):
 1. Bump `version` in `packages/shared/package.json`
@@ -23,7 +28,15 @@ Why split? Components need consumer-side Tailwind config + theme tokens + logic 
 
 **Bottom-up harvest flow** (consumer perfects feature → push UP to kitab):
 
-Use the global skill `/send-to-resource` from inside a consumer project. It:
+Two-step pipeline. Always run prep first.
+
+**Step 1 — `/rr-prep <slug> --fix`** (inside the consumer project)
+Audits the feature against kitab hard rules (Clerk imports, file size ≤500 LOC, cross-slice imports, raw HTML primitives, Convex RBAC + workspace-isolation, hard-coded IDs). Applies safe auto-fixes (import rewrites, README scaffold). Emits `<feature>/.harvest/{prep-report.md, slice.manifest.draft.json, inventory.json, audit-flags.json}`. Final report says **READY / NEEDS FIX (n) / BLOCKED**. Do not proceed to step 2 unless READY.
+
+Skill: `~/.agents/skills/rr-prep/SKILL.md`. Wrapper: `/rr-prep`.
+
+**Step 2 — `/rr-send <slug>`** (still inside the consumer project)
+Consumes `.harvest/` from step 1, then:
 - Detects current consumer (notion/superspace/CareerPack/content/rahmanef)
 - Copies feature into `frontend/slices/<slug>/` or `template-base/frontend/slices/<slug>/`
 - Sanitizes imports → `rahman-shared/*` + `@/features/<slug>/*`
@@ -36,7 +49,7 @@ Use the global skill `/send-to-resource` from inside a consumer project. It:
 
 CREATE mode (slug new) vs UPDATE mode (slug exists, bump version).
 
-Skill location: `~/.agents/skills/send-to-resource/SKILL.md`. Wrapper: `/send-to-resource`.
+Skill: `~/.agents/skills/rr-send/SKILL.md`. Wrapper: `/rr-send`.
 
 ## Hard Rules
 
@@ -134,12 +147,15 @@ Commands:
 | `npx rahman-resources list [templates\|features\|skills]` | Print available items. |
 | `npx rahman-resources info <slug>` | Show full metadata for one item. |
 | `npx rahman-resources mcp` | Print MCP wiring snippet for Claude Code config. |
+| `npx rahman-resources scaffold-slice <slug>` | Scaffold new tier-3 slice locally. |
+| `npx rahman-resources lift <slug>` | Lift consumer feature back into kitab (bottom-up). |
+| `npx rahman-resources publish-slice <slug>` | Verify slice ready for publish. |
 
 `rr.json` is the project manifest — schema in `packages/cli/lib/rr-schema.json`. Validated on every mutation.
 
 ### `packages/mcp` — `rahman-resources-mcp`
 
-Stdio MCP server. 8 tools (rr_list_templates, rr_list_features, rr_list_recipes, rr_list_skills, rr_search, rr_get, rr_compose_init_command, rr_compose_add_commands) + 45 resources via `rr://` URIs. Reads from sibling cli package's `manifest.json` + `skills.json` — single source of truth.
+Stdio MCP server. 14 tools (the original 8 + rr_list_slices, rr_get_slice, rr_compose_app, rr_audit_slice, rr_list_workflows, rr_get_workflow) + ~70 dynamic resources (manifest + templates/features/recipes/skills/slices + workflows) via `rr://` URIs. Reads from sibling cli package's `manifest.json` + `skills.json` — single source of truth.
 
 Wire into Claude Code:
 ```json

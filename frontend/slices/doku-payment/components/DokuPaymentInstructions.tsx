@@ -118,7 +118,7 @@ function QrisBlock({ imageUrl, qrString }: { imageUrl?: string; qrString?: strin
   return (
     <div className="flex flex-col items-center gap-2">
       {imageUrl ? (
-        // eslint-disable-next-line @next/next/no-img-element
+        // eslint-disable-next-line @next/next/no-img-element -- remote QRIS URL, dims unknown at SSR
         <img src={imageUrl} alt="QRIS" className="h-56 w-56 rounded-md border" />
       ) : (
         <pre className="max-w-full overflow-x-auto rounded-md border bg-muted p-3 text-[10px]">
