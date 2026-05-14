@@ -2,7 +2,7 @@ import { defineFeature } from "@/lib/shared/features/defineFeature";
 
 export const midtransPaymentConfig = defineFeature({
   slug: "midtrans-payment",
-  title: "Midtrans Payment",
+  title: "Midtrans — Indonesia Payment",
   category: "payment",
   routes: [
     { path: "/checkout", view: () => import("./components/checkout-page"), requiresAuth: true },
