@@ -4,7 +4,7 @@
  */
 export const dokuPaymentConfig = {
   slug: "doku-payment",
-  title: "DOKU Payment",
+  title: "DOKU — Indonesia Payment",
   description:
     "DOKU Checkout (hosted) + Direct (VA / QRIS / e-Wallet / PayLater) for Indonesian merchants.",
   category: "payment" as const,
