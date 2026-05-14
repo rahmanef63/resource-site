@@ -30,6 +30,7 @@ import {
 } from "../lib/rr.mjs";
 import { runPostInit } from "../lib/post-init.mjs";
 import { runGraph } from "./graph.mjs";
+import { runCompose, preflight as composePreflight } from "./compose.mjs";
 
 const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -79,6 +80,8 @@ async function main() {
       return runDoctor(rest);
     case "graph":
       return runGraph(rest);
+    case "compose":
+      return runCompose(rest);
     case "mcp":
       return runMcpHint();
     case undefined:
@@ -118,6 +121,7 @@ ${kleur.bold("Usage:")}
   npx rahman-resources info <slug>
   npx rahman-resources doctor
   npx rahman-resources graph [slug] [--all] [--json]
+  npx rahman-resources compose <slug>... [--json] [--rr-path <path>] [--no-deps]
   npx rahman-resources mcp
 
 ${kleur.bold("Init flags:")}
@@ -165,6 +169,25 @@ function parseFlags(rest) {
 function csv(s) {
   if (!s || s === true) return [];
   return String(s).split(",").map((x) => x.trim()).filter(Boolean);
+}
+
+// Walk up looking for the kitab repo root (`packages/` + `package.json`).
+// Used by the compose pre-flight to anchor slice.contract.ts discovery
+// regardless of where the CLI is invoked from.
+function findRepoRoot(start) {
+  let dir = start;
+  for (let i = 0; i < 8; i++) {
+    if (
+      existsSync(path.join(dir, "packages")) &&
+      existsSync(path.join(dir, "package.json"))
+    ) {
+      return dir;
+    }
+    const parent = path.dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  return process.cwd();
 }
 
 // ─── catalog lookups ──────────────────────────────────────────────────────
@@ -435,6 +458,47 @@ async function runAdd(rest) {
   if (!found) throw new Error(`"${slug}" not found. Run ${kleur.cyan("npx rahman-resources list")}.`);
   const { kind, entry } = found;
   const target = path.resolve(process.cwd(), targetArg);
+
+  // ── Pre-flight compose check (Phase B). Skipped with --force. ───────────
+  // Only run when the target has an rr.json — fresh dirs / non-rr consumers
+  // have no state to check against.
+  if (!flags.force && existsSync(path.join(target, "rr.json"))) {
+    try {
+      const repoRoot = findRepoRoot(__dirname);
+      const { result } = await composePreflight(slug, repoRoot, target);
+      const blockers = result.conflicts.filter((c) => c.severity === "blocker");
+      if (blockers.length > 0) {
+        console.error(kleur.red(`\n✖ compose pre-flight blocked "${slug}".`));
+        for (const line of result.proof) {
+          const colored = line.startsWith("+ ")
+            ? kleur.green(line)
+            : line.startsWith("- ")
+              ? kleur.red(line)
+              : line;
+          console.error("  " + colored);
+        }
+        for (const b of blockers) {
+          console.error(
+            "  " + kleur.red(`[${b.type}]`) + "  " + b.detail,
+          );
+        }
+        console.error(
+          kleur.dim(`\n  Pass --force to skip this check.\n`),
+        );
+        process.exit(1);
+      }
+    } catch (err) {
+      // Pre-flight failure (e.g. tsx not available) shouldn't break legacy
+      // add flow — warn but proceed.
+      console.error(
+        kleur.yellow(
+          `  ⚠ compose pre-flight skipped (${err.message ?? err}).`,
+        ),
+      );
+    }
+  } else if (flags.force) {
+    console.log(kleur.yellow(`  ⚠ --force: skipping compose pre-flight.`));
+  }
 
   if (kind === "slice") return runLift([`rahman:${entry.slug}`, ...(targetArg !== "." ? ["--target", targetArg] : [])]);
   if (kind === "layout") return addLayout(entry, target, targetArg, flags);
