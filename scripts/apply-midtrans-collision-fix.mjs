@@ -1,0 +1,169 @@
+// apply-midtrans-collision-fix.mjs — Track G of Wave N+1.
+//
+// Materialises the namespace-rename migration plan for BOTH payment slices:
+//
+//   - doku-payment:     paymentOrders         → doku_orders
+//                       paymentWebhookEvents  → doku_webhook_events
+//   - midtrans-payment: paymentOrders         → midtrans_orders
+//                       paymentWebhookEvents  → midtrans_webhook_events
+//
+// Each provider's rename is independent — the legacy shared rows split into
+// the two new tables based on their `provider` discriminator (the operator
+// runs the migrations once data has been bucketed). This script does the
+// Phase-E plumbing — diff + plan + write convex/migrations/*.ts + append DNA
+// lineage. It does NOT touch the production Convex backend.
+//
+// Run: node scripts/apply-midtrans-collision-fix.mjs
+
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { spawnSync } from "node:child_process";
+
+import { diffContracts, planMigration } from "../packages/cli/lib/migration-plan.mjs";
+import { appendLineage } from "../packages/cli/lib/dna.mjs";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const repoRoot = path.resolve(__dirname, "..");
+
+function camelCase(s) {
+  return String(s)
+    .replace(/[^a-zA-Z0-9]+(.)/g, (_, c) => c.toUpperCase())
+    .replace(/^([A-Z])/, (m) => m.toLowerCase());
+}
+
+function loadCurrentContract(slug) {
+  const rel = `./frontend/slices/${slug}/slice.contract.ts`;
+  const code = [
+    `import(${JSON.stringify(rel)})`,
+    `  .then(m => { const c = m.contract || (m.default && m.default.contract); if (!c) { process.exit(2); } process.stdout.write(JSON.stringify(c)); })`,
+    `  .catch(e => { process.stderr.write(String(e.stack || e)); process.exit(3); });`,
+  ].join("\n");
+  const res = spawnSync("npx", ["--no-install", "tsx", "-e", code], {
+    cwd: repoRoot,
+    encoding: "utf8",
+  });
+  if (res.status !== 0 || !res.stdout) {
+    process.stderr.write(`Failed to load ${slug} contract: ${res.stderr ?? ""}\n`);
+    process.exit(1);
+  }
+  return JSON.parse(res.stdout);
+}
+
+/**
+ * Synthetic v0.9.0 contract: the pre-namespace shape both providers shared
+ * (paymentOrders / paymentWebhookEvents under no prefix). We omit
+ * requires.convex because v0.9.0 predated the prefix invariant — the planner
+ * only inspects provides.tables + version + id.
+ */
+function syntheticV09(toContract) {
+  return {
+    id: toContract.id,
+    version: "0.9.0",
+    requires: {
+      auth: toContract.requires.auth,
+      rbac: toContract.requires.rbac,
+      env: toContract.requires.env,
+      deps: toContract.requires.deps,
+    },
+    provides: {
+      tables: ["paymentOrders", "paymentWebhookEvents"],
+      routes: toContract.provides.routes,
+      hooks: toContract.provides.hooks,
+      events: toContract.provides.events,
+      components: toContract.provides.components,
+    },
+  };
+}
+
+const SLICES = [
+  { slug: "doku-payment", outFile: "M-doku-namespace-2026-05.ts" },
+  { slug: "midtrans-payment", outFile: "M-midtrans-namespace-2026-05.ts" },
+];
+
+const writeDir = path.join(repoRoot, "convex", "migrations");
+mkdirSync(writeDir, { recursive: true });
+
+let totalRenames = 0;
+let totalDrops = 0;
+
+for (const { slug, outFile } of SLICES) {
+  const toContract = loadCurrentContract(slug);
+  const fromContract = syntheticV09(toContract);
+  const diff = diffContracts(fromContract, toContract);
+  const plan = planMigration(diff);
+
+  const renames = plan.steps.filter((s) => s.kind === "convex-schema-rename-table");
+  const drops = plan.steps.filter((s) => s.kind === "convex-schema-drop-table");
+  totalRenames += renames.length;
+  totalDrops += drops.length;
+
+  process.stdout.write(`\n→ ${slug}: v${plan.fromVersion} → v${plan.toVersion}\n`);
+  process.stdout.write(
+    `  steps=${plan.summary.totalSteps} renames=${renames.length} drops=${drops.length}\n`,
+  );
+  if (renames.length !== 2 || drops.length !== 0) {
+    process.stderr.write(
+      `FAIL ${slug}: expected 2 renames + 0 drops, got ${renames.length} + ${drops.length}.\n`,
+    );
+    process.exit(1);
+  }
+
+  // Concatenate every rename step's convexMigration body into a single file
+  // so the operator only has to load one mutation per slice. The planner
+  // emits one `export default` per body — to coexist in one file we rewrite
+  // each body's import + default export into a named export keyed off the
+  // source/target table pair, and emit a single shared import at the top.
+  const renamedBodies = renames.map((step, idx) => {
+    const raw = step.artifacts.convexMigration ?? "";
+    const exportName = camelCase(step.id.replace(/^M\d+-/, ""));
+    // Strip the per-block import (we hoist a single shared one) and rewrite
+    // `export default internalMutation(...)` into a named export.
+    return raw
+      .replace(/^import\s+\{\s*internalMutation\s*\}\s+from\s+["'][^"']+["'];?\s*$/m, "")
+      .replace(/export default internalMutation/g, `export const ${exportName} = internalMutation`);
+  });
+  const sharedImport = `import { internalMutation } from "../_generated/server";\n`;
+  const blocks = renamedBodies;
+  const header = [
+    `// convex/migrations/${outFile}`,
+    `// AUTOGENERATED by scripts/apply-midtrans-collision-fix.mjs.`,
+    `// Track G of Wave N+1 — resolves the legacy paymentOrders /`,
+    `// paymentWebhookEvents collision between doku-payment + midtrans-payment.`,
+    `//`,
+    `// Slice: ${slug}`,
+    `// From:  v${plan.fromVersion}`,
+    `// To:    v${plan.toVersion}`,
+    `// Steps: ${plan.summary.totalSteps} (${renames.length} renames, ${drops.length} drops)`,
+    `//`,
+    `// The blocks below are the planner's rename-step artifacts concatenated`,
+    `// verbatim. Run each \`internalMutation\` once via the Convex dashboard,`,
+    `// verify row counts match the prior shared-table count for THIS provider,`,
+    `// then drop the legacy paymentOrders / paymentWebhookEvents tables in a`,
+    `// follow-up irreversible migration. Filtering happens via the legacy`,
+    `// \`provider\` discriminator on the row — see the rename body comments.`,
+    ``,
+  ].join("\n");
+
+  const outPath = path.join(writeDir, outFile);
+  writeFileSync(outPath, header + sharedImport + "\n" + blocks.join("\n\n") + "\n");
+  process.stdout.write(`  + ${path.relative(repoRoot, outPath)}\n`);
+
+  // DNA lineage append. Use the same shape as bin/migrate.mjs.
+  const lineageEntry = {
+    from: `contract:${slug}@${plan.fromVersion}`,
+    to: `kitab:0.1.0`,
+    at: new Date().toISOString(),
+    transforms: ["migration-applied", "namespace-rename-2026-05"],
+    actor: "apply-midtrans-collision-fix",
+  };
+  appendLineage(slug, lineageEntry);
+  process.stdout.write(
+    `  lineage: appended migration-applied entry to .kitab/lineage/${slug}.dna.json\n`,
+  );
+}
+
+process.stdout.write(
+  `\nOK — ${totalRenames} renames written, ${totalDrops} drops. ` +
+    `Run the migrations from the Convex dashboard once you have backed up the legacy tables.\n`,
+);

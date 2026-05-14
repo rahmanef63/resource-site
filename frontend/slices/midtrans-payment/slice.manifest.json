@@ -68,5 +68,5 @@
     "auth": "convex-auth"
   },
   "tags": ["payment", "commerce", "midtrans", "indonesia", "snap", "qris", "webhook"],
-  "notes": "Existing `convex/features/payment/schema.ts` declares shared `paymentOrders`/`paymentWebhookEvents` across midtrans + doku — collides with 2026-05-12 namespace decision. Manifest captures target namespaced state; schema migration tracked in Operator Backlog. Snap.js loaded client-side via MIDTRANS_CLIENT_KEY; webhook verification uses MIDTRANS_SERVER_KEY HMAC."
+  "notes": "Snap.js loaded client-side via MIDTRANS_CLIENT_KEY; webhook verification uses MIDTRANS_SERVER_KEY HMAC. Namespace collision with doku-payment RESOLVED 2026-05-14 via convex/migrations/M-midtrans-namespace-2026-05.ts (rename paymentOrders → midtrans_orders, paymentWebhookEvents → midtrans_webhook_events). Both contracts now use disjoint Convex prefixes (doku_ / midtrans_) so the compose-solver accepts them together."
 }
