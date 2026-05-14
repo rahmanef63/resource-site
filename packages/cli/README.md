@@ -104,6 +104,35 @@ The companion `rahman-resources-mcp` server exposes the same data:
 
 Files matching `.kitab/lineage/*.local.json` are gitignored, so contributors can stage experimental DNA without committing it. Promote to `<slug>.dna.json` to ship it.
 
+## Compose Solver
+
+Phase B of the Slice Composition Compiler. The `compose` subcommand takes the project state from your `rr.json` plus a list of desired slice slugs, then computes a compatible subset (or rejects with a human-readable proof of every conflict).
+
+```bash
+npx rahman-resources compose doku-payment mdx-blog
+npx rahman-resources compose doku-payment midtrans-payment   # shows the documented collision
+npx rahman-resources compose doku-payment --json             # machine-readable
+npx rahman-resources compose doku-payment --rr-path ./apps/x/rr.json
+npx rahman-resources compose doku-payment --no-deps          # disable transitive dep resolution
+```
+
+The solver enforces:
+
+- **auth-mismatch** (blocker) — slice requires auth X, rr.json has Y.
+- **table-collision** (blocker) — two slices declare the same Convex table, or a slice's table is already in the target's schema.
+- **explicit-conflict** (blocker) — `contract.conflicts: ["<other>:tables.<value>"]` matches `<other>.provides.tables`.
+- **missing-dep** (blocker) — slice's `requires.deps[]` missing from both the candidate set and `slicesInstalled`, or the desired slug itself isn't registered.
+- **rbac-collision** (warning) — two slices declare the same permission. Surfaced; never blocks.
+- **env-missing** (warning) — `requires.env[]` not in the target's `envExisting`. Surfaced; never blocks.
+
+Transitive deps are pulled in automatically (BFS, depth capped at 16, throws on cycle).
+
+### Pre-flight gate on `rr add`
+
+`rr add <slug>` runs the same solver against `[slug]` before any file copy. If any blocker conflicts surface, `add` aborts and prints the proof. Pass `--force` to skip the gate (a warning is logged).
+
+A full algorithm walkthrough with worked examples lives in [`docs/compose-solver.md`](../../docs/compose-solver.md).
+
 ## Updating the manifest
 
 The manifest is generated from `site/lib/content/layouts.ts`. To regenerate:
