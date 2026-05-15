@@ -1,9 +1,17 @@
 # KitabSync Aggregate Report
 
-> Last refresh: 2026-05-15 (post Wave N+3.7 — command-menu@0.2.0 UP-sync ingest from notion)
+> Last refresh: 2026-05-15 (post Wave N+3.8 — seo@0.2.0 UP-sync ingest from rahmanef)
 > Source: scrape of `<consumer-repo>/docs/kitabsync.md` × 6 consumers + live `npm run scan:consumers`
 > Skipped: cescadesigns (operator decision — minimal overlap expected)
 > Kitab snapshot ref: this commit
+
+## Wave N+3.8 deltas (2026-05-15 — late⁴)
+
+| # | Action | Side | Result |
+|---:|---|---|---|
+| 17 | `seo@0.2.0` UP-sync ingest from rahmanef.com | kitab | Adopted rahmanef's `buildSeoSystemPrompt({ personaContext })` factory from `seo@0.2.0` portable surface. Pure helpers (`DEFAULT_PERSONA_CONTEXT`, `HARD_RULES`, `buildSeoSystemPrompt`) live at `frontend/slices/seo/lib/persona.ts`; `convex/features/seo/actions.ts` mirrors the prompt construction inline (Convex bundler cannot reach the frontend slice tree) and accepts a new `personaContext: v.optional(v.string())` arg on both `generate` and `generateAndApply`. DROPPED rahmanef-domain literals: kitab's `DEFAULT_PERSONA_CONTEXT` is a generic placeholder describing the override path, NOT Rahman's brand persona. Contract bumped `0.1.0 → 0.2.0` with `forbiddenTerms: ["rahmanef","rahmanef.com"]` + `requiredProps: ["personaContext"]`. 11 vitest cases lock the factory shape + DEFAULT/HARD_RULES constants + the prop-driven and back-compat branches. Pure UI/factory refactor — `seoGeneratorCalls` table shape unchanged → no migration script needed. |
+| — | Cross-consumer matrix update | kitab | rahmanef `seo` flips `up-needed (kitab 0.1.0)` → `in-sync (kitab 0.2.0, consumer 0.2.0)` + `syncDirection: down-only → bidirectional`. |
+| — | Per Wave N+3.1 follow-up #12 (partial) | kitab | The `seo` half of #12 closed. `admin` half still open — kitab maintainer signal not yet given for that slug. |
 
 ## Wave N+3.7 deltas (2026-05-15 — late late late)
 
@@ -86,7 +94,7 @@ Reads as: `verdict · generalization` (alias in parens when consumer renamed the
 | `mdx-blog` | kitab-only | kitab-only | in-sync · portable (as `blog`) | **up-needed · portable** ⇡ | diverged · consumer-locked (as `blog`, plain-text) |
 | `midtrans-payment` | kitab-only | kitab-only | kitab-only | kitab-only | kitab-only |
 | `resend-newsletter` | kitab-only | kitab-only | kitab-only | in-sync · portable | kitab-only |
-| `seo` | kitab-only | kitab-only | **up-needed · portable** ⇡ | kitab-only | kitab-only |
+| `seo` | kitab-only | kitab-only | **in-sync · portable** ⇡ | kitab-only | kitab-only |
 | `vector-search` | kitab-only | kitab-only | kitab-only | kitab-only | kitab-only |
 
 ⇡ = changed since previous aggregate (Wave N+3.1 delta)
@@ -122,7 +130,7 @@ Reads as: `verdict · generalization` (alias in parens when consumer renamed the
 | # | Action | Notes |
 |---:|---|---|
 | **11** | ~~`/rr-send mdx-blog` from kitab maintainer side~~ | **DONE** ✓ (Wave N+3.6) — kitab `mdx-blog@0.2.0` LANDED with `defineMdxBlog(opts)` factory + 4 config props. rahmanef.blog now eligible for DOWN-sync; superspace.blog still parked (consumer-locked plain-text). |
-| 12 | `/rr-send seo` + `/rr-send admin` from rahmanef once kitab opens UP-sync slot | rahmanef has both portable + up-needed but `syncDirection: down-only` — flip to bidirectional after kitab maintainer signals readiness. |
+| 12 | ~~`/rr-send seo`~~ + `/rr-send admin` from rahmanef once kitab opens UP-sync slot | **seo half DONE** ✓ (Wave N+3.8) — kitab `seo@0.2.0` LANDED with `buildSeoSystemPrompt({ personaContext })` factory + `personaContext` action arg + 11 vitest cases. rahmanef.seo now `bidirectional · in-sync`. `admin` half still open. |
 | **13** | ~~Fix `npx rahman-resources scan-consumers` cache-path bug~~ | **DONE** ✓ (CLI 0.13.1, SHA `659c7fb`) · 4-tier KITAB_ROOT resolution (env > flag > walk-up cwd > __dirname fallback). |
 | **14** | ~~Push UP `command-menu@0.3.0` from notion to kitab~~ | kitab maintainer | **DONE** ✓ (Wave N+3.7) — kitab `command-menu@0.2.0` LANDED with renderless `CommandPalette` + bindings-driven `SearchModal` + 8 vitest cases. notion adapters left consumer-side. |
 | 15 | Decide adapter-scope split for notion's `adapters/nosion.*` (drop vs consumer-locked `nosion-command-palette` slice) | kitab maintainer + notion | open · keeps notion verdict permanently `up-needed` until resolved. |
@@ -151,4 +159,5 @@ Verified live via `node packages/cli/bin/scan-consumers.mjs --consumer rahmanef|
 | 2026-05-15 late | Wave N+3.4 — comments@0.2.0 frontend + platform-admin scaffold | 5 + live scan | `01c5132` | claude-code |
 | 2026-05-15 late | Wave N+3.5 — comments@0.2.0 Convex rebuild + audit-log@0.2.0 ship + 2 migration scripts + split proposal + content parse-error fix | 6 + live scan | `484ba2b` | claude-code |
 | 2026-05-15 late late | Wave N+3.6 — mdx-blog@0.2.0 UP-sync ingest from content (defineMdxBlog factory + 4 props + 8 vitest cases) | 1 (mdx-blog) | (prev commit) | claude-code |
-| 2026-05-15 late late late | Wave N+3.7 — command-menu@0.2.0 UP-sync ingest from notion (renderless CommandPalette + bindings-driven SearchModal + 8 vitest cases, dropped Nosion adapters) | 1 (command-menu) | (this commit) | claude-code |
+| 2026-05-15 late late late | Wave N+3.7 — command-menu@0.2.0 UP-sync ingest from notion (renderless CommandPalette + bindings-driven SearchModal + 8 vitest cases, dropped Nosion adapters) | 1 (command-menu) | (prev commit) | claude-code |
+| 2026-05-15 late⁴ | Wave N+3.8 — seo@0.2.0 UP-sync ingest from rahmanef (buildSeoSystemPrompt factory + personaContext arg + 11 vitest cases, dropped Rahman persona literal) | 1 (seo) | (this commit) | claude-code |

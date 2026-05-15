@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-15T12:59:39.545Z",
+  "generatedAt": "2026-05-15T13:12:03.462Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -1279,12 +1279,12 @@
       "slug": "seo",
       "title": "SEO — AI Metadata Generator",
       "category": "content",
-      "description": "Service slice for SEO metadata generation — Anthropic-backed action with per-user 24h cost guard. No public route. Backend exposes generate + generateAndApply mutations gated by requireAdmin.",
+      "description": "Service slice for SEO metadata generation — Anthropic-backed action with per-user 24h cost guard + portable persona prop. No public route. Backend exposes generate + generateAndApply mutations gated by requireAdmin; consumers inject brand voice via the personaContext arg (or buildSeoSystemPrompt factory).",
       "source": "rahmanef63/resource-site",
       "install": "npx rahman-resources add seo",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `rr add seo`. Call seo.generate from server actions or admin mutations. Cost guard rate-limits per-user within 24h via callsInWindow query.",
+      "agentRecipe": "Run `rr add seo`. Call seo.generate from server actions or admin mutations with `personaContext` describing your brand voice (or rely on the generic default). Cost guard rate-limits per-user within 24h via callsInWindow query.",
       "tags": [
         "content",
         "seo",
@@ -2202,8 +2202,8 @@
       "title": "SEO — AI Metadata Generator",
       "category": "content",
       "kind": "full",
-      "version": "0.1.0",
-      "description": "Service slice for SEO metadata generation — Anthropic-backed action with per-user 24h cost guard. No public route. Backend exposes generate + generateAndApply mutations gated by requireAdmin.",
+      "version": "0.2.0",
+      "description": "Service slice for SEO metadata generation — Anthropic-backed action with per-user 24h cost guard + portable persona prop. No public route. Backend exposes generate + generateAndApply mutations gated by requireAdmin; consumers inject brand voice via the personaContext arg (or buildSeoSystemPrompt factory).",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/seo",
       "convexPaths": [
@@ -2233,7 +2233,7 @@
         "anthropic",
         "metadata-generator"
       ],
-      "agentRecipe": "Run `rr add seo`. Call seo.generate from server actions or admin mutations. Cost guard rate-limits per-user within 24h via callsInWindow query."
+      "agentRecipe": "Run `rr add seo`. Call seo.generate from server actions or admin mutations with `personaContext` describing your brand voice (or rely on the generic default). Cost guard rate-limits per-user within 24h via callsInWindow query."
     },
     {
       "slug": "document-checklist",
