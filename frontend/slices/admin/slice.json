@@ -1,10 +1,10 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "admin",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "category": "infra",
   "title": "Admin — Generic Shell",
-  "description": "Landing page scaffold + Convex admin probe (isAdmin / counts). Consumer composes feature panels into the grid. Gated by requireAdmin on Convex side; superadmin email gate via SUPER_ADMIN_EMAIL env.",
+  "description": "Per-instance admin landing scaffold + portable nav-from-registry factory. Consumer supplies a SliceRegistryAdapter (each slice declares its own admin.activity[]) and a queryTable reader; the slice's buildAdminStats(opts) emits the { counts, unreadMessages, activity } shape Convex's admin.stats query returns. Pure UI/factory — no Convex tables owned. Gated by requireAdmin on Convex side; superadmin email gate via SUPER_ADMIN_EMAIL env.",
   "namespace": "@/features/admin",
   "kind": "full",
   "convex": {
@@ -29,5 +29,5 @@
   "registers": ["registry"],
   "audit": ["bp:public-fn-validator"],
   "license": "MIT",
-  "tags": ["infra", "admin", "shell", "crud"]
+  "tags": ["infra", "admin", "shell", "crud", "nav-from-registry"]
 }

@@ -25,7 +25,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...adminConfig,
     importPath: "@/features/admin/config",
-    version: "0.1.0",
+    version: "0.2.0",
   },
   {
     ...aiRouterConfig,

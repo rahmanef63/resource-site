@@ -1,9 +1,17 @@
 # KitabSync Aggregate Report
 
-> Last refresh: 2026-05-15 (post Wave N+3.8 — seo@0.2.0 UP-sync ingest from rahmanef)
+> Last refresh: 2026-05-15 (post Wave N+3.9 — admin@0.2.0 UP-sync ingest from rahmanef)
 > Source: scrape of `<consumer-repo>/docs/kitabsync.md` × 6 consumers + live `npm run scan:consumers`
 > Skipped: cescadesigns (operator decision — minimal overlap expected)
 > Kitab snapshot ref: this commit
+
+## Wave N+3.9 deltas (2026-05-15 — late⁵)
+
+| # | Action | Side | Result |
+|---:|---|---|---|
+| 18 | `admin@0.2.0` UP-sync ingest from rahmanef.com | kitab | Adopted rahmanef's `nav-from-registry` factory from `admin@0.2.0` portable surface. New module at `frontend/slices/admin/lib/registry-adapter.ts` exporting `buildAdminStats({ sliceRegistry, queryTable, labels, activityLimit, strict })` + `SliceAdminActivityEntry`/`SliceRegistryAdapter`/`SliceAdminLabels` types + `pickTitle` / `deriveCountTables` / `resolveAdminLabels` helpers + `DEFAULT_ADMIN_LABELS`. `AdminPage` now accepts a `labels` prop. Pure-async factory — no Convex import — so the kitab convex `admin.stats` query is the consumer of `queryTable` at deploy time. DROPPED rahmanef-domain literals: `DEFAULT_ADMIN_LABELS` is a generic placeholder; the consumer-specific count-tables + activity routes (`aboutPillars`, `aiFeatures`, etc.) that lived in `convex/features/admin/queries.ts` are NOT part of the portable surface (consumers wire them via `sliceRegistry.entries`). Contract bumped `0.1.0 → 0.2.0` with `forbiddenTerms: ["rahmanef","rahmanef.com"]` + `requiredProps: ["sliceRegistry","queryTable","labels"]`. 13 vitest cases lock the factory shape + DEFAULT_ADMIN_LABELS constants + the prop-driven, lenient/strict, activityLimit, and `_creationTime` fallback branches. Distinct from `platform-admin` (per docs/contract-negotiations-2026-05-15.md §4). Pure UI/factory refactor — admin slice still owns zero Convex tables → no migration script needed. |
+| — | Cross-consumer matrix update | kitab | rahmanef `admin` flips `up-needed (kitab 0.1.0)` → `in-sync (kitab 0.2.0, consumer 0.2.0)` + `syncDirection: down-only → bidirectional`. |
+| — | Per Wave N+3.1 follow-up #12 (FULLY CLOSED) | kitab | The `admin` half of #12 closed. Both halves (seo N+3.8 + admin N+3.9) now landed; follow-up #12 marked DONE. |
 
 ## Wave N+3.8 deltas (2026-05-15 — late⁴)
 
@@ -68,10 +76,10 @@ All three precommit-hook clean (typecheck + lint + tests). All three now show `u
 |---|---:|---|---|---|
 | **CareerPack** | 1 | in-sync=1 · kitab-only=14 | needs-adapter=1 | `document-checklist` (architectural mismatch — single-user vs workspace) |
 | **notion-page-clone** | 2 | **up-needed=1** · diverged=1 · consumer-only=33 · kitab-only=6 | **portable=1** · needs-adapter=1 | `comments` (still — coordinate with rahmanef) |
-| **rahmanef.com** | 6 | in-sync=4 · up-needed=2 · consumer-only=20 · kitab-only=9 | portable=4 · needs-adapter=2 | `comments` (coordinate with notion) |
+| **rahmanef.com** | 6 | in-sync=6 · up-needed=0 · consumer-only=20 · kitab-only=9 | portable=4 · needs-adapter=2 | `comments` (coordinate with notion) |
 | **content-rahmanef-com** | 3 | in-sync=2 · up-needed=1 · consumer-only=5 · kitab-only=4 | portable=3 · needs-adapter=0 | All adopted are portable — ready for kitab merge |
 | **superspace** | 4 | diverged=4 · consumer-only=46 · kitab-only=11 | needs-adapter=2 · consumer-locked=2 | `ai` (P0) + `audit-log` (P0) |
-| **TOTAL** | **16 manifests** | **up-needed=4** | **portable=8** · needs-adapter=6 · consumer-locked=2 | — |
+| **TOTAL** | **16 manifests** | **up-needed=2** | **portable=8** · needs-adapter=6 · consumer-locked=2 | — |
 
 Net portability shift across Wave N+3.1 + N+3.3: **+4 portable, −4 needs-adapter** in one evening. Plus 1 new up-needed verdict (command-menu).
 
@@ -81,7 +89,7 @@ Reads as: `verdict · generalization` (alias in parens when consumer renamed the
 
 | Kitab slug | CareerPack | notion | rahmanef | content | superspace |
 |---|---|---|---|---|---|
-| `admin` | kitab-only | kitab-only | **up-needed · portable** ⇡ | kitab-only | diverged · consumer-locked (as `platform-admin`) |
+| `admin` | kitab-only | kitab-only | **in-sync · portable** ⇡ | kitab-only | diverged · consumer-locked (as `platform-admin`) |
 | `ai-router` | kitab-only | kitab-only | kitab-only | kitab-only | **diverged · needs-adapter** (as `ai`) |
 | `audit-log` | kitab-only | kitab-only | in-sync · portable (as `audit`) | kitab-only | **diverged · needs-adapter** |
 | `broadcast-channel-sync` | kitab-only | kitab-only | kitab-only | kitab-only | kitab-only |
@@ -130,7 +138,7 @@ Reads as: `verdict · generalization` (alias in parens when consumer renamed the
 | # | Action | Notes |
 |---:|---|---|
 | **11** | ~~`/rr-send mdx-blog` from kitab maintainer side~~ | **DONE** ✓ (Wave N+3.6) — kitab `mdx-blog@0.2.0` LANDED with `defineMdxBlog(opts)` factory + 4 config props. rahmanef.blog now eligible for DOWN-sync; superspace.blog still parked (consumer-locked plain-text). |
-| 12 | ~~`/rr-send seo`~~ + `/rr-send admin` from rahmanef once kitab opens UP-sync slot | **seo half DONE** ✓ (Wave N+3.8) — kitab `seo@0.2.0` LANDED with `buildSeoSystemPrompt({ personaContext })` factory + `personaContext` action arg + 11 vitest cases. rahmanef.seo now `bidirectional · in-sync`. `admin` half still open. |
+| 12 | ~~`/rr-send seo` + `/rr-send admin` from rahmanef once kitab opens UP-sync slot~~ | **FULLY DONE** ✓ — seo half (Wave N+3.8) ships `buildSeoSystemPrompt({ personaContext })` factory + 11 vitest cases. admin half (Wave N+3.9) ships `buildAdminStats({ sliceRegistry, queryTable, labels })` portable factory + 13 vitest cases. Both rahmanef slices now `bidirectional · in-sync`. |
 | **13** | ~~Fix `npx rahman-resources scan-consumers` cache-path bug~~ | **DONE** ✓ (CLI 0.13.1, SHA `659c7fb`) · 4-tier KITAB_ROOT resolution (env > flag > walk-up cwd > __dirname fallback). |
 | **14** | ~~Push UP `command-menu@0.3.0` from notion to kitab~~ | kitab maintainer | **DONE** ✓ (Wave N+3.7) — kitab `command-menu@0.2.0` LANDED with renderless `CommandPalette` + bindings-driven `SearchModal` + 8 vitest cases. notion adapters left consumer-side. |
 | 15 | Decide adapter-scope split for notion's `adapters/nosion.*` (drop vs consumer-locked `nosion-command-palette` slice) | kitab maintainer + notion | open · keeps notion verdict permanently `up-needed` until resolved. |
@@ -160,4 +168,5 @@ Verified live via `node packages/cli/bin/scan-consumers.mjs --consumer rahmanef|
 | 2026-05-15 late | Wave N+3.5 — comments@0.2.0 Convex rebuild + audit-log@0.2.0 ship + 2 migration scripts + split proposal + content parse-error fix | 6 + live scan | `484ba2b` | claude-code |
 | 2026-05-15 late late | Wave N+3.6 — mdx-blog@0.2.0 UP-sync ingest from content (defineMdxBlog factory + 4 props + 8 vitest cases) | 1 (mdx-blog) | (prev commit) | claude-code |
 | 2026-05-15 late late late | Wave N+3.7 — command-menu@0.2.0 UP-sync ingest from notion (renderless CommandPalette + bindings-driven SearchModal + 8 vitest cases, dropped Nosion adapters) | 1 (command-menu) | (prev commit) | claude-code |
-| 2026-05-15 late⁴ | Wave N+3.8 — seo@0.2.0 UP-sync ingest from rahmanef (buildSeoSystemPrompt factory + personaContext arg + 11 vitest cases, dropped Rahman persona literal) | 1 (seo) | (this commit) | claude-code |
+| 2026-05-15 late⁴ | Wave N+3.8 — seo@0.2.0 UP-sync ingest from rahmanef (buildSeoSystemPrompt factory + personaContext arg + 11 vitest cases, dropped Rahman persona literal) | 1 (seo) | `21edbd1` | claude-code |
+| 2026-05-15 late⁵ | Wave N+3.9 — admin@0.2.0 UP-sync ingest from rahmanef (buildAdminStats nav-from-registry factory + SliceRegistryAdapter/SliceAdminActivityEntry/SliceAdminLabels types + resolveAdminLabels + AdminPage labels prop + 13 vitest cases, dropped consumer-domain count-tables; follow-up #12 fully closed) | 1 (admin) | (this commit) | claude-code |

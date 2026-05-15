@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-15T13:12:03.462Z",
+  "generatedAt": "2026-05-15T13:22:16.552Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -1209,17 +1209,18 @@
       "slug": "admin",
       "title": "Admin — Generic Shell",
       "category": "infra",
-      "description": "Landing page scaffold + Convex admin probe (isAdmin / counts). Consumer composes feature panels into the grid. Gated by requireAdmin on Convex side; superadmin email gate via SUPER_ADMIN_EMAIL env.",
+      "description": "Per-instance admin landing scaffold + portable nav-from-registry factory. Consumer supplies a SliceRegistryAdapter (each slice declares its own admin.activity[]) + queryTable reader; the slice's buildAdminStats(opts) emits the { counts, unreadMessages, activity } shape Convex's admin.stats query returns. Pulled UP from rahmanef.com (Wave N+3.1, commit b542389) — domain literals dropped at the kitab boundary. Gated by requireAdmin on Convex side; superadmin email gate via SUPER_ADMIN_EMAIL env.",
       "source": "rahmanef63/resource-site",
       "install": "npx rahman-resources add admin",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `rr add admin`. Set SUPER_ADMIN_EMAIL via `npx convex env set` to lock down /admin to one address.",
+      "agentRecipe": "Run `rr add admin`. Wire <AdminPage labels={...} /> at /admin and call buildAdminStats({ sliceRegistry, queryTable }) inside convex/features/admin/queries.ts — sliceRegistry.entries flat-maps each feature's admin.activity[] declarations. Set SUPER_ADMIN_EMAIL via `npx convex env set` to lock down /admin to one address.",
       "tags": [
         "infra",
         "admin",
         "shell",
-        "crud"
+        "crud",
+        "nav-from-registry"
       ]
     },
     {
@@ -2051,8 +2052,8 @@
       "title": "Admin — Generic Shell",
       "category": "infra",
       "kind": "full",
-      "version": "0.1.0",
-      "description": "Landing page scaffold + Convex admin probe (isAdmin / counts). Consumer composes feature panels into the grid. Gated by requireAdmin on Convex side; superadmin email gate via SUPER_ADMIN_EMAIL env.",
+      "version": "0.2.0",
+      "description": "Per-instance admin landing scaffold + portable nav-from-registry factory. Consumer supplies a SliceRegistryAdapter (each slice declares its own admin.activity[]) + queryTable reader; the slice's buildAdminStats(opts) emits the { counts, unreadMessages, activity } shape Convex's admin.stats query returns. Pulled UP from rahmanef.com (Wave N+3.1, commit b542389) — domain literals dropped at the kitab boundary. Gated by requireAdmin on Convex side; superadmin email gate via SUPER_ADMIN_EMAIL env.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/admin",
       "convexPaths": [
@@ -2082,9 +2083,10 @@
         "infra",
         "admin",
         "shell",
-        "crud"
+        "crud",
+        "nav-from-registry"
       ],
-      "agentRecipe": "Run `rr add admin`. Set SUPER_ADMIN_EMAIL via `npx convex env set` to lock down /admin to one address."
+      "agentRecipe": "Run `rr add admin`. Wire <AdminPage labels={...} /> at /admin and call buildAdminStats({ sliceRegistry, queryTable }) inside convex/features/admin/queries.ts — sliceRegistry.entries flat-maps each feature's admin.activity[] declarations. Set SUPER_ADMIN_EMAIL via `npx convex env set` to lock down /admin to one address."
     },
     {
       "slug": "platform-admin",
