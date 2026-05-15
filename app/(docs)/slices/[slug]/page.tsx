@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PreviewFrame } from "@/components/site/preview-frame";
+import { UseWideLayout } from "@/components/site/use-wide-layout";
 
 export function generateStaticParams() {
   return slices.map((s) => ({ slug: s.slug }));
@@ -32,6 +33,7 @@ export default async function SliceDetailPage({ params }: { params: Promise<{ sl
 
   return (
     <div className="space-y-8">
+      <UseWideLayout />
       <div>
         <Link
           href="/slices"

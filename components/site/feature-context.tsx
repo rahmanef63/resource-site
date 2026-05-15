@@ -52,6 +52,8 @@ export type FeatureManifest = {
   composePrompt?: (selections: Selections) => string;
   /** compute preview src given selections */
   composePreviewSrc?: (selections: Selections, basePath: string) => string;
+  /** when true, no-tabs pages render full-width instead of max-w-3xl. Useful for catalog grids. */
+  wide?: boolean;
 };
 
 type Ctx = {

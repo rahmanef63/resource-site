@@ -39,6 +39,8 @@ function DocsShellInner({ children }: { children: React.ReactNode }) {
             {activeRender ? activeRender() : null}
           </div>
         </>
+      ) : manifest?.wide ? (
+        <div className="w-full flex-1 overflow-auto p-6 sm:p-8">{children}</div>
       ) : (
         <div className="mx-auto w-full max-w-3xl flex-1 overflow-auto p-6 sm:p-8">{children}</div>
       )}

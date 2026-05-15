@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { CatalogCard } from "@/components/site/catalog/catalog-card";
 import { CatalogSearch, type CatalogSearchItem } from "@/components/site/catalog/catalog-search";
 import { MockThumbnail } from "@/components/site/catalog/mock-thumbnail";
+import { UseWideLayout } from "@/components/site/use-wide-layout";
 
 export const metadata = {
   title: "Slices — portable feature units",
@@ -90,6 +91,7 @@ export default function SlicesPage() {
 
   return (
     <div className="space-y-8">
+      <UseWideLayout />
       <div>
         <p className="text-sm font-medium text-muted-foreground">Catalog</p>
         <div className="mt-2 flex items-center gap-2">
