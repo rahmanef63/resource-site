@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Box, Code2, Columns2, Eye, FileCode, LayoutDashboard, Tag, Wand2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Box, Code2, Columns2, Eye, FileCode, FolderTree, LayoutDashboard, Package, Rocket, Tag, Terminal, Wand2 } from "lucide-react";
 import { IconBrandGithub as Github } from "@tabler/icons-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,7 @@ import { InstallWithAgent } from "@/components/site/install-with-agent";
 import { PreviewPane } from "@/components/site/preview-pane";
 import { SplitPreviewPane } from "@/components/site/split-preview-pane";
 import { AssemblerInspector } from "@/components/site/assembler-inspector";
+import { ShowcaseCard } from "@/components/site/catalog/showcase-card";
 import {
   repoUrl,
   useFeatureContext,
@@ -234,24 +235,24 @@ function CodeTab({
 
   return (
     <div className="h-full space-y-4 overflow-auto p-4">
-      <section>
-        <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-          Fresh project — scaffold first
-        </p>
+      <ShowcaseCard
+        icon={Rocket}
+        label="Fresh project — scaffold first"
+        variant="code"
+        footer="Skip if you already have a Next 16 project."
+      >
         <CodeBlock code={initCmd} language="bash" filename="bootstrap.sh" />
-        <p className="mt-1 text-[10px] text-muted-foreground">
-          Skip if you already have a Next 16 project.
-        </p>
-      </section>
+      </ShowcaseCard>
 
-      <section>
-        <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-          Then drop in this template (auto-pulls deps)
-        </p>
+      <ShowcaseCard
+        icon={Terminal}
+        label="Then drop in this template (auto-pulls deps)"
+        variant="code"
+      >
         <CodeBlock code={cliCmd} language="bash" filename="install.sh" />
-      </section>
+      </ShowcaseCard>
 
-      <details className="rounded border border-border/60 bg-muted/20">
+      <details className="overflow-hidden rounded-xl border bg-muted/20">
         <summary className="cursor-pointer select-none px-3 py-2 text-xs text-muted-foreground hover:text-foreground">
           Alt: degit (manual, {pulls.length} folder{pulls.length === 1 ? "" : "s"})
         </summary>
@@ -260,7 +261,7 @@ function CodeTab({
         </div>
       </details>
 
-      <details className="rounded border border-border/60 bg-muted/20">
+      <details className="overflow-hidden rounded-xl border bg-muted/20">
         <summary className="cursor-pointer select-none px-3 py-2 text-xs text-muted-foreground hover:text-foreground">
           Alt: git sparse-checkout
         </summary>
@@ -270,37 +271,40 @@ function CodeTab({
       </details>
 
       {dependencies && dependencies.length > 0 && (
-        <section>
-          <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-            Dependencies ({dependencies.length})
-          </p>
+        <ShowcaseCard
+          icon={Package}
+          label={`Dependencies (${dependencies.length})`}
+          variant="code"
+        >
           <CodeBlock
             code={`pnpm add ${dependencies.join(" ")}`}
             language="bash"
             filename="install.sh"
           />
-        </section>
+        </ShowcaseCard>
       )}
 
       {files && files.length > 0 && (
-        <details className="rounded border border-border/60 bg-muted/20" open>
-          <summary className="cursor-pointer select-none px-3 py-2 text-xs font-medium text-foreground">
-            Files in this template ({files.length})
-          </summary>
-          <ul className="border-t border-border/60 p-2 font-mono text-[11px] leading-relaxed text-muted-foreground">
+        <ShowcaseCard
+          icon={FolderTree}
+          label={`Files in this template (${files.length})`}
+          variant="static"
+        >
+          <ul className="font-mono text-[11px] leading-relaxed text-muted-foreground">
             {files.map((f) => (
               <li key={f} className="truncate">· {f}</li>
             ))}
           </ul>
-        </details>
+        </ShowcaseCard>
       )}
 
-      <section>
-        <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-          Example mount
-        </p>
+      <ShowcaseCard
+        icon={FileCode}
+        label="Example mount"
+        variant="code"
+      >
         <CodeBlock code={exampleCode} language="tsx" filename={primaryFile ?? "example.tsx"} />
-      </section>
+      </ShowcaseCard>
     </div>
   );
 }
@@ -311,22 +315,33 @@ function PromptTab({ fallback, kind, slug, title }: { fallback: string; kind: st
   const composed = manifest?.composePrompt ? manifest.composePrompt(selections) : fallback;
   return (
     <div className="h-full overflow-auto p-4">
-      <div className="mb-3 flex flex-wrap items-center gap-2">
-        <InstallWithAgent prompt={composed} size="sm" />
-        <a
-          href={`/api/knowledge?${kind}=${slug}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-xs text-muted-foreground hover:text-foreground"
-        >
-          Knowledge JSON →
-        </a>
-        <span className="text-[10px] text-muted-foreground">
-          {manifest?.composePrompt ? "↻ updates with selection" : "static"}
-        </span>
-        <span className="ml-auto text-[10px] text-muted-foreground">{title}</span>
-      </div>
-      <CodeBlock code={composed} language="markdown" filename="agent-prompt.md" />
+      <ShowcaseCard
+        icon={Wand2}
+        label="Agent prompt"
+        badge={
+          <span className="text-[10px] text-muted-foreground">
+            {manifest?.composePrompt ? "↻ updates with selection" : "static"}
+          </span>
+        }
+        actions={
+          <>
+            <InstallWithAgent prompt={composed} size="sm" />
+            <Button asChild variant="ghost" size="sm" className="h-7 gap-1 px-2 text-xs">
+              <a
+                href={`/api/knowledge?${kind}=${slug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Knowledge JSON →
+              </a>
+            </Button>
+          </>
+        }
+        variant="code"
+        footer={title}
+      >
+        <CodeBlock code={composed} language="markdown" filename="agent-prompt.md" />
+      </ShowcaseCard>
     </div>
   );
 }
