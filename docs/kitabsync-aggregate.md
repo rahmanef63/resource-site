@@ -1,9 +1,22 @@
 # KitabSync Aggregate Report
 
-> Last refresh: 2026-05-15 (post Wave N+3.3 — command-menu portable + 3 kitab contract level shifts)
-> Source: scrape of `<consumer-repo>/docs/kitabsync.md` × 5 consumers + live `npm run scan:consumers`
+> Last refresh: 2026-05-15 (post Wave N+3.5 — comments dual-side coord + audit-log@0.2.0 ship + 2 migration scripts + comments split proposal)
+> Source: scrape of `<consumer-repo>/docs/kitabsync.md` × 6 consumers + live `npm run scan:consumers`
 > Skipped: cescadesigns (operator decision — minimal overlap expected)
-> Kitab snapshot ref: `0ccd403` (this commit)
+> Kitab snapshot ref: this commit
+
+## Wave N+3.5 deltas (2026-05-15 — late)
+
+| # | Action | Side | Result |
+|---:|---|---|---|
+| — | `comments@0.2.0` Convex layer rebuild | kitab | Table renamed `comments → comment_threads`. Schema dropped notion-specific `pageId`/`blockId`/`pages` FK. Mutations + queries rewritten generic-TargetRef. Contract `convex.prefix: "comment_"` declared. |
+| — | `audit-log@0.2.0` ship | kitab | TenantAdapter type + `createAuditLogger` factory + `NULL_TENANT_ADAPTER`. Schema renamed `auditLogs → audit_events`, index `by_tenant_id_at`, optional tenantId. Contract bumped 0.1.0→0.2.0 with `forbiddenTerms: ["workspaceId","auditLogs"]` + `requiredProps: ["tenantAdapter","bindings"]`. |
+| — | Migration scripts created | kitab | `scripts/migrations/audit-log-v0.1.0-to-v0.2.0-tenant-adapter.ts` + `comments-v0.1.0-to-v0.2.0-polymorphic-target.ts` (paginated batched internalMutation walkers). |
+| 3 | `comments` notion adoption | notion-page-clone | SHA `d9413e4` · v0.2.0 portable + in-sync. TargetRef polymorphic-target adopted. Adapter wiring isolated under `adapters/nosion.*`. 412/412 tests. |
+| 3 | `comments` rahmanef divergence flagged | rahmanef.com | SHA `430c35b` · honest no-op refactor. Status flipped `portable → needs-adapter · frozen` with 7 documented blockers. Architectural mismatch — see `docs/comments-split-proposal-2026-05-15.md`. |
+| — | `comments-split-proposal-2026-05-15.md` | kitab | Operator decision proposal: super-contract (Option A) vs `public-comments` carve (Option B, recommended) vs hybrid (Option C, deferred). |
+| — | Content `audit-log/.kitab.json` parse-error fix | content-rahmanef-com | `lastPullAt` numeric → ISO string. Scanner clean across 6 consumers now. |
+| 9 | `platform-admin@0.1.0` scaffold | kitab | (Wave N+3.4) shipped contract-only scaffold with adapter spec. Distinct slug from per-instance `admin`. |
 
 ## Wave N+3.3 deltas (2026-05-15 late evening)
 
@@ -116,4 +129,6 @@ Verified live via `node packages/cli/bin/scan-consumers.mjs --consumer rahmanef|
 |---|---|---:|---|---|
 | 2026-05-15 | initial aggregation | 5 (skipped cescadesigns) | `0ea2ff6` | claude-code |
 | 2026-05-15 evening | Wave N+3.1 refresh — 3 portability refactors landed (rahmanef seo+admin, content mdx-blog) | 5 + live scan | `d4dbd37` | claude-code |
-| 2026-05-15 late evening | Wave N+3.3 — command-menu portable + 3 kitab contract level shifts + scan multi-path | 5 + live scan | (this commit) | claude-code |
+| 2026-05-15 late evening | Wave N+3.3 — command-menu portable + 3 kitab contract level shifts + scan multi-path | 5 + live scan | `0ccd403` | claude-code |
+| 2026-05-15 late | Wave N+3.4 — comments@0.2.0 frontend + platform-admin scaffold | 5 + live scan | `01c5132` | claude-code |
+| 2026-05-15 late | Wave N+3.5 — comments@0.2.0 Convex rebuild + audit-log@0.2.0 ship + 2 migration scripts + split proposal + content parse-error fix | 6 + live scan | (this commit) | claude-code |

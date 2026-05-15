@@ -10,7 +10,8 @@
   "convex": {
     "tablesExport": "commentsTables",
     "schemaPath": "convex/features/comments/schema.ts",
-    "rootPaths": ["convex/features/comments"]
+    "rootPaths": ["convex/features/comments"],
+    "prefix": "comment_"
   },
   "frontend": {
     "slicePath": "frontend/slices/comments",

@@ -1,22 +1,36 @@
 import { defineTable } from "convex/server"
 import { v } from "convex/values"
 
-// Comments table — page/block-attached threaded comments.
-// Workspace-isolated; soft-delete supported via `deletedAt`.
+/**
+ * comment_threads — v0.2.0 polymorphic-target shape.
+ *
+ * Renamed from `comments` per per-slice namespace rule. Migration script:
+ * scripts/migrations/comments-v0.1.0-to-v0.2.0-polymorphic-target.ts.
+ *
+ * Target tuple `(targetKind, targetId, targetSubId?)` lets consumers anchor
+ * threads against any entity ("page", "blog", "task", ...) without the
+ * contract knowing the consumer's data model.
+ */
 export const commentsTables = {
-  comments: defineTable({
-    workspaceId: v.id("workspaces"),
-    userId: v.id("users"),
-    pageId: v.id("pages"),
-    // Block-anchored comments use blockId; page-level comments leave it undefined.
-    blockId: v.optional(v.string()),
+  comment_threads: defineTable({
+    /** Multi-tenant id (e.g. workspaceId) or null for single-tenant. */
+    tenantId: v.union(v.string(), v.null()),
+    /** Actor user/session id (consumer-resolved via TenantAdapter). */
+    actorId: v.string(),
+    /** Consumer-defined kind literal — "page", "blog", "task", etc. */
+    targetKind: v.string(),
+    /** Primary entity id. */
+    targetId: v.string(),
+    /** Optional secondary anchor (e.g. blockId within a page). */
+    targetSubId: v.optional(v.string()),
     body: v.string(),
-    // Resolved threads stay visible but greyed; null = active.
     resolvedAt: v.optional(v.number()),
     deletedAt: v.optional(v.number()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
   })
-    .index("by_workspace", ["workspaceId"])
-    .index("by_page", ["pageId"])
-    .index("by_block", ["blockId"])
-    .index("by_user", ["userId"]),
+    .index("by_target_kind_id", ["targetKind", "targetId"])
+    .index("by_target_kind_id_subId", ["targetKind", "targetId", "targetSubId"])
+    .index("by_tenant", ["tenantId"])
+    .index("by_actor", ["actorId"]),
 }

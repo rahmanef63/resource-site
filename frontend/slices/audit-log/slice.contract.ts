@@ -1,36 +1,44 @@
 /**
- * Slice contract for `audit-log` — Phase A.
+ * Slice contract for `audit-log` — v0.2.0.
  *
- * Workspace-scoped audit event recorder. Actor identity resolved via
- * convex-auth. Current Convex schema (`convex/features/audit-log/schema.ts`)
- * declares ONE table named `auditLogs` — predates the per-slice namespace rule.
+ * Adds `TenantAdapter` prop to hoist workspace tenancy out of the contract.
+ * Multi-tenant consumers (e.g. superspace) return the active workspaceId;
+ * single-tenant consumers (e.g. rahmanef) return null.
  *
- * TODO(contract): tables need namespace rename migration — see Phase E planner
- * Aspirational prefix is `audit_` (e.g. `audit_logs`). Until the rename lands,
- * `requires.convex` is intentionally omitted so the validator's prefix
- * invariant doesn't fail; `provides.tables` reflects the actual current name.
+ * Convex schema renamed: `auditLogs` → `audit_events` per the per-slice
+ * namespace rule. Index `by_workspace` → `by_tenant_id_at` (tenantId, at).
  *
- * Backfilled from `slice.json` 2026-05-14 (Track H3 — new slice.json schema).
+ * Migration script: `audit-log-v0.1.0-to-v0.2.0-tenant-adapter` (see
+ * scripts/migrations/). Applied in-place by Convex action.
+ *
+ * Per docs/contract-negotiations-2026-05-15.md §3.
  */
 import { defineSliceContract } from "../../../packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "audit-log",
-  version: "0.1.0",
+  version: "0.2.0",
   requires: {
     auth: "convex",
     rbac: ["audit.read", "audit.write"],
+    convex: { prefix: "audit_", tables: ["audit_events"] },
     deps: ["convex-auth"],
   },
   provides: {
-    // TODO(contract): tables need namespace rename migration — see Phase E planner
-    tables: ["auditLogs"],
+    tables: ["audit_events"],
+    hooks: ["createAuditLogger"],
+    components: [],
   },
   conflicts: [],
+  migrationFrom: {
+    "0.1.0": "audit-log-v0.1.0-to-v0.2.0-tenant-adapter",
+  },
   bidir: {
     syncPolicy: "manual",
     generalization: {
       level: "needs-adapter",
+      forbiddenTerms: ["workspaceId", "auditLogs"],
+      requiredProps: ["tenantAdapter", "bindings"],
     },
   },
 });
