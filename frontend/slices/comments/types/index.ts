@@ -1,7 +1,30 @@
+/**
+ * Polymorphic anchor for a comment thread.
+ *
+ * The kitab `comments` slice intentionally does NOT bake in consumer-specific
+ * entity names. Consumer projects pick the `kind` literal (e.g. "page",
+ * "blog-post", "task") and resolve `id`/`subId` to whatever primary +
+ * optional sub-anchor matches their domain.
+ *
+ * - notion: `{ kind: "page", id: <page-uid>, subId: <block-uid> }`
+ * - rahmanef.com blog: `{ kind: "blog", id: <post-slug> }`
+ * - rahmanef.com portfolio: `{ kind: "portfolio", id: <work-slug> }`
+ *
+ * See docs/contract-negotiations-2026-05-15.md §1 for the operator decision.
+ */
+export type TargetRef = {
+  /** Consumer-defined entity kind literal. */
+  kind: string;
+  /** Primary entity id. */
+  id: string;
+  /** Optional secondary anchor (e.g. a block within a page). */
+  subId?: string;
+};
+
 export interface Comment {
   id: string;
-  pageId: string;
-  blockId?: string;
+  /** Polymorphic target — replaces v0.1.0 page/block-coupled ids. */
+  target: TargetRef;
   text: string;
   authorName: string;
   authorIcon: string;

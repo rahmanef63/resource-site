@@ -18,7 +18,7 @@ import { defineSliceContract } from "../../../packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "comments",
-  version: "0.1.0",
+  version: "0.2.0",
   requires: {
     auth: "convex",
     rbac: ["comment.create", "comment.read"],
@@ -28,12 +28,18 @@ export const contract = defineSliceContract({
     // TODO(contract): tables need namespace rename migration — see Phase E planner
     tables: ["comments"],
     hooks: ["useComments"],
+    components: ["CommentsThread", "CommentsAnchor"],
   },
   conflicts: [],
+  migrationFrom: {
+    "0.1.0": "comments-v0.1.0-to-v0.2.0-polymorphic-target",
+  },
   bidir: {
     syncPolicy: "manual",
     generalization: {
       level: "needs-adapter",
+      forbiddenTerms: ["pageId", "blockId", "targetType"],
+      requiredProps: ["target", "bindings", "forbiddenWords", "pathMap"],
     },
   },
 });

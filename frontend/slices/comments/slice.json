@@ -1,10 +1,10 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "comments",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "category": "content",
   "title": "Comments — Threaded",
-  "description": "Workspace-scoped threaded comments anchored to pages or blocks. Soft-delete + resolve semantics. useComments(opts) hook returns items + openCount + CRUD mutations.",
+  "description": "Polymorphic-target threaded comments. Consumer picks `TargetRef = { kind, id, subId? }` (e.g. page+block, blog+slug, task+id). Renderless <CommentsThread> + <CommentsAnchor> wrappers; useComments(bindings, opts) hook returns items + openCount + CRUD + forbiddenWords guard. Adapter pattern — see contract-negotiations-2026-05-15 §1.",
   "namespace": "@/features/comments",
   "kind": "full",
   "convex": {

@@ -14,6 +14,8 @@
 
 ## 1. `comments` — polymorphic target shape
 
+**Status**: ✓ kitab `comments@0.2.0` LANDED 2026-05-15. Renderless `<CommentsThread>` + `<CommentsAnchor>` shipped. `TargetRef` shape live in `frontend/slices/comments/types/index.ts`. `forbiddenWords` guard wired into `useComments`. `pathMap` accepted by `CommentsAnchor`. `forbiddenTerms: ["pageId","blockId","targetType"]` declared in contract; audit-bp scanner enforces. Consumer migration follows below.
+
 **Conflict**: notion-page-clone's `comments` keys on `pageId`/`blockId` (page+block-anchored). rahmanef.com's keys on `targetType` enum + entity slug per consumer feature (`blog`/`library`/`projects`/...). Both want kitab to be the upstream but their data-shape assumptions are mutually exclusive.
 
 **Decision**: kitab `comments@0.2.0` exposes a polymorphic target tuple the consumer fills in:
