@@ -1,9 +1,17 @@
 # KitabSync Aggregate Report
 
-> Last refresh: 2026-05-15 (post Wave N+3.1 — 3 portability refactors landed)
+> Last refresh: 2026-05-15 (post Wave N+3.3 — command-menu portable + 3 kitab contract level shifts)
 > Source: scrape of `<consumer-repo>/docs/kitabsync.md` × 5 consumers + live `npm run scan:consumers`
 > Skipped: cescadesigns (operator decision — minimal overlap expected)
-> Kitab snapshot ref: `0ea2ff6` → newer kitab work in flight
+> Kitab snapshot ref: `0ccd403` (this commit)
+
+## Wave N+3.3 deltas (2026-05-15 late evening)
+
+| # | Action | Consumer / Side | Result |
+|---:|---|---|---|
+| 4 | `command-menu` 5-blocker renderless refactor | notion-page-clone | SHA `068709c` · `0.2.0 → 0.3.0` portable + bidirectional. Renderless `CommandPalette` + `lib/types.ts` + `adapters/nosion.*` isolated. SearchModal accepts `labels?` prop. 412/412 tests + build pass. |
+| — | Contract level alignment with decisions doc | kitab | SHA `0ccd403` · 3 slices flipped `portable → needs-adapter`: `ai-router`, `audit-log`, `comments`. Reflects required-adapter prop surface per docs/contract-negotiations-2026-05-15.md. |
+| — | scan-consumers multi-path walker | kitab (CLI lib) | SHA `0ccd403` · `walkConsumerSlices` now scans BOTH `frontend/slices/` AND `frontend/src/slices/` (CareerPack uses nested path). |
 
 ## Wave N+3.1 deltas (2026-05-15 evening)
 
@@ -22,13 +30,13 @@ All three precommit-hook clean (typecheck + lint + tests). All three now show `u
 | Consumer | Adopted | Verdict mix | Generalization mix | Top P0 |
 |---|---:|---|---|---|
 | **CareerPack** | 1 | in-sync=1 · kitab-only=14 | needs-adapter=1 | `document-checklist` (architectural mismatch — single-user vs workspace) |
-| **notion-page-clone** | 2 | diverged=2 · consumer-only=33 · kitab-only=6 | needs-adapter=2 | `comments` + `command-menu` both diverged |
-| **rahmanef.com** | 6 | in-sync=4 · **up-needed=2** · consumer-only=20 · kitab-only=9 | **portable=4** · needs-adapter=2 | `comments` (still — coordinate with notion) |
-| **content-rahmanef-com** | 3 | in-sync=2 · **up-needed=1** · consumer-only=5 · kitab-only=4 | **portable=3** · needs-adapter=0 | All adopted are portable — ready for kitab merge |
+| **notion-page-clone** | 2 | **up-needed=1** · diverged=1 · consumer-only=33 · kitab-only=6 | **portable=1** · needs-adapter=1 | `comments` (still — coordinate with rahmanef) |
+| **rahmanef.com** | 6 | in-sync=4 · up-needed=2 · consumer-only=20 · kitab-only=9 | portable=4 · needs-adapter=2 | `comments` (coordinate with notion) |
+| **content-rahmanef-com** | 3 | in-sync=2 · up-needed=1 · consumer-only=5 · kitab-only=4 | portable=3 · needs-adapter=0 | All adopted are portable — ready for kitab merge |
 | **superspace** | 4 | diverged=4 · consumer-only=46 · kitab-only=11 | needs-adapter=2 · consumer-locked=2 | `ai` (P0) + `audit-log` (P0) |
-| **TOTAL** | **16 manifests** | up-needed=3 (new) | **portable=7** (was 6) · needs-adapter=7 (was 10) · consumer-locked=2 | — |
+| **TOTAL** | **16 manifests** | **up-needed=4** | **portable=8** · needs-adapter=6 · consumer-locked=2 | — |
 
-Net portability shift: **+3 portable, −3 needs-adapter** in one evening.
+Net portability shift across Wave N+3.1 + N+3.3: **+4 portable, −4 needs-adapter** in one evening. Plus 1 new up-needed verdict (command-menu).
 
 ## Cross-consumer slug matrix (refreshed)
 
@@ -72,7 +80,7 @@ Reads as: `verdict · generalization` (alias in parens when consumer renamed the
 | 1 | `/rr-prep ai-router --fix` then `/rr-send` from **superspace** | superspace | open · 6 seams · P0 |
 | 2 | `/rr-prep audit-log --fix` then coordinate with rahmanef | superspace | open · 4 blockers · P0 |
 | 3 | Coordinate `comments` blockers (notion + rahmanef) | notion + rahmanef | open · 7 unique blockers combined · P0 |
-| 4 | Refactor `command-menu` blockers from notion | notion | open · 5 blockers · P0 |
+| **4** | ~~Refactor `command-menu` blockers from notion~~ | notion | **DONE** ✓ (SHA `068709c`) |
 | **5** | ~~Refactor `mdx-blog` from content~~ | content | **DONE** ✓ (SHA `c6729a5`) |
 | 6 | `document-checklist` from CareerPack | CareerPack | open · architectural mismatch — operator decision needed |
 | **7** | ~~Refactor `seo` persona prop from rahmanef~~ | rahmanef | **DONE** ✓ (SHA `bde5763`) |
@@ -86,7 +94,8 @@ Reads as: `verdict · generalization` (alias in parens when consumer renamed the
 |---:|---|---|
 | 11 | `/rr-send mdx-blog` from kitab maintainer side | Accept content's portable refactor as kitab `mdx-blog@0.2.0`. Coordinate with rahmanef.blog + superspace.blog before bumping contract semver. |
 | 12 | `/rr-send seo` + `/rr-send admin` from rahmanef once kitab opens UP-sync slot | rahmanef has both portable + up-needed but `syncDirection: down-only` — flip to bidirectional after kitab maintainer signals readiness. |
-| 13 | Fix `npx rahman-resources scan-consumers` cache-path bug | When invoked via npx (not local node), `KITAB_ROOT` resolves to npm cache instead of repo root → `ENOENT scandir frontend/slices`. Workaround today: use `npm run scan:consumers` from kitab repo. Fix path resolution in scan-consumers.mjs to walk up + detect package.json sentinel. |
+| **13** | ~~Fix `npx rahman-resources scan-consumers` cache-path bug~~ | **DONE** ✓ (CLI 0.13.1, SHA `659c7fb`) · 4-tier KITAB_ROOT resolution (env > flag > walk-up cwd > __dirname fallback). |
+| 14 | Push UP `command-menu@0.3.0` from notion to kitab | kitab maintainer | Renderless API ready. Accept as `command-menu@0.2.0` contract bump. |
 
 ## Consumer-only seed candidates (P4 — unchanged)
 
@@ -106,4 +115,5 @@ Verified live via `node packages/cli/bin/scan-consumers.mjs --consumer rahmanef|
 | Date (UTC) | Action | Consumers scraped | Commit (kitab) | Author |
 |---|---|---:|---|---|
 | 2026-05-15 | initial aggregation | 5 (skipped cescadesigns) | `0ea2ff6` | claude-code |
-| 2026-05-15 evening | Wave N+3.1 refresh — 3 portability refactors landed (rahmanef seo+admin, content mdx-blog) | 5 + live scan | (this commit) | claude-code |
+| 2026-05-15 evening | Wave N+3.1 refresh — 3 portability refactors landed (rahmanef seo+admin, content mdx-blog) | 5 + live scan | `d4dbd37` | claude-code |
+| 2026-05-15 late evening | Wave N+3.3 — command-menu portable + 3 kitab contract level shifts + scan multi-path | 5 + live scan | (this commit) | claude-code |
