@@ -61,6 +61,7 @@ function buildSections(): NavSection[] {
         { kind: "leaf", title: "Install with Agent", href: "/agents", badge: "new" },
         { kind: "leaf", title: "Bundle Builder", href: "/build", badge: "new" },
         { kind: "leaf", title: "MCP server", href: "/mcp", badge: "new" },
+        { kind: "leaf", title: "VPS Control Room", href: "/control-room", badge: "new" },
       ],
     },
     {
