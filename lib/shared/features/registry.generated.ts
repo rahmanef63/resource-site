@@ -6,7 +6,7 @@ import type { RegisteredSlice } from "./registry";
 
 import { adminConfig } from "@/features/admin/config";
 import { aiRouterConfig } from "@/features/ai-router/config";
-import {  } from "@/features/audit-log/config";
+import { auditLogConfig } from "@/features/audit-log/config";
 import { broadcastChannelSyncConfig } from "@/features/broadcast-channel-sync/config";
 import { calComBookingConfig } from "@/features/cal-com-booking/config";
 import { commentsConfig } from "@/features/comments/config";
@@ -31,7 +31,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     version: "0.1.0",
   },
   {
-    ...,
+    ...auditLogConfig,
     importPath: "@/features/audit-log/config",
     version: "0.1.0",
   },

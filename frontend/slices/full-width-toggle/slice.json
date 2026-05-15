@@ -10,7 +10,7 @@
   "convex": { "tablesExport": "", "schemaPath": "", "rootPaths": [] },
   "frontend": {
     "slicePath": "frontend/slices/full-width-toggle",
-    "configExport": ""
+    "configExport": "fullWidthToggleConfig"
   },
   "deps": {
     "npm": [],

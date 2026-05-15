@@ -14,7 +14,7 @@
   },
   "frontend": {
     "slicePath": "frontend/slices/audit-log",
-    "configExport": ""
+    "configExport": "auditLogConfig"
   },
   "deps": {
     "npm": [],
