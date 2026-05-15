@@ -34,7 +34,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...auditLogConfig,
     importPath: "@/features/audit-log/config",
-    version: "0.1.0",
+    version: "0.2.0",
   },
   {
     ...broadcastChannelSyncConfig,

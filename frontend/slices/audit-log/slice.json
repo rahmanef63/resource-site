@@ -10,8 +10,7 @@
   "convex": {
     "tablesExport": "auditLogTables",
     "schemaPath": "convex/features/audit-log/schema.ts",
-    "rootPaths": ["convex/features/audit-log"],
-    "prefix": "audit_"
+    "rootPaths": ["convex/features/audit-log"]
   },
   "frontend": {
     "slicePath": "frontend/slices/audit-log",

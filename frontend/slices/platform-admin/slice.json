@@ -19,7 +19,14 @@
   "deps": {
     "npm": [],
     "shadcn": [],
-    "env": ["PLATFORM_ADMIN_EMAILS"],
+    "env": [
+      {
+        "name": "PLATFORM_ADMIN_EMAILS",
+        "scope": "convex",
+        "required": true,
+        "description": "Comma-separated list of operator email addresses with platform-admin access."
+      }
+    ],
     "peers": [
       { "slug": "convex-auth", "range": "^0.1", "reason": "Actor identity for audit + tier-set ops." },
       { "slug": "audit-log", "range": "^0.2", "reason": "padmin_audit table feeds through audit-log TenantAdapter." }

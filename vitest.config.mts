@@ -11,6 +11,7 @@ export default defineConfig({
       "shared/**/*.test.{ts,tsx}",
       "lib/**/*.test.{ts,tsx}",
       "packages/cli/lib/**/*.test.{mjs,ts}",
+      "frontend/slices/**/*.test.{ts,tsx}",
     ],
     setupFiles: [],
   },
