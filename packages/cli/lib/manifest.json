@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-15T03:17:39.773Z",
+  "generatedAt": "2026-05-15T03:29:39.955Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -1273,6 +1273,24 @@
         "anthropic",
         "metadata-generator"
       ]
+    },
+    {
+      "slug": "document-checklist",
+      "title": "Document Checklist — Job-Search Doc Tracker",
+      "category": "content",
+      "description": "Track required job-search documents (CV, KTP, ijazah, etc.) with country-scoped seed templates and per-user completion state. Ships an Indonesian default checklist. Toggle completed + notes + expiry per item.",
+      "source": "rahmanef63/CareerPack",
+      "install": "npx rahman-resources add document-checklist",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `rr add document-checklist`. Wire <DocumentChecklist bindings={{ current, seed, updateStatus }} countryTemplateSlot={<CountryTemplateCard bindings={{ templates, getTemplate, instantiate }} />} /> — bindings sourced from api.features['document-checklist'].* queries/mutations.",
+      "tags": [
+        "career",
+        "documents",
+        "checklist",
+        "job-search",
+        "indonesia"
+      ]
     }
   ],
   "slices": [
@@ -2152,6 +2170,53 @@
         "metadata-generator"
       ],
       "agentRecipe": "Run `rr add seo`. Call seo.generate from server actions or admin mutations. Cost guard rate-limits per-user within 24h via callsInWindow query."
+    },
+    {
+      "slug": "document-checklist",
+      "title": "Document Checklist — Job-Search Doc Tracker",
+      "category": "content",
+      "kind": "full",
+      "version": "0.1.0",
+      "description": "Track required job-search documents (CV, KTP, ijazah, etc.) with country-scoped seed templates and per-user completion state. Ships an Indonesian default checklist. Toggle completed + notes + expiry per item.",
+      "source": "rahmanef63/CareerPack",
+      "slicePath": "frontend/slices/document-checklist",
+      "convexPaths": [
+        "convex/features/document-checklist"
+      ],
+      "npm": [
+        "lucide-react"
+      ],
+      "shadcn": [
+        "badge",
+        "button",
+        "card",
+        "dialog",
+        "label",
+        "popover",
+        "calendar",
+        "progress",
+        "scroll-area",
+        "skeleton",
+        "tabs",
+        "textarea"
+      ],
+      "env": [],
+      "peers": [
+        {
+          "slug": "convex-auth",
+          "range": "^0.1",
+          "reason": "Auth identity for user-scoped checklist state."
+        }
+      ],
+      "providers": [],
+      "tags": [
+        "career",
+        "documents",
+        "checklist",
+        "job-search",
+        "indonesia"
+      ],
+      "agentRecipe": "Run `rr add document-checklist`. Wire <DocumentChecklist bindings={{ current, seed, updateStatus }} countryTemplateSlot={<CountryTemplateCard bindings={{ templates, getTemplate, instantiate }} />} /> — bindings sourced from api.features['document-checklist'].* queries/mutations."
     }
   ]
 }
