@@ -1,0 +1,36 @@
+{
+  "name": "@rahman/cr",
+  "version": "0.1.0",
+  "description": "Installer for VPS Control Room (control-room v2.0). One-line npx or AI-assisted (Claude/Codex/Gemini) flows with /sc-all skill integration.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Rahman",
+  "homepage": "https://github.com/rahmanef63/control-room",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rahmanef63/resource-site.git",
+    "directory": "packages/cr"
+  },
+  "bin": {
+    "cr": "bin/cr.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "kleur": "^4.1.5"
+  },
+  "keywords": [
+    "vps",
+    "control-room",
+    "installer",
+    "dokploy",
+    "tailscale",
+    "self-hosted"
+  ]
+}
