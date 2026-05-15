@@ -197,19 +197,24 @@ export function diffSlice({ slug, manifest, kitabVersion }) {
 }
 
 export async function walkConsumerSlices(consumerRoot) {
-  const slicesDir = join(consumerRoot, "frontend", "slices");
-  if (!existsSync(slicesDir)) return [];
+  const candidates = [
+    join(consumerRoot, "frontend", "slices"),
+    join(consumerRoot, "frontend", "src", "slices"),
+  ];
   const out = [];
-  const entries = await readdir(slicesDir, { withFileTypes: true });
-  for (const e of entries) {
-    if (!e.isDirectory() || e.name.startsWith("_")) continue;
-    const manifestPath = join(slicesDir, e.name, ".kitab.json");
-    if (!existsSync(manifestPath)) continue;
-    try {
-      const m = await readConsumerManifest(manifestPath);
-      out.push({ dir: join(slicesDir, e.name), manifest: m });
-    } catch (err) {
-      out.push({ dir: join(slicesDir, e.name), error: err.message });
+  for (const slicesDir of candidates) {
+    if (!existsSync(slicesDir)) continue;
+    const entries = await readdir(slicesDir, { withFileTypes: true });
+    for (const e of entries) {
+      if (!e.isDirectory() || e.name.startsWith("_")) continue;
+      const manifestPath = join(slicesDir, e.name, ".kitab.json");
+      if (!existsSync(manifestPath)) continue;
+      try {
+        const m = await readConsumerManifest(manifestPath);
+        out.push({ dir: join(slicesDir, e.name), manifest: m });
+      } catch (err) {
+        out.push({ dir: join(slicesDir, e.name), error: err.message });
+      }
     }
   }
   return out;

@@ -30,7 +30,7 @@ export const contract = defineSliceContract({
   bidir: {
     syncPolicy: "manual",
     generalization: {
-      level: "portable",
+      level: "needs-adapter",
     },
   },
 });

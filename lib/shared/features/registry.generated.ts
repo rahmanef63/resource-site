@@ -4,19 +4,35 @@
 import { registerFeatures } from "./registerFeature";
 import type { RegisteredSlice } from "./registry";
 
+import { adminConfig } from "@/features/admin/config";
 import { aiRouterConfig } from "@/features/ai-router/config";
+import {  } from "@/features/audit-log/config";
 import { broadcastChannelSyncConfig } from "@/features/broadcast-channel-sync/config";
 import { calComBookingConfig } from "@/features/cal-com-booking/config";
+import { commentsConfig } from "@/features/comments/config";
 import { convexAuthConfig } from "@/features/convex-auth/config";
+import { documentChecklistConfig } from "@/features/document-checklist/config";
+import { dokuPaymentConfig } from "@/features/doku-payment/config";
 import { mdxBlogConfig } from "@/features/mdx-blog/config";
 import { midtransPaymentConfig } from "@/features/midtrans-payment/config";
 import { resendNewsletterConfig } from "@/features/resend-newsletter/config";
+import { seoConfig } from "@/features/seo/config";
 import { vectorSearchConfig } from "@/features/vector-search/config";
 
 export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
+    ...adminConfig,
+    importPath: "@/features/admin/config",
+    version: "0.1.0",
+  },
+  {
     ...aiRouterConfig,
     importPath: "@/features/ai-router/config",
+    version: "0.1.0",
+  },
+  {
+    ...,
+    importPath: "@/features/audit-log/config",
     version: "0.1.0",
   },
   {
@@ -30,8 +46,23 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     version: "0.1.0",
   },
   {
+    ...commentsConfig,
+    importPath: "@/features/comments/config",
+    version: "0.1.0",
+  },
+  {
     ...convexAuthConfig,
     importPath: "@/features/convex-auth/config",
+    version: "0.1.0",
+  },
+  {
+    ...documentChecklistConfig,
+    importPath: "@/features/document-checklist/config",
+    version: "0.1.0",
+  },
+  {
+    ...dokuPaymentConfig,
+    importPath: "@/features/doku-payment/config",
     version: "0.1.0",
   },
   {
@@ -47,6 +78,11 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...resendNewsletterConfig,
     importPath: "@/features/resend-newsletter/config",
+    version: "0.1.0",
+  },
+  {
+    ...seoConfig,
+    importPath: "@/features/seo/config",
     version: "0.1.0",
   },
   {
