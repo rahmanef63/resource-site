@@ -201,3 +201,49 @@ node packages/cli/scripts/sync-skills.mjs --check  # CI guard
 ```
 
 `prepublishOnly` of the CLI package runs `--check` so a drifted publish is impossible.
+
+---
+
+## Wave N+3 — Bidirectional Sync Detection Layer (BSDL)
+
+> Added 2026-05-15 (commit `5b8b612`).
+
+Every kitab slice contract carries an additive `bidir` block declaring its
+sync policy (`auto-pr|notify|manual|frozen`) and generalisation gate
+(`portable|needs-adapter|consumer-locked` with optional `forbiddenTerms[]`
+and `requiredProps[]`). Consumer copies (CareerPack / notion / rahmanef /
+content / superspace / cescadesigns) drop a `.kitab.json` next to the
+slice; `rr scan-consumers` reads them and surfaces what needs to flow UP
+or DOWN.
+
+### Operator commands
+
+```bash
+npm run scan:consumers                                     # all registered
+npx rahman-resources scan-consumers --consumer careerpack  # one consumer
+npx rahman-resources scan-consumers --json                 # CI-friendly
+npm run forbidden:terms                                    # cross-provider leak gate
+```
+
+### MCP resources
+
+- `rr://sync/scan` — verdicts across all registered consumers
+- `rr://sync/scan/<consumer-name>` — single consumer's slice diffs
+
+### Adding a consumer
+
+Edit `packages/cli/bin/scan-consumers.mjs#DEFAULT_CONSUMERS` — append
+`{ name, path }`. The MCP resource list auto-updates.
+
+### Trigger prompts (kitab-side, paste in Claude Code)
+
+| Goal | Prompt |
+|---|---|
+| Scan all consumers | `run scan:consumers and report which slices need UP-sync` |
+| Inspect one consumer | `scan careerpack and show what needs pulling up` |
+| Verify generalisation | `run forbidden:terms and surface any cross-provider leaks` |
+| Promote consumer edit | `pull <slug> up from <consumer> via rr-prep + rr-send` |
+
+Spec: [`docs/consumer-manifest.md`](./docs/consumer-manifest.md).
+Schema: `packages/cli/lib/consumer-manifest.{mjs,d.ts}`.
+Tests: 19 vitest cases at `packages/cli/lib/consumer-manifest.test.mjs`.
