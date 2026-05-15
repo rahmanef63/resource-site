@@ -1,0 +1,24 @@
+{
+  "id": "platform-admin",
+  "created_at": "2026-05-15T08:00:00.000Z",
+  "lineage": [
+    {
+      "from": "contract-negotiations:2026-05-15:§4",
+      "to": "kitab:0.1.0",
+      "at": "2026-05-15T08:00:00.000Z",
+      "transforms": [
+        "slug-split-from-admin",
+        "needs-adapter-scaffold"
+      ],
+      "actor": "rahman"
+    }
+  ],
+  "consumers": {
+    "superspace": {
+      "adopted_at": "2026-05-15T08:00:00.000Z",
+      "version": "0.3.0",
+      "drift_score": 90,
+      "last_synced_at": null
+    }
+  }
+}

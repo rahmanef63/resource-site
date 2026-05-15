@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-15T07:57:28.621Z",
+  "generatedAt": "2026-05-15T08:01:45.587Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -1222,6 +1222,24 @@
       ]
     },
     {
+      "slug": "platform-admin",
+      "title": "Platform Admin — Multi-Tenant Control Plane",
+      "category": "infra",
+      "description": "Multi-tenant SaaS control plane. Workspace lifecycle ops (list/delete/cascade), per-tenant tier presets (gates + quota), KPI dashboard grid. Consumer-domain bits injected via adapter props (tenantTablesAdapter / tierPresets / kpiSources). Contract-only scaffold; canonical implementation lands via /rr-send from superspace. See docs/contract-negotiations-2026-05-15.md §4.",
+      "source": "rahmanef63/resource-site",
+      "install": "npx rahman-resources add platform-admin",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Contract-only scaffold. Wait for superspace /rr-send platform-admin before adopting. Distinct from per-instance `admin` slug.",
+      "tags": [
+        "infra",
+        "admin",
+        "multi-tenant",
+        "saas",
+        "platform"
+      ]
+    },
+    {
       "slug": "audit-log",
       "title": "Audit Log — Workspace Events",
       "category": "infra",
@@ -2065,6 +2083,50 @@
         "crud"
       ],
       "agentRecipe": "Run `rr add admin`. Set SUPER_ADMIN_EMAIL via `npx convex env set` to lock down /admin to one address."
+    },
+    {
+      "slug": "platform-admin",
+      "title": "Platform Admin — Multi-Tenant Control Plane",
+      "category": "infra",
+      "kind": "full",
+      "version": "0.1.0",
+      "description": "Multi-tenant SaaS control plane. Workspace lifecycle ops (list/delete/cascade), per-tenant tier presets (gates + quota), KPI dashboard grid. Consumer-domain bits injected via adapter props (tenantTablesAdapter / tierPresets / kpiSources). Contract-only scaffold; canonical implementation lands via /rr-send from superspace. See docs/contract-negotiations-2026-05-15.md §4.",
+      "source": "rahmanef63/resource-site",
+      "slicePath": "frontend/slices/platform-admin",
+      "convexPaths": [
+        "convex/features/platform-admin"
+      ],
+      "npm": [],
+      "shadcn": [],
+      "env": [
+        {
+          "name": "PLATFORM_ADMIN_EMAILS",
+          "scope": "convex",
+          "required": true,
+          "description": "Comma-separated list of platform admin email addresses."
+        }
+      ],
+      "peers": [
+        {
+          "slug": "convex-auth",
+          "range": "^0.1",
+          "reason": "Actor identity for audit + tier-set ops."
+        },
+        {
+          "slug": "audit-log",
+          "range": "^0.2",
+          "reason": "padmin_audit table feeds through audit-log TenantAdapter."
+        }
+      ],
+      "providers": [],
+      "tags": [
+        "infra",
+        "admin",
+        "multi-tenant",
+        "saas",
+        "platform"
+      ],
+      "agentRecipe": "Contract-only scaffold. Wait for superspace /rr-send platform-admin before adopting. Distinct from per-instance `admin` slug."
     },
     {
       "slug": "audit-log",

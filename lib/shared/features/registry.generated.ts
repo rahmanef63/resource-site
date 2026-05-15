@@ -15,6 +15,7 @@ import { documentChecklistConfig } from "@/features/document-checklist/config";
 import { dokuPaymentConfig } from "@/features/doku-payment/config";
 import { mdxBlogConfig } from "@/features/mdx-blog/config";
 import { midtransPaymentConfig } from "@/features/midtrans-payment/config";
+import { platformAdminConfig } from "@/features/platform-admin/config";
 import { resendNewsletterConfig } from "@/features/resend-newsletter/config";
 import { seoConfig } from "@/features/seo/config";
 import { vectorSearchConfig } from "@/features/vector-search/config";
@@ -73,6 +74,11 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...midtransPaymentConfig,
     importPath: "@/features/midtrans-payment/config",
+    version: "0.1.0",
+  },
+  {
+    ...platformAdminConfig,
+    importPath: "@/features/platform-admin/config",
     version: "0.1.0",
   },
   {

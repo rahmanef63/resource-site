@@ -1,0 +1,32 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "platform-admin",
+  "version": "0.1.0",
+  "category": "infra",
+  "title": "Platform Admin — Multi-Tenant Control Plane",
+  "description": "Multi-tenant control plane for SaaS hosts. Workspace lifecycle ops (list/delete/cascade), per-tenant tier presets (gates + quota), KPI dashboard grid. Consumer-domain bits (which tables to sweep, which KPI sources to read, what tier ladder applies) injected via adapter props — see contract-negotiations-2026-05-15 §4. superspace canonical reference implementation.",
+  "namespace": "@/features/platform-admin",
+  "kind": "full",
+  "convex": {
+    "tablesExport": "platformAdminTables",
+    "schemaPath": "convex/features/platform-admin/schema.ts",
+    "rootPaths": ["convex/features/platform-admin"]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/platform-admin",
+    "configExport": "platformAdminConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": ["PLATFORM_ADMIN_EMAILS"],
+    "peers": [
+      { "slug": "convex-auth", "range": "^0.1", "reason": "Actor identity for audit + tier-set ops." },
+      { "slug": "audit-log", "range": "^0.2", "reason": "padmin_audit table feeds through audit-log TenantAdapter." }
+    ]
+  },
+  "registers": ["registry"],
+  "audit": ["bp:public-fn-validator", "bp:rbac-gate", "bp:workspace-isolation"],
+  "license": "MIT",
+  "tags": ["infra", "admin", "multi-tenant", "saas", "platform"]
+}
