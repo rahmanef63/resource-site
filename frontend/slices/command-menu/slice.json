@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "command-menu",
+  "version": "0.2.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "Command Menu",
+  "description": "Renderless ⌘K command palette + generic search modal. Consumer-supplied groups + onSelect + label bag; slice owns dialog chrome, hotkey, and MRU history. Pulled UP from notion-page-clone's command-palette renderless surface (Wave N+3.7).",
+  "namespace": "@/features/command-menu",
+  "convex": { "tablesExport": "", "schemaPath": "", "rootPaths": [] },
+  "frontend": { "slicePath": "frontend/slices/command-menu", "configExport": "commandMenuConfig" },
+  "deps": {
+    "npm": ["cmdk@^1.0.0"],
+    "shadcn": ["command", "dialog"],
+    "env": [],
+    "peers": []
+  },
+  "registers": ["registry"],
+  "license": "MIT",
+  "tags": ["ui", "palette", "cmd-k", "navigation", "keyboard", "search"],
+  "providers": []
+}

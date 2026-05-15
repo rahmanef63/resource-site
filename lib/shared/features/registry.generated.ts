@@ -9,6 +9,7 @@ import { aiRouterConfig } from "@/features/ai-router/config";
 import { auditLogConfig } from "@/features/audit-log/config";
 import { broadcastChannelSyncConfig } from "@/features/broadcast-channel-sync/config";
 import { calComBookingConfig } from "@/features/cal-com-booking/config";
+import { commandMenuConfig } from "@/features/command-menu/config";
 import { commentsConfig } from "@/features/comments/config";
 import { convexAuthConfig } from "@/features/convex-auth/config";
 import { documentChecklistConfig } from "@/features/document-checklist/config";
@@ -45,6 +46,11 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     ...calComBookingConfig,
     importPath: "@/features/cal-com-booking/config",
     version: "0.1.0",
+  },
+  {
+    ...commandMenuConfig,
+    importPath: "@/features/command-menu/config",
+    version: "0.2.0",
   },
   {
     ...commentsConfig,

@@ -15,14 +15,29 @@
       "at": "2026-04-25T16:10:00.000Z",
       "transforms": ["alias-rewrite", "merge-with-notion-palette"],
       "actor": "rahman"
+    },
+    {
+      "from": "notion-page-clone:frontend/slices/command-palette@0.3.0",
+      "to": "kitab:0.2.0",
+      "at": "2026-05-15T13:30:00.000Z",
+      "transforms": [
+        "renderless-promote",
+        "drop-nosion-adapters",
+        "drop-store-search-router-coupling",
+        "searchmodal-bindings-prop",
+        "label-bag-defaults",
+        "history-key-rename:nosion.cmdk.history->kitab.cmdk.history"
+      ],
+      "actor": "claude-code"
     }
   ],
   "consumers": {
     "notion": {
       "adopted_at": "2026-05-13T10:00:00.000Z",
-      "version": "0.1.0",
-      "drift_score": 11,
-      "last_synced_at": "2026-05-13T10:00:00.000Z"
+      "version": "0.3.0",
+      "drift_score": 6,
+      "last_synced_at": "2026-05-15T13:30:00.000Z",
+      "notes": "Pre-adopted at 0.3.0 — UP-sync source. Adapters layer (NosionCommandPalette + nosion.tsx + nosionStandalone) lives consumer-side, excluded from kitab portable surface."
     },
     "superspace": {
       "adopted_at": "2026-05-14T07:30:00.000Z",

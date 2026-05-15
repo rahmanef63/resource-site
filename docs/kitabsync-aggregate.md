@@ -1,9 +1,17 @@
 # KitabSync Aggregate Report
 
-> Last refresh: 2026-05-15 (post Wave N+3.6 — mdx-blog@0.2.0 UP-sync ingest from content)
+> Last refresh: 2026-05-15 (post Wave N+3.7 — command-menu@0.2.0 UP-sync ingest from notion)
 > Source: scrape of `<consumer-repo>/docs/kitabsync.md` × 6 consumers + live `npm run scan:consumers`
 > Skipped: cescadesigns (operator decision — minimal overlap expected)
 > Kitab snapshot ref: this commit
+
+## Wave N+3.7 deltas (2026-05-15 — late late late)
+
+| # | Action | Side | Result |
+|---:|---|---|---|
+| 14 | `command-menu@0.2.0` UP-sync ingest from notion-page-clone | kitab | Adopted notion's renderless `CommandPalette` + `CommandGroupList` + label-bag-driven `SearchModal` from `command-palette@0.3.0` portable surface. NEW tier-3 slice at `frontend/slices/command-menu/` (was: facade-only entry pointing at template-base). Dropped notion's `adapters/nosion.tsx` + `adapters/NosionCommandPalette.tsx` + `ShortcutsDialog` (consumer-only). Refactored `SearchModal` to take `bindings: SearchModalBindings` (pages/databases/recents + onSelect callbacks) instead of pulling `useStore`/`useSearch`/`useNavigate`/`DynamicIcon` directly. Renamed history key `nosion.cmdk.history → kitab.cmdk.history`. Contract bumped `0.1.0 → 0.2.0` with `forbiddenTerms: ["nosion","Nosion"]` + `requiredProps: ["groups","onNavigate","labels"]`. 8 vitest cases lock the CommandGroup/CommandItem/CommandPaletteLabels/SearchModalLabels shapes + DEFAULT constants. |
+| — | Cross-consumer matrix update | kitab | notion `command-menu` flips `up-needed (kitab 0.1.0)` → `up-needed (kitab 0.2.0)` because notion still ships the consumer-side `adapters/` extras. Verdict still flagged — see follow-up #15. |
+| — | Per Wave N+3.6 follow-up #14 | kitab | Action 14 of run history closed. rahmanef.command-palette consumer DOWN-sync now possible against `command-menu@0.2.0`. |
 
 ## Wave N+3.6 deltas (2026-05-15 — late late)
 
@@ -116,7 +124,9 @@ Reads as: `verdict · generalization` (alias in parens when consumer renamed the
 | **11** | ~~`/rr-send mdx-blog` from kitab maintainer side~~ | **DONE** ✓ (Wave N+3.6) — kitab `mdx-blog@0.2.0` LANDED with `defineMdxBlog(opts)` factory + 4 config props. rahmanef.blog now eligible for DOWN-sync; superspace.blog still parked (consumer-locked plain-text). |
 | 12 | `/rr-send seo` + `/rr-send admin` from rahmanef once kitab opens UP-sync slot | rahmanef has both portable + up-needed but `syncDirection: down-only` — flip to bidirectional after kitab maintainer signals readiness. |
 | **13** | ~~Fix `npx rahman-resources scan-consumers` cache-path bug~~ | **DONE** ✓ (CLI 0.13.1, SHA `659c7fb`) · 4-tier KITAB_ROOT resolution (env > flag > walk-up cwd > __dirname fallback). |
-| 14 | Push UP `command-menu@0.3.0` from notion to kitab | kitab maintainer | Renderless API ready. Accept as `command-menu@0.2.0` contract bump. |
+| **14** | ~~Push UP `command-menu@0.3.0` from notion to kitab~~ | kitab maintainer | **DONE** ✓ (Wave N+3.7) — kitab `command-menu@0.2.0` LANDED with renderless `CommandPalette` + bindings-driven `SearchModal` + 8 vitest cases. notion adapters left consumer-side. |
+| 15 | Decide adapter-scope split for notion's `adapters/nosion.*` (drop vs consumer-locked `nosion-command-palette` slice) | kitab maintainer + notion | open · keeps notion verdict permanently `up-needed` until resolved. |
+| 16 | rahmanef.command-palette DOWN-sync to `command-menu@0.2.0` | rahmanef | open · contract API now stable — can adopt the renderless surface. |
 
 ## Consumer-only seed candidates (P4 — unchanged)
 
@@ -140,4 +150,5 @@ Verified live via `node packages/cli/bin/scan-consumers.mjs --consumer rahmanef|
 | 2026-05-15 late evening | Wave N+3.3 — command-menu portable + 3 kitab contract level shifts + scan multi-path | 5 + live scan | `0ccd403` | claude-code |
 | 2026-05-15 late | Wave N+3.4 — comments@0.2.0 frontend + platform-admin scaffold | 5 + live scan | `01c5132` | claude-code |
 | 2026-05-15 late | Wave N+3.5 — comments@0.2.0 Convex rebuild + audit-log@0.2.0 ship + 2 migration scripts + split proposal + content parse-error fix | 6 + live scan | `484ba2b` | claude-code |
-| 2026-05-15 late late | Wave N+3.6 — mdx-blog@0.2.0 UP-sync ingest from content (defineMdxBlog factory + 4 props + 8 vitest cases) | 1 (mdx-blog) | (this commit) | claude-code |
+| 2026-05-15 late late | Wave N+3.6 — mdx-blog@0.2.0 UP-sync ingest from content (defineMdxBlog factory + 4 props + 8 vitest cases) | 1 (mdx-blog) | (prev commit) | claude-code |
+| 2026-05-15 late late late | Wave N+3.7 — command-menu@0.2.0 UP-sync ingest from notion (renderless CommandPalette + bindings-driven SearchModal + 8 vitest cases, dropped Nosion adapters) | 1 (command-menu) | (this commit) | claude-code |
