@@ -1,6 +1,6 @@
 {
   "name": "rahman-resources",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "description": "Scaffolder + installer for Rahman Resources kitab — npx rahman-resources init/add/lift/scaffold-slice/publish-slice. Tier-3 portable feature slices + manifest + skills + CRUD workflows.",
   "type": "module",
   "license": "MIT",

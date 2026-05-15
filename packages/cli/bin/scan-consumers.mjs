@@ -21,8 +21,45 @@ import {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Kitab repo root resolved relative to this file's location: bin/ → cli → packages → repo
-const KITAB_ROOT = resolve(__dirname, "..", "..", "..");
+/**
+ * Resolve KITAB_ROOT in priority order:
+ *   1. `process.env.KITAB_ROOT` — explicit operator override.
+ *   2. `--kitab-root <path>` flag — same idea, per-invocation.
+ *   3. Walk up from `process.cwd()` looking for the kitab sentinel
+ *      (a directory containing both `frontend/slices/_templates` AND
+ *      `packages/cli/bin/scan-consumers.mjs`).
+ *   4. Fall back to `__dirname`-relative resolution — works in monorepo
+ *      dev (`node packages/cli/bin/scan-consumers.mjs`) but fails when
+ *      published + invoked via npx (cache path).
+ *
+ * If none resolve to a directory containing `frontend/slices/`, the CLI
+ * exits with a helpful message instead of `ENOENT scandir`.
+ */
+function isKitabRoot(p) {
+  return (
+    existsSync(join(p, "frontend", "slices", "_templates")) &&
+    existsSync(join(p, "packages", "cli", "bin", "scan-consumers.mjs"))
+  );
+}
+
+function walkUpForKitab(start) {
+  let cur = resolve(start);
+  while (cur !== dirname(cur)) {
+    if (isKitabRoot(cur)) return cur;
+    cur = dirname(cur);
+  }
+  return null;
+}
+
+function resolveKitabRoot(flagValue) {
+  if (process.env.KITAB_ROOT) return resolve(process.env.KITAB_ROOT);
+  if (flagValue) return resolve(flagValue);
+  const cwdMatch = walkUpForKitab(process.cwd());
+  if (cwdMatch) return cwdMatch;
+  const fallback = resolve(__dirname, "..", "..", "..");
+  if (existsSync(join(fallback, "frontend", "slices"))) return fallback;
+  return null;
+}
 
 /**
  * Default consumer registry. Edit when adding new consumers. Paths are
@@ -58,8 +95,8 @@ const VERSION_RE = /\bversion\s*:\s*["'](\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?)["']/
  * Skips folders without a contract file (drift scanner separately reports
  * those — we only need version data here).
  */
-async function readKitabContractVersions() {
-  const slicesDir = join(KITAB_ROOT, "frontend", "slices");
+async function readKitabContractVersions(kitabRoot) {
+  const slicesDir = join(kitabRoot, "frontend", "slices");
   const entries = await readdir(slicesDir, { withFileTypes: true });
   const out = new Map();
   for (const e of entries) {
@@ -80,13 +117,15 @@ async function readKitabContractVersions() {
 }
 
 function parseArgs(argv) {
-  const args = { paths: [], consumers: [], all: false, json: false, help: false };
+  const args = { paths: [], consumers: [], all: false, json: false, help: false, kitabRoot: null };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === "--path") {
       args.paths.push(argv[++i]);
     } else if (a === "--consumer") {
       args.consumers.push(argv[++i]);
+    } else if (a === "--kitab-root") {
+      args.kitabRoot = argv[++i];
     } else if (a === "--all") {
       args.all = true;
     } else if (a === "--json") {
@@ -112,16 +151,24 @@ Options:
   --path <dir>            Scan one consumer repo at this path. Repeatable.
   --consumer <name>       Scan a registered consumer by name (see DEFAULT_CONSUMERS).
                           Repeatable.
+  --kitab-root <dir>      Override kitab repo path. Default: walk up from cwd.
+                          Equivalent to setting KITAB_ROOT env var.
   --all                   Scan every registered consumer.
   --json                  Machine-readable JSON output.
   -h, --help              Print this help.
 
 Default if no flag given: --all.
 
+Kitab root resolution priority:
+  1. KITAB_ROOT env var
+  2. --kitab-root flag
+  3. Walk up from cwd looking for a kitab sentinel
+  4. __dirname-relative (works in monorepo dev only)
+
 Exit code:
   0  no UP-sync needed (DOWN-sync surfaced as info, not error)
   1  at least one consumer slice is up-needed/diverged AND policy != frozen
-  2  malformed manifest in some consumer (also exits 1)
+  2  malformed manifest in some consumer, OR kitab root not resolvable
 `);
 }
 
@@ -210,8 +257,19 @@ export async function runScan(argv = []) {
     printHelp();
     process.exit(0);
   }
+  const KITAB_ROOT = resolveKitabRoot(args.kitabRoot);
+  if (!KITAB_ROOT) {
+    console.error(
+      color(
+        "red",
+        "could not locate kitab root. Set KITAB_ROOT env var, pass --kitab-root <path>, or run from within the kitab repo (or any subdir).",
+        false,
+      ),
+    );
+    process.exit(2);
+  }
   const targets = resolveTargets(args);
-  const kitabVersions = await readKitabContractVersions();
+  const kitabVersions = await readKitabContractVersions(KITAB_ROOT);
   const reports = await Promise.all(targets.map((t) => scanOne(t, kitabVersions)));
 
   let upNeeded = 0;
@@ -243,6 +301,7 @@ export async function runScan(argv = []) {
 
   console.log(color("cyan", "\n== consumer sync scan ==", false));
   console.log(color("dim", `kitab root: ${KITAB_ROOT}  (${kitabVersions.size} contracts)`, false));
+  void KITAB_ROOT;
   for (const r of reports) {
     console.log("");
     console.log(color("cyan", `▸ ${r.name}`, false), color("dim", r.path, false));
