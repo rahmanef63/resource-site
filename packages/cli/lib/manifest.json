@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-14T03:46:32.521Z",
+  "generatedAt": "2026-05-15T03:17:39.773Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -1203,6 +1203,76 @@
         "resend",
         "convex"
       ]
+    },
+    {
+      "slug": "admin",
+      "title": "Admin — Generic Shell",
+      "category": "infra",
+      "description": "Landing page scaffold + Convex admin probe (isAdmin / counts). Consumer composes feature panels into the grid. Gated by requireAdmin on Convex side; superadmin email gate via SUPER_ADMIN_EMAIL env.",
+      "source": "rahmanef63/resource-site",
+      "install": "npx rahman-resources add admin",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `rr add admin`. Set SUPER_ADMIN_EMAIL via `npx convex env set` to lock down /admin to one address.",
+      "tags": [
+        "infra",
+        "admin",
+        "shell",
+        "crud"
+      ]
+    },
+    {
+      "slug": "audit-log",
+      "title": "Audit Log — Workspace Events",
+      "category": "infra",
+      "description": "Workspace-scoped audit event recorder. Canonical logAuditEvent helper for mutations + actions; supports entity tracking, before/after diff, IP/user-agent capture.",
+      "source": "rahmanef63/resource-site",
+      "install": "npx rahman-resources add audit-log",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `rr add audit-log`. Import logAuditEvent from convex/_shared/auditLogger.ts and call inside every workspace-scoped mutation with { action, workspaceId, entityType, entityId, before?, after? }.",
+      "tags": [
+        "infra",
+        "audit",
+        "compliance",
+        "logging"
+      ]
+    },
+    {
+      "slug": "comments",
+      "title": "Comments — Threaded",
+      "category": "content",
+      "description": "Workspace-scoped threaded comments anchored to pages or blocks. Soft-delete + resolve semantics. useComments(opts) hook returns items + openCount + CRUD mutations.",
+      "source": "rahmanef63/resource-site",
+      "install": "npx rahman-resources add comments",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `rr add comments`. Use useComments({ pageId } | { blockId }) — returns items, openCount, addComment, editComment, resolveComment, deleteComment. resolvedAt!=null = thread closed but visible.",
+      "tags": [
+        "content",
+        "social",
+        "comments",
+        "threaded",
+        "annotations"
+      ]
+    },
+    {
+      "slug": "seo",
+      "title": "SEO — AI Metadata Generator",
+      "category": "content",
+      "description": "Service slice for SEO metadata generation — Anthropic-backed action with per-user 24h cost guard. No public route. Backend exposes generate + generateAndApply mutations gated by requireAdmin.",
+      "source": "rahmanef63/resource-site",
+      "install": "npx rahman-resources add seo",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `rr add seo`. Call seo.generate from server actions or admin mutations. Cost guard rate-limits per-user within 24h via callsInWindow query.",
+      "tags": [
+        "content",
+        "seo",
+        "ai",
+        "anthropic",
+        "metadata-generator"
+      ]
     }
   ],
   "slices": [
@@ -1937,6 +2007,151 @@
         "convex"
       ],
       "agentRecipe": "Wire contactMessages.send mutation in convex/. Server emails via Resend from form@yourdomain.com. Always validate inputs with Zod or v.* server-side. Anonymous allowed."
+    },
+    {
+      "slug": "admin",
+      "title": "Admin — Generic Shell",
+      "category": "infra",
+      "kind": "full",
+      "version": "0.1.0",
+      "description": "Landing page scaffold + Convex admin probe (isAdmin / counts). Consumer composes feature panels into the grid. Gated by requireAdmin on Convex side; superadmin email gate via SUPER_ADMIN_EMAIL env.",
+      "source": "rahmanef63/resource-site",
+      "slicePath": "frontend/slices/admin",
+      "convexPaths": [
+        "convex/features/admin"
+      ],
+      "npm": [],
+      "shadcn": [
+        "card",
+        "button"
+      ],
+      "env": [
+        {
+          "name": "SUPER_ADMIN_EMAIL",
+          "scope": "convex",
+          "required": false
+        }
+      ],
+      "peers": [
+        {
+          "slug": "convex-auth",
+          "range": "^0.1",
+          "reason": "requireAdmin gate uses convex-auth user identity."
+        }
+      ],
+      "providers": [],
+      "tags": [
+        "infra",
+        "admin",
+        "shell",
+        "crud"
+      ],
+      "agentRecipe": "Run `rr add admin`. Set SUPER_ADMIN_EMAIL via `npx convex env set` to lock down /admin to one address."
+    },
+    {
+      "slug": "audit-log",
+      "title": "Audit Log — Workspace Events",
+      "category": "infra",
+      "kind": "backend",
+      "version": "0.1.0",
+      "description": "Workspace-scoped audit event recorder. Canonical logAuditEvent helper for mutations + actions; supports entity tracking, before/after diff, IP/user-agent capture.",
+      "source": "rahmanef63/resource-site",
+      "slicePath": "frontend/slices/audit-log",
+      "convexPaths": [
+        "convex/features/audit-log"
+      ],
+      "npm": [],
+      "shadcn": [],
+      "env": [],
+      "peers": [
+        {
+          "slug": "convex-auth",
+          "range": "^0.1",
+          "reason": "Event actor resolved via authenticated user."
+        }
+      ],
+      "providers": [],
+      "tags": [
+        "infra",
+        "audit",
+        "compliance",
+        "logging"
+      ],
+      "agentRecipe": "Run `rr add audit-log`. Import logAuditEvent from convex/_shared/auditLogger.ts and call inside every workspace-scoped mutation with { action, workspaceId, entityType, entityId, before?, after? }."
+    },
+    {
+      "slug": "comments",
+      "title": "Comments — Threaded",
+      "category": "content",
+      "kind": "full",
+      "version": "0.1.0",
+      "description": "Workspace-scoped threaded comments anchored to pages or blocks. Soft-delete + resolve semantics. useComments(opts) hook returns items + openCount + CRUD mutations.",
+      "source": "rahmanef63/resource-site",
+      "slicePath": "frontend/slices/comments",
+      "convexPaths": [
+        "convex/features/comments"
+      ],
+      "npm": [],
+      "shadcn": [
+        "button",
+        "textarea",
+        "avatar"
+      ],
+      "env": [],
+      "peers": [
+        {
+          "slug": "convex-auth",
+          "range": "^0.1",
+          "reason": "Comment author identity from convex-auth."
+        }
+      ],
+      "providers": [],
+      "tags": [
+        "content",
+        "social",
+        "comments",
+        "threaded",
+        "annotations"
+      ],
+      "agentRecipe": "Run `rr add comments`. Use useComments({ pageId } | { blockId }) — returns items, openCount, addComment, editComment, resolveComment, deleteComment. resolvedAt!=null = thread closed but visible."
+    },
+    {
+      "slug": "seo",
+      "title": "SEO — AI Metadata Generator",
+      "category": "content",
+      "kind": "full",
+      "version": "0.1.0",
+      "description": "Service slice for SEO metadata generation — Anthropic-backed action with per-user 24h cost guard. No public route. Backend exposes generate + generateAndApply mutations gated by requireAdmin.",
+      "source": "rahmanef63/resource-site",
+      "slicePath": "frontend/slices/seo",
+      "convexPaths": [
+        "convex/features/seo"
+      ],
+      "npm": [],
+      "shadcn": [],
+      "env": [
+        {
+          "name": "ANTHROPIC_API_KEY",
+          "scope": "server",
+          "required": true
+        }
+      ],
+      "peers": [
+        {
+          "slug": "convex-auth",
+          "range": "^0.1",
+          "reason": "Cost guard + requireAdmin gates use convex-auth user identity."
+        }
+      ],
+      "providers": [],
+      "tags": [
+        "content",
+        "seo",
+        "ai",
+        "anthropic",
+        "metadata-generator"
+      ],
+      "agentRecipe": "Run `rr add seo`. Call seo.generate from server actions or admin mutations. Cost guard rate-limits per-user within 24h via callsInWindow query."
     }
   ]
 }
