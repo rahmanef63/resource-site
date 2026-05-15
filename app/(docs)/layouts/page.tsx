@@ -1,10 +1,12 @@
-import Link from "next/link";
 import { LayoutGrid } from "lucide-react";
 import { layouts } from "@/lib/content/layouts";
 import { CatalogCard } from "@/components/site/catalog/catalog-card";
-import { CatalogSearch, type CatalogSearchItem } from "@/components/site/catalog/catalog-search";
+import { type CatalogSearchItem } from "@/components/site/catalog/catalog-search";
+import { CatalogHero } from "@/components/site/catalog/catalog-hero";
+import { CatalogTabs } from "@/components/site/catalog/catalog-tabs";
 import { IframeThumbnail } from "@/components/site/catalog/iframe-thumbnail";
 import { MockThumbnail } from "@/components/site/catalog/mock-thumbnail";
+import { UseWideLayout } from "@/components/site/use-wide-layout";
 
 const CATEGORY_LABEL: Record<string, string> = {
   marketing: "Marketing",
@@ -58,23 +60,17 @@ export default function LayoutsPage() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <p className="text-sm font-medium text-muted-foreground">Catalog</p>
-        <div className="mt-2 flex items-center gap-2">
-          <LayoutGrid className="size-6 text-muted-foreground" />
-          <h1 className="text-3xl font-bold tracking-tight">Layouts</h1>
-        </div>
-        <p className="mt-3 max-w-2xl text-muted-foreground">
-          {sources.length} cookbook layouts — marketing, dashboard, and CMS shapes. For full apps,
-          see{" "}
-          <Link href="/templates" className="underline hover:text-foreground">
-            website templates
-          </Link>
-          .
-        </p>
-      </div>
+      <UseWideLayout />
+      <CatalogHero
+        pill="Catalog"
+        icon={LayoutGrid}
+        title="Layouts"
+        subtitle={`${sources.length} cookbook layouts — marketing, dashboard, and CMS shapes. For full apps, see website templates.`}
+        primaryCta={{ label: "Website templates", href: "/templates" }}
+        secondaryCta={{ label: "Slices", href: "/slices" }}
+      />
 
-      <CatalogSearch
+      <CatalogTabs
         items={items}
         allTags={topTags}
         placeholder="Cari layout…"

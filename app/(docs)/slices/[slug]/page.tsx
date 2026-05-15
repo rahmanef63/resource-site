@@ -1,11 +1,23 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, ExternalLink, Layers, Eye } from "lucide-react";
+import {
+  ArrowLeft,
+  Bot,
+  Eye,
+  ExternalLink,
+  Layers,
+  Link2,
+  Package,
+  Plug,
+  Server,
+  Settings2,
+  Terminal,
+} from "lucide-react";
 import { slices, getSlice } from "@/lib/content/slices";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PreviewFrame } from "@/components/site/preview-frame";
+import { ShowcaseCard } from "@/components/site/catalog/showcase-card";
 import { UseWideLayout } from "@/components/site/use-wide-layout";
 
 export function generateStaticParams() {
@@ -31,8 +43,10 @@ export default async function SliceDetailPage({ params }: { params: Promise<{ sl
     .map((p) => ({ peer: p, target: getSlice(p.slug) }))
     .filter((x): x is { peer: typeof x.peer; target: NonNullable<typeof x.target> } => !!x.target);
 
+  const sourceHref = `https://github.com/rahmanef63/resource-site/tree/main/${slice.slicePath}`;
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <UseWideLayout />
       <div>
         <Link
@@ -65,55 +79,58 @@ export default async function SliceDetailPage({ params }: { params: Promise<{ sl
       </div>
 
       {slice.previewPath && (
-        <Card>
-          <CardContent className="space-y-3 p-4">
-            <div className="flex items-baseline justify-between">
-              <h2 className="flex items-center gap-1.5 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-                <Eye className="size-3.5" /> Live preview
-              </h2>
-              <a
-                href={slice.previewPath}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
-              >
-                Open standalone <ExternalLink className="size-3" />
-              </a>
-            </div>
-            <PreviewFrame src={slice.previewPath} defaultView="desktop" defaultZoom={1} />
-          </CardContent>
-        </Card>
+        <ShowcaseCard
+          icon={Eye}
+          label="Live preview"
+          actions={
+            <>
+              <Button asChild variant="ghost" size="sm" className="h-7 gap-1 px-2 text-xs">
+                <a href={slice.previewPath} target="_blank" rel="noreferrer">
+                  Open standalone <ExternalLink className="size-3" />
+                </a>
+              </Button>
+              <Button asChild variant="ghost" size="sm" className="h-7 gap-1 px-2 text-xs">
+                <a href={sourceHref} target="_blank" rel="noreferrer">
+                  View source <ExternalLink className="size-3" />
+                </a>
+              </Button>
+            </>
+          }
+          variant="iframe"
+        >
+          <PreviewFrame src={slice.previewPath} defaultView="desktop" defaultZoom={1} />
+        </ShowcaseCard>
       )}
 
-      <Card>
-        <CardContent className="space-y-4 p-6">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Install</h2>
-          <pre className="overflow-x-auto rounded-md bg-muted px-4 py-3 text-sm">
-            <code>{`npx rahman-resources add ${slice.slug}`}</code>
-          </pre>
-          <p className="text-xs text-muted-foreground">
-            Or pull just the source: <code className="rounded bg-muted px-1 py-0.5 text-[11px]">npx rahman-resources lift rahman:{slice.slug}</code>
-          </p>
-        </CardContent>
-      </Card>
+      <ShowcaseCard icon={Terminal} label="Install" variant="static">
+        <pre className="overflow-x-auto rounded-md bg-muted px-4 py-3 text-sm">
+          <code>{`npx rahman-resources add ${slice.slug}`}</code>
+        </pre>
+        <p className="mt-3 text-xs text-muted-foreground">
+          Or pull just the source:{" "}
+          <code className="rounded bg-muted px-1 py-0.5 text-[11px]">
+            npx rahman-resources lift rahman:{slice.slug}
+          </code>
+        </p>
+      </ShowcaseCard>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <DetailCard title="Frontend">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <ShowcaseCard icon={Layers} label="Frontend">
           <Row label="Slice path">
             <code className="text-xs">{slice.slicePath}</code>
           </Row>
           {slice.shadcn && slice.shadcn.length > 0 && (
             <Row label="shadcn">
-              <div className="flex flex-wrap gap-1">
+              <div className="mt-1 flex flex-wrap gap-1">
                 {slice.shadcn.map((c) => (
                   <Badge key={c} variant="outline" className="text-[10px]">{c}</Badge>
                 ))}
               </div>
             </Row>
           )}
-        </DetailCard>
+        </ShowcaseCard>
 
-        <DetailCard title="Backend (Convex)">
+        <ShowcaseCard icon={Server} label="Backend (Convex)">
           {slice.convexPaths && slice.convexPaths.length > 0 ? (
             slice.convexPaths.map((p) => (
               <Row key={p} label="Path">
@@ -123,9 +140,9 @@ export default async function SliceDetailPage({ params }: { params: Promise<{ sl
           ) : (
             <p className="text-xs text-muted-foreground">No Convex backend (frontend-only slice).</p>
           )}
-        </DetailCard>
+        </ShowcaseCard>
 
-        <DetailCard title="npm packages">
+        <ShowcaseCard icon={Package} label="npm packages">
           {slice.npm && slice.npm.length > 0 ? (
             <div className="flex flex-wrap gap-1.5">
               {slice.npm.map((p) => (
@@ -135,9 +152,9 @@ export default async function SliceDetailPage({ params }: { params: Promise<{ sl
           ) : (
             <p className="text-xs text-muted-foreground">No external npm deps.</p>
           )}
-        </DetailCard>
+        </ShowcaseCard>
 
-        <DetailCard title="Environment">
+        <ShowcaseCard icon={Settings2} label="Environment">
           {slice.env && slice.env.length > 0 ? (
             <ul className="space-y-1.5">
               {slice.env.map((e) => (
@@ -153,65 +170,57 @@ export default async function SliceDetailPage({ params }: { params: Promise<{ sl
           ) : (
             <p className="text-xs text-muted-foreground">No env vars required.</p>
           )}
-        </DetailCard>
+        </ShowcaseCard>
       </div>
 
       {peerSlices.length > 0 && (
-        <Card>
-          <CardContent className="space-y-3 p-6">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Peer slices</h2>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {peerSlices.map(({ peer, target }) => (
-                <Link
-                  key={peer.slug}
-                  href={`/slices/${peer.slug}`}
-                  className="group flex items-start justify-between gap-3 rounded-lg border border-border/60 p-3 transition hover:border-primary/40"
-                >
-                  <div>
-                    <p className="text-sm font-medium group-hover:underline">{target.title}</p>
-                    <p className="text-xs text-muted-foreground">{peer.range}</p>
-                    {peer.reason && (
-                      <p className="mt-1 text-xs text-muted-foreground">{peer.reason}</p>
-                    )}
-                  </div>
-                  <ExternalLink className="size-4 text-muted-foreground" />
-                </Link>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+        <ShowcaseCard icon={Link2} label="Peer slices">
+          <div className="grid gap-3 sm:grid-cols-2">
+            {peerSlices.map(({ peer, target }) => (
+              <Link
+                key={peer.slug}
+                href={`/slices/${peer.slug}`}
+                className="group flex items-start justify-between gap-3 rounded-lg border border-border/60 p-3 transition hover:border-primary/40"
+              >
+                <div>
+                  <p className="text-sm font-medium group-hover:underline">{target.title}</p>
+                  <p className="text-xs text-muted-foreground">{peer.range}</p>
+                  {peer.reason && (
+                    <p className="mt-1 text-xs text-muted-foreground">{peer.reason}</p>
+                  )}
+                </div>
+                <ExternalLink className="size-4 text-muted-foreground" />
+              </Link>
+            ))}
+          </div>
+        </ShowcaseCard>
       )}
 
       {slice.providers && slice.providers.length > 0 && (
-        <Card>
-          <CardContent className="space-y-3 p-6">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Providers</h2>
-            <div className="flex flex-wrap gap-1.5">
-              {slice.providers.map((p) => (
-                <Badge key={p} variant="secondary" className="capitalize">{p}</Badge>
-              ))}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Sub-providers live as siblings under{" "}
-              <code className="rounded bg-muted px-1 py-0.5 text-[11px]">components/providers/</code> and{" "}
-              <code className="rounded bg-muted px-1 py-0.5 text-[11px]">actions/</code>. Add a sibling to plug in another vendor without API churn.
-            </p>
-          </CardContent>
-        </Card>
+        <ShowcaseCard icon={Plug} label="Providers">
+          <div className="flex flex-wrap gap-1.5">
+            {slice.providers.map((p) => (
+              <Badge key={p} variant="secondary" className="capitalize">{p}</Badge>
+            ))}
+          </div>
+          <p className="mt-3 text-xs text-muted-foreground">
+            Sub-providers live as siblings under{" "}
+            <code className="rounded bg-muted px-1 py-0.5 text-[11px]">components/providers/</code> and{" "}
+            <code className="rounded bg-muted px-1 py-0.5 text-[11px]">actions/</code>. Add a sibling
+            to plug in another vendor without API churn.
+          </p>
+        </ShowcaseCard>
       )}
 
       {slice.agentRecipe && (
-        <Card>
-          <CardContent className="space-y-2 p-6">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Agent recipe</h2>
-            <p className="text-sm text-muted-foreground">{slice.agentRecipe}</p>
-          </CardContent>
-        </Card>
+        <ShowcaseCard icon={Bot} label="Agent recipe">
+          <p className="text-sm text-muted-foreground">{slice.agentRecipe}</p>
+        </ShowcaseCard>
       )}
 
       <div className="flex flex-wrap items-center gap-2">
         <Button asChild variant="outline" size="sm">
-          <Link href={`https://github.com/rahmanef63/resource-site/tree/main/${slice.slicePath}`} target="_blank" rel="noreferrer">
+          <Link href={sourceHref} target="_blank" rel="noreferrer">
             View source <ExternalLink className="size-3" />
           </Link>
         </Button>
@@ -223,21 +232,12 @@ export default async function SliceDetailPage({ params }: { params: Promise<{ sl
   );
 }
 
-function DetailCard({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <Card>
-      <CardContent className="space-y-3 p-5">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{title}</h3>
-        {children}
-      </CardContent>
-    </Card>
-  );
-}
-
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div>
-      <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{label}</div>
+    <div className="mb-2 last:mb-0">
+      <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+        {label}
+      </div>
       <div className="mt-1">{children}</div>
     </div>
   );

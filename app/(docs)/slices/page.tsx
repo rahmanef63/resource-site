@@ -15,7 +15,9 @@ import {
 import { slices } from "@/lib/content/slices";
 import { Badge } from "@/components/ui/badge";
 import { CatalogCard } from "@/components/site/catalog/catalog-card";
-import { CatalogSearch, type CatalogSearchItem } from "@/components/site/catalog/catalog-search";
+import { type CatalogSearchItem } from "@/components/site/catalog/catalog-search";
+import { CatalogHero } from "@/components/site/catalog/catalog-hero";
+import { CatalogTabs } from "@/components/site/catalog/catalog-tabs";
 import { MockThumbnail } from "@/components/site/catalog/mock-thumbnail";
 import { UseWideLayout } from "@/components/site/use-wide-layout";
 
@@ -27,6 +29,20 @@ export const metadata = {
 const CATEGORY_ORDER = [
   "auth", "payment", "ai", "email", "data", "search", "realtime", "content", "storage", "ui", "infra",
 ];
+
+const CATEGORY_LABEL: Record<string, string> = {
+  auth: "Auth",
+  payment: "Payment",
+  ai: "AI",
+  email: "Email",
+  data: "Data",
+  search: "Search",
+  realtime: "Realtime",
+  content: "Content",
+  storage: "Storage",
+  ui: "UI",
+  infra: "Infra",
+};
 
 const CATEGORY_ICON: Record<string, LucideIcon> = {
   auth: ShieldCheck,
@@ -92,31 +108,35 @@ export default function SlicesPage() {
   return (
     <div className="space-y-8">
       <UseWideLayout />
-      <div>
-        <p className="text-sm font-medium text-muted-foreground">Catalog</p>
-        <div className="mt-2 flex items-center gap-2">
-          <Layers className="size-6 text-muted-foreground" />
-          <h1 className="text-3xl font-bold tracking-tight">Feature slices</h1>
-        </div>
-        <p className="mt-3 max-w-2xl text-muted-foreground">
-          Tier-3 portable vertical slices. Each slice ships a frontend half (
-          <code className="rounded bg-muted px-1 py-0.5 text-xs">frontend/slices/&lt;slug&gt;/</code>) +
-          a Convex backend half (
-          <code className="rounded bg-muted px-1 py-0.5 text-xs">convex/features/&lt;slug&gt;/</code>).
-          Lift one folder, drop it into any compatible project. See{" "}
-          <Link href="/docs" className="underline">slice architecture</Link> for the full plan.
-        </p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          <code className="rounded bg-muted px-2 py-1 text-xs">npx rahman-resources add &lt;slug&gt;</code>
-          <code className="rounded bg-muted px-2 py-1 text-xs">npx rahman-resources lift rahman:&lt;slug&gt;</code>
-        </div>
-      </div>
+      <CatalogHero
+        pill="Catalog"
+        icon={Layers}
+        title="Feature slices"
+        subtitle={
+          <>
+            Tier-3 portable vertical slices. Each slice ships a frontend half +
+            a Convex backend half. Lift one folder, drop it into any compatible
+            project. See{" "}
+            <Link href="/docs" className="underline hover:text-foreground">
+              slice architecture
+            </Link>{" "}
+            for the full plan.
+          </>
+        }
+        primaryCta={{ label: "Bundle builder", href: "/build" }}
+        secondaryCta={{ label: "Templates", href: "/templates" }}
+        commands={[
+          "npx rahman-resources add <slug>",
+          "npx rahman-resources lift rahman:<slug>",
+        ]}
+      />
 
-      <CatalogSearch
+      <CatalogTabs
         items={items}
         allTags={topTags}
         placeholder="Cari slice…"
         groupOrder={CATEGORY_ORDER}
+        groupLabel={CATEGORY_LABEL}
       />
     </div>
   );
