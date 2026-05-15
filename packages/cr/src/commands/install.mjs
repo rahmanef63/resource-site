@@ -24,7 +24,7 @@ export async function runInstall(args) {
 
   if (!f.vps || !f.domain) {
     console.error(kleur.red("--vps and --domain are required"));
-    console.error("Example: npx @rahman/cr install --vps ubuntu@1.2.3.4 --domain control.you.ts.net");
+    console.error("Example: npx rahman-cr install --vps ubuntu@1.2.3.4 --domain control.you.ts.net");
     process.exit(1);
   }
 

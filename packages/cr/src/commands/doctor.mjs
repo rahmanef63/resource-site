@@ -21,7 +21,7 @@ export async function runDoctor() {
   console.log(kleur.green("All local prereqs OK."));
   console.log(
     kleur.gray(
-      "\nNext: pick a path —\n  npx @rahman/cr ai claude         (AI-assisted)\n  npx @rahman/cr install --vps … --domain …  (one-line)",
+      "\nNext: pick a path —\n  npx rahman-cr ai claude         (AI-assisted)\n  npx rahman-cr install --vps … --domain …  (one-line)",
     ),
   );
 }

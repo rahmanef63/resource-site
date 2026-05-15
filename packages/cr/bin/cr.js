@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-// @rahman/cr — VPS Control Room installer
+// rahman-cr — VPS Control Room installer
 // Usage:
-//   npx @rahman/cr init                   interactive wizard
-//   npx @rahman/cr ai <claude|codex|gemini>
-//   npx @rahman/cr install --vps user@ip --domain <d> [--tailscale-key tskey-...]
-//   npx @rahman/cr doctor
+//   npx rahman-cr init                   interactive wizard
+//   npx rahman-cr ai <claude|codex|gemini>
+//   npx rahman-cr install --vps user@ip --domain <d> [--tailscale-key tskey-...]
+//   npx rahman-cr doctor
 
 import kleur from "kleur";
 

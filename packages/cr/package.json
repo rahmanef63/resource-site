@@ -1,5 +1,5 @@
 {
-  "name": "@rahman/cr",
+  "name": "rahman-cr",
   "version": "0.1.0",
   "description": "Installer for VPS Control Room (control-room v2.0). One-line npx or AI-assisted (Claude/Codex/Gemini) flows with /sc-all skill integration.",
   "type": "module",

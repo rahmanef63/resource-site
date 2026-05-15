@@ -11,7 +11,7 @@ export async function runAi(args) {
       kleur.red("Pick a provider:"),
       validProviders.map((p) => kleur.cyan(p)).join(" | "),
     );
-    console.error(`\nExample: ${kleur.bold("npx @rahman/cr ai claude")}`);
+    console.error(`\nExample: ${kleur.bold("npx rahman-cr ai claude")}`);
     process.exit(1);
   }
 

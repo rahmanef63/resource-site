@@ -13,10 +13,10 @@ export function printVersion() {
 
 export function printHelp() {
   console.log(`
-${kleur.bold("@rahman/cr")} — VPS Control Room installer
+${kleur.bold("rahman-cr")} — VPS Control Room installer
 
 ${kleur.bold("Usage")}
-  ${kleur.cyan("npx @rahman/cr")} <command> [options]
+  ${kleur.cyan("npx rahman-cr")} <command> [options]
 
 ${kleur.bold("Commands")}
   ${kleur.green("init")}                    Interactive wizard — pick AI or one-line, walk through env
@@ -36,13 +36,13 @@ ${kleur.bold("Install flags")}
 
 ${kleur.bold("Examples")}
   ${kleur.gray("# AI walks you through every step (paste prompt into Claude/Codex/Gemini)")}
-  npx @rahman/cr ai claude
+  npx rahman-cr ai claude
 
   ${kleur.gray("# One-liner on a VPS you already SSH into and that's already on tailnet")}
-  npx @rahman/cr install --vps ubuntu@1.2.3.4 --domain control.you.ts.net
+  npx rahman-cr install --vps ubuntu@1.2.3.4 --domain control.you.ts.net
 
   ${kleur.gray("# Full one-liner with fresh Tailscale install")}
-  npx @rahman/cr install --vps ubuntu@1.2.3.4 --domain control.you.ts.net \\
+  npx rahman-cr install --vps ubuntu@1.2.3.4 --domain control.you.ts.net \\
     --tailscale-key tskey-auth-XXXX
 
 ${kleur.bold("Docs")}

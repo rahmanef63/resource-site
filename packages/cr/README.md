@@ -1,4 +1,4 @@
-# @rahman/cr
+# rahman-cr
 
 > Installer for **VPS Control Room v2.0** — mobile-first PWA dashboard
 > for driving a single VPS through a web browser.
@@ -8,18 +8,18 @@
 
 ```bash
 # Option A — AI-assisted (Claude / Codex / Gemini)
-npx @rahman/cr ai claude
+npx rahman-cr ai claude
 # prints a structured prompt + copies it to clipboard → paste into your AI
 
 # Option B — One-line non-interactive install
-npx @rahman/cr install --vps user@1.2.3.4 --domain control.you.ts.net
+npx rahman-cr install --vps user@1.2.3.4 --domain control.you.ts.net
 # fresh VPS not on Tailscale yet? add --tailscale-key tskey-auth-XXXX
 
 # Option C — Interactive wizard (asks A or B for you)
-npx @rahman/cr init
+npx rahman-cr init
 
 # Verify local prereqs first
-npx @rahman/cr doctor
+npx rahman-cr doctor
 ```
 
 ## What the AI path does
