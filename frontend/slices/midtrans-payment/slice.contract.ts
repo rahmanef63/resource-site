@@ -49,4 +49,11 @@ export const contract = defineSliceContract({
   migrationFrom: {
     "0.9.0": "namespace-rename-2026-05",
   },
+  bidir: {
+    syncPolicy: "manual",
+    generalization: {
+      level: "portable",
+      forbiddenTerms: ["doku"],
+    },
+  },
 });

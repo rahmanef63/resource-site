@@ -33,6 +33,7 @@ import { runGraph } from "./graph.mjs";
 import { runCompose, preflight as composePreflight } from "./compose.mjs";
 import { runUpdate as runUpdate3Way } from "./update.mjs";
 import { runMigrate } from "./migrate.mjs";
+import { runScan } from "./scan-consumers.mjs";
 
 const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -86,6 +87,9 @@ async function main() {
       return runCompose(rest);
     case "migrate":
       return runMigrate(rest);
+    case "scan-consumers":
+    case "scan":
+      return runScan(rest);
     case "mcp":
       return runMcpHint();
     case undefined:

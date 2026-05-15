@@ -23,4 +23,10 @@ export const contract = defineSliceContract({
     hooks: ["useChecklistData"],
   },
   conflicts: [],
+  bidir: {
+    syncPolicy: "manual",
+    generalization: {
+      level: "portable",
+    },
+  },
 });

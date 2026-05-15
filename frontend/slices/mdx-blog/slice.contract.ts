@@ -15,4 +15,10 @@ export const contract = defineSliceContract({
     routes: ["/blog", "/blog/[slug]", "/rss.xml"],
     components: ["BlogList", "BlogPost"],
   },
+  bidir: {
+    syncPolicy: "manual",
+    generalization: {
+      level: "portable",
+    },
+  },
 });

@@ -93,6 +93,66 @@ export interface SliceContractProvides {
 }
 
 // ---------------------------------------------------------------------------
+// `bidir` block — Wave N+3 (Bidirectional Sync Detection Layer)
+// ---------------------------------------------------------------------------
+
+/**
+ * How the kitab treats sync between this slice and consumer copies.
+ *
+ * - `auto-pr`: when `rr scan-consumers` sees an `up-needed` verdict on a
+ *   consumer's `.kitab.json`, the operator workflow auto-opens a PR against
+ *   the kitab. Reserved for slices with strict generalisation gates.
+ * - `notify`: surface in the scan report; no auto-action.
+ * - `manual`: default — operator picks up via `/rr-prep` + `/rr-send`.
+ * - `frozen`: kitab refuses both UP and DOWN sync. Lock for retired slices.
+ */
+export type SliceSyncPolicy = "auto-pr" | "notify" | "manual" | "frozen";
+
+/**
+ * Generalisation level a consumer-side `.kitab.json` MUST claim before
+ * `rr-send` accepts the push back into the kitab.
+ *
+ * - `portable`: no consumer-specific business terms baked in. UP-sync allowed.
+ * - `needs-adapter`: requires a thin adapter wired by the consumer; UP-sync
+ *   blocked until blockers are addressed (or the contract drops the slice
+ *   to `consumer-locked`).
+ * - `consumer-locked`: contains business-specific logic that cannot be
+ *   generalised. Only DOWN-sync allowed.
+ */
+export type GeneralizationLevel =
+  | "portable"
+  | "needs-adapter"
+  | "consumer-locked";
+
+/**
+ * Generalisation contract — what the audit-bp `forbiddenTerms` rule scans
+ * for, and which props the consumer MUST inject.
+ */
+export interface SliceGeneralization {
+  level: GeneralizationLevel;
+  /**
+   * Identifiers / business terms that MUST NOT appear in the slice source
+   * tree. Audit-bp scans .ts/.tsx files. Empty when the slice is generic.
+   */
+  forbiddenTerms?: string[];
+  /**
+   * Props the consumer must inject for the slice to remain portable —
+   * e.g. `["basePath", "labels", "permission"]`.
+   */
+  requiredProps?: string[];
+}
+
+/**
+ * Bidirectional sync block. Optional, additive — slices without it default to
+ * `{ syncPolicy: "manual", generalization: { level: "portable" } }` for
+ * legacy compatibility with Wave N+1 contracts.
+ */
+export interface SliceBidirContract {
+  syncPolicy: SliceSyncPolicy;
+  generalization: SliceGeneralization;
+}
+
+// ---------------------------------------------------------------------------
 // Top-level contract
 // ---------------------------------------------------------------------------
 
@@ -121,6 +181,8 @@ export interface SliceContract {
   conflicts?: string[];
   /** Map of previous-version → migration script id. */
   migrationFrom?: Record<string, string>;
+  /** Wave N+3 — bidirectional sync policy + generalisation gate. */
+  bidir?: SliceBidirContract;
 }
 
 // ---------------------------------------------------------------------------
@@ -216,6 +278,60 @@ export function defineSliceContract(c: SliceContract): SliceContract {
         if (typeof t !== "string" || !t.startsWith(cx.prefix)) {
           throw new Error(
             `defineSliceContract(${c.id}): provides.tables entry "${String(t)}" must start with prefix "${cx.prefix}"`,
+          );
+        }
+      }
+    }
+  }
+
+  // bidir block — Wave N+3
+  if (c.bidir !== undefined) {
+    if (!c.bidir || typeof c.bidir !== "object") {
+      throw new Error(`defineSliceContract(${c.id}): bidir must be an object`);
+    }
+    const policies = ["auto-pr", "notify", "manual", "frozen"];
+    if (!policies.includes(c.bidir.syncPolicy)) {
+      throw new Error(
+        `defineSliceContract(${c.id}): bidir.syncPolicy "${String(c.bidir.syncPolicy)}" must be one of ${policies.join("|")}`,
+      );
+    }
+    if (!c.bidir.generalization || typeof c.bidir.generalization !== "object") {
+      throw new Error(
+        `defineSliceContract(${c.id}): bidir.generalization must be an object`,
+      );
+    }
+    const levels = ["portable", "needs-adapter", "consumer-locked"];
+    if (!levels.includes(c.bidir.generalization.level)) {
+      throw new Error(
+        `defineSliceContract(${c.id}): bidir.generalization.level "${String(c.bidir.generalization.level)}" must be one of ${levels.join("|")}`,
+      );
+    }
+    const ft = c.bidir.generalization.forbiddenTerms;
+    if (ft !== undefined) {
+      if (!Array.isArray(ft)) {
+        throw new Error(
+          `defineSliceContract(${c.id}): bidir.generalization.forbiddenTerms must be an array`,
+        );
+      }
+      for (const t of ft) {
+        if (typeof t !== "string" || t.length === 0) {
+          throw new Error(
+            `defineSliceContract(${c.id}): bidir.generalization.forbiddenTerms entries must be non-empty strings`,
+          );
+        }
+      }
+    }
+    const rp = c.bidir.generalization.requiredProps;
+    if (rp !== undefined) {
+      if (!Array.isArray(rp)) {
+        throw new Error(
+          `defineSliceContract(${c.id}): bidir.generalization.requiredProps must be an array`,
+        );
+      }
+      for (const p of rp) {
+        if (typeof p !== "string" || p.length === 0) {
+          throw new Error(
+            `defineSliceContract(${c.id}): bidir.generalization.requiredProps entries must be non-empty strings`,
           );
         }
       }

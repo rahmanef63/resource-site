@@ -31,4 +31,10 @@ export const contract = defineSliceContract({
     tables: ["seoGeneratorCalls"],
   },
   conflicts: [],
+  bidir: {
+    syncPolicy: "manual",
+    generalization: {
+      level: "portable",
+    },
+  },
 });

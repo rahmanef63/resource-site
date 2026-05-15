@@ -22,4 +22,10 @@ export const contract = defineSliceContract({
     components: ["AdminShell"],
   },
   conflicts: [],
+  bidir: {
+    syncPolicy: "manual",
+    generalization: {
+      level: "portable",
+    },
+  },
 });

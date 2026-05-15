@@ -30,4 +30,10 @@ export const contract = defineSliceContract({
     hooks: ["useComments"],
   },
   conflicts: [],
+  bidir: {
+    syncPolicy: "manual",
+    generalization: {
+      level: "portable",
+    },
+  },
 });

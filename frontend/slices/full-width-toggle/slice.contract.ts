@@ -19,4 +19,10 @@ export const contract = defineSliceContract({
     components: ["FullWidthToggle", "WidthContainer"],
   },
   conflicts: [],
+  bidir: {
+    syncPolicy: "manual",
+    generalization: {
+      level: "portable",
+    },
+  },
 });

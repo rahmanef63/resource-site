@@ -27,4 +27,10 @@ export const contract = defineSliceContract({
     tables: ["auditLogs"],
   },
   conflicts: [],
+  bidir: {
+    syncPolicy: "manual",
+    generalization: {
+      level: "portable",
+    },
+  },
 });

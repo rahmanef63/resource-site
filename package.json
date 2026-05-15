@@ -18,6 +18,8 @@
     "validate:contracts": "node scripts/validation/validate-contract.mjs",
     "validate:contracts:check": "node scripts/validation/validate-contract.mjs --check",
     "contracts:drift": "node scripts/validation/check-contract-drift.mjs",
+    "forbidden:terms": "node scripts/validation/check-forbidden-terms.mjs",
+    "scan:consumers": "node packages/cli/bin/scan-consumers.mjs --all",
     "slices:check": "npm run validate:slices && npm run audit:slices && npm run gen:slices:check && npm run validate:manifests && npm run validate:contracts",
     "new:slice": "node scripts/features/scaffold-slice.mjs",
     "new:template": "node scripts/features/scaffold-template.mjs",

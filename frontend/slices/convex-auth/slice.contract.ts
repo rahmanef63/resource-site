@@ -23,4 +23,10 @@ export const contract = defineSliceContract({
     tables: ["auth_users", "auth_accounts", "auth_sessions", "auth_verifiers"],
     components: ["SignInPage"],
   },
+  bidir: {
+    syncPolicy: "manual",
+    generalization: {
+      level: "portable",
+    },
+  },
 });
