@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-15T12:29:02.624Z",
+  "generatedAt": "2026-05-15T12:44:49.851Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -937,7 +937,7 @@
       "slug": "mdx-blog",
       "title": "MDX Blog",
       "category": "content",
-      "description": "Markdown-with-JSX untuk blog post. File-based under content/blog/*.mdx. Auto-generate ToC, reading-time, syntax highlight, plus embed React components inline.",
+      "description": "Markdown-with-JSX untuk blog post. File-based MDX content collection. Portable defineMdxBlog(opts) factory dengan 4 config props (basePath, contentDir, labels.list, nav) — defaults preserve legacy /blog + content/blog. Auto-generate ToC, reading-time, syntax highlight, plus embed React components inline.",
       "source": "rahmanef63/resource-site",
       "docsUrl": "https://github.com/hashicorp/next-mdx-remote",
       "install": "npm i next-mdx-remote rehype-pretty-code remark-gfm reading-time",
@@ -1607,8 +1607,8 @@
       "title": "MDX Blog",
       "category": "content",
       "kind": "ui",
-      "version": "0.1.0",
-      "description": "Markdown-with-JSX untuk blog post. File-based under content/blog/*.mdx. Auto-generate ToC, reading-time, syntax highlight, plus embed React components inline.",
+      "version": "0.2.0",
+      "description": "Markdown-with-JSX untuk blog post. File-based MDX content collection. Portable defineMdxBlog(opts) factory dengan 4 config props (basePath, contentDir, labels.list, nav) — defaults preserve legacy /blog + content/blog. Auto-generate ToC, reading-time, syntax highlight, plus embed React components inline.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/mdx-blog",
       "convexPaths": [],

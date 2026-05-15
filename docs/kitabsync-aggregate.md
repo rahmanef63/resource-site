@@ -1,9 +1,17 @@
 # KitabSync Aggregate Report
 
-> Last refresh: 2026-05-15 (post Wave N+3.5 — comments dual-side coord + audit-log@0.2.0 ship + 2 migration scripts + comments split proposal)
+> Last refresh: 2026-05-15 (post Wave N+3.6 — mdx-blog@0.2.0 UP-sync ingest from content)
 > Source: scrape of `<consumer-repo>/docs/kitabsync.md` × 6 consumers + live `npm run scan:consumers`
 > Skipped: cescadesigns (operator decision — minimal overlap expected)
 > Kitab snapshot ref: this commit
+
+## Wave N+3.6 deltas (2026-05-15 — late late)
+
+| # | Action | Side | Result |
+|---:|---|---|---|
+| 11 | `mdx-blog@0.2.0` UP-sync ingest from content-rahmanef-com | kitab | Adopted content's `defineMdxBlog(opts)` portable factory + 4 config props (basePath / contentDir / labels.list / nav). `MDX_BLOG_DEFAULTS` constant + `resolveMdxBlogOptions` resolver. `BlogList` accepts `title` + `contentDir` props. Pure UI/factory refactor — no Convex side, no migration script needed. Contract bumped 0.1.0→0.2.0 with `forbiddenTerms: ["rahmanef","content.rahmanef.com"]` + `requiredProps: ["basePath","contentDir","labels","nav"]`. 8 new vitest cases lock the factory shape. |
+| — | Cross-consumer matrix update | kitab | content `mdx-blog` flips `up-needed → in-sync` (kitabVersion + consumerVersion both `0.2.0`). rahmanef `blog` slice now eligible for DOWN-sync to align with the new factory shape. |
+| — | Per Wave N+3.5 follow-up #11 | kitab | Action 11 of run history closed. Stranded slugs unchanged (still 6). |
 
 ## Wave N+3.5 deltas (2026-05-15 — late)
 
@@ -105,7 +113,7 @@ Reads as: `verdict · generalization` (alias in parens when consumer renamed the
 
 | # | Action | Notes |
 |---:|---|---|
-| 11 | `/rr-send mdx-blog` from kitab maintainer side | Accept content's portable refactor as kitab `mdx-blog@0.2.0`. Coordinate with rahmanef.blog + superspace.blog before bumping contract semver. |
+| **11** | ~~`/rr-send mdx-blog` from kitab maintainer side~~ | **DONE** ✓ (Wave N+3.6) — kitab `mdx-blog@0.2.0` LANDED with `defineMdxBlog(opts)` factory + 4 config props. rahmanef.blog now eligible for DOWN-sync; superspace.blog still parked (consumer-locked plain-text). |
 | 12 | `/rr-send seo` + `/rr-send admin` from rahmanef once kitab opens UP-sync slot | rahmanef has both portable + up-needed but `syncDirection: down-only` — flip to bidirectional after kitab maintainer signals readiness. |
 | **13** | ~~Fix `npx rahman-resources scan-consumers` cache-path bug~~ | **DONE** ✓ (CLI 0.13.1, SHA `659c7fb`) · 4-tier KITAB_ROOT resolution (env > flag > walk-up cwd > __dirname fallback). |
 | 14 | Push UP `command-menu@0.3.0` from notion to kitab | kitab maintainer | Renderless API ready. Accept as `command-menu@0.2.0` contract bump. |
@@ -131,4 +139,5 @@ Verified live via `node packages/cli/bin/scan-consumers.mjs --consumer rahmanef|
 | 2026-05-15 evening | Wave N+3.1 refresh — 3 portability refactors landed (rahmanef seo+admin, content mdx-blog) | 5 + live scan | `d4dbd37` | claude-code |
 | 2026-05-15 late evening | Wave N+3.3 — command-menu portable + 3 kitab contract level shifts + scan multi-path | 5 + live scan | `0ccd403` | claude-code |
 | 2026-05-15 late | Wave N+3.4 — comments@0.2.0 frontend + platform-admin scaffold | 5 + live scan | `01c5132` | claude-code |
-| 2026-05-15 late | Wave N+3.5 — comments@0.2.0 Convex rebuild + audit-log@0.2.0 ship + 2 migration scripts + split proposal + content parse-error fix | 6 + live scan | (this commit) | claude-code |
+| 2026-05-15 late | Wave N+3.5 — comments@0.2.0 Convex rebuild + audit-log@0.2.0 ship + 2 migration scripts + split proposal + content parse-error fix | 6 + live scan | `484ba2b` | claude-code |
+| 2026-05-15 late late | Wave N+3.6 — mdx-blog@0.2.0 UP-sync ingest from content (defineMdxBlog factory + 4 props + 8 vitest cases) | 1 (mdx-blog) | (this commit) | claude-code |
