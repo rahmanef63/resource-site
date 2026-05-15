@@ -247,3 +247,22 @@ Edit `packages/cli/bin/scan-consumers.mjs#DEFAULT_CONSUMERS` — append
 Spec: [`docs/consumer-manifest.md`](./docs/consumer-manifest.md).
 Schema: `packages/cli/lib/consumer-manifest.{mjs,d.ts}`.
 Tests: 19 vitest cases at `packages/cli/lib/consumer-manifest.test.mjs`.
+
+### Consumer report convention (`docs/kitabsync.md`)
+
+Every consumer ships **`docs/kitabsync.md`** at a uniform path so the kitab
+can scrape state across the mesh without RPC. Schema is fixed (anchors are
+load-bearing for the aggregator) — see
+[`docs/kitabsync-report-template.md`](./docs/kitabsync-report-template.md).
+
+Aggregate roll-up (operator-side):
+
+```bash
+for c in CareerPack notion-page-clone rahmanef.com content-rahmanef-com superspace cescadesigns; do
+  echo "=== $c ==="
+  cat /home/rahman/projects/$c/docs/kitabsync.md 2>/dev/null | head -40 || echo "  (no report)"
+done
+```
+
+Or paste the **kitab aggregator prompt** in a Claude session here for a
+parsed cross-consumer matrix + ranked action plan.
