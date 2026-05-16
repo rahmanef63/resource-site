@@ -85,7 +85,7 @@ export function ComponentShowcase() {
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="rounded-md border bg-muted/30 p-3 font-mono text-[11px] leading-relaxed text-muted-foreground">
-                <span className="text-foreground"># Bootstrap from kitab</span>
+                <span className="text-foreground"># Bootstrap from Rahman Resources</span>
                 <br />
                 Use <span className="text-foreground">Rahman Resources</span> to scaffold…
                 <br />

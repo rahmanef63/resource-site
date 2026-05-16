@@ -1,6 +1,6 @@
 # resource.rahmanef.com — public site
 
-Public showcase for the [resources/](https://github.com/rahmanef63/resources) kitab.
+Public showcase for the [Rahman Resources](https://github.com/rahmanef63/resources) monorepo (`rr`).
 
 - shadcn-style sidebar layout
 - Per-layout & per-recipe pages with Preview / Code / Install tabs
@@ -12,11 +12,11 @@ resources/
 ├── template-base/   # canonical copy-from template (lean)
 ├── cookbook/        # opinionated layout variants (landing, dashboard)
 ├── recipes/         # feature drop-ins (block-editor, command-palette, ...)
-├── site/            # Next 16 site — kitab browser + Bundle Builder (/build)
+├── site/            # Next 16 site — rr browser + Bundle Builder (/build)
 ├── packages/
-│   ├── cli/         # `rahman-resources` — npx scaffolder + add + add-skill + doctor
+│   ├── cli/         # `rahman-resources` (alias `resources`) — npx scaffolder + add + lift
 │   └── mcp/         # `rahman-resources-mcp` — stdio MCP for Claude Code / agents
-└── docs/            # the kitab itself
+└── docs/            # rr docs (slice authoring, etc)
 ```
 
 Next.js 16 + React 19 + Tailwind 4 + shadcn/ui. No backend.

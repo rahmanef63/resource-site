@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 /**
- * Shared chrome for every "preview / detail / inspector" surface in the kitab.
+ * Shared chrome for every "preview / detail / inspector" surface in Rahman Resources.
  * Mirrors shadcn/ui's card style on https://ui.shadcn.com/charts and /blocks:
  *
  *   ┌──────────────────────────────────────────────────────────┐

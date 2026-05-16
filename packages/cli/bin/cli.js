@@ -1,14 +1,15 @@
 #!/usr/bin/env node
-// rahman-resources — installer for the Rahman kitab.
+// Rahman Resources (rr) — shadcn-style installer for vertical slices.
+// Aliases: `rahman-resources`, `resources`, `rr` (all run this file).
 // Usage:
-//   npx rahman-resources init <app-name> [--template <slug>] [--features a,b] [--skills x,y] [--with-shadcn-all]
-//   npx rahman-resources add <slug> [target-dir] [--at root|preview] [--with-shadcn-all]
-//   npx rahman-resources add-skill <slug> [target-dir]
-//   npx rahman-resources scaffold-slice <slug> [--category <cat>] [--target <dir>]
-//   npx rahman-resources list [layouts|recipes|features|skills|slices]
-//   npx rahman-resources info <slug>
-//   npx rahman-resources doctor
-//   npx rahman-resources mcp                # not implemented in CLI; install rahman-resources-mcp
+//   npx rr init <app-name> [--template <slug>] [--features a,b] [--skills x,y] [--with-shadcn-all]
+//   npx rr add <slug> [target-dir] [--at root|preview] [--with-shadcn-all]
+//   npx rr add-skill <slug> [target-dir]
+//   npx rr scaffold-slice <slug> [--category <cat>] [--target <dir>]
+//   npx rr list [layouts|recipes|features|skills|slices]
+//   npx rr info <slug>
+//   npx rr doctor
+//   npx rr mcp                # not implemented in CLI; install rahman-resources-mcp
 
 import { createRequire } from "node:module";
 import { spawn } from "node:child_process";
@@ -117,22 +118,25 @@ function printHelp() {
   console.log(`
 ${kleur.bold("rahman-resources")} — scaffold + install templates, recipes, features, Claude skills
 
+${kleur.bold("Rahman Resources (rr)")} — shadcn-style installer for vertical slices.
+${kleur.dim("Bins: rahman-resources / resources / rr (all run this CLI).")}
+
 ${kleur.bold("Usage:")}
-  npx rahman-resources init <app-name> [--template <slug>] [--features a,b] [--skills x,y]
-                                       [--no-install] [--with-shadcn-reinit] [--with-shadcn-all]
-  npx rahman-resources add <slug> [target-dir] [--at root|preview] [--with-shadcn-all]
-  npx rahman-resources add-skill <slug> [target-dir]
-  npx rahman-resources scaffold-slice <slug> [--category <cat>] [--target <dir>]
-  npx rahman-resources lift <source>:<path> [--target <dir>] [--dry-run]
-  npx rahman-resources publish-slice <local-slice-dir> [--open-pr]
-  npx rahman-resources list [layouts|recipes|features|skills|slices]
-  npx rahman-resources info <slug>
-  npx rahman-resources doctor
-  npx rahman-resources graph [slug] [--all] [--json]
-  npx rahman-resources compose <slug>... [--json] [--rr-path <path>] [--no-deps] [--strict]
-  npx rahman-resources update <slug> [--apply] [--force] [--rr-path P] [--json]
-  npx rahman-resources migrate <slug> --from <v1> [--to <v2>] [--json] [--write-files] [--force-overwrite]
-  npx rahman-resources mcp
+  npx rr init <app-name> [--template <slug>] [--features a,b] [--skills x,y]
+                         [--no-install] [--with-shadcn-reinit] [--with-shadcn-all]
+  npx rr add <slug> [target-dir] [--at root|preview] [--with-shadcn-all]
+  npx rr add-skill <slug> [target-dir]
+  npx rr scaffold-slice <slug> [--category <cat>] [--target <dir>]
+  npx rr lift <source>:<path> [--target <dir>] [--dry-run]
+  npx rr publish-slice <local-slice-dir> [--open-pr]
+  npx rr list [layouts|recipes|features|skills|slices]
+  npx rr info <slug>
+  npx rr doctor
+  npx rr graph [slug] [--all] [--json]
+  npx rr compose <slug>... [--json] [--rr-path <path>] [--no-deps] [--strict]
+  npx rr update <slug> [--apply] [--force] [--rr-path P] [--json]
+  npx rr migrate <slug> --from <v1> [--to <v2>] [--json] [--write-files] [--force-overwrite]
+  npx rr mcp
 
 ${kleur.bold("Init flags:")}
   --no-install            skip 'npm install' step (faster scaffolds; you run it manually)
@@ -149,13 +153,17 @@ ${kleur.bold("Add flags:")}
   --force                 skip compose pre-flight entirely
 
 ${kleur.bold("Examples:")}
-  npx rahman-resources init my-app
-  npx rahman-resources init my-app --template personal-brand-os --skills frontend-design,mcp-builder
-  npx rahman-resources init my-app --no-install
-  npx rahman-resources add personal-brand-os . --at root
-  npx rahman-resources add personal-brand-os . --with-shadcn-all
-  npx rahman-resources add-skill webapp-testing
-  npx rahman-resources list skills
+  npx rr init my-app
+  npx rr init my-app --template personal-brand-os --skills frontend-design,mcp-builder
+  npx rr init my-app --no-install
+  npx rr add personal-brand-os . --at root
+  npx rr add personal-brand-os . --with-shadcn-all
+  npx rr add-skill webapp-testing
+  npx rr list skills
+
+${kleur.dim("Slice install destination (consumer): slices/<slug>/")}
+${kleur.dim("Shared utils destination (cascade): shared/<name>/")}
+${kleur.dim("Consumer's components/ui/ + lib/utils.ts (shadcn) are never touched.")}
 `);
 }
 

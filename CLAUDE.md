@@ -1,65 +1,86 @@
-# CLAUDE.md — resources/ kitab
+# CLAUDE.md — Rahman Resources (rr)
 
-## Published Packages (npm — public registry)
+> Vision: pola **shadcn** untuk slice. Consumer run `npx resources add <name>`,
+> file di-copy ke `slices/<name>/` (vertical slice, owned by consumer).
+> Tidak ada npm dependency runtime. Tidak ada framework lock-in. Consumer bebas
+> edit.
+
+## Naming (2026-05-16 transition)
+
+| Lama | Baru |
+|---|---|
+| "kitab" | "Rahman Resources" / "rr" |
+| `frontend/slices/` (consumer side) | `slices/` (consumer side) |
+| `frontend/slices/` (rr internal) | tetap `frontend/slices/` (preserves Next.js routing layout) |
+| Multiple shared dirs | `shared/<name>/` (cascade dari slice deps) |
+| BSDL + `.kitab.json` per slice | dihapus di Sesi 2 |
+| CLI bin `rahman-resources` | tetap published, tambah alias `resources` |
+
+Per-slice + per-shared folder shape (consumer):
+
+```
+slices/<name>/
+├── components/    ├── lib/
+├── utils/         ├── hooks/
+├── config/        └── api/
+
+shared/<name>/
+├── components/    ├── lib/
+├── utils/         ├── hooks/
+├── config/        └── api/
+```
+
+Root project (consumer) **tidak disentuh** RR:
+- `components/ui/` — shadcn primitives (default)
+- `lib/utils.ts` — shadcn util (default)
+
+## Published Packages (npm public)
 
 | Package | Version | Purpose |
 |---|---|---|
-| `rahman-resources` | 0.11.1 | CLI (init/add/list/info/scaffold/mcp) — `packages/cli/` |
-| `rahman-resources-mcp` | 0.9.1 | MCP server (14 tools + ~70 dynamic resources) — `packages/mcp/` |
-| `rahman-shared` | 0.2.0 | npm utils + hooks (cn, formatDate, sanitizeHtml, useDebounce, useClickOutside, useResponsive) — `packages/shared/` |
+| `rahman-resources` | 0.13.1 | CLI installer (`npx rahman-resources …` / alias `resources …`) |
+| `rahman-resources-mcp` | 0.9.1 | MCP server (14 tools + ~70 resources) |
+| `rahman-shared` | 0.2.0 | Pure utils + hooks (cn, formatDate, sanitizeHtml, useDebounce, useClickOutside, useResponsive) |
 
-### Slice Residency
+**Distribusi rule:**
+- **`rahman-shared`** (npm install) — pure functions saja. Consumer import dari node_modules, no local copy.
+- **CLI copy** (`npx rr add <slug>`) — UI/feature components. Consumer OWNS file di `slices/<slug>/`, edit Tailwind + theme tokens bebas.
 
-- `frontend/slices/*` — kitab-side **portable tier-3** slices (have slice.manifest.json, distributable via `npx rahman-resources add <slug>`).
-- `template-base/frontend/slices/*` — **scaffold-base** slices, copied wholesale during `init`. R1 tier (copy + customize), not individually addable.
+Why split? Component butuh consumer-side Tailwind scan + theme tokens + logic tweaks. Pure function tidak.
 
-**Distribution model** (CRITICAL — don't mix):
-- **npm install** (`rahman-shared`): pure utils + hooks. Consumer imports from `node_modules/`, no local copy.
-- **CLI copy** (`npx rahman-resources add <slug>`): UI components (ResponsiveDialog/DateField/SharedDatePicker/FileUpload). Consumer OWNS the file, customizes Tailwind classes + theme tokens.
+## CLI (Sesi 1 — current state)
 
-Why split? Components need consumer-side Tailwind config + theme tokens + logic tweaks. Pure functions don't. npm distribution would force one-size-fits-all surface.
+| Command | Apa kerjanya |
+|---|---|
+| `npx rr init <app>` | Scaffold project baru |
+| `npx rr add <slug>` | Copy slice/template ke consumer (auto cascade shared deps) |
+| `npx rr list [templates\|features\|skills]` | List available items |
+| `npx rr info <slug>` | Full metadata |
+| `npx rr lift <slug>` | Manual: kirim improvement consumer → rr (operator only) |
+| `npx rr update <slug>` | Re-pull upstream version (overwrite, warn kalau local edit) |
+| `npx rr scaffold-slice <slug>` | Bikin slice baru lokal (di rr repo) |
 
-**Adoption pattern across consumers**: skill `/rr-adopt` (`~/.agents/skills/rr-adopt/SKILL.md`). 4 consumers adopted 2026-05-13 (content/rahmanef/notion/CareerPack). superspace pending (waits Phase 5.5 cutover).
-
-**Re-publish flow** (after content change in `packages/shared/src/`):
-1. Bump `version` in `packages/shared/package.json`
-2. `cd packages/shared && npm publish` (operator OTP via browser)
-3. Consumers `pnpm update rahman-shared` when ready
-
-**Bottom-up harvest flow** (consumer perfects feature → push UP to kitab):
-
-Two-step pipeline. Always run prep first.
-
-**Step 1 — `/rr-prep <slug> --fix`** (inside the consumer project)
-Audits the feature against kitab hard rules (Clerk imports, file size ≤500 LOC, cross-slice imports, raw HTML primitives, Convex RBAC + workspace-isolation, hard-coded IDs). Applies safe auto-fixes (import rewrites, README scaffold). Emits `<feature>/.harvest/{prep-report.md, slice.manifest.draft.json, inventory.json, audit-flags.json}`. Final report says **READY / NEEDS FIX (n) / BLOCKED**. Do not proceed to step 2 unless READY.
-
-Skill: `~/.agents/skills/rr-prep/SKILL.md`. Wrapper: `/rr-prep`.
-
-**Step 2 — `/rr-send <slug>`** (still inside the consumer project)
-Consumes `.harvest/` from step 1, then:
-- Detects current consumer (notion/superspace/CareerPack/content/rahmanef)
-- Copies feature into `frontend/slices/<slug>/` or `template-base/frontend/slices/<slug>/`
-- Sanitizes imports → `rahman-shared/*` + `@/features/<slug>/*`
-- Strips Clerk coupling (kitab is convex-auth only)
-- Namespaces Convex tables `<slug>_*`, adds `by_workspace` index, gates with `requirePermission`
-- Creates/updates `slice.manifest.json`
-- Updates `lib/content/slices.ts` + regenerates `packages/cli/lib/manifest.json`
-- Runs validators (R1-R5 + slice-parity)
-- Branch + commit + PR
-
-CREATE mode (slug new) vs UPDATE mode (slug exists, bump version).
-
-Skill: `~/.agents/skills/rr-send/SKILL.md`. Wrapper: `/rr-send`.
+CLI baca `rr.json` (consumer project manifest) — schema di `packages/cli/lib/rr-schema.json`.
 
 ## Hard Rules
 
-1. **NO Clerk.** Auth = `@convex-dev/auth`. Si-coder dokploy mandate.
-2. **All UI = shadcn primitives** or composed from shadcn. Forbid raw `<button>`, `<dialog>`, `<input type=date|file>`. Use `ResponsiveDialog`, `DateField`, `FileUpload`.
-3. **Copy-first flow.** Never greenfield. `cp -r` from source → adjust import aliases → strip business-specific bits.
-4. **Stack**: Next 16 + React 19 + Tailwind 4 + Convex self-hosted + TS strict.
-5. **Slice contract.** Every new vertical feature ships as a tier-3 slice — `frontend/slices/<slug>/` (with `slice.json` + `config.ts`) + `convex/features/<slug>/` (with `<slug>Tables` schema export). See [`docs/authoring-slices.md`](./docs/authoring-slices.md). Imports inside a slice MUST resolve via `@/components/ui/*`, `@/shared/*`, `@/features/<own-slug>/*`, `@convex/*`, or relative-within-slice. No deep `../../` reaching out. Audit-bp gates this in CI (`npm run audit:slices`).
+1. **NO Clerk.** Auth = `@convex-dev/auth`.
+2. **All UI = shadcn primitives** atau composed dari shadcn. Forbid raw `<button>`, `<dialog>`, `<input type=date|file>`. Pakai `ResponsiveDialog`, `DateField`, `FileUpload`.
+3. **Copy-first flow.** Jangan greenfield. `cp -r` dari source → adjust import alias → strip business-specific bits.
+4. **Stack:** Next 16 + React 19 + Tailwind 4 + Convex self-hosted + TS strict.
+5. **Slice contract.** Setiap vertical feature = tier-3 slice di rr `frontend/slices/<slug>/` (dgn `slice.json` + `slice.contract.ts`) + `convex/features/<slug>/` (dgn `<slug>Tables` schema export). Imports di dalam slice WAJIB resolve via `@/components/ui/*`, `@/shared/*`, `@/features/<own-slug>/*`, `@convex/*`, atau relative-within-slice. No `../../` reaching out. Audit-bp gates ini di CI (`npm run audit:slices`).
 
-## Source Map (where to copy from)
+## Forbidden
+
+- `<a href="/internal">` (pakai `next/link` atau `SmartLink`)
+- `<img src="...">` (pakai `next/image`)
+- bare `.collect()` di Convex queries (pakai `.withIndex(...).take(N)`)
+- public Convex fn tanpa `args: { ... }` validator (audit-bp P0)
+- Server Action tanpa authn+authz (audit-bp P0)
+- `NEXT_PUBLIC_*` untuk sensitive values (leak ke client bundle)
+- `middleware.ts` di Next 16 (pakai `proxy.ts`)
+
+## Source Map (kalau copy dari project lain)
 
 | Want | Source path |
 |---|---|
@@ -75,194 +96,117 @@ Skill: `~/.agents/skills/rr-send/SKILL.md`. Wrapper: `/rr-send`.
 | Asymmetric masonry | `/home/rahman/projects/rahmanef.com/frontend/slices/portfolio/components/PortfolioGrid.tsx` |
 | Hero carousel | `/home/rahman/projects/cescadesigns/components/cummon/hero-section.tsx` |
 | ContactForm + Resend | `/home/rahman/projects/cescadesigns/app/contact/` |
-| Block editor + slash menu | `/home/rahman/projects/notion-page-clone/src/slices/editor/` |
-| Page tree dnd sidebar | `/home/rahman/projects/notion-page-clone/src/slices/workspace-sidebar/` |
-| Multi-block selection | `/home/rahman/projects/notion-page-clone/src/slices/block-selection/` |
-| Database views (11) | `/home/rahman/projects/notion-page-clone/src/slices/databases/` |
-| Command palette | `/home/rahman/projects/notion-page-clone/src/slices/command-palette/` |
-| Comments threaded | `/home/rahman/projects/notion-page-clone/src/slices/comments/` |
+| Block editor + slash menu | `/home/rahman/projects/notion-page-clone/frontend/slices/editor/` |
+| Page tree dnd sidebar | `/home/rahman/projects/notion-page-clone/frontend/slices/workspace-sidebar/` |
+| Multi-block selection | `/home/rahman/projects/notion-page-clone/frontend/slices/block-selection/` |
+| Database views (11) | `/home/rahman/projects/notion-page-clone/frontend/slices/databases/` |
+| Command palette | `/home/rahman/projects/notion-page-clone/frontend/slices/command-palette/` |
+| Comments threaded | `/home/rahman/projects/notion-page-clone/frontend/slices/comments/` |
 | RBAC roles (6 system roles + tier presets) | `/home/rahman/projects/superspace/convex/workspace/{permissions,roles.config}.ts` + `convex/lib/platformAdmin.ts` |
 | Admin panel (17-section shell + access gate) | `template-base/frontend/slices/admin-panel/` + `superspace/frontend/slices/platform-admin/` |
 | Event tracking SDK (P0 instrumentation) | `template-base/frontend/slices/admin-panel/slices/events/` |
 | DOKU payment (Checkout + Direct + webhook) | `frontend/slices/doku-payment/` + `convex/features/payment/{doku,actions/doku.ts,http.ts}` |
-| DOKU MCP wiring | `docs/integrations/doku-mcp.md` + `scripts/setup-doku-mcp.mjs` |
 
 ## Notion Slice Convention
 
-`frontend/slices/notion/` is a **nested vertical slice** (slice-of-slices):
+`frontend/slices/notion/` = **nested vertical slice** (slice-of-slices):
 
 ```
 frontend/slices/notion/
-├── config.ts          # outer defineFeature() registered to root registry
+├── config.ts          # outer defineFeature() registered ke root registry
 ├── init.ts
 ├── page.tsx
-├── slices/            # inner slices (editor, workspace-sidebar, block-selection, databases, command-palette, comments)
+├── slices/            # inner slices (editor, workspace-sidebar, dll)
 │   └── {inner}/
-│       ├── config.ts  # inner defineFeature() registered to notion sub-registry
+│       ├── config.ts  # inner defineFeature() registered ke notion sub-registry
 │       └── ...
 └── shared/            # notion-private shared (types, store, hooks)
 ```
 
-Path alias `@notion/*` → `./frontend/slices/notion/*` (set in tsconfig.json after P5). Keeps notion's internal imports stable post-copy.
-
-Convex code from notion-clone merges to root `convex/features/notion/` (not nested), to avoid Convex generator confusion.
-
-## Forbidden
-
-- `<a href="/internal">` (use `next/link` or `SmartLink`)
-- `<img src="...">` (use `next/image`)
-- bare `.collect()` on Convex queries (use `.withIndex(...).take(N)`)
-- public Convex fn without `args: { ... }` validator (audit-bp P0)
-- Server Action without authn+authz (audit-bp P0)
-- `NEXT_PUBLIC_*` for sensitive values (leaks to client bundle)
-- middleware.ts on Next 16 (use `proxy.ts`)
+Path alias `@notion/*` → `./frontend/slices/notion/*`. Convex code dari notion-clone merge ke root `convex/features/notion/` (not nested), avoid Convex generator confusion.
 
 ## Workflow
 
-1. Identify source path (see Source Map)
+1. Cek Source Map untuk path
 2. `cp -r {source} {target}`
-3. Adjust imports (`sed`/Edit). Try to keep alias structure identical to source.
-4. Run `npm run audit:bp -- --slice <path>` (after P7 wire)
-5. Commit small chunks per source.
+3. Adjust imports (`sed`/Edit). Pertahankan alias structure sebisanya.
+4. Run `npm run audit:slices`
+5. Commit chunked per source.
 
 ## Triggers
 
-- Use `/use-audit-bp` before any deploy or after major slice copy
-- Use `/use-si-coder` for first dokploy deploy + DNS setup
+- `/use-audit-bp` sebelum deploy atau after major slice copy
+- `/use-si-coder` untuk first dokploy deploy + DNS setup
 
-## CLI / MCP / Builder
-
-The kitab ships three surfaces. Keep them aligned.
+## CLI / MCP / Builder (3 surface, harus sinkron)
 
 ### `packages/cli` — `rahman-resources`
 
-Commands:
-
-| Command | What it does |
-|---|---|
-| `npx rahman-resources init <app>` | Scaffold a fresh project. Flags: `--template <slug>`, `--features a,b`, `--skills a,b`, `--no-install`, `--with-shadcn-reinit` |
-| `npx rahman-resources add <slug>` | Add a template or feature into existing rr.json project. Patches `rr.json` + pulls files. |
-| `npx rahman-resources add-skill <slug>` | Pull a Claude Skill into `.claude/skills/<slug>/`. |
-| `npx rahman-resources doctor` | Check rr.json shape + components.json aliases. |
-| `npx rahman-resources list [templates\|features\|skills]` | Print available items. |
-| `npx rahman-resources info <slug>` | Show full metadata for one item. |
-| `npx rahman-resources mcp` | Print MCP wiring snippet for Claude Code config. |
-| `npx rahman-resources scaffold-slice <slug>` | Scaffold new tier-3 slice locally. |
-| `npx rahman-resources lift <slug>` | Lift consumer feature back into kitab (bottom-up). |
-| `npx rahman-resources publish-slice <slug>` | Verify slice ready for publish. |
-
-`rr.json` is the project manifest — schema in `packages/cli/lib/rr-schema.json`. Validated on every mutation.
+CLI installer. Lihat tabel command di atas.
 
 ### `packages/mcp` — `rahman-resources-mcp`
 
-Stdio MCP server. 14 tools (the original 8 + rr_list_slices, rr_get_slice, rr_compose_app, rr_audit_slice, rr_list_workflows, rr_get_workflow) + ~70 dynamic resources (manifest + templates/features/recipes/skills/slices + workflows) via `rr://` URIs. Reads from sibling cli package's `manifest.json` + `skills.json` — single source of truth.
+Stdio MCP server. 14 tools + ~70 dynamic resources via `rr://` URIs. Read dari sibling cli `manifest.json` + `skills.json` (single source of truth).
 
-Wire into Claude Code:
+Wire ke Claude Code:
 ```json
 { "mcpServers": { "rahman-resources": { "command": "npx", "args": ["rahman-resources-mcp"] } } }
 ```
 
 ### `site/app/(docs)/build` — Bundle Builder UI
 
-Visual picker: template + features + skills + project form → emits `npx` commands. Uses nested 3-col layout (`tone="layout"` blue outer, `tone="feature"` muted inner). Sentinel template `_existing` switches Project tab to rr.json uploader and emits `add` commands instead of `init`.
-
-Compatibility hints come from `site/lib/build/compat.ts` — hand-curated template×feature matrix. Add entries when new templates land.
+Visual picker template + features + skills + project form → emit `npx` commands. Compatibility matrix di `site/lib/build/compat.ts`.
 
 ### Publishing (npm)
 
-The CLI + MCP packages are **the distribution channel** — consumers `npx rahman-resources …` against the published tarball, not against the repo. Forgetting to publish = stale manifests for everyone.
+CLI + MCP packages = distribution channel. Trigger publish suggestion kalau ALL hold:
 
-Trigger a publish suggestion in the response when ALL hold:
+1. Files di `packages/cli/` ATAU `packages/mcp/` modified
+2. `version` bumped above `npm view <pkg> version`
+3. `npx tsc --noEmit` green
+4. Pushed ke main
 
-1. Files under `packages/cli/` OR `packages/mcp/` modified.
-2. `version` in the package.json bumped above `npm view <pkg> version`.
-3. `npx tsc --noEmit` passes from repo root.
-4. Change committed + pushed to `main`.
-
-When all four hold, end the response with a one-liner:
+When all 4 hold, end response dgn:
 
 ```
 Saatnya publish — cd packages/cli && npm publish --otp=…
 ```
 
-(or the MCP equivalent). The user runs the OTP step. Don't run `npm publish` yourself.
-
-If version wasn't bumped but content changed, suggest the bump first ("CLI baru belum di-version, bump ke vX.Y.Z?").
-
-If versions match the registry, the package is already shipped — say so explicitly.
+User run OTP step. JANGAN run `npm publish` sendiri.
 
 ### Skills sync (CLI ↔ site)
 
-Skills source of truth lives in `site/lib/content/claude-skills.ts`. After editing it run:
+SSOT di `site/lib/content/claude-skills.ts`. After edit:
 
 ```bash
 node packages/cli/scripts/sync-skills.mjs          # write JSON
 node packages/cli/scripts/sync-skills.mjs --check  # CI guard
 ```
 
-`prepublishOnly` of the CLI package runs `--check` so a drifted publish is impossible.
+`prepublishOnly` CLI run `--check` — drifted publish impossible.
 
 ---
 
-## Wave N+3 — Bidirectional Sync Detection Layer (BSDL)
+## ⚠ Wave N+3 BSDL — DEPRECATED (Sesi 2 cleanup)
 
-> Added 2026-05-15 (commit `5b8b612`).
+Bidirectional Sync Detection Layer (consumer-manifest + scan-consumers + DNA
+lineage + drift scoring) di-deprecate per keputusan 2026-05-16. Reason:
+solo-dev overhead — 31 `.kitab.json` di-maintain demi ~4 harvest event/bulan.
+Manual `cp -r` lebih cepet.
 
-Every kitab slice contract carries an additive `bidir` block declaring its
-sync policy (`auto-pr|notify|manual|frozen`) and generalisation gate
-(`portable|needs-adapter|consumer-locked` with optional `forbiddenTerms[]`
-and `requiredProps[]`). Consumer copies (CareerPack / notion / rahmanef /
-content / superspace / cescadesigns) drop a `.kitab.json` next to the
-slice; `rr scan-consumers` reads them and surfaces what needs to flow UP
-or DOWN.
+Yang akan dihapus di Sesi 2:
+- `.kitab.json` per slice (31 file across 5 consumer)
+- `packages/cli/bin/scan-consumers.mjs`
+- `packages/cli/lib/consumer-manifest.{mjs,d.ts,test.mjs}`
+- `.kitab/lineage/*.dna.json` (40+ file — backup keep)
+- `/admin/scan` tab + `/admin/registry` slice manifest viewer
+- skill `/rr-prep`, `/rr-send` (replaced by manual `npx rr lift`)
+- `scripts/rr-status.mjs`
 
-### Operator commands
-
-```bash
-npm run scan:consumers                                     # all registered
-npx rahman-resources scan-consumers --consumer careerpack  # one consumer
-npx rahman-resources scan-consumers --json                 # CI-friendly
-npm run forbidden:terms                                    # cross-provider leak gate
-```
-
-### MCP resources
-
-- `rr://sync/scan` — verdicts across all registered consumers
-- `rr://sync/scan/<consumer-name>` — single consumer's slice diffs
-
-### Adding a consumer
-
-Edit `packages/cli/bin/scan-consumers.mjs#DEFAULT_CONSUMERS` — append
-`{ name, path }`. The MCP resource list auto-updates.
-
-### Trigger prompts (kitab-side, paste in Claude Code)
-
-| Goal | Prompt |
-|---|---|
-| Scan all consumers | `run scan:consumers and report which slices need UP-sync` |
-| Inspect one consumer | `scan careerpack and show what needs pulling up` |
-| Verify generalisation | `run forbidden:terms and surface any cross-provider leaks` |
-| Promote consumer edit | `pull <slug> up from <consumer> via rr-prep + rr-send` |
-
-Spec: [`docs/consumer-manifest.md`](./docs/consumer-manifest.md).
-Schema: `packages/cli/lib/consumer-manifest.{mjs,d.ts}`.
-Tests: 19 vitest cases at `packages/cli/lib/consumer-manifest.test.mjs`.
-
-### Consumer report convention (`docs/kitabsync.md`)
-
-Every consumer ships **`docs/kitabsync.md`** at a uniform path so the kitab
-can scrape state across the mesh without RPC. Schema is fixed (anchors are
-load-bearing for the aggregator) — see
-[`docs/kitabsync-report-template.md`](./docs/kitabsync-report-template.md).
-
-Aggregate roll-up (operator-side):
-
-```bash
-for c in CareerPack notion-page-clone rahmanef.com content-rahmanef-com superspace cescadesigns; do
-  echo "=== $c ==="
-  cat /home/rahman/projects/$c/docs/kitabsync.md 2>/dev/null | head -40 || echo "  (no report)"
-done
-```
-
-Or paste the **kitab aggregator prompt** in a Claude session here for a
-parsed cross-consumer matrix + ranked action plan.
+Yang dipertahankan:
+- `slice.contract.ts` DSL (typed declaration)
+- `slice.manifest.json` (CLI distribution metadata)
+- Audit-bp validators
+- `/admin/lineage` (history view only, drift removed)
+- `/admin/quality` (band scoring)
+- `npx rr lift <slug>` — manual operator command + audit-bp guard

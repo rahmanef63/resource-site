@@ -1,7 +1,7 @@
 {
   "name": "rahman-resources",
   "version": "0.13.1",
-  "description": "Scaffolder + installer for Rahman Resources kitab — npx rahman-resources init/add/lift/scaffold-slice/publish-slice. Tier-3 portable feature slices + manifest + skills + CRUD workflows.",
+  "description": "Rahman Resources (rr) — shadcn-style installer for vertical slices. `npx resources add <slug>` copies slice into your project's `slices/<slug>/`. You own the files.",
   "type": "module",
   "license": "MIT",
   "author": "Rahman <casadezian@gmail.com>",
@@ -12,7 +12,9 @@
     "directory": "packages/cli"
   },
   "bin": {
-    "rahman-resources": "bin/cli.js"
+    "rahman-resources": "bin/cli.js",
+    "resources": "bin/cli.js",
+    "rr": "bin/cli.js"
   },
   "files": [
     "bin",

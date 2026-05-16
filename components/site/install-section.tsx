@@ -5,7 +5,7 @@ import { buildAgentPrompt } from "@/lib/agent-prompt";
 import { site } from "@/lib/content/site";
 
 export function InstallSection() {
-  const cli = `# 1. Clone the kitab
+  const cli = `# 1. Clone Rahman Resources (rr)
 git clone ${site.repo} resources
 cd resources/template-base
 

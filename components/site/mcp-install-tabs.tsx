@@ -95,7 +95,7 @@ export function McpInstallTabs() {
                 <p className="font-medium text-foreground">Open public endpoint — no auth</p>
                 <p className="mt-1 text-muted-foreground">
                   <code className="rounded bg-muted px-1 font-mono text-[10px]">{HOSTED_URL}</code>{" "}
-                  serves the kitab manifest via Streamable HTTP. Same public data as this site.
+                  serves the Rahman Resources manifest via Streamable HTTP. Same public data as this site.
                   Paste &amp; go — Claude Code / Cursor / Cline / curl / SDK clients all work directly.
                 </p>
               </div>
@@ -124,7 +124,7 @@ export function McpInstallTabs() {
                     The server ALSO serves OAuth 2.1 + PKCE endpoints so ChatGPT&apos;s
                     Developer-Mode connector form has somewhere to point. The
                     flow is ceremonial — <em>tokens issued by /oauth/* are NOT
-                    validated on /mcp</em> because the kitab is public read-only.
+                    validated on /mcp</em> because Rahman Resources is public read-only.
                     Try connecting with <span className="font-medium text-foreground">Authentication: None</span>{" "}
                     first; only fall back to this if the form mandates OAuth.
                   </p>

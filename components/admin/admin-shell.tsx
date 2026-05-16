@@ -111,7 +111,7 @@ export function AdminShell({
             <div className="leading-tight">
               <p className="text-sm font-semibold">Operator</p>
               <p className="text-[10px] text-muted-foreground">
-                kitab control room
+                rr control room
               </p>
             </div>
           </div>
