@@ -4,7 +4,7 @@
   "version": "0.2.0",
   "category": "ui",
   "kind": "ui",
-  "title": "Notion-Style Icon Picker",
+  "title": "Icon Picker",
   "description": "Emoji + lucide icon picker with search, 10-color Notion palette, Twemoji/native toggle, recents tracking. One string stores emoji OR `lucide:Name` OR with `?c=hex` tint — backwards-compat with raw-emoji fields. Two variants: Popover (compact trigger) and Inline (full sheet/dialog use).",
   "namespace": "@/features/icon-picker",
   "kind": "ui",

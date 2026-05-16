@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-16T12:09:18.769Z",
+  "generatedAt": "2026-05-16T13:23:25.536Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -1343,9 +1343,9 @@
     },
     {
       "slug": "ai-router",
-      "title": "AI Router (OpenRouter)",
+      "title": "AI Router — Tiered Provider Proxy",
       "category": "ai",
-      "description": "Tier-routed LLM access via OpenRouter — nano (Haiku) for classification, mid (Sonnet) for chat, flagship (Opus) for deep reasoning. Per-call usage log.",
+      "description": "Backend infrastructure slice. Tier-routed LLM access — nano (Haiku) for classification, mid (Sonnet) for chat, flagship (Opus) for deep reasoning. Per-call usage log + cost guard. Works with direct Anthropic/OpenAI/Google keys or OpenRouter umbrella key. Every other AI slice calls through it.",
       "source": "rahmanef63/resource-site",
       "docsUrl": "https://sdk.vercel.ai/docs",
       "install": "npm i ai @openrouter/ai-sdk-provider",
@@ -1357,9 +1357,137 @@
       "agentRecipe": "Wrap every AI call through ai-router action. Pick tier based on workload: nano for spam-flag/headline-suggest, mid for chat/draft, flagship for methodology-review. Log token usage to ai_usage table for cost dashboard.",
       "tags": [
         "ai",
-        "llm",
-        "openrouter",
-        "tier-routing"
+        "ai:backend",
+        "tier-routing",
+        "cost-guard"
+      ]
+    },
+    {
+      "slug": "ai-chatbot",
+      "title": "AI Chatbot — Three-Column Workbench",
+      "category": "ai",
+      "description": "Claude.ai / ChatGPT-style chatbot. Three-column shell: threads + attachments + active tools on the left, streaming messages in the center, model + params + skills + actions on the right. Multi-provider, multimodal (text/image/PDF/audio), typed tool calls with inline inspector, agent mode (plan→execute→reflect), branching threads, RAG citations, resumable streams, usage telemetry. Public surface = consumer workbench; admin surface = per-bot persona, fallback responses, guardrails.",
+      "source": "rahmanef63/resource-site",
+      "docsUrl": "https://sdk.vercel.ai/docs",
+      "install": "npm i ai @ai-sdk/anthropic @ai-sdk/openai",
+      "npmPackages": [
+        "ai",
+        "@ai-sdk/anthropic",
+        "@ai-sdk/openai"
+      ],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add ai-chatbot`. Mount `<ChatWorkbench />` at /chat (public) and `<ChatbotAdminPanel />` at /admin/ai-chatbot. Streaming via HTTP action SSE; tool registry pulled from ai-admin; multimodal attachments via Convex storage.",
+      "tags": [
+        "ai",
+        "ai:chatbot",
+        "streaming",
+        "multimodal",
+        "tool-calls",
+        "agent-mode",
+        "rag",
+        "citations",
+        "branching",
+        "history"
+      ]
+    },
+    {
+      "slug": "ai-first-app",
+      "title": "AI-First App — Generation Canvas",
+      "category": "ai",
+      "description": "AI is the primary UI — single big prompt input → live-streaming generation canvas with iteration toolbar. Suno / Midjourney / Lovable pattern. Includes prompt history, version tree (branch & compare outputs), variation grid, share-to-link. Public surface = generator; admin surface = template library + few-shot example bank + output moderation rules.",
+      "source": "rahmanef63/resource-site",
+      "install": "",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add ai-first-app`. Mount `<GeneratorCanvas />` at /. Use case: prompt → output is the entire product flow. Wire your output renderer (text/image/code/audio) via the OutputSlot adapter.",
+      "tags": [
+        "ai",
+        "ai:first-app",
+        "generation",
+        "streaming",
+        "history",
+        "branching",
+        "image-gen"
+      ]
+    },
+    {
+      "slug": "ai-copilot",
+      "title": "AI Copilot — Sidebar Companion",
+      "category": "ai",
+      "description": "AI sits in a collapsible sidebar of an existing CRUD app — context-aware suggestions for the currently-focused entity (record, doc, ticket). Inline accept/dismiss diff hunks, slash-command palette, multi-turn drill-down. Public surface = embedded copilot panel; admin surface = trigger rules (which entity types fire which prompts) + tone/persona overrides.",
+      "source": "rahmanef63/resource-site",
+      "install": "",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add ai-copilot`. Wrap your host app in `<CopilotProvider>` and mount `<CopilotPanel />` in the page shell. Register entity → prompt mappings in ai-admin.copilot.triggers.",
+      "tags": [
+        "ai",
+        "ai:copilot",
+        "streaming",
+        "tool-calls",
+        "suggestions",
+        "context-aware"
+      ]
+    },
+    {
+      "slug": "ai-agent-runner",
+      "title": "AI Agent Runner — Async Worker Dashboard",
+      "category": "ai",
+      "description": "Autonomous background agents. Public surface = task queue + run results dashboard with step-by-step traces (Devin/Replit-Agent style). Admin surface = agent registry (skill + model + tool subset + max-iter + schedule + concurrency caps) + retry/backoff policy. Each run produces an audit-log entry, cost tally, and shareable trace URL.",
+      "source": "rahmanef63/resource-site",
+      "install": "",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add ai-agent-runner`. Mount `<RunnerDashboard />` at /agents. Trigger runs via `runAgent({agentSlug, input, scheduleAt?})`. Cron scheduler optional via Convex cron — wire if you need scheduled runs.",
+      "tags": [
+        "ai",
+        "ai:agent",
+        "agent-mode",
+        "tool-calls",
+        "async",
+        "queue",
+        "traces"
+      ]
+    },
+    {
+      "slug": "ai-search",
+      "title": "AI Search — Ask with Citations",
+      "category": "ai",
+      "description": "Perplexity-style answer engine over a workspace corpus. Public surface = ask box + streaming answer with inline numbered citations + source cards strip. Admin surface = corpus ingestion (URLs / files / Notion / Slack) + crawl schedule + reranker tuning + per-source weight.",
+      "source": "rahmanef63/resource-site",
+      "install": "",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add ai-search`. Mount `<AskBox />` at /ask. Ingestion runs in ai-admin → AI Search → Sources. Wire vector-search slice for embedding store.",
+      "tags": [
+        "ai",
+        "ai:search",
+        "rag",
+        "citations",
+        "streaming",
+        "corpus"
+      ]
+    },
+    {
+      "slug": "ai-admin",
+      "title": "AI Admin — Central Config Console",
+      "category": "ai",
+      "description": "Operator console for the whole AI stack — API sources (Anthropic/OpenAI/Google/Mistral/Ollama), model registry with capabilities + pricing, skill library (system prompts + tool defaults), tool registry (typed JSON schemas + sandbox flags), agent definitions, per-workspace cost budgets, full audit log of every call. Plugs into the existing admin-panel section registry. Every other ai-* slice reads its registries here.",
+      "source": "rahmanef63/resource-site",
+      "install": "",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add ai-admin`. Adds an `AI` section to the admin-panel ADMIN_SECTIONS registry with sub-tabs (Providers/Models/Skills/Tools/Agents/Budgets/Audit). API keys encrypted at rest via AI_ADMIN_ENCRYPTION_KEY. Skills + tools + agents are SSOTs consumed by every ai-* consumer slice.",
+      "tags": [
+        "ai",
+        "ai:admin",
+        "config",
+        "providers",
+        "models",
+        "skills",
+        "tools",
+        "agents",
+        "budgets"
       ]
     },
     {
@@ -1621,9 +1749,9 @@
     },
     {
       "slug": "icon-picker",
-      "title": "Notion-Style Icon Picker",
+      "title": "Icon Picker",
       "category": "ui",
-      "description": "Emoji + lucide icon picker with search, 10-color Notion palette, Twemoji/native toggle, recents tracking. One string stores emoji OR lucide:Name OR with ?c=hex tint — backwards-compat with raw-emoji fields. Two variants: Popover (compact trigger) and Inline (full sheet/dialog use). Lifted 2026-05-16 from notion-page-clone — full implementation (19 files) including emoji-keywords search index, twemoji renderer, lucide-catalog, recents store, style-pref hook.",
+      "description": "Emoji + lucide icon picker with search, 10-color palette, Twemoji/native toggle, recents tracking. One string stores emoji OR lucide:Name OR with ?c=hex tint — backwards-compat with raw-emoji fields. Two variants: Popover (compact trigger) and Inline (full sheet/dialog use). Lifted 2026-05-16 from notion-page-clone — full implementation (19 files) including emoji-keywords search index, twemoji renderer, lucide-catalog, recents store, style-pref hook.",
       "source": "notion-page-clone",
       "install": "npx rahman-resources add icon-picker",
       "npmPackages": [],
@@ -1692,6 +1820,80 @@
         "convex",
         "backend",
         "throttle"
+      ]
+    },
+    {
+      "slug": "subscribers",
+      "title": "Subscribers",
+      "category": "email",
+      "description": "Newsletter list with honeypot + per-email rate-limit + token-based unsubscribe + admin remove. Public `subscribe` returns status strings (`created` / `already` / `resubscribed` / `honeypot`); admin `listAll` / `count` queries gated by `requireAdmin` (rr `_shared/auth`). Lifted 2026-05-16 from rahmanef.com; sanitized: token args dropped, sibling `analyticsEvents` insert removed — wrap subscribe in a consumer action if you want funnel telemetry.",
+      "source": "rahmanef.com",
+      "install": "npx rahman-resources add subscribers",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add subscribers`. Compose `subscribersTables` into root convex/schema.ts. Public form posts `api.features.subscribers.mutations.subscribe({ email, source, website })` — `website` is the honeypot, leave it `\"\"` from the form. Render unsubscribe link `/unsubscribe?t=<token>` and call `unsubscribe({ token })`.",
+      "tags": [
+        "email",
+        "newsletter",
+        "subscribers",
+        "convex",
+        "backend"
+      ]
+    },
+    {
+      "slug": "testimonials",
+      "title": "Testimonials",
+      "category": "content",
+      "description": "Quote/name/role rotator backend. Public `listAll` + `get` (no auth — testimonials are public), admin CRUD via `requireAdmin`, internal `seed` for one-shot bootstrap. Indexed by `order` so carousel/grid keeps stable rotation. Lifted 2026-05-16 from rahmanef.com; token-based admin gate swapped for rr `_shared/auth`.",
+      "source": "rahmanef.com",
+      "install": "npx rahman-resources add testimonials",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add testimonials`. Compose `testimonialsTables` into root schema. Bootstrap via `npx convex run internal.features.testimonials.mutations.seed '{\"items\":[{\"quote\":\"...\",\"name\":\"...\",\"role\":\"...\",\"order\":1}]}'`. Render with `useQuery(api.features.testimonials.queries.listAll)`.",
+      "tags": [
+        "content",
+        "testimonials",
+        "convex",
+        "backend",
+        "marketing"
+      ]
+    },
+    {
+      "slug": "services",
+      "title": "Services",
+      "category": "content",
+      "description": "Service offerings backend — title + summary + deliverables array + sort order. Public read, admin CRUD, internal seed. Pairs with a frontend services grid/list (consumer-side). Lifted 2026-05-16 from rahmanef.com; token-based admin gate swapped for rr `_shared/auth`.",
+      "source": "rahmanef.com",
+      "install": "npx rahman-resources add services",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add services`. Compose `servicesTables` into root schema. Use `useQuery(api.features.services.queries.listAll)` from a server component / route to render service cards. CRUD via admin UI calling `create` / `update` / `remove` after `requireAdmin` passes.",
+      "tags": [
+        "content",
+        "services",
+        "convex",
+        "backend",
+        "marketing",
+        "agency"
+      ]
+    },
+    {
+      "slug": "socials",
+      "title": "Socials",
+      "category": "content",
+      "description": "Single source of truth for profile/social links. Powers JSON-LD `Person.sameAs` (Google entity graph), IndieWeb `<link rel=\"me\">` tags, and footer/contact/about UI surfaces. URL-deduped, ordered, `visible` / `featured` / `relMe` / `sameAs` flags. Lifted 2026-05-16 from rahmanef.com; token-based admin gate swapped, baked-in 14-platform rahmanef seed dropped — `seed` now takes items via args so each adopter ships their own list.",
+      "source": "rahmanef.com",
+      "install": "npx rahman-resources add socials",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add socials`. Compose `socialsTables` into root schema. Bootstrap with `npx convex run internal.features.socials.mutations.seed '{\"items\":[{\"platform\":\"github\",\"url\":\"https://github.com/<you>\",\"order\":1,\"visible\":true,\"featured\":true,\"sameAs\":true,\"relMe\":true}]}'`. Wire `useQuery(api.features.socials.queries.listVisible)` into footer for entity-graph SEO.",
+      "tags": [
+        "content",
+        "socials",
+        "seo",
+        "indieweb",
+        "convex",
+        "backend"
       ]
     },
     {
@@ -2039,11 +2241,11 @@
     },
     {
       "slug": "ai-router",
-      "title": "AI Router (OpenRouter)",
+      "title": "AI Router — Tiered Provider Proxy",
       "category": "ai",
       "kind": "backend",
       "version": "0.1.0",
-      "description": "Tier-routed LLM access via OpenRouter — nano (Haiku) for classification, mid (Sonnet) for chat, flagship (Opus) for deep reasoning. Per-call usage log.",
+      "description": "Backend infrastructure slice. Tier-routed LLM access — nano (Haiku) for classification, mid (Sonnet) for chat, flagship (Opus) for deep reasoning. Per-call usage log + cost guard. Works with direct Anthropic/OpenAI/Google keys or OpenRouter umbrella key. Every other AI slice calls through it.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/ai-router",
       "convexPaths": [
@@ -2067,11 +2269,391 @@
       "providers": [],
       "tags": [
         "ai",
-        "llm",
-        "openrouter",
-        "tier-routing"
+        "ai:backend",
+        "tier-routing",
+        "cost-guard"
       ],
       "agentRecipe": "Wrap every AI call through ai-router action. Pick tier based on workload: nano for spam-flag/headline-suggest, mid for chat/draft, flagship for methodology-review. Log token usage to ai_usage table for cost dashboard."
+    },
+    {
+      "slug": "ai-chatbot",
+      "title": "AI Chatbot — Three-Column Workbench",
+      "category": "ai",
+      "kind": "full",
+      "version": "0.1.0",
+      "description": "Claude.ai / ChatGPT-style chatbot. Three-column shell: threads + attachments + active tools on the left, streaming messages in the center, model + params + skills + actions on the right. Multi-provider, multimodal (text/image/PDF/audio), typed tool calls with inline inspector, agent mode (plan→execute→reflect), branching threads, RAG citations, resumable streams, usage telemetry. Public surface = consumer workbench; admin surface = per-bot persona, fallback responses, guardrails.",
+      "source": "rahmanef63/resource-site",
+      "slicePath": "frontend/slices/ai-chatbot",
+      "convexPaths": [
+        "convex/features/ai-chatbot"
+      ],
+      "npm": [
+        "ai@^4.0.0",
+        "@ai-sdk/anthropic@^0.0.50",
+        "@ai-sdk/openai@^0.0.60"
+      ],
+      "shadcn": [
+        "button",
+        "card",
+        "badge",
+        "avatar",
+        "scroll-area",
+        "select",
+        "separator",
+        "slider",
+        "switch",
+        "textarea",
+        "tabs"
+      ],
+      "env": [
+        {
+          "name": "ANTHROPIC_API_KEY",
+          "scope": "convex",
+          "required": false
+        },
+        {
+          "name": "OPENAI_API_KEY",
+          "scope": "convex",
+          "required": false
+        },
+        {
+          "name": "GOOGLE_GENERATIVE_AI_API_KEY",
+          "scope": "convex",
+          "required": false
+        }
+      ],
+      "peers": [
+        {
+          "slug": "convex-auth",
+          "range": "^0.1",
+          "reason": "Thread ownership requires authenticated user."
+        },
+        {
+          "slug": "ai-router",
+          "range": "^0.1",
+          "reason": "Routes provider calls through tiered proxy."
+        },
+        {
+          "slug": "ai-admin",
+          "range": "^0.1",
+          "reason": "Reads skills/tools/models from ai-admin registry."
+        },
+        {
+          "slug": "vector-search",
+          "range": "^0.1",
+          "reason": "Optional — RAG tool uses workspace embeddings."
+        }
+      ],
+      "providers": [],
+      "tags": [
+        "ai",
+        "ai:chatbot",
+        "streaming",
+        "multimodal",
+        "tool-calls",
+        "agent-mode",
+        "rag",
+        "citations",
+        "branching",
+        "history"
+      ],
+      "agentRecipe": "Run `npx rr add ai-chatbot`. Mount `<ChatWorkbench />` at /chat (public) and `<ChatbotAdminPanel />` at /admin/ai-chatbot. Streaming via HTTP action SSE; tool registry pulled from ai-admin; multimodal attachments via Convex storage."
+    },
+    {
+      "slug": "ai-first-app",
+      "title": "AI-First App — Generation Canvas",
+      "category": "ai",
+      "kind": "full",
+      "version": "0.1.0",
+      "description": "AI is the primary UI — single big prompt input → live-streaming generation canvas with iteration toolbar. Suno / Midjourney / Lovable pattern. Includes prompt history, version tree (branch & compare outputs), variation grid, share-to-link. Public surface = generator; admin surface = template library + few-shot example bank + output moderation rules.",
+      "source": "rahmanef63/resource-site",
+      "slicePath": "frontend/slices/ai-first-app",
+      "convexPaths": [
+        "convex/features/ai-first-app"
+      ],
+      "npm": [
+        "ai@^4.0.0"
+      ],
+      "shadcn": [
+        "button",
+        "card",
+        "badge",
+        "textarea",
+        "tabs",
+        "tooltip",
+        "scroll-area",
+        "select"
+      ],
+      "env": [],
+      "peers": [
+        {
+          "slug": "convex-auth",
+          "range": "^0.1",
+          "reason": "Generation history per user."
+        },
+        {
+          "slug": "ai-router",
+          "range": "^0.1",
+          "reason": "All generation calls flow through router."
+        },
+        {
+          "slug": "ai-admin",
+          "range": "^0.1",
+          "reason": "Templates + moderation rules live in ai-admin."
+        }
+      ],
+      "providers": [],
+      "tags": [
+        "ai",
+        "ai:first-app",
+        "generation",
+        "streaming",
+        "history",
+        "branching",
+        "image-gen"
+      ],
+      "agentRecipe": "Run `npx rr add ai-first-app`. Mount `<GeneratorCanvas />` at /. Use case: prompt → output is the entire product flow. Wire your output renderer (text/image/code/audio) via the OutputSlot adapter."
+    },
+    {
+      "slug": "ai-copilot",
+      "title": "AI Copilot — Sidebar Companion",
+      "category": "ai",
+      "kind": "full",
+      "version": "0.1.0",
+      "description": "AI sits in a collapsible sidebar of an existing CRUD app — context-aware suggestions for the currently-focused entity (record, doc, ticket). Inline accept/dismiss diff hunks, slash-command palette, multi-turn drill-down. Public surface = embedded copilot panel; admin surface = trigger rules (which entity types fire which prompts) + tone/persona overrides.",
+      "source": "rahmanef63/resource-site",
+      "slicePath": "frontend/slices/ai-copilot",
+      "convexPaths": [
+        "convex/features/ai-copilot"
+      ],
+      "npm": [
+        "ai@^4.0.0"
+      ],
+      "shadcn": [
+        "button",
+        "card",
+        "badge",
+        "command",
+        "scroll-area",
+        "sheet",
+        "separator",
+        "tooltip"
+      ],
+      "env": [],
+      "peers": [
+        {
+          "slug": "convex-auth",
+          "range": "^0.1",
+          "reason": "Suggestions scoped to authed user."
+        },
+        {
+          "slug": "ai-router",
+          "range": "^0.1",
+          "reason": "Inference via tiered router."
+        },
+        {
+          "slug": "ai-admin",
+          "range": "^0.1",
+          "reason": "Trigger rules + personas live in ai-admin."
+        }
+      ],
+      "providers": [],
+      "tags": [
+        "ai",
+        "ai:copilot",
+        "streaming",
+        "tool-calls",
+        "suggestions",
+        "context-aware"
+      ],
+      "agentRecipe": "Run `npx rr add ai-copilot`. Wrap your host app in `<CopilotProvider>` and mount `<CopilotPanel />` in the page shell. Register entity → prompt mappings in ai-admin.copilot.triggers."
+    },
+    {
+      "slug": "ai-agent-runner",
+      "title": "AI Agent Runner — Async Worker Dashboard",
+      "category": "ai",
+      "kind": "full",
+      "version": "0.1.0",
+      "description": "Autonomous background agents. Public surface = task queue + run results dashboard with step-by-step traces (Devin/Replit-Agent style). Admin surface = agent registry (skill + model + tool subset + max-iter + schedule + concurrency caps) + retry/backoff policy. Each run produces an audit-log entry, cost tally, and shareable trace URL.",
+      "source": "rahmanef63/resource-site",
+      "slicePath": "frontend/slices/ai-agent-runner",
+      "convexPaths": [
+        "convex/features/ai-agent-runner"
+      ],
+      "npm": [
+        "ai@^4.0.0"
+      ],
+      "shadcn": [
+        "button",
+        "card",
+        "badge",
+        "table",
+        "tabs",
+        "scroll-area",
+        "progress"
+      ],
+      "env": [],
+      "peers": [
+        {
+          "slug": "convex-auth",
+          "range": "^0.1",
+          "reason": "Per-user agent run ownership."
+        },
+        {
+          "slug": "ai-router",
+          "range": "^0.1",
+          "reason": "Step calls flow through router."
+        },
+        {
+          "slug": "ai-admin",
+          "range": "^0.1",
+          "reason": "Agents defined in ai-admin.agents."
+        },
+        {
+          "slug": "audit-log",
+          "range": "^0.1",
+          "reason": "Every step logged."
+        }
+      ],
+      "providers": [],
+      "tags": [
+        "ai",
+        "ai:agent",
+        "agent-mode",
+        "tool-calls",
+        "async",
+        "queue",
+        "traces"
+      ],
+      "agentRecipe": "Run `npx rr add ai-agent-runner`. Mount `<RunnerDashboard />` at /agents. Trigger runs via `runAgent({agentSlug, input, scheduleAt?})`. Cron scheduler optional via Convex cron — wire if you need scheduled runs."
+    },
+    {
+      "slug": "ai-search",
+      "title": "AI Search — Ask with Citations",
+      "category": "ai",
+      "kind": "full",
+      "version": "0.1.0",
+      "description": "Perplexity-style answer engine over a workspace corpus. Public surface = ask box + streaming answer with inline numbered citations + source cards strip. Admin surface = corpus ingestion (URLs / files / Notion / Slack) + crawl schedule + reranker tuning + per-source weight.",
+      "source": "rahmanef63/resource-site",
+      "slicePath": "frontend/slices/ai-search",
+      "convexPaths": [
+        "convex/features/ai-search"
+      ],
+      "npm": [
+        "ai@^4.0.0"
+      ],
+      "shadcn": [
+        "button",
+        "card",
+        "badge",
+        "input",
+        "tabs",
+        "scroll-area",
+        "separator"
+      ],
+      "env": [],
+      "peers": [
+        {
+          "slug": "convex-auth",
+          "range": "^0.1",
+          "reason": "Per-workspace corpus scoping."
+        },
+        {
+          "slug": "ai-router",
+          "range": "^0.1",
+          "reason": "Answer synthesis via router."
+        },
+        {
+          "slug": "ai-admin",
+          "range": "^0.1",
+          "reason": "Reranker + source weights tunable in ai-admin."
+        },
+        {
+          "slug": "vector-search",
+          "range": "^0.1",
+          "reason": "Embeddings index for retrieval."
+        }
+      ],
+      "providers": [],
+      "tags": [
+        "ai",
+        "ai:search",
+        "rag",
+        "citations",
+        "streaming",
+        "corpus"
+      ],
+      "agentRecipe": "Run `npx rr add ai-search`. Mount `<AskBox />` at /ask. Ingestion runs in ai-admin → AI Search → Sources. Wire vector-search slice for embedding store."
+    },
+    {
+      "slug": "ai-admin",
+      "title": "AI Admin — Central Config Console",
+      "category": "ai",
+      "kind": "full",
+      "version": "0.1.0",
+      "description": "Operator console for the whole AI stack — API sources (Anthropic/OpenAI/Google/Mistral/Ollama), model registry with capabilities + pricing, skill library (system prompts + tool defaults), tool registry (typed JSON schemas + sandbox flags), agent definitions, per-workspace cost budgets, full audit log of every call. Plugs into the existing admin-panel section registry. Every other ai-* slice reads its registries here.",
+      "source": "rahmanef63/resource-site",
+      "slicePath": "frontend/slices/ai-admin",
+      "convexPaths": [
+        "convex/features/ai-admin"
+      ],
+      "npm": [],
+      "shadcn": [
+        "card",
+        "button",
+        "badge",
+        "tabs",
+        "table",
+        "dialog",
+        "input",
+        "label",
+        "select",
+        "textarea",
+        "switch"
+      ],
+      "env": [
+        {
+          "name": "AI_ADMIN_ENCRYPTION_KEY",
+          "scope": "convex",
+          "required": true,
+          "description": "Encrypts stored provider API keys at rest."
+        }
+      ],
+      "peers": [
+        {
+          "slug": "convex-auth",
+          "range": "^0.1",
+          "reason": "requireAdmin gate."
+        },
+        {
+          "slug": "rbac-roles",
+          "range": "^0.1",
+          "reason": "Section gated by AI_ADMIN permission."
+        },
+        {
+          "slug": "admin-panel",
+          "range": "^0.1",
+          "reason": "Lives as a registered admin section."
+        },
+        {
+          "slug": "audit-log",
+          "range": "^0.1",
+          "reason": "Every config change + AI call routes through audit-log."
+        }
+      ],
+      "providers": [],
+      "tags": [
+        "ai",
+        "ai:admin",
+        "config",
+        "providers",
+        "models",
+        "skills",
+        "tools",
+        "agents",
+        "budgets"
+      ],
+      "agentRecipe": "Run `npx rr add ai-admin`. Adds an `AI` section to the admin-panel ADMIN_SECTIONS registry with sub-tabs (Providers/Models/Skills/Tools/Agents/Budgets/Audit). API keys encrypted at rest via AI_ADMIN_ENCRYPTION_KEY. Skills + tools + agents are SSOTs consumed by every ai-* consumer slice."
     },
     {
       "slug": "vector-search",
@@ -2482,11 +3064,11 @@
     },
     {
       "slug": "icon-picker",
-      "title": "Notion-Style Icon Picker",
+      "title": "Icon Picker",
       "category": "ui",
       "kind": "ui",
       "version": "0.2.0",
-      "description": "Emoji + lucide icon picker with search, 10-color Notion palette, Twemoji/native toggle, recents tracking. One string stores emoji OR lucide:Name OR with ?c=hex tint — backwards-compat with raw-emoji fields. Two variants: Popover (compact trigger) and Inline (full sheet/dialog use). Lifted 2026-05-16 from notion-page-clone — full implementation (19 files) including emoji-keywords search index, twemoji renderer, lucide-catalog, recents store, style-pref hook.",
+      "description": "Emoji + lucide icon picker with search, 10-color palette, Twemoji/native toggle, recents tracking. One string stores emoji OR lucide:Name OR with ?c=hex tint — backwards-compat with raw-emoji fields. Two variants: Popover (compact trigger) and Inline (full sheet/dialog use). Lifted 2026-05-16 from notion-page-clone — full implementation (19 files) including emoji-keywords search index, twemoji renderer, lucide-catalog, recents store, style-pref hook.",
       "source": "notion-page-clone",
       "slicePath": "frontend/slices/icon-picker",
       "convexPaths": [],
@@ -2590,6 +3172,161 @@
         "throttle"
       ],
       "agentRecipe": "Run `npx rr add rate-limit`. Compose `rateLimitTables` into root convex/schema.ts. Wire `internal.features.rate_limit.mutations._pruneExpired` into convex/crons.ts every 5 min. Call `api.features.rate_limit.mutations.consume({ key, limit, windowMs })` from server-side handlers — keep a fail-open wrapper so a Convex outage doesn't 503 the route."
+    },
+    {
+      "slug": "subscribers",
+      "title": "Subscribers",
+      "category": "email",
+      "kind": "backend",
+      "version": "0.1.0",
+      "description": "Newsletter list with honeypot + per-email rate-limit + token-based unsubscribe + admin remove. Public `subscribe` returns status strings (`created` / `already` / `resubscribed` / `honeypot`); admin `listAll` / `count` queries gated by `requireAdmin` (rr `_shared/auth`). Lifted 2026-05-16 from rahmanef.com; sanitized: token args dropped, sibling `analyticsEvents` insert removed — wrap subscribe in a consumer action if you want funnel telemetry.",
+      "source": "rahmanef.com",
+      "slicePath": "frontend/slices/subscribers",
+      "convexPaths": [
+        "convex/features/subscribers"
+      ],
+      "npm": [],
+      "shadcn": [],
+      "env": [
+        {
+          "name": "SUPER_ADMIN_EMAIL",
+          "scope": "convex",
+          "required": false,
+          "description": "Optional super-admin gate for admin queries."
+        }
+      ],
+      "peers": [
+        {
+          "slug": "convex-auth",
+          "range": "^0.1",
+          "reason": "requireAdmin uses getAuthUserId from @convex-dev/auth."
+        }
+      ],
+      "providers": [],
+      "tags": [
+        "email",
+        "newsletter",
+        "subscribers",
+        "convex",
+        "backend"
+      ],
+      "agentRecipe": "Run `npx rr add subscribers`. Compose `subscribersTables` into root convex/schema.ts. Public form posts `api.features.subscribers.mutations.subscribe({ email, source, website })` — `website` is the honeypot, leave it `\"\"` from the form. Render unsubscribe link `/unsubscribe?t=<token>` and call `unsubscribe({ token })`."
+    },
+    {
+      "slug": "testimonials",
+      "title": "Testimonials",
+      "category": "content",
+      "kind": "backend",
+      "version": "0.1.0",
+      "description": "Quote/name/role rotator backend. Public `listAll` + `get` (no auth — testimonials are public), admin CRUD via `requireAdmin`, internal `seed` for one-shot bootstrap. Indexed by `order` so carousel/grid keeps stable rotation. Lifted 2026-05-16 from rahmanef.com; token-based admin gate swapped for rr `_shared/auth`.",
+      "source": "rahmanef.com",
+      "slicePath": "frontend/slices/testimonials",
+      "convexPaths": [
+        "convex/features/testimonials"
+      ],
+      "npm": [],
+      "shadcn": [],
+      "env": [
+        {
+          "name": "SUPER_ADMIN_EMAIL",
+          "scope": "convex",
+          "required": false
+        }
+      ],
+      "peers": [
+        {
+          "slug": "convex-auth",
+          "range": "^0.1",
+          "reason": "requireAdmin uses getAuthUserId from @convex-dev/auth."
+        }
+      ],
+      "providers": [],
+      "tags": [
+        "content",
+        "testimonials",
+        "convex",
+        "backend",
+        "marketing"
+      ],
+      "agentRecipe": "Run `npx rr add testimonials`. Compose `testimonialsTables` into root schema. Bootstrap via `npx convex run internal.features.testimonials.mutations.seed '{\"items\":[{\"quote\":\"...\",\"name\":\"...\",\"role\":\"...\",\"order\":1}]}'`. Render with `useQuery(api.features.testimonials.queries.listAll)`."
+    },
+    {
+      "slug": "services",
+      "title": "Services",
+      "category": "content",
+      "kind": "backend",
+      "version": "0.1.0",
+      "description": "Service offerings backend — title + summary + deliverables array + sort order. Public read, admin CRUD, internal seed. Pairs with a frontend services grid/list (consumer-side). Lifted 2026-05-16 from rahmanef.com; token-based admin gate swapped for rr `_shared/auth`.",
+      "source": "rahmanef.com",
+      "slicePath": "frontend/slices/services",
+      "convexPaths": [
+        "convex/features/services"
+      ],
+      "npm": [],
+      "shadcn": [],
+      "env": [
+        {
+          "name": "SUPER_ADMIN_EMAIL",
+          "scope": "convex",
+          "required": false
+        }
+      ],
+      "peers": [
+        {
+          "slug": "convex-auth",
+          "range": "^0.1",
+          "reason": "requireAdmin uses getAuthUserId from @convex-dev/auth."
+        }
+      ],
+      "providers": [],
+      "tags": [
+        "content",
+        "services",
+        "convex",
+        "backend",
+        "marketing",
+        "agency"
+      ],
+      "agentRecipe": "Run `npx rr add services`. Compose `servicesTables` into root schema. Use `useQuery(api.features.services.queries.listAll)` from a server component / route to render service cards. CRUD via admin UI calling `create` / `update` / `remove` after `requireAdmin` passes."
+    },
+    {
+      "slug": "socials",
+      "title": "Socials",
+      "category": "content",
+      "kind": "backend",
+      "version": "0.1.0",
+      "description": "Single source of truth for profile/social links. Powers JSON-LD `Person.sameAs` (Google entity graph), IndieWeb `<link rel=\"me\">` tags, and footer/contact/about UI surfaces. URL-deduped, ordered, `visible` / `featured` / `relMe` / `sameAs` flags. Lifted 2026-05-16 from rahmanef.com; token-based admin gate swapped, baked-in 14-platform rahmanef seed dropped — `seed` now takes items via args so each adopter ships their own list.",
+      "source": "rahmanef.com",
+      "slicePath": "frontend/slices/socials",
+      "convexPaths": [
+        "convex/features/socials"
+      ],
+      "npm": [],
+      "shadcn": [],
+      "env": [
+        {
+          "name": "SUPER_ADMIN_EMAIL",
+          "scope": "convex",
+          "required": false
+        }
+      ],
+      "peers": [
+        {
+          "slug": "convex-auth",
+          "range": "^0.1",
+          "reason": "requireAdmin uses getAuthUserId from @convex-dev/auth."
+        }
+      ],
+      "providers": [],
+      "tags": [
+        "content",
+        "socials",
+        "seo",
+        "indieweb",
+        "convex",
+        "backend"
+      ],
+      "agentRecipe": "Run `npx rr add socials`. Compose `socialsTables` into root schema. Bootstrap with `npx convex run internal.features.socials.mutations.seed '{\"items\":[{\"platform\":\"github\",\"url\":\"https://github.com/<you>\",\"order\":1,\"visible\":true,\"featured\":true,\"sameAs\":true,\"relMe\":true}]}'`. Wire `useQuery(api.features.socials.queries.listVisible)` into footer for entity-graph SEO."
     },
     {
       "slug": "contact-form-resend",

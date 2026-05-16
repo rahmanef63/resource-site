@@ -1,0 +1,24 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "services",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add services",
+    "consumerPath": "slices/services"
+  },
+  "files": [
+    "index.ts",
+    "config.ts"
+  ],
+  "convexFiles": [
+    "convex/features/services/schema.ts",
+    "convex/features/services/queries.ts",
+    "convex/features/services/mutations.ts"
+  ],
+  "imports": {
+    "shared": ["convex/_shared/auth"],
+    "external": ["convex/server", "convex/values"]
+  }
+}

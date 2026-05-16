@@ -1,0 +1,24 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "subscribers",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add subscribers",
+    "consumerPath": "slices/subscribers"
+  },
+  "files": [
+    "index.ts",
+    "config.ts"
+  ],
+  "convexFiles": [
+    "convex/features/subscribers/schema.ts",
+    "convex/features/subscribers/queries.ts",
+    "convex/features/subscribers/mutations.ts"
+  ],
+  "imports": {
+    "shared": ["convex/_shared/auth"],
+    "external": ["convex/server", "convex/values"]
+  }
+}

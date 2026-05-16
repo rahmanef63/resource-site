@@ -1,0 +1,24 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "socials",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add socials",
+    "consumerPath": "slices/socials"
+  },
+  "files": [
+    "index.ts",
+    "config.ts"
+  ],
+  "convexFiles": [
+    "convex/features/socials/schema.ts",
+    "convex/features/socials/queries.ts",
+    "convex/features/socials/mutations.ts"
+  ],
+  "imports": {
+    "shared": ["convex/_shared/auth"],
+    "external": ["convex/server", "convex/values"]
+  }
+}
