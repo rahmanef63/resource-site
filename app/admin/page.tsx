@@ -2,7 +2,6 @@ import Link from "next/link";
 import {
   ArrowRight,
   Box,
-  ChefHat,
   FileCode,
   GaugeCircle,
   GitBranch,
@@ -20,7 +19,6 @@ import { Badge } from "@/components/ui/badge";
 const EDIT_TILES = [
   { label: "Site", href: "/admin/site", icon: Settings, desc: "Name, tagline, repo URL." },
   { label: "Layouts", href: "/admin/layouts", icon: Layout, desc: "Add/edit page shells." },
-  { label: "Recipes", href: "/admin/recipes", icon: ChefHat, desc: "Cookbook recipes." },
   { label: "Sources", href: "/admin/sources", icon: Box, desc: "Source projects + attribution." },
   { label: "Export", href: "/admin/export", icon: FileCode, desc: "Generate TS files to commit." },
 ];

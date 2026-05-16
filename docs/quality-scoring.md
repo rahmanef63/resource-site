@@ -2,7 +2,10 @@
 
 Phase F of the Slice Composition Compiler. Closes the feedback loop:
 consumers anonymously report slice usage / audit results → the kitab
-computes per-slice quality scores → the `/quality` page surfaces them.
+computes per-slice quality scores → the `/admin/quality` page surfaces them.
+
+> The dashboard moved from public `/quality` to `/admin/quality` (operator-only)
+> on 2026-05-16 — consumer adoption telemetry is internal intel, not public docs.
 
 ## Pieces
 
@@ -11,8 +14,8 @@ computes per-slice quality scores → the `/quality` page surfaces them.
 | Telemetry receiver | `convex/features/telemetry/` (`telemetryTables`, `recordEvent`, `getSliceStats`) |
 | Scoring fn | `lib/telemetry/score.ts` (`computeQuality`, `computeQualityBars`) |
 | Score tests | `lib/telemetry/score.test.ts` (6 vitest cases) |
-| Dashboard | `app/(docs)/quality/page.tsx` → route `/quality` |
-| Nav link | `components/site/top-navbar.tsx` `NAV` array |
+| Dashboard | `app/admin/quality/page.tsx` → route `/admin/quality` (auth-gated) |
+| Sidebar nav | `components/admin/admin-shell.tsx` `INSPECT_NAV` |
 
 ## Scoring formula
 
@@ -118,7 +121,7 @@ out of `convex/schema.ts` — there are no other consumers of
 
 ## TODO — live integration
 
-The dashboard at `/quality` currently uses deterministic placeholder
+The dashboard at `/admin/quality` currently uses deterministic placeholder
 inputs keyed off the slice slug (see `mockInputsForSlug` in the page).
 Switch to live data once:
 

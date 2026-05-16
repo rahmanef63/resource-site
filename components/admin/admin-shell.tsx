@@ -6,7 +6,6 @@ import { useRouter, usePathname } from "next/navigation";
 import {
   AlertTriangle,
   Box,
-  ChefHat,
   FileCode,
   GaugeCircle,
   GitBranch,
@@ -33,7 +32,6 @@ const EDIT_NAV: NavItem[] = [
   { label: "Overview", href: "/admin", icon: Sparkles },
   { label: "Site", href: "/admin/site", icon: Settings },
   { label: "Layouts", href: "/admin/layouts", icon: Layout },
-  { label: "Recipes", href: "/admin/recipes", icon: ChefHat },
   { label: "Sources", href: "/admin/sources", icon: Box },
   { label: "Export", href: "/admin/export", icon: FileCode },
 ];
