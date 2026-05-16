@@ -8,6 +8,7 @@
 // MCP `rr_list_slices`/`rr_get_slice`, sidebar Slices group.
 
 import type { SliceCategory } from "@/lib/shared/features/defineFeature";
+import type { PreviewView } from "@/lib/preview-presets";
 
 export type SlicePeer = { slug: string; range: string; reason?: string };
 export type SliceEnvVar = {
@@ -83,6 +84,12 @@ export type SliceEntry = {
   /** Live preview route, e.g. "/preview/slices/full-width-toggle". When set,
    *  the slice detail page renders a PreviewFrame iframing this URL. */
   previewPath?: string;
+  /** Initial preview viewport on the detail page. Defaults to desktop.
+   *  Pick "mobile" for mobile-first UIs (e.g. comments thread, forms). */
+  defaultView?: PreviewView;
+  /** Initial preview zoom (1.0 = real size). Override when the slice
+   *  is dense and benefits from being scaled down inside the iframe. */
+  defaultZoom?: number;
   /** Compatibility: per-template status + slice peer/conflict declarations.
    *  Was hand-curated in lib/build/compat.ts pre-Phase-4. */
   compat?: SliceCompat;
@@ -114,6 +121,8 @@ export const slices: SliceEntry[] = [
     usedBy: ["personal-brand-os", "wirausaha-os", "konsultan-os"],
     agentRecipe: "Run `rr add convex-auth`. Then create convex/auth.ts using the kitab pattern (Resend provider). Set env via `npx convex env set` for self-hosted.",
     previewPath: "/preview/slices/convex-auth",
+    defaultView: "mobile",
+    defaultZoom: 1,
     compat: {
       templates: {
         "personal-brand-os": { status: "native" },
@@ -165,6 +174,8 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os", "konsultan-os", "wirausaha-os", "kreator-studio-os", "riset-kit", "agency-studio-os", "cms-public-storefront"],
     agentRecipe: "DOKU dual-mode: Checkout (hosted, all channels) atau Direct (single channel, returns VA/QRIS/deeplink). Webhook di /webhooks/doku verify HMAC-SHA256 (canonical: Client-Id + Request-Id + Request-Timestamp + Request-Target + Digest). Idempotency by request_id index. Server-only — no NEXT_PUBLIC_*. Sandbox default (api-sandbox.doku.com); flip DOKU_IS_PRODUCTION=true for live.",
     previewPath: "/preview/slices/doku-payment",
+    defaultView: "mobile",
+    defaultZoom: 1,
     compat: {
       templates: {
         "personal-brand-os": { status: "recommended", note: "Pairs with services/digital-product flow. Mount checkout-page at /checkout." },
@@ -205,6 +216,8 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["wirausaha-os", "konsultan-os", "kreator-studio-os"],
     agentRecipe: "Midtrans Snap untuk pembayaran instant. Webhook ke Convex HTTP action /api/midtrans-callback untuk update order status. Ingat: PPN 11% sudah included di amount, jangan double-count.",
     previewPath: "/preview/slices/midtrans-payment",
+    defaultView: "mobile",
+    defaultZoom: 1,
     compat: {
       templates: {
         "personal-brand-os": { status: "warn", note: "Personal-brand has no checkout slice; you'll add one manually." },
@@ -242,6 +255,8 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os", "kreator-studio-os", "wirausaha-os"],
     agentRecipe: "Use Resend Audiences API for newsletter — store subscriber emails in Convex too for segmentation. Double opt-in: subscriber.create with status 'pending' → click link → status 'confirmed'.",
     previewPath: "/preview/slices/resend-newsletter",
+    defaultView: "tablet",
+    defaultZoom: 0.8,
     compat: {
       templates: {
         "personal-brand-os": { status: "recommended", note: "Newsletter slice already calls Resend Audiences API." },
@@ -271,6 +286,8 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os"],
     agentRecipe: "Wrap every AI call through ai-router action. Pick tier based on workload: nano for spam-flag/headline-suggest, mid for chat/draft, flagship for methodology-review. Log token usage to ai_usage table for cost dashboard.",
     previewPath: "/preview/slices/ai-router",
+    defaultView: "desktop",
+    defaultZoom: 0.7,
     compat: {
       templates: {
         "personal-brand-os": { status: "recommended", note: "Chatbot + post-draft assistant compose on top." },
@@ -300,6 +317,8 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os", "riset-kit"],
     agentRecipe: "Add embedding field + vectorIndex per searchable table. Re-embed on upsert via Convex action. Cache embeddings — don't re-call OpenAI on every read.",
     previewPath: "/preview/slices/vector-search",
+    defaultView: "tablet",
+    defaultZoom: 0.8,
     compat: {
       templates: {
         "riset-kit": { status: "native", note: "Research kit pakai embedding search untuk konten." },
@@ -326,6 +345,8 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os", "konsultan-os", "saas-marketing-os"],
     agentRecipe: "Store post body sebagai markdown di content/blog/*.mdx. Render dengan MDXRemote di [slug]/page.tsx. Auto-extract headings ke ToC via remark plugin custom.",
     previewPath: "/preview/slices/mdx-blog",
+    defaultView: "tablet",
+    defaultZoom: 0.8,
     compat: {
       templates: {
         "saas-marketing-os": { status: "native", note: "Blog + changelog slices both render MDX." },
@@ -358,6 +379,8 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os", "konsultan-os"],
     agentRecipe: "Embed Cal.com via @calcom/embed-react di halaman services. Configure webhook di Cal.com dashboard → POST ke /api/cal-webhook → upsert booking di Convex.",
     previewPath: "/preview/slices/cal-com-booking",
+    defaultView: "mobile",
+    defaultZoom: 1,
     compat: {
       templates: {
         "personal-brand-os": { status: "recommended", note: "Services slice has a booking placeholder slot." },
@@ -387,6 +410,8 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os", "agency-studio-os", "konsultan-os", "wirausaha-os", "kreator-studio-os", "saas-marketing-os", "riset-kit", "cms-public-storefront"],
     agentRecipe: "Drop <WidthContainer> around page content, <FullWidthToggle variant='icon' /> in topbar. Variant 'segment' best for settings page. Hook useFullWidth() returns [mode, setMode, cycle]. SSR-safe — defaults to 'contained' until hydrate.",
     previewPath: "/preview/slices/full-width-toggle",
+    defaultView: "desktop",
+    defaultZoom: 0.6,
   },
   {
     slug: "command-menu",
@@ -408,6 +433,8 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os", "agency-studio-os", "konsultan-os", "wirausaha-os", "kreator-studio-os", "saas-marketing-os", "riset-kit", "cms-public-storefront"],
     agentRecipe: "Wire <CommandPalette groups={...} onHistorySelect={...} labels={...} /> at the dashboard shell. Build groups from your feature registry; each item.onSelect handles navigation. Use <SearchModal bindings={{ pages, databases, recents, isLoading, onQueryChange, onSelectPage, onSelectDatabase }} /> for the search dialog — see slice README.md for adapter shapes.",
     previewPath: "/preview/slices/command-menu",
+    defaultView: "mobile",
+    defaultZoom: 1,
   },
   {
     slug: "motion-primitives",
@@ -429,6 +456,8 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os", "agency-studio-os", "kreator-studio-os", "saas-marketing-os"],
     agentRecipe: "Each primitive is independently importable from @/features/motion-primitives. Use marquee for logo strips, kinetic-heading for hero text, magnetic for CTA buttons, cursor-spotlight for hover-reveal panels, stat-counter for animated numbers, reading-progress for blog top bar, grain for film texture, lightbox for image gallery.",
     previewPath: "/preview/slices/motion-primitives",
+    defaultView: "desktop",
+    defaultZoom: 0.6,
   },
   {
     slug: "responsive-dialog",
@@ -450,6 +479,8 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os", "agency-studio-os", "konsultan-os", "wirausaha-os", "kreator-studio-os", "saas-marketing-os", "riset-kit", "cms-public-storefront"],
     agentRecipe: "Drop-in for shadcn Dialog. Use <ResponsiveDialog><ResponsiveDialogTrigger>…</ResponsiveDialogTrigger><ResponsiveDialogContent>…</ResponsiveDialogContent></ResponsiveDialog>. On mobile renders as Sheet sliding from bottom; on desktop as centered Dialog. Threshold via useMediaQuery('(min-width: 768px)').",
     previewPath: "/preview/slices/responsive-dialog",
+    defaultView: "tablet",
+    defaultZoom: 0.85,
   },
   {
     slug: "dashboard-shell",
@@ -471,6 +502,8 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os", "agency-studio-os", "konsultan-os", "wirausaha-os", "kreator-studio-os", "riset-kit", "cms-public-storefront"],
     agentRecipe: "Wraps app/(admin) routes. <ResponsiveDashboardShell sidebar={<AppSidebar />} topbar={<TopBar />}>{children}</ResponsiveDashboardShell>. Mobile: sidebar collapses to <Sheet>. Desktop: persistent sidebar + topbar. Embed FullWidthToggle in topbar for instant container resize.",
     previewPath: "/preview/slices/dashboard-shell",
+    defaultView: "desktop",
+    defaultZoom: 0.6,
   },
   {
     slug: "broadcast-channel-sync",
@@ -492,6 +525,8 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os"],
     agentRecipe: "Use BroadcastChannel only for demo / cross-iframe state mirroring. Production data still goes through Convex realtime. Use the useBroadcastSync(channelName, initial) hook from @/features/broadcast-channel-sync.",
     previewPath: "/preview/slices/broadcast-channel-sync",
+    defaultView: "tablet",
+    defaultZoom: 0.8,
     compat: {
       templates: {
         "personal-brand-os": { status: "native", note: "Public ↔ Admin live sync wired in StoreProvider." },
@@ -523,6 +558,8 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os", "konsultan-os", "wirausaha-os"],
     agentRecipe: "Three tier presets pick which system roles to seed: solo (owner+admin), influencer (+manager), organization (6 roles). Platform admin via env PLATFORM_ADMIN_EMAILS bypasses all checks. Resolution: platform admin → workspace owner → membership.additionalPermissions → role.permissions.",
     previewPath: "/preview/slices/rbac-roles",
+    defaultView: "desktop",
+    defaultZoom: 0.7,
   },
   {
     slug: "admin-panel",
@@ -542,6 +579,8 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os"],
     agentRecipe: "Wrap pages with <AdminPage workspaceId tier>. AccessGate hides UI for non-admins, AdminShell renders 2-col layout with sidebar filtered by tier+perms. ADMIN_SECTIONS in config.ts is SSOT (17 entries). Personal-brand-os = tier 'solo' = owner sees everything.",
     previewPath: "/preview/slices/admin-panel",
+    defaultView: "desktop",
+    defaultZoom: 0.65,
   },
   {
     slug: "event-tracking",
@@ -561,6 +600,8 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os"],
     agentRecipe: "Writes to analyticsEvents table (no new schema). Anonymous page_view allowed pre-signup; other events require workspaceId. Session id per tab (sessionStorage), first-touch UTM in localStorage. Flush every ~500ms via requestIdleCallback. Cap retry queue at 500.",
     previewPath: "/preview/slices/event-tracking",
+    defaultView: "desktop",
+    defaultZoom: 0.7,
   },
   {
     slug: "theme-preset-switcher",
@@ -580,6 +621,8 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os", "konsultan-os", "wirausaha-os"],
     agentRecipe: "Import ThemePresetSwitcher from @/frontend/shared/ui/components/theme-preset-switcher and mount in the topbar. Presets live in theme-presets.ts; preset-groups.ts groups them for the picker UI.",
     previewPath: "/preview/slices/theme-preset-switcher",
+    defaultView: "tablet",
+    defaultZoom: 0.85,
   },
   {
     slug: "icon-picker",
@@ -599,6 +642,8 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os"],
     agentRecipe: "parseIconValue() decodes; lucideValue()/withColor() build. Add 'icon: v.string()' to Convex table — no migration needed for existing emoji fields. Popover variant for inline UI, Inline for sheets/dialogs.",
     previewPath: "/preview/slices/icon-picker",
+    defaultView: "tablet",
+    defaultZoom: 0.9,
   },
   {
     slug: "contact-form-resend",
@@ -618,6 +663,8 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: [],
     agentRecipe: "Wire contactMessages.send mutation in convex/. Server emails via Resend from form@yourdomain.com. Always validate inputs with Zod or v.* server-side. Anonymous allowed.",
     previewPath: "/preview/slices/contact-form-resend",
+    defaultView: "mobile",
+    defaultZoom: 1,
   },
   {
     slug: "admin",
@@ -637,6 +684,8 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: [],
     agentRecipe: "Run `rr add admin`. Wire <AdminPage labels={...} /> at /admin and call buildAdminStats({ sliceRegistry, queryTable }) inside convex/features/admin/queries.ts — sliceRegistry.entries flat-maps each feature's admin.activity[] declarations. Set SUPER_ADMIN_EMAIL via `npx convex env set` to lock down /admin to one address.",
     previewPath: "/preview/slices/admin",
+    defaultView: "desktop",
+    defaultZoom: 0.65,
   },
   {
     slug: "platform-admin",
@@ -659,6 +708,8 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: [],
     agentRecipe: "Contract-only scaffold. Wait for superspace /rr-send platform-admin before adopting. Distinct from per-instance `admin` slug.",
     previewPath: "/preview/slices/platform-admin",
+    defaultView: "desktop",
+    defaultZoom: 0.7,
   },
   {
     slug: "audit-log",
@@ -678,6 +729,8 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: [],
     agentRecipe: "Run `rr add audit-log`. Import logAuditEvent from convex/_shared/auditLogger.ts and call inside every workspace-scoped mutation with { action, workspaceId, entityType, entityId, before?, after? }.",
     previewPath: "/preview/slices/audit-log",
+    defaultView: "desktop",
+    defaultZoom: 0.7,
   },
   {
     slug: "comments",
@@ -697,6 +750,8 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: [],
     agentRecipe: "Run `rr add comments`. Wire Convex bindings ({ list, create, update, resolve, remove }) then use <CommentsThread target={{ kind, id, subId? }} bindings={bindings} forbiddenWords={[...]}>{render-prop}</CommentsThread> OR <CommentsAnchor target=... bindings=... pathMap={(t)=>...}>. v0.2.0 polymorphic — pick `kind` literal per host domain.",
     previewPath: "/preview/slices/comments",
+    defaultView: "mobile",
+    defaultZoom: 1,
   },
   {
     slug: "seo",
@@ -716,6 +771,8 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: [],
     agentRecipe: "Run `rr add seo`. Call seo.generate from server actions or admin mutations with `personaContext` describing your brand voice (or rely on the generic default). Cost guard rate-limits per-user within 24h via callsInWindow query.",
     previewPath: "/preview/slices/seo",
+    defaultView: "tablet",
+    defaultZoom: 0.8,
   },
   {
     slug: "document-checklist",
@@ -735,6 +792,8 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["CareerPack"],
     agentRecipe: "Run `rr add document-checklist`. Wire <DocumentChecklist bindings={{ current, seed, updateStatus }} countryTemplateSlot={<CountryTemplateCard bindings={{ templates, getTemplate, instantiate }} />} /> — bindings sourced from api.features['document-checklist'].* queries/mutations.",
     previewPath: "/preview/slices/document-checklist",
+    defaultView: "mobile",
+    defaultZoom: 1,
   },
 ];
 

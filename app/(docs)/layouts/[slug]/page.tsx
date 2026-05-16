@@ -52,6 +52,7 @@ export default async function LayoutDetailPage({ params }: { params: Promise<{ s
         adminPreviewPath: l.adminPreviewPath,
         defaultSurface: l.defaultSurface,
         defaultView: l.defaultView,
+        defaultZoom: l.defaultZoom,
         badge: l.category,
       }}
       prev={prev}

@@ -45,6 +45,7 @@ type Props = {
     adminPreviewPath?: string;
     defaultSurface?: "public" | "admin";
     defaultView?: PreviewView;
+    defaultZoom?: number;
     badge?: string;
   };
   prev: Neighbor | null;
@@ -148,6 +149,7 @@ export function TemplateDetail({ kind, basePath, data, prev, next, prompt, siteU
           : "code",
       responsive: !!(data.previewPath || data.adminPreviewPath),
       defaultView: data.defaultView,
+      defaultZoom: data.defaultZoom,
       sourceRepo,
       inspector: { title: tplConfig ? "Assemble" : "Inspector", render: inspectorRender },
       config: tplConfig?.config,

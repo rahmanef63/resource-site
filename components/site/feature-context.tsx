@@ -39,6 +39,8 @@ export type FeatureManifest = {
   responsive?: boolean;
   /** initial preview view when manifest mounts. Fallback "desktop". */
   defaultView?: import("@/lib/preview-presets").PreviewView;
+  /** initial preview zoom when manifest mounts. Fallback 0.7. */
+  defaultZoom?: number;
   /** repo path on rahmanef63/resource-site — used by inspector "View source" */
   sourceRepo?: { owner: string; repo: string; branch?: string; path: string };
   /** when set, right panel is enabled (closed by default until user opens) */
@@ -116,6 +118,7 @@ export function FeatureProvider({ children }: { children: React.ReactNode }) {
     }
     setSelections(defaultsFromSchema(manifest.config));
     if (manifest.defaultView) setPreviewView(manifest.defaultView);
+    if (typeof manifest.defaultZoom === "number") setPreviewZoom(manifest.defaultZoom);
     setPreviewOrientation("portrait");
   }, [manifest]);
 

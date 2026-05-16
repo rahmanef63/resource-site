@@ -98,7 +98,11 @@ export default async function SliceDetailPage({ params }: { params: Promise<{ sl
           }
           variant="iframe"
         >
-          <PreviewFrame src={slice.previewPath} defaultView="desktop" defaultZoom={1} />
+          <PreviewFrame
+            src={slice.previewPath}
+            defaultView={slice.defaultView ?? "desktop"}
+            defaultZoom={slice.defaultZoom ?? 1}
+          />
         </ShowcaseCard>
       )}
 

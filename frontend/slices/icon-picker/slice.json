@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "icon-picker",
+  "version": "0.2.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "Notion-Style Icon Picker",
+  "description": "Emoji + lucide icon picker with search, 10-color Notion palette, Twemoji/native toggle, recents tracking. One string stores emoji OR `lucide:Name` OR with `?c=hex` tint — backwards-compat with raw-emoji fields. Two variants: Popover (compact trigger) and Inline (full sheet/dialog use).",
+  "namespace": "@/features/icon-picker",
+  "kind": "ui",
+  "convex": {
+    "tablesExport": "",
+    "schemaPath": "",
+    "rootPaths": []
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/icon-picker",
+    "configExport": ""
+  },
+  "deps": {
+    "npm": ["lucide-react@^0.400.0"],
+    "shadcn": ["popover", "button", "input", "scroll-area", "tabs"],
+    "env": [],
+    "peers": []
+  },
+  "registers": [],
+  "audit": [],
+  "license": "MIT",
+  "tags": ["ui", "icon", "emoji", "lucide", "picker", "twemoji", "notion"]
+}

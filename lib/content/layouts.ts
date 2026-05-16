@@ -34,6 +34,8 @@ export type LayoutEntry = {
   defaultSurface?: "public" | "admin";
   /** Initial preview viewport. Defaults to desktop. */
   defaultView?: PreviewView;
+  /** Initial preview zoom (1.0 = real size). */
+  defaultZoom?: number;
 };
 
 export const layouts: LayoutEntry[] = [
@@ -856,6 +858,8 @@ export default function Page() { return <HomePage />; }`,
     primaryFile: "app/preview/hero-centered/page.tsx",
     tags: ["block", "hero", "centered", "marketing"],
     previewPath: "/preview/hero-centered",
+    defaultView: "desktop",
+    defaultZoom: 0.5,
     exampleCode: `<section className="mx-auto max-w-3xl text-center py-24">
   <span className="rounded-full border px-3 py-1 text-xs">New — v1.0</span>
   <h1 className="mt-6 text-6xl font-bold tracking-tight">Ship faster</h1>
@@ -877,6 +881,8 @@ export default function Page() { return <HomePage />; }`,
     primaryFile: "app/preview/hero-split/page.tsx",
     tags: ["block", "hero", "split", "marketing", "product"],
     previewPath: "/preview/hero-split",
+    defaultView: "desktop",
+    defaultZoom: 0.5,
     exampleCode: `<section className="grid lg:grid-cols-2 gap-12 py-16">
   <div>
     <h1 className="text-5xl font-bold">From idea to prod</h1>
@@ -899,6 +905,8 @@ export default function Page() { return <HomePage />; }`,
     primaryFile: "app/preview/hero-bento-bg/page.tsx",
     tags: ["block", "hero", "bento", "marketing", "decorative"],
     previewPath: "/preview/hero-bento-bg",
+    defaultView: "desktop",
+    defaultZoom: 0.5,
     exampleCode: `<main className="relative">
   <div className="absolute inset-0 -z-10 grid grid-cols-4 gap-3 p-6 [mask-image:radial-gradient(circle,black,transparent_75%)]">
     {TILES.map(t => <div className={t.span + ' rounded-2xl bg-gradient-to-br ' + t.g} />)}
@@ -917,6 +925,8 @@ export default function Page() { return <HomePage />; }`,
     primaryFile: "app/preview/hero-video-loop/page.tsx",
     tags: ["block", "hero", "video", "marketing", "dark"],
     previewPath: "/preview/hero-video-loop",
+    defaultView: "desktop",
+    defaultZoom: 0.5,
     exampleCode: `<main className="relative bg-zinc-950 text-white">
   <video autoPlay muted loop className="absolute inset-0 -z-10 w-full h-full object-cover" />
   <section className="text-center py-24">
@@ -936,6 +946,8 @@ export default function Page() { return <HomePage />; }`,
     primaryFile: "app/preview/hero-animated-text/page.tsx",
     tags: ["block", "hero", "motion", "marketing", "kinetic"],
     previewPath: "/preview/hero-animated-text",
+    defaultView: "desktop",
+    defaultZoom: 0.5,
     exampleCode: `const WORDS = ["faster", "smarter", "safer"];
 const [i, setI] = useState(0);
 useEffect(() => { const id = setInterval(() => setI(n => (n+1)%WORDS.length), 2000); return () => clearInterval(id); }, []);
@@ -955,6 +967,8 @@ useEffect(() => { const id = setInterval(() => setI(n => (n+1)%WORDS.length), 20
     primaryFile: "app/preview/pricing-three/page.tsx",
     tags: ["block", "pricing", "marketing", "saas"],
     previewPath: "/preview/pricing-three",
+    defaultView: "desktop",
+    defaultZoom: 0.55,
     exampleCode: `<div className="grid md:grid-cols-3 gap-6">
   {TIERS.map(t => (
     <div className={t.featured ? "border-primary/50 bg-primary/[0.03]" : ""}>
@@ -977,6 +991,8 @@ useEffect(() => { const id = setInterval(() => setI(n => (n+1)%WORDS.length), 20
     primaryFile: "app/preview/pricing-four/page.tsx",
     tags: ["block", "pricing", "marketing", "saas"],
     previewPath: "/preview/pricing-four",
+    defaultView: "desktop",
+    defaultZoom: 0.55,
     exampleCode: `<div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
   {TIERS.map(t => (
     <div className="flex flex-col rounded-xl border p-6">
@@ -999,6 +1015,8 @@ useEffect(() => { const id = setInterval(() => setI(n => (n+1)%WORDS.length), 20
     primaryFile: "app/preview/pricing-toggle/page.tsx",
     tags: ["block", "pricing", "marketing", "interactive"],
     previewPath: "/preview/pricing-toggle",
+    defaultView: "desktop",
+    defaultZoom: 0.55,
     exampleCode: `const [yearly, setYearly] = useState(true);
 const price = yearly ? t.yearly : t.monthly;
 
@@ -1018,6 +1036,8 @@ const price = yearly ? t.yearly : t.monthly;
     primaryFile: "app/preview/pricing-compare/page.tsx",
     tags: ["block", "pricing", "marketing", "comparison", "table"],
     previewPath: "/preview/pricing-compare",
+    defaultView: "desktop",
+    defaultZoom: 0.6,
     exampleCode: `<div className="rounded-2xl border overflow-hidden">
   <div className="grid grid-cols-4 bg-muted/30 px-6 py-5">
     <div />
@@ -1042,6 +1062,8 @@ const price = yearly ? t.yearly : t.monthly;
     primaryFile: "app/preview/pricing-slider/page.tsx",
     tags: ["block", "pricing", "marketing", "interactive", "usage"],
     previewPath: "/preview/pricing-slider",
+    defaultView: "tablet",
+    defaultZoom: 0.8,
     exampleCode: `function priceFor(seats) {
   if (seats <= 1) return 0;
   if (seats <= 5) return seats * 9;
@@ -1064,6 +1086,8 @@ const [seats, setSeats] = useState(5);
     primaryFile: "app/preview/accordion-faq/page.tsx",
     tags: ["block", "accordion", "faq", "marketing"],
     previewPath: "/preview/accordion-faq",
+    defaultView: "tablet",
+    defaultZoom: 0.85,
     exampleCode: `const [open, setOpen] = useState(0);
 
 <div className="divide-y rounded-2xl border">
@@ -1088,6 +1112,8 @@ const [seats, setSeats] = useState(5);
     primaryFile: "app/preview/accordion-grouped/page.tsx",
     tags: ["block", "accordion", "faq", "marketing", "grouped"],
     previewPath: "/preview/accordion-grouped",
+    defaultView: "tablet",
+    defaultZoom: 0.8,
     exampleCode: `{GROUPS.map(g => (
   <section>
     <h2 className="text-xs uppercase">{g.title}</h2>
@@ -1108,6 +1134,8 @@ const [seats, setSeats] = useState(5);
     primaryFile: "app/preview/accordion-sidebar/page.tsx",
     tags: ["block", "accordion", "docs", "sidebar", "navigation"],
     previewPath: "/preview/accordion-sidebar",
+    defaultView: "desktop",
+    defaultZoom: 0.65,
     exampleCode: `<section className="grid md:grid-cols-[220px_1fr] gap-8">
   <aside>{SECTIONS.map((s, i) => <button onClick={() => setSection(i)}>{s.title}</button>)}</aside>
   <div>
@@ -1127,6 +1155,8 @@ const [seats, setSeats] = useState(5);
     primaryFile: "app/preview/accordion-animated/page.tsx",
     tags: ["block", "accordion", "marketing", "motion"],
     previewPath: "/preview/accordion-animated",
+    defaultView: "tablet",
+    defaultZoom: 0.85,
     exampleCode: `<div style={{
   gridTemplateRows: open ? "1fr" : "0fr",
   transition: "grid-template-rows 280ms cubic-bezier(0.4,0,0.2,1)",
@@ -1147,6 +1177,8 @@ const [seats, setSeats] = useState(5);
     primaryFile: "app/preview/accordion-multi/page.tsx",
     tags: ["block", "accordion", "marketing", "multi-open"],
     previewPath: "/preview/accordion-multi",
+    defaultView: "tablet",
+    defaultZoom: 0.85,
     exampleCode: `const [open, setOpen] = useState(new Set([0]));
 const toggle = (i) => setOpen(s => {
   const next = new Set(s);
@@ -1171,6 +1203,8 @@ const toggle = (i) => setOpen(s => {
     primaryFile: "app/preview/blog-grid/page.tsx",
     tags: ["block", "blog", "cms", "grid"],
     previewPath: "/preview/blog-grid",
+    defaultView: "desktop",
+    defaultZoom: 0.55,
     exampleCode: `<div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
   {posts.map(p => (
     <article className="rounded-2xl border">
@@ -1195,6 +1229,8 @@ const toggle = (i) => setOpen(s => {
     primaryFile: "app/preview/blog-list/page.tsx",
     tags: ["block", "blog", "cms", "list"],
     previewPath: "/preview/blog-list",
+    defaultView: "tablet",
+    defaultZoom: 0.75,
     exampleCode: `<div className="divide-y">
   {posts.map(p => (
     <article className="flex gap-5 py-6">
@@ -1219,6 +1255,8 @@ const toggle = (i) => setOpen(s => {
     primaryFile: "app/preview/blog-magazine/page.tsx",
     tags: ["block", "blog", "cms", "editorial", "magazine"],
     previewPath: "/preview/blog-magazine",
+    defaultView: "desktop",
+    defaultZoom: 0.55,
     exampleCode: `<div className="grid lg:grid-cols-3 gap-8">
   <article className="lg:col-span-2">
     <Thumb post={hero} className="h-96" />
@@ -1242,6 +1280,8 @@ const toggle = (i) => setOpen(s => {
     primaryFile: "app/preview/blog-masonry/page.tsx",
     tags: ["block", "blog", "cms", "masonry"],
     previewPath: "/preview/blog-masonry",
+    defaultView: "desktop",
+    defaultZoom: 0.55,
     exampleCode: `<div className="columns-1 sm:columns-2 lg:columns-3 gap-6">
   {posts.map((p, i) => (
     <article className="mb-6 break-inside-avoid rounded-2xl border">
@@ -1262,6 +1302,8 @@ const toggle = (i) => setOpen(s => {
     primaryFile: "app/preview/blog-featured/page.tsx",
     tags: ["block", "blog", "cms", "featured", "hero"],
     previewPath: "/preview/blog-featured",
+    defaultView: "desktop",
+    defaultZoom: 0.55,
     exampleCode: `<section className="relative overflow-hidden">
   <Thumb post={hero} className="absolute inset-0" />
   <div className="absolute inset-0 bg-gradient-to-t from-background" />
