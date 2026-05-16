@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-15T13:22:16.552Z",
+  "generatedAt": "2026-05-16T08:00:25.594Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -802,6 +802,456 @@
         "indonesia"
       ],
       "primaryFile": "app/preview/riset-kit/public/page.tsx"
+    },
+    {
+      "slug": "hero-centered",
+      "title": "Hero — Centered",
+      "category": "marketing",
+      "description": "Single-column centered hero with eyebrow pill, headline, sub-copy, and dual CTA. Radial gradient backdrop.",
+      "source": "kitab",
+      "repoPath": "app/preview/hero-centered",
+      "pullPaths": [
+        "app/preview/hero-centered"
+      ],
+      "files": [],
+      "dependencies": [],
+      "shadcnComponents": [],
+      "agentRecipe": "Pure layout. Drop into landing pages where the product needs minimum framing. Replace the eyebrow pill with a status badge or release tag. Two CTAs is the sweet spot.",
+      "tags": [
+        "block",
+        "hero",
+        "centered",
+        "marketing"
+      ],
+      "primaryFile": "app/preview/hero-centered/page.tsx"
+    },
+    {
+      "slug": "hero-split",
+      "title": "Hero — Split (Text + Visual)",
+      "category": "marketing",
+      "description": "Two-column hero: left copy + feature list + CTAs, right visual slot. 9-cell mock grid placeholder for product shot.",
+      "source": "kitab",
+      "repoPath": "app/preview/hero-split",
+      "pullPaths": [
+        "app/preview/hero-split"
+      ],
+      "files": [],
+      "dependencies": [],
+      "shadcnComponents": [],
+      "agentRecipe": "Right column accepts any visual — screenshot, product mock, illustration, or live demo iframe. Feature list pairs Lucide icons with one-line value props.",
+      "tags": [
+        "block",
+        "hero",
+        "split",
+        "marketing",
+        "product"
+      ],
+      "primaryFile": "app/preview/hero-split/page.tsx"
+    },
+    {
+      "slug": "hero-bento-bg",
+      "title": "Hero — Bento Background",
+      "category": "marketing",
+      "description": "Bento mini-grid behind a centered headline. Radial mask focuses the eye on the copy while the grid hints at features.",
+      "source": "kitab",
+      "repoPath": "app/preview/hero-bento-bg",
+      "pullPaths": [
+        "app/preview/hero-bento-bg"
+      ],
+      "files": [],
+      "dependencies": [],
+      "shadcnComponents": [],
+      "agentRecipe": "Background tiles get a radial mask so the center stays readable. Use 6-8 tiles with asymmetric spans (col-span-2 row-span-2 for one, others 1x1). Lucide icon in each tile.",
+      "tags": [
+        "block",
+        "hero",
+        "bento",
+        "marketing",
+        "decorative"
+      ],
+      "primaryFile": "app/preview/hero-bento-bg/page.tsx"
+    },
+    {
+      "slug": "hero-video-loop",
+      "title": "Hero — Video Loop (dark)",
+      "category": "marketing",
+      "description": "Dark-mode hero with conic-gradient animated backdrop (stand-in for video). Play CTA, headline, dual CTA.",
+      "source": "kitab",
+      "repoPath": "app/preview/hero-video-loop",
+      "pullPaths": [
+        "app/preview/hero-video-loop"
+      ],
+      "files": [],
+      "dependencies": [],
+      "shadcnComponents": [],
+      "agentRecipe": "Replace the conic-gradient backdrop with a muted <video autoplay loop>. Keep the dark theme — light text on motion only reads when the contrast is hard.",
+      "tags": [
+        "block",
+        "hero",
+        "video",
+        "marketing",
+        "dark"
+      ],
+      "primaryFile": "app/preview/hero-video-loop/page.tsx"
+    },
+    {
+      "slug": "hero-animated-text",
+      "title": "Hero — Animated Text",
+      "category": "marketing",
+      "description": "Rotating word inside the headline cycles every 2s with gradient text + fade-slide transition. Lightweight, no extra deps.",
+      "source": "kitab",
+      "repoPath": "app/preview/hero-animated-text",
+      "pullPaths": [
+        "app/preview/hero-animated-text"
+      ],
+      "files": [],
+      "dependencies": [],
+      "shadcnComponents": [],
+      "agentRecipe": "Use absolute-positioned word slots with translate-y + opacity transitions. The invisible placeholder word keeps the bounding box stable.",
+      "tags": [
+        "block",
+        "hero",
+        "motion",
+        "marketing",
+        "kinetic"
+      ],
+      "primaryFile": "app/preview/hero-animated-text/page.tsx"
+    },
+    {
+      "slug": "pricing-three",
+      "title": "Pricing — Three Tier",
+      "category": "marketing",
+      "description": "Classic 3-tier card layout. Middle tier highlighted with Most Popular badge + soft shadow.",
+      "source": "kitab",
+      "repoPath": "app/preview/pricing-three",
+      "pullPaths": [
+        "app/preview/pricing-three"
+      ],
+      "files": [],
+      "dependencies": [],
+      "shadcnComponents": [],
+      "agentRecipe": "Three is the magic number for SaaS pricing — fewer feels limited, more triggers analysis paralysis. Middle tier should be the one you actually want to sell.",
+      "tags": [
+        "block",
+        "pricing",
+        "marketing",
+        "saas"
+      ],
+      "primaryFile": "app/preview/pricing-three/page.tsx"
+    },
+    {
+      "slug": "pricing-four",
+      "title": "Pricing — Four Tier",
+      "category": "marketing",
+      "description": "Four-tier with Best Value badge on tier 3. Compact card chrome, 4-column grid that collapses gracefully.",
+      "source": "kitab",
+      "repoPath": "app/preview/pricing-four",
+      "pullPaths": [
+        "app/preview/pricing-four"
+      ],
+      "files": [],
+      "dependencies": [],
+      "shadcnComponents": [],
+      "agentRecipe": "Use when you genuinely have four distinct tiers (free / solo / team / enterprise). Don't pad to four — use the three-tier variant if the fourth is forced.",
+      "tags": [
+        "block",
+        "pricing",
+        "marketing",
+        "saas"
+      ],
+      "primaryFile": "app/preview/pricing-four/page.tsx"
+    },
+    {
+      "slug": "pricing-toggle",
+      "title": "Pricing — Monthly/Yearly Toggle",
+      "category": "marketing",
+      "description": "3-tier with a monthly/yearly pill toggle. Yearly price strikethroughs the monthly, -20% savings badge inside the toggle.",
+      "source": "kitab",
+      "repoPath": "app/preview/pricing-toggle",
+      "pullPaths": [
+        "app/preview/pricing-toggle"
+      ],
+      "files": [],
+      "dependencies": [],
+      "shadcnComponents": [],
+      "agentRecipe": "Default to yearly — that's the conversion-optimized choice. Show the monthly strikethrough so the savings feel real, not implied.",
+      "tags": [
+        "block",
+        "pricing",
+        "marketing",
+        "interactive"
+      ],
+      "primaryFile": "app/preview/pricing-toggle/page.tsx"
+    },
+    {
+      "slug": "pricing-compare",
+      "title": "Pricing — Feature Comparison",
+      "category": "marketing",
+      "description": "Single comparison table: feature rows × plan columns. Check/Minus icons, header row with prices, sticky CTA row.",
+      "source": "kitab",
+      "repoPath": "app/preview/pricing-compare",
+      "pullPaths": [
+        "app/preview/pricing-compare"
+      ],
+      "files": [],
+      "dependencies": [],
+      "shadcnComponents": [],
+      "agentRecipe": "Use for complex products where buyers actually compare. Mix boolean rows (Check/Minus) with string-value rows (\"1\", \"10\", \"Unlimited\") for clarity.",
+      "tags": [
+        "block",
+        "pricing",
+        "marketing",
+        "comparison",
+        "table"
+      ],
+      "primaryFile": "app/preview/pricing-compare/page.tsx"
+    },
+    {
+      "slug": "pricing-slider",
+      "title": "Pricing — Usage Slider",
+      "category": "marketing",
+      "description": "Range slider drives the price. Tier name and per-seat cost update live. Single-card layout, focus on the math.",
+      "source": "kitab",
+      "repoPath": "app/preview/pricing-slider",
+      "pullPaths": [
+        "app/preview/pricing-slider"
+      ],
+      "files": [],
+      "dependencies": [],
+      "shadcnComponents": [],
+      "agentRecipe": "Use for usage-based or seat-based products. Make the breakpoints transparent — buyers should be able to predict the next price without surprises.",
+      "tags": [
+        "block",
+        "pricing",
+        "marketing",
+        "interactive",
+        "usage"
+      ],
+      "primaryFile": "app/preview/pricing-slider/page.tsx"
+    },
+    {
+      "slug": "accordion-faq",
+      "title": "Accordion — Classic FAQ",
+      "category": "marketing",
+      "description": "Single-open FAQ accordion. ChevronDown rotates, content reveals below. Clean, compact, perfect for support pages.",
+      "source": "kitab",
+      "repoPath": "app/preview/accordion-faq",
+      "pullPaths": [
+        "app/preview/accordion-faq"
+      ],
+      "files": [],
+      "dependencies": [],
+      "shadcnComponents": [],
+      "agentRecipe": "Single-open keeps the page short. Use when answers are independent. Switch to multi-open if buyers tend to scan multiple answers at once.",
+      "tags": [
+        "block",
+        "accordion",
+        "faq",
+        "marketing"
+      ],
+      "primaryFile": "app/preview/accordion-faq/page.tsx"
+    },
+    {
+      "slug": "accordion-grouped",
+      "title": "Accordion — Grouped Sections",
+      "category": "marketing",
+      "description": "FAQ split into themed groups (Getting Started / Slices / Billing). Each group is its own card. Independent open state per item.",
+      "source": "kitab",
+      "repoPath": "app/preview/accordion-grouped",
+      "pullPaths": [
+        "app/preview/accordion-grouped"
+      ],
+      "files": [],
+      "dependencies": [],
+      "shadcnComponents": [],
+      "agentRecipe": "Use when the FAQ is long (>10 items) and questions cluster naturally. Each group's Item owns its open state for predictable UX.",
+      "tags": [
+        "block",
+        "accordion",
+        "faq",
+        "marketing",
+        "grouped"
+      ],
+      "primaryFile": "app/preview/accordion-grouped/page.tsx"
+    },
+    {
+      "slug": "accordion-sidebar",
+      "title": "Accordion — Sidebar Navigation",
+      "category": "marketing",
+      "description": "Docs-style: left nav switches sections, right pane shows the section's accordion. Two-axis navigation in one layout.",
+      "source": "kitab",
+      "repoPath": "app/preview/accordion-sidebar",
+      "pullPaths": [
+        "app/preview/accordion-sidebar"
+      ],
+      "files": [],
+      "dependencies": [],
+      "shadcnComponents": [],
+      "agentRecipe": "Use for help/docs pages with section breadth. Keep section count ≤ 5 — beyond that, the sidebar gets noisy. Reset accordion state on section change.",
+      "tags": [
+        "block",
+        "accordion",
+        "docs",
+        "sidebar",
+        "navigation"
+      ],
+      "primaryFile": "app/preview/accordion-sidebar/page.tsx"
+    },
+    {
+      "slug": "accordion-animated",
+      "title": "Accordion — Smooth Animated",
+      "category": "marketing",
+      "description": "Grid-row transition for true height animation, no janky calc. Each item is a rounded card with rotating plus → primary close icon.",
+      "source": "kitab",
+      "repoPath": "app/preview/accordion-animated",
+      "pullPaths": [
+        "app/preview/accordion-animated"
+      ],
+      "files": [],
+      "dependencies": [],
+      "shadcnComponents": [],
+      "agentRecipe": "The grid-template-rows trick lets CSS animate to-auto-height natively. No JS measurement, no jank. Pair with rounded card chrome for premium feel.",
+      "tags": [
+        "block",
+        "accordion",
+        "marketing",
+        "motion"
+      ],
+      "primaryFile": "app/preview/accordion-animated/page.tsx"
+    },
+    {
+      "slug": "accordion-multi",
+      "title": "Accordion — Multi-open",
+      "category": "marketing",
+      "description": "All items can be open at once. Expand-all / Collapse-all toggle in header. Best for compare-style reading.",
+      "source": "kitab",
+      "repoPath": "app/preview/accordion-multi",
+      "pullPaths": [
+        "app/preview/accordion-multi"
+      ],
+      "files": [],
+      "dependencies": [],
+      "shadcnComponents": [],
+      "agentRecipe": "Use when answers reference each other or buyers want to keep multiple sections visible (changelogs, release notes, feature comparison FAQs).",
+      "tags": [
+        "block",
+        "accordion",
+        "marketing",
+        "multi-open"
+      ],
+      "primaryFile": "app/preview/accordion-multi/page.tsx"
+    },
+    {
+      "slug": "blog-grid",
+      "title": "Blog — Card Grid",
+      "category": "cms",
+      "description": "3-column responsive card grid. Cover thumbnail (HSL gradient), title, excerpt, author·date·read meta. Default blog index shape.",
+      "source": "kitab",
+      "repoPath": "app/preview/blog-grid",
+      "pullPaths": [
+        "app/preview/blog-grid"
+      ],
+      "files": [],
+      "dependencies": [],
+      "shadcnComponents": [],
+      "agentRecipe": "Default to 3 columns at lg. Use the Thumb helper for cover generation when posts don't ship an image yet — HSL gradient by post.hue keeps each card distinct.",
+      "tags": [
+        "block",
+        "blog",
+        "cms",
+        "grid"
+      ],
+      "primaryFile": "app/preview/blog-grid/page.tsx"
+    },
+    {
+      "slug": "blog-list",
+      "title": "Blog — Dense List",
+      "category": "cms",
+      "description": "Single-column scannable list. Thumbnail left, meta + title + excerpt right. High density, low scroll.",
+      "source": "kitab",
+      "repoPath": "app/preview/blog-list",
+      "pullPaths": [
+        "app/preview/blog-list"
+      ],
+      "files": [],
+      "dependencies": [],
+      "shadcnComponents": [],
+      "agentRecipe": "Use for archives or category pages where the reader is hunting a specific post. Compact thumbnail keeps the line height tight.",
+      "tags": [
+        "block",
+        "blog",
+        "cms",
+        "list"
+      ],
+      "primaryFile": "app/preview/blog-list/page.tsx"
+    },
+    {
+      "slug": "blog-magazine",
+      "title": "Blog — Magazine Layout",
+      "category": "cms",
+      "description": "Editorial spread: large hero post (2/3 width) + secondary featured + tail of headlines. Issue-number header gives quarterly feel.",
+      "source": "kitab",
+      "repoPath": "app/preview/blog-magazine",
+      "pullPaths": [
+        "app/preview/blog-magazine"
+      ],
+      "files": [],
+      "dependencies": [],
+      "shadcnComponents": [],
+      "agentRecipe": "Use for content-heavy publications. Hero post earns the visual real estate; the sidebar carries breadth. Mix typography sizes for editorial rhythm.",
+      "tags": [
+        "block",
+        "blog",
+        "cms",
+        "editorial",
+        "magazine"
+      ],
+      "primaryFile": "app/preview/blog-magazine/page.tsx"
+    },
+    {
+      "slug": "blog-masonry",
+      "title": "Blog — Masonry",
+      "category": "cms",
+      "description": "CSS columns-based masonry with varying card heights for organic rhythm. break-inside-avoid keeps each card intact.",
+      "source": "kitab",
+      "repoPath": "app/preview/blog-masonry",
+      "pullPaths": [
+        "app/preview/blog-masonry"
+      ],
+      "files": [],
+      "dependencies": [],
+      "shadcnComponents": [],
+      "agentRecipe": "CSS columns are the cheap masonry — no JS, no layout shift. Vary the thumbnail height via a HEIGHTS array (h-44 to h-80). DOM order ≠ visual order — design around it.",
+      "tags": [
+        "block",
+        "blog",
+        "cms",
+        "masonry"
+      ],
+      "primaryFile": "app/preview/blog-masonry/page.tsx"
+    },
+    {
+      "slug": "blog-featured",
+      "title": "Blog — Featured Hero + Tail",
+      "category": "cms",
+      "description": "Full-bleed cover hero on the first post, then a tight 2-column grid for the rest. Cinematic open, fast scroll for the tail.",
+      "source": "kitab",
+      "repoPath": "app/preview/blog-featured",
+      "pullPaths": [
+        "app/preview/blog-featured"
+      ],
+      "files": [],
+      "dependencies": [],
+      "shadcnComponents": [],
+      "agentRecipe": "Use for marketing-driven content sites (newsletter, podcast, brand journal) where the lead story carries the visit. Tail grid keeps the index scrollable without losing the hero impact.",
+      "tags": [
+        "block",
+        "blog",
+        "cms",
+        "featured",
+        "hero"
+      ],
+      "primaryFile": "app/preview/blog-featured/page.tsx"
     }
   ],
   "recipes": [],
@@ -2137,7 +2587,7 @@
       "title": "Audit Log — Workspace Events",
       "category": "infra",
       "kind": "backend",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "description": "Workspace-scoped audit event recorder. Canonical logAuditEvent helper for mutations + actions; supports entity tracking, before/after diff, IP/user-agent capture.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/audit-log",
