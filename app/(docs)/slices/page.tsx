@@ -95,7 +95,12 @@ export default function SlicesPage() {
           }
           thumbnail={
             s.previewPath ? (
-              <IframeThumbnail src={s.previewPath} />
+              <IframeThumbnail
+                src={s.previewPath}
+                liveTitle={s.title}
+                liveDefaultView={s.defaultView}
+                liveDefaultZoom={s.defaultZoom}
+              />
             ) : (
               <MockThumbnail
                 kind="slice"

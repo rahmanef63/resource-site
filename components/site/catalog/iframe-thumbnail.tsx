@@ -7,18 +7,32 @@
 // - Pointer-events: none on the iframe so card-level click-to-detail wins.
 // - Transform-scale 0.4x → effective desktop preview at 1280×800 fitted into
 //   ~512×320 visual cell. Fallback skeleton while loading.
+//
+// When `liveTitle` is set, a "Try it" trigger overlays the bottom-right
+// (icon-picker-style affordance) and opens an interactive PreviewFrame
+// in a Dialog — keeps the user on the catalog while still letting them
+// click around the real slice/template.
 
 import * as React from "react";
+import type { PreviewView } from "@/lib/preview-presets";
 import { cn } from "@/lib/utils";
+import { LivePreviewButton } from "./live-preview-button";
 
 export function IframeThumbnail({
   src,
   className,
   scale = 0.4,
+  liveTitle,
+  liveDefaultView,
+  liveDefaultZoom,
 }: {
   src: string;
   className?: string;
   scale?: number;
+  /** When set, render an interactive "Try it" trigger over the thumbnail. */
+  liveTitle?: string;
+  liveDefaultView?: PreviewView;
+  liveDefaultZoom?: number;
 }) {
   const ref = React.useRef<HTMLDivElement | null>(null);
   const [visible, setVisible] = React.useState(false);
@@ -82,6 +96,14 @@ export function IframeThumbnail({
       )}
       {/* Scrim — dims the iframe for legibility + signals "preview" */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent" />
+      {liveTitle && (
+        <LivePreviewButton
+          src={src}
+          title={liveTitle}
+          defaultView={liveDefaultView}
+          defaultZoom={liveDefaultZoom}
+        />
+      )}
     </div>
   );
 }

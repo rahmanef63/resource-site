@@ -33,7 +33,12 @@ export default function TemplatesPage() {
         meta={<span className="font-mono">{l.source}</span>}
         thumbnail={
           l.previewPath ? (
-            <IframeThumbnail src={l.previewPath} />
+            <IframeThumbnail
+              src={l.previewPath}
+              liveTitle={l.title}
+              liveDefaultView={l.defaultView}
+              liveDefaultZoom={l.defaultZoom}
+            />
           ) : (
             <MockThumbnail kind="dashboard" category="dashboard" label={l.slug} />
           )
