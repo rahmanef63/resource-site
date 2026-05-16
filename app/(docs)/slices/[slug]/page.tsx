@@ -18,6 +18,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PreviewFrame } from "@/components/site/preview-frame";
 import { ShowcaseCard } from "@/components/site/catalog/showcase-card";
+import { SlicePreviewSection } from "@/components/site/slice-preview-section";
 import { UseWideLayout } from "@/components/site/use-wide-layout";
 
 export function generateStaticParams() {
@@ -79,31 +80,14 @@ export default async function SliceDetailPage({ params }: { params: Promise<{ sl
       </div>
 
       {slice.previewPath && (
-        <ShowcaseCard
-          icon={Eye}
-          label="Live preview"
-          actions={
-            <>
-              <Button asChild variant="ghost" size="sm" className="h-7 gap-1 px-2 text-xs">
-                <a href={slice.previewPath} target="_blank" rel="noreferrer">
-                  Open standalone <ExternalLink className="size-3" />
-                </a>
-              </Button>
-              <Button asChild variant="ghost" size="sm" className="h-7 gap-1 px-2 text-xs">
-                <a href={sourceHref} target="_blank" rel="noreferrer">
-                  View source <ExternalLink className="size-3" />
-                </a>
-              </Button>
-            </>
-          }
-          variant="iframe"
-        >
-          <PreviewFrame
-            src={slice.previewPath}
-            defaultView={slice.defaultView ?? "desktop"}
-            defaultZoom={slice.defaultZoom ?? 1}
-          />
-        </ShowcaseCard>
+        <SlicePreviewSection
+          publicPath={slice.previewPath}
+          adminPath={slice.adminPreviewPath}
+          defaultSurface={slice.defaultSurface}
+          defaultView={slice.defaultView ?? "desktop"}
+          defaultZoom={slice.defaultZoom ?? 1}
+          sourceHref={sourceHref}
+        />
       )}
 
       <ShowcaseCard icon={Terminal} label="Install" variant="static">
