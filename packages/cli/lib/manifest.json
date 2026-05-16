@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-16T12:03:28.553Z",
+  "generatedAt": "2026-05-16T12:09:18.769Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -1657,6 +1657,26 @@
       ]
     },
     {
+      "slug": "hero",
+      "title": "Hero",
+      "category": "ui",
+      "description": "Editorial split-grid landing hero — eyebrow pill + large serif H1 + italic pull-quote + 1-2 button CTA row + right-column portrait card with optional caption. Fully props-driven (title/quote/ctas/image). Sanitized from rahmanef.com on 2026-05-16: SITE_CONFIG hardcode dropped, custom Heading/Section primitives replaced with raw semantic elements + stock Tailwind tracking-widest so the slice ships without consumer preset utilities.",
+      "source": "rahmanef.com",
+      "install": "npx rahman-resources add hero",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add hero`. <HeroView title eyebrow quote ctas image imageCaption /> — all props optional except title. Pass `image={undefined}` for text-only hero (auto-collapses to single 12-column row). Pairs visually with cta slice (same brutalist border + serif scale).",
+      "tags": [
+        "ui",
+        "hero",
+        "marketing",
+        "landing",
+        "section",
+        "editorial",
+        "brutalist"
+      ]
+    },
+    {
       "slug": "rate-limit",
       "title": "Rate Limit",
       "category": "infra",
@@ -2516,6 +2536,34 @@
         "brutalist"
       ],
       "agentRecipe": "Run `npx rr add cta`. <CtaView eyebrow title body href ctaLabel /> renders the full section; <CtaButton href label /> drops a standalone arrow button anywhere. Override tracking-brutal utilities in tailwind.config or swap for tracking-wide if your design system has no brutal preset."
+    },
+    {
+      "slug": "hero",
+      "title": "Hero",
+      "category": "ui",
+      "kind": "ui",
+      "version": "0.1.0",
+      "description": "Editorial split-grid landing hero — eyebrow pill + large serif H1 + italic pull-quote + 1-2 button CTA row + right-column portrait card with optional caption. Fully props-driven (title/quote/ctas/image). Sanitized from rahmanef.com on 2026-05-16: SITE_CONFIG hardcode dropped, custom Heading/Section primitives replaced with raw semantic elements + stock Tailwind tracking-widest so the slice ships without consumer preset utilities.",
+      "source": "rahmanef.com",
+      "slicePath": "frontend/slices/hero",
+      "convexPaths": [],
+      "npm": [
+        "lucide-react@^0.400.0"
+      ],
+      "shadcn": [],
+      "env": [],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "ui",
+        "hero",
+        "marketing",
+        "landing",
+        "section",
+        "editorial",
+        "brutalist"
+      ],
+      "agentRecipe": "Run `npx rr add hero`. <HeroView title eyebrow quote ctas image imageCaption /> — all props optional except title. Pass `image={undefined}` for text-only hero (auto-collapses to single 12-column row). Pairs visually with cta slice (same brutalist border + serif scale)."
     },
     {
       "slug": "rate-limit",

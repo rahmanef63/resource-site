@@ -1,0 +1,20 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "hero",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add hero",
+    "consumerPath": "slices/hero"
+  },
+  "files": [
+    "index.ts",
+    "config.ts",
+    "views/HeroView.tsx"
+  ],
+  "imports": {
+    "shared": [],
+    "external": ["lucide-react", "next/link", "next/image"]
+  }
+}
