@@ -844,6 +844,436 @@ export default function Page() { return <HomePage />; }`,
     agentRecipe:
       "Riset Kit = full-app research template (public KB reader + 6-tab admin). 1) Edit components/templates/research/shared/site-config.ts. 2) Replace localStorage StoreProvider with Convex queries. 3) Add @convex-dev/auth on /admin (single owner suffices). 4) Document library expects pdf-extract + vector-search — wire convex-vector-search component. 5) AI Reader wires ai-router (mid tier) for QA over uploaded PDFs. 6) Lit-review matrix is a scaffold — wire AI summarizer per cell.",
   },
+
+  // ───────────── HERO BLOCKS (5) ─────────────
+  {
+    slug: "hero-centered",
+    title: "Hero — Centered",
+    category: "marketing",
+    description: "Single-column centered hero with eyebrow pill, headline, sub-copy, and dual CTA. Radial gradient backdrop.",
+    source: "kitab",
+    repoPath: "app/preview/hero-centered",
+    primaryFile: "app/preview/hero-centered/page.tsx",
+    tags: ["block", "hero", "centered", "marketing"],
+    previewPath: "/preview/hero-centered",
+    exampleCode: `<section className="mx-auto max-w-3xl text-center py-24">
+  <span className="rounded-full border px-3 py-1 text-xs">New — v1.0</span>
+  <h1 className="mt-6 text-6xl font-bold tracking-tight">Ship faster</h1>
+  <p className="mt-6 text-lg text-muted-foreground">Copy proven slices.</p>
+  <div className="mt-8 flex justify-center gap-3">
+    <Button>Get started</Button>
+    <Button variant="outline">Docs</Button>
+  </div>
+</section>`,
+    agentRecipe: "Pure layout. Drop into landing pages where the product needs minimum framing. Replace the eyebrow pill with a status badge or release tag. Two CTAs is the sweet spot.",
+  },
+  {
+    slug: "hero-split",
+    title: "Hero — Split (Text + Visual)",
+    category: "marketing",
+    description: "Two-column hero: left copy + feature list + CTAs, right visual slot. 9-cell mock grid placeholder for product shot.",
+    source: "kitab",
+    repoPath: "app/preview/hero-split",
+    primaryFile: "app/preview/hero-split/page.tsx",
+    tags: ["block", "hero", "split", "marketing", "product"],
+    previewPath: "/preview/hero-split",
+    exampleCode: `<section className="grid lg:grid-cols-2 gap-12 py-16">
+  <div>
+    <h1 className="text-5xl font-bold">From idea to prod</h1>
+    <ul className="mt-6 space-y-3">
+      <li><ShieldCheck /> Audit-gated</li>
+      <li><Boxes /> 26 portable slices</li>
+    </ul>
+  </div>
+  <div className="rounded-2xl border bg-gradient-to-br">{visual}</div>
+</section>`,
+    agentRecipe: "Right column accepts any visual — screenshot, product mock, illustration, or live demo iframe. Feature list pairs Lucide icons with one-line value props.",
+  },
+  {
+    slug: "hero-bento-bg",
+    title: "Hero — Bento Background",
+    category: "marketing",
+    description: "Bento mini-grid behind a centered headline. Radial mask focuses the eye on the copy while the grid hints at features.",
+    source: "kitab",
+    repoPath: "app/preview/hero-bento-bg",
+    primaryFile: "app/preview/hero-bento-bg/page.tsx",
+    tags: ["block", "hero", "bento", "marketing", "decorative"],
+    previewPath: "/preview/hero-bento-bg",
+    exampleCode: `<main className="relative">
+  <div className="absolute inset-0 -z-10 grid grid-cols-4 gap-3 p-6 [mask-image:radial-gradient(circle,black,transparent_75%)]">
+    {TILES.map(t => <div className={t.span + ' rounded-2xl bg-gradient-to-br ' + t.g} />)}
+  </div>
+  <section className="text-center"><h1>The kitab for shipping</h1></section>
+</main>`,
+    agentRecipe: "Background tiles get a radial mask so the center stays readable. Use 6-8 tiles with asymmetric spans (col-span-2 row-span-2 for one, others 1x1). Lucide icon in each tile.",
+  },
+  {
+    slug: "hero-video-loop",
+    title: "Hero — Video Loop (dark)",
+    category: "marketing",
+    description: "Dark-mode hero with conic-gradient animated backdrop (stand-in for video). Play CTA, headline, dual CTA.",
+    source: "kitab",
+    repoPath: "app/preview/hero-video-loop",
+    primaryFile: "app/preview/hero-video-loop/page.tsx",
+    tags: ["block", "hero", "video", "marketing", "dark"],
+    previewPath: "/preview/hero-video-loop",
+    exampleCode: `<main className="relative bg-zinc-950 text-white">
+  <video autoPlay muted loop className="absolute inset-0 -z-10 w-full h-full object-cover" />
+  <section className="text-center py-24">
+    <button className="rounded-full p-4 backdrop-blur"><Play /></button>
+    <h1 className="text-7xl">Watch it move</h1>
+  </section>
+</main>`,
+    agentRecipe: "Replace the conic-gradient backdrop with a muted <video autoplay loop>. Keep the dark theme — light text on motion only reads when the contrast is hard.",
+  },
+  {
+    slug: "hero-animated-text",
+    title: "Hero — Animated Text",
+    category: "marketing",
+    description: "Rotating word inside the headline cycles every 2s with gradient text + fade-slide transition. Lightweight, no extra deps.",
+    source: "kitab",
+    repoPath: "app/preview/hero-animated-text",
+    primaryFile: "app/preview/hero-animated-text/page.tsx",
+    tags: ["block", "hero", "motion", "marketing", "kinetic"],
+    previewPath: "/preview/hero-animated-text",
+    exampleCode: `const WORDS = ["faster", "smarter", "safer"];
+const [i, setI] = useState(0);
+useEffect(() => { const id = setInterval(() => setI(n => (n+1)%WORDS.length), 2000); return () => clearInterval(id); }, []);
+
+<h1>Build <span className="bg-gradient-to-r from-violet-500 to-orange-500 bg-clip-text text-transparent">{WORDS[i]}</span> with the mesh</h1>`,
+    agentRecipe: "Use absolute-positioned word slots with translate-y + opacity transitions. The invisible placeholder word keeps the bounding box stable.",
+  },
+
+  // ───────────── PRICING BLOCKS (5) ─────────────
+  {
+    slug: "pricing-three",
+    title: "Pricing — Three Tier",
+    category: "marketing",
+    description: "Classic 3-tier card layout. Middle tier highlighted with Most Popular badge + soft shadow.",
+    source: "kitab",
+    repoPath: "app/preview/pricing-three",
+    primaryFile: "app/preview/pricing-three/page.tsx",
+    tags: ["block", "pricing", "marketing", "saas"],
+    previewPath: "/preview/pricing-three",
+    exampleCode: `<div className="grid md:grid-cols-3 gap-6">
+  {TIERS.map(t => (
+    <div className={t.featured ? "border-primary/50 bg-primary/[0.03]" : ""}>
+      <h2>{t.name}</h2>
+      <p className="text-4xl font-bold">\${t.price}</p>
+      <ul>{t.features.map(f => <li><Check />{f}</li>)}</ul>
+      <Button>{t.cta}</Button>
+    </div>
+  ))}
+</div>`,
+    agentRecipe: "Three is the magic number for SaaS pricing — fewer feels limited, more triggers analysis paralysis. Middle tier should be the one you actually want to sell.",
+  },
+  {
+    slug: "pricing-four",
+    title: "Pricing — Four Tier",
+    category: "marketing",
+    description: "Four-tier with Best Value badge on tier 3. Compact card chrome, 4-column grid that collapses gracefully.",
+    source: "kitab",
+    repoPath: "app/preview/pricing-four",
+    primaryFile: "app/preview/pricing-four/page.tsx",
+    tags: ["block", "pricing", "marketing", "saas"],
+    previewPath: "/preview/pricing-four",
+    exampleCode: `<div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+  {TIERS.map(t => (
+    <div className="flex flex-col rounded-xl border p-6">
+      <h2 className="uppercase text-xs">{t.name}</h2>
+      <p className="text-3xl font-bold">\${t.price}</p>
+      <ul className="grow">{t.features.map(f => <li>{f}</li>)}</ul>
+      <Button>Get started</Button>
+    </div>
+  ))}
+</div>`,
+    agentRecipe: "Use when you genuinely have four distinct tiers (free / solo / team / enterprise). Don't pad to four — use the three-tier variant if the fourth is forced.",
+  },
+  {
+    slug: "pricing-toggle",
+    title: "Pricing — Monthly/Yearly Toggle",
+    category: "marketing",
+    description: "3-tier with a monthly/yearly pill toggle. Yearly price strikethroughs the monthly, -20% savings badge inside the toggle.",
+    source: "kitab",
+    repoPath: "app/preview/pricing-toggle",
+    primaryFile: "app/preview/pricing-toggle/page.tsx",
+    tags: ["block", "pricing", "marketing", "interactive"],
+    previewPath: "/preview/pricing-toggle",
+    exampleCode: `const [yearly, setYearly] = useState(true);
+const price = yearly ? t.yearly : t.monthly;
+
+<div className="inline-flex rounded-full border p-1">
+  <button onClick={() => setYearly(false)}>Monthly</button>
+  <button onClick={() => setYearly(true)}>Yearly <span>-20%</span></button>
+</div>`,
+    agentRecipe: "Default to yearly — that's the conversion-optimized choice. Show the monthly strikethrough so the savings feel real, not implied.",
+  },
+  {
+    slug: "pricing-compare",
+    title: "Pricing — Feature Comparison",
+    category: "marketing",
+    description: "Single comparison table: feature rows × plan columns. Check/Minus icons, header row with prices, sticky CTA row.",
+    source: "kitab",
+    repoPath: "app/preview/pricing-compare",
+    primaryFile: "app/preview/pricing-compare/page.tsx",
+    tags: ["block", "pricing", "marketing", "comparison", "table"],
+    previewPath: "/preview/pricing-compare",
+    exampleCode: `<div className="rounded-2xl border overflow-hidden">
+  <div className="grid grid-cols-4 bg-muted/30 px-6 py-5">
+    <div />
+    {PLANS.map(p => <div className="text-center">{p}</div>)}
+  </div>
+  {ROWS.map(r => (
+    <div className="grid grid-cols-4 px-6 py-3">
+      <div>{r.feature}</div>
+      {r.values.map(v => <div className="text-center">{typeof v === "boolean" ? (v ? <Check /> : <Minus />) : v}</div>)}
+    </div>
+  ))}
+</div>`,
+    agentRecipe: "Use for complex products where buyers actually compare. Mix boolean rows (Check/Minus) with string-value rows (\"1\", \"10\", \"Unlimited\") for clarity.",
+  },
+  {
+    slug: "pricing-slider",
+    title: "Pricing — Usage Slider",
+    category: "marketing",
+    description: "Range slider drives the price. Tier name and per-seat cost update live. Single-card layout, focus on the math.",
+    source: "kitab",
+    repoPath: "app/preview/pricing-slider",
+    primaryFile: "app/preview/pricing-slider/page.tsx",
+    tags: ["block", "pricing", "marketing", "interactive", "usage"],
+    previewPath: "/preview/pricing-slider",
+    exampleCode: `function priceFor(seats) {
+  if (seats <= 1) return 0;
+  if (seats <= 5) return seats * 9;
+  return 5*9 + (seats-5) * 7;
+}
+const [seats, setSeats] = useState(5);
+<input type="range" min={1} max={50} value={seats} onChange={e => setSeats(+e.target.value)} />
+<p className="text-4xl">\${priceFor(seats)}/mo</p>`,
+    agentRecipe: "Use for usage-based or seat-based products. Make the breakpoints transparent — buyers should be able to predict the next price without surprises.",
+  },
+
+  // ───────────── ACCORDION BLOCKS (5) ─────────────
+  {
+    slug: "accordion-faq",
+    title: "Accordion — Classic FAQ",
+    category: "marketing",
+    description: "Single-open FAQ accordion. ChevronDown rotates, content reveals below. Clean, compact, perfect for support pages.",
+    source: "kitab",
+    repoPath: "app/preview/accordion-faq",
+    primaryFile: "app/preview/accordion-faq/page.tsx",
+    tags: ["block", "accordion", "faq", "marketing"],
+    previewPath: "/preview/accordion-faq",
+    exampleCode: `const [open, setOpen] = useState(0);
+
+<div className="divide-y rounded-2xl border">
+  {ITEMS.map((it, i) => (
+    <div>
+      <button onClick={() => setOpen(open === i ? -1 : i)}>
+        {it.q} <ChevronDown className={open === i ? "rotate-180" : ""} />
+      </button>
+      {open === i && <div>{it.a}</div>}
+    </div>
+  ))}
+</div>`,
+    agentRecipe: "Single-open keeps the page short. Use when answers are independent. Switch to multi-open if buyers tend to scan multiple answers at once.",
+  },
+  {
+    slug: "accordion-grouped",
+    title: "Accordion — Grouped Sections",
+    category: "marketing",
+    description: "FAQ split into themed groups (Getting Started / Slices / Billing). Each group is its own card. Independent open state per item.",
+    source: "kitab",
+    repoPath: "app/preview/accordion-grouped",
+    primaryFile: "app/preview/accordion-grouped/page.tsx",
+    tags: ["block", "accordion", "faq", "marketing", "grouped"],
+    previewPath: "/preview/accordion-grouped",
+    exampleCode: `{GROUPS.map(g => (
+  <section>
+    <h2 className="text-xs uppercase">{g.title}</h2>
+    <div className="rounded-2xl border">
+      {g.items.map(it => <Item q={it.q} a={it.a} />)}
+    </div>
+  </section>
+))}`,
+    agentRecipe: "Use when the FAQ is long (>10 items) and questions cluster naturally. Each group's Item owns its open state for predictable UX.",
+  },
+  {
+    slug: "accordion-sidebar",
+    title: "Accordion — Sidebar Navigation",
+    category: "marketing",
+    description: "Docs-style: left nav switches sections, right pane shows the section's accordion. Two-axis navigation in one layout.",
+    source: "kitab",
+    repoPath: "app/preview/accordion-sidebar",
+    primaryFile: "app/preview/accordion-sidebar/page.tsx",
+    tags: ["block", "accordion", "docs", "sidebar", "navigation"],
+    previewPath: "/preview/accordion-sidebar",
+    exampleCode: `<section className="grid md:grid-cols-[220px_1fr] gap-8">
+  <aside>{SECTIONS.map((s, i) => <button onClick={() => setSection(i)}>{s.title}</button>)}</aside>
+  <div>
+    <h1>{current.title}</h1>
+    {current.items.map(it => <AccordionRow q={it.q} a={it.a} />)}
+  </div>
+</section>`,
+    agentRecipe: "Use for help/docs pages with section breadth. Keep section count ≤ 5 — beyond that, the sidebar gets noisy. Reset accordion state on section change.",
+  },
+  {
+    slug: "accordion-animated",
+    title: "Accordion — Smooth Animated",
+    category: "marketing",
+    description: "Grid-row transition for true height animation, no janky calc. Each item is a rounded card with rotating plus → primary close icon.",
+    source: "kitab",
+    repoPath: "app/preview/accordion-animated",
+    primaryFile: "app/preview/accordion-animated/page.tsx",
+    tags: ["block", "accordion", "marketing", "motion"],
+    previewPath: "/preview/accordion-animated",
+    exampleCode: `<div style={{
+  gridTemplateRows: open ? "1fr" : "0fr",
+  transition: "grid-template-rows 280ms cubic-bezier(0.4,0,0.2,1)",
+}} className="grid">
+  <div className="overflow-hidden">
+    <p>{a}</p>
+  </div>
+</div>`,
+    agentRecipe: "The grid-template-rows trick lets CSS animate to-auto-height natively. No JS measurement, no jank. Pair with rounded card chrome for premium feel.",
+  },
+  {
+    slug: "accordion-multi",
+    title: "Accordion — Multi-open",
+    category: "marketing",
+    description: "All items can be open at once. Expand-all / Collapse-all toggle in header. Best for compare-style reading.",
+    source: "kitab",
+    repoPath: "app/preview/accordion-multi",
+    primaryFile: "app/preview/accordion-multi/page.tsx",
+    tags: ["block", "accordion", "marketing", "multi-open"],
+    previewPath: "/preview/accordion-multi",
+    exampleCode: `const [open, setOpen] = useState(new Set([0]));
+const toggle = (i) => setOpen(s => {
+  const next = new Set(s);
+  next.has(i) ? next.delete(i) : next.add(i);
+  return next;
+});
+
+<button onClick={() => setOpen(open.size === ITEMS.length ? new Set() : new Set(ITEMS.map((_,i)=>i)))}>
+  {open.size === ITEMS.length ? "Collapse all" : "Expand all"}
+</button>`,
+    agentRecipe: "Use when answers reference each other or buyers want to keep multiple sections visible (changelogs, release notes, feature comparison FAQs).",
+  },
+
+  // ───────────── BLOG VIEW BLOCKS (5) ─────────────
+  {
+    slug: "blog-grid",
+    title: "Blog — Card Grid",
+    category: "cms",
+    description: "3-column responsive card grid. Cover thumbnail (HSL gradient), title, excerpt, author·date·read meta. Default blog index shape.",
+    source: "kitab",
+    repoPath: "app/preview/blog-grid",
+    primaryFile: "app/preview/blog-grid/page.tsx",
+    tags: ["block", "blog", "cms", "grid"],
+    previewPath: "/preview/blog-grid",
+    exampleCode: `<div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  {posts.map(p => (
+    <article className="rounded-2xl border">
+      <Thumb post={p} className="h-44 rounded-t-2xl" />
+      <div className="p-5">
+        <h2>{p.title}</h2>
+        <p className="text-muted-foreground">{p.excerpt}</p>
+        <div className="text-xs">{p.author}·{p.date}·{p.read}</div>
+      </div>
+    </article>
+  ))}
+</div>`,
+    agentRecipe: "Default to 3 columns at lg. Use the Thumb helper for cover generation when posts don't ship an image yet — HSL gradient by post.hue keeps each card distinct.",
+  },
+  {
+    slug: "blog-list",
+    title: "Blog — Dense List",
+    category: "cms",
+    description: "Single-column scannable list. Thumbnail left, meta + title + excerpt right. High density, low scroll.",
+    source: "kitab",
+    repoPath: "app/preview/blog-list",
+    primaryFile: "app/preview/blog-list/page.tsx",
+    tags: ["block", "blog", "cms", "list"],
+    previewPath: "/preview/blog-list",
+    exampleCode: `<div className="divide-y">
+  {posts.map(p => (
+    <article className="flex gap-5 py-6">
+      <Thumb post={p} className="size-24 shrink-0 rounded-xl" />
+      <div className="flex-1">
+        <div className="text-xs">{p.tag}·{p.date}·{p.read}</div>
+        <h2>{p.title}</h2>
+        <p className="line-clamp-2">{p.excerpt}</p>
+      </div>
+    </article>
+  ))}
+</div>`,
+    agentRecipe: "Use for archives or category pages where the reader is hunting a specific post. Compact thumbnail keeps the line height tight.",
+  },
+  {
+    slug: "blog-magazine",
+    title: "Blog — Magazine Layout",
+    category: "cms",
+    description: "Editorial spread: large hero post (2/3 width) + secondary featured + tail of headlines. Issue-number header gives quarterly feel.",
+    source: "kitab",
+    repoPath: "app/preview/blog-magazine",
+    primaryFile: "app/preview/blog-magazine/page.tsx",
+    tags: ["block", "blog", "cms", "editorial", "magazine"],
+    previewPath: "/preview/blog-magazine",
+    exampleCode: `<div className="grid lg:grid-cols-3 gap-8">
+  <article className="lg:col-span-2">
+    <Thumb post={hero} className="h-96" />
+    <h2 className="text-4xl">{hero.title}</h2>
+  </article>
+  <aside>
+    <Thumb post={secondary} className="h-32" />
+    <h3>{secondary.title}</h3>
+    {tail.map(p => <article><h4>{p.title}</h4></article>)}
+  </aside>
+</div>`,
+    agentRecipe: "Use for content-heavy publications. Hero post earns the visual real estate; the sidebar carries breadth. Mix typography sizes for editorial rhythm.",
+  },
+  {
+    slug: "blog-masonry",
+    title: "Blog — Masonry",
+    category: "cms",
+    description: "CSS columns-based masonry with varying card heights for organic rhythm. break-inside-avoid keeps each card intact.",
+    source: "kitab",
+    repoPath: "app/preview/blog-masonry",
+    primaryFile: "app/preview/blog-masonry/page.tsx",
+    tags: ["block", "blog", "cms", "masonry"],
+    previewPath: "/preview/blog-masonry",
+    exampleCode: `<div className="columns-1 sm:columns-2 lg:columns-3 gap-6">
+  {posts.map((p, i) => (
+    <article className="mb-6 break-inside-avoid rounded-2xl border">
+      <Thumb post={p} className={HEIGHTS[i % HEIGHTS.length]} />
+      <div className="p-5">{p.title}</div>
+    </article>
+  ))}
+</div>`,
+    agentRecipe: "CSS columns are the cheap masonry — no JS, no layout shift. Vary the thumbnail height via a HEIGHTS array (h-44 to h-80). DOM order ≠ visual order — design around it.",
+  },
+  {
+    slug: "blog-featured",
+    title: "Blog — Featured Hero + Tail",
+    category: "cms",
+    description: "Full-bleed cover hero on the first post, then a tight 2-column grid for the rest. Cinematic open, fast scroll for the tail.",
+    source: "kitab",
+    repoPath: "app/preview/blog-featured",
+    primaryFile: "app/preview/blog-featured/page.tsx",
+    tags: ["block", "blog", "cms", "featured", "hero"],
+    previewPath: "/preview/blog-featured",
+    exampleCode: `<section className="relative overflow-hidden">
+  <Thumb post={hero} className="absolute inset-0" />
+  <div className="absolute inset-0 bg-gradient-to-t from-background" />
+  <div className="relative min-h-[420px] flex flex-col justify-end p-12">
+    <h1 className="text-6xl">{hero.title}</h1>
+  </div>
+</section>
+<section className="grid md:grid-cols-2 gap-5">
+  {rest.map(p => <article>{p.title}</article>)}
+</section>`,
+    agentRecipe: "Use for marketing-driven content sites (newsletter, podcast, brand journal) where the lead story carries the visit. Tail grid keeps the index scrollable without losing the hero impact.",
+  },
 ];
 
 export function getLayout(slug: string) {

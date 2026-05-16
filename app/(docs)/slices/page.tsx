@@ -18,6 +18,7 @@ import { CatalogCard } from "@/components/site/catalog/catalog-card";
 import { type CatalogSearchItem } from "@/components/site/catalog/catalog-search";
 import { CatalogHero } from "@/components/site/catalog/catalog-hero";
 import { CatalogTabs } from "@/components/site/catalog/catalog-tabs";
+import { IframeThumbnail } from "@/components/site/catalog/iframe-thumbnail";
 import { MockThumbnail } from "@/components/site/catalog/mock-thumbnail";
 import { UseWideLayout } from "@/components/site/use-wide-layout";
 
@@ -93,12 +94,16 @@ export default function SlicesPage() {
             </div>
           }
           thumbnail={
-            <MockThumbnail
-              kind="slice"
-              category={s.category as string}
-              icon={Icon}
-              accents={accents}
-            />
+            s.previewPath ? (
+              <IframeThumbnail src={s.previewPath} />
+            ) : (
+              <MockThumbnail
+                kind="slice"
+                category={s.category as string}
+                icon={Icon}
+                accents={accents}
+              />
+            )
           }
         />
       ),
