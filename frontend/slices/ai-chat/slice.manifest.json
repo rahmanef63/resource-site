@@ -1,12 +1,12 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
-  "slug": "ai-chatbot",
+  "slug": "ai-chat",
   "version": "0.1.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
-    "command": "npx rr add ai-chatbot",
-    "consumerPath": "slices/ai-chatbot"
+    "command": "npx rr add ai-chat",
+    "consumerPath": "slices/ai-chat"
   },
   "files": [
     "index.ts",
@@ -23,8 +23,8 @@
     "types.ts"
   ],
   "convex": {
-    "schemaPath": "convex/features/ai-chatbot/schema.ts",
-    "rootPaths": ["convex/features/ai-chatbot"]
+    "schemaPath": "convex/features/ai-chat/schema.ts",
+    "rootPaths": ["convex/features/ai-chat"]
   },
   "imports": {
     "shared": [

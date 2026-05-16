@@ -13,10 +13,12 @@ import { ThemePresetSwitcher } from "./theme-preset-switcher";
 import { site } from "@/lib/content/site";
 import { cn } from "@/lib/utils";
 
+// Top-level nav label "Slices" → "Features" (URL stays /slices for
+// backward compat with existing inbound links + bookmarks).
 const NAV = [
   { label: "Docs", href: "/docs" },
   { label: "Layouts", href: "/layouts" },
-  { label: "Slices", href: "/slices" },
+  { label: "Features", href: "/slices" },
   { label: "Directory", href: "/directory" },
   { label: "Agents", href: "/agents" },
   { label: "Install", href: "/installation" },

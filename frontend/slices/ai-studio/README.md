@@ -1,11 +1,11 @@
-# ai-first-app
+# ai-studio
 
 Generation canvas where AI is the entire product flow. Big prompt → streaming output → iterate. Suno / Midjourney / Lovable pattern.
 
 ## Install
 
 ```bash
-npx rr add ai-first-app
+npx rr add ai-studio
 ```
 
 Peers: `convex-auth`, `ai-router`, `ai-admin`.
@@ -21,4 +21,4 @@ Peers: `convex-auth`, `ai-router`, `ai-admin`.
 
 ## Status
 
-**Scaffold (0.1.0)** — contract + metadata + types. Real impl pending. UX target at `/preview/slices/ai-first-app`.
+**Scaffold (0.1.0)** — contract + metadata + types. Real impl pending. UX target at `/preview/slices/ai-studio`.

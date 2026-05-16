@@ -1,4 +1,4 @@
-/** Public types for ai-first-app slice. */
+/** Public types for ai-studio slice. */
 
 export type OutputKind = "image" | "text" | "code" | "audio";
 export type GenerationStatus = "queued" | "generating" | "done" | "error";

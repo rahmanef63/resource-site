@@ -1,38 +1,38 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
-  "slug": "ai-search",
+  "slug": "ai-agents",
   "version": "0.1.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
-    "command": "npx rr add ai-search",
-    "consumerPath": "slices/ai-search"
+    "command": "npx rr add ai-agents",
+    "consumerPath": "slices/ai-agents"
   },
   "files": [
     "index.ts",
     "README.md",
     "types.ts",
-    "components/AskBox.tsx",
-    "components/AnswerView.tsx",
-    "components/SourceStrip.tsx",
-    "components/FollowUpChips.tsx",
-    "hooks/useAsk.ts",
-    "hooks/useCorpus.ts",
-    "lib/citation-parser.ts"
+    "components/RunnerDashboard.tsx",
+    "components/RunQueue.tsx",
+    "components/RunTrace.tsx",
+    "components/AgentCard.tsx",
+    "hooks/useAgentRuns.ts",
+    "hooks/useRunTrace.ts",
+    "lib/retry-policy.ts"
   ],
   "convex": {
-    "schemaPath": "convex/features/ai-search/schema.ts",
-    "rootPaths": ["convex/features/ai-search"]
+    "schemaPath": "convex/features/ai-agents/schema.ts",
+    "rootPaths": ["convex/features/ai-agents"]
   },
   "imports": {
     "shared": [
       "@/components/ui/button",
       "@/components/ui/card",
       "@/components/ui/badge",
-      "@/components/ui/input",
+      "@/components/ui/table",
       "@/components/ui/tabs",
       "@/components/ui/scroll-area",
-      "@/components/ui/separator",
+      "@/components/ui/progress",
       "@/lib/utils"
     ],
     "external": ["react", "lucide-react", "ai"]

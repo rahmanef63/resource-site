@@ -1,19 +1,19 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
-  "slug": "ai-first-app",
+  "slug": "ai-studio",
   "version": "0.1.0",
   "category": "ai",
   "kind": "full",
   "title": "AI-First App — Generation Canvas",
   "description": "AI is the primary UI — single big prompt input → live-streaming generation canvas with iteration toolbar. Suno / Midjourney / Lovable pattern. Includes prompt history, version tree (branch & compare outputs), variation grid, share-to-link.",
-  "namespace": "@/features/ai-first-app",
+  "namespace": "@/features/ai-studio",
   "convex": {
-    "tablesExport": "aiFirstAppTables",
-    "schemaPath": "convex/features/ai-first-app/schema.ts",
-    "rootPaths": ["convex/features/ai-first-app"]
+    "tablesExport": "aiStudioTables",
+    "schemaPath": "convex/features/ai-studio/schema.ts",
+    "rootPaths": ["convex/features/ai-studio"]
   },
   "frontend": {
-    "slicePath": "frontend/slices/ai-first-app",
+    "slicePath": "frontend/slices/ai-studio",
     "configExport": ""
   },
   "deps": {
@@ -29,5 +29,5 @@
   "registers": [],
   "audit": [],
   "license": "MIT",
-  "tags": ["ai", "ai:first-app", "generation", "streaming", "history", "branching", "image-gen"]
+  "tags": ["ai", "ai:studio", "generation", "streaming", "history", "branching", "image-gen"]
 }

@@ -1,10 +1,10 @@
 /**
- * ai-chatbot slice — public barrel.
+ * ai-chat slice — public barrel.
  *
  * Three-column AI chatbot workbench. Mount `<ChatWorkbench />` at the
  * route of your choice; wire `bindings` to your Convex API surface.
  *
- *   import { ChatWorkbench, useChat } from "@/features/ai-chatbot";
+ *   import { ChatWorkbench, useChat } from "@/features/ai-chat";
  *
  * NOTE: this scaffold ships the contract + metadata only. The
  * component files are intentionally absent until the full impl lands

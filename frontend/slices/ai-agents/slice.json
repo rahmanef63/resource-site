@@ -1,19 +1,19 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
-  "slug": "ai-agent-runner",
+  "slug": "ai-agents",
   "version": "0.1.0",
   "category": "ai",
   "kind": "full",
   "title": "AI Agent Runner — Async Worker Dashboard",
   "description": "Autonomous background agents. Task queue + run results dashboard with step-by-step traces (Devin/Replit-Agent style). Each run produces an audit-log entry, cost tally, and shareable trace URL.",
-  "namespace": "@/features/ai-agent-runner",
+  "namespace": "@/features/ai-agents",
   "convex": {
-    "tablesExport": "aiAgentRunnerTables",
-    "schemaPath": "convex/features/ai-agent-runner/schema.ts",
-    "rootPaths": ["convex/features/ai-agent-runner"]
+    "tablesExport": "aiAgentsTables",
+    "schemaPath": "convex/features/ai-agents/schema.ts",
+    "rootPaths": ["convex/features/ai-agents"]
   },
   "frontend": {
-    "slicePath": "frontend/slices/ai-agent-runner",
+    "slicePath": "frontend/slices/ai-agents",
     "configExport": ""
   },
   "deps": {

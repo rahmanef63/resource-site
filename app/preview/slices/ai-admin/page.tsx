@@ -3,8 +3,12 @@
 import * as React from "react";
 import {
   Sparkles, Plus, Pencil, Trash2, KeyRound, CheckCircle2, AlertTriangle, XCircle,
-  ShieldCheck, Wrench, Bot, GraduationCap, Receipt, Activity,
+  ShieldCheck, Wrench, Bot, GraduationCap, Receipt, Activity, FileText, Save,
 } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   PreviewPage,
   PreviewHeader,
@@ -33,14 +37,23 @@ const STATUS_ICON = {
   "missing-key": AlertTriangle,
 };
 
+// Build-flow order: infrastructure → catalog → behavior → safety.
 const TAB_LIST = [
-  { id: "providers", label: "API Sources", icon: KeyRound },
-  { id: "models", label: "Models", icon: Sparkles },
-  { id: "skills", label: "Skills", icon: GraduationCap },
-  { id: "tools", label: "Tools", icon: Wrench },
-  { id: "agents", label: "Agents", icon: Bot },
-  { id: "budgets", label: "Budgets", icon: Receipt },
-  { id: "audit", label: "Audit", icon: Activity },
+  { id: "providers", label: "1. Providers", icon: KeyRound },
+  { id: "models", label: "2. Models", icon: Sparkles },
+  { id: "instructions", label: "3. Instructions", icon: FileText },
+  { id: "skills", label: "4. Skills", icon: GraduationCap },
+  { id: "tools", label: "5. Tools", icon: Wrench },
+  { id: "agents", label: "6. Agents", icon: Bot },
+  { id: "budgets", label: "7. Budgets", icon: Receipt },
+  { id: "audit", label: "8. Audit", icon: Activity },
+];
+
+const INSTRUCTIONS = [
+  { slug: "house-style", name: "House style", body: "Reply in user's language. Cite docs. Refuse off-topic.", uses: 412 },
+  { slug: "brief", name: "Brief mode", body: "Short answers. No filler. Code blocks only when asked.", uses: 248 },
+  { slug: "tutor", name: "Patient tutor", body: "Explain like to a smart beginner. Use analogies.", uses: 91 },
+  { slug: "shipper", name: "Senior shipper", body: "Production-ready code. Edge cases. No prose.", uses: 188 },
 ];
 
 const AGENT_STATUS_COLOR = {
@@ -170,15 +183,43 @@ export default function Page() {
             </div>
           </TabsContent>
 
+          {/* ───────── Instructions ───────── */}
+          <TabsContent value="instructions" className="space-y-3">
+            <div className="flex items-center justify-between">
+              <p className="text-xs text-muted-foreground">
+                Reusable custom instructions. Each skill references one — change
+                an instruction here and every agent using that skill updates.
+              </p>
+              <CreateInstructionDialog />
+            </div>
+            <div className="grid gap-3 md:grid-cols-2">
+              {INSTRUCTIONS.map((it) => (
+                <Card key={it.slug} className="gap-2 p-4">
+                  <header className="flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold">{it.name}</p>
+                      <p className="font-mono text-[10px] text-muted-foreground">{it.slug}</p>
+                    </div>
+                    <Button variant="ghost" size="icon" className="size-7">
+                      <Pencil className="size-3" />
+                    </Button>
+                  </header>
+                  <p className="line-clamp-3 text-xs text-muted-foreground">{it.body}</p>
+                  <Badge variant="outline" className="w-fit text-[10px]">
+                    used by {it.uses} runs
+                  </Badge>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+
           {/* ───────── Skills ───────── */}
           <TabsContent value="skills" className="space-y-3">
             <div className="flex items-center justify-between">
               <p className="text-xs text-muted-foreground">
-                {SKILLS.length} skills registered.
+                Skill = instruction + default model + default tools. Reuse across chats / agents.
               </p>
-              <Button size="sm" className="gap-1.5">
-                <Plus className="size-3" /> New skill
-              </Button>
+              <CreateSkillDialog />
             </div>
             <div className="grid gap-3 md:grid-cols-2">
               {SKILLS.map((s) => (
@@ -213,9 +254,7 @@ export default function Page() {
               <p className="text-xs text-muted-foreground">
                 {TOOLS.length} tools registered.
               </p>
-              <Button size="sm" className="gap-1.5">
-                <Plus className="size-3" /> Register tool
-              </Button>
+              <CreateToolDialog />
             </div>
             <Card className="overflow-hidden p-0">
               <Table>
@@ -271,9 +310,7 @@ export default function Page() {
                 {AGENTS.filter((a) => a.status === "active").length} active /{" "}
                 {AGENTS.length} total.
               </p>
-              <Button size="sm" className="gap-1.5">
-                <Plus className="size-3" /> New agent
-              </Button>
+              <CreateAgentDialog />
             </div>
             <Card className="overflow-hidden p-0">
               <Table>
@@ -379,5 +416,120 @@ export default function Page() {
         </Tabs>
       </div>
     </PreviewPage>
+  );
+}
+
+// ───────────────── Create-* wizards (shadcn Dialog) ─────────────────
+
+type Field = {
+  id: string;
+  label: string;
+  kind?: "text" | "textarea";
+  placeholder?: string;
+  defaultValue?: string;
+};
+
+function CreateWizard({
+  trigger,
+  title,
+  fields,
+  saveLabel = "Save",
+}: {
+  trigger: React.ReactNode;
+  title: string;
+  fields: Field[];
+  saveLabel?: string;
+}) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogContent className="sm:max-w-lg">
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-3 py-2">
+          {fields.map((f) => (
+            <div key={f.id} className="space-y-1.5">
+              <Label className="text-xs uppercase tracking-wider text-muted-foreground">{f.label}</Label>
+              {f.kind === "textarea" ? (
+                <Textarea rows={4} placeholder={f.placeholder} defaultValue={f.defaultValue} />
+              ) : (
+                <Input placeholder={f.placeholder} defaultValue={f.defaultValue} />
+              )}
+            </div>
+          ))}
+        </div>
+        <DialogFooter>
+          <Button size="sm" className="gap-1.5">
+            <Save className="size-3.5" /> {saveLabel}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function CreateInstructionDialog() {
+  return (
+    <CreateWizard
+      title="Create instruction"
+      saveLabel="Save instruction"
+      trigger={<Button size="sm" className="gap-1.5"><Plus className="size-3" /> New instruction</Button>}
+      fields={[
+        { id: "name", label: "Name", placeholder: "House style" },
+        { id: "slug", label: "Slug", placeholder: "house-style" },
+        { id: "body", label: "Body", kind: "textarea", placeholder: "Reply in user's language. Cite docs. Refuse off-topic." },
+      ]}
+    />
+  );
+}
+
+function CreateSkillDialog() {
+  return (
+    <CreateWizard
+      title="Create skill"
+      saveLabel="Save skill"
+      trigger={<Button size="sm" className="gap-1.5"><Plus className="size-3" /> New skill</Button>}
+      fields={[
+        { id: "name", label: "Name", placeholder: "Coder" },
+        { id: "instruction", label: "Instruction", placeholder: "house-style" },
+        { id: "modelDefault", label: "Default model", placeholder: "claude-opus-4-7" },
+        { id: "toolDefaults", label: "Default tools (comma-sep)", placeholder: "shell, code-interp, git" },
+      ]}
+    />
+  );
+}
+
+function CreateToolDialog() {
+  return (
+    <CreateWizard
+      title="Register tool"
+      saveLabel="Register tool"
+      trigger={<Button size="sm" className="gap-1.5"><Plus className="size-3" /> Register tool</Button>}
+      fields={[
+        { id: "name", label: "Name", placeholder: "Web search" },
+        { id: "slug", label: "Slug", placeholder: "web-search" },
+        { id: "impl", label: "Impl (http / convex / shell)", placeholder: "http" },
+        { id: "endpoint", label: "Endpoint / function", placeholder: "https://api.tavily.com/search" },
+        { id: "jsonSchema", label: "JSON Schema", kind: "textarea", placeholder: '{ "type": "object", "properties": {...} }' },
+      ]}
+    />
+  );
+}
+
+function CreateAgentDialog() {
+  return (
+    <CreateWizard
+      title="Create agent"
+      saveLabel="Save agent"
+      trigger={<Button size="sm" className="gap-1.5"><Plus className="size-3" /> New agent</Button>}
+      fields={[
+        { id: "name", label: "Name", placeholder: "audit-bp" },
+        { id: "skill", label: "Skill", placeholder: "coder" },
+        { id: "model", label: "Model", placeholder: "claude-opus-4-7" },
+        { id: "tools", label: "Allowed tools (comma-sep)", placeholder: "shell, rag, code-interp" },
+        { id: "maxIter", label: "Max iterations", placeholder: "8" },
+      ]}
+    />
   );
 }

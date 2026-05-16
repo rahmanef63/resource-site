@@ -1,4 +1,4 @@
-/** Public types for ai-agent-runner slice. */
+/** Public types for ai-agents slice. */
 
 export type RunStatus = "queued" | "running" | "success" | "failed";
 export type StepStatus = "pending" | "running" | "done" | "error";

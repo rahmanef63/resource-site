@@ -1,19 +1,19 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
-  "slug": "ai-chatbot",
+  "slug": "ai-chat",
   "version": "0.1.0",
   "category": "ai",
   "kind": "full",
-  "title": "AI Chatbot — Three-Column Workbench",
+  "title": "AI Chat — Three-Column Workbench",
   "description": "Claude.ai / ChatGPT-style chatbot. Three-column shell: threads + attachments + active tools on the left, streaming messages in the center, model picker + params + skills + actions on the right. Multi-provider, multimodal, typed tool calls, agent mode, branching threads, RAG citations, resumable streams.",
-  "namespace": "@/features/ai-chatbot",
+  "namespace": "@/features/ai-chat",
   "convex": {
-    "tablesExport": "aiChatbotTables",
-    "schemaPath": "convex/features/ai-chatbot/schema.ts",
-    "rootPaths": ["convex/features/ai-chatbot"]
+    "tablesExport": "aiChatTables",
+    "schemaPath": "convex/features/ai-chat/schema.ts",
+    "rootPaths": ["convex/features/ai-chat"]
   },
   "frontend": {
-    "slicePath": "frontend/slices/ai-chatbot",
+    "slicePath": "frontend/slices/ai-chat",
     "configExport": ""
   },
   "deps": {
