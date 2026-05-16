@@ -20,6 +20,10 @@ cookbook
 recipes
 template-base
 packages
+!packages/cli
+!packages/cli/lib
+!packages/cli/lib/consumer-manifest.mjs
+!packages/cli/lib/consumer-manifest.d.ts
 site
 convex
 convex-templates
