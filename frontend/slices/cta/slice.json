@@ -1,0 +1,29 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "cta",
+  "version": "0.1.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "Call to Action",
+  "description": "Brutalist call-to-action section with eyebrow label, large serif headline, body copy, and arrow CTA link. Pair with CtaButton standalone for inline placements. Lifted from rahmanef.com — assumes Tailwind tracking-brutal / tracking-brutal-sm utilities OR drop them for the default tracking scale.",
+  "namespace": "@/features/cta",
+  "frontend": {
+    "slicePath": "frontend/slices/cta",
+    "configExport": "ctaFeature"
+  },
+  "convex": {
+    "tablesExport": "",
+    "schemaPath": "",
+    "rootPaths": []
+  },
+  "deps": {
+    "npm": ["lucide-react@^0.400.0", "next@^15"],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [],
+  "audit": [],
+  "license": "MIT",
+  "tags": ["ui", "marketing", "cta", "section", "brutalist"]
+}

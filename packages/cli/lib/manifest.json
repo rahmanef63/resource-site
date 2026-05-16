@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-16T10:56:11.339Z",
+  "generatedAt": "2026-05-16T11:24:22.395Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -1639,6 +1639,42 @@
       ]
     },
     {
+      "slug": "cta",
+      "title": "Call to Action",
+      "category": "ui",
+      "description": "Brutalist call-to-action section — eyebrow label, serif headline, body, arrow CTA. Pair with CtaButton standalone for inline placements. Lifted 2026-05-16 from rahmanef.com; assumes Tailwind tracking-brutal / tracking-brutal-sm utilities OR drop them for the default tracking scale.",
+      "source": "rahmanef.com",
+      "install": "npx rahman-resources add cta",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add cta`. <CtaView eyebrow title body href ctaLabel /> renders the full section; <CtaButton href label /> drops a standalone arrow button anywhere. Override tracking-brutal utilities in tailwind.config or swap for tracking-wide if your design system has no brutal preset.",
+      "tags": [
+        "ui",
+        "marketing",
+        "cta",
+        "section",
+        "brutalist"
+      ]
+    },
+    {
+      "slug": "rate-limit",
+      "title": "Rate Limit",
+      "category": "infra",
+      "description": "Convex-backed per-key request counter. Atomic check-and-increment via `consume` mutation; expired rows pruned by `_pruneExpired` internalMutation wired to a 5-min cron. Replaces single-replica in-memory Map so multi-replica Next deployments share buckets. Caller chooses key namespace (csp:<ip>, mcp:<ip>, oauth_token:<ip>). Lifted 2026-05-16 from rahmanef.com.",
+      "source": "rahmanef.com",
+      "install": "npx rahman-resources add rate-limit",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add rate-limit`. Compose `rateLimitTables` into root convex/schema.ts. Wire `internal.features.rate_limit.mutations._pruneExpired` into convex/crons.ts every 5 min. Call `api.features.rate_limit.mutations.consume({ key, limit, windowMs })` from server-side handlers — keep a fail-open wrapper so a Convex outage doesn't 503 the route.",
+      "tags": [
+        "infra",
+        "rate-limit",
+        "convex",
+        "backend",
+        "throttle"
+      ]
+    },
+    {
       "slug": "contact-form-resend",
       "title": "Contact Form + Resend",
       "category": "email",
@@ -2454,6 +2490,58 @@
         "notion"
       ],
       "agentRecipe": "Run `npx rr add icon-picker`. parseIconValue() decodes; lucideValue()/withColor() build. Add 'icon: v.string()' to Convex table — no migration needed for existing emoji fields. <IconPicker> wraps any trigger (Popover); <IconPickerInline> for sheets/dialogs. <DynamicIcon> renders from parsed value."
+    },
+    {
+      "slug": "cta",
+      "title": "Call to Action",
+      "category": "ui",
+      "kind": "ui",
+      "version": "0.1.0",
+      "description": "Brutalist call-to-action section — eyebrow label, serif headline, body, arrow CTA. Pair with CtaButton standalone for inline placements. Lifted 2026-05-16 from rahmanef.com; assumes Tailwind tracking-brutal / tracking-brutal-sm utilities OR drop them for the default tracking scale.",
+      "source": "rahmanef.com",
+      "slicePath": "frontend/slices/cta",
+      "convexPaths": [],
+      "npm": [
+        "lucide-react@^0.400.0"
+      ],
+      "shadcn": [],
+      "env": [],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "ui",
+        "marketing",
+        "cta",
+        "section",
+        "brutalist"
+      ],
+      "agentRecipe": "Run `npx rr add cta`. <CtaView eyebrow title body href ctaLabel /> renders the full section; <CtaButton href label /> drops a standalone arrow button anywhere. Override tracking-brutal utilities in tailwind.config or swap for tracking-wide if your design system has no brutal preset."
+    },
+    {
+      "slug": "rate-limit",
+      "title": "Rate Limit",
+      "category": "infra",
+      "kind": "backend",
+      "version": "0.1.0",
+      "description": "Convex-backed per-key request counter. Atomic check-and-increment via `consume` mutation; expired rows pruned by `_pruneExpired` internalMutation wired to a 5-min cron. Replaces single-replica in-memory Map so multi-replica Next deployments share buckets. Caller chooses key namespace (csp:<ip>, mcp:<ip>, oauth_token:<ip>). Lifted 2026-05-16 from rahmanef.com.",
+      "source": "rahmanef.com",
+      "slicePath": "frontend/slices/rate-limit",
+      "convexPaths": [
+        "convex/features/rate-limit"
+      ],
+      "npm": [],
+      "shadcn": [],
+      "env": [],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "infra",
+        "rate-limit",
+        "convex",
+        "backend",
+        "throttle"
+      ],
+      "agentRecipe": "Run `npx rr add rate-limit`. Compose `rateLimitTables` into root convex/schema.ts. Wire `internal.features.rate_limit.mutations._pruneExpired` into convex/crons.ts every 5 min. Call `api.features.rate_limit.mutations.consume({ key, limit, windowMs })` from server-side handlers — keep a fail-open wrapper so a Convex outage doesn't 503 the route."
     },
     {
       "slug": "contact-form-resend",

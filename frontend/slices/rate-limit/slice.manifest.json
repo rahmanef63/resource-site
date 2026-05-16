@@ -1,0 +1,23 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "rate-limit",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add rate-limit",
+    "consumerPath": "slices/rate-limit"
+  },
+  "files": [
+    "index.ts",
+    "config.ts"
+  ],
+  "convexFiles": [
+    "convex/features/rate-limit/schema.ts",
+    "convex/features/rate-limit/mutations.ts"
+  ],
+  "imports": {
+    "shared": [],
+    "external": ["convex/server", "convex/values"]
+  }
+}

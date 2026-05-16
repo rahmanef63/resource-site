@@ -1,0 +1,21 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "cta",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add cta",
+    "consumerPath": "slices/cta"
+  },
+  "files": [
+    "index.ts",
+    "config.ts",
+    "components/CallToAction.tsx",
+    "views/CtaView.tsx"
+  ],
+  "imports": {
+    "shared": [],
+    "external": ["lucide-react", "next/link"]
+  }
+}
