@@ -74,19 +74,22 @@ export function LivePreviewButton({
         </Button>
       </DialogTrigger>
       <DialogContent
-        className="!max-w-6xl gap-0 overflow-hidden p-0 sm:!max-w-6xl"
-        // Prevent the parent Link from firing on close-via-click-outside.
+        // Responsive container — fills viewport on mobile/tablet, caps
+        // at ~960px on desktop so it doesn't dwarf the preview canvas.
+        // `top-[50%]` + `translate-y-[-50%]` inherited from shadcn so it
+        // stays centered as size changes.
+        className="flex h-[92svh] w-[96vw] !max-w-[min(960px,96vw)] flex-col gap-0 overflow-hidden p-0"
         onClick={(e) => e.stopPropagation()}
       >
-        <DialogHeader className="border-b px-4 py-3">
+        <DialogHeader className="shrink-0 border-b px-4 py-3">
           <DialogTitle className="text-sm font-semibold">{title}</DialogTitle>
         </DialogHeader>
-        <div className="bg-background">
+        <div className="min-h-0 flex-1 overflow-hidden bg-background">
           <PreviewFrame
             src={src}
             defaultView={defaultView ?? "desktop"}
             defaultZoom={defaultZoom}
-            className="rounded-none border-0"
+            className="h-full rounded-none border-0"
           />
         </div>
       </DialogContent>
