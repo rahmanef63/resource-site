@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { usePathname } from "next/navigation";
 import { ThreeColumnLayoutAdvanced } from "@/components/previews/three-column/ThreeColumnLayout";
 import { DocsSidebar } from "./docs-sidebar";
 import { FeatureProvider, useFeatureContext } from "./feature-context";
@@ -24,6 +25,16 @@ function DocsShellInner({ children }: { children: React.ReactNode }) {
   const tabs = manifest?.tabs ?? [];
   const hasTabs = tabs.length > 0;
   const hasInspector = !!manifest?.inspector;
+
+  // Mobile view control. Default to "center" so users landing on any docs
+  // route see content first, not the sidebar. Sidebar opens via ChevronLeft
+  // in the mobile center header. Snap back to "center" on every navigation
+  // so tapping a sidebar link always reveals the new page.
+  const pathname = usePathname();
+  const [mobileView, setMobileView] = React.useState<"left" | "center">("center");
+  React.useEffect(() => {
+    setMobileView("center");
+  }, [pathname]);
 
   const activeRender = hasTabs && activeTab
     ? tabs.find((t) => t.id === activeTab)?.render
@@ -74,6 +85,8 @@ function DocsShellInner({ children }: { children: React.ReactNode }) {
         defaultLeftCollapsed={false}
         rightCollapsed={!rightOpen}
         onRightCollapsedChange={(collapsed) => setRightOpen(!collapsed)}
+        mobileView={mobileView}
+        onMobileViewChange={setMobileView}
         showCollapseButtons
         resizable
         persistState
