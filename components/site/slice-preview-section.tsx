@@ -6,31 +6,61 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ShowcaseCard } from "@/components/site/catalog/showcase-card";
 import { PreviewFrame } from "@/components/site/preview-frame";
-import type { PreviewView } from "@/lib/preview-presets";
+import {
+  PREVIEW_DEFAULTS,
+  activePreviewPath,
+  hasDualSurface,
+  type PreviewSource,
+  type PreviewSurfaceMode,
+} from "@/components/site/preview";
 
-type Props = {
-  publicPath: string;
-  adminPath?: string;
-  defaultSurface?: "public" | "admin";
-  defaultView?: PreviewView;
-  defaultZoom?: number;
-  sourceHref: string;
-};
+type Props =
+  | {
+      /** New API — pass a normalized PreviewSource. */
+      source: PreviewSource;
+      sourceHref: string;
+      /** Legacy props (ignored when `source` is set). */
+      publicPath?: never;
+      adminPath?: never;
+      defaultSurface?: never;
+      defaultView?: never;
+      defaultZoom?: never;
+    }
+  | {
+      /** Legacy direct-props API — kept for backward compat. */
+      publicPath: string;
+      adminPath?: string;
+      defaultSurface?: PreviewSurfaceMode;
+      defaultView?: import("@/lib/preview-presets").PreviewView;
+      defaultZoom?: number;
+      sourceHref: string;
+      source?: never;
+    };
 
-/** Slice detail "Live preview" section. Single surface → bare
- *  PreviewFrame; dual surface → Public/Admin tabs (mirrors the
- *  full-app template detail pattern). */
-export function SlicePreviewSection({
-  publicPath,
-  adminPath,
-  defaultSurface = "public",
-  defaultView,
-  defaultZoom,
-  sourceHref,
-}: Props) {
-  const dual = !!adminPath;
-  const [tab, setTab] = React.useState<"public" | "admin">(defaultSurface);
-  const activePath = tab === "admin" && adminPath ? adminPath : publicPath;
+/** Slice detail "Live preview" section. Renders Public/Admin tabs when
+ *  the source has both surfaces; falls back to a bare PreviewFrame
+ *  otherwise. Consumes the normalized PreviewSource SSOT. */
+export function SlicePreviewSection(props: Props) {
+  // Normalize both API shapes into one source object.
+  const source: PreviewSource = React.useMemo(() => {
+    if ("source" in props && props.source) return props.source;
+    return {
+      publicPath: props.publicPath!,
+      adminPath: props.adminPath,
+      defaultSurface: props.defaultSurface,
+      defaultView: props.defaultView,
+      defaultZoom: props.defaultZoom,
+    };
+  }, [props]);
+
+  const dual = hasDualSurface(source);
+  const [surface, setSurface] = React.useState<PreviewSurfaceMode>(
+    source.defaultSurface ?? "public",
+  );
+  const activePath = activePreviewPath(source, surface);
+
+  const view = source.defaultView ?? PREVIEW_DEFAULTS.view;
+  const zoom = source.defaultZoom;
 
   return (
     <ShowcaseCard
@@ -39,7 +69,7 @@ export function SlicePreviewSection({
       actions={
         <>
           {dual && (
-            <Tabs value={tab} onValueChange={(v) => setTab(v as "public" | "admin")}>
+            <Tabs value={surface} onValueChange={(v) => setSurface(v as PreviewSurfaceMode)}>
               <TabsList className="h-7 bg-muted/40 p-0.5">
                 <TabsTrigger value="public" className="h-6 gap-1 px-2 text-[11px]">
                   <Eye className="size-3" /> Public
@@ -56,7 +86,7 @@ export function SlicePreviewSection({
             </a>
           </Button>
           <Button asChild variant="ghost" size="sm" className="h-7 gap-1 px-2 text-xs">
-            <a href={sourceHref} target="_blank" rel="noreferrer">
+            <a href={props.sourceHref} target="_blank" rel="noreferrer">
               View source <ExternalLink className="size-3" />
             </a>
           </Button>
@@ -65,28 +95,16 @@ export function SlicePreviewSection({
       variant="iframe"
     >
       {dual ? (
-        <Tabs value={tab} onValueChange={(v) => setTab(v as "public" | "admin")}>
+        <Tabs value={surface} onValueChange={(v) => setSurface(v as PreviewSurfaceMode)}>
           <TabsContent value="public" className="m-0">
-            <PreviewFrame
-              src={publicPath}
-              defaultView={defaultView ?? "desktop"}
-              defaultZoom={defaultZoom}
-            />
+            <PreviewFrame src={source.publicPath} defaultView={view} defaultZoom={zoom} />
           </TabsContent>
           <TabsContent value="admin" className="m-0">
-            <PreviewFrame
-              src={adminPath!}
-              defaultView={defaultView ?? "desktop"}
-              defaultZoom={defaultZoom}
-            />
+            <PreviewFrame src={source.adminPath!} defaultView={view} defaultZoom={zoom} />
           </TabsContent>
         </Tabs>
       ) : (
-        <PreviewFrame
-          src={publicPath}
-          defaultView={defaultView ?? "desktop"}
-          defaultZoom={defaultZoom}
-        />
+        <PreviewFrame src={source.publicPath} defaultView={view} defaultZoom={zoom} />
       )}
     </ShowcaseCard>
   );
