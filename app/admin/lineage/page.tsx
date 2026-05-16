@@ -10,8 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { loadDna, flattenDrift, flattenLineage } from "@/lib/admin/lineage";
-import { cn } from "@/lib/utils";
+import { loadDna, flattenLineage } from "@/lib/admin/lineage";
 
 export const metadata = {
   title: "Admin · Lineage",
@@ -20,89 +19,45 @@ export const metadata = {
 
 export default async function AdminLineagePage() {
   const dnas = await loadDna();
-  const drift = flattenDrift(dnas);
-  const lineage = flattenLineage(dnas, 30);
+  const lineage = flattenLineage(dnas, 50);
   const hops = dnas.reduce((n, d) => n + d.lineage.length, 0);
+  const actors = new Set(
+    dnas.flatMap((d) => d.lineage.map((l) => l.actor).filter(Boolean) as string[]),
+  );
 
   return (
     <div className="space-y-8">
       <PageHeader
         eyebrow="Inspect"
-        title="DNA lineage & consumer drift"
-        description="Every harvest hop and consumer adoption recorded in .kitab/lineage/*.dna.json. Drift cells coloured red ≥40% (re-sync will likely conflict — lift improvements UP)."
+        title="DNA lineage — history archive"
+        description="Harvest hop history from .kitab/lineage/*.dna.json. Read-only archive of past transforms (alias-rewrite, clerk-strip, namespace-rename, etc). BSDL consumer-drift tracking removed 2026-05-16."
       />
 
-      <section className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <section className="grid grid-cols-3 gap-3">
         <StatCard
           label="Slices tracked"
           value={dnas.length}
           hint="DNA files present"
         />
         <StatCard
-          label="Lineage hops"
+          label="Total hops"
           value={hops}
           hint="harvest, rename, strip…"
         />
-        <StatCard label="Drift rows" value={drift.length} hint="consumer × slice" />
-        <StatCard
-          label="High-drift"
-          value={drift.filter((d) => d.drift >= 40).length}
-          hint="≥40% — needs UP-sync"
-          tone={drift.some((d) => d.drift >= 40) ? "err" : "ok"}
-        />
+        <StatCard label="Distinct actors" value={actors.size} hint="users + agents" />
       </section>
 
       {dnas.length === 0 ? (
         <EmptyState />
       ) : (
-        <>
-          {drift.length > 0 && (
-            <Section title="Consumer drift" caption={`${drift.length} row(s) · sorted by drift desc`}>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Slice</TableHead>
-                    <TableHead>Consumer</TableHead>
-                    <TableHead>Adopted version</TableHead>
-                    <TableHead className="text-right">Drift</TableHead>
-                    <TableHead className="text-right">Last synced</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {drift.map((d) => {
-                    const tone =
-                      d.drift >= 40
-                        ? "text-rose-500"
-                        : d.drift >= 15
-                          ? "text-amber-500"
-                          : "text-emerald-500";
-                    return (
-                      <TableRow key={`${d.slice}-${d.consumer}`}>
-                        <TableCell className="font-mono text-xs">{d.slice}</TableCell>
-                        <TableCell className="font-mono text-xs">{d.consumer}</TableCell>
-                        <TableCell className="font-mono text-xs text-muted-foreground">
-                          {d.version}
-                        </TableCell>
-                        <TableCell
-                          className={cn("text-right font-mono tabular-nums", tone)}
-                        >
-                          {d.drift}%
-                        </TableCell>
-                        <TableCell className="text-right font-mono text-xs tabular-nums text-muted-foreground">
-                          {d.synced.slice(0, 10)}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </Section>
-          )}
-
-          <Section
-            title="Recent lineage"
-            caption={`last ${lineage.length} transform(s)`}
-          >
+        <section className="space-y-3">
+          <div className="flex items-end justify-between">
+            <h2 className="text-base font-semibold">Recent lineage</h2>
+            <span className="text-[11px] text-muted-foreground">
+              last {lineage.length} transform(s) · newest first
+            </span>
+          </div>
+          <div className="rounded-lg border bg-card">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -141,30 +96,10 @@ export default async function AdminLineagePage() {
                 ))}
               </TableBody>
             </Table>
-          </Section>
-        </>
+          </div>
+        </section>
       )}
     </div>
-  );
-}
-
-function Section({
-  title,
-  caption,
-  children,
-}: {
-  title: string;
-  caption: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="space-y-3">
-      <div className="flex items-end justify-between">
-        <h2 className="text-base font-semibold">{title}</h2>
-        <span className="text-[11px] text-muted-foreground">{caption}</span>
-      </div>
-      <div className="rounded-lg border bg-card">{children}</div>
-    </section>
   );
 }
 
@@ -174,8 +109,8 @@ function EmptyState() {
       <GitBranch className="size-8 text-muted-foreground" />
       <p className="mt-3 text-sm font-medium">No DNA files yet</p>
       <p className="mt-1 max-w-md text-xs text-muted-foreground">
-        Lineage records appear here after the first <code>rr lift</code> /{" "}
-        <code>rr-send</code> harvest writes to <code>.kitab/lineage/*.dna.json</code>.
+        Lineage records appear here after the first <code>rr lift</code> writes to{" "}
+        <code>.kitab/lineage/*.dna.json</code>.
       </p>
     </div>
   );

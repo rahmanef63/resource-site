@@ -187,26 +187,24 @@ node packages/cli/scripts/sync-skills.mjs --check  # CI guard
 
 ---
 
-## ⚠ Wave N+3 BSDL — DEPRECATED (Sesi 2 cleanup)
+## ⚠ BSDL (legacy) — removed 2026-05-16
 
-Bidirectional Sync Detection Layer (consumer-manifest + scan-consumers + DNA
-lineage + drift scoring) di-deprecate per keputusan 2026-05-16. Reason:
-solo-dev overhead — 31 `.kitab.json` di-maintain demi ~4 harvest event/bulan.
-Manual `cp -r` lebih cepet.
+Wave N+3 Bidirectional Sync Detection Layer was deleted in Sesi 2
+(commits `1573128` → onwards). Reason: solo-dev overhead — 31
+`.kitab.json` files maintained for ~4 harvest events/month. Manual
+`cp -r` + `git commit` is faster.
 
-Yang akan dihapus di Sesi 2:
-- `.kitab.json` per slice (31 file across 5 consumer)
-- `packages/cli/bin/scan-consumers.mjs`
-- `packages/cli/lib/consumer-manifest.{mjs,d.ts,test.mjs}`
-- `.kitab/lineage/*.dna.json` (40+ file — backup keep)
-- `/admin/scan` tab + `/admin/registry` slice manifest viewer
-- skill `/rr-prep`, `/rr-send` (replaced by manual `npx rr lift`)
-- `scripts/rr-status.mjs`
+**Removed:**
+- `packages/cli/bin/scan-consumers.mjs` + `packages/cli/lib/consumer-manifest.*`
+- `packages/mcp/src/resources/sync.mjs` (rr://sync/* URIs no longer served)
+- `scripts/rr-status.mjs` + `npm run scan:consumers` + `npm run rr:status`
+- `app/admin/scan/page.tsx` + `lib/admin/scan.ts`
+- `.kitab.json` per slice in consumer repos (cleanup Phase E)
 
-Yang dipertahankan:
-- `slice.contract.ts` DSL (typed declaration)
+**Kept:**
+- `slice.contract.ts` DSL (typed declaration) — the `bidir` block is now vestigial; ignore it
 - `slice.manifest.json` (CLI distribution metadata)
 - Audit-bp validators
-- `/admin/lineage` (history view only, drift removed)
-- `/admin/quality` (band scoring)
-- `npx rr lift <slug>` — manual operator command + audit-bp guard
+- `.kitab/lineage/*.dna.json` (historical archive, read-only by `/admin/lineage`)
+- `/admin/lineage` (history view), `/admin/quality` (band scoring), `/admin/registry` (manifest viewer)
+- `npx rr lift <slug>` — manual operator command (audit-bp guard preserved)

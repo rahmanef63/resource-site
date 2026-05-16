@@ -48,7 +48,6 @@ import { createServer } from "node:http";
 import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { findEntry, getManifest, getSkills, searchAll, getWorkflow, WORKFLOW_KINDS } from "../src/data-loader.mjs";
 import { listLineageResources, readLineageResource, LINEAGE_URI_PREFIX } from "../src/resources/lineage.mjs";
-import { listSyncResources, readSyncResource, SYNC_URI_PREFIX } from "../src/resources/sync.mjs";
 import { createRequire } from "node:module";
 
 const require = createRequire(import.meta.url);
@@ -447,13 +446,6 @@ const handleListResources = async () => {
   } catch (err) {
     console.error("[mcp] failed to enumerate lineage resources:", err?.message ?? err);
   }
-  // Wave N+3 — consumer sync scan resources (rr://sync/*) — see src/resources/sync.mjs.
-  try {
-    const sync = await listSyncResources();
-    for (const r of sync) resources.push(r);
-  } catch (err) {
-    console.error("[mcp] failed to enumerate sync resources:", err?.message ?? err);
-  }
   return { resources };
 };
 
@@ -468,15 +460,6 @@ const handleReadResource = async (req) => {
     if (result.match) {
       if (result.error) return resourceError(uri, result.error);
       return resourceJson(uri, result.payload);
-    }
-  }
-  // Wave N+3 — consumer sync URIs (rr://sync/...) — delegated to sync.mjs.
-  if (typeof uri === "string" && uri.startsWith(SYNC_URI_PREFIX)) {
-    try {
-      const payload = await readSyncResource(uri);
-      return resourceJson(uri, JSON.parse(payload));
-    } catch (err) {
-      return resourceError(uri, err?.message ?? String(err));
     }
   }
   const wf = uri.match(/^rr:\/\/workflow\/(templates|features|recipes|skills)$/);

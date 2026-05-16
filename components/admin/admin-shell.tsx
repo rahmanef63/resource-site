@@ -14,7 +14,6 @@ import {
   LogOut,
   Network,
   PackageSearch,
-  Radar,
   Settings,
   Sparkles,
 } from "lucide-react";
@@ -39,7 +38,6 @@ const EDIT_NAV: NavItem[] = [
 const INSPECT_NAV: NavItem[] = [
   { label: "Lineage", href: "/admin/lineage", icon: GitBranch },
   { label: "Quality", href: "/admin/quality", icon: GaugeCircle },
-  { label: "Scan", href: "/admin/scan", icon: Radar },
   { label: "Registry", href: "/admin/registry", icon: PackageSearch },
 ];
 

@@ -7,7 +7,6 @@ import {
   GitBranch,
   Layout,
   PackageSearch,
-  Radar,
   Settings,
 } from "lucide-react";
 import { loadAdminStats } from "@/lib/admin/stats";
@@ -24,9 +23,8 @@ const EDIT_TILES = [
 ];
 
 const INSPECT_TILES = [
-  { label: "Lineage", href: "/admin/lineage", icon: GitBranch, desc: "DNA hops + consumer drift." },
+  { label: "Lineage", href: "/admin/lineage", icon: GitBranch, desc: "DNA harvest hop history." },
   { label: "Quality", href: "/admin/quality", icon: GaugeCircle, desc: "Per-slice score band A–F." },
-  { label: "Scan", href: "/admin/scan", icon: Radar, desc: "Consumer mesh sync status." },
   { label: "Registry", href: "/admin/registry", icon: PackageSearch, desc: "Slice manifests + contracts." },
 ];
 
@@ -41,41 +39,32 @@ export default async function AdminOverviewPage() {
 
   const healthTone =
     stats.healthPct >= 90 ? "ok" : stats.healthPct >= 70 ? "warn" : "err";
-  const driftTone =
-    stats.driftAvg <= 10 ? "ok" : stats.driftAvg <= 25 ? "warn" : "err";
 
   return (
     <div className="space-y-8">
       <PageHeader
         eyebrow="Admin"
         title="Control room"
-        description="Edit kitab content + inspect mesh health. Edit tiles persist to your browser; Inspect tiles read live state from .kitab + frontend/slices."
+        description="Edit rr content + inspect slice health. Edit tiles persist to your browser; Inspect tiles read live state from frontend/slices + .kitab/lineage (history archive)."
       />
 
-      <section className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <section className="grid grid-cols-3 gap-3">
         <StatCard
           label="Slices"
           value={stats.slices}
-          hint={`${stats.contracts} with typed contract`}
+          hint="frontend/slices/* with slice.json"
           icon={PackageSearch}
         />
         <StatCard
-          label="Consumers"
-          value={stats.consumers}
-          hint="recorded in DNA lineage"
+          label="Typed contracts"
+          value={stats.contracts}
+          hint={`${stats.slices - stats.contracts} slice(s) without contract`}
           icon={GitBranch}
         />
         <StatCard
-          label="Avg drift"
-          value={`${stats.driftAvg}%`}
-          hint={`max ${stats.driftMax}% across mesh`}
-          icon={Radar}
-          tone={driftTone}
-        />
-        <StatCard
-          label="Health"
+          label="Contract health"
           value={`${stats.healthPct}%`}
-          hint="contracts ÷ slices − drift/4"
+          hint="contracts ÷ slices"
           icon={GaugeCircle}
           tone={healthTone}
         />

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aggregate validation runner — run before any kitab push or UP-sync.
+ * Aggregate validation runner — run before any rr push.
  *
  * Chains in the order they would fail in CI:
  *   1. typecheck      (catches contract DSL signature drift first)
