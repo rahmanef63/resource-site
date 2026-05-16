@@ -45,14 +45,18 @@ export function PreviewIframeShell({
   return (
     <div
       className={cn(
-        "relative overflow-auto bg-zinc-950/40 [background-image:radial-gradient(circle_at_1px_1px,theme(colors.zinc.700/.4)_1px,transparent_0)] [background-size:14px_14px]",
+        // Theme-aware canvas: dotted grid + radial vignette + edge fade.
+        // Gives the "you're inside a sandbox preview" feel without the
+        // hardcoded zinc/dark wash.
+        "relative overflow-auto bg-muted/30 [background-image:radial-gradient(circle_at_1px_1px,var(--border)_1px,transparent_0)] [background-size:14px_14px]",
+        "before:pointer-events-none before:absolute before:inset-0 before:bg-[radial-gradient(ellipse_at_center,transparent_55%,var(--background)/85%_100%)] before:content-['']",
         className,
       )}
       style={style}
     >
-      <div className="flex justify-center" style={{ padding }}>
+      <div className="relative flex justify-center" style={{ padding }}>
         <div
-          className="relative"
+          className="group/preview relative"
           style={{ width: preset.width * zoom, height: preset.height * zoom }}
           aria-label={`${preset.label} (${preset.width}×${preset.height})`}
         >
@@ -64,8 +68,10 @@ export function PreviewIframeShell({
               transformOrigin: "top left",
             }}
             className={cn(
-              "relative overflow-hidden rounded-md border bg-background shadow-2xl",
-              segmented && "ring-1 ring-zinc-700/40",
+              "relative overflow-hidden rounded-md border bg-background shadow-2xl transition-shadow duration-300",
+              "ring-1 ring-border/40",
+              "group-hover/preview:shadow-[0_30px_80px_-12px_rgba(0,0,0,0.4)] group-hover/preview:ring-primary/30",
+              segmented && "ring-border/60",
             )}
           >
             {segmented ? (

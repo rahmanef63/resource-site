@@ -16,8 +16,8 @@ export type StatCardProps = {
 };
 
 const TREND_COLOR: Record<NonNullable<StatCardProps["trend"]>, string> = {
-  up: "text-emerald-600 dark:text-emerald-400",
-  down: "text-rose-600 dark:text-rose-400",
+  up: "text-success",
+  down: "text-danger",
   muted: "text-muted-foreground",
 };
 

@@ -32,6 +32,18 @@
   --sidebar-accent-foreground: hsl(240 5.9% 10%);
   --sidebar-border: hsl(220 13% 91%);
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
+
+  /* Semantic status tokens — map to OKLch so they harmonize with the
+     base palette and theme presets. Use via `bg-success/15`,
+     `text-success`, etc. instead of hard-coded emerald/rose/amber. */
+  --success: oklch(0.722 0.166 162);
+  --success-foreground: oklch(0.985 0 0);
+  --warning: oklch(0.787 0.176 75);
+  --warning-foreground: oklch(0.205 0 0);
+  --danger: oklch(0.628 0.21 25);
+  --danger-foreground: oklch(0.985 0 0);
+  --info: oklch(0.65 0.16 245);
+  --info-foreground: oklch(0.985 0 0);
 }
 
 .dark {
@@ -63,6 +75,16 @@
   --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
   --sidebar-border: hsl(240 3.7% 15.9%);
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
+
+  /* Semantic status tokens — slightly lifted lightness for dark mode. */
+  --success: oklch(0.76 0.18 162);
+  --success-foreground: oklch(0.141 0.005 285);
+  --warning: oklch(0.82 0.18 75);
+  --warning-foreground: oklch(0.141 0.005 285);
+  --danger: oklch(0.68 0.22 25);
+  --danger-foreground: oklch(0.985 0 0);
+  --info: oklch(0.72 0.17 245);
+  --info-foreground: oklch(0.141 0.005 285);
 }
 
 @theme inline {
@@ -82,6 +104,14 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);

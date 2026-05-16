@@ -47,28 +47,64 @@ function BrandMark({ className }: { className?: string }) {
   );
 }
 
+/** Dim chrome when user lands on a template/layout DETAIL page so the
+ *  iframe preview reads as the primary content. Matches:
+ *    /layouts/<slug>   /templates/<slug>   /slices/<slug>
+ *  but NOT the catalog index (/layouts, /templates, /slices). */
+function useDetailDim(pathname: string | null): boolean {
+  if (!pathname) return false;
+  return /^\/(layouts|templates|slices)\/[^/]+/.test(pathname);
+}
+
 export function TopNavbar() {
   const pathname = usePathname();
+  const dim = useDetailDim(pathname);
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header
+      className={cn(
+        "sticky top-0 z-50 w-full border-b transition-[background-color,border-color,backdrop-filter] duration-300",
+        dim
+          ? "border-border/30 bg-background/40 backdrop-blur-xl supports-[backdrop-filter]:bg-background/30"
+          : "border-border/60 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60",
+      )}
+    >
       <div className="flex h-14 items-center px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-6">
-          <Link href="/" className="flex items-center gap-2 text-foreground" aria-label={site.name}>
+          <Link
+            href="/"
+            className="group/brand flex items-center gap-2 text-foreground transition-opacity hover:opacity-100"
+            aria-label={site.name}
+          >
             <BrandMark />
             <span className="hidden text-sm font-semibold tracking-tight sm:inline">
               {site.shortName ?? site.name}
             </span>
           </Link>
-          <nav className="hidden items-center gap-5 text-sm font-medium md:flex">
+          <nav
+            className={cn(
+              // Subtle horizontal mask so far-right items fade — gives
+              // the "you are deep in a template" feel on detail pages.
+              "hidden items-center gap-5 text-sm font-medium md:flex",
+              dim &&
+                "[mask-image:linear-gradient(to_right,transparent_0,black_24px,black_calc(100%-24px),transparent_100%)]",
+            )}
+          >
             {NAV.map((item) => {
-              const active = pathname === item.href || pathname.startsWith(item.href + "/");
+              const active = pathname === item.href || pathname?.startsWith(item.href + "/");
               return (
                 <Link
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "transition-colors hover:text-foreground",
-                    active ? "text-foreground" : "text-muted-foreground"
+                    "relative transition-colors duration-200 hover:text-foreground",
+                    active
+                      ? "text-foreground"
+                      : dim
+                        ? "text-muted-foreground/50 hover:text-foreground"
+                        : "text-muted-foreground",
+                    // Active underline pill — more interactive feedback.
+                    active &&
+                      "after:absolute after:-bottom-[18px] after:left-0 after:right-0 after:h-0.5 after:rounded-full after:bg-foreground/80 after:content-['']",
                   )}
                 >
                   {item.label}

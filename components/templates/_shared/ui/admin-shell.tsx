@@ -1,13 +1,16 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AdminSidebar } from "./admin-sidebar";
 import { AdminTopbar } from "./admin-topbar";
 import type { AdminNavItem, Brand, User } from "../types/common";
 
 /**
- * Top-level admin shell. Composes <AdminSidebar> + <AdminTopbar> + <main>.
- * Pass nav config + user once at the layout level.
+ * Top-level admin shell. Wraps everything in shadcn `SidebarProvider`
+ * so the sidebar + topbar trigger share state (cmd/ctrl+B toggle,
+ * cookie persistence, mobile drawer). Pass nav config once at the
+ * layout level.
  */
 export function AdminShell({
   brand,
@@ -33,7 +36,7 @@ export function AdminShell({
   children: ReactNode;
 }) {
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-background text-foreground">
+    <SidebarProvider defaultOpen>
       <AdminSidebar
         brand={brand}
         appLabel={appLabel}
@@ -42,7 +45,7 @@ export function AdminShell({
         settingsNav={settingsNav}
         user={user}
       />
-      <div className="flex flex-1 flex-col overflow-hidden">
+      <SidebarInset className="bg-background text-foreground">
         <AdminTopbar
           brand={brand}
           appLabel={appLabel}
@@ -55,7 +58,7 @@ export function AdminShell({
           actions={topbarActions}
         />
         <main className="flex-1 overflow-auto p-4 md:p-6">{children}</main>
-      </div>
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
