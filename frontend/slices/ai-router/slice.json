@@ -3,7 +3,7 @@
   "slug": "ai-router",
   "version": "0.1.0",
   "category": "ai",
-  "title": "AI Router — Tiered Provider Proxy",
+  "title": "AI Router — Backend Provider Proxy",
   "description": "Tier-routed LLM access via OpenRouter — nano (Haiku) for classification, mid (Sonnet) for chat, flagship (Opus) for deep reasoning. Per-call usage log.",
   "namespace": "@/features/ai-router",
   "convex": {

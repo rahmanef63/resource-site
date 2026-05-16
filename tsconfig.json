@@ -48,6 +48,7 @@
     "packages/**",
     "site/**",
     "scripts/migrations/**",
-    "frontend/slices/**/slice.contract.ts"
+    "frontend/slices/**/slice.contract.ts",
+    "frontend/slices/**/routes/**"
   ]
 }

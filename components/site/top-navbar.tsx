@@ -20,6 +20,7 @@ const NAV = [
   { label: "Layouts", href: "/layouts" },
   { label: "Features", href: "/slices" },
   { label: "Directory", href: "/directory" },
+  { label: "Best Practice", href: "/best-practice" },
   { label: "Agents", href: "/agents" },
   { label: "Install", href: "/installation" },
 ];

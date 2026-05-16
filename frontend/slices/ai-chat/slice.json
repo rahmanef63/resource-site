@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "category": "ai",
   "kind": "full",
-  "title": "AI Chat — Three-Column Workbench",
+  "title": "AI Chat — Workbench / Sidebar / Search",
   "description": "Claude.ai / ChatGPT-style chatbot. Three-column shell: threads + attachments + active tools on the left, streaming messages in the center, model picker + params + skills + actions on the right. Multi-provider, multimodal, typed tool calls, agent mode, branching threads, RAG citations, resumable streams.",
   "namespace": "@/features/ai-chat",
   "convex": {

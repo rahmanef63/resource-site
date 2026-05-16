@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "category": "ai",
   "kind": "full",
-  "title": "AI-First App — Generation Canvas",
+  "title": "AI Studio — Generation Canvas",
   "description": "AI is the primary UI — single big prompt input → live-streaming generation canvas with iteration toolbar. Suno / Midjourney / Lovable pattern. Includes prompt history, version tree (branch & compare outputs), variation grid, share-to-link.",
   "namespace": "@/features/ai-studio",
   "convex": {

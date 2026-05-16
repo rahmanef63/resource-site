@@ -1,10 +1,10 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "ai-admin",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "category": "ai",
   "kind": "full",
-  "title": "AI Admin — Central Config Console",
+  "title": "AI Admin — Console (Instructions · Skills · Tools · Agents · Providers)",
   "description": "Operator console for the whole AI stack — API sources (Anthropic/OpenAI/Google/Mistral/Ollama), model registry with capabilities + pricing, skill library, tool registry, agent definitions, per-workspace cost budgets, full audit log. Plugs into the admin-panel section registry. Every other ai-* slice reads its registries here.",
   "namespace": "@/features/ai-admin",
   "convex": {
@@ -29,9 +29,7 @@
       { "slug": "audit-log", "range": "^0.1" }
     ]
   },
-  "registers": [
-    { "kind": "admin-section", "id": "ai", "label": "AI", "icon": "Sparkles" }
-  ],
+  "registers": [],
   "audit": [],
   "license": "MIT",
   "tags": ["ai", "ai:admin", "config", "providers", "models", "skills", "tools", "agents", "budgets"]

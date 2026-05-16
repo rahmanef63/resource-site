@@ -1,0 +1,34 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "create-your-mcp",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add create-your-mcp",
+    "consumerPath": "slices/create-your-mcp"
+  },
+  "files": [
+    "index.ts",
+    "config.ts",
+    "lib/types.ts",
+    "lib/context.ts",
+    "lib/auth.ts",
+    "lib/server.ts",
+    "lib/tools/example.ts",
+    "routes/mcp.route.ts",
+    "routes/oauth-token.route.ts",
+    "views/McpAdminView.tsx",
+    "README.md"
+  ],
+  "convexFiles": [
+    "convex/features/create-your-mcp/schema.ts",
+    "convex/features/create-your-mcp/pkce.ts",
+    "convex/features/create-your-mcp/mutations.ts",
+    "convex/features/create-your-mcp/queries.ts"
+  ],
+  "imports": {
+    "shared": ["convex/_shared/auth"],
+    "external": ["convex/server", "convex/values", "next/server", "node:async_hooks"]
+  }
+}

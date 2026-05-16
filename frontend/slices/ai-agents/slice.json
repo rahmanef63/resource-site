@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "category": "ai",
   "kind": "full",
-  "title": "AI Agent Runner — Async Worker Dashboard",
+  "title": "AI Agents — Autonomous Workers",
   "description": "Autonomous background agents. Task queue + run results dashboard with step-by-step traces (Devin/Replit-Agent style). Each run produces an audit-log entry, cost tally, and shareable trace URL.",
   "namespace": "@/features/ai-agents",
   "convex": {

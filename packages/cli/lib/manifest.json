@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-16T14:36:06.650Z",
+  "generatedAt": "2026-05-16T15:21:03.869Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -1342,31 +1342,10 @@
       ]
     },
     {
-      "slug": "ai-router",
-      "title": "AI Router — Tiered Provider Proxy",
+      "slug": "ai-chat",
+      "title": "AI Chat — Workbench / Sidebar / Search",
       "category": "ai",
-      "description": "Backend infrastructure slice. Tier-routed LLM access — nano (Haiku) for classification, mid (Sonnet) for chat, flagship (Opus) for deep reasoning. Per-call usage log + cost guard. Works with direct Anthropic/OpenAI/Google keys or OpenRouter umbrella key. Every other AI slice calls through it.",
-      "source": "rahmanef63/resource-site",
-      "docsUrl": "https://sdk.vercel.ai/docs",
-      "install": "npm i ai @openrouter/ai-sdk-provider",
-      "npmPackages": [
-        "ai",
-        "@openrouter/ai-sdk-provider"
-      ],
-      "exampleCode": "",
-      "agentRecipe": "Wrap every AI call through ai-router action. Pick tier based on workload: nano for spam-flag/headline-suggest, mid for chat/draft, flagship for methodology-review. Log token usage to ai_usage table for cost dashboard.",
-      "tags": [
-        "ai",
-        "ai:backend",
-        "tier-routing",
-        "cost-guard"
-      ]
-    },
-    {
-      "slug": "ai-chatbot",
-      "title": "AI Chatbot — Three-Column Workbench",
-      "category": "ai",
-      "description": "Claude.ai / ChatGPT-style chatbot. Three-column shell: threads + attachments + active tools on the left, streaming messages in the center, model + params + skills + actions on the right. Multi-provider, multimodal (text/image/PDF/audio), typed tool calls with inline inspector, agent mode (plan→execute→reflect), branching threads, RAG citations, resumable streams, usage telemetry. Public surface = consumer workbench; admin surface = per-bot persona, fallback responses, guardrails.",
+      "description": "One conversational AI feature, three render modes. Same Convex backend (threads + streaming + tool calls + RAG), pick the surface via prop:\n\n  • workbench — Claude.ai / ChatGPT three-column page (default)\n  • sidebar — collapsible copilot panel inside another CRUD app\n  • search — single-question + answer + citations (Perplexity)\n\nUse cases:\n  – Customer-support chatbot embedded in your marketing site\n  – Developer copilot in your PR/docs admin\n  – Knowledge-base search over your blog + docs corpus\n  – Internal AI assistant in your dashboard\n\nWhat it ships: multi-provider (Anthropic / OpenAI / Google / Mistral / Ollama), multimodal (text + image + PDF + audio), typed tool calls with inline inspector, agent mode (plan→execute→reflect), branching threads, RAG citations, resumable streams, usage telemetry. Public surface = consumer chat; admin surface = persona, fallback, guardrails per-bot.",
       "source": "rahmanef63/resource-site",
       "docsUrl": "https://sdk.vercel.ai/docs",
       "install": "npm i ai @ai-sdk/anthropic @ai-sdk/openai",
@@ -1376,10 +1355,10 @@
         "@ai-sdk/openai"
       ],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add ai-chatbot`. Mount `<ChatWorkbench />` at /chat (public) and `<ChatbotAdminPanel />` at /admin/ai-chatbot. Streaming via HTTP action SSE; tool registry pulled from ai-admin; multimodal attachments via Convex storage.",
+      "agentRecipe": "Run `npx rr add ai-chat`. Pick `mode=\"workbench\" | \"sidebar\" | \"search\"` on `<AIChat />` (or use the convenience exports `<AIChatWorkbench />`, `<AIChatSidebar />`, `<AIChatSearch />`). Same backend tables + streaming action for all three.",
       "tags": [
         "ai",
-        "ai:chatbot",
+        "ai:chat",
         "streaming",
         "multimodal",
         "tool-calls",
@@ -1391,18 +1370,18 @@
       ]
     },
     {
-      "slug": "ai-first-app",
-      "title": "AI-First App — Generation Canvas",
+      "slug": "ai-studio",
+      "title": "AI Studio — Generation Canvas",
       "category": "ai",
-      "description": "AI is the primary UI — single big prompt input → live-streaming generation canvas with iteration toolbar. Suno / Midjourney / Lovable pattern. Includes prompt history, version tree (branch & compare outputs), variation grid, share-to-link. Public surface = generator; admin surface = template library + few-shot example bank + output moderation rules.",
+      "description": "AI is the primary UI — single big prompt input → live-streaming output → variation grid → version tree. Suno / Midjourney / Lovable / v0 pattern. Output kinds: text, code, image, audio (configurable per template).\n\nUse cases:\n  – AI image generation product (creative output)\n  – AI logo / banner / social-post studio\n  – AI code-snippet generator (component scaffolder)\n  – AI music / voiceover producer\n  – AI blog-draft factory (text)\n\nFeatures: prompt history, branch + compare outputs, like + favorite, share-to-link, templates from ai-admin.",
       "source": "rahmanef63/resource-site",
       "install": "",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add ai-first-app`. Mount `<GeneratorCanvas />` at /. Use case: prompt → output is the entire product flow. Wire your output renderer (text/image/code/audio) via the OutputSlot adapter.",
+      "agentRecipe": "Run `npx rr add ai-studio`. Mount `<GeneratorCanvas />` at /. Use case: prompt → output IS the entire product. Wire your output renderer (text/image/code/audio) via the OutputSlot adapter. Templates loaded from ai-admin.studio.templates.",
       "tags": [
         "ai",
-        "ai:first-app",
+        "ai:studio",
         "generation",
         "streaming",
         "history",
@@ -1411,37 +1390,18 @@
       ]
     },
     {
-      "slug": "ai-copilot",
-      "title": "AI Copilot — Sidebar Companion",
+      "slug": "ai-agents",
+      "title": "AI Agents — Autonomous Workers",
       "category": "ai",
-      "description": "AI sits in a collapsible sidebar of an existing CRUD app — context-aware suggestions for the currently-focused entity (record, doc, ticket). Inline accept/dismiss diff hunks, slash-command palette, multi-turn drill-down. Public surface = embedded copilot panel; admin surface = trigger rules (which entity types fire which prompts) + tone/persona overrides.",
+      "description": "Background AI workers. Define an agent (skill × model × tools × max-iter), trigger it on-demand or on a cron schedule, watch the step-by-step trace as it runs. Devin / Replit-Agent / Manus pattern.\n\nUse cases:\n  – Nightly audit-bp on the codebase (PR-reviewer style)\n  – Weekly SEO crawl + content suggestions\n  – Auto-moderate comment queue\n  – Scheduled data ingestion + summarization\n  – Long-form research task with multi-source citations\n\nFeatures: queue + live trace, per-step retry policy, hard cost cap, shareable trace URLs, full audit-log integration.",
       "source": "rahmanef63/resource-site",
       "install": "",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add ai-copilot`. Wrap your host app in `<CopilotProvider>` and mount `<CopilotPanel />` in the page shell. Register entity → prompt mappings in ai-admin.copilot.triggers.",
+      "agentRecipe": "Run `npx rr add ai-agents`. Mount `<RunnerDashboard />` at /agents. Trigger runs via `runAgent({agentSlug, input, scheduleAt?})`. Cron scheduler via Convex cron — wire if you need scheduled runs. Agent definitions managed in ai-admin.",
       "tags": [
         "ai",
-        "ai:copilot",
-        "streaming",
-        "tool-calls",
-        "suggestions",
-        "context-aware"
-      ]
-    },
-    {
-      "slug": "ai-agent-runner",
-      "title": "AI Agent Runner — Async Worker Dashboard",
-      "category": "ai",
-      "description": "Autonomous background agents. Public surface = task queue + run results dashboard with step-by-step traces (Devin/Replit-Agent style). Admin surface = agent registry (skill + model + tool subset + max-iter + schedule + concurrency caps) + retry/backoff policy. Each run produces an audit-log entry, cost tally, and shareable trace URL.",
-      "source": "rahmanef63/resource-site",
-      "install": "",
-      "npmPackages": [],
-      "exampleCode": "",
-      "agentRecipe": "Run `npx rr add ai-agent-runner`. Mount `<RunnerDashboard />` at /agents. Trigger runs via `runAgent({agentSlug, input, scheduleAt?})`. Cron scheduler optional via Convex cron — wire if you need scheduled runs.",
-      "tags": [
-        "ai",
-        "ai:agent",
+        "ai:agents",
         "agent-mode",
         "tool-calls",
         "async",
@@ -1450,44 +1410,47 @@
       ]
     },
     {
-      "slug": "ai-search",
-      "title": "AI Search — Ask with Citations",
-      "category": "ai",
-      "description": "Perplexity-style answer engine over a workspace corpus. Public surface = ask box + streaming answer with inline numbered citations + source cards strip. Admin surface = corpus ingestion (URLs / files / Notion / Slack) + crawl schedule + reranker tuning + per-source weight.",
-      "source": "rahmanef63/resource-site",
-      "install": "",
-      "npmPackages": [],
-      "exampleCode": "",
-      "agentRecipe": "Run `npx rr add ai-search`. Mount `<AskBox />` at /ask. Ingestion runs in ai-admin → AI Search → Sources. Wire vector-search slice for embedding store.",
-      "tags": [
-        "ai",
-        "ai:search",
-        "rag",
-        "citations",
-        "streaming",
-        "corpus"
-      ]
-    },
-    {
       "slug": "ai-admin",
-      "title": "AI Admin — Central Config Console",
+      "title": "AI Admin — Console (Instructions · Skills · Tools · Agents · Providers)",
       "category": "ai",
-      "description": "Operator console for the whole AI stack — API sources (Anthropic/OpenAI/Google/Mistral/Ollama), model registry with capabilities + pricing, skill library (system prompts + tool defaults), tool registry (typed JSON schemas + sandbox flags), agent definitions, per-workspace cost budgets, full audit log of every call. Plugs into the existing admin-panel section registry. Every other ai-* slice reads its registries here.",
+      "description": "Central operator console for the whole AI stack. Every other ai-* feature reads its registries from here. Tabs ordered to match the build-flow:\n\n  1. Providers   — register Anthropic / OpenAI / Google / Mistral / Ollama (API keys AES-encrypted at rest)\n  2. Models      — per-provider catalog (capabilities, context window, pricing)\n  3. Instructions — custom system-prompt library (Claude Projects-style)\n  4. Skills      — named instruction + model default + tool defaults (consumed by chat + studio)\n  5. Tools       — JSON-schema function specs + impl (http / convex / shell) + sandbox flag\n  6. Agents      — skill × model × tools × max-iter (consumed by ai-agents)\n  7. Budgets     — per-workspace cost caps + alerts + hard kill\n  8. Audit       — every AI call: actor / agent / tokens / cost / latency / outcome\n\nIncludes Create-Agent / Create-Skill / Create-Tool / Create-Instruction wizards.",
       "source": "rahmanef63/resource-site",
       "install": "",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add ai-admin`. Adds an `AI` section to the admin-panel ADMIN_SECTIONS registry with sub-tabs (Providers/Models/Skills/Tools/Agents/Budgets/Audit). API keys encrypted at rest via AI_ADMIN_ENCRYPTION_KEY. Skills + tools + agents are SSOTs consumed by every ai-* consumer slice.",
+      "agentRecipe": "Run `npx rr add ai-admin`. Adds an `AI` section to the admin-panel ADMIN_SECTIONS registry. Sub-tabs ordered to match build-flow: Providers → Models → Instructions → Skills → Tools → Agents → Budgets → Audit. Includes Create-* wizards for instructions / skills / tools / agents. API keys AES-encrypted via AI_ADMIN_ENCRYPTION_KEY env. The instruction / skill / tool / agent registries are SSOTs consumed by every ai-* consumer slice (chat + studio + agents).",
       "tags": [
         "ai",
         "ai:admin",
-        "config",
-        "providers",
-        "models",
+        "instructions",
         "skills",
         "tools",
         "agents",
-        "budgets"
+        "providers",
+        "models",
+        "budgets",
+        "audit"
+      ]
+    },
+    {
+      "slug": "ai-router",
+      "title": "AI Router — Backend Provider Proxy",
+      "category": "ai",
+      "description": "Backend infrastructure (no UI). Single proxy that every other ai-* feature calls. Tier-routed — nano (Haiku) for classification, mid (Sonnet) for chat, flagship (Opus) for deep reasoning. Per-call usage log + cost guard. Works with direct provider keys or OpenRouter umbrella.\n\nNot something you mount — installed automatically as a peer when you add ai-chat / ai-studio / ai-agents.",
+      "source": "rahmanef63/resource-site",
+      "docsUrl": "https://sdk.vercel.ai/docs",
+      "install": "npm i ai @openrouter/ai-sdk-provider",
+      "npmPackages": [
+        "ai",
+        "@openrouter/ai-sdk-provider"
+      ],
+      "exampleCode": "",
+      "agentRecipe": "Wrap every AI call through ai-router. Tiers: nano = quick classification (spam-flag, headline-suggest), mid = chat / draft, flagship = methodology-review / deep-think. Token usage logs to ai_usage table for the cost dashboard.",
+      "tags": [
+        "ai",
+        "ai:backend",
+        "tier-routing",
+        "cost-guard"
       ]
     },
     {
@@ -1897,6 +1860,28 @@
       ]
     },
     {
+      "slug": "create-your-mcp",
+      "title": "Create Your MCP",
+      "category": "ai",
+      "description": "Turn any rr-based app into an MCP server that ChatGPT custom apps, Claude.ai connectors, Cursor MCP, and other AI clients authenticate to. OAuth 2.1 + PKCE flow with code → bearer exchange, env-configured vendor-host allowlist, single-use codes, 1-year bearer tokens, scope-tagged tools, opaque error collapsing, constant-time token compare. Static MCP_API_KEY fallback for service-account / CI scripts. Sanitized 2026-05-16 from rahmanef.com's production MCP integration — vendor literals (chatgpt.com / OpenAI paths) replaced with MCP_OAUTH_ALLOWED_HOSTS + MCP_OAUTH_ALLOWED_PATH_PREFIXES env vars so the slice ships portable.",
+      "source": "rahmanef.com",
+      "install": "npx rahman-resources add create-your-mcp",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add create-your-mcp`. Compose `createYourMcpTables` into root schema. Move `slices/create-your-mcp/routes/mcp.route.ts` → `app/api/mcp/route.ts` and `oauth-token.route.ts` → `app/api/oauth/token/route.ts`. Set MCP_OAUTH_ALLOWED_HOSTS (CSV vendor domains). Mount `<McpAdminView />` at /admin/mcp. Connect ChatGPT/Claude/Cursor via the setup form rendered by the admin view.",
+      "tags": [
+        "ai",
+        "mcp",
+        "oauth",
+        "pkce",
+        "chatgpt",
+        "claude",
+        "cursor",
+        "convex",
+        "integration"
+      ]
+    },
+    {
       "slug": "contact-form-resend",
       "title": "Contact Form + Resend",
       "category": "email",
@@ -2240,52 +2225,16 @@
       "agentRecipe": "Use Resend Audiences API for newsletter — store subscriber emails in Convex too for segmentation. Double opt-in: subscriber.create with status 'pending' → click link → status 'confirmed'."
     },
     {
-      "slug": "ai-router",
-      "title": "AI Router — Tiered Provider Proxy",
-      "category": "ai",
-      "kind": "backend",
-      "version": "0.1.0",
-      "description": "Backend infrastructure slice. Tier-routed LLM access — nano (Haiku) for classification, mid (Sonnet) for chat, flagship (Opus) for deep reasoning. Per-call usage log + cost guard. Works with direct Anthropic/OpenAI/Google keys or OpenRouter umbrella key. Every other AI slice calls through it.",
-      "source": "rahmanef63/resource-site",
-      "slicePath": "frontend/slices/ai-router",
-      "convexPaths": [
-        "convex/features/ai"
-      ],
-      "npm": [
-        "ai@^4.0.0",
-        "@openrouter/ai-sdk-provider@^0.0.5"
-      ],
-      "shadcn": [
-        "button"
-      ],
-      "env": [
-        {
-          "name": "OPENROUTER_API_KEY",
-          "scope": "convex",
-          "required": true
-        }
-      ],
-      "peers": [],
-      "providers": [],
-      "tags": [
-        "ai",
-        "ai:backend",
-        "tier-routing",
-        "cost-guard"
-      ],
-      "agentRecipe": "Wrap every AI call through ai-router action. Pick tier based on workload: nano for spam-flag/headline-suggest, mid for chat/draft, flagship for methodology-review. Log token usage to ai_usage table for cost dashboard."
-    },
-    {
-      "slug": "ai-chatbot",
-      "title": "AI Chatbot — Three-Column Workbench",
+      "slug": "ai-chat",
+      "title": "AI Chat — Workbench / Sidebar / Search",
       "category": "ai",
       "kind": "full",
       "version": "0.1.0",
-      "description": "Claude.ai / ChatGPT-style chatbot. Three-column shell: threads + attachments + active tools on the left, streaming messages in the center, model + params + skills + actions on the right. Multi-provider, multimodal (text/image/PDF/audio), typed tool calls with inline inspector, agent mode (plan→execute→reflect), branching threads, RAG citations, resumable streams, usage telemetry. Public surface = consumer workbench; admin surface = per-bot persona, fallback responses, guardrails.",
+      "description": "One conversational AI feature, three render modes. Same Convex backend (threads + streaming + tool calls + RAG), pick the surface via prop:\n\n  • workbench — Claude.ai / ChatGPT three-column page (default)\n  • sidebar — collapsible copilot panel inside another CRUD app\n  • search — single-question + answer + citations (Perplexity)\n\nUse cases:\n  – Customer-support chatbot embedded in your marketing site\n  – Developer copilot in your PR/docs admin\n  – Knowledge-base search over your blog + docs corpus\n  – Internal AI assistant in your dashboard\n\nWhat it ships: multi-provider (Anthropic / OpenAI / Google / Mistral / Ollama), multimodal (text + image + PDF + audio), typed tool calls with inline inspector, agent mode (plan→execute→reflect), branching threads, RAG citations, resumable streams, usage telemetry. Public surface = consumer chat; admin surface = persona, fallback, guardrails per-bot.",
       "source": "rahmanef63/resource-site",
-      "slicePath": "frontend/slices/ai-chatbot",
+      "slicePath": "frontend/slices/ai-chat",
       "convexPaths": [
-        "convex/features/ai-chatbot"
+        "convex/features/ai-chat"
       ],
       "npm": [
         "ai@^4.0.0",
@@ -2303,7 +2252,9 @@
         "slider",
         "switch",
         "textarea",
-        "tabs"
+        "tabs",
+        "command",
+        "sheet"
       ],
       "env": [
         {
@@ -2336,18 +2287,18 @@
         {
           "slug": "ai-admin",
           "range": "^0.1",
-          "reason": "Reads skills/tools/models from ai-admin registry."
+          "reason": "Reads instructions / skills / tools / models from ai-admin registry."
         },
         {
           "slug": "vector-search",
           "range": "^0.1",
-          "reason": "Optional — RAG tool uses workspace embeddings."
+          "reason": "Optional — RAG / search modes pull workspace embeddings."
         }
       ],
       "providers": [],
       "tags": [
         "ai",
-        "ai:chatbot",
+        "ai:chat",
         "streaming",
         "multimodal",
         "tool-calls",
@@ -2357,19 +2308,19 @@
         "branching",
         "history"
       ],
-      "agentRecipe": "Run `npx rr add ai-chatbot`. Mount `<ChatWorkbench />` at /chat (public) and `<ChatbotAdminPanel />` at /admin/ai-chatbot. Streaming via HTTP action SSE; tool registry pulled from ai-admin; multimodal attachments via Convex storage."
+      "agentRecipe": "Run `npx rr add ai-chat`. Pick `mode=\"workbench\" | \"sidebar\" | \"search\"` on `<AIChat />` (or use the convenience exports `<AIChatWorkbench />`, `<AIChatSidebar />`, `<AIChatSearch />`). Same backend tables + streaming action for all three."
     },
     {
-      "slug": "ai-first-app",
-      "title": "AI-First App — Generation Canvas",
+      "slug": "ai-studio",
+      "title": "AI Studio — Generation Canvas",
       "category": "ai",
       "kind": "full",
       "version": "0.1.0",
-      "description": "AI is the primary UI — single big prompt input → live-streaming generation canvas with iteration toolbar. Suno / Midjourney / Lovable pattern. Includes prompt history, version tree (branch & compare outputs), variation grid, share-to-link. Public surface = generator; admin surface = template library + few-shot example bank + output moderation rules.",
+      "description": "AI is the primary UI — single big prompt input → live-streaming output → variation grid → version tree. Suno / Midjourney / Lovable / v0 pattern. Output kinds: text, code, image, audio (configurable per template).\n\nUse cases:\n  – AI image generation product (creative output)\n  – AI logo / banner / social-post studio\n  – AI code-snippet generator (component scaffolder)\n  – AI music / voiceover producer\n  – AI blog-draft factory (text)\n\nFeatures: prompt history, branch + compare outputs, like + favorite, share-to-link, templates from ai-admin.",
       "source": "rahmanef63/resource-site",
-      "slicePath": "frontend/slices/ai-first-app",
+      "slicePath": "frontend/slices/ai-studio",
       "convexPaths": [
-        "convex/features/ai-first-app"
+        "convex/features/ai-studio"
       ],
       "npm": [
         "ai@^4.0.0"
@@ -2399,86 +2350,32 @@
         {
           "slug": "ai-admin",
           "range": "^0.1",
-          "reason": "Templates + moderation rules live in ai-admin."
+          "reason": "Templates + few-shot library + moderation rules live in ai-admin."
         }
       ],
       "providers": [],
       "tags": [
         "ai",
-        "ai:first-app",
+        "ai:studio",
         "generation",
         "streaming",
         "history",
         "branching",
         "image-gen"
       ],
-      "agentRecipe": "Run `npx rr add ai-first-app`. Mount `<GeneratorCanvas />` at /. Use case: prompt → output is the entire product flow. Wire your output renderer (text/image/code/audio) via the OutputSlot adapter."
+      "agentRecipe": "Run `npx rr add ai-studio`. Mount `<GeneratorCanvas />` at /. Use case: prompt → output IS the entire product. Wire your output renderer (text/image/code/audio) via the OutputSlot adapter. Templates loaded from ai-admin.studio.templates."
     },
     {
-      "slug": "ai-copilot",
-      "title": "AI Copilot — Sidebar Companion",
+      "slug": "ai-agents",
+      "title": "AI Agents — Autonomous Workers",
       "category": "ai",
       "kind": "full",
       "version": "0.1.0",
-      "description": "AI sits in a collapsible sidebar of an existing CRUD app — context-aware suggestions for the currently-focused entity (record, doc, ticket). Inline accept/dismiss diff hunks, slash-command palette, multi-turn drill-down. Public surface = embedded copilot panel; admin surface = trigger rules (which entity types fire which prompts) + tone/persona overrides.",
+      "description": "Background AI workers. Define an agent (skill × model × tools × max-iter), trigger it on-demand or on a cron schedule, watch the step-by-step trace as it runs. Devin / Replit-Agent / Manus pattern.\n\nUse cases:\n  – Nightly audit-bp on the codebase (PR-reviewer style)\n  – Weekly SEO crawl + content suggestions\n  – Auto-moderate comment queue\n  – Scheduled data ingestion + summarization\n  – Long-form research task with multi-source citations\n\nFeatures: queue + live trace, per-step retry policy, hard cost cap, shareable trace URLs, full audit-log integration.",
       "source": "rahmanef63/resource-site",
-      "slicePath": "frontend/slices/ai-copilot",
+      "slicePath": "frontend/slices/ai-agents",
       "convexPaths": [
-        "convex/features/ai-copilot"
-      ],
-      "npm": [
-        "ai@^4.0.0"
-      ],
-      "shadcn": [
-        "button",
-        "card",
-        "badge",
-        "command",
-        "scroll-area",
-        "sheet",
-        "separator",
-        "tooltip"
-      ],
-      "env": [],
-      "peers": [
-        {
-          "slug": "convex-auth",
-          "range": "^0.1",
-          "reason": "Suggestions scoped to authed user."
-        },
-        {
-          "slug": "ai-router",
-          "range": "^0.1",
-          "reason": "Inference via tiered router."
-        },
-        {
-          "slug": "ai-admin",
-          "range": "^0.1",
-          "reason": "Trigger rules + personas live in ai-admin."
-        }
-      ],
-      "providers": [],
-      "tags": [
-        "ai",
-        "ai:copilot",
-        "streaming",
-        "tool-calls",
-        "suggestions",
-        "context-aware"
-      ],
-      "agentRecipe": "Run `npx rr add ai-copilot`. Wrap your host app in `<CopilotProvider>` and mount `<CopilotPanel />` in the page shell. Register entity → prompt mappings in ai-admin.copilot.triggers."
-    },
-    {
-      "slug": "ai-agent-runner",
-      "title": "AI Agent Runner — Async Worker Dashboard",
-      "category": "ai",
-      "kind": "full",
-      "version": "0.1.0",
-      "description": "Autonomous background agents. Public surface = task queue + run results dashboard with step-by-step traces (Devin/Replit-Agent style). Admin surface = agent registry (skill + model + tool subset + max-iter + schedule + concurrency caps) + retry/backoff policy. Each run produces an audit-log entry, cost tally, and shareable trace URL.",
-      "source": "rahmanef63/resource-site",
-      "slicePath": "frontend/slices/ai-agent-runner",
-      "convexPaths": [
-        "convex/features/ai-agent-runner"
+        "convex/features/ai-agents"
       ],
       "npm": [
         "ai@^4.0.0"
@@ -2507,7 +2404,7 @@
         {
           "slug": "ai-admin",
           "range": "^0.1",
-          "reason": "Agents defined in ai-admin.agents."
+          "reason": "Agent definitions live in ai-admin → Agents."
         },
         {
           "slug": "audit-log",
@@ -2518,80 +2415,22 @@
       "providers": [],
       "tags": [
         "ai",
-        "ai:agent",
+        "ai:agents",
         "agent-mode",
         "tool-calls",
         "async",
         "queue",
         "traces"
       ],
-      "agentRecipe": "Run `npx rr add ai-agent-runner`. Mount `<RunnerDashboard />` at /agents. Trigger runs via `runAgent({agentSlug, input, scheduleAt?})`. Cron scheduler optional via Convex cron — wire if you need scheduled runs."
-    },
-    {
-      "slug": "ai-search",
-      "title": "AI Search — Ask with Citations",
-      "category": "ai",
-      "kind": "full",
-      "version": "0.1.0",
-      "description": "Perplexity-style answer engine over a workspace corpus. Public surface = ask box + streaming answer with inline numbered citations + source cards strip. Admin surface = corpus ingestion (URLs / files / Notion / Slack) + crawl schedule + reranker tuning + per-source weight.",
-      "source": "rahmanef63/resource-site",
-      "slicePath": "frontend/slices/ai-search",
-      "convexPaths": [
-        "convex/features/ai-search"
-      ],
-      "npm": [
-        "ai@^4.0.0"
-      ],
-      "shadcn": [
-        "button",
-        "card",
-        "badge",
-        "input",
-        "tabs",
-        "scroll-area",
-        "separator"
-      ],
-      "env": [],
-      "peers": [
-        {
-          "slug": "convex-auth",
-          "range": "^0.1",
-          "reason": "Per-workspace corpus scoping."
-        },
-        {
-          "slug": "ai-router",
-          "range": "^0.1",
-          "reason": "Answer synthesis via router."
-        },
-        {
-          "slug": "ai-admin",
-          "range": "^0.1",
-          "reason": "Reranker + source weights tunable in ai-admin."
-        },
-        {
-          "slug": "vector-search",
-          "range": "^0.1",
-          "reason": "Embeddings index for retrieval."
-        }
-      ],
-      "providers": [],
-      "tags": [
-        "ai",
-        "ai:search",
-        "rag",
-        "citations",
-        "streaming",
-        "corpus"
-      ],
-      "agentRecipe": "Run `npx rr add ai-search`. Mount `<AskBox />` at /ask. Ingestion runs in ai-admin → AI Search → Sources. Wire vector-search slice for embedding store."
+      "agentRecipe": "Run `npx rr add ai-agents`. Mount `<RunnerDashboard />` at /agents. Trigger runs via `runAgent({agentSlug, input, scheduleAt?})`. Cron scheduler via Convex cron — wire if you need scheduled runs. Agent definitions managed in ai-admin."
     },
     {
       "slug": "ai-admin",
-      "title": "AI Admin — Central Config Console",
+      "title": "AI Admin — Console (Instructions · Skills · Tools · Agents · Providers)",
       "category": "ai",
       "kind": "full",
-      "version": "0.1.0",
-      "description": "Operator console for the whole AI stack — API sources (Anthropic/OpenAI/Google/Mistral/Ollama), model registry with capabilities + pricing, skill library (system prompts + tool defaults), tool registry (typed JSON schemas + sandbox flags), agent definitions, per-workspace cost budgets, full audit log of every call. Plugs into the existing admin-panel section registry. Every other ai-* slice reads its registries here.",
+      "version": "0.2.0",
+      "description": "Central operator console for the whole AI stack. Every other ai-* feature reads its registries from here. Tabs ordered to match the build-flow:\n\n  1. Providers   — register Anthropic / OpenAI / Google / Mistral / Ollama (API keys AES-encrypted at rest)\n  2. Models      — per-provider catalog (capabilities, context window, pricing)\n  3. Instructions — custom system-prompt library (Claude Projects-style)\n  4. Skills      — named instruction + model default + tool defaults (consumed by chat + studio)\n  5. Tools       — JSON-schema function specs + impl (http / convex / shell) + sandbox flag\n  6. Agents      — skill × model × tools × max-iter (consumed by ai-agents)\n  7. Budgets     — per-workspace cost caps + alerts + hard kill\n  8. Audit       — every AI call: actor / agent / tokens / cost / latency / outcome\n\nIncludes Create-Agent / Create-Skill / Create-Tool / Create-Instruction wizards.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/ai-admin",
       "convexPaths": [
@@ -2609,7 +2448,8 @@
         "label",
         "select",
         "textarea",
-        "switch"
+        "switch",
+        "command"
       ],
       "env": [
         {
@@ -2628,7 +2468,7 @@
         {
           "slug": "rbac-roles",
           "range": "^0.1",
-          "reason": "Section gated by AI_ADMIN permission."
+          "reason": "Section gated by ai.* permissions (manage_providers, manage_skills, etc)."
         },
         {
           "slug": "admin-panel",
@@ -2645,15 +2485,52 @@
       "tags": [
         "ai",
         "ai:admin",
-        "config",
-        "providers",
-        "models",
+        "instructions",
         "skills",
         "tools",
         "agents",
-        "budgets"
+        "providers",
+        "models",
+        "budgets",
+        "audit"
       ],
-      "agentRecipe": "Run `npx rr add ai-admin`. Adds an `AI` section to the admin-panel ADMIN_SECTIONS registry with sub-tabs (Providers/Models/Skills/Tools/Agents/Budgets/Audit). API keys encrypted at rest via AI_ADMIN_ENCRYPTION_KEY. Skills + tools + agents are SSOTs consumed by every ai-* consumer slice."
+      "agentRecipe": "Run `npx rr add ai-admin`. Adds an `AI` section to the admin-panel ADMIN_SECTIONS registry. Sub-tabs ordered to match build-flow: Providers → Models → Instructions → Skills → Tools → Agents → Budgets → Audit. Includes Create-* wizards for instructions / skills / tools / agents. API keys AES-encrypted via AI_ADMIN_ENCRYPTION_KEY env. The instruction / skill / tool / agent registries are SSOTs consumed by every ai-* consumer slice (chat + studio + agents)."
+    },
+    {
+      "slug": "ai-router",
+      "title": "AI Router — Backend Provider Proxy",
+      "category": "ai",
+      "kind": "backend",
+      "version": "0.1.0",
+      "description": "Backend infrastructure (no UI). Single proxy that every other ai-* feature calls. Tier-routed — nano (Haiku) for classification, mid (Sonnet) for chat, flagship (Opus) for deep reasoning. Per-call usage log + cost guard. Works with direct provider keys or OpenRouter umbrella.\n\nNot something you mount — installed automatically as a peer when you add ai-chat / ai-studio / ai-agents.",
+      "source": "rahmanef63/resource-site",
+      "slicePath": "frontend/slices/ai-router",
+      "convexPaths": [
+        "convex/features/ai"
+      ],
+      "npm": [
+        "ai@^4.0.0",
+        "@openrouter/ai-sdk-provider@^0.0.5"
+      ],
+      "shadcn": [
+        "button"
+      ],
+      "env": [
+        {
+          "name": "OPENROUTER_API_KEY",
+          "scope": "convex",
+          "required": true
+        }
+      ],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "ai",
+        "ai:backend",
+        "tier-routing",
+        "cost-guard"
+      ],
+      "agentRecipe": "Wrap every AI call through ai-router. Tiers: nano = quick classification (spam-flag, headline-suggest), mid = chat / draft, flagship = methodology-review / deep-think. Token usage logs to ai_usage table for the cost dashboard."
     },
     {
       "slug": "vector-search",
@@ -3327,6 +3204,67 @@
         "backend"
       ],
       "agentRecipe": "Run `npx rr add socials`. Compose `socialsTables` into root schema. Bootstrap with `npx convex run internal.features.socials.mutations.seed '{\"items\":[{\"platform\":\"github\",\"url\":\"https://github.com/<you>\",\"order\":1,\"visible\":true,\"featured\":true,\"sameAs\":true,\"relMe\":true}]}'`. Wire `useQuery(api.features.socials.queries.listVisible)` into footer for entity-graph SEO."
+    },
+    {
+      "slug": "create-your-mcp",
+      "title": "Create Your MCP",
+      "category": "ai",
+      "kind": "full",
+      "version": "0.1.0",
+      "description": "Turn any rr-based app into an MCP server that ChatGPT custom apps, Claude.ai connectors, Cursor MCP, and other AI clients authenticate to. OAuth 2.1 + PKCE flow with code → bearer exchange, env-configured vendor-host allowlist, single-use codes, 1-year bearer tokens, scope-tagged tools, opaque error collapsing, constant-time token compare. Static MCP_API_KEY fallback for service-account / CI scripts. Sanitized 2026-05-16 from rahmanef.com's production MCP integration — vendor literals (chatgpt.com / OpenAI paths) replaced with MCP_OAUTH_ALLOWED_HOSTS + MCP_OAUTH_ALLOWED_PATH_PREFIXES env vars so the slice ships portable.",
+      "source": "rahmanef.com",
+      "slicePath": "frontend/slices/create-your-mcp",
+      "convexPaths": [
+        "convex/features/create-your-mcp"
+      ],
+      "npm": [],
+      "shadcn": [],
+      "env": [
+        {
+          "name": "MCP_API_KEY",
+          "scope": "server",
+          "required": false,
+          "description": "Static bearer for service-account / CI access. Min 32 chars. Must match Convex env."
+        },
+        {
+          "name": "MCP_OAUTH_ALLOWED_HOSTS",
+          "scope": "convex",
+          "required": false,
+          "description": "CSV vendor domains for redirect_uri (chatgpt.com,claude.ai,cursor.sh)."
+        },
+        {
+          "name": "MCP_OAUTH_ALLOWED_PATH_PREFIXES",
+          "scope": "convex",
+          "required": false,
+          "description": "CSV path prefixes under allowed hosts (/aip/,/connector/,/oauth/)."
+        },
+        {
+          "name": "NEXT_PUBLIC_SITE_URL",
+          "scope": "next-public",
+          "required": true,
+          "description": "Public site origin for WWW-Authenticate challenge."
+        }
+      ],
+      "peers": [
+        {
+          "slug": "convex-auth",
+          "range": "^0.1",
+          "reason": "requireAdmin uses getAuthUserId from @convex-dev/auth."
+        }
+      ],
+      "providers": [],
+      "tags": [
+        "ai",
+        "mcp",
+        "oauth",
+        "pkce",
+        "chatgpt",
+        "claude",
+        "cursor",
+        "convex",
+        "integration"
+      ],
+      "agentRecipe": "Run `npx rr add create-your-mcp`. Compose `createYourMcpTables` into root schema. Move `slices/create-your-mcp/routes/mcp.route.ts` → `app/api/mcp/route.ts` and `oauth-token.route.ts` → `app/api/oauth/token/route.ts`. Set MCP_OAUTH_ALLOWED_HOSTS (CSV vendor domains). Mount `<McpAdminView />` at /admin/mcp. Connect ChatGPT/Claude/Cursor via the setup form rendered by the admin view."
     },
     {
       "slug": "contact-form-resend",
