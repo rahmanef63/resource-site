@@ -1,70 +1,205 @@
-"use client";
-
-import * as React from "react";
 import Link from "next/link";
-import { ArrowRight, Box, FileCode, Layout, Settings } from "lucide-react";
-import { layouts } from "@/lib/content/layouts";
-import { sources } from "@/lib/content/sources";
-import { useAdminState } from "@/lib/admin/storage";
+import {
+  ArrowRight,
+  Box,
+  ChefHat,
+  FileCode,
+  GaugeCircle,
+  GitBranch,
+  Layout,
+  PackageSearch,
+  Radar,
+  Settings,
+} from "lucide-react";
+import { loadAdminStats } from "@/lib/admin/stats";
+import { loadDna, flattenLineage } from "@/lib/admin/lineage";
+import { StatCard } from "@/components/admin/stat-card";
+import { PageHeader } from "@/components/admin/page-header";
+import { Badge } from "@/components/ui/badge";
 
-const CARDS = [
+const EDIT_TILES = [
   { label: "Site", href: "/admin/site", icon: Settings, desc: "Name, tagline, repo URL." },
   { label: "Layouts", href: "/admin/layouts", icon: Layout, desc: "Add/edit page shells." },
+  { label: "Recipes", href: "/admin/recipes", icon: ChefHat, desc: "Cookbook recipes." },
   { label: "Sources", href: "/admin/sources", icon: Box, desc: "Source projects + attribution." },
   { label: "Export", href: "/admin/export", icon: FileCode, desc: "Generate TS files to commit." },
 ];
 
-export default function AdminOverviewPage() {
-  const [layoutsState] = useAdminState("layouts", layouts);
-  const [sourcesState] = useAdminState("sources", sources);
+const INSPECT_TILES = [
+  { label: "Lineage", href: "/admin/lineage", icon: GitBranch, desc: "DNA hops + consumer drift." },
+  { label: "Quality", href: "/admin/quality", icon: GaugeCircle, desc: "Per-slice score band A–F." },
+  { label: "Scan", href: "/admin/scan", icon: Radar, desc: "Consumer mesh sync status." },
+  { label: "Registry", href: "/admin/registry", icon: PackageSearch, desc: "Slice manifests + contracts." },
+];
+
+export const metadata = {
+  title: "Admin · Overview",
+  robots: { index: false, follow: false },
+};
+
+export default async function AdminOverviewPage() {
+  const [stats, dnas] = await Promise.all([loadAdminStats(), loadDna()]);
+  const recent = flattenLineage(dnas, 6);
+
+  const healthTone =
+    stats.healthPct >= 90 ? "ok" : stats.healthPct >= 70 ? "warn" : "err";
+  const driftTone =
+    stats.driftAvg <= 10 ? "ok" : stats.driftAvg <= 25 ? "warn" : "err";
 
   return (
-    <div className="max-w-3xl space-y-8">
-      <div>
-        <p className="text-sm font-medium text-muted-foreground">Admin</p>
-        <h1 className="mt-2 text-3xl font-bold tracking-tight">Content editor</h1>
-        <p className="mt-3 text-muted-foreground">
-          Edit your kitab content in-browser. Nothing is sent to a server. When done, hit{" "}
-          <Link href="/admin/export" className="underline underline-offset-2">Export</Link>{" "}
-          to copy the updated TS files into <code className="font-mono text-xs">lib/content/</code>{" "}
-          and commit.
-        </p>
-      </div>
+    <div className="space-y-8">
+      <PageHeader
+        eyebrow="Admin"
+        title="Control room"
+        description="Edit kitab content + inspect mesh health. Edit tiles persist to your browser; Inspect tiles read live state from .kitab + frontend/slices."
+      />
 
-      <div className="grid grid-cols-2 gap-3 text-center">
-        <div className="rounded-lg border bg-card p-4">
-          <p className="text-2xl font-bold">{layoutsState.length}</p>
-          <p className="mt-1 text-xs text-muted-foreground">Layouts</p>
-        </div>
-        <div className="rounded-lg border bg-card p-4">
-          <p className="text-2xl font-bold">{sourcesState.length}</p>
-          <p className="mt-1 text-xs text-muted-foreground">Sources</p>
-        </div>
-      </div>
+      <section className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <StatCard
+          label="Slices"
+          value={stats.slices}
+          hint={`${stats.contracts} with typed contract`}
+          icon={PackageSearch}
+        />
+        <StatCard
+          label="Consumers"
+          value={stats.consumers}
+          hint="recorded in DNA lineage"
+          icon={GitBranch}
+        />
+        <StatCard
+          label="Avg drift"
+          value={`${stats.driftAvg}%`}
+          hint={`max ${stats.driftMax}% across mesh`}
+          icon={Radar}
+          tone={driftTone}
+        />
+        <StatCard
+          label="Health"
+          value={`${stats.healthPct}%`}
+          hint="contracts ÷ slices − drift/4"
+          icon={GaugeCircle}
+          tone={healthTone}
+        />
+      </section>
 
-      <div className="grid gap-3 sm:grid-cols-2">
-        {CARDS.map((c) => {
-          const Icon = c.icon;
-          return (
-            <Link
-              key={c.href}
-              href={c.href}
-              className="group flex items-center justify-between rounded-lg border bg-card p-4 transition-colors hover:border-foreground/30"
-            >
-              <div className="flex items-center gap-3">
-                <div className="flex size-9 items-center justify-center rounded-md border bg-muted/40">
-                  <Icon className="size-4" />
+      <section className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+            Edit
+          </h2>
+          <Badge variant="outline" className="text-[10px]">
+            local · browser-only
+          </Badge>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {EDIT_TILES.map((t) => {
+            const Icon = t.icon;
+            return (
+              <Link
+                key={t.href}
+                href={t.href}
+                className="group flex items-center justify-between rounded-lg border bg-card p-4 transition-colors hover:border-foreground/30 hover:bg-accent/30"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex size-9 items-center justify-center rounded-md border bg-muted/40">
+                    <Icon className="size-4" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold">{t.label}</p>
+                    <p className="text-xs text-muted-foreground">{t.desc}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="font-semibold">{c.label}</p>
-                  <p className="text-xs text-muted-foreground">{c.desc}</p>
+                <ArrowRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+            Inspect
+          </h2>
+          <Badge variant="outline" className="text-[10px]">
+            read-only · live
+          </Badge>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {INSPECT_TILES.map((t) => {
+            const Icon = t.icon;
+            return (
+              <Link
+                key={t.href}
+                href={t.href}
+                className="group flex items-center justify-between rounded-lg border bg-card p-4 transition-colors hover:border-foreground/30 hover:bg-accent/30"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex size-9 items-center justify-center rounded-md border bg-muted/40">
+                    <Icon className="size-4" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold">{t.label}</p>
+                    <p className="text-xs text-muted-foreground">{t.desc}</p>
+                  </div>
                 </div>
-              </div>
-              <ArrowRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
-            </Link>
-          );
-        })}
-      </div>
+                <ArrowRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      {recent.length > 0 && (
+        <section className="space-y-3">
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+            Recent lineage
+          </h2>
+          <div className="rounded-lg border bg-card">
+            <ul className="divide-y divide-border/60">
+              {recent.map((r, i) => (
+                <li
+                  key={`${r.slice}-${i}`}
+                  className="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-2.5 text-xs"
+                >
+                  <span className="font-mono font-medium">{r.slice}</span>
+                  <span className="font-mono text-muted-foreground">
+                    {r.from} → {r.to}
+                  </span>
+                  <div className="flex flex-wrap gap-1">
+                    {r.transforms.slice(0, 3).map((t) => (
+                      <Badge
+                        key={t}
+                        variant="secondary"
+                        className="font-mono text-[10px]"
+                      >
+                        {t}
+                      </Badge>
+                    ))}
+                    {r.transforms.length > 3 && (
+                      <span className="text-[10px] text-muted-foreground">
+                        +{r.transforms.length - 3}
+                      </span>
+                    )}
+                  </div>
+                  <span className="ml-auto font-mono text-muted-foreground tabular-nums">
+                    {r.at.slice(0, 10)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <div className="border-t px-4 py-2 text-right">
+              <Link
+                href="/admin/lineage"
+                className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+              >
+                Full lineage <ArrowRight className="size-3" />
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 }

@@ -17,8 +17,6 @@ const NAV = [
   { label: "Docs", href: "/docs" },
   { label: "Layouts", href: "/layouts" },
   { label: "Slices", href: "/slices" },
-  { label: "Compiler", href: "/compiler" },
-  { label: "Quality", href: "/quality" },
   { label: "Directory", href: "/directory" },
   { label: "Agents", href: "/agents" },
   { label: "Install", href: "/installation" },
