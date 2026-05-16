@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Sparkles, Wand2, Shuffle, Heart, Download, GitBranch, Image as ImageIcon, Code2, Type, Music } from "lucide-react";
+import { Sparkles, Wand2, Shuffle, Heart, Download, GitBranch, Image as ImageIcon, Code2, Type, Music, Sliders } from "lucide-react";
 import {
   PreviewPage, ParamSlider, ModelPicker, PROVIDER_GROUPS, DEFAULT_MODEL_ID,
 } from "@/components/site/preview-kit";
@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 
 const HISTORY = [
   { id: "g1", prompt: "isometric tropical island, low-poly", ago: "now", active: true },
@@ -32,6 +33,39 @@ export default function Page() {
   const [variations, setVariations] = React.useState(4);
   const [creativity, setCreativity] = React.useState(0.8);
 
+  const controlsPanel = (
+    <ScrollArea className="flex-1">
+      <section className="space-y-3 px-3 py-3">
+        <h3 className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Model</h3>
+        <ModelPicker value={model} onValueChange={setModel} groups={PROVIDER_GROUPS} size="sm" />
+      </section>
+      <Separator />
+      <section className="space-y-3 px-3 py-3">
+        <h3 className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Controls</h3>
+        <ParamSlider label="Variations" value={variations} onValueChange={setVariations} min={1} max={8} step={1} format={(v) => v.toString()} />
+        <ParamSlider label="Creativity" value={creativity} onValueChange={setCreativity} min={0} max={1} step={0.05} format={(v) => v.toFixed(2)} hint="Higher = more surprising outputs." />
+      </section>
+      <Separator />
+      <section className="space-y-2 px-3 py-3">
+        <h3 className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">History</h3>
+        <ul className="space-y-0.5">
+          {HISTORY.map((h) => (
+            <li key={h.id}>
+              <button
+                className={`flex w-full items-start gap-2 rounded-md px-2 py-1.5 text-left text-xs transition ${
+                  h.active ? "bg-primary/10 text-foreground" : "text-muted-foreground hover:bg-accent"
+                }`}
+              >
+                <span className="flex-1 line-clamp-2">{h.prompt}</span>
+                <span className="shrink-0 font-mono text-[10px] text-muted-foreground/70">{h.ago}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </ScrollArea>
+  );
+
   return (
     <PreviewPage>
       <div className="grid h-screen w-full grid-cols-1 lg:grid-cols-[1fr_300px]">
@@ -45,6 +79,18 @@ export default function Page() {
             <div className="flex items-center gap-1">
               <Button variant="ghost" size="sm" className="h-7 gap-1.5"><GitBranch className="size-3" /> Branch</Button>
               <Button variant="ghost" size="sm" className="h-7 gap-1.5"><Download className="size-3" /> Export</Button>
+              {/* Mobile-only controls trigger */}
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon" className="size-7 lg:hidden" aria-label="Controls">
+                    <Sliders className="size-4" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right" className="flex w-80 flex-col p-0">
+                  <SheetTitle className="sr-only">Controls panel</SheetTitle>
+                  {controlsPanel}
+                </SheetContent>
+              </Sheet>
             </div>
           </header>
           <ScrollArea className="flex-1">
@@ -100,36 +146,7 @@ export default function Page() {
           </div>
         </div>
         <aside className="hidden flex-col border-l border-border/60 bg-muted/20 lg:flex">
-          <ScrollArea className="flex-1">
-            <section className="space-y-3 px-3 py-3">
-              <h3 className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Model</h3>
-              <ModelPicker value={model} onValueChange={setModel} groups={PROVIDER_GROUPS} size="sm" />
-            </section>
-            <Separator />
-            <section className="space-y-3 px-3 py-3">
-              <h3 className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Controls</h3>
-              <ParamSlider label="Variations" value={variations} onValueChange={setVariations} min={1} max={8} step={1} format={(v) => v.toString()} />
-              <ParamSlider label="Creativity" value={creativity} onValueChange={setCreativity} min={0} max={1} step={0.05} format={(v) => v.toFixed(2)} hint="Higher = more surprising outputs." />
-            </section>
-            <Separator />
-            <section className="space-y-2 px-3 py-3">
-              <h3 className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">History</h3>
-              <ul className="space-y-0.5">
-                {HISTORY.map((h) => (
-                  <li key={h.id}>
-                    <button
-                      className={`flex w-full items-start gap-2 rounded-md px-2 py-1.5 text-left text-xs transition ${
-                        h.active ? "bg-primary/10 text-foreground" : "text-muted-foreground hover:bg-accent"
-                      }`}
-                    >
-                      <span className="flex-1 line-clamp-2">{h.prompt}</span>
-                      <span className="shrink-0 font-mono text-[10px] text-muted-foreground/70">{h.ago}</span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          </ScrollArea>
+          {controlsPanel}
         </aside>
       </div>
     </PreviewPage>

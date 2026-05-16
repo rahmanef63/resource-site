@@ -6,7 +6,6 @@ import {
   Eye,
   ExternalLink,
   Layers,
-  Link2,
   Package,
   Plug,
   Server,
@@ -20,6 +19,11 @@ import { PreviewFrame } from "@/components/site/preview-frame";
 import { ShowcaseCard } from "@/components/site/catalog/showcase-card";
 import { SlicePreviewSection } from "@/components/site/slice-preview-section";
 import { UseWideLayout } from "@/components/site/use-wide-layout";
+import {
+  RelatedFeatures,
+  RELATED_ICONS,
+  type RelatedGroup,
+} from "@/components/site/related-features";
 
 export function generateStaticParams() {
   return slices.map((s) => ({ slug: s.slug }));
@@ -43,6 +47,55 @@ export default async function SliceDetailPage({ params }: { params: Promise<{ sl
   const peerSlices = (slice.peers ?? [])
     .map((p) => ({ peer: p, target: getSlice(p.slug) }))
     .filter((x): x is { peer: typeof x.peer; target: NonNullable<typeof x.target> } => !!x.target);
+
+  const enhancesItems = (slice.compat?.enhances ?? [])
+    .map((s) => getSlice(s))
+    .filter((s): s is NonNullable<typeof s> => !!s);
+
+  const siblingItems = slices
+    .filter((s) => s.slug !== slice.slug && s.category === slice.category)
+    .slice(0, 6);
+
+  const relatedGroups: RelatedGroup[] = [
+    {
+      id: "peers",
+      label: "Peer slices",
+      hint: "required co-dependencies",
+      icon: RELATED_ICONS.peers,
+      items: peerSlices.map(({ peer, target }) => ({
+        slug: target.slug,
+        title: target.title,
+        description: target.description,
+        category: target.category,
+        badge: peer.range,
+        reason: peer.reason,
+      })),
+    },
+    {
+      id: "enhances",
+      label: "Pairs well with",
+      hint: "optional enhancers",
+      icon: RELATED_ICONS.enhances,
+      items: enhancesItems.map((s) => ({
+        slug: s.slug,
+        title: s.title,
+        description: s.description,
+        category: s.category,
+      })),
+    },
+    {
+      id: "siblings",
+      label: `More in ${slice.category}`,
+      hint: "same category",
+      icon: RELATED_ICONS.siblings,
+      items: siblingItems.map((s) => ({
+        slug: s.slug,
+        title: s.title,
+        description: s.description,
+        category: s.category,
+      })),
+    },
+  ];
 
   const sourceHref = `https://github.com/rahmanef63/resource-site/tree/main/${slice.slicePath}`;
 
@@ -161,29 +214,6 @@ export default async function SliceDetailPage({ params }: { params: Promise<{ sl
         </ShowcaseCard>
       </div>
 
-      {peerSlices.length > 0 && (
-        <ShowcaseCard icon={Link2} label="Peer slices">
-          <div className="grid gap-3 sm:grid-cols-2">
-            {peerSlices.map(({ peer, target }) => (
-              <Link
-                key={peer.slug}
-                href={`/slices/${peer.slug}`}
-                className="group flex items-start justify-between gap-3 rounded-lg border border-border/60 p-3 transition hover:border-primary/40"
-              >
-                <div>
-                  <p className="text-sm font-medium group-hover:underline">{target.title}</p>
-                  <p className="text-xs text-muted-foreground">{peer.range}</p>
-                  {peer.reason && (
-                    <p className="mt-1 text-xs text-muted-foreground">{peer.reason}</p>
-                  )}
-                </div>
-                <ExternalLink className="size-4 text-muted-foreground" />
-              </Link>
-            ))}
-          </div>
-        </ShowcaseCard>
-      )}
-
       {slice.providers && slice.providers.length > 0 && (
         <ShowcaseCard icon={Plug} label="Providers">
           <div className="flex flex-wrap gap-1.5">
@@ -205,6 +235,8 @@ export default async function SliceDetailPage({ params }: { params: Promise<{ sl
           <p className="text-sm text-muted-foreground">{slice.agentRecipe}</p>
         </ShowcaseCard>
       )}
+
+      <RelatedFeatures groups={relatedGroups} />
 
       <div className="flex flex-wrap items-center gap-2">
         <Button asChild variant="outline" size="sm">

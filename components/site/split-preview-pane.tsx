@@ -6,17 +6,45 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useFeatureContext } from "./feature-context";
-import { PREVIEW_PRESETS, applyRotation, type PreviewPreset } from "@/lib/preview-presets";
+import {
+  PREVIEW_PRESETS,
+  applyRotation,
+  type PreviewOrientation,
+  type PreviewPreset,
+  type PreviewView,
+} from "@/lib/preview-presets";
 
 type Props = {
   publicSrc: string;
   adminSrc: string;
+  /** Force a preview view (e.g. "desktop"). Skips context. */
+  view?: PreviewView;
+  /** Force preview rotation. Skips context. */
+  previewOrientation?: PreviewOrientation;
 };
 
-export function SplitPreviewPane({ publicSrc, adminSrc }: Props) {
-  const { previewView, previewOrientation } = useFeatureContext();
+/** Safe context read — returns null when no FeatureProvider is mounted
+ *  (e.g. when rendered inside /slices instead of /layouts). */
+function useOptionalFeatureContext(): ReturnType<typeof useFeatureContext> | null {
+  try {
+    return useFeatureContext();
+  } catch {
+    return null;
+  }
+}
+
+export function SplitPreviewPane({
+  publicSrc,
+  adminSrc,
+  view,
+  previewOrientation: previewOrientationProp,
+}: Props) {
+  const ctx = useOptionalFeatureContext();
+  const previewView = view ?? ctx?.previewView ?? "desktop";
+  const previewOrientation = previewOrientationProp ?? ctx?.previewOrientation ?? "portrait";
   const [iframeKey, setIframeKey] = React.useState(0);
-  const [orientation, setOrientation] = React.useState<"horizontal" | "vertical">("horizontal");
+  const [splitOrientation, setSplitOrientation] =
+    React.useState<"horizontal" | "vertical">("horizontal");
 
   React.useEffect(() => {
     function refresh() {
@@ -46,14 +74,14 @@ export function SplitPreviewPane({ publicSrc, adminSrc }: Props) {
             variant="ghost"
             size="icon"
             className="size-7"
-            onClick={() => setOrientation((o) => (o === "horizontal" ? "vertical" : "horizontal"))}
+            onClick={() => setSplitOrientation((o) => (o === "horizontal" ? "vertical" : "horizontal"))}
             aria-label="Toggle split orientation"
-            title={orientation === "horizontal" ? "Stack vertically" : "Side-by-side"}
+            title={splitOrientation === "horizontal" ? "Stack vertically" : "Side-by-side"}
           >
             <Rows3
               className={cn(
                 "size-3.5 transition-transform",
-                orientation === "vertical" && "rotate-90",
+                splitOrientation === "vertical" && "rotate-90",
               )}
             />
           </Button>
@@ -73,7 +101,7 @@ export function SplitPreviewPane({ publicSrc, adminSrc }: Props) {
       <div
         className={cn(
           "flex flex-1 overflow-hidden",
-          orientation === "horizontal" ? "flex-row" : "flex-col",
+          splitOrientation === "horizontal" ? "flex-row" : "flex-col",
         )}
       >
         <SplitPane
@@ -85,7 +113,7 @@ export function SplitPreviewPane({ publicSrc, adminSrc }: Props) {
           tone="emerald"
           preset={preset}
         />
-        <Divider orientation={orientation} />
+        <Divider orientation={splitOrientation} />
         <SplitPane
           key={"adm-" + iframeKey}
           src={adminSrc}
