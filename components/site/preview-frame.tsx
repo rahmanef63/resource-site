@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { PreviewIframeShell } from "@/components/site/preview-shell";
+import { usePreviewState } from "@/components/site/preview";
 import {
   PREVIEW_PRESETS,
   PREVIEW_VIEW_ORDER,
@@ -76,11 +77,13 @@ export function PreviewFrame({
   compact = false,
   viewControls = "buttons",
 }: Props) {
-  const [view, setView] = React.useState<PreviewView>(defaultView);
-  const [orientation, setOrientation] = React.useState<PreviewOrientation>("portrait");
-  const [zoom, setZoom] = React.useState<number>(defaultZoom ?? (compact ? 1 : 0.6));
-  const [iframeKey, setIframeKey] = React.useState(0);
-  const [fullscreen, setFullscreen] = React.useState(false);
+  const {
+    view, zoom, orientation, iframeKey, fullscreen,
+    setView, setZoom, toggleOrientation, refreshIframe, setFullscreen,
+  } = usePreviewState({
+    defaultView,
+    defaultZoom: defaultZoom ?? (compact ? 1 : 0.6),
+  });
 
   const basePreset = PREVIEW_PRESETS[view];
   const preset = applyRotation(basePreset, orientation);
@@ -145,7 +148,7 @@ export function PreviewFrame({
             <Button
               variant="ghost" size="icon"
               className={cn("size-6", orientation === "landscape" && "bg-accent text-foreground")}
-              onClick={() => setOrientation((o) => (o === "portrait" ? "landscape" : "portrait"))}
+              onClick={toggleOrientation}
               disabled={!canRotate}
               aria-label="Rotate device"
               title={canRotate ? `Rotate (${orientation})` : "Rotation disabled"}
@@ -153,7 +156,7 @@ export function PreviewFrame({
               <RotateCw className={cn("size-3 transition-transform", orientation === "landscape" && "rotate-90")} />
             </Button>
             <Button variant="ghost" size="icon" className="size-6"
-              onClick={() => setZoom((z) => Math.max(minZoom, +(z - 0.1).toFixed(2)))}
+              onClick={() => setZoom(Math.max(minZoom, +(zoom - 0.1).toFixed(2)))}
               aria-label="Zoom out">
               <ZoomOut className="size-3" />
             </Button>
@@ -162,7 +165,7 @@ export function PreviewFrame({
               onChange={(e) => setZoom(Number(e.target.value) / 100)}
               className="h-1 w-24 cursor-pointer accent-foreground" />
             <Button variant="ghost" size="icon" className="size-6"
-              onClick={() => setZoom((z) => Math.min(maxZoom, +(z + 0.1).toFixed(2)))}
+              onClick={() => setZoom(Math.min(maxZoom, +(zoom + 0.1).toFixed(2)))}
               aria-label="Zoom in">
               <ZoomIn className="size-3" />
             </Button>
@@ -173,7 +176,7 @@ export function PreviewFrame({
 
           <div className="flex items-center gap-0.5">
             <Button variant="ghost" size="icon" className="size-6"
-              onClick={() => setIframeKey((k) => k + 1)}
+              onClick={() => refreshIframe()}
               aria-label="Refresh" title="Refresh">
               <RefreshCw className="size-3" />
             </Button>

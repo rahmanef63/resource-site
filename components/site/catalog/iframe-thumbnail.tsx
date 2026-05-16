@@ -4,12 +4,13 @@
 // Composes the preview module — same iframe / lazy / loaded semantics
 // as the dialog and detail-page surfaces.
 //
-// IntersectionObserver gating (useIframeLazyLoad), onLoad skeleton swap
-// (useIframeLoaded), and sandbox tokens (IFRAME_SANDBOX) all live in
-// `@/components/site/preview` now — DRY across every preview context.
+// Two ways to call:
 //
-// "Try it" button overlay → opens an interactive PreviewFrame in a
-// Dialog. Set `liveTitle` to enable it. Backward compat preserved.
+//   1. `source={normalizePreviewSource(entry)}`  (preferred — SSOT)
+//   2. legacy direct props (src + liveTitle + liveDefault*)
+//
+// Both produce identical output; the source form is just terser when
+// you already have a SliceEntry/LayoutEntry in hand.
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
@@ -18,35 +19,72 @@ import {
   PreviewIframe,
   useIframeLazyLoad,
   useIframeLoaded,
+  type PreviewSource,
 } from "@/components/site/preview";
 import type { PreviewView } from "@/lib/preview-presets";
 import { LivePreviewButton } from "./live-preview-button";
 
-type Props = {
-  src: string;
+type CommonProps = {
   className?: string;
   /** Scale factor (default = PREVIEW_DEFAULTS.thumbnailScale). */
   scale?: number;
-  /** Aspect ratio override (Tailwind aspect-* fragment). */
+  /** Aspect ratio override (Tailwind aspect-* fragment or CSS value). */
   aspect?: string;
-  /** When set, an interactive "Try it" trigger overlays the thumbnail. */
+  /** Custom IntersectionObserver rootMargin. */
+  rootMargin?: string;
+  /** Suppress the "Try it" overlay even when liveTitle/source.title is set. */
+  hideLiveTrigger?: boolean;
+};
+
+type SourceProps = CommonProps & {
+  source: PreviewSource;
+  src?: never;
+  liveTitle?: never;
+  liveDefaultView?: never;
+  liveDefaultZoom?: never;
+};
+
+type LegacyProps = CommonProps & {
+  src: string;
   liveTitle?: string;
   liveDefaultView?: PreviewView;
   liveDefaultZoom?: number;
-  /** Custom IntersectionObserver rootMargin. */
-  rootMargin?: string;
+  source?: never;
 };
 
-export function IframeThumbnail({
-  src,
-  className,
-  scale = PREVIEW_DEFAULTS.thumbnailScale,
-  aspect = PREVIEW_DEFAULTS.thumbnailAspect,
-  liveTitle,
-  liveDefaultView,
-  liveDefaultZoom,
-  rootMargin,
-}: Props) {
+type Props = SourceProps | LegacyProps;
+
+function resolveSource(props: Props): {
+  src: string;
+  liveTitle?: string;
+  liveDefaultView?: PreviewView;
+  liveDefaultZoom?: number;
+} {
+  if ("source" in props && props.source) {
+    return {
+      src: props.source.publicPath,
+      liveTitle: props.source.title,
+      liveDefaultView: props.source.defaultView,
+      liveDefaultZoom: props.source.defaultZoom,
+    };
+  }
+  return {
+    src: props.src,
+    liveTitle: props.liveTitle,
+    liveDefaultView: props.liveDefaultView,
+    liveDefaultZoom: props.liveDefaultZoom,
+  };
+}
+
+export function IframeThumbnail(props: Props) {
+  const {
+    className,
+    scale = PREVIEW_DEFAULTS.thumbnailScale,
+    aspect = PREVIEW_DEFAULTS.thumbnailAspect,
+    rootMargin,
+    hideLiveTrigger,
+  } = props;
+  const { src, liveTitle, liveDefaultView, liveDefaultZoom } = resolveSource(props);
   const { ref, visible } = useIframeLazyLoad<HTMLDivElement>(rootMargin);
   const { loaded, onLoad } = useIframeLoaded();
   return (
@@ -75,7 +113,7 @@ export function IframeThumbnail({
         />
       )}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent" />
-      {liveTitle && (
+      {liveTitle && !hideLiveTrigger && (
         <LivePreviewButton
           src={src}
           title={liveTitle}

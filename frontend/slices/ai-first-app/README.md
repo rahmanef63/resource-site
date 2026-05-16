@@ -1,5 +1,24 @@
-# ai-first-app — planned
+# ai-first-app
 
-Catalog entry roadmap (see `lib/content/slices.ts`). Implementation not
-yet lifted. Scaffold-only — `slice.json`, `slice.contract.ts`, and
-implementation files land in a follow-up.
+Generation canvas where AI is the entire product flow. Big prompt → streaming output → iterate. Suno / Midjourney / Lovable pattern.
+
+## Install
+
+```bash
+npx rr add ai-first-app
+```
+
+Peers: `convex-auth`, `ai-router`, `ai-admin`.
+
+## Surfaces
+
+- **Public** — `<GeneratorCanvas />` is the consumer studio. Single big input, 4-up variation grid, version tree.
+- **Admin** — template library + few-shot pairs + output moderation rules. Mounts as `admin-panel` section.
+
+## Output kinds
+
+`image` · `text` · `code` · `audio` — pick via `kind` prop or per-template default.
+
+## Status
+
+**Scaffold (0.1.0)** — contract + metadata + types. Real impl pending. UX target at `/preview/slices/ai-first-app`.

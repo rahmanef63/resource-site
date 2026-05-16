@@ -1,0 +1,48 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "ai-chatbot",
+  "version": "0.1.0",
+  "category": "ai",
+  "kind": "full",
+  "title": "AI Chatbot — Three-Column Workbench",
+  "description": "Claude.ai / ChatGPT-style chatbot. Three-column shell: threads + attachments + active tools on the left, streaming messages in the center, model picker + params + skills + actions on the right. Multi-provider, multimodal, typed tool calls, agent mode, branching threads, RAG citations, resumable streams.",
+  "namespace": "@/features/ai-chatbot",
+  "convex": {
+    "tablesExport": "aiChatbotTables",
+    "schemaPath": "convex/features/ai-chatbot/schema.ts",
+    "rootPaths": ["convex/features/ai-chatbot"]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/ai-chatbot",
+    "configExport": ""
+  },
+  "deps": {
+    "npm": [
+      "ai@^4.0.0",
+      "@ai-sdk/anthropic@^0.0.50",
+      "@ai-sdk/openai@^0.0.60"
+    ],
+    "shadcn": [
+      "button", "card", "badge", "avatar", "scroll-area",
+      "select", "separator", "slider", "switch", "textarea", "tabs"
+    ],
+    "env": [
+      { "name": "ANTHROPIC_API_KEY", "scope": "convex" },
+      { "name": "OPENAI_API_KEY", "scope": "convex" },
+      { "name": "GOOGLE_GENERATIVE_AI_API_KEY", "scope": "convex" }
+    ],
+    "peers": [
+      { "slug": "convex-auth", "range": "^0.1" },
+      { "slug": "ai-router", "range": "^0.1" },
+      { "slug": "ai-admin", "range": "^0.1" },
+      { "slug": "vector-search", "range": "^0.1" }
+    ]
+  },
+  "registers": [],
+  "audit": [],
+  "license": "MIT",
+  "tags": [
+    "ai", "ai:chatbot", "streaming", "multimodal", "tool-calls",
+    "agent-mode", "rag", "citations", "branching", "history"
+  ]
+}

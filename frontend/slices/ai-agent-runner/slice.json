@@ -1,0 +1,34 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "ai-agent-runner",
+  "version": "0.1.0",
+  "category": "ai",
+  "kind": "full",
+  "title": "AI Agent Runner — Async Worker Dashboard",
+  "description": "Autonomous background agents. Task queue + run results dashboard with step-by-step traces (Devin/Replit-Agent style). Each run produces an audit-log entry, cost tally, and shareable trace URL.",
+  "namespace": "@/features/ai-agent-runner",
+  "convex": {
+    "tablesExport": "aiAgentRunnerTables",
+    "schemaPath": "convex/features/ai-agent-runner/schema.ts",
+    "rootPaths": ["convex/features/ai-agent-runner"]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/ai-agent-runner",
+    "configExport": ""
+  },
+  "deps": {
+    "npm": ["ai@^4.0.0"],
+    "shadcn": ["button", "card", "badge", "table", "tabs", "scroll-area", "progress"],
+    "env": [],
+    "peers": [
+      { "slug": "convex-auth", "range": "^0.1" },
+      { "slug": "ai-router", "range": "^0.1" },
+      { "slug": "ai-admin", "range": "^0.1" },
+      { "slug": "audit-log", "range": "^0.1" }
+    ]
+  },
+  "registers": [],
+  "audit": [],
+  "license": "MIT",
+  "tags": ["ai", "ai:agent", "agent-mode", "tool-calls", "async", "queue", "traces"]
+}

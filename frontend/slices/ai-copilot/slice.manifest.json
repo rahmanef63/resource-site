@@ -1,0 +1,41 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "ai-copilot",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add ai-copilot",
+    "consumerPath": "slices/ai-copilot"
+  },
+  "files": [
+    "index.ts",
+    "README.md",
+    "types.ts",
+    "components/CopilotProvider.tsx",
+    "components/CopilotPanel.tsx",
+    "components/SuggestionList.tsx",
+    "components/SlashPalette.tsx",
+    "hooks/useCopilot.ts",
+    "hooks/useEntityContext.ts",
+    "lib/triggers.ts"
+  ],
+  "convex": {
+    "schemaPath": "convex/features/ai-copilot/schema.ts",
+    "rootPaths": ["convex/features/ai-copilot"]
+  },
+  "imports": {
+    "shared": [
+      "@/components/ui/button",
+      "@/components/ui/card",
+      "@/components/ui/badge",
+      "@/components/ui/command",
+      "@/components/ui/scroll-area",
+      "@/components/ui/sheet",
+      "@/components/ui/separator",
+      "@/components/ui/tooltip",
+      "@/lib/utils"
+    ],
+    "external": ["react", "lucide-react", "ai"]
+  }
+}

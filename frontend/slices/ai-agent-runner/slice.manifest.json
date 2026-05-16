@@ -1,0 +1,40 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "ai-agent-runner",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add ai-agent-runner",
+    "consumerPath": "slices/ai-agent-runner"
+  },
+  "files": [
+    "index.ts",
+    "README.md",
+    "types.ts",
+    "components/RunnerDashboard.tsx",
+    "components/RunQueue.tsx",
+    "components/RunTrace.tsx",
+    "components/AgentCard.tsx",
+    "hooks/useAgentRuns.ts",
+    "hooks/useRunTrace.ts",
+    "lib/retry-policy.ts"
+  ],
+  "convex": {
+    "schemaPath": "convex/features/ai-agent-runner/schema.ts",
+    "rootPaths": ["convex/features/ai-agent-runner"]
+  },
+  "imports": {
+    "shared": [
+      "@/components/ui/button",
+      "@/components/ui/card",
+      "@/components/ui/badge",
+      "@/components/ui/table",
+      "@/components/ui/tabs",
+      "@/components/ui/scroll-area",
+      "@/components/ui/progress",
+      "@/lib/utils"
+    ],
+    "external": ["react", "lucide-react", "ai"]
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "ai-first-app",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add ai-first-app",
+    "consumerPath": "slices/ai-first-app"
+  },
+  "files": [
+    "index.ts",
+    "README.md",
+    "types.ts",
+    "components/GeneratorCanvas.tsx",
+    "components/VariationGrid.tsx",
+    "components/PromptComposer.tsx",
+    "components/HistoryPanel.tsx",
+    "hooks/useGenerator.ts",
+    "hooks/useGenerationHistory.ts",
+    "lib/output-renderer.ts"
+  ],
+  "convex": {
+    "schemaPath": "convex/features/ai-first-app/schema.ts",
+    "rootPaths": ["convex/features/ai-first-app"]
+  },
+  "imports": {
+    "shared": [
+      "@/components/ui/button",
+      "@/components/ui/card",
+      "@/components/ui/badge",
+      "@/components/ui/textarea",
+      "@/components/ui/tabs",
+      "@/components/ui/tooltip",
+      "@/components/ui/scroll-area",
+      "@/components/ui/select",
+      "@/lib/utils"
+    ],
+    "external": ["react", "lucide-react", "ai"]
+  }
+}
