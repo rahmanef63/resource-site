@@ -102,19 +102,26 @@ const ACTIVITY_SPEC: {
   },
 ];
 
+// Admin stats are unbounded scans across dynamic tables (can't .withIndex on
+// a runtime-named table). Cap each scan so a growing table doesn't blow the
+// query budget — UI shows "N+" when the cap is hit.
+const STATS_TABLE_CAP = 1000;
+const ACTIVITY_TABLE_CAP = 200;
+
 export const stats = query({
   args: {},
   handler: async (ctx) => {
-    const counts: Record<string, number> = {};
+    const counts: Record<string, number | string> = {};
     for (const table of COUNT_TABLES) {
-      const rows = await ctx.db.query(table).collect();
-      counts[table] = rows.length;
+      const rows = await ctx.db.query(table).take(STATS_TABLE_CAP + 1);
+      counts[table] = rows.length > STATS_TABLE_CAP ? `${STATS_TABLE_CAP}+` : rows.length;
     }
 
-    let unreadMessages = 0;
+    let unreadMessages: number | string = 0;
     try {
-      const msgs = await ctx.db.query("contactSubmissions").collect();
-      unreadMessages = msgs.filter((m: any) => !m.isRead).length;
+      const msgs = await ctx.db.query("contactSubmissions").take(STATS_TABLE_CAP + 1);
+      const unread = msgs.filter((m: any) => !m.isRead).length;
+      unreadMessages = msgs.length > STATS_TABLE_CAP ? `${unread}+` : unread;
     } catch {
       unreadMessages = 0;
     }
@@ -129,7 +136,7 @@ export const stats = query({
     }[] = [];
 
     for (const spec of ACTIVITY_SPEC) {
-      const rows = await ctx.db.query(spec.table).collect();
+      const rows = await ctx.db.query(spec.table).take(ACTIVITY_TABLE_CAP);
       for (const row of rows as any[]) {
         merged.push({
           id: row._id,

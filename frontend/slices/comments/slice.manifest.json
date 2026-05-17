@@ -1,0 +1,35 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "comments",
+  "version": "0.2.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add comments",
+    "consumerPath": "slices/comments"
+  },
+  "files": [
+    "index.ts",
+    "config.ts",
+    "components/CommentsAnchor.tsx",
+    "components/CommentsThread.tsx",
+    "components/index.ts",
+    "hooks/useComments.ts",
+    "lib/index.ts",
+    "types/index.ts",
+    "utils/index.ts"
+  ],
+  "convex": {
+    "schemaPath": "convex/features/comments/schema.ts",
+    "rootPaths": ["convex/features/comments"]
+  },
+  "imports": {
+    "shared": [
+      "@/components/ui/avatar",
+      "@/components/ui/button",
+      "@/components/ui/textarea",
+      "@/components/ui/dropdown-menu"
+    ],
+    "external": ["react", "convex/react", "lucide-react"]
+  }
+}

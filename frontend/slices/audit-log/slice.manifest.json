@@ -1,0 +1,32 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "audit-log",
+  "version": "0.2.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add audit-log",
+    "consumerPath": "slices/audit-log"
+  },
+  "files": [
+    "index.ts",
+    "config.ts",
+    "components/index.ts",
+    "hooks/index.ts",
+    "lib/index.ts",
+    "types/index.ts",
+    "utils/index.ts"
+  ],
+  "convex": {
+    "schemaPath": "convex/features/audit-log/schema.ts",
+    "rootPaths": ["convex/features/audit-log"]
+  },
+  "imports": {
+    "shared": [
+      "@/components/ui/card",
+      "@/components/ui/badge",
+      "@/components/ui/table"
+    ],
+    "external": ["react", "lucide-react"]
+  }
+}

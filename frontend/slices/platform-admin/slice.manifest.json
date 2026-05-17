@@ -1,0 +1,24 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "platform-admin",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add platform-admin",
+    "consumerPath": "slices/platform-admin"
+  },
+  "files": [
+    "index.ts",
+    "config.ts",
+    "README.md"
+  ],
+  "convex": {
+    "schemaPath": "convex/features/platform-admin/schema.ts",
+    "rootPaths": ["convex/features/platform-admin"]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}
