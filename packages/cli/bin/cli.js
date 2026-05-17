@@ -34,6 +34,7 @@ import { runGraph } from "./graph.mjs";
 import { runCompose, preflight as composePreflight } from "./compose.mjs";
 import { runUpdate as runUpdate3Way } from "./update.mjs";
 import { runMigrate } from "./migrate.mjs";
+import { augmentConsumerEnv } from "../lib/env-augment.mjs";
 
 const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -523,7 +524,15 @@ async function runAdd(rest) {
       kleur.dim(`[SLICE — drop-in feature]`) +
       kleur.bold(` to ${kleur.dim(target)}\n`),
     );
-    return runLift([`rahman:${entry.slug}`, ...(targetArg !== "." ? ["--target", targetArg] : [])]);
+    await runLift([`rahman:${entry.slug}`, ...(targetArg !== "." ? ["--target", targetArg] : [])]);
+    // Augment consumer .env.example with this slice's env requirements.
+    // Idempotent — re-running `add` does not duplicate entries.
+    try {
+      augmentConsumerEnv(entry, target);
+    } catch (err) {
+      console.error(kleur.yellow(`  ⚠ env augment skipped: ${err.message ?? err}`));
+    }
+    return;
   }
   if (kind === "layout") return addLayout(entry, target, targetArg, flags);
   if (kind === "feature") return addFeature(entry, target, targetArg);

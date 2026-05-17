@@ -9,10 +9,11 @@
  *
  * Wired into `slices:check` script.
  */
-import { readFile, readdir, stat } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { join, resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { validate } from "./lib/json-schema-mini.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..", "..");
@@ -32,67 +33,6 @@ const COLOR = {
 
 function color(c, str) {
   return process.stdout.isTTY ? `${COLOR[c]}${str}${COLOR.reset}` : str;
-}
-
-/**
- * Minimal JSON Schema validator covering the fields used by slice.manifest.v1.
- * Avoids pulling in ajv as a dep until we're sure we want it.
- */
-function validate(manifest, schema, path = "$") {
-  const errors = [];
-
-  if (schema.required) {
-    for (const key of schema.required) {
-      if (!(key in manifest)) {
-        errors.push(`${path}: missing required field "${key}"`);
-      }
-    }
-  }
-
-  if (schema.type === "object" && schema.properties) {
-    for (const [key, val] of Object.entries(manifest)) {
-      const propSchema = schema.properties[key];
-      if (!propSchema) {
-        if (schema.additionalProperties === false) {
-          errors.push(`${path}.${key}: unknown property (additionalProperties: false)`);
-        }
-        continue;
-      }
-      errors.push(...validate(val, propSchema, `${path}.${key}`));
-    }
-  }
-
-  if (schema.type === "string") {
-    if (typeof manifest !== "string") {
-      errors.push(`${path}: expected string, got ${typeof manifest}`);
-    } else {
-      if (schema.pattern) {
-        const re = new RegExp(schema.pattern);
-        if (!re.test(manifest)) {
-          errors.push(`${path}: value "${manifest}" does not match pattern ${schema.pattern}`);
-        }
-      }
-      if (schema.enum && !schema.enum.includes(manifest)) {
-        errors.push(`${path}: value "${manifest}" not in enum ${JSON.stringify(schema.enum)}`);
-      }
-    }
-  }
-
-  if (schema.type === "array") {
-    if (!Array.isArray(manifest)) {
-      errors.push(`${path}: expected array, got ${typeof manifest}`);
-    } else if (schema.items) {
-      manifest.forEach((item, i) => {
-        errors.push(...validate(item, schema.items, `${path}[${i}]`));
-      });
-    }
-  }
-
-  if (schema.type === "object" && typeof manifest !== "object") {
-    errors.push(`${path}: expected object, got ${typeof manifest}`);
-  }
-
-  return errors;
 }
 
 async function findSlices() {

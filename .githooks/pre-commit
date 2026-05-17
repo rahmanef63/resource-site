@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
 # pre-commit hook — Track J / local-first quality gate.
 #
-# Runs the two fastest authoritative checks before letting a commit land:
-#   1. npm run typecheck           — tsc --noEmit, ~5-10s incremental
-#   2. npm run validate:contracts:check — Phase A contract validator
+# Runs fast authoritative checks before commit lands. Audit chain catches
+# drift at commit time so it never reaches pre-push.
+#   1. typecheck                  — tsc --noEmit, ~5-10s incremental
+#   2. validate:contracts:check   — Phase A contract validator
+#   3. audit:slices               — naming/imports/schema/trio enforcement
+#   4. audit:templates            — shadcn + hardcoded /preview/<slug> leak
+#   5. audit:file-size            — ≤200 LOC modularity cap
 #
-# Heavier checks (lint, vitest, build, audit-bp) run only in CI to keep the
-# local commit loop fast.
+# Heavier checks (lint, vitest, build) still run only in CI/pre-push.
 #
 # Bypass: `git commit --no-verify`
 #
@@ -19,7 +22,7 @@ set -e
 ROOT="$(git rev-parse --show-toplevel)"
 cd "$ROOT"
 
-echo "pre-commit: typecheck + contracts:check"
+echo "pre-commit: typecheck + contracts + audit chain"
 
 if ! npm run --silent typecheck; then
   echo ""
@@ -30,6 +33,24 @@ fi
 if ! npm run --silent validate:contracts:check; then
   echo ""
   echo "pre-commit: contract validator FAILED — fix slice.contract.ts or bypass with --no-verify" >&2
+  exit 1
+fi
+
+if ! npm run --silent audit:slices; then
+  echo ""
+  echo "pre-commit: audit:slices FAILED — fix slice naming/imports/trio or bypass with --no-verify" >&2
+  exit 1
+fi
+
+if ! npm run --silent audit:templates; then
+  echo ""
+  echo "pre-commit: audit:templates FAILED — wrap raw HTML or fix hardcoded /preview/<slug> or bypass with --no-verify" >&2
+  exit 1
+fi
+
+if ! npm run --silent audit:file-size; then
+  echo ""
+  echo "pre-commit: audit:file-size FAILED — split files >200 LOC or bypass with --no-verify" >&2
   exit 1
 fi
 
