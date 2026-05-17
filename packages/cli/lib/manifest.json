@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-17T11:38:12.682Z",
+  "generatedAt": "2026-05-17T13:11:19.220Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -135,7 +135,7 @@
         "tabs",
         "textarea"
       ],
-      "agentRecipe": "Personal Brand OS = full-app template (public + admin). 1) Default `npx rr add personal-brand-os` runs `--at root`: routes promoted to app/(public)/ + app/admin/, and /preview/personal-brand-os/* path constants in nav-config/site-config/robots/sitemap auto-rewritten. (Pass `--at preview` only for sandbox demos that keep /preview/personal-brand-os/* URLs.) 2) Edit components/templates/personal-brand/shared/site-config.ts — set brandName, ownerName, baseUrl, twitter, email. 3) Wire convex-templates/personal-brand-os/* into your convex/features/personal-brand-os/ (kitab ships them outside `convex/` so the bundler doesn't try to compile scaffolds without _generated) and add @convex-dev/auth on admin routes. 4) Replace localStorage StoreProvider with Convex queries (schema mirrors localStorage shape).",
+      "agentRecipe": "Run `npx rr init <app> --template personal-brand-os` (or `npx rr add personal-brand-os` inside an existing project). Personal Brand OS = full-app template (public + admin). 1) Default `npx rr add personal-brand-os` runs `--at root`: routes promoted to app/(public)/ + app/admin/, and /preview/personal-brand-os/* path constants in nav-config/site-config/robots/sitemap auto-rewritten. (Pass `--at preview` only for sandbox demos that keep /preview/personal-brand-os/* URLs.) 2) Edit components/templates/personal-brand/shared/site-config.ts — set brandName, ownerName, baseUrl, twitter, email. 3) Wire convex-templates/personal-brand-os/* into your convex/features/personal-brand-os/ (kitab ships them outside `convex/` so the bundler doesn't try to compile scaffolds without _generated) and add @convex-dev/auth on admin routes. 4) Replace localStorage StoreProvider with Convex queries (schema mirrors localStorage shape).",
       "tags": [
         "template",
         "personal-brand",
@@ -233,7 +233,7 @@
         "sheet",
         "textarea"
       ],
-      "agentRecipe": "Agency Studio OS = full-app B2B agency template (public + admin). 1) Move app/preview/agency-studio-os/{robots,sitemap,opengraph-image}.* to app root. 2) Copy public into app/(public)/, admin into app/(admin)/. 3) Edit components/templates/agency-studio/shared/site-config.ts — set studioName, brandName, baseUrl, twitter, email. 4) Wire convex-templates/agency-studio-os/* into your convex/ (kitab ships them outside `convex/` so the bundler doesn't try to compile scaffolds without _generated) and add @convex-dev/auth on admin routes. 5) Replace localStorage StoreProvider with Convex queries.",
+      "agentRecipe": "Run `npx rr init <app> --template agency-studio-os`. Agency Studio OS = full-app B2B agency template (public + admin). 1) Move app/preview/agency-studio-os/{robots,sitemap,opengraph-image}.* to app root. 2) Copy public into app/(public)/, admin into app/(admin)/. 3) Edit components/templates/agency-studio/shared/site-config.ts — set studioName, brandName, baseUrl, twitter, email. 4) Wire convex-templates/agency-studio-os/* into your convex/ (kitab ships them outside `convex/` so the bundler doesn't try to compile scaffolds without _generated) and add @convex-dev/auth on admin routes. 5) Replace localStorage StoreProvider with Convex queries.",
       "tags": [
         "template",
         "agency",
@@ -258,14 +258,14 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Mount the HeroSection from cookbook/layouts/landing-hero-carousel as the hero of the marketing route group. Provide image array via props or wire to Convex api.heroImages.list.",
+      "agentRecipe": "Run `npx rr add landing-hero-carousel`. Mount the HeroSection from cookbook/layouts/landing-hero-carousel as the hero of the marketing route group. Provide image array via props or wire to Convex api.heroImages.list.",
       "tags": [
         "marketing",
         "carousel",
         "image",
         "cms"
       ],
-      "primaryFile": "src/HeroSection.tsx"
+      "primaryFile": "cookbook/layouts/landing-hero-carousel/src/HeroSection.tsx"
     },
     {
       "slug": "landing-asymmetric-masonry",
@@ -280,14 +280,14 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Use PortfolioGrid for case-study or portfolio pages. Items array shape: { id, title, cover, href, category }. The 8-slot pattern repeats; supply at least 8 items for the layout to bloom.",
+      "agentRecipe": "Run `npx rr add landing-asymmetric-masonry`. Use PortfolioGrid for case-study or portfolio pages. Items array shape: { id, title, cover, href, category }. The 8-slot pattern repeats; supply at least 8 items for the layout to bloom.",
       "tags": [
         "marketing",
         "portfolio",
         "masonry",
         "scroll-reveal"
       ],
-      "primaryFile": "src/PortfolioGrid.tsx"
+      "primaryFile": "cookbook/layouts/landing-asymmetric-masonry/src/PortfolioGrid.tsx"
     },
     {
       "slug": "landing-bento",
@@ -302,7 +302,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Compose a 3-column CSS grid with explicit area assignments per feature. Mix Card sizes (1x1, 1x2, 2x1, 2x2) for visual rhythm.",
+      "agentRecipe": "Run `npx rr add landing-bento`. Compose a 3-column CSS grid with explicit area assignments per feature. Mix Card sizes (1x1, 1x2, 2x1, 2x2) for visual rhythm.",
       "tags": [
         "marketing",
         "bento",
@@ -323,7 +323,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Use motion primitives marquee, kinetic-heading, magnetic from components/motion (already imported into the kitab from rahmanef.com). All respect prefers-reduced-motion automatically.",
+      "agentRecipe": "Run `npx rr add landing-kinetic-text`. Use motion primitives marquee, kinetic-heading, magnetic from components/motion (already imported into the kitab from rahmanef.com). All respect prefers-reduced-motion automatically.",
       "tags": [
         "marketing",
         "motion",
@@ -344,7 +344,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Mount inside app/dashboard/<slice>/page.tsx. Wrap with the kitab's <ThreeColumnLayout>. Slot in slice-specific sidebars and inspectors. Mobile auto-collapses to drawers.",
+      "agentRecipe": "Run `npx rr add dashboard-three-column`. Mount inside app/dashboard/<slice>/page.tsx. Wrap with the kitab's <ThreeColumnLayout>. Slot in slice-specific sidebars and inspectors. Mobile auto-collapses to drawers.",
       "tags": [
         "dashboard",
         "three-column",
@@ -366,7 +366,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Compose grid: 48px activity bar + tabs row + editor/inspector flex row + bottom console. Wire activity bar items to dispatch into tabs/inspector store.",
+      "agentRecipe": "Run `npx rr add dashboard-ide`. Compose grid: 48px activity bar + tabs row + editor/inspector flex row + bottom console. Wire activity bar items to dispatch into tabs/inspector store.",
       "tags": [
         "dashboard",
         "ide",
@@ -387,7 +387,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Use ResponsiveDashboardShell which branches desktop (sidebar) vs mobile (dock). Customize MobileDashboardDock items and MobileTopBar workspace switcher to your domain.",
+      "agentRecipe": "Run `npx rr add dashboard-mobile-dock`. Use ResponsiveDashboardShell which branches desktop (sidebar) vs mobile (dock). Customize MobileDashboardDock items and MobileTopBar workspace switcher to your domain.",
       "tags": [
         "dashboard",
         "mobile",
@@ -408,7 +408,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Port kitab-core slices/cms-lite/ into your project's app/(cms)/ route group. Fetch products/pages from Convex via api.cmsLite.* queries.",
+      "agentRecipe": "Run `npx rr add cms-public-storefront`. Port kitab-core slices/cms-lite/ into your project's app/(cms)/ route group. Fetch products/pages from Convex via api.cmsLite.* queries.",
       "tags": [
         "cms",
         "ecommerce",
@@ -475,7 +475,7 @@
         "sheet",
         "textarea"
       ],
-      "agentRecipe": "SaaS Marketing OS = public-only marketing template. Blog + changelog use MDX (add the mdx-blog feature). Edit components/templates/saas-marketing/shared/site-config.ts to set product name, tagline, pricing tiers, contact email.",
+      "agentRecipe": "Run `npx rr init <app> --template saas-marketing-os`. SaaS Marketing OS = public-only marketing template. Blog + changelog use MDX (add the mdx-blog feature). Edit components/templates/saas-marketing/shared/site-config.ts to set product name, tagline, pricing tiers, contact email.",
       "tags": [
         "template",
         "saas",
@@ -557,7 +557,7 @@
         "separator",
         "sheet"
       ],
-      "agentRecipe": "Kreator Studio OS = full-app content-creator template (public newsletter + 9-tab admin). 1) Edit components/templates/kreator-studio/shared/site-config.ts (brandName, ownerName, baseUrl, twitter). 2) Replace localStorage StoreProvider with Convex queries (state shape mirrors localStorage). 3) Wire Resend for newsletter + Midtrans tip-jar on public CTA. 4) Voice/Scripts/Carousels admin views are scaffolds — wire to ai-router (mid tier for voice-train/voice-apply, nano for shortform script).",
+      "agentRecipe": "Run `npx rr init <app> --template kreator-studio-os`. Kreator Studio OS = full-app content-creator template (public newsletter + 9-tab admin). 1) Edit components/templates/kreator-studio/shared/site-config.ts (brandName, ownerName, baseUrl, twitter). 2) Replace localStorage StoreProvider with Convex queries (state shape mirrors localStorage). 3) Wire Resend for newsletter + Midtrans tip-jar on public CTA. 4) Voice/Scripts/Carousels admin views are scaffolds — wire to ai-router (mid tier for voice-train/voice-apply, nano for shortform script).",
       "tags": [
         "template",
         "creator",
@@ -636,7 +636,7 @@
         "sheet",
         "textarea"
       ],
-      "agentRecipe": "Konsultan OS = full-app consultancy template (public services + 7-tab admin). 1) Edit components/templates/konsultan/shared/site-config.ts (brandName, ownerName, baseUrl). 2) Replace localStorage StoreProvider with Convex queries. 3) Add @convex-dev/auth + RBAC on /admin routes. 4) Wire Resend for proposal email + e-sign provider for contracts. 5) Billing view is PajakAware-ready — connect to Midtrans + Indonesian-tax calc on invoice generation.",
+      "agentRecipe": "Run `npx rr init <app> --template konsultan-os`. Konsultan OS = full-app consultancy template (public services + 7-tab admin). 1) Edit components/templates/konsultan/shared/site-config.ts (brandName, ownerName, baseUrl). 2) Replace localStorage StoreProvider with Convex queries. 3) Add @convex-dev/auth + RBAC on /admin routes. 4) Wire Resend for proposal email + e-sign provider for contracts. 5) Billing view is PajakAware-ready — connect to Midtrans + Indonesian-tax calc on invoice generation.",
       "tags": [
         "template",
         "consultant",
@@ -715,7 +715,7 @@
         "sheet",
         "textarea"
       ],
-      "agentRecipe": "Wirausaha OS = full-app UKM template (mobile-first public storefront + 8-tab admin). 1) Edit components/templates/wirausaha/shared/site-config.ts. 2) Replace localStorage StoreProvider with Convex queries. 3) Wire Midtrans + QRIS for orders. 4) Add WhatsApp-bot for order confirmations. 5) Finance view scaffolds AI-laporan — connect to ai-router (mid tier) for narrative generation from monthly aggregates.",
+      "agentRecipe": "Run `npx rr init <app> --template wirausaha-os`. Wirausaha OS = full-app UKM template (mobile-first public storefront + 8-tab admin). 1) Edit components/templates/wirausaha/shared/site-config.ts. 2) Replace localStorage StoreProvider with Convex queries. 3) Wire Midtrans + QRIS for orders. 4) Add WhatsApp-bot for order confirmations. 5) Finance view scaffolds AI-laporan — connect to ai-router (mid tier) for narrative generation from monthly aggregates.",
       "tags": [
         "template",
         "smb",
@@ -792,7 +792,7 @@
         "separator",
         "sheet"
       ],
-      "agentRecipe": "Riset Kit = full-app research template (public KB reader + 6-tab admin). 1) Edit components/templates/research/shared/site-config.ts. 2) Replace localStorage StoreProvider with Convex queries. 3) Add @convex-dev/auth on /admin (single owner suffices). 4) Document library expects pdf-extract + vector-search — wire convex-vector-search component. 5) AI Reader wires ai-router (mid tier) for QA over uploaded PDFs. 6) Lit-review matrix is a scaffold — wire AI summarizer per cell.",
+      "agentRecipe": "Run `npx rr init <app> --template riset-kit`. Riset Kit = full-app research template (public KB reader + 6-tab admin). 1) Edit components/templates/research/shared/site-config.ts. 2) Replace localStorage StoreProvider with Convex queries. 3) Add @convex-dev/auth on /admin (single owner suffices). 4) Document library expects pdf-extract + vector-search — wire convex-vector-search component. 5) AI Reader wires ai-router (mid tier) for QA over uploaded PDFs. 6) Lit-review matrix is a scaffold — wire AI summarizer per cell.",
       "tags": [
         "template",
         "research",
@@ -816,7 +816,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Pure layout. Drop into landing pages where the product needs minimum framing. Replace the eyebrow pill with a status badge or release tag. Two CTAs is the sweet spot.",
+      "agentRecipe": "Run `npx rr add hero-centered`. Pure layout. Drop into landing pages where the product needs minimum framing. Replace the eyebrow pill with a status badge or release tag. Two CTAs is the sweet spot.",
       "tags": [
         "block",
         "hero",
@@ -838,7 +838,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Right column accepts any visual — screenshot, product mock, illustration, or live demo iframe. Feature list pairs Lucide icons with one-line value props.",
+      "agentRecipe": "Run `npx rr add hero-split`. Right column accepts any visual — screenshot, product mock, illustration, or live demo iframe. Feature list pairs Lucide icons with one-line value props.",
       "tags": [
         "block",
         "hero",
@@ -861,7 +861,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Background tiles get a radial mask so the center stays readable. Use 6-8 tiles with asymmetric spans (col-span-2 row-span-2 for one, others 1x1). Lucide icon in each tile.",
+      "agentRecipe": "Run `npx rr add hero-bento-bg`. Background tiles get a radial mask so the center stays readable. Use 6-8 tiles with asymmetric spans (col-span-2 row-span-2 for one, others 1x1). Lucide icon in each tile.",
       "tags": [
         "block",
         "hero",
@@ -884,7 +884,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Replace the conic-gradient backdrop with a muted <video autoplay loop>. Keep the dark theme — light text on motion only reads when the contrast is hard.",
+      "agentRecipe": "Run `npx rr add hero-video-loop`. Replace the conic-gradient backdrop with a muted <video autoplay loop>. Keep the dark theme — light text on motion only reads when the contrast is hard.",
       "tags": [
         "block",
         "hero",
@@ -907,7 +907,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Use absolute-positioned word slots with translate-y + opacity transitions. The invisible placeholder word keeps the bounding box stable.",
+      "agentRecipe": "Run `npx rr add hero-animated-text`. Use absolute-positioned word slots with translate-y + opacity transitions. The invisible placeholder word keeps the bounding box stable.",
       "tags": [
         "block",
         "hero",
@@ -930,7 +930,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Three is the magic number for SaaS pricing — fewer feels limited, more triggers analysis paralysis. Middle tier should be the one you actually want to sell.",
+      "agentRecipe": "Run `npx rr add pricing-three`. Three is the magic number for SaaS pricing — fewer feels limited, more triggers analysis paralysis. Middle tier should be the one you actually want to sell.",
       "tags": [
         "block",
         "pricing",
@@ -952,7 +952,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Use when you genuinely have four distinct tiers (free / solo / team / enterprise). Don't pad to four — use the three-tier variant if the fourth is forced.",
+      "agentRecipe": "Run `npx rr add pricing-four`. Use when you genuinely have four distinct tiers (free / solo / team / enterprise). Don't pad to four — use the three-tier variant if the fourth is forced.",
       "tags": [
         "block",
         "pricing",
@@ -974,7 +974,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Default to yearly — that's the conversion-optimized choice. Show the monthly strikethrough so the savings feel real, not implied.",
+      "agentRecipe": "Run `npx rr add pricing-toggle`. Default to yearly — that's the conversion-optimized choice. Show the monthly strikethrough so the savings feel real, not implied.",
       "tags": [
         "block",
         "pricing",
@@ -996,7 +996,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Use for complex products where buyers actually compare. Mix boolean rows (Check/Minus) with string-value rows (\"1\", \"10\", \"Unlimited\") for clarity.",
+      "agentRecipe": "Run `npx rr add pricing-compare`. Use for complex products where buyers actually compare. Mix boolean rows (Check/Minus) with string-value rows (\"1\", \"10\", \"Unlimited\") for clarity.",
       "tags": [
         "block",
         "pricing",
@@ -1019,7 +1019,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Use for usage-based or seat-based products. Make the breakpoints transparent — buyers should be able to predict the next price without surprises.",
+      "agentRecipe": "Run `npx rr add pricing-slider`. Use for usage-based or seat-based products. Make the breakpoints transparent — buyers should be able to predict the next price without surprises.",
       "tags": [
         "block",
         "pricing",
@@ -1042,7 +1042,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Single-open keeps the page short. Use when answers are independent. Switch to multi-open if buyers tend to scan multiple answers at once.",
+      "agentRecipe": "Run `npx rr add accordion-faq`. Single-open keeps the page short. Use when answers are independent. Switch to multi-open if buyers tend to scan multiple answers at once.",
       "tags": [
         "block",
         "accordion",
@@ -1064,7 +1064,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Use when the FAQ is long (>10 items) and questions cluster naturally. Each group's Item owns its open state for predictable UX.",
+      "agentRecipe": "Run `npx rr add accordion-grouped`. Use when the FAQ is long (>10 items) and questions cluster naturally. Each group's Item owns its open state for predictable UX.",
       "tags": [
         "block",
         "accordion",
@@ -1087,7 +1087,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Use for help/docs pages with section breadth. Keep section count ≤ 5 — beyond that, the sidebar gets noisy. Reset accordion state on section change.",
+      "agentRecipe": "Run `npx rr add accordion-sidebar`. Use for help/docs pages with section breadth. Keep section count ≤ 5 — beyond that, the sidebar gets noisy. Reset accordion state on section change.",
       "tags": [
         "block",
         "accordion",
@@ -1110,7 +1110,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "The grid-template-rows trick lets CSS animate to-auto-height natively. No JS measurement, no jank. Pair with rounded card chrome for premium feel.",
+      "agentRecipe": "Run `npx rr add accordion-animated`. The grid-template-rows trick lets CSS animate to-auto-height natively. No JS measurement, no jank. Pair with rounded card chrome for premium feel.",
       "tags": [
         "block",
         "accordion",
@@ -1132,7 +1132,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Use when answers reference each other or buyers want to keep multiple sections visible (changelogs, release notes, feature comparison FAQs).",
+      "agentRecipe": "Run `npx rr add accordion-multi`. Use when answers reference each other or buyers want to keep multiple sections visible (changelogs, release notes, feature comparison FAQs).",
       "tags": [
         "block",
         "accordion",
@@ -1154,7 +1154,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Default to 3 columns at lg. Use the Thumb helper for cover generation when posts don't ship an image yet — HSL gradient by post.hue keeps each card distinct.",
+      "agentRecipe": "Run `npx rr add blog-grid`. Default to 3 columns at lg. Use the Thumb helper for cover generation when posts don't ship an image yet — HSL gradient by post.hue keeps each card distinct.",
       "tags": [
         "block",
         "blog",
@@ -1176,7 +1176,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Use for archives or category pages where the reader is hunting a specific post. Compact thumbnail keeps the line height tight.",
+      "agentRecipe": "Run `npx rr add blog-list`. Use for archives or category pages where the reader is hunting a specific post. Compact thumbnail keeps the line height tight.",
       "tags": [
         "block",
         "blog",
@@ -1198,7 +1198,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Use for content-heavy publications. Hero post earns the visual real estate; the sidebar carries breadth. Mix typography sizes for editorial rhythm.",
+      "agentRecipe": "Run `npx rr add blog-magazine`. Use for content-heavy publications. Hero post earns the visual real estate; the sidebar carries breadth. Mix typography sizes for editorial rhythm.",
       "tags": [
         "block",
         "blog",
@@ -1221,7 +1221,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "CSS columns are the cheap masonry — no JS, no layout shift. Vary the thumbnail height via a HEIGHTS array (h-44 to h-80). DOM order ≠ visual order — design around it.",
+      "agentRecipe": "Run `npx rr add blog-masonry`. CSS columns are the cheap masonry — no JS, no layout shift. Vary the thumbnail height via a HEIGHTS array (h-44 to h-80). DOM order ≠ visual order — design around it.",
       "tags": [
         "block",
         "blog",
@@ -1243,7 +1243,7 @@
       "files": [],
       "dependencies": [],
       "shadcnComponents": [],
-      "agentRecipe": "Use for marketing-driven content sites (newsletter, podcast, brand journal) where the lead story carries the visit. Tail grid keeps the index scrollable without losing the hero impact.",
+      "agentRecipe": "Run `npx rr add blog-featured`. Use for marketing-driven content sites (newsletter, podcast, brand journal) where the lead story carries the visit. Tail grid keeps the index scrollable without losing the hero impact.",
       "tags": [
         "block",
         "blog",
@@ -1258,9 +1258,9 @@
   "features": [
     {
       "slug": "convex-auth",
-      "title": "Convex Auth — Email Magic Link",
+      "title": "Convex Auth — Multi-Provider Sign-in",
       "category": "auth",
-      "description": "@convex-dev/auth with email magic link via Resend. Self-hosted Convex friendly. Hard mandate per kitab CLAUDE.md (no Clerk).",
+      "description": "@convex-dev/auth with Password (PBKDF2-SHA256 100k, self-hosted-friendly), Anonymous (guest), Google OAuth, and Resend magic-link. Ships a production SignInPage with i18n, prop-driven provider list, and split Login/Register tabs. No Clerk.",
       "source": "rahmanef63/resource-site",
       "docsUrl": "https://labs.convex.dev/auth",
       "install": "npm i @convex-dev/auth @auth/core resend",
@@ -1274,8 +1274,12 @@
       "tags": [
         "auth",
         "convex",
+        "password",
         "magic-link",
-        "no-clerk"
+        "google",
+        "anonymous",
+        "no-clerk",
+        "pbkdf2"
       ]
     },
     {
@@ -1288,7 +1292,7 @@
       "install": "",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "DOKU dual-mode: Checkout (hosted, all channels) atau Direct (single channel, returns VA/QRIS/deeplink). Webhook di /webhooks/doku verify HMAC-SHA256 (canonical: Client-Id + Request-Id + Request-Timestamp + Request-Target + Digest). Idempotency by request_id index. Server-only — no NEXT_PUBLIC_*. Sandbox default (api-sandbox.doku.com); flip DOKU_IS_PRODUCTION=true for live.",
+      "agentRecipe": "Run `npx rr add doku-payment`. DOKU dual-mode: Checkout (hosted, all channels) atau Direct (single channel, returns VA/QRIS/deeplink). Webhook di /webhooks/doku verify HMAC-SHA256 (canonical: Client-Id + Request-Id + Request-Timestamp + Request-Target + Digest). Idempotency by request_id index. Server-only — no NEXT_PUBLIC_*. Sandbox default (api-sandbox.doku.com); flip DOKU_IS_PRODUCTION=true for live.",
       "tags": [
         "payment",
         "doku",
@@ -1311,7 +1315,7 @@
         "midtrans-client"
       ],
       "exampleCode": "",
-      "agentRecipe": "Midtrans Snap untuk pembayaran instant. Webhook ke Convex HTTP action /api/midtrans-callback untuk update order status. Ingat: PPN 11% sudah included di amount, jangan double-count.",
+      "agentRecipe": "Run `npx rr add midtrans-payment`. Midtrans Snap untuk pembayaran instant. Webhook ke Convex HTTP action /api/midtrans-callback untuk update order status. Ingat: PPN 11% sudah included di amount, jangan double-count.",
       "tags": [
         "payment",
         "midtrans",
@@ -1334,7 +1338,7 @@
         "@react-email/components"
       ],
       "exampleCode": "",
-      "agentRecipe": "Use Resend Audiences API for newsletter — store subscriber emails in Convex too for segmentation. Double opt-in: subscriber.create with status 'pending' → click link → status 'confirmed'.",
+      "agentRecipe": "Run `npx rr add resend-newsletter`. Use Resend Audiences API for newsletter — store subscriber emails in Convex too for segmentation. Double opt-in: subscriber.create with status 'pending' → click link → status 'confirmed'.",
       "tags": [
         "email",
         "newsletter",
@@ -1445,7 +1449,7 @@
         "@openrouter/ai-sdk-provider"
       ],
       "exampleCode": "",
-      "agentRecipe": "Wrap every AI call through ai-router. Tiers: nano = quick classification (spam-flag, headline-suggest), mid = chat / draft, flagship = methodology-review / deep-think. Token usage logs to ai_usage table for the cost dashboard.",
+      "agentRecipe": "Run `npx rr add ai-router`. Wrap every AI call through ai-router. Tiers: nano = quick classification (spam-flag, headline-suggest), mid = chat / draft, flagship = methodology-review / deep-think. Token usage logs to ai_usage table for the cost dashboard.",
       "tags": [
         "ai",
         "ai:backend",
@@ -1465,7 +1469,7 @@
         "openai"
       ],
       "exampleCode": "",
-      "agentRecipe": "Add embedding field + vectorIndex per searchable table. Re-embed on upsert via Convex action. Cache embeddings — don't re-call OpenAI on every read.",
+      "agentRecipe": "Run `npx rr add vector-search`. Add embedding field + vectorIndex per searchable table. Re-embed on upsert via Convex action. Cache embeddings — don't re-call OpenAI on every read.",
       "tags": [
         "search",
         "vector",
@@ -1489,7 +1493,7 @@
         "reading-time"
       ],
       "exampleCode": "",
-      "agentRecipe": "Store post body sebagai markdown di content/blog/*.mdx. Render dengan MDXRemote di [slug]/page.tsx. Auto-extract headings ke ToC via remark plugin custom.",
+      "agentRecipe": "Run `npx rr add mdx-blog`. Store post body sebagai markdown di content/blog/*.mdx. Render dengan MDXRemote di [slug]/page.tsx. Auto-extract headings ke ToC via remark plugin custom.",
       "tags": [
         "content",
         "blog",
@@ -1509,7 +1513,7 @@
         "@calcom/embed-react"
       ],
       "exampleCode": "",
-      "agentRecipe": "Embed Cal.com via @calcom/embed-react di halaman services. Configure webhook di Cal.com dashboard → POST ke /api/cal-webhook → upsert booking di Convex.",
+      "agentRecipe": "Run `npx rr add cal-com-booking`. Embed Cal.com via @calcom/embed-react di halaman services. Configure webhook di Cal.com dashboard → POST ke /api/cal-webhook → upsert booking di Convex.",
       "tags": [
         "data",
         "scheduling",
@@ -1527,7 +1531,7 @@
       "install": "",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Drop <WidthContainer> around page content, <FullWidthToggle variant='icon' /> in topbar. Variant 'segment' best for settings page. Hook useFullWidth() returns [mode, setMode, cycle]. SSR-safe — defaults to 'contained' until hydrate.",
+      "agentRecipe": "Run `npx rr add full-width-toggle`. Drop <WidthContainer> around page content, <FullWidthToggle variant='icon' /> in topbar. Variant 'segment' best for settings page. Hook useFullWidth() returns [mode, setMode, cycle]. SSR-safe — defaults to 'contained' until hydrate.",
       "tags": [
         "ui",
         "layout",
@@ -1548,7 +1552,7 @@
         "cmdk"
       ],
       "exampleCode": "",
-      "agentRecipe": "Wire <CommandPalette groups={...} onHistorySelect={...} labels={...} /> at the dashboard shell. Build groups from your feature registry; each item.onSelect handles navigation. Use <SearchModal bindings={{ pages, databases, recents, isLoading, onQueryChange, onSelectPage, onSelectDatabase }} /> for the search dialog — see slice README.md for adapter shapes.",
+      "agentRecipe": "Run `npx rr add command-menu`. Wire <CommandPalette groups={...} onHistorySelect={...} labels={...} /> at the dashboard shell. Build groups from your feature registry; each item.onSelect handles navigation. Use <SearchModal bindings={{ pages, databases, recents, isLoading, onQueryChange, onSelectPage, onSelectDatabase }} /> for the search dialog — see slice README.md for adapter shapes.",
       "tags": [
         "ui",
         "palette",
@@ -1570,7 +1574,7 @@
         "framer-motion"
       ],
       "exampleCode": "",
-      "agentRecipe": "Each primitive is independently importable from @/features/motion-primitives. Use marquee for logo strips, kinetic-heading for hero text, magnetic for CTA buttons, cursor-spotlight for hover-reveal panels, stat-counter for animated numbers, reading-progress for blog top bar, grain for film texture, lightbox for image gallery.",
+      "agentRecipe": "Run `npx rr add motion-primitives`. Each primitive is independently importable from @/features/motion-primitives. Use marquee for logo strips, kinetic-heading for hero text, magnetic for CTA buttons, cursor-spotlight for hover-reveal panels, stat-counter for animated numbers, reading-progress for blog top bar, grain for film texture, lightbox for image gallery.",
       "tags": [
         "ui",
         "motion",
@@ -1589,7 +1593,7 @@
       "install": "",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Drop-in for shadcn Dialog. Use <ResponsiveDialog><ResponsiveDialogTrigger>…</ResponsiveDialogTrigger><ResponsiveDialogContent>…</ResponsiveDialogContent></ResponsiveDialog>. On mobile renders as Sheet sliding from bottom; on desktop as centered Dialog. Threshold via useMediaQuery('(min-width: 768px)').",
+      "agentRecipe": "Run `npx rr add responsive-dialog`. Drop-in for shadcn Dialog. Use <ResponsiveDialog><ResponsiveDialogTrigger>…</ResponsiveDialogTrigger><ResponsiveDialogContent>…</ResponsiveDialogContent></ResponsiveDialog>. On mobile renders as Sheet sliding from bottom; on desktop as centered Dialog. Threshold via useMediaQuery('(min-width: 768px)').",
       "tags": [
         "ui",
         "dialog",
@@ -1609,7 +1613,7 @@
       "install": "",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Wraps app/(admin) routes. <ResponsiveDashboardShell sidebar={<AppSidebar />} topbar={<TopBar />}>{children}</ResponsiveDashboardShell>. Mobile: sidebar collapses to <Sheet>. Desktop: persistent sidebar + topbar. Embed FullWidthToggle in topbar for instant container resize.",
+      "agentRecipe": "Run `npx rr add dashboard-shell`. Wraps app/(admin) routes. <ResponsiveDashboardShell sidebar={<AppSidebar />} topbar={<TopBar />}>{children}</ResponsiveDashboardShell>. Mobile: sidebar collapses to <Sheet>. Desktop: persistent sidebar + topbar. Embed FullWidthToggle in topbar for instant container resize.",
       "tags": [
         "ui",
         "layout",
@@ -1629,7 +1633,7 @@
       "install": "// no install — Web Platform API",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Use BroadcastChannel only for demo / cross-iframe state mirroring. Production data still goes through Convex realtime. Use the useBroadcastSync(channelName, initial) hook from @/features/broadcast-channel-sync.",
+      "agentRecipe": "Run `npx rr add broadcast-channel-sync`. Use BroadcastChannel only for demo / cross-iframe state mirroring. Production data still goes through Convex realtime. Use the useBroadcastSync(channelName, initial) hook from @/features/broadcast-channel-sync.",
       "tags": [
         "realtime",
         "cross-tab",
@@ -1646,7 +1650,7 @@
       "install": "npx rahman-resources add rbac-roles",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Three tier presets pick which system roles to seed: solo (owner+admin), influencer (+manager), organization (6 roles). Platform admin via env PLATFORM_ADMIN_EMAILS bypasses all checks. Resolution: platform admin → workspace owner → membership.additionalPermissions → role.permissions.",
+      "agentRecipe": "Run `npx rr add rbac-roles`. Three tier presets pick which system roles to seed: solo (owner+admin), influencer (+manager), organization (6 roles). Platform admin via env PLATFORM_ADMIN_EMAILS bypasses all checks. Resolution: platform admin → workspace owner → membership.additionalPermissions → role.permissions.",
       "tags": [
         "rbac",
         "auth",
@@ -1664,7 +1668,7 @@
       "install": "npx rahman-resources add admin-panel",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Wrap pages with <AdminPage workspaceId tier>. AccessGate hides UI for non-admins, AdminShell renders 2-col layout with sidebar filtered by tier+perms. ADMIN_SECTIONS in config.ts is SSOT (17 entries). Personal-brand-os = tier 'solo' = owner sees everything.",
+      "agentRecipe": "Run `npx rr add admin-panel`. Wrap pages with <AdminPage workspaceId tier>. AccessGate hides UI for non-admins, AdminShell renders 2-col layout with sidebar filtered by tier+perms. ADMIN_SECTIONS in config.ts is SSOT (17 entries). Personal-brand-os = tier 'solo' = owner sees everything.",
       "tags": [
         "admin",
         "owner",
@@ -1683,7 +1687,7 @@
       "install": "npx rahman-resources add event-tracking",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Writes to analyticsEvents table (no new schema). Anonymous page_view allowed pre-signup; other events require workspaceId. Session id per tab (sessionStorage), first-touch UTM in localStorage. Flush every ~500ms via requestIdleCallback. Cap retry queue at 500.",
+      "agentRecipe": "Run `npx rr add event-tracking`. Writes to analyticsEvents table (no new schema). Anonymous page_view allowed pre-signup; other events require workspaceId. Session id per tab (sessionStorage), first-touch UTM in localStorage. Flush every ~500ms via requestIdleCallback. Cap retry queue at 500.",
       "tags": [
         "events",
         "analytics",
@@ -1702,7 +1706,7 @@
       "install": "npx rahman-resources add theme-preset-switcher",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Import ThemePresetSwitcher from @/frontend/shared/ui/components/theme-preset-switcher and mount in the topbar. Presets live in theme-presets.ts; preset-groups.ts groups them for the picker UI.",
+      "agentRecipe": "Run `npx rr add theme-preset-switcher`. Import ThemePresetSwitcher from @/frontend/shared/ui/components/theme-preset-switcher and mount in the topbar. Presets live in theme-presets.ts; preset-groups.ts groups them for the picker UI.",
       "tags": [
         "theme",
         "presets",
@@ -1890,7 +1894,7 @@
       "install": "npx rahman-resources add contact-form-resend",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Wire contactMessages.send mutation in convex/. Server emails via Resend from form@yourdomain.com. Always validate inputs with Zod or v.* server-side. Anonymous allowed.",
+      "agentRecipe": "Run `npx rr add contact-form-resend`. Wire contactMessages.send mutation in convex/. Server emails via Resend from form@yourdomain.com. Always validate inputs with Zod or v.* server-side. Anonymous allowed.",
       "tags": [
         "form",
         "email",
@@ -1925,7 +1929,7 @@
       "install": "npx rahman-resources add platform-admin",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Contract-only scaffold. Wait for superspace /rr-send platform-admin before adopting. Distinct from per-instance `admin` slug.",
+      "agentRecipe": "Run `npx rr add platform-admin`. Contract-only scaffold. Wait for superspace /rr-send platform-admin before adopting. Distinct from per-instance `admin` slug.",
       "tags": [
         "infra",
         "admin",
@@ -2009,19 +2013,19 @@
   "slices": [
     {
       "slug": "convex-auth",
-      "title": "Convex Auth — Email Magic Link",
+      "title": "Convex Auth — Multi-Provider Sign-in",
       "category": "auth",
       "kind": "backend",
-      "version": "0.1.0",
-      "description": "@convex-dev/auth with email magic link via Resend. Self-hosted Convex friendly. Hard mandate per kitab CLAUDE.md (no Clerk).",
+      "version": "0.2.0",
+      "description": "@convex-dev/auth with Password (PBKDF2-SHA256 100k, self-hosted-friendly), Anonymous (guest), Google OAuth, and Resend magic-link. Ships a production SignInPage with i18n, prop-driven provider list, and split Login/Register tabs. No Clerk.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/convex-auth",
       "convexPaths": [
         "convex/features/auth"
       ],
       "npm": [
-        "@convex-dev/auth@^0.0.84",
-        "@auth/core@^0.37.0",
+        "@convex-dev/auth@^0.0.92",
+        "@auth/core@^0.37.4",
         "resend@^4.0.0"
       ],
       "shadcn": [
@@ -2029,8 +2033,8 @@
         "card",
         "input",
         "label",
-        "dropdown-menu",
-        "avatar"
+        "tabs",
+        "alert"
       ],
       "env": [
         {
@@ -2048,6 +2052,14 @@
         {
           "name": "SITE_URL",
           "scope": "convex"
+        },
+        {
+          "name": "AUTH_GOOGLE_ID",
+          "scope": "convex"
+        },
+        {
+          "name": "AUTH_GOOGLE_SECRET",
+          "scope": "convex"
         }
       ],
       "peers": [],
@@ -2055,8 +2067,12 @@
       "tags": [
         "auth",
         "convex",
+        "password",
         "magic-link",
-        "no-clerk"
+        "google",
+        "anonymous",
+        "no-clerk",
+        "pbkdf2"
       ],
       "agentRecipe": "Run `rr add convex-auth`. Then create convex/auth.ts using the kitab pattern (Resend provider). Set env via `npx convex env set` for self-hosted."
     },
@@ -2122,7 +2138,7 @@
         "ewallet",
         "checkout"
       ],
-      "agentRecipe": "DOKU dual-mode: Checkout (hosted, all channels) atau Direct (single channel, returns VA/QRIS/deeplink). Webhook di /webhooks/doku verify HMAC-SHA256 (canonical: Client-Id + Request-Id + Request-Timestamp + Request-Target + Digest). Idempotency by request_id index. Server-only — no NEXT_PUBLIC_*. Sandbox default (api-sandbox.doku.com); flip DOKU_IS_PRODUCTION=true for live."
+      "agentRecipe": "Run `npx rr add doku-payment`. DOKU dual-mode: Checkout (hosted, all channels) atau Direct (single channel, returns VA/QRIS/deeplink). Webhook di /webhooks/doku verify HMAC-SHA256 (canonical: Client-Id + Request-Id + Request-Timestamp + Request-Target + Digest). Idempotency by request_id index. Server-only — no NEXT_PUBLIC_*. Sandbox default (api-sandbox.doku.com); flip DOKU_IS_PRODUCTION=true for live."
     },
     {
       "slug": "midtrans-payment",
@@ -2179,7 +2195,7 @@
         "qris",
         "snap"
       ],
-      "agentRecipe": "Midtrans Snap untuk pembayaran instant. Webhook ke Convex HTTP action /api/midtrans-callback untuk update order status. Ingat: PPN 11% sudah included di amount, jangan double-count."
+      "agentRecipe": "Run `npx rr add midtrans-payment`. Midtrans Snap untuk pembayaran instant. Webhook ke Convex HTTP action /api/midtrans-callback untuk update order status. Ingat: PPN 11% sudah included di amount, jangan double-count."
     },
     {
       "slug": "resend-newsletter",
@@ -2222,7 +2238,7 @@
         "newsletter",
         "resend"
       ],
-      "agentRecipe": "Use Resend Audiences API for newsletter — store subscriber emails in Convex too for segmentation. Double opt-in: subscriber.create with status 'pending' → click link → status 'confirmed'."
+      "agentRecipe": "Run `npx rr add resend-newsletter`. Use Resend Audiences API for newsletter — store subscriber emails in Convex too for segmentation. Double opt-in: subscriber.create with status 'pending' → click link → status 'confirmed'."
     },
     {
       "slug": "ai-chat",
@@ -2234,7 +2250,7 @@
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/ai-chat",
       "convexPaths": [
-        "convex/features/ai-chat"
+        "convex/features/ai"
       ],
       "npm": [
         "ai@^4.0.0",
@@ -2320,7 +2336,7 @@
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/ai-studio",
       "convexPaths": [
-        "convex/features/ai-studio"
+        "convex/features/ai"
       ],
       "npm": [
         "ai@^4.0.0"
@@ -2375,7 +2391,7 @@
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/ai-agents",
       "convexPaths": [
-        "convex/features/ai-agents"
+        "convex/features/ai"
       ],
       "npm": [
         "ai@^4.0.0"
@@ -2434,7 +2450,7 @@
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/ai-admin",
       "convexPaths": [
-        "convex/features/ai-admin"
+        "convex/features/ai"
       ],
       "npm": [],
       "shadcn": [
@@ -2530,7 +2546,7 @@
         "tier-routing",
         "cost-guard"
       ],
-      "agentRecipe": "Wrap every AI call through ai-router. Tiers: nano = quick classification (spam-flag, headline-suggest), mid = chat / draft, flagship = methodology-review / deep-think. Token usage logs to ai_usage table for the cost dashboard."
+      "agentRecipe": "Run `npx rr add ai-router`. Wrap every AI call through ai-router. Tiers: nano = quick classification (spam-flag, headline-suggest), mid = chat / draft, flagship = methodology-review / deep-think. Token usage logs to ai_usage table for the cost dashboard."
     },
     {
       "slug": "vector-search",
@@ -2567,7 +2583,7 @@
         "convex",
         "rag"
       ],
-      "agentRecipe": "Add embedding field + vectorIndex per searchable table. Re-embed on upsert via Convex action. Cache embeddings — don't re-call OpenAI on every read."
+      "agentRecipe": "Run `npx rr add vector-search`. Add embedding field + vectorIndex per searchable table. Re-embed on upsert via Convex action. Cache embeddings — don't re-call OpenAI on every read."
     },
     {
       "slug": "mdx-blog",
@@ -2596,7 +2612,7 @@
         "mdx",
         "static"
       ],
-      "agentRecipe": "Store post body sebagai markdown di content/blog/*.mdx. Render dengan MDXRemote di [slug]/page.tsx. Auto-extract headings ke ToC via remark plugin custom."
+      "agentRecipe": "Run `npx rr add mdx-blog`. Store post body sebagai markdown di content/blog/*.mdx. Render dengan MDXRemote di [slug]/page.tsx. Auto-extract headings ke ToC via remark plugin custom."
     },
     {
       "slug": "cal-com-booking",
@@ -2636,7 +2652,7 @@
         "cal-com",
         "bookings"
       ],
-      "agentRecipe": "Embed Cal.com via @calcom/embed-react di halaman services. Configure webhook di Cal.com dashboard → POST ke /api/cal-webhook → upsert booking di Convex."
+      "agentRecipe": "Run `npx rr add cal-com-booking`. Embed Cal.com via @calcom/embed-react di halaman services. Configure webhook di Cal.com dashboard → POST ke /api/cal-webhook → upsert booking di Convex."
     },
     {
       "slug": "full-width-toggle",
@@ -2662,7 +2678,7 @@
         "localstorage",
         "dashboard"
       ],
-      "agentRecipe": "Drop <WidthContainer> around page content, <FullWidthToggle variant='icon' /> in topbar. Variant 'segment' best for settings page. Hook useFullWidth() returns [mode, setMode, cycle]. SSR-safe — defaults to 'contained' until hydrate."
+      "agentRecipe": "Run `npx rr add full-width-toggle`. Drop <WidthContainer> around page content, <FullWidthToggle variant='icon' /> in topbar. Variant 'segment' best for settings page. Hook useFullWidth() returns [mode, setMode, cycle]. SSR-safe — defaults to 'contained' until hydrate."
     },
     {
       "slug": "command-menu",
@@ -2692,7 +2708,7 @@
         "keyboard",
         "search"
       ],
-      "agentRecipe": "Wire <CommandPalette groups={...} onHistorySelect={...} labels={...} /> at the dashboard shell. Build groups from your feature registry; each item.onSelect handles navigation. Use <SearchModal bindings={{ pages, databases, recents, isLoading, onQueryChange, onSelectPage, onSelectDatabase }} /> for the search dialog — see slice README.md for adapter shapes."
+      "agentRecipe": "Run `npx rr add command-menu`. Wire <CommandPalette groups={...} onHistorySelect={...} labels={...} /> at the dashboard shell. Build groups from your feature registry; each item.onSelect handles navigation. Use <SearchModal bindings={{ pages, databases, recents, isLoading, onQueryChange, onSelectPage, onSelectDatabase }} /> for the search dialog — see slice README.md for adapter shapes."
     },
     {
       "slug": "motion-primitives",
@@ -2718,7 +2734,7 @@
         "marquee",
         "framer-motion"
       ],
-      "agentRecipe": "Each primitive is independently importable from @/features/motion-primitives. Use marquee for logo strips, kinetic-heading for hero text, magnetic for CTA buttons, cursor-spotlight for hover-reveal panels, stat-counter for animated numbers, reading-progress for blog top bar, grain for film texture, lightbox for image gallery."
+      "agentRecipe": "Run `npx rr add motion-primitives`. Each primitive is independently importable from @/features/motion-primitives. Use marquee for logo strips, kinetic-heading for hero text, magnetic for CTA buttons, cursor-spotlight for hover-reveal panels, stat-counter for animated numbers, reading-progress for blog top bar, grain for film texture, lightbox for image gallery."
     },
     {
       "slug": "responsive-dialog",
@@ -2746,7 +2762,7 @@
         "responsive",
         "primitive"
       ],
-      "agentRecipe": "Drop-in for shadcn Dialog. Use <ResponsiveDialog><ResponsiveDialogTrigger>…</ResponsiveDialogTrigger><ResponsiveDialogContent>…</ResponsiveDialogContent></ResponsiveDialog>. On mobile renders as Sheet sliding from bottom; on desktop as centered Dialog. Threshold via useMediaQuery('(min-width: 768px)')."
+      "agentRecipe": "Run `npx rr add responsive-dialog`. Drop-in for shadcn Dialog. Use <ResponsiveDialog><ResponsiveDialogTrigger>…</ResponsiveDialogTrigger><ResponsiveDialogContent>…</ResponsiveDialogContent></ResponsiveDialog>. On mobile renders as Sheet sliding from bottom; on desktop as centered Dialog. Threshold via useMediaQuery('(min-width: 768px)')."
     },
     {
       "slug": "dashboard-shell",
@@ -2782,7 +2798,7 @@
         "topbar",
         "responsive"
       ],
-      "agentRecipe": "Wraps app/(admin) routes. <ResponsiveDashboardShell sidebar={<AppSidebar />} topbar={<TopBar />}>{children}</ResponsiveDashboardShell>. Mobile: sidebar collapses to <Sheet>. Desktop: persistent sidebar + topbar. Embed FullWidthToggle in topbar for instant container resize."
+      "agentRecipe": "Run `npx rr add dashboard-shell`. Wraps app/(admin) routes. <ResponsiveDashboardShell sidebar={<AppSidebar />} topbar={<TopBar />}>{children}</ResponsiveDashboardShell>. Mobile: sidebar collapses to <Sheet>. Desktop: persistent sidebar + topbar. Embed FullWidthToggle in topbar for instant container resize."
     },
     {
       "slug": "broadcast-channel-sync",
@@ -2805,7 +2821,7 @@
         "broadcast-channel",
         "demo-pattern"
       ],
-      "agentRecipe": "Use BroadcastChannel only for demo / cross-iframe state mirroring. Production data still goes through Convex realtime. Use the useBroadcastSync(channelName, initial) hook from @/features/broadcast-channel-sync."
+      "agentRecipe": "Run `npx rr add broadcast-channel-sync`. Use BroadcastChannel only for demo / cross-iframe state mirroring. Production data still goes through Convex realtime. Use the useBroadcastSync(channelName, initial) hook from @/features/broadcast-channel-sync."
     },
     {
       "slug": "rbac-roles",
@@ -2843,7 +2859,7 @@
         "roles",
         "workspaces"
       ],
-      "agentRecipe": "Three tier presets pick which system roles to seed: solo (owner+admin), influencer (+manager), organization (6 roles). Platform admin via env PLATFORM_ADMIN_EMAILS bypasses all checks. Resolution: platform admin → workspace owner → membership.additionalPermissions → role.permissions."
+      "agentRecipe": "Run `npx rr add rbac-roles`. Three tier presets pick which system roles to seed: solo (owner+admin), influencer (+manager), organization (6 roles). Platform admin via env PLATFORM_ADMIN_EMAILS bypasses all checks. Resolution: platform admin → workspace owner → membership.additionalPermissions → role.permissions."
     },
     {
       "slug": "admin-panel",
@@ -2880,7 +2896,7 @@
         "instrumentation",
         "panel"
       ],
-      "agentRecipe": "Wrap pages with <AdminPage workspaceId tier>. AccessGate hides UI for non-admins, AdminShell renders 2-col layout with sidebar filtered by tier+perms. ADMIN_SECTIONS in config.ts is SSOT (17 entries). Personal-brand-os = tier 'solo' = owner sees everything."
+      "agentRecipe": "Run `npx rr add admin-panel`. Wrap pages with <AdminPage workspaceId tier>. AccessGate hides UI for non-admins, AdminShell renders 2-col layout with sidebar filtered by tier+perms. ADMIN_SECTIONS in config.ts is SSOT (17 entries). Personal-brand-os = tier 'solo' = owner sees everything."
     },
     {
       "slug": "event-tracking",
@@ -2914,7 +2930,7 @@
         "utm",
         "p0"
       ],
-      "agentRecipe": "Writes to analyticsEvents table (no new schema). Anonymous page_view allowed pre-signup; other events require workspaceId. Session id per tab (sessionStorage), first-touch UTM in localStorage. Flush every ~500ms via requestIdleCallback. Cap retry queue at 500."
+      "agentRecipe": "Run `npx rr add event-tracking`. Writes to analyticsEvents table (no new schema). Anonymous page_view allowed pre-signup; other events require workspaceId. Session id per tab (sessionStorage), first-touch UTM in localStorage. Flush every ~500ms via requestIdleCallback. Cap retry queue at 500."
     },
     {
       "slug": "theme-preset-switcher",
@@ -2937,7 +2953,7 @@
         "oklch",
         "design-system"
       ],
-      "agentRecipe": "Import ThemePresetSwitcher from @/frontend/shared/ui/components/theme-preset-switcher and mount in the topbar. Presets live in theme-presets.ts; preset-groups.ts groups them for the picker UI."
+      "agentRecipe": "Run `npx rr add theme-preset-switcher`. Import ThemePresetSwitcher from @/frontend/shared/ui/components/theme-preset-switcher and mount in the topbar. Presets live in theme-presets.ts; preset-groups.ts groups them for the picker UI."
     },
     {
       "slug": "icon-picker",
@@ -3308,7 +3324,7 @@
         "resend",
         "convex"
       ],
-      "agentRecipe": "Wire contactMessages.send mutation in convex/. Server emails via Resend from form@yourdomain.com. Always validate inputs with Zod or v.* server-side. Anonymous allowed."
+      "agentRecipe": "Run `npx rr add contact-form-resend`. Wire contactMessages.send mutation in convex/. Server emails via Resend from form@yourdomain.com. Always validate inputs with Zod or v.* server-side. Anonymous allowed."
     },
     {
       "slug": "admin",
@@ -3360,9 +3376,7 @@
       "description": "Multi-tenant SaaS control plane. Workspace lifecycle ops (list/delete/cascade), per-tenant tier presets (gates + quota), KPI dashboard grid. Consumer-domain bits injected via adapter props (tenantTablesAdapter / tierPresets / kpiSources). Contract-only scaffold; canonical implementation lands via /rr-send from superspace. See docs/contract-negotiations-2026-05-15.md §4.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/platform-admin",
-      "convexPaths": [
-        "convex/features/platform-admin"
-      ],
+      "convexPaths": [],
       "npm": [],
       "shadcn": [],
       "env": [
@@ -3393,7 +3407,7 @@
         "saas",
         "platform"
       ],
-      "agentRecipe": "Contract-only scaffold. Wait for superspace /rr-send platform-admin before adopting. Distinct from per-instance `admin` slug."
+      "agentRecipe": "Run `npx rr add platform-admin`. Contract-only scaffold. Wait for superspace /rr-send platform-admin before adopting. Distinct from per-instance `admin` slug."
     },
     {
       "slug": "audit-log",
