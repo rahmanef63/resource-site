@@ -192,7 +192,7 @@ export default function HomePage() {
   );
 }`,
     agentRecipe:
-      "Personal Brand OS = full-app template (public + admin). 1) Move app/preview/personal-brand-os/{robots,sitemap,opengraph-image}.* to app root. 2) Copy app/preview/personal-brand-os/public into app/(public)/, app/preview/personal-brand-os/admin into app/(admin)/. 3) Edit components/templates/personal-brand/shared/site-config.ts — set brandName, ownerName, baseUrl, twitter, email. 4) Wire convex-templates/personal-brand-os/* into your convex/ (kitab ships them outside `convex/` so the bundler doesn't try to compile scaffolds without _generated) and add @convex-dev/auth on admin routes. 5) Replace localStorage StoreProvider with Convex queries (schema mirrors localStorage shape).",
+      "Personal Brand OS = full-app template (public + admin). 1) Default `npx rr add personal-brand-os` runs `--at root`: routes promoted to app/(public)/ + app/admin/, and /preview/personal-brand-os/* path constants in nav-config/site-config/robots/sitemap auto-rewritten. (Pass `--at preview` only for sandbox demos that keep /preview/personal-brand-os/* URLs.) 2) Edit components/templates/personal-brand/shared/site-config.ts — set brandName, ownerName, baseUrl, twitter, email. 3) Wire convex-templates/personal-brand-os/* into your convex/features/personal-brand-os/ (kitab ships them outside `convex/` so the bundler doesn't try to compile scaffolds without _generated) and add @convex-dev/auth on admin routes. 4) Replace localStorage StoreProvider with Convex queries (schema mirrors localStorage shape).",
   },
   {
     slug: "agency-studio-os",

@@ -48,16 +48,18 @@ export function PostsList() {
 
       <div className="flex gap-1 text-xs">
         {(["all", "draft", "scheduled", "published"] as const).map((s) => (
-          <button
+          <Button
             key={s}
+            size="sm"
+            variant={statusFilter === s ? "default" : "outline"}
             onClick={() => setStatusFilter(s)}
             className={
-              "rounded-full border px-3 py-1 capitalize transition " +
-              (statusFilter === s ? "border-foreground bg-foreground text-background" : "border-border/60 text-muted-foreground hover:bg-accent")
+              "h-7 rounded-full px-3 text-xs capitalize " +
+              (statusFilter === s ? "" : "border-border/60 text-muted-foreground")
             }
           >
             {s} ({s === "all" ? posts.length : posts.filter((p) => p.status === s).length})
-          </button>
+          </Button>
         ))}
       </div>
 

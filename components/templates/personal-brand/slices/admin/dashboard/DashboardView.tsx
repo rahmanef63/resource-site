@@ -185,14 +185,15 @@ export function DashboardView() {
             ].map((s) => {
               const Icon = s.icon;
               return (
-                <button
+                <Button
                   key={s.title}
-                  className="rounded-lg border border-border/60 bg-background/50 p-4 text-left transition hover:border-foreground/30 hover:bg-accent/50"
+                  variant="outline"
+                  className="h-auto flex-col items-start gap-1 rounded-lg border-border/60 bg-background/50 p-4 text-left whitespace-normal hover:border-foreground/30 hover:bg-accent/50"
                 >
                   <Icon className="size-4 text-foreground/80" />
-                  <p className="mt-2 text-sm font-medium">{s.title}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">{s.blurb}</p>
-                </button>
+                  <span className="mt-2 text-sm font-medium">{s.title}</span>
+                  <span className="text-xs font-normal text-muted-foreground">{s.blurb}</span>
+                </Button>
               );
             })}
           </div>

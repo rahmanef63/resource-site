@@ -1,6 +1,10 @@
 // Personal Brand OS — single source of brand identity.
 // All UI (nav, footer, sidebar, metadata, og-image, sitemap) reads from here.
 // Edit-driven: SettingsView writes patches via store; values fall back to these defaults.
+//
+// NOTE: `bookCallHref` uses `/preview/personal-brand-os/*` for the rr sandbox.
+// Consumers installing via `npx rr add personal-brand-os` (default `--at root`)
+// get this rewritten to `/services` by the CLI's `rewritePreviewPaths()`.
 
 export type SiteConfig = {
   brandLetter: string;

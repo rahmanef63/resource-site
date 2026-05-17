@@ -96,17 +96,18 @@ export function ChatFab() {
 
   return (
     <>
-      <button
+      <Button
+        variant="outline"
         onClick={() => setOpen((o) => !o)}
         className={cn(
-          "fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-full border border-border/60 bg-background/90 px-4 py-2.5 text-sm font-medium shadow-xl backdrop-blur transition hover:bg-accent",
+          "fixed bottom-5 right-5 z-40 h-auto gap-2 rounded-full border-border/60 bg-background/90 px-4 py-2.5 text-sm font-medium shadow-xl backdrop-blur hover:bg-accent",
           open && "translate-y-2 opacity-0 pointer-events-none",
         )}
         aria-label="Open chatbot"
       >
         <MessageCircle className="size-4" />
         Tanya AI Lorem
-      </button>
+      </Button>
 
       {open && (
         <Card className="fixed bottom-5 right-5 z-40 flex w-[min(380px,calc(100vw-2.5rem))] flex-col border-border/60 bg-card shadow-2xl">

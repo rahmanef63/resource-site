@@ -141,9 +141,10 @@ ${kleur.bold("Init flags:")}
                           (heavy; ~50 components — use only if you'll customize beyond the template)
 
 ${kleur.bold("Add flags:")}
-  --at root               install template AT app/(public)/ + app/admin/ (recommended; rewrites
+  --at root               install template AT app/(public)/ + app/admin/ (default — rewrites
                           /preview/<slug> path constants in nav-config/robots/sitemap)
-  --at preview            install template AT app/preview/<slug>/ (default — sandbox style)
+  --at preview            install template AT app/preview/<slug>/ (sandbox; keeps hardcoded
+                          /preview/<slug> URLs — only useful for parallel demo of multiple templates)
   --with-shadcn-all       same as init flag
   --strict                enforce strict compose pre-flight (uncontracted/env-missing → blocker)
   --force                 skip compose pre-flight entirely
@@ -516,7 +517,14 @@ async function runAdd(rest) {
     console.log(kleur.yellow(`  ⚠ --force: skipping compose pre-flight.`));
   }
 
-  if (kind === "slice") return runLift([`rahman:${entry.slug}`, ...(targetArg !== "." ? ["--target", targetArg] : [])]);
+  if (kind === "slice") {
+    console.log(
+      kleur.bold(`\n→ Adding slice ${kleur.cyan(entry.slug)} `) +
+      kleur.dim(`[SLICE — drop-in feature]`) +
+      kleur.bold(` to ${kleur.dim(target)}\n`),
+    );
+    return runLift([`rahman:${entry.slug}`, ...(targetArg !== "." ? ["--target", targetArg] : [])]);
+  }
   if (kind === "layout") return addLayout(entry, target, targetArg, flags);
   if (kind === "feature") return addFeature(entry, target, targetArg);
   if (kind === "recipe") return addRecipe(entry);
@@ -558,13 +566,25 @@ async function runUpdate(rest) {
 }
 
 async function addLayout(t, target, targetArg, flags = {}) {
-  console.log(kleur.bold(`\n→ Installing ${kleur.cyan(t.title)} into ${kleur.dim(target)}\n`));
+  console.log(
+    kleur.bold(`\n→ Installing ${kleur.cyan(t.title)} `) +
+    kleur.dim(`[TEMPLATE — full-app scaffold]`) +
+    kleur.bold(` into ${kleur.dim(target)}\n`),
+  );
   if (!t.pullPaths || t.pullPaths.length === 0) {
     throw new Error(`Layout "${t.slug}" has no valid pullPaths in manifest.`);
   }
-  const at = typeof flags.at === "string" ? flags.at : "preview";
+  const at = typeof flags.at === "string" ? flags.at : "root";
   if (!["root", "preview"].includes(at)) {
     throw new Error(`--at must be "root" or "preview" (got "${at}").`);
+  }
+  if (at === "preview") {
+    console.log(
+      kleur.yellow(
+        `  ⚠ --at preview: routes stay under /preview/${t.slug}/* (sandbox).\n` +
+        `    For a production-ready install, omit --at or pass --at root.\n`,
+      ),
+    );
   }
 
   for (const p of t.pullPaths) {
@@ -756,7 +776,11 @@ function rewritePreviewPaths(target, slug) {
 }
 
 async function addFeature(t, target, targetArg) {
-  console.log(kleur.bold(`\n→ Adding feature ${kleur.cyan(t.title)} to ${kleur.dim(target)}\n`));
+  console.log(
+    kleur.bold(`\n→ Adding feature ${kleur.cyan(t.title)} `) +
+    kleur.dim(`[SLICE — drop-in feature]`) +
+    kleur.bold(` to ${kleur.dim(target)}\n`),
+  );
   if (!t.npmPackages || t.npmPackages.length === 0) {
     console.log(kleur.dim(`  No npm packages to install (${t.install}).`));
   } else {

@@ -1,5 +1,10 @@
 // Per-template nav config. Imported by app/preview layouts and any slice
 // that needs PUBLIC_BASE / ADMIN_BASE constants.
+//
+// NOTE: `/preview/personal-brand-os/*` is the rr sandbox path. Consumers
+// installing via `npx rr add personal-brand-os` (default `--at root`) get
+// these constants auto-rewritten to "" / "/admin" by the CLI's
+// `rewritePreviewPaths()` step — so edits below stay on the rr side.
 
 import {
   BookOpen,
