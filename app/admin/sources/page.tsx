@@ -25,7 +25,7 @@ export default function AdminSourcesPage() {
   const [showExport, setShowExport] = React.useState(false);
 
   return (
-    <div className="max-w-3xl space-y-6">
+    <div className="w-full space-y-6">
       <div>
         <p className="text-sm font-medium text-muted-foreground">Admin · Sources</p>
         <h1 className="mt-2 text-3xl font-bold tracking-tight">Sources</h1>

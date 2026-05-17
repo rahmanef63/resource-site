@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Save, RotateCcw } from "lucide-react";
+import { Eye, EyeOff, RotateCcw, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { TextField, TextAreaField, TagField, Field } from "@/components/admin/field";
@@ -9,6 +9,7 @@ import { ListEditor } from "@/components/admin/list-editor";
 import { ExportBlock } from "@/components/admin/export-block";
 import { useAdminState } from "@/lib/admin/storage";
 import { emitLayoutsTs } from "@/lib/admin/codegen";
+import { HIDDEN_KEY, emitHiddenTs } from "@/lib/admin/hidden";
 import { layouts as defaults, type LayoutEntry } from "@/lib/content/layouts";
 
 function blank(): LayoutEntry {
@@ -28,16 +29,29 @@ function blank(): LayoutEntry {
 
 export default function AdminLayoutsPage() {
   const [items, setItems, reset] = useAdminState<LayoutEntry[]>("layouts", defaults);
+  const [hidden, setHidden] = useAdminState<string[]>(HIDDEN_KEY, []);
   const [showExport, setShowExport] = React.useState(false);
+  const [showHiddenExport, setShowHiddenExport] = React.useState(false);
+
+  const hiddenSet = React.useMemo(() => new Set(hidden), [hidden]);
+
+  function toggleHide(slug: string) {
+    setHidden((prev) =>
+      prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug],
+    );
+  }
 
   return (
-    <div className="max-w-4xl space-y-6">
+    <div className="w-full space-y-6">
       <div>
         <p className="text-sm font-medium text-muted-foreground">Admin · Layouts</p>
         <h1 className="mt-2 text-3xl font-bold tracking-tight">Layouts</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Add, edit, or remove cookbook layouts. Export overwrites{" "}
-          <code className="font-mono text-xs">lib/content/layouts.ts</code>.
+          Add, edit, hide, or remove cookbook layouts. Export overwrites{" "}
+          <code className="font-mono text-xs">lib/content/layouts.ts</code>. Hide marks a
+          slug for removal from public catalogs — export{" "}
+          <code className="font-mono text-xs">lib/content/hidden-slugs.ts</code> and wire
+          <code className="font-mono text-xs"> isHidden(slug)</code> into consumers.
         </p>
       </div>
 
@@ -47,6 +61,28 @@ export default function AdminLayoutsPage() {
         blank={blank}
         itemLabel={(l) => l.title || l.slug}
         itemSubLabel={(l) => `${l.category} · ${l.source || "no source"}`}
+        isItemHidden={(l) => hiddenSet.has(l.slug)}
+        extraRowActions={(l) => (
+          <Button
+            asChild
+            variant="ghost"
+            size="icon"
+            className="size-7"
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleHide(l.slug);
+            }}
+            aria-label={hiddenSet.has(l.slug) ? "Unhide" : "Hide"}
+          >
+            <span>
+              {hiddenSet.has(l.slug) ? (
+                <Eye className="size-3.5 text-muted-foreground hover:text-foreground" />
+              ) : (
+                <EyeOff className="size-3.5 text-muted-foreground hover:text-foreground" />
+              )}
+            </span>
+          </Button>
+        )}
         renderEditor={(l, update) => (
           <div className="space-y-4">
             <div className="grid gap-3 sm:grid-cols-2">
@@ -90,9 +126,18 @@ export default function AdminLayoutsPage() {
         )}
       />
 
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <Button onClick={() => setShowExport(true)} size="sm" className="gap-1.5">
-          <Save className="size-3.5" /> Generate TS
+          <Save className="size-3.5" /> Generate layouts.ts
+        </Button>
+        <Button
+          onClick={() => setShowHiddenExport(true)}
+          size="sm"
+          variant={hiddenSet.size > 0 ? "default" : "outline"}
+          className="gap-1.5"
+          disabled={hiddenSet.size === 0}
+        >
+          <EyeOff className="size-3.5" /> Export hidden ({hiddenSet.size})
         </Button>
         <Button onClick={reset} variant="outline" size="sm" className="gap-1.5">
           <RotateCcw className="size-3.5" /> Reset to defaults
@@ -101,6 +146,13 @@ export default function AdminLayoutsPage() {
 
       {showExport && (
         <ExportBlock filename="lib/content/layouts.ts" source={emitLayoutsTs(items)} />
+      )}
+      {showHiddenExport && (
+        <ExportBlock
+          filename="lib/content/hidden-slugs.ts"
+          source={emitHiddenTs(hidden)}
+          description="Commit this file, then wire isHidden(slug) into public catalog consumers."
+        />
       )}
     </div>
   );

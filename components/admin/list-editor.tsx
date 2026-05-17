@@ -13,6 +13,8 @@ export function ListEditor<T extends { slug?: string; id?: string; title?: strin
   blank,
   itemLabel,
   itemSubLabel,
+  extraRowActions,
+  isItemHidden,
 }: {
   items: T[];
   onChange: (next: T[]) => void;
@@ -20,6 +22,8 @@ export function ListEditor<T extends { slug?: string; id?: string; title?: strin
   blank: () => T;
   itemLabel: (item: T) => string;
   itemSubLabel?: (item: T) => string;
+  extraRowActions?: (item: T, index: number) => React.ReactNode;
+  isItemHidden?: (item: T) => boolean;
 }) {
   const [openIdx, setOpenIdx] = React.useState<number | null>(null);
 
@@ -53,6 +57,7 @@ export function ListEditor<T extends { slug?: string; id?: string; title?: strin
       <div className="divide-y divide-border rounded-lg border bg-card">
         {items.map((item, i) => {
           const open = openIdx === i;
+          const hidden = isItemHidden?.(item) ?? false;
           return (
             <div key={(item.slug || item.id || itemLabel(item)) + i}>
               <button
@@ -60,7 +65,8 @@ export function ListEditor<T extends { slug?: string; id?: string; title?: strin
                 onClick={() => setOpenIdx(open ? null : i)}
                 className={cn(
                   "flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors hover:bg-accent/40",
-                  open && "bg-accent/30"
+                  open && "bg-accent/30",
+                  hidden && "opacity-50"
                 )}
               >
                 {open ? (
@@ -69,16 +75,24 @@ export function ListEditor<T extends { slug?: string; id?: string; title?: strin
                   <ChevronRight className="size-3.5 text-muted-foreground" />
                 )}
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium">{itemLabel(item)}</p>
+                  <p className={cn("truncate text-sm font-medium", hidden && "line-through")}>
+                    {itemLabel(item)}
+                  </p>
                   {itemSubLabel && (
                     <p className="truncate text-[11px] text-muted-foreground">
                       {itemSubLabel(item)}
                     </p>
                   )}
                 </div>
+                {hidden && (
+                  <Badge variant="outline" className="text-[9px]">
+                    hidden
+                  </Badge>
+                )}
                 <Badge variant="outline" className="font-mono text-[10px]">
                   {(item.slug || item.id || "").slice(0, 24)}
                 </Badge>
+                {extraRowActions?.(item, i)}
                 <Button
                   asChild
                   variant="ghost"

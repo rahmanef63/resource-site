@@ -1,15 +1,7 @@
 import { GitBranch } from "lucide-react";
 import { PageHeader } from "@/components/admin/page-header";
 import { StatCard } from "@/components/admin/stat-card";
-import { Badge } from "@/components/ui/badge";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { LineageTable } from "@/components/admin/lineage-table";
 import { loadDna, flattenLineage } from "@/lib/admin/lineage";
 
 export const metadata = {
@@ -26,7 +18,7 @@ export default async function AdminLineagePage() {
   );
 
   return (
-    <div className="space-y-8">
+    <div className="mx-auto w-full max-w-7xl space-y-6">
       <PageHeader
         eyebrow="Inspect"
         title="DNA lineage — history archive"
@@ -34,71 +26,12 @@ export default async function AdminLineagePage() {
       />
 
       <section className="grid grid-cols-3 gap-3">
-        <StatCard
-          label="Slices tracked"
-          value={dnas.length}
-          hint="DNA files present"
-        />
-        <StatCard
-          label="Total hops"
-          value={hops}
-          hint="harvest, rename, strip…"
-        />
+        <StatCard label="Slices tracked" value={dnas.length} hint="DNA files present" />
+        <StatCard label="Total hops" value={hops} hint="harvest, rename, strip…" />
         <StatCard label="Distinct actors" value={actors.size} hint="users + agents" />
       </section>
 
-      {dnas.length === 0 ? (
-        <EmptyState />
-      ) : (
-        <section className="space-y-3">
-          <div className="flex items-end justify-between">
-            <h2 className="text-base font-semibold">Recent lineage</h2>
-            <span className="text-[11px] text-muted-foreground">
-              last {lineage.length} transform(s) · newest first
-            </span>
-          </div>
-          <div className="rounded-lg border bg-card">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[18%]">Slice</TableHead>
-                  <TableHead className="w-[24%]">From → To</TableHead>
-                  <TableHead>Transforms</TableHead>
-                  <TableHead className="w-[14%]">Actor</TableHead>
-                  <TableHead className="w-[12%] text-right">When</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {lineage.map((r, i) => (
-                  <TableRow key={`${r.slice}-${i}`}>
-                    <TableCell className="font-mono text-xs">{r.slice}</TableCell>
-                    <TableCell className="font-mono text-xs text-muted-foreground">
-                      {r.from} → {r.to}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex flex-wrap gap-1">
-                        {r.transforms.map((t) => (
-                          <Badge
-                            key={t}
-                            variant="secondary"
-                            className="font-mono text-[10px]"
-                          >
-                            {t}
-                          </Badge>
-                        ))}
-                      </div>
-                    </TableCell>
-                    <TableCell className="font-mono text-xs">{r.actor}</TableCell>
-                    <TableCell className="text-right font-mono text-xs tabular-nums text-muted-foreground">
-                      {r.at.slice(0, 10)}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </section>
-      )}
+      {dnas.length === 0 ? <EmptyState /> : <LineageTable rows={lineage} />}
     </div>
   );
 }

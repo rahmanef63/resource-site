@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { CheckCircle2, Eye, EyeOff, FileText, Save, XCircle } from "lucide-react";
+import { CheckCircle2, FileText, Save, XCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,7 +13,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ExportBlock } from "@/components/admin/export-block";
+import { RegistryRowDialog } from "@/components/admin/registry-row-dialog";
 import { useAdminState } from "@/lib/admin/storage";
+import { HIDDEN_KEY, emitHiddenTs } from "@/lib/admin/hidden";
 import type { SliceManifest } from "@/lib/admin/registry";
 
 const CATEGORY_TONE: Record<string, string> = {
@@ -24,55 +26,37 @@ const CATEGORY_TONE: Record<string, string> = {
   ai: "border-fuchsia-500/40 bg-fuchsia-500/10 text-fuchsia-600 dark:text-fuchsia-400",
 };
 
-function emitHiddenTs(slugs: string[]): string {
-  const body = slugs
-    .slice()
-    .sort()
-    .map((s) => `  ${JSON.stringify(s)},`)
-    .join("\n");
-  return `// Auto-generated from /admin/registry. Slugs listed here are hidden from
-// public catalogs (slices page, sitemap, llms.txt, build picker).
-export const hiddenSlugs: readonly string[] = [
-${body}
-] as const;
-
-export function isHidden(slug: string): boolean {
-  return hiddenSlugs.includes(slug);
-}
-`;
-}
-
 export function RegistryTable({ slices }: { slices: SliceManifest[] }) {
-  const [hidden, setHidden] = useAdminState<string[]>("registry-hidden", []);
+  const [hidden, setHidden] = useAdminState<string[]>(HIDDEN_KEY, []);
+  const [openSlug, setOpenSlug] = React.useState<string | null>(null);
   const [showExport, setShowExport] = React.useState(false);
 
   const hiddenSet = React.useMemo(() => new Set(hidden), [hidden]);
-
-  const ordered = React.useMemo(() => {
-    return slices
-      .slice()
-      .sort((a, b) => {
+  const ordered = React.useMemo(
+    () =>
+      slices.slice().sort((a, b) => {
         const ah = hiddenSet.has(a.slug) ? 1 : 0;
         const bh = hiddenSet.has(b.slug) ? 1 : 0;
         if (ah !== bh) return ah - bh;
         return a.slug.localeCompare(b.slug);
-      });
-  }, [slices, hiddenSet]);
+      }),
+    [slices, hiddenSet],
+  );
+
+  const selected = openSlug ? slices.find((s) => s.slug === openSlug) ?? null : null;
 
   function toggle(slug: string) {
     setHidden((prev) =>
-      prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]
+      prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug],
     );
   }
-
-  const visibleCount = slices.length - hiddenSet.size;
 
   return (
     <>
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-xs text-muted-foreground">
-          {visibleCount} visible · {hiddenSet.size} hidden ·{" "}
-          <span className="font-mono">{slices.length}</span> total
+          {slices.length - hiddenSet.size} visible · {hiddenSet.size} hidden ·{" "}
+          <span className="font-mono">{slices.length}</span> total · click row for details
         </p>
         <Button
           size="sm"
@@ -90,36 +74,32 @@ export function RegistryTable({ slices }: { slices: SliceManifest[] }) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[16%]">Slug</TableHead>
-              <TableHead className="w-[8%]">Version</TableHead>
-              <TableHead className="w-[10%]">Category</TableHead>
+              <TableHead className="w-[24%]">Slug</TableHead>
+              <TableHead className="w-[10%]">Version</TableHead>
+              <TableHead className="w-[14%]">Category</TableHead>
               <TableHead>Title</TableHead>
-              <TableHead className="w-[7%] text-center">Contract</TableHead>
-              <TableHead className="w-[7%] text-center">Manifest</TableHead>
-              <TableHead className="w-[7%] text-center">Action</TableHead>
+              <TableHead className="w-[8%] text-center">Contract</TableHead>
+              <TableHead className="w-[8%] text-center">Manifest</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {ordered.map((s) => {
-              const isHidden = hiddenSet.has(s.slug);
+              const isH = hiddenSet.has(s.slug);
               return (
                 <TableRow
                   key={s.slug}
-                  className={isHidden ? "opacity-50" : undefined}
+                  className={`cursor-pointer hover:bg-accent/50 ${isH ? "opacity-50" : ""}`}
+                  onClick={() => setOpenSlug(s.slug)}
                 >
                   <TableCell className="font-mono text-xs font-medium">
-                    <span className={isHidden ? "line-through" : undefined}>
-                      {s.slug}
-                    </span>
-                    {isHidden && (
+                    <span className={isH ? "line-through" : undefined}>{s.slug}</span>
+                    {isH && (
                       <Badge variant="outline" className="ml-2 text-[9px]">
                         hidden
                       </Badge>
                     )}
                   </TableCell>
-                  <TableCell className="font-mono text-xs tabular-nums">
-                    {s.version}
-                  </TableCell>
+                  <TableCell className="font-mono text-xs tabular-nums">{s.version}</TableCell>
                   <TableCell>
                     {s.category && (
                       <Badge
@@ -131,14 +111,7 @@ export function RegistryTable({ slices }: { slices: SliceManifest[] }) {
                     )}
                   </TableCell>
                   <TableCell className="text-xs">
-                    <div className="line-clamp-1 font-medium">
-                      {s.title ?? "—"}
-                    </div>
-                    {s.description && (
-                      <div className="line-clamp-1 text-muted-foreground">
-                        {s.description}
-                      </div>
-                    )}
+                    <div className="line-clamp-1 font-medium">{s.title ?? "—"}</div>
                   </TableCell>
                   <TableCell className="text-center">
                     {s.hasContract ? (
@@ -154,21 +127,6 @@ export function RegistryTable({ slices }: { slices: SliceManifest[] }) {
                       <XCircle className="mx-auto size-4 text-muted-foreground/60" />
                     )}
                   </TableCell>
-                  <TableCell className="text-center">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="h-7 w-7 p-0"
-                      title={isHidden ? "Unhide" : "Hide"}
-                      onClick={() => toggle(s.slug)}
-                    >
-                      {isHidden ? (
-                        <Eye className="size-3.5" />
-                      ) : (
-                        <EyeOff className="size-3.5" />
-                      )}
-                    </Button>
-                  </TableCell>
                 </TableRow>
               );
             })}
@@ -176,11 +134,19 @@ export function RegistryTable({ slices }: { slices: SliceManifest[] }) {
         </Table>
       </section>
 
+      <RegistryRowDialog
+        slice={selected}
+        open={!!selected}
+        onOpenChange={(o) => !o && setOpenSlug(null)}
+        isHidden={selected ? hiddenSet.has(selected.slug) : false}
+        onToggleHide={toggle}
+      />
+
       {showExport && (
         <ExportBlock
           filename="lib/content/hidden-slugs.ts"
           source={emitHiddenTs(hidden)}
-          description="Commit this file, then wire isHidden(slug) into public catalog consumers (slices page, sitemap, llms.txt, build picker) to take effect."
+          description="Commit this file, then wire isHidden(slug) into public catalog consumers."
         />
       )}
     </>
