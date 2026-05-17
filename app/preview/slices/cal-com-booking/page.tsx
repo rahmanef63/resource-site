@@ -44,27 +44,29 @@ export default function Page() {
             </div>
             <div className="p-4">
               <div className="mb-2 flex items-center justify-between">
-                <button className="rounded p-1 hover:bg-accent">
+                <Button variant="ghost" size="icon" type="button" className="size-auto rounded p-1 hover:bg-accent">
                   <ChevronLeft className="h-3.5 w-3.5" />
-                </button>
+                </Button>
                 <span className="text-xs font-medium">Mei 2026</span>
-                <button className="rounded p-1 hover:bg-accent">
+                <Button variant="ghost" size="icon" type="button" className="size-auto rounded p-1 hover:bg-accent">
                   <ChevronRight className="h-3.5 w-3.5" />
-                </button>
+                </Button>
               </div>
               <div className="grid grid-cols-5 gap-1">
                 {DAYS.map((d, i) => (
-                  <button
+                  <Button
                     key={d}
+                    variant="outline"
+                    type="button"
                     onClick={() => setSelectedDay(i)}
                     className={cn(
-                      "flex flex-col items-center rounded-md border p-1.5 text-[10px]",
+                      "flex h-auto flex-col items-center rounded-md p-1.5 text-[10px]",
                       selectedDay === i ? "border-foreground bg-accent" : "hover:bg-accent/50",
                     )}
                   >
                     <span className="text-muted-foreground">{d}</span>
                     <span className="text-sm font-medium">{11 + i}</span>
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>
@@ -72,16 +74,18 @@ export default function Page() {
               <div className="text-xs font-medium">Senin, 13 Mei</div>
               <div className="mt-2 space-y-1">
                 {SLOTS.map((s) => (
-                  <button
+                  <Button
                     key={s}
+                    variant="outline"
+                    type="button"
                     onClick={() => setSelectedSlot(s)}
                     className={cn(
-                      "w-full rounded-md border px-2 py-1 text-center text-[11px]",
+                      "h-auto w-full rounded-md px-2 py-1 text-center text-[11px]",
                       selectedSlot === s ? "border-foreground bg-foreground text-background" : "hover:bg-accent",
                     )}
                   >
                     {s}
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>

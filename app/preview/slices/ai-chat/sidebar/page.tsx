@@ -73,9 +73,11 @@ export default function Page() {
                 <ul className="space-y-1">
                   {SUGGESTIONS.map((s) => (
                     <li key={s.label}>
-                      <button
+                      <Button
+                        variant="outline"
+                        type="button"
                         className={cn(
-                          "group/sug flex w-full items-center gap-2 rounded-md border border-border/40 bg-card px-2.5 py-2 text-left transition",
+                          "group/sug flex h-auto w-full items-center justify-start gap-2 rounded-md border-border/40 bg-card px-2.5 py-2 text-left transition",
                           "hover:border-primary/40 hover:bg-accent",
                         )}
                       >
@@ -85,7 +87,7 @@ export default function Page() {
                           <p className="text-[10px] text-muted-foreground">{s.hint}</p>
                         </div>
                         <ChevronRight className="size-3 text-muted-foreground" />
-                      </button>
+                      </Button>
                     </li>
                   ))}
                 </ul>

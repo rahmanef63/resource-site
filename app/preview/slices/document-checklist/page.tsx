@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { ListChecks, Check, Circle, GripVertical } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 type Item = { id: string; label: string; group: string; done: boolean };
 
@@ -46,17 +47,18 @@ export default function Page() {
               <h2 className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{g}</h2>
               <div className="space-y-1.5">
                 {items.filter((i) => i.group === g).map((i) => (
-                  <button
+                  <Button
                     key={i.id}
+                    variant="outline"
                     onClick={() => toggle(i.id)}
-                    className={`group flex w-full items-center gap-3 rounded-lg border p-3 text-left transition ${i.done ? "border-emerald-500/30 bg-emerald-500/5" : "border-border/60 bg-card hover:border-border"}`}
+                    className={`group flex h-auto w-full items-center justify-start gap-3 whitespace-normal rounded-lg p-3 text-left font-normal ${i.done ? "border-emerald-500/30 bg-emerald-500/5" : "border-border/60 bg-card hover:border-border"}`}
                   >
                     <GripVertical className="size-3.5 shrink-0 text-muted-foreground/30 opacity-0 group-hover:opacity-100" />
                     <div className={`grid size-5 shrink-0 place-items-center rounded-full border-2 ${i.done ? "border-emerald-500 bg-emerald-500 text-white" : "border-border"}`}>
                       {i.done ? <Check className="size-3" /> : <Circle className="size-2.5 opacity-0" />}
                     </div>
                     <span className={`flex-1 text-sm ${i.done ? "text-muted-foreground line-through" : ""}`}>{i.label}</span>
-                  </button>
+                  </Button>
                 ))}
               </div>
             </section>

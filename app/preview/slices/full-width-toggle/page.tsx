@@ -142,18 +142,19 @@ function SegmentToggle({ value, onChange }: { value: WidthMode; onChange: (m: Wi
       {order.map((m) => {
         const Icon = m === "contained" ? Minimize2 : m === "wide" ? ArrowLeftRight : Maximize2;
         return (
-          <button
+          <Button
             key={m}
+            variant="ghost"
             type="button"
             onClick={() => onChange(m)}
             className={cn(
-              "inline-flex items-center gap-1.5 rounded px-2.5 py-1 text-xs transition",
+              "inline-flex h-auto items-center gap-1.5 rounded px-2.5 py-1 text-xs transition",
               value === m ? "bg-accent font-medium" : "hover:bg-accent/50 text-muted-foreground",
             )}
           >
             <Icon className="h-3.5 w-3.5" />
             <span className="capitalize">{m}</span>
-          </button>
+          </Button>
         );
       })}
     </div>

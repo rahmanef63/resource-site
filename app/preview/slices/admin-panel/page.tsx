@@ -1,4 +1,5 @@
 import { LayoutDashboard, Users, FileText, Mail, Settings, ShieldCheck, BarChart3, Bot, Image as ImageIcon, Webhook, KeyRound, Activity, Folder, Wrench, Bell, Boxes, Database } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const SECTIONS = [
   { Icon: LayoutDashboard, label: "Overview" },
@@ -38,10 +39,10 @@ export default function Page() {
           </div>
           <nav className="space-y-0.5">
             {SECTIONS.map(({ Icon, label }, i) => (
-              <button key={label} className={`flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-xs transition ${i === 0 ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted/40"}`}>
+              <Button key={label} variant="ghost" type="button" className={`flex h-auto w-full items-center justify-start gap-2 rounded-md px-2 py-1.5 text-left text-xs transition ${i === 0 ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted/40"}`}>
                 <Icon className="size-3.5" />
                 {label}
-              </button>
+              </Button>
             ))}
           </nav>
         </aside>

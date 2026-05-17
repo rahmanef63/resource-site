@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Mail, Send, Check, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function Page() {
   const [state, setState] = React.useState<"idle" | "sending" | "sent">("idle");
@@ -43,15 +44,15 @@ export default function Page() {
             <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Message</label>
             <textarea className="mt-1.5 min-h-[100px] w-full rounded-md border border-border/60 bg-background px-3 py-2 text-sm outline-none focus:border-primary" placeholder="What's on your mind?" />
           </div>
-          <button
+          <Button
             type="submit"
             disabled={state !== "idle"}
-            className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-md bg-primary text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+            className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-md text-sm font-medium disabled:opacity-60"
           >
             {state === "idle" && (<><Send className="size-4" /> Send message</>)}
             {state === "sending" && (<><Loader2 className="size-4 animate-spin" /> Sending…</>)}
             {state === "sent" && (<><Check className="size-4" /> Sent — we&apos;ll be in touch</>)}
-          </button>
+          </Button>
         </form>
       </section>
     </main>

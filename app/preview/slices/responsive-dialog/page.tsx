@@ -151,9 +151,9 @@ function Dialog({
           <div className="text-sm font-semibold">
             {variant === "alert" ? "Hapus item?" : variant === "panel" ? "Pengaturan" : "Konfirmasi"}
           </div>
-          <button onClick={onClose} className="text-muted-foreground hover:text-foreground">
+          <Button variant="ghost" size="icon" type="button" onClick={onClose} className="size-auto p-0 text-muted-foreground hover:bg-transparent hover:text-foreground">
             <X className="h-4 w-4" />
-          </button>
+          </Button>
         </header>
         <div className="flex-1 space-y-2 p-4 text-sm text-muted-foreground">
           <p>
@@ -193,16 +193,18 @@ function Seg({
       <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</span>
       <div className="inline-flex rounded-md border border-input p-0.5">
         {options.map((o) => (
-          <button
+          <Button
             key={o}
+            variant="ghost"
+            type="button"
             onClick={() => onChange(o)}
             className={cn(
-              "rounded px-2 py-0.5 text-[10px] capitalize transition",
+              "h-auto rounded px-2 py-0.5 text-[10px] capitalize transition",
               value === o ? "bg-accent font-medium" : "text-muted-foreground hover:text-foreground",
             )}
           >
             {o}
-          </button>
+          </Button>
         ))}
       </div>
     </div>

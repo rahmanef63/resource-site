@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useQuery } from "convex/react";
 import { api } from "@convex/_generated/api";
+import { Button } from "@/components/ui/button";
 import { PROJECTS, PORTFOLIO_CATEGORIES, type Project, type ProjectCategory } from "../constants";
 
 function isExternalImage(src: string): boolean {
@@ -100,16 +101,17 @@ export function PortfolioGrid({
       {showFilters && (
         <div className="flex flex-wrap gap-0 mb-8 border-2 border-foreground rounded-md shadow-xs overflow-hidden w-fit">
           {PORTFOLIO_CATEGORIES.map((c, i) => (
-            <button
+            <Button
               key={c.value}
               type="button"
+              variant="ghost"
               onClick={() => setActive(c.value)}
-              className={`px-4 py-2 text-xs uppercase tracking-brutal-sm font-medium transition-colors ${
+              className={`h-auto rounded-none px-4 py-2 text-xs uppercase tracking-brutal-sm font-medium ${
                 i > 0 ? "border-l-2 border-foreground" : ""
               } ${active === c.value ? "bg-foreground text-background" : "hover:bg-foreground hover:text-background"}`}
             >
               {c.label}
-            </button>
+            </Button>
           ))}
         </div>
       )}

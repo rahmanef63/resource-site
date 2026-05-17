@@ -4,6 +4,7 @@ import * as React from "react";
 import { Image as ImageIcon } from "lucide-react";
 import { SlicePreviewLayout, PreviewSection, CodeBlock } from "@/components/slice-previews/preview-layout";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 /**
@@ -133,12 +134,13 @@ function MagneticMock() {
   }
   return (
     <div className="flex h-32 w-full items-center justify-center" onMouseMove={onMove} onMouseLeave={reset}>
-      <button
+      <Button
         ref={ref}
-        className="rounded-full bg-foreground px-6 py-2.5 text-xs font-medium text-background transition-transform"
+        type="button"
+        className="h-auto rounded-full bg-foreground px-6 py-2.5 text-xs font-medium text-background transition-transform hover:bg-foreground/90"
       >
         Hover me
-      </button>
+      </Button>
     </div>
   );
 }
@@ -233,12 +235,14 @@ function LightboxMock() {
   const [open, setOpen] = React.useState(false);
   return (
     <div className="relative h-32 w-full">
-      <button
+      <Button
+        variant="outline"
+        type="button"
         onClick={() => setOpen(true)}
-        className="flex h-full w-full items-center justify-center rounded-md border bg-gradient-to-br from-sky-100 to-indigo-100 text-xs text-muted-foreground"
+        className="flex h-full w-full items-center justify-center rounded-md bg-gradient-to-br from-sky-100 to-indigo-100 text-xs text-muted-foreground"
       >
         <ImageIcon className="mr-1.5 h-3.5 w-3.5" /> Click to zoom
-      </button>
+      </Button>
       {open && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-8"

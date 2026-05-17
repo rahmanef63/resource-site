@@ -1,4 +1,5 @@
 import { LayoutDashboard, BarChart3, Users, FileText, Settings, Bell, Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function Page() {
   return (
@@ -15,9 +16,9 @@ export default function Page() {
               { Icon: Bell, label: "Notifications" },
               { Icon: Settings, label: "Settings" },
             ].map(({ Icon, label, active }) => (
-              <button key={label} className={`flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left ${active ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted/40"}`}>
+              <Button key={label} variant="ghost" type="button" className={`flex h-auto w-full items-center justify-start gap-2 rounded-md px-2 py-1.5 text-left text-xs ${active ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted/40"}`}>
                 <Icon className="size-3.5" /> {label}
-              </button>
+              </Button>
             ))}
           </nav>
         </aside>

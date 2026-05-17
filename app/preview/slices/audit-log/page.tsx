@@ -1,4 +1,5 @@
 import { ClipboardList, Filter, Download } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const LOGS = [
   { ts: "2026-05-16 12:04:18", actor: "alice@acme", role: "Owner", action: "role.assigned", target: "bob@acme → Admin", ip: "10.0.0.4" },
@@ -23,8 +24,8 @@ export default function Page() {
           <p className="text-xs text-muted-foreground">TenantAdapter-backed. Append-only, exportable.</p>
         </div>
         <div className="ml-auto flex items-center gap-2">
-          <button className="inline-flex h-8 items-center gap-1.5 rounded-md border border-border/60 bg-card px-3 text-xs hover:bg-muted/40"><Filter className="size-3" /> Filter</button>
-          <button className="inline-flex h-8 items-center gap-1.5 rounded-md border border-border/60 bg-card px-3 text-xs hover:bg-muted/40"><Download className="size-3" /> Export CSV</button>
+          <Button variant="outline" type="button" className="inline-flex h-8 items-center gap-1.5 rounded-md border-border/60 bg-card px-3 text-xs hover:bg-muted/40"><Filter className="size-3" /> Filter</Button>
+          <Button variant="outline" type="button" className="inline-flex h-8 items-center gap-1.5 rounded-md border-border/60 bg-card px-3 text-xs hover:bg-muted/40"><Download className="size-3" /> Export CSV</Button>
         </div>
       </header>
       <div className="overflow-hidden rounded-lg border border-border/60 bg-card">

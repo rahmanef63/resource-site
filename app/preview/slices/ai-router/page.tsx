@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Bot, Cpu, Brain, Zap, Send } from "lucide-react";
 import { SlicePreviewLayout, PreviewSection, CodeBlock, FlowDiagram } from "@/components/slice-previews/preview-layout";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -35,11 +36,12 @@ export default function Page() {
       <PreviewSection title="3 tiers" hint="Pick per workload, not per app">
         <div className="grid gap-3 md:grid-cols-3">
           {PRESETS.map((p) => (
-            <button
+            <Button
               key={p.tier}
+              variant="outline"
               onClick={() => setTier(p.tier)}
               className={cn(
-                "rounded-lg border p-4 text-left transition",
+                "h-auto flex-col items-start gap-0 whitespace-normal rounded-lg p-4 text-left",
                 tier === p.tier ? "border-foreground bg-accent/40" : "hover:bg-accent/20",
               )}
             >
@@ -52,8 +54,8 @@ export default function Page() {
                 <Badge variant="outline" className="text-[9px]">{p.latency}</Badge>
                 <Badge variant="outline" className="text-[9px]">{p.cost}</Badge>
               </div>
-              <p className="mt-2 text-[11px] text-muted-foreground">{p.use}</p>
-            </button>
+              <p className="mt-2 text-[11px] font-normal text-muted-foreground">{p.use}</p>
+            </Button>
           ))}
         </div>
       </PreviewSection>
@@ -70,14 +72,15 @@ export default function Page() {
             <Badge variant="outline" className="font-mono text-[10px]">
               tier: {tier}
             </Badge>
-            <button
+            <Button
+              size="sm"
               onClick={go}
               disabled={thinking}
-              className="inline-flex items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-xs text-background disabled:opacity-50"
+              className="h-auto gap-1.5 rounded-md px-3 py-1.5 text-xs"
             >
               <Send className="h-3 w-3" />
               {thinking ? "Memproses…" : "Send"}
-            </button>
+            </Button>
           </div>
           {thinking ? (
             <div className="rounded-md border bg-muted/30 p-3 text-xs text-muted-foreground">

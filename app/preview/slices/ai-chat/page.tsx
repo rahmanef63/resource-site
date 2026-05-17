@@ -130,9 +130,11 @@ export default function Page() {
           <ul className="space-y-0.5">
             {SAMPLE_THREADS.map((t, i) => (
               <li key={t.id}>
-                <button
+                <Button
+                  variant="ghost"
+                  type="button"
                   className={cn(
-                    "flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-xs transition",
+                    "flex h-auto w-full items-center justify-start gap-2 rounded-md px-2 py-1.5 text-left text-xs transition",
                     i === 0
                       ? "bg-primary/10 text-foreground"
                       : "text-muted-foreground hover:bg-accent",
@@ -141,7 +143,7 @@ export default function Page() {
                   <MessageSquare className="size-3 shrink-0" />
                   <span className="flex-1 truncate">{t.title}</span>
                   <span className="text-[10px] font-mono text-muted-foreground/70">{t.ts}</span>
-                </button>
+                </Button>
               </li>
             ))}
           </ul>
@@ -192,11 +194,13 @@ export default function Page() {
         <Section title="Skill">
           <div className="grid grid-cols-2 gap-1.5">
             {SKILLS.map((s) => (
-              <button
+              <Button
                 key={s.slug}
+                variant="outline"
+                type="button"
                 onClick={() => setSkill(s.slug)}
                 className={cn(
-                  "rounded-md border px-2 py-2 text-left text-[11px] transition",
+                  "flex h-auto flex-col items-start gap-0 rounded-md px-2 py-2 text-left text-[11px] transition",
                   skill === s.slug
                     ? "border-primary/50 bg-primary/[0.05] text-foreground"
                     : "border-border/60 bg-card text-muted-foreground hover:bg-accent",
@@ -206,7 +210,7 @@ export default function Page() {
                 <p className="mt-0.5 truncate text-[10px] text-muted-foreground/80">
                   {s.modelDefault}
                 </p>
-              </button>
+              </Button>
             ))}
           </div>
         </Section>

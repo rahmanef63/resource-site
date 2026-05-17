@@ -51,14 +51,16 @@ export default function Page() {
         <ul className="space-y-0.5">
           {HISTORY.map((h) => (
             <li key={h.id}>
-              <button
-                className={`flex w-full items-start gap-2 rounded-md px-2 py-1.5 text-left text-xs transition ${
+              <Button
+                variant="ghost"
+                type="button"
+                className={`flex h-auto w-full items-start justify-start gap-2 rounded-md px-2 py-1.5 text-left text-xs transition ${
                   h.active ? "bg-primary/10 text-foreground" : "text-muted-foreground hover:bg-accent"
                 }`}
               >
                 <span className="flex-1 line-clamp-2">{h.prompt}</span>
                 <span className="shrink-0 font-mono text-[10px] text-muted-foreground/70">{h.ago}</span>
-              </button>
+              </Button>
             </li>
           ))}
         </ul>

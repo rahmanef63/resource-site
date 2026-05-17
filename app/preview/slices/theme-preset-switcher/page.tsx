@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Palette, Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const PRESETS = [
   { id: "default", name: "Default", swatches: ["#0f172a", "#3b82f6", "#f1f5f9", "#94a3b8"] },
@@ -27,17 +28,19 @@ export default function Page() {
       <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
         <div className="grid gap-3 sm:grid-cols-2">
           {PRESETS.map((p) => (
-            <button
+            <Button
               key={p.id}
+              variant="outline"
+              type="button"
               onClick={() => setActive(p.id)}
-              className={`flex items-center gap-3 rounded-lg border p-4 text-left transition ${active === p.id ? "border-primary/60 bg-primary/[0.04] shadow-sm" : "border-border/60 hover:border-border"}`}
+              className={`flex h-auto items-center justify-start gap-3 rounded-lg p-4 text-left transition ${active === p.id ? "border-primary/60 bg-primary/[0.04] shadow-sm" : "border-border/60 hover:border-border"}`}
             >
               <div className="flex gap-1">
                 {p.swatches.map((c) => <div key={c} className="size-6 rounded-md shadow-inner" style={{ background: c }} />)}
               </div>
               <span className="flex-1 text-sm font-medium">{p.name}</span>
               {active === p.id && <Check className="size-4 text-primary" />}
-            </button>
+            </Button>
           ))}
         </div>
         <aside className="rounded-lg border border-border/60 bg-card p-5">
@@ -47,7 +50,7 @@ export default function Page() {
             <div className="rounded-md p-4" style={{ background: current.swatches[0], color: current.swatches[2] }}>
               <p className="text-xs opacity-70">card.background</p>
               <p className="mt-1 text-lg font-semibold">Sample heading</p>
-              <button className="mt-3 rounded px-3 py-1.5 text-xs font-medium" style={{ background: current.swatches[1], color: current.swatches[2] }}>Primary action</button>
+              <Button type="button" className="mt-3 h-auto rounded px-3 py-1.5 text-xs font-medium" style={{ background: current.swatches[1], color: current.swatches[2] }}>Primary action</Button>
             </div>
             <div className="rounded-md border border-border/60 bg-muted/30 p-3 text-[10px] font-mono text-muted-foreground">
               <p>--primary: oklch(...)</p>

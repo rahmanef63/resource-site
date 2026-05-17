@@ -139,11 +139,13 @@ export default function Page() {
                       {items.map((c) => {
                         const idx = filtered.indexOf(c);
                         return (
-                          <button
+                          <Button
                             key={c.id}
+                            variant="ghost"
+                            type="button"
                             onMouseEnter={() => setActive(idx)}
                             className={cn(
-                              "flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-sm transition",
+                              "flex h-auto w-full items-center justify-start gap-2 rounded px-2 py-1.5 text-left text-sm transition",
                               idx === active ? "bg-accent" : "hover:bg-accent/50",
                             )}
                           >
@@ -153,7 +155,7 @@ export default function Page() {
                             {c.shortcut && (
                               <kbd className="ml-auto rounded border bg-muted px-1.5 py-0.5 font-mono text-[10px]">{c.shortcut}</kbd>
                             )}
-                          </button>
+                          </Button>
                         );
                       })}
                     </div>

@@ -47,6 +47,14 @@ if (slugs.length === 0) {
 const TEMPLATE_ROOTS = [
   ...slugs.map((s) => path.join(REPO, "app", "preview", s)),
   path.join(REPO, "components", "templates"),
+  // Cookbook layouts — shipped via `repoPath: "cookbook/layouts/<slug>"` in
+  // lib/content/layouts.ts. Real ship code; same rules as components/templates/.
+  path.join(REPO, "cookbook", "layouts"),
+  // Per-slice preview demos. Sandbox docs surface, but still consumer-facing
+  // and a leak path for shadcn-rule violations into example code consumers
+  // copy. Treat as warnings (not blockers) since they're not in the install
+  // payload — but we want visibility.
+  path.join(REPO, "app", "preview", "slices"),
 ];
 
 // A "real template" is one that ships public + admin route trees (e.g.
@@ -74,6 +82,27 @@ function slugForFile(file) {
   return null;
 }
 
+function severityFor(file) {
+  const rel = path.relative(REPO, file);
+  const parts = rel.split(path.sep);
+  // app/preview/slices/<slug>/* → sandbox docs surface, warning only
+  if (parts[0] === "app" && parts[1] === "preview" && parts[2] === "slices") {
+    return "warning";
+  }
+  // cookbook/layouts/<slug>/* → real ship code, blocker
+  if (parts[0] === "cookbook" && parts[1] === "layouts") {
+    return "error";
+  }
+  // components/templates/* → real ship code, blocker
+  if (parts[0] === "components" && parts[1] === "templates") {
+    return "error";
+  }
+  // app/preview/<slug>/* (non-slices) → use existing real-template logic
+  const slug = slugForFile(file);
+  if (slug) return isRealTemplate(slug) ? "error" : "warning";
+  return "error";
+}
+
 let scanned = 0;
 for (const root of TEMPLATE_ROOTS) {
   if (!existsSync(root)) continue;
@@ -82,10 +111,7 @@ for (const root of TEMPLATE_ROOTS) {
     const body = readFileSync(file, "utf8");
     const rel = path.relative(REPO, file);
     const base = path.basename(file);
-    const slug = slugForFile(file);
-    // components/templates/* always ships → real-template severity.
-    // app/preview/<slug>/* severity follows isRealTemplate().
-    const severity = slug ? (isRealTemplate(slug) ? "error" : "warning") : "error";
+    const severity = severityFor(file);
     const sink = severity === "error" ? errors : warnings;
 
     // Rule 1 — shadcn primitives only.
@@ -129,12 +155,42 @@ process.exit(errors.length > 0 ? 1 : 0);
 // ───────────────────────────────────────────────────────────────────
 
 function checkRaw(body, re, message, rel, sink) {
+  const templateRanges = templateLiteralRanges(body);
   let m;
   while ((m = re.exec(body)) !== null) {
+    if (isInsideRange(m.index, templateRanges)) continue;
     const before = body.slice(0, m.index);
     const line = before.split("\n").length;
     sink.push(`${message} at ${rel}:${line}`);
   }
+}
+
+// Track [start, end] char ranges of every backtick-delimited template
+// literal. Match indices that fall inside one are documentation strings
+// (e.g. <CodeBlock>{`<button>example</button>`}</CodeBlock>) — skip.
+// Ignores escaped backticks (rare in TSX).
+function templateLiteralRanges(body) {
+  const ranges = [];
+  let inTpl = false, tStart = 0;
+  for (let i = 0; i < body.length; i++) {
+    if (body[i] === "`" && body[i - 1] !== "\\") {
+      if (inTpl) {
+        ranges.push([tStart, i]);
+        inTpl = false;
+      } else {
+        tStart = i;
+        inTpl = true;
+      }
+    }
+  }
+  return ranges;
+}
+
+function isInsideRange(idx, ranges) {
+  for (const [a, b] of ranges) {
+    if (idx >= a && idx <= b) return true;
+  }
+  return false;
 }
 
 function findTsxFiles(dir) {

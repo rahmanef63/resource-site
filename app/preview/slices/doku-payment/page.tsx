@@ -102,17 +102,19 @@ function VaView() {
       </div>
       <div className="flex items-center gap-3 rounded-md bg-muted/40 p-3">
         <div className="font-mono text-lg tracking-wider">8800 0012 3456 7890</div>
-        <button
+        <Button
+          variant="outline"
+          size="sm"
           onClick={() => {
             void navigator.clipboard.writeText("8800001234567890");
             setCopied(true);
             setTimeout(() => setCopied(false), 1500);
           }}
-          className="ml-auto inline-flex items-center gap-1 rounded border bg-background px-2 py-1 text-[10px]"
+          className="ml-auto h-auto gap-1 rounded bg-background px-2 py-1 text-[10px]"
         >
           {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
           {copied ? "Tersalin" : "Salin"}
-        </button>
+        </Button>
       </div>
       <p className="text-[11px] text-muted-foreground">
         Berlaku 60 menit. Bayar via m-BCA / KlikBCA / ATM BCA.
@@ -158,15 +160,17 @@ function EwalletView() {
 
 function ModeChip({ active, onClick, label }: { active: boolean; onClick: () => void; label: string }) {
   return (
-    <button
+    <Button
+      size="sm"
+      variant={active ? "default" : "outline"}
       onClick={onClick}
       className={cn(
-        "rounded-full border px-3 py-1 text-xs transition",
-        active ? "border-foreground bg-foreground text-background" : "border-input hover:bg-accent",
+        "h-auto rounded-full px-3 py-1 text-xs",
+        active ? "" : "border-input",
       )}
     >
       {label}
-    </button>
+    </Button>
   );
 }
 

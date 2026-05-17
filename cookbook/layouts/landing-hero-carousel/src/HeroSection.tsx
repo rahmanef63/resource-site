@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 export const HeroSection = () => {
@@ -78,29 +79,35 @@ export const HeroSection = () => {
       </div>
 
       <div className="absolute inset-0 flex items-center justify-between p-4">
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={prevImage}
-          className="p-2 rounded-full bg-white/50 hover:bg-white/75 transition-colors"
+          className="rounded-full bg-white/50 hover:bg-white/75"
           aria-label="Previous image"
         >
           <ChevronLeft className="w-6 h-6" />
-        </button>
+        </Button>
 
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={nextImage}
-          className="p-2 rounded-full bg-white/50 hover:bg-white/75 transition-colors"
+          className="rounded-full bg-white/50 hover:bg-white/75"
           aria-label="Next image"
         >
           <ChevronRight className="w-6 h-6" />
-        </button>
+        </Button>
       </div>
 
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
         {heroImages.map((_, index) => (
-          <button
+          <Button
             key={index}
+            variant="ghost"
+            size="icon"
             onClick={() => setCurrentImageIndex(index)}
-            className={`w-2 h-2 rounded-full transition-colors ${
+            className={`h-2 w-2 rounded-full p-0 ${
               index === currentImageIndex ? 'bg-white' : 'bg-white/50'
             }`}
             aria-label={`Go to slide ${index + 1}`}

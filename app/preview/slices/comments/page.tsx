@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { MessageSquare, MoreHorizontal, CornerDownRight, Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const COMMENTS = [
   {
@@ -40,7 +41,7 @@ export default function Page() {
                   <span className="text-sm font-semibold">{c.author}</span>
                   <span className="text-[10px] text-muted-foreground">·{c.ts}</span>
                   {c.resolved && <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-600 dark:text-emerald-400"><Check className="size-3" /> Resolved</span>}
-                  {!c.resolved && <button className="ml-auto text-muted-foreground hover:text-foreground"><MoreHorizontal className="size-3.5" /></button>}
+                  {!c.resolved && <Button variant="ghost" size="icon" type="button" className="ml-auto size-auto p-0 text-muted-foreground hover:bg-transparent hover:text-foreground"><MoreHorizontal className="size-3.5" /></Button>}
                 </div>
                 <p className="mt-1.5 text-sm text-foreground">{c.text}</p>
                 {c.replies && c.replies.length > 0 && (
@@ -59,8 +60,8 @@ export default function Page() {
                 )}
                 {!c.resolved && (
                   <div className="mt-4 flex items-center gap-3 text-xs">
-                    <button className="text-muted-foreground hover:text-foreground">Reply</button>
-                    <button className="text-muted-foreground hover:text-foreground">Resolve</button>
+                    <Button variant="ghost" type="button" className="h-auto p-0 text-xs font-normal text-muted-foreground hover:bg-transparent hover:text-foreground">Reply</Button>
+                    <Button variant="ghost" type="button" className="h-auto p-0 text-xs font-normal text-muted-foreground hover:bg-transparent hover:text-foreground">Resolve</Button>
                   </div>
                 )}
               </div>

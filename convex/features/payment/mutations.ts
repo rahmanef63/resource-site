@@ -1,5 +1,6 @@
 import { internalMutation, mutation } from "../../_generated/server";
 import { v } from "convex/values";
+import { requireUser } from "../../_shared/auth";
 
 export const recordPending = internalMutation({
   args: {
@@ -129,9 +130,17 @@ export const markWebhookProcessed = internalMutation({
   },
 });
 
+// Client-callable "I just came back from the provider's hosted checkout, my
+// order should be paid now" optimistic update. Webhook (markPaidByWebhook) is
+// still the source of truth — this one runs first so the UI doesn't lag.
+//
+// Gate: requireUser. Anonymous guest-checkout flows should not use this path
+// (use the webhook to flip status server-side). If your app needs guest
+// optimistic update, replace requireUser with an order.ownerToken check.
 export const markPaid = mutation({
   args: { orderId: v.string(), providerTransactionId: v.string() },
   handler: async (ctx, { orderId, providerTransactionId }) => {
+    await requireUser(ctx);
     const order = await ctx.db
       .query("paymentOrders")
       .withIndex("by_orderId", (q) => q.eq("orderId", orderId))

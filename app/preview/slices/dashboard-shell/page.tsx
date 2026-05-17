@@ -31,16 +31,18 @@ export default function Page() {
       <PreviewSection title="Live demo" hint="Toggle the viewport">
         <div className="mb-4 inline-flex rounded-md border border-input p-0.5">
           {(["desktop", "mobile"] as const).map((v) => (
-            <button
+            <Button
               key={v}
+              variant="ghost"
+              type="button"
               onClick={() => setViewport(v)}
               className={cn(
-                "rounded px-3 py-1 text-xs capitalize transition",
+                "h-auto rounded px-3 py-1 text-xs capitalize transition",
                 viewport === v ? "bg-accent font-medium" : "text-muted-foreground hover:text-foreground",
               )}
             >
               {v}
-            </button>
+            </Button>
           ))}
         </div>
 
@@ -104,13 +106,13 @@ function MobileShell({ open, setOpen }: { open: boolean; setOpen: (v: boolean) =
   return (
     <div className="relative flex h-full flex-col">
       <header className="flex items-center justify-between border-b px-3 py-2">
-        <button onClick={() => setOpen(true)} className="rounded p-1.5 hover:bg-accent">
+        <Button variant="ghost" type="button" onClick={() => setOpen(true)} className="h-auto rounded p-1.5 hover:bg-accent">
           <Menu className="h-4 w-4" />
-        </button>
+        </Button>
         <span className="text-xs font-semibold">Acme</span>
-        <button className="rounded p-1.5 hover:bg-accent">
+        <Button variant="ghost" type="button" className="h-auto rounded p-1.5 hover:bg-accent">
           <Bell className="h-4 w-4" />
-        </button>
+        </Button>
       </header>
       <div className="flex-1 overflow-y-auto p-3">
         <ContentArea compact />
@@ -196,16 +198,18 @@ function SideRow({
   active?: boolean;
 }) {
   return (
-    <button
+    <Button
+      variant="ghost"
+      type="button"
       className={cn(
-        "flex w-full items-center gap-2 rounded px-2 py-1.5 text-xs transition",
+        "flex h-auto w-full items-center gap-2 rounded px-2 py-1.5 text-xs transition",
         active ? "bg-accent font-medium" : "hover:bg-accent/50 text-muted-foreground",
       )}
     >
       <Icon className="h-3.5 w-3.5" />
       <span className="flex-1 text-left">{label}</span>
       {badge && <span className="rounded bg-foreground/10 px-1 text-[10px]">{badge}</span>}
-    </button>
+    </Button>
   );
 }
 
@@ -219,14 +223,16 @@ function DockButton({
   active?: boolean;
 }) {
   return (
-    <button
+    <Button
+      variant="ghost"
+      type="button"
       className={cn(
-        "flex flex-col items-center gap-0.5 py-2 text-[10px]",
+        "flex h-auto flex-col items-center gap-0.5 rounded-none py-2 text-[10px]",
         active ? "text-foreground" : "text-muted-foreground",
       )}
     >
       <Icon className="h-4 w-4" />
       {label}
-    </button>
+    </Button>
   );
 }
