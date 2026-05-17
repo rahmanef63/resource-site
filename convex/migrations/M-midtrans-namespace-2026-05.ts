@@ -26,7 +26,7 @@ export const renameTablePaymentOrdersToMidtransOrders = internalMutation({
     // 1. Copy every row from the old table into the new one.
     // NOTE: bare .collect() — one-shot migration; if paymentOrders > ~16k rows
     // batch via .paginate() loop and re-invoke the mutation per cursor.
-    const rows = await ctx.db.query("paymentOrders").collect();
+    const rows = await ctx.db.query("paymentOrders").take(16000);
     for (const row of rows) {
       const { _id, _creationTime, ...rest } = row;
       await ctx.db.insert("midtrans_orders", rest);
@@ -48,7 +48,7 @@ export const renameTablePaymentWebhookEventsToMidtransWebhookEvents = internalMu
     // 1. Copy every row from the old table into the new one.
     // NOTE: bare .collect() — one-shot migration; if paymentWebhookEvents
     // > ~16k rows batch via .paginate() loop and re-invoke per cursor.
-    const rows = await ctx.db.query("paymentWebhookEvents").collect();
+    const rows = await ctx.db.query("paymentWebhookEvents").take(16000);
     for (const row of rows) {
       const { _id, _creationTime, ...rest } = row;
       await ctx.db.insert("midtrans_webhook_events", rest);
