@@ -19,6 +19,9 @@
     "routes/mcp.route.ts",
     "routes/oauth-token.route.ts",
     "views/McpAdminView.tsx",
+    "views/McpSetupPanel.tsx",
+    "views/McpTokenTable.tsx",
+    "views/mcp-admin-helpers.ts",
     "README.md"
   ],
   "convexFiles": [

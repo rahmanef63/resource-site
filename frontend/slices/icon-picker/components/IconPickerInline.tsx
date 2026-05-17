@@ -4,17 +4,17 @@ import * as React from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-import { EMOJI_GROUPS, ALL_EMOJIS } from "../lib/emoji-catalog";
-import { LUCIDE_GROUPS, ALL_LUCIDE } from "../lib/lucide-catalog";
+import { ALL_EMOJIS } from "../lib/emoji-catalog";
+import { ALL_LUCIDE } from "../lib/lucide-catalog";
 import { lucideValue, parseIconValue, withColor } from "../lib/parse";
-import { useIconStyle, type Style } from "../lib/style-pref";
+import { useIconStyle } from "../lib/style-pref";
 import { useRecentIcons, pushRecent } from "../lib/recents";
-import { buildEmojiSearchHaystack } from "../lib/emoji-keywords";
-import { EmojiCell, LucideCell, RecentCell, Grid, Empty } from "./picker-parts/cells";
+import { filterEmoji, filterLucide } from "../lib/search-haystacks";
 import { PickerToolbar } from "./picker-parts/Toolbar";
 import { ColorRow } from "./picker-parts/ColorRow";
+import { EmojiTab } from "./picker-parts/EmojiTab";
+import { LucideTab } from "./picker-parts/LucideTab";
 
 export interface IconPickerInlineProps {
   value: string | null | undefined;
@@ -32,19 +32,6 @@ export interface IconPickerInlineProps {
 }
 
 type Tab = "emoji" | "lucide";
-
-/** Precomputed lowercase search haystacks. Built once at module load. */
-const EMOJI_HAYSTACKS: ReadonlyMap<string, string> = (() => {
-  const map = new Map<string, string>();
-  for (const e of ALL_EMOJIS) map.set(e, buildEmojiSearchHaystack(e));
-  return map;
-})();
-
-const LUCIDE_LOWER: ReadonlyMap<string, string> = (() => {
-  const map = new Map<string, string>();
-  for (const n of ALL_LUCIDE) map.set(n, n.toLowerCase());
-  return map;
-})();
 
 /** Inline picker — emoji + lucide tabs, search, color row (lucide only),
  *  twemoji toggle, recents, keyboard nav.
@@ -73,25 +60,8 @@ export function IconPickerInline({ value, onChange, onClear, onSelect, className
     startTransition(() => setQuery(queryInput.trim().toLowerCase()));
   }, [queryInput]);
 
-  const filteredEmoji = React.useMemo(() => {
-    if (!query) return null;
-    const out: string[] = [];
-    for (const e of ALL_EMOJIS) {
-      const hay = EMOJI_HAYSTACKS.get(e);
-      if (hay && hay.includes(query)) out.push(e);
-    }
-    return out;
-  }, [query]);
-
-  const filteredLucide = React.useMemo(() => {
-    if (!query) return null;
-    const out: string[] = [];
-    for (const n of ALL_LUCIDE) {
-      const hay = LUCIDE_LOWER.get(n);
-      if (hay && hay.includes(query)) out.push(n);
-    }
-    return out;
-  }, [query]);
+  const filteredEmoji = React.useMemo(() => filterEmoji(query), [query]);
+  const filteredLucide = React.useMemo(() => filterLucide(query), [query]);
 
   // Icon-pick path: commits value + bumps recents + signals close intent.
   function commit(nextValue: string) {
@@ -155,6 +125,8 @@ export function IconPickerInline({ value, onChange, onClear, onSelect, className
     cells[next]?.focus();
   }
 
+  const activeValue = value ?? "";
+
   return (
     <div className={cn("w-full space-y-3", className)} onKeyDown={handleGridKeyDown} ref={gridRef}>
       <Tabs value={tab} onValueChange={(v) => setTab(v as Tab)} className="w-full">
@@ -179,93 +151,28 @@ export function IconPickerInline({ value, onChange, onClear, onSelect, className
         </div>
 
         <TabsContent value="emoji" className="mt-2">
-          <ScrollArea className="h-64 pr-2">
-            {filteredEmoji ? (
-              <Grid>
-                {filteredEmoji.length === 0 ? <Empty /> : filteredEmoji.map((e, i) => (
-                  <EmojiCell
-                    key={`f-${e}-${i}`}
-                    emoji={e}
-                    style={iconStyle}
-                    active={parsed.kind === "emoji" && parsed.emoji === e}
-                    onClick={() => pickEmoji(e)}
-                    tabIndex={i === 0 ? 0 : -1}
-                    index={i}
-                  />
-                ))}
-              </Grid>
-            ) : (
-              <div className="space-y-3">
-                {recents.length > 0 && (
-                  <RecentsSection
-                    recents={recents}
-                    style={iconStyle}
-                    activeValue={value ?? ""}
-                    onPick={pickRecent}
-                  />
-                )}
-                {EMOJI_GROUPS.map((g) => (
-                  <Section key={g.id} label={g.label}>
-                    {g.items.map((e, i) => (
-                      <EmojiCell
-                        key={`${g.id}-${e}-${i}`}
-                        emoji={e}
-                        style={iconStyle}
-                        active={parsed.kind === "emoji" && parsed.emoji === e}
-                        onClick={() => pickEmoji(e)}
-                      />
-                    ))}
-                  </Section>
-                ))}
-              </div>
-            )}
-          </ScrollArea>
+          <EmojiTab
+            filtered={filteredEmoji}
+            parsed={parsed}
+            iconStyle={iconStyle}
+            recents={recents}
+            activeValue={activeValue}
+            onPickEmoji={pickEmoji}
+            onPickRecent={pickRecent}
+          />
         </TabsContent>
 
         <TabsContent value="lucide" className="mt-2">
-          <ScrollArea className="h-64 pr-2">
-            {filteredLucide ? (
-              <Grid>
-                {filteredLucide.length === 0 ? <Empty /> : filteredLucide.map((n, i) => (
-                  <LucideCell
-                    key={`f-${n}`}
-                    name={n}
-                    color={currentColor}
-                    style={iconStyle}
-                    active={parsed.kind === "lucide" && parsed.name === n}
-                    onClick={() => pickLucide(n)}
-                    tabIndex={i === 0 ? 0 : -1}
-                    index={i}
-                  />
-                ))}
-              </Grid>
-            ) : (
-              <div className="space-y-3">
-                {recents.length > 0 && (
-                  <RecentsSection
-                    recents={recents}
-                    style={iconStyle}
-                    activeValue={value ?? ""}
-                    onPick={pickRecent}
-                  />
-                )}
-                {LUCIDE_GROUPS.map((g) => (
-                  <Section key={g.id} label={g.label}>
-                    {g.items.map((n) => (
-                      <LucideCell
-                        key={`${g.id}-${n}`}
-                        name={n}
-                        color={currentColor}
-                        style={iconStyle}
-                        active={parsed.kind === "lucide" && parsed.name === n}
-                        onClick={() => pickLucide(n)}
-                      />
-                    ))}
-                  </Section>
-                ))}
-              </div>
-            )}
-          </ScrollArea>
+          <LucideTab
+            filtered={filteredLucide}
+            parsed={parsed}
+            iconStyle={iconStyle}
+            currentColor={currentColor}
+            recents={recents}
+            activeValue={activeValue}
+            onPickLucide={pickLucide}
+            onPickRecent={pickRecent}
+          />
         </TabsContent>
       </Tabs>
 
@@ -273,36 +180,6 @@ export function IconPickerInline({ value, onChange, onClear, onSelect, className
         Emoji rendered via Twemoji (CC-BY 4.0) for consistent look across devices.
       </p>
     </div>
-  );
-}
-
-function Section({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <section>
-      <h4 className="mb-1 px-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{label}</h4>
-      <Grid>{children}</Grid>
-    </section>
-  );
-}
-
-function RecentsSection({
-  recents, style, activeValue, onPick,
-}: { recents: readonly string[]; style: Style; activeValue: string; onPick: (v: string) => void }) {
-  return (
-    <section>
-      <h4 className="mb-1 px-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Recent</h4>
-      <Grid>
-        {recents.map((v, i) => (
-          <RecentCell
-            key={`r-${v}-${i}`}
-            value={v}
-            style={style}
-            active={v === activeValue}
-            onClick={() => onPick(v)}
-          />
-        ))}
-      </Grid>
-    </section>
   );
 }
 

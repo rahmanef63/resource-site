@@ -16,6 +16,9 @@
     "hooks/index.ts",
     "lib/index.ts",
     "lib/registry-adapter.ts",
+    "lib/registry-types.ts",
+    "lib/registry-labels.ts",
+    "lib/registry-stats.ts",
     "types/index.ts",
     "utils/index.ts"
   ],

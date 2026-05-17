@@ -13,6 +13,8 @@
     "config.ts",
     "README.md",
     "components/CountryTemplateCard.tsx",
+    "components/TemplatePreviewDialog.tsx",
+    "components/country-template-types.ts",
     "components/DocumentChecklist.tsx",
     "components/document-checklist/CategoryFilter.tsx",
     "components/document-checklist/CategorySection.tsx",

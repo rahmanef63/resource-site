@@ -3,27 +3,18 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowUpRight, Eye, Save, Sparkles, Trash2, Wand2 } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Eye, Save } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { nid, slugify, useStore } from "../../../shared/store";
 import type { Post, PostStatus } from "../../../shared/types";
-import { ADMIN_BASE } from "../../../shared/nav-config";
-import { PUBLIC_BASE } from "../../../shared/nav-config";
-
-const COVERS = [
-  "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1400&q=70",
-  "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1400&q=70",
-  "https://images.unsplash.com/photo-1517436073-3b1d4d8b3d8a?auto=format&fit=crop&w=1400&q=70",
-  "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?auto=format&fit=crop&w=1400&q=70",
-];
-
-const TAGS = ["Strategy", "Engineering", "Notes", "Career", "Indonesia", "AI"];
+import { ADMIN_BASE, PUBLIC_BASE } from "../../../shared/nav-config";
+import { COVERS, TAGS } from "./post-editor-data";
+import { PostEditorSidebar } from "./PostEditorSidebar";
 
 export function PostEditor({ id }: { id: string | null }) {
   const router = useRouter();
@@ -50,30 +41,17 @@ export function PostEditor({ id }: { id: string | null }) {
   const readMin = Math.max(1, Math.round(body.split(/\s+/).length / 220));
 
   function save(nextStatus?: PostStatus) {
-    if (!title) {
-      toast.error("Title wajib diisi");
-      return;
-    }
-    if (!slug) {
-      toast.error("Slug wajib diisi");
-      return;
-    }
+    if (!title) { toast.error("Title wajib diisi"); return; }
+    if (!slug) { toast.error("Slug wajib diisi"); return; }
     const finalStatus = nextStatus ?? status;
     const post: Post = {
       id: existing?.id ?? nid("post"),
-      slug,
-      title,
-      excerpt: excerpt || title,
-      body,
-      cover,
-      tag,
+      slug, title, excerpt: excerpt || title, body, cover, tag,
       author: existing?.author ?? "Lorem D.",
       status: finalStatus,
       publishedAt:
         finalStatus === "published"
-          ? existing?.status === "published"
-            ? existing.publishedAt
-            : Date.now()
+          ? existing?.status === "published" ? existing.publishedAt : Date.now()
           : existing?.publishedAt ?? 0,
       views: existing?.views ?? 0,
       readMin,
@@ -81,11 +59,9 @@ export function PostEditor({ id }: { id: string | null }) {
     dispatch({ type: "post.upsert", post });
     setStatus(finalStatus);
     toast.success(
-      finalStatus === "published"
-        ? "Post dipublish — cek tab Public"
-        : finalStatus === "scheduled"
-          ? "Post dijadwalkan"
-          : "Draft tersimpan",
+      finalStatus === "published" ? "Post dipublish — cek tab Public"
+        : finalStatus === "scheduled" ? "Post dijadwalkan"
+        : "Draft tersimpan",
     );
     if (!existing) router.push(`${ADMIN_BASE}/posts/${post.id}`);
   }
@@ -105,6 +81,13 @@ export function PostEditor({ id }: { id: string | null }) {
     ];
     setTitle(variants[Math.floor(Math.random() * variants.length)]);
     toast.success("Headline regenerated");
+  }
+
+  function onDelete() {
+    if (existing && confirm("Delete post?")) {
+      dispatch({ type: "post.delete", id: existing.id });
+      router.push(`${ADMIN_BASE}/posts`);
+    }
   }
 
   return (
@@ -162,105 +145,20 @@ export function PostEditor({ id }: { id: string | null }) {
           </CardContent>
         </Card>
 
-        <div className="space-y-4">
-          <Card className="border-border/60 bg-card/60">
-            <CardContent className="p-5">
-              <Tabs defaultValue="ai">
-                <TabsList className="grid w-full grid-cols-3">
-                  <TabsTrigger value="ai">AI</TabsTrigger>
-                  <TabsTrigger value="meta">Meta</TabsTrigger>
-                  <TabsTrigger value="seo">SEO</TabsTrigger>
-                </TabsList>
-                <TabsContent value="ai" className="mt-3 space-y-2">
-                  <Button variant="outline" size="sm" className="w-full gap-1" onClick={aiOutline}>
-                    <Wand2 className="size-3.5" /> Generate outline
-                  </Button>
-                  <Button variant="outline" size="sm" className="w-full gap-1" onClick={aiHeadlines}>
-                    <Sparkles className="size-3.5" /> Suggest headline
-                  </Button>
-                  <Button variant="outline" size="sm" className="w-full gap-1" disabled>
-                    <Wand2 className="size-3.5" /> Adjust tone
-                  </Button>
-                  <p className="text-[10px] text-muted-foreground">model: claude-sonnet-4-6</p>
-                </TabsContent>
-                <TabsContent value="meta" className="mt-3 space-y-2 text-sm">
-                  <div>
-                    <label className="text-xs text-muted-foreground">Tag</label>
-                    <select
-                      value={tag}
-                      onChange={(e) => setTag(e.target.value)}
-                      className="mt-1 w-full rounded-md border bg-background px-2 py-1 text-sm"
-                    >
-                      {TAGS.map((t) => <option key={t}>{t}</option>)}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="text-xs text-muted-foreground">Cover</label>
-                    <div className="mt-1 grid grid-cols-2 gap-1">
-                      {COVERS.map((c) => (
-                        <Button
-                          key={c}
-                          variant="outline"
-                          onClick={() => setCover(c)}
-                          aria-label="Select cover"
-                          className={
-                            "h-auto aspect-video overflow-hidden rounded-md p-0 " +
-                            (c === cover ? "border-foreground" : "border-border/60 opacity-60 hover:opacity-100")
-                          }
-                          style={{ backgroundImage: `url(${c})`, backgroundSize: "cover", backgroundPosition: "center" }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </TabsContent>
-                <TabsContent value="seo" className="mt-3 space-y-2 text-sm">
-                  <p className="text-xs text-muted-foreground">Meta title</p>
-                  <p className="rounded border bg-muted/30 p-2 text-xs">{title || "—"}</p>
-                  <p className="text-xs text-muted-foreground">Meta description</p>
-                  <p className="rounded border bg-muted/30 p-2 text-xs">{excerpt || "—"}</p>
-                  <p className="text-[10px] text-muted-foreground">Auto-derived from title + excerpt.</p>
-                </TabsContent>
-              </Tabs>
-            </CardContent>
-          </Card>
-
-          <Card className="border-border/60 bg-card/60">
-            <CardContent className="space-y-2 p-5 text-sm">
-              <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Status</p>
-              <div className="flex flex-wrap gap-1">
-                {(["draft", "scheduled", "published"] as PostStatus[]).map((s) => (
-                  <Button
-                    key={s}
-                    size="sm"
-                    variant={status === s ? "default" : "outline"}
-                    onClick={() => setStatus(s)}
-                    className={
-                      "h-7 rounded-full px-3 text-xs capitalize " +
-                      (status === s ? "" : "border-border/60 text-muted-foreground")
-                    }
-                  >
-                    {s}
-                  </Button>
-                ))}
-              </div>
-              {existing && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="mt-2 w-full justify-start gap-1 text-rose-400 hover:bg-rose-500/10 hover:text-rose-400"
-                  onClick={() => {
-                    if (confirm("Delete post?")) {
-                      dispatch({ type: "post.delete", id: existing.id });
-                      router.push(`${ADMIN_BASE}/posts`);
-                    }
-                  }}
-                >
-                  <Trash2 className="size-3.5" /> Delete post
-                </Button>
-              )}
-            </CardContent>
-          </Card>
-        </div>
+        <PostEditorSidebar
+          title={title}
+          excerpt={excerpt}
+          tag={tag}
+          setTag={setTag}
+          cover={cover}
+          setCover={setCover}
+          status={status}
+          setStatus={setStatus}
+          hasExisting={!!existing}
+          onAiOutline={aiOutline}
+          onAiHeadlines={aiHeadlines}
+          onDelete={onDelete}
+        />
       </div>
     </div>
   );
