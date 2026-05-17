@@ -2,11 +2,49 @@
 //
 // Extracted from migrate.mjs. Resolves on-disk vs historic contract files
 // (via git show) and evaluates them with `npx tsx` to JSON-serialize the
-// named `contract` export.
+// named `contract` export. Also exposes argv parsing + repo-root finder
+// shared with the dispatcher.
 
 import { existsSync, mkdirSync, unlinkSync, writeFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import path from "node:path";
+
+export function parseFlags(rest) {
+  const positional = [];
+  const flags = {};
+  for (let i = 0; i < rest.length; i++) {
+    const a = rest[i];
+    if (a.startsWith("--")) {
+      const key = a.slice(2);
+      const next = rest[i + 1];
+      if (next && !next.startsWith("--")) {
+        flags[key] = next;
+        i++;
+      } else {
+        flags[key] = true;
+      }
+    } else {
+      positional.push(a);
+    }
+  }
+  return { positional, flags };
+}
+
+export function findRepoRoot(start) {
+  let dir = start;
+  for (let i = 0; i < 8; i++) {
+    if (
+      existsSync(path.join(dir, "packages")) &&
+      existsSync(path.join(dir, "package.json"))
+    ) {
+      return dir;
+    }
+    const parent = path.dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  return process.cwd();
+}
 
 const SLICE_ROOTS = [
   ["frontend", "slices"],

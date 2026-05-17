@@ -1,8 +1,1 @@
-[
-  "packages/cli/bin/graph.mjs",
-  "packages/cli/bin/migrate.mjs",
-  "scripts/validation/audit-slice.mjs",
-  "scripts/validation/audit-templates.mjs",
-  "scripts/validation/check-contract-drift.mjs",
-  "scripts/validation/validate-contract.mjs"
-]
+[]

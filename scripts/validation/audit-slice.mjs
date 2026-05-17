@@ -8,52 +8,39 @@
 //   4. config agrees — slice.json fields match config.ts export
 //
 // No external deps. Run: node scripts/validation/audit-slice.mjs [--check]
+//
+// Pure helpers (discoverSlices, findTsFiles, isAllowedPrefix, …) live in
+// audit-slice-helpers.mjs to keep this file ≤200 LOC.
 
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+
+import {
+  camelCase,
+  discoverSlices,
+  extractTables,
+  findTsFiles,
+  isAllowedPrefix,
+  isBareNpmImport,
+  isOwnSliceImport,
+  isRelativeWithinSlice,
+  readSliceConfig,
+} from "./audit-slice-helpers.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(__dirname, "../..");
 const SLICES_ROOT = path.join(REPO, "frontend", "slices");
-const CONVEX_ROOT = path.join(REPO, "convex", "features");
 
-const ALLOWED_IMPORT_PREFIXES = [
-  // App-relative shared / UI
-  "@/components/ui/",
-  "@/components/shared/",
-  "@/lib/shared/",
-  "@/lib/utils",
-  "@/lib/utils.ts",
-  "@/shared/",
-  // Convex barrels
-  "@convex/",
-  // Slice's own internal
-  // (we check this via slice-relative match, not prefix)
-  // Standard libs / frameworks
-  "react",
-  "react-dom",
-  "next",
-  "next/",
-  "lucide-react",
-  "convex",
-  "convex/",
-  "@convex-dev/",
-  "zod",
-  "clsx",
-  "tailwind-merge",
-];
-
-const slices = discoverSlices();
+const slices = discoverSlices(SLICES_ROOT);
 const tableNames = new Map(); // name → owning slug
-const schemasSeen = new Set(); // schemaPath → first slice that audited it (co-located providers share schemas)
+const schemasSeen = new Set(); // schemaPath → first slice that audited it
 
 const errors = [];
 const warnings = [];
 
 for (const slice of slices) {
-  // 0. metadata trio enforcement — every slice ships slice.json (already
-  //    required by discoverSlices), slice.contract.ts, slice.manifest.json.
+  // 0. metadata trio enforcement
   if (!existsSync(path.join(slice.dir, "slice.contract.ts"))) {
     errors.push(`[${slice.folder}] missing slice.contract.ts (metadata trio)`);
   }
@@ -82,7 +69,9 @@ for (const slice of slices) {
     // walk for that single file.
     if (path.basename(file) === "slice.contract.ts") continue;
     const body = readFileSync(file, "utf8");
-    const imports = [...body.matchAll(/^\s*import[^"']*["']([^"']+)["']/gm)].map((m) => m[1]);
+    const imports = [...body.matchAll(/^\s*import[^"']*["']([^"']+)["']/gm)].map(
+      (m) => m[1],
+    );
     for (const spec of imports) {
       if (isOwnSliceImport(spec, slice)) continue;
       if (isAllowedPrefix(spec)) continue;
@@ -94,14 +83,13 @@ for (const slice of slices) {
     }
   }
 
-  // 3. schema clash
-  // Co-located provider slices (e.g. doku-payment + midtrans-payment) share one
-  // schema file under convex/features/<group>/. Skip the collision check when a
-  // slice points at a schemaPath that was already audited by a sibling — the
-  // tables are the SAME declarations, not separate ones.
-  const sharedSchema = slice.convexSchemaPath && schemasSeen.has(slice.convexSchemaPath);
+  // 3. schema clash — co-located provider slices share one schema file; skip
+  // the collision check when a slice points at a schemaPath that was already
+  // audited by a sibling (tables are the SAME declarations).
+  const sharedSchema =
+    slice.convexSchemaPath && schemasSeen.has(slice.convexSchemaPath);
   if (!sharedSchema) {
-    const tables = extractTables(slice);
+    const tables = extractTables(slice, REPO);
     for (const t of tables) {
       if (tableNames.has(t)) {
         errors.push(
@@ -135,8 +123,6 @@ for (const slice of slices) {
   }
 }
 
-const isCheck = process.argv.includes("--check");
-
 if (errors.length === 0 && warnings.length === 0) {
   console.log(`✓ audit-slice: ${slices.length} slice(s) OK`);
   process.exit(0);
@@ -152,91 +138,3 @@ if (errors.length > 0) {
 }
 
 process.exit(errors.length > 0 ? 1 : 0);
-
-// ───────────────────────────────────────────────────────────────────
-
-function discoverSlices() {
-  if (!existsSync(SLICES_ROOT)) return [];
-  const out = [];
-  for (const name of readdirSync(SLICES_ROOT)) {
-    if (name.startsWith("_") || name.startsWith(".")) continue;
-    const dir = path.join(SLICES_ROOT, name);
-    if (!statSync(dir).isDirectory()) continue;
-    const sj = path.join(dir, "slice.json");
-    if (!existsSync(sj)) continue;
-    const meta = JSON.parse(readFileSync(sj, "utf8"));
-    out.push({
-      folder: name,
-      dir,
-      slugFromJson: meta.slug,
-      titleFromJson: meta.title,
-      categoryFromJson: meta.category,
-      configExport: meta.frontend?.configExport,
-      tablesExport: meta.convex?.tablesExport,
-      convexSchemaPath: meta.convex?.schemaPath,
-      convexRootPaths: meta.convex?.rootPaths ?? [],
-    });
-  }
-  return out;
-}
-
-function camelCase(slug) {
-  return slug.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
-}
-
-function findTsFiles(dir) {
-  const out = [];
-  for (const name of readdirSync(dir)) {
-    const full = path.join(dir, name);
-    const stat = statSync(full);
-    if (stat.isDirectory()) out.push(...findTsFiles(full));
-    else if (/\.(ts|tsx)$/.test(name)) out.push(full);
-  }
-  return out;
-}
-
-function isAllowedPrefix(spec) {
-  return ALLOWED_IMPORT_PREFIXES.some((p) => spec === p || spec.startsWith(p));
-}
-
-function isOwnSliceImport(spec, slice) {
-  return spec.startsWith(`@/features/${slice.folder}/`) || spec === `@/features/${slice.folder}`;
-}
-
-function isRelativeWithinSlice(spec, file, sliceDir) {
-  if (!spec.startsWith(".")) return false;
-  const target = path.resolve(path.dirname(file), spec);
-  return target.startsWith(sliceDir);
-}
-
-function isBareNpmImport(spec) {
-  // Heuristic: not relative, not absolute alias, no leading slash, contains
-  // at most one slash before '/' (or scoped pkg). Allow scoped packages too.
-  if (spec.startsWith(".") || spec.startsWith("/") || spec.startsWith("@/") || spec.startsWith("@convex/")) return false;
-  return true;
-}
-
-function extractTables(slice) {
-  const tables = [];
-  for (const rp of slice.convexRootPaths) {
-    const schemaFile = path.join(REPO, rp, "schema.ts");
-    if (!existsSync(schemaFile)) continue;
-    const body = readFileSync(schemaFile, "utf8");
-    // Match `tableName: defineTable(`
-    const matches = [...body.matchAll(/^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*:\s*defineTable\(/gm)];
-    for (const m of matches) tables.push(m[1]);
-  }
-  return tables;
-}
-
-function readSliceConfig(slice) {
-  const file = path.join(slice.dir, "config.ts");
-  if (!existsSync(file)) return null;
-  const body = readFileSync(file, "utf8");
-  // Brittle but cheap: pull literal values for slug/title/category.
-  const grab = (key) => {
-    const m = body.match(new RegExp(`${key}\\s*:\\s*"([^"]+)"`));
-    return m ? m[1] : null;
-  };
-  return { slug: grab("slug"), title: grab("title"), category: grab("category") };
-}

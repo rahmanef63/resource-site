@@ -30,7 +30,12 @@ import kleur from "kleur";
 
 import { diffContracts, planMigration } from "../lib/migration-plan.mjs";
 import { appendLineage } from "../lib/dna.mjs";
-import { loadCurrentContract, loadHistoricContract } from "./migrate-load.mjs";
+import {
+  loadCurrentContract,
+  loadHistoricContract,
+  parseFlags,
+  findRepoRoot,
+} from "./migrate-load.mjs";
 import { printPlan } from "./migrate-print.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -174,43 +179,4 @@ function appendMigrationLineage({ slug, plan, asJson }) {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-function parseFlags(rest) {
-  const positional = [];
-  const flags = {};
-  for (let i = 0; i < rest.length; i++) {
-    const a = rest[i];
-    if (a.startsWith("--")) {
-      const key = a.slice(2);
-      const next = rest[i + 1];
-      if (next && !next.startsWith("--")) {
-        flags[key] = next;
-        i++;
-      } else {
-        flags[key] = true;
-      }
-    } else {
-      positional.push(a);
-    }
-  }
-  return { positional, flags };
-}
-
-function findRepoRoot(start) {
-  let dir = start;
-  for (let i = 0; i < 8; i++) {
-    if (
-      existsSync(path.join(dir, "packages")) &&
-      existsSync(path.join(dir, "package.json"))
-    ) {
-      return dir;
-    }
-    const parent = path.dirname(dir);
-    if (parent === dir) break;
-    dir = parent;
-  }
-  return process.cwd();
-}
+// parseFlags + findRepoRoot live in migrate-load.mjs (single-source helpers).

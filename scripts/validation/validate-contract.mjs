@@ -18,12 +18,19 @@
  * Usage:
  *   node scripts/validation/validate-contract.mjs
  *   node scripts/validation/validate-contract.mjs --check    # exit 1 on any failure
+ *
+ * Shape checks + tsx loader live in validate-contract-shape.mjs (kept ≤200 LOC).
  */
-import { readFile, readdir } from "node:fs/promises";
+import { readdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
-import { spawnSync } from "node:child_process";
 import { join, resolve, relative, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+
+import {
+  shapeCheck,
+  loadContract,
+  regexFallback,
+} from "./validate-contract-shape.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..", "..");
@@ -48,131 +55,6 @@ function color(c, str) {
   return process.stdout.isTTY ? `${COLOR[c]}${str}${COLOR.reset}` : str;
 }
 
-// ---------------------------------------------------------------------------
-// Same regex set as packages/cli/lib/contract.ts — kept in sync intentionally
-// ---------------------------------------------------------------------------
-const KEBAB_CASE = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/;
-const SEMVER =
-  /^\d+\.\d+\.\d+(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
-const PREFIX = /^[a-z][a-z0-9_]*_$/;
-const CONFLICT_RE =
-  /^[a-z][a-z0-9-]*:(routes|hooks|tables|events|components)\.[A-Za-z0-9_\-\/]+$/;
-const PERMISSION = /^[^.]+\.[^.]+$/;
-
-/**
- * Replicates defineSliceContract's runtime invariants for the validator.
- * Returns array of human-readable error strings (empty on success).
- */
-function shapeCheck(c) {
-  const errs = [];
-  if (!c || typeof c !== "object") {
-    errs.push("contract is not an object");
-    return errs;
-  }
-  if (typeof c.id !== "string" || !KEBAB_CASE.test(c.id)) {
-    errs.push(`id "${String(c.id)}" must be kebab-case`);
-  }
-  if (typeof c.version !== "string" || !SEMVER.test(c.version)) {
-    errs.push(`version "${String(c.version)}" is not semver`);
-  }
-  const requires = c.requires || {};
-  const provides = c.provides || {};
-
-  if (Array.isArray(requires.rbac)) {
-    for (const p of requires.rbac) {
-      if (typeof p !== "string" || !PERMISSION.test(p)) {
-        errs.push(`rbac entry "${String(p)}" must be "<domain>.<action>"`);
-      }
-    }
-  }
-
-  const cx = requires.convex;
-  if (cx) {
-    if (typeof cx.prefix !== "string" || !PREFIX.test(cx.prefix)) {
-      errs.push(`convex.prefix "${String(cx.prefix)}" must match /^[a-z][a-z0-9_]*_$/`);
-    } else {
-      if (!Array.isArray(cx.tables)) {
-        errs.push("convex.tables must be an array");
-      } else {
-        for (const t of cx.tables) {
-          if (typeof t !== "string" || !t.startsWith(cx.prefix)) {
-            errs.push(`convex.tables entry "${String(t)}" must start with prefix "${cx.prefix}"`);
-          }
-        }
-      }
-      if (Array.isArray(provides.tables)) {
-        for (const t of provides.tables) {
-          if (typeof t !== "string" || !t.startsWith(cx.prefix)) {
-            errs.push(
-              `provides.tables entry "${String(t)}" must start with prefix "${cx.prefix}"`,
-            );
-          }
-        }
-      }
-    }
-  }
-
-  if (c.conflicts) {
-    if (!Array.isArray(c.conflicts)) {
-      errs.push("conflicts must be an array");
-    } else {
-      for (const cf of c.conflicts) {
-        if (typeof cf !== "string" || !CONFLICT_RE.test(cf)) {
-          errs.push(
-            `conflicts entry "${String(cf)}" must match "<slug>:<routes|hooks|tables|events|components>.<value>"`,
-          );
-        }
-      }
-    }
-  }
-
-  return errs;
-}
-
-/**
- * Load a contract from a `.ts` file.
- *
- * Strategy: spawn `npx tsx` to dynamic-import the file and JSON-stringify the
- * named `contract` export. Falls back to a regex pre-parse that only verifies
- * the file structurally calls `defineSliceContract({...})` if tsx is
- * unavailable or returns a non-zero exit.
- */
-function loadContract(filePath) {
-  // Dynamic import — tsx wraps named exports under `default` namespace, so we
-  // try both shapes. Use a relative path so tsx resolves it correctly.
-  const rel = "./" + relative(ROOT, filePath);
-  const code = [
-    `import(${JSON.stringify(rel)})`,
-    `  .then(m => { const c = m.contract || (m.default && m.default.contract); if (!c) { process.stderr.write("no-contract-export"); process.exit(2); } process.stdout.write(JSON.stringify(c)); })`,
-    `  .catch(e => { process.stderr.write(String(e && e.message || e)); process.exit(3); });`,
-  ].join("\n");
-  const res = spawnSync("npx", ["--no-install", "tsx", "-e", code], {
-    cwd: ROOT,
-    encoding: "utf8",
-  });
-  if (res.status === 0 && res.stdout) {
-    try {
-      return { ok: true, contract: JSON.parse(res.stdout), source: "tsx" };
-    } catch {
-      /* fall through */
-    }
-  }
-
-  return { ok: false, error: "tsx-load-failed", stderr: res.stderr || "" };
-}
-
-async function regexFallback(filePath) {
-  const src = await readFile(filePath, "utf8");
-  const hasFactory = /defineSliceContract\s*\(\s*\{/.test(src);
-  const hasExport = /export\s+const\s+contract\s*=/.test(src);
-  if (!hasFactory || !hasExport) {
-    return [
-      `regex-fallback: file does not export \`const contract = defineSliceContract({...})\``,
-    ];
-  }
-  return [];
-}
-
 async function findContracts() {
   const found = [];
   for (const root of SLICE_ROOTS) {
@@ -190,16 +72,7 @@ async function findContracts() {
   return found;
 }
 
-async function main() {
-  console.log(color("cyan", "\n== slice.contract validator =="));
-
-  const contracts = await findContracts();
-  if (contracts.length === 0) {
-    console.log(color("yellow", "  (no slice.contract.ts files found)"));
-    return;
-  }
-
-  // Phase 1: load + shape-check each contract.
+async function loadAndShapeCheck(contracts) {
   const loaded = [];
   const lines = [];
   let failures = 0;
@@ -208,7 +81,7 @@ async function main() {
   for (const c of contracts) {
     i++;
     const rel = relative(ROOT, c.path);
-    const load = loadContract(c.path);
+    const load = loadContract(c.path, ROOT);
     if (!load.ok) {
       // try regex fallback
       const fallbackErrs = await regexFallback(c.path);
@@ -233,9 +106,12 @@ async function main() {
       failures++;
     }
   }
+  return { loaded, lines, failures, lastIdx: i };
+}
 
-  // Phase 2: cross-slice conflict resolution.
-  // Build lookup: slug -> provides map.
+function crossSliceCheck(loaded, lines, startIdx) {
+  let i = startIdx;
+  let failures = 0;
   const byId = new Map();
   for (const entry of loaded) {
     if (entry.skipped || !entry.contract) continue;
@@ -268,11 +144,29 @@ async function main() {
       }
     }
   }
+  return failures;
+}
+
+async function main() {
+  console.log(color("cyan", "\n== slice.contract validator =="));
+
+  const contracts = await findContracts();
+  if (contracts.length === 0) {
+    console.log(color("yellow", "  (no slice.contract.ts files found)"));
+    return;
+  }
+
+  // Phase 1: load + shape-check each contract.
+  const { loaded, lines, failures: shapeFailures, lastIdx } = await loadAndShapeCheck(contracts);
+
+  // Phase 2: cross-slice conflict resolution.
+  const crossFailures = crossSliceCheck(loaded, lines, lastIdx);
+  const failures = shapeFailures + crossFailures;
 
   for (const line of lines) console.log("  " + line);
 
   console.log("");
-  const okCount = loaded.length - failures;
+  const okCount = loaded.length - shapeFailures;
   console.log(
     `${color("cyan", "Summary:")} ${color("green", `${okCount} ok`)} · ${color("red", `${failures} failures`)} · ${contracts.length} contract(s) scanned`,
   );
