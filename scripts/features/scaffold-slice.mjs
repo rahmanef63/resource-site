@@ -12,14 +12,18 @@
 //   5. Append a stub SliceEntry to lib/content/slices.ts
 //   6. Run `npm run slices:check` so author sees green or fails fast
 //
-// All edits stay local — does NOT commit, push, or publish.
+// Helpers in ./scaffold-slice-helpers.mjs. All edits stay local — does NOT
+// commit, push, or publish.
 
-import {
-  cpSync, existsSync, readFileSync, readdirSync, statSync, writeFileSync,
-} from "node:fs";
+import { cpSync, existsSync, writeFileSync } from "node:fs";
 import { execSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+
+import {
+  parseArgs, toTitleCase, rewriteTree, appendSliceEntry,
+  patchSliceConfig, patchConfigTs, camelCase, pascalCase,
+} from "./scaffold-slice-helpers.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(__dirname, "../..");
@@ -59,43 +63,33 @@ if (!existsSync(CONVEX_TEMPLATE)) fail(`Template missing: ${CONVEX_TEMPLATE}`);
 
 console.log(`\n→ Scaffolding slice ${slug} (${category})\n`);
 
-// 1+2. Copy both halves
+// 1+2. Copy both halves.
 cpSync(FRONTEND_TEMPLATE, frontendDest, { recursive: true });
 console.log(`  ✓ ${path.relative(REPO, frontendDest)}`);
 cpSync(CONVEX_TEMPLATE, convexDest, { recursive: true });
 console.log(`  ✓ ${path.relative(REPO, convexDest)}`);
 
-// 3. Rewrite identifiers
-rewriteTree(frontendDest);
-rewriteTree(convexDest);
+// 3. Rewrite identifiers.
+rewriteTree(frontendDest, slug);
+rewriteTree(convexDest, slug);
 console.log(`  ✓ rewrote identifiers (${slug} / ${camelCase(slug)} / ${pascalCase(slug)})`);
 
-// 4. Patch slice.json
-const sliceJsonPath = path.join(frontendDest, "slice.json");
-const sliceJson = JSON.parse(readFileSync(sliceJsonPath, "utf8"));
-sliceJson.category = category;
-sliceJson.title = title;
+// 4. Patch slice.json.
+const { sliceJson, sliceJsonPath } = patchSliceConfig(frontendDest, { title, category });
 sliceJson.description = description;
-sliceJson.tags = ["new"];
 writeFileSync(sliceJsonPath, JSON.stringify(sliceJson, null, 2) + "\n");
 console.log(`  ✓ patched slice.json (category=${category})`);
 
 // 4b. Patch config.ts — title + category fields are human text, not identifiers.
-const configTsPath = path.join(frontendDest, "config.ts");
-if (existsSync(configTsPath)) {
-  let cfg = readFileSync(configTsPath, "utf8");
-  cfg = cfg
-    .replace(/title:\s*"Example Feature"/, `title: ${JSON.stringify(title)}`)
-    .replace(/category:\s*"[^"]*"/, `category: "${category}"`);
-  writeFileSync(configTsPath, cfg);
+if (patchConfigTs(frontendDest, { title, category })) {
   console.log(`  ✓ patched config.ts (title + category)`);
 }
 
-// 5. Append stub row to lib/content/slices.ts
-appendSliceEntry({ slug, title, category, description });
+// 5. Append stub row to lib/content/slices.ts.
+appendSliceEntry({ slug, title, category, description }, SLICES_TS, fail);
 console.log(`  ✓ appended SliceEntry to lib/content/slices.ts`);
 
-// 6. Regenerate registries (new slice → new entry in the auto-emitted files)
+// 6. Regenerate registries (new slice → new entry in the auto-emitted files).
 console.log(`\n→ Regenerating registries\n`);
 try {
   execSync("npm run gen:slices", { cwd: REPO, stdio: "inherit" });
@@ -104,7 +98,7 @@ try {
   process.exit(1);
 }
 
-// 7. Validate + audit (the gen-drift check is now satisfied by step 6)
+// 7. Validate + audit (the gen-drift check is now satisfied by step 6).
 console.log(`\n→ Validating\n`);
 try {
   execSync("npm run validate:slices && npm run audit:slices", { cwd: REPO, stdio: "inherit" });
@@ -120,89 +114,6 @@ console.log(`  2. Define backend in ${path.relative(REPO, convexDest)}/{schema,q
 console.log(`  3. Fill rich metadata in lib/content/slices.ts (docsUrl, install, exampleCode, agentRecipe)`);
 console.log(`  4. Run: node packages/cli/scripts/gen-manifest.mjs`);
 console.log(`  5. Commit + (when ready) bump CLI/MCP versions and publish.\n`);
-
-// ─── helpers ───────────────────────────────────────────────────────────
-
-function rewriteTree(dir) {
-  const fromCamel = "exampleFeature";
-  const fromPascal = "ExampleFeature";
-  const fromSlug = "example-feature";
-  const toCamel = camelCase(slug);
-  const toPascal = pascalCase(slug);
-
-  for (const name of readdirSync(dir)) {
-    const full = path.join(dir, name);
-    const st = statSync(full);
-    if (st.isDirectory()) {
-      rewriteTree(full);
-      continue;
-    }
-    let body = readFileSync(full, "utf8");
-    const before = body;
-    body = body
-      .replaceAll(fromSlug, slug)
-      .replaceAll(fromPascal, toPascal)
-      .replaceAll(fromCamel, toCamel);
-    if (body !== before) writeFileSync(full, body);
-  }
-}
-
-function appendSliceEntry({ slug, title, category, description }) {
-  const src = readFileSync(SLICES_TS, "utf8");
-  if (src.includes(`slug: "${slug}"`)) {
-    console.log(`  · slices.ts already has "${slug}" — skipping append`);
-    return;
-  }
-
-  const stub = `  {
-    slug: "${slug}",
-    title: ${JSON.stringify(title)},
-    category: "${category}",
-    version: "0.1.0",
-    description: ${JSON.stringify(description)},
-    source: "rahmanef63/resource-site",
-    slicePath: "frontend/slices/${slug}",
-    convexPaths: ["convex/features/${slug}"],
-    npm: [],
-    shadcn: ["button", "card"],
-    env: [],
-    peers: [],
-    tags: ["new"],
-    agentRecipe: "Run \`rr add ${slug}\`. Replace this stub recipe with concrete steps.",
-  },
-`;
-
-  // Inject before the closing `];` of the `slices` array.
-  const closingIdx = src.lastIndexOf("];");
-  if (closingIdx === -1) fail("Could not find closing `];` in lib/content/slices.ts — append manually.");
-
-  const next = src.slice(0, closingIdx) + stub + src.slice(closingIdx);
-  writeFileSync(SLICES_TS, next);
-}
-
-function camelCase(s) {
-  return s.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
-}
-function pascalCase(s) {
-  const c = camelCase(s);
-  return c.charAt(0).toUpperCase() + c.slice(1);
-}
-function toTitleCase(s) {
-  return s.split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
-}
-
-function parseArgs(argv) {
-  const out = {};
-  for (let i = 0; i < argv.length; i++) {
-    const a = argv[i];
-    if (!a.startsWith("--")) continue;
-    const key = a.slice(2);
-    const next = argv[i + 1];
-    if (next && !next.startsWith("--")) { out[key] = next; i++; }
-    else out[key] = true;
-  }
-  return out;
-}
 
 function fail(msg) {
   console.error(`✖ ${msg}`);
