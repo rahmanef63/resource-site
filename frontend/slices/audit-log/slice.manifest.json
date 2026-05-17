@@ -9,17 +9,20 @@
     "consumerPath": "slices/audit-log"
   },
   "files": [
-    "index.ts",
-    "config.ts",
+    "README.md",
     "components/index.ts",
+    "config.ts",
     "hooks/index.ts",
+    "index.ts",
     "lib/index.ts",
     "types/index.ts",
     "utils/index.ts"
   ],
   "convex": {
     "schemaPath": "convex/features/audit-log/schema.ts",
-    "rootPaths": ["convex/features/audit-log"]
+    "rootPaths": [
+      "convex/features/audit-log"
+    ]
   },
   "imports": {
     "shared": [
@@ -27,6 +30,9 @@
       "@/components/ui/badge",
       "@/components/ui/table"
     ],
-    "external": ["react", "lucide-react"]
+    "external": [
+      "react",
+      "lucide-react"
+    ]
   }
 }

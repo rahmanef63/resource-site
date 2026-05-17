@@ -9,8 +9,9 @@
     "consumerPath": "slices/services"
   },
   "files": [
-    "index.ts",
-    "config.ts"
+    "README.md",
+    "config.ts",
+    "index.ts"
   ],
   "convexFiles": [
     "convex/features/services/schema.ts",
@@ -18,7 +19,12 @@
     "convex/features/services/mutations.ts"
   ],
   "imports": {
-    "shared": ["convex/_shared/auth"],
-    "external": ["convex/server", "convex/values"]
+    "shared": [
+      "convex/_shared/auth"
+    ],
+    "external": [
+      "convex/server",
+      "convex/values"
+    ]
   }
 }

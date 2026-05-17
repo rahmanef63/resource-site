@@ -9,10 +9,11 @@
     "consumerPath": "slices/seo"
   },
   "files": [
-    "index.ts",
-    "config.ts",
+    "README.md",
     "components/index.ts",
+    "config.ts",
     "hooks/index.ts",
+    "index.ts",
     "lib/index.ts",
     "lib/persona.ts",
     "types/index.ts",
@@ -20,7 +21,9 @@
   ],
   "convex": {
     "schemaPath": "convex/features/seo/schema.ts",
-    "rootPaths": ["convex/features/seo"]
+    "rootPaths": [
+      "convex/features/seo"
+    ]
   },
   "imports": {
     "shared": [
@@ -29,6 +32,10 @@
       "@/components/ui/input",
       "@/components/ui/textarea"
     ],
-    "external": ["react", "convex/react", "lucide-react"]
+    "external": [
+      "react",
+      "convex/react",
+      "lucide-react"
+    ]
   }
 }

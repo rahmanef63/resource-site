@@ -73,7 +73,7 @@ function patchTsconfig(targetDir, out) {
     out.skipped.push("tsconfig.json (not found)");
     return;
   }
-  let raw = readFileSync(p, "utf8");
+  const raw = readFileSync(p, "utf8");
   let cfg;
   try { cfg = JSON.parse(raw); } catch {
     out.skipped.push("tsconfig.json (parse failed — likely has comments; skipped)");

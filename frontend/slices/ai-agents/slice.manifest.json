@@ -9,20 +9,15 @@
     "consumerPath": "slices/ai-agents"
   },
   "files": [
-    "index.ts",
     "README.md",
-    "types.ts",
-    "components/RunnerDashboard.tsx",
-    "components/RunQueue.tsx",
-    "components/RunTrace.tsx",
-    "components/AgentCard.tsx",
-    "hooks/useAgentRuns.ts",
-    "hooks/useRunTrace.ts",
-    "lib/retry-policy.ts"
+    "index.ts",
+    "types.ts"
   ],
   "convex": {
     "schemaPath": "convex/features/ai-agents/schema.ts",
-    "rootPaths": ["convex/features/ai-agents"]
+    "rootPaths": [
+      "convex/features/ai-agents"
+    ]
   },
   "imports": {
     "shared": [
@@ -35,6 +30,10 @@
       "@/components/ui/progress",
       "@/lib/utils"
     ],
-    "external": ["react", "lucide-react", "ai"]
+    "external": [
+      "react",
+      "lucide-react",
+      "ai"
+    ]
   }
 }

@@ -9,8 +9,9 @@
     "consumerPath": "slices/rate-limit"
   },
   "files": [
-    "index.ts",
-    "config.ts"
+    "README.md",
+    "config.ts",
+    "index.ts"
   ],
   "convexFiles": [
     "convex/features/rate-limit/schema.ts",
@@ -18,6 +19,9 @@
   ],
   "imports": {
     "shared": [],
-    "external": ["convex/server", "convex/values"]
+    "external": [
+      "convex/server",
+      "convex/values"
+    ]
   }
 }

@@ -9,32 +9,42 @@
     "consumerPath": "slices/icon-picker"
   },
   "files": [
-    "index.ts",
+    "README.md",
+    "components/DynamicIcon.tsx",
     "components/IconPicker.tsx",
     "components/IconPickerInline.tsx",
-    "components/DynamicIcon.tsx",
     "components/PickerSkeleton.tsx",
-    "components/picker-parts/Toolbar.tsx",
     "components/picker-parts/ColorRow.tsx",
-    "components/picker-parts/cells.tsx",
-    "components/picker-parts/Sections.tsx",
     "components/picker-parts/EmojiTab.tsx",
     "components/picker-parts/LucideTab.tsx",
-    "lib/parse.ts",
-    "lib/search-haystacks.ts",
-    "lib/parse.test.ts",
+    "components/picker-parts/Sections.tsx",
+    "components/picker-parts/Toolbar.tsx",
+    "components/picker-parts/cells.tsx",
+    "index.ts",
     "lib/colors.ts",
     "lib/defaults.ts",
     "lib/emoji-catalog.ts",
     "lib/emoji-keywords.ts",
     "lib/lucide-catalog.ts",
     "lib/lucide-icons.ts",
+    "lib/parse.ts",
     "lib/recents.ts",
+    "lib/search-haystacks.ts",
     "lib/style-pref.ts",
     "lib/twemoji.ts"
   ],
   "imports": {
-    "shared": ["@/components/ui/input", "@/components/ui/popover", "@/components/ui/scroll-area", "@/components/ui/tabs", "@/lib/utils"],
-    "external": ["lucide-react", "react", "vitest"]
+    "shared": [
+      "@/components/ui/input",
+      "@/components/ui/popover",
+      "@/components/ui/scroll-area",
+      "@/components/ui/tabs",
+      "@/lib/utils"
+    ],
+    "external": [
+      "lucide-react",
+      "react",
+      "vitest"
+    ]
   }
 }

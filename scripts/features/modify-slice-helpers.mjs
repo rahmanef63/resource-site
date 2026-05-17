@@ -104,7 +104,7 @@ export function mergeBy(a, b, key) {
 export function bumpSemver(v, level, failFn) {
   const m = String(v).match(/^(\d+)\.(\d+)\.(\d+)(?:-.*)?$/);
   if (!m) failFn(`Invalid semver: "${v}"`);
-  let [, maj, min, pat] = m;
+  const [, maj, min, pat] = m;
   let M = +maj, mn = +min, p = +pat;
   if (level === "major") { M++; mn = 0; p = 0; }
   else if (level === "minor") { mn++; p = 0; }

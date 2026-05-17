@@ -75,7 +75,7 @@ export default function McpPreviewPage() {
           onRevoke={async (id, label) => {
             // Preview-only — no Convex wiring. Real consumer wires this
             // to `api.features["create-your-mcp"].mutations.revokeToken`.
-            // eslint-disable-next-line no-console
+             
             console.log(`[preview] revoke ${id} (${label})`);
           }}
         />

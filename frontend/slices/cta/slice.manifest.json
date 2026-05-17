@@ -9,13 +9,17 @@
     "consumerPath": "slices/cta"
   },
   "files": [
-    "index.ts",
-    "config.ts",
+    "README.md",
     "components/CallToAction.tsx",
+    "config.ts",
+    "index.ts",
     "views/CtaView.tsx"
   ],
   "imports": {
     "shared": [],
-    "external": ["lucide-react", "next/link"]
+    "external": [
+      "lucide-react",
+      "next/link"
+    ]
   }
 }

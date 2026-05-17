@@ -9,22 +9,15 @@
     "consumerPath": "slices/ai-chat"
   },
   "files": [
-    "index.ts",
     "README.md",
-    "components/ChatWorkbench.tsx",
-    "components/ChatThreadList.tsx",
-    "components/ChatMessagesView.tsx",
-    "components/ChatComposer.tsx",
-    "components/ChatModelPanel.tsx",
-    "hooks/useChat.ts",
-    "hooks/useStreamingMessage.ts",
-    "lib/sse.ts",
-    "lib/normalize-message.ts",
+    "index.ts",
     "types.ts"
   ],
   "convex": {
     "schemaPath": "convex/features/ai-chat/schema.ts",
-    "rootPaths": ["convex/features/ai-chat"]
+    "rootPaths": [
+      "convex/features/ai-chat"
+    ]
   },
   "imports": {
     "shared": [
@@ -41,6 +34,12 @@
       "@/components/ui/tabs",
       "@/lib/utils"
     ],
-    "external": ["react", "lucide-react", "ai", "@ai-sdk/anthropic", "@ai-sdk/openai"]
+    "external": [
+      "react",
+      "lucide-react",
+      "ai",
+      "@ai-sdk/anthropic",
+      "@ai-sdk/openai"
+    ]
   }
 }

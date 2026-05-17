@@ -9,24 +9,16 @@
     "consumerPath": "slices/ai-admin"
   },
   "files": [
-    "index.ts",
     "README.md",
-    "types.ts",
     "config.ts",
-    "components/AdminSection.tsx",
-    "components/ProvidersTable.tsx",
-    "components/ModelsGrid.tsx",
-    "components/SkillsGrid.tsx",
-    "components/ToolsTable.tsx",
-    "components/AgentsTable.tsx",
-    "components/BudgetsCard.tsx",
-    "components/AuditTable.tsx",
-    "hooks/useAiAdmin.ts",
-    "lib/encrypt.ts"
+    "index.ts",
+    "types.ts"
   ],
   "convex": {
     "schemaPath": "convex/features/ai-admin/schema.ts",
-    "rootPaths": ["convex/features/ai-admin"]
+    "rootPaths": [
+      "convex/features/ai-admin"
+    ]
   },
   "imports": {
     "shared": [
@@ -43,6 +35,9 @@
       "@/components/ui/switch",
       "@/lib/utils"
     ],
-    "external": ["react", "lucide-react"]
+    "external": [
+      "react",
+      "lucide-react"
+    ]
   }
 }

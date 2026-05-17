@@ -9,22 +9,25 @@
     "consumerPath": "slices/admin"
   },
   "files": [
-    "index.ts",
-    "config.ts",
-    "page.tsx",
+    "README.md",
     "components/index.ts",
+    "config.ts",
     "hooks/index.ts",
+    "index.ts",
     "lib/index.ts",
     "lib/registry-adapter.ts",
-    "lib/registry-types.ts",
     "lib/registry-labels.ts",
     "lib/registry-stats.ts",
+    "lib/registry-types.ts",
+    "page.tsx",
     "types/index.ts",
     "utils/index.ts"
   ],
   "convex": {
     "schemaPath": "convex/features/admin/schema.ts",
-    "rootPaths": ["convex/features/admin"]
+    "rootPaths": [
+      "convex/features/admin"
+    ]
   },
   "imports": {
     "shared": [
@@ -32,6 +35,10 @@
       "@/components/ui/button",
       "@/components/ui/badge"
     ],
-    "external": ["react", "next/link", "lucide-react"]
+    "external": [
+      "react",
+      "next/link",
+      "lucide-react"
+    ]
   }
 }

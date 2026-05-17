@@ -9,19 +9,22 @@
     "consumerPath": "slices/comments"
   },
   "files": [
-    "index.ts",
-    "config.ts",
+    "README.md",
     "components/CommentsAnchor.tsx",
     "components/CommentsThread.tsx",
     "components/index.ts",
+    "config.ts",
     "hooks/useComments.ts",
+    "index.ts",
     "lib/index.ts",
     "types/index.ts",
     "utils/index.ts"
   ],
   "convex": {
     "schemaPath": "convex/features/comments/schema.ts",
-    "rootPaths": ["convex/features/comments"]
+    "rootPaths": [
+      "convex/features/comments"
+    ]
   },
   "imports": {
     "shared": [
@@ -30,6 +33,10 @@
       "@/components/ui/textarea",
       "@/components/ui/dropdown-menu"
     ],
-    "external": ["react", "convex/react", "lucide-react"]
+    "external": [
+      "react",
+      "convex/react",
+      "lucide-react"
+    ]
   }
 }

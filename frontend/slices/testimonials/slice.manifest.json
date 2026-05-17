@@ -9,8 +9,9 @@
     "consumerPath": "slices/testimonials"
   },
   "files": [
-    "index.ts",
-    "config.ts"
+    "README.md",
+    "config.ts",
+    "index.ts"
   ],
   "convexFiles": [
     "convex/features/testimonials/schema.ts",
@@ -18,7 +19,12 @@
     "convex/features/testimonials/mutations.ts"
   ],
   "imports": {
-    "shared": ["convex/_shared/auth"],
-    "external": ["convex/server", "convex/values"]
+    "shared": [
+      "convex/_shared/auth"
+    ],
+    "external": [
+      "convex/server",
+      "convex/values"
+    ]
   }
 }

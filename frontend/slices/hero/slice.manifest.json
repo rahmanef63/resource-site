@@ -9,12 +9,17 @@
     "consumerPath": "slices/hero"
   },
   "files": [
-    "index.ts",
+    "README.md",
     "config.ts",
+    "index.ts",
     "views/HeroView.tsx"
   ],
   "imports": {
     "shared": [],
-    "external": ["lucide-react", "next/link", "next/image"]
+    "external": [
+      "lucide-react",
+      "next/link",
+      "next/image"
+    ]
   }
 }

@@ -148,7 +148,7 @@ export function BuildShell() {
       ],
       defaultTab: "builder",
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [sel, rr, templates, featureOptions, toggleFeature, toggleSlice, toggleSkill, blocks, filename, warnings],
   );
 

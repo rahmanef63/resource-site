@@ -9,20 +9,15 @@
     "consumerPath": "slices/ai-studio"
   },
   "files": [
-    "index.ts",
     "README.md",
-    "types.ts",
-    "components/GeneratorCanvas.tsx",
-    "components/VariationGrid.tsx",
-    "components/PromptComposer.tsx",
-    "components/HistoryPanel.tsx",
-    "hooks/useGenerator.ts",
-    "hooks/useGenerationHistory.ts",
-    "lib/output-renderer.ts"
+    "index.ts",
+    "types.ts"
   ],
   "convex": {
     "schemaPath": "convex/features/ai-studio/schema.ts",
-    "rootPaths": ["convex/features/ai-studio"]
+    "rootPaths": [
+      "convex/features/ai-studio"
+    ]
   },
   "imports": {
     "shared": [
@@ -36,6 +31,10 @@
       "@/components/ui/select",
       "@/lib/utils"
     ],
-    "external": ["react", "lucide-react", "ai"]
+    "external": [
+      "react",
+      "lucide-react",
+      "ai"
+    ]
   }
 }

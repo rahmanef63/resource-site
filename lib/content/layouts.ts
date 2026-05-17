@@ -298,7 +298,7 @@ export default function Page() {
       "Full-width image carousel hero with auto-fade + dot indicators. Originally CMS-driven via Convex. Best for visual brands.",
     source: "cescadesigns",
     repoPath: "cookbook/layouts/landing-hero-carousel",
-    primaryFile: "src/HeroSection.tsx",
+    primaryFile: "cookbook/layouts/landing-hero-carousel/src/HeroSection.tsx",
     tags: ["marketing", "carousel", "image", "cms"],
     previewPath: "/preview/landing-hero-carousel",
     exampleCode: `import { HeroSection } from "@/cookbook/landing-hero-carousel/HeroSection";
@@ -321,7 +321,7 @@ export default function HomePage() {
       "8-slot repeating asymmetric grid. Intersection-observer staggered scroll-reveal. Lifted from rahmanef.com portfolio.",
     source: "rahmanef.com",
     repoPath: "cookbook/layouts/landing-asymmetric-masonry",
-    primaryFile: "src/PortfolioGrid.tsx",
+    primaryFile: "cookbook/layouts/landing-asymmetric-masonry/src/PortfolioGrid.tsx",
     tags: ["marketing", "portfolio", "masonry", "scroll-reveal"],
     previewPath: "/preview/landing-asymmetric-masonry",
     exampleCode: `import { PortfolioGrid } from "@/cookbook/landing-asymmetric-masonry/PortfolioGrid";
