@@ -8,13 +8,16 @@
 //
 // Public API + types live in migration-plan.d.ts.
 //
-// Runtime contract:
-//   - `diffContracts(from, to)` is pure. No fs, no env. Returns a fresh
-//     {@link ContractDiff}.
-//   - `planMigration(diff)` is pure. Returns a fresh {@link MigrationPlan}.
-//   - The CLI dispatcher (../bin/migrate.mjs) is the only side-effecting
-//     consumer — it loads contracts via git + writes files into
-//     `convex/migrations/`.
+// Module split (kept ≤200 LOC each):
+//   - migration-plan-render.mjs  — paste-ready snippet renderers + helpers
+//   - migration-plan-steps.mjs   — per-diff-bucket step generators
+//   - migration-plan.mjs (here)  — diffContracts + planMigration glue
+
+import {
+  addRenameSteps,
+  addAddSteps,
+  addRemoveSteps,
+} from "./migration-plan-steps.mjs";
 
 // ---------------------------------------------------------------------------
 // Public — diffContracts
@@ -55,23 +58,17 @@ export function diffContracts(from, to) {
   const fromRbac = unique(from.requires?.rbac ?? []);
   const toRbac = unique(to.requires?.rbac ?? []);
 
-  /** @type {string[]} */
   let addedTables = diffArr(toTables, fromTables);
-  /** @type {string[]} */
   let removedTables = diffArr(fromTables, toTables);
   /** @type {{ from: string; to: string }[]} */
   const renamedTables = [];
 
-  // Rename detection — only when migrationFrom[from.version] is set.
   const hasRenameMarker =
     to.migrationFrom &&
     typeof to.migrationFrom === "object" &&
     typeof to.migrationFrom[from.version] === "string";
 
   if (hasRenameMarker && removedTables.length > 0 && addedTables.length > 0) {
-    // Pair by position in the original `provides.tables` arrays — covers the
-    // most common case ("rename every table at once") without trying to
-    // parse the marker string. Anything unpaired stays in added/removed.
     const removedInOrder = fromTables.filter((t) => removedTables.includes(t));
     const addedInOrder = toTables.filter((t) => addedTables.includes(t));
     const pairs = Math.min(removedInOrder.length, addedInOrder.length);
@@ -84,8 +81,7 @@ export function diffContracts(from, to) {
     addedTables = addedTables.filter((t) => !pairedTo.has(t));
   }
 
-  /** @type {import("./migration-plan").ContractDiff} */
-  const diff = {
+  return {
     slug: from.id,
     fromVersion: from.version,
     toVersion: to.version,
@@ -101,12 +97,8 @@ export function diffContracts(from, to) {
       env: diffArr(fromEnv, toEnv),
       rbac: diffArr(fromRbac, toRbac),
     }),
-    renamed: pruneEmpty({
-      tables: renamedTables,
-    }),
+    renamed: pruneEmpty({ tables: renamedTables }),
   };
-
-  return diff;
 }
 
 // ---------------------------------------------------------------------------
@@ -132,138 +124,16 @@ export function planMigration(diff) {
   /** @type {string[]} */
   const warnings = [];
   let counter = 1;
-
   const nextId = (suffix) => {
     const id = `M${String(counter).padStart(3, "0")}-${suffix}`;
     counter += 1;
     return id;
   };
 
-  // 1) Renames first (they precede plain adds, since rename is "move data")
-  for (const pair of diff.renamed.tables ?? []) {
-    steps.push({
-      id: nextId(`rename-table-${pair.from}-to-${pair.to}`),
-      kind: "convex-schema-rename-table",
-      description: `Rename Convex table "${pair.from}" → "${pair.to}". Convex has no in-place rename — data must be copied via a migration mutation.`,
-      reversible: true,
-      risk: "medium",
-      artifacts: {
-        convexSchema: renderRenameSchemaSnippet(diff.slug, pair.from, pair.to),
-        convexMigration: renderRenameMigration(diff.slug, pair.from, pair.to),
-        note:
-          'Convex does not support table rename in-place; data copy required. Run the migration as a one-shot mutation, then drop the old table once verified.',
-      },
-    });
-  }
-
-  // 2) Adds — tables, env, rbac, routes (info-only).
-  for (const name of diff.added.tables ?? []) {
-    steps.push({
-      id: nextId(`add-table-${name}`),
-      kind: "convex-schema-add-table",
-      description: `Add new Convex table "${name}" to convex/features/${diff.slug}/schema.ts.`,
-      reversible: true,
-      risk: "low",
-      artifacts: {
-        convexSchema: renderAddTableSnippet(diff.slug, name),
-        note: `Spread \`${camelCase(diff.slug)}Tables\` into convex/schema.ts so the new table is registered with the deployment.`,
-      },
-    });
-  }
-  for (const name of diff.added.env ?? []) {
-    steps.push({
-      id: nextId(`env-add-${name}`),
-      kind: "env-add",
-      description: `Declare required env var "${name}".`,
-      reversible: true,
-      risk: "low",
-      artifacts: {
-        envExample: `${name}=  # set in .env.local before deploy`,
-        note: `Append to .env.example so consumers see the requirement. Set the real value in .env.local.`,
-      },
-    });
-  }
-  for (const perm of diff.added.rbac ?? []) {
-    steps.push({
-      id: nextId(`rbac-add-${perm}`),
-      kind: "rbac-add-permission",
-      description: `Add RBAC permission "${perm}" to the project's permissions config.`,
-      reversible: true,
-      risk: "low",
-      artifacts: {
-        rbacPatch: renderRbacAddSnippet(perm),
-        note: `Add the permission to convex/workspace/permissions.ts (or the project equivalent), then grant it to the relevant role presets.`,
-      },
-    });
-  }
-  for (const route of diff.added.routes ?? []) {
-    steps.push({
-      id: nextId(`route-add-${slugifyForId(route)}`),
-      kind: "route-add",
-      description: `Slice mounts new route "${route}" — wire it up in the consumer's app router.`,
-      reversible: true,
-      risk: "low",
-      artifacts: {
-        note: `Route is provided by the slice; this step is informational. Verify no consumer-side route already collides.`,
-      },
-    });
-  }
-
-  // 3) Removes — tables (high risk), env / rbac / routes (low-medium).
-  for (const name of diff.removed.tables ?? []) {
-    steps.push({
-      id: nextId(`drop-table-${name}`),
-      kind: "convex-schema-drop-table",
-      description: `Drop Convex table "${name}". DATA LOSS — back up before running.`,
-      reversible: false,
-      risk: "high",
-      artifacts: {
-        convexMigration: renderDropMigration(diff.slug, name),
-        note:
-          'Backup data before drop. Consider rename-then-deprecate instead of a hard drop — that path is reversible.',
-      },
-    });
-    warnings.push(
-      `Drop of "${name}" is irreversible. Backup data before drop. Consider rename-then-deprecate.`,
-    );
-  }
-  for (const name of diff.removed.env ?? []) {
-    steps.push({
-      id: nextId(`env-remove-${name}`),
-      kind: "env-remove",
-      description: `Env var "${name}" is no longer required by the slice — remove from .env.example.`,
-      reversible: true,
-      risk: "low",
-      artifacts: {
-        note: `Removing an env declaration is safe; the runtime simply ignores it. Drop the line from .env.example.`,
-      },
-    });
-  }
-  for (const perm of diff.removed.rbac ?? []) {
-    steps.push({
-      id: nextId(`rbac-remove-${perm}`),
-      kind: "rbac-remove-permission",
-      description: `RBAC permission "${perm}" is no longer required — consider deprecating in the project's permissions config.`,
-      reversible: true,
-      risk: "medium",
-      artifacts: {
-        rbacPatch: renderRbacRemoveSnippet(perm),
-        note: `Removing a permission may strand roles that still reference it. Audit role presets before deleting.`,
-      },
-    });
-  }
-  for (const route of diff.removed.routes ?? []) {
-    steps.push({
-      id: nextId(`route-remove-${slugifyForId(route)}`),
-      kind: "route-remove",
-      description: `Slice no longer provides route "${route}" — remove dangling links in the consumer.`,
-      reversible: true,
-      risk: "low",
-      artifacts: {
-        note: `Route is no longer mounted by the slice; this step is informational. Audit navigation + sitemap entries.`,
-      },
-    });
-  }
+  // Renames first (precede plain adds), then adds, then removes.
+  addRenameSteps(steps, diff, nextId);
+  addAddSteps(steps, diff, nextId);
+  addRemoveSteps(steps, warnings, diff, nextId);
 
   const highRisk = steps.filter((s) => s.risk === "high").length;
   const irreversible = steps.filter((s) => !s.reversible).length;
@@ -273,112 +143,9 @@ export function planMigration(diff) {
     fromVersion: diff.fromVersion,
     toVersion: diff.toVersion,
     steps,
-    summary: {
-      totalSteps: steps.length,
-      highRisk,
-      irreversible,
-    },
+    summary: { totalSteps: steps.length, highRisk, irreversible },
     warnings,
   };
-}
-
-// ---------------------------------------------------------------------------
-// Internal — artifact renderers
-// ---------------------------------------------------------------------------
-
-function renderAddTableSnippet(slug, table) {
-  const obj = `${camelCase(slug)}Tables`;
-  return [
-    `// convex/features/${slug}/schema.ts`,
-    `// Append the new table to the existing \`${obj}\` export:`,
-    `//`,
-    `//   export const ${obj} = {`,
-    `//     ...existing,`,
-    `    ${table}: defineTable({`,
-    `      // TODO: declare fields for ${table}`,
-    `      createdAt: v.number(),`,
-    `    }),`,
-    `//   };`,
-  ].join("\n");
-}
-
-function renderRenameSchemaSnippet(slug, fromName, toName) {
-  const obj = `${camelCase(slug)}Tables`;
-  return [
-    `// convex/features/${slug}/schema.ts`,
-    `// Rename "${fromName}" → "${toName}" inside \`${obj}\`:`,
-    `//`,
-    `//   export const ${obj} = {`,
-    `//     // OLD: ${fromName}: defineTable({...})`,
-    `    ${toName}: defineTable({`,
-    `      // Carry over the prior shape from ${fromName}.`,
-    `    }),`,
-    `//   };`,
-  ].join("\n");
-}
-
-function renderRenameMigration(slug, fromName, toName) {
-  return [
-    `// convex/migrations/rename-${fromName}-to-${toName}.ts`,
-    `// One-shot data copy — Convex has no in-place table rename.`,
-    ``,
-    `import { internalMutation } from "../_generated/server";`,
-    ``,
-    `export default internalMutation({`,
-    `  args: {},`,
-    `  handler: async (ctx) => {`,
-    `    // 1. Copy every row from the old table into the new one.`,
-    `    const rows = await ctx.db.query("${fromName}").collect();`,
-    `    for (const row of rows) {`,
-    `      const { _id, _creationTime, ...rest } = row;`,
-    `      await ctx.db.insert("${toName}", rest);`,
-    `    }`,
-    `    // 2. Once verified, drop the old table in a follow-up migration.`,
-    `    //    (Leaving the drop separate keeps this step reversible.)`,
-    `    return { copied: rows.length };`,
-    `  },`,
-    `});`,
-    `// slug: ${slug}`,
-  ].join("\n");
-}
-
-function renderDropMigration(slug, table) {
-  return [
-    `// convex/migrations/drop-${table}.ts`,
-    `// IRREVERSIBLE — backup ${table} before running. Slice: ${slug}.`,
-    ``,
-    `import { internalMutation } from "../_generated/server";`,
-    ``,
-    `export default internalMutation({`,
-    `  args: {},`,
-    `  handler: async (ctx) => {`,
-    `    const rows = await ctx.db.query("${table}").collect();`,
-    `    for (const row of rows) {`,
-    `      await ctx.db.delete(row._id);`,
-    `    }`,
-    `    return { deleted: rows.length };`,
-    `  },`,
-    `});`,
-  ].join("\n");
-}
-
-function renderRbacAddSnippet(perm) {
-  return [
-    `// convex/workspace/permissions.ts (or project equivalent)`,
-    `// Append "${perm}" to the permission catalog + grant to relevant roles:`,
-    `//`,
-    `//   export const PERMISSIONS = [`,
-    `//     ...existing,`,
-    `    "${perm}",`,
-    `//   ] as const;`,
-  ].join("\n");
-}
-
-function renderRbacRemoveSnippet(perm) {
-  return [
-    `// convex/workspace/permissions.ts (or project equivalent)`,
-    `// Remove "${perm}" once no role preset still references it.`,
-  ].join("\n");
 }
 
 // ---------------------------------------------------------------------------
@@ -403,12 +170,4 @@ function pruneEmpty(obj) {
     out[k] = v;
   }
   return out;
-}
-
-function camelCase(slug) {
-  return String(slug).replace(/-([a-z0-9])/g, (_, c) => c.toUpperCase());
-}
-
-function slugifyForId(s) {
-  return String(s).replace(/[^a-zA-Z0-9]+/g, "-").replace(/^-+|-+$/g, "").toLowerCase() || "x";
 }

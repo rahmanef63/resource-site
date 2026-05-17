@@ -31,6 +31,7 @@ import {
 import { layouts } from "@/lib/content/layouts";
 import { slices } from "@/lib/content/slices";
 import { site } from "@/lib/content/site";
+import { SidebarListGroup } from "@/components/site/site-sidebar/sidebar-list-group";
 
 const docsItems = [
   { title: "Introduction", href: "/", icon: Home },
@@ -43,6 +44,9 @@ export function SiteSidebar() {
   const pathname = usePathname() ?? "";
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
+
+  const websiteTemplates = layouts.filter((l) => l.category === "website-template");
+  const otherLayouts = layouts.filter((l) => l.category !== "website-template");
 
   return (
     <Sidebar collapsible="icon">
@@ -88,101 +92,37 @@ export function SiteSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <SidebarGroup>
-          <SidebarGroupLabel className="flex items-center gap-2">
-            <Globe className="size-3.5" /> Website templates
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={pathname === "/templates"}>
-                  <Link href="/templates">
-                    <span className="font-semibold">All website templates</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              {layouts
-                .filter((l) => l.category === "website-template")
-                .map((l) => (
-                  <SidebarMenuItem key={l.slug}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={pathname === `/layouts/${l.slug}`}
-                      size="sm"
-                    >
-                      <Link href={`/layouts/${l.slug}`}>
-                        <span className="truncate text-xs text-muted-foreground/80 group-data-[active=true]/menu-button:text-foreground">{l.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        <SidebarListGroup
+          label="Website templates"
+          icon={Globe}
+          allLabel="All website templates"
+          allHref="/templates"
+          pathname={pathname}
+          items={websiteTemplates}
+          itemHrefPrefix="/layouts"
+        />
 
-        <SidebarGroup>
-          <SidebarGroupLabel className="flex items-center gap-2">
-            <Layout className="size-3.5" /> Layouts
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={pathname === "/layouts"}>
-                  <Link href="/layouts">
-                    <span className="font-semibold">All layouts</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              {layouts
-                .filter((l) => l.category !== "website-template")
-                .map((l) => (
-                  <SidebarMenuItem key={l.slug}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={pathname === `/layouts/${l.slug}`}
-                      size="sm"
-                    >
-                      <Link href={`/layouts/${l.slug}`}>
-                        <span className="truncate text-xs text-muted-foreground/80 group-data-[active=true]/menu-button:text-foreground">{l.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        <SidebarListGroup
+          label="Layouts"
+          icon={Layout}
+          allLabel="All layouts"
+          allHref="/layouts"
+          pathname={pathname}
+          items={otherLayouts}
+          itemHrefPrefix="/layouts"
+        />
 
         {/* Recipes group removed 2026-05-12 — migrated to slices (Phase 3 of REFACTOR-PLAN.md). */}
 
-        <SidebarGroup>
-          <SidebarGroupLabel className="flex items-center gap-2">
-            <Wand2 className="size-3.5" /> Slices
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={pathname === "/slices"}>
-                  <Link href="/slices">
-                    <span className="font-semibold">All slices</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              {slices.map((s) => (
-                <SidebarMenuItem key={s.slug}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={pathname === `/slices/${s.slug}`}
-                    size="sm"
-                  >
-                    <Link href={`/slices/${s.slug}`}>
-                      <span className="truncate text-xs text-muted-foreground/80 group-data-[active=true]/menu-button:text-foreground">{s.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        <SidebarListGroup
+          label="Slices"
+          icon={Wand2}
+          allLabel="All slices"
+          allHref="/slices"
+          pathname={pathname}
+          items={slices}
+          itemHrefPrefix="/slices"
+        />
       </SidebarContent>
 
       <SidebarFooter>

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useTheme } from "next-themes";
-import { ChevronDown, Monitor, Moon, Palette, RotateCcw, Sun } from "lucide-react";
+import { ChevronDown, Palette, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -14,21 +14,15 @@ import {
   DEFAULT_PRESET_NAME,
   useThemePreset,
 } from "@/components/site/theme-preset-provider";
-import { presetSwatches, type ThemePresetItem } from "@/lib/theme/theme-presets";
+import { type ThemePresetItem } from "@/lib/theme/theme-presets";
 import { groupPresets, type PresetGroup } from "@/lib/theme/preset-groups";
+import { ModeSelector, type ModeId } from "@/components/site/theme-preset/mode-selector";
+import { PresetList } from "@/components/site/theme-preset/preset-list";
 
 interface ThemePresetSwitcherProps {
   size?: "sm" | "mobile";
   triggerClassName?: string;
 }
-
-const MODES = [
-  { id: "light", label: "Terang", Icon: Sun },
-  { id: "dark", label: "Gelap", Icon: Moon },
-  { id: "system", label: "Sistem", Icon: Monitor },
-] as const;
-
-type ModeId = (typeof MODES)[number]["id"];
 
 export function ThemePresetSwitcher({
   size = "sm",
@@ -97,38 +91,7 @@ export function ThemePresetSwitcher({
         className="flex h-[min(80vh,34rem)] w-[min(20rem,calc(100vw-1rem))] sm:w-80 flex-col p-0 overflow-hidden"
         onMouseLeave={() => restore()}
       >
-        <div className="sticky top-0 z-20 shrink-0 border-b border-border bg-popover/95 px-3 py-2 backdrop-blur">
-          <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-            Mode Tampilan
-          </p>
-          <div
-            role="tablist"
-            aria-label="Mode tampilan"
-            className="grid grid-cols-3 gap-1 rounded-md bg-muted/60 p-1"
-          >
-            {MODES.map(({ id, label, Icon }) => {
-              const active = id === activeMode;
-              return (
-                <button
-                  key={id}
-                  role="tab"
-                  aria-selected={active}
-                  type="button"
-                  onClick={() => setTheme(id)}
-                  className={cn(
-                    "flex items-center justify-center gap-1.5 rounded px-2 py-1.5 text-xs font-medium transition-colors",
-                    active
-                      ? "bg-background text-foreground shadow-sm"
-                      : "text-muted-foreground hover:text-foreground",
-                  )}
-                >
-                  <Icon className="h-3.5 w-3.5" />
-                  {label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        <ModeSelector activeMode={activeMode} setTheme={setTheme} />
 
         <div className="flex shrink-0 items-center justify-between border-b border-border px-3 py-2">
           <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
@@ -152,54 +115,12 @@ export function ThemePresetSwitcher({
           </button>
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
-          {groups.length === 0 && (
-            <p className="px-3 py-6 text-center text-sm text-muted-foreground">
-              Memuat preset…
-            </p>
-          )}
-          {groups.map((grp) => (
-            <div key={grp.id}>
-              <div className="sticky top-0 z-10 border-b border-border/30 bg-popover/95 px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground backdrop-blur">
-                {grp.label}
-              </div>
-              {grp.items.map((p) => {
-                const selected = p.name === presetName;
-                const swatches = presetSwatches(p);
-                return (
-                  <button
-                    key={p.name}
-                    type="button"
-                    onClick={() => commit(p.name)}
-                    onMouseEnter={() => preview(p.name)}
-                    onFocus={() => preview(p.name)}
-                    className={cn(
-                      "flex w-full items-center gap-3 border-b border-border/40 px-3 py-2 text-left text-sm transition-colors",
-                      "hover:bg-accent hover:text-accent-foreground",
-                      selected && "bg-accent text-accent-foreground",
-                    )}
-                    aria-pressed={selected}
-                  >
-                    <span className="flex shrink-0 items-center gap-0.5">
-                      {swatches.map((c, i) => (
-                        <span
-                          key={i}
-                          aria-hidden
-                          className="block h-3 w-3 rounded-full border border-border/60"
-                          style={{ background: c }}
-                        />
-                      ))}
-                    </span>
-                    <span className="flex-1 truncate">{p.title}</span>
-                    {selected && (
-                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-foreground" />
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          ))}
-        </div>
+        <PresetList
+          groups={groups}
+          presetName={presetName}
+          commit={commit}
+          preview={preview}
+        />
       </PopoverContent>
     </Popover>
   );

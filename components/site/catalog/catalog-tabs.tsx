@@ -1,11 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { Search, X } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import type { CatalogSearchItem } from "./catalog-search";
-import { cn } from "@/lib/utils";
+import { CatalogGrid, SearchRow, TagRow } from "./catalog-tabs-parts";
 
 /**
  * Tab-first catalog navigation. Mirrors shadcn/ui's /charts page nav:
@@ -66,70 +64,22 @@ export function CatalogTabs({
     : [];
 
   const searchRow = (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-      <div className="relative flex-1">
-        <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-        <input
-          type="search"
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder={placeholder}
-          className="h-9 w-full rounded-md border border-border bg-background pl-9 pr-9 text-sm outline-none transition placeholder:text-muted-foreground focus:border-foreground"
-        />
-        {q && (
-          <button
-            type="button"
-            onClick={() => setQ("")}
-            aria-label="Clear"
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1 text-muted-foreground hover:bg-accent/40 hover:text-foreground"
-          >
-            <X className="size-3.5" />
-          </button>
-        )}
-      </div>
-      <div className="text-xs text-muted-foreground">
-        {filtered.length === items.length
-          ? `${items.length} item${items.length > 1 ? "s" : ""}`
-          : `${filtered.length} of ${items.length}`}
-      </div>
-    </div>
+    <SearchRow
+      q={q}
+      setQ={setQ}
+      placeholder={placeholder}
+      filteredLen={filtered.length}
+      totalLen={items.length}
+    />
   );
 
   const tagRow = allTags && allTags.length > 0 && (
-    <div className="flex flex-wrap gap-1.5">
-      {allTags.map((t) => {
-        const on = activeTags.has(t);
-        return (
-          <button
-            key={t}
-            type="button"
-            onClick={() => toggleTag(t)}
-            aria-pressed={on}
-            className={cn(
-              "transition",
-              on ? "" : "opacity-70 hover:opacity-100",
-            )}
-          >
-            <Badge
-              variant={on ? "default" : "outline"}
-              className="cursor-pointer rounded-full text-[10px]"
-            >
-              {t}
-              {on && <X className="ml-0.5 size-2.5" />}
-            </Badge>
-          </button>
-        );
-      })}
-      {activeTags.size > 0 && (
-        <button
-          type="button"
-          onClick={() => setActiveTags(new Set())}
-          className="text-[10px] text-muted-foreground hover:text-foreground"
-        >
-          clear
-        </button>
-      )}
-    </div>
+    <TagRow
+      allTags={allTags}
+      activeTags={activeTags}
+      toggleTag={toggleTag}
+      clearAll={() => setActiveTags(new Set())}
+    />
   );
 
   if (filtered.length === 0) {
@@ -149,11 +99,7 @@ export function CatalogTabs({
       <div className="space-y-4">
         {searchRow}
         {tagRow}
-        <div className={gridClassName}>
-          {filtered.map((it) => (
-            <React.Fragment key={it.key}>{it.node}</React.Fragment>
-          ))}
-        </div>
+        <CatalogGrid items={filtered} gridClassName={gridClassName} />
       </div>
     );
   }
@@ -197,11 +143,7 @@ export function CatalogTabs({
                     ({inGroup.length})
                   </span>
                 </h2>
-                <div className={gridClassName}>
-                  {inGroup.map((it) => (
-                    <React.Fragment key={it.key}>{it.node}</React.Fragment>
-                  ))}
-                </div>
+                <CatalogGrid items={inGroup} gridClassName={gridClassName} />
               </section>
             );
           })}
@@ -211,11 +153,7 @@ export function CatalogTabs({
           const inGroup = filtered.filter((it) => it.group === g);
           return (
             <TabsContent key={g} value={g}>
-              <div className={gridClassName}>
-                {inGroup.map((it) => (
-                  <React.Fragment key={it.key}>{it.node}</React.Fragment>
-                ))}
-              </div>
+              <CatalogGrid items={inGroup} gridClassName={gridClassName} />
             </TabsContent>
           );
         })}

@@ -1,24 +1,11 @@
 import { mutation } from "../../_generated/server";
 import { v } from "convex/values";
 import { requireUser } from "../../_shared/auth";
-
-const MAX_TYPE_LEN = 50;
-const MAX_COUNTRY_LEN = 100;
-const MAX_ID_LEN = 100;
-const MAX_NAME_LEN = 200;
-const MAX_CATEGORY_LEN = 50;
-const MAX_SUBCATEGORY_LEN = 50;
-const MAX_NOTES_LEN = 2000;
-const MAX_DATE_LEN = 32;
-const MAX_DOCS = 200;
-
-function trimLen(field: string, value: string, max: number): string {
-  const trimmed = value.trim();
-  if (trimmed.length === 0 || trimmed.length > max) {
-    throw new Error(`${field} 1-${max} karakter`);
-  }
-  return trimmed;
-}
+import {
+  MAX_COUNTRY_LEN, MAX_DATE_LEN, MAX_DOCS, MAX_ID_LEN, MAX_NOTES_LEN,
+  MAX_TYPE_LEN, applyDocStatus, computeProgress, mergePriorChecklist,
+  mergeTemplateForInstantiate, normalizeSeedTemplate, trimLen,
+} from "./mutation-helpers";
 
 /**
  * Idempotent seed of the user's checklist row. Re-running with a new
@@ -51,17 +38,7 @@ export const seed = mutation({
       throw new Error(`Template 1-${MAX_DOCS} dokumen`);
     }
 
-    const documents = args.template.map((doc) => ({
-      id: trimLen("ID dokumen", doc.id, MAX_ID_LEN),
-      name: trimLen("Nama dokumen", doc.name, MAX_NAME_LEN),
-      category: trimLen("Kategori", doc.category, MAX_CATEGORY_LEN),
-      subcategory: doc.subcategory
-        ? trimLen("Subkategori", doc.subcategory, MAX_SUBCATEGORY_LEN)
-        : undefined,
-      required: doc.required,
-      completed: false,
-      notes: "",
-    }));
+    const documents = normalizeSeedTemplate(args.template);
 
     const existing = await ctx.db
       .query("document_checklist_items")
@@ -69,25 +46,12 @@ export const seed = mutation({
       .first();
 
     if (existing) {
-      const prior = new Map(existing.documents.map((d) => [d.id, d]));
-      const merged = documents.map((doc) => {
-        const old = prior.get(doc.id);
-        if (!old) return doc;
-        return {
-          ...doc,
-          completed: old.completed,
-          notes: old.notes,
-          expiryDate: old.expiryDate,
-        };
-      });
-      const progress = Math.round(
-        (merged.filter((d) => d.completed).length / merged.length) * 100,
-      );
+      const merged = mergePriorChecklist(documents, existing.documents);
       await ctx.db.patch(existing._id, {
         type,
         country,
         documents: merged,
-        progress,
+        progress: computeProgress(merged),
       });
       return existing._id;
     }
@@ -133,32 +97,16 @@ export const updateStatus = mutation({
 
     if (!checklist) throw new Error("Checklist tidak ditemukan");
 
-    let touched = false;
-    const updatedDocuments = checklist.documents.map((doc) => {
-      if (doc.id === documentId) {
-        touched = true;
-        return {
-          ...doc,
-          completed: args.completed,
-          notes: notes !== undefined ? notes : doc.notes,
-          expiryDate:
-            expiryDate !== undefined ? expiryDate : doc.expiryDate,
-        };
-      }
-      return doc;
-    });
-
-    if (!touched) throw new Error("Dokumen tidak ditemukan");
-
-    const completedCount = updatedDocuments.filter((doc) => doc.completed)
-      .length;
-    const progress = Math.round(
-      (completedCount / updatedDocuments.length) * 100,
+    const { documents: updatedDocuments, touched } = applyDocStatus(
+      checklist.documents,
+      documentId,
+      { completed: args.completed, notes, expiryDate },
     );
+    if (!touched) throw new Error("Dokumen tidak ditemukan");
 
     await ctx.db.patch(checklist._id, {
       documents: updatedDocuments,
-      progress,
+      progress: computeProgress(updatedDocuments),
     });
   },
 });
@@ -206,41 +154,12 @@ export const instantiateFromTemplate = mutation({
       .query("document_checklist_items")
       .withIndex("by_user", (q) => q.eq("userId", userId))
       .first();
-    const prior = new Map(
-      (existing?.documents ?? []).map((d) => [d.id, d]),
-    );
 
-    let preserved = 0;
-    const documents = template.documents.map((td) => {
-      const old = prior.get(td.id);
-      if (old) {
-        preserved++;
-        return {
-          id: td.id,
-          name: td.title,
-          category: td.category,
-          subcategory: td.subcategory,
-          required: td.required,
-          completed: old.completed,
-          notes: old.notes,
-          expiryDate: old.expiryDate,
-        };
-      }
-      return {
-        id: td.id,
-        name: td.title,
-        category: td.category,
-        subcategory: td.subcategory,
-        required: td.required,
-        completed: false,
-        notes: "",
-      };
-    });
-
-    const completedCount = documents.filter((d) => d.completed).length;
-    const progress = Math.round(
-      (completedCount / documents.length) * 100,
+    const { documents, preserved } = mergeTemplateForInstantiate(
+      template.documents,
+      existing?.documents ?? [],
     );
+    const progress = computeProgress(documents);
 
     if (existing) {
       await ctx.db.patch(existing._id, {
