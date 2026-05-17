@@ -1,8 +1,8 @@
 {
   "$schema": "../../../docs/slice.manifest.schema.json",
   "name": "convex-auth",
-  "version": "0.1.0",
-  "description": "@convex-dev/auth with email magic link (Resend) + optional Google OAuth. Hard SSOT mandate per kitab — no Clerk.",
+  "version": "0.2.0",
+  "description": "@convex-dev/auth multi-provider sign-in: Password (PBKDF2-SHA256 100k, self-hosted-friendly), Anonymous (guest), Google OAuth, Resend magic-link. Ships a production <SignInPage> with i18n + prop-driven provider list. No Clerk.",
   "category": "auth",
   "stability": "beta",
   "deps": {
@@ -108,6 +108,6 @@
       }
     ]
   },
-  "tags": ["auth", "convex-auth", "magic-link", "oauth", "google", "no-clerk"],
-  "notes": "Pre-migration: if consumer has Clerk, use same Google client ID + secret to preserve user identity via Google `sub` join key. See Phase 5.5 in SSOT_MIGRATION_PLAN.md. Convex Auth tables intentionally namespaced (auth_*) to avoid collision with consumer's existing `users` table during dual-auth period."
+  "tags": ["auth", "convex-auth", "password", "magic-link", "oauth", "google", "anonymous", "pbkdf2", "no-clerk"],
+  "notes": "0.2.0 (2026-05-17): lifted production SignInPage from CareerPack. Backend (convex/features/auth/auth.ts) already shipped Password + Anonymous + Google + PBKDF2-SHA256 100k crypto; this release fills in the frontend with login/register tabs, Google + Anonymous buttons, and i18n-via-props. PBKDF2 (not Scrypt) because Scrypt times out behind reverse proxies that gate WebSocket actions (e.g. Dokploy). Pre-migration note still applies: if migrating from Clerk, reuse the same Google client ID/secret so the OAuth `sub` join preserves identity."
 }

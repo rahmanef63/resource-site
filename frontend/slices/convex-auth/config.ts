@@ -2,7 +2,7 @@ import { defineFeature } from "@/lib/shared/features/defineFeature";
 
 export const convexAuthConfig = defineFeature({
   slug: "convex-auth",
-  title: "Convex Auth — Email Magic Link",
+  title: "Convex Auth — Multi-Provider Sign-in",
   category: "auth",
   routes: [
     { path: "/sign-in", view: () => import("./components/sign-in-page") },
