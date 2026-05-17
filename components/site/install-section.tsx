@@ -5,20 +5,22 @@ import { buildAgentPrompt } from "@/lib/agent-prompt";
 import { site } from "@/lib/content/site";
 
 export function InstallSection() {
-  const cli = `# 1. Clone Rahman Resources (rr)
-git clone ${site.repo} resources
-cd resources/template-base
+  const cli = `# Scaffold fresh Next 16 + React 19 + Tailwind 4 + Convex + shadcn app
+# Cross-platform — works on macOS, Linux, Windows (PowerShell + WSL).
+npx rahman-resources@latest init my-app
 
-# 2. Install + generate Convex types
-pnpm install --yes --legacy-peer-deps
-npx convex dev --once
+# Pre-bake every shadcn primitive (recommended if you'll customize beyond
+# the template's default subset):
+npx rahman-resources@latest init my-app --with-shadcn-all
 
-# 3. Configure env
-cp .env.example .env.local
+# Pre-load a full-app template (public + admin route trees):
+npx rahman-resources@latest init my-app --template personal-brand-os
 
-# 4. Audit + run
-pnpm audit:bp -- --full
-pnpm dev`;
+# Then:
+cd my-app
+cp .env.example .env.local      # fill NEXT_PUBLIC_CONVEX_URL
+npx convex dev --once           # generates convex/_generated
+npm run dev                     # http://localhost:3000`;
 
   const agentPrompt = buildAgentPrompt({
     projectName: "<your-project-name>",

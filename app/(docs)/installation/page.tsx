@@ -17,9 +17,52 @@ export default function InstallationPage() {
       </p>
 
       <section className="mt-10 space-y-4">
-        <h2 className="text-2xl font-semibold tracking-tight">Manual</h2>
+        <h2 className="text-2xl font-semibold tracking-tight">CLI scaffold (recommended)</h2>
+        <p className="text-muted-foreground">
+          One command. Scaffolds Next 16 + React 19 + Tailwind 4 + Convex
+          self-hosted + shadcn/ui into a fresh empty folder. Cross-platform —
+          macOS / Linux / Windows PowerShell + WSL.
+        </p>
         <CodeBlock
-          code={`# 1. Clone\ngit clone ${site.repo} resources\ncd resources/template-base\n\n# 2. Install + Convex codegen\npnpm install --yes --legacy-peer-deps\nnpx convex dev --once\ngit add convex/_generated && git commit -m "chore: convex codegen"\n\n# 3. Configure env\ncp .env.example .env.local\n\n# 4. Audit + run\npnpm audit:bp -- --full\npnpm dev`}
+          code={`# Scaffold
+npx rahman-resources@latest init my-app
+
+# With every shadcn primitive pre-baked (recommended for heavy customization):
+npx rahman-resources@latest init my-app --with-shadcn-all
+
+# With a full-app template (public + admin route trees):
+npx rahman-resources@latest init my-app --template personal-brand-os
+
+# Then:
+cd my-app
+cp .env.example .env.local        # fill NEXT_PUBLIC_CONVEX_URL
+npx convex dev --once             # generates convex/_generated
+npm run dev                       # http://localhost:3000`}
+          language="bash"
+          filename="terminal"
+        />
+        <p className="text-sm text-muted-foreground">
+          Browse the catalog at{" "}
+          <a href="/templates" className="underline">/templates</a>{" "}
+          or use the visual{" "}
+          <a href="/build" className="underline">Bundle Builder</a>{" "}
+          to compose template + slices + skills.
+        </p>
+      </section>
+
+      <section className="mt-12 space-y-4">
+        <h2 className="text-2xl font-semibold tracking-tight">Clone the repo (contributors)</h2>
+        <p className="text-muted-foreground">
+          Only needed if you&apos;re contributing back to rr (adding slices,
+          editing templates, fixing the CLI). Consumers use{" "}
+          <code className="rounded bg-muted px-1 font-mono text-xs">npx rr init</code>{" "}
+          above.
+        </p>
+        <CodeBlock
+          code={`git clone ${site.repo} resources
+cd resources
+npm install --legacy-peer-deps
+npm run dev`}
           language="bash"
           filename="terminal"
         />

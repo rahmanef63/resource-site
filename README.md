@@ -21,11 +21,25 @@ resources/
 
 Next.js 16 + React 19 + Tailwind 4 + shadcn/ui. No backend.
 
-## Dev
+## Install (consumers)
 
 ```bash
-cd site
-npm install --yes --legacy-peer-deps
+# Scaffold a fresh Next 16 + React 19 + Tailwind 4 + Convex + shadcn app
+npx rahman-resources@latest init my-app
+
+# With every shadcn primitive pre-baked:
+npx rahman-resources@latest init my-app --with-shadcn-all
+
+# With a full-app template (public + admin route trees):
+npx rahman-resources@latest init my-app --template personal-brand-os
+```
+
+Cross-platform — macOS / Linux / Windows PowerShell + WSL.
+
+## Dev (this repo, for contributors)
+
+```bash
+npm install --legacy-peer-deps
 npm run dev
 ```
 

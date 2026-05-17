@@ -31,10 +31,10 @@
     "validate:features": "tsx scripts/validation/features.ts",
     "validate:feature-naming": "tsx scripts/validation/feature-naming.ts",
     "sync:all": "pnpm run sync:features && pnpm run syncagent:all && pnpm run generate:registry && pnpm run generate:init-imports && pnpm run generate:previews && pnpm run generate:manifest && pnpm run generate:slice-docs && pnpm run validate:bundles",
-    "audit:bp": "bash $HOME/.agents/skills/audit-bp/scripts/audit-bp.sh",
-    "audit:bp:full": "bash $HOME/.agents/skills/audit-bp/scripts/audit-bp.sh --full",
-    "audit:features": "bash $HOME/.agents/skills/audit-bp/scripts/audit-features.sh",
-    "audit:features:md": "bash $HOME/.agents/skills/audit-bp/scripts/audit-features.sh --md",
+    "audit:bp": "echo 'audit:bp is operator-only — install /use-audit-bp skill first, or run npm run typecheck && npm run lint locally'",
+    "audit:bp:full": "echo 'audit:bp:full is operator-only — install /use-audit-bp skill first'",
+    "audit:features": "echo 'audit:features is operator-only — install /use-audit-bp skill first'",
+    "audit:features:md": "echo 'audit:features:md is operator-only — install /use-audit-bp skill first'",
     "precommit": "pnpm run lint && pnpm run validate:slice-structure && pnpm run typecheck && pnpm test"
   },
   "dependencies": {
