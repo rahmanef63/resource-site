@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const ITEMS = [
   { q: "Can I customize the slice after import?", a: "Yes. Slices are copied into your repo — you own the files. Editing them is the expected flow." },
@@ -15,15 +16,17 @@ function Item({ q, a }: { q: string; a: string }) {
   const ref = React.useRef<HTMLDivElement>(null);
   return (
     <div className="overflow-hidden rounded-2xl border border-border/60 bg-card transition-shadow data-[open]:shadow-md" data-open={open || undefined}>
-      <button
+      <Button
+        type="button"
+        variant="ghost"
         onClick={() => setOpen((v) => !v)}
-        className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
+        className="flex h-auto w-full items-center justify-between gap-4 rounded-none px-6 py-5 text-left font-normal hover:bg-transparent"
       >
         <span className="text-base font-medium">{q}</span>
         <span className={`grid size-7 shrink-0 place-items-center rounded-full border border-border/60 bg-background transition-transform ${open ? "rotate-45 bg-primary text-primary-foreground" : ""}`}>
           <Plus className="size-3.5" />
         </span>
-      </button>
+      </Button>
       <div
         style={{
           gridTemplateRows: open ? "1fr" : "0fr",

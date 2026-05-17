@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { DynamicIcon } from "./DynamicIcon";
 import { PickerSkeleton } from "./PickerSkeleton";
@@ -80,13 +81,15 @@ export function IconPickerPopover({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         {children ?? (
-          <button
+          <Button
             type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border text-2xl hover:bg-accent transition"
+            variant="outline"
+            size="icon"
+            className="h-10 w-10 text-2xl"
             aria-label="Change icon"
           >
             <DynamicIcon value={value} />
-          </button>
+          </Button>
         )}
       </PopoverTrigger>
       <PopoverContent align={align} side={side} className="w-[360px] p-3">

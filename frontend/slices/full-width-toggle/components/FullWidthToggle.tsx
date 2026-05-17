@@ -49,19 +49,21 @@ export function FullWidthToggle({ variant = "icon", className }: FullWidthToggle
         {order.map((m) => {
           const Icon = ICONS[m];
           return (
-            <button
+            <Button
               key={m}
               type="button"
+              variant="ghost"
+              size="sm"
               onClick={() => setMode(m)}
               className={
-                "inline-flex items-center gap-1.5 rounded px-2.5 py-1 text-xs transition " +
+                "h-auto gap-1.5 rounded px-2.5 py-1 text-xs " +
                 (mode === m ? "bg-accent font-medium" : "hover:bg-accent/50 text-muted-foreground")
               }
               title={TITLE[m]}
             >
               <Icon className="h-3.5 w-3.5" />
               {LABEL[m]}
-            </button>
+            </Button>
           );
         })}
       </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 export type McpTokenRow = {
   _id: string;
@@ -115,17 +116,18 @@ export function McpAdminView({
       </header>
 
       <section className="border-2 border-foreground rounded-lg bg-card">
-        <button
+        <Button
           type="button"
+          variant="ghost"
           onClick={() => setSetupOpen((v) => !v)}
-          className="w-full flex items-center justify-between px-5 py-3 border-b-2 border-foreground hover:bg-foreground hover:text-background transition-colors"
+          className="h-auto w-full justify-between rounded-none px-5 py-3 border-b-2 border-foreground hover:bg-foreground hover:text-background"
           aria-expanded={setupOpen}
         >
           <span className="text-sm uppercase tracking-widest font-bold">
             Setup an AI client (ChatGPT / Claude / Cursor)
           </span>
           <span className="text-xs">{setupOpen ? "▼ Hide" : "▶ Show"}</span>
-        </button>
+        </Button>
         {setupOpen && (
           <div className="p-5 space-y-3">
             <p className="text-xs text-muted-foreground">
@@ -141,13 +143,15 @@ export function McpAdminView({
                   <dd className="flex items-center justify-between gap-2 border border-foreground/20 rounded-md bg-background px-3 py-1.5">
                     <code className="text-xs font-mono break-all">{f.value}</code>
                     {f.kind === "copyable" && (
-                      <button
+                      <Button
                         type="button"
+                        variant="outline"
+                        size="sm"
                         onClick={() => copy(f.value)}
-                        className="shrink-0 text-[10px] uppercase tracking-widest border border-foreground/40 rounded px-2 py-0.5 hover:bg-foreground hover:text-background transition-colors"
+                        className="h-auto shrink-0 px-2 py-0.5 text-[10px] uppercase tracking-widest border-foreground/40 hover:bg-foreground hover:text-background"
                       >
                         Copy
-                      </button>
+                      </Button>
                     )}
                   </dd>
                 </div>
@@ -222,13 +226,15 @@ export function McpAdminView({
                     <td className="px-3 py-3 text-xs text-muted-foreground tabular-nums">{formatTime(r.expiresAt)}</td>
                     <td className="px-3 py-3 text-right">
                       {s === "active" ? (
-                        <button
+                        <Button
                           type="button"
+                          variant="outline"
+                          size="sm"
                           onClick={() => handleRevoke(r._id, r.label ?? r.clientId)}
-                          className="border-2 border-destructive rounded-md px-2 py-1 text-[10px] uppercase tracking-widest font-medium text-destructive hover:bg-destructive hover:text-background transition-colors"
+                          className="h-auto border-2 border-destructive px-2 py-1 text-[10px] uppercase tracking-widest font-medium text-destructive hover:bg-destructive hover:text-background"
                         >
                           Revoke
-                        </button>
+                        </Button>
                       ) : (
                         <span className="text-[10px] text-muted-foreground">—</span>
                       )}

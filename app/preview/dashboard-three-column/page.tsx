@@ -92,11 +92,13 @@ function Sidebar() {
                 const active = gi === 0 && ii === 0;
                 return (
                   <li key={item.label}>
-                    <button
+                    <Button
+                      type="button"
+                      variant="ghost"
                       className={cn(
-                        "flex h-8 w-full items-center gap-2 rounded-md px-2 text-sm transition-colors",
+                        "flex h-8 w-full items-center justify-start gap-2 rounded-md px-2 text-sm font-normal transition-colors",
                         active
-                          ? "bg-accent font-medium text-foreground"
+                          ? "bg-accent font-medium text-foreground hover:bg-accent hover:text-foreground"
                           : "text-muted-foreground hover:bg-accent/40 hover:text-foreground"
                       )}
                     >
@@ -107,7 +109,7 @@ function Sidebar() {
                           {item.count}
                         </Badge>
                       )}
-                    </button>
+                    </Button>
                   </li>
                 );
               })}
@@ -141,11 +143,13 @@ function MainList() {
         <ul className="divide-y">
           {DOCS.map((d, i) => (
             <li key={d.title}>
-              <button
+              <Button
+                type="button"
+                variant="ghost"
                 onClick={() => setActiveIdx(i)}
                 className={cn(
-                  "flex w-full items-start gap-3 px-5 py-3 text-left transition-colors hover:bg-accent/30",
-                  activeIdx === i && "bg-accent/40"
+                  "flex h-auto w-full items-start justify-start gap-3 rounded-none px-5 py-3 text-left font-normal transition-colors hover:bg-accent/30",
+                  activeIdx === i && "bg-accent/40 hover:bg-accent/40"
                 )}
               >
                 <Avatar className="size-7 shrink-0 text-[10px]">
@@ -163,7 +167,7 @@ function MainList() {
                     </Badge>
                   </div>
                 </div>
-              </button>
+              </Button>
             </li>
           ))}
         </ul>
@@ -267,12 +271,14 @@ function Configurable() {
         className="h-full"
       />
       {aiFab && (
-        <button
+        <Button
+          type="button"
+          variant="default"
           aria-label="AI"
-          className="fixed bottom-5 right-5 z-30 flex size-12 items-center justify-center rounded-full bg-violet-500 text-white shadow-xl shadow-violet-500/30"
+          className="fixed bottom-5 right-5 z-30 flex size-12 items-center justify-center rounded-full bg-violet-500 text-white shadow-xl shadow-violet-500/30 hover:bg-violet-500/90"
         >
           <Sparkles className="size-5" />
-        </button>
+        </Button>
       )}
     </div>
   );

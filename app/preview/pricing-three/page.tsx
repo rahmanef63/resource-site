@@ -1,4 +1,5 @@
 import { Check, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const TIERS = [
   { name: "Starter", price: 0, blurb: "For tinkering", features: ["1 project", "Community support", "Basic slices"], cta: "Start free" },
@@ -41,13 +42,15 @@ export default function Page() {
                   </li>
                 ))}
               </ul>
-              <button
+              <Button
+                type="button"
+                variant={t.featured ? "default" : "outline"}
                 className={`mt-7 inline-flex h-10 w-full items-center justify-center gap-2 rounded-md text-sm font-medium ${
                   t.featured ? "bg-primary text-primary-foreground hover:bg-primary/90" : "border border-border/60 hover:bg-muted"
                 }`}
               >
                 {t.cta} <ArrowRight className="size-4" />
-              </button>
+              </Button>
             </div>
           ))}
         </div>

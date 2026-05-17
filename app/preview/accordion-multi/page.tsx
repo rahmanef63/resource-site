@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const ITEMS = [
   { q: "Does the kitab work offline?", a: "Slices live in your repo. After init, you only need network to pull updates or run the Convex deployment." },
@@ -27,25 +28,29 @@ export default function Page() {
             <h1 className="text-4xl font-bold tracking-tight">Open as many as you want</h1>
             <p className="mt-3 text-muted-foreground">Multi-open accordion. Great for compare-style reading.</p>
           </div>
-          <button
+          <Button
+            type="button"
+            variant="ghost"
             onClick={() => setOpen(open.size === ITEMS.length ? new Set() : new Set(ITEMS.map((_, i) => i)))}
-            className="text-xs text-muted-foreground underline-offset-2 hover:underline"
+            className="h-auto rounded-none p-0 text-xs font-normal text-muted-foreground underline-offset-2 hover:bg-transparent hover:underline"
           >
             {open.size === ITEMS.length ? "Collapse all" : "Expand all"}
-          </button>
+          </Button>
         </header>
         <div className="space-y-2">
           {ITEMS.map((it, i) => {
             const isOpen = open.has(i);
             return (
               <div key={it.q} className="rounded-xl border border-border/60 bg-card">
-                <button
+                <Button
+                  type="button"
+                  variant="ghost"
                   onClick={() => toggle(i)}
-                  className="flex w-full items-center justify-between px-5 py-3.5 text-left"
+                  className="flex h-auto w-full items-center justify-between rounded-none px-5 py-3.5 text-left font-normal hover:bg-transparent"
                 >
                   <span className="text-sm font-medium">{it.q}</span>
                   <ChevronDown className={`size-4 text-muted-foreground transition-transform ${isOpen ? "rotate-180" : ""}`} />
-                </button>
+                </Button>
                 {isOpen && <p className="px-5 pb-4 text-sm text-muted-foreground">{it.a}</p>}
               </div>
             );

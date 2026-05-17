@@ -89,13 +89,15 @@ export function ChatFab({
             {tier}
           </span>
         </div>
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={() => setOpen(false)}
           aria-label="Close chat"
-          className="rounded p-1 text-muted-foreground hover:bg-accent/40 hover:text-foreground"
+          className="size-6 rounded text-muted-foreground hover:bg-accent/40 hover:text-foreground"
         >
           <X className="size-4" />
-        </button>
+        </Button>
       </header>
       <CardContent ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto p-3">
         {messages.map((m) => (

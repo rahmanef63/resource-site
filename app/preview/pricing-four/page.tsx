@@ -1,4 +1,5 @@
 import { Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const TIERS = [
   { name: "Free", price: 0, blurb: "Hobby projects", features: ["1 seat", "5 slices"] },
@@ -41,13 +42,15 @@ export default function Page() {
                   </li>
                 ))}
               </ul>
-              <button
+              <Button
+                type="button"
+                variant={t.featured ? "default" : "outline"}
                 className={`mt-6 inline-flex h-9 w-full items-center justify-center rounded-md text-sm font-medium ${
                   t.featured ? "bg-primary text-primary-foreground hover:bg-primary/90" : "border border-border/60 hover:bg-muted"
                 }`}
               >
                 {t.price === 0 ? "Start free" : "Get started"}
-              </button>
+              </Button>
             </div>
           ))}
         </div>

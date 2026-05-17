@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, type ReactNode } from "react";
+import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Search, FileText, Clock, Database as DatabaseIcon, Loader2 } from "lucide-react";
 import { DEFAULT_SEARCH_LABELS, type SearchModalLabels } from "../lib/types";
@@ -140,13 +141,17 @@ function Row({
   const TrailIcon = kind === "db" ? DatabaseIcon : FileText;
   const title = hit.title || "Untitled";
   return (
-    <button onClick={onClick} className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-left hover:bg-accent transition">
+    <Button
+      variant="ghost"
+      onClick={onClick}
+      className="flex h-auto w-full items-center justify-start gap-3 rounded-md px-3 py-2 text-left font-normal hover:bg-accent"
+    >
       {hit.icon ?? <TrailIcon className="h-4 w-4 text-muted-foreground" />}
       <div className="min-w-0 flex-1">
         <div className="truncate text-sm font-medium">{title}</div>
         {hit.subtitle && <div className="truncate text-xs text-muted-foreground">{hit.subtitle}</div>}
       </div>
       <TrailIcon className="h-3.5 w-3.5 text-muted-foreground" />
-    </button>
+    </Button>
   );
 }

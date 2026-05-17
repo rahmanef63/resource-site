@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { lucideValue } from "../../lib/parse";
 import { RawIcon } from "../DynamicIcon";
@@ -37,21 +38,23 @@ interface EmojiCellProps extends CellProps {
 
 function EmojiCellImpl({ emoji, active, onClick, onMouseEnter, tabIndex, index, style }: EmojiCellProps) {
   return (
-    <button
+    <Button
       type="button"
+      variant="ghost"
+      size="icon"
       onClick={onClick}
       onMouseEnter={onMouseEnter}
       tabIndex={tabIndex}
       data-icon-cell-index={index}
       className={cn(
-        "flex h-8 w-8 items-center justify-center rounded text-lg leading-none transition",
+        "h-8 w-8 rounded text-lg leading-none",
         active ? "bg-brand/15 ring-1 ring-brand" : "hover:bg-accent",
       )}
       title={emoji}
       aria-label={`Pick ${emoji}`}
     >
       <RawIcon value={emoji} style={style} className="text-lg" />
-    </button>
+    </Button>
   );
 }
 
@@ -66,21 +69,23 @@ interface LucideCellProps extends CellProps {
 function LucideCellImpl({ name, color, active, onClick, onMouseEnter, tabIndex, index, style }: LucideCellProps) {
   const value = React.useMemo(() => lucideValue(name, color), [name, color]);
   return (
-    <button
+    <Button
       type="button"
+      variant="ghost"
+      size="icon"
       onClick={onClick}
       onMouseEnter={onMouseEnter}
       tabIndex={tabIndex}
       data-icon-cell-index={index}
       className={cn(
-        "flex h-8 w-8 items-center justify-center rounded transition",
+        "h-8 w-8 rounded",
         active ? "bg-brand/15 ring-1 ring-brand" : "hover:bg-accent",
       )}
       title={name}
       aria-label={`Pick ${name}`}
     >
       <RawIcon value={value} style={style} className="text-base" />
-    </button>
+    </Button>
   );
 }
 
@@ -95,21 +100,23 @@ interface RecentCellProps extends CellProps {
 
 function RecentCellImpl({ value, active, onClick, onMouseEnter, tabIndex, index, style }: RecentCellProps) {
   return (
-    <button
+    <Button
       type="button"
+      variant="ghost"
+      size="icon"
       onClick={onClick}
       onMouseEnter={onMouseEnter}
       tabIndex={tabIndex}
       data-icon-cell-index={index}
       className={cn(
-        "flex h-8 w-8 items-center justify-center rounded transition",
+        "h-8 w-8 rounded",
         active ? "bg-brand/15 ring-1 ring-brand" : "hover:bg-accent",
       )}
       title={value}
       aria-label={`Pick recent ${value}`}
     >
       <RawIcon value={value} style={style} className="text-base" />
-    </button>
+    </Button>
   );
 }
 

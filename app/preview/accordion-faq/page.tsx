@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const ITEMS = [
   { q: "What is a slice?", a: "A vertical feature unit — frontend + Convex backend + agent recipe — that you can drop into any compatible project." },
@@ -25,15 +26,17 @@ export default function Page() {
             const isOpen = open === i;
             return (
               <div key={it.q}>
-                <button
+                <Button
+                  type="button"
+                  variant="ghost"
                   onClick={() => setOpen(isOpen ? -1 : i)}
-                  className="flex w-full items-center justify-between px-5 py-4 text-left text-sm font-medium hover:bg-muted/30"
+                  className="flex h-auto w-full items-center justify-between rounded-none px-5 py-4 text-left text-sm font-medium hover:bg-muted/30"
                 >
                   {it.q}
                   <ChevronDown
                     className={`size-4 shrink-0 text-muted-foreground transition-transform ${isOpen ? "rotate-180" : ""}`}
                   />
-                </button>
+                </Button>
                 {isOpen && (
                   <div className="px-5 pb-5 text-sm text-muted-foreground">{it.a}</div>
                 )}

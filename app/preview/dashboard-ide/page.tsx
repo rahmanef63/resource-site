@@ -18,6 +18,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const THEMES = {
   dark:  { bg: "bg-zinc-950 text-zinc-200", panel: "bg-zinc-900/60", editor: "bg-[#0b0b0e]", border: "border-zinc-800" },
@@ -71,27 +72,31 @@ function Inner() {
       {/* activity bar */}
       <aside className={cn("row-span-full flex flex-col items-center gap-1 border-r py-2", t.border, t.panel)}>
         {[FileCode2, Search, GitBranch, Bug, Settings].map((Icon, i) => (
-          <button
+          <Button
+            type="button"
+            variant="ghost"
             key={i}
             className={cn(
-              "flex size-9 items-center justify-center rounded text-zinc-400 transition-colors hover:text-zinc-100",
+              "flex size-9 items-center justify-center rounded text-zinc-400 transition-colors hover:bg-transparent hover:text-zinc-100",
               i === 0 && "border-l-2 border-violet-400 text-zinc-100",
             )}
           >
             <Icon className="size-4" />
-          </button>
+          </Button>
         ))}
       </aside>
 
       {/* tabs */}
       <div className="col-start-2 col-end-4 flex items-center border-b border-zinc-800 bg-zinc-900/60">
         {tabs.map((t) => (
-          <button
+          <Button
+            type="button"
+            variant="ghost"
             key={t}
             onClick={() => setActive(t)}
             className={cn(
-              "group flex h-full items-center gap-2 border-r border-zinc-800 px-3 text-xs",
-              active === t ? "bg-zinc-950 text-zinc-100" : "text-zinc-500 hover:text-zinc-300",
+              "group flex h-full items-center gap-2 rounded-none border-r border-zinc-800 px-3 text-xs font-normal hover:bg-transparent",
+              active === t ? "bg-zinc-950 text-zinc-100 hover:bg-zinc-950 hover:text-zinc-100" : "text-zinc-500 hover:text-zinc-300",
             )}
           >
             <FileCode2 className="size-3 text-sky-400" /> {t}
@@ -106,13 +111,13 @@ function Inner() {
             >
               <X className="size-3" />
             </span>
-          </button>
+          </Button>
         ))}
         <div className="ml-auto flex items-center gap-2 px-3">
           {runBtn && (
-            <button className="flex h-6 items-center gap-1 rounded bg-emerald-500/20 px-2 text-[10px] font-medium text-emerald-300">
+            <Button type="button" variant="ghost" className="flex h-6 items-center gap-1 rounded bg-emerald-500/20 px-2 text-[10px] font-medium text-emerald-300 hover:bg-emerald-500/30 hover:text-emerald-300">
               <Play className="size-3" /> Run
-            </button>
+            </Button>
           )}
         </div>
       </div>
@@ -209,14 +214,16 @@ function Tree({ node, depth = 0 }: { node: { name: string; expanded: boolean; ch
   const [open, setOpen] = React.useState(node.expanded);
   return (
     <div>
-      <button
+      <Button
+        type="button"
+        variant="ghost"
         onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center gap-1 rounded px-1 py-0.5 hover:bg-zinc-800/60"
+        className="flex h-auto w-full items-center justify-start gap-1 rounded px-1 py-0.5 text-xs font-normal hover:bg-zinc-800/60"
         style={{ paddingLeft: depth * 8 }}
       >
         {open ? <ChevronDown className="size-3" /> : <ChevronRight className="size-3" />}
         <Folder className="size-3 text-amber-400" /> <span className="text-zinc-200">{node.name}</span>
-      </button>
+      </Button>
       {open && (
         <ul className="ml-3 border-l border-zinc-800/80 pl-1">
           {node.children.map((c) => (

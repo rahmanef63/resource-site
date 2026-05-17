@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const GROUPS = [
   {
@@ -31,13 +32,15 @@ function Item({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = React.useState(false);
   return (
     <div className="border-b border-border/40 last:border-0">
-      <button
+      <Button
+        type="button"
+        variant="ghost"
         onClick={() => setOpen((v) => !v)}
-        className="flex w-full items-center justify-between py-3 text-left text-sm font-medium"
+        className="flex h-auto w-full items-center justify-between rounded-none px-0 py-3 text-left text-sm font-medium hover:bg-transparent"
       >
         {q}
         <ChevronDown className={`size-4 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} />
-      </button>
+      </Button>
       {open && <p className="pb-3 text-sm text-muted-foreground">{a}</p>}
     </div>
   );

@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 const HEADLINE = "We design space.";
 
@@ -62,14 +63,14 @@ function Inner() {
         <div className="mt-10 flex items-center gap-4">
           {magnetic ? (
             <Magnetic>
-              <button className="group rounded-full bg-white px-6 py-3 text-sm font-medium text-zinc-900 transition-transform hover:scale-105">
+              <Button type="button" variant="default" className="group h-auto rounded-full bg-white px-6 py-3 text-sm font-medium text-zinc-900 transition-transform hover:scale-105 hover:bg-white">
                 View work →
-              </button>
+              </Button>
             </Magnetic>
           ) : (
-            <button className="rounded-full bg-white px-6 py-3 text-sm font-medium text-zinc-900 transition-transform hover:scale-105">
+            <Button type="button" variant="default" className="h-auto rounded-full bg-white px-6 py-3 text-sm font-medium text-zinc-900 transition-transform hover:scale-105 hover:bg-white">
               View work →
-            </button>
+            </Button>
           )}
           <span className="text-xs uppercase tracking-[0.3em] text-zinc-500">since 2018</span>
         </div>

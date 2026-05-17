@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const SECTIONS = [
   {
@@ -38,15 +39,17 @@ export default function Page() {
         <aside>
           <nav className="space-y-1">
             {SECTIONS.map((s, i) => (
-              <button
+              <Button
                 key={s.title}
+                type="button"
+                variant="ghost"
                 onClick={() => { setSection(i); setItem(0); }}
-                className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm transition ${
-                  i === section ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted"
+                className={`flex h-auto w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm font-normal transition ${
+                  i === section ? "bg-primary/10 text-primary hover:bg-primary/10 hover:text-primary" : "text-muted-foreground hover:bg-muted"
                 }`}
               >
                 {s.title} <ChevronRight className="size-3" />
-              </button>
+              </Button>
             ))}
           </nav>
         </aside>
@@ -55,13 +58,15 @@ export default function Page() {
           <div className="mt-6 divide-y divide-border/40 rounded-2xl border border-border/60 bg-card">
             {current.items.map((it, i) => (
               <div key={it.q}>
-                <button
+                <Button
+                  type="button"
+                  variant="ghost"
                   onClick={() => setItem(i === item ? -1 : i)}
-                  className="flex w-full items-center justify-between px-5 py-4 text-left text-sm font-medium"
+                  className="flex h-auto w-full items-center justify-between rounded-none px-5 py-4 text-left text-sm font-medium hover:bg-transparent"
                 >
                   {it.q}
                   <ChevronRight className={`size-3.5 text-muted-foreground transition-transform ${i === item ? "rotate-90" : ""}`} />
-                </button>
+                </Button>
                 {i === item && <p className="px-5 pb-4 text-sm text-muted-foreground">{it.a}</p>}
               </div>
             ))}

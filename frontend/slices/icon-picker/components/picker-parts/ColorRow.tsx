@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ICON_COLORS } from "../../lib/colors";
 
@@ -15,12 +16,14 @@ export function ColorRow({
           (c.hex === "" && !currentColor) ||
           (c.hex !== "" && currentColor?.toLowerCase() === c.hex.toLowerCase());
         return (
-          <button
+          <Button
             key={c.id}
             type="button"
+            variant="ghost"
+            size="icon"
             onClick={() => onPick(c.hex)}
             className={cn(
-              "h-5 w-5 rounded-full border transition",
+              "h-5 w-5 rounded-full border p-0",
               isSelected ? "ring-2 ring-foreground/60 ring-offset-1 ring-offset-background" : "hover:scale-110",
             )}
             style={{
@@ -31,7 +34,7 @@ export function ColorRow({
             aria-label={`Color: ${c.label}`}
           >
             {!c.hex && <span className="block text-[10px] leading-none">∅</span>}
-          </button>
+          </Button>
         );
       })}
     </div>

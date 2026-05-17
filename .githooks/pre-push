@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# pre-push hook — Track J / catalog quality gate.
+#
+# Runs the audit chain that pre-commit skips for speed. Catches drift in
+# slice metadata trio + raw HTML primitives + hardcoded preview URLs in
+# templates before they leave the local repo.
+#
+# Bypass: `git push --no-verify` (only when you know what you're doing).
+
+set -e
+
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+
+echo "→ pre-push: audit:slices + audit:templates"
+npm run audit:slices --silent
+npm run audit:templates --silent
+
+echo "✓ pre-push: catalog gates green"

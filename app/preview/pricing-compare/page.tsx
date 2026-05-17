@@ -1,4 +1,5 @@
 import { Check, Minus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const PLANS = ["Free", "Pro", "Team"] as const;
 const ROWS: { feature: string; values: (boolean | string)[] }[] = [
@@ -50,14 +51,16 @@ export default function Page() {
           <div className="grid grid-cols-4 border-t border-border/60 bg-muted/20 px-6 py-4">
             <div />
             {PLANS.map((p, i) => (
-              <button
+              <Button
                 key={p}
+                type="button"
+                variant={i === 1 ? "default" : "outline"}
                 className={`mx-1 inline-flex h-9 items-center justify-center rounded-md text-xs font-medium ${
                   i === 1 ? "bg-primary text-primary-foreground" : "border border-border/60 hover:bg-muted"
                 }`}
               >
                 Choose {p}
-              </button>
+              </Button>
             ))}
           </div>
         </div>

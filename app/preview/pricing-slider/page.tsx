@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 function priceFor(seats: number): number {
   if (seats <= 1) return 0;
@@ -54,9 +55,9 @@ export default function Page() {
               </li>
             ))}
           </ul>
-          <button className="mt-7 h-11 w-full rounded-md bg-primary text-sm font-medium text-primary-foreground hover:bg-primary/90">
+          <Button type="button" variant="default" className="mt-7 h-11 w-full rounded-md bg-primary text-sm font-medium text-primary-foreground hover:bg-primary/90">
             Start with {seats} {seats === 1 ? "seat" : "seats"}
-          </button>
+          </Button>
         </div>
       </section>
     </main>

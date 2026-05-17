@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const TIERS = [
   { name: "Hobby", monthly: 0, yearly: 0, features: ["1 seat", "5 slices", "Community"] },
@@ -17,18 +18,22 @@ export default function Page() {
         <header className="mb-10 text-center">
           <h1 className="text-4xl font-bold tracking-tight md:text-5xl">Simple pricing</h1>
           <div className="mt-6 inline-flex items-center gap-1 rounded-full border border-border/60 bg-muted/30 p-1 text-sm">
-            <button
+            <Button
+              type="button"
+              variant="ghost"
               onClick={() => setYearly(false)}
-              className={`rounded-full px-4 py-1.5 transition ${!yearly ? "bg-background shadow" : "text-muted-foreground"}`}
+              className={`h-auto rounded-full px-4 py-1.5 transition ${!yearly ? "bg-background shadow" : "text-muted-foreground"}`}
             >
               Monthly
-            </button>
-            <button
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
               onClick={() => setYearly(true)}
-              className={`rounded-full px-4 py-1.5 transition ${yearly ? "bg-background shadow" : "text-muted-foreground"}`}
+              className={`h-auto rounded-full px-4 py-1.5 transition ${yearly ? "bg-background shadow" : "text-muted-foreground"}`}
             >
               Yearly <span className="ml-1 rounded bg-emerald-500/15 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">-20%</span>
-            </button>
+            </Button>
           </div>
         </header>
         <div className="grid gap-5 md:grid-cols-3">
@@ -56,13 +61,15 @@ export default function Page() {
                     </li>
                   ))}
                 </ul>
-                <button
+                <Button
+                  type="button"
+                  variant={t.featured ? "default" : "outline"}
                   className={`mt-7 h-10 w-full rounded-md text-sm font-medium ${
                     t.featured ? "bg-primary text-primary-foreground hover:bg-primary/90" : "border border-border/60 hover:bg-muted"
                   }`}
                 >
                   Choose {t.name}
-                </button>
+                </Button>
               </div>
             );
           })}

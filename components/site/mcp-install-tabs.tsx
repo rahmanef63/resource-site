@@ -5,7 +5,9 @@ import { Terminal, Code2, Bot, AlertTriangle, Cloud, Wrench } from "lucide-react
 import { CodeBlock } from "@/components/site/code-block";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const HOSTED_URL = "https://mcp-resource.rahmanef.com/mcp";
+const HOSTED_URL =
+  process.env.NEXT_PUBLIC_MCP_SERVER_URL ?? "https://mcp-resource.rahmanef.com/mcp";
+const HOSTED_BASE = HOSTED_URL.replace(/\/mcp\/?$/, "");
 
 const CLAUDE_CONFIG = `{
   "mcpServers": {
@@ -141,16 +143,16 @@ export function McpInstallTabs() {
                         </tr>
                       </thead>
                       <tbody className="text-muted-foreground">
-                        <tr className="border-t"><td className="px-2 py-1.5">MCP Server URL</td><td className="px-2 py-1.5 font-mono"><code>https://mcp-resource.rahmanef.com/mcp</code></td></tr>
+                        <tr className="border-t"><td className="px-2 py-1.5">MCP Server URL</td><td className="px-2 py-1.5 font-mono"><code>{HOSTED_URL}</code></td></tr>
                         <tr className="border-t"><td className="px-2 py-1.5">Authentication</td><td className="px-2 py-1.5"><span className="font-medium text-foreground">OAuth</span></td></tr>
                         <tr className="border-t"><td className="px-2 py-1.5">Registration method</td><td className="px-2 py-1.5"><span className="font-medium text-foreground">User-Defined OAuth Client</span></td></tr>
                         <tr className="border-t"><td className="px-2 py-1.5">Client ID</td><td className="px-2 py-1.5 font-mono"><code>chatgpt-rahman</code> (any string)</td></tr>
                         <tr className="border-t"><td className="px-2 py-1.5">Client Secret</td><td className="px-2 py-1.5"><em>empty</em></td></tr>
                         <tr className="border-t"><td className="px-2 py-1.5">Token endpoint auth method</td><td className="px-2 py-1.5 font-mono"><code>none</code></td></tr>
-                        <tr className="border-t"><td className="px-2 py-1.5">Auth URL</td><td className="px-2 py-1.5 font-mono"><code>https://mcp-resource.rahmanef.com/oauth/authorize</code></td></tr>
-                        <tr className="border-t"><td className="px-2 py-1.5">Token URL</td><td className="px-2 py-1.5 font-mono"><code>https://mcp-resource.rahmanef.com/api/oauth/token</code></td></tr>
-                        <tr className="border-t"><td className="px-2 py-1.5">Authorization server base</td><td className="px-2 py-1.5 font-mono"><code>https://mcp-resource.rahmanef.com</code></td></tr>
-                        <tr className="border-t"><td className="px-2 py-1.5">Resource</td><td className="px-2 py-1.5 font-mono"><code>https://mcp-resource.rahmanef.com/mcp</code></td></tr>
+                        <tr className="border-t"><td className="px-2 py-1.5">Auth URL</td><td className="px-2 py-1.5 font-mono"><code>{HOSTED_BASE}/oauth/authorize</code></td></tr>
+                        <tr className="border-t"><td className="px-2 py-1.5">Token URL</td><td className="px-2 py-1.5 font-mono"><code>{HOSTED_BASE}/api/oauth/token</code></td></tr>
+                        <tr className="border-t"><td className="px-2 py-1.5">Authorization server base</td><td className="px-2 py-1.5 font-mono"><code>{HOSTED_BASE}</code></td></tr>
+                        <tr className="border-t"><td className="px-2 py-1.5">Resource</td><td className="px-2 py-1.5 font-mono"><code>{HOSTED_URL}</code></td></tr>
                       </tbody>
                     </table>
                   </div>

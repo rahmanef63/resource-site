@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { ShoppingBag, Globe, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const PRODUCTS = [
   { id: "1", name: "Wedang Uwuh",     price: 28000, img: "https://images.unsplash.com/photo-1547517023-7ca0c162f816?auto=format&fit=crop&w=800&q=70", tag: "Hot" },
@@ -59,9 +60,9 @@ function Inner() {
           </nav>
           <div className="flex items-center gap-3">
             {showSearch && (
-              <button className="hidden size-8 items-center justify-center rounded-md border md:flex">
+              <Button type="button" variant="outline" className="hidden size-8 items-center justify-center rounded-md border md:flex">
                 <Search className="size-3.5" />
-              </button>
+              </Button>
             )}
             {showI18n && (
               <select className="rounded-md border bg-background px-2 py-1 text-xs">
@@ -77,14 +78,14 @@ function Inner() {
                 {CURRENCIES.map((c) => <option key={c.code} value={c.code}>{c.code}</option>)}
               </select>
             )}
-            <button onClick={() => cartUI === "drawer" ? setDrawer(true) : null} className="relative flex size-8 items-center justify-center rounded-md border">
+            <Button type="button" variant="outline" onClick={() => cartUI === "drawer" ? setDrawer(true) : null} className="relative flex size-8 items-center justify-center rounded-md border">
               <ShoppingBag className="size-3.5" />
               {cart.length > 0 && (
                 <span className="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-amber-500 text-[10px] font-bold text-amber-950">
                   {cart.length}
                 </span>
               )}
-            </button>
+            </Button>
           </div>
         </div>
       </header>
@@ -112,12 +113,14 @@ function Inner() {
                 <p className="truncate text-sm font-medium">{p.name}</p>
                 <p className="shrink-0 text-sm tabular-nums text-muted-foreground">{fmt(p.price)}</p>
               </div>
-              <button
+              <Button
+                type="button"
+                variant="outline"
                 onClick={() => setCart((c) => [...c, p.id])}
-                className="mt-2 w-full rounded-md border px-3 py-1.5 text-xs font-medium hover:bg-accent"
+                className="mt-2 h-auto w-full rounded-md border px-3 py-1.5 text-xs font-medium hover:bg-accent"
               >
                 Tambah ke keranjang
-              </button>
+              </Button>
             </article>
           ))}
         </div>

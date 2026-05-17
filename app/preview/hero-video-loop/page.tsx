@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Play, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function Page() {
   return (
@@ -11,9 +12,9 @@ export default function Page() {
         <div className="absolute inset-0 bg-zinc-950/40" />
       </div>
       <section className="mx-auto flex min-h-screen max-w-4xl flex-col items-center justify-center px-6 py-24 text-center">
-        <button className="mb-8 inline-flex size-14 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur transition hover:bg-white/20">
+        <Button type="button" variant="ghost" className="mb-8 inline-flex size-14 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur transition hover:bg-white/20 hover:text-white">
           <Play className="size-5 fill-white" />
-        </button>
+        </Button>
         <h1 className="text-balance text-5xl font-bold tracking-tight md:text-7xl">
           Watch the platform in motion
         </h1>

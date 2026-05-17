@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Sparkles, Zap, ShieldCheck, GitBranch, Rocket, Boxes, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const ICONS = [Boxes, ShieldCheck, Rocket, GitBranch, Sparkles, Zap, Boxes, ShieldCheck, Rocket];
 const TITLES = [
@@ -106,9 +107,9 @@ function Inner() {
               <p className="font-semibold">Ready to ship?</p>
               <p className="text-sm text-muted-foreground">Copy the prompt → your agent does the rest.</p>
             </div>
-            <button className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm text-primary-foreground hover:opacity-90">
+            <Button type="button" variant="default" className="inline-flex h-auto items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm text-primary-foreground hover:opacity-90">
               Get started <ArrowRight className="size-4" />
-            </button>
+            </Button>
           </div>
         )}
       </div>

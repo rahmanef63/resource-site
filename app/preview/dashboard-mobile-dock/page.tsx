@@ -20,6 +20,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 const TAB_POOL = {
   home: { id: "home", label: "Home", icon: Home },
@@ -71,12 +72,14 @@ function Inner() {
       </main>
 
       {aiBtn && (
-        <button
+        <Button
+          type="button"
+          variant="default"
           aria-label="AI"
-          className="fixed bottom-20 left-1/2 z-20 flex size-14 -translate-x-1/2 items-center justify-center rounded-full bg-violet-500 text-white shadow-xl shadow-violet-500/30"
+          className="fixed bottom-20 left-1/2 z-20 flex size-14 -translate-x-1/2 items-center justify-center rounded-full bg-violet-500 text-white shadow-xl shadow-violet-500/30 hover:bg-violet-500/90"
         >
           <Sparkles className="size-6" />
-        </button>
+        </Button>
       )}
 
       <BottomNav
@@ -100,14 +103,16 @@ function Inner() {
                 const t = TAB_POOL[id];
                 const Icon = t.icon;
                 return (
-                  <button
+                  <Button
+                    type="button"
+                    variant="ghost"
                     key={id}
                     onClick={() => { setActive(id); setMoreOpen(false); }}
-                    className="flex flex-col items-center gap-1 rounded-lg border border-zinc-800 bg-zinc-900/60 p-3 text-zinc-300 hover:bg-zinc-800/60"
+                    className="flex h-auto flex-col items-center gap-1 rounded-lg border border-zinc-800 bg-zinc-900/60 p-3 font-normal text-zinc-300 hover:bg-zinc-800/60 hover:text-zinc-300"
                   >
                     <Icon className="size-5" />
                     <span className="text-[10px]">{t.label}</span>
-                  </button>
+                  </Button>
                 );
               })}
             </div>
@@ -127,9 +132,9 @@ function Header({
       <div className="flex items-center justify-between px-4 py-3">
         <div className="flex items-center gap-2">
           {sidebarToggle && (
-            <button className="-ml-1 flex size-8 items-center justify-center rounded-md text-zinc-400 hover:bg-zinc-800">
+            <Button type="button" variant="ghost" className="-ml-1 flex size-8 items-center justify-center rounded-md text-zinc-400 hover:bg-zinc-800 hover:text-zinc-400">
               <PanelLeft className="size-4" />
-            </button>
+            </Button>
           )}
           <div className="flex size-8 items-center justify-center rounded-lg bg-violet-500/20 text-violet-300">
             <Sparkles className="size-4" />
@@ -140,28 +145,28 @@ function Header({
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button className="flex size-8 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900 text-zinc-400">
+          <Button type="button" variant="ghost" className="flex size-8 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-400">
             <Search className="size-4" />
-          </button>
+          </Button>
           {rightNav === "settings" && (
-            <button className="flex size-8 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900 text-zinc-400">
+            <Button type="button" variant="ghost" className="flex size-8 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-400">
               <Cog className="size-4" />
-            </button>
+            </Button>
           )}
           {rightNav === "avatar" && (
-            <button className="flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-xs font-bold text-white">
+            <Button type="button" variant="default" className="flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-xs font-bold text-white hover:opacity-90">
               R
-            </button>
+            </Button>
           )}
         </div>
       </div>
       {tabsHeader && (
         <div className="flex items-center gap-1 overflow-x-auto border-t border-zinc-800/60 px-3 py-1.5 text-xs">
           {(["Today", "Upcoming", "Backlog", "Archive"] as const).map((t, i) => (
-            <button key={t} className={cn(
-              "shrink-0 rounded-md px-2.5 py-1",
-              i === 0 ? "bg-zinc-800 text-zinc-100" : "text-zinc-500 hover:text-zinc-200",
-            )}>{t}</button>
+            <Button type="button" variant="ghost" key={t} className={cn(
+              "h-auto shrink-0 rounded-md px-2.5 py-1 text-xs font-normal hover:bg-transparent",
+              i === 0 ? "bg-zinc-800 text-zinc-100 hover:bg-zinc-800 hover:text-zinc-100" : "text-zinc-500 hover:text-zinc-200",
+            )}>{t}</Button>
           ))}
         </div>
       )}
@@ -230,22 +235,24 @@ function BottomNav({
             const Icon = t.icon;
             const on = active === id;
             return (
-              <button
+              <Button
+                type="button"
+                variant="ghost"
                 key={id}
                 onClick={() => setActive(id)}
                 className={cn(
-                  "flex size-10 items-center justify-center rounded-full transition-colors",
-                  on ? "bg-violet-500 text-white" : "text-zinc-400 hover:text-zinc-100",
+                  "flex size-10 items-center justify-center rounded-full transition-colors hover:bg-transparent",
+                  on ? "bg-violet-500 text-white hover:bg-violet-500 hover:text-white" : "text-zinc-400 hover:text-zinc-100",
                 )}
               >
                 <Icon className="size-4" />
-              </button>
+              </Button>
             );
           })}
           {moreItems.length > 0 && (
-            <button onClick={() => setMoreOpen(true)} className="flex size-10 items-center justify-center rounded-full text-zinc-400 hover:text-zinc-100">
+            <Button type="button" variant="ghost" onClick={() => setMoreOpen(true)} className="flex size-10 items-center justify-center rounded-full text-zinc-400 hover:bg-transparent hover:text-zinc-100">
               <MoreHorizontal className="size-4" />
-            </button>
+            </Button>
           )}
         </div>
       </nav>
@@ -264,27 +271,29 @@ function BottomNav({
           const Icon = t.icon;
           const on = active === id;
           return (
-            <button
+            <Button
+              type="button"
+              variant="ghost"
               key={id}
               onClick={() => setActive(id)}
               className={cn(
-                "flex flex-col items-center gap-0.5 px-3 text-[10px] font-medium transition-colors",
-                on ? "text-violet-300" : "text-zinc-500 hover:text-zinc-300",
+                "flex h-auto flex-col items-center gap-0.5 px-3 text-[10px] font-medium transition-colors hover:bg-transparent",
+                on ? "text-violet-300 hover:text-violet-300" : "text-zinc-500 hover:text-zinc-300",
               )}
             >
               <Icon className={variant === "dock" ? "size-5" : "size-4"} />
               <span>{t.label}</span>
-            </button>
+            </Button>
           );
         })}
         {moreItems.length > 0 && (
-          <button onClick={() => setMoreOpen(true)} className={cn(
-            "flex flex-col items-center gap-0.5 px-3 text-[10px] font-medium",
+          <Button type="button" variant="ghost" onClick={() => setMoreOpen(true)} className={cn(
+            "flex h-auto flex-col items-center gap-0.5 px-3 text-[10px] font-medium hover:bg-transparent",
             "text-zinc-500 hover:text-zinc-300",
           )}>
             <MoreHorizontal className={variant === "dock" ? "size-5" : "size-4"} />
             <span>More</span>
-          </button>
+          </Button>
         )}
       </div>
       {aiBtn && variant === "dock" && (
