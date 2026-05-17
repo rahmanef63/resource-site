@@ -1,7 +1,7 @@
 import { layouts } from "@/lib/content/layouts";
-import { recipes } from "@/lib/content/recipes";
 import { features, stack } from "@/lib/content/sections";
 import { site } from "@/lib/content/site";
+import { slices } from "@/lib/content/slices";
 
 export function GET() {
   const lines: string[] = [];
@@ -33,47 +33,68 @@ export function GET() {
     lines.push(`- agent recipe: ${l.agentRecipe}`);
     lines.push("");
   }
-  lines.push("## Recipes");
+  lines.push("## Slices");
   lines.push("");
-  for (const r of recipes) {
-    lines.push(`### ${r.title}`);
-    lines.push(`- slug: \`${r.slug}\`  source: ${r.source}`);
-    lines.push(`- ${r.description}`);
-    lines.push(`- repo path: \`${r.repoPath}\``);
-    lines.push(`- files:`);
-    for (const f of r.files) lines.push(`  - \`${f}\``);
-    lines.push(`- detail: ${site.url}/recipes/${r.slug}`);
-    lines.push(`- agent recipe: ${r.agentRecipe}`);
+  lines.push(
+    "Drop-in vertical features. Each ships the metadata trio (`slice.json` + `slice.contract.ts` + `slice.manifest.json`). Install with `npx rr add <slug>` — CLI auto-augments env, installs deps, and copies into `frontend/slices/<slug>/` (+ optional `convex/features/<slug>/`).",
+  );
+  lines.push("");
+  for (const s of slices) {
+    lines.push(`### ${s.title}`);
+    lines.push(`- slug: \`${s.slug}\`  kind: \`${s.kind}\`  category: \`${s.category}\``);
+    lines.push(`- ${s.description}`);
+    lines.push(`- install: \`npx rr add ${s.slug}\``);
+    lines.push(`- detail: ${site.url}/slices/${s.slug}`);
     lines.push("");
   }
-  lines.push("## Hard rules");
+  lines.push("## Hard rules (12-rule doctrine — full text at /best-practice)");
   lines.push("");
   lines.push("- NO Clerk. Use @convex-dev/auth.");
   lines.push("- All UI = shadcn primitives. No raw HTML buttons / dialogs / native date/file inputs.");
   lines.push("- Copy-first flow. Never greenfield — copy from a source project, adjust imports.");
   lines.push("- Stack: Next 16 + React 19 + Tailwind 4 + Convex self-hosted + TS strict.");
+  lines.push("- Next 16: use `proxy.ts` not `middleware.ts`; `next/link` + `next/image` only.");
   lines.push("- Workspace isolation per Convex query (`.withIndex('by_workspace', …)`).");
+  lines.push("- No bare `.collect()` — use `.withIndex(...).take(N)` or paginate.");
+  lines.push("- Every public mutation/query MUST declare `args:` validators + server-side authz (`requireUser`/`requireAdmin`).");
   lines.push("- RBAC + audit log on every mutation.");
-  lines.push("- Commit `convex/_generated` before deploy.");
-  lines.push("- audit-bp score ≥80 before deploy.");
+  lines.push("- `NEXT_PUBLIC_*` only for non-sensitive values.");
+  lines.push("- **File modularity: 200-line hard cap per source file** (excl. catalog/seed/_generated). Compose, don't accumulate. Gate: `npm run audit:file-size`.");
+  lines.push("- Slice contract: `slice.json` + `slice.contract.ts` + `slice.manifest.json` mandatory per slice. Imports resolve via `@/components/ui/*`, `@/shared/*`, `@/features/<own-slug>/*`, `@convex/*`, or relative-within-slice.");
+  lines.push("- Solo-dev: push direct to main (no PR); Dokploy auto-deploys on push.");
   lines.push("");
   lines.push("## How to install");
   lines.push("");
-  lines.push("Manual:");
+  lines.push("Fresh project (recommended):");
   lines.push("```");
-  lines.push(`git clone ${site.repo} && cd resources/template-base`);
-  lines.push("pnpm install --yes --legacy-peer-deps");
-  lines.push("npx convex dev --once && git add convex/_generated && git commit");
-  lines.push("cp .env.example .env.local");
-  lines.push("pnpm audit:bp -- --full");
-  lines.push("pnpm dev");
+  lines.push("npx rahman-resources init my-app   # or alias: npx rr init my-app");
+  lines.push("cd my-app");
+  lines.push("cp .env.example .env.local         # fill NEXT_PUBLIC_CONVEX_URL");
+  lines.push("npm install --legacy-peer-deps");
+  lines.push("npx convex dev --once              # generates convex/_generated");
+  lines.push("npm run dev");
   lines.push("```");
   lines.push("");
-  lines.push("## Deploy (Dokploy via si-coder)");
+  lines.push("Add a template or slice into an existing project:");
   lines.push("```");
-  lines.push("node $HOME/.agents/skills/si-coder/scripts/deploy.js \\");
-  lines.push('  "$DOKPLOY_API_URL" "$DOKPLOY_API_KEY" \\');
-  lines.push('  "<PROJECT>" "<APP>" "$GITHUB_TOKEN" "<DOMAIN>"');
+  lines.push("npx rr add <slug>                  # auto-detects TEMPLATE vs SLICE,");
+  lines.push("                                   # auto-augments .env.example,");
+  lines.push("                                   # auto-installs npm deps");
+  lines.push("```");
+  lines.push("");
+  lines.push("## Audit chain (run before deploy)");
+  lines.push("```");
+  lines.push("npm run validate:all               # full chain: slices + templates + file-size + manifests + contracts");
+  lines.push("npm run audit:slices               # slice contract violations");
+  lines.push("npm run audit:templates            # template scaffold violations");
+  lines.push("npm run audit:file-size            # 200-line modularity cap");
+  lines.push("```");
+  lines.push("");
+  lines.push("## Deploy (Dokploy via sc-all)");
+  lines.push("```");
+  lines.push("# Invoke the sc-all skill in Claude Code — orchestrates");
+  lines.push("# sc-dokploy + sc-convex: creates repo, pushes, configures Dokploy,");
+  lines.push("# deploys self-hosted Convex backend, sets DNS, triggers build.");
   lines.push("```");
   lines.push("");
 

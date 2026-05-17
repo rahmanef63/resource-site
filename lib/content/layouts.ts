@@ -52,6 +52,8 @@ export const layouts: LayoutEntry[] = [
     previewPath: "/preview/personal-brand-os/public",
     adminPreviewPath: "/preview/personal-brand-os/admin",
     defaultSurface: "public",
+    defaultView: "desktop",
+    defaultZoom: 1,
     pullPaths: [
       "app/preview/personal-brand-os",
       "components/templates/_shared",
@@ -192,7 +194,7 @@ export default function HomePage() {
   );
 }`,
     agentRecipe:
-      "Personal Brand OS = full-app template (public + admin). 1) Default `npx rr add personal-brand-os` runs `--at root`: routes promoted to app/(public)/ + app/admin/, and /preview/personal-brand-os/* path constants in nav-config/site-config/robots/sitemap auto-rewritten. (Pass `--at preview` only for sandbox demos that keep /preview/personal-brand-os/* URLs.) 2) Edit components/templates/personal-brand/shared/site-config.ts — set brandName, ownerName, baseUrl, twitter, email. 3) Wire convex-templates/personal-brand-os/* into your convex/features/personal-brand-os/ (kitab ships them outside `convex/` so the bundler doesn't try to compile scaffolds without _generated) and add @convex-dev/auth on admin routes. 4) Replace localStorage StoreProvider with Convex queries (schema mirrors localStorage shape).",
+      "Run `npx rr init <app> --template personal-brand-os` (or `npx rr add personal-brand-os` inside an existing project). Personal Brand OS = full-app template (public + admin). 1) Default `npx rr add personal-brand-os` runs `--at root`: routes promoted to app/(public)/ + app/admin/, and /preview/personal-brand-os/* path constants in nav-config/site-config/robots/sitemap auto-rewritten. (Pass `--at preview` only for sandbox demos that keep /preview/personal-brand-os/* URLs.) 2) Edit components/templates/personal-brand/shared/site-config.ts — set brandName, ownerName, baseUrl, twitter, email. 3) Wire convex-templates/personal-brand-os/* into your convex/features/personal-brand-os/ (kitab ships them outside `convex/` so the bundler doesn't try to compile scaffolds without _generated) and add @convex-dev/auth on admin routes. 4) Replace localStorage StoreProvider with Convex queries (schema mirrors localStorage shape).",
   },
   {
     slug: "agency-studio-os",
@@ -207,6 +209,8 @@ export default function HomePage() {
     previewPath: "/preview/agency-studio-os/public",
     adminPreviewPath: "/preview/agency-studio-os/admin",
     defaultSurface: "public",
+    defaultView: "desktop",
+    defaultZoom: 1,
     pullPaths: [
       "app/preview/agency-studio-os",
       "components/templates/_shared",
@@ -288,7 +292,7 @@ export default function Page() {
   return <HomePage />;
 }`,
     agentRecipe:
-      "Agency Studio OS = full-app B2B agency template (public + admin). 1) Move app/preview/agency-studio-os/{robots,sitemap,opengraph-image}.* to app root. 2) Copy public into app/(public)/, admin into app/(admin)/. 3) Edit components/templates/agency-studio/shared/site-config.ts — set studioName, brandName, baseUrl, twitter, email. 4) Wire convex-templates/agency-studio-os/* into your convex/ (kitab ships them outside `convex/` so the bundler doesn't try to compile scaffolds without _generated) and add @convex-dev/auth on admin routes. 5) Replace localStorage StoreProvider with Convex queries.",
+      "Run `npx rr init <app> --template agency-studio-os`. Agency Studio OS = full-app B2B agency template (public + admin). 1) Move app/preview/agency-studio-os/{robots,sitemap,opengraph-image}.* to app root. 2) Copy public into app/(public)/, admin into app/(admin)/. 3) Edit components/templates/agency-studio/shared/site-config.ts — set studioName, brandName, baseUrl, twitter, email. 4) Wire convex-templates/agency-studio-os/* into your convex/ (kitab ships them outside `convex/` so the bundler doesn't try to compile scaffolds without _generated) and add @convex-dev/auth on admin routes. 5) Replace localStorage StoreProvider with Convex queries.",
   },
   {
     slug: "landing-hero-carousel",
@@ -301,6 +305,8 @@ export default function Page() {
     primaryFile: "cookbook/layouts/landing-hero-carousel/src/HeroSection.tsx",
     tags: ["marketing", "carousel", "image", "cms"],
     previewPath: "/preview/landing-hero-carousel",
+    defaultView: "desktop",
+    defaultZoom: 1,
     exampleCode: `import { HeroSection } from "@/cookbook/landing-hero-carousel/HeroSection";
 
 export default function HomePage() {
@@ -311,7 +317,7 @@ export default function HomePage() {
   );
 }`,
     agentRecipe:
-      "Mount the HeroSection from cookbook/layouts/landing-hero-carousel as the hero of the marketing route group. Provide image array via props or wire to Convex api.heroImages.list.",
+      "Run `npx rr add landing-hero-carousel`. Mount the HeroSection from cookbook/layouts/landing-hero-carousel as the hero of the marketing route group. Provide image array via props or wire to Convex api.heroImages.list.",
   },
   {
     slug: "landing-asymmetric-masonry",
@@ -324,13 +330,15 @@ export default function HomePage() {
     primaryFile: "cookbook/layouts/landing-asymmetric-masonry/src/PortfolioGrid.tsx",
     tags: ["marketing", "portfolio", "masonry", "scroll-reveal"],
     previewPath: "/preview/landing-asymmetric-masonry",
+    defaultView: "desktop",
+    defaultZoom: 1,
     exampleCode: `import { PortfolioGrid } from "@/cookbook/landing-asymmetric-masonry/PortfolioGrid";
 
 export default function PortfolioPage() {
   return <PortfolioGrid items={items} />;
 }`,
     agentRecipe:
-      "Use PortfolioGrid for case-study or portfolio pages. Items array shape: { id, title, cover, href, category }. The 8-slot pattern repeats; supply at least 8 items for the layout to bloom.",
+      "Run `npx rr add landing-asymmetric-masonry`. Use PortfolioGrid for case-study or portfolio pages. Items array shape: { id, title, cover, href, category }. The 8-slot pattern repeats; supply at least 8 items for the layout to bloom.",
   },
   {
     slug: "landing-bento",
@@ -343,6 +351,8 @@ export default function PortfolioPage() {
     primaryFile: "README.md",
     tags: ["marketing", "bento", "features"],
     previewPath: "/preview/landing-bento",
+    defaultView: "desktop",
+    defaultZoom: 1,
     exampleCode: `<section className="grid grid-cols-3 gap-4">
   <Card className="col-span-2 row-span-2">Feature 1</Card>
   <Card>Feature 2</Card>
@@ -351,7 +361,7 @@ export default function PortfolioPage() {
   <Card>Feature 5</Card>
 </section>`,
     agentRecipe:
-      "Compose a 3-column CSS grid with explicit area assignments per feature. Mix Card sizes (1x1, 1x2, 2x1, 2x2) for visual rhythm.",
+      "Run `npx rr add landing-bento`. Compose a 3-column CSS grid with explicit area assignments per feature. Mix Card sizes (1x1, 1x2, 2x1, 2x2) for visual rhythm.",
   },
   {
     slug: "landing-kinetic-text",
@@ -364,6 +374,8 @@ export default function PortfolioPage() {
     primaryFile: "README.md",
     tags: ["marketing", "motion", "type"],
     previewPath: "/preview/landing-kinetic-text",
+    defaultView: "desktop",
+    defaultZoom: 1,
     exampleCode: `import { KineticHeading } from "@/components/motion/kinetic-heading";
 import { Magnetic } from "@/components/motion/magnetic";
 import { Marquee } from "@/components/motion/marquee";
@@ -374,7 +386,7 @@ import { Marquee } from "@/components/motion/marquee";
 </Magnetic>
 <Marquee speed={30}>brands…</Marquee>`,
     agentRecipe:
-      "Use motion primitives marquee, kinetic-heading, magnetic from components/motion (already imported into the kitab from rahmanef.com). All respect prefers-reduced-motion automatically.",
+      "Run `npx rr add landing-kinetic-text`. Use motion primitives marquee, kinetic-heading, magnetic from components/motion (already imported into the kitab from rahmanef.com). All respect prefers-reduced-motion automatically.",
   },
   {
     slug: "dashboard-three-column",
@@ -388,6 +400,8 @@ import { Marquee } from "@/components/motion/marquee";
       "template-base/frontend/shared/ui/layout/container/three-column/ThreeColumnLayout.tsx",
     tags: ["dashboard", "three-column", "resizable", "responsive"],
     previewPath: "/preview/dashboard-three-column",
+    defaultView: "desktop",
+    defaultZoom: 1,
     exampleCode: `"use client";
 import { ThreeColumnLayout } from "@/frontend/shared/ui/layout/container/three-column/ThreeColumnLayout";
 
@@ -408,7 +422,7 @@ export default function FeaturePage() {
   );
 }`,
     agentRecipe:
-      "Mount inside app/dashboard/<slice>/page.tsx. Wrap with the kitab's <ThreeColumnLayout>. Slot in slice-specific sidebars and inspectors. Mobile auto-collapses to drawers.",
+      "Run `npx rr add dashboard-three-column`. Mount inside app/dashboard/<slice>/page.tsx. Wrap with the kitab's <ThreeColumnLayout>. Slot in slice-specific sidebars and inspectors. Mobile auto-collapses to drawers.",
   },
   {
     slug: "dashboard-ide",
@@ -421,6 +435,8 @@ export default function FeaturePage() {
     primaryFile: "README.md",
     tags: ["dashboard", "ide", "editor"],
     previewPath: "/preview/dashboard-ide",
+    defaultView: "desktop",
+    defaultZoom: 1,
     exampleCode: `<div className="grid h-screen grid-cols-[48px_1fr] grid-rows-[auto_1fr_200px]">
   <ActivityBar className="row-span-3" />
   <TabsBar className="border-b" />
@@ -431,7 +447,7 @@ export default function FeaturePage() {
   <Console className="border-t" />
 </div>`,
     agentRecipe:
-      "Compose grid: 48px activity bar + tabs row + editor/inspector flex row + bottom console. Wire activity bar items to dispatch into tabs/inspector store.",
+      "Run `npx rr add dashboard-ide`. Compose grid: 48px activity bar + tabs row + editor/inspector flex row + bottom console. Wire activity bar items to dispatch into tabs/inspector store.",
   },
   {
     slug: "dashboard-mobile-dock",
@@ -446,6 +462,7 @@ export default function FeaturePage() {
     tags: ["dashboard", "mobile", "pwa"],
     previewPath: "/preview/dashboard-mobile-dock",
     defaultView: "mobile",
+    defaultZoom: 1,
     exampleCode: `// app/dashboard/layout.tsx
 import { ResponsiveDashboardShell } from "@/frontend/shared/ui/layout/dashboard/ResponsiveDashboardShell";
 
@@ -453,7 +470,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return <ResponsiveDashboardShell>{children}</ResponsiveDashboardShell>;
 }`,
     agentRecipe:
-      "Use ResponsiveDashboardShell which branches desktop (sidebar) vs mobile (dock). Customize MobileDashboardDock items and MobileTopBar workspace switcher to your domain.",
+      "Run `npx rr add dashboard-mobile-dock`. Use ResponsiveDashboardShell which branches desktop (sidebar) vs mobile (dock). Customize MobileDashboardDock items and MobileTopBar workspace switcher to your domain.",
   },
   {
     slug: "cms-public-storefront",
@@ -466,6 +483,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     primaryFile: "README.md",
     tags: ["cms", "ecommerce", "storefront"],
     previewPath: "/preview/cms-public-storefront",
+    defaultView: "desktop",
+    defaultZoom: 1,
     exampleCode: `// app/(cms)/layout.tsx
 import { ConvexClientProvider } from "@/components/ConvexClientProvider";
 import { LanguageProvider } from "@/components/LanguageContext";
@@ -481,7 +500,7 @@ export default function Layout({ children }) {
   );
 }`,
     agentRecipe:
-      "Port kitab-core slices/cms-lite/ into your project's app/(cms)/ route group. Fetch products/pages from Convex via api.cmsLite.* queries.",
+      "Run `npx rr add cms-public-storefront`. Port kitab-core slices/cms-lite/ into your project's app/(cms)/ route group. Fetch products/pages from Convex via api.cmsLite.* queries.",
   },
   {
     slug: "saas-marketing-os",
@@ -496,6 +515,8 @@ export default function Layout({ children }) {
     tags: ["template", "saas", "marketing", "mdx", "blog", "changelog"],
     previewPath: "/preview/saas-marketing-os/public",
     defaultSurface: "public",
+    defaultView: "desktop",
+    defaultZoom: 1,
     pullPaths: [
       "app/preview/saas-marketing-os",
       "components/templates/_shared",
@@ -546,7 +567,7 @@ export default function Layout({ children }) {
 import { HomePage } from "@/components/templates/saas-marketing/slices/home/HomePage";
 export default function Page() { return <HomePage />; }`,
     agentRecipe:
-      "SaaS Marketing OS = public-only marketing template. Blog + changelog use MDX (add the mdx-blog feature). Edit components/templates/saas-marketing/shared/site-config.ts to set product name, tagline, pricing tiers, contact email.",
+      "Run `npx rr init <app> --template saas-marketing-os`. SaaS Marketing OS = public-only marketing template. Blog + changelog use MDX (add the mdx-blog feature). Edit components/templates/saas-marketing/shared/site-config.ts to set product name, tagline, pricing tiers, contact email.",
   },
   {
     slug: "kreator-studio-os",
@@ -561,6 +582,8 @@ export default function Page() { return <HomePage />; }`,
     previewPath: "/preview/kreator-studio-os/public",
     adminPreviewPath: "/preview/kreator-studio-os/admin",
     defaultSurface: "admin",
+    defaultView: "desktop",
+    defaultZoom: 1,
     pullPaths: [
       "app/preview/kreator-studio-os",
       "components/templates/_shared",
@@ -624,7 +647,7 @@ export default function Page() { return <HomePage />; }`,
 import { HomePage } from "@/components/templates/kreator-studio/slices/home/HomePage";
 export default function Page() { return <HomePage />; }`,
     agentRecipe:
-      "Kreator Studio OS = full-app content-creator template (public newsletter + 9-tab admin). 1) Edit components/templates/kreator-studio/shared/site-config.ts (brandName, ownerName, baseUrl, twitter). 2) Replace localStorage StoreProvider with Convex queries (state shape mirrors localStorage). 3) Wire Resend for newsletter + Midtrans tip-jar on public CTA. 4) Voice/Scripts/Carousels admin views are scaffolds — wire to ai-router (mid tier for voice-train/voice-apply, nano for shortform script).",
+      "Run `npx rr init <app> --template kreator-studio-os`. Kreator Studio OS = full-app content-creator template (public newsletter + 9-tab admin). 1) Edit components/templates/kreator-studio/shared/site-config.ts (brandName, ownerName, baseUrl, twitter). 2) Replace localStorage StoreProvider with Convex queries (state shape mirrors localStorage). 3) Wire Resend for newsletter + Midtrans tip-jar on public CTA. 4) Voice/Scripts/Carousels admin views are scaffolds — wire to ai-router (mid tier for voice-train/voice-apply, nano for shortform script).",
   },
   {
     slug: "konsultan-os",
@@ -639,6 +662,8 @@ export default function Page() { return <HomePage />; }`,
     previewPath: "/preview/konsultan-os/public",
     adminPreviewPath: "/preview/konsultan-os/admin",
     defaultSurface: "admin",
+    defaultView: "desktop",
+    defaultZoom: 1,
     pullPaths: [
       "app/preview/konsultan-os",
       "components/templates/_shared",
@@ -698,7 +723,7 @@ export default function Page() { return <HomePage />; }`,
 import { HomePage } from "@/components/templates/konsultan/slices/home/HomePage";
 export default function Page() { return <HomePage />; }`,
     agentRecipe:
-      "Konsultan OS = full-app consultancy template (public services + 7-tab admin). 1) Edit components/templates/konsultan/shared/site-config.ts (brandName, ownerName, baseUrl). 2) Replace localStorage StoreProvider with Convex queries. 3) Add @convex-dev/auth + RBAC on /admin routes. 4) Wire Resend for proposal email + e-sign provider for contracts. 5) Billing view is PajakAware-ready — connect to Midtrans + Indonesian-tax calc on invoice generation.",
+      "Run `npx rr init <app> --template konsultan-os`. Konsultan OS = full-app consultancy template (public services + 7-tab admin). 1) Edit components/templates/konsultan/shared/site-config.ts (brandName, ownerName, baseUrl). 2) Replace localStorage StoreProvider with Convex queries. 3) Add @convex-dev/auth + RBAC on /admin routes. 4) Wire Resend for proposal email + e-sign provider for contracts. 5) Billing view is PajakAware-ready — connect to Midtrans + Indonesian-tax calc on invoice generation.",
   },
   {
     slug: "wirausaha-os",
@@ -713,6 +738,8 @@ export default function Page() { return <HomePage />; }`,
     previewPath: "/preview/wirausaha-os/public",
     adminPreviewPath: "/preview/wirausaha-os/admin",
     defaultSurface: "admin",
+    defaultView: "desktop",
+    defaultZoom: 1,
     pullPaths: [
       "app/preview/wirausaha-os",
       "components/templates/_shared",
@@ -772,7 +799,7 @@ export default function Page() { return <HomePage />; }`,
 import { HomePage } from "@/components/templates/wirausaha/slices/home/HomePage";
 export default function Page() { return <HomePage />; }`,
     agentRecipe:
-      "Wirausaha OS = full-app UKM template (mobile-first public storefront + 8-tab admin). 1) Edit components/templates/wirausaha/shared/site-config.ts. 2) Replace localStorage StoreProvider with Convex queries. 3) Wire Midtrans + QRIS for orders. 4) Add WhatsApp-bot for order confirmations. 5) Finance view scaffolds AI-laporan — connect to ai-router (mid tier) for narrative generation from monthly aggregates.",
+      "Run `npx rr init <app> --template wirausaha-os`. Wirausaha OS = full-app UKM template (mobile-first public storefront + 8-tab admin). 1) Edit components/templates/wirausaha/shared/site-config.ts. 2) Replace localStorage StoreProvider with Convex queries. 3) Wire Midtrans + QRIS for orders. 4) Add WhatsApp-bot for order confirmations. 5) Finance view scaffolds AI-laporan — connect to ai-router (mid tier) for narrative generation from monthly aggregates.",
   },
   {
     slug: "riset-kit",
@@ -787,6 +814,8 @@ export default function Page() { return <HomePage />; }`,
     previewPath: "/preview/riset-kit/public",
     adminPreviewPath: "/preview/riset-kit/admin",
     defaultSurface: "admin",
+    defaultView: "desktop",
+    defaultZoom: 1,
     pullPaths: [
       "app/preview/riset-kit",
       "components/templates/_shared",
@@ -844,7 +873,7 @@ export default function Page() { return <HomePage />; }`,
 import { HomePage } from "@/components/templates/research/slices/home/HomePage";
 export default function Page() { return <HomePage />; }`,
     agentRecipe:
-      "Riset Kit = full-app research template (public KB reader + 6-tab admin). 1) Edit components/templates/research/shared/site-config.ts. 2) Replace localStorage StoreProvider with Convex queries. 3) Add @convex-dev/auth on /admin (single owner suffices). 4) Document library expects pdf-extract + vector-search — wire convex-vector-search component. 5) AI Reader wires ai-router (mid tier) for QA over uploaded PDFs. 6) Lit-review matrix is a scaffold — wire AI summarizer per cell.",
+      "Run `npx rr init <app> --template riset-kit`. Riset Kit = full-app research template (public KB reader + 6-tab admin). 1) Edit components/templates/research/shared/site-config.ts. 2) Replace localStorage StoreProvider with Convex queries. 3) Add @convex-dev/auth on /admin (single owner suffices). 4) Document library expects pdf-extract + vector-search — wire convex-vector-search component. 5) AI Reader wires ai-router (mid tier) for QA over uploaded PDFs. 6) Lit-review matrix is a scaffold — wire AI summarizer per cell.",
   },
 
   // ───────────── HERO BLOCKS (5) ─────────────
@@ -869,7 +898,7 @@ export default function Page() { return <HomePage />; }`,
     <Button variant="outline">Docs</Button>
   </div>
 </section>`,
-    agentRecipe: "Pure layout. Drop into landing pages where the product needs minimum framing. Replace the eyebrow pill with a status badge or release tag. Two CTAs is the sweet spot.",
+    agentRecipe: "Run `npx rr add hero-centered`. Pure layout. Drop into landing pages where the product needs minimum framing. Replace the eyebrow pill with a status badge or release tag. Two CTAs is the sweet spot.",
   },
   {
     slug: "hero-split",
@@ -893,7 +922,7 @@ export default function Page() { return <HomePage />; }`,
   </div>
   <div className="rounded-2xl border bg-gradient-to-br">{visual}</div>
 </section>`,
-    agentRecipe: "Right column accepts any visual — screenshot, product mock, illustration, or live demo iframe. Feature list pairs Lucide icons with one-line value props.",
+    agentRecipe: "Run `npx rr add hero-split`. Right column accepts any visual — screenshot, product mock, illustration, or live demo iframe. Feature list pairs Lucide icons with one-line value props.",
   },
   {
     slug: "hero-bento-bg",
@@ -913,7 +942,7 @@ export default function Page() { return <HomePage />; }`,
   </div>
   <section className="text-center"><h1>The kitab for shipping</h1></section>
 </main>`,
-    agentRecipe: "Background tiles get a radial mask so the center stays readable. Use 6-8 tiles with asymmetric spans (col-span-2 row-span-2 for one, others 1x1). Lucide icon in each tile.",
+    agentRecipe: "Run `npx rr add hero-bento-bg`. Background tiles get a radial mask so the center stays readable. Use 6-8 tiles with asymmetric spans (col-span-2 row-span-2 for one, others 1x1). Lucide icon in each tile.",
   },
   {
     slug: "hero-video-loop",
@@ -934,7 +963,7 @@ export default function Page() { return <HomePage />; }`,
     <h1 className="text-7xl">Watch it move</h1>
   </section>
 </main>`,
-    agentRecipe: "Replace the conic-gradient backdrop with a muted <video autoplay loop>. Keep the dark theme — light text on motion only reads when the contrast is hard.",
+    agentRecipe: "Run `npx rr add hero-video-loop`. Replace the conic-gradient backdrop with a muted <video autoplay loop>. Keep the dark theme — light text on motion only reads when the contrast is hard.",
   },
   {
     slug: "hero-animated-text",
@@ -953,7 +982,7 @@ const [i, setI] = useState(0);
 useEffect(() => { const id = setInterval(() => setI(n => (n+1)%WORDS.length), 2000); return () => clearInterval(id); }, []);
 
 <h1>Build <span className="bg-gradient-to-r from-violet-500 to-orange-500 bg-clip-text text-transparent">{WORDS[i]}</span> with the mesh</h1>`,
-    agentRecipe: "Use absolute-positioned word slots with translate-y + opacity transitions. The invisible placeholder word keeps the bounding box stable.",
+    agentRecipe: "Run `npx rr add hero-animated-text`. Use absolute-positioned word slots with translate-y + opacity transitions. The invisible placeholder word keeps the bounding box stable.",
   },
 
   // ───────────── PRICING BLOCKS (5) ─────────────
@@ -979,7 +1008,7 @@ useEffect(() => { const id = setInterval(() => setI(n => (n+1)%WORDS.length), 20
     </div>
   ))}
 </div>`,
-    agentRecipe: "Three is the magic number for SaaS pricing — fewer feels limited, more triggers analysis paralysis. Middle tier should be the one you actually want to sell.",
+    agentRecipe: "Run `npx rr add pricing-three`. Three is the magic number for SaaS pricing — fewer feels limited, more triggers analysis paralysis. Middle tier should be the one you actually want to sell.",
   },
   {
     slug: "pricing-four",
@@ -1003,7 +1032,7 @@ useEffect(() => { const id = setInterval(() => setI(n => (n+1)%WORDS.length), 20
     </div>
   ))}
 </div>`,
-    agentRecipe: "Use when you genuinely have four distinct tiers (free / solo / team / enterprise). Don't pad to four — use the three-tier variant if the fourth is forced.",
+    agentRecipe: "Run `npx rr add pricing-four`. Use when you genuinely have four distinct tiers (free / solo / team / enterprise). Don't pad to four — use the three-tier variant if the fourth is forced.",
   },
   {
     slug: "pricing-toggle",
@@ -1024,7 +1053,7 @@ const price = yearly ? t.yearly : t.monthly;
   <button onClick={() => setYearly(false)}>Monthly</button>
   <button onClick={() => setYearly(true)}>Yearly <span>-20%</span></button>
 </div>`,
-    agentRecipe: "Default to yearly — that's the conversion-optimized choice. Show the monthly strikethrough so the savings feel real, not implied.",
+    agentRecipe: "Run `npx rr add pricing-toggle`. Default to yearly — that's the conversion-optimized choice. Show the monthly strikethrough so the savings feel real, not implied.",
   },
   {
     slug: "pricing-compare",
@@ -1050,7 +1079,7 @@ const price = yearly ? t.yearly : t.monthly;
     </div>
   ))}
 </div>`,
-    agentRecipe: "Use for complex products where buyers actually compare. Mix boolean rows (Check/Minus) with string-value rows (\"1\", \"10\", \"Unlimited\") for clarity.",
+    agentRecipe: "Run `npx rr add pricing-compare`. Use for complex products where buyers actually compare. Mix boolean rows (Check/Minus) with string-value rows (\"1\", \"10\", \"Unlimited\") for clarity.",
   },
   {
     slug: "pricing-slider",
@@ -1072,7 +1101,7 @@ const price = yearly ? t.yearly : t.monthly;
 const [seats, setSeats] = useState(5);
 <input type="range" min={1} max={50} value={seats} onChange={e => setSeats(+e.target.value)} />
 <p className="text-4xl">\${priceFor(seats)}/mo</p>`,
-    agentRecipe: "Use for usage-based or seat-based products. Make the breakpoints transparent — buyers should be able to predict the next price without surprises.",
+    agentRecipe: "Run `npx rr add pricing-slider`. Use for usage-based or seat-based products. Make the breakpoints transparent — buyers should be able to predict the next price without surprises.",
   },
 
   // ───────────── ACCORDION BLOCKS (5) ─────────────
@@ -1100,7 +1129,7 @@ const [seats, setSeats] = useState(5);
     </div>
   ))}
 </div>`,
-    agentRecipe: "Single-open keeps the page short. Use when answers are independent. Switch to multi-open if buyers tend to scan multiple answers at once.",
+    agentRecipe: "Run `npx rr add accordion-faq`. Single-open keeps the page short. Use when answers are independent. Switch to multi-open if buyers tend to scan multiple answers at once.",
   },
   {
     slug: "accordion-grouped",
@@ -1122,7 +1151,7 @@ const [seats, setSeats] = useState(5);
     </div>
   </section>
 ))}`,
-    agentRecipe: "Use when the FAQ is long (>10 items) and questions cluster naturally. Each group's Item owns its open state for predictable UX.",
+    agentRecipe: "Run `npx rr add accordion-grouped`. Use when the FAQ is long (>10 items) and questions cluster naturally. Each group's Item owns its open state for predictable UX.",
   },
   {
     slug: "accordion-sidebar",
@@ -1143,7 +1172,7 @@ const [seats, setSeats] = useState(5);
     {current.items.map(it => <AccordionRow q={it.q} a={it.a} />)}
   </div>
 </section>`,
-    agentRecipe: "Use for help/docs pages with section breadth. Keep section count ≤ 5 — beyond that, the sidebar gets noisy. Reset accordion state on section change.",
+    agentRecipe: "Run `npx rr add accordion-sidebar`. Use for help/docs pages with section breadth. Keep section count ≤ 5 — beyond that, the sidebar gets noisy. Reset accordion state on section change.",
   },
   {
     slug: "accordion-animated",
@@ -1165,7 +1194,7 @@ const [seats, setSeats] = useState(5);
     <p>{a}</p>
   </div>
 </div>`,
-    agentRecipe: "The grid-template-rows trick lets CSS animate to-auto-height natively. No JS measurement, no jank. Pair with rounded card chrome for premium feel.",
+    agentRecipe: "Run `npx rr add accordion-animated`. The grid-template-rows trick lets CSS animate to-auto-height natively. No JS measurement, no jank. Pair with rounded card chrome for premium feel.",
   },
   {
     slug: "accordion-multi",
@@ -1189,7 +1218,7 @@ const toggle = (i) => setOpen(s => {
 <button onClick={() => setOpen(open.size === ITEMS.length ? new Set() : new Set(ITEMS.map((_,i)=>i)))}>
   {open.size === ITEMS.length ? "Collapse all" : "Expand all"}
 </button>`,
-    agentRecipe: "Use when answers reference each other or buyers want to keep multiple sections visible (changelogs, release notes, feature comparison FAQs).",
+    agentRecipe: "Run `npx rr add accordion-multi`. Use when answers reference each other or buyers want to keep multiple sections visible (changelogs, release notes, feature comparison FAQs).",
   },
 
   // ───────────── BLOG VIEW BLOCKS (5) ─────────────
@@ -1217,7 +1246,7 @@ const toggle = (i) => setOpen(s => {
     </article>
   ))}
 </div>`,
-    agentRecipe: "Default to 3 columns at lg. Use the Thumb helper for cover generation when posts don't ship an image yet — HSL gradient by post.hue keeps each card distinct.",
+    agentRecipe: "Run `npx rr add blog-grid`. Default to 3 columns at lg. Use the Thumb helper for cover generation when posts don't ship an image yet — HSL gradient by post.hue keeps each card distinct.",
   },
   {
     slug: "blog-list",
@@ -1243,7 +1272,7 @@ const toggle = (i) => setOpen(s => {
     </article>
   ))}
 </div>`,
-    agentRecipe: "Use for archives or category pages where the reader is hunting a specific post. Compact thumbnail keeps the line height tight.",
+    agentRecipe: "Run `npx rr add blog-list`. Use for archives or category pages where the reader is hunting a specific post. Compact thumbnail keeps the line height tight.",
   },
   {
     slug: "blog-magazine",
@@ -1268,7 +1297,7 @@ const toggle = (i) => setOpen(s => {
     {tail.map(p => <article><h4>{p.title}</h4></article>)}
   </aside>
 </div>`,
-    agentRecipe: "Use for content-heavy publications. Hero post earns the visual real estate; the sidebar carries breadth. Mix typography sizes for editorial rhythm.",
+    agentRecipe: "Run `npx rr add blog-magazine`. Use for content-heavy publications. Hero post earns the visual real estate; the sidebar carries breadth. Mix typography sizes for editorial rhythm.",
   },
   {
     slug: "blog-masonry",
@@ -1290,7 +1319,7 @@ const toggle = (i) => setOpen(s => {
     </article>
   ))}
 </div>`,
-    agentRecipe: "CSS columns are the cheap masonry — no JS, no layout shift. Vary the thumbnail height via a HEIGHTS array (h-44 to h-80). DOM order ≠ visual order — design around it.",
+    agentRecipe: "Run `npx rr add blog-masonry`. CSS columns are the cheap masonry — no JS, no layout shift. Vary the thumbnail height via a HEIGHTS array (h-44 to h-80). DOM order ≠ visual order — design around it.",
   },
   {
     slug: "blog-featured",
@@ -1314,7 +1343,7 @@ const toggle = (i) => setOpen(s => {
 <section className="grid md:grid-cols-2 gap-5">
   {rest.map(p => <article>{p.title}</article>)}
 </section>`,
-    agentRecipe: "Use for marketing-driven content sites (newsletter, podcast, brand journal) where the lead story carries the visit. Tail grid keeps the index scrollable without losing the hero impact.",
+    agentRecipe: "Run `npx rr add blog-featured`. Use for marketing-driven content sites (newsletter, podcast, brand journal) where the lead story carries the visit. Tail grid keeps the index scrollable without losing the hero impact.",
   },
 ];
 

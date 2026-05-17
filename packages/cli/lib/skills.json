@@ -3,7 +3,7 @@
     "description": "Claude Skills inventory — 19 entries (sync'd from site/lib/content/claude-skills.ts). Used by CLI add-skill + builder UI + MCP server.",
     "anthropicsRepo": "anthropics/skills",
     "branch": "main",
-    "lastSynced": "2026-05-09"
+    "lastSynced": "2026-05-17"
   },
   "skills": [
     {

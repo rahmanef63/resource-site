@@ -75,9 +75,12 @@ export function buildAgentPrompt({
   // Step 1 — pull explicit folders
   lines.push(`## 1. Pull only these folders`);
   lines.push("");
-  lines.push("Option A — `rahman-resources` CLI (recommended, auto-installs deps):");
+  lines.push(
+    "Option A — `rr` CLI (recommended; auto-detects TEMPLATE vs SLICE, auto-augments `.env.example`, auto-installs deps):",
+  );
   lines.push("```bash");
-  lines.push(`npx rahman-resources add ${layoutSlug ?? "<slug>"} ${projectName}`);
+  lines.push(`npx rr add ${layoutSlug ?? "<slug>"} ${projectName}`);
+  lines.push("# alias of: npx rahman-resources add ...");
   lines.push("```");
   lines.push("");
   lines.push("Option B — degit (no .git history, fastest manual path):");
@@ -161,8 +164,13 @@ export function buildAgentPrompt({
     "Adjust path aliases in `tsconfig.json` so imports resolve (`@/*` → project root).",
   );
   lines.push(
-    "Read `CLAUDE.md` of the source repo for hard rules (no Clerk, shadcn-only, copy-first, Next 16 + @convex-dev/auth).",
+    "Read `CLAUDE.md` of the source repo + `/best-practice` (12-rule doctrine) for hard rules (no Clerk, shadcn-only, copy-first, Next 16 + @convex-dev/auth, 200-LOC file cap, slice metadata trio).",
   );
+  lines.push("");
+  lines.push("Then run the audit chain:");
+  lines.push("```bash");
+  lines.push("npm run validate:all   # slices + templates + file-size + manifests + contracts");
+  lines.push("```");
   lines.push("");
 
   return lines.join("\n");
