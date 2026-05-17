@@ -52,6 +52,15 @@ const errors = [];
 const warnings = [];
 
 for (const slice of slices) {
+  // 0. metadata trio enforcement — every slice ships slice.json (already
+  //    required by discoverSlices), slice.contract.ts, slice.manifest.json.
+  if (!existsSync(path.join(slice.dir, "slice.contract.ts"))) {
+    errors.push(`[${slice.folder}] missing slice.contract.ts (metadata trio)`);
+  }
+  if (!existsSync(path.join(slice.dir, "slice.manifest.json"))) {
+    errors.push(`[${slice.folder}] missing slice.manifest.json (metadata trio)`);
+  }
+
   // 1. naming
   if (slice.slugFromJson !== slice.folder) {
     errors.push(

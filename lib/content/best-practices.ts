@@ -177,20 +177,32 @@ export const BEST_PRACTICES: BestPracticeSection[] = [
     ],
   },
   {
-    id: "rr-slice-flow",
-    title: "Working with rr slices",
+    id: "rr-distribution-kinds",
+    title: "rr distribution kinds (TEMPLATE vs SLICE)",
+    intro:
+      "rr publishes TWO different installable kinds. They install to different paths and answer different needs — confusing them is the #1 source of \"the output looks nothing like the docs\" reports.",
     rules: [
       {
+        title: "TEMPLATE = full-app scaffold",
+        rule: "A TEMPLATE (catalog: `lib/content/layouts.ts`, e.g. `personal-brand-os`, `agency-studio-os`) is a whole-app starter — public marketing routes + admin dashboard + Convex schema. Install with `npx rr add <template-slug>` (defaults to `--at root` → routes promoted to `app/(public)/` + `app/admin/`, hardcoded `/preview/<slug>` path constants in nav-config/site-config/robots/sitemap auto-rewritten). Pass `--at preview` only for sandbox demos that keep the `/preview/<slug>` URL prefix.",
+        why: "Templates are NOT vertical slices — they don't ship `slice.json` + `slice.contract.ts` + `slice.manifest.json`. They're monolithic scaffolds you fork and customize.",
+      },
+      {
+        title: "SLICE = drop-in vertical feature",
+        rule: "A SLICE (catalog: `lib/content/slices.ts`, e.g. `comments`, `doku-payment`, `ai-chat`) is one self-contained feature. Install with `npx rr add <slice-slug>` — CLI copies files into `frontend/slices/<slug>/` + (optionally) `convex/features/<slug>/`. Each slice ships the metadata trio (`slice.json` + `slice.contract.ts` + `slice.manifest.json`) and is props-driven so it composes with the rest of your app.",
+        why: "Slices are mix-and-match. The trio is what makes a slice composable — without it the CLI can't audit dep peers, env, RBAC scopes, or table collisions.",
+      },
+      {
         title: "Adopt = npx rr add <slug>",
-        rule: "Pull a slice into your project with `npx rr add <slug>`. CLI copies files into `slices/<slug>/` (you own them).",
+        rule: "CLI auto-detects kind via catalog lookup and prints `[TEMPLATE]` or `[SLICE]` in the banner. Trust the banner — if you expected a slice and got `[TEMPLATE]`, you used the wrong slug.",
       },
       {
         title: "Lift = sanitize first",
-        rule: "Before pushing UP to rr, strip consumer-specific URLs, env names, role enums, and table coupling. Replace with props or env-configured allowlists.",
+        rule: "Before pushing UP to rr (slice path only), strip consumer-specific URLs, env names, role enums, and table coupling. Replace with props or env-configured allowlists.",
       },
       {
-        title: "Catalog entry + metadata trio is mandatory",
-        rule: "New slice in rr needs: catalog entry in `lib/content/slices.ts` + `slice.json` + `slice.contract.ts` + `slice.manifest.json`. Validate with `npm run validate:all`.",
+        title: "Catalog entry + metadata trio is mandatory (slices)",
+        rule: "New slice in rr needs: catalog entry in `lib/content/slices.ts` + `slice.json` + `slice.contract.ts` + `slice.manifest.json`. Validate with `npm run validate:all` (chain includes `audit:slices` + `audit:templates`).",
       },
       {
         title: "MCP integration via create-your-mcp slice",

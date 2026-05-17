@@ -136,13 +136,15 @@ export function ChatFab() {
                   </p>
                   <div className="flex flex-wrap gap-1.5">
                     {SUGGESTIONS.map((s) => (
-                      <button
+                      <Button
                         key={s}
+                        size="sm"
+                        variant="outline"
                         onClick={() => sendText(s)}
-                        className="rounded-full border border-border/60 bg-muted/30 px-3 py-1 text-xs text-muted-foreground hover:bg-accent hover:text-foreground"
+                        className="h-auto rounded-full border-border/60 bg-muted/30 px-3 py-1 text-xs font-normal text-muted-foreground hover:bg-accent hover:text-foreground"
                       >
                         {s}
-                      </button>
+                      </Button>
                     ))}
                   </div>
                 </div>

@@ -131,16 +131,18 @@ export function PortfolioEditor({ id }: { id: string | null }) {
               <p className="mt-4 text-[11px] uppercase tracking-wider text-muted-foreground">Cover</p>
               <div className="mt-2 grid grid-cols-2 gap-1.5">
                 {COVERS.map((c) => (
-                  <button
+                  <Button
                     key={c}
+                    variant="outline"
                     onClick={() => setCover(c)}
+                    aria-label="Select cover"
                     className={
-                      "relative aspect-video overflow-hidden rounded-md border " +
+                      "relative h-auto aspect-video overflow-hidden rounded-md p-0 " +
                       (c === cover ? "border-foreground" : "border-border/60 opacity-60 hover:opacity-100")
                     }
                   >
                     <Image src={c} alt="" fill sizes="160px" className="object-cover" />
-                  </button>
+                  </Button>
                 ))}
               </div>
             </CardContent>

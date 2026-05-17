@@ -51,10 +51,11 @@ export function ChatbotAdminView() {
                   <ul className="divide-y divide-border/60">
                     {sessions.map((s) => (
                       <li key={s.id}>
-                        <button
+                        <Button
+                          variant="ghost"
                           onClick={() => setActiveId(s.id)}
                           className={
-                            "flex w-full items-start gap-3 p-3 text-left transition " +
+                            "flex h-auto w-full items-start justify-start gap-3 whitespace-normal rounded-none p-3 text-left " +
                             (activeId === s.id ? "bg-accent" : "hover:bg-accent/40")
                           }
                         >
@@ -72,7 +73,7 @@ export function ChatbotAdminView() {
                               flagged
                             </Badge>
                           )}
-                        </button>
+                        </Button>
                       </li>
                     ))}
                   </ul>

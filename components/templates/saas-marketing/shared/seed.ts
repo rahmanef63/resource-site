@@ -1,4 +1,7 @@
+import { PUBLIC_BASE } from "./nav-config";
 import type { BlogPost, ChangelogEntry, FeatureItem, PricingTier, State } from "./types";
+
+const CONTACT_HREF = `${PUBLIC_BASE}/contact`;
 
 const now = Date.now();
 const day = (n: number) => now - n * 24 * 60 * 60 * 1000;
@@ -14,7 +17,7 @@ export const SEED_PRICING: PricingTier[] = [
     period: "forever",
     blurb: "Everything you need to ship your first signed doc.",
     bullets: ["100 signed PDFs / month", "1 team member", "Community support", "REST API + webhooks"],
-    cta: { label: "Start free", href: "/preview/saas-marketing-os/public/contact" },
+    cta: { label: "Start free", href: CONTACT_HREF },
     featured: false,
   },
   {
@@ -24,7 +27,7 @@ export const SEED_PRICING: PricingTier[] = [
     period: "per month",
     blurb: "For startups shipping signed contracts daily.",
     bullets: ["10,000 signed PDFs / month", "Up to 10 seats", "Email support", "Audit log + SAML SSO"],
-    cta: { label: "Start 14-day trial", href: "/preview/saas-marketing-os/public/contact" },
+    cta: { label: "Start 14-day trial", href: CONTACT_HREF },
     featured: true,
   },
   {
@@ -34,7 +37,7 @@ export const SEED_PRICING: PricingTier[] = [
     period: "annual",
     blurb: "Volume + compliance for regulated industries.",
     bullets: ["Unlimited signed PDFs", "Unlimited seats", "EU + US data residency", "Dedicated support, SLA"],
-    cta: { label: "Talk to sales", href: "/preview/saas-marketing-os/public/contact" },
+    cta: { label: "Talk to sales", href: CONTACT_HREF },
     featured: false,
   },
 ];

@@ -39,16 +39,18 @@ export function LeadsView() {
 
       <div className="flex flex-wrap gap-1">
         {(["all", "new", "contacted", "closed"] as const).map((s) => (
-          <button
+          <Button
             key={s}
+            size="sm"
+            variant={filter === s ? "default" : "outline"}
             onClick={() => setFilter(s)}
             className={
-              "rounded-full border px-3 py-1 text-xs capitalize transition " +
-              (filter === s ? "border-foreground bg-foreground text-background" : "border-border/60 text-muted-foreground hover:bg-accent")
+              "h-7 rounded-full px-3 text-xs capitalize " +
+              (filter === s ? "" : "border-border/60 text-muted-foreground")
             }
           >
             {s} ({counts[s as keyof typeof counts]})
-          </button>
+          </Button>
         ))}
         <Filter className="ml-auto size-3.5 self-center text-muted-foreground" />
       </div>

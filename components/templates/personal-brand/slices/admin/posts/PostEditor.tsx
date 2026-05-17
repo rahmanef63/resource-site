@@ -198,15 +198,16 @@ export function PostEditor({ id }: { id: string | null }) {
                     <label className="text-xs text-muted-foreground">Cover</label>
                     <div className="mt-1 grid grid-cols-2 gap-1">
                       {COVERS.map((c) => (
-                        <button
+                        <Button
                           key={c}
+                          variant="outline"
                           onClick={() => setCover(c)}
+                          aria-label="Select cover"
                           className={
-                            "aspect-video overflow-hidden rounded-md border " +
+                            "h-auto aspect-video overflow-hidden rounded-md p-0 " +
                             (c === cover ? "border-foreground" : "border-border/60 opacity-60 hover:opacity-100")
                           }
                           style={{ backgroundImage: `url(${c})`, backgroundSize: "cover", backgroundPosition: "center" }}
-                          aria-label="Select cover"
                         />
                       ))}
                     </div>
@@ -228,16 +229,18 @@ export function PostEditor({ id }: { id: string | null }) {
               <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Status</p>
               <div className="flex flex-wrap gap-1">
                 {(["draft", "scheduled", "published"] as PostStatus[]).map((s) => (
-                  <button
+                  <Button
                     key={s}
+                    size="sm"
+                    variant={status === s ? "default" : "outline"}
                     onClick={() => setStatus(s)}
                     className={
-                      "rounded-full border px-3 py-1 text-xs capitalize transition " +
-                      (status === s ? "border-foreground bg-foreground text-background" : "border-border/60 text-muted-foreground hover:bg-accent")
+                      "h-7 rounded-full px-3 text-xs capitalize " +
+                      (status === s ? "" : "border-border/60 text-muted-foreground")
                     }
                   >
                     {s}
-                  </button>
+                  </Button>
                 ))}
               </div>
               {existing && (

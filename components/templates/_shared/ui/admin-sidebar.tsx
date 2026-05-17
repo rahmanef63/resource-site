@@ -19,6 +19,7 @@ import {
   SidebarSeparator,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { AdminNavItem, Brand, User } from "../types/common";
 
@@ -90,12 +91,13 @@ function BrandHeader({ brand, appLabel, homeHref }: Pick<SidebarProps, "brand" |
 
 function UserFooter({ user }: { user: User }) {
   return (
-    <button
-      className={cn(
-        "flex w-full items-center gap-2 rounded-md px-2 py-2 text-left transition-colors",
-        "hover:bg-sidebar-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring",
-      )}
+    <Button
+      variant="ghost"
       type="button"
+      className={cn(
+        "flex h-auto w-full items-center justify-start gap-2 rounded-md px-2 py-2 text-left",
+        "hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-sidebar-ring",
+      )}
     >
       <div className="grid size-8 shrink-0 place-items-center rounded-full bg-muted text-xs font-medium">
         {user.initials}
@@ -105,7 +107,7 @@ function UserFooter({ user }: { user: User }) {
         <p className="truncate text-[10px] text-muted-foreground">{user.role}</p>
       </div>
       <ChevronDown className="size-3.5 shrink-0 text-muted-foreground group-data-[collapsible=icon]:hidden" />
-    </button>
+    </Button>
   );
 }
 
