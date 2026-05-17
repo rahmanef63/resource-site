@@ -136,6 +136,41 @@ export const BEST_PRACTICES: BestPracticeSection[] = [
     ],
   },
   {
+    id: "modularity",
+    title: "File modularity",
+    intro:
+      "Files are read more than written. Keep them small, single-purpose, and composable so consumers can grok + reuse + replace pieces without reading the whole thing.",
+    rules: [
+      {
+        title: "Max 200 lines per file",
+        rule: "Hard cap: no source file may exceed 200 lines (excl. pure data exports like `lib/content/*.ts` catalog arrays, `*/seed.ts`, theme presets, and `_generated/`). If a component, route, or module is approaching the cap, split before shipping. Audit gate: `audit:file-size`.",
+        why: "Large files hide concerns, resist diff review, force consumers to scroll instead of compose. The cap forces extraction of reusable pieces — composition over accumulation.",
+        example: "// BAD: 400-line PostEditor.tsx with toolbar + body + sidebar + status panel\n// GOOD: PostEditor.tsx (≤200) composes <Toolbar/> + <EditorBody/> + <SidebarMeta/> + <StatusPanel/> from neighbour files",
+      },
+      {
+        title: "Single responsibility per file",
+        rule: "One default export OR one cohesive cluster of named exports per file. If you find yourself prefixing exports (`createX`, `parseX`, `serializeX`, `validateX`) — those are 4 files, not 4 exports.",
+        why: "Single-responsibility files are testable in isolation, replaceable without ripple, and reusable without context.",
+      },
+      {
+        title: "Extract reusable, don't inline twice",
+        rule: "If a UI pattern (filter pills, status badge, picker grid) repeats — extract to `components/` or `shared/`. If two slices need the same util — promote to `shared/<name>/utils/`.",
+        why: "Duplication compounds: the third copy is where bug-fix divergence starts. Extract on the SECOND occurrence, not the third.",
+      },
+      {
+        title: "Dynamic over hardcoded",
+        rule: "Prefer config-driven + props-driven code. Replace switch/if-chains with lookup maps. Replace literal arrays with derived selectors. Replace inline copy with `labels` props.",
+        why: "Dynamic code adapts when the consumer customizes; hardcoded code forces them to fork.",
+        example: "// BAD\nif (kind === 'admin') return <AdminLink/>;\nif (kind === 'user') return <UserLink/>;\n\n// GOOD\nconst LINKS = { admin: AdminLink, user: UserLink };\nconst Link = LINKS[kind];\nreturn <Link/>;",
+      },
+      {
+        title: "Compose, don't accumulate",
+        rule: "When adding a feature, ask: can I add a new file that COMPOSES with the existing one, instead of editing the existing one bigger?",
+        why: "Open-closed principle in practice. Existing file stays small + tested; new file is the one that changes.",
+      },
+    ],
+  },
+  {
     id: "ui",
     title: "UI rules",
     rules: [
