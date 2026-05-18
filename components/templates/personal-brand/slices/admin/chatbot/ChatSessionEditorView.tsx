@@ -1,39 +1,18 @@
 "use client";
 
 import * as React from "react";
-import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
-import type { ColumnDef, CrudController, EntityMeta } from "@/components/templates/_shared/crud/types";
+import { CrudFormView } from "@/components/templates/_shared/crud/CrudFormView";
+import type { CrudController, EntityMeta, FieldDef } from "@/components/templates/_shared/crud/types";
 import { useStore } from "../../../shared/store";
 import { ADMIN_BASE } from "../../../shared/nav-config";
 import type { ChatSession } from "../../../shared/types";
 
 const META: EntityMeta = { label: "Session", labelPlural: "Chat Sessions" };
 
-const COLUMNS: ColumnDef<ChatSession>[] = [
-  { key: "visitorId", header: "Visitor", width: "w-[22%]", mono: true },
-  {
-    key: "messages",
-    header: "Messages",
-    width: "w-[14%]",
-    render: (v) => (Array.isArray(v) ? v.length : 0),
-  },
-  {
-    key: "messages",
-    header: "Latest",
-    width: "w-[36%]",
-    render: (v) => {
-      const arr = Array.isArray(v) ? (v as { content?: string }[]) : [];
-      const last = arr[arr.length - 1];
-      return last?.content ?? "(empty)";
-    },
-  },
-  { key: "flagged", header: "Flagged", width: "w-[14%]", badge: "outline" },
-  {
-    key: "startedAt",
-    header: "Started",
-    width: "w-[14%]",
-    render: (v) => new Date(Number(v ?? 0)).toLocaleDateString(),
-  },
+const FIELDS: FieldDef<ChatSession>[] = [
+  { kind: "text", key: "visitorId", label: "Visitor ID", mono: true },
+  { kind: "date", key: "startedAt", label: "Started at" },
+  { kind: "switch", key: "flagged", label: "Flagged for review" },
 ];
 
 function useChatSessionsController(): CrudController<ChatSession> {
@@ -61,16 +40,15 @@ function useChatSessionsController(): CrudController<ChatSession> {
   );
 }
 
-export function ChatbotAdminView() {
+export function ChatSessionEditorView({ id }: { id: string }) {
   const controller = useChatSessionsController();
-  const flagged = controller.items.filter((s) => s.flagged).length;
   return (
-    <CrudListView
+    <CrudFormView
+      id={id}
       meta={META}
       controller={controller}
-      columns={COLUMNS}
-      editPath={(id) => `${ADMIN_BASE}/chatbot/${id}`}
-      description={`${flagged} flagged`}
+      fields={FIELDS}
+      backHref={`${ADMIN_BASE}/chatbot`}
     />
   );
 }

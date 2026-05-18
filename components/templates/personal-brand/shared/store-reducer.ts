@@ -88,6 +88,14 @@ export function reducer(state: State, action: Action): State {
 
     case "comment.create":
       return { ...state, comments: [action.comment, ...state.comments] };
+    case "comment.upsert": {
+      const idx = state.comments.findIndex((c) => c.id === action.comment.id);
+      const comments =
+        idx >= 0
+          ? state.comments.map((c) => (c.id === action.comment.id ? action.comment : c))
+          : [action.comment, ...state.comments];
+      return { ...state, comments };
+    }
     case "comment.moderate":
       return {
         ...state,
@@ -95,9 +103,19 @@ export function reducer(state: State, action: Action): State {
           c.id === action.id ? { ...c, status: action.status } : c,
         ),
       };
+    case "comment.delete":
+      return { ...state, comments: state.comments.filter((c) => c.id !== action.id) };
 
     case "subscriber.create":
       return { ...state, subscribers: [action.sub, ...state.subscribers] };
+    case "subscriber.upsert": {
+      const idx = state.subscribers.findIndex((s) => s.id === action.sub.id);
+      const subscribers =
+        idx >= 0
+          ? state.subscribers.map((s) => (s.id === action.sub.id ? action.sub : s))
+          : [action.sub, ...state.subscribers];
+      return { ...state, subscribers };
+    }
     case "subscriber.confirm":
       return {
         ...state,
@@ -112,9 +130,21 @@ export function reducer(state: State, action: Action): State {
           s.id === action.id ? { ...s, status: "unsubscribed" } : s,
         ),
       };
+    case "subscriber.delete":
+      return { ...state, subscribers: state.subscribers.filter((s) => s.id !== action.id) };
 
     case "chat.session.start":
       return { ...state, chatSessions: [action.session, ...state.chatSessions] };
+    case "chat.session.upsert": {
+      const idx = state.chatSessions.findIndex((s) => s.id === action.session.id);
+      const chatSessions =
+        idx >= 0
+          ? state.chatSessions.map((s) => (s.id === action.session.id ? action.session : s))
+          : [action.session, ...state.chatSessions];
+      return { ...state, chatSessions };
+    }
+    case "chat.session.delete":
+      return { ...state, chatSessions: state.chatSessions.filter((s) => s.id !== action.id) };
     case "chat.message":
       return {
         ...state,

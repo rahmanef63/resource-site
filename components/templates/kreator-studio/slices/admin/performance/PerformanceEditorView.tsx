@@ -1,35 +1,32 @@
 "use client";
 
 import * as React from "react";
-import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
-import type { ColumnDef, CrudController, EntityMeta } from "@/components/templates/_shared/crud/types";
+import { CrudFormView } from "@/components/templates/_shared/crud/CrudFormView";
+import type { CrudController, EntityMeta, FieldDef } from "@/components/templates/_shared/crud/types";
 import { useStore } from "../../../shared/store";
 import { ADMIN_BASE } from "../../../shared/nav-config";
 import type { PerformanceMetric } from "../../../shared/types";
 
 const META: EntityMeta = { label: "Metric", labelPlural: "Performance Metrics" };
 
-const COLUMNS: ColumnDef<PerformanceMetric>[] = [
-  { key: "channel", header: "Channel", width: "w-[18%]", badge: "outline" },
-  { key: "period", header: "Period", width: "w-[16%]" },
+const FIELDS: FieldDef<PerformanceMetric>[] = [
   {
-    key: "views",
-    header: "Views",
-    width: "w-[18%]",
-    render: (v) => Number(v ?? 0).toLocaleString(),
+    kind: "select",
+    key: "channel",
+    label: "Channel",
+    options: [
+      { value: "instagram", label: "Instagram" },
+      { value: "tiktok", label: "TikTok" },
+      { value: "youtube", label: "YouTube" },
+      { value: "twitter", label: "Twitter" },
+      { value: "newsletter", label: "Newsletter" },
+      { value: "linkedin", label: "LinkedIn" },
+    ],
   },
-  {
-    key: "followers",
-    header: "Followers",
-    width: "w-[18%]",
-    render: (v) => Number(v ?? 0).toLocaleString(),
-  },
-  {
-    key: "engagementRate",
-    header: "Engagement",
-    width: "w-[16%]",
-    render: (v) => `${Number(v ?? 0).toFixed(1)}%`,
-  },
+  { kind: "text", key: "period", label: "Period", placeholder: "Jan 2026" },
+  { kind: "number", key: "views", label: "Views", min: 0 },
+  { kind: "number", key: "followers", label: "Followers", min: 0 },
+  { kind: "number", key: "engagementRate", label: "Engagement %", min: 0, max: 100, step: 0.1 },
 ];
 
 function usePerformanceController(): CrudController<PerformanceMetric> {
@@ -58,15 +55,15 @@ function usePerformanceController(): CrudController<PerformanceMetric> {
   );
 }
 
-export function PerformanceView() {
+export function PerformanceEditorView({ id }: { id: string }) {
   const controller = usePerformanceController();
   return (
-    <CrudListView
+    <CrudFormView
+      id={id}
       meta={META}
       controller={controller}
-      columns={COLUMNS}
-      editPath={(id) => `${ADMIN_BASE}/performance/${id}`}
-      description="Cross-channel analytics"
+      fields={FIELDS}
+      backHref={`${ADMIN_BASE}/performance`}
     />
   );
 }

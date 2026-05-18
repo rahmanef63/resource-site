@@ -96,6 +96,8 @@ function reducer(state: State, action: Action): State {
           : [action.metric, ...state.performance];
       return { ...state, performance };
     }
+    case "performance.delete":
+      return { ...state, performance: state.performance.filter((p) => p.id !== action.id) };
 
     case "comment.upsert": {
       const idx = state.commentDrafts.findIndex((c) => c.id === action.draft.id);

@@ -1,20 +1,31 @@
 "use client";
 
 import * as React from "react";
-import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
-import type { ColumnDef, CrudController, EntityMeta } from "@/components/templates/_shared/crud/types";
+import { CrudFormView } from "@/components/templates/_shared/crud/CrudFormView";
+import type { CrudController, EntityMeta, FieldDef } from "@/components/templates/_shared/crud/types";
 import { useStore } from "../../../shared/store";
 import { ADMIN_BASE } from "../../../shared/nav-config";
 import type { Lead } from "../../../shared/types";
 
 const META: EntityMeta = { label: "Lead", labelPlural: "Leads" };
 
-const COLUMNS: ColumnDef<Lead>[] = [
-  { key: "name", header: "Name", width: "w-[24%]" },
-  { key: "email", header: "Email", width: "w-[24%]", mono: true },
-  { key: "topic", header: "Topic", width: "w-[20%]" },
-  { key: "source", header: "Source", width: "w-[14%]", badge: "outline" },
-  { key: "status", header: "Status", width: "w-[10%]", badge: "secondary" },
+const FIELDS: FieldDef<Lead>[] = [
+  { kind: "text", key: "name", label: "Name" },
+  { kind: "text", key: "email", label: "Email", mono: true },
+  { kind: "text", key: "topic", label: "Topic" },
+  { kind: "text", key: "source", label: "Source", placeholder: "Contact form / Lead magnet / etc." },
+  { kind: "textarea", key: "message", label: "Message", rows: 4 },
+  {
+    kind: "select",
+    key: "status",
+    label: "Status",
+    options: [
+      { value: "new", label: "New" },
+      { value: "contacted", label: "Contacted" },
+      { value: "closed", label: "Closed" },
+    ],
+  },
+  { kind: "date", key: "ts", label: "Received" },
 ];
 
 function useLeadsController(): CrudController<Lead> {
@@ -41,16 +52,15 @@ function useLeadsController(): CrudController<Lead> {
   );
 }
 
-export function LeadsView() {
+export function LeadEditorView({ id }: { id: string }) {
   const controller = useLeadsController();
-  const newCount = controller.items.filter((l) => l.status === "new").length;
   return (
-    <CrudListView
+    <CrudFormView
+      id={id}
       meta={META}
       controller={controller}
-      columns={COLUMNS}
-      editPath={(id) => `${ADMIN_BASE}/leads/${id}`}
-      description={`${newCount} new`}
+      fields={FIELDS}
+      backHref={`${ADMIN_BASE}/leads`}
     />
   );
 }

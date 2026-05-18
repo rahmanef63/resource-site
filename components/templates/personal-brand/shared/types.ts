@@ -131,11 +131,17 @@ export type Action =
   | { type: "lead.update"; id: string; patch: Partial<Lead> }
   | { type: "lead.delete"; id: string }
   | { type: "comment.create"; comment: Comment }
+  | { type: "comment.upsert"; comment: Comment }
   | { type: "comment.moderate"; id: string; status: CommentStatus }
+  | { type: "comment.delete"; id: string }
   | { type: "subscriber.create"; sub: Subscriber }
+  | { type: "subscriber.upsert"; sub: Subscriber }
   | { type: "subscriber.confirm"; id: string }
   | { type: "subscriber.unsubscribe"; id: string }
+  | { type: "subscriber.delete"; id: string }
   | { type: "chat.session.start"; session: ChatSession }
+  | { type: "chat.session.upsert"; session: ChatSession }
+  | { type: "chat.session.delete"; id: string }
   | { type: "chat.message"; sessionId: string; msg: ChatMessage; flag?: boolean }
   | { type: "hydrate"; state: State }
   | { type: "reset" };

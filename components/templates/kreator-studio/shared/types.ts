@@ -110,6 +110,7 @@ export type Action =
   | { type: "newsletter.upsert"; issue: NewsletterIssue }
   | { type: "newsletter.delete"; id: string }
   | { type: "performance.upsert"; metric: PerformanceMetric }
+  | { type: "performance.delete"; id: string }
   | { type: "comment.upsert"; draft: CommentDraft }
   | { type: "comment.delete"; id: string }
   | { type: "hydrate"; state: State }

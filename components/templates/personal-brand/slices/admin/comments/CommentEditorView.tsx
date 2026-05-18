@@ -1,19 +1,31 @@
 "use client";
 
 import * as React from "react";
-import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
-import type { ColumnDef, CrudController, EntityMeta } from "@/components/templates/_shared/crud/types";
+import { CrudFormView } from "@/components/templates/_shared/crud/CrudFormView";
+import type { CrudController, EntityMeta, FieldDef } from "@/components/templates/_shared/crud/types";
 import { useStore } from "../../../shared/store";
 import { ADMIN_BASE } from "../../../shared/nav-config";
 import type { Comment } from "../../../shared/types";
 
 const META: EntityMeta = { label: "Comment", labelPlural: "Comments" };
 
-const COLUMNS: ColumnDef<Comment>[] = [
-  { key: "author", header: "Author", width: "w-[18%]" },
-  { key: "body", header: "Body", width: "w-[40%]" },
-  { key: "postTitle", header: "On post", width: "w-[22%]" },
-  { key: "status", header: "Status", width: "w-[10%]", badge: "secondary" },
+const FIELDS: FieldDef<Comment>[] = [
+  { kind: "text", key: "author", label: "Author" },
+  { kind: "text", key: "email", label: "Email", mono: true },
+  { kind: "text", key: "postTitle", label: "On post (title)" },
+  { kind: "text", key: "postId", label: "Post ID", mono: true },
+  { kind: "textarea", key: "body", label: "Comment body", rows: 4 },
+  {
+    kind: "select",
+    key: "status",
+    label: "Status",
+    options: [
+      { value: "pending", label: "Pending" },
+      { value: "approved", label: "Approved" },
+      { value: "spam", label: "Spam" },
+    ],
+  },
+  { kind: "date", key: "ts", label: "Posted at" },
 ];
 
 function useCommentsController(): CrudController<Comment> {
@@ -45,16 +57,15 @@ function useCommentsController(): CrudController<Comment> {
   );
 }
 
-export function CommentsView() {
+export function CommentEditorView({ id }: { id: string }) {
   const controller = useCommentsController();
-  const pending = controller.items.filter((c) => c.status === "pending").length;
   return (
-    <CrudListView
+    <CrudFormView
+      id={id}
       meta={META}
       controller={controller}
-      columns={COLUMNS}
-      editPath={(id) => `${ADMIN_BASE}/comments/${id}`}
-      description={`${pending} pending moderation`}
+      fields={FIELDS}
+      backHref={`${ADMIN_BASE}/comments`}
     />
   );
 }

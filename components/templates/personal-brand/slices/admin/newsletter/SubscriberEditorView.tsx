@@ -1,24 +1,28 @@
 "use client";
 
 import * as React from "react";
-import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
-import type { ColumnDef, CrudController, EntityMeta } from "@/components/templates/_shared/crud/types";
+import { CrudFormView } from "@/components/templates/_shared/crud/CrudFormView";
+import type { CrudController, EntityMeta, FieldDef } from "@/components/templates/_shared/crud/types";
 import { useStore } from "../../../shared/store";
 import { ADMIN_BASE } from "../../../shared/nav-config";
 import type { Subscriber } from "../../../shared/types";
 
 const META: EntityMeta = { label: "Subscriber", labelPlural: "Subscribers" };
 
-const COLUMNS: ColumnDef<Subscriber>[] = [
-  { key: "email", header: "Email", width: "w-[40%]", mono: true },
-  { key: "status", header: "Status", width: "w-[16%]", badge: "secondary" },
-  { key: "source", header: "Source", width: "w-[20%]", badge: "outline" },
+const FIELDS: FieldDef<Subscriber>[] = [
+  { kind: "text", key: "email", label: "Email", mono: true },
   {
-    key: "ts",
-    header: "Subscribed",
-    width: "w-[14%]",
-    render: (v) => new Date(Number(v ?? 0)).toLocaleDateString(),
+    kind: "select",
+    key: "status",
+    label: "Status",
+    options: [
+      { value: "pending", label: "Pending" },
+      { value: "confirmed", label: "Confirmed" },
+      { value: "unsubscribed", label: "Unsubscribed" },
+    ],
   },
+  { kind: "text", key: "source", label: "Source", placeholder: "footer / lead-magnet / post:<slug>" },
+  { kind: "date", key: "ts", label: "Subscribed at" },
 ];
 
 function useSubscribersController(): CrudController<Subscriber> {
@@ -46,16 +50,15 @@ function useSubscribersController(): CrudController<Subscriber> {
   );
 }
 
-export function NewsletterView() {
+export function SubscriberEditorView({ id }: { id: string }) {
   const controller = useSubscribersController();
-  const confirmed = controller.items.filter((s) => s.status === "confirmed").length;
   return (
-    <CrudListView
+    <CrudFormView
+      id={id}
       meta={META}
       controller={controller}
-      columns={COLUMNS}
-      editPath={(id) => `${ADMIN_BASE}/newsletter/${id}`}
-      description={`${confirmed} confirmed`}
+      fields={FIELDS}
+      backHref={`${ADMIN_BASE}/newsletter`}
     />
   );
 }

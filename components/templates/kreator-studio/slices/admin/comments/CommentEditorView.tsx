@@ -1,19 +1,41 @@
 "use client";
 
 import * as React from "react";
-import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
-import type { ColumnDef, CrudController, EntityMeta } from "@/components/templates/_shared/crud/types";
+import { CrudFormView } from "@/components/templates/_shared/crud/CrudFormView";
+import type { CrudController, EntityMeta, FieldDef } from "@/components/templates/_shared/crud/types";
 import { useStore } from "../../../shared/store";
 import { ADMIN_BASE } from "../../../shared/nav-config";
 import type { CommentDraft } from "../../../shared/types";
 
 const META: EntityMeta = { label: "Comment", labelPlural: "Comment Drafts" };
 
-const COLUMNS: ColumnDef<CommentDraft>[] = [
-  { key: "comment", header: "Comment", width: "w-[36%]" },
-  { key: "reply", header: "Reply draft", width: "w-[30%]" },
-  { key: "channel", header: "Channel", width: "w-[10%]", badge: "outline" },
-  { key: "status", header: "Status", width: "w-[10%]", badge: "secondary" },
+const FIELDS: FieldDef<CommentDraft>[] = [
+  {
+    kind: "select",
+    key: "channel",
+    label: "Channel",
+    options: [
+      { value: "instagram", label: "Instagram" },
+      { value: "tiktok", label: "TikTok" },
+      { value: "youtube", label: "YouTube" },
+      { value: "twitter", label: "Twitter" },
+      { value: "newsletter", label: "Newsletter" },
+      { value: "linkedin", label: "LinkedIn" },
+    ],
+  },
+  { kind: "text", key: "postRef", label: "Post reference", placeholder: "@user / post URL" },
+  { kind: "textarea", key: "comment", label: "Comment from audience", rows: 3 },
+  { kind: "textarea", key: "reply", label: "Draft reply", rows: 4 },
+  {
+    kind: "select",
+    key: "status",
+    label: "Status",
+    options: [
+      { value: "draft", label: "Draft" },
+      { value: "sent", label: "Sent" },
+    ],
+  },
+  { kind: "date", key: "ts", label: "Timestamp" },
 ];
 
 function useCommentsController(): CrudController<CommentDraft> {
@@ -43,16 +65,15 @@ function useCommentsController(): CrudController<CommentDraft> {
   );
 }
 
-export function CommentsView() {
+export function CommentEditorView({ id }: { id: string }) {
   const controller = useCommentsController();
-  const pending = controller.items.filter((d) => d.status === "draft").length;
   return (
-    <CrudListView
+    <CrudFormView
+      id={id}
       meta={META}
       controller={controller}
-      columns={COLUMNS}
-      editPath={(id) => `${ADMIN_BASE}/comments/${id}`}
-      description={`${pending} menunggu kirim`}
+      fields={FIELDS}
+      backHref={`${ADMIN_BASE}/comments`}
     />
   );
 }
