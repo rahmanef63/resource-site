@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { PreviewFrame } from "@/components/site/preview-frame";
+import { PREVIEW_DEFAULTS } from "@/components/site/preview";
 
 export function LivePreview({
   templateSlug,
@@ -28,7 +29,7 @@ export function LivePreview({
 
   if (!templateSlug) {
     return (
-      <div className="flex h-[480px] flex-col items-center justify-center rounded-xl border border-dashed bg-muted/20 p-6 text-center">
+      <div className={cn("flex h-[480px] flex-col items-center justify-center border border-dashed bg-muted/20 p-6 text-center", PREVIEW_DEFAULTS.containerRadius)}>
         <Eye className="size-6 text-muted-foreground" />
         <p className="mt-3 text-sm font-medium">Pick a template to preview</p>
         <p className="mt-1 max-w-xs text-xs text-muted-foreground">
@@ -41,7 +42,7 @@ export function LivePreview({
 
   if (isExisting) {
     return (
-      <div className="flex h-[480px] flex-col items-center justify-center rounded-xl border border-dashed bg-muted/20 p-6 text-center">
+      <div className={cn("flex h-[480px] flex-col items-center justify-center border border-dashed bg-muted/20 p-6 text-center", PREVIEW_DEFAULTS.containerRadius)}>
         <Eye className="size-6 text-muted-foreground" />
         <p className="mt-3 text-sm font-medium">Existing project — no preview</p>
         <p className="mt-1 max-w-xs text-xs text-muted-foreground">
@@ -79,13 +80,13 @@ export function LivePreview({
       {src ? (
         <PreviewFrame
           src={src}
-          defaultView="desktop"
-          defaultZoom={0.55}
+          defaultView={PREVIEW_DEFAULTS.view}
+          defaultZoom={PREVIEW_DEFAULTS.zoom}
           viewControls="dropdown"
           className="h-[520px]"
         />
       ) : (
-        <div className="flex h-[400px] items-center justify-center rounded-xl border border-dashed text-xs text-muted-foreground">
+        <div className={cn("flex h-[400px] items-center justify-center border border-dashed text-xs text-muted-foreground", PREVIEW_DEFAULTS.containerRadius)}>
           No {surface} preview available for this template.
         </div>
       )}

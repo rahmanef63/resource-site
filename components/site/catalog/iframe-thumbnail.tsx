@@ -91,7 +91,9 @@ export function IframeThumbnail(props: Props) {
     <div
       ref={ref}
       className={cn(
-        "relative w-full overflow-hidden rounded-md bg-muted/40 ring-1 ring-border/40",
+        "relative w-full overflow-hidden bg-muted/40",
+        PREVIEW_DEFAULTS.containerRadius,
+        PREVIEW_DEFAULTS.containerRing,
         className,
       )}
       style={{ aspectRatio: aspect }}

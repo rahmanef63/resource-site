@@ -5,7 +5,7 @@ import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { PreviewIframeShell } from "@/components/site/preview-shell";
-import { usePreviewState } from "@/components/site/preview";
+import { PREVIEW_DEFAULTS, usePreviewState } from "@/components/site/preview";
 import {
   PREVIEW_PRESETS,
   applyRotation,
@@ -54,7 +54,15 @@ export function PreviewFrame({
 
   return (
     <>
-      <div className={cn("overflow-hidden rounded-xl border bg-card", className)}>
+      <div
+        className={cn(
+          "overflow-hidden border bg-card",
+          PREVIEW_DEFAULTS.containerRadius,
+          PREVIEW_DEFAULTS.containerShadow,
+          PREVIEW_DEFAULTS.containerRing,
+          className,
+        )}
+      >
         <PreviewToolbar
           src={src}
           view={view}

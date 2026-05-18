@@ -36,6 +36,20 @@ export const PREVIEW_DEFAULTS = {
   canvasPaddingPx: 24,
   /** Chrome height (toolbar) — added to canvas height calc. */
   chromeHeightPx: 56,
+
+  // ─── Design-system canon (do not hardcode in consumers) ────────────
+  /** Outer container radius — wraps toolbar + canvas. */
+  containerRadius: "rounded-lg",
+  /** Outer container shadow — default resting state. */
+  containerShadow: "shadow-md",
+  /** Outer container ring — subtle separator from page bg. */
+  containerRing: "ring-1 ring-border/40",
+  /** Inner device-canvas radius (rendered iframe shell). */
+  canvasRadius: "rounded-md",
+  /** Mobile viewport cap for detail-page previews. */
+  detailMobileMaxHeight: "max-h-[85svh]",
+  /** Detail page max width — keeps preview from stretching on ultra-wide. */
+  detailMaxWidth: "max-w-6xl",
 } as const;
 
 /** localStorage key prefix for persisted view/zoom across sessions.
