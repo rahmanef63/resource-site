@@ -27,6 +27,8 @@ export type PricingSectionProps = {
   className?: string;
   /** Override the "featured" visual style. */
   featuredVariant?: "ring" | "scale" | "tint";
+  /** Per-tier CTA override. Return custom JSX (e.g. modal trigger button) to replace the default Link-based CTA. */
+  renderTierCta?: (tier: PricingTier) => React.ReactNode;
 };
 
 const colClass: Record<2 | 3 | 4, string> = {
@@ -51,6 +53,7 @@ export function PricingSection({
   faqTitle,
   className,
   featuredVariant = "ring",
+  renderTierCta,
 }: PricingSectionProps) {
   const cols = columns ?? clampCols(tiers.length);
   return (
@@ -87,6 +90,7 @@ export function PricingSection({
               blurb={tier.blurb}
               bullets={tier.bullets}
               cta={tier.cta}
+              customCta={renderTierCta?.(tier)}
               featured={tier.featured}
               badge={tier.badge}
               featuredVariant={featuredVariant}

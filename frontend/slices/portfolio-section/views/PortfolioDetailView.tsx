@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
@@ -18,8 +19,34 @@ export type PortfolioDetailViewProps = {
   /** Show related items below (next/prev or "More work"). */
   related?: PortfolioItem[];
   hrefForRelated?: (item: PortfolioItem) => string;
+  /** Optional slot rendered after body+gallery+link, before related. */
+  afterContent?: ReactNode;
   className?: string;
 };
+
+const SECTION_COLS: Record<2 | 3, string> = {
+  2: "md:grid-cols-2",
+  3: "md:grid-cols-3",
+};
+
+function Sections({ sections }: { sections: NonNullable<PortfolioItem["sections"]> }) {
+  if (sections.length === 0) return null;
+  const cols = sections.length === 2 ? 2 : sections.length >= 3 ? 3 : 1;
+  return (
+    <div className={cn("grid grid-cols-1 gap-6", cols !== 1 && SECTION_COLS[cols as 2 | 3])}>
+      {sections.map((s, i) => (
+        <Card key={s.id ?? `${s.heading}-${i}`} className="border-border/60 bg-card/60">
+          <CardContent className="p-5">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+              {s.heading}
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-foreground/85">{s.body}</p>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+}
 
 function defaultRenderBody(body: string): ReactNode {
   const paras = body
@@ -80,6 +107,7 @@ export function PortfolioDetailView({
   renderBody,
   related,
   hrefForRelated,
+  afterContent,
   className,
 }: PortfolioDetailViewProps) {
   const body = item.body ?? "";
@@ -125,11 +153,17 @@ export function PortfolioDetailView({
 
         <Separator />
 
-        <div className="prose prose-neutral max-w-none dark:prose-invert">
-          {body ? render(body) : (
-            <p className="text-sm text-muted-foreground">No description.</p>
-          )}
-        </div>
+        {item.sections && item.sections.length > 0 ? (
+          <Sections sections={item.sections} />
+        ) : null}
+
+        {body ? (
+          <div className="prose prose-neutral max-w-none dark:prose-invert">
+            {render(body)}
+          </div>
+        ) : !item.sections?.length ? (
+          <p className="text-sm text-muted-foreground">No description.</p>
+        ) : null}
 
         {item.gallery && item.gallery.length > 0 ? (
           <Gallery images={item.gallery} />
@@ -144,6 +178,8 @@ export function PortfolioDetailView({
             </Button>
           </div>
         ) : null}
+
+        {afterContent}
 
         {related && related.length > 0 ? (
           <Related items={related} hrefFor={relHref} />

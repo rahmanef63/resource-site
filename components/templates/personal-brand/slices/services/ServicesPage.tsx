@@ -1,10 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { ArrowRight, CheckCircle2, Sparkles } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -16,64 +14,52 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import {
+  PricingSection,
+  type PricingTier as SliceTier,
+} from "@/features/pricing-page";
 import { FAQSection } from "@/features/faq-section";
 import { nid, useServices, useStore } from "../../shared/store";
 
+/**
+ * Hybrid wrapper: tiers + FAQ delegated to canonical slices. Booking modal
+ * (lead.create dispatch) preserved via renderTierCta slot — admin Service
+ * CRUD propagates via createTemplateStore BroadcastChannel.
+ */
 export function ServicesPage() {
   const services = useServices();
   const [openSvc, setOpenSvc] = React.useState<string | null>(null);
   const active = services.find((s) => s.id === openSvc) ?? null;
 
+  const tiers: SliceTier[] = services.map((s) => ({
+    id: s.id,
+    name: s.name,
+    price: s.priceLabel,
+    period: s.period,
+    blurb: s.description,
+    bullets: s.bullets,
+    featured: s.featured,
+    badge: s.featured ? "Most picked" : undefined,
+  }));
+
   return (
     <section className="mx-auto max-w-6xl px-6 py-16">
-      <header className="mb-10">
-        <p className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground">Services</p>
-        <h1 className="mt-2 text-4xl font-semibold tracking-tight md:text-5xl">Cara kerja sama</h1>
-        <p className="mt-2 max-w-2xl text-muted-foreground">
-          Pilih sesuai konteks tim atau kariermu. Bisa kombinasi — strategy sprint dulu, lanjut mentoring bulanan.
-        </p>
-      </header>
-
-      <div className="grid gap-5 md:grid-cols-3">
-        {services.map((s) => (
-          <Card
-            key={s.id}
-            id={s.slug}
-            className={
-              "relative scroll-mt-24 border-border/60 bg-card/60 " +
-              (s.featured ? "ring-1 ring-foreground/30" : "")
-            }
+      <PricingSection
+        eyebrow="Services"
+        title="Cara kerja sama"
+        subtitle="Pilih sesuai konteks tim atau kariermu. Bisa kombinasi — strategy sprint dulu, lanjut mentoring bulanan."
+        tiers={tiers}
+        className="!px-0 !pt-0"
+        renderTierCta={(t) => (
+          <Button
+            className="w-full"
+            variant={t.featured ? "default" : "outline"}
+            onClick={() => setOpenSvc(t.id)}
           >
-            {s.featured && (
-              <Badge className="absolute right-4 top-4 rounded-full">Most picked</Badge>
-            )}
-            <CardContent className="p-6">
-              <Sparkles className="size-5 text-foreground/80" />
-              <h3 className="mt-4 text-lg font-medium">{s.name}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{s.description}</p>
-              <div className="mt-5 flex items-baseline gap-1">
-                <span className="text-3xl font-semibold tracking-tight">{s.priceLabel}</span>
-                <span className="text-sm text-muted-foreground">{s.period}</span>
-              </div>
-              <ul className="mt-4 space-y-1.5 text-sm text-muted-foreground">
-                {s.bullets.map((b) => (
-                  <li key={b} className="flex items-start gap-2">
-                    <CheckCircle2 className="mt-0.5 size-4 text-foreground/70" />
-                    {b}
-                  </li>
-                ))}
-              </ul>
-              <Button
-                className="mt-6 w-full"
-                variant={s.featured ? "default" : "outline"}
-                onClick={() => setOpenSvc(s.id)}
-              >
-                Book {s.name} <ArrowRight className="size-4" />
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+            Book {t.name} <ArrowRight className="size-4" />
+          </Button>
+        )}
+      />
 
       <BookDialog
         open={!!active}

@@ -1,3 +1,4 @@
+import * as React from "react";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 
@@ -19,6 +20,8 @@ export type PricingTierCardProps = {
   blurb?: string;
   bullets: string[];
   cta?: { label: string; href: string };
+  /** When provided, overrides the default Link-based CTA. Use for modal triggers, onClick handlers, etc. */
+  customCta?: React.ReactNode;
   featured?: boolean;
   badge?: string;
   /** Visual treatment when `featured` is true. */
@@ -39,6 +42,7 @@ export function PricingTierCard({
   blurb,
   bullets,
   cta,
+  customCta,
   featured = false,
   badge,
   featuredVariant = "ring",
@@ -80,7 +84,9 @@ export function PricingTierCard({
           ))}
         </ul>
       </CardContent>
-      {cta ? (
+      {customCta ? (
+        <CardFooter>{customCta}</CardFooter>
+      ) : cta ? (
         <CardFooter>
           <Button
             asChild

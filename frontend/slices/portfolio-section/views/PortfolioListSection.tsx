@@ -22,6 +22,8 @@ export type PortfolioItem = {
   gallery?: { src: string; alt: string }[];
   /** external "view live". */
   link?: { label: string; href: string };
+  /** Detail-view structured sub-sections (Brief/Outcome, Problem/Approach/Result, etc). Auto-grid by length: 2→2col, 3→3col, default stack. */
+  sections?: { id?: string; heading: string; body: string }[];
 };
 
 export type PortfolioListSectionProps = {
