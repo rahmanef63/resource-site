@@ -25,10 +25,10 @@
     "README.md"
   ],
   "convexFiles": [
-    "convex/features/create-your-mcp/schema.ts",
+    "convex/features/create-your-mcp/_schema.ts",
     "convex/features/create-your-mcp/pkce.ts",
-    "convex/features/create-your-mcp/mutations.ts",
-    "convex/features/create-your-mcp/queries.ts"
+    "convex/features/create-your-mcp/mutation.ts",
+    "convex/features/create-your-mcp/query.ts"
   ],
   "imports": {
     "shared": ["convex/_shared/auth"],

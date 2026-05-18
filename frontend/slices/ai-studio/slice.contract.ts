@@ -5,7 +5,7 @@
  * toolbar (Suno / Midjourney / Lovable pattern). Prompt history, version
  * tree (branch & compare outputs), variation grid, share-to-link.
  *
- * Convex tables: aiStudioTables (see `convex/features/ai-studio/schema.ts`).
+ * Convex tables: aiStudioTables (see `convex/features/ai-studio/_schema.ts`).
  * Routes generation calls via `ai-router`; reads registries from `ai-admin`.
  */
 import { defineSliceContract } from "../../../packages/cli/lib/contract";

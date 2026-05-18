@@ -1,8 +1,8 @@
 // Schema fragment for the telemetry slice.
 //
-// Composed into the consumer's root convex/schema.ts via:
+// Composed into the consumer's root convex/_schema.ts via:
 //
-//   import { telemetryTables } from "./features/telemetry/schema";
+//   import { telemetryTables } from "./features/telemetry/_schema";
 //   export default defineSchema({ ...telemetryTables, ...others });
 //
 // Privacy model:

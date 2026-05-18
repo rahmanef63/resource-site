@@ -24,7 +24,7 @@ export const DEFAULT_ADMIN_LABELS: Required<SliceAdminLabels> = {
     "Workspace management surface. Wire panels via slice composition.",
   emptyHeading: "No panels mounted",
   emptyBody:
-    "Consumer projects compose panels here. See `convex/features/admin/queries.ts` for the admin probe + counts API.",
+    "Consumer projects compose panels here. See `convex/features/admin/query.ts` for the admin probe + counts API.",
 };
 
 /**

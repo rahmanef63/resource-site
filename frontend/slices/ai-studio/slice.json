@@ -9,7 +9,7 @@
   "namespace": "@/features/ai-studio",
   "convex": {
     "tablesExport": "aiStudioTables",
-    "schemaPath": "convex/features/ai-studio/schema.ts",
+    "schemaPath": "convex/features/ai-studio/_schema.ts",
     "rootPaths": ["convex/features/ai-studio"]
   },
   "frontend": {

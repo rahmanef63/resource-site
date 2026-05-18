@@ -1,8 +1,8 @@
 // Schema fragment for the testimonials slice.
 //
-// Compose into the consumer's root convex/schema.ts:
+// Compose into the consumer's root convex/_schema.ts:
 //
-//   import { testimonialsTables } from "./features/testimonials/schema";
+//   import { testimonialsTables } from "./features/testimonials/_schema";
 //   export default defineSchema({ ...testimonialsTables, ...others });
 
 import { defineTable } from "convex/server";

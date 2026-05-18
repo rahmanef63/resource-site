@@ -30,7 +30,7 @@ gate blocks UP-sync:
 ## Convex schema (preview — scaffold only)
 
 ```ts
-// convex/features/platform-admin/schema.ts (when promoted)
+// convex/features/platform-admin/_schema.ts (when promoted)
 export const platformAdminTables = {
   padmin_audit: defineTable({
     tenantId: v.optional(v.string()), // null for single-tenant overrides

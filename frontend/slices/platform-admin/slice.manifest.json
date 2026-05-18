@@ -14,7 +14,7 @@
     "README.md"
   ],
   "convex": {
-    "schemaPath": "convex/features/platform-admin/schema.ts",
+    "schemaPath": "convex/features/platform-admin/_schema.ts",
     "rootPaths": ["convex/features/platform-admin"]
   },
   "imports": {

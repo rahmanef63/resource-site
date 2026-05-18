@@ -11,7 +11,7 @@ frontend/slices/midtrans-payment/components/providers/
 ├── midtrans.tsx         ← shipped
 └── doku.tsx             ← drop-in sibling
 
-convex/features/payment/actions/
+convex/features/payment/action/
 ├── midtrans.ts          ← shipped
 └── doku.ts              ← drop-in sibling
 ```
@@ -23,7 +23,7 @@ a per-user preference.
 
 When you add Doku:
 1. `mkdir frontend/slices/midtrans-payment/components/providers && touch doku.tsx`
-2. `mkdir convex/features/payment/actions && touch doku.ts`
+2. `mkdir convex/features/payment/action && touch doku.ts`
 3. Bump `slice.json.providers` to `["midtrans","doku"]`.
 4. Bump `version` minor.
 
@@ -43,7 +43,7 @@ MIDTRANS_IS_PRODUCTION=false    # convex; defaults sandbox
 
 ```ts
 // convex/schema.ts
-import { paymentTables } from "./features/payment/schema";
+import { paymentTables } from "./features/payment/_schema";
 export default defineSchema({ ...paymentTables, /* others */ });
 ```
 

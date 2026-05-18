@@ -13,7 +13,7 @@
   },
   "convex": {
     "tablesExport": "servicesTables",
-    "schemaPath": "convex/features/services/schema.ts",
+    "schemaPath": "convex/features/services/_schema.ts",
     "rootPaths": ["convex/features/services"]
   },
   "deps": {

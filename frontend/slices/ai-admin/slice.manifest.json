@@ -15,7 +15,7 @@
     "types.ts"
   ],
   "convex": {
-    "schemaPath": "convex/features/ai-admin/schema.ts",
+    "schemaPath": "convex/features/ai-admin/_schema.ts",
     "rootPaths": [
       "convex/features/ai-admin"
     ]

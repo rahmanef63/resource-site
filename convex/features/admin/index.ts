@@ -1,1 +1,1 @@
-export { stats } from "./queries";
+export { stats } from "./query";

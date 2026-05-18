@@ -14,9 +14,9 @@
     "index.ts"
   ],
   "convexFiles": [
-    "convex/features/testimonials/schema.ts",
-    "convex/features/testimonials/queries.ts",
-    "convex/features/testimonials/mutations.ts"
+    "convex/features/testimonials/_schema.ts",
+    "convex/features/testimonials/query.ts",
+    "convex/features/testimonials/mutation.ts"
   ],
   "imports": {
     "shared": [

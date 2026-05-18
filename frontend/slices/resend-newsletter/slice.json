@@ -8,7 +8,7 @@
   "namespace": "@/features/resend-newsletter",
   "convex": {
     "tablesExport": "newsletterTables",
-    "schemaPath": "convex/features/newsletter/schema.ts",
+    "schemaPath": "convex/features/newsletter/_schema.ts",
     "rootPaths": ["convex/features/newsletter"]
   },
   "frontend": {

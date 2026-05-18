@@ -2,7 +2,7 @@
  * SEO persona + system-prompt factory — v0.2.0 portable surface.
  *
  * UP-synced from rahmanef.com (commit `bde5763`, Wave N+3.1) — the persona
- * literal that was hardcoded inside `convex/features/seo/actions.ts` is
+ * literal that was hardcoded inside `convex/features/seo/action.ts` is
  * hoisted here as a pure factory consumers can override via the
  * `personaContext` action arg.
  *

@@ -3,8 +3,8 @@
  *
  * Tier-routed LLM access via OpenRouter (nano → Haiku, mid → Sonnet, flagship
  * → Opus) with a per-call usage log. Convex action lives at
- * `convex/features/ai/actions.ts`; usage logged via internal mutation in
- * `convex/features/ai/mutations.ts`. The slice owns the `ai_router_*`
+ * `convex/features/ai/action.ts`; usage logged via internal mutation in
+ * `convex/features/ai/mutation.ts`. The slice owns the `ai_router_*`
  * namespace per the 2026-05-12 prefix decision (consumer migration documented
  * in `slice.manifest.json` notes).
  */

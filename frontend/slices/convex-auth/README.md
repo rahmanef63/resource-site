@@ -30,7 +30,7 @@ backend was already production-grade since the previous release.
 // convex/schema.ts
 import { defineSchema } from "convex/server";
 import { authTables } from "@convex-dev/auth/server";
-import { authTablesExt } from "./features/auth/schema";
+import { authTablesExt } from "./features/auth/_schema";
 
 export default defineSchema({ ...authTables, ...authTablesExt });
 ```
@@ -160,7 +160,7 @@ Self-hosted: push the same env via the Convex REST `update_environment_variables
 
 ## Tables (namespaced)
 
-The slice defines `authTablesExt` in `convex/features/auth/schema.ts` to extend `@convex-dev/auth`'s built-in `authTables` with a `userProfiles` row (display name, avatar, timezone, locale, role). All Convex Auth tables stay namespaced (`auth_users`, `auth_accounts`, `auth_sessions`, `auth_verifiers`) so a dual-auth migration window (e.g. Clerk → Convex Auth) doesn't collide with the consumer's existing `users` table.
+The slice defines `authTablesExt` in `convex/features/auth/_schema.ts` to extend `@convex-dev/auth`'s built-in `authTables` with a `userProfiles` row (display name, avatar, timezone, locale, role). All Convex Auth tables stay namespaced (`auth_users`, `auth_accounts`, `auth_sessions`, `auth_verifiers`) so a dual-auth migration window (e.g. Clerk → Convex Auth) doesn't collide with the consumer's existing `users` table.
 
 ## What's NOT in scope
 

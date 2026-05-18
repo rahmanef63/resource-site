@@ -6,7 +6,7 @@ Subscribe form + Convex action to send broadcasts via Resend.
 
 ```ts
 // convex/schema.ts
-import { newsletterTables } from "./features/newsletter/schema";
+import { newsletterTables } from "./features/newsletter/_schema";
 export default defineSchema({ ...newsletterTables });
 ```
 

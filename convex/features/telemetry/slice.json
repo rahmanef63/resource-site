@@ -8,7 +8,7 @@
   "namespace": "@convex/features/telemetry",
   "convex": {
     "tablesExport": "telemetryTables",
-    "schemaPath": "convex/features/telemetry/schema.ts",
+    "schemaPath": "convex/features/telemetry/_schema.ts",
     "rootPaths": ["convex/features/telemetry"]
   },
   "frontend": {

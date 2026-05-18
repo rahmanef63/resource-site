@@ -13,7 +13,7 @@
   },
   "convex": {
     "tablesExport": "testimonialsTables",
-    "schemaPath": "convex/features/testimonials/schema.ts",
+    "schemaPath": "convex/features/testimonials/_schema.ts",
     "rootPaths": ["convex/features/testimonials"]
   },
   "deps": {

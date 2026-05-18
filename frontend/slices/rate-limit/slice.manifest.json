@@ -14,8 +14,8 @@
     "index.ts"
   ],
   "convexFiles": [
-    "convex/features/rate-limit/schema.ts",
-    "convex/features/rate-limit/mutations.ts"
+    "convex/features/rate-limit/_schema.ts",
+    "convex/features/rate-limit/mutation.ts"
   ],
   "imports": {
     "shared": [],

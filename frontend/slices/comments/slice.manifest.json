@@ -21,7 +21,7 @@
     "utils/index.ts"
   ],
   "convex": {
-    "schemaPath": "convex/features/comments/schema.ts",
+    "schemaPath": "convex/features/comments/_schema.ts",
     "rootPaths": [
       "convex/features/comments"
     ]

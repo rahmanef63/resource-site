@@ -15,12 +15,12 @@ import type { Comment, TargetRef } from "../types";
  *   import { api } from "@convex/_generated/api";
  *   const bindings: CommentsBindings = {
  *     list: ({ kind, id, subId }) =>
- *       useQuery(api["features/comments/queries"].listByTarget,
+ *       useQuery(api["features/comments/query"].listByTarget,
  *         id ? { kind, id, subId } : "skip")?.map(toComment),
- *     create:  useMutation(api["features/comments/mutations"].create),
- *     update:  useMutation(api["features/comments/mutations"].update),
- *     resolve: useMutation(api["features/comments/mutations"].resolve),
- *     remove:  useMutation(api["features/comments/mutations"].remove),
+ *     create:  useMutation(api["features/comments/mutation"].create),
+ *     update:  useMutation(api["features/comments/mutation"].update),
+ *     resolve: useMutation(api["features/comments/mutation"].resolve),
+ *     remove:  useMutation(api["features/comments/mutation"].remove),
  *   };
  *   const c = useComments(bindings, { target: { kind: "page", id: someId } });
  */

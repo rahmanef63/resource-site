@@ -9,7 +9,7 @@
   "namespace": "@/features/ai-admin",
   "convex": {
     "tablesExport": "aiAdminTables",
-    "schemaPath": "convex/features/ai-admin/schema.ts",
+    "schemaPath": "convex/features/ai-admin/_schema.ts",
     "rootPaths": ["convex/features/ai-admin"]
   },
   "frontend": {

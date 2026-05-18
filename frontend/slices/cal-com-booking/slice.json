@@ -8,7 +8,7 @@
   "namespace": "@/features/cal-com-booking",
   "convex": {
     "tablesExport": "bookingsTables",
-    "schemaPath": "convex/features/bookings/schema.ts",
+    "schemaPath": "convex/features/bookings/_schema.ts",
     "rootPaths": ["convex/features/bookings"]
   },
   "frontend": {

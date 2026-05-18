@@ -9,7 +9,7 @@
   "namespace": "@/features/ai-agents",
   "convex": {
     "tablesExport": "aiAgentsTables",
-    "schemaPath": "convex/features/ai-agents/schema.ts",
+    "schemaPath": "convex/features/ai-agents/_schema.ts",
     "rootPaths": ["convex/features/ai-agents"]
   },
   "frontend": {

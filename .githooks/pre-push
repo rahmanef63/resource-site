@@ -12,9 +12,10 @@ set -e
 ROOT="$(git rev-parse --show-toplevel)"
 cd "$ROOT"
 
-echo "→ pre-push: audit:slices + audit:templates + audit:file-size"
+echo "→ pre-push: audit:slices + audit:templates + audit:file-size + audit:convex-features"
 npm run audit:slices --silent
 npm run audit:templates --silent
 npm run audit:file-size --silent
+npm run audit:convex-features --silent
 
 echo "✓ pre-push: catalog gates green"

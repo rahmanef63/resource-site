@@ -8,7 +8,7 @@
   "namespace": "@/features/convex-auth",
   "convex": {
     "tablesExport": "authTablesExt",
-    "schemaPath": "convex/features/auth/schema.ts",
+    "schemaPath": "convex/features/auth/_schema.ts",
     "rootPaths": ["convex/features/auth"]
   },
   "frontend": {

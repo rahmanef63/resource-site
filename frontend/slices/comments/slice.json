@@ -9,7 +9,7 @@
   "kind": "full",
   "convex": {
     "tablesExport": "commentsTables",
-    "schemaPath": "convex/features/comments/schema.ts",
+    "schemaPath": "convex/features/comments/_schema.ts",
     "rootPaths": ["convex/features/comments"]
   },
   "frontend": {

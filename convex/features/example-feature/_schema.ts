@@ -1,8 +1,8 @@
 // Schema fragment for the example-feature slice.
 //
-// Composed into the consumer's root convex/schema.ts via:
+// Composed into the consumer's root convex/_schema.ts via:
 //
-//   import { exampleFeatureTables } from "./features/example-feature/schema";
+//   import { exampleFeatureTables } from "./features/example-feature/_schema";
 //   export default defineSchema({ ...exampleFeatureTables, ...others });
 //
 // Never declare a table here that another slice also declares — slug-prefix

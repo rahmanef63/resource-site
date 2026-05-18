@@ -9,7 +9,7 @@
   "kind": "full",
   "convex": {
     "tablesExport": "seoTables",
-    "schemaPath": "convex/features/seo/schema.ts",
+    "schemaPath": "convex/features/seo/_schema.ts",
     "rootPaths": ["convex/features/seo"]
   },
   "frontend": {

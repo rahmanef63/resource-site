@@ -2,7 +2,7 @@
  * Slice contract for `admin` — v0.2.0.
  *
  * Generic admin shell slice. Server-only aggregator across other slices; owns
- * NO Convex tables (see `convex/features/admin/schema.ts` → `tables = {}`).
+ * NO Convex tables (see `convex/features/admin/_schema.ts` → `tables = {}`).
  * Gated by `requireAdmin` (convex-auth identity + optional SUPER_ADMIN_EMAIL).
  *
  * v0.2.0 introduces the `nav-from-registry` portable factory: instead of

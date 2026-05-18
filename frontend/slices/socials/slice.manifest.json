@@ -14,9 +14,9 @@
     "index.ts"
   ],
   "convexFiles": [
-    "convex/features/socials/schema.ts",
-    "convex/features/socials/queries.ts",
-    "convex/features/socials/mutations.ts"
+    "convex/features/socials/_schema.ts",
+    "convex/features/socials/query.ts",
+    "convex/features/socials/mutation.ts"
   ],
   "imports": {
     "shared": [

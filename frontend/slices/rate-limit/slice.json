@@ -13,7 +13,7 @@
   },
   "convex": {
     "tablesExport": "rateLimitTables",
-    "schemaPath": "convex/features/rate-limit/schema.ts",
+    "schemaPath": "convex/features/rate-limit/_schema.ts",
     "rootPaths": ["convex/features/rate-limit"]
   },
   "deps": {

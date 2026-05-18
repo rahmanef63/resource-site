@@ -6,7 +6,7 @@
  * threads, RAG citations, resumable streams. Reads provider/model/tool/skill
  * registries from `ai-admin`; routes calls via `ai-router`.
  *
- * Convex tables: aiChatTables (see `convex/features/ai-chat/schema.ts`).
+ * Convex tables: aiChatTables (see `convex/features/ai-chat/_schema.ts`).
  * Provider keys live in Convex env: ANTHROPIC_API_KEY / OPENAI_API_KEY /
  * GOOGLE_GENERATIVE_AI_API_KEY (any subset — ai-router picks the available).
  */

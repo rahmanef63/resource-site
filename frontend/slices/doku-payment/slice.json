@@ -8,7 +8,7 @@
   "namespace": "@/features/doku-payment",
   "convex": {
     "tablesExport": "paymentTables",
-    "schemaPath": "convex/features/payment/schema.ts",
+    "schemaPath": "convex/features/payment/_schema.ts",
     "rootPaths": ["convex/features/payment"]
   },
   "frontend": {

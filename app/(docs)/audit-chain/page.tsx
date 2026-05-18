@@ -51,6 +51,19 @@ const GUARDS = [
     ],
     severity: "Errors fail validation. Run with --check to fail CI on errors.",
   },
+  {
+    name: "audit:convex-features",
+    script: "scripts/validation/audit-convex-features.mjs",
+    coverage: "19/19 convex/features/* folders",
+    rules: [
+      "Canon files (top-level only): _schema.ts (REQUIRED), query.ts, mutation.ts, action.ts, http.ts, index.ts, README.md (warned), slice trio",
+      "BANNED: schema.ts (no underscore), mutations.ts/queries.ts/actions.ts (plural)",
+      "Private helpers/types: underscore-prefix (e.g. _helpers.ts, _types.ts)",
+      "_schema.ts should export `<slug>Tables` for root-schema composition (warning)",
+      "Subfolders (e.g. payment/actions/<provider>.ts) allowed — canon applies to top-level only",
+    ],
+    severity: "BANNED files + missing _schema.ts are errors. Naming + missing tables export are warnings.",
+  },
 ];
 
 export default function AuditChainPage() {
@@ -80,6 +93,7 @@ npm run slices:check
 npm run audit:slices
 npm run audit:templates
 npm run audit:file-size
+npm run audit:convex-features
 npm run validate:manifests
 npm run validate:contracts:check
 

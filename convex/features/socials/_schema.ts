@@ -1,8 +1,8 @@
 // Schema fragment for the socials slice.
 //
-// Compose into the consumer's root convex/schema.ts:
+// Compose into the consumer's root convex/_schema.ts:
 //
-//   import { socialsTables } from "./features/socials/schema";
+//   import { socialsTables } from "./features/socials/_schema";
 //   export default defineSchema({ ...socialsTables, ...others });
 //
 // Single source of truth for every social/profile presence. Drives:

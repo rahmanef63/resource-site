@@ -9,7 +9,7 @@
   "kind": "full",
   "convex": {
     "tablesExport": "platformAdminTables",
-    "schemaPath": "convex/features/platform-admin/schema.ts",
+    "schemaPath": "convex/features/platform-admin/_schema.ts",
     "rootPaths": ["convex/features/platform-admin"]
   },
   "frontend": {

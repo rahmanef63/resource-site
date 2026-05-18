@@ -19,7 +19,7 @@
     "utils/index.ts"
   ],
   "convex": {
-    "schemaPath": "convex/features/audit-log/schema.ts",
+    "schemaPath": "convex/features/audit-log/_schema.ts",
     "rootPaths": [
       "convex/features/audit-log"
     ]

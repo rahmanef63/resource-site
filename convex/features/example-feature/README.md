@@ -6,16 +6,16 @@ Pairs with the frontend slice at `frontend/slices/_templates/example-feature/`.
 
 | File | Role |
 |---|---|
-| `schema.ts` | Exports `exampleFeatureTables` — spread into the consumer's root `convex/schema.ts`. |
+| `schema.ts` | Exports `exampleFeatureTables` — spread into the consumer's root `convex/_schema.ts`. |
 | `queries.ts` | Public read fns. |
 | `mutations.ts` | Public write fns; `getAuthUserId` enforces ownership. |
 
 ## Wiring into a consumer's convex
 
 ```ts
-// convex/schema.ts (consumer)
+// convex/_schema.ts (consumer)
 import { defineSchema } from "convex/server";
-import { exampleFeatureTables } from "./features/example-feature/schema";
+import { exampleFeatureTables } from "./features/example-feature/_schema";
 import { authTables } from "@convex-dev/auth/server"; // peer slice
 
 export default defineSchema({

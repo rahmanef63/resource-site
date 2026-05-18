@@ -1,8 +1,8 @@
 // Schema fragment for the subscribers slice.
 //
-// Compose into the consumer's root convex/schema.ts:
+// Compose into the consumer's root convex/_schema.ts:
 //
-//   import { subscribersTables } from "./features/subscribers/schema";
+//   import { subscribersTables } from "./features/subscribers/_schema";
 //   export default defineSchema({ ...subscribersTables, ...others });
 
 import { defineTable } from "convex/server";

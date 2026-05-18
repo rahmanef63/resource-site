@@ -13,7 +13,7 @@
   },
   "convex": {
     "tablesExport": "createYourMcpTables",
-    "schemaPath": "convex/features/create-your-mcp/schema.ts",
+    "schemaPath": "convex/features/create-your-mcp/_schema.ts",
     "rootPaths": ["convex/features/create-your-mcp"]
   },
   "deps": {

@@ -13,7 +13,7 @@
   },
   "convex": {
     "tablesExport": "socialsTables",
-    "schemaPath": "convex/features/socials/schema.ts",
+    "schemaPath": "convex/features/socials/_schema.ts",
     "rootPaths": ["convex/features/socials"]
   },
   "deps": {

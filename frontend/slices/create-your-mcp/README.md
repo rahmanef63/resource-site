@@ -20,7 +20,7 @@ Compose the schema:
 ```ts
 // convex/schema.ts
 import { defineSchema } from "convex/server";
-import { createYourMcpTables } from "./features/create-your-mcp/schema";
+import { createYourMcpTables } from "./features/create-your-mcp/_schema";
 
 export default defineSchema({
   ...createYourMcpTables,

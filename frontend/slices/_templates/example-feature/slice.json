@@ -8,7 +8,7 @@
   "namespace": "@/features/example-feature",
   "convex": {
     "tablesExport": "exampleFeatureTables",
-    "schemaPath": "convex/features/example-feature/schema.ts",
+    "schemaPath": "convex/features/example-feature/_schema.ts",
     "rootPaths": ["convex/features/example-feature"]
   },
   "frontend": {

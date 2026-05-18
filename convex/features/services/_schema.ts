@@ -1,8 +1,8 @@
 // Schema fragment for the services slice.
 //
-// Compose into the consumer's root convex/schema.ts:
+// Compose into the consumer's root convex/_schema.ts:
 //
-//   import { servicesTables } from "./features/services/schema";
+//   import { servicesTables } from "./features/services/_schema";
 //   export default defineSchema({ ...servicesTables, ...others });
 
 import { defineTable } from "convex/server";

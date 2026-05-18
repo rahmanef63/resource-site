@@ -12,7 +12,7 @@
  * Pure persona/factory refactor — no Convex schema change → no migrationFrom
  * entry. The `seoGeneratorCalls` table shape is unchanged from v0.1.0.
  *
- * Current Convex schema (`convex/features/seo/schema.ts`) declares ONE table
+ * Current Convex schema (`convex/features/seo/_schema.ts`) declares ONE table
  * named `seoGeneratorCalls` — predates the per-slice namespace rule.
  *
  * TODO(contract): tables need namespace rename migration — see Phase E planner

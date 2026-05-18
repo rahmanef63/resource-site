@@ -68,7 +68,7 @@ export default function Page() {
 
 ```ts
 // convex/schema.ts
-import { paymentTables } from "./features/payment/schema";
+import { paymentTables } from "./features/payment/_schema";
 export default defineSchema({ ...paymentTables, /* others */ });
 ```
 
@@ -110,7 +110,7 @@ URL is the hosted checkout link, which we open via `window.location.href`).
 
 `paymentOrders.provider` is a literal union including `midtrans | doku | stripe`. Wiring a third provider (e.g. Xendit) requires:
 
-1. `convex/features/payment/actions/<provider>.ts`
+1. `convex/features/payment/action/<provider>.ts`
 2. `convex/features/payment/<provider>/{client,signature,types}.ts`
 3. `frontend/slices/<provider>-payment/` slice
 4. Add literal to `paymentOrders.provider` union

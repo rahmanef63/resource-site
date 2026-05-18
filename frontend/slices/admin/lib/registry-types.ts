@@ -68,7 +68,7 @@ export type AdminTableRow = Record<string, unknown> & {
  *
  * Kept generic so this module remains testable in vitest without a Convex
  * runtime. Production consumers wire this to `ctx.db.query(table).collect()`
- * inside their `convex/features/admin/queries.ts`.
+ * inside their `convex/features/admin/query.ts`.
  */
 export type AdminCountTableReader = (
   table: string,

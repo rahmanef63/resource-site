@@ -6,7 +6,7 @@
  * cost tally, and shareable trace URL. Reads model/tool registries from
  * the `ai-admin` slice.
  *
- * Convex tables: aiAgentsTables (see `convex/features/ai-agents/schema.ts`).
+ * Convex tables: aiAgentsTables (see `convex/features/ai-agents/_schema.ts`).
  */
 import { defineSliceContract } from "../../../packages/cli/lib/contract";
 

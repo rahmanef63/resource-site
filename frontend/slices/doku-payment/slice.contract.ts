@@ -2,7 +2,7 @@
  * Slice contract for `doku-payment` — Phase A.
  *
  * Encodes the documented operator backlog item: the legacy
- * `convex/features/payment/schema.ts` shares `paymentOrders` /
+ * `convex/features/payment/_schema.ts` shares `paymentOrders` /
  * `paymentWebhookEvents` between DOKU and Midtrans. Per the 2026-05-12
  * namespace decision, DOKU now owns `doku_orders` + `doku_webhook_events`
  * and explicitly conflicts with `midtrans-payment` over the old shared names.

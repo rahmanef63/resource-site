@@ -13,7 +13,7 @@
   },
   "convex": {
     "tablesExport": "subscribersTables",
-    "schemaPath": "convex/features/subscribers/schema.ts",
+    "schemaPath": "convex/features/subscribers/_schema.ts",
     "rootPaths": ["convex/features/subscribers"]
   },
   "deps": {

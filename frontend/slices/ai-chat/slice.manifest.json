@@ -14,7 +14,7 @@
     "types.ts"
   ],
   "convex": {
-    "schemaPath": "convex/features/ai-chat/schema.ts",
+    "schemaPath": "convex/features/ai-chat/_schema.ts",
     "rootPaths": [
       "convex/features/ai-chat"
     ]

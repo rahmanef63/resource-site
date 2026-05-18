@@ -8,7 +8,7 @@
   "namespace": "@/features/ai-router",
   "convex": {
     "tablesExport": "aiTables",
-    "schemaPath": "convex/features/ai/schema.ts",
+    "schemaPath": "convex/features/ai/_schema.ts",
     "rootPaths": ["convex/features/ai"]
   },
   "frontend": {

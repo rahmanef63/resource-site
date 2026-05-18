@@ -28,7 +28,7 @@
     "types/index.ts"
   ],
   "convex": {
-    "schemaPath": "convex/features/document-checklist/schema.ts",
+    "schemaPath": "convex/features/document-checklist/_schema.ts",
     "rootPaths": ["convex/features/document-checklist"]
   },
   "imports": {

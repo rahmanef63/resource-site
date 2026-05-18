@@ -43,8 +43,8 @@ runbook:
    and `provides.tables = ["stripe_orders", "stripe_webhook_events"]`.
 2. Create `convex/features/payment/actions/stripe.ts` mirroring the
    existing providers' shape (export `createTransaction`).
-3. Register the namespaced tables in `convex/features/payment/schema.ts`
-   under a `stripeTables` export, and spread into `convex/schema.ts`.
+3. Register the namespaced tables in `convex/features/payment/_schema.ts`
+   under a `stripeTables` export, and spread into `convex/_schema.ts`.
 4. Add a frontend wrapper in the slice's components directory.
 
 Per-provider tables keep blast radius low: a Stripe schema bug can't

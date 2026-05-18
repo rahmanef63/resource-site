@@ -24,7 +24,7 @@
     "utils/index.ts"
   ],
   "convex": {
-    "schemaPath": "convex/features/admin/schema.ts",
+    "schemaPath": "convex/features/admin/_schema.ts",
     "rootPaths": [
       "convex/features/admin"
     ]

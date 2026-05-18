@@ -5,7 +5,7 @@
  * agents, budgets, audit). Plugs into the admin-panel section registry; every
  * other ai-* slice reads its registries from here.
  *
- * Convex tables: aiAdminTables (see `convex/features/ai-admin/schema.ts`).
+ * Convex tables: aiAdminTables (see `convex/features/ai-admin/_schema.ts`).
  * API keys are AES-encrypted at rest via AI_ADMIN_ENCRYPTION_KEY.
  */
 import { defineSliceContract } from "../../../packages/cli/lib/contract";

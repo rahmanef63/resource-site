@@ -14,9 +14,9 @@
     "index.ts"
   ],
   "convexFiles": [
-    "convex/features/services/schema.ts",
-    "convex/features/services/queries.ts",
-    "convex/features/services/mutations.ts"
+    "convex/features/services/_schema.ts",
+    "convex/features/services/query.ts",
+    "convex/features/services/mutation.ts"
   ],
   "imports": {
     "shared": [
