@@ -1,6 +1,7 @@
 // Personal Brand OS state reducer. Split out of `store.tsx` (LOC cap).
 // Pure function over (State, Action) — no React dependency.
 
+import { pagesReducer } from "@/components/templates/_shared/pages/reducer";
 import type { Action, State } from "./types";
 import { SEED_STATE } from "./seed";
 
@@ -10,6 +11,14 @@ export function reducer(state: State, action: Action): State {
       return action.state;
     case "reset":
       return SEED_STATE;
+
+    case "PAGE_CREATE":
+    case "PAGE_UPDATE":
+    case "PAGE_DELETE":
+    case "PAGE_REORDER_BLOCK": {
+      const next = pagesReducer({ pages: state.pages }, action);
+      return { ...state, pages: next.pages };
+    }
 
     case "post.upsert": {
       const idx = state.posts.findIndex((p) => p.id === action.post.id);

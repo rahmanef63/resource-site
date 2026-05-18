@@ -1,3 +1,4 @@
+import { SEED_PAGES } from "./pages-seed";
 import type {
   Asset,
   Carousel,
@@ -262,4 +263,5 @@ export const SEED_STATE: State = {
   newsletters: SEED_NEWSLETTERS,
   performance: SEED_PERFORMANCE,
   commentDrafts: SEED_COMMENTS,
+  pages: SEED_PAGES,
 };

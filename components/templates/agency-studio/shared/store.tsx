@@ -1,6 +1,13 @@
 "use client";
 
+import * as React from "react";
 import { createTemplateStore } from "@/components/templates/_shared/hooks/create-template-store";
+import { pagesReducer } from "@/components/templates/_shared/pages/reducer";
+import {
+  PagesProvider,
+  type PagesStore,
+} from "@/components/templates/_shared/pages/pages-context";
+import type { PageEntry } from "@/components/templates/_shared/pages/types";
 import type { Action, State } from "./types";
 import { SEED_STATE } from "./seed";
 
@@ -10,6 +17,14 @@ function reducer(state: State, action: Action): State {
       return action.state;
     case "reset":
       return SEED_STATE;
+
+    case "PAGE_CREATE":
+    case "PAGE_UPDATE":
+    case "PAGE_DELETE":
+    case "PAGE_REORDER_BLOCK": {
+      const next = pagesReducer({ pages: state.pages }, action);
+      return { ...state, pages: next.pages };
+    }
 
     case "project.upsert": {
       const idx = state.projects.findIndex((p) => p.id === action.project.id);
@@ -57,13 +72,36 @@ function reducer(state: State, action: Action): State {
 }
 
 const { Provider, useStore } = createTemplateStore<State, Action>({
-  storageKey: "agency-studio:state:v1",
+  storageKey: "agency-studio:state:v2-pages",
   channel: "agency-studio:sync",
   seed: SEED_STATE,
   reducer,
 });
 
-export const StoreProvider = Provider;
+function PagesAdapter({ children }: { children: React.ReactNode }) {
+  const { state, dispatch } = useStore();
+  const value = React.useMemo<PagesStore>(
+    () => ({
+      pages: state.pages,
+      create: (entry: PageEntry) => dispatch({ type: "PAGE_CREATE", payload: entry }),
+      update: (id, patch) => dispatch({ type: "PAGE_UPDATE", payload: { id, patch } }),
+      remove: (id: string) => dispatch({ type: "PAGE_DELETE", payload: { id } }),
+      reorderBlock: (id, from, to) =>
+        dispatch({ type: "PAGE_REORDER_BLOCK", payload: { id, from, to } }),
+    }),
+    [state.pages, dispatch],
+  );
+  return <PagesProvider value={value}>{children}</PagesProvider>;
+}
+
+export function StoreProvider({ children }: { children: React.ReactNode }) {
+  return (
+    <Provider>
+      <PagesAdapter>{children}</PagesAdapter>
+    </Provider>
+  );
+}
+
 export { useStore };
 
 export const useProjects = () => useStore().state.projects;
@@ -72,5 +110,6 @@ export const useProject = (slug: string) => useProjects().find((p) => p.slug ===
 export const useClients = () => useStore().state.clients;
 export const useServices = () => useStore().state.services;
 export const useLeads = () => useStore().state.leads;
+export const usePages = () => useStore().state.pages;
 
 export { nid, fmtDate, rel } from "@/components/templates/_shared/utils";

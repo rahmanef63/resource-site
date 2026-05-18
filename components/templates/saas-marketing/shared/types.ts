@@ -83,7 +83,13 @@ export type State = {
   pages: import("@/components/templates/_shared/pages/types").PageEntry[];
 };
 
+export type PostsAction =
+  | { type: "POST_CREATE"; payload: BlogPost }
+  | { type: "POST_UPDATE"; payload: { id: string; patch: Partial<Omit<BlogPost, "id">> } }
+  | { type: "POST_DELETE"; payload: { id: string } };
+
 export type Action =
   | { type: "hydrate"; state: State }
   | { type: "reset" }
+  | PostsAction
   | import("@/components/templates/_shared/pages/types").PagesAction;

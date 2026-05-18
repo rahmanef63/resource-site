@@ -26,6 +26,7 @@ import { fileURLToPath } from "node:url";
 import {
   checkRaw,
   extractLayoutSlugs,
+  extractWebsiteTemplateSlugs,
   findTsxFiles,
   severityFor,
 } from "./audit-templates-helpers.mjs";
@@ -126,9 +127,30 @@ for (const root of TEMPLATE_ROOTS) {
   }
 }
 
+// Rule 3 — every website-template must expose the Pages CRUD surface.
+// Required files (P-wave, 2026-05-18):
+//   app/preview/<slug>/admin/pages/page.tsx
+//   app/preview/<slug>/admin/pages/[id]/page.tsx
+//   app/preview/<slug>/public/[...slug]/page.tsx
+const wtSlugs = extractWebsiteTemplateSlugs(LAYOUTS_FILE);
+for (const wt of wtSlugs) {
+  const required = [
+    `app/preview/${wt}/admin/pages/page.tsx`,
+    `app/preview/${wt}/admin/pages/[id]/page.tsx`,
+    `app/preview/${wt}/public/[...slug]/page.tsx`,
+  ];
+  for (const rel of required) {
+    if (!existsSync(path.join(REPO, rel))) {
+      errors.push(
+        `[${wt}] missing Pages CRUD surface: ${rel} — every website-template must wire admin/pages + public catch-all (see saas-marketing-os POC, commit 3768678)`,
+      );
+    }
+  }
+}
+
 if (errors.length === 0 && warnings.length === 0) {
   console.log(
-    `✓ audit-templates: ${scanned} file(s) across ${slugs.length} template(s) OK`,
+    `✓ audit-templates: ${scanned} file(s) across ${slugs.length} template(s) OK; ${wtSlugs.length} website-template(s) have Pages CRUD`,
   );
   process.exit(0);
 }

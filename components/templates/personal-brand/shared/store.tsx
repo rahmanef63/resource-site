@@ -2,18 +2,46 @@
 
 import * as React from "react";
 import { createTemplateStore } from "@/components/templates/_shared/hooks/create-template-store";
+import {
+  PagesProvider,
+  type PagesStore,
+} from "@/components/templates/_shared/pages/pages-context";
+import type { PageEntry } from "@/components/templates/_shared/pages/types";
 import type { Action, State } from "./types";
 import { SEED_STATE } from "./seed";
 import { reducer } from "./store-reducer";
 
 const { Provider, useStore } = createTemplateStore<State, Action>({
-  storageKey: "pbos:state:v1",
+  storageKey: "pbos:state:v2-pages",
   channel: "pbos:sync",
   seed: SEED_STATE,
   reducer,
 });
 
-export const StoreProvider = Provider;
+function PagesAdapter({ children }: { children: React.ReactNode }) {
+  const { state, dispatch } = useStore();
+  const value = React.useMemo<PagesStore>(
+    () => ({
+      pages: state.pages,
+      create: (entry: PageEntry) => dispatch({ type: "PAGE_CREATE", payload: entry }),
+      update: (id, patch) => dispatch({ type: "PAGE_UPDATE", payload: { id, patch } }),
+      remove: (id: string) => dispatch({ type: "PAGE_DELETE", payload: { id } }),
+      reorderBlock: (id, from, to) =>
+        dispatch({ type: "PAGE_REORDER_BLOCK", payload: { id, from, to } }),
+    }),
+    [state.pages, dispatch],
+  );
+  return <PagesProvider value={value}>{children}</PagesProvider>;
+}
+
+export function StoreProvider({ children }: { children: React.ReactNode }) {
+  return (
+    <Provider>
+      <PagesAdapter>{children}</PagesAdapter>
+    </Provider>
+  );
+}
+
 export { useStore };
 
 // Convenience derived selectors.
@@ -69,6 +97,7 @@ export function useChatSessions() {
   const { state } = useStore();
   return state.chatSessions;
 }
+export const usePages = () => useStore().state.pages;
 
 // Re-export shared utils so existing T1 imports keep working.
 export { nid, slugify, fmtDate, rel } from "@/components/templates/_shared/utils";

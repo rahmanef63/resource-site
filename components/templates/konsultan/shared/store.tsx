@@ -1,6 +1,13 @@
 "use client";
 
+import * as React from "react";
 import { createTemplateStore } from "@/components/templates/_shared/hooks/create-template-store";
+import { pagesReducer } from "@/components/templates/_shared/pages/reducer";
+import {
+  PagesProvider,
+  type PagesStore,
+} from "@/components/templates/_shared/pages/pages-context";
+import type { PageEntry } from "@/components/templates/_shared/pages/types";
 import type { Action, State } from "./types";
 import { SEED_STATE } from "./seed";
 
@@ -10,6 +17,14 @@ function reducer(state: State, action: Action): State {
       return action.state;
     case "reset":
       return SEED_STATE;
+
+    case "PAGE_CREATE":
+    case "PAGE_UPDATE":
+    case "PAGE_DELETE":
+    case "PAGE_REORDER_BLOCK": {
+      const next = pagesReducer({ pages: state.pages }, action);
+      return { ...state, pages: next.pages };
+    }
 
     case "client.upsert": {
       const idx = state.clients.findIndex((c) => c.id === action.client.id);
@@ -83,14 +98,37 @@ function reducer(state: State, action: Action): State {
 }
 
 const { Provider, useStore } = createTemplateStore<State, Action>({
-  storageKey: "konsultan:state:v1",
+  storageKey: "konsultan:state:v2-pages",
   channel: "konsultan:sync",
   seed: SEED_STATE,
   reducer,
 });
 
-export const StoreProvider = Provider;
+function PagesAdapter({ children }: { children: React.ReactNode }) {
+  const { state, dispatch } = useStore();
+  const value = React.useMemo<PagesStore>(
+    () => ({
+      pages: state.pages,
+      create: (entry: PageEntry) => dispatch({ type: "PAGE_CREATE", payload: entry }),
+      update: (id, patch) => dispatch({ type: "PAGE_UPDATE", payload: { id, patch } }),
+      remove: (id: string) => dispatch({ type: "PAGE_DELETE", payload: { id } }),
+      reorderBlock: (id, from, to) =>
+        dispatch({ type: "PAGE_REORDER_BLOCK", payload: { id, from, to } }),
+    }),
+    [state.pages, dispatch],
+  );
+  return <PagesProvider value={value}>{children}</PagesProvider>;
+}
+
+export function StoreProvider({ children }: { children: React.ReactNode }) {
+  return (
+    <Provider>
+      <PagesAdapter>{children}</PagesAdapter>
+    </Provider>
+  );
+}
 export { useStore };
+export const usePages = () => useStore().state.pages;
 
 export function useClients() {
   const { state } = useStore();

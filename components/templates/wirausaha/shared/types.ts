@@ -69,9 +69,12 @@ export type State = {
   customers: Customer[];
   finance: FinanceRecord[];
   staff: StaffMember[];
+  /** O-wave: public pages CRUD slice. */
+  pages: import("@/components/templates/_shared/pages/types").PageEntry[];
 };
 
 export type Action =
+  | import("@/components/templates/_shared/pages/types").PagesAction
   | { type: "business.upsert"; business: Business }
   | { type: "business.delete"; id: string }
   | { type: "product.upsert"; product: Product }

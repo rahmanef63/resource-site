@@ -59,9 +59,12 @@ export type State = {
   citations: Citation[];
   litReviews: LitReview[];
   aiReaderSessions: AiReaderSession[];
+  /** O-wave: public pages CRUD slice. */
+  pages: import("@/components/templates/_shared/pages/types").PageEntry[];
 };
 
 export type Action =
+  | import("@/components/templates/_shared/pages/types").PagesAction
   | { type: "doc.upsert"; doc: Document }
   | { type: "doc.delete"; id: string }
   | { type: "note.upsert"; note: Note }

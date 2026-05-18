@@ -16,6 +16,7 @@ import {
   LineChart,
   Mail,
   MessageSquare,
+  Newspaper,
   Settings,
   Sparkles,
   Users,
@@ -74,8 +75,10 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
   const newLeads = state.leads.filter((l) => l.status === "new").length;
   const flaggedChats = state.chatSessions.filter((s) => s.flagged).length;
   const pendingSubs = state.subscribers.filter((s) => s.status === "pending").length;
+  const customPages = state.pages.filter((p) => !p.systemPage).length;
   return [
     { id: "dashboard", label: "Dashboard", href: ADMIN_BASE,                  icon: LayoutDashboard, count: null },
+    { id: "pages",     label: "Pages",     href: `${ADMIN_BASE}/pages`,       icon: Newspaper,       count: customPages || null },
     { id: "posts",     label: "Posts",     href: `${ADMIN_BASE}/posts`,       icon: FileText,        count: draftCount || null },
     { id: "portfolio", label: "Portfolio", href: `${ADMIN_BASE}/portfolio`,   icon: Briefcase,       count: state.portfolio.length },
     { id: "services",  label: "Services",  href: `${ADMIN_BASE}/services`,    icon: Sparkles,        count: state.services.length },

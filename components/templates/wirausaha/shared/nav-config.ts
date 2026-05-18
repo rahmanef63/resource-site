@@ -1,6 +1,7 @@
 import {
   Building2,
   LayoutDashboard,
+  Newspaper,
   Package,
   Receipt,
   ShoppingCart,
@@ -46,8 +47,10 @@ export const OWNER_USER: User = {
 export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
   const newOrders = state.orders.filter((o) => o.status === "new").length;
   const lowStock = state.products.filter((p) => p.stock < 20).length;
+  const customPages = state.pages.filter((p) => !p.systemPage).length;
   return [
     { id: "dashboard",  label: "Dashboard",  href: ADMIN_BASE,                   icon: LayoutDashboard, count: null },
+    { id: "pages",      label: "Pages",      href: `${ADMIN_BASE}/pages`,        icon: Newspaper,       count: customPages || null },
     { id: "businesses", label: "Businesses", href: `${ADMIN_BASE}/businesses`,   icon: Building2,       count: state.businesses.length },
     { id: "inventory",  label: "Inventory",  href: `${ADMIN_BASE}/inventory`,    icon: Package,         count: lowStock || null },
     { id: "orders",     label: "Orders",     href: `${ADMIN_BASE}/orders`,       icon: ShoppingCart,    count: newOrders || null },

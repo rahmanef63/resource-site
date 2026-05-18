@@ -1,3 +1,4 @@
+import { SEED_PAGES } from "./pages-seed";
 import type {
   Business,
   Customer,
@@ -81,4 +82,5 @@ export const SEED_STATE: State = {
   customers: SEED_CUSTOMERS,
   finance: SEED_FINANCE,
   staff: SEED_STAFF,
+  pages: SEED_PAGES,
 };

@@ -4,6 +4,7 @@ import {
   FileText,
   LayoutDashboard,
   Library,
+  Newspaper,
   Quote,
   Settings,
   StickyNote,
@@ -47,8 +48,10 @@ export const OWNER_USER: User = {
 
 export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
   const newDocs = state.documents.filter((d) => d.status === "uploaded").length;
+  const customPages = state.pages.filter((p) => !p.systemPage).length;
   return [
     { id: "dashboard", label: "Dashboard",   href: ADMIN_BASE,                   icon: LayoutDashboard, count: null },
+    { id: "pages",     label: "Pages",       href: `${ADMIN_BASE}/pages`,        icon: Newspaper,       count: customPages || null },
     { id: "documents", label: "Documents",   href: `${ADMIN_BASE}/documents`,    icon: FileText,        count: newDocs || null },
     { id: "notes",     label: "Notes",       href: `${ADMIN_BASE}/notes`,        icon: StickyNote,      count: state.notes.length },
     { id: "citations", label: "Citations",   href: `${ADMIN_BASE}/citations`,    icon: Quote,           count: state.citations.length },

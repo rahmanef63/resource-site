@@ -91,9 +91,12 @@ export type State = {
   newsletters: NewsletterIssue[];
   performance: PerformanceMetric[];
   commentDrafts: CommentDraft[];
+  /** O-wave: public pages CRUD slice. */
+  pages: import("@/components/templates/_shared/pages/types").PageEntry[];
 };
 
 export type Action =
+  | import("@/components/templates/_shared/pages/types").PagesAction
   | { type: "content.upsert"; item: ContentItem }
   | { type: "content.delete"; id: string }
   | { type: "voice.upsert"; voice: VoiceProfile }

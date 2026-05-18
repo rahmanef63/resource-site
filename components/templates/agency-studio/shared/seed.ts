@@ -1,3 +1,4 @@
+import { SEED_PAGES } from "./pages-seed";
 import type { Client, Lead, Project, Service, State } from "./types";
 
 const now = Date.now();
@@ -142,4 +143,5 @@ export const SEED_STATE: State = {
   clients: SEED_CLIENTS,
   services: SEED_SERVICES,
   leads: SEED_LEADS,
+  pages: SEED_PAGES,
 };

@@ -1,3 +1,4 @@
+import { SEED_PAGES } from "./pages-seed";
 import type {
   Client,
   ConsultDoc,
@@ -202,4 +203,5 @@ export const SEED_STATE: State = {
   projects: SEED_PROJECTS,
   invoices: SEED_INVOICES,
   documents: SEED_DOCUMENTS,
+  pages: SEED_PAGES,
 };

@@ -8,6 +8,7 @@ import {
   Mail,
   MessageSquare,
   Mic,
+  Newspaper,
   Settings,
   Wand2,
 } from "lucide-react";
@@ -50,8 +51,10 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
   const drafts = state.contents.filter((c) => c.status !== "published").length;
   const newsletterDrafts = state.newsletters.filter((n) => n.status !== "sent").length;
   const pendingComments = state.commentDrafts.filter((c) => c.status === "draft").length;
+  const customPages = state.pages.filter((p) => !p.systemPage).length;
   return [
     { id: "dashboard",  label: "Dashboard",   href: ADMIN_BASE,                    icon: LayoutDashboard, count: null },
+    { id: "pages",      label: "Pages",       href: `${ADMIN_BASE}/pages`,         icon: Newspaper,       count: customPages || null },
     { id: "planner",    label: "Planner",     href: `${ADMIN_BASE}/planner`,       icon: CalendarDays,    count: drafts || null },
     { id: "voice",      label: "Voice",       href: `${ADMIN_BASE}/voice`,         icon: Mic,             count: state.voices.length },
     { id: "scripts",    label: "Scripts",     href: `${ADMIN_BASE}/scripts`,       icon: FileText,        count: state.scripts.length },

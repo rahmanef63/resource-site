@@ -1,3 +1,4 @@
+import { SEED_PAGES } from "./pages-seed";
 import type { Post, PortfolioItem, Resource, Service, State } from "./types";
 
 const now = Date.now();
@@ -257,4 +258,5 @@ export const SEED_STATE: State = {
     { id: "sub-3", email: "new@example.com",   status: "pending",   source: "footer", ts: day(1) },
   ],
   chatSessions: [],
+  pages: SEED_PAGES,
 };

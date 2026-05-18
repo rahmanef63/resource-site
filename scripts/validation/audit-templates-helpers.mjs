@@ -80,6 +80,21 @@ export function extractLayoutSlugs(file) {
   return [...new Set(out)];
 }
 
+/** Extract slugs whose entry has `category: "website-template"`. Used by
+ *  the pages-CRUD gate to require the canonical admin/pages surface on
+ *  full-app templates. */
+export function extractWebsiteTemplateSlugs(file) {
+  if (!existsSync(file)) return [];
+  const body = readFileSync(file, "utf8");
+  const out = [];
+  // Walk each top-level entry block, look for slug + category="website-template".
+  const blockRe = /\{\s*slug:\s*"([^"]+)"[\s\S]*?category:\s*"([^"]+)"/g;
+  for (const m of body.matchAll(blockRe)) {
+    if (m[2] === "website-template") out.push(m[1]);
+  }
+  return [...new Set(out)];
+}
+
 // Track [start, end] char ranges of every backtick-delimited template
 // literal. Match indices that fall inside one are documentation strings
 // (e.g. <CodeBlock>{`<button>example</button>`}</CodeBlock>) — skip.

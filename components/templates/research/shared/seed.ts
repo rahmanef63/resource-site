@@ -1,3 +1,4 @@
+import { SEED_PAGES } from "./pages-seed";
 import type { Citation, Document, LitReview, Note, State, AiReaderSession } from "./types";
 
 const now = Date.now();
@@ -168,4 +169,5 @@ export const SEED_STATE: State = {
   citations: SEED_CITATIONS,
   litReviews: SEED_LIT_REVIEWS,
   aiReaderSessions: SEED_AI_SESSIONS,
+  pages: SEED_PAGES,
 };

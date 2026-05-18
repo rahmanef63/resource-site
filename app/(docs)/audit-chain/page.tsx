@@ -19,14 +19,15 @@ const GUARDS = [
   {
     name: "audit:templates",
     script: "scripts/validation/audit-templates.mjs",
-    coverage: "367 files / 35 templates / cookbook + preview slices",
+    coverage: "367 files / 35 templates / cookbook + preview slices / 7 website-template Pages CRUD surfaces",
     rules: [
       "shadcn primitives only — no raw <button>, <dialog>, <input type=date|file>",
       "Hardcoded /preview/<slug> tokens only in rewriter-handled files (robots.ts, sitemap.ts, site-config.ts, nav-config.ts)",
       "Template-literal aware: <button> inside CodeBlock string templates is skipped",
+      "Every website-template MUST wire Pages CRUD: admin/pages/page.tsx + admin/pages/[id]/page.tsx + public/[...slug]/page.tsx (P-wave 2026-05-18)",
     ],
     severity:
-      "Error in components/templates/* + cookbook/layouts/*; warning in single-page block demos.",
+      "Error in components/templates/* + cookbook/layouts/* + missing Pages CRUD on website-templates; warning in single-page block demos.",
   },
   {
     name: "audit:file-size",

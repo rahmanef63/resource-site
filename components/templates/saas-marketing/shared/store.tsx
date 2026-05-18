@@ -24,6 +24,17 @@ function reducer(state: State, action: Action): State {
       const next = pagesReducer({ pages: state.pages }, action);
       return { ...state, pages: next.pages };
     }
+    case "POST_CREATE":
+      return { ...state, posts: [action.payload, ...state.posts] };
+    case "POST_UPDATE":
+      return {
+        ...state,
+        posts: state.posts.map((p) =>
+          p.id === action.payload.id ? { ...p, ...action.payload.patch } : p,
+        ),
+      };
+    case "POST_DELETE":
+      return { ...state, posts: state.posts.filter((p) => p.id !== action.payload.id) };
     default:
       return state;
   }

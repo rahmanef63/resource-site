@@ -85,9 +85,12 @@ export type State = {
   projects: Project[];
   invoices: Invoice[];
   documents: ConsultDoc[];
+  /** O-wave: public pages CRUD slice. */
+  pages: import("@/components/templates/_shared/pages/types").PageEntry[];
 };
 
 export type Action =
+  | import("@/components/templates/_shared/pages/types").PagesAction
   | { type: "client.upsert"; client: Client }
   | { type: "client.delete"; id: string }
   | { type: "proposal.upsert"; proposal: Proposal }

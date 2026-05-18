@@ -3,6 +3,7 @@ import {
   FileSignature,
   FileText,
   LayoutDashboard,
+  Newspaper,
   Receipt,
   ScrollText,
   Settings,
@@ -47,8 +48,10 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
   const draftProposals = state.proposals.filter((p) => p.status === "draft" || p.status === "sent").length;
   const overdueInvoices = state.invoices.filter((i) => i.status === "overdue" || i.status === "sent").length;
   const activeProjects = state.projects.filter((p) => p.status !== "delivered").length;
+  const customPages = state.pages.filter((p) => !p.systemPage).length;
   return [
     { id: "dashboard",  label: "Dashboard",  href: ADMIN_BASE,                   icon: LayoutDashboard, count: null },
+    { id: "pages",      label: "Pages",      href: `${ADMIN_BASE}/pages`,        icon: Newspaper,       count: customPages || null },
     { id: "clients",    label: "Clients",    href: `${ADMIN_BASE}/clients`,      icon: Users,           count: state.clients.length },
     { id: "proposals",  label: "Proposals",  href: `${ADMIN_BASE}/proposals`,    icon: FileText,        count: draftProposals || null },
     { id: "contracts",  label: "Contracts",  href: `${ADMIN_BASE}/contracts`,    icon: FileSignature,   count: state.contracts.length },
