@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { CodeBlock } from "@/components/site/code-block";
 import { RepoLink } from "@/components/site/repo-link";
 import { InstallWithAgent } from "@/components/site/install-with-agent";
@@ -43,9 +44,9 @@ npm run dev                       # http://localhost:3000`}
         />
         <p className="text-sm text-muted-foreground">
           Browse the catalog at{" "}
-          <a href="/templates" className="underline">/templates</a>{" "}
+          <Link href="/templates" className="underline">/templates</Link>{" "}
           or use the visual{" "}
-          <a href="/build" className="underline">Bundle Builder</a>{" "}
+          <Link href="/build" className="underline">Bundle Builder</Link>{" "}
           to compose template + slices + skills.
         </p>
       </section>

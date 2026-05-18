@@ -381,16 +381,17 @@ export const processExecution = internalAction({
               isDryRun,
             });
             break; // Success
-          } catch (err: any) {
+          } catch (err) {
             if (attempts >= maxAttempts) throw err;
 
             // Log retry
+            const errMsg = err instanceof Error ? err.message : String(err);
             await ctx.runMutation(
               internal.features.studio.executor.addExecutionLog,
               {
                 executionId: args.executionId,
                 level: "warn",
-                message: `Step ${step.id} failed (attempt ${attempts}/${maxAttempts}). Retrying in ${backoffMs}ms... Error: ${err.message}`,
+                message: `Step ${step.id} failed (attempt ${attempts}/${maxAttempts}). Retrying in ${backoffMs}ms... Error: ${errMsg}`,
               }
             );
 
@@ -446,8 +447,9 @@ export const processExecution = internalAction({
         internal.features.studio.executor.completeExecution,
         { executionId: args.executionId, result: results }
       );
-    } catch (error: any) {
+    } catch (error) {
       console.error("Workflow execution failed:", error);
+      const errorMsg = error instanceof Error ? error.message : String(error);
       
       // Rollback Logic
       if (!isDryRun && compensations.length > 0) {
@@ -472,13 +474,14 @@ export const processExecution = internalAction({
                 message: `Rolled back step ${comp.stepId} (${comp.type})`,
               }
             );
-          } catch (rollbackError: any) {
+          } catch (rollbackError) {
+            const rollbackMsg = rollbackError instanceof Error ? rollbackError.message : String(rollbackError);
             await ctx.runMutation(
               internal.features.studio.executor.addExecutionLog,
               {
                 executionId: args.executionId,
                 level: "error",
-                message: `Failed to rollback step ${comp.stepId}: ${rollbackError.message}`,
+                message: `Failed to rollback step ${comp.stepId}: ${rollbackMsg}`,
               }
             );
           }
@@ -487,7 +490,7 @@ export const processExecution = internalAction({
 
       await ctx.runMutation(
         internal.features.studio.executor.failExecution,
-        { executionId: args.executionId, error: error.message || "Unknown error" }
+        { executionId: args.executionId, error: errorMsg || "Unknown error" }
       );
     }
   },
@@ -804,8 +807,9 @@ async function executeUpdateRecord(ctx: ActionCtx, config: Record<string, unknow
         updates: config.updates as { status?: string; priority?: string; title?: string },
       });
       return { updated: true };
-    } catch (e: any) {
-      return { updated: false, error: e.message };
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      return { updated: false, error: msg };
     }
   }
 
@@ -825,8 +829,9 @@ async function executeHttpRequest(config: any): Promise<{ status?: number; data?
 
     const data = await response.json().catch(() => null);
     return { status: response.status, data };
-  } catch (error: any) {
-    return { status: 0, data: { error: error.message } };
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : String(error);
+    return { status: 0, data: { error: msg } };
   }
 }
 

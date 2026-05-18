@@ -3,6 +3,7 @@ import katex from "katex";
 import "katex/dist/katex.min.css";
 import { Sigma, Pencil } from "lucide-react";
 import type { EquationBlockProps } from "../types";
+import { errorMessage } from "@/lib/utils";
 
 export function EquationBlock({ text, onText, registerRef }: EquationBlockProps) {
   const [editing, setEditing] = useState(!text);
@@ -12,8 +13,8 @@ export function EquationBlock({ text, onText, registerRef }: EquationBlockProps)
     if (!text) return "";
     try {
       return katex.renderToString(text, { throwOnError: false, displayMode: true });
-    } catch (e: any) {
-      return `<span class="text-destructive text-sm">LaTeX error: ${e?.message ?? "invalid"}</span>`;
+    } catch (e) {
+      return `<span class="text-destructive text-sm">LaTeX error: ${errorMessage(e, "invalid")}</span>`;
     }
   }, [text]);
 
@@ -83,7 +84,7 @@ export function EquationBlock({ text, onText, registerRef }: EquationBlockProps)
 function safeRender(src: string): string {
   try {
     return katex.renderToString(src, { throwOnError: false, displayMode: true });
-  } catch (e: any) {
-    return `<span class="text-destructive text-xs">${e?.message ?? "LaTeX error"}</span>`;
+  } catch (e) {
+    return `<span class="text-destructive text-xs">${errorMessage(e, "LaTeX error")}</span>`;
   }
 }

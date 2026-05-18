@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback, useEffect, useState } from 'react';
 import type { Schema, Workspace } from '@/frontend/slices/studio/ui/types';
 import { getWidgetConfig } from '@/frontend/slices/studio/ui/registry';
-import { cn } from '@/lib/utils';
+import { cn, errorMessage } from '@/lib/utils';
 import { getCachedTemplateByKey, preloadTemplateByKey } from '@/frontend/slices/studio/ui/state/templateStore';
 import { AnimationWrapper } from '@/frontend/slices/studio/ui/lib/animations';
 import { studioErrorLog } from '@/frontend/slices/studio/ui/lib/studioErrorLog';
@@ -651,11 +651,11 @@ export const Renderer: React.FC<RendererProps> = ({
           )}
         </WidgetErrorBoundary>
       );
-    } catch (err: any) {
+    } catch (err) {
       console.error(`[Studio] Widget "${id}" sync render error:`, err);
       return (
         <div key={id} className="flex items-center justify-between gap-2 p-2 border-2 border-red-500 bg-red-950/40 rounded text-xs text-red-300">
-          <span>⚠ <code className="font-mono">{id}</code> — {err?.message ?? 'render error'}</span>
+          <span>⚠ <code className="font-mono">{id}</code> — {errorMessage(err, 'render error')}</span>
         </div>
       );
     }

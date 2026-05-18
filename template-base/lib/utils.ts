@@ -17,3 +17,14 @@ export function uid(prefix = "id") {
 export function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max)
 }
+
+/** Safely extract a human message from any thrown value. */
+export function errorMessage(e: unknown, fallback = "Something went wrong"): string {
+  if (e instanceof Error) return e.message
+  if (typeof e === "string") return e
+  if (e && typeof e === "object" && "message" in e) {
+    const m = (e as { message?: unknown }).message
+    if (typeof m === "string") return m
+  }
+  return fallback
+}

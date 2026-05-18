@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { Button } from "@notion/shared/ui/button";
 import { Input } from "@notion/shared/ui/input";
+import { errorMessage } from "@/lib/utils";
 
 export default function AuthPage() {
   const { signIn } = useAuthActions();
@@ -18,8 +19,8 @@ export default function AuthPage() {
     setLoading(true);
     try {
       await signIn("password", { email, password, flow, name: flow === "signUp" ? name : undefined });
-    } catch (err: any) {
-      setError(err?.message ?? "Authentication failed");
+    } catch (err) {
+      setError(errorMessage(err, "Authentication failed"));
     } finally {
       setLoading(false);
     }

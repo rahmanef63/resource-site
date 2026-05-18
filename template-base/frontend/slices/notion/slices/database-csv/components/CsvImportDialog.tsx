@@ -8,6 +8,7 @@ import { useStore } from "@notion/shared/lib/store";
 import { parseCsv, valueFromString, type ParsedCsv } from "../lib/csv";
 import type { Database, PropertyType } from "@notion/shared/types/domain";
 import { PROPERTY_TYPE_LABELS } from "@notion/slices/databases/DatabaseBlock";
+import { errorMessage } from "@/lib/utils";
 
 interface Props {
   db: Database;
@@ -55,8 +56,8 @@ export function CsvImportDialog({ db, open, onOpenChange }: Props) {
         initial[i] = matched ? matched.id : SKIP;
       });
       setMapping(initial);
-    } catch (e: any) {
-      setError(e?.message ?? "Failed to parse CSV");
+    } catch (e) {
+      setError(errorMessage(e, "Failed to parse CSV"));
     }
   };
 
@@ -208,8 +209,8 @@ export function CsvImportDialog({ db, open, onOpenChange }: Props) {
                   count++;
                 }
                 setImported(count);
-              } catch (e: any) {
-                setError(e?.message ?? "Import failed mid-way");
+              } catch (e) {
+                setError(errorMessage(e, "Import failed mid-way"));
               } finally {
                 setImporting(false);
               }

@@ -11,6 +11,7 @@ import type { Schema } from '@/frontend/slices/studio/ui/types';
 import { resolveRendererRootId } from '@/frontend/slices/studio/ui/slices/renderer/components/Renderer';
 import { schemaToHtml } from '@/frontend/slices/studio/lib/schemaToHtml';
 import { X, RefreshCw } from 'lucide-react';
+import { errorMessage } from '@/lib/utils';
 
 const STORAGE_KEY = 'studio-preview-schema';
 
@@ -28,8 +29,8 @@ export default function StudioPreviewPage() {
             const parsed = JSON.parse(raw);
             setSchema(parsed);
             setError(null);
-        } catch (e: any) {
-            setError('Failed to parse schema: ' + e.message);
+        } catch (e) {
+            setError('Failed to parse schema: ' + errorMessage(e, 'unknown error'));
         }
     };
 

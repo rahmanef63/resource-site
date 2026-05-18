@@ -13,6 +13,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Copy, Download, Check, ArrowRightLeft, FileCode2, Code2, Braces } from "lucide-react";
 import type { Schema, ConversionStats } from "@/frontend/slices/studio/ui/lib/converters";
 import { jsonToHtml, jsonToTsx, htmlToJson, tsxToJson, computeConversionStats } from "@/frontend/slices/studio/ui/lib/converters";
+import { errorMessage } from "@/lib/utils";
 
 type ConvertMode = 'json-to-html' | 'json-to-tsx' | 'html-to-json' | 'tsx-to-json';
 
@@ -68,8 +69,8 @@ export const StudioConverterDialog: React.FC<StudioConverterDialogProps> = ({
                 setOutput(JSON.stringify(result, null, 2));
                 setStats(computeConversionStats(result));
             }
-        } catch (e: any) {
-            setError(e?.message ?? 'Conversion failed');
+        } catch (e) {
+            setError(errorMessage(e, 'Conversion failed'));
         }
     }, [mode, schema, input, componentName]);
 
@@ -101,8 +102,8 @@ export const StudioConverterDialog: React.FC<StudioConverterDialogProps> = ({
             const parsed = JSON.parse(output);
             onImportSchema(parsed);
             onClose();
-        } catch (e: any) {
-            setError('Invalid JSON: ' + (e?.message ?? 'parse error'));
+        } catch (e) {
+            setError('Invalid JSON: ' + errorMessage(e, 'parse error'));
         }
     };
 

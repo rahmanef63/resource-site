@@ -20,7 +20,7 @@ import {
     ResizableHandle,
 } from '@/components/ui/resizable';
 import { Card, CardTitle, Button, Input, Label } from '@/components/ui';
-import { cn } from '@/lib/utils';
+import { cn, errorMessage } from '@/lib/utils';
 import { MobileInspectorDrawer } from '@/frontend/shared/ui/layout/container/three-column/mobile/MobileInspectorDrawer';
 import { FeatureThreeColumnLayout } from '@/frontend/shared/ui/layout/container/three-column';
 import { MobileHeader } from '@/frontend/shared/ui/layout/header';
@@ -341,8 +341,8 @@ const StudioLayoutInner: React.FC<StudioLayoutInnerProps> = ({ workspaceId: _wor
             } else {
                 toast({ title: 'Import failed', description: 'Missing root/nodes in schema.', variant: 'destructive' });
             }
-        } catch (err: any) {
-            toast({ title: 'Import failed', description: err?.message ?? 'Unknown error', variant: 'destructive' });
+        } catch (err) {
+            toast({ title: 'Import failed', description: errorMessage(err, 'Unknown error'), variant: 'destructive' });
         }
     }, [setNodes, setEdges, toast]);
 
@@ -397,8 +397,8 @@ const StudioLayoutInner: React.FC<StudioLayoutInnerProps> = ({ workspaceId: _wor
                 importFlow(text);
                 toast({ title: 'Workflow imported' });
             }
-        } catch (err: any) {
-            toast({ title: 'Import failed', description: err?.message ?? 'Unknown error', variant: 'destructive' });
+        } catch (err) {
+            toast({ title: 'Import failed', description: errorMessage(err, 'Unknown error'), variant: 'destructive' });
         }
     }, [importFlow, toast]);
 

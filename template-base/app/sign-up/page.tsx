@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
+import { errorMessage } from "@/lib/utils";
 
 export default function SignUpPage() {
   const { signIn } = useAuthActions();
@@ -21,8 +22,8 @@ export default function SignUpPage() {
       formData.append("flow", "signUp");
       await signIn("password", formData);
       router.push("/dashboard/overview");
-    } catch (e: any) {
-      toast.error(e?.message ?? "Sign up failed");
+    } catch (e) {
+      toast.error(errorMessage(e, "Sign up failed"));
     } finally {
       setSubmitting(false);
     }
