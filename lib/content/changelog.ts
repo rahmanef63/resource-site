@@ -1,0 +1,116 @@
+import type { ChangelogEntry } from "@/features/changelog-feed";
+
+/**
+ * Public release history for the Rahman Resources monorepo. Surfaced on
+ * `/changelog` via the canonical `changelog-feed` slice — same component
+ * every template ships via `npx rr add changelog-feed`.
+ *
+ * Source of truth is CHANGELOG.md (human-readable wave history). This
+ * file lists the user-facing CLI release dates only.
+ */
+export const releases: ChangelogEntry[] = [
+  {
+    id: "1.7.0",
+    version: "1.7.0",
+    date: Date.parse("2026-05-18"),
+    kind: "feature",
+    title: "Seven canonical UI slices + V-wave three-column",
+    body:
+      "R + S + T waves shipped the missing marketing-page primitives so every template consumes one SSOT per surface. V-wave ported superspace's PanelSection compound. W-wave wired live previews. CLI 1.7.0 + MCP 1.1.0 on npm.",
+    groups: [
+      {
+        heading: "New slices",
+        bullets: [
+          "pricing-page · PricingSection with renderTierCta slot",
+          "feature-grid · cards / minimal / alternating / grouped layouts",
+          "faq-section · single / two-column / grouped + footer CTA",
+          "testimonials-grid · cards / quote-stack / masonry",
+          "blog-section · BlogListSection + BlogPostView (afterContent / extraMeta / related slots)",
+          "changelog-feed · timeline / cards / list",
+          "portfolio-section · PortfolioListSection + PortfolioDetailView with sections[]",
+        ],
+      },
+      {
+        heading: "Layout — V-wave",
+        bullets: [
+          "PanelSection compound (Header / Items / Footer)",
+          "PanelGroup / PanelMenu / PanelSeparator primitives",
+          "leftFooter / centerFooter / rightFooter slots on ThreeColumnLayoutAdvanced",
+          "Trigger ≠ Header separation rule",
+          "Mobile drawer header + footer slot props",
+        ],
+      },
+      {
+        heading: "Site",
+        bullets: [
+          "/preview/slices/<slug> for all 7 new slices",
+          "/preview/three-column-trio V-wave demo",
+          "rr site dogfood — FeaturesGrid + /stack + /changelog use canonical slices",
+        ],
+      },
+    ],
+  },
+  {
+    id: "1.6.0",
+    version: "1.6.0",
+    date: Date.parse("2026-05-10"),
+    kind: "feature",
+    title: "Generic CRUD primitives + 25 entities migrated",
+    body:
+      "<CrudListView> + <CrudFormView> + typed CrudController<T>. Replaced per-template bespoke admin tables. Every website template now has Pages CRUD with audit-templates hard-error gate.",
+  },
+  {
+    id: "1.5.0",
+    version: "1.5.0",
+    date: Date.parse("2026-04-22"),
+    kind: "feature",
+    title: "Page CRUD on all 7 website templates",
+    body:
+      "Shared _shared/pages/ infra. PagesView + PageEditorView propagated to every website template. Hybrid client-wrap pattern: server chrome + client data section.",
+  },
+  {
+    id: "1.4.0",
+    version: "1.4.0",
+    date: Date.parse("2026-04-10"),
+    kind: "improvement",
+    title: "Security + infra + Next.js primitive sweep",
+    body:
+      "Rate-limit, strict headers, isHidden wiring, env hygiene. next/link + next/image + typed catch across template-base. Sidebar grouping: 38 flat slices → 11 collapsible categories.",
+  },
+  {
+    id: "1.3.0",
+    version: "1.3.0",
+    date: Date.parse("2026-03-25"),
+    kind: "improvement",
+    title: "CLI publish prep + audit chain self-doc",
+    body:
+      "Consumer install REAL test. .env.example per-slice augment. Schema unification. pre-commit hook expanded to run full audit chain. /llms.txt + catalog completeness.",
+  },
+  {
+    id: "1.2.0",
+    version: "1.2.0",
+    date: Date.parse("2026-02-28"),
+    kind: "improvement",
+    title: "Install snippet modernization + lint zero",
+    body:
+      "Install snippets → npx rr init flow. 75 lint warnings → 0. Catalog drift fixes (5 ai-* + platform-admin + 2 landing). sync-slice-manifests handles both schemas.",
+  },
+  {
+    id: "1.1.0",
+    version: "1.1.0",
+    date: Date.parse("2026-02-14"),
+    kind: "feature",
+    title: "200-LOC modularity rule + audit-file-size guard",
+    body:
+      "New audit-file-size.mjs gates file length. 8 top offenders refactored. Grandfather list driven 35 → 0. F4: TEMPLATE/SLICE distinction in audit guard.",
+  },
+  {
+    id: "1.0.0",
+    version: "1.0.0",
+    date: Date.parse("2026-01-30"),
+    kind: "feature",
+    title: "Audit chain comprehensive — D + B waves",
+    body:
+      "Site-level raw-HTML audit. Convex authn+authz on every public mutation. Schema index validity. 39 raw <button> wrapped in shadcn Button. Pre-push hook installed. Hardcoded MCP URL extracted to env.",
+  },
+];

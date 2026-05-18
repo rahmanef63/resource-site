@@ -13,6 +13,7 @@ import {
   Globe,
   Home,
   Wand2,
+  Newspaper,
 } from "lucide-react";
 import { IconBrandGithub as Github } from "@tabler/icons-react";
 import {
@@ -65,6 +66,7 @@ const docsItems = [
   { title: "Installation", href: "/installation", icon: Rocket },
   { title: "Architecture", href: "/architecture", icon: Layers },
   { title: "Stack", href: "/stack", icon: GitBranch },
+  { title: "Changelog", href: "/changelog", icon: Newspaper },
 ];
 
 export function SiteSidebar() {

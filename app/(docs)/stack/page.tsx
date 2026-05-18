@@ -1,7 +1,5 @@
+import { FeatureGridSection } from "@/features/feature-grid";
 import { stack } from "@/lib/content/sections";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import Link from "next/link";
-import { ExternalLink } from "lucide-react";
 
 export const metadata = { title: "Stack" };
 
@@ -18,36 +16,31 @@ const detail: Record<string, string> = {
   "Lucide Icons": "+ @tabler/icons-react for variety. tree-shaken via optimizePackageImports.",
 };
 
+/**
+ * Dogfood — `/stack` consumes the canonical `feature-grid` slice (cards
+ * layout, 2 cols) instead of a bespoke Card grid. Same primitive every
+ * template ships via `npx rr add feature-grid`.
+ */
 export default function StackPage() {
   return (
-    <div className="max-w-3xl">
-      <h1 className="text-4xl font-bold tracking-tight">Stack</h1>
-      <p className="mt-3 text-muted-foreground">
-        Everything you'd pick if you were starting today.
-      </p>
-
-      <div className="mt-10 grid gap-4 md:grid-cols-2">
-        {stack.map((s) => (
-          <Card key={s.name}>
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between text-base">
-                {s.name}
-                <Link
-                  href={s.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  <ExternalLink className="size-4" />
-                </Link>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CardDescription>{detail[s.name] ?? "—"}</CardDescription>
-            </CardContent>
-          </Card>
-        ))}
+    <div>
+      <div className="max-w-3xl">
+        <h1 className="text-4xl font-bold tracking-tight">Stack</h1>
+        <p className="mt-3 text-muted-foreground">
+          Everything you'd pick if you were starting today.
+        </p>
       </div>
+
+      <FeatureGridSection
+        className="!px-0 !py-10"
+        columns={2}
+        items={stack.map((s) => ({
+          id: s.name,
+          title: s.name,
+          body: detail[s.name] ?? "—",
+          link: { label: "Docs ↗", href: s.url },
+        }))}
+      />
     </div>
   );
 }

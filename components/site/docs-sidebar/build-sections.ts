@@ -42,6 +42,7 @@ export function buildSections(): NavSection[] {
         { kind: "leaf", title: "Bundle Builder", href: "/build", badge: "new" },
         { kind: "leaf", title: "MCP server", href: "/mcp", badge: "new" },
         { kind: "leaf", title: "VPS Control Room", href: "/control-room", badge: "new" },
+        { kind: "leaf", title: "Changelog", href: "/changelog", badge: "new" },
       ],
     },
     {
