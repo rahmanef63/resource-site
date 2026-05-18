@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-18T10:03:42.701Z",
+  "generatedAt": "2026-05-18T13:02:24.075Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -2047,6 +2047,82 @@
         "grid",
         "saas"
       ]
+    },
+    {
+      "slug": "faq-section",
+      "title": "FAQ Section",
+      "category": "ui",
+      "description": "Canonical FAQ accordion section — eyebrow + headline + accordion item list. Three layouts (single column, two-column, grouped by category). Optional footer CTA (\"Still have questions?\"). Items fully data-driven. Single SSOT — every template consumes this slice for FAQ blocks so admin-edited Q&A propagates without per-template rewrite.",
+      "source": "rahman-resources",
+      "install": "npx rahman-resources add faq-section",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add faq-section`. <FAQSection items title subtitle layout multiple defaultOpen footerCta /> — only `items` required. Each item: `{ id, q, a, category? }`. `layout=\"grouped\"` buckets by `category`. `multiple` lets users open several at once. `footerCta={{ label, href }}` wires a contact link below the accordion.",
+      "tags": [
+        "ui",
+        "faq",
+        "section",
+        "accordion",
+        "marketing"
+      ]
+    },
+    {
+      "slug": "testimonials-grid",
+      "title": "Testimonials Grid",
+      "category": "ui",
+      "description": "Canonical testimonials section — quote + author + role/company + optional avatar + optional star rating. Three layouts (uniform cards grid, centered quote-stack, CSS masonry). `featured` testimonials get a ring accent. Pairs naturally with the `testimonials` backend slice (Convex queries) but has zero coupling — pass any item array.",
+      "source": "rahman-resources",
+      "install": "npx rahman-resources add testimonials-grid",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add testimonials-grid`. <TestimonialsGridSection items title subtitle columns layout align /> — only `items` required. Each item: `{ id, quote, author, role?, company?, avatar?, rating?, featured? }`. `layout=\"quote-stack\"` renders a centered no-card scroll for editorial sites. `layout=\"masonry\"` uses CSS columns for variable-height quotes.",
+      "tags": [
+        "ui",
+        "testimonials",
+        "section",
+        "marketing",
+        "social-proof",
+        "saas"
+      ]
+    },
+    {
+      "slug": "blog-section",
+      "title": "Blog Section",
+      "category": "ui",
+      "description": "Canonical blog list + detail section. <BlogListSection> renders 3 layouts (cards grid, minimal list, featured-split with hero + side rail). <BlogPostView> renders the single-post page with cover + meta + paragraph-split body. Both pass through `hrefFor`/`backHref` so each template controls routing — single SSOT for /blog and /blog/[slug] across all templates.",
+      "source": "rahman-resources",
+      "install": "npx rahman-resources add blog-section",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add blog-section`. <BlogListSection posts hrefFor title columns layout limit /> for /blog — `hrefFor(post)` returns the per-post URL. <BlogPostView post backHref renderBody /> for /blog/[slug] — `renderBody` defaults to paragraph-split on `\\n\\n` (swap for an MDX renderer if you use mdx-blog).",
+      "tags": [
+        "ui",
+        "blog",
+        "section",
+        "marketing",
+        "content",
+        "list",
+        "detail"
+      ]
+    },
+    {
+      "slug": "changelog-feed",
+      "title": "Changelog Feed",
+      "category": "ui",
+      "description": "Canonical /changelog or /whats-new section. Entries support 5 kinds (feature/improvement/fix/chore/breaking) with color-coded badges. Three layouts (timeline with date-rail, large cards, minimal list). Optional `limit` for \"Recent updates\" excerpts on home pages. Optional `groups` per entry for sub-sectioned bullet lists.",
+      "source": "rahman-resources",
+      "install": "npx rahman-resources add changelog-feed",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add changelog-feed`. <ChangelogFeedSection entries title subtitle layout sortDescending limit /> — only `entries` required. Each entry: `{ id, version, date, kind, title, body, bullets?, groups? }`. `layout=\"timeline\"` adds a left date-rail; `layout=\"list\"` is the most compact. Pass `limit={3}` on home pages to show recent releases.",
+      "tags": [
+        "ui",
+        "changelog",
+        "section",
+        "saas",
+        "release-notes",
+        "marketing"
+      ]
     }
   ],
   "slices": [
@@ -3661,6 +3737,138 @@
         "saas"
       ],
       "agentRecipe": "Run `npx rr add feature-grid`. <FeatureGridSection eyebrow title subtitle items columns layout align /> — only `items` required. Each item: `{ id, title, body, icon?, image?, link? }`. `icon` can be a LucideIcon component (rendered as 5×5 inline) or a string (rendered as letter fallback). `layout=\"alternating\"` produces image+text rows that flip per index — set `image` per item for that variant."
+    },
+    {
+      "slug": "faq-section",
+      "title": "FAQ Section",
+      "category": "ui",
+      "kind": "ui",
+      "version": "0.1.0",
+      "description": "Canonical FAQ accordion section — eyebrow + headline + accordion item list. Three layouts (single column, two-column, grouped by category). Optional footer CTA (\"Still have questions?\"). Items fully data-driven. Single SSOT — every template consumes this slice for FAQ blocks so admin-edited Q&A propagates without per-template rewrite.",
+      "source": "rahman-resources",
+      "slicePath": "frontend/slices/faq-section",
+      "convexPaths": [],
+      "npm": [],
+      "shadcn": [
+        "accordion",
+        "button"
+      ],
+      "env": [],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "ui",
+        "faq",
+        "section",
+        "accordion",
+        "marketing"
+      ],
+      "agentRecipe": "Run `npx rr add faq-section`. <FAQSection items title subtitle layout multiple defaultOpen footerCta /> — only `items` required. Each item: `{ id, q, a, category? }`. `layout=\"grouped\"` buckets by `category`. `multiple` lets users open several at once. `footerCta={{ label, href }}` wires a contact link below the accordion."
+    },
+    {
+      "slug": "testimonials-grid",
+      "title": "Testimonials Grid",
+      "category": "ui",
+      "kind": "ui",
+      "version": "0.1.0",
+      "description": "Canonical testimonials section — quote + author + role/company + optional avatar + optional star rating. Three layouts (uniform cards grid, centered quote-stack, CSS masonry). `featured` testimonials get a ring accent. Pairs naturally with the `testimonials` backend slice (Convex queries) but has zero coupling — pass any item array.",
+      "source": "rahman-resources",
+      "slicePath": "frontend/slices/testimonials-grid",
+      "convexPaths": [],
+      "npm": [
+        "lucide-react@^0.400.0"
+      ],
+      "shadcn": [
+        "avatar",
+        "button",
+        "card"
+      ],
+      "env": [],
+      "peers": [
+        {
+          "slug": "testimonials",
+          "range": "^0.1",
+          "reason": "Optional — pair with backend testimonials slice for full admin CRUD + storage."
+        }
+      ],
+      "providers": [],
+      "tags": [
+        "ui",
+        "testimonials",
+        "section",
+        "marketing",
+        "social-proof",
+        "saas"
+      ],
+      "agentRecipe": "Run `npx rr add testimonials-grid`. <TestimonialsGridSection items title subtitle columns layout align /> — only `items` required. Each item: `{ id, quote, author, role?, company?, avatar?, rating?, featured? }`. `layout=\"quote-stack\"` renders a centered no-card scroll for editorial sites. `layout=\"masonry\"` uses CSS columns for variable-height quotes."
+    },
+    {
+      "slug": "blog-section",
+      "title": "Blog Section",
+      "category": "ui",
+      "kind": "ui",
+      "version": "0.1.0",
+      "description": "Canonical blog list + detail section. <BlogListSection> renders 3 layouts (cards grid, minimal list, featured-split with hero + side rail). <BlogPostView> renders the single-post page with cover + meta + paragraph-split body. Both pass through `hrefFor`/`backHref` so each template controls routing — single SSOT for /blog and /blog/[slug] across all templates.",
+      "source": "rahman-resources",
+      "slicePath": "frontend/slices/blog-section",
+      "convexPaths": [],
+      "npm": [
+        "lucide-react@^0.400.0"
+      ],
+      "shadcn": [
+        "badge",
+        "button",
+        "card",
+        "separator"
+      ],
+      "env": [],
+      "peers": [
+        {
+          "slug": "mdx-blog",
+          "range": "^0.1",
+          "reason": "Optional — pair with mdx-blog backend slice for MDX-rendered posts."
+        }
+      ],
+      "providers": [],
+      "tags": [
+        "ui",
+        "blog",
+        "section",
+        "marketing",
+        "content",
+        "list",
+        "detail"
+      ],
+      "agentRecipe": "Run `npx rr add blog-section`. <BlogListSection posts hrefFor title columns layout limit /> for /blog — `hrefFor(post)` returns the per-post URL. <BlogPostView post backHref renderBody /> for /blog/[slug] — `renderBody` defaults to paragraph-split on `\\n\\n` (swap for an MDX renderer if you use mdx-blog)."
+    },
+    {
+      "slug": "changelog-feed",
+      "title": "Changelog Feed",
+      "category": "ui",
+      "kind": "ui",
+      "version": "0.1.0",
+      "description": "Canonical /changelog or /whats-new section. Entries support 5 kinds (feature/improvement/fix/chore/breaking) with color-coded badges. Three layouts (timeline with date-rail, large cards, minimal list). Optional `limit` for \"Recent updates\" excerpts on home pages. Optional `groups` per entry for sub-sectioned bullet lists.",
+      "source": "rahman-resources",
+      "slicePath": "frontend/slices/changelog-feed",
+      "convexPaths": [],
+      "npm": [],
+      "shadcn": [
+        "badge",
+        "card",
+        "separator"
+      ],
+      "env": [],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "ui",
+        "changelog",
+        "section",
+        "saas",
+        "release-notes",
+        "marketing"
+      ],
+      "agentRecipe": "Run `npx rr add changelog-feed`. <ChangelogFeedSection entries title subtitle layout sortDescending limit /> — only `entries` required. Each entry: `{ id, version, date, kind, title, body, bullets?, groups? }`. `layout=\"timeline\"` adds a left date-rail; `layout=\"list\"` is the most compact. Pass `limit={3}` on home pages to show recent releases."
     }
   ]
 }

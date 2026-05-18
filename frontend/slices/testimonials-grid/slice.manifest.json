@@ -1,0 +1,28 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "testimonials-grid",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add testimonials-grid",
+    "consumerPath": "slices/testimonials-grid"
+  },
+  "files": [
+    "README.md",
+    "components/TestimonialCard.tsx",
+    "config.ts",
+    "index.ts",
+    "views/TestimonialsGridSection.tsx"
+  ],
+  "imports": {
+    "shared": [],
+    "external": [
+      "lucide-react",
+      "next/link",
+      "@/components/ui/avatar",
+      "@/components/ui/button",
+      "@/components/ui/card"
+    ]
+  }
+}

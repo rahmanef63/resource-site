@@ -1,0 +1,29 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "faq-section",
+  "version": "0.1.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "FAQ Section",
+  "description": "Reusable, prop-driven FAQ accordion section for marketing pages. Composes a header (eyebrow / title / subtitle) with a shadcn Accordion of question/answer items. Three layouts: single column, two-column split (md+), and grouped-by-category with labelled sub-sections. Optional footer CTA (\"Still have questions?\") with link. Server-component shell that mounts the shadcn Accordion client primitive as a leaf island.",
+  "namespace": "@/features/faq-section",
+  "frontend": {
+    "slicePath": "frontend/slices/faq-section",
+    "configExport": "faqSectionFeature"
+  },
+  "convex": {
+    "tablesExport": "",
+    "schemaPath": "",
+    "rootPaths": []
+  },
+  "deps": {
+    "npm": ["next@^15"],
+    "shadcn": ["accordion", "button"],
+    "env": [],
+    "peers": []
+  },
+  "registers": [],
+  "audit": [],
+  "license": "MIT",
+  "tags": ["ui", "marketing", "faq", "accordion", "section"]
+}

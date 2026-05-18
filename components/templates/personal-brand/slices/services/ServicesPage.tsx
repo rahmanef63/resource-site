@@ -16,6 +16,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { FAQSection } from "@/features/faq-section";
 import { nid, useServices, useStore } from "../../shared/store";
 
 export function ServicesPage() {
@@ -169,28 +170,21 @@ function BookDialog({
   );
 }
 
-const FAQ = [
-  { q: "Apakah pricing nego?", a: "Untuk strategy sprint, pricing fixed. Mentoring bisa dapet diskon kalau bayar 6 bulan di muka." },
-  { q: "Pembayaran bagaimana?", a: "Bank transfer (BCA/Mandiri) atau Wise. Invoice berlaku PPN 11% (klien Indonesia)." },
-  { q: "Bisa cancel?", a: "Ya — full refund kalau cancel >7 hari sebelum sesi pertama, 50% kalau <7 hari." },
-  { q: "Bahasa apa?", a: "Sesi default Bahasa Indonesia. Bisa English on request, terutama untuk tim multinational." },
+const FAQ_ITEMS = [
+  { id: "nego", q: "Apakah pricing nego?", a: "Untuk strategy sprint, pricing fixed. Mentoring bisa dapet diskon kalau bayar 6 bulan di muka." },
+  { id: "pay", q: "Pembayaran bagaimana?", a: "Bank transfer (BCA/Mandiri) atau Wise. Invoice berlaku PPN 11% (klien Indonesia)." },
+  { id: "cancel", q: "Bisa cancel?", a: "Ya — full refund kalau cancel >7 hari sebelum sesi pertama, 50% kalau <7 hari." },
+  { id: "lang", q: "Bahasa apa?", a: "Sesi default Bahasa Indonesia. Bisa English on request, terutama untuk tim multinational." },
 ];
 
 function FaqSection() {
   return (
-    <section className="mt-20">
-      <p className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground">FAQ</p>
-      <h2 className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">Pertanyaan umum</h2>
-      <div className="mt-6 grid gap-3 md:grid-cols-2">
-        {FAQ.map((f) => (
-          <Card key={f.q} className="border-border/60 bg-card/60">
-            <CardContent className="p-5">
-              <p className="text-sm font-medium">{f.q}</p>
-              <p className="mt-1 text-sm text-muted-foreground">{f.a}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    </section>
+    <FAQSection
+      eyebrow="FAQ"
+      title="Pertanyaan umum"
+      items={FAQ_ITEMS}
+      layout="two-column"
+      className="mt-20 !px-0 !py-0"
+    />
   );
 }
