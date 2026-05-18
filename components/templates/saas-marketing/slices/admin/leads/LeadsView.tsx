@@ -1,60 +1,67 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import * as React from "react";
+import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
+import type {
+  ColumnDef,
+  CrudController,
+  EntityMeta,
+} from "@/components/templates/_shared/crud/types";
 import { rel, useStore } from "../../../shared/store";
-import type { LeadStatus } from "../../../shared/types";
+import { ADMIN_BASE } from "../../../shared/nav-config";
+import type { Lead } from "../../../shared/types";
 
-const STATUS_VARIANT: Record<LeadStatus, "default" | "secondary" | "outline" | "destructive"> = {
-  new: "default",
-  contacted: "secondary",
-  qualified: "secondary",
-  won: "outline",
-  lost: "destructive",
-};
+const META: EntityMeta = { label: "Lead", labelPlural: "Leads" };
 
-const STATUSES: LeadStatus[] = ["new", "contacted", "qualified", "won", "lost"];
+const COLUMNS: ColumnDef<Lead>[] = [
+  { key: "name", header: "Name", width: "w-[22%]" },
+  { key: "email", header: "Email", width: "w-[28%]", mono: true },
+  { key: "source", header: "Source", width: "w-[14%]", badge: "outline" },
+  { key: "status", header: "Status", width: "w-[12%]", badge: "secondary" },
+  {
+    key: "ts",
+    header: "Received",
+    width: "w-[14%]",
+    render: (v) => <span className="tabular-nums">{rel(Number(v))}</span>,
+  },
+];
+
+function useLeadsController(): CrudController<Lead> {
+  const { state, dispatch } = useStore();
+  return React.useMemo(
+    () => ({
+      items: state.leads,
+      getId: (l) => l.id,
+      blank: () => ({
+        id: `lead-${Math.random().toString(36).slice(2, 10)}`,
+        email: "",
+        name: "New lead",
+        source: "website",
+        status: "new",
+        ts: Date.now(),
+      }),
+      create: (l) => dispatch({ type: "LEAD_UPSERT", payload: l }),
+      update: (id, patch) =>
+        dispatch({
+          type: "LEAD_UPSERT",
+          payload: { ...state.leads.find((x) => x.id === id)!, ...patch, id },
+        }),
+      remove: (id) => dispatch({ type: "LEAD_DELETE", payload: { id } }),
+    }),
+    [state.leads, dispatch],
+  );
+}
 
 export function LeadsView() {
-  const { state } = useStore();
-  const counts = STATUSES.reduce<Record<LeadStatus, number>>((acc, s) => {
-    acc[s] = state.leads.filter((l) => l.status === s).length;
-    return acc;
-  }, { new: 0, contacted: 0, qualified: 0, won: 0, lost: 0 });
-
+  const controller = useLeadsController();
+  const newCount = controller.items.filter((l) => l.status === "new").length;
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Leads</h1>
-        <p className="text-sm text-muted-foreground">{state.leads.length} total — pipeline below.</p>
-      </div>
-
-      <div className="grid gap-2 md:grid-cols-5">
-        {STATUSES.map((s) => (
-          <Card key={s} className="border-border/60">
-            <CardContent className="p-3">
-              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{s}</p>
-              <p className="text-2xl font-semibold tracking-tight">{counts[s]}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      <Card className="border-border/60">
-        <CardContent className="p-0">
-          <ul className="divide-y divide-border/60">
-            {state.leads.map((l) => (
-              <li key={l.id} className="grid grid-cols-1 gap-1 px-5 py-4 text-sm md:grid-cols-12 md:items-center">
-                <p className="font-medium md:col-span-3">{l.name}</p>
-                <p className="text-muted-foreground md:col-span-4">{l.email}</p>
-                <Badge variant="outline" className="w-fit md:col-span-2">{l.source}</Badge>
-                <Badge variant={STATUS_VARIANT[l.status]} className="w-fit md:col-span-1">{l.status}</Badge>
-                <p className="text-xs text-muted-foreground md:col-span-2 md:text-right">{rel(l.ts)}</p>
-              </li>
-            ))}
-          </ul>
-        </CardContent>
-      </Card>
-    </div>
+    <CrudListView
+      meta={META}
+      controller={controller}
+      columns={COLUMNS}
+      editPath={(id) => `${ADMIN_BASE}/leads/${id}`}
+      description={`${newCount} new`}
+    />
   );
 }

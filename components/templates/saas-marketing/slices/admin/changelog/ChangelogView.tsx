@@ -1,40 +1,69 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import * as React from "react";
+import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
+import type {
+  ColumnDef,
+  CrudController,
+  EntityMeta,
+} from "@/components/templates/_shared/crud/types";
 import { fmtDate, useStore } from "../../../shared/store";
+import { ADMIN_BASE, PUBLIC_BASE } from "../../../shared/nav-config";
+import type { ChangelogEntry } from "../../../shared/types";
 
-const KIND_VARIANT: Record<string, "default" | "secondary" | "outline"> = {
-  feature: "default",
-  fix: "secondary",
-  chore: "outline",
+const META: EntityMeta = {
+  label: "Changelog entry",
+  labelPlural: "Changelog",
+  publicHref: () => `${PUBLIC_BASE}/changelog`,
 };
 
+const COLUMNS: ColumnDef<ChangelogEntry>[] = [
+  { key: "version", header: "Version", width: "w-[12%]", mono: true },
+  { key: "kind", header: "Kind", width: "w-[10%]", badge: "outline" },
+  { key: "title", header: "Title", width: "w-[42%]" },
+  {
+    key: "date",
+    header: "Date",
+    width: "w-[18%]",
+    render: (v) => <span className="tabular-nums">{fmtDate(Number(v))}</span>,
+  },
+];
+
+function useChangelogController(): CrudController<ChangelogEntry> {
+  const { state, dispatch } = useStore();
+  return React.useMemo(
+    () => ({
+      items: state.changelog,
+      getId: (e) => e.id,
+      blank: () => ({
+        id: `cl-${Math.random().toString(36).slice(2, 10)}`,
+        version: "v0.0.0",
+        date: Date.now(),
+        kind: "feature",
+        title: "New entry",
+        body: "",
+      }),
+      create: (e) => dispatch({ type: "CHANGELOG_UPSERT", payload: e }),
+      update: (id, patch) =>
+        dispatch({
+          type: "CHANGELOG_UPSERT",
+          payload: { ...state.changelog.find((x) => x.id === id)!, ...patch, id },
+        }),
+      remove: (id) => dispatch({ type: "CHANGELOG_DELETE", payload: { id } }),
+    }),
+    [state.changelog, dispatch],
+  );
+}
+
 export function ChangelogView() {
-  const { state } = useStore();
+  const controller = useChangelogController();
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Changelog</h1>
-        <p className="text-sm text-muted-foreground">{state.changelog.length} entries published on the public site.</p>
-      </div>
-      <Card className="border-border/60">
-        <CardContent className="p-0">
-          <ul className="divide-y divide-border/60">
-            {state.changelog.map((e) => (
-              <li key={e.id} className="grid grid-cols-1 gap-1 px-5 py-4 text-sm md:grid-cols-12 md:items-center">
-                <p className="font-mono text-xs md:col-span-2">{e.version}</p>
-                <Badge variant={KIND_VARIANT[e.kind] ?? "outline"} className="w-fit md:col-span-1">{e.kind}</Badge>
-                <div className="md:col-span-7">
-                  <p className="truncate font-medium">{e.title}</p>
-                  <p className="truncate text-xs text-muted-foreground">{e.body}</p>
-                </div>
-                <p className="text-xs text-muted-foreground md:col-span-2 md:text-right">{fmtDate(e.date)}</p>
-              </li>
-            ))}
-          </ul>
-        </CardContent>
-      </Card>
-    </div>
+    <CrudListView
+      meta={META}
+      controller={controller}
+      columns={COLUMNS}
+      editPath={(id) => `${ADMIN_BASE}/changelog/${id}`}
+      description="published on the public site"
+    />
   );
 }

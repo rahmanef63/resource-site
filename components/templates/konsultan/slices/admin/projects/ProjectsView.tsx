@@ -1,53 +1,70 @@
 "use client";
 
-import { Briefcase, Plus } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { SectionHead } from "@/components/templates/_shared/ui/section-head";
-import { StatCard } from "@/components/templates/_shared/ui/stat-card";
-import { fmtDate, useClients, useProjects } from "../../../shared/store";
+import * as React from "react";
+import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
+import type { ColumnDef, CrudController, EntityMeta } from "@/components/templates/_shared/crud/types";
+import { useStore } from "../../../shared/store";
+import { ADMIN_BASE } from "../../../shared/nav-config";
+import type { Project } from "../../../shared/types";
+
+const META: EntityMeta = { label: "Project", labelPlural: "Projects" };
+
+const COLUMNS: ColumnDef<Project>[] = [
+  { key: "name", header: "Name", width: "w-[30%]" },
+  { key: "status", header: "Status", width: "w-[16%]", badge: "outline" },
+  {
+    key: "progress",
+    header: "Progress",
+    width: "w-[14%]",
+    render: (v) => `${Number(v ?? 0)}%`,
+  },
+  {
+    key: "endsAt",
+    header: "Ends",
+    width: "w-[18%]",
+    render: (v) => (typeof v === "number" ? new Date(v).toLocaleDateString() : "—"),
+  },
+  { key: "clientId", header: "Client ID", width: "w-[10%]", mono: true },
+];
+
+function useProjectsController(): CrudController<Project> {
+  const { state, dispatch } = useStore();
+  return React.useMemo(
+    () => ({
+      items: state.projects,
+      getId: (p) => p.id,
+      blank: () => ({
+        id: `proj-${Math.random().toString(36).slice(2, 10)}`,
+        contractId: state.contracts[0]?.id ?? "",
+        clientId: state.clients[0]?.id ?? "",
+        name: "New Project",
+        description: "",
+        status: "kickoff",
+        progress: 0,
+        startedAt: Date.now(),
+        endsAt: Date.now() + 60 * 24 * 60 * 60 * 1000,
+      }),
+      create: (project) => dispatch({ type: "project.upsert", project }),
+      update: (id, patch) => {
+        const cur = state.projects.find((p) => p.id === id);
+        if (!cur) return;
+        dispatch({ type: "project.upsert", project: { ...cur, ...patch, id } });
+      },
+      remove: (id) => dispatch({ type: "project.delete", id }),
+    }),
+    [state.projects, state.clients, state.contracts, dispatch],
+  );
+}
 
 export function ProjectsView() {
-  const projects = useProjects();
-  const clients = useClients();
-  const cmap = new Map(clients.map((c) => [c.id, c]));
-  const active = projects.filter((p) => p.status !== "delivered").length;
-  const avgProgress = projects.length ? Math.round(projects.reduce((s, p) => s + p.progress, 0) / projects.length) : 0;
+  const controller = useProjectsController();
   return (
-    <div className="space-y-5">
-      <SectionHead eyebrow="Projects" title="Project Tracker" subtitle="Status proyek live + progress milestone." />
-      <div className="grid gap-4 md:grid-cols-3">
-        <StatCard icon={Briefcase} label="Total project" value={projects.length} />
-        <StatCard label="Aktif" value={active} />
-        <StatCard label="Avg progress" value={`${avgProgress}%`} />
-      </div>
-
-      <div className="flex justify-end">
-        <Button size="sm" className="gap-1"><Plus className="size-4" /> Project baru</Button>
-      </div>
-
-      <div className="grid gap-3 md:grid-cols-2">
-        {projects.map((p) => (
-          <Card key={p.id} className="border-border/60 bg-card/60">
-            <CardContent className="space-y-2 p-5">
-              <div className="flex items-center justify-between">
-                <Badge variant="outline" className="rounded-full text-[10px] capitalize">{p.status}</Badge>
-                <span className="text-[11px] text-muted-foreground">{p.progress}%</span>
-              </div>
-              <p className="text-sm font-medium">{p.name}</p>
-              <p className="text-xs text-muted-foreground">{cmap.get(p.clientId)?.company ?? "—"}</p>
-              <p className="text-xs text-foreground/70">{p.description}</p>
-              <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted/40">
-                <div className="h-full bg-foreground/70" style={{ width: `${p.progress}%` }} />
-              </div>
-              <p className="text-[11px] text-muted-foreground">
-                {fmtDate(p.startedAt)} → {fmtDate(p.endsAt)}
-              </p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    </div>
+    <CrudListView
+      meta={META}
+      controller={controller}
+      columns={COLUMNS}
+      editPath={(id) => `${ADMIN_BASE}/projects/${id}`}
+      description="Project tracker dengan milestone"
+    />
   );
 }

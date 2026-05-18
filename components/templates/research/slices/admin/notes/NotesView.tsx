@@ -1,48 +1,74 @@
 "use client";
 
-import { Plus, StickyNote, Tag } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { SectionHead } from "@/components/templates/_shared/ui/section-head";
-import { StatCard } from "@/components/templates/_shared/ui/stat-card";
-import { fmtDate, useNotes } from "../../../shared/store";
+import * as React from "react";
+import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
+import type {
+  ColumnDef,
+  CrudController,
+  EntityMeta,
+} from "@/components/templates/_shared/crud/types";
+import { ADMIN_BASE } from "../../../shared/nav-config";
+import { useStore } from "../../../shared/store";
+import type { Note } from "../../../shared/types";
+
+const META: EntityMeta = { label: "Catatan", labelPlural: "Catatan" };
+
+const COLUMNS: ColumnDef<Note>[] = [
+  { key: "title", header: "Judul", width: "w-[32%]" },
+  { key: "tags", header: "Tag", width: "w-[28%]" },
+  {
+    key: "linkedDocIds",
+    header: "Link",
+    width: "w-[14%]",
+    render: (v) => (Array.isArray(v) ? v.length : 0) + " doc",
+  },
+  {
+    key: "updatedAt",
+    header: "Diperbarui",
+    width: "w-[18%]",
+    render: (v) =>
+      typeof v === "number" ? new Date(v).toLocaleDateString() : "",
+  },
+];
+
+export function useNotesController(): CrudController<Note> {
+  const { state, dispatch } = useStore();
+  return React.useMemo(
+    () => ({
+      items: state.notes,
+      getId: (n) => n.id,
+      blank: () => ({
+        id: `note-${Date.now().toString(36)}`,
+        title: "Catatan baru",
+        body: "",
+        tags: [],
+        linkedDocIds: [],
+        updatedAt: Date.now(),
+      }),
+      create: (note) => dispatch({ type: "note.upsert", note }),
+      update: (id, patch) => {
+        const cur = state.notes.find((n) => n.id === id);
+        if (!cur) return;
+        dispatch({
+          type: "note.upsert",
+          note: { ...cur, ...patch, id, updatedAt: Date.now() },
+        });
+      },
+      remove: (id) => dispatch({ type: "note.delete", id }),
+    }),
+    [state.notes, dispatch],
+  );
+}
 
 export function NotesView() {
-  const notes = useNotes();
-  const linked = notes.filter((n) => n.linkedDocIds.length > 0).length;
-  const allTags = new Set(notes.flatMap((n) => n.tags));
+  const controller = useNotesController();
   return (
-    <div className="space-y-5">
-      <SectionHead eyebrow="Workspace" title="Smart Notes" subtitle="Catatan dengan backlinks dan concept map." />
-      <div className="grid gap-4 md:grid-cols-3">
-        <StatCard icon={StickyNote} label="Total catatan" value={notes.length} />
-        <StatCard label="Terlink ke dokumen" value={linked} />
-        <StatCard icon={Tag} label="Tag unik" value={allTags.size} />
-      </div>
-
-      <div className="flex justify-end">
-        <Button size="sm" className="gap-1"><Plus className="size-4" /> Catatan baru</Button>
-      </div>
-
-      <div className="grid gap-3 md:grid-cols-2">
-        {notes.map((n) => (
-          <Card key={n.id} className="border-border/60 bg-card/60">
-            <CardContent className="space-y-2 p-5">
-              <p className="text-sm font-medium">{n.title}</p>
-              <p className="line-clamp-3 text-xs text-foreground/70">{n.body}</p>
-              <div className="flex flex-wrap items-center gap-1 pt-2">
-                {n.tags.map((t) => (
-                  <Badge key={t} variant="outline" className="rounded-full text-[10px]">{t}</Badge>
-                ))}
-              </div>
-              <p className="pt-1 text-[11px] text-muted-foreground">
-                {n.linkedDocIds.length} link · diperbarui {fmtDate(n.updatedAt)}
-              </p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    </div>
+    <CrudListView
+      meta={META}
+      controller={controller}
+      columns={COLUMNS}
+      editPath={(id) => `${ADMIN_BASE}/notes/${id}`}
+      description="Catatan dengan backlinks dan concept map."
+    />
   );
 }

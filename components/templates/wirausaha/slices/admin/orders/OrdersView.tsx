@@ -1,51 +1,90 @@
 "use client";
 
-import { ShoppingCart } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { SectionHead } from "@/components/templates/_shared/ui/section-head";
-import { StatCard } from "@/components/templates/_shared/ui/stat-card";
-import { rel, useBusinesses, useCustomers, useOrders } from "../../../shared/store";
+import * as React from "react";
+import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
+import type { ColumnDef, CrudController, EntityMeta } from "@/components/templates/_shared/crud/types";
+import { useStore } from "../../../shared/store";
+import { ADMIN_BASE } from "../../../shared/nav-config";
+import type { Order } from "../../../shared/types";
+
+const META: EntityMeta = { label: "Order", labelPlural: "Orders" };
+
+function useColumns(): ColumnDef<Order>[] {
+  const { state } = useStore();
+  const bizMap = React.useMemo(
+    () => new Map(state.businesses.map((b) => [b.id, b.name])),
+    [state.businesses],
+  );
+  const custMap = React.useMemo(
+    () => new Map(state.customers.map((c) => [c.id, c.name])),
+    [state.customers],
+  );
+  return React.useMemo<ColumnDef<Order>[]>(
+    () => [
+      { key: "id", header: "ID", width: "w-[14%]", mono: true },
+      {
+        key: "customerId",
+        header: "Pelanggan",
+        width: "w-[22%]",
+        render: (v) => custMap.get(String(v)) ?? "—",
+      },
+      {
+        key: "businessId",
+        header: "Unit",
+        width: "w-[20%]",
+        render: (v) => bizMap.get(String(v)) ?? "—",
+      },
+      {
+        key: "items",
+        header: "Item",
+        width: "w-[10%]",
+        render: (v) => `${Array.isArray(v) ? v.length : 0} item`,
+      },
+      { key: "totalLabel", header: "Total", width: "w-[12%]" },
+      { key: "status", header: "Status", width: "w-[12%]", badge: "secondary" },
+    ],
+    [bizMap, custMap],
+  );
+}
+
+export function useOrdersController(): CrudController<Order> {
+  const { state, dispatch } = useStore();
+  return React.useMemo(
+    () => ({
+      items: state.orders,
+      getId: (o) => o.id,
+      blank: () => ({
+        id: `ord-${Math.random().toString(36).slice(2, 10)}`,
+        businessId: state.businesses[0]?.id ?? "",
+        customerId: state.customers[0]?.id ?? "",
+        items: [],
+        totalLabel: "Rp 0",
+        status: "new",
+        ts: Date.now(),
+      }),
+      create: (order) => dispatch({ type: "order.upsert", order }),
+      update: (id, patch) => {
+        const cur = state.orders.find((o) => o.id === id);
+        if (!cur) return;
+        dispatch({ type: "order.upsert", order: { ...cur, ...patch, id } });
+      },
+      remove: (id) => dispatch({ type: "order.delete", id }),
+    }),
+    [state.orders, state.businesses, state.customers, dispatch],
+  );
+}
 
 export function OrdersView() {
-  const orders = useOrders();
-  const businesses = useBusinesses();
-  const customers = useCustomers();
-  const bizMap = new Map(businesses.map((b) => [b.id, b]));
-  const custMap = new Map(customers.map((c) => [c.id, c]));
-  const newOrders = orders.filter((o) => o.status === "new").length;
-  const processing = orders.filter((o) => o.status === "processing").length;
+  const controller = useOrdersController();
+  const columns = useColumns();
+  const newOrders = controller.items.filter((o) => o.status === "new").length;
   return (
-    <div className="space-y-5">
-      <SectionHead eyebrow="Order" title="Orders" subtitle="Status order dari new → processing → delivered." />
-      <div className="grid gap-4 md:grid-cols-4">
-        <StatCard icon={ShoppingCart} label="Total order" value={orders.length} />
-        <StatCard label="Order baru" value={newOrders} />
-        <StatCard label="Diproses" value={processing} />
-        <StatCard label="Selesai" value={orders.filter((o) => o.status === "delivered").length} />
-      </div>
-
-      <div className="grid gap-3">
-        {orders.map((o) => (
-          <Card key={o.id} className="border-border/60 bg-card/60">
-            <CardContent className="space-y-2 p-5">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Badge variant="outline" className="rounded-full text-[10px] capitalize">{o.status}</Badge>
-                  <span className="font-mono text-[11px] text-muted-foreground">#{o.id.toUpperCase()}</span>
-                </div>
-                <span className="text-[11px] text-muted-foreground">{rel(o.ts)}</span>
-              </div>
-              <p className="text-sm">
-                <span className="font-medium">{custMap.get(o.customerId)?.name ?? "—"}</span>
-                <span className="text-muted-foreground"> di </span>
-                <span>{bizMap.get(o.businessId)?.name ?? "—"}</span>
-              </p>
-              <p className="text-xs text-muted-foreground">{o.items.length} item · {o.totalLabel}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    </div>
+    <CrudListView
+      meta={META}
+      controller={controller}
+      columns={columns}
+      editPath={(id) => `${ADMIN_BASE}/orders/${id}`}
+      description={`${newOrders} order baru`}
+    />
   );
 }

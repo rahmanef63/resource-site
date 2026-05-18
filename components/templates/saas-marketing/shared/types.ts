@@ -88,8 +88,38 @@ export type PostsAction =
   | { type: "POST_UPDATE"; payload: { id: string; patch: Partial<Omit<BlogPost, "id">> } }
   | { type: "POST_DELETE"; payload: { id: string } };
 
+export type CustomerAction =
+  | { type: "CUSTOMER_UPSERT"; payload: Customer }
+  | { type: "CUSTOMER_DELETE"; payload: { id: string } };
+
+export type SubscriptionAction =
+  | { type: "SUBSCRIPTION_UPSERT"; payload: Subscription }
+  | { type: "SUBSCRIPTION_DELETE"; payload: { id: string } };
+
+export type LeadAction =
+  | { type: "LEAD_UPSERT"; payload: Lead }
+  | { type: "LEAD_DELETE"; payload: { id: string } };
+
+export type ChangelogAction =
+  | { type: "CHANGELOG_UPSERT"; payload: ChangelogEntry }
+  | { type: "CHANGELOG_DELETE"; payload: { id: string } };
+
+export type PricingAction =
+  | { type: "PRICING_UPSERT"; payload: PricingTier }
+  | { type: "PRICING_DELETE"; payload: { id: string } };
+
+export type FeatureAction =
+  | { type: "FEATURE_UPSERT"; payload: FeatureItem }
+  | { type: "FEATURE_DELETE"; payload: { id: string } };
+
 export type Action =
   | { type: "hydrate"; state: State }
   | { type: "reset" }
   | PostsAction
+  | CustomerAction
+  | SubscriptionAction
+  | LeadAction
+  | ChangelogAction
+  | PricingAction
+  | FeatureAction
   | import("@/components/templates/_shared/pages/types").PagesAction;

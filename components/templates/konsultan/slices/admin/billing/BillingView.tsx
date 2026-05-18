@@ -1,70 +1,66 @@
 "use client";
 
-import { Plus, Receipt } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { SectionHead } from "@/components/templates/_shared/ui/section-head";
-import { StatCard } from "@/components/templates/_shared/ui/stat-card";
-import { fmtDate, useClients, useInvoices } from "../../../shared/store";
+import * as React from "react";
+import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
+import type { ColumnDef, CrudController, EntityMeta } from "@/components/templates/_shared/crud/types";
+import { useStore } from "../../../shared/store";
+import { ADMIN_BASE } from "../../../shared/nav-config";
+import type { Invoice } from "../../../shared/types";
+
+const META: EntityMeta = { label: "Invoice", labelPlural: "Invoices" };
+
+const COLUMNS: ColumnDef<Invoice>[] = [
+  { key: "number", header: "Number", width: "w-[18%]", mono: true },
+  { key: "totalLabel", header: "Total", width: "w-[18%]" },
+  { key: "ppnLabel", header: "PPN", width: "w-[18%]" },
+  { key: "status", header: "Status", width: "w-[14%]", badge: "outline" },
+  {
+    key: "dueAt",
+    header: "Due",
+    width: "w-[18%]",
+    render: (v) => (typeof v === "number" ? new Date(v).toLocaleDateString() : "—"),
+  },
+];
+
+function useInvoicesController(): CrudController<Invoice> {
+  const { state, dispatch } = useStore();
+  return React.useMemo(
+    () => ({
+      items: state.invoices,
+      getId: (i) => i.id,
+      blank: () => ({
+        id: `inv-${Math.random().toString(36).slice(2, 10)}`,
+        projectId: state.projects[0]?.id ?? "",
+        clientId: state.clients[0]?.id ?? "",
+        number: `INV-${new Date().getFullYear()}-${String(state.invoices.length + 1).padStart(3, "0")}`,
+        amountLabel: "Rp 0",
+        ppnLabel: "Rp 0 (11%)",
+        totalLabel: "Rp 0",
+        status: "draft",
+        dueAt: Date.now() + 30 * 24 * 60 * 60 * 1000,
+        issuedAt: Date.now(),
+      }),
+      create: (invoice) => dispatch({ type: "invoice.upsert", invoice }),
+      update: (id, patch) => {
+        const cur = state.invoices.find((i) => i.id === id);
+        if (!cur) return;
+        dispatch({ type: "invoice.upsert", invoice: { ...cur, ...patch, id } });
+      },
+      remove: (id) => dispatch({ type: "invoice.delete", id }),
+    }),
+    [state.invoices, state.clients, state.projects, dispatch],
+  );
+}
 
 export function BillingView() {
-  const invoices = useInvoices();
-  const clients = useClients();
-  const cmap = new Map(clients.map((c) => [c.id, c]));
-  const paid = invoices.filter((i) => i.status === "paid").length;
-  const sent = invoices.filter((i) => i.status === "sent").length;
-  const overdue = invoices.filter((i) => i.status === "overdue").length;
+  const controller = useInvoicesController();
   return (
-    <div className="space-y-5">
-      <SectionHead
-        eyebrow="Billing"
-        title="PajakAware Invoicing"
-        subtitle="Auto PPN 11%, e-Faktur compatible, reminder otomatis."
-      />
-      <div className="grid gap-4 md:grid-cols-4">
-        <StatCard icon={Receipt} label="Total invoice" value={invoices.length} />
-        <StatCard label="Lunas" value={paid} />
-        <StatCard label="Terkirim" value={sent} />
-        <StatCard label="Overdue" value={overdue} />
-      </div>
-
-      <div className="flex justify-end">
-        <Button size="sm" className="gap-1"><Plus className="size-4" /> Invoice baru</Button>
-      </div>
-
-      <Card className="border-border/60 bg-card/60">
-        <CardContent className="p-0">
-          <table className="w-full text-sm">
-            <thead className="border-b border-border/60 bg-muted/30 text-left text-xs uppercase tracking-wider">
-              <tr>
-                <th className="px-4 py-3">Nomor</th>
-                <th className="px-4 py-3">Klien</th>
-                <th className="px-4 py-3">Subtotal</th>
-                <th className="px-4 py-3">PPN</th>
-                <th className="px-4 py-3">Total</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3">Jatuh tempo</th>
-              </tr>
-            </thead>
-            <tbody>
-              {invoices.map((i) => (
-                <tr key={i.id} className="border-t border-border/60">
-                  <td className="px-4 py-3 font-mono text-[11px]">{i.number}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{cmap.get(i.clientId)?.company ?? "—"}</td>
-                  <td className="px-4 py-3">{i.amountLabel}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{i.ppnLabel}</td>
-                  <td className="px-4 py-3 font-medium">{i.totalLabel}</td>
-                  <td className="px-4 py-3">
-                    <Badge variant="outline" className="rounded-full text-[10px] capitalize">{i.status}</Badge>
-                  </td>
-                  <td className="px-4 py-3 text-muted-foreground">{fmtDate(i.dueAt)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </CardContent>
-      </Card>
-    </div>
+    <CrudListView
+      meta={META}
+      controller={controller}
+      columns={COLUMNS}
+      editPath={(id) => `${ADMIN_BASE}/billing/${id}`}
+      description="PajakAware invoicing (PPN 11%, e-Faktur)"
+    />
   );
 }

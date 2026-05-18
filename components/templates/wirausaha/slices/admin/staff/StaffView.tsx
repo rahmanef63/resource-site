@@ -1,46 +1,79 @@
 "use client";
 
-import { Plus, Users } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { SectionHead } from "@/components/templates/_shared/ui/section-head";
-import { StatCard } from "@/components/templates/_shared/ui/stat-card";
-import { fmtDate, useBusinesses, useStaff } from "../../../shared/store";
+import * as React from "react";
+import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
+import type { ColumnDef, CrudController, EntityMeta } from "@/components/templates/_shared/crud/types";
+import { fmtDate, useStore } from "../../../shared/store";
+import { ADMIN_BASE } from "../../../shared/nav-config";
+import type { StaffMember } from "../../../shared/types";
+
+const META: EntityMeta = { label: "Staff", labelPlural: "Staff" };
+
+function useColumns(): ColumnDef<StaffMember>[] {
+  const { state } = useStore();
+  const bizMap = React.useMemo(
+    () => new Map(state.businesses.map((b) => [b.id, b.name])),
+    [state.businesses],
+  );
+  return React.useMemo<ColumnDef<StaffMember>[]>(
+    () => [
+      { key: "name", header: "Nama", width: "w-[24%]" },
+      { key: "role", header: "Role", width: "w-[18%]", badge: "outline" },
+      { key: "phone", header: "Telepon", width: "w-[20%]", mono: true },
+      {
+        key: "businessId",
+        header: "Unit",
+        width: "w-[20%]",
+        render: (v) => bizMap.get(String(v)) ?? "—",
+      },
+      {
+        key: "joinedAt",
+        header: "Gabung",
+        width: "w-[14%]",
+        render: (v) => fmtDate(Number(v)),
+      },
+    ],
+    [bizMap],
+  );
+}
+
+export function useStaffController(): CrudController<StaffMember> {
+  const { state, dispatch } = useStore();
+  return React.useMemo(
+    () => ({
+      items: state.staff,
+      getId: (s) => s.id,
+      blank: () => ({
+        id: `staff-${Math.random().toString(36).slice(2, 10)}`,
+        businessId: state.businesses[0]?.id ?? "",
+        name: "Staff baru",
+        role: "Kasir",
+        phone: "",
+        joinedAt: Date.now(),
+      }),
+      create: (member) => dispatch({ type: "staff.upsert", member }),
+      update: (id, patch) => {
+        const cur = state.staff.find((s) => s.id === id);
+        if (!cur) return;
+        dispatch({ type: "staff.upsert", member: { ...cur, ...patch, id } });
+      },
+      remove: (id) => dispatch({ type: "staff.delete", id }),
+    }),
+    [state.staff, state.businesses, dispatch],
+  );
+}
 
 export function StaffView() {
-  const staff = useStaff();
-  const businesses = useBusinesses();
-  const bizMap = new Map(businesses.map((b) => [b.id, b]));
+  const controller = useStaffController();
+  const columns = useColumns();
+  const units = new Set(controller.items.map((s) => s.businessId)).size;
   return (
-    <div className="space-y-5">
-      <SectionHead eyebrow="Staff" title="Tim & karyawan" subtitle="Kelola staff lintas unit usaha." />
-      <div className="grid gap-4 md:grid-cols-3">
-        <StatCard icon={Users} label="Total staff" value={staff.length} />
-        <StatCard label="Unit dengan staff" value={new Set(staff.map((s) => s.businessId)).size} />
-        <StatCard label="Role unik" value={new Set(staff.map((s) => s.role)).size} />
-      </div>
-
-      <div className="flex justify-end">
-        <Button size="sm" className="gap-1"><Plus className="size-4" /> Staff baru</Button>
-      </div>
-
-      <div className="grid gap-3 md:grid-cols-2">
-        {staff.map((s) => (
-          <Card key={s.id} className="border-border/60 bg-card/60">
-            <CardContent className="space-y-1 p-5">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium">{s.name}</p>
-                <Badge variant="outline" className="rounded-full text-[10px]">{s.role}</Badge>
-              </div>
-              <p className="text-xs text-muted-foreground">{s.phone}</p>
-              <p className="text-[11px] text-muted-foreground">
-                {bizMap.get(s.businessId)?.name ?? "—"} · gabung {fmtDate(s.joinedAt)}
-              </p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    </div>
+    <CrudListView
+      meta={META}
+      controller={controller}
+      columns={columns}
+      editPath={(id) => `${ADMIN_BASE}/staff/${id}`}
+      description={`${units} unit terisi`}
+    />
   );
 }

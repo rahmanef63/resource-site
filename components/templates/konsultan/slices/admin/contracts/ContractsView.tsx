@@ -1,52 +1,69 @@
 "use client";
 
-import { FileSignature, Plus } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { SectionHead } from "@/components/templates/_shared/ui/section-head";
-import { StatCard } from "@/components/templates/_shared/ui/stat-card";
-import { fmtDate, useClients, useContracts } from "../../../shared/store";
+import * as React from "react";
+import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
+import type { ColumnDef, CrudController, EntityMeta } from "@/components/templates/_shared/crud/types";
+import { useStore } from "../../../shared/store";
+import { ADMIN_BASE } from "../../../shared/nav-config";
+import type { Contract } from "../../../shared/types";
+
+const META: EntityMeta = { label: "Contract", labelPlural: "Contracts" };
+
+const COLUMNS: ColumnDef<Contract>[] = [
+  { key: "title", header: "Title", width: "w-[32%]" },
+  { key: "status", header: "Status", width: "w-[14%]", badge: "outline" },
+  {
+    key: "signedAt",
+    header: "Signed",
+    width: "w-[18%]",
+    render: (v) => (typeof v === "number" ? new Date(v).toLocaleDateString() : "—"),
+  },
+  {
+    key: "endsAt",
+    header: "Ends",
+    width: "w-[18%]",
+    render: (v) => (typeof v === "number" ? new Date(v).toLocaleDateString() : "—"),
+  },
+  { key: "clientId", header: "Client ID", width: "w-[10%]", mono: true },
+];
+
+function useContractsController(): CrudController<Contract> {
+  const { state, dispatch } = useStore();
+  return React.useMemo(
+    () => ({
+      items: state.contracts,
+      getId: (c) => c.id,
+      blank: () => ({
+        id: `ctr-${Math.random().toString(36).slice(2, 10)}`,
+        proposalId: state.proposals[0]?.id ?? "",
+        clientId: state.clients[0]?.id ?? "",
+        title: "New Contract",
+        termsSummary: "",
+        status: "draft",
+        signedAt: Date.now(),
+        endsAt: Date.now() + 90 * 24 * 60 * 60 * 1000,
+      }),
+      create: (contract) => dispatch({ type: "contract.upsert", contract }),
+      update: (id, patch) => {
+        const cur = state.contracts.find((c) => c.id === id);
+        if (!cur) return;
+        dispatch({ type: "contract.upsert", contract: { ...cur, ...patch, id } });
+      },
+      remove: (id) => dispatch({ type: "contract.delete", id }),
+    }),
+    [state.contracts, state.clients, state.proposals, dispatch],
+  );
+}
 
 export function ContractsView() {
-  const contracts = useContracts();
-  const clients = useClients();
-  const cmap = new Map(clients.map((c) => [c.id, c]));
-  const signed = contracts.filter((c) => c.status === "signed").length;
+  const controller = useContractsController();
   return (
-    <div className="space-y-5">
-      <SectionHead
-        eyebrow="Contracts"
-        title="Kontrak ID-aware"
-        subtitle="Template kontrak sesuai hukum Indonesia — bilingual ID/EN."
-      />
-      <div className="grid gap-4 md:grid-cols-3">
-        <StatCard icon={FileSignature} label="Total kontrak" value={contracts.length} />
-        <StatCard label="Aktif" value={signed} />
-        <StatCard label="Expired" value={contracts.filter((c) => c.status === "expired").length} />
-      </div>
-
-      <div className="flex justify-end">
-        <Button size="sm" className="gap-1"><Plus className="size-4" /> Kontrak baru</Button>
-      </div>
-
-      <div className="grid gap-3">
-        {contracts.map((c) => (
-          <Card key={c.id} className="border-border/60 bg-card/60">
-            <CardContent className="space-y-2 p-5">
-              <div className="flex items-center justify-between">
-                <Badge variant="outline" className="rounded-full text-[10px] capitalize">{c.status}</Badge>
-                <span className="text-[11px] text-muted-foreground">
-                  Signed {fmtDate(c.signedAt)} · ends {fmtDate(c.endsAt)}
-                </span>
-              </div>
-              <p className="text-sm font-medium">{c.title}</p>
-              <p className="text-xs text-muted-foreground">Klien: {cmap.get(c.clientId)?.company ?? "—"}</p>
-              <p className="text-xs text-foreground/70">{c.termsSummary}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    </div>
+    <CrudListView
+      meta={META}
+      controller={controller}
+      columns={COLUMNS}
+      editPath={(id) => `${ADMIN_BASE}/contracts/${id}`}
+      description="Kontrak ID-aware bilingual"
+    />
   );
 }

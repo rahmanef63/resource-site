@@ -1,42 +1,58 @@
 "use client";
 
-import { Plus, Users } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { SectionHead } from "@/components/templates/_shared/ui/section-head";
-import { StatCard } from "@/components/templates/_shared/ui/stat-card";
-import { useCustomers } from "../../../shared/store";
+import * as React from "react";
+import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
+import type { ColumnDef, CrudController, EntityMeta } from "@/components/templates/_shared/crud/types";
+import { useStore } from "../../../shared/store";
+import { ADMIN_BASE } from "../../../shared/nav-config";
+import type { Customer } from "../../../shared/types";
+
+const META: EntityMeta = { label: "Pelanggan", labelPlural: "Customers" };
+
+const COLUMNS: ColumnDef<Customer>[] = [
+  { key: "name", header: "Nama", width: "w-[26%]" },
+  { key: "phone", header: "Telepon", width: "w-[22%]", mono: true },
+  { key: "city", header: "Kota", width: "w-[16%]" },
+  { key: "totalSpentLabel", header: "Total spent", width: "w-[14%]" },
+  { key: "orderCount", header: "Order", width: "w-[8%]" },
+];
+
+export function useCustomersController(): CrudController<Customer> {
+  const { state, dispatch } = useStore();
+  return React.useMemo(
+    () => ({
+      items: state.customers,
+      getId: (c) => c.id,
+      blank: () => ({
+        id: `cust-${Math.random().toString(36).slice(2, 10)}`,
+        name: "Pelanggan baru",
+        phone: "",
+        city: "",
+        totalSpentLabel: "Rp 0",
+        orderCount: 0,
+      }),
+      create: (customer) => dispatch({ type: "customer.upsert", customer }),
+      update: (id, patch) => {
+        const cur = state.customers.find((c) => c.id === id);
+        if (!cur) return;
+        dispatch({ type: "customer.upsert", customer: { ...cur, ...patch, id } });
+      },
+      remove: (id) => dispatch({ type: "customer.delete", id }),
+    }),
+    [state.customers, dispatch],
+  );
+}
 
 export function CustomersView() {
-  const customers = useCustomers();
-  const totalOrders = customers.reduce((s, c) => s + c.orderCount, 0);
+  const controller = useCustomersController();
+  const totalOrders = controller.items.reduce((s, c) => s + c.orderCount, 0);
   return (
-    <div className="space-y-5">
-      <SectionHead eyebrow="Customers" title="Customers" subtitle="Profil pelanggan lintas unit usaha." />
-      <div className="grid gap-4 md:grid-cols-3">
-        <StatCard icon={Users} label="Total pelanggan" value={customers.length} />
-        <StatCard label="Total order" value={totalOrders} />
-        <StatCard label="Avg order/cust" value={customers.length ? Math.round(totalOrders / customers.length) : 0} />
-      </div>
-
-      <div className="flex justify-end">
-        <Button size="sm" className="gap-1"><Plus className="size-4" /> Pelanggan baru</Button>
-      </div>
-
-      <div className="grid gap-3 md:grid-cols-2">
-        {customers.map((c) => (
-          <Card key={c.id} className="border-border/60 bg-card/60">
-            <CardContent className="space-y-1 p-5">
-              <p className="text-sm font-medium">{c.name}</p>
-              <p className="text-xs text-muted-foreground">{c.phone} · {c.city}</p>
-              <div className="flex items-center justify-between pt-2">
-                <p className="text-base font-semibold">{c.totalSpentLabel}</p>
-                <p className="text-[11px] text-muted-foreground">{c.orderCount} order</p>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    </div>
+    <CrudListView
+      meta={META}
+      controller={controller}
+      columns={COLUMNS}
+      editPath={(id) => `${ADMIN_BASE}/customers/${id}`}
+      description={`${totalOrders} order kumulatif`}
+    />
   );
 }

@@ -74,5 +74,7 @@ export type Action =
   | { type: "litreview.upsert"; lit: LitReview }
   | { type: "litreview.delete"; id: string }
   | { type: "aireader.create"; session: AiReaderSession }
+  | { type: "aireader.upsert"; session: AiReaderSession }
+  | { type: "aireader.delete"; id: string }
   | { type: "hydrate"; state: State }
   | { type: "reset" };

@@ -1,55 +1,71 @@
 "use client";
 
-import { FileText, Plus } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { SectionHead } from "@/components/templates/_shared/ui/section-head";
-import { StatCard } from "@/components/templates/_shared/ui/stat-card";
-import { fmtDate, useDocuments } from "../../../shared/store";
+import * as React from "react";
+import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
+import type {
+  ColumnDef,
+  CrudController,
+  EntityMeta,
+} from "@/components/templates/_shared/crud/types";
+import { ADMIN_BASE, PUBLIC_BASE } from "../../../shared/nav-config";
+import { useStore } from "../../../shared/store";
+import type { Document } from "../../../shared/types";
+
+const META: EntityMeta = {
+  label: "Dokumen",
+  labelPlural: "Dokumen",
+  publicHref: () => `${PUBLIC_BASE}/library`,
+};
+
+const COLUMNS: ColumnDef<Document>[] = [
+  { key: "title", header: "Judul", width: "w-[30%]" },
+  { key: "authors", header: "Penulis", width: "w-[22%]" },
+  { key: "year", header: "Tahun", width: "w-[8%]" },
+  { key: "tag", header: "Tag", width: "w-[12%]", badge: "outline" },
+  { key: "status", header: "Status", width: "w-[10%]", badge: "secondary" },
+  { key: "pages", header: "Hal", width: "w-[6%]" },
+];
+
+export function useDocumentsController(): CrudController<Document> {
+  const { state, dispatch } = useStore();
+  return React.useMemo(
+    () => ({
+      items: state.documents,
+      getId: (d) => d.id,
+      blank: () => ({
+        id: `doc-${Date.now().toString(36)}`,
+        title: "Dokumen baru",
+        authors: "",
+        year: new Date().getFullYear(),
+        fileLabel: "PDF · 0 hal",
+        abstract: "",
+        tag: "umum",
+        status: "uploaded" as const,
+        uploadedAt: Date.now(),
+        pages: 0,
+        highlights: 0,
+      }),
+      create: (doc) => dispatch({ type: "doc.upsert", doc }),
+      update: (id, patch) => {
+        const cur = state.documents.find((d) => d.id === id);
+        if (!cur) return;
+        dispatch({ type: "doc.upsert", doc: { ...cur, ...patch, id } });
+      },
+      remove: (id) => dispatch({ type: "doc.delete", id }),
+    }),
+    [state.documents, dispatch],
+  );
+}
 
 export function DocumentsView() {
-  const docs = useDocuments();
-  const indexed = docs.filter((d) => d.status === "indexed").length;
-  const reviewed = docs.filter((d) => d.status === "reviewed").length;
-  const totalPages = docs.reduce((s, d) => s + d.pages, 0);
+  const controller = useDocumentsController();
   return (
-    <div className="space-y-5">
-      <SectionHead
-        eyebrow="Library"
-        title="Documents"
-        subtitle="Upload PDF/DOCX, OCR otomatis, indeks vektor untuk pencarian semantik."
-        cta={{ label: "Upload baru", href: "#" }}
-      />
-      <div className="grid gap-4 md:grid-cols-4">
-        <StatCard icon={FileText} label="Total dokumen" value={docs.length} />
-        <StatCard label="Sudah diindeks" value={indexed} />
-        <StatCard label="Sudah direview" value={reviewed} />
-        <StatCard label="Total halaman" value={totalPages} />
-      </div>
-
-      <div className="flex justify-end">
-        <Button size="sm" className="gap-1"><Plus className="size-4" /> Upload dokumen</Button>
-      </div>
-
-      <div className="grid gap-3 md:grid-cols-2">
-        {docs.map((d) => (
-          <Card key={d.id} className="border-border/60 bg-card/60">
-            <CardContent className="space-y-2 p-5">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium">{d.title}</p>
-                <Badge variant="outline" className="rounded-full text-[10px] capitalize">{d.status}</Badge>
-              </div>
-              <p className="text-xs text-muted-foreground">{d.authors} · {d.year}</p>
-              <p className="line-clamp-2 text-xs text-foreground/70">{d.abstract}</p>
-              <div className="flex items-center justify-between pt-2 text-[11px] text-muted-foreground">
-                <span>{d.fileLabel} · {d.highlights} highlight</span>
-                <span>{fmtDate(d.uploadedAt)}</span>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    </div>
+    <CrudListView
+      meta={META}
+      controller={controller}
+      columns={COLUMNS}
+      editPath={(id) => `${ADMIN_BASE}/documents/${id}`}
+      description="Upload PDF/DOCX, OCR otomatis, indeks vektor untuk pencarian semantik."
+    />
   );
 }

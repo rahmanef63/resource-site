@@ -1,47 +1,76 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import * as React from "react";
+import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
+import type {
+  ColumnDef,
+  CrudController,
+  EntityMeta,
+} from "@/components/templates/_shared/crud/types";
 import { fmtDate, useStore } from "../../../shared/store";
-import type { SubStatus } from "../../../shared/types";
+import { ADMIN_BASE } from "../../../shared/nav-config";
+import type { Subscription } from "../../../shared/types";
 
-const STATUS_VARIANT: Record<SubStatus, "default" | "secondary" | "outline" | "destructive"> = {
-  active: "default",
-  trialing: "secondary",
-  past_due: "destructive",
-  canceled: "outline",
-};
+const META: EntityMeta = { label: "Subscription", labelPlural: "Subscriptions" };
 
 const fmtMrr = (cents: number) => `$${(cents / 100).toFixed(0)}/mo`;
 
-export function SubscriptionsView() {
-  const { state } = useStore();
-  const active = state.subscriptions.filter((s) => s.status === "active");
-  const mrrCents = active.reduce((acc, s) => acc + s.mrrCents, 0);
+const COLUMNS: ColumnDef<Subscription>[] = [
+  { key: "customerEmail", header: "Customer", width: "w-[32%]", mono: true },
+  { key: "plan", header: "Plan", width: "w-[12%]", badge: "outline" },
+  {
+    key: "mrrCents",
+    header: "MRR",
+    width: "w-[12%]",
+    render: (v) => <span className="tabular-nums">{fmtMrr(Number(v))}</span>,
+  },
+  { key: "status", header: "Status", width: "w-[14%]", badge: "secondary" },
+  {
+    key: "renewsAt",
+    header: "Renews",
+    width: "w-[16%]",
+    render: (v) => <span className="tabular-nums">{fmtDate(Number(v))}</span>,
+  },
+];
 
+function useSubscriptionsController(): CrudController<Subscription> {
+  const { state, dispatch } = useStore();
+  return React.useMemo(
+    () => ({
+      items: state.subscriptions,
+      getId: (s) => s.id,
+      blank: () => ({
+        id: `sub-${Math.random().toString(36).slice(2, 10)}`,
+        customerId: "",
+        customerEmail: "",
+        plan: "team",
+        mrrCents: 4900,
+        status: "trialing",
+        renewsAt: Date.now() + 30 * 24 * 60 * 60 * 1000,
+      }),
+      create: (s) => dispatch({ type: "SUBSCRIPTION_UPSERT", payload: s }),
+      update: (id, patch) =>
+        dispatch({
+          type: "SUBSCRIPTION_UPSERT",
+          payload: { ...state.subscriptions.find((x) => x.id === id)!, ...patch, id },
+        }),
+      remove: (id) => dispatch({ type: "SUBSCRIPTION_DELETE", payload: { id } }),
+    }),
+    [state.subscriptions, dispatch],
+  );
+}
+
+export function SubscriptionsView() {
+  const controller = useSubscriptionsController();
+  const active = controller.items.filter((s) => s.status === "active");
+  const mrrCents = active.reduce((acc, s) => acc + s.mrrCents, 0);
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Subscriptions</h1>
-        <p className="text-sm text-muted-foreground">
-          {state.subscriptions.length} total · {active.length} active · MRR ${(mrrCents / 100).toFixed(0)}
-        </p>
-      </div>
-      <Card className="border-border/60">
-        <CardContent className="p-0">
-          <ul className="divide-y divide-border/60">
-            {state.subscriptions.map((s) => (
-              <li key={s.id} className="grid grid-cols-1 gap-1 px-5 py-4 text-sm md:grid-cols-12 md:items-center">
-                <p className="font-medium md:col-span-4">{s.customerEmail}</p>
-                <Badge variant="outline" className="w-fit md:col-span-2">{s.plan}</Badge>
-                <p className="md:col-span-2">{fmtMrr(s.mrrCents)}</p>
-                <Badge variant={STATUS_VARIANT[s.status]} className="w-fit md:col-span-2">{s.status}</Badge>
-                <p className="text-xs text-muted-foreground md:col-span-2">renews {fmtDate(s.renewsAt)}</p>
-              </li>
-            ))}
-          </ul>
-        </CardContent>
-      </Card>
-    </div>
+    <CrudListView
+      meta={META}
+      controller={controller}
+      columns={COLUMNS}
+      editPath={(id) => `${ADMIN_BASE}/subscriptions/${id}`}
+      description={`${active.length} active · MRR $${(mrrCents / 100).toFixed(0)}`}
+    />
   );
 }

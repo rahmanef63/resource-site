@@ -1,11 +1,13 @@
 import {
   CreditCard,
+  DollarSign,
   FileText,
   Inbox,
   LayoutDashboard,
   Megaphone,
   Newspaper,
   Settings,
+  Sparkles,
   Users,
 } from "lucide-react";
 import type {
@@ -64,6 +66,8 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
     { id: "subscriptions", label: "Subscriptions", href: `${ADMIN_BASE}/subscriptions`,    icon: CreditCard,      count: activeSubs || null },
     { id: "leads",         label: "Leads",         href: `${ADMIN_BASE}/leads`,            icon: Inbox,           count: newLeads || null },
     { id: "posts",         label: "Posts",         href: `${ADMIN_BASE}/posts`,            icon: FileText,        count: draftPosts || null },
+    { id: "features",      label: "Features",      href: `${ADMIN_BASE}/features`,         icon: Sparkles,        count: state.features.length || null },
+    { id: "pricing",       label: "Pricing",       href: `${ADMIN_BASE}/pricing`,          icon: DollarSign,      count: state.pricing.length || null },
     { id: "changelog",     label: "Changelog",     href: `${ADMIN_BASE}/changelog`,        icon: Megaphone,       count: state.changelogEntries.length },
   ];
 }

@@ -1,5 +1,5 @@
-import { ClientsList } from "@/components/templates/agency-studio/slices/admin/clients/ClientsList";
+import { ClientsView } from "@/components/templates/agency-studio/slices/admin/clients/ClientsView";
 
 export default function Page() {
-  return <ClientsList />;
+  return <ClientsView />;
 }

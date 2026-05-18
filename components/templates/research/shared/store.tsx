@@ -73,6 +73,17 @@ function reducer(state: State, action: Action): State {
     case "aireader.create":
       return { ...state, aiReaderSessions: [action.session, ...state.aiReaderSessions] };
 
+    case "aireader.upsert": {
+      const idx = state.aiReaderSessions.findIndex((s) => s.id === action.session.id);
+      const aiReaderSessions =
+        idx >= 0
+          ? state.aiReaderSessions.map((s) => (s.id === action.session.id ? action.session : s))
+          : [action.session, ...state.aiReaderSessions];
+      return { ...state, aiReaderSessions };
+    }
+    case "aireader.delete":
+      return { ...state, aiReaderSessions: state.aiReaderSessions.filter((s) => s.id !== action.id) };
+
     default:
       return state;
   }

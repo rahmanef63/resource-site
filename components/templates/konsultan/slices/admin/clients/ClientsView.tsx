@@ -1,45 +1,60 @@
 "use client";
 
-import { Plus, Users } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { SectionHead } from "@/components/templates/_shared/ui/section-head";
-import { StatCard } from "@/components/templates/_shared/ui/stat-card";
-import { fmtDate, useClients } from "../../../shared/store";
+import * as React from "react";
+import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
+import type { ColumnDef, CrudController, EntityMeta } from "@/components/templates/_shared/crud/types";
+import { useStore } from "../../../shared/store";
+import { ADMIN_BASE } from "../../../shared/nav-config";
+import type { Client } from "../../../shared/types";
+
+const META: EntityMeta = { label: "Client", labelPlural: "Clients" };
+
+const COLUMNS: ColumnDef<Client>[] = [
+  { key: "name", header: "Name", width: "w-[22%]" },
+  { key: "company", header: "Company", width: "w-[22%]" },
+  { key: "industry", header: "Industry", width: "w-[16%]" },
+  { key: "city", header: "City", width: "w-[14%]" },
+  { key: "status", header: "Status", width: "w-[12%]", badge: "outline" },
+];
+
+function useClientsController(): CrudController<Client> {
+  const { state, dispatch } = useStore();
+  return React.useMemo(
+    () => ({
+      items: state.clients,
+      getId: (c) => c.id,
+      blank: () => ({
+        id: `client-${Math.random().toString(36).slice(2, 10)}`,
+        name: "New Client",
+        company: "",
+        industry: "",
+        email: "",
+        phone: "",
+        city: "",
+        status: "lead",
+        createdAt: Date.now(),
+      }),
+      create: (client) => dispatch({ type: "client.upsert", client }),
+      update: (id, patch) => {
+        const cur = state.clients.find((c) => c.id === id);
+        if (!cur) return;
+        dispatch({ type: "client.upsert", client: { ...cur, ...patch, id } });
+      },
+      remove: (id) => dispatch({ type: "client.delete", id }),
+    }),
+    [state.clients, dispatch],
+  );
+}
 
 export function ClientsView() {
-  const clients = useClients();
-  const active = clients.filter((c) => c.status === "active").length;
-  const leads = clients.filter((c) => c.status === "lead").length;
+  const controller = useClientsController();
   return (
-    <div className="space-y-5">
-      <SectionHead eyebrow="CRM" title="Clients" subtitle="Kelola lead, klien aktif, dan engagement selesai." />
-      <div className="grid gap-4 md:grid-cols-3">
-        <StatCard icon={Users} label="Total client" value={clients.length} />
-        <StatCard label="Aktif" value={active} />
-        <StatCard label="Lead baru" value={leads} />
-      </div>
-
-      <div className="flex justify-end">
-        <Button size="sm" className="gap-1"><Plus className="size-4" /> Client baru</Button>
-      </div>
-
-      <div className="grid gap-3 md:grid-cols-2">
-        {clients.map((c) => (
-          <Card key={c.id} className="border-border/60 bg-card/60">
-            <CardContent className="space-y-1 p-5">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium">{c.name}</p>
-                <Badge variant="outline" className="rounded-full text-[10px] capitalize">{c.status}</Badge>
-              </div>
-              <p className="text-xs text-muted-foreground">{c.company} · {c.industry}</p>
-              <p className="text-[11px] text-muted-foreground">{c.email} · {c.phone}</p>
-              <p className="text-[11px] text-muted-foreground">{c.city} · sejak {fmtDate(c.createdAt)}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    </div>
+    <CrudListView
+      meta={META}
+      controller={controller}
+      columns={COLUMNS}
+      editPath={(id) => `${ADMIN_BASE}/clients/${id}`}
+      description="CRM lead → aktif → completed"
+    />
   );
 }
