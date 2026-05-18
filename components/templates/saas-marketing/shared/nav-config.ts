@@ -1,7 +1,23 @@
-import type { FooterColumn, NavItem } from "@/components/templates/_shared/types/common";
+import {
+  CreditCard,
+  FileText,
+  Inbox,
+  LayoutDashboard,
+  Megaphone,
+  Settings,
+  Users,
+} from "lucide-react";
+import type {
+  AdminNavItem,
+  FooterColumn,
+  NavItem,
+  User,
+} from "@/components/templates/_shared/types/common";
 import { DEFAULT_SITE_CONFIG } from "./site-config";
+import type { State } from "./types";
 
 export const PUBLIC_BASE = "/preview/saas-marketing-os/public";
+export const ADMIN_BASE = "/preview/saas-marketing-os/admin";
 
 export const PUBLIC_NAV: NavItem[] = [
   { label: "Features",  href: `${PUBLIC_BASE}/features` },
@@ -27,3 +43,28 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
 ];
 
 export const FOOTER_TAGLINE = "Built with SaaS Marketing OS";
+
+export const OWNER_USER: User = {
+  name: "Maya K.",
+  role: "growth lead",
+  initials: "MK",
+};
+
+export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
+  const activeSubs = state.subscriptions.filter((s) => s.status === "active").length;
+  const newLeads = state.leads.filter((l) => l.status === "new").length;
+  const draftPosts = state.posts.filter((p) => p.status === "draft").length;
+  const activeCustomers = state.customers.filter((c) => c.status === "active").length;
+  return [
+    { id: "dashboard",     label: "Dashboard",     href: ADMIN_BASE,                       icon: LayoutDashboard, count: null },
+    { id: "customers",     label: "Customers",     href: `${ADMIN_BASE}/customers`,        icon: Users,           count: activeCustomers || null },
+    { id: "subscriptions", label: "Subscriptions", href: `${ADMIN_BASE}/subscriptions`,    icon: CreditCard,      count: activeSubs || null },
+    { id: "leads",         label: "Leads",         href: `${ADMIN_BASE}/leads`,            icon: Inbox,           count: newLeads || null },
+    { id: "posts",         label: "Posts",         href: `${ADMIN_BASE}/posts`,            icon: FileText,        count: draftPosts || null },
+    { id: "changelog",     label: "Changelog",     href: `${ADMIN_BASE}/changelog`,        icon: Megaphone,       count: state.changelogEntries.length },
+  ];
+}
+
+export const ADMIN_SETTINGS_NAV: AdminNavItem[] = [
+  { id: "workspace", label: "Workspace", href: `${ADMIN_BASE}/settings`, icon: Settings },
+];

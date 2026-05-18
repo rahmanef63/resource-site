@@ -1,5 +1,14 @@
 import { PUBLIC_BASE } from "./nav-config";
-import type { BlogPost, ChangelogEntry, FeatureItem, PricingTier, State } from "./types";
+import type {
+  BlogPost,
+  ChangelogEntry,
+  Customer,
+  FeatureItem,
+  Lead,
+  PricingTier,
+  State,
+  Subscription,
+} from "./types";
 
 const CONTACT_HREF = `${PUBLIC_BASE}/contact`;
 
@@ -102,9 +111,40 @@ export const SEED_CHANGELOG: ChangelogEntry[] = [
   { id: "v-1-5-0", version: "v1.5.0", date: day(48), kind: "feature", title: "Reusable signer roles",             body: "Define 'CFO', 'Legal', etc. and reuse across templates." },
 ];
 
+export const SEED_CUSTOMERS: Customer[] = [
+  { id: "cus-1", email: "rae@northwind.co",    name: "Rae H.",     plan: "team",  status: "active",  startedAt: day(62) },
+  { id: "cus-2", email: "ivo@kestrel.app",     name: "Ivo M.",     plan: "scale", status: "active",  startedAt: day(128) },
+  { id: "cus-3", email: "ann@swiftpay.io",     name: "Annika R.",  plan: "team",  status: "trial",   startedAt: day(4) },
+  { id: "cus-4", email: "dev@orbitlabs.dev",   name: "Devi P.",    plan: "free",  status: "active",  startedAt: day(21) },
+  { id: "cus-5", email: "luca@bluemoon.studio", name: "Luca B.",   plan: "team",  status: "churned", startedAt: day(190) },
+];
+
+export const SEED_SUBSCRIPTIONS: Subscription[] = [
+  { id: "sub-1", customerId: "cus-1", customerEmail: "rae@northwind.co", plan: "team",  mrrCents: 4900,  status: "active",   renewsAt: day(-18) },
+  { id: "sub-2", customerId: "cus-2", customerEmail: "ivo@kestrel.app",  plan: "scale", mrrCents: 49000, status: "active",   renewsAt: day(-9) },
+  { id: "sub-3", customerId: "cus-3", customerEmail: "ann@swiftpay.io",  plan: "team",  mrrCents: 4900,  status: "trialing", renewsAt: day(-10) },
+  { id: "sub-4", customerId: "cus-5", customerEmail: "luca@bluemoon.studio", plan: "team", mrrCents: 4900, status: "canceled", renewsAt: day(15) },
+];
+
+export const SEED_LEADS: Lead[] = [
+  { id: "lead-1", email: "founder@nimbus.dev",  name: "Sam O.",    source: "website",  status: "new",       ts: day(1) },
+  { id: "lead-2", email: "ops@flint.studio",    name: "Theo G.",   source: "referral", status: "contacted", ts: day(3) },
+  { id: "lead-3", email: "cto@vega.health",     name: "Yara F.",   source: "ad",       status: "qualified", ts: day(6) },
+  { id: "lead-4", email: "pm@harbor.app",       name: "Indi C.",   source: "event",    status: "won",       ts: day(14) },
+];
+
+const ADMIN_POSTS: BlogPost[] = SEED_POSTS.map((p, i) => ({
+  ...p,
+  status: i === 0 ? "draft" : "published",
+}));
+
 export const SEED_STATE: State = {
   pricing: SEED_PRICING,
   features: SEED_FEATURES,
-  posts: SEED_POSTS,
+  posts: ADMIN_POSTS,
   changelog: SEED_CHANGELOG,
+  customers: SEED_CUSTOMERS,
+  subscriptions: SEED_SUBSCRIPTIONS,
+  leads: SEED_LEADS,
+  changelogEntries: SEED_CHANGELOG,
 };

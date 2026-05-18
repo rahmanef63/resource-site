@@ -25,6 +25,8 @@ export type BlogPost = {
   author: string;
   publishedAt: number;
   tags: string[];
+  /** admin-only: workflow status. Optional for backward compat. */
+  status?: "draft" | "scheduled" | "published";
 };
 
 export type ChangelogEntry = {
@@ -36,11 +38,47 @@ export type ChangelogEntry = {
   body: string;
 };
 
+export type CustomerStatus = "trial" | "active" | "churned";
+export type Customer = {
+  id: string;
+  email: string;
+  name: string;
+  plan: "free" | "team" | "scale";
+  status: CustomerStatus;
+  startedAt: number;
+};
+
+export type SubStatus = "active" | "trialing" | "past_due" | "canceled";
+export type Subscription = {
+  id: string;
+  customerId: string;
+  customerEmail: string;
+  plan: "team" | "scale";
+  mrrCents: number;
+  status: SubStatus;
+  renewsAt: number;
+};
+
+export type LeadStatus = "new" | "contacted" | "qualified" | "won" | "lost";
+export type Lead = {
+  id: string;
+  email: string;
+  name: string;
+  source: "website" | "referral" | "ad" | "event";
+  status: LeadStatus;
+  ts: number;
+};
+
 export type State = {
   pricing: PricingTier[];
   features: FeatureItem[];
   posts: BlogPost[];
   changelog: ChangelogEntry[];
+  customers: Customer[];
+  subscriptions: Subscription[];
+  leads: Lead[];
+  /** alias for changelog from the admin nav perspective */
+  changelogEntries: ChangelogEntry[];
 };
 
 export type Action =
