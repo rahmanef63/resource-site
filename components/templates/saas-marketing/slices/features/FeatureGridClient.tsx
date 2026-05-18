@@ -1,25 +1,42 @@
 "use client";
 
+import {
+  FeatureGridSection,
+  type FeatureItem,
+} from "@/features/feature-grid";
 import { useFeatures } from "../../shared/store";
 
 /**
- * Client-side data grid for the public Features page. Reads live items from
- * the template store via useFeatures(), so admin edits propagate via the
- * BroadcastChannel sync in createTemplateStore (cross-tab live update).
+ * Hybrid wrapper: server chrome (FeaturesPage) renders this client wrap which
+ * reads live items via useFeatures() and feeds the canonical FeatureGridSection
+ * slice (DRY+SSOT). Admin edits propagate via the createTemplateStore
+ * BroadcastChannel.
  */
-export function FeatureGridClient() {
+export function FeatureGridClient({
+  eyebrow,
+  title,
+  subtitle,
+}: {
+  eyebrow?: string;
+  title?: string;
+  subtitle?: string;
+}) {
   const features = useFeatures();
+  const items: FeatureItem[] = features.map((f) => ({
+    id: f.id,
+    title: f.title,
+    body: f.blurb,
+    icon: f.icon,
+  }));
   return (
-    <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {features.map((f) => (
-        <div key={f.id} className="rounded-lg border border-border/60 bg-card p-6">
-          <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
-            {f.icon}
-          </p>
-          <h3 className="mt-2 text-base font-medium">{f.title}</h3>
-          <p className="mt-2 text-sm text-muted-foreground">{f.blurb}</p>
-        </div>
-      ))}
-    </div>
+    <FeatureGridSection
+      eyebrow={eyebrow}
+      title={title}
+      subtitle={subtitle}
+      items={items}
+      columns={3}
+      layout="cards"
+      className="!p-0"
+    />
   );
 }

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "pricing-page",
+  "version": "0.1.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "Pricing Page",
+  "description": "Reusable prop-driven pricing section: header (eyebrow + title + subtitle), responsive tiers grid (2/3/4 cols), and optional FAQ accordion. Built on shadcn primitives (Button, Card, Accordion). Featured tier supports ring/scale/tint visual variants. No Convex, no env — fully composed by templates via <PricingSection tiers={...} />.",
+  "namespace": "@/features/pricing-page",
+  "frontend": {
+    "slicePath": "frontend/slices/pricing-page",
+    "configExport": "pricingPageFeature"
+  },
+  "convex": {
+    "tablesExport": "",
+    "schemaPath": "",
+    "rootPaths": []
+  },
+  "deps": {
+    "npm": ["lucide-react@^0.400.0", "next@^15"],
+    "shadcn": ["button", "card", "accordion"],
+    "env": [],
+    "peers": []
+  },
+  "registers": [],
+  "audit": [],
+  "license": "MIT",
+  "tags": ["ui", "marketing", "pricing", "section"]
+}
