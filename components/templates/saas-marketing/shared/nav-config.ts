@@ -4,6 +4,7 @@ import {
   Inbox,
   LayoutDashboard,
   Megaphone,
+  Newspaper,
   Settings,
   Users,
 } from "lucide-react";
@@ -55,8 +56,10 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
   const newLeads = state.leads.filter((l) => l.status === "new").length;
   const draftPosts = state.posts.filter((p) => p.status === "draft").length;
   const activeCustomers = state.customers.filter((c) => c.status === "active").length;
+  const customPages = state.pages.filter((p) => !p.systemPage).length;
   return [
     { id: "dashboard",     label: "Dashboard",     href: ADMIN_BASE,                       icon: LayoutDashboard, count: null },
+    { id: "pages",         label: "Pages",         href: `${ADMIN_BASE}/pages`,            icon: Newspaper,       count: customPages || null },
     { id: "customers",     label: "Customers",     href: `${ADMIN_BASE}/customers`,        icon: Users,           count: activeCustomers || null },
     { id: "subscriptions", label: "Subscriptions", href: `${ADMIN_BASE}/subscriptions`,    icon: CreditCard,      count: activeSubs || null },
     { id: "leads",         label: "Leads",         href: `${ADMIN_BASE}/leads`,            icon: Inbox,           count: newLeads || null },

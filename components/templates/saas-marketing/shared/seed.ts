@@ -138,6 +138,8 @@ const ADMIN_POSTS: BlogPost[] = SEED_POSTS.map((p, i) => ({
   status: i === 0 ? "draft" : "published",
 }));
 
+import { SEED_PAGES } from "./pages-seed";
+
 export const SEED_STATE: State = {
   pricing: SEED_PRICING,
   features: SEED_FEATURES,
@@ -147,4 +149,5 @@ export const SEED_STATE: State = {
   subscriptions: SEED_SUBSCRIPTIONS,
   leads: SEED_LEADS,
   changelogEntries: SEED_CHANGELOG,
+  pages: SEED_PAGES,
 };
