@@ -59,6 +59,25 @@ export { CollapseButton } from "./CollapseButton"
 export { PanelHeader } from "./PanelHeader"
 export { CollapsedPanel } from "./CollapsedPanel"
 export { LeftPanel, CenterPanel, RightPanel } from "./Panels"
+export {
+  PanelSection,
+  PanelLeftHeader,
+  PanelLeftItems,
+  PanelLeftFooter,
+  PanelCenterHeader,
+  PanelCenterItems,
+  PanelCenterFooter,
+  PanelRightHeader,
+  PanelRightItems,
+  PanelRightFooter,
+  PanelGroup,
+  PanelGroupLabel,
+  PanelGroupContent,
+  PanelMenu,
+  PanelMenuItem,
+  PanelMenuButton,
+  PanelSeparator,
+} from "./PanelSection"
 
 // Mobile Components
 export { MobileHeader, useMobileNavigation, MobilePanelWrapper, MobileInspectorDrawer } from "./mobile"

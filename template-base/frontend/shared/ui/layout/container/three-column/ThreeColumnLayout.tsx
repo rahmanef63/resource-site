@@ -44,6 +44,11 @@ export function ThreeColumnLayoutAdvanced(rawProps: ThreeColumnLayoutAdvancedPro
   const centerHeader = rawProps.centerHeader
   const rightHeader = rawProps.rightHeader
 
+  // Optional custom panel footers (pinned bottom, flex-shrink-0)
+  const leftFooter = rawProps.leftFooter
+  const centerFooter = rawProps.centerFooter
+  const rightFooter = rawProps.rightFooter
+
   // Panel widths
   const defaultLeftWidth = rawProps.leftWidth ?? presetConfig.leftWidth ?? 280
   const defaultRightWidth = rawProps.rightWidth ?? presetConfig.rightWidth ?? 400
@@ -286,12 +291,15 @@ export function ThreeColumnLayoutAdvanced(rawProps: ThreeColumnLayoutAdvancedPro
             <div className="absolute inset-0 flex flex-col bg-background z-10">
               {mobileLeftHeader !== undefined ? (
                 mobileLeftHeader != null && <div className="flex-shrink-0">{mobileLeftHeader}</div>
+              ) : leftHeader ? (
+                <div className="flex-shrink-0 border-b border-sidebar-border bg-sidebar/95">{leftHeader}</div>
               ) : (
                 <div className="flex items-center justify-between px-4 py-3 border-b bg-muted/30 flex-shrink-0">
                   <span className="text-base font-semibold">{leftLabel}</span>
                 </div>
               )}
-              <div className="flex-1 overflow-auto">{left}</div>
+              <div className="flex-1 min-h-0 overflow-auto">{left}</div>
+              {leftFooter && <div className="flex-shrink-0 border-t border-sidebar-border bg-sidebar/95 px-3 py-2 backdrop-blur">{leftFooter}</div>}
             </div>
           )}
 
@@ -321,8 +329,9 @@ export function ThreeColumnLayoutAdvanced(rawProps: ThreeColumnLayoutAdvancedPro
                   </Button>
                 )}
               </div>
-              {centerHeader && <div className="flex-shrink-0">{centerHeader}</div>}
-              <div className="flex-1 overflow-auto">{center}</div>
+              {centerHeader && <div className="flex-shrink-0 border-b border-sidebar-border bg-sidebar/95">{centerHeader}</div>}
+              <div className="flex-1 min-h-0 overflow-auto">{center}</div>
+              {centerFooter && <div className="flex-shrink-0 border-t border-sidebar-border bg-sidebar/95 px-3 py-2 backdrop-blur">{centerFooter}</div>}
             </div>
           )}
 
@@ -332,6 +341,8 @@ export function ThreeColumnLayoutAdvanced(rawProps: ThreeColumnLayoutAdvancedPro
               open={mobileInspectorOpen}
               onClose={closeInspectorDrawer}
               title={rightLabel}
+              header={rightHeader}
+              footer={rightFooter}
             >
               {right}
             </MobileInspectorDrawer>
@@ -382,24 +393,31 @@ export function ThreeColumnLayoutAdvanced(rawProps: ThreeColumnLayoutAdvancedPro
                 />
               ) : (
                 <>
-                  {leftHeader ? (
-                    <div className="flex-shrink-0">{leftHeader}</div>
-                  ) : (
-                    effectiveShowLeftCollapseButton && (
-                      <PanelHeader
-                        side="left"
-                        collapsed={leftCollapsed}
-                        onToggle={toggleLeft}
-                        label={leftLabel}
-                        showButton={effectiveShowLeftCollapseButton}
-                      >
-                        {leftLabel}
-                      </PanelHeader>
-                    )
+                  {/* TRIGGER — panel chrome, always rendered when enabled.
+                      Separate hierarchy from the slice's header. */}
+                  {effectiveShowLeftCollapseButton && (
+                    <PanelHeader
+                      side="left"
+                      collapsed={leftCollapsed}
+                      onToggle={toggleLeft}
+                      label={leftLabel}
+                      showButton
+                    >
+                      {leftLabel}
+                    </PanelHeader>
                   )}
-                  <div className="flex-1 overflow-auto">
+                  {/* HEADER slot — optional layout-managed header, rendered
+                      below the trigger (e.g. SidebarHeader builder). Most
+                      slices instead put PanelSection.Header inside `left`. */}
+                  {leftHeader && (
+                    <div className="flex-shrink-0 border-b border-sidebar-border bg-sidebar/95">{leftHeader}</div>
+                  )}
+                  <div className="flex-1 min-h-0 overflow-auto">
                     {left}
                   </div>
+                  {leftFooter && (
+                    <div className="flex-shrink-0 border-t border-sidebar-border bg-sidebar/95 px-3 py-2 backdrop-blur">{leftFooter}</div>
+                  )}
                 </>
               )}
             </div>
@@ -427,10 +445,13 @@ export function ThreeColumnLayoutAdvanced(rawProps: ThreeColumnLayoutAdvancedPro
           }}
           aria-label={centerLabel}
         >
-          {centerHeader && <div className="flex-shrink-0">{centerHeader}</div>}
-          <div className="flex-1 overflow-auto">
+          {centerHeader && <div className="flex-shrink-0 border-b border-sidebar-border bg-sidebar/95">{centerHeader}</div>}
+          <div className="flex-1 min-h-0 overflow-auto">
             {center}
           </div>
+          {centerFooter && (
+            <div className="flex-shrink-0 border-t border-sidebar-border bg-sidebar/95 px-3 py-2 backdrop-blur">{centerFooter}</div>
+          )}
         </div>
 
         {!hideRight && (
@@ -472,24 +493,28 @@ export function ThreeColumnLayoutAdvanced(rawProps: ThreeColumnLayoutAdvancedPro
                 />
               ) : (
                 <>
-                  {rightHeader ? (
-                    <div className="flex-shrink-0">{rightHeader}</div>
-                  ) : (
-                    effectiveShowRightCollapseButton && (
-                      <PanelHeader
-                        side="right"
-                        collapsed={rightCollapsed}
-                        onToggle={toggleRight}
-                        label={rightLabel}
-                        showButton={effectiveShowRightCollapseButton}
-                      >
-                        {rightLabel}
-                      </PanelHeader>
-                    )
+                  {/* TRIGGER — panel chrome, always rendered when enabled. */}
+                  {effectiveShowRightCollapseButton && (
+                    <PanelHeader
+                      side="right"
+                      collapsed={rightCollapsed}
+                      onToggle={toggleRight}
+                      label={rightLabel}
+                      showButton
+                    >
+                      {rightLabel}
+                    </PanelHeader>
                   )}
-                  <div className="flex-1 overflow-auto">
+                  {/* HEADER slot — optional layout-managed header below trigger. */}
+                  {rightHeader && (
+                    <div className="flex-shrink-0 border-b border-sidebar-border bg-sidebar/95">{rightHeader}</div>
+                  )}
+                  <div className="flex-1 min-h-0 overflow-auto">
                     {right}
                   </div>
+                  {rightFooter && (
+                    <div className="flex-shrink-0 border-t border-sidebar-border bg-sidebar/95 px-3 py-2 backdrop-blur">{rightFooter}</div>
+                  )}
                 </>
               )}
             </div>

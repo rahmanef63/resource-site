@@ -41,30 +41,24 @@ export function PanelHeader({
 
   return (
     <button
+      data-slot="panel-trigger"
+      data-panel-section="trigger"
       className={cn(
-        "flex items-center w-full h-10 gap-2 px-3",
-        "bg-muted/30 hover:bg-muted/50 transition-colors duration-150",
-        "border-b border-border/50",
+        // Trigger = panel chrome — icon-only collapse button. Label is
+        // owned by the slice (via PanelSection.Header) or by CollapsedPanel
+        // when collapsed. Uses sidebar tokens so it adapts to theme presets
+        // and sits ABOVE the slice header without reading as content.
+        "flex items-center w-full h-9 px-2",
+        "border-b border-sidebar-border bg-sidebar-accent/40 text-sidebar-foreground hover:bg-sidebar-accent transition-colors duration-150",
         "cursor-pointer select-none",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-inset",
+        side === "left" ? "justify-start" : "justify-end",
       )}
       onClick={onToggle}
       aria-label={ariaLabel}
       aria-expanded={!collapsed}
     >
-      {side === "left" && (
-        <Icon className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
-      )}
-
-      {!collapsed && children && (
-        <span className="flex-1 truncate text-sm font-medium text-left">
-          {children}
-        </span>
-      )}
-
-      {side === "right" && (
-        <Icon className="h-4 w-4 flex-shrink-0 text-muted-foreground ml-auto" />
-      )}
+      <Icon className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
     </button>
   )
 }

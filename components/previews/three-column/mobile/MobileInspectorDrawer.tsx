@@ -17,10 +17,14 @@ export interface MobileInspectorDrawerProps {
     open: boolean
     /** Close callback */
     onClose: () => void
-    /** Drawer content */
+    /** Drawer content (items section) */
     children: React.ReactNode
-    /** Optional title */
+    /** Optional title (shown in default header bar when no custom header) */
     title?: string
+    /** Optional custom header — replaces default title bar when provided */
+    header?: React.ReactNode
+    /** Optional footer pinned to bottom of drawer */
+    footer?: React.ReactNode
     /** Additional className */
     className?: string
 }
@@ -36,6 +40,8 @@ export function MobileInspectorDrawer({
     onClose,
     children,
     title,
+    header,
+    footer,
     className,
 }: MobileInspectorDrawerProps) {
     const [touchStart, setTouchStart] = React.useState<number | null>(null)
@@ -109,24 +115,37 @@ export function MobileInspectorDrawer({
                 </div>
 
                 {/* Header */}
-                <div className="flex items-center justify-between px-4 py-3 border-b shrink-0">
-                    <h3 className="font-semibold text-sm">
-                        {title || "Inspector"}
-                    </h3>
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={onClose}
-                        className="h-8 w-8"
-                    >
-                        <X className="h-4 w-4" />
-                    </Button>
-                </div>
+                {header ? (
+                    <div className="flex-shrink-0 border-b border-sidebar-border bg-sidebar/95">{header}</div>
+                ) : (
+                    <div className="flex items-center justify-between px-4 py-3 border-b shrink-0">
+                        <h3 className="font-semibold text-sm">
+                            {title || "Inspector"}
+                        </h3>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={onClose}
+                            className="h-8 w-8"
+                        >
+                            <X className="h-4 w-4" />
+                        </Button>
+                    </div>
+                )}
 
-                {/* Content */}
-                <div className="flex-1 overflow-y-auto min-h-0 pb-[env(safe-area-inset-bottom)]">
+                {/* Content (items) */}
+                <div className="flex-1 overflow-y-auto min-h-0">
                     {children}
                 </div>
+
+                {/* Footer */}
+                {footer ? (
+                    <div className="flex-shrink-0 border-t border-sidebar-border bg-sidebar/95 pb-[env(safe-area-inset-bottom)]">
+                        {footer}
+                    </div>
+                ) : (
+                    <div className="pb-[env(safe-area-inset-bottom)]" />
+                )}
             </div>
         </>
     )

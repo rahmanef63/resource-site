@@ -13,7 +13,17 @@ export type ThreeColumnPresetName = "feature" | "store" | "admin" | "ide"
 export type ThreeColumnPresetConfig = Partial<
   Omit<
     ThreeColumnLayoutAdvancedProps,
-    "left" | "center" | "right" | "className" | "preset" | "leftHeader" | "centerHeader" | "rightHeader"
+    | "left"
+    | "center"
+    | "right"
+    | "className"
+    | "preset"
+    | "leftHeader"
+    | "centerHeader"
+    | "rightHeader"
+    | "leftFooter"
+    | "centerFooter"
+    | "rightFooter"
   >
 >
 
@@ -52,10 +62,15 @@ export interface ThreeColumnLayoutAdvancedProps {
   /** How to distribute/allow shrinking: 'center-priority' protects center, 'right-priority' protects right */
   spaceDistribution?: "center-priority" | "right-priority" | "equal"
 
-  // Optional custom headers per panel (rendered when expanded)
+  // Optional custom headers per panel (rendered when expanded, pinned top via flex-shrink-0)
   leftHeader?: ReactNode
   centerHeader?: ReactNode
   rightHeader?: ReactNode
+
+  // Optional custom footers per panel (pinned bottom via flex-shrink-0, border-top)
+  leftFooter?: ReactNode
+  centerFooter?: ReactNode
+  rightFooter?: ReactNode
 
   // Collapse / Visibility State
   /** Force-hide left panel entirely (overrides left content) */

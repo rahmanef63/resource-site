@@ -1,12 +1,13 @@
 /**
- * Panel Header Component
+ * Panel Header Component (panel trigger)
  *
- * The full-width header row is a single interactive trigger —
- * clicking anywhere (label text or icon) toggles the panel.
+ * Icon-only collapse trigger rendered as panel chrome — separate from the
+ * slice's own header (which lives inside `left`/`center`/`right` content via
+ * PanelSection.Header). Clicking anywhere toggles the panel.
  *
  * The `tone` prop controls hierarchy color:
- *   - "layout"  → blue accent (top-level shell)
- *   - "feature" → default muted (nested inner shell)
+ *   - "feature" → sidebar tokens (default, matches app sidebar)
+ *   - "layout"  → blue accent (top-level shell — legacy preview chrome)
  */
 
 "use client"
@@ -45,9 +46,9 @@ export function PanelHeader({
     : `Collapse ${label || side} panel`
 
   const layoutTone =
-    "bg-blue-500/10 hover:bg-blue-500/15 border-blue-500/30 text-blue-700 dark:text-blue-300"
+    "border-blue-500/30 bg-blue-500/10 text-blue-700 hover:bg-blue-500/15 focus-visible:ring-ring dark:text-blue-300"
   const featureTone =
-    "bg-muted/30 hover:bg-muted/50 border-border/50 text-foreground"
+    "border-sidebar-border bg-sidebar-accent/40 text-sidebar-foreground hover:bg-sidebar-accent focus-visible:ring-sidebar-ring"
 
   const iconCls =
     tone === "layout"
@@ -56,28 +57,27 @@ export function PanelHeader({
 
   return (
     <button
+      data-slot="panel-trigger"
+      data-panel-section="trigger"
       className={cn(
-        "flex items-center w-full h-10 gap-2 px-3 transition-colors duration-150",
+        "flex items-center w-full h-9 px-2 border-b transition-colors duration-150",
         tone === "layout" ? layoutTone : featureTone,
-        "border-b cursor-pointer select-none",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset",
+        "cursor-pointer select-none",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset",
+        side === "left" ? "justify-start" : "justify-end",
       )}
       onClick={onToggle}
       aria-label={ariaLabel}
       aria-expanded={!collapsed}
     >
-      {side === "left" && (
-        <Icon className={cn("h-4 w-4 flex-shrink-0", iconCls)} />
-      )}
-
+      <Icon className={cn("h-4 w-4 flex-shrink-0", iconCls)} />
+      {/* Label rendered only when slice opts in (back-compat for previews
+          that still pass children as the header label). Most callers should
+          rely on the slice's own PanelSection.Header sibling below this. */}
       {!collapsed && children && (
-        <span className="flex-1 truncate text-sm font-medium text-left">
+        <span className="flex-1 truncate text-sm font-medium text-left ml-2">
           {children}
         </span>
-      )}
-
-      {side === "right" && (
-        <Icon className={cn("h-4 w-4 flex-shrink-0 ml-auto", iconCls)} />
       )}
     </button>
   )

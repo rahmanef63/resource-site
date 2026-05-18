@@ -12,8 +12,6 @@
 
 import * as React from "react";
 import { ThreeColumnLayoutAdvanced } from "./ThreeColumnLayout";
-import { PanelLeftClose } from "lucide-react";
-import { useThreeColumnLayoutSafe } from "./context";
 import { HeaderControls } from "@/frontend/shared/ui/layout/header";
 import { UniversalToolbar, toolType, type SortToolParams } from "@/frontend/shared/ui/layout/toolbar";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -35,7 +33,9 @@ export interface FeatureThreeColumnLayoutProps extends Omit<ThreeColumnLayoutAdv
     sidebarTitle?: string;
     sidebarStats?: string; // e.g. "12 of 50 documents"
     sidebarActions?: React.ReactNode; // e.g. View toggle, New button
-    sidebarContent: React.ReactNode;
+    sidebarContent: React.ReactNode; // items section (scrollable)
+    /** Optional footer pinned to bottom of left panel (e.g. bulk-action bar, pagination) */
+    sidebarFooter?: React.ReactNode;
 
     // Search & Filter configuration
     searchProps?: {
@@ -48,11 +48,17 @@ export interface FeatureThreeColumnLayoutProps extends Omit<ThreeColumnLayoutAdv
     breadcrumbs?: React.ReactNode;
 
     // Center Panel Configuration
-    mainContent: React.ReactNode;
+    mainContent: React.ReactNode; // items section (scrollable)
     mainHeader?: React.ReactNode;
+    /** Optional footer pinned to bottom of center panel (e.g. save bar, save status) */
+    mainFooter?: React.ReactNode;
 
     // Right Panel Configuration
     inspector?: React.ReactNode; // If null, right panel is hidden/empty
+    /** Optional footer pinned to bottom of right panel (e.g. action buttons) */
+    inspectorFooter?: React.ReactNode;
+    /** Optional custom header for right panel (overrides default) */
+    inspectorHeader?: React.ReactNode;
 
     // ✨ NEW: Mobile Configuration
     /** Mobile navigation configuration */
@@ -89,13 +95,17 @@ export function FeatureThreeColumnLayout({
     sidebarStats,
     sidebarActions,
     sidebarContent,
+    sidebarFooter,
     searchProps,
     sortOptions,
     filterOptions,
     breadcrumbs,
     mainContent,
     mainHeader,
+    mainFooter,
     inspector,
+    inspectorHeader,
+    inspectorFooter,
 
     // New Props
     mobile,
@@ -133,32 +143,24 @@ export function FeatureThreeColumnLayout({
     // LEFT HEADER (uses layout context for collapse)
     // ============================================================================
     function SidebarHeader() {
-        const layout = useThreeColumnLayoutSafe()
+        // Header is slice content — NOT a trigger. The collapse trigger
+        // is owned by the layout (PanelHeader, rendered above this block).
+        // Keep this DRY: don't re-implement collapse-onClick here.
 
         return (
-            <div className="flex-shrink-0 border-b bg-muted/30">
+            <div className="flex-shrink-0 border-b border-sidebar-border bg-sidebar/95">
                 {hasTopRow && (
-                    <div className="flex items-center">
-                        {/* Full-width clickable trigger: icon + title + stats */}
-                        <button
-                            className="flex items-center gap-2 flex-1 min-w-0 px-3 py-2 hover:bg-muted/50 transition-colors duration-150 cursor-pointer select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
-                            onClick={layout ? layout.toggleLeft : undefined}
-                            aria-label={layout ? `Collapse ${effectiveLeftLabel} panel` : undefined}
-                            aria-expanded={layout ? true : undefined}
-                            disabled={!layout}
-                        >
-                            <PanelLeftClose className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+                    <div className="flex items-center gap-2 px-3 py-2">
+                        <div className="flex items-center gap-2 flex-1 min-w-0">
                             {sidebarTitle && (
                                 <span className="font-medium text-sm text-foreground truncate">{sidebarTitle}</span>
                             )}
                             {sidebarStats && (
                                 <span className="text-sm text-muted-foreground truncate">{sidebarStats}</span>
                             )}
-                        </button>
-
-                        {/* Independent action buttons — not part of collapse trigger */}
+                        </div>
                         {sidebarActions && (
-                            <div className="flex items-center gap-1 pr-2 flex-shrink-0">
+                            <div className="flex items-center gap-1 flex-shrink-0">
                                 {sidebarActions}
                             </div>
                         )}
@@ -233,13 +235,10 @@ export function FeatureThreeColumnLayout({
             return <EmptyState {...sidebarEmptyState} />
         }
 
-        return (
-            <ScrollArea className="h-full">
-                <div className="p-2">
-                    {sidebarContent}
-                </div>
-            </ScrollArea>
-        )
+        // Pass-through: let slice control its own scroll (PanelRoot / FeatureShell).
+        // Wrapping in ScrollArea + auto-height div breaks `h-full` chain for
+        // sidebars that pin a footer at the bottom (Communications, Workspace).
+        return <div className="h-full w-full">{sidebarContent}</div>
     }, [sidebarContent, loading?.sidebar, sidebarEmptyState])
 
     // ============================================================================
@@ -265,7 +264,7 @@ export function FeatureThreeColumnLayout({
         const content = (
             <div className="flex flex-col h-full min-h-0">
                 {mainHeader && (
-                    <div className="flex-shrink-0 border-b bg-muted/30">
+                    <div className="flex-shrink-0 border-b border-border bg-background">
                         {mainHeader}
                     </div>
                 )}
@@ -320,7 +319,11 @@ export function FeatureThreeColumnLayout({
             className={className}
             preset={effectivePreset}
             leftHeader={hasHeaderContent ? <SidebarHeader /> : leftHeaderProp}
-            showLeftCollapseButton={hasHeaderContent ? (showLeftCollapseButtonProp ?? false) : showLeftCollapseButtonProp}
+            leftFooter={sidebarFooter}
+            centerFooter={mainFooter}
+            rightHeader={inspectorHeader}
+            rightFooter={inspectorFooter}
+            showLeftCollapseButton={showLeftCollapseButtonProp}
             leftLabel={effectiveLeftLabel}
             centerLabel={effectiveCenterLabel}
             rightLabel={effectiveRightLabel}
