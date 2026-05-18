@@ -1,0 +1,32 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "portfolio-section",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add portfolio-section",
+    "consumerPath": "slices/portfolio-section"
+  },
+  "files": [
+    "README.md",
+    "components/PortfolioCard.tsx",
+    "components/ProjectMeta.tsx",
+    "config.ts",
+    "index.ts",
+    "views/PortfolioDetailView.tsx",
+    "views/PortfolioListSection.tsx"
+  ],
+  "imports": {
+    "shared": [],
+    "external": [
+      "next/image",
+      "next/link",
+      "@/components/ui/badge",
+      "@/components/ui/button",
+      "@/components/ui/card",
+      "@/components/ui/separator",
+      "@/lib/utils"
+    ]
+  }
+}

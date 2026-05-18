@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-18T13:02:24.075Z",
+  "generatedAt": "2026-05-18T13:17:09.212Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -2123,6 +2123,26 @@
         "release-notes",
         "marketing"
       ]
+    },
+    {
+      "slug": "portfolio-section",
+      "title": "Portfolio Section",
+      "category": "ui",
+      "description": "Canonical portfolio list + detail section. <PortfolioListSection> renders 3 layouts (uniform 16:9 grid, CSS masonry, asymmetric with featured hero). <PortfolioDetailView> renders title + meta + cover + body + gallery + external link + related items. Both pass through `hrefFor`/`backHref` so each template controls routing — single SSOT for /portfolio and /portfolio/[slug] across agency-studio and personal-brand.",
+      "source": "rahman-resources",
+      "install": "npx rahman-resources add portfolio-section",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add portfolio-section`. <PortfolioListSection items hrefFor title columns layout limit /> for /portfolio — each item `{ id, slug, title, summary?, year?, client?, role?, tags?, cover: {src,alt}, gallery?, link? }`. <PortfolioDetailView item backHref renderBody related hrefForRelated /> for /portfolio/[slug] — `renderBody` defaults to paragraph split; override for project-specific layouts (problem/approach/result, brief/outcome, etc).",
+      "tags": [
+        "ui",
+        "portfolio",
+        "section",
+        "marketing",
+        "case-study",
+        "list",
+        "detail"
+      ]
     }
   ],
   "slices": [
@@ -3869,6 +3889,39 @@
         "marketing"
       ],
       "agentRecipe": "Run `npx rr add changelog-feed`. <ChangelogFeedSection entries title subtitle layout sortDescending limit /> — only `entries` required. Each entry: `{ id, version, date, kind, title, body, bullets?, groups? }`. `layout=\"timeline\"` adds a left date-rail; `layout=\"list\"` is the most compact. Pass `limit={3}` on home pages to show recent releases."
+    },
+    {
+      "slug": "portfolio-section",
+      "title": "Portfolio Section",
+      "category": "ui",
+      "kind": "ui",
+      "version": "0.1.0",
+      "description": "Canonical portfolio list + detail section. <PortfolioListSection> renders 3 layouts (uniform 16:9 grid, CSS masonry, asymmetric with featured hero). <PortfolioDetailView> renders title + meta + cover + body + gallery + external link + related items. Both pass through `hrefFor`/`backHref` so each template controls routing — single SSOT for /portfolio and /portfolio/[slug] across agency-studio and personal-brand.",
+      "source": "rahman-resources",
+      "slicePath": "frontend/slices/portfolio-section",
+      "convexPaths": [],
+      "npm": [
+        "lucide-react@^0.400.0"
+      ],
+      "shadcn": [
+        "badge",
+        "button",
+        "card",
+        "separator"
+      ],
+      "env": [],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "ui",
+        "portfolio",
+        "section",
+        "marketing",
+        "case-study",
+        "list",
+        "detail"
+      ],
+      "agentRecipe": "Run `npx rr add portfolio-section`. <PortfolioListSection items hrefFor title columns layout limit /> for /portfolio — each item `{ id, slug, title, summary?, year?, client?, role?, tags?, cover: {src,alt}, gallery?, link? }`. <PortfolioDetailView item backHref renderBody related hrefForRelated /> for /portfolio/[slug] — `renderBody` defaults to paragraph split; override for project-specific layouts (problem/approach/result, brief/outcome, etc)."
     }
   ]
 }

@@ -1,16 +1,22 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { ArrowUpRight, Calendar, Clock, Filter } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Filter } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { fmtDate, usePublishedPosts } from "../../shared/store";
+import {
+  BlogListSection,
+  type BlogPost as SliceBlogPost,
+} from "@/features/blog-section";
+import { usePublishedPosts } from "../../shared/store";
 import { PUBLIC_BASE } from "../../shared/nav-config";
 
+/**
+ * Hybrid wrapper: filter + search chrome bespoke (single-tag chips +
+ * substring search), grid delegated to canonical BlogListSection slice.
+ * Admin edits propagate via createTemplateStore BroadcastChannel.
+ */
 export function BlogList() {
   const posts = usePublishedPosts();
   const [q, setQ] = React.useState("");
@@ -25,6 +31,16 @@ export function BlogList() {
       return true;
     });
   }, [posts, tag, q]);
+
+  const items: SliceBlogPost[] = filtered.map((p) => ({
+    id: p.id,
+    slug: p.slug,
+    title: p.title,
+    excerpt: p.excerpt,
+    publishedAt: p.publishedAt,
+    tags: [p.tag],
+    cover: { src: p.cover, alt: p.title },
+  }));
 
   return (
     <section className="mx-auto max-w-6xl px-6 py-16">
@@ -67,42 +83,18 @@ export function BlogList() {
         ))}
       </div>
 
-      {filtered.length === 0 ? (
+      {items.length === 0 ? (
         <Card className="border-dashed bg-muted/10 p-10 text-center text-sm text-muted-foreground">
           Tidak ada post yang cocok. Reset filter atau buat post baru di Admin.
         </Card>
       ) : (
-        <div className="grid gap-6 md:grid-cols-3">
-          {filtered.map((p) => (
-            <Link
-              key={p.id}
-              href={`${PUBLIC_BASE}/blog/${p.slug}`}
-              className="group overflow-hidden rounded-xl border border-border/60 bg-card/50 transition hover:border-border"
-            >
-              <div className="relative aspect-[16/10] overflow-hidden">
-                <Image
-                  src={p.cover}
-                  alt=""
-                  fill
-                  sizes="(min-width: 768px) 33vw, 100vw"
-                  className="object-cover transition duration-500 group-hover:scale-105"
-                />
-              </div>
-              <div className="p-5">
-                <div className="mb-2 flex items-center gap-2 text-[10px] uppercase tracking-wider text-muted-foreground">
-                  <Badge variant="outline" className="rounded-full text-[10px]">{p.tag}</Badge>
-                  <span className="inline-flex items-center gap-1"><Calendar className="size-3" /> {fmtDate(p.publishedAt)}</span>
-                  <span className="inline-flex items-center gap-1"><Clock className="size-3" /> {p.readMin} min</span>
-                </div>
-                <h3 className="text-base font-medium leading-snug">{p.title}</h3>
-                <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{p.excerpt}</p>
-                <span className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-foreground/80 group-hover:text-foreground">
-                  Read post <ArrowUpRight className="size-3.5" />
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
+        <BlogListSection
+          posts={items}
+          hrefFor={(p) => `${PUBLIC_BASE}/blog/${p.slug}`}
+          layout="cards"
+          columns={3}
+          className="!p-0"
+        />
       )}
     </section>
   );
