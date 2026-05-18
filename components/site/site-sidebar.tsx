@@ -28,10 +28,37 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { layouts } from "@/lib/content/layouts";
-import { slices } from "@/lib/content/slices";
+import { layouts as allLayouts } from "@/lib/content/layouts";
+import { slices as allSlices } from "@/lib/content/slices";
 import { site } from "@/lib/content/site";
+import { isHidden } from "@/lib/content/hidden-slugs";
 import { SidebarListGroup } from "@/components/site/site-sidebar/sidebar-list-group";
+
+const SLICE_CATEGORY_ORDER = [
+  "auth", "payment", "ai", "email", "data", "search",
+  "realtime", "content", "storage", "ui", "infra",
+] as const;
+
+const SLICE_CATEGORY_LABEL: Record<string, string> = {
+  auth: "Auth",
+  payment: "Payment",
+  ai: "AI",
+  email: "Email",
+  data: "Data",
+  search: "Search",
+  realtime: "Realtime",
+  content: "Content",
+  storage: "Storage",
+  ui: "UI",
+  infra: "Infra",
+};
+
+const LAYOUT_CATEGORY_ORDER = ["marketing", "dashboard", "cms"] as const;
+const LAYOUT_CATEGORY_LABEL: Record<string, string> = {
+  marketing: "Marketing",
+  dashboard: "Dashboard",
+  cms: "CMS",
+};
 
 const docsItems = [
   { title: "Introduction", href: "/", icon: Home },
@@ -45,6 +72,8 @@ export function SiteSidebar() {
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
+  const layouts = allLayouts.filter((l) => !isHidden(l.slug));
+  const slices = allSlices.filter((s) => !isHidden(s.slug));
   const websiteTemplates = layouts.filter((l) => l.category === "website-template");
   const otherLayouts = layouts.filter((l) => l.category !== "website-template");
 
@@ -110,6 +139,9 @@ export function SiteSidebar() {
           pathname={pathname}
           items={otherLayouts}
           itemHrefPrefix="/layouts"
+          groupBy={(l) => (l as { category?: string }).category ?? "other"}
+          categoryOrder={LAYOUT_CATEGORY_ORDER}
+          categoryLabel={LAYOUT_CATEGORY_LABEL}
         />
 
         {/* Recipes group removed 2026-05-12 — migrated to slices (Phase 3 of REFACTOR-PLAN.md). */}
@@ -122,6 +154,9 @@ export function SiteSidebar() {
           pathname={pathname}
           items={slices}
           itemHrefPrefix="/slices"
+          groupBy={(s) => (s as { category?: string }).category ?? "other"}
+          categoryOrder={SLICE_CATEGORY_ORDER}
+          categoryLabel={SLICE_CATEGORY_LABEL}
         />
       </SidebarContent>
 
