@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { layouts } from "@/lib/content/layouts";
-import { slices as sliceCatalog } from "@/lib/content/slices";
+import { isHidden } from "@/lib/content/hidden-slugs";
 import {
   EMPTY_SELECTION,
   type BuildSelection,
@@ -55,7 +55,7 @@ export function BuildShell() {
   const realTemplates: TemplateOption[] = React.useMemo(
     () =>
       layouts
-        .filter((l) => l.category === "website-template")
+        .filter((l) => l.category === "website-template" && !isHidden(l.slug))
         .map((l) => ({
           slug: l.slug,
           title: l.title,

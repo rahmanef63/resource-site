@@ -1,5 +1,6 @@
 import { LayoutGrid } from "lucide-react";
-import { layouts } from "@/lib/content/layouts";
+import { layouts as allLayouts } from "@/lib/content/layouts";
+import { isHidden } from "@/lib/content/hidden-slugs";
 import { CatalogCard } from "@/components/site/catalog/catalog-card";
 import { type CatalogSearchItem } from "@/components/site/catalog/catalog-search";
 import { CatalogHero } from "@/components/site/catalog/catalog-hero";
@@ -19,7 +20,9 @@ const GROUP_ORDER = ["marketing", "dashboard", "cms"];
 export const metadata = { title: "Layouts" };
 
 export default function LayoutsPage() {
-  const sources = layouts.filter((l) => l.category !== "website-template");
+  const sources = allLayouts.filter(
+    (l) => l.category !== "website-template" && !isHidden(l.slug),
+  );
 
   const tagFreq = new Map<string, number>();
   for (const t of sources) for (const tag of t.tags ?? []) tagFreq.set(tag, (tagFreq.get(tag) ?? 0) + 1);

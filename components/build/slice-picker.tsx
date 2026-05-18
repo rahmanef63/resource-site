@@ -4,8 +4,11 @@ import * as React from "react";
 import { AlertTriangle, Check, Layers } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { slices, type SliceEntry } from "@/lib/content/slices";
+import { slices as allSlices, type SliceEntry } from "@/lib/content/slices";
+import { isHidden } from "@/lib/content/hidden-slugs";
 import { SLICE_COMPAT } from "@/lib/build/compat";
+
+const slices = allSlices.filter((s) => !isHidden(s.slug));
 
 const CATEGORY_ORDER = [
   "auth", "payment", "ai", "email", "data", "search", "realtime", "content", "storage", "ui", "infra",

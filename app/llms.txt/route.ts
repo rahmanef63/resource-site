@@ -2,8 +2,12 @@ import { layouts } from "@/lib/content/layouts";
 import { features, stack } from "@/lib/content/sections";
 import { site } from "@/lib/content/site";
 import { slices } from "@/lib/content/slices";
+import { isHidden } from "@/lib/content/hidden-slugs";
 
-export function GET() {
+async function buildBody() {
+  "use cache";
+  const visibleLayouts = layouts.filter((l) => !isHidden(l.slug));
+  const visibleSlices = slices.filter((s) => !isHidden(s.slug));
   const lines: string[] = [];
   lines.push(`# ${site.name}`);
   lines.push("");
@@ -23,7 +27,7 @@ export function GET() {
   lines.push("");
   lines.push("## Layouts");
   lines.push("");
-  for (const l of layouts) {
+  for (const l of visibleLayouts) {
     lines.push(`### ${l.title}`);
     lines.push(`- slug: \`${l.slug}\`  category: \`${l.category}\`  source: ${l.source}`);
     lines.push(`- ${l.description}`);
@@ -39,7 +43,7 @@ export function GET() {
     "Drop-in vertical features. Each ships the metadata trio (`slice.json` + `slice.contract.ts` + `slice.manifest.json`). Install with `npx rr add <slug>` — CLI auto-augments env, installs deps, and copies into `frontend/slices/<slug>/` (+ optional `convex/features/<slug>/`).",
   );
   lines.push("");
-  for (const s of slices) {
+  for (const s of visibleSlices) {
     lines.push(`### ${s.title}`);
     lines.push(`- slug: \`${s.slug}\`  kind: \`${s.kind}\`  category: \`${s.category}\``);
     lines.push(`- ${s.description}`);
@@ -98,7 +102,12 @@ export function GET() {
   lines.push("```");
   lines.push("");
 
-  return new Response(lines.join("\n"), {
+  return lines.join("\n");
+}
+
+export async function GET() {
+  const body = await buildBody();
+  return new Response(body, {
     headers: { "Content-Type": "text/plain; charset=utf-8" },
   });
 }

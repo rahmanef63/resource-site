@@ -6,7 +6,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { CLAUDE_SKILLS } from "@/lib/content/claude-skills";
-import { slices as sliceCatalog } from "@/lib/content/slices";
+import { slices as allSlices } from "@/lib/content/slices";
+import { isHidden } from "@/lib/content/hidden-slugs";
+
+const sliceCatalog = allSlices.filter((s) => !isHidden(s.slug));
 import { EXISTING_PROJECT_SLUG } from "@/lib/build/command-builder";
 import type { BuildSelection, ProjectForm as ProjectFormShape } from "@/lib/build/types";
 import { TemplatePicker, type TemplateOption } from "./template-picker";

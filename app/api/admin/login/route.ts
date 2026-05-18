@@ -1,7 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkLogin, makeSession, SESSION_COOKIE } from "@/lib/admin-auth";
+import { extractIp, rateLimit, resetRateLimit } from "@/lib/rate-limit-memory";
+
+const RL = { limit: 5, windowMs: 15 * 60 * 1000 }; // 5 attempts per 15 minutes
 
 export async function POST(req: NextRequest) {
+  const ip = extractIp(req);
+  const gate = rateLimit(`admin-login:${ip}`, RL);
+  if (!gate.ok) {
+    return NextResponse.json(
+      { error: "Too many attempts. Try again later." },
+      {
+        status: 429,
+        headers: { "Retry-After": String(gate.retryAfterSec) },
+      },
+    );
+  }
+
   let email = "";
   let password = "";
   try {
@@ -23,6 +38,7 @@ export async function POST(req: NextRequest) {
   if (!ok) {
     return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
   }
+  resetRateLimit(`admin-login:${ip}`);
   const token = makeSession(email);
   const res = NextResponse.json({ ok: true });
   res.cookies.set(SESSION_COOKIE, token, {

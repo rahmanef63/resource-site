@@ -12,7 +12,8 @@ import {
   ShieldCheck,
   type LucideIcon,
 } from "lucide-react";
-import { slices } from "@/lib/content/slices";
+import { slices as allSlices } from "@/lib/content/slices";
+import { isHidden } from "@/lib/content/hidden-slugs";
 import { Badge } from "@/components/ui/badge";
 import { CatalogCard } from "@/components/site/catalog/catalog-card";
 import { type CatalogSearchItem } from "@/components/site/catalog/catalog-search";
@@ -63,6 +64,7 @@ function stripVersion(npmSpec: string): string {
 }
 
 export default function SlicesPage() {
+  const slices = allSlices.filter((s) => !isHidden(s.slug));
   const tagFreq = new Map<string, number>();
   for (const s of slices) for (const t of s.tags ?? []) tagFreq.set(t, (tagFreq.get(t) ?? 0) + 1);
   const topTags = [...tagFreq.entries()].sort((a, b) => b[1] - a[1]).slice(0, 14).map(([t]) => t);

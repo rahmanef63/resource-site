@@ -2,8 +2,8 @@
 const nextConfig = {
   cacheComponents: true,
   // Pin a stable deploymentId so rolling deploys keep Server Action / RSC
-  // payloads valid across instances. Override via DEPLOYMENT_ID env in CI.
-  deploymentId: process.env.DEPLOYMENT_ID,
+  // payloads valid across instances. Override via NEXT_DEPLOYMENT_ID in CI.
+  deploymentId: process.env.NEXT_DEPLOYMENT_ID,
   experimental: {
     optimizePackageImports: [
       "lucide-react",
@@ -16,11 +16,44 @@ const nextConfig = {
       "cmdk",
       "sonner",
     ],
+    serverActions: {
+      allowedOrigins: [
+        "resource.rahmanef.com",
+        "localhost:3000",
+      ],
+    },
   },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
     ],
+  },
+  async headers() {
+    const base = [
+      { key: "X-Content-Type-Options", value: "nosniff" },
+      { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+      {
+        key: "Permissions-Policy",
+        value: "camera=(), microphone=(), geolocation=()",
+      },
+    ];
+    return [
+      { source: "/(.*)", headers: base },
+      {
+        source: "/admin/:path*",
+        headers: [
+          { key: "X-Frame-Options", value: "DENY" },
+          { key: "X-Robots-Tag", value: "noindex, nofollow" },
+        ],
+      },
+      {
+        source: "/api/admin/:path*",
+        headers: [
+          { key: "X-Frame-Options", value: "DENY" },
+          { key: "X-Robots-Tag", value: "noindex, nofollow" },
+        ],
+      },
+    ];
   },
   async redirects() {
     return [
