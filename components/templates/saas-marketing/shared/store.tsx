@@ -8,6 +8,13 @@ import {
   type PagesStore,
 } from "@/components/templates/_shared/pages/pages-context";
 import type { PageEntry } from "@/components/templates/_shared/pages/types";
+import { landingReducer } from "@/components/templates/_shared/landing/reducer";
+import {
+  LandingProvider,
+  type LandingStore,
+} from "@/components/templates/_shared/landing/landing-context";
+import type { LandingSection } from "@/components/templates/_shared/landing/types";
+import { ADMIN_BASE, PUBLIC_BASE } from "./nav-config";
 import type { Action, State } from "./types";
 import { SEED_STATE } from "./seed";
 
@@ -110,19 +117,11 @@ function reducer(state: State, action: Action): State {
     case "FEATURE_DELETE":
       return { ...state, features: state.features.filter((f) => f.id !== action.payload.id) };
 
-    case "LANDING_UPSERT": {
-      const idx = state.landingSections.findIndex((s) => s.id === action.payload.id);
-      const landingSections =
-        idx >= 0
-          ? state.landingSections.map((s) => (s.id === action.payload.id ? action.payload : s))
-          : [...state.landingSections, action.payload];
-      return { ...state, landingSections };
+    case "LANDING_UPSERT":
+    case "LANDING_DELETE": {
+      const next = landingReducer({ landingSections: state.landingSections }, action);
+      return { ...state, landingSections: next.landingSections };
     }
-    case "LANDING_DELETE":
-      return {
-        ...state,
-        landingSections: state.landingSections.filter((s) => s.id !== action.payload.id),
-      };
 
     default:
       return state;
@@ -130,9 +129,7 @@ function reducer(state: State, action: Action): State {
 }
 
 const { Provider, useStore } = createTemplateStore<State, Action>({
-  // Bumped v2-pages → v3-landing in AB-wave when LandingSection was
-  // added. Old payloads missing the field are still defended by the
-  // hydrate-case shallow merge above, but a fresh key is cleaner.
+  // v3-landing: AB-wave added LandingSection. Hydrate merge defends old payloads.
   storageKey: "saas-marketing:state:v3-landing",
   channel: "saas-marketing:sync",
   seed: SEED_STATE,
@@ -155,10 +152,33 @@ function PagesAdapter({ children }: { children: React.ReactNode }) {
   return <PagesProvider value={value}>{children}</PagesProvider>;
 }
 
+function LandingAdapter({ children }: { children: React.ReactNode }) {
+  const { state, dispatch } = useStore();
+  const value = React.useMemo<LandingStore>(
+    () => ({
+      items: state.landingSections,
+      publicBase: PUBLIC_BASE,
+      adminBase: ADMIN_BASE,
+      create: (section: LandingSection) =>
+        dispatch({ type: "LANDING_UPSERT", payload: section }),
+      update: (id, patch) => {
+        const current = state.landingSections.find((s) => s.id === id);
+        if (!current) return;
+        dispatch({ type: "LANDING_UPSERT", payload: { ...current, ...patch, id } });
+      },
+      remove: (id: string) => dispatch({ type: "LANDING_DELETE", payload: { id } }),
+    }),
+    [state.landingSections, dispatch],
+  );
+  return <LandingProvider value={value}>{children}</LandingProvider>;
+}
+
 export function StoreProvider({ children }: { children: React.ReactNode }) {
   return (
     <Provider>
-      <PagesAdapter>{children}</PagesAdapter>
+      <PagesAdapter>
+        <LandingAdapter>{children}</LandingAdapter>
+      </PagesAdapter>
     </Provider>
   );
 }

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "notifications",
+  "version": "0.1.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "Notifications — Per-page Notify Me",
+  "description": "Pure-client subscription state stored in localStorage. Surface as a `NotifyMePopover` toggled from a page-action button. Lifted from notion-page-clone (Nosion) via rr-sync pipeline.",
+  "namespace": "@/features/notifications",
+  "registers": [],
+  "audit": [],
+  "frontend": {
+    "slicePath": "frontend/slices/notifications",
+    "configExport": ""
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": ["button", "popover"],
+    "env": [],
+    "peers": []
+  }
+}
