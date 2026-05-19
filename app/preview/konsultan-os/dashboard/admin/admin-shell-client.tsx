@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { AdminShell } from "@/components/templates/_shared/ui/admin-shell";
+import { AdminShell } from "@/components/templates/_shared/ui/dashboard-shell";
 import { useStore } from "@/components/templates/konsultan/shared/store";
 import { DEFAULT_SITE_CONFIG } from "@/components/templates/konsultan/shared/site-config";
 import {

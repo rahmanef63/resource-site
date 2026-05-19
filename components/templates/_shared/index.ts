@@ -10,7 +10,7 @@ export * from "./ui/site-footer";
 export * from "./ui/site-shell";
 export * from "./ui/admin-sidebar";
 export * from "./ui/admin-topbar";
-export * from "./ui/admin-shell";
+export * from "./ui/dashboard-shell";
 export * from "./ui/stat-card";
 export * from "./ui/hero-block";
 export * from "./ui/cta-band";

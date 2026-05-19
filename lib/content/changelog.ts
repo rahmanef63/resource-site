@@ -10,6 +10,48 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "AZ",
+    version: "AZ-wave",
+    date: Date.parse("2026-05-19"),
+    kind: "improvement",
+    title: "Dashboard foundation rename — /admin → /dashboard/admin + workspace stubs",
+    body:
+      "AZ-wave foundation only (mechanical URL prefix shift). Every `/preview/<template>/admin/...` route moves under `/preview/<template>/dashboard/admin/...`, freeing `dashboard/workspace/` as the new productivity surface. Permanent redirect from old URLs preserves every external link. Per-template constants split: DASHBOARD_BASE / ADMIN_PANEL_BASE / WORKSPACE_BASE introduced; ADMIN_BASE kept as alias for backwards compat. _shared/ui/admin-shell.tsx renamed to dashboard-shell.tsx with AdminShell as deprecated alias. Workspace landing pages now render a placeholder pointing to docs/architecture/dashboard-vision.md — BA/BB waves will populate it with notion editor + calendar + command-menu + database views. No URL breaking change; no consumer-side action needed.",
+    groups: [
+      {
+        heading: "Templates touched (admin → dashboard/admin + workspace stub)",
+        bullets: [
+          { text: "saas-marketing-os — admin moved to dashboard/admin; workspace stub added", slug: "saas-marketing-os", kind: "template" },
+          { text: "personal-brand-os — admin moved to dashboard/admin; workspace stub added", slug: "personal-brand-os", kind: "template" },
+          { text: "agency-studio-os — admin moved to dashboard/admin; workspace stub added", slug: "agency-studio-os", kind: "template" },
+          { text: "konsultan-os — admin moved to dashboard/admin; workspace stub added", slug: "konsultan-os", kind: "template" },
+          { text: "kreator-studio-os — admin moved to dashboard/admin; workspace stub added", slug: "kreator-studio-os", kind: "template" },
+          { text: "riset-kit — admin moved to dashboard/admin; workspace stub added", slug: "riset-kit", kind: "template" },
+          { text: "wirausaha-os — admin moved to dashboard/admin; workspace stub added", slug: "wirausaha-os", kind: "template" },
+          { text: "notion-page-clone-os — admin moved to dashboard/admin; workspace stub added", slug: "notion-page-clone-os", kind: "template" },
+        ],
+      },
+      {
+        heading: "Infra",
+        bullets: [
+          "next.config.mjs — permanent redirect /preview/:tpl/admin/:path* → /preview/:tpl/dashboard/admin/:path*",
+          "_shared/ui/dashboard-shell.tsx — canonical export DashboardShell + deprecated AdminShell alias (drop-in for existing layouts)",
+          "_shared/ui/workspace-placeholder.tsx NEW — minimal coming-soon card for /dashboard/workspace until BB-wave",
+          "lib/content/layouts.ts — adminPreviewPath + filePaths updated for all 8 OS templates (81 path replacements)",
+          "Per-template nav-config.ts — DASHBOARD_BASE / ADMIN_PANEL_BASE / WORKSPACE_BASE constants (8 templates)",
+        ],
+      },
+      {
+        heading: "Up next (see docs/architecture/dashboard-vision.md)",
+        bullets: [
+          "BA-wave — Pages restructure inside Admin Panel + RBAC / CMS-menu / Analytics / CRM / Audit-log siblings",
+          "BB-wave — Workspace bootstrap (notion editor at MAX, calendar, command-menu, database views)",
+          "BC-wave — feature harvest from superspace + notion-page-clone via /rr lift",
+        ],
+      },
+    ],
+  },
+  {
     id: "AY",
     version: "AY-wave",
     date: Date.parse("2026-05-19"),

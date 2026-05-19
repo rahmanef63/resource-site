@@ -98,6 +98,13 @@ const nextConfig = {
       { source: "/recipes/multi-block-selection", destination: "/slices", permanent: true },
       { source: "/recipes/database-views", destination: "/slices", permanent: true },
       { source: "/recipes/comments-threaded", destination: "/slices", permanent: true },
+
+      // AZ-wave (2026-05-19): /preview/<template>/admin → /preview/<template>/dashboard/admin
+      // Dashboard becomes operator root; admin is now a sub-section
+      // alongside workspace. See docs/architecture/dashboard-vision.md.
+      // Permanent so any external link (docs, PR, shared URL) keeps working.
+      { source: "/preview/:tpl/admin", destination: "/preview/:tpl/dashboard/admin", permanent: true },
+      { source: "/preview/:tpl/admin/:path*", destination: "/preview/:tpl/dashboard/admin/:path*", permanent: true },
     ];
   },
 };

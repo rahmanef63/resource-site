@@ -16,7 +16,11 @@ import type { State } from "./types";
 import { DEFAULT_SITE_CONFIG } from "./site-config";
 
 export const PUBLIC_BASE = "/preview/konsultan-os/public";
-export const ADMIN_BASE = "/preview/konsultan-os/admin";
+export const DASHBOARD_BASE = "/preview/konsultan-os/dashboard";
+export const ADMIN_PANEL_BASE = `${DASHBOARD_BASE}/admin`;
+export const WORKSPACE_BASE = `${DASHBOARD_BASE}/workspace`;
+/** @deprecated use ADMIN_PANEL_BASE */
+export const ADMIN_BASE = ADMIN_PANEL_BASE;
 
 export const PUBLIC_NAV: NavItem[] = [
   { label: "Case Studies", href: `${PUBLIC_BASE}/case-studies` },

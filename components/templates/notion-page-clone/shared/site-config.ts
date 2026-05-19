@@ -22,7 +22,7 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
   baseUrl: "https://nosion.example.com",
   twitter: "@nosion",
   email: "hi@nosion.example.com",
-  ctaPrimary: { label: "Start writing", href: "/preview/notion-page-clone-os/admin" },
+  ctaPrimary: { label: "Start writing", href: "/preview/notion-page-clone-os/dashboard/admin" },
   defaultLocale: "en-US",
   themeColor: "#0a0a0a",
 };

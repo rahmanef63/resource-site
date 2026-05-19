@@ -15,7 +15,11 @@ import { DEFAULT_SITE_CONFIG } from "./site-config";
 import type { State } from "./types";
 
 export const PUBLIC_BASE = "/preview/notion-page-clone-os/public";
-export const ADMIN_BASE = "/preview/notion-page-clone-os/admin";
+export const DASHBOARD_BASE = "/preview/notion-page-clone-os/dashboard";
+export const ADMIN_PANEL_BASE = `${DASHBOARD_BASE}/admin`;
+export const WORKSPACE_BASE = `${DASHBOARD_BASE}/workspace`;
+/** @deprecated use ADMIN_PANEL_BASE */
+export const ADMIN_BASE = ADMIN_PANEL_BASE;
 
 export const PUBLIC_NAV: NavItem[] = [
   { label: "Snippets", href: `${PUBLIC_BASE}/snippets` },

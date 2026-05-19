@@ -7,12 +7,14 @@ import { AdminTopbar } from "./admin-topbar";
 import type { AdminNavItem, Brand, User } from "../types/common";
 
 /**
- * Top-level admin shell. Wraps everything in shadcn `SidebarProvider`
- * so the sidebar + topbar trigger share state (cmd/ctrl+B toggle,
- * cookie persistence, mobile drawer). Pass nav config once at the
- * layout level.
+ * Top-level operator shell mounted under
+ * `/preview/<template>/dashboard/{admin,workspace}/`. Wraps everything
+ * in shadcn `SidebarProvider` so sidebar + topbar trigger share state.
+ *
+ * BA-wave will add a section switcher (Admin Panel ↔ Workspace) inside
+ * this shell. For AZ-wave this is a thin rename of the old `AdminShell`.
  */
-export function AdminShell({
+export function DashboardShell({
   brand,
   appLabel,
   homeHref,
@@ -62,3 +64,6 @@ export function AdminShell({
     </SidebarProvider>
   );
 }
+
+/** @deprecated use {@link DashboardShell} — kept for AZ-wave migration */
+export const AdminShell = DashboardShell;

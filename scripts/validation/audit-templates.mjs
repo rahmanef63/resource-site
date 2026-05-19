@@ -128,15 +128,15 @@ for (const root of TEMPLATE_ROOTS) {
 }
 
 // Rule 3 — every website-template must expose the Pages CRUD surface.
-// Required files (P-wave, 2026-05-18):
-//   app/preview/<slug>/admin/pages/page.tsx
-//   app/preview/<slug>/admin/pages/[id]/page.tsx
+// Required files (P-wave, 2026-05-18; rebased to dashboard/admin in AZ-wave):
+//   app/preview/<slug>/dashboard/admin/pages/page.tsx
+//   app/preview/<slug>/dashboard/admin/pages/[id]/page.tsx
 //   app/preview/<slug>/public/[...slug]/page.tsx
 const wtSlugs = extractWebsiteTemplateSlugs(LAYOUTS_FILE);
 for (const wt of wtSlugs) {
   const required = [
-    `app/preview/${wt}/admin/pages/page.tsx`,
-    `app/preview/${wt}/admin/pages/[id]/page.tsx`,
+    `app/preview/${wt}/dashboard/admin/pages/page.tsx`,
+    `app/preview/${wt}/dashboard/admin/pages/[id]/page.tsx`,
     `app/preview/${wt}/public/[...slug]/page.tsx`,
   ];
   for (const rel of required) {
