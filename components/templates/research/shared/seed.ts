@@ -1,3 +1,4 @@
+import { defaultLandingSections } from "@/components/templates/_shared/landing/seed-factory";
 import { SEED_PAGES } from "./pages-seed";
 import type { Citation, Document, LitReview, Note, State, AiReaderSession } from "./types";
 
@@ -170,4 +171,5 @@ export const SEED_STATE: State = {
   litReviews: SEED_LIT_REVIEWS,
   aiReaderSessions: SEED_AI_SESSIONS,
   pages: SEED_PAGES,
+  landingSections: defaultLandingSections(),
 };

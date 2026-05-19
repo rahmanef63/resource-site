@@ -3,6 +3,7 @@ import {
   Bot,
   FileText,
   LayoutDashboard,
+  LayoutTemplate,
   Library,
   Newspaper,
   Quote,
@@ -51,6 +52,7 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
   const customPages = state.pages.filter((p) => !p.systemPage).length;
   return [
     { id: "dashboard", label: "Dashboard",   href: ADMIN_BASE,                   icon: LayoutDashboard, count: null },
+    { id: "landing",   label: "Landing",     href: `${ADMIN_BASE}/landing`,      icon: LayoutTemplate,  count: state.landingSections.filter((s) => s.enabled).length || null },
     { id: "pages",     label: "Pages",       href: `${ADMIN_BASE}/pages`,        icon: Newspaper,       count: customPages || null },
     { id: "documents", label: "Documents",   href: `${ADMIN_BASE}/documents`,    icon: FileText,        count: newDocs || null },
     { id: "notes",     label: "Notes",       href: `${ADMIN_BASE}/notes`,        icon: StickyNote,      count: state.notes.length },

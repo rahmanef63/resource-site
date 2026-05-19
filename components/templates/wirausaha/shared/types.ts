@@ -71,10 +71,17 @@ export type State = {
   staff: StaffMember[];
   /** O-wave: public pages CRUD slice. */
   pages: import("@/components/templates/_shared/pages/types").PageEntry[];
+  /** AB-wave: home-page section composition. Ordered + toggleable. */
+  landingSections: import("@/components/templates/_shared/landing/types").LandingSection[];
 };
+
+export type LandingSection = import("@/components/templates/_shared/landing/types").LandingSection;
+export type LandingSectionKind = import("@/components/templates/_shared/landing/types").LandingSectionKind;
+export type LandingAction = import("@/components/templates/_shared/landing/types").LandingAction;
 
 export type Action =
   | import("@/components/templates/_shared/pages/types").PagesAction
+  | LandingAction
   | { type: "business.upsert"; business: Business }
   | { type: "business.delete"; id: string }
   | { type: "product.upsert"; product: Product }

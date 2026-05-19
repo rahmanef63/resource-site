@@ -1,3 +1,4 @@
+import { defaultLandingSections } from "@/components/templates/_shared/landing/seed-factory";
 import { SEED_PAGES } from "./pages-seed";
 import type {
   Client,
@@ -204,4 +205,5 @@ export const SEED_STATE: State = {
   invoices: SEED_INVOICES,
   documents: SEED_DOCUMENTS,
   pages: SEED_PAGES,
+  landingSections: defaultLandingSections(),
 };

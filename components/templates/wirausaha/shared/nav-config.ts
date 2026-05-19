@@ -1,6 +1,7 @@
 import {
   Building2,
   LayoutDashboard,
+  LayoutTemplate,
   Newspaper,
   Package,
   Receipt,
@@ -50,6 +51,7 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
   const customPages = state.pages.filter((p) => !p.systemPage).length;
   return [
     { id: "dashboard",  label: "Dashboard",  href: ADMIN_BASE,                   icon: LayoutDashboard, count: null },
+    { id: "landing",    label: "Landing",    href: `${ADMIN_BASE}/landing`,      icon: LayoutTemplate,  count: state.landingSections.filter((s) => s.enabled).length || null },
     { id: "pages",      label: "Pages",      href: `${ADMIN_BASE}/pages`,        icon: Newspaper,       count: customPages || null },
     { id: "businesses", label: "Businesses", href: `${ADMIN_BASE}/businesses`,   icon: Building2,       count: state.businesses.length },
     { id: "inventory",  label: "Inventory",  href: `${ADMIN_BASE}/inventory`,    icon: Package,         count: lowStock || null },

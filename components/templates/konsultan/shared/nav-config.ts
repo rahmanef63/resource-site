@@ -3,6 +3,7 @@ import {
   FileSignature,
   FileText,
   LayoutDashboard,
+  LayoutTemplate,
   Newspaper,
   Receipt,
   ScrollText,
@@ -51,6 +52,7 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
   const customPages = state.pages.filter((p) => !p.systemPage).length;
   return [
     { id: "dashboard",  label: "Dashboard",  href: ADMIN_BASE,                   icon: LayoutDashboard, count: null },
+    { id: "landing",    label: "Landing",    href: `${ADMIN_BASE}/landing`,      icon: LayoutTemplate,  count: state.landingSections.filter((s) => s.enabled).length || null },
     { id: "pages",      label: "Pages",      href: `${ADMIN_BASE}/pages`,        icon: Newspaper,       count: customPages || null },
     { id: "clients",    label: "Clients",    href: `${ADMIN_BASE}/clients`,      icon: Users,           count: state.clients.length },
     { id: "proposals",  label: "Proposals",  href: `${ADMIN_BASE}/proposals`,    icon: FileText,        count: draftProposals || null },

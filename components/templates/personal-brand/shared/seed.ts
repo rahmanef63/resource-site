@@ -1,3 +1,4 @@
+import { defaultLandingSections } from "@/components/templates/_shared/landing/seed-factory";
 import { SEED_PAGES } from "./pages-seed";
 import type { Post, PortfolioItem, Resource, Service, State } from "./types";
 
@@ -259,4 +260,5 @@ export const SEED_STATE: State = {
   ],
   chatSessions: [],
   pages: SEED_PAGES,
+  landingSections: defaultLandingSections(),
 };

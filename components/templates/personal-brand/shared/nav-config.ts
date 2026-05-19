@@ -13,6 +13,7 @@ import {
   FileText,
   Inbox,
   LayoutDashboard,
+  LayoutTemplate,
   LineChart,
   Mail,
   MessageSquare,
@@ -78,6 +79,7 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
   const customPages = state.pages.filter((p) => !p.systemPage).length;
   return [
     { id: "dashboard", label: "Dashboard", href: ADMIN_BASE,                  icon: LayoutDashboard, count: null },
+    { id: "landing",   label: "Landing",   href: `${ADMIN_BASE}/landing`,     icon: LayoutTemplate,  count: state.landingSections.filter((s) => s.enabled).length || null },
     { id: "pages",     label: "Pages",     href: `${ADMIN_BASE}/pages`,       icon: Newspaper,       count: customPages || null },
     { id: "posts",     label: "Posts",     href: `${ADMIN_BASE}/posts`,       icon: FileText,        count: draftCount || null },
     { id: "portfolio", label: "Portfolio", href: `${ADMIN_BASE}/portfolio`,   icon: Briefcase,       count: state.portfolio.length },

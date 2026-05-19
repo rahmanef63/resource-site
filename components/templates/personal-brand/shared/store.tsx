@@ -7,12 +7,18 @@ import {
   type PagesStore,
 } from "@/components/templates/_shared/pages/pages-context";
 import type { PageEntry } from "@/components/templates/_shared/pages/types";
+import {
+  LandingProvider,
+  type LandingStore,
+} from "@/components/templates/_shared/landing/landing-context";
+import type { LandingSection } from "@/components/templates/_shared/landing/types";
+import { ADMIN_BASE, PUBLIC_BASE } from "./nav-config";
 import type { Action, State } from "./types";
 import { SEED_STATE } from "./seed";
 import { reducer } from "./store-reducer";
 
 const { Provider, useStore } = createTemplateStore<State, Action>({
-  storageKey: "pbos:state:v2-pages",
+  storageKey: "pbos:state:v3-landing",
   channel: "pbos:sync",
   seed: SEED_STATE,
   reducer,
@@ -34,10 +40,33 @@ function PagesAdapter({ children }: { children: React.ReactNode }) {
   return <PagesProvider value={value}>{children}</PagesProvider>;
 }
 
+function LandingAdapter({ children }: { children: React.ReactNode }) {
+  const { state, dispatch } = useStore();
+  const value = React.useMemo<LandingStore>(
+    () => ({
+      items: state.landingSections,
+      publicBase: PUBLIC_BASE,
+      adminBase: ADMIN_BASE,
+      create: (section: LandingSection) =>
+        dispatch({ type: "LANDING_UPSERT", payload: section }),
+      update: (id, patch) => {
+        const current = state.landingSections.find((s) => s.id === id);
+        if (!current) return;
+        dispatch({ type: "LANDING_UPSERT", payload: { ...current, ...patch, id } });
+      },
+      remove: (id: string) => dispatch({ type: "LANDING_DELETE", payload: { id } }),
+    }),
+    [state.landingSections, dispatch],
+  );
+  return <LandingProvider value={value}>{children}</LandingProvider>;
+}
+
 export function StoreProvider({ children }: { children: React.ReactNode }) {
   return (
     <Provider>
-      <PagesAdapter>{children}</PagesAdapter>
+      <PagesAdapter>
+        <LandingAdapter>{children}</LandingAdapter>
+      </PagesAdapter>
     </Provider>
   );
 }

@@ -69,33 +69,6 @@ export type Lead = {
   ts: number;
 };
 
-export type LandingSectionKind =
-  | "hero"
-  | "features"
-  | "testimonials"
-  | "pricing"
-  | "blog"
-  | "changelog"
-  | "faq"
-  | "cta"
-  | "custom";
-
-export type LandingSection = {
-  id: string;
-  /** Render order on the home page. Lower numbers render first. */
-  order: number;
-  /** Section type — picks which canonical slice renders. */
-  kind: LandingSectionKind;
-  /** Section heading shown by the renderer (also used as admin label). */
-  title: string;
-  /** Optional subtitle / lead paragraph. */
-  subtitle?: string;
-  /** Toggle to hide the section on /public without deleting it. */
-  enabled: boolean;
-  /** Free-form JSON config the section renderer reads (slice-specific). */
-  config?: string;
-};
-
 export type State = {
   pricing: PricingTier[];
   features: FeatureItem[];
@@ -109,8 +82,11 @@ export type State = {
   /** O-wave: public pages CRUD slice. */
   pages: import("@/components/templates/_shared/pages/types").PageEntry[];
   /** AB-wave: home-page section composition. Ordered + toggleable. */
-  landingSections: LandingSection[];
+  landingSections: import("@/components/templates/_shared/landing/types").LandingSection[];
 };
+
+export type LandingSection = import("@/components/templates/_shared/landing/types").LandingSection;
+export type LandingSectionKind = import("@/components/templates/_shared/landing/types").LandingSectionKind;
 
 export type PostsAction =
   | { type: "POST_CREATE"; payload: BlogPost }
@@ -141,9 +117,7 @@ export type FeatureAction =
   | { type: "FEATURE_UPSERT"; payload: FeatureItem }
   | { type: "FEATURE_DELETE"; payload: { id: string } };
 
-export type LandingAction =
-  | { type: "LANDING_UPSERT"; payload: LandingSection }
-  | { type: "LANDING_DELETE"; payload: { id: string } };
+export type LandingAction = import("@/components/templates/_shared/landing/types").LandingAction;
 
 export type Action =
   | { type: "hydrate"; state: State }

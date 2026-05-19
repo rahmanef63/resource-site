@@ -1,3 +1,4 @@
+import { defaultLandingSections } from "@/components/templates/_shared/landing/seed-factory";
 import { SEED_PAGES } from "./pages-seed";
 import type {
   Asset,
@@ -264,4 +265,5 @@ export const SEED_STATE: State = {
   performance: SEED_PERFORMANCE,
   commentDrafts: SEED_COMMENTS,
   pages: SEED_PAGES,
+  landingSections: defaultLandingSections(),
 };

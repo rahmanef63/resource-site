@@ -8,14 +8,12 @@ import type {
   CrudController,
   EntityMeta,
 } from "@/components/templates/_shared/crud/types";
-import { useStore } from "../../../shared/store";
-import { ADMIN_BASE, PUBLIC_BASE } from "../../../shared/nav-config";
-import type { LandingSection } from "../../../shared/types";
+import { useLandingStore } from "./landing-context";
+import type { LandingSection } from "./types";
 
 const META: EntityMeta = {
   label: "Section",
   labelPlural: "Landing sections",
-  publicHref: () => `${PUBLIC_BASE}`,
 };
 
 const KIND_LABEL: Record<LandingSection["kind"], string> = {
@@ -26,6 +24,7 @@ const KIND_LABEL: Record<LandingSection["kind"], string> = {
   blog: "Blog",
   changelog: "Changelog",
   faq: "FAQ",
+  portfolio: "Portfolio",
   cta: "CTA",
   custom: "Custom",
 };
@@ -67,42 +66,37 @@ const COLUMNS: ColumnDef<LandingSection>[] = [
   },
 ];
 
-function useLandingController(): CrudController<LandingSection> {
-  const { state, dispatch } = useStore();
-  return React.useMemo(
+export function LandingView() {
+  const store = useLandingStore();
+  const controller = React.useMemo<CrudController<LandingSection>>(
     () => ({
-      items: [...state.landingSections].sort((a, b) => a.order - b.order),
+      items: [...store.items].sort((a, b) => a.order - b.order),
       getId: (s) => s.id,
       blank: () => ({
         id: `ls-${Math.random().toString(36).slice(2, 10)}`,
-        order: (state.landingSections.at(-1)?.order ?? 0) + 10,
+        order: (store.items.at(-1)?.order ?? 0) + 10,
         kind: "custom",
         title: "New section",
         subtitle: "",
         enabled: true,
         config: "",
       }),
-      create: (s) => dispatch({ type: "LANDING_UPSERT", payload: s }),
-      update: (id, patch) => {
-        const current = state.landingSections.find((x) => x.id === id);
-        if (!current) return;
-        dispatch({ type: "LANDING_UPSERT", payload: { ...current, ...patch, id } });
-      },
-      remove: (id) => dispatch({ type: "LANDING_DELETE", payload: { id } }),
+      create: store.create,
+      update: store.update,
+      remove: store.remove,
     }),
-    [state.landingSections, dispatch],
+    [store],
   );
-}
-
-export function LandingView() {
-  const controller = useLandingController();
   const enabled = controller.items.filter((s) => s.enabled).length;
   return (
     <CrudListView
-      meta={META}
+      meta={{
+        ...META,
+        publicHref: () => store.publicBase,
+      }}
       controller={controller}
       columns={COLUMNS}
-      editPath={(id) => `${ADMIN_BASE}/landing/${id}`}
+      editPath={(id) => `${store.adminBase}/landing/${id}`}
       description={`${enabled}/${controller.items.length} sections visible`}
     />
   );

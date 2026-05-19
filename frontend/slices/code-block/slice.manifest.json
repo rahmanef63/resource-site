@@ -1,0 +1,13 @@
+{
+  "name": "code-block",
+  "description": "",
+  "deps": {
+    "shared": [
+      "ui/button",
+      "ui/dropdown-menu"
+    ],
+    "slices": [],
+    "convex": []
+  },
+  "notes": ""
+}

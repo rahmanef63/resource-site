@@ -4,6 +4,7 @@ import {
   FileText,
   Image as ImageIcon,
   LayoutDashboard,
+  LayoutTemplate,
   LineChart,
   Mail,
   MessageSquare,
@@ -54,6 +55,7 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
   const customPages = state.pages.filter((p) => !p.systemPage).length;
   return [
     { id: "dashboard",  label: "Dashboard",   href: ADMIN_BASE,                    icon: LayoutDashboard, count: null },
+    { id: "landing",    label: "Landing",     href: `${ADMIN_BASE}/landing`,       icon: LayoutTemplate,  count: state.landingSections.filter((s) => s.enabled).length || null },
     { id: "pages",      label: "Pages",       href: `${ADMIN_BASE}/pages`,         icon: Newspaper,       count: customPages || null },
     { id: "planner",    label: "Planner",     href: `${ADMIN_BASE}/planner`,       icon: CalendarDays,    count: drafts || null },
     { id: "voice",      label: "Voice",       href: `${ADMIN_BASE}/voice`,         icon: Mic,             count: state.voices.length },

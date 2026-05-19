@@ -2,13 +2,17 @@
 // Pure function over (State, Action) — no React dependency.
 
 import { pagesReducer } from "@/components/templates/_shared/pages/reducer";
+import { landingReducer } from "@/components/templates/_shared/landing/reducer";
 import type { Action, State } from "./types";
 import { SEED_STATE } from "./seed";
 
 export function reducer(state: State, action: Action): State {
   switch (action.type) {
     case "hydrate":
-      return action.state;
+      // Shallow-merge with SEED_STATE so any field added in a newer
+      // schema (e.g. AB-wave landingSections) gets its default when
+      // hydrating from an older localStorage payload.
+      return { ...SEED_STATE, ...action.state };
     case "reset":
       return SEED_STATE;
 
@@ -18,6 +22,12 @@ export function reducer(state: State, action: Action): State {
     case "PAGE_REORDER_BLOCK": {
       const next = pagesReducer({ pages: state.pages }, action);
       return { ...state, pages: next.pages };
+    }
+
+    case "LANDING_UPSERT":
+    case "LANDING_DELETE": {
+      const next = landingReducer({ landingSections: state.landingSections }, action);
+      return { ...state, landingSections: next.landingSections };
     }
 
     case "post.upsert": {

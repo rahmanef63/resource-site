@@ -4,6 +4,7 @@ import {
   Briefcase,
   Inbox,
   LayoutDashboard,
+  LayoutTemplate,
   Newspaper,
   Settings,
   Sparkles,
@@ -52,6 +53,7 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
   const customPages = state.pages.filter((p) => !p.systemPage).length;
   return [
     { id: "dashboard", label: "Dashboard", href: ADMIN_BASE,                  icon: LayoutDashboard, count: null },
+    { id: "landing",   label: "Landing",   href: `${ADMIN_BASE}/landing`,     icon: LayoutTemplate,  count: state.landingSections.filter((s) => s.enabled).length || null },
     { id: "pages",     label: "Pages",     href: `${ADMIN_BASE}/pages`,       icon: Newspaper,       count: customPages || null },
     { id: "projects",  label: "Projects",  href: `${ADMIN_BASE}/projects`,    icon: Briefcase,       count: activeProjects || null },
     { id: "clients",   label: "Clients",   href: `${ADMIN_BASE}/clients`,     icon: Users,           count: activeClients || null },

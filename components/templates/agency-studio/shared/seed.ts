@@ -1,3 +1,4 @@
+import { defaultLandingSections } from "@/components/templates/_shared/landing/seed-factory";
 import { SEED_PAGES } from "./pages-seed";
 import type { Client, Lead, Project, Service, State } from "./types";
 
@@ -144,4 +145,5 @@ export const SEED_STATE: State = {
   services: SEED_SERVICES,
   leads: SEED_LEADS,
   pages: SEED_PAGES,
+  landingSections: defaultLandingSections(),
 };
