@@ -10,6 +10,43 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "AN",
+    version: "AN-wave",
+    date: Date.parse("2026-05-19"),
+    kind: "improvement",
+    title: "Changelog clickable + live-preview SSOT + landing editor polish",
+    body:
+      "AM-wave unified the docs-shell tabs for /slices and /layouts behind a single buildPreviewManifest helper. AL-wave fixed admin landing editor: bgImage scrim, fg image inside Hero with aspect-ratio dropdown, 1-based reorder arrows. AK-E published landing-sections as installable slice. AN-wave: changelog bullets now link back to the slice/template they reference.",
+    groups: [
+      {
+        heading: "Slices touched",
+        bullets: [
+          { text: "landing-sections — promoted to distributable slice", slug: "landing-sections" },
+          { text: "changelog-feed — bullets now accept { text, slug, kind } for back-links", slug: "changelog-feed" },
+        ],
+      },
+      {
+        heading: "Templates touched (admin landing editor)",
+        bullets: [
+          { text: "saas-marketing-os", slug: "saas-marketing-os", kind: "template" },
+          { text: "personal-brand-os", slug: "personal-brand-os", kind: "template" },
+          { text: "agency-studio-os", slug: "agency-studio-os", kind: "template" },
+          { text: "konsultan-os", slug: "konsultan-os", kind: "template" },
+          { text: "kreator-studio-os", slug: "kreator-studio-os", kind: "template" },
+          { text: "riset-kit", slug: "riset-kit", kind: "template" },
+          { text: "wirausaha-os", slug: "wirausaha-os", kind: "template" },
+        ],
+      },
+      {
+        heading: "Site",
+        bullets: [
+          "VersionWatcher toasts when a redeploy lands (rc-samata-dash pattern)",
+          "/slices/<slug> + /layouts/<slug> share the same Code/Public/Split/Admin tabs",
+        ],
+      },
+    ],
+  },
+  {
     id: "1.7.0",
     version: "1.7.0",
     date: Date.parse("2026-05-18"),
@@ -21,13 +58,13 @@ export const releases: ChangelogEntry[] = [
       {
         heading: "New slices",
         bullets: [
-          "pricing-page · PricingSection with renderTierCta slot",
-          "feature-grid · cards / minimal / alternating / grouped layouts",
-          "faq-section · single / two-column / grouped + footer CTA",
-          "testimonials-grid · cards / quote-stack / masonry",
-          "blog-section · BlogListSection + BlogPostView (afterContent / extraMeta / related slots)",
-          "changelog-feed · timeline / cards / list",
-          "portfolio-section · PortfolioListSection + PortfolioDetailView with sections[]",
+          { text: "pricing-page · PricingSection with renderTierCta slot", slug: "pricing-page" },
+          { text: "feature-grid · cards / minimal / alternating / grouped layouts", slug: "feature-grid" },
+          { text: "faq-section · single / two-column / grouped + footer CTA", slug: "faq-section" },
+          { text: "testimonials-grid · cards / quote-stack / masonry", slug: "testimonials-grid" },
+          { text: "blog-section · BlogListSection + BlogPostView (afterContent / extraMeta / related slots)", slug: "blog-section" },
+          { text: "changelog-feed · timeline / cards / list", slug: "changelog-feed" },
+          { text: "portfolio-section · PortfolioListSection + PortfolioDetailView with sections[]", slug: "portfolio-section" },
         ],
       },
       {

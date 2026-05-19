@@ -4,6 +4,22 @@ import { ChangelogEntryCard } from "../components/ChangelogEntryCard";
 
 export type ChangelogKind = "feature" | "fix" | "improvement" | "chore" | "breaking";
 
+/** A bullet item — plain string OR an object that points back to a
+ *  catalog entry. When `slug` is set the BulletList renders the text as
+ *  a clickable Link to `/slices/<slug>` (kind="slice", default) or
+ *  `/layouts/<slug>` (kind="template"). */
+export type ChangelogBullet =
+  | string
+  | {
+      text: string;
+      /** Catalog slug — when set, bullet becomes a link. */
+      slug?: string;
+      /** Catalog kind. Decides URL path. Default "slice". */
+      kind?: "slice" | "template";
+      /** Override generated href entirely (e.g. external link). */
+      href?: string;
+    };
+
 export type ChangelogEntry = {
   id: string;
   version: string;
@@ -12,9 +28,9 @@ export type ChangelogEntry = {
   title: string;
   body: string;
   /** Optional bullet items rendered as a list below the body. */
-  bullets?: string[];
+  bullets?: ChangelogBullet[];
   /** Optional grouped sections within an entry. Keys become subheadings. */
-  groups?: { heading: string; bullets: string[] }[];
+  groups?: { heading: string; bullets: ChangelogBullet[] }[];
 };
 
 export type ChangelogFeedSectionProps = {
@@ -42,7 +58,10 @@ function formatRail(ms: number): { day: string; month: string; year: string } {
 function TimelineRow({ entry }: { entry: ChangelogEntry }) {
   const r = formatRail(entry.date);
   return (
-    <div className="grid grid-cols-[6rem_1fr] gap-6 md:grid-cols-[8rem_1fr] md:gap-10">
+    <div
+      id={entry.id}
+      className="scroll-mt-24 grid grid-cols-[6rem_1fr] gap-6 md:grid-cols-[8rem_1fr] md:gap-10"
+    >
       <div className="flex flex-col items-end pt-1 text-right">
         <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
           {r.month}

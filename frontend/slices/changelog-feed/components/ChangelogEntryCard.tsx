@@ -1,9 +1,14 @@
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
-import type { ChangelogEntry, ChangelogKind } from "../views/ChangelogFeedSection";
+import type {
+  ChangelogBullet,
+  ChangelogEntry,
+  ChangelogKind,
+} from "../views/ChangelogFeedSection";
 
 export type ChangelogEntryCardProps = {
   entry: ChangelogEntry;
@@ -53,13 +58,39 @@ function Paragraphs({ body }: { body: string }) {
   );
 }
 
-function BulletList({ items }: { items: string[] }) {
+function bulletText(b: ChangelogBullet): string {
+  return typeof b === "string" ? b : b.text;
+}
+
+function bulletHref(b: ChangelogBullet): string | null {
+  if (typeof b === "string") return null;
+  if (b.href) return b.href;
+  if (!b.slug) return null;
+  return b.kind === "template" ? `/layouts/${b.slug}` : `/slices/${b.slug}`;
+}
+
+function BulletList({ items }: { items: ChangelogBullet[] }) {
   if (items.length === 0) return null;
   return (
     <ul className="ml-5 flex list-disc flex-col gap-1.5 text-sm leading-relaxed text-muted-foreground marker:text-muted-foreground/60">
-      {items.map((b, i) => (
-        <li key={i}>{b}</li>
-      ))}
+      {items.map((b, i) => {
+        const text = bulletText(b);
+        const href = bulletHref(b);
+        return (
+          <li key={i}>
+            {href ? (
+              <Link
+                href={href}
+                className="font-medium text-foreground underline decoration-foreground/30 underline-offset-2 hover:decoration-foreground"
+              >
+                {text}
+              </Link>
+            ) : (
+              text
+            )}
+          </li>
+        );
+      })}
     </ul>
   );
 }

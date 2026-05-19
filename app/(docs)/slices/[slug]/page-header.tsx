@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowLeft, Layers, Terminal } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ShowcaseCard } from "@/components/site/catalog/showcase-card";
+import { RecentlyUpdatedBadge } from "@/components/site/recently-updated-badge";
 import type { SliceEntry } from "@/lib/content/slices";
 
 const KIND_CLASS = {
@@ -34,6 +35,7 @@ export function SliceTitle({ slice }: { slice: SliceEntry }) {
             {slice.kind}
           </Badge>
         )}
+        <RecentlyUpdatedBadge slug={slice.slug} kind="slice" />
       </div>
       <p className="mt-3 max-w-2xl text-muted-foreground">{slice.description}</p>
     </div>

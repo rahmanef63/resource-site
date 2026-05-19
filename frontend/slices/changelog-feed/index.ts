@@ -4,5 +4,6 @@ export {
   type ChangelogFeedSectionProps,
   type ChangelogEntry,
   type ChangelogKind,
+  type ChangelogBullet,
 } from "./views/ChangelogFeedSection";
 export { ChangelogEntryCard, type ChangelogEntryCardProps } from "./components/ChangelogEntryCard";
