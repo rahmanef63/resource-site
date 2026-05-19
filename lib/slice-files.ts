@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 
@@ -49,15 +50,24 @@ function isTextFile(name: string): boolean {
  *
  * Server-only — uses `node:fs`. Call from a Server Component or RSC.
  */
-export async function readSliceFiles(slicePath: string): Promise<SliceFile[]> {
-  return readPathsFiles([slicePath]);
-}
+/**
+ * Memoized via React.cache so repeated reads of the same slicePath
+ * within one RSC render share the result. Pages that share a parent
+ * layout therefore don't redo file I/O when multiple components ask
+ * for the same source. */
+export const readSliceFiles = cache(
+  async function readSliceFiles(slicePath: string): Promise<SliceFile[]> {
+    return readPathsFiles([slicePath]);
+  },
+);
 
 /**
  * Same as `readSliceFiles` but accepts multiple roots and merges. When
  * more than one root is given, file paths get the root folder's last
  * segment prefixed so they don't collide in the tree.
- */
+ *
+ * Not React.cache-wrapped — array args compare by reference, so the
+ * cache wouldn't dedupe across call sites. Caller can wrap if needed. */
 export async function readPathsFiles(rootPaths: string[]): Promise<SliceFile[]> {
   const repoRoot = process.cwd();
   const out: SliceFile[] = [];

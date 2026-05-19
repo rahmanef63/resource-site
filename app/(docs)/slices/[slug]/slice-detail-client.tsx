@@ -23,6 +23,7 @@ interface Props {
 export function SliceDetailClient({ slice, codeFiles, sourceHref }: Props) {
   const manifest = React.useMemo(() => {
     return buildPreviewManifest({
+      id: `slice:${slice.slug}`,
       title: slice.title,
       subtitle: slice.description,
       publicPath: slice.previewPath,

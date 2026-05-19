@@ -37,6 +37,7 @@ export function TemplateDetail({ kind, basePath, data, prev, next, prompt, siteU
       ? () => <AssemblerInspector />
       : () => <StaticInspector data={data} />;
     return buildPreviewManifest({
+      id: `${kind}:${data.slug}`,
       title: data.title,
       subtitle: data.description,
       publicPath: data.previewPath,

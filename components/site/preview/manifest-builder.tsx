@@ -11,6 +11,11 @@ import type {
 import type { PreviewView } from "@/lib/preview-presets";
 
 export interface BuildPreviewManifestArgs {
+  /** Stable identity per page (usually the slug). Used by the
+   *  FeatureProvider to decide whether a manifest update represents a
+   *  fresh page (reset tab/view/zoom) or a same-page re-render
+   *  (preserve user state). Always pass this — falls back to title. */
+  id?: string;
   title: string;
   subtitle?: string;
 
@@ -128,6 +133,7 @@ export function buildPreviewManifest(args: BuildPreviewManifestArgs): FeatureMan
             : (tabs[0]?.id ?? undefined));
 
   return {
+    id: args.id ?? args.title,
     title: args.title,
     subtitle: args.subtitle,
     tabs,

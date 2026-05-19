@@ -31,6 +31,11 @@ export type Selections = Record<string, string | boolean | string[]>;
 // ---------------------------------------------------------------------
 
 export type FeatureManifest = {
+  /** Stable identity used by the provider to decide whether a manifest
+   *  update is a NEW page (resets activeTab/view/zoom to defaults) or
+   *  just a re-render of the same page (preserves user choices). Set
+   *  to the route slug. Fallback: title. */
+  id?: string;
   title?: string;
   subtitle?: string;
   tabs?: FeatureTab[];
@@ -105,14 +110,44 @@ export function FeatureProvider({ children }: { children: React.ReactNode }) {
   const [previewZoom, setPreviewZoom] = React.useState(0.7);
   const [selections, setSelections] = React.useState<Selections>({});
 
+  // Track the previous manifest's stable id so we only RESET preview
+  // state (activeTab / view / zoom / selections) when the page actually
+  // changes — not on every re-render. Preserves user's tab + viewport
+  // choice across in-page renders and across navigations to a slice
+  // with the same id (e.g. when the manifest object identity changes
+  // for unrelated reasons).
+  const prevIdRef = React.useRef<string | null>(null);
+
   React.useEffect(() => {
     if (!manifest) {
+      prevIdRef.current = null;
       setActiveTab(null);
       setSelections({});
       return;
     }
+    const id = manifest.id ?? manifest.title ?? "_unknown";
+    const sameId = prevIdRef.current === id;
+    prevIdRef.current = id;
+
+    if (sameId) {
+      // Same page re-render — keep activeTab / view / zoom intact.
+      // Only adopt new tabs if the previously active one disappeared.
+      const tabs = manifest.tabs ?? [];
+      setActiveTab((cur) => {
+        if (cur && tabs.find((t) => t.id === cur)) return cur;
+        return tabs.length > 0 ? (manifest.defaultTab ?? tabs[0].id) : null;
+      });
+      return;
+    }
+
+    // New page — reset to manifest defaults, BUT preserve activeTab
+    // when the new manifest exposes a tab with the same id (so users
+    // who sat on "code" stay on "code" when they click another slice).
     if (manifest.tabs && manifest.tabs.length > 0) {
-      setActiveTab(manifest.defaultTab ?? manifest.tabs[0].id);
+      setActiveTab((cur) => {
+        if (cur && manifest.tabs!.find((t) => t.id === cur)) return cur;
+        return manifest.defaultTab ?? manifest.tabs![0].id;
+      });
     } else {
       setActiveTab(null);
     }
@@ -153,13 +188,18 @@ export function useFeatureContext(): Ctx {
   return c;
 }
 
-/** Page registers its manifest. Pass a memoized manifest object. */
+/** Page registers its manifest. Pass a memoized manifest object.
+ *
+ *  No cleanup unsets the manifest on unmount — that caused a flicker
+ *  on every nav (manifest → null → new), which fired feature-context's
+ *  effect twice per page change and reset previewView/Zoom/activeTab
+ *  unnecessarily. DocsShellInner handles "navigated to a non-manifest
+ *  page" via a pathname-based clear instead. */
 export function useFeatureManifest(m: FeatureManifest | null) {
   const ctx = React.useContext(FeatureCtx);
   React.useEffect(() => {
     if (!ctx) return;
     ctx.setManifest(m);
-    return () => ctx.setManifest(null);
   }, [ctx, m]);
 }
 
