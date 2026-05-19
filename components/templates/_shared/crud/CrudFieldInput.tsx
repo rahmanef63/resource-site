@@ -92,5 +92,30 @@ export function CrudFieldInput<T>({
         />
       );
     }
+    case "image": {
+      const url = String(value ?? "");
+      const showPreview = /^(https?:\/\/|\/)/i.test(url);
+      return (
+        <div className="space-y-2">
+          <Input
+            value={url}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder={field.placeholder ?? "https://… or /path.jpg"}
+            className="font-mono text-xs"
+          />
+          {showPreview && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={url}
+              alt="preview"
+              className="h-20 w-32 rounded-md border border-border/60 object-cover"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).style.display = "none";
+              }}
+            />
+          )}
+        </div>
+      );
+    }
   }
 }

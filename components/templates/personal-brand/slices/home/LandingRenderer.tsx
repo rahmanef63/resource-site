@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import type { LandingSection } from "@/components/templates/_shared/landing/types";
+import { LandingSectionShell } from "@/components/templates/_shared/landing/LandingSectionShell";
 import { Hero } from "./Hero";
 import { NewsletterBlock } from "./NewsletterBlock";
 import {
@@ -33,32 +34,65 @@ export function renderLanding(section: LandingSection, deps: Deps) {
   switch (section.kind) {
     case "hero":
       return (
-        <Hero
-          key={section.id}
-          title={section.title}
-          subtitle={section.subtitle}
-          badge={parseConfigBadge(section.config)}
-        />
+        <LandingSectionShell section={section}>
+          <Hero
+            title={section.title}
+            subtitle={section.subtitle}
+            badge={parseConfigBadge(section.config)}
+          />
+          {section.imageUrl && (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={section.imageUrl}
+              alt=""
+              className="mx-auto mt-8 max-h-[420px] w-full max-w-4xl rounded-2xl border border-border/60 object-cover shadow-lg"
+            />
+          )}
+        </LandingSectionShell>
       );
 
     case "stats":
-      return <StatsStrip key={section.id} />;
+      return (
+        <LandingSectionShell section={section}>
+          <StatsStrip />
+        </LandingSectionShell>
+      );
 
     case "blog":
-      return <FeaturedPosts key={section.id} posts={deps.posts.slice(0, 3)} />;
+      return (
+        <LandingSectionShell section={section}>
+          <FeaturedPosts posts={deps.posts.slice(0, 3)} />
+        </LandingSectionShell>
+      );
 
     case "portfolio":
-      return <PortfolioStrip key={section.id} items={deps.portfolio.slice(0, 4)} />;
+      return (
+        <LandingSectionShell section={section}>
+          <PortfolioStrip items={deps.portfolio.slice(0, 4)} />
+        </LandingSectionShell>
+      );
 
     case "services":
-      return <ServicesBand key={section.id} services={deps.services} />;
+      return (
+        <LandingSectionShell section={section}>
+          <ServicesBand services={deps.services} />
+        </LandingSectionShell>
+      );
 
     case "testimonials":
-      return <TestimonialsGrid key={section.id} />;
+      return (
+        <LandingSectionShell section={section}>
+          <TestimonialsGrid />
+        </LandingSectionShell>
+      );
 
     case "newsletter":
     case "cta":
-      return <NewsletterBlock key={section.id} />;
+      return (
+        <LandingSectionShell section={section}>
+          <NewsletterBlock />
+        </LandingSectionShell>
+      );
 
     case "features":
     case "pricing":
@@ -66,9 +100,9 @@ export function renderLanding(section: LandingSection, deps: Deps) {
     case "faq":
     case "custom":
       return (
-        <section
-          key={section.id}
-          className="border-y border-border/40 bg-muted/10 py-12"
+        <LandingSectionShell
+          section={section}
+          defaultClassName="border-y border-border/40 bg-muted/10 py-12"
         >
           <div className="mx-auto max-w-3xl px-6 text-center">
             <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
@@ -81,7 +115,7 @@ export function renderLanding(section: LandingSection, deps: Deps) {
               <p className="mt-3 text-sm text-muted-foreground">{section.subtitle}</p>
             ) : null}
           </div>
-        </section>
+        </LandingSectionShell>
       );
 
     default:

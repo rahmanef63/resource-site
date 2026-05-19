@@ -10,6 +10,7 @@ import {
   CtaBand,
   MetricRow,
 } from "@/components/templates/_shared";
+import { LandingSectionShell } from "@/components/templates/_shared/landing/LandingSectionShell";
 import type { LandingSection } from "@/components/templates/_shared/landing/types";
 import { PUBLIC_BASE } from "../../shared/nav-config";
 import { DEFAULT_SITE_CONFIG } from "../../shared/site-config";
@@ -29,37 +30,46 @@ export function renderLanding(section: LandingSection, deps: Deps) {
   switch (section.kind) {
     case "hero":
       return (
-        <HeroBlock
-          key={section.id}
-          variant="split"
-          eyebrow={DEFAULT_SITE_CONFIG.studioName}
-          title={section.title}
-          subtitle={section.subtitle ?? DEFAULT_SITE_CONFIG.description}
-          primaryCta={{ label: "Start a project", href: `${PUBLIC_BASE}/contact` }}
-          secondaryCta={{ label: "See work", href: `${PUBLIC_BASE}/portfolio` }}
-          sidekick={
-            <Card className="border-border/60">
-              <CardContent className="space-y-3 p-6">
-                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  Selected stats
-                </p>
-                <MetricRow
-                  rows={[
-                    { k: "Active clients", v: "14" },
-                    { k: "Projects shipped", v: "86+" },
-                    { k: "Avg engagement", v: "6 weeks" },
-                    { k: "NPS", v: "72" },
-                  ]}
-                />
-              </CardContent>
-            </Card>
-          }
-        />
+        <LandingSectionShell section={section}>
+          <HeroBlock
+            variant="split"
+            eyebrow={DEFAULT_SITE_CONFIG.studioName}
+            title={section.title}
+            subtitle={section.subtitle ?? DEFAULT_SITE_CONFIG.description}
+            primaryCta={{ label: "Start a project", href: `${PUBLIC_BASE}/contact` }}
+            secondaryCta={{ label: "See work", href: `${PUBLIC_BASE}/portfolio` }}
+            sidekick={
+              <Card className="border-border/60">
+                <CardContent className="space-y-3 p-6">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    Selected stats
+                  </p>
+                  <MetricRow
+                    rows={[
+                      { k: "Active clients", v: "14" },
+                      { k: "Projects shipped", v: "86+" },
+                      { k: "Avg engagement", v: "6 weeks" },
+                      { k: "NPS", v: "72" },
+                    ]}
+                  />
+                </CardContent>
+              </Card>
+            }
+          />
+          {section.imageUrl && (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={section.imageUrl}
+              alt=""
+              className="mx-auto mt-8 max-h-[420px] w-full max-w-4xl rounded-2xl border border-border/60 object-cover shadow-lg"
+            />
+          )}
+        </LandingSectionShell>
       );
 
     case "portfolio":
       return (
-        <section key={section.id} className="border-b border-border/60">
+        <LandingSectionShell section={section} defaultClassName="border-b border-border/60">
           <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
             <SectionHead
               eyebrow="Featured work"
@@ -96,12 +106,12 @@ export function renderLanding(section: LandingSection, deps: Deps) {
               </Button>
             </div>
           </div>
-        </section>
+        </LandingSectionShell>
       );
 
     case "services":
       return (
-        <section key={section.id} className="border-b border-border/60 bg-muted/30">
+        <LandingSectionShell section={section} defaultClassName="border-b border-border/60 bg-muted/30">
           <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
             <SectionHead
               eyebrow="What we do"
@@ -128,17 +138,18 @@ export function renderLanding(section: LandingSection, deps: Deps) {
               ))}
             </div>
           </div>
-        </section>
+        </LandingSectionShell>
       );
 
     case "cta":
       return (
-        <CtaBand
-          key={section.id}
-          title={section.title}
-          subtitle={section.subtitle ?? "No commitment. We respond within 24h."}
-          cta={{ label: "Send the brief", href: `${PUBLIC_BASE}/contact` }}
-        />
+        <LandingSectionShell section={section}>
+          <CtaBand
+            title={section.title}
+            subtitle={section.subtitle ?? "No commitment. We respond within 24h."}
+            cta={{ label: "Send the brief", href: `${PUBLIC_BASE}/contact` }}
+          />
+        </LandingSectionShell>
       );
 
     case "stats":
@@ -151,9 +162,9 @@ export function renderLanding(section: LandingSection, deps: Deps) {
     case "newsletter":
     case "custom":
       return (
-        <section
-          key={section.id}
-          className="border-b border-border/40 bg-muted/10 py-12"
+        <LandingSectionShell
+          section={section}
+          defaultClassName="border-b border-border/40 bg-muted/10 py-12"
         >
           <div className="mx-auto max-w-3xl px-6 text-center">
             <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
@@ -164,7 +175,7 @@ export function renderLanding(section: LandingSection, deps: Deps) {
               <p className="mt-3 text-sm text-muted-foreground">{section.subtitle}</p>
             ) : null}
           </div>
-        </section>
+        </LandingSectionShell>
       );
 
     default:

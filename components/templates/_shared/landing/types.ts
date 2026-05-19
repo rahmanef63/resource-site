@@ -38,7 +38,18 @@ export type LandingSection = {
   subtitle?: string;
   /** Toggle to hide on / without deleting. */
   enabled: boolean;
-  /** Free-form JSON the renderer can interpret (slice-specific). */
+  /** Optional foreground image (hero illustration, feature graphic, etc.).
+   *  Threaded into the per-template renderer for the matching kind. */
+  imageUrl?: string;
+  /** Optional decorative background image (full-bleed band behind the
+   *  section). Renderer composes with overlay/gradient. */
+  bgImageUrl?: string;
+  /** Custom Tailwind classes appended to the section wrapper. Use for
+   *  one-off spacing / color / typography tweaks without touching code.
+   *  Example: "py-24 bg-gradient-to-b from-background to-muted/40". */
+  className?: string;
+  /** Free-form JSON the renderer can interpret (kind-specific extras).
+   *  Common keys: { badge: string } for hero badge override. */
   config?: string;
 };
 

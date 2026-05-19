@@ -4,6 +4,7 @@ import {
   HeroBlock,
   CtaBand,
 } from "@/components/templates/_shared";
+import { LandingSectionShell } from "@/components/templates/_shared/landing/LandingSectionShell";
 import {
   FeatureGridSection,
   type FeatureItem as SliceFeatureItem,
@@ -48,14 +49,23 @@ export function renderLanding(section: LandingSection, deps: Deps) {
   switch (section.kind) {
     case "hero":
       return (
-        <HeroBlock
-          key={section.id}
-          badge={DEFAULT_SITE_CONFIG.tagline}
-          title={section.title}
-          subtitle={section.subtitle ?? DEFAULT_SITE_CONFIG.description}
-          primaryCta={DEFAULT_SITE_CONFIG.ctaPrimary}
-          secondaryCta={{ label: "See features", href: `${PUBLIC_BASE}/features` }}
-        />
+        <LandingSectionShell section={section}>
+          <HeroBlock
+            badge={DEFAULT_SITE_CONFIG.tagline}
+            title={section.title}
+            subtitle={section.subtitle ?? DEFAULT_SITE_CONFIG.description}
+            primaryCta={DEFAULT_SITE_CONFIG.ctaPrimary}
+            secondaryCta={{ label: "See features", href: `${PUBLIC_BASE}/features` }}
+          />
+          {section.imageUrl && (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={section.imageUrl}
+              alt=""
+              className="mx-auto mt-8 max-h-[420px] w-full max-w-4xl rounded-2xl border border-border/60 object-cover shadow-lg"
+            />
+          )}
+        </LandingSectionShell>
       );
 
     case "features": {
@@ -66,29 +76,31 @@ export function renderLanding(section: LandingSection, deps: Deps) {
         icon: f.icon,
       }));
       return (
-        <FeatureGridSection
-          key={section.id}
-          eyebrow="What you get"
-          title={section.title}
-          subtitle={section.subtitle}
-          items={items}
-          columns={3}
-          layout="cards"
-          className={SHARED_CLS}
-        />
+        <LandingSectionShell section={section}>
+          <FeatureGridSection
+            eyebrow="What you get"
+            title={section.title}
+            subtitle={section.subtitle}
+            items={items}
+            columns={3}
+            layout="cards"
+            className={SHARED_CLS}
+          />
+        </LandingSectionShell>
       );
     }
 
     case "pricing":
       return (
-        <PricingSection
-          key={section.id}
-          eyebrow="Pricing"
-          title={section.title}
-          subtitle={section.subtitle}
-          tiers={deps.pricing as SliceTier[]}
-          className={`${SHARED_CLS} bg-muted/30`}
-        />
+        <LandingSectionShell section={section}>
+          <PricingSection
+            eyebrow="Pricing"
+            title={section.title}
+            subtitle={section.subtitle}
+            tiers={deps.pricing as SliceTier[]}
+            className={`${SHARED_CLS} bg-muted/30`}
+          />
+        </LandingSectionShell>
       );
 
     case "blog": {
@@ -101,18 +113,19 @@ export function renderLanding(section: LandingSection, deps: Deps) {
         tags: p.tags,
       }));
       return (
-        <BlogListSection
-          key={section.id}
-          eyebrow="Latest writing"
-          title={section.title}
-          subtitle={section.subtitle}
-          posts={items}
-          hrefFor={(p) => `${PUBLIC_BASE}/blog/${p.slug}`}
-          columns={3}
-          layout="cards"
-          limit={3}
-          className={SHARED_CLS}
-        />
+        <LandingSectionShell section={section}>
+          <BlogListSection
+            eyebrow="Latest writing"
+            title={section.title}
+            subtitle={section.subtitle}
+            posts={items}
+            hrefFor={(p) => `${PUBLIC_BASE}/blog/${p.slug}`}
+            columns={3}
+            layout="cards"
+            limit={3}
+            className={SHARED_CLS}
+          />
+        </LandingSectionShell>
       );
     }
 
@@ -126,28 +139,30 @@ export function renderLanding(section: LandingSection, deps: Deps) {
         body: e.body,
       }));
       return (
-        <ChangelogFeedSection
-          key={section.id}
-          eyebrow="What's new"
-          title={section.title}
-          subtitle={section.subtitle}
-          entries={entries}
-          layout="list"
-          limit={4}
-          className={SHARED_CLS}
-        />
+        <LandingSectionShell section={section}>
+          <ChangelogFeedSection
+            eyebrow="What's new"
+            title={section.title}
+            subtitle={section.subtitle}
+            entries={entries}
+            layout="list"
+            limit={4}
+            className={SHARED_CLS}
+          />
+        </LandingSectionShell>
       );
     }
 
     case "cta":
       return (
-        <CtaBand
-          key={section.id}
-          title={section.title}
-          subtitle={section.subtitle ?? "Spin up a workspace in 60 seconds."}
-          cta={DEFAULT_SITE_CONFIG.ctaPrimary}
-          secondaryCta={{ label: "Talk to sales", href: `${PUBLIC_BASE}/contact` }}
-        />
+        <LandingSectionShell section={section}>
+          <CtaBand
+            title={section.title}
+            subtitle={section.subtitle ?? "Spin up a workspace in 60 seconds."}
+            cta={DEFAULT_SITE_CONFIG.ctaPrimary}
+            secondaryCta={{ label: "Talk to sales", href: `${PUBLIC_BASE}/contact` }}
+          />
+        </LandingSectionShell>
       );
 
     case "testimonials":
@@ -159,9 +174,9 @@ export function renderLanding(section: LandingSection, deps: Deps) {
       // No matching data source yet — render a minimal stub so the admin
       // sees its label without crashing the page.
       return (
-        <section
-          key={section.id}
-          className={`${SHARED_CLS} mx-auto max-w-3xl px-6 text-center`}
+        <LandingSectionShell
+          section={section}
+          defaultClassName={`${SHARED_CLS} mx-auto max-w-3xl px-6 text-center`}
         >
           <p className="text-xs uppercase tracking-widest text-muted-foreground">
             {section.kind}
@@ -172,7 +187,7 @@ export function renderLanding(section: LandingSection, deps: Deps) {
           {section.subtitle ? (
             <p className="mt-3 text-sm text-muted-foreground">{section.subtitle}</p>
           ) : null}
-        </section>
+        </LandingSectionShell>
       );
 
     default:

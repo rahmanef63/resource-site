@@ -45,14 +45,15 @@ function FieldRender<T>({
   value: unknown;
   onChange: (next: unknown) => void;
 }) {
-  const wrapper =
-    field.kind === "textarea" || field.kind === "tags" ? "sm:col-span-2" : "";
+  const alwaysWide = field.kind === "textarea" || field.kind === "tags";
+  const optWide = "wide" in field && field.wide === true;
+  const wrapper = alwaysWide || optWide ? "sm:col-span-2" : "";
   return (
     <div className={`space-y-1.5 ${wrapper}`}>
       <Label className="text-xs">{field.label}</Label>
       <CrudFieldInput field={field} value={value} onChange={onChange} />
       {"hint" in field && field.hint && (
-        <p className="text-[10px] text-muted-foreground">{field.hint}</p>
+        <p className="text-[10px] leading-relaxed text-muted-foreground">{field.hint}</p>
       )}
     </div>
   );

@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { ArrowRight, CalendarDays, Mail, Mic, Wand2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,6 +11,7 @@ import {
   FeatureGrid,
   type FeatureItem,
 } from "@/components/templates/_shared";
+import { LandingSectionShell } from "@/components/templates/_shared/landing/LandingSectionShell";
 import type { LandingSection } from "@/components/templates/_shared/landing/types";
 import { ADMIN_BASE, PUBLIC_BASE } from "../../shared/nav-config";
 import type { ContentItem, NewsletterIssue } from "../../shared/types";
@@ -37,18 +37,27 @@ export function renderLanding(section: LandingSection, deps: Deps) {
   switch (section.kind) {
     case "hero":
       return (
-        <HeroBlock
-          key={section.id}
-          glow
-          badge={parseConfigBadge(section.config) ?? "Issue mingguan untuk creator"}
-          title={section.title}
-          subtitle={section.subtitle}
-        />
+        <LandingSectionShell section={section}>
+          <HeroBlock
+            glow
+            badge={parseConfigBadge(section.config) ?? "Issue mingguan untuk creator"}
+            title={section.title}
+            subtitle={section.subtitle}
+          />
+          {section.imageUrl && (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={section.imageUrl}
+              alt=""
+              className="mx-auto mt-8 max-h-[420px] w-full max-w-4xl rounded-2xl border border-border/60 object-cover shadow-lg"
+            />
+          )}
+        </LandingSectionShell>
       );
 
     case "newsletter":
       return (
-        <section key={section.id} className="border-b border-border/60 bg-muted/10">
+        <LandingSectionShell section={section} defaultClassName="border-b border-border/60 bg-muted/10">
           <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-6">
             <div>
               <p className="text-sm font-medium">{section.title}</p>
@@ -63,12 +72,12 @@ export function renderLanding(section: LandingSection, deps: Deps) {
               </Button>
             </form>
           </div>
-        </section>
+        </LandingSectionShell>
       );
 
     case "features":
       return (
-        <section key={section.id} className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+        <LandingSectionShell section={section} defaultClassName="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
           <SectionHead
             eyebrow="Workspace"
             title={section.title}
@@ -76,13 +85,13 @@ export function renderLanding(section: LandingSection, deps: Deps) {
             cta={{ label: "Buka workspace", href: ADMIN_BASE }}
           />
           <FeatureGrid items={FEATURE_ITEMS} columns={4} className="mt-10" />
-        </section>
+        </LandingSectionShell>
       );
 
     case "blog": {
       const items = deps.newsletters.filter((n) => n.status === "sent").slice(0, 3);
       return (
-        <section key={section.id} className="border-y border-border/50 bg-muted/10">
+        <LandingSectionShell section={section} defaultClassName="border-y border-border/50 bg-muted/10">
           <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
             <SectionHead
               eyebrow="Newsletter"
@@ -107,14 +116,14 @@ export function renderLanding(section: LandingSection, deps: Deps) {
               ))}
             </div>
           </div>
-        </section>
+        </LandingSectionShell>
       );
     }
 
     case "portfolio": {
       const items = deps.contents.filter((c) => c.status === "published").slice(0, 3);
       return (
-        <section key={section.id} className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+        <LandingSectionShell section={section} defaultClassName="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
           <SectionHead
             eyebrow="Content"
             title={section.title}
@@ -136,7 +145,7 @@ export function renderLanding(section: LandingSection, deps: Deps) {
               </Card>
             ))}
           </div>
-        </section>
+        </LandingSectionShell>
       );
     }
 
@@ -149,9 +158,9 @@ export function renderLanding(section: LandingSection, deps: Deps) {
     case "cta":
     case "custom":
       return (
-        <section
-          key={section.id}
-          className="border-b border-border/40 bg-muted/10 py-12"
+        <LandingSectionShell
+          section={section}
+          defaultClassName="border-b border-border/40 bg-muted/10 py-12"
         >
           <div className="mx-auto max-w-3xl px-6 text-center">
             <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
@@ -162,7 +171,7 @@ export function renderLanding(section: LandingSection, deps: Deps) {
               <p className="mt-3 text-sm text-muted-foreground">{section.subtitle}</p>
             ) : null}
           </div>
-        </section>
+        </LandingSectionShell>
       );
 
     default:

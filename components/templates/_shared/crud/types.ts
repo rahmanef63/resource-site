@@ -18,15 +18,21 @@ export type ColumnDef<T> = {
   hideOnMobile?: boolean;
 };
 
-/** Field definition for CrudFormView. */
+/** Field definition for CrudFormView.
+ *
+ *  `wide?: true` (text/select/number/image) makes the field span both
+ *  columns (sm:col-span-2). textarea / tags are always wide.
+ *  `hint?` renders as muted helper text below the input. */
 export type FieldDef<T> =
-  | { kind: "text"; key: keyof T & string; label: string; mono?: boolean; placeholder?: string; hint?: string }
-  | { kind: "textarea"; key: keyof T & string; label: string; rows?: number; mono?: boolean; placeholder?: string }
-  | { kind: "number"; key: keyof T & string; label: string; min?: number; max?: number; step?: number }
-  | { kind: "select"; key: keyof T & string; label: string; options: { value: string; label: string }[] }
+  | { kind: "text"; key: keyof T & string; label: string; mono?: boolean; placeholder?: string; hint?: string; wide?: boolean }
+  | { kind: "textarea"; key: keyof T & string; label: string; rows?: number; mono?: boolean; placeholder?: string; hint?: string }
+  | { kind: "number"; key: keyof T & string; label: string; min?: number; max?: number; step?: number; hint?: string; wide?: boolean }
+  | { kind: "select"; key: keyof T & string; label: string; options: { value: string; label: string }[]; hint?: string; wide?: boolean }
   | { kind: "tags"; key: keyof T & string; label: string; hint?: string }
-  | { kind: "switch"; key: keyof T & string; label: string }
-  | { kind: "date"; key: keyof T & string; label: string };
+  | { kind: "switch"; key: keyof T & string; label: string; hint?: string }
+  | { kind: "date"; key: keyof T & string; label: string; hint?: string }
+  /** URL text input with live preview thumbnail when value is a URL or path. */
+  | { kind: "image"; key: keyof T & string; label: string; placeholder?: string; hint?: string; wide?: boolean };
 
 /** Adapter the template wires from its store dispatch. Generic CRUD
  *  components consume this — no direct store coupling. */

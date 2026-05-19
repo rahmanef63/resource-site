@@ -7,38 +7,11 @@ import type {
   ColumnDef,
   CrudController,
   EntityMeta,
-  FieldDef,
 } from "@/components/templates/_shared/crud/types";
 import { useLandingStore } from "./landing-context";
+import { blankSection } from "./LandingEditorView";
+import { LANDING_FIELDS } from "./landing-fields";
 import type { LandingSection } from "./types";
-
-const FIELDS: FieldDef<LandingSection>[] = [
-  {
-    kind: "select",
-    key: "kind",
-    label: "Kind",
-    options: [
-      { value: "hero", label: "Hero" },
-      { value: "features", label: "Features grid" },
-      { value: "testimonials", label: "Testimonials" },
-      { value: "pricing", label: "Pricing tiers" },
-      { value: "blog", label: "Blog cards" },
-      { value: "changelog", label: "Changelog feed" },
-      { value: "faq", label: "FAQ accordion" },
-      { value: "portfolio", label: "Portfolio grid" },
-      { value: "services", label: "Services band" },
-      { value: "stats", label: "Stats strip" },
-      { value: "newsletter", label: "Newsletter signup" },
-      { value: "cta", label: "Call-to-action" },
-      { value: "custom", label: "Custom" },
-    ],
-  },
-  { kind: "text", key: "title", label: "Title", placeholder: "Section heading" },
-  { kind: "textarea", key: "subtitle", label: "Subtitle", rows: 2 },
-  { kind: "number", key: "order", label: "Order", min: 0, step: 10 } as FieldDef<LandingSection>,
-  { kind: "switch", key: "enabled", label: "Visible on /" },
-  { kind: "textarea", key: "config", label: "Config (JSON)", rows: 4, mono: true, placeholder: "{}" },
-];
 
 const META: EntityMeta = {
   label: "Section",
@@ -106,15 +79,7 @@ export function LandingView() {
     () => ({
       items: [...store.items].sort((a, b) => a.order - b.order),
       getId: (s) => s.id,
-      blank: () => ({
-        id: `ls-${Math.random().toString(36).slice(2, 10)}`,
-        order: (store.items.at(-1)?.order ?? 0) + 10,
-        kind: "custom",
-        title: "New section",
-        subtitle: "",
-        enabled: true,
-        config: "",
-      }),
+      blank: () => blankSection(store.items.at(-1)?.order ?? 0),
       create: store.create,
       update: store.update,
       remove: store.remove,
@@ -130,7 +95,7 @@ export function LandingView() {
       }}
       controller={controller}
       columns={COLUMNS}
-      fields={FIELDS}
+      fields={LANDING_FIELDS}
       editPath={(id) => `${store.adminBase}/landing/${id}`}
       description={`${enabled}/${controller.items.length} sections visible`}
     />

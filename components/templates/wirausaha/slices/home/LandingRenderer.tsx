@@ -10,6 +10,7 @@ import {
   CtaBand,
   type FeatureItem,
 } from "@/components/templates/_shared";
+import { LandingSectionShell } from "@/components/templates/_shared/landing/LandingSectionShell";
 import type { LandingSection } from "@/components/templates/_shared/landing/types";
 import { ADMIN_BASE, PUBLIC_BASE } from "../../shared/nav-config";
 import type { Business, Product } from "../../shared/types";
@@ -35,32 +36,41 @@ export function renderLanding(section: LandingSection, deps: Deps) {
   switch (section.kind) {
     case "hero":
       return (
-        <HeroBlock
-          key={section.id}
-          glow
-          badge={parseConfigBadge(section.config) ?? "Untuk wirausaha multi-unit"}
-          title={section.title}
-          subtitle={section.subtitle}
-          primaryCta={{ label: "Buka workspace", href: ADMIN_BASE }}
-          secondaryCta={{ label: "Hubungi kami", href: `${PUBLIC_BASE}/contact` }}
-        />
+        <LandingSectionShell section={section}>
+          <HeroBlock
+            glow
+            badge={parseConfigBadge(section.config) ?? "Untuk wirausaha multi-unit"}
+            title={section.title}
+            subtitle={section.subtitle}
+            primaryCta={{ label: "Buka workspace", href: ADMIN_BASE }}
+            secondaryCta={{ label: "Hubungi kami", href: `${PUBLIC_BASE}/contact` }}
+          />
+          {section.imageUrl && (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={section.imageUrl}
+              alt=""
+              className="mx-auto mt-8 max-h-[420px] w-full max-w-4xl rounded-2xl border border-border/60 object-cover shadow-lg"
+            />
+          )}
+        </LandingSectionShell>
       );
 
     case "features":
       return (
-        <section key={section.id} className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+        <LandingSectionShell section={section} defaultClassName="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
           <SectionHead
             eyebrow="Fitur"
             title={section.title}
             subtitle={section.subtitle}
           />
           <FeatureGrid items={FEATURE_ITEMS} columns={4} className="mt-10" />
-        </section>
+        </LandingSectionShell>
       );
 
     case "portfolio":
       return (
-        <section key={section.id} className="border-y border-border/50 bg-muted/10">
+        <LandingSectionShell section={section} defaultClassName="border-y border-border/50 bg-muted/10">
           <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
             <SectionHead
               eyebrow="Unit usaha"
@@ -85,12 +95,12 @@ export function renderLanding(section: LandingSection, deps: Deps) {
               ))}
             </div>
           </div>
-        </section>
+        </LandingSectionShell>
       );
 
     case "services":
       return (
-        <section key={section.id} className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+        <LandingSectionShell section={section} defaultClassName="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
           <SectionHead
             eyebrow="Katalog"
             title={section.title}
@@ -109,17 +119,18 @@ export function renderLanding(section: LandingSection, deps: Deps) {
               </Card>
             ))}
           </div>
-        </section>
+        </LandingSectionShell>
       );
 
     case "cta":
       return (
-        <CtaBand
-          key={section.id}
-          title={section.title}
-          subtitle={section.subtitle ?? "Demo workspace dalam 5 menit."}
-          cta={{ label: "Mulai sekarang", href: ADMIN_BASE }}
-        />
+        <LandingSectionShell section={section}>
+          <CtaBand
+            title={section.title}
+            subtitle={section.subtitle ?? "Demo workspace dalam 5 menit."}
+            cta={{ label: "Mulai sekarang", href: ADMIN_BASE }}
+          />
+        </LandingSectionShell>
       );
 
     case "stats":
@@ -131,9 +142,9 @@ export function renderLanding(section: LandingSection, deps: Deps) {
     case "newsletter":
     case "custom":
       return (
-        <section
-          key={section.id}
-          className="border-b border-border/40 bg-muted/10 py-12"
+        <LandingSectionShell
+          section={section}
+          defaultClassName="border-b border-border/40 bg-muted/10 py-12"
         >
           <div className="mx-auto max-w-3xl px-6 text-center">
             <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
@@ -144,7 +155,7 @@ export function renderLanding(section: LandingSection, deps: Deps) {
               <p className="mt-3 text-sm text-muted-foreground">{section.subtitle}</p>
             ) : null}
           </div>
-        </section>
+        </LandingSectionShell>
       );
 
     default:

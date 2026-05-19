@@ -11,5 +11,7 @@ export { LandingProvider, useLandingStore, type LandingStore } from "./landing-c
 export { landingReducer } from "./reducer";
 export { defaultLandingSections } from "./seed-factory";
 export { LandingView } from "./LandingView";
-export { LandingEditorView } from "./LandingEditorView";
+export { LandingEditorView, blankSection } from "./LandingEditorView";
+export { LANDING_FIELDS } from "./landing-fields";
+export { LandingSectionShell } from "./LandingSectionShell";
 export type { LandingSection, LandingSectionKind, LandingAction, LandingSlice } from "./types";
