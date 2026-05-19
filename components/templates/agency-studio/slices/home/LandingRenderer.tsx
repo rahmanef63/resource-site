@@ -39,31 +39,26 @@ export function renderLanding(section: LandingSection, deps: Deps) {
             primaryCta={{ label: "Start a project", href: `${PUBLIC_BASE}/contact` }}
             secondaryCta={{ label: "See work", href: `${PUBLIC_BASE}/portfolio` }}
             sidekick={
-              <Card className="border-border/60">
-                <CardContent className="space-y-3 p-6">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                    Selected stats
-                  </p>
-                  <MetricRow
-                    rows={[
-                      { k: "Active clients", v: "14" },
-                      { k: "Projects shipped", v: "86+" },
-                      { k: "Avg engagement", v: "6 weeks" },
-                      { k: "NPS", v: "72" },
-                    ]}
-                  />
-                </CardContent>
-              </Card>
+              section.imageUrl ? undefined : (
+                <Card className="border-border/60">
+                  <CardContent className="space-y-3 p-6">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      Selected stats
+                    </p>
+                    <MetricRow
+                      rows={[
+                        { k: "Active clients", v: "14" },
+                        { k: "Projects shipped", v: "86+" },
+                        { k: "Avg engagement", v: "6 weeks" },
+                        { k: "NPS", v: "72" },
+                      ]}
+                    />
+                  </CardContent>
+                </Card>
+              )
             }
+            image={section.imageUrl ? { url: section.imageUrl, ratio: section.imageRatio } : undefined}
           />
-          {section.imageUrl && (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img
-              src={section.imageUrl}
-              alt=""
-              className="mx-auto mt-8 max-h-[420px] w-full max-w-4xl rounded-2xl border border-border/60 object-cover shadow-lg"
-            />
-          )}
         </LandingSectionShell>
       );
 

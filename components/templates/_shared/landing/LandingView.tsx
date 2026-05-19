@@ -75,17 +75,30 @@ const COLUMNS: ColumnDef<LandingSection>[] = [
 
 export function LandingView() {
   const store = useLandingStore();
-  const controller = React.useMemo<CrudController<LandingSection>>(
-    () => ({
-      items: [...store.items].sort((a, b) => a.order - b.order),
+  const controller = React.useMemo<CrudController<LandingSection>>(() => {
+    const sorted = [...store.items].sort((a, b) => a.order - b.order);
+    const swap = (id: string, delta: -1 | 1) => {
+      const idx = sorted.findIndex((s) => s.id === id);
+      if (idx < 0) return;
+      const next = idx + delta;
+      if (next < 0 || next >= sorted.length) return;
+      const a = sorted[idx];
+      const b = sorted[next];
+      store.update(a.id, { order: b.order });
+      store.update(b.id, { order: a.order });
+    };
+    const lastOrder = sorted.at(-1)?.order ?? 0;
+    return {
+      items: sorted,
       getId: (s) => s.id,
-      blank: () => blankSection(store.items.at(-1)?.order ?? 0),
+      blank: () => blankSection(lastOrder),
       create: store.create,
       update: store.update,
       remove: store.remove,
-    }),
-    [store],
-  );
+      moveUp: (id) => swap(id, -1),
+      moveDown: (id) => swap(id, 1),
+    };
+  }, [store]);
   const enabled = controller.items.filter((s) => s.enabled).length;
   return (
     <CrudListView

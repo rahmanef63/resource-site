@@ -43,15 +43,8 @@ export function renderLanding(section: LandingSection, deps: Deps) {
             badge={parseConfigBadge(section.config) ?? "Issue mingguan untuk creator"}
             title={section.title}
             subtitle={section.subtitle}
+            image={section.imageUrl ? { url: section.imageUrl, ratio: section.imageRatio } : undefined}
           />
-          {section.imageUrl && (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img
-              src={section.imageUrl}
-              alt=""
-              className="mx-auto mt-8 max-h-[420px] w-full max-w-4xl rounded-2xl border border-border/60 object-cover shadow-lg"
-            />
-          )}
         </LandingSectionShell>
       );
 

@@ -38,9 +38,9 @@ export const LANDING_FIELDS: FieldDef<LandingSection>[] = [
     kind: "number",
     key: "order",
     label: "Order",
-    min: 0,
-    step: 10,
-    hint: "Lower numbers render first. Leave gaps (10, 20, 30…) so you can squeeze new sections in later.",
+    min: 1,
+    step: 1,
+    hint: "1 = top of the page; 2, 3, 4… render below. Auto-assigned on create — the list has up/down arrows for re-ordering.",
   },
   {
     kind: "switch",
@@ -74,12 +74,26 @@ export const LANDING_FIELDS: FieldDef<LandingSection>[] = [
     hint: "Hero illustration, feature graphic, portfolio cover, etc. URL or /public path. Leave blank for text-only sections.",
   },
   {
+    kind: "select",
+    key: "imageRatio",
+    label: "Image aspect ratio",
+    options: [
+      { value: "16:9", label: "16:9 (widescreen, default)" },
+      { value: "4:3", label: "4:3 (classic)" },
+      { value: "1:1", label: "1:1 (square)" },
+      { value: "3:2", label: "3:2 (photo)" },
+      { value: "21:9", label: "21:9 (ultrawide)" },
+      { value: "auto", label: "auto (use the image's natural ratio)" },
+    ],
+    hint: "Controls how the foreground image is cropped. \"auto\" keeps the natural ratio.",
+  },
+  {
     kind: "image",
     key: "bgImageUrl",
     label: "Background image",
     wide: true,
     placeholder: "https://… (subtle textures work best)",
-    hint: "Full-bleed background behind the section. The renderer composes a dark overlay automatically so text stays readable.",
+    hint: "Full-bleed background behind the section. A soft gradient scrim keeps text readable.",
   },
 
   {

@@ -27,7 +27,7 @@ export function LandingSectionShell({ section, children, defaultClassName }: Pro
         "relative",
         defaultClassName,
         section.className,
-        hasBg && "isolate text-foreground",
+        hasBg && "isolate overflow-hidden text-foreground",
       )}
     >
       {hasBg && (
@@ -42,9 +42,11 @@ export function LandingSectionShell({ section, children, defaultClassName }: Pro
               (e.currentTarget as HTMLImageElement).style.display = "none";
             }}
           />
+          {/* Soft readability scrim — keeps text legible but the bg
+              image stays clearly visible (AL-A fix: was bg/70 blanket). */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 -z-10 bg-background/70 backdrop-blur-sm"
+            className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-background/30 via-background/10 to-background/60"
           />
         </>
       )}

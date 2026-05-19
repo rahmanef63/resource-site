@@ -35,7 +35,10 @@ export type FieldDef<T> =
   | { kind: "image"; key: keyof T & string; label: string; placeholder?: string; hint?: string; wide?: boolean };
 
 /** Adapter the template wires from its store dispatch. Generic CRUD
- *  components consume this — no direct store coupling. */
+ *  components consume this — no direct store coupling.
+ *
+ *  Optional `moveUp` / `moveDown` opt the list into per-row reorder
+ *  arrows (CrudListView renders them when both are provided). */
 export type CrudController<T> = {
   items: T[];
   getId: (item: T) => string;
@@ -43,6 +46,8 @@ export type CrudController<T> = {
   create: (item: T) => void;
   update: (id: string, patch: Partial<T>) => void;
   remove: (id: string) => void;
+  moveUp?: (id: string) => void;
+  moveDown?: (id: string) => void;
 };
 
 export type EntityMeta = {

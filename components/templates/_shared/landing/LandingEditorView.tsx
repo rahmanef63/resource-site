@@ -45,12 +45,14 @@ export function LandingEditorView({ id }: { id: string }) {
 export function blankSection(lastOrder: number): LandingSection {
   return {
     id: `ls-${Math.random().toString(36).slice(2, 10)}`,
-    order: lastOrder + 10,
+    // 1-based: first item is 1, next is 2, etc. (AL-D)
+    order: Math.max(1, Math.floor(lastOrder) + 1),
     kind: "custom",
     title: "New section",
     subtitle: "",
     enabled: true,
     imageUrl: "",
+    imageRatio: "16:9",
     bgImageUrl: "",
     className: "",
     config: "",

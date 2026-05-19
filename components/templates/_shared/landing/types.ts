@@ -41,6 +41,9 @@ export type LandingSection = {
   /** Optional foreground image (hero illustration, feature graphic, etc.).
    *  Threaded into the per-template renderer for the matching kind. */
   imageUrl?: string;
+  /** Aspect ratio for the foreground image. Renders via Tailwind
+   *  aspect-* utilities. Defaults to 16:9 if unset. */
+  imageRatio?: AspectRatio;
   /** Optional decorative background image (full-bleed band behind the
    *  section). Renderer composes with overlay/gradient. */
   bgImageUrl?: string;
@@ -51,6 +54,24 @@ export type LandingSection = {
   /** Free-form JSON the renderer can interpret (kind-specific extras).
    *  Common keys: { badge: string } for hero badge override. */
   config?: string;
+};
+
+export type AspectRatio =
+  | "16:9"
+  | "4:3"
+  | "1:1"
+  | "3:2"
+  | "21:9"
+  | "auto";
+
+/** Tailwind aspect-* class for each ratio. Empty for "auto". */
+export const ASPECT_RATIO_CLASS: Record<AspectRatio, string> = {
+  "16:9": "aspect-video",
+  "4:3": "aspect-[4/3]",
+  "1:1": "aspect-square",
+  "3:2": "aspect-[3/2]",
+  "21:9": "aspect-[21/9]",
+  "auto": "",
 };
 
 export type LandingAction =

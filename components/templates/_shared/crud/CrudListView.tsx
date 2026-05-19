@@ -1,8 +1,7 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
-import { ExternalLink, Plus, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -14,6 +13,7 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { CellRender, renderForLabel } from "./CrudCells";
+import { CrudRowActions } from "./CrudRowActions";
 import { CrudRowDialog } from "./CrudRowDialog";
 import type {
   ColumnDef,
@@ -119,11 +119,14 @@ export function CrudListView<T>({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {controller.items.map((row) => {
+            {controller.items.map((row, idx) => {
               const id = controller.getId(row);
               const label = renderForLabel(row, columns);
               const publicHref = meta.publicHref?.(row as unknown);
               const clickable = Boolean(fields);
+              const canReorder = Boolean(controller.moveUp && controller.moveDown);
+              const isFirst = idx === 0;
+              const isLast = idx === controller.items.length - 1;
               return (
                 <TableRow
                   key={id}
@@ -142,24 +145,17 @@ export function CrudListView<T>({
                     </TableCell>
                   ))}
                   <TableCell onClick={(e) => e.stopPropagation()}>
-                    <div className="flex items-center justify-end gap-1">
-                      {publicHref && (
-                        <Button asChild size="icon" variant="ghost" className="size-7" title="View public">
-                          <Link href={publicHref} target="_blank">
-                            <ExternalLink className="size-3.5" />
-                          </Link>
-                        </Button>
-                      )}
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        className="size-7 text-destructive hover:text-destructive"
-                        title="Delete"
-                        onClick={() => deleteItem(id, label)}
-                      >
-                        <Trash2 className="size-3.5" />
-                      </Button>
-                    </div>
+                    <CrudRowActions
+                      id={id}
+                      label={label}
+                      publicHref={publicHref}
+                      canReorder={canReorder}
+                      isFirst={isFirst}
+                      isLast={isLast}
+                      onMoveUp={controller.moveUp}
+                      onMoveDown={controller.moveDown}
+                      onDelete={deleteItem}
+                    />
                   </TableCell>
                 </TableRow>
               );

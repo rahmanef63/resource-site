@@ -4,6 +4,10 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import {
+  ASPECT_RATIO_CLASS,
+  type AspectRatio,
+} from "../landing/types";
 import type { Cta } from "../types/common";
 
 /**
@@ -24,6 +28,7 @@ export function HeroBlock({
   secondaryCta,
   variant = "centered",
   sidekick,
+  image,
   glow = false,
   className,
 }: {
@@ -35,9 +40,16 @@ export function HeroBlock({
   secondaryCta?: Cta;
   variant?: "centered" | "split";
   sidekick?: React.ReactNode;
+  /** Foreground illustration. Auto-promotes variant to "split" when set
+   *  and no sidekick is provided. */
+  image?: { url: string; ratio?: AspectRatio; alt?: string };
   glow?: boolean;
   className?: string;
 }) {
+  const effectiveVariant =
+    variant === "split" || (image && !sidekick) ? "split" : "centered";
+  const imageSidekick = image && !sidekick ? <HeroImage image={image} /> : null;
+  const rightCol = sidekick ?? imageSidekick;
   return (
     <section className={cn("relative isolate overflow-hidden border-b border-border/60", className)}>
       {glow && (
@@ -49,11 +61,11 @@ export function HeroBlock({
       )}
       <div
         className={cn(
-          "mx-auto grid max-w-6xl gap-8 px-4 py-16 sm:px-6 sm:py-20 md:py-28",
-          variant === "split" ? "md:grid-cols-12" : "",
+          "mx-auto grid max-w-6xl items-center gap-8 px-4 py-16 sm:px-6 sm:py-20 md:py-28",
+          effectiveVariant === "split" ? "md:grid-cols-12" : "",
         )}
       >
-        <div className={variant === "split" ? "md:col-span-8" : ""}>
+        <div className={effectiveVariant === "split" ? "md:col-span-7" : ""}>
           {badge && (
             <Badge variant="secondary" className="mb-4 rounded-full px-3 py-1 text-[11px]">
               <Sparkles className="mr-1 size-3" /> {badge}
@@ -89,10 +101,32 @@ export function HeroBlock({
             </div>
           )}
         </div>
-        {variant === "split" && sidekick && (
-          <div className="md:col-span-4">{sidekick}</div>
+        {effectiveVariant === "split" && rightCol && (
+          <div className="md:col-span-5">{rightCol}</div>
         )}
       </div>
     </section>
+  );
+}
+
+function HeroImage({ image }: { image: { url: string; ratio?: AspectRatio; alt?: string } }) {
+  const ratioClass = ASPECT_RATIO_CLASS[image.ratio ?? "16:9"];
+  return (
+    <div
+      className={cn(
+        "overflow-hidden rounded-2xl border border-border/60 shadow-lg",
+        ratioClass,
+      )}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={image.url}
+        alt={image.alt ?? ""}
+        className="h-full w-full object-cover"
+        onError={(e) => {
+          (e.currentTarget.parentElement as HTMLElement).style.display = "none";
+        }}
+      />
+    </div>
   );
 }

@@ -50,15 +50,8 @@ export function renderLanding(section: LandingSection, deps: Deps) {
             subtitle={section.subtitle}
             primaryCta={{ label: "Konsultasi gratis", href: `${PUBLIC_BASE}/contact` }}
             secondaryCta={{ label: "Lihat case studies", href: `${PUBLIC_BASE}/case-studies` }}
+            image={section.imageUrl ? { url: section.imageUrl, ratio: section.imageRatio } : undefined}
           />
-          {section.imageUrl && (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img
-              src={section.imageUrl}
-              alt=""
-              className="mx-auto mt-8 max-h-[420px] w-full max-w-4xl rounded-2xl border border-border/60 object-cover shadow-lg"
-            />
-          )}
         </LandingSectionShell>
       );
 
