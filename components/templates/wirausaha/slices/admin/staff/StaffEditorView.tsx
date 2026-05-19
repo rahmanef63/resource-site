@@ -10,7 +10,7 @@ import { useStaffController } from "./StaffView";
 
 const META: EntityMeta = { label: "Staff", labelPlural: "Staff" };
 
-function useFields(): FieldDef<StaffMember>[] {
+export function useFields(): FieldDef<StaffMember>[] {
   const { state } = useStore();
   return React.useMemo<FieldDef<StaffMember>[]>(
     () => [

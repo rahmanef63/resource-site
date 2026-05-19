@@ -10,7 +10,7 @@ import { useProductsController } from "./InventoryView";
 
 const META: EntityMeta = { label: "Produk", labelPlural: "Inventory" };
 
-function useFields(): FieldDef<Product>[] {
+export function useFields(): FieldDef<Product>[] {
   const { state } = useStore();
   return React.useMemo<FieldDef<Product>[]>(
     () => [

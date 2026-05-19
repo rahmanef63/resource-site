@@ -6,6 +6,7 @@ import type { ColumnDef, CrudController, EntityMeta } from "@/components/templat
 import { useStore } from "../../../shared/store";
 import { ADMIN_BASE } from "../../../shared/nav-config";
 import type { Order } from "../../../shared/types";
+import { useFields } from "./OrderEditorView";
 
 const META: EntityMeta = { label: "Order", labelPlural: "Orders" };
 
@@ -77,12 +78,14 @@ export function useOrdersController(): CrudController<Order> {
 export function OrdersView() {
   const controller = useOrdersController();
   const columns = useColumns();
+  const fields = useFields();
   const newOrders = controller.items.filter((o) => o.status === "new").length;
   return (
     <CrudListView
       meta={META}
       controller={controller}
       columns={columns}
+      fields={fields}
       editPath={(id) => `${ADMIN_BASE}/orders/${id}`}
       description={`${newOrders} order baru`}
     />

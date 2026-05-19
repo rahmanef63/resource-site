@@ -10,7 +10,7 @@ import { useOrdersController } from "./OrdersView";
 
 const META: EntityMeta = { label: "Order", labelPlural: "Orders" };
 
-function useFields(): FieldDef<Order>[] {
+export function useFields(): FieldDef<Order>[] {
   const { state } = useStore();
   return React.useMemo<FieldDef<Order>[]>(
     () => [

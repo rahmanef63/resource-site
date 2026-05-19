@@ -18,12 +18,12 @@ const META: EntityMeta = {
 };
 
 /** Flat view-model for the form (cta unrolled into 2 flat fields). */
-type TierFlat = Omit<PricingTier, "cta"> & {
+export type TierFlat = Omit<PricingTier, "cta"> & {
   ctaLabel: string;
   ctaHref: string;
 };
 
-const FIELDS: FieldDef<TierFlat>[] = [
+export const FIELDS: FieldDef<TierFlat>[] = [
   { kind: "text", key: "name", label: "Name" },
   { kind: "text", key: "price", label: "Price", mono: true, placeholder: "$49" },
   { kind: "text", key: "period", label: "Period", placeholder: "per month" },
@@ -57,7 +57,7 @@ const fromFlat = (f: TierFlat): PricingTier => ({
   cta: { label: f.ctaLabel, href: f.ctaHref },
 });
 
-function useController(): CrudController<TierFlat> {
+export function useTierFlatController(): CrudController<TierFlat> {
   const { state, dispatch } = useStore();
   return React.useMemo(
     () => ({
@@ -88,7 +88,7 @@ function useController(): CrudController<TierFlat> {
 }
 
 export function PricingEditorView({ id }: { id: string }) {
-  const controller = useController();
+  const controller = useTierFlatController();
   return (
     <CrudFormView
       id={id}

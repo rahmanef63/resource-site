@@ -10,7 +10,7 @@ import { useFinanceController } from "./FinanceView";
 
 const META: EntityMeta = { label: "Catatan", labelPlural: "Finance" };
 
-function useFields(): FieldDef<FinanceRecord>[] {
+export function useFields(): FieldDef<FinanceRecord>[] {
   const { state } = useStore();
   return React.useMemo<FieldDef<FinanceRecord>[]>(
     () => [

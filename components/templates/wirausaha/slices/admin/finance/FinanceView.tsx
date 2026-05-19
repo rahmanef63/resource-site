@@ -6,6 +6,7 @@ import type { ColumnDef, CrudController, EntityMeta } from "@/components/templat
 import { fmtDate, useStore } from "../../../shared/store";
 import { ADMIN_BASE } from "../../../shared/nav-config";
 import type { FinanceRecord } from "../../../shared/types";
+import { useFields } from "./FinanceEditorView";
 
 const META: EntityMeta = { label: "Catatan", labelPlural: "Finance" };
 
@@ -68,12 +69,14 @@ export function useFinanceController(): CrudController<FinanceRecord> {
 export function FinanceView() {
   const controller = useFinanceController();
   const columns = useColumns();
+  const fields = useFields();
   const income = controller.items.filter((r) => r.kind === "income").length;
   return (
     <CrudListView
       meta={META}
       controller={controller}
       columns={columns}
+      fields={fields}
       editPath={(id) => `${ADMIN_BASE}/finance/${id}`}
       description={`${income} income`}
     />

@@ -6,6 +6,7 @@ import type { ColumnDef, CrudController, EntityMeta } from "@/components/templat
 import { fmtDate, useStore } from "../../../shared/store";
 import { ADMIN_BASE } from "../../../shared/nav-config";
 import type { StaffMember } from "../../../shared/types";
+import { useFields } from "./StaffEditorView";
 
 const META: EntityMeta = { label: "Staff", labelPlural: "Staff" };
 
@@ -66,12 +67,14 @@ export function useStaffController(): CrudController<StaffMember> {
 export function StaffView() {
   const controller = useStaffController();
   const columns = useColumns();
+  const fields = useFields();
   const units = new Set(controller.items.map((s) => s.businessId)).size;
   return (
     <CrudListView
       meta={META}
       controller={controller}
       columns={columns}
+      fields={fields}
       editPath={(id) => `${ADMIN_BASE}/staff/${id}`}
       description={`${units} unit terisi`}
     />

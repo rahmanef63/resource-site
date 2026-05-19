@@ -6,6 +6,7 @@ import type { ColumnDef, CrudController, EntityMeta } from "@/components/templat
 import { useStore } from "../../../shared/store";
 import { ADMIN_BASE } from "../../../shared/nav-config";
 import type { Product } from "../../../shared/types";
+import { useFields } from "./ProductEditorView";
 
 const META: EntityMeta = { label: "Produk", labelPlural: "Inventory" };
 
@@ -67,12 +68,14 @@ export function useProductsController(): CrudController<Product> {
 export function InventoryView() {
   const controller = useProductsController();
   const columns = useColumns();
+  const fields = useFields();
   const lowStock = controller.items.filter((p) => p.stock < 20).length;
   return (
     <CrudListView
       meta={META}
       controller={controller}
       columns={columns}
+      fields={fields}
       editPath={(id) => `${ADMIN_BASE}/inventory/${id}`}
       description={`${lowStock} stok menipis`}
     />

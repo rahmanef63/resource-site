@@ -7,9 +7,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import type { FieldDef } from "@/components/templates/_shared/crud/types";
 import { ADMIN_BASE } from "../../../shared/nav-config";
 import type { LitReview } from "../../../shared/types";
 import { useLitReviewController } from "./LitReviewView";
+
+/** Quick-edit dialog fields (matrix omitted — too rich for inline dialog;
+ *  use deep-link page below for matrix editing). */
+export const FIELDS: FieldDef<LitReview>[] = [
+  { kind: "text", key: "topic", label: "Topik" },
+  { kind: "tags", key: "docIds", label: "Document IDs", hint: "Edit matrix di halaman deep-link." },
+  { kind: "textarea", key: "question", label: "Pertanyaan riset", rows: 3 },
+];
 
 export function LitReviewEditorView({ id }: { id: string }) {
   const controller = useLitReviewController();

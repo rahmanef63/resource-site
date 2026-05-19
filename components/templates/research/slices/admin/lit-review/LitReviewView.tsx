@@ -10,6 +10,7 @@ import type {
 import { ADMIN_BASE } from "../../../shared/nav-config";
 import { useStore } from "../../../shared/store";
 import type { LitReview } from "../../../shared/types";
+import { FIELDS } from "./LitReviewEditorView";
 
 const META: EntityMeta = { label: "Review", labelPlural: "Literature Review" };
 
@@ -73,6 +74,7 @@ export function LitReviewView() {
       meta={META}
       controller={controller}
       columns={COLUMNS}
+      fields={FIELDS}
       editPath={(id) => `${ADMIN_BASE}/lit-review/${id}`}
       description="Matrix bandingkan metode, temuan, dan gap antar paper."
     />
