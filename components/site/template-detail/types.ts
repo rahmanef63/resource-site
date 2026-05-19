@@ -1,4 +1,5 @@
 import type { PreviewView } from "@/lib/preview-presets";
+import type { SliceFile } from "@/lib/slice-files";
 
 export type TemplateDetailData = {
   slug: string;
@@ -9,6 +10,11 @@ export type TemplateDetailData = {
   primaryFile?: string;
   files?: string[];
   pullPaths?: string[];
+  /** Server-pre-read file contents for the in-browser code viewer. */
+  codeFiles?: SliceFile[];
+  /** Root path the codeFiles were read from — shown as a header in the
+   *  viewer. Typically equals `repoPath` or the first `pullPaths` entry. */
+  codeRootPath?: string;
   dependencies?: string[];
   exampleCode: string;
   agentRecipe: string;

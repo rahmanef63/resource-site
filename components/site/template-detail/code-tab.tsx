@@ -1,9 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { FileCode, FolderTree, Package, Rocket, Terminal } from "lucide-react";
+import { FileCode, Package, Rocket, Terminal } from "lucide-react";
 import { CodeBlock } from "@/components/site/code-block";
 import { ShowcaseCard } from "@/components/site/catalog/showcase-card";
+import { SliceCodeViewer } from "@/components/site/slice-code/code-viewer";
+import type { SliceFile } from "@/lib/slice-files";
 
 export function CodeTab({
   slug,
@@ -12,6 +14,8 @@ export function CodeTab({
   files,
   pullPaths,
   dependencies,
+  codeFiles,
+  codeRootPath,
 }: {
   slug: string;
   exampleCode: string;
@@ -19,6 +23,8 @@ export function CodeTab({
   files?: string[];
   pullPaths?: string[];
   dependencies?: string[];
+  codeFiles?: SliceFile[];
+  codeRootPath?: string;
 }) {
   const owner = "rahmanef63";
   const repo = "resource-site";
@@ -87,9 +93,16 @@ export function CodeTab({
         </ShowcaseCard>
       )}
 
-      {files && files.length > 0 && (
+      {codeFiles && codeFiles.length > 0 ? (
+        <SliceCodeViewer
+          slug={slug}
+          rootPath={codeRootPath ?? pulls[0] ?? ""}
+          files={codeFiles}
+        />
+      ) : files && files.length > 0 ? (
+        // Fallback when server-read failed — keep the old static list
         <ShowcaseCard
-          icon={FolderTree}
+          icon={FileCode}
           label={`Files in this template (${files.length})`}
           variant="static"
         >
@@ -99,7 +112,7 @@ export function CodeTab({
             ))}
           </ul>
         </ShowcaseCard>
-      )}
+      ) : null}
 
       <ShowcaseCard
         icon={FileCode}

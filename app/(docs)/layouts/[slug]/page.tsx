@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getLayout, layouts } from "@/lib/content/layouts";
 import { TemplateDetail } from "@/components/site/template-detail";
 import { buildAgentPrompt } from "@/lib/agent-prompt";
+import { readPathsFiles } from "@/lib/slice-files";
 import { site } from "@/lib/content/site";
 
 export function generateStaticParams() {
@@ -31,6 +32,12 @@ export default async function LayoutDetailPage({ params }: { params: Promise<{ s
     agentRecipe: l.agentRecipe,
   });
 
+  // Pre-read the template's source files server-side so the in-browser
+  // Code tab can show contents + zip download without an API roundtrip.
+  const codeRoots = l.pullPaths && l.pullPaths.length > 0 ? l.pullPaths : [l.repoPath];
+  const codeFiles = await readPathsFiles(codeRoots);
+  const codeRootPath = codeRoots.length === 1 ? codeRoots[0] : `${codeRoots.length} folders`;
+
   return (
     <TemplateDetail
       kind="layout"
@@ -44,6 +51,8 @@ export default async function LayoutDetailPage({ params }: { params: Promise<{ s
         primaryFile: l.primaryFile,
         files: l.files,
         pullPaths: l.pullPaths,
+        codeFiles,
+        codeRootPath,
         dependencies: l.dependencies,
         exampleCode: l.exampleCode,
         agentRecipe: l.agentRecipe,

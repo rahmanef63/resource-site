@@ -94,6 +94,8 @@ export function TemplateDetail({ kind, basePath, data, prev, next, prompt, siteU
             files={data.files}
             pullPaths={data.pullPaths}
             dependencies={data.dependencies}
+            codeFiles={data.codeFiles}
+            codeRootPath={data.codeRootPath}
           />
         ),
       },

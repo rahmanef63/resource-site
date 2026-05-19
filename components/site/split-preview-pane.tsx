@@ -12,9 +12,9 @@ import { useSplitRatio } from "./split-preview/use-split-ratio";
 type Props = {
   publicSrc: string;
   adminSrc: string;
-  /** Force a starting view for BOTH panes (e.g. "desktop"). Each pane then
-   *  diverges independently via its own selector. Defaults to context or
-   *  "desktop". */
+  /** Seed view for both panes. Re-syncs both panes when this changes
+   *  (lets the page-level main viewport selector drive both at once).
+   *  Each pane can still diverge via its own selector after. */
   view?: PreviewView;
   /** Storage key for the divider ratio. Pass a slug-derived key so each
    *  slice / template remembers its own preferred split. */
@@ -44,7 +44,21 @@ export function SplitPreviewPane({
   const [splitOrientation, setSplitOrientation] =
     React.useState<"horizontal" | "vertical">("horizontal");
 
-  const { ratio, resetRatio, onDragStart, dragging } = useSplitRatio({
+  // Page-level viewport (main selector) drives BOTH panes whenever it
+  // changes. Per-pane selectors then let the user diverge from there.
+  React.useEffect(() => {
+    setPublicView(seedView);
+    setAdminView(seedView);
+  }, [seedView]);
+
+  const {
+    ratio,
+    containerStyle,
+    leftPaneStyle,
+    onDragStart,
+    dragging,
+    resetRatio,
+  } = useSplitRatio({
     storageKey: storageKey ? `rr.split-ratio:${storageKey}` : undefined,
   });
 
@@ -58,18 +72,13 @@ export function SplitPreviewPane({
     return () => window.removeEventListener("rresource:refresh-preview", refresh);
   }, []);
 
-  const leftStyle =
-    splitOrientation === "horizontal"
-      ? ({ flex: `0 0 ${ratio * 100}%` } as const)
-      : ({ flex: `0 0 ${ratio * 100}%` } as const);
-
   return (
     <div className="flex h-full flex-col bg-zinc-950/40">
       <div className="flex items-center justify-between gap-2 border-b border-border/60 bg-background/60 px-3 py-2">
         <div className="flex min-w-0 items-center gap-2 text-xs text-muted-foreground">
           <ArrowLeftRight className="size-3.5 shrink-0" />
           <span className="truncate">
-            Live sync via BroadcastChannel — drag divider to resize, swap viewport per pane.
+            Drag the divider to resize · swap viewport per pane independently.
           </span>
         </div>
         <div className="flex shrink-0 items-center gap-1">
@@ -118,13 +127,14 @@ export function SplitPreviewPane({
 
       <div
         ref={containerRef}
+        style={containerStyle}
         className={cn(
           "flex flex-1 overflow-hidden",
           splitOrientation === "horizontal" ? "flex-row" : "flex-col",
-          dragging && "select-none",
+          dragging && "select-none [&_iframe]:pointer-events-none",
         )}
       >
-        <div className="flex min-w-0 min-h-0 flex-col" style={leftStyle}>
+        <div className="flex min-w-0 min-h-0 flex-col" style={leftPaneStyle}>
           <SplitPane
             key={"pub-" + iframeKey}
             src={publicSrc}

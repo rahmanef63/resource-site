@@ -50,11 +50,20 @@ function isTextFile(name: string): boolean {
  * Server-only — uses `node:fs`. Call from a Server Component or RSC.
  */
 export async function readSliceFiles(slicePath: string): Promise<SliceFile[]> {
-  const repoRoot = process.cwd();
-  const absRoot = path.join(repoRoot, slicePath);
-  const out: SliceFile[] = [];
+  return readPathsFiles([slicePath]);
+}
 
-  async function walk(absDir: string, relDir: string): Promise<void> {
+/**
+ * Same as `readSliceFiles` but accepts multiple roots and merges. When
+ * more than one root is given, file paths get the root folder's last
+ * segment prefixed so they don't collide in the tree.
+ */
+export async function readPathsFiles(rootPaths: string[]): Promise<SliceFile[]> {
+  const repoRoot = process.cwd();
+  const out: SliceFile[] = [];
+  const multi = rootPaths.length > 1;
+
+  async function walk(absDir: string, relDir: string, prefix: string): Promise<void> {
     let entries;
     try {
       entries = await fs.readdir(absDir, { withFileTypes: true });
@@ -64,7 +73,11 @@ export async function readSliceFiles(slicePath: string): Promise<SliceFile[]> {
     for (const entry of entries) {
       if (entry.isDirectory()) {
         if (SKIP_DIRS.has(entry.name)) continue;
-        await walk(path.join(absDir, entry.name), path.join(relDir, entry.name));
+        await walk(
+          path.join(absDir, entry.name),
+          path.join(relDir, entry.name),
+          prefix,
+        );
         continue;
       }
       if (!entry.isFile()) continue;
@@ -76,15 +89,22 @@ export async function readSliceFiles(slicePath: string): Promise<SliceFile[]> {
       if (stat.size > MAX_FILE_BYTES) continue;
 
       const content = await fs.readFile(absFile, "utf8");
+      const rel = path.posix
+        .join(relDir.split(path.sep).join("/"), entry.name)
+        .replace(/^\/+/, "");
       out.push({
-        path: path.posix.join(relDir.split(path.sep).join("/"), entry.name).replace(/^\/+/, ""),
+        path: prefix ? `${prefix}/${rel}` : rel,
         content,
         size: Buffer.byteLength(content, "utf8"),
       });
     }
   }
 
-  await walk(absRoot, "");
+  for (const rp of rootPaths) {
+    const absRoot = path.join(repoRoot, rp);
+    const prefix = multi ? path.basename(rp) : "";
+    await walk(absRoot, "", prefix);
+  }
 
   out.sort((a, b) => a.path.localeCompare(b.path));
   return out;
