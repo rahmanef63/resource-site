@@ -56,7 +56,7 @@ function reducer(state: State, action: Action): State {
 }
 
 const { Provider, useStore } = createTemplateStore<State, Action>({
-  storageKey: "nosion-os:state:v1",
+  storageKey: "nosion-os:state:v2-landing",
   channel: "nosion-os:sync",
   seed: SEED_STATE,
   reducer,

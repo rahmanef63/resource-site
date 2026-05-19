@@ -10,6 +10,41 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "AW",
+    version: "AW-wave",
+    date: Date.parse("2026-05-19"),
+    kind: "feature",
+    title: "Notion Page Clone OS — nested Pages nav + landing-renderer composition",
+    body:
+      "Applies the AV nested-nav pattern to notion-page-clone-os and rewires the public homepage to compose existing rr slices instead of a bespoke React tree. Admin sidebar now groups Landing / Snippets / All-pages under a single \"Pages\" parent (Collapsible + SidebarMenuSub). Public homepage reads admin-editable LandingSection rows from the template store and renders each via the canonical HeroBlock / FeatureGridSection / CtaBand slices, plus a custom snippets gallery section for the notion-blocks demo. Store schema bumped to v2-landing — landing-sections now first-class state managed via LANDING_UPSERT / LANDING_DELETE alongside pages + snippets.",
+    groups: [
+      {
+        heading: "Templates touched",
+        bullets: [
+          { text: "notion-page-clone-os — nested Pages nav + LandingRenderer composition", slug: "notion-page-clone-os", kind: "template" },
+        ],
+      },
+      {
+        heading: "Slices reused (no change)",
+        bullets: [
+          { text: "hero-block — landing hero rendered via canonical HeroBlock", slug: "hero-block" },
+          { text: "feature-grid — primitive showcase via FeatureGridSection", slug: "feature-grid" },
+          { text: "cta-band — landing CTA rendered via canonical CtaBand", slug: "cta-band" },
+          { text: "notion-blocks — snippet gallery embeds EquationBlock + CodeBlock + NotifyMePopover", slug: "notion-blocks" },
+        ],
+      },
+      {
+        heading: "Site",
+        bullets: [
+          "components/templates/notion-page-clone/shared/nav-config.ts — buildAdminPrimaryNav now emits nested Pages parent with landing/snippets/all-pages children",
+          "components/templates/notion-page-clone/shared/store.tsx — landingSections added to State; storageKey bumped to v2-landing; LANDING_UPSERT / LANDING_DELETE reducer",
+          "components/templates/notion-page-clone/slices/home/LandingRenderer.tsx NEW — switch on section.kind → HeroBlock / FeatureGridSection / CtaBand / custom SnippetsGallery",
+          "components/templates/notion-page-clone/slices/home/HomePage.tsx — reads useLandingSections() filter+sort, renders via LandingRenderer",
+        ],
+      },
+    ],
+  },
+  {
     id: "AV",
     version: "AV-wave",
     date: Date.parse("2026-05-19"),

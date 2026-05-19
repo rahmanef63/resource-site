@@ -57,26 +57,20 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
   const publishedSnippets = state.snippets.filter((s) => s.published).length;
   return [
     { id: "dashboard", label: "Dashboard", href: ADMIN_BASE, icon: LayoutDashboard, count: null },
-    {
-      id: "landing",
-      label: "Landing",
-      href: `${ADMIN_BASE}/landing`,
-      icon: LayoutTemplate,
-      count: enabledLanding || null,
-    },
-    {
-      id: "snippets",
-      label: "Snippets",
-      href: `${ADMIN_BASE}/snippets`,
-      icon: Sparkles,
-      count: publishedSnippets || null,
-    },
+    // AV-wave nested "Pages" parent — collapsible group bundling every
+    // content surface that maps to a public page (landing, snippets,
+    // custom pages). Each child reuses an existing CRUD route.
     {
       id: "pages",
       label: "Pages",
       href: `${ADMIN_BASE}/pages`,
       icon: Newspaper,
-      count: customPages || null,
+      count: (customPages + publishedSnippets + enabledLanding) || null,
+      children: [
+        { id: "pages-landing",  label: "Landing page", href: `${ADMIN_BASE}/landing`,  icon: LayoutTemplate, count: enabledLanding || null },
+        { id: "pages-snippets", label: "Snippets",     href: `${ADMIN_BASE}/snippets`, icon: Sparkles,       count: publishedSnippets || null },
+        { id: "pages-all",      label: "All pages",    href: `${ADMIN_BASE}/pages`,    icon: Newspaper,      count: customPages || null },
+      ],
     },
   ];
 }

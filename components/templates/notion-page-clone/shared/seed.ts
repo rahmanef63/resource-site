@@ -1,7 +1,48 @@
-import { defaultLandingSections } from "@/components/templates/_shared/landing/seed-factory";
+import type { LandingSection } from "@/components/templates/_shared/landing/types";
 import type { State, Snippet } from "./types";
 
 const now = () => Date.now();
+
+/** Notion-OS specific landing seed — features + custom snippets gallery
+ *  tuned to the notion-blocks demo. Public homepage reads + renders these
+ *  via LandingRenderer; admin edits them at /admin/landing. */
+function nosionLandingSections(): LandingSection[] {
+  return [
+    {
+      id: "ls-hero",
+      order: 10,
+      kind: "hero",
+      title: "Block-based writing surface, in 4 primitives.",
+      subtitle:
+        "Equations, code, subscriptions, drag-fill grids. Each is a portable rr slice — drop into any React surface without convex or store coupling.",
+      enabled: true,
+    },
+    {
+      id: "ls-features",
+      order: 20,
+      kind: "features",
+      title: "What ships in notion-blocks",
+      subtitle: "Four notion-style primitives, one install.",
+      enabled: true,
+    },
+    {
+      id: "ls-snippets",
+      order: 30,
+      kind: "custom",
+      title: "Live snippets gallery",
+      subtitle: "Each entry below is admin-editable — add via /admin/snippets, renders live here.",
+      enabled: true,
+    },
+    {
+      id: "ls-cta",
+      order: 40,
+      kind: "cta",
+      title: "Lift the whole bundle into your project.",
+      subtitle: "Run `npx rr add notion-blocks` — cascades all four peer slices + every shared dep.",
+      enabled: true,
+    },
+  ];
+}
 
 const SEED_SNIPPETS: Snippet[] = [
   {
@@ -79,5 +120,5 @@ export const SEED_STATE: State = {
     },
   ],
   snippets: SEED_SNIPPETS,
-  landingSections: defaultLandingSections(),
+  landingSections: nosionLandingSections(),
 };
