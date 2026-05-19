@@ -9,6 +9,10 @@ const BUILD_ID =
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   cacheComponents: true,
+  // rahman-shared ships raw .ts in dist/src; tell Turbopack to transpile.
+  // Required since notifications + future lifts rewrite @/shared/lib/utils
+  // imports to rahman-shared/lib/utils.
+  transpilePackages: ["rahman-shared"],
   // Pin a stable deploymentId so rolling deploys keep Server Action / RSC
   // payloads valid across instances. Override via NEXT_DEPLOYMENT_ID in CI.
   deploymentId: process.env.NEXT_DEPLOYMENT_ID || BUILD_ID,

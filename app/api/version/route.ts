@@ -3,9 +3,9 @@ import { NextResponse } from "next/server";
 /** Always-fresh build identifier. VersionWatcher polls this and prompts
  *  reload when the value differs from the build it loaded with. Cache
  *  headers explicit so no intermediate proxy (Traefik / Dokploy /
- *  Cloudflare) serves a stale copy. */
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+ *  Cloudflare) serves a stale copy. Route is always-dynamic via the
+ *  freshness headers alone — segment config "dynamic"/"revalidate" is
+ *  incompatible with nextConfig.cacheComponents in Next 16. */
 
 export function GET() {
   const buildId =
