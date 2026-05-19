@@ -2,18 +2,18 @@ import type { Metadata } from "next";
 import { Suspense, type ReactNode } from "react";
 import { StoreProvider } from "@/components/templates/research/shared/store";
 import { DEFAULT_SITE_CONFIG } from "@/components/templates/research/shared/site-config";
-import { AdminShellClient } from "./admin-shell-client";
+import { DashboardShellClient } from "./dashboard-shell-client";
 
 export const metadata: Metadata = {
-  title: { default: `${DEFAULT_SITE_CONFIG.brandName} admin`, template: `%s — admin` },
+  title: { default: `${DEFAULT_SITE_CONFIG.brandName} dashboard`, template: `%s — dashboard` },
   robots: { index: false, follow: false },
 };
 
-export default function AdminLayout({ children }: { children: ReactNode }) {
+export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
     <Suspense fallback={null}>
       <StoreProvider>
-        <AdminShellClient>{children}</AdminShellClient>
+        <DashboardShellClient>{children}</DashboardShellClient>
       </StoreProvider>
     </Suspense>
   );

@@ -4,7 +4,12 @@ import type { ReactNode } from "react";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AdminSidebar } from "./admin-sidebar";
 import { AdminTopbar } from "./admin-topbar";
-import type { AdminNavItem, Brand, User } from "../types/common";
+import type {
+  AdminNavItem,
+  Brand,
+  DashboardSection,
+  User,
+} from "../types/common";
 
 /**
  * Top-level operator shell mounted under
@@ -24,6 +29,8 @@ export function DashboardShell({
   searchPlaceholder,
   notifCount,
   topbarActions,
+  dashboardSections,
+  activeSectionId,
   children,
 }: {
   brand: Brand;
@@ -35,6 +42,8 @@ export function DashboardShell({
   searchPlaceholder?: string;
   notifCount?: number;
   topbarActions?: ReactNode;
+  dashboardSections?: DashboardSection[];
+  activeSectionId?: string;
   children: ReactNode;
 }) {
   return (
@@ -46,6 +55,8 @@ export function DashboardShell({
         primaryNav={primaryNav}
         settingsNav={settingsNav}
         user={user}
+        dashboardSections={dashboardSections}
+        activeSectionId={activeSectionId}
       />
       <SidebarInset className="bg-background text-foreground">
         <AdminTopbar

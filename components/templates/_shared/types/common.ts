@@ -44,6 +44,24 @@ export type Cta = {
   href: string;
 };
 
+/**
+ * A top-level surface in the operator dashboard. AZ-wave split the
+ * old `/admin` into two sibling surfaces — Admin Panel (CMS) and
+ * Workspace (productivity). The DashboardSwitcher in the sidebar
+ * header lets the operator swap between them; future sections (e.g.
+ * Team, Settings) can be added by extending the array per template.
+ */
+export type DashboardSection = {
+  id: "admin" | "workspace" | (string & {});
+  label: string;
+  description: string;
+  href: string;
+  /** lucide icon — React.ComponentType */
+  icon?: any;
+  /** keyboard shortcut hint shown next to label, e.g. "⌘1" */
+  shortcut?: string;
+};
+
 export type FooterColumn = {
   heading: string;
   items: { label: string; href: string }[];

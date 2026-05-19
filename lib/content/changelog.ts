@@ -10,6 +10,50 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "BB",
+    version: "BB-wave",
+    date: Date.parse("2026-05-19"),
+    kind: "feature",
+    title: "DashboardSwitcher — shadcn sidebar-07 team-switcher adapted for /dashboard/{admin,workspace}",
+    body:
+      "Top of every template sidebar now hosts an improved adaptation of the shadcn sidebar-07 TeamSwitcher pattern. Click → dropdown reveals Admin Panel + Workspace sections with icon, label, one-line description, active checkmark, and ⌘1/⌘2 keyboard shortcuts. Footer link jumps to /templates so operators can hop to another template without leaving the dashboard. Inspired by notion-page-clone WorkspaceSwitcher (role-gated items, composable trigger) and superspace EnhancedWorkspaceSwitcher (hierarchical context, descriptions). The dashboard/admin and dashboard/workspace surfaces now share a single dashboard/layout.tsx — the switcher and store provider live one level up so the chassis stays consistent across both surfaces. Workspace placeholder updated to point at the new ⌘1/⌘2 shortcuts.",
+    groups: [
+      {
+        heading: "Templates touched (DashboardSwitcher mounted; layout lifted)",
+        bullets: [
+          { text: "saas-marketing-os — switcher in sidebar header; workspace inherits shell", slug: "saas-marketing-os", kind: "template" },
+          { text: "personal-brand-os — switcher in sidebar header; workspace inherits shell", slug: "personal-brand-os", kind: "template" },
+          { text: "agency-studio-os — switcher in sidebar header; workspace inherits shell", slug: "agency-studio-os", kind: "template" },
+          { text: "konsultan-os — switcher in sidebar header; workspace inherits shell", slug: "konsultan-os", kind: "template" },
+          { text: "kreator-studio-os — switcher in sidebar header; workspace inherits shell", slug: "kreator-studio-os", kind: "template" },
+          { text: "riset-kit — switcher in sidebar header; workspace inherits shell", slug: "riset-kit", kind: "template" },
+          { text: "wirausaha-os — switcher in sidebar header; workspace inherits shell", slug: "wirausaha-os", kind: "template" },
+          { text: "notion-page-clone-os — switcher in sidebar header; workspace inherits shell", slug: "notion-page-clone-os", kind: "template" },
+        ],
+      },
+      {
+        heading: "Infra",
+        bullets: [
+          "_shared/ui/dashboard-switcher.tsx NEW — SidebarMenuButton + DropdownMenu + ⌘N shortcuts + active checkmark + Switch-template footer",
+          "_shared/dashboard/sections.ts NEW — buildDashboardSections() + activeSectionFromPathname() helpers",
+          "_shared/types/common.ts — added DashboardSection type",
+          "_shared/ui/admin-sidebar.tsx — renders DashboardSwitcher when sections prop provided (BrandHeader fallback preserved)",
+          "_shared/ui/dashboard-shell.tsx — accepts dashboardSections + activeSectionId props",
+          "Per-template nav-config.ts — DASHBOARD_SECTIONS export (8 templates)",
+          "Per-template dashboard/layout.tsx NEW — lifted from admin/layout.tsx so workspace inherits StoreProvider + DashboardShell",
+          "Per-template dashboard/dashboard-shell-client.tsx NEW — derives activeSection from usePathname",
+        ],
+      },
+      {
+        heading: "Up next (see docs/architecture/dashboard-vision.md)",
+        bullets: [
+          "BC-wave — Workspace bootstrap (notion editor at MAX, calendar, command-menu, database views) — replaces current placeholder",
+          "BD-wave — feature harvest from superspace + notion-page-clone via /rr lift (RBAC / CRM / Analytics / CMS-menu siblings inside Admin Panel)",
+        ],
+      },
+    ],
+  },
+  {
     id: "BA",
     version: "BA-wave",
     date: Date.parse("2026-05-19"),
