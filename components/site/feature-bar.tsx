@@ -4,7 +4,6 @@ import * as React from "react";
 import {
   Columns2,
   Columns3,
-  ExternalLink,
   Monitor,
   RectangleHorizontal,
   RectangleVertical,
@@ -27,6 +26,7 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { useFeatureContext } from "./feature-context";
+import { FeatureBarOpenButton } from "./feature-bar-open-button";
 import { PREVIEW_PRESETS, type PreviewView } from "@/lib/preview-presets";
 
 const VIEW_ICONS: Record<PreviewView, React.ComponentType<{ className?: string }>> = {
@@ -180,31 +180,7 @@ export function FeatureBar() {
       )}
 
       <div className="flex items-center gap-1">
-        {(() => {
-          // "Open full page" — pop the iframe content out into a real
-          // browser tab so the user can interact at native size + use
-          // dev tools. Only rendered when the active tab is a preview
-          // surface AND the manifest has a matching URL.
-          if (!activeTab || !PREVIEW_TAB_IDS.has(activeTab)) return null;
-          if (activeTab === "preview-split") return null;
-          const surface =
-            activeTab === "preview-admin" ? "admin" : "public";
-          const href = manifest.previewUrls?.[surface];
-          if (!href) return null;
-          return (
-            <Button
-              asChild
-              variant="ghost"
-              size="icon"
-              className="size-6"
-              title="Open full page in new tab"
-            >
-              <a href={href} target="_blank" rel="noreferrer" aria-label="Open full page">
-                <ExternalLink className="size-3" />
-              </a>
-            </Button>
-          );
-        })()}
+        <FeatureBarOpenButton activeTab={activeTab} manifest={manifest} />
         <Button
           variant="ghost" size="icon" className="size-6"
           onClick={() => window.dispatchEvent(new Event("rresource:refresh-preview"))}
