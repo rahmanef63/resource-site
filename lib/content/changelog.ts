@@ -10,6 +10,33 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "AS",
+    version: "AS-wave",
+    date: Date.parse("2026-05-19"),
+    kind: "improvement",
+    title: "Consolidate notion editor primitives into single bundle",
+    body:
+      "Four tiny notion-lifted primitives (equation, code-block, notifications, database-cell-selection) collapsed into one catalog entry: notion-blocks. Each was ~5 files / one component — splitting them four ways cluttered the catalog without giving consumers narrower install ergonomics. notion-blocks is a peer-bundle: re-exports the four slices' public API behind one import path. Per-block narrow imports still work (the peer slices stay registered + lifted). Updated equation + code-block index.ts to also re-export their Props types for ergonomic typing.",
+    groups: [
+      {
+        heading: "Slices touched",
+        bullets: [
+          { text: "notion-blocks — NEW peer-bundle. Catalog entry replaces 4 sub-entries", slug: "notion-blocks" },
+          { text: "equation — added EquationBlockProps to barrel exports", slug: "equation" },
+          { text: "code-block — added CodeBlockProps to barrel exports", slug: "code-block" },
+        ],
+      },
+      {
+        heading: "Site",
+        bullets: [
+          "/preview/slices/notion-blocks — single page demos all 4 primitives (KaTeX formulas, TS/Bash code samples, NotifyMe bells, drag-fill table)",
+          "Removed /preview/slices/{equation,notifications,code-block,database-cell-selection} — bundle is canonical surface",
+          "Removed 4 individual SliceEntry rows from lib/content/slices.ts",
+        ],
+      },
+    ],
+  },
+  {
     id: "AR",
     version: "AR-wave",
     date: Date.parse("2026-05-19"),

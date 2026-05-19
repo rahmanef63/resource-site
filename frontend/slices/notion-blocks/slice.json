@@ -1,0 +1,27 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "notion-blocks",
+  "version": "0.1.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "Notion Blocks — editor primitive bundle",
+  "description": "One install ships four notion-style block primitives — KaTeX equation, highlight.js code block, per-page subscription bell, and drag-fill grid cell selection. Each is config-driven (no shared state coupling) so it drops into any React surface: marketing landing, admin panel, full app editor, doc page. Bundled because small primitives are noisier when split four ways in the catalog. Lifted from notion-page-clone (Nosion) via rr-sync.",
+  "namespace": "@/features/notion-blocks",
+  "registers": [],
+  "audit": [],
+  "frontend": {
+    "slicePath": "frontend/slices/notion-blocks",
+    "configExport": ""
+  },
+  "deps": {
+    "npm": ["katex@^0.16.45", "highlight.js@^11.11.1"],
+    "shadcn": ["button", "popover", "dropdown-menu"],
+    "env": [],
+    "peers": [
+      { "slug": "equation", "range": "^0.1", "reason": "Re-exports EquationBlock + props type." },
+      { "slug": "code-block", "range": "^0.1", "reason": "Re-exports CodeBlock + language helpers." },
+      { "slug": "notifications", "range": "^0.1", "reason": "Re-exports NotifyMePopover + useSubscription." },
+      { "slug": "database-cell-selection", "range": "^0.1", "reason": "Re-exports useDragFill + SelectableCell." }
+    ]
+  }
+}
