@@ -14,7 +14,10 @@ import { SEED_STATE } from "./seed";
 function reducer(state: State, action: Action): State {
   switch (action.type) {
     case "hydrate":
-      return action.state;
+      // Shallow-merge with SEED_STATE so any field added in a newer
+      // schema (e.g. AB-wave landingSections) gets its default when
+      // hydrating from an older localStorage payload.
+      return { ...SEED_STATE, ...action.state };
     case "reset":
       return SEED_STATE;
     case "PAGE_CREATE":
@@ -127,7 +130,10 @@ function reducer(state: State, action: Action): State {
 }
 
 const { Provider, useStore } = createTemplateStore<State, Action>({
-  storageKey: "saas-marketing:state:v2-pages",
+  // Bumped v2-pages → v3-landing in AB-wave when LandingSection was
+  // added. Old payloads missing the field are still defended by the
+  // hydrate-case shallow merge above, but a fresh key is cleaner.
+  storageKey: "saas-marketing:state:v3-landing",
   channel: "saas-marketing:sync",
   seed: SEED_STATE,
   reducer,
