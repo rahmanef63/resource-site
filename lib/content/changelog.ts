@@ -10,6 +10,55 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "AP",
+    version: "AP-wave",
+    date: Date.parse("2026-05-19"),
+    kind: "fix",
+    title: "Stop full preview reset on every sidebar/layout nav",
+    body:
+      "Regression from AM-wave: /slices/[slug] started registering a FeatureManifest to share the docs-shell tabs with /layouts/[slug]. Two long-standing rough edges in feature-context surfaced — useFeatureManifest's unmount cleanup flashed null on every nav (firing the provider's effect twice), and the effect reset activeTab / previewView / previewZoom on every manifest object identity change. Result: clicking any sidebar link rebuilt the iframe, dropped the user's tab choice, and felt like a fresh fetch. AP threads a stable manifest.id (slug-based) through buildPreviewManifest, gates the reset on id change via a ref, preserves activeTab across slugs when the id exists in the new tabs, drops the unmount cleanup, and React.cache-wraps readSliceFiles.",
+    groups: [
+      {
+        heading: "Site",
+        bullets: [
+          "FeatureManifest gained `id` field; buildPreviewManifest derives from slug",
+          "feature-context useEffect is now id-gated — same-id re-renders don't reset state",
+          "useFeatureManifest cleanup dropped — no more null-flash between transitions",
+          "lib/slice-files: readSliceFiles wrapped with React.cache for intra-render dedupe",
+          "components/site/feature-context-effect.ts NEW — extracted manifest-effect helper to keep feature-context.tsx under 200 LOC",
+        ],
+      },
+    ],
+  },
+  {
+    id: "AO",
+    version: "AO-wave",
+    date: Date.parse("2026-05-19"),
+    kind: "feature",
+    title: "Notion editor primitives lifted via new rr-sync pipeline",
+    body:
+      "Four pure-UI primitives lifted from notion-page-clone using a new hash-based, idempotent sync pipeline. The pipeline auto-derives import rewrites from both repos' tsconfigs, follows transitive shared-dep graphs, cross-checks npm packages against rr's package.json, and ships a registry (rr-sync.json) so subsequent updates to the same slice in nosion can re-propagate with one command. Each lifted slice has an interactive preview at /preview/slices/<slug>.",
+    groups: [
+      {
+        heading: "Slices touched",
+        bullets: [
+          { text: "equation — KaTeX-rendered LaTeX block, click-pencil to edit", slug: "equation" },
+          { text: "notifications — per-page subscription toggle (localStorage-backed NotifyMePopover)", slug: "notifications" },
+          { text: "code-block — highlight.js syntax block with language picker + copy", slug: "code-block" },
+          { text: "database-cell-selection — drag-fill + SelectableCell primitives for grid UIs", slug: "database-cell-selection" },
+        ],
+      },
+      {
+        heading: "Site",
+        bullets: [
+          "rr-sync pipeline in notion-page-clone: pathMap registry + tsconfig alias auto-derivation + transitive-import follower + sibling-barrel resolver + npm-deps cross-check + skipFiles wildcards + per-file hash drift detection",
+          "Pre-push hook adds `npm run build` to catch Next-only errors (cacheComponents conflicts, Turbopack loader issues) that tsc misses",
+          "next.config: transpilePackages: [\"rahman-shared\"] added — required for slices using rewritten @/shared/lib/utils → rahman-shared/lib/utils imports",
+        ],
+      },
+    ],
+  },
+  {
     id: "AN",
     version: "AN-wave",
     date: Date.parse("2026-05-19"),
