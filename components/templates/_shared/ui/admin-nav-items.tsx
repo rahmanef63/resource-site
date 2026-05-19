@@ -27,7 +27,10 @@ function itemContainsActive(item: AdminNavItem, pathname: string): boolean {
   return Boolean(item.children?.some((c) => isPathActive(pathname, c.href, false)));
 }
 
-/** Collapsible parent — chevron toggles SidebarMenuSub children. */
+/** Collapsible parent — follows the canonical shadcn `NavMain` pattern
+ *  (group/collapsible + group-data-[state=open]/collapsible:rotate-90)
+ *  so the chevron rotates via CSS without per-instance state. Children
+ *  use `next/link` (rr best practice: never raw <a> for internal nav). */
 export function ParentNavItem({
   item,
   pathname,
@@ -37,22 +40,18 @@ export function ParentNavItem({
 }) {
   const Icon = item.icon;
   const containsActive = itemContainsActive(item, pathname);
-  const [open, setOpen] = React.useState(containsActive);
-  React.useEffect(() => {
-    if (containsActive) setOpen(true);
-  }, [containsActive]);
-
   return (
-    <Collapsible asChild open={open} onOpenChange={setOpen}>
+    <Collapsible
+      asChild
+      defaultOpen={containsActive}
+      className="group/collapsible"
+    >
       <SidebarMenuItem>
         <CollapsibleTrigger asChild>
           <SidebarMenuButton isActive={containsActive} tooltip={item.label}>
             {Icon && <Icon className="size-4" />}
             <span className="flex-1 truncate">{item.label}</span>
-            <ChevronRight
-              className="ml-auto size-3.5 shrink-0 transition-transform data-[state=open]:rotate-90"
-              data-state={open ? "open" : "closed"}
-            />
+            <ChevronRight className="ml-auto size-3.5 shrink-0 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
           </SidebarMenuButton>
         </CollapsibleTrigger>
         {item.count != null && item.count > 0 && (

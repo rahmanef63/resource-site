@@ -51,13 +51,26 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
   const newLeads = state.leads.filter((l) => l.status === "new").length;
   const activeClients = state.clients.filter((c) => c.status === "active").length;
   const customPages = state.pages.filter((p) => !p.systemPage).length;
+  const enabledLanding = state.landingSections.filter((s) => s.enabled).length;
   return [
     { id: "dashboard", label: "Dashboard", href: ADMIN_BASE,                  icon: LayoutDashboard, count: null },
-    { id: "landing",   label: "Landing",   href: `${ADMIN_BASE}/landing`,     icon: LayoutTemplate,  count: state.landingSections.filter((s) => s.enabled).length || null },
-    { id: "pages",     label: "Pages",     href: `${ADMIN_BASE}/pages`,       icon: Newspaper,       count: customPages || null },
-    { id: "projects",  label: "Projects",  href: `${ADMIN_BASE}/projects`,    icon: Briefcase,       count: activeProjects || null },
+    // "Pages" parent — collapsible group bundling every content surface
+    // that maps to a public page (landing, work/portfolio, services).
+    // Each child reuses an existing CRUD route.
+    {
+      id: "pages",
+      label: "Pages",
+      href: `${ADMIN_BASE}/pages`,
+      icon: Newspaper,
+      count: customPages || null,
+      children: [
+        { id: "pages-landing",  label: "Landing page", href: `${ADMIN_BASE}/landing`,  icon: LayoutTemplate, count: enabledLanding || null },
+        { id: "pages-all",      label: "All pages",    href: `${ADMIN_BASE}/pages`,    icon: Newspaper,      count: customPages || null },
+        { id: "pages-projects", label: "Work",         href: `${ADMIN_BASE}/projects`, icon: Briefcase,      count: activeProjects || null },
+        { id: "pages-services", label: "Services",     href: `${ADMIN_BASE}/services`, icon: Sparkles,       count: state.services.length || null },
+      ],
+    },
     { id: "clients",   label: "Clients",   href: `${ADMIN_BASE}/clients`,     icon: Users,           count: activeClients || null },
-    { id: "services",  label: "Services",  href: `${ADMIN_BASE}/services`,    icon: Sparkles,        count: state.services.length },
     { id: "leads",     label: "Leads",     href: `${ADMIN_BASE}/leads`,       icon: Inbox,           count: newLeads || null },
   ];
 }

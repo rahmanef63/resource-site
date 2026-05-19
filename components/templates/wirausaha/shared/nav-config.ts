@@ -49,10 +49,24 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
   const newOrders = state.orders.filter((o) => o.status === "new").length;
   const lowStock = state.products.filter((p) => p.stock < 20).length;
   const customPages = state.pages.filter((p) => !p.systemPage).length;
+  const enabledLanding = state.landingSections.filter((s) => s.enabled).length;
   return [
     { id: "dashboard",  label: "Dashboard",  href: ADMIN_BASE,                   icon: LayoutDashboard, count: null },
-    { id: "landing",    label: "Landing",    href: `${ADMIN_BASE}/landing`,      icon: LayoutTemplate,  count: state.landingSections.filter((s) => s.enabled).length || null },
-    { id: "pages",      label: "Pages",      href: `${ADMIN_BASE}/pages`,        icon: Newspaper,       count: customPages || null },
+    // "Pages" parent — collapsible group bundling every content surface
+    // that maps to a public page. Wirausaha OS only ships landing +
+    // custom pages publicly; businesses/inventory/orders/finance/staff
+    // are internal operations entities.
+    {
+      id: "pages",
+      label: "Pages",
+      href: `${ADMIN_BASE}/pages`,
+      icon: Newspaper,
+      count: customPages || null,
+      children: [
+        { id: "pages-landing", label: "Landing page", href: `${ADMIN_BASE}/landing`, icon: LayoutTemplate, count: enabledLanding || null },
+        { id: "pages-all",     label: "All pages",    href: `${ADMIN_BASE}/pages`,   icon: Newspaper,      count: customPages || null },
+      ],
+    },
     { id: "businesses", label: "Businesses", href: `${ADMIN_BASE}/businesses`,   icon: Building2,       count: state.businesses.length },
     { id: "inventory",  label: "Inventory",  href: `${ADMIN_BASE}/inventory`,    icon: Package,         count: lowStock || null },
     { id: "orders",     label: "Orders",     href: `${ADMIN_BASE}/orders`,       icon: ShoppingCart,    count: newOrders || null },

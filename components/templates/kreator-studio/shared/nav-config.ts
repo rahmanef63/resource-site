@@ -53,10 +53,25 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
   const newsletterDrafts = state.newsletters.filter((n) => n.status !== "sent").length;
   const pendingComments = state.commentDrafts.filter((c) => c.status === "draft").length;
   const customPages = state.pages.filter((p) => !p.systemPage).length;
+  const enabledLanding = state.landingSections.filter((s) => s.enabled).length;
   return [
     { id: "dashboard",  label: "Dashboard",   href: ADMIN_BASE,                    icon: LayoutDashboard, count: null },
-    { id: "landing",    label: "Landing",     href: `${ADMIN_BASE}/landing`,       icon: LayoutTemplate,  count: state.landingSections.filter((s) => s.enabled).length || null },
-    { id: "pages",      label: "Pages",       href: `${ADMIN_BASE}/pages`,         icon: Newspaper,       count: customPages || null },
+    // "Pages" parent — collapsible group bundling every content surface
+    // that maps to a public page. Kreator Studio publishes landing +
+    // custom pages; planner/voice/scripts/carousels/assets are
+    // production tooling (feed posts but don't render as their own
+    // public route here).
+    {
+      id: "pages",
+      label: "Pages",
+      href: `${ADMIN_BASE}/pages`,
+      icon: Newspaper,
+      count: customPages || null,
+      children: [
+        { id: "pages-landing", label: "Landing page", href: `${ADMIN_BASE}/landing`, icon: LayoutTemplate, count: enabledLanding || null },
+        { id: "pages-all",     label: "All pages",    href: `${ADMIN_BASE}/pages`,   icon: Newspaper,      count: customPages || null },
+      ],
+    },
     { id: "planner",    label: "Planner",     href: `${ADMIN_BASE}/planner`,       icon: CalendarDays,    count: drafts || null },
     { id: "voice",      label: "Voice",       href: `${ADMIN_BASE}/voice`,         icon: Mic,             count: state.voices.length },
     { id: "scripts",    label: "Scripts",     href: `${ADMIN_BASE}/scripts`,       icon: FileText,        count: state.scripts.length },

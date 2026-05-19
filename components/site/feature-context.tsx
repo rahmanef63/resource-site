@@ -62,6 +62,12 @@ export type FeatureManifest = {
   composePreviewSrc?: (selections: Selections, basePath: string) => string;
   /** when true, no-tabs pages render full-width instead of max-w-3xl. Useful for catalog grids. */
   wide?: boolean;
+  /** Direct URLs for each preview tab — used by the FeatureBar's
+   *  "Open in new tab" button so the user can pop the iframed content
+   *  out to a full browser window. Keyed by the surface portion of
+   *  the tab id (preview-public → "public", preview-admin → "admin").
+   *  Plain "preview" tabs (single-surface) read the "public" key. */
+  previewUrls?: { public?: string; admin?: string };
 };
 
 type Ctx = {

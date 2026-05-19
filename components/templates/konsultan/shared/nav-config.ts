@@ -50,10 +50,24 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
   const overdueInvoices = state.invoices.filter((i) => i.status === "overdue" || i.status === "sent").length;
   const activeProjects = state.projects.filter((p) => p.status !== "delivered").length;
   const customPages = state.pages.filter((p) => !p.systemPage).length;
+  const enabledLanding = state.landingSections.filter((s) => s.enabled).length;
   return [
     { id: "dashboard",  label: "Dashboard",  href: ADMIN_BASE,                   icon: LayoutDashboard, count: null },
-    { id: "landing",    label: "Landing",    href: `${ADMIN_BASE}/landing`,      icon: LayoutTemplate,  count: state.landingSections.filter((s) => s.enabled).length || null },
-    { id: "pages",      label: "Pages",      href: `${ADMIN_BASE}/pages`,        icon: Newspaper,       count: customPages || null },
+    // "Pages" parent — collapsible group bundling every content surface
+    // that maps to a public page. Konsultan only ships landing + custom
+    // pages publicly; everything else (proposals, contracts, billing,
+    // documents) is internal CRM.
+    {
+      id: "pages",
+      label: "Pages",
+      href: `${ADMIN_BASE}/pages`,
+      icon: Newspaper,
+      count: customPages || null,
+      children: [
+        { id: "pages-landing", label: "Landing page", href: `${ADMIN_BASE}/landing`, icon: LayoutTemplate, count: enabledLanding || null },
+        { id: "pages-all",     label: "All pages",    href: `${ADMIN_BASE}/pages`,   icon: Newspaper,      count: customPages || null },
+      ],
+    },
     { id: "clients",    label: "Clients",    href: `${ADMIN_BASE}/clients`,      icon: Users,           count: state.clients.length },
     { id: "proposals",  label: "Proposals",  href: `${ADMIN_BASE}/proposals`,    icon: FileText,        count: draftProposals || null },
     { id: "contracts",  label: "Contracts",  href: `${ADMIN_BASE}/contracts`,    icon: FileSignature,   count: state.contracts.length },

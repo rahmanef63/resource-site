@@ -138,6 +138,10 @@ export function buildPreviewManifest(args: BuildPreviewManifestArgs): FeatureMan
     subtitle: args.subtitle,
     tabs,
     defaultTab,
+    previewUrls: {
+      public: args.publicPath,
+      admin: args.adminPath,
+    },
     responsive: Boolean(args.publicPath || args.adminPath),
     defaultView: args.defaultView,
     defaultZoom: args.defaultZoom,

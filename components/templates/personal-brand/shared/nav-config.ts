@@ -77,14 +77,27 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
   const flaggedChats = state.chatSessions.filter((s) => s.flagged).length;
   const pendingSubs = state.subscribers.filter((s) => s.status === "pending").length;
   const customPages = state.pages.filter((p) => !p.systemPage).length;
+  const enabledLanding = state.landingSections.filter((s) => s.enabled).length;
   return [
     { id: "dashboard", label: "Dashboard", href: ADMIN_BASE,                  icon: LayoutDashboard, count: null },
-    { id: "landing",   label: "Landing",   href: `${ADMIN_BASE}/landing`,     icon: LayoutTemplate,  count: state.landingSections.filter((s) => s.enabled).length || null },
-    { id: "pages",     label: "Pages",     href: `${ADMIN_BASE}/pages`,       icon: Newspaper,       count: customPages || null },
-    { id: "posts",     label: "Posts",     href: `${ADMIN_BASE}/posts`,       icon: FileText,        count: draftCount || null },
-    { id: "portfolio", label: "Portfolio", href: `${ADMIN_BASE}/portfolio`,   icon: Briefcase,       count: state.portfolio.length },
-    { id: "services",  label: "Services",  href: `${ADMIN_BASE}/services`,    icon: Sparkles,        count: state.services.length },
-    { id: "resources", label: "Resources", href: `${ADMIN_BASE}/resources`,   icon: BookOpen,        count: state.resources.length },
+    // "Pages" parent — collapsible group bundling every content surface
+    // that maps to a public page (landing, blog, portfolio, services,
+    // resources). Each child reuses an existing CRUD route.
+    {
+      id: "pages",
+      label: "Pages",
+      href: `${ADMIN_BASE}/pages`,
+      icon: Newspaper,
+      count: customPages || null,
+      children: [
+        { id: "pages-landing",   label: "Landing page", href: `${ADMIN_BASE}/landing`,   icon: LayoutTemplate, count: enabledLanding || null },
+        { id: "pages-all",       label: "All pages",    href: `${ADMIN_BASE}/pages`,     icon: Newspaper,      count: customPages || null },
+        { id: "pages-blog",      label: "Blog",         href: `${ADMIN_BASE}/posts`,     icon: FileText,       count: draftCount || null },
+        { id: "pages-portfolio", label: "Portfolio",    href: `${ADMIN_BASE}/portfolio`, icon: Briefcase,      count: state.portfolio.length || null },
+        { id: "pages-services",  label: "Services",     href: `${ADMIN_BASE}/services`,  icon: Sparkles,       count: state.services.length || null },
+        { id: "pages-resources", label: "Resources",    href: `${ADMIN_BASE}/resources`, icon: BookOpen,       count: state.resources.length || null },
+      ],
+    },
     { id: "leads",     label: "Leads",     href: `${ADMIN_BASE}/leads`,       icon: Inbox,           count: newLeads || null },
     { id: "newsletter",label: "Newsletter",href: `${ADMIN_BASE}/newsletter`,  icon: Mail,            count: pendingSubs || null },
     { id: "comments",  label: "Comments",  href: `${ADMIN_BASE}/comments`,    icon: MessageSquare,   count: pendingComments || null },

@@ -10,6 +10,37 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "AX",
+    version: "AX-wave",
+    date: Date.parse("2026-05-19"),
+    kind: "feature",
+    title: "Nested Pages nav across all 7 templates + Open-full-page button",
+    body:
+      "Closes the AV-deferred propagation: every website template now has the Pages parent + collapsible sub-items (Landing / All pages / blog / portfolio / services where applicable). ParentNavItem rewired to the canonical shadcn NavMain idiom (group/collapsible + group-data-[state=open]/collapsible:rotate-90) — same pattern shadcn ships in its docs. FeatureBar gets a new ExternalLink button: when the active docs tab is a preview surface, the button pops the iframed content out into a real browser tab at native size.",
+    groups: [
+      {
+        heading: "Templates touched (Pages parent + nested sub-items)",
+        bullets: [
+          { text: "personal-brand-os — Landing, All pages, Blog, Portfolio, Services, Resources", slug: "personal-brand-os", kind: "template" },
+          { text: "agency-studio-os — Landing, All pages, Work, Services", slug: "agency-studio-os", kind: "template" },
+          { text: "konsultan-os — Landing, All pages", slug: "konsultan-os", kind: "template" },
+          { text: "kreator-studio-os — Landing, All pages", slug: "kreator-studio-os", kind: "template" },
+          { text: "riset-kit — Landing, All pages", slug: "riset-kit", kind: "template" },
+          { text: "wirausaha-os — Landing, All pages", slug: "wirausaha-os", kind: "template" },
+        ],
+      },
+      {
+        heading: "Site",
+        bullets: [
+          "components/templates/_shared/ui/admin-nav-items.tsx — ParentNavItem refactored to canonical shadcn NavMain idiom (group/collapsible class + CSS-driven chevron rotation, no per-item useState)",
+          "components/site/feature-context.tsx — FeatureManifest.previewUrls?: { public?, admin? } so FeatureBar can resolve the surface URL without a fresh ref",
+          "components/site/preview/manifest-builder.tsx — buildPreviewManifest emits previewUrls from publicPath/adminPath",
+          "components/site/feature-bar.tsx — new ExternalLink button (right-side cluster) opens the active preview surface in a new tab; auto-hides on split tab and when manifest has no URL for the current surface",
+        ],
+      },
+    ],
+  },
+  {
     id: "AW",
     version: "AW-wave",
     date: Date.parse("2026-05-19"),
