@@ -51,12 +51,14 @@ function isTextFile(name: string): boolean {
  * Server-only — uses `node:fs`. Call from a Server Component or RSC.
  */
 /**
- * Memoized via React.cache so repeated reads of the same slicePath
- * within one RSC render share the result. Pages that share a parent
- * layout therefore don't redo file I/O when multiple components ask
- * for the same source. */
+ * Memoized via React.cache (intra-render) AND tagged with Next 16
+ * `"use cache"` directive so the result is cached across navigations
+ * too. Without "use cache" the page would re-read the filesystem on
+ * every nav because cacheComponents: true treats async server
+ * components as dynamic by default. */
 export const readSliceFiles = cache(
   async function readSliceFiles(slicePath: string): Promise<SliceFile[]> {
+    "use cache";
     return readPathsFiles([slicePath]);
   },
 );
@@ -69,6 +71,7 @@ export const readSliceFiles = cache(
  * Not React.cache-wrapped — array args compare by reference, so the
  * cache wouldn't dedupe across call sites. Caller can wrap if needed. */
 export async function readPathsFiles(rootPaths: string[]): Promise<SliceFile[]> {
+  "use cache";
   const repoRoot = process.cwd();
   const out: SliceFile[] = [];
   const multi = rootPaths.length > 1;

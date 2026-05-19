@@ -1,3 +1,6 @@
+"use client";
+
+import * as React from "react";
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -17,13 +20,25 @@ interface Props {
  * lib/content/changelog-helpers.ts as SSOT — single helper, every place
  * that surfaces "this is fresh" reads from there.
  *
+ * Client-only: Date.now() lives here so cacheComponents server
+ * prerender doesn't trip on "current time read before uncached data".
  * Renders null when the slug has no matching changelog reference, so
  * callers can drop it in unconditionally.
  */
 export function RecentlyUpdatedBadge({ slug, kind, variant = "badge", className }: Props) {
-  const ref = getLatestUpdate(slug, kind);
-  if (!ref) return null;
-  const label = `Updated ${formatRelative(ref.date)}`;
+  const ref = React.useMemo(() => getLatestUpdate(slug, kind), [slug, kind]);
+  // Compute label on the client so Date.now() never runs during server
+  // prerender. Lazy state init runs once on mount.
+  const [label, setLabel] = React.useState<string | null>(null);
+  React.useEffect(() => {
+    if (!ref) {
+      setLabel(null);
+      return;
+    }
+    setLabel(`Updated ${formatRelative(ref.date)}`);
+  }, [ref]);
+
+  if (!ref || !label) return null;
 
   const inner = (
     <Badge

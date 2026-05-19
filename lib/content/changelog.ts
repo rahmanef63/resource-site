@@ -10,6 +10,28 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "AR",
+    version: "AR-wave",
+    date: Date.parse("2026-05-19"),
+    kind: "improvement",
+    title: "Skeleton fallbacks + cacheComponents-friendly slice file I/O",
+    body:
+      "After AP killed the client-side reset churn, server-side nav still felt heavy because cacheComponents: true treats async server components as dynamic by default — every navigation re-ran readSliceFiles on the filesystem. AR adds Next 16 `use cache` directives to the file readers and per-route loading.tsx skeletons that stream instantly on click. /slices/[slug] now reports as Partial Prerender with 15m revalidate; nav between detail pages feels app-router-fast.",
+    groups: [
+      {
+        heading: "Site",
+        bullets: [
+          "lib/slice-files.ts: \"use cache\" on readSliceFiles + readPathsFiles — cross-nav cache, not just intra-render dedupe",
+          "components/site/docs-loading-skeleton.tsx NEW — shared title-strip / tabs / preview-iframe skeleton",
+          "app/(docs)/loading.tsx — catch-all skeleton for plain docs routes",
+          "app/(docs)/slices/[slug]/loading.tsx — tab + iframe skeleton",
+          "app/(docs)/layouts/[slug]/loading.tsx — tab + iframe skeleton",
+          "RecentlyUpdatedBadge → \"use client\" so Date.now() runs in the browser (cacheComponents blocked the previous server read)",
+        ],
+      },
+    ],
+  },
+  {
     id: "AQ",
     version: "AQ-wave",
     date: Date.parse("2026-05-19"),
