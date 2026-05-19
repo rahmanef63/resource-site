@@ -2,18 +2,13 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Code2, Columns2, Eye, LayoutDashboard, Wand2 } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CopyPageButton } from "@/components/site/copy-page-button";
-import { PreviewPane } from "@/components/site/preview-pane";
-import { SplitPreviewPane } from "@/components/site/split-preview-pane";
 import { AssemblerInspector } from "@/components/site/assembler-inspector";
-import {
-  useFeatureManifest,
-  type FeatureManifest,
-  type Selections,
-} from "@/components/site/feature-context";
+import { useFeatureManifest, type Selections } from "@/components/site/feature-context";
+import { buildPreviewManifest } from "@/components/site/preview";
 import { getTemplateConfig } from "@/lib/templates/configs";
 import { CodeTab } from "@/components/site/template-detail/code-tab";
 import { PromptTab } from "@/components/site/template-detail/prompt-tab";
@@ -36,111 +31,51 @@ type Props = {
 export function TemplateDetail({ kind, basePath, data, prev, next, prompt, siteUrl }: Props) {
   const tplConfig = React.useMemo(() => getTemplateConfig(data.slug), [data.slug]);
 
-  const hasDualSurface = !!(data.previewPath && data.adminPreviewPath);
-
-  const manifest: FeatureManifest = React.useMemo(() => {
-    const tabs = [
-      // Single-surface preview (existing layouts)
-      data.previewPath && !hasDualSurface
-        ? {
-            id: "preview",
-            label: "Preview",
-            icon: Eye,
-            render: () => <PreviewPane src={data.previewPath!} />,
-          }
-        : null,
-      // Dual-surface: Public tab
-      data.previewPath && hasDualSurface
-        ? {
-            id: "preview-public",
-            label: "Public",
-            icon: Eye,
-            render: () => <PreviewPane src={data.previewPath!} />,
-          }
-        : null,
-      // Dual-surface: Split tab (between Public + Admin)
-      hasDualSurface
-        ? {
-            id: "preview-split",
-            label: "Split",
-            icon: Columns2,
-            render: () => (
-              <SplitPreviewPane
-                publicSrc={data.previewPath!}
-                adminSrc={data.adminPreviewPath!}
-                storageKey={data.slug ?? data.previewPath!}
-              />
-            ),
-          }
-        : null,
-      // Dual-surface: Admin tab
-      data.adminPreviewPath
-        ? {
-            id: "preview-admin",
-            label: "Admin",
-            icon: LayoutDashboard,
-            render: () => <PreviewPane src={data.adminPreviewPath!} />,
-          }
-        : null,
-      {
-        id: "code",
-        label: "Code",
-        icon: Code2,
-        render: () => (
-          <CodeTab
-            slug={data.slug}
-            exampleCode={data.exampleCode}
-            primaryFile={data.primaryFile}
-            files={data.files}
-            pullPaths={data.pullPaths}
-            dependencies={data.dependencies}
-            codeFiles={data.codeFiles}
-            codeRootPath={data.codeRootPath}
-          />
-        ),
-      },
-      {
-        id: "prompt",
-        label: "Prompt",
-        icon: Wand2,
-        render: () => <PromptTab fallback={prompt} kind={kind} slug={data.slug} title={data.title} />,
-      },
-    ].filter(Boolean) as NonNullable<FeatureManifest["tabs"]>;
-
-    const sourceRepo: FeatureManifest["sourceRepo"] = {
-      owner: "rahmanef63",
-      repo: "resource-site",
-      branch: "main",
-      path: data.repoPath,
-    };
-
+  const manifest = React.useMemo(() => {
     const inspectorRender = tplConfig
       ? () => <AssemblerInspector />
       : () => <StaticInspector data={data} />;
-
-    return {
+    return buildPreviewManifest({
       title: data.title,
       subtitle: data.description,
-      tabs,
-      defaultTab: hasDualSurface
-        ? data.defaultSurface === "admin"
-          ? "preview-admin"
-          : "preview-public"
-        : data.previewPath
-          ? "preview"
-          : "code",
-      responsive: !!(data.previewPath || data.adminPreviewPath),
+      publicPath: data.previewPath,
+      adminPath: data.adminPreviewPath,
+      defaultSurface: data.defaultSurface,
       defaultView: data.defaultView,
       defaultZoom: data.defaultZoom,
-      sourceRepo,
-      inspector: { title: tplConfig ? "Assemble" : "Inspector", render: inspectorRender },
+      splitStorageKey: data.slug ?? data.previewPath,
+      code: () => (
+        <CodeTab
+          slug={data.slug}
+          exampleCode={data.exampleCode}
+          primaryFile={data.primaryFile}
+          files={data.files}
+          pullPaths={data.pullPaths}
+          dependencies={data.dependencies}
+          codeFiles={data.codeFiles}
+          codeRootPath={data.codeRootPath}
+        />
+      ),
+      prompt: () => (
+        <PromptTab fallback={prompt} kind={kind} slug={data.slug} title={data.title} />
+      ),
+      sourceRepo: {
+        owner: "rahmanef63",
+        repo: "resource-site",
+        branch: "main",
+        path: data.repoPath,
+      },
+      inspector: {
+        title: tplConfig ? "Assemble" : "Inspector",
+        render: inspectorRender,
+      },
       config: tplConfig?.config,
       composePrompt: tplConfig
         ? (s: Selections) => tplConfig.composePrompt(data.slug, data.title, s)
         : undefined,
       composePreviewSrc: tplConfig?.composePreviewSrc,
-    };
-  }, [data, prompt, kind, tplConfig, hasDualSurface]);
+    });
+  }, [data, prompt, kind, tplConfig]);
 
   useFeatureManifest(manifest);
 

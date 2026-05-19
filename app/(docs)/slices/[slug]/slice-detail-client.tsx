@@ -1,0 +1,114 @@
+"use client";
+
+import * as React from "react";
+import { ExternalLink, FileCode, Package, Terminal } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { CodeBlock } from "@/components/site/code-block";
+import { ShowcaseCard } from "@/components/site/catalog/showcase-card";
+import { SliceCodeViewer } from "@/components/site/slice-code/code-viewer";
+import { useFeatureManifest } from "@/components/site/feature-context";
+import { buildPreviewManifest } from "@/components/site/preview";
+import type { SliceFile } from "@/lib/slice-files";
+import type { SliceEntry } from "@/lib/content/slices";
+
+interface Props {
+  slice: SliceEntry;
+  codeFiles?: SliceFile[];
+  sourceHref: string;
+}
+
+/** Registers the same docs-shell tabbed preview manifest that
+ *  `/layouts/[slug]` uses, so both routes expose Code / Public / Split
+ *  / Admin in one consistent UI (AM-wave SSOT). */
+export function SliceDetailClient({ slice, codeFiles, sourceHref }: Props) {
+  const manifest = React.useMemo(() => {
+    return buildPreviewManifest({
+      title: slice.title,
+      subtitle: slice.description,
+      publicPath: slice.previewPath,
+      adminPath: slice.adminPreviewPath,
+      defaultSurface: slice.defaultSurface,
+      defaultView: slice.defaultView,
+      defaultZoom: slice.defaultZoom,
+      splitStorageKey: `slice:${slice.slug}`,
+      code: slice.slicePath
+        ? () => (
+            <CodeTab
+              slug={slice.slug}
+              slicePath={slice.slicePath}
+              codeFiles={codeFiles}
+              dependencies={slice.npm ?? []}
+              sourceHref={sourceHref}
+            />
+          )
+        : undefined,
+      sourceRepo: {
+        owner: "rahmanef63",
+        repo: "resource-site",
+        branch: "main",
+        path: slice.slicePath ?? "",
+      },
+    });
+  }, [slice, codeFiles, sourceHref]);
+
+  useFeatureManifest(manifest);
+  return null;
+}
+
+function CodeTab({
+  slug,
+  slicePath,
+  codeFiles,
+  dependencies,
+  sourceHref,
+}: {
+  slug: string;
+  slicePath: string;
+  codeFiles?: SliceFile[];
+  dependencies: string[];
+  sourceHref: string;
+}) {
+  const cliCmd = `npx rahman-resources add ${slug} my-app`;
+  return (
+    <div className="h-full space-y-4 overflow-auto p-4">
+      <ShowcaseCard
+        icon={Terminal}
+        label="Install via CLI (auto-pulls peers + deps)"
+        variant="code"
+        actions={
+          <Button asChild variant="ghost" size="sm" className="h-7 gap-1 px-2 text-xs">
+            <a href={sourceHref} target="_blank" rel="noreferrer">
+              View source <ExternalLink className="size-3" />
+            </a>
+          </Button>
+        }
+      >
+        <CodeBlock code={cliCmd} language="bash" filename="install.sh" />
+      </ShowcaseCard>
+
+      {dependencies.length > 0 && (
+        <ShowcaseCard
+          icon={Package}
+          label={`Dependencies (${dependencies.length})`}
+          variant="code"
+        >
+          <CodeBlock
+            code={`pnpm add ${dependencies.join(" ")}`}
+            language="bash"
+            filename="install.sh"
+          />
+        </ShowcaseCard>
+      )}
+
+      {codeFiles && codeFiles.length > 0 ? (
+        <SliceCodeViewer slug={slug} rootPath={slicePath} files={codeFiles} />
+      ) : (
+        <ShowcaseCard icon={FileCode} label="No files" variant="static">
+          <p className="text-xs text-muted-foreground">
+            Slice source not available client-side. Open the GitHub link above.
+          </p>
+        </ShowcaseCard>
+      )}
+    </div>
+  );
+}

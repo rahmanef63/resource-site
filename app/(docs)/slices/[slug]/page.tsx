@@ -4,16 +4,15 @@ import { Bot, ExternalLink } from "lucide-react";
 import { slices, getSlice } from "@/lib/content/slices";
 import { Button } from "@/components/ui/button";
 import { ShowcaseCard } from "@/components/site/catalog/showcase-card";
-import { SlicePreviewSection } from "@/components/site/slice-preview-section";
-import { SliceCodeSection } from "@/components/site/slice-code";
-import { UseWideLayout } from "@/components/site/use-wide-layout";
 import {
   RelatedFeatures,
   RELATED_ICONS,
   type RelatedGroup,
 } from "@/components/site/related-features";
+import { readSliceFiles } from "@/lib/slice-files";
 import { SliceTitle, InstallCard } from "./page-header";
 import { MetaCardsGrid, ProvidersCard } from "./page-meta-cards";
+import { SliceDetailClient } from "./slice-detail-client";
 
 export function generateStaticParams() {
   return slices.map((s) => ({ slug: s.slug }));
@@ -89,26 +88,15 @@ export default async function SliceDetailPage({ params }: { params: Promise<{ sl
 
   const sourceHref = `https://github.com/rahmanef63/resource-site/tree/main/${slice.slicePath}`;
 
+  // Server-read slice source files so the Code tab in the manifest
+  // can show contents without an API roundtrip.
+  const codeFiles = slice.slicePath ? await readSliceFiles(slice.slicePath) : undefined;
+
   return (
     <div className="space-y-6">
-      <UseWideLayout />
+      {/* Registers the docs-shell tabs (Code/Public/Split/Admin) — SSOT with /layouts/[slug]. */}
+      <SliceDetailClient slice={slice} codeFiles={codeFiles} sourceHref={sourceHref} />
       <SliceTitle slice={slice} />
-
-      {slice.previewPath && (
-        <SlicePreviewSection
-          publicPath={slice.previewPath}
-          adminPath={slice.adminPreviewPath}
-          defaultSurface={slice.defaultSurface}
-          defaultView={slice.defaultView ?? "desktop"}
-          defaultZoom={slice.defaultZoom ?? 1}
-          sourceHref={sourceHref}
-        />
-      )}
-
-      {slice.slicePath && (
-        <SliceCodeSection slug={slice.slug} slicePath={slice.slicePath} />
-      )}
-
       <InstallCard slug={slice.slug} />
 
       <MetaCardsGrid slice={slice} />

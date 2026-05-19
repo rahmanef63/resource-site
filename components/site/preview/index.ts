@@ -19,3 +19,4 @@ export * from "./hooks/use-iframe-loaded";
 export * from "./hooks/use-preview-state";
 export * from "./lib/normalize-source";
 export * from "./lib/canvas-size";
+export * from "./manifest-builder";
