@@ -5,6 +5,7 @@ import { slices, getSlice } from "@/lib/content/slices";
 import { Button } from "@/components/ui/button";
 import { ShowcaseCard } from "@/components/site/catalog/showcase-card";
 import { SlicePreviewSection } from "@/components/site/slice-preview-section";
+import { SliceCodeSection } from "@/components/site/slice-code";
 import { UseWideLayout } from "@/components/site/use-wide-layout";
 import {
   RelatedFeatures,
@@ -102,6 +103,10 @@ export default async function SliceDetailPage({ params }: { params: Promise<{ sl
           defaultZoom={slice.defaultZoom ?? 1}
           sourceHref={sourceHref}
         />
+      )}
+
+      {slice.slicePath && (
+        <SliceCodeSection slug={slice.slug} slicePath={slice.slicePath} />
       )}
 
       <InstallCard slug={slice.slug} />

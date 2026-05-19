@@ -1,0 +1,91 @@
+import { promises as fs } from "node:fs";
+import path from "node:path";
+
+export type SliceFile = {
+  /** Path relative to slice root, e.g. "views/PricingSection.tsx". */
+  path: string;
+  /** UTF-8 file contents. */
+  content: string;
+  /** Bytes (post-UTF-8 encode). Used for size badge. */
+  size: number;
+};
+
+const SKIP_DIRS = new Set([
+  "node_modules",
+  ".next",
+  ".turbo",
+  "dist",
+  "build",
+  "__tests__",
+  "__snapshots__",
+]);
+
+const SKIP_FILES = new Set([
+  ".DS_Store",
+  ".env",
+  ".env.local",
+  "tsconfig.tsbuildinfo",
+]);
+
+const TEXT_EXT = new Set([
+  ".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs",
+  ".json", ".md", ".mdx", ".txt", ".css", ".scss",
+  ".yml", ".yaml", ".toml", ".html", ".svg",
+]);
+
+const MAX_FILE_BYTES = 256 * 1024;
+
+function isTextFile(name: string): boolean {
+  const ext = path.extname(name).toLowerCase();
+  if (TEXT_EXT.has(ext)) return true;
+  if (!ext && /^(README|LICENSE|CHANGELOG)/i.test(name)) return true;
+  return false;
+}
+
+/**
+ * Recursively read every text file under `slicePath` (relative to repo
+ * root). Returns a flat array suitable for serializing to a client
+ * component or zipping. Binary files and oversized files are skipped.
+ *
+ * Server-only — uses `node:fs`. Call from a Server Component or RSC.
+ */
+export async function readSliceFiles(slicePath: string): Promise<SliceFile[]> {
+  const repoRoot = process.cwd();
+  const absRoot = path.join(repoRoot, slicePath);
+  const out: SliceFile[] = [];
+
+  async function walk(absDir: string, relDir: string): Promise<void> {
+    let entries;
+    try {
+      entries = await fs.readdir(absDir, { withFileTypes: true });
+    } catch {
+      return;
+    }
+    for (const entry of entries) {
+      if (entry.isDirectory()) {
+        if (SKIP_DIRS.has(entry.name)) continue;
+        await walk(path.join(absDir, entry.name), path.join(relDir, entry.name));
+        continue;
+      }
+      if (!entry.isFile()) continue;
+      if (SKIP_FILES.has(entry.name)) continue;
+      if (!isTextFile(entry.name)) continue;
+
+      const absFile = path.join(absDir, entry.name);
+      const stat = await fs.stat(absFile);
+      if (stat.size > MAX_FILE_BYTES) continue;
+
+      const content = await fs.readFile(absFile, "utf8");
+      out.push({
+        path: path.posix.join(relDir.split(path.sep).join("/"), entry.name).replace(/^\/+/, ""),
+        content,
+        size: Buffer.byteLength(content, "utf8"),
+      });
+    }
+  }
+
+  await walk(absRoot, "");
+
+  out.sort((a, b) => a.path.localeCompare(b.path));
+  return out;
+}
