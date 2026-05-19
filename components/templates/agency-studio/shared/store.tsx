@@ -88,7 +88,7 @@ function reducer(state: State, action: Action): State {
 }
 
 const { Provider, useStore } = createTemplateStore<State, Action>({
-  storageKey: "agency-studio:state:v3-landing",
+  storageKey: "agency-studio:state:v4-landing-sync",
   channel: "agency-studio:sync",
   seed: SEED_STATE,
   reducer,
@@ -150,5 +150,6 @@ export const useClients = () => useStore().state.clients;
 export const useServices = () => useStore().state.services;
 export const useLeads = () => useStore().state.leads;
 export const usePages = () => useStore().state.pages;
+export const useLandingSections = () => useStore().state.landingSections;
 
 export { nid, fmtDate, rel } from "@/components/templates/_shared/utils";

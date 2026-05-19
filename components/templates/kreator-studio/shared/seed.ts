@@ -1,5 +1,50 @@
-import { defaultLandingSections } from "@/components/templates/_shared/landing/seed-factory";
+import type { LandingSection } from "@/components/templates/_shared/landing/types";
 import { SEED_PAGES } from "./pages-seed";
+
+export const SEED_LANDING_SECTIONS: LandingSection[] = [
+  {
+    id: "ls-hero",
+    order: 10,
+    kind: "hero",
+    title: "Newsletter & content notes untuk creator yang serius.",
+    subtitle:
+      "Tiap minggu — strategi konten, breakdown viral hits, dan template yang bisa kamu pakai langsung.",
+    enabled: true,
+    config: '{"badge":"Issue mingguan untuk creator"}',
+  },
+  {
+    id: "ls-newsletter",
+    order: 20,
+    kind: "newsletter",
+    title: "Subscribe newsletter",
+    subtitle: "12K subscribers · 38% avg open rate · gratis selamanya.",
+    enabled: true,
+  },
+  {
+    id: "ls-features",
+    order: 30,
+    kind: "features",
+    title: "Apa yang ada di balik newsletter ini",
+    subtitle: "Workspace kreator yang sama saya pakai untuk produce content tiap minggu.",
+    enabled: true,
+  },
+  {
+    id: "ls-blog",
+    order: 40,
+    kind: "blog",
+    title: "Issue terbaru",
+    subtitle: "Klik untuk baca arsip lengkap.",
+    enabled: true,
+  },
+  {
+    id: "ls-portfolio",
+    order: 50,
+    kind: "portfolio",
+    title: "Highlight social posts",
+    subtitle: "Yang paling resonance bulan ini di IG, TikTok, dan YouTube.",
+    enabled: true,
+  },
+];
 import type {
   Asset,
   Carousel,
@@ -265,5 +310,5 @@ export const SEED_STATE: State = {
   performance: SEED_PERFORMANCE,
   commentDrafts: SEED_COMMENTS,
   pages: SEED_PAGES,
-  landingSections: defaultLandingSections(),
+  landingSections: SEED_LANDING_SECTIONS,
 };

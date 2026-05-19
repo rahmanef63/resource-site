@@ -1,5 +1,50 @@
-import { defaultLandingSections } from "@/components/templates/_shared/landing/seed-factory";
+import type { LandingSection } from "@/components/templates/_shared/landing/types";
 import { SEED_PAGES } from "./pages-seed";
+
+export const SEED_LANDING_SECTIONS: LandingSection[] = [
+  {
+    id: "ls-hero",
+    order: 10,
+    kind: "hero",
+    title: "Konsultan independen, tools setara firma global.",
+    subtitle:
+      "Proposal AI, kontrak ID-aware, PajakAware invoicing — workspace lengkap untuk konsultan Indonesia yang serius.",
+    enabled: true,
+    config: '{"badge":"Boutique consulting · Indonesia"}',
+  },
+  {
+    id: "ls-services",
+    order: 20,
+    kind: "services",
+    title: "Empat area utama",
+    subtitle: "Fokus di strategi, operasi, organisasi, dan workshop intensif.",
+    enabled: true,
+  },
+  {
+    id: "ls-features",
+    order: 30,
+    kind: "features",
+    title: "Tools yang menjalankan praktik kami",
+    subtitle: "Sistem ini sama yang juga bisa Anda pakai untuk firma sendiri.",
+    enabled: true,
+  },
+  {
+    id: "ls-portfolio",
+    order: 40,
+    kind: "portfolio",
+    title: "Proyek terbaru",
+    subtitle: "Sebagian engagement yang sedang/telah berjalan.",
+    enabled: true,
+  },
+  {
+    id: "ls-cta",
+    order: 50,
+    kind: "cta",
+    title: "Siap mulai konsultasi?",
+    subtitle: "Konsultasi awal gratis. Respons dalam 24 jam.",
+    enabled: true,
+  },
+];
 import type {
   Client,
   ConsultDoc,
@@ -205,5 +250,5 @@ export const SEED_STATE: State = {
   invoices: SEED_INVOICES,
   documents: SEED_DOCUMENTS,
   pages: SEED_PAGES,
-  landingSections: defaultLandingSections(),
+  landingSections: SEED_LANDING_SECTIONS,
 };

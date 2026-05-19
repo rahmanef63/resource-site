@@ -1,5 +1,50 @@
-import { defaultLandingSections } from "@/components/templates/_shared/landing/seed-factory";
+import type { LandingSection } from "@/components/templates/_shared/landing/types";
 import { SEED_PAGES } from "./pages-seed";
+
+export const SEED_LANDING_SECTIONS: LandingSection[] = [
+  {
+    id: "ls-hero",
+    order: 10,
+    kind: "hero",
+    title: "Kelola banyak unit usaha dari satu workspace.",
+    subtitle:
+      "Inventory, order, finance, staff — semua jadi satu. AI bantu narasi laporan bulanan dalam bahasa Indonesia.",
+    enabled: true,
+    config: '{"badge":"Untuk wirausaha multi-unit"}',
+  },
+  {
+    id: "ls-features",
+    order: 20,
+    kind: "features",
+    title: "Operasi multi-unit, satu kontrol panel",
+    subtitle: "Semua yang dibutuhkan wirausaha untuk kelola unit kuliner, retail, dan jasa.",
+    enabled: true,
+  },
+  {
+    id: "ls-portfolio",
+    order: 30,
+    kind: "portfolio",
+    title: "Yang sudah jalan di Wirausaha OS",
+    subtitle: "Sebagian unit usaha yang dikelola lewat workspace ini.",
+    enabled: true,
+  },
+  {
+    id: "ls-services",
+    order: 40,
+    kind: "services",
+    title: "Produk & jasa",
+    subtitle: "Daftar produk multi-unit yang aktif tersedia.",
+    enabled: true,
+  },
+  {
+    id: "ls-cta",
+    order: 50,
+    kind: "cta",
+    title: "Siap satukan operasi unit usaha?",
+    subtitle: "Demo workspace dalam 5 menit.",
+    enabled: true,
+  },
+];
 import type {
   Business,
   Customer,
@@ -84,5 +129,5 @@ export const SEED_STATE: State = {
   finance: SEED_FINANCE,
   staff: SEED_STAFF,
   pages: SEED_PAGES,
-  landingSections: defaultLandingSections(),
+  landingSections: SEED_LANDING_SECTIONS,
 };

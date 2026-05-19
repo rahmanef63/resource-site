@@ -1,6 +1,51 @@
-import { defaultLandingSections } from "@/components/templates/_shared/landing/seed-factory";
+import type { LandingSection } from "@/components/templates/_shared/landing/types";
 import { SEED_PAGES } from "./pages-seed";
 import type { Citation, Document, LitReview, Note, State, AiReaderSession } from "./types";
+
+export const SEED_LANDING_SECTIONS: LandingSection[] = [
+  {
+    id: "ls-hero",
+    order: 10,
+    kind: "hero",
+    title: "Riset workspace yang paham bahasa akademik Indonesia.",
+    subtitle:
+      "Baca PDF, review literatur, dan draft tesis — semua dalam satu workspace dengan AI yang ngerti EYD dan metodologi riset.",
+    enabled: true,
+    config: '{"badge":"Untuk peneliti, mahasiswa S2/S3, think-tank"}',
+  },
+  {
+    id: "ls-stats",
+    order: 20,
+    kind: "stats",
+    title: "Spesifikasi singkat",
+    subtitle: "Format, citation styles, dan privasi.",
+    enabled: true,
+  },
+  {
+    id: "ls-features",
+    order: 30,
+    kind: "features",
+    title: "Semua yang dibutuhkan dalam siklus riset",
+    subtitle: "Dari upload paper sampai draft bab — satu workspace, AI di setiap titik.",
+    enabled: true,
+  },
+  {
+    id: "ls-blog",
+    order: 40,
+    kind: "blog",
+    title: "Paper terbaru",
+    subtitle: "Sebagian dari knowledge-base yang sudah diindeks.",
+    enabled: true,
+  },
+  {
+    id: "ls-portfolio",
+    order: 50,
+    kind: "portfolio",
+    title: "Sintesis literatur jadi mudah",
+    subtitle: "Matrix bandingkan metode, temuan, dan gap antar paper otomatis.",
+    enabled: true,
+  },
+];
 
 const now = Date.now();
 const day = (n: number) => now - n * 24 * 60 * 60 * 1000;
@@ -171,5 +216,5 @@ export const SEED_STATE: State = {
   litReviews: SEED_LIT_REVIEWS,
   aiReaderSessions: SEED_AI_SESSIONS,
   pages: SEED_PAGES,
-  landingSections: defaultLandingSections(),
+  landingSections: SEED_LANDING_SECTIONS,
 };

@@ -1,127 +1,29 @@
 "use client";
 
-import Link from "next/link";
-import { ArrowRight, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { DEFAULT_SITE_CONFIG } from "../../shared/site-config";
-import { useFeaturedProjects, useServices } from "../../shared/store";
+import * as React from "react";
 import {
-  HeroBlock,
-  SectionHead,
-  CtaBand,
-  MetricRow,
-} from "@/components/templates/_shared";
-import { PUBLIC_BASE } from "../../shared/nav-config";
+  useFeaturedProjects,
+  useLandingSections,
+  useServices,
+} from "../../shared/store";
+import { renderLanding } from "./LandingRenderer";
 
+/**
+ * Composes the public home from admin-editable `landingSections`.
+ * Order + visibility + per-section copy are owned by /admin/landing;
+ * BroadcastChannel sync makes edits appear here without a reload.
+ *
+ * Pre-AJ-wave this file hard-coded section order + uneditable copy.
+ */
 export function HomePage() {
-  const c = DEFAULT_SITE_CONFIG;
+  const sections = useLandingSections();
   const featured = useFeaturedProjects();
-  const services = useServices().filter((s) => s.featured);
+  const services = useServices();
 
-  return (
-    <>
-      <HeroBlock
-        variant="split"
-        eyebrow={c.studioName}
-        title={c.tagline}
-        subtitle={c.description}
-        primaryCta={{ label: "Start a project", href: `${PUBLIC_BASE}/contact` }}
-        secondaryCta={{ label: "See work", href: `${PUBLIC_BASE}/portfolio` }}
-        sidekick={
-          <Card className="border-border/60">
-            <CardContent className="space-y-3 p-6">
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Selected stats
-              </p>
-              <MetricRow
-                rows={[
-                  { k: "Active clients", v: "14" },
-                  { k: "Projects shipped", v: "86+" },
-                  { k: "Avg engagement", v: "6 weeks" },
-                  { k: "NPS", v: "72" },
-                ]}
-              />
-            </CardContent>
-          </Card>
-        }
-      />
-
-      {/* Featured work */}
-      <section className="border-b border-border/60">
-        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
-          <SectionHead
-            eyebrow="Featured work"
-            title="Recent client engagements"
-            subtitle="A peek at what we've shipped lately."
-          />
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
-            {featured.slice(0, 4).map((p) => (
-              <Link
-                key={p.id}
-                href={`${PUBLIC_BASE}/portfolio/${p.slug}`}
-                className="group block overflow-hidden rounded-lg border border-border/60 bg-card transition hover:shadow-lg"
-              >
-                <div
-                  className="aspect-[16/9] w-full bg-cover bg-center"
-                  style={{ backgroundImage: `url(${p.cover})` }}
-                />
-                <div className="p-5">
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                    {p.category}
-                  </p>
-                  <h3 className="mt-1 text-lg font-medium group-hover:underline">{p.title}</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">{p.client}</p>
-                  <p className="mt-3 text-sm text-muted-foreground line-clamp-2">{p.blurb}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-          <div className="mt-8 text-center">
-            <Button asChild variant="ghost">
-              <Link href={`${PUBLIC_BASE}/portfolio`}>
-                All work <ArrowRight className="size-4" />
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Services strip */}
-      <section className="border-b border-border/60 bg-muted/30">
-        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
-          <SectionHead
-            eyebrow="What we do"
-            title="Productized + retainer engagements"
-            subtitle="Pick a sprint, a system build, or an embedded retainer."
-          />
-          <div className="mt-10 grid gap-4 md:grid-cols-2">
-            {services.map((s) => (
-              <Link
-                key={s.id}
-                href={`${PUBLIC_BASE}/services`}
-                className="group rounded-lg border border-border/60 bg-card p-6 transition hover:bg-card/90"
-              >
-                <div className="flex items-center gap-2">
-                  <Sparkles className="size-4 text-muted-foreground" />
-                  <h3 className="text-lg font-medium">{s.name}</h3>
-                </div>
-                <p className="mt-2 text-sm text-muted-foreground">{s.blurb}</p>
-                <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
-                  <span>{s.duration}</span>
-                  <span className="font-mono text-foreground">{s.priceLabel}</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <CtaBand
-        title="Brief us — get a proposal in 5 days."
-        subtitle="No commitment. We respond within 24h."
-        cta={{ label: "Send the brief", href: `${PUBLIC_BASE}/contact` }}
-      />
-    </>
+  const ordered = React.useMemo(
+    () => [...sections].filter((s) => s.enabled).sort((a, b) => a.order - b.order),
+    [sections],
   );
+
+  return <>{ordered.map((s) => renderLanding(s, { featured, services }))}</>;
 }

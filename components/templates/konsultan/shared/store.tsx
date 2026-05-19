@@ -114,7 +114,7 @@ function reducer(state: State, action: Action): State {
 }
 
 const { Provider, useStore } = createTemplateStore<State, Action>({
-  storageKey: "konsultan:state:v3-landing",
+  storageKey: "konsultan:state:v4-landing-sync",
   channel: "konsultan:sync",
   seed: SEED_STATE,
   reducer,
@@ -168,6 +168,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 }
 export { useStore };
 export const usePages = () => useStore().state.pages;
+export const useLandingSections = () => useStore().state.landingSections;
 
 export function useClients() {
   const { state } = useStore();

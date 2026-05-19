@@ -132,7 +132,7 @@ function reducer(state: State, action: Action): State {
 }
 
 const { Provider, useStore } = createTemplateStore<State, Action>({
-  storageKey: "kreator:state:v3-landing",
+  storageKey: "kreator:state:v4-landing-sync",
   channel: "kreator:sync",
   seed: SEED_STATE,
   reducer,
@@ -194,5 +194,6 @@ export const useAssets = () => useStore().state.assets;
 export const useNewsletters = () => useStore().state.newsletters;
 export const usePerformance = () => useStore().state.performance;
 export const useCommentDrafts = () => useStore().state.commentDrafts;
+export const useLandingSections = () => useStore().state.landingSections;
 
 export { nid, slugify, fmtDate, rel } from "@/components/templates/_shared/utils";

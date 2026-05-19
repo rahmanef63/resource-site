@@ -106,7 +106,7 @@ function reducer(state: State, action: Action): State {
 }
 
 const { Provider, useStore } = createTemplateStore<State, Action>({
-  storageKey: "riset:state:v3-landing",
+  storageKey: "riset:state:v4-landing-sync",
   channel: "riset:sync",
   seed: SEED_STATE,
   reducer,
@@ -160,6 +160,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 }
 export { useStore };
 export const usePages = () => useStore().state.pages;
+export const useLandingSections = () => useStore().state.landingSections;
 
 export function useDocuments() {
   const { state } = useStore();
