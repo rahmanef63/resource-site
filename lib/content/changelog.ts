@@ -10,6 +10,37 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "AY",
+    version: "AY-wave",
+    date: Date.parse("2026-05-19"),
+    kind: "improvement",
+    title: "Session close-out — All Pages first sub-item + Dashboard vision docs",
+    body:
+      "Tiny nav UX fix + comprehensive close-out docs so the next session resumes without retracing today's conversation. Reorder Pages sub-items so All Pages comes first (the listing surface a user opens before drilling into a specific page editor like Landing). Capture the Dashboard architectural direction (Admin Panel + Workspace split, RBAC/CRM/Analytics harvest from superspace) at docs/architecture/dashboard-vision.md, and a wave-by-wave log at docs/sessions/2026-05-19-session.md. Memory entries written so /rr in the next session auto-loads the vision + open items.",
+    groups: [
+      {
+        heading: "Templates touched (Pages children re-ordered)",
+        bullets: [
+          { text: "saas-marketing-os — All pages first, Landing second", slug: "saas-marketing-os", kind: "template" },
+          { text: "personal-brand-os — All pages first", slug: "personal-brand-os", kind: "template" },
+          { text: "agency-studio-os — All pages first", slug: "agency-studio-os", kind: "template" },
+          { text: "konsultan-os — All pages first", slug: "konsultan-os", kind: "template" },
+          { text: "kreator-studio-os — All pages first", slug: "kreator-studio-os", kind: "template" },
+          { text: "riset-kit — All pages first", slug: "riset-kit", kind: "template" },
+          { text: "wirausaha-os — All pages first", slug: "wirausaha-os", kind: "template" },
+        ],
+      },
+      {
+        heading: "Docs",
+        bullets: [
+          "docs/architecture/dashboard-vision.md NEW — Dashboard > Admin Panel + Workspace split direction; AZ→BC wave roadmap; source map for RBAC/CRM/Analytics from superspace + notion-page-clone",
+          "docs/sessions/2026-05-19-session.md NEW — wave-by-wave commit log AK→AY; flagged items for next session; process notes (200-LOC cap, pre-push build hook, wave-letter collisions)",
+          "Memory entries — dashboard-vision + session-2026-05-19 + feedback-wave-letters + feedback-changelog-discipline written to /home/rahman/.claude/projects/-home-rahman-projects-resources/memory/ for cross-session auto-load",
+        ],
+      },
+    ],
+  },
+  {
     id: "AX",
     version: "AX-wave",
     date: Date.parse("2026-05-19"),

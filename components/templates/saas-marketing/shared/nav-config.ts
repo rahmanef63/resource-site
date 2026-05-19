@@ -73,8 +73,8 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
       icon: Newspaper,
       count: customPages || null,
       children: [
-        { id: "pages-landing",   label: "Landing page",  href: `${ADMIN_BASE}/landing`,   icon: LayoutTemplate, count: enabledLanding || null },
         { id: "pages-all",       label: "All pages",     href: `${ADMIN_BASE}/pages`,     icon: Newspaper,      count: customPages || null },
+        { id: "pages-landing",   label: "Landing page",  href: `${ADMIN_BASE}/landing`,   icon: LayoutTemplate, count: enabledLanding || null },
         { id: "pages-blog",      label: "Blog",          href: `${ADMIN_BASE}/posts`,     icon: FileText,       count: draftPosts || null },
         { id: "pages-pricing",   label: "Pricing",       href: `${ADMIN_BASE}/pricing`,   icon: DollarSign,     count: state.pricing.length || null },
         { id: "pages-features",  label: "Features",      href: `${ADMIN_BASE}/features`,  icon: Sparkles,       count: state.features.length || null },

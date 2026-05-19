@@ -64,8 +64,8 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
       icon: Newspaper,
       count: customPages || null,
       children: [
-        { id: "pages-landing", label: "Landing page", href: `${ADMIN_BASE}/landing`, icon: LayoutTemplate, count: enabledLanding || null },
         { id: "pages-all",     label: "All pages",    href: `${ADMIN_BASE}/pages`,   icon: Newspaper,      count: customPages || null },
+        { id: "pages-landing", label: "Landing page", href: `${ADMIN_BASE}/landing`, icon: LayoutTemplate, count: enabledLanding || null },
       ],
     },
     { id: "clients",    label: "Clients",    href: `${ADMIN_BASE}/clients`,      icon: Users,           count: state.clients.length },
