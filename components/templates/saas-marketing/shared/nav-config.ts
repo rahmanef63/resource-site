@@ -60,17 +60,30 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
   const draftPosts = state.posts.filter((p) => p.status === "draft").length;
   const activeCustomers = state.customers.filter((c) => c.status === "active").length;
   const customPages = state.pages.filter((p) => !p.systemPage).length;
+  const enabledLanding = state.landingSections.filter((s) => s.enabled).length;
   return [
-    { id: "dashboard",     label: "Dashboard",     href: ADMIN_BASE,                       icon: LayoutDashboard, count: null },
-    { id: "landing",       label: "Landing",       href: `${ADMIN_BASE}/landing`,          icon: LayoutTemplate,  count: state.landingSections.filter((s) => s.enabled).length || null },
-    { id: "pages",         label: "Pages",         href: `${ADMIN_BASE}/pages`,            icon: Newspaper,       count: customPages || null },
-    { id: "customers",     label: "Customers",     href: `${ADMIN_BASE}/customers`,        icon: Users,           count: activeCustomers || null },
-    { id: "subscriptions", label: "Subscriptions", href: `${ADMIN_BASE}/subscriptions`,    icon: CreditCard,      count: activeSubs || null },
-    { id: "leads",         label: "Leads",         href: `${ADMIN_BASE}/leads`,            icon: Inbox,           count: newLeads || null },
-    { id: "posts",         label: "Posts",         href: `${ADMIN_BASE}/posts`,            icon: FileText,        count: draftPosts || null },
-    { id: "features",      label: "Features",      href: `${ADMIN_BASE}/features`,         icon: Sparkles,        count: state.features.length || null },
-    { id: "pricing",       label: "Pricing",       href: `${ADMIN_BASE}/pricing`,          icon: DollarSign,      count: state.pricing.length || null },
-    { id: "changelog",     label: "Changelog",     href: `${ADMIN_BASE}/changelog`,        icon: Megaphone,       count: state.changelogEntries.length },
+    { id: "dashboard", label: "Dashboard", href: ADMIN_BASE, icon: LayoutDashboard, count: null },
+    // "Pages" parent — collapsible group bundling every content surface
+    // that maps to a public page (landing, blog, pricing, etc.). Each
+    // child reuses an existing CRUD route.
+    {
+      id: "pages",
+      label: "Pages",
+      href: `${ADMIN_BASE}/pages`,
+      icon: Newspaper,
+      count: customPages || null,
+      children: [
+        { id: "pages-landing",   label: "Landing page",  href: `${ADMIN_BASE}/landing`,   icon: LayoutTemplate, count: enabledLanding || null },
+        { id: "pages-all",       label: "All pages",     href: `${ADMIN_BASE}/pages`,     icon: Newspaper,      count: customPages || null },
+        { id: "pages-blog",      label: "Blog",          href: `${ADMIN_BASE}/posts`,     icon: FileText,       count: draftPosts || null },
+        { id: "pages-pricing",   label: "Pricing",       href: `${ADMIN_BASE}/pricing`,   icon: DollarSign,     count: state.pricing.length || null },
+        { id: "pages-features",  label: "Features",      href: `${ADMIN_BASE}/features`,  icon: Sparkles,       count: state.features.length || null },
+        { id: "pages-changelog", label: "Changelog",     href: `${ADMIN_BASE}/changelog`, icon: Megaphone,      count: state.changelogEntries.length || null },
+      ],
+    },
+    { id: "customers",     label: "Customers",     href: `${ADMIN_BASE}/customers`,     icon: Users,      count: activeCustomers || null },
+    { id: "subscriptions", label: "Subscriptions", href: `${ADMIN_BASE}/subscriptions`, icon: CreditCard, count: activeSubs || null },
+    { id: "leads",         label: "Leads",         href: `${ADMIN_BASE}/leads`,         icon: Inbox,      count: newLeads || null },
   ];
 }
 

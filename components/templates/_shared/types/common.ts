@@ -24,6 +24,12 @@ export type AdminNavItem = NavItem & {
   icon?: any;
   /** small badge count next to nav label */
   count?: number | null;
+  /** Nested sub-items. When present, the entry renders as a
+   *  Collapsible parent inside the admin SidebarMenu with a
+   *  SidebarMenuSub for the children. The parent's `href` is still
+   *  navigable (e.g. clicking "Pages" can hit /admin/pages); the
+   *  chevron handles expand/collapse independently. */
+  children?: AdminNavItem[];
 };
 
 export type User = {

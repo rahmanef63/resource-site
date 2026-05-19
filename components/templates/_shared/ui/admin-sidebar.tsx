@@ -13,14 +13,16 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuBadge,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarSeparator,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import {
+  LeafNavItem,
+  ParentNavItem,
+  isPathActive,
+} from "./admin-nav-items";
 import type { AdminNavItem, Brand, User } from "../types/common";
 
 type SidebarProps = {
@@ -42,30 +44,22 @@ function NavGroup({
   homeAware?: boolean;
 }) {
   const pathname = usePathname() ?? "";
-  const isActive = (href: string, isHome: boolean) =>
-    isHome ? pathname === href : pathname === href || pathname.startsWith(href + "/");
   return (
     <SidebarGroup>
       <SidebarGroupLabel>{label}</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
-          {items.map((n, i) => {
-            const Icon = n.icon;
-            const on = isActive(n.href, homeAware && i === 0);
-            return (
-              <SidebarMenuItem key={n.id}>
-                <SidebarMenuButton asChild isActive={on} tooltip={n.label}>
-                  <Link href={n.href}>
-                    {Icon && <Icon className="size-4" />}
-                    <span>{n.label}</span>
-                  </Link>
-                </SidebarMenuButton>
-                {n.count != null && n.count > 0 && (
-                  <SidebarMenuBadge>{n.count}</SidebarMenuBadge>
-                )}
-              </SidebarMenuItem>
-            );
-          })}
+          {items.map((n, i) =>
+            n.children && n.children.length > 0 ? (
+              <ParentNavItem key={n.id} item={n} pathname={pathname} />
+            ) : (
+              <LeafNavItem
+                key={n.id}
+                item={n}
+                active={isPathActive(pathname, n.href, homeAware && i === 0)}
+              />
+            ),
+          )}
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>

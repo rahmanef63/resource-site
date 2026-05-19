@@ -10,6 +10,43 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "AV",
+    version: "AV-wave",
+    date: Date.parse("2026-05-19"),
+    kind: "feature",
+    title: "Admin sidebar: nested Pages parent + sub-items (POC on saas-marketing-os)",
+    body:
+      "Admin nav was a flat list per template — every content surface (landing, blog, pricing, features, changelog) sat as a sibling top-level menu item. With more entities being added the sidebar started feeling crowded. AV adds optional `children` to AdminNavItem and renders nested entries via shadcn's `Collapsible` + `SidebarMenuSub` + `SidebarMenuSubButton`. POC on saas-marketing-os groups all page-driving CRUDs (landing, all pages, blog, pricing, features, changelog) under a single \"Pages\" parent. Top-level keeps Dashboard / Pages / Customers / Subscriptions / Leads. Other 6 templates queued for AW. Dynamic per-page section composition (using existing hero / feature-grid / pricing-page / blog-section / changelog-feed / faq-section / portfolio-section / cta / services / testimonials-grid slices) deferred to a separate AW-B sub-wave.",
+    groups: [
+      {
+        heading: "Templates touched",
+        bullets: [
+          { text: "saas-marketing-os — Pages parent with 6 sub-items (POC)", slug: "saas-marketing-os", kind: "template" },
+        ],
+      },
+      {
+        heading: "Templates queued for AW (same restructure)",
+        bullets: [
+          { text: "personal-brand-os", slug: "personal-brand-os", kind: "template" },
+          { text: "agency-studio-os", slug: "agency-studio-os", kind: "template" },
+          { text: "konsultan-os", slug: "konsultan-os", kind: "template" },
+          { text: "kreator-studio-os", slug: "kreator-studio-os", kind: "template" },
+          { text: "riset-kit", slug: "riset-kit", kind: "template" },
+          { text: "wirausaha-os", slug: "wirausaha-os", kind: "template" },
+        ],
+      },
+      {
+        heading: "Site",
+        bullets: [
+          "components/templates/_shared/types/common.ts: AdminNavItem.children?: AdminNavItem[]",
+          "components/templates/_shared/ui/admin-nav-items.tsx NEW — ParentNavItem + LeafNavItem + isPathActive helper",
+          "components/templates/_shared/ui/admin-sidebar.tsx — NavGroup routes child-having items through ParentNavItem (Collapsible + SidebarMenuSub)",
+          "Existing flat nav items keep rendering as before (LeafNavItem)",
+        ],
+      },
+    ],
+  },
+  {
     id: "AU",
     version: "AU-wave",
     date: Date.parse("2026-05-19"),
