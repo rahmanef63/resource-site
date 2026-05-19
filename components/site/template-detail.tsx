@@ -68,6 +68,7 @@ export function TemplateDetail({ kind, basePath, data, prev, next, prompt, siteU
               <SplitPreviewPane
                 publicSrc={data.previewPath!}
                 adminSrc={data.adminPreviewPath!}
+                storageKey={data.slug ?? data.previewPath!}
               />
             ),
           }

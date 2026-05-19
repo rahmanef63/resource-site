@@ -112,6 +112,7 @@ export function SlicePreviewSection(props: Props) {
                 publicSrc={source.publicPath}
                 adminSrc={source.adminPath!}
                 view={view}
+                storageKey={source.publicPath}
               />
             </div>
           </TabsContent>
