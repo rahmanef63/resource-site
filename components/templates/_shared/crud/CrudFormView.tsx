@@ -4,14 +4,13 @@ import * as React from "react";
 import Link from "next/link";
 import { ArrowLeft, ExternalLink, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { CrudFieldInput } from "./CrudFieldInput";
+import { CrudFormBody } from "./CrudFormBody";
 import type { CrudController, EntityMeta, FieldDef } from "./types";
 
 /**
- * Generic editor for one entity row. Field-schema driven — pass FieldDef[]
- * + the entity id + a CrudController. Dirty state tracked locally; Save
- * dispatches update(id, draft). Public link auto-shown via meta.publicHref.
+ * Full-page editor — used by deep-link /admin/<entity>/[id] routes.
+ * For inline row-click editing, prefer mounting CrudRowDialog from
+ * CrudListView (default since AF-wave).
  */
 export function CrudFormView<T>({
   id,
@@ -44,8 +43,8 @@ export function CrudFormView<T>({
   const dirty = JSON.stringify(draft) !== JSON.stringify(entity);
   const publicHref = meta.publicHref?.(draft as unknown);
 
-  function patch<K extends keyof T>(key: K, value: T[K]) {
-    setDraft((d) => (d ? { ...d, [key]: value } : d));
+  function patch(key: keyof T & string, value: unknown) {
+    setDraft((d) => (d ? ({ ...d, [key]: value } as T) : d));
   }
 
   function save() {
@@ -55,7 +54,7 @@ export function CrudFormView<T>({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <BackLink href={backHref} label={meta.labelPlural} />
         <div className="flex items-center gap-2">
           {publicHref && (
@@ -71,17 +70,8 @@ export function CrudFormView<T>({
         </div>
       </div>
 
-      <div className="rounded-lg border bg-card p-5">
-        <div className="grid gap-4 sm:grid-cols-2">
-          {fields.map((f) => (
-            <FieldRender
-              key={f.key}
-              field={f}
-              value={(draft as Record<string, unknown>)[f.key]}
-              onChange={(v) => patch(f.key as keyof T, v as T[keyof T])}
-            />
-          ))}
-        </div>
+      <div className="rounded-lg border bg-card p-4 sm:p-5">
+        <CrudFormBody fields={fields} draft={draft} onChange={patch} />
       </div>
     </div>
   );
@@ -95,26 +85,5 @@ function BackLink({ href, label }: { href: string; label: string }) {
     >
       <ArrowLeft className="size-3" /> All {label.toLowerCase()}
     </Link>
-  );
-}
-
-function FieldRender<T>({
-  field,
-  value,
-  onChange,
-}: {
-  field: FieldDef<T>;
-  value: unknown;
-  onChange: (next: unknown) => void;
-}) {
-  const wrapper = field.kind === "textarea" || field.kind === "tags" ? "sm:col-span-2" : "";
-  return (
-    <div className={`space-y-1.5 ${wrapper}`}>
-      <Label className="text-xs">{field.label}</Label>
-      <CrudFieldInput field={field} value={value} onChange={onChange} />
-      {"hint" in field && field.hint && (
-        <p className="text-[10px] text-muted-foreground">{field.hint}</p>
-      )}
-    </div>
   );
 }

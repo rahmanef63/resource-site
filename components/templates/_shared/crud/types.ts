@@ -12,6 +12,10 @@ export type ColumnDef<T> = {
   mono?: boolean;
   /** Render as Badge instead of plain text. */
   badge?: boolean | "outline" | "secondary" | "default";
+  /** Hide this column below the md breakpoint. Use for secondary fields
+   *  so narrow screens show only the essentials. The first column is
+   *  always visible (treated as the label). */
+  hideOnMobile?: boolean;
 };
 
 /** Field definition for CrudFormView. */

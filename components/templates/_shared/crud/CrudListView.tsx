@@ -2,8 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ExternalLink, Pencil, Plus, Trash2 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { ExternalLink, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -13,33 +12,73 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { ColumnDef, CrudController, EntityMeta } from "./types";
+import { cn } from "@/lib/utils";
+import { CellRender, renderForLabel } from "./CrudCells";
+import { CrudRowDialog } from "./CrudRowDialog";
+import type {
+  ColumnDef,
+  CrudController,
+  EntityMeta,
+  FieldDef,
+} from "./types";
 
 /**
- * Generic admin list — table with View/Edit/Delete row actions + top
- * "New <entity>" button. Pass a CrudController + ColumnDef[]. Click New
- * → dispatch create(blank()) → redirect to editor at `editPath(id)`.
+ * Generic admin list. Row click opens an inline dialog editor (AF-wave
+ * default). Optional fields prop wires the dialog form schema; when not
+ * provided, rows still open dialog with a "use deep-link editor"
+ * fallback to keep backward compat.
+ *
+ * New flow:
+ *   • Click row → CrudRowDialog with full field form + Save / Cancel
+ *     / Delete inside.
+ *   • Click "New" → controller.create(blank()) → open dialog on the
+ *     fresh row (no page navigation).
+ *   • Old per-row Edit-link button removed; delete stays inline for
+ *     destructive-action visibility but stops row-click propagation.
+ *
+ * Responsive: secondary columns get `hideOnMobile` to drop below md.
  */
 export function CrudListView<T>({
   meta,
   controller,
   columns,
   editPath,
+  fields,
   description,
 }: {
   meta: EntityMeta;
   controller: CrudController<T>;
   columns: ColumnDef<T>[];
-  /** Builds the /admin/<entity>/<id> editor URL. */
+  /** Used for deep-link rows (e.g. share a URL). Dialog handles inline
+   *  editing without navigation. */
   editPath: (id: string) => string;
-  /** Optional sub-header line below the title. */
+  /** Field schema for the inline dialog. Pass to enable row-click
+   *  editing; omit to fall back to legacy navigate-on-click. */
+  fields?: FieldDef<T>[];
   description?: React.ReactNode;
 }) {
+  const [openId, setOpenId] = React.useState<string | null>(null);
+  const open = openId !== null;
+  const setOpen = (next: boolean) => {
+    if (!next) setOpenId(null);
+  };
+
+  function openRow(id: string) {
+    if (fields) {
+      setOpenId(id);
+    } else if (typeof window !== "undefined") {
+      window.location.href = editPath(id);
+    }
+  }
+
   function createNew() {
     const item = controller.blank();
     controller.create(item);
-    if (typeof window !== "undefined") {
-      window.location.href = editPath(controller.getId(item));
+    const id = controller.getId(item);
+    if (fields) {
+      setOpenId(id);
+    } else if (typeof window !== "undefined") {
+      window.location.href = editPath(id);
     }
   }
 
@@ -49,9 +88,11 @@ export function CrudListView<T>({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between gap-2">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">{meta.labelPlural}</h1>
+      <div className="flex flex-wrap items-end justify-between gap-2">
+        <div className="min-w-0">
+          <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
+            {meta.labelPlural}
+          </h1>
           <p className="text-xs text-muted-foreground">
             {controller.items.length} total
             {description ? <> · {description}</> : null}
@@ -66,12 +107,15 @@ export function CrudListView<T>({
         <Table>
           <TableHeader>
             <TableRow>
-              {columns.map((c) => (
-                <TableHead key={c.key} className={c.width}>
+              {columns.map((c, i) => (
+                <TableHead
+                  key={c.key}
+                  className={cn(c.width, i > 0 && c.hideOnMobile && "hidden md:table-cell")}
+                >
                   {c.header}
                 </TableHead>
               ))}
-              <TableHead className="w-[14%] text-right">Actions</TableHead>
+              <TableHead className="w-[60px] text-right">{/* delete */}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -79,14 +123,25 @@ export function CrudListView<T>({
               const id = controller.getId(row);
               const label = renderForLabel(row, columns);
               const publicHref = meta.publicHref?.(row as unknown);
+              const clickable = Boolean(fields);
               return (
-                <TableRow key={id}>
-                  {columns.map((c) => (
-                    <TableCell key={c.key} className={c.mono ? "font-mono text-xs" : "text-xs"}>
+                <TableRow
+                  key={id}
+                  onClick={clickable ? () => openRow(id) : undefined}
+                  className={cn(clickable && "cursor-pointer hover:bg-accent/40")}
+                >
+                  {columns.map((c, i) => (
+                    <TableCell
+                      key={c.key}
+                      className={cn(
+                        c.mono ? "font-mono text-xs" : "text-xs",
+                        i > 0 && c.hideOnMobile && "hidden md:table-cell",
+                      )}
+                    >
                       <CellRender col={c} row={row} />
                     </TableCell>
                   ))}
-                  <TableCell>
+                  <TableCell onClick={(e) => e.stopPropagation()}>
                     <div className="flex items-center justify-end gap-1">
                       {publicHref && (
                         <Button asChild size="icon" variant="ghost" className="size-7" title="View public">
@@ -95,11 +150,6 @@ export function CrudListView<T>({
                           </Link>
                         </Button>
                       )}
-                      <Button asChild size="icon" variant="ghost" className="size-7" title="Edit">
-                        <Link href={editPath(id)}>
-                          <Pencil className="size-3.5" />
-                        </Link>
-                      </Button>
                       <Button
                         size="icon"
                         variant="ghost"
@@ -125,29 +175,18 @@ export function CrudListView<T>({
           </TableBody>
         </Table>
       </div>
+
+      {fields && (
+        <CrudRowDialog
+          open={open}
+          onOpenChange={setOpen}
+          id={openId}
+          meta={meta}
+          controller={controller}
+          fields={fields}
+        />
+      )}
     </div>
   );
 }
 
-function CellRender<T>({ col, row }: { col: ColumnDef<T>; row: T }) {
-  const value = (row as Record<string, unknown>)[col.key];
-  if (col.render) return <>{col.render(value, row)}</>;
-  if (col.badge) {
-    const variant = col.badge === true ? "outline" : col.badge;
-    return (
-      <Badge variant={variant as "outline" | "secondary" | "default"} className="text-[10px]">
-        {String(value ?? "")}
-      </Badge>
-    );
-  }
-  if (Array.isArray(value)) return <>{value.join(", ")}</>;
-  return <>{String(value ?? "")}</>;
-}
-
-function renderForLabel<T>(row: T, columns: ColumnDef<T>[]): string {
-  // First column = display label
-  const first = columns[0];
-  if (!first) return "item";
-  const value = (row as Record<string, unknown>)[first.key];
-  return String(value ?? "item");
-}
