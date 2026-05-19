@@ -18,4 +18,14 @@ npm run audit:templates --silent
 npm run audit:file-size --silent
 npm run audit:convex-features --silent
 
-echo "✓ pre-push: catalog gates green"
+echo "→ pre-push: npm run build (catches Next-only errors tsc misses — cacheComponents conflicts, Turbopack loader issues, etc)"
+npm run build --silent > /tmp/rr-prepush-build.log 2>&1 || {
+  echo ""
+  echo "❌ pre-push: production build FAILED. See /tmp/rr-prepush-build.log"
+  tail -40 /tmp/rr-prepush-build.log
+  echo ""
+  echo "   Bypass (NOT recommended): git push --no-verify"
+  exit 1
+}
+
+echo "✓ pre-push: catalog gates + build green"
