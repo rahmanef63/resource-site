@@ -1,0 +1,17 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "database-cell-selection",
+  "version": "0.1.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "Database Cell Selection",
+  "description": "Drag-fill + selectable-cell primitives for grid/database UIs. Pure-UI hook+component, no convex tables. Lifted from notion-page-clone (Nosion).",
+  "namespace": "@/features/database-cell-selection",
+  "registers": [],
+  "audit": [],
+  "frontend": {
+    "slicePath": "frontend/slices/database-cell-selection",
+    "configExport": ""
+  },
+  "deps": { "npm": [], "shadcn": [], "env": [], "peers": [] }
+}
