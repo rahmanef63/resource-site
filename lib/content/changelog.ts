@@ -10,6 +10,37 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "AU",
+    version: "AU-wave",
+    date: Date.parse("2026-05-19"),
+    kind: "feature",
+    title: "Notion Page Clone OS — full website template using notion-blocks",
+    body:
+      "First end-to-end website template built on the notion-blocks bundle. Notion Page Clone OS = block-based notes-app starter with admin CRUD + public landing. Snippets entity (kind: equation/code/text/grid) renders live on the public landing via the four bundled primitives (EquationBlock / CodeBlock / NotifyMePopover / SelectableCell). Pure-localStorage state, zero convex required — drop-in for anyone shipping a writing surface or doc site. Wires the same _shared/{pages,landing,crud,ui} primitives the other 7 templates use so consistency holds across the OS family.",
+    groups: [
+      {
+        heading: "Templates touched",
+        bullets: [
+          { text: "notion-page-clone-os — NEW website template (admin + public)", slug: "notion-page-clone-os", kind: "template" },
+        ],
+      },
+      {
+        heading: "Slices touched",
+        bullets: [
+          { text: "notion-blocks — first downstream consumer (template usedBy)", slug: "notion-blocks" },
+        ],
+      },
+      {
+        heading: "Site",
+        bullets: [
+          "/preview/notion-page-clone-os/public — homepage renders snippets via notion-blocks primitives (equations, code, NotifyMe bell)",
+          "/preview/notion-page-clone-os/admin — dashboard + /snippets CrudListView for managing the public content",
+          "lib/content/layouts.ts — new SliceEntry for notion-page-clone-os, with pullPaths cascading notion-blocks + 4 peer slices",
+        ],
+      },
+    ],
+  },
+  {
     id: "AT",
     version: "AT-wave",
     date: Date.parse("2026-05-19"),
