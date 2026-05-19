@@ -8,13 +8,23 @@ import {
   type PagesStore,
 } from "@/components/templates/_shared/pages/pages-context";
 import type { PageEntry } from "@/components/templates/_shared/pages/types";
+import { landingReducer } from "@/components/templates/_shared/landing/reducer";
+import {
+  LandingProvider,
+  type LandingStore,
+} from "@/components/templates/_shared/landing/landing-context";
+import type { LandingSection } from "@/components/templates/_shared/landing/types";
+import { ADMIN_BASE, PUBLIC_BASE } from "./nav-config";
 import type { Action, State } from "./types";
 import { SEED_STATE } from "./seed";
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
     case "hydrate":
-      return action.state;
+      // Shallow-merge with SEED_STATE so any field added in a newer
+      // schema (e.g. AB-wave landingSections) gets its default when
+      // hydrating from an older localStorage payload.
+      return { ...SEED_STATE, ...action.state };
     case "reset":
       return SEED_STATE;
 
@@ -24,6 +34,12 @@ function reducer(state: State, action: Action): State {
     case "PAGE_REORDER_BLOCK": {
       const next = pagesReducer({ pages: state.pages }, action);
       return { ...state, pages: next.pages };
+    }
+
+    case "LANDING_UPSERT":
+    case "LANDING_DELETE": {
+      const next = landingReducer({ landingSections: state.landingSections }, action);
+      return { ...state, landingSections: next.landingSections };
     }
 
     case "content.upsert": {
@@ -116,7 +132,7 @@ function reducer(state: State, action: Action): State {
 }
 
 const { Provider, useStore } = createTemplateStore<State, Action>({
-  storageKey: "kreator:state:v2-pages",
+  storageKey: "kreator:state:v3-landing",
   channel: "kreator:sync",
   seed: SEED_STATE,
   reducer,
@@ -138,47 +154,45 @@ function PagesAdapter({ children }: { children: React.ReactNode }) {
   return <PagesProvider value={value}>{children}</PagesProvider>;
 }
 
+function LandingAdapter({ children }: { children: React.ReactNode }) {
+  const { state, dispatch } = useStore();
+  const value = React.useMemo<LandingStore>(
+    () => ({
+      items: state.landingSections,
+      publicBase: PUBLIC_BASE,
+      adminBase: ADMIN_BASE,
+      create: (section: LandingSection) =>
+        dispatch({ type: "LANDING_UPSERT", payload: section }),
+      update: (id, patch) => {
+        const current = state.landingSections.find((s) => s.id === id);
+        if (!current) return;
+        dispatch({ type: "LANDING_UPSERT", payload: { ...current, ...patch, id } });
+      },
+      remove: (id: string) => dispatch({ type: "LANDING_DELETE", payload: { id } }),
+    }),
+    [state.landingSections, dispatch],
+  );
+  return <LandingProvider value={value}>{children}</LandingProvider>;
+}
+
 export function StoreProvider({ children }: { children: React.ReactNode }) {
   return (
     <Provider>
-      <PagesAdapter>{children}</PagesAdapter>
+      <PagesAdapter>
+        <LandingAdapter>{children}</LandingAdapter>
+      </PagesAdapter>
     </Provider>
   );
 }
 export { useStore };
 export const usePages = () => useStore().state.pages;
-
-export function useContents() {
-  const { state } = useStore();
-  return state.contents;
-}
-export function useVoices() {
-  const { state } = useStore();
-  return state.voices;
-}
-export function useScripts() {
-  const { state } = useStore();
-  return state.scripts;
-}
-export function useCarousels() {
-  const { state } = useStore();
-  return state.carousels;
-}
-export function useAssets() {
-  const { state } = useStore();
-  return state.assets;
-}
-export function useNewsletters() {
-  const { state } = useStore();
-  return state.newsletters;
-}
-export function usePerformance() {
-  const { state } = useStore();
-  return state.performance;
-}
-export function useCommentDrafts() {
-  const { state } = useStore();
-  return state.commentDrafts;
-}
+export const useContents = () => useStore().state.contents;
+export const useVoices = () => useStore().state.voices;
+export const useScripts = () => useStore().state.scripts;
+export const useCarousels = () => useStore().state.carousels;
+export const useAssets = () => useStore().state.assets;
+export const useNewsletters = () => useStore().state.newsletters;
+export const usePerformance = () => useStore().state.performance;
+export const useCommentDrafts = () => useStore().state.commentDrafts;
 
 export { nid, slugify, fmtDate, rel } from "@/components/templates/_shared/utils";
