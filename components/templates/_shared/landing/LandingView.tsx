@@ -25,6 +25,9 @@ const KIND_LABEL: Record<LandingSection["kind"], string> = {
   changelog: "Changelog",
   faq: "FAQ",
   portfolio: "Portfolio",
+  services: "Services",
+  stats: "Stats",
+  newsletter: "Newsletter",
   cta: "CTA",
   custom: "Custom",
 };

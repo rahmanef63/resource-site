@@ -1,4 +1,23 @@
-import { defaultLandingSections } from "@/components/templates/_shared/landing/seed-factory";
+import type { LandingSection } from "@/components/templates/_shared/landing/types";
+
+export const SEED_LANDING_SECTIONS: LandingSection[] = [
+  {
+    id: "ls-hero",
+    order: 10,
+    kind: "hero",
+    title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.",
+    subtitle:
+      "Tempor incididunt ut labore et dolore magna aliqua — strategi produk, mentorship engineer, dan riset go-to-market untuk founder & tim Indonesia.",
+    enabled: true,
+    config: '{"badge":"2026 mentorship cohort open"}',
+  },
+  { id: "ls-stats",        order: 20, kind: "stats",        title: "Numbers", subtitle: "Quick credibility strip.", enabled: true },
+  { id: "ls-blog",         order: 30, kind: "blog",         title: "Tulisan terbaru", subtitle: "Catatan singkat tentang produk, riset, dan delivery.", enabled: true },
+  { id: "ls-portfolio",    order: 40, kind: "portfolio",    title: "Karya pilihan", subtitle: "Proyek yang menggambarkan cara saya bekerja.", enabled: true },
+  { id: "ls-services",     order: 50, kind: "services",     title: "Layanan", subtitle: "Tiga jalur kerja sama.", enabled: true },
+  { id: "ls-testimonials", order: 60, kind: "testimonials", title: "Apa kata mereka", subtitle: "Dari founder dan tim yang sudah bekerja sama.", enabled: true },
+  { id: "ls-newsletter",   order: 70, kind: "newsletter",   title: "Newsletter", subtitle: "Sekali sebulan, kabar produk + sumber bacaan.", enabled: true },
+];
 import { SEED_PAGES } from "./pages-seed";
 import type { Post, PortfolioItem, Resource, Service, State } from "./types";
 
@@ -260,5 +279,5 @@ export const SEED_STATE: State = {
   ],
   chatSessions: [],
   pages: SEED_PAGES,
-  landingSections: defaultLandingSections(),
+  landingSections: SEED_LANDING_SECTIONS,
 };

@@ -20,6 +20,9 @@ export type LandingSectionKind =
   | "changelog"
   | "faq"
   | "portfolio"
+  | "services"
+  | "stats"
+  | "newsletter"
   | "cta"
   | "custom";
 

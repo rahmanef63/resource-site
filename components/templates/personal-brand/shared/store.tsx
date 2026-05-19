@@ -18,7 +18,9 @@ import { SEED_STATE } from "./seed";
 import { reducer } from "./store-reducer";
 
 const { Provider, useStore } = createTemplateStore<State, Action>({
-  storageKey: "pbos:state:v3-landing",
+  // AE-wave: hero/blog/portfolio/services/etc seeded with template-specific
+  // copy so admin Hero edits are visible from first load.
+  storageKey: "pbos:state:v4-landing-seed",
   channel: "pbos:sync",
   seed: SEED_STATE,
   reducer,
@@ -127,6 +129,7 @@ export function useChatSessions() {
   return state.chatSessions;
 }
 export const usePages = () => useStore().state.pages;
+export const useLandingSections = () => useStore().state.landingSections;
 
 // Re-export shared utils so existing T1 imports keep working.
 export { nid, slugify, fmtDate, rel } from "@/components/templates/_shared/utils";

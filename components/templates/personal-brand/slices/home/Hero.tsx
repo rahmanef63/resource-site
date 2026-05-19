@@ -7,7 +7,30 @@ import { Button } from "@/components/ui/button";
 import { PUBLIC_BASE } from "../../shared/nav-config";
 import { HERO_IMG } from "./home-data";
 
-export function Hero() {
+export interface HeroProps {
+  /** Headline. Defaults to the original lorem copy when unset. */
+  title?: string;
+  /** Sub-headline / lead paragraph. */
+  subtitle?: string;
+  /** Pill above the headline. */
+  badge?: string;
+  /** Trust strip below the CTAs. */
+  trust?: string;
+}
+
+const DEFAULTS = {
+  title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.",
+  subtitle:
+    "Tempor incididunt ut labore et dolore magna aliqua — strategi produk, mentorship engineer, dan riset go-to-market untuk founder & tim Indonesia.",
+  badge: "2026 mentorship cohort open",
+  trust: "Trusted by — Acme · Foobar · Beta Labs · Gamma · Delta · Zeta",
+} as const;
+
+export function Hero({ title, subtitle, badge, trust }: HeroProps = {}) {
+  const t = title?.trim() || DEFAULTS.title;
+  const s = subtitle?.trim() || DEFAULTS.subtitle;
+  const b = badge?.trim() || DEFAULTS.badge;
+  const tr = trust?.trim() || DEFAULTS.trust;
   return (
     <section className="relative isolate overflow-hidden">
       <div className="absolute inset-0 -z-10">
@@ -18,25 +41,23 @@ export function Hero() {
       </div>
       <div className="mx-auto max-w-6xl px-6 pt-24 pb-28 md:pt-32 md:pb-36">
         <Badge variant="secondary" className="rounded-full px-3 py-1 text-[11px]">
-          <Sparkles className="mr-1 size-3" /> 2026 mentorship cohort open
+          <Sparkles className="mr-1 size-3" /> {b}
         </Badge>
         <h1 className="mt-6 max-w-4xl text-4xl font-semibold leading-[1.05] tracking-tight md:text-6xl">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.
+          {t}
         </h1>
-        <p className="mt-5 max-w-2xl text-lg text-muted-foreground md:text-xl">
-          Tempor incididunt ut labore et dolore magna aliqua — strategi produk, mentorship engineer, dan riset go-to-market untuk founder &amp; tim Indonesia.
-        </p>
+        <p className="mt-5 max-w-2xl text-lg text-muted-foreground md:text-xl">{s}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button size="lg" asChild>
-            <Link href={`${PUBLIC_BASE}/services`}>Lihat layanan <ArrowRight className="size-4" /></Link>
+            <Link href={`${PUBLIC_BASE}/services`}>
+              Lihat layanan <ArrowRight className="size-4" />
+            </Link>
           </Button>
           <Button size="lg" variant="outline" asChild>
             <Link href={`${PUBLIC_BASE}/portfolio`}>Karya terpilih</Link>
           </Button>
         </div>
-        <p className="mt-12 text-[11px] uppercase tracking-[0.25em] text-muted-foreground">
-          Trusted by — Acme · Foobar · Beta Labs · Gamma · Delta · Zeta
-        </p>
+        <p className="mt-12 text-[11px] uppercase tracking-[0.25em] text-muted-foreground">{tr}</p>
       </div>
     </section>
   );

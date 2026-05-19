@@ -152,6 +152,9 @@ export function renderLanding(section: LandingSection, deps: Deps) {
 
     case "testimonials":
     case "faq":
+    case "services":
+    case "stats":
+    case "newsletter":
     case "custom":
       // No matching data source yet — render a minimal stub so the admin
       // sees its label without crashing the page.
