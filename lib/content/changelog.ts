@@ -10,6 +10,34 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "AQ",
+    version: "AQ-wave",
+    date: Date.parse("2026-05-19"),
+    kind: "feature",
+    title: "Notion editor primitives lifted via new rr-sync pipeline",
+    body:
+      "Four pure-UI primitives lifted from notion-page-clone using a new hash-based, idempotent sync pipeline. The pipeline auto-derives import rewrites from both repos' tsconfigs, follows transitive shared-dep graphs, cross-checks npm packages against rr's package.json, and ships a registry (rr-sync.json) so subsequent updates to the same slice in nosion can re-propagate with one command. Each lifted slice has an interactive preview at /preview/slices/<slug>.",
+    groups: [
+      {
+        heading: "Slices touched",
+        bullets: [
+          { text: "equation — KaTeX-rendered LaTeX block, click-pencil to edit", slug: "equation" },
+          { text: "notifications — per-page subscription toggle (localStorage-backed NotifyMePopover)", slug: "notifications" },
+          { text: "code-block — highlight.js syntax block with language picker + copy", slug: "code-block" },
+          { text: "database-cell-selection — drag-fill + SelectableCell primitives for grid UIs", slug: "database-cell-selection" },
+        ],
+      },
+      {
+        heading: "Site",
+        bullets: [
+          "rr-sync pipeline in notion-page-clone: pathMap registry + tsconfig alias auto-derivation + transitive-import follower + sibling-barrel resolver + npm-deps cross-check + skipFiles wildcards + per-file hash drift detection",
+          "Pre-push hook adds `npm run build` to catch Next-only errors (cacheComponents conflicts, Turbopack loader issues) that tsc misses",
+          "next.config: transpilePackages: [\"rahman-shared\"] added — required for slices using rewritten @/shared/lib/utils → rahman-shared/lib/utils imports",
+        ],
+      },
+    ],
+  },
+  {
     id: "AP",
     version: "AP-wave",
     date: Date.parse("2026-05-19"),
