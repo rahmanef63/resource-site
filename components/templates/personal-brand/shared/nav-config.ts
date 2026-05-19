@@ -10,9 +10,11 @@ import {
   BookOpen,
   Bot,
   Briefcase,
+  CheckSquare,
   FileText,
   Inbox,
   LayoutDashboard,
+  LayoutPanelLeft,
   LayoutTemplate,
   LineChart,
   Mail,
@@ -20,6 +22,7 @@ import {
   Newspaper,
   Settings,
   Sparkles,
+  StickyNote,
   Users,
   Wand2,
 } from "lucide-react";
@@ -118,3 +121,21 @@ export const ADMIN_SETTINGS_NAV: AdminNavItem[] = [
   { id: "team", label: "Team",      href: `${ADMIN_BASE}/settings/team`, icon: Users },
   { id: "site", label: "Site",      href: `${ADMIN_BASE}/settings/site`, icon: Settings },
 ];
+
+/**
+ * BC-wave — Workspace surface nav (distinct from admin). Operator's
+ * productivity tools: dashboard overview, scoped notes + tasks for the
+ * active workspace, and the workspace manager (CRUD over the
+ * `workspaces[]` slice itself).
+ */
+export function buildWorkspaceNav(state: State): AdminNavItem[] {
+  const activeWs = state.activeWorkspaceId;
+  const openNotes = state.notes.filter((n) => n.workspaceId === activeWs).length;
+  const openTasks = state.tasks.filter((t) => t.workspaceId === activeWs && !t.done).length;
+  return [
+    { id: "ws-dashboard", label: "Dashboard", href: WORKSPACE_BASE,             icon: LayoutPanelLeft, count: null },
+    { id: "ws-notes",     label: "Notes",     href: `${WORKSPACE_BASE}/notes`,  icon: StickyNote,      count: openNotes || null },
+    { id: "ws-tasks",     label: "Tasks",     href: `${WORKSPACE_BASE}/tasks`,  icon: CheckSquare,     count: openTasks || null },
+    { id: "ws-manage",    label: "Workspaces",href: `${WORKSPACE_BASE}/manage`, icon: Users,           count: state.workspaces.length },
+  ];
+}

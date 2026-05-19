@@ -10,6 +10,57 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "BC",
+    version: "BC-wave",
+    date: Date.parse("2026-05-19"),
+    kind: "feature",
+    title: "personal-brand-os workspace surface — Workspace CRUD + Notes + Tasks (live)",
+    body:
+      "BB-wave delivered the DashboardSwitcher chassis. BC-wave proves it end-to-end on one template: personal-brand-os now has a fully working Workspace surface. Multi-tenant workspaces (Personal / Side Project / …) with CRUD + active switching. Per-workspace Notes (full editor, search) and Tasks (inline checklist with overdue badge + open/done/all filter). All persisted via the existing localStorage store + BroadcastChannel cross-tab sync. Sidebar nav swaps between admin and workspace primary nav based on pathname; switcher header shows the active workspace icon + name. Old `/dashboard/workspace` placeholder replaced by a real dashboard with stat cards and recent-notes list. The other 7 OS templates keep the placeholder; their workspace surfaces lift the same pattern in subsequent waves.",
+    groups: [
+      {
+        heading: "Template touched",
+        bullets: [
+          { text: "personal-brand-os — Workspace dashboard + Notes (CRUD with editor) + Tasks (inline checklist) + Workspaces (CRUD over the workspace entities themselves)", slug: "personal-brand-os", kind: "template" },
+        ],
+      },
+      {
+        heading: "Data model (personal-brand/shared)",
+        bullets: [
+          "types.ts — added Workspace + Note + Task types, State fields (workspaces, activeWorkspaceId, notes, tasks), Action union extensions (workspace.create/update/delete/switch, note.upsert/delete, task.upsert/toggle/delete)",
+          "workspace-reducer.ts NEW — isolated workspace surface transitions; cascade-delete notes + tasks on workspace.delete; keep ≥1 workspace alive; activeWorkspaceId falls back when active is removed",
+          "store-reducer.ts — delegates workspace/note/task actions via isWorkspaceAction guard",
+          "seed.ts — 2 workspaces (Personal 🧠, Side project 🚀) + 3 notes + 4 tasks; storageKey bumped pbos:state:v5 → v6-workspaces",
+        ],
+      },
+      {
+        heading: "Surfaces",
+        bullets: [
+          "WorkspaceDashboardView — stat cards (Notes / Open tasks / Workspaces) + recent-notes list scoped to active workspace",
+          "NotesView + NoteEditor — list with search, inline create-then-redirect, full-page editor with dirty-state Save",
+          "TasksView — quick-add input, open/done/all filter, checkbox toggle, overdue badge, delete",
+          "WorkspaceManageView — list with inline rename (icon + name), switch, delete (cascade-aware, disabled when only one remains), create form with icon input",
+        ],
+      },
+      {
+        heading: "Routing + nav",
+        bullets: [
+          "app/preview/personal-brand-os/dashboard/workspace/{page,notes/page,notes/[id]/page,tasks/page,manage/page}.tsx NEW",
+          "personal-brand/shared/nav-config.ts — buildWorkspaceNav(state) returns Dashboard / Notes / Tasks / Workspaces with live counts",
+          "personal-brand/dashboard-shell-client.tsx — section-aware primaryNav (admin vs workspace), appLabel shows active workspace icon + name, homeHref + searchPlaceholder swap by section",
+        ],
+      },
+      {
+        heading: "Up next",
+        bullets: [
+          "Propagate workspace surface to remaining 7 OS templates (likely lifted as a distributable rr slice once the pattern stabilizes)",
+          "BD — feature harvest from superspace + notion-page-clone via /rr lift (RBAC / CRM / Analytics / CMS-menu inside Admin Panel)",
+          "BE — replace placeholder Tasks with notion-style block editor for richer Note bodies",
+        ],
+      },
+    ],
+  },
+  {
     id: "BB",
     version: "BB-wave",
     date: Date.parse("2026-05-19"),

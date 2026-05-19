@@ -11,23 +11,39 @@ import {
   ADMIN_SETTINGS_NAV,
   DASHBOARD_SECTIONS,
   OWNER_USER,
+  WORKSPACE_BASE,
   buildAdminPrimaryNav,
+  buildWorkspaceNav,
 } from "@/components/templates/personal-brand/shared/nav-config";
 
 export function DashboardShellClient({ children }: { children: ReactNode }) {
   const { state } = useStore();
   const pathname = usePathname();
-  const primaryNav = buildAdminPrimaryNav(state);
   const activeSection = activeSectionFromPathname(pathname);
+
+  const activeWs = state.workspaces.find((w) => w.id === state.activeWorkspaceId);
+  const inWorkspace = activeSection === "workspace";
+  const primaryNav = inWorkspace
+    ? buildWorkspaceNav(state)
+    : buildAdminPrimaryNav(state);
+  const settingsNav = inWorkspace ? undefined : ADMIN_SETTINGS_NAV;
+  const appLabel = inWorkspace
+    ? `${activeWs?.icon ?? ""} ${activeWs?.name ?? "Workspace"}`.trim()
+    : "Admin Panel";
+  const homeHref = inWorkspace ? WORKSPACE_BASE : ADMIN_PANEL_BASE;
+  const searchPlaceholder = inWorkspace
+    ? "Search notes, tasks…"
+    : "Search posts, leads, contacts…";
+
   return (
     <DashboardShell
       brand={DEFAULT_SITE_CONFIG}
-      appLabel="admin"
-      homeHref={ADMIN_PANEL_BASE}
+      appLabel={appLabel}
+      homeHref={homeHref}
       primaryNav={primaryNav}
-      settingsNav={ADMIN_SETTINGS_NAV}
+      settingsNav={settingsNav}
       user={OWNER_USER}
-      searchPlaceholder="Search posts, leads, contacts…"
+      searchPlaceholder={searchPlaceholder}
       dashboardSections={DASHBOARD_SECTIONS}
       activeSectionId={activeSection}
     >

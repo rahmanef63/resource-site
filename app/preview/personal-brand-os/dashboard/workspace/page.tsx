@@ -1,5 +1,5 @@
-import { WorkspacePlaceholder } from "@/components/templates/_shared/ui/workspace-placeholder";
+import { WorkspaceDashboardView } from "@/components/templates/personal-brand/slices/workspace/dashboard/WorkspaceDashboardView";
 
 export default function Page() {
-  return <WorkspacePlaceholder template="personal-brand-os" />;
+  return <WorkspaceDashboardView />;
 }
