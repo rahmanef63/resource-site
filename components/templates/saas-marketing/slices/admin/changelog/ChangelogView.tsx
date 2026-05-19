@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
+import { FIELDS } from "./ChangelogEditorView";
 import type {
   ColumnDef,
   CrudController,
@@ -62,6 +63,7 @@ export function ChangelogView() {
       meta={META}
       controller={controller}
       columns={COLUMNS}
+      fields={FIELDS}
       editPath={(id) => `${ADMIN_BASE}/changelog/${id}`}
       description="published on the public site"
     />

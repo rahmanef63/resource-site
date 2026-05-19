@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
+import { FIELDS } from "./CustomerEditorView";
 import type { ColumnDef, CrudController, EntityMeta } from "@/components/templates/_shared/crud/types";
 import { useStore } from "../../../shared/store";
 import { ADMIN_BASE } from "../../../shared/nav-config";
@@ -51,6 +52,7 @@ export function CustomersView() {
       meta={META}
       controller={controller}
       columns={COLUMNS}
+      fields={FIELDS}
       editPath={(id) => `${ADMIN_BASE}/customers/${id}`}
       description={`${totalOrders} order kumulatif`}
     />

@@ -8,7 +8,7 @@ import { useBusinessesController } from "./BusinessesView";
 
 const META: EntityMeta = { label: "Bisnis", labelPlural: "Bisnis" };
 
-const FIELDS: FieldDef<Business>[] = [
+export const FIELDS: FieldDef<Business>[] = [
   { kind: "text", key: "name", label: "Nama unit" },
   {
     kind: "select",

@@ -11,7 +11,7 @@ import { useNotesController } from "./NotesView";
 
 const META: EntityMeta = { label: "Catatan", labelPlural: "Catatan" };
 
-const FIELDS: FieldDef<Note>[] = [
+export const FIELDS: FieldDef<Note>[] = [
   { kind: "text", key: "title", label: "Judul" },
   { kind: "date", key: "updatedAt", label: "Diperbarui" },
   { kind: "tags", key: "tags", label: "Tag", hint: "Pisah dengan koma" },

@@ -13,7 +13,7 @@ import type { Lead } from "../../../shared/types";
 
 const META: EntityMeta = { label: "Lead", labelPlural: "Leads" };
 
-const FIELDS: FieldDef<Lead>[] = [
+export const FIELDS: FieldDef<Lead>[] = [
   { kind: "text", key: "name", label: "Name" },
   { kind: "text", key: "email", label: "Email", mono: true },
   {

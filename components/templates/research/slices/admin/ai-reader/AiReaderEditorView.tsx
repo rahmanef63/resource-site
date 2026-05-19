@@ -11,7 +11,7 @@ import { useAiReaderController } from "./AiReaderView";
 
 const META: EntityMeta = { label: "Sesi AI", labelPlural: "Sesi AI Reader" };
 
-const FIELDS: FieldDef<AiReaderSession>[] = [
+export const FIELDS: FieldDef<AiReaderSession>[] = [
   { kind: "text", key: "docId", label: "Document ID", mono: true },
   { kind: "date", key: "ts", label: "Waktu" },
   { kind: "textarea", key: "question", label: "Pertanyaan", rows: 4 },

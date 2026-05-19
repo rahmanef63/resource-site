@@ -9,7 +9,7 @@ import type { ConsultDoc } from "../../../shared/types";
 
 const META: EntityMeta = { label: "Document", labelPlural: "Documents" };
 
-const FIELDS: FieldDef<ConsultDoc>[] = [
+export const FIELDS: FieldDef<ConsultDoc>[] = [
   { kind: "text", key: "title", label: "Title" },
   { kind: "text", key: "projectId", label: "Project ID", mono: true },
   {

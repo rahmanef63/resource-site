@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
+import { FIELDS } from "./CustomerEditorView";
 import type {
   ColumnDef,
   CrudController,
@@ -60,6 +61,7 @@ export function CustomersView() {
       meta={META}
       controller={controller}
       columns={COLUMNS}
+      fields={FIELDS}
       editPath={(id) => `${ADMIN_BASE}/customers/${id}`}
       description={`${active} active`}
     />

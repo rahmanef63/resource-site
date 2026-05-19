@@ -15,7 +15,7 @@ const META: EntityMeta = {
   publicHref: () => `${PUBLIC_BASE}/library`,
 };
 
-const FIELDS: FieldDef<Document>[] = [
+export const FIELDS: FieldDef<Document>[] = [
   { kind: "text", key: "title", label: "Judul" },
   { kind: "text", key: "authors", label: "Penulis" },
   { kind: "number", key: "year", label: "Tahun", min: 1900, max: 2100 },

@@ -9,7 +9,7 @@ import type { Contract } from "../../../shared/types";
 
 const META: EntityMeta = { label: "Contract", labelPlural: "Contracts" };
 
-const FIELDS: FieldDef<Contract>[] = [
+export const FIELDS: FieldDef<Contract>[] = [
   { kind: "text", key: "title", label: "Title" },
   { kind: "text", key: "clientId", label: "Client ID", mono: true },
   { kind: "text", key: "proposalId", label: "Proposal ID", mono: true },

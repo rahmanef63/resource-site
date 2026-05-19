@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
+import { FIELDS } from "./DocumentEditorView";
 import type {
   ColumnDef,
   CrudController,
@@ -64,6 +65,7 @@ export function DocumentsView() {
       meta={META}
       controller={controller}
       columns={COLUMNS}
+      fields={FIELDS}
       editPath={(id) => `${ADMIN_BASE}/documents/${id}`}
       description="Upload PDF/DOCX, OCR otomatis, indeks vektor untuk pencarian semantik."
     />

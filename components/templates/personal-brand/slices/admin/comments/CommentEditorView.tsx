@@ -9,7 +9,7 @@ import type { Comment } from "../../../shared/types";
 
 const META: EntityMeta = { label: "Comment", labelPlural: "Comments" };
 
-const FIELDS: FieldDef<Comment>[] = [
+export const FIELDS: FieldDef<Comment>[] = [
   { kind: "text", key: "author", label: "Author" },
   { kind: "text", key: "email", label: "Email", mono: true },
   { kind: "text", key: "postTitle", label: "On post (title)" },

@@ -17,7 +17,7 @@ const META: EntityMeta = {
   publicHref: () => `${PUBLIC_BASE}/features`,
 };
 
-const FIELDS: FieldDef<FeatureItem>[] = [
+export const FIELDS: FieldDef<FeatureItem>[] = [
   { kind: "text", key: "title", label: "Title" },
   {
     kind: "text",

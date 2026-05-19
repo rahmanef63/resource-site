@@ -11,7 +11,7 @@ import { useCitationsController } from "./CitationsView";
 
 const META: EntityMeta = { label: "Sitasi", labelPlural: "Sitasi" };
 
-const FIELDS: FieldDef<Citation>[] = [
+export const FIELDS: FieldDef<Citation>[] = [
   { kind: "text", key: "bibKey", label: "Bib Key", mono: true },
   { kind: "text", key: "docId", label: "Document ID", mono: true },
   {

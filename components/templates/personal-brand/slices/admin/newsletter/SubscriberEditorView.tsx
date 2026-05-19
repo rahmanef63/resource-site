@@ -9,7 +9,7 @@ import type { Subscriber } from "../../../shared/types";
 
 const META: EntityMeta = { label: "Subscriber", labelPlural: "Subscribers" };
 
-const FIELDS: FieldDef<Subscriber>[] = [
+export const FIELDS: FieldDef<Subscriber>[] = [
   { kind: "text", key: "email", label: "Email", mono: true },
   {
     kind: "select",

@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
+import { FIELDS } from "./FeatureEditorView";
 import type {
   ColumnDef,
   CrudController,
@@ -54,6 +55,7 @@ export function FeaturesView() {
       meta={META}
       controller={controller}
       columns={COLUMNS}
+      fields={FIELDS}
       editPath={(id) => `${ADMIN_BASE}/features/${id}`}
       description="rendered on the public Features page"
     />

@@ -9,7 +9,7 @@ import type { CommentDraft } from "../../../shared/types";
 
 const META: EntityMeta = { label: "Comment", labelPlural: "Comment Drafts" };
 
-const FIELDS: FieldDef<CommentDraft>[] = [
+export const FIELDS: FieldDef<CommentDraft>[] = [
   {
     kind: "select",
     key: "channel",

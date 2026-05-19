@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
+import { FIELDS } from "./ClientEditorView";
 import type { ColumnDef, CrudController, EntityMeta } from "@/components/templates/_shared/crud/types";
 import { useStore, fmtDate } from "../../../shared/store";
 import { ADMIN_BASE } from "../../../shared/nav-config";
@@ -54,6 +55,7 @@ export function ClientsView() {
       meta={META}
       controller={controller}
       columns={COLUMNS}
+      fields={FIELDS}
       editPath={(id) => `${ADMIN_BASE}/clients/${id}`}
       description={`${activeCount} active`}
     />

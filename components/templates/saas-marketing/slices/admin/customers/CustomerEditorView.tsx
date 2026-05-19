@@ -13,7 +13,7 @@ import type { Customer } from "../../../shared/types";
 
 const META: EntityMeta = { label: "Customer", labelPlural: "Customers" };
 
-const FIELDS: FieldDef<Customer>[] = [
+export const FIELDS: FieldDef<Customer>[] = [
   { kind: "text", key: "name", label: "Name" },
   { kind: "text", key: "email", label: "Email", mono: true },
   {

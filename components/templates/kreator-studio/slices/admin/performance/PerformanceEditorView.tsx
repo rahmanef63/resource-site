@@ -9,7 +9,7 @@ import type { PerformanceMetric } from "../../../shared/types";
 
 const META: EntityMeta = { label: "Metric", labelPlural: "Performance Metrics" };
 
-const FIELDS: FieldDef<PerformanceMetric>[] = [
+export const FIELDS: FieldDef<PerformanceMetric>[] = [
   {
     kind: "select",
     key: "channel",

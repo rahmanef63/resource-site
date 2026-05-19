@@ -9,7 +9,7 @@ import type { ChatSession } from "../../../shared/types";
 
 const META: EntityMeta = { label: "Session", labelPlural: "Chat Sessions" };
 
-const FIELDS: FieldDef<ChatSession>[] = [
+export const FIELDS: FieldDef<ChatSession>[] = [
   { kind: "text", key: "visitorId", label: "Visitor ID", mono: true },
   { kind: "date", key: "startedAt", label: "Started at" },
   { kind: "switch", key: "flagged", label: "Flagged for review" },

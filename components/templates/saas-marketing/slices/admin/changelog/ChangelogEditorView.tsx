@@ -17,7 +17,7 @@ const META: EntityMeta = {
   publicHref: () => `${PUBLIC_BASE}/changelog`,
 };
 
-const FIELDS: FieldDef<ChangelogEntry>[] = [
+export const FIELDS: FieldDef<ChangelogEntry>[] = [
   { kind: "text", key: "version", label: "Version", mono: true, placeholder: "v1.0.0" },
   {
     kind: "select",

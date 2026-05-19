@@ -9,7 +9,7 @@ import type { Client } from "../../../shared/types";
 
 const META: EntityMeta = { label: "Client", labelPlural: "Clients" };
 
-const FIELDS: FieldDef<Client>[] = [
+export const FIELDS: FieldDef<Client>[] = [
   { kind: "text", key: "name", label: "Name" },
   { kind: "text", key: "company", label: "Company" },
   { kind: "text", key: "industry", label: "Industry" },

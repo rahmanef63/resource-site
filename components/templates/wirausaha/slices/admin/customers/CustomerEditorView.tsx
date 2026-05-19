@@ -8,7 +8,7 @@ import { useCustomersController } from "./CustomersView";
 
 const META: EntityMeta = { label: "Pelanggan", labelPlural: "Customers" };
 
-const FIELDS: FieldDef<Customer>[] = [
+export const FIELDS: FieldDef<Customer>[] = [
   { kind: "text", key: "name", label: "Nama" },
   { kind: "text", key: "phone", label: "Telepon", mono: true, placeholder: "+62 812-..." },
   { kind: "text", key: "city", label: "Kota" },

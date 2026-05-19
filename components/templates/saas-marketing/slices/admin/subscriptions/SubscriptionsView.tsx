@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
+import { FIELDS } from "./SubscriptionEditorView";
 import type {
   ColumnDef,
   CrudController,
@@ -69,6 +70,7 @@ export function SubscriptionsView() {
       meta={META}
       controller={controller}
       columns={COLUMNS}
+      fields={FIELDS}
       editPath={(id) => `${ADMIN_BASE}/subscriptions/${id}`}
       description={`${active.length} active · MRR $${(mrrCents / 100).toFixed(0)}`}
     />

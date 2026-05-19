@@ -9,7 +9,7 @@ import type { Invoice } from "../../../shared/types";
 
 const META: EntityMeta = { label: "Invoice", labelPlural: "Invoices" };
 
-const FIELDS: FieldDef<Invoice>[] = [
+export const FIELDS: FieldDef<Invoice>[] = [
   { kind: "text", key: "number", label: "Invoice Number", mono: true },
   { kind: "text", key: "clientId", label: "Client ID", mono: true },
   { kind: "text", key: "projectId", label: "Project ID", mono: true },

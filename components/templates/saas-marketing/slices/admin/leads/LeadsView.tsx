@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
+import { FIELDS } from "./LeadEditorView";
 import type {
   ColumnDef,
   CrudController,
@@ -60,6 +61,7 @@ export function LeadsView() {
       meta={META}
       controller={controller}
       columns={COLUMNS}
+      fields={FIELDS}
       editPath={(id) => `${ADMIN_BASE}/leads/${id}`}
       description={`${newCount} new`}
     />

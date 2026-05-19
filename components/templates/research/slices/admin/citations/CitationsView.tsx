@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
+import { FIELDS } from "./CitationEditorView";
 import type {
   ColumnDef,
   CrudController,
@@ -56,6 +57,7 @@ export function CitationsView() {
       meta={META}
       controller={controller}
       columns={COLUMNS}
+      fields={FIELDS}
       editPath={(id) => `${ADMIN_BASE}/citations/${id}`}
       description="APA, MLA, Chicago, IEEE, BibTeX — semua style siap export."
     />

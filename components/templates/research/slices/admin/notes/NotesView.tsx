@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { CrudListView } from "@/components/templates/_shared/crud/CrudListView";
+import { FIELDS } from "./NoteEditorView";
 import type {
   ColumnDef,
   CrudController,
@@ -67,6 +68,7 @@ export function NotesView() {
       meta={META}
       controller={controller}
       columns={COLUMNS}
+      fields={FIELDS}
       editPath={(id) => `${ADMIN_BASE}/notes/${id}`}
       description="Catatan dengan backlinks dan concept map."
     />
