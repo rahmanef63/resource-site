@@ -1,0 +1,13 @@
+{
+  "name": "equation",
+  "description": "",
+  "deps": {
+    "shared": [
+      "lib/error",
+      "ui/button"
+    ],
+    "slices": [],
+    "convex": []
+  },
+  "notes": ""
+}

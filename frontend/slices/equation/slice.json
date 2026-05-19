@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "equation",
+  "version": "0.1.0",
+  "category": "ui",
+  "kind": "full",
+  "title": "Equation — KaTeX block",
+  "description": "Inline-or-display LaTeX equation block primitive. KaTeX-rendered with edit/preview toggle. Pure UI primitive — zero convex tables. Lifted from notion-page-clone (Nosion).",
+  "namespace": "@/features/equation",
+  "registers": [],
+  "audit": [],
+  "frontend": {
+    "slicePath": "frontend/slices/equation",
+    "configExport": ""
+  },
+  "deps": {
+    "npm": ["katex@^0.16.45"],
+    "shadcn": ["button"],
+    "env": [],
+    "peers": []
+  }
+}
