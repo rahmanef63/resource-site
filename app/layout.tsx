@@ -6,6 +6,7 @@ import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { SiteShell } from "@/components/site/site-shell";
 import { ThemePresetProvider } from "@/components/site/theme-preset-provider";
+import { VersionWatcher } from "@/components/system/VersionWatcher";
 import { site } from "@/lib/content/site";
 import "./globals.css";
 
@@ -55,6 +56,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <SiteShell>{children}</SiteShell>
             </Suspense>
             <Toaster richColors position="bottom-right" />
+            <VersionWatcher />
           </ThemePresetProvider>
         </ThemeProvider>
       </body>

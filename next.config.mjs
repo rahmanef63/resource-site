@@ -1,9 +1,20 @@
+// Build-time id baked into client bundle + served by /api/version so
+// VersionWatcher can detect a redeploy and toast users to reload.
+// Falls back to per-build timestamp when no env id is supplied.
+const BUILD_ID =
+  process.env.NEXT_PUBLIC_BUILD_ID ||
+  process.env.NEXT_DEPLOYMENT_ID ||
+  String(Date.now());
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   cacheComponents: true,
   // Pin a stable deploymentId so rolling deploys keep Server Action / RSC
   // payloads valid across instances. Override via NEXT_DEPLOYMENT_ID in CI.
-  deploymentId: process.env.NEXT_DEPLOYMENT_ID,
+  deploymentId: process.env.NEXT_DEPLOYMENT_ID || BUILD_ID,
+  env: {
+    NEXT_PUBLIC_BUILD_ID: BUILD_ID,
+  },
   experimental: {
     optimizePackageImports: [
       "lucide-react",

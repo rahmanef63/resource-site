@@ -68,7 +68,7 @@ export const SEED_POSTS: Post[] = [
       "Sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error.",
     body: LOREM_LONG,
     cover:
-      "https://images.unsplash.com/photo-1517436073-3b1d4d8b3d8a?auto=format&fit=crop&w=1400&q=70",
+      "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1400&q=70",
     tag: "Notes",
     author: "Lorem D.",
     status: "published",

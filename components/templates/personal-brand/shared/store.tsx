@@ -20,7 +20,7 @@ import { reducer } from "./store-reducer";
 const { Provider, useStore } = createTemplateStore<State, Action>({
   // AE-wave: hero/blog/portfolio/services/etc seeded with template-specific
   // copy so admin Hero edits are visible from first load.
-  storageKey: "pbos:state:v4-landing-seed",
+  storageKey: "pbos:state:v5-cover-fix",
   channel: "pbos:sync",
   seed: SEED_STATE,
   reducer,
