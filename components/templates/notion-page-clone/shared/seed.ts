@@ -1,5 +1,11 @@
 import type { LandingSection } from "@/components/templates/_shared/landing/types";
-import type { State, Snippet } from "./types";
+import type {
+  NotionBlock,
+  NotionDatabase,
+  NotionDoc,
+  State,
+  Snippet,
+} from "./types";
 
 const now = () => Date.now();
 
@@ -105,6 +111,88 @@ cd ~/projects/resources && git add . && git commit && git push`,
   },
 ];
 
+/** Notion-clone docs — tree of pages. Each carries a block body that
+ *  the editor surface renders via NotionBlock. */
+const SEED_DOCS: NotionDoc[] = [
+  {
+    id: "doc-welcome",
+    parentId: null,
+    title: "Welcome to Nosion-OS",
+    icon: "👋",
+    favorite: false,
+    trashed: false,
+    createdAt: now(),
+    updatedAt: now(),
+    blocks: [
+      { id: "b1", type: "h1", text: "Welcome to Nosion-OS" } satisfies NotionBlock,
+      { id: "b2", type: "paragraph", text: "This is a Notion-clone website template built from rr slices: notion-shell wrappers + notion-blocks primitives." } satisfies NotionBlock,
+      { id: "b3", type: "h2", text: "What lives here" } satisfies NotionBlock,
+      { id: "b4", type: "bullet", text: "Pages — tree-structured docs (this is one)" } satisfies NotionBlock,
+      { id: "b5", type: "bullet", text: "Databases — embedded tables w/ schema + rows" } satisfies NotionBlock,
+      { id: "b6", type: "bullet", text: "Snippets — admin-editable equations / code / grids on the landing page" } satisfies NotionBlock,
+      { id: "b7", type: "quote", text: "Everything is local-first via createTemplateStore — no convex, no auth, no server." } satisfies NotionBlock,
+    ],
+  },
+  {
+    id: "doc-getting-started",
+    parentId: "doc-welcome",
+    title: "Getting started",
+    icon: "🚀",
+    favorite: false,
+    trashed: false,
+    createdAt: now(),
+    updatedAt: now(),
+    blocks: [
+      { id: "g1", type: "h2", text: "Three things to try" } satisfies NotionBlock,
+      { id: "g2", type: "numbered", text: "Hover a sidebar row → click + to add a subpage" } satisfies NotionBlock,
+      { id: "g3", type: "numbered", text: "Click this page icon → pick a different emoji or lucide icon" } satisfies NotionBlock,
+      { id: "g4", type: "numbered", text: "Open the Roadmap database — edit cells inline, add rows / properties" } satisfies NotionBlock,
+    ],
+  },
+  {
+    id: "doc-roadmap-meta",
+    parentId: null,
+    title: "Roadmap",
+    icon: "🗺️",
+    favorite: true,
+    trashed: false,
+    createdAt: now(),
+    updatedAt: now(),
+    blocks: [
+      { id: "r-intro", type: "paragraph", text: "Open the Roadmap database to see the table view + property editor." } satisfies NotionBlock,
+    ],
+  },
+  // Roadmap database rows (rowOfDatabaseId = "db-roadmap")
+  { id: "row-r1", parentId: null, title: "Ship notion-shell", icon: "📦", favorite: false, trashed: false, createdAt: now(), updatedAt: now(), blocks: [], rowOfDatabaseId: "db-roadmap", rowProps: { name: "Ship notion-shell", status: "done", done: true } },
+  { id: "row-r2", parentId: null, title: "Wire template",     icon: "🔌", favorite: false, trashed: false, createdAt: now(), updatedAt: now(), blocks: [], rowOfDatabaseId: "db-roadmap", rowProps: { name: "Wire template",     status: "doing", done: false } },
+  { id: "row-r3", parentId: null, title: "Add command palette", icon: "⌨️", favorite: false, trashed: false, createdAt: now(), updatedAt: now(), blocks: [], rowOfDatabaseId: "db-roadmap", rowProps: { name: "Add command palette", status: "todo",  done: false } },
+];
+
+const SEED_DATABASES: NotionDatabase[] = [
+  {
+    id: "db-roadmap",
+    name: "Roadmap",
+    icon: "🗺️",
+    properties: [
+      { id: "name", name: "Name", type: "text" },
+      {
+        id: "status", name: "Status", type: "select",
+        options: [
+          { id: "todo",  name: "Todo",  color: "gray" },
+          { id: "doing", name: "Doing", color: "blue" },
+          { id: "done",  name: "Done",  color: "green" },
+        ],
+      },
+      { id: "done", name: "Done", type: "checkbox" },
+    ],
+    rowIds: ["row-r1", "row-r2", "row-r3"],
+    views: [],
+    activeViewId: "",
+    createdAt: now(),
+    updatedAt: now(),
+  },
+];
+
 export const SEED_STATE: State = {
   pages: [
     {
@@ -121,4 +209,6 @@ export const SEED_STATE: State = {
   ],
   snippets: SEED_SNIPPETS,
   landingSections: nosionLandingSections(),
+  docs: SEED_DOCS,
+  databases: SEED_DATABASES,
 };

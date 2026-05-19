@@ -3,6 +3,14 @@ import type {
   LandingAction,
   LandingSection,
 } from "@/components/templates/_shared/landing/types";
+import type {
+  Block as NotionBlock,
+  Database as NotionDatabase,
+  Page as NotionDoc,
+  Property,
+  PropertyValue,
+  PropertyType,
+} from "@/features/notion-shell";
 
 /** Demo content type: one rich snippet showcasing a notion-block primitive.
  *  - "equation" kind → LaTeX rendered via EquationBlock
@@ -33,6 +41,11 @@ export type State = {
   pages: PageEntry[];
   snippets: Snippet[];
   landingSections: LandingSection[];
+  /** Notion-clone docs: tree-structured pages with block body. Database
+   *  rows live here too — flagged via `rowOfDatabaseId`. */
+  docs: NotionDoc[];
+  /** Notion-clone databases: property schema + view config + rowIds. */
+  databases: NotionDatabase[];
 };
 
 export type Action =
@@ -41,6 +54,24 @@ export type Action =
   | PagesAction
   | LandingAction
   | { type: "snippet.upsert"; snippet: Snippet }
-  | { type: "snippet.delete"; id: string };
+  | { type: "snippet.delete"; id: string }
+  /** Notion-clone doc CRUD. `doc` carries the full row on upsert. */
+  | { type: "doc.create"; doc: NotionDoc }
+  | { type: "doc.update"; id: string; patch: Partial<NotionDoc> }
+  | { type: "doc.delete"; id: string }
+  | { type: "doc.block.update"; docId: string; blockId: string; patch: Partial<NotionBlock> }
+  | { type: "doc.block.append"; docId: string; block: NotionBlock }
+  | { type: "doc.block.remove"; docId: string; blockId: string }
+  /** Database schema + view config. */
+  | { type: "db.create"; db: NotionDatabase }
+  | { type: "db.update"; id: string; patch: Partial<NotionDatabase> }
+  | { type: "db.delete"; id: string }
+  | { type: "db.property.add"; dbId: string; propType: PropertyType }
+  | { type: "db.property.update"; dbId: string; propId: string; patch: Partial<Property> }
+  | { type: "db.property.remove"; dbId: string; propId: string }
+  /** Database row mutations — operate on doc + db.rowIds atomically. */
+  | { type: "db.row.add"; dbId: string }
+  | { type: "db.row.update"; dbId: string; rowId: string; propId: string; value: PropertyValue }
+  | { type: "db.row.remove"; dbId: string; rowId: string };
 
-export type { PageEntry, LandingSection };
+export type { PageEntry, LandingSection, NotionBlock, NotionDatabase, NotionDoc };

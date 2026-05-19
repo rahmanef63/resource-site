@@ -17,6 +17,7 @@ import type { LandingSection } from "@/components/templates/_shared/landing/type
 import { ADMIN_BASE, PUBLIC_BASE } from "./nav-config";
 import type { Action, State } from "./types";
 import { SEED_STATE } from "./seed";
+import { isNotionAction, notionReducer } from "./notion-reducer";
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
@@ -51,12 +52,12 @@ function reducer(state: State, action: Action): State {
       return { ...state, snippets: state.snippets.filter((s) => s.id !== action.id) };
 
     default:
-      return state;
+      return isNotionAction(action) ? notionReducer(state, action) : state;
   }
 }
 
 const { Provider, useStore } = createTemplateStore<State, Action>({
-  storageKey: "nosion-os:state:v2-landing",
+  storageKey: "nosion-os:state:v3-docs",
   channel: "nosion-os:sync",
   seed: SEED_STATE,
   reducer,
@@ -112,3 +113,5 @@ export { useStore };
 export const usePages = () => useStore().state.pages;
 export const useSnippets = () => useStore().state.snippets;
 export const useLandingSections = () => useStore().state.landingSections;
+export const useDocs = () => useStore().state.docs;
+export const useDatabases = () => useStore().state.databases;

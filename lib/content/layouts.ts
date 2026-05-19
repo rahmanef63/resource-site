@@ -508,8 +508,8 @@ export default function Layout({ children }) {
     category: "website-template",
     status: "stable",
     description:
-      "Block-based notes-app template. Public landing showcases the notion-blocks bundle (KaTeX equations, highlight.js code, NotifyMe bell, drag-fill grid) backed by admin-editable Snippets. localStorage-persisted, no convex required. Drop-in starter for anyone building a writing surface, doc site, or block-editor demo.",
-    source: "synthesized + notion-blocks bundle + landing-sections",
+      "Full Notion-clone website template: tree-structured sidebar + page editor + embedded databases. Built from rr's notion-shell wrappers (NotionSidebar / NotionPage / NotionBlock / NotionDatabase) + notion-blocks primitives (equation / code / notify / drag-fill grid). localStorage-persisted via createTemplateStore — no convex, no auth, no server. Drop-in starter for anyone building a Notion-like writing surface, doc site, or block editor.",
+    source: "synthesized + notion-shell wrappers + notion-blocks bundle",
     repoPath: "app/preview/notion-page-clone-os",
     primaryFile: "app/preview/notion-page-clone-os/public/page.tsx",
     tags: ["template", "notion", "notes", "blocks", "katex", "code", "editor", "indonesia"],
@@ -521,8 +521,10 @@ export default function Layout({ children }) {
     pullPaths: [
       "app/preview/notion-page-clone-os",
       "components/templates/_shared",
-      "components/templates/notion-page-clone-os",
+      "components/templates/notion-page-clone",
       "frontend/slices/notion-blocks",
+      "frontend/slices/notion-shell",
+      "frontend/slices/icon-picker",
       "frontend/slices/equation",
       "frontend/slices/code-block",
       "frontend/slices/notifications",
@@ -531,17 +533,24 @@ export default function Layout({ children }) {
     files: [
       "app/preview/notion-page-clone-os/public/layout.tsx",
       "app/preview/notion-page-clone-os/public/page.tsx",
+      "app/preview/notion-page-clone-os/public/d/[id]/page.tsx",
+      "app/preview/notion-page-clone-os/public/db/[id]/page.tsx",
       "app/preview/notion-page-clone-os/dashboard/admin/layout.tsx",
       "app/preview/notion-page-clone-os/dashboard/admin/admin-shell-client.tsx",
       "app/preview/notion-page-clone-os/dashboard/admin/page.tsx",
       "app/preview/notion-page-clone-os/dashboard/admin/snippets/page.tsx",
-      "components/templates/notion-page-clone-os/shared/site-config.ts",
-      "components/templates/notion-page-clone-os/shared/nav-config.ts",
-      "components/templates/notion-page-clone-os/shared/types.ts",
-      "components/templates/notion-page-clone-os/shared/store.tsx",
-      "components/templates/notion-page-clone-os/shared/seed.ts",
-      "components/templates/notion-page-clone-os/slices/home/HomePage.tsx",
-      "components/templates/notion-page-clone-os/slices/admin/snippets/SnippetsView.tsx",
+      "components/templates/notion-page-clone/shared/site-config.ts",
+      "components/templates/notion-page-clone/shared/nav-config.ts",
+      "components/templates/notion-page-clone/shared/types.ts",
+      "components/templates/notion-page-clone/shared/store.tsx",
+      "components/templates/notion-page-clone/shared/seed.ts",
+      "components/templates/notion-page-clone/slices/home/HomePage.tsx",
+      "components/templates/notion-page-clone/slices/admin/snippets/SnippetsView.tsx",
+      "components/templates/notion-page-clone/slices/notion-app/Dashboard.tsx",
+      "components/templates/notion-page-clone/slices/notion-app/DocView.tsx",
+      "components/templates/notion-page-clone/slices/notion-app/DatabaseView.tsx",
+      "components/templates/notion-page-clone/slices/notion-app/hooks.ts",
+      "components/templates/notion-page-clone/slices/notion-app/block-renderers.tsx",
     ],
     dependencies: [
       "next@^16",
@@ -554,11 +563,11 @@ export default function Layout({ children }) {
       "tailwindcss@^4",
     ],
     shadcnComponents: ["badge", "button", "popover", "dropdown-menu", "input", "label", "switch", "textarea", "select", "dialog"],
-    exampleCode: `// app/(public)/page.tsx
-import { HomePage } from "@/components/templates/notion-page-clone-os/slices/home/HomePage";
-export default function Page() { return <HomePage />; }`,
+    exampleCode: `// app/(public)/page.tsx — opens the welcome doc inside the dashboard
+import { Dashboard } from "@/components/templates/notion-page-clone/slices/notion-app/Dashboard";
+export default function Page() { return <Dashboard activeKind="doc" activeId="doc-welcome" />; }`,
     agentRecipe:
-      "Run `npx rr init <app> --template notion-page-clone-os`. Bundles notion-blocks (4 editor primitives) + landing-sections + admin CRUD. Edit components/templates/notion-page-clone-os/shared/site-config.ts to set brand. Add snippets via /admin/snippets — they render live on public landing.",
+      "Run `npx rr init <app> --template notion-page-clone-os`. Cascades notion-shell (wrappers) + notion-blocks (4 editor primitives) + icon-picker. Edit components/templates/notion-page-clone/shared/site-config.ts to set brand; seed.ts to bootstrap docs + databases. Sidebar CRUD already wired — hover a row → +/✎/🗑.",
   },
   {
     slug: "saas-marketing-os",

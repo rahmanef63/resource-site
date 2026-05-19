@@ -10,6 +10,44 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "BA",
+    version: "BA-wave",
+    date: Date.parse("2026-05-19"),
+    kind: "feature",
+    title: "notion-shell slice + Notion Page Clone OS = real Notion-clone template (not marketing landing)",
+    body:
+      "Before: /preview/notion-page-clone-os/public showed a marketing landing page jualan notion-blocks slice. After: it IS a Notion clone — left sidebar with tree-nav (page CRUD inline), main panel with page editor (rich blocks via notion-blocks primitive registry) or database table (per-cell + property CRUD). Built by lifting the six props-driven Notion wrappers from nosion's shared/components/notion (NotionPage / NotionHeader / NotionSidebar / NotionBlock / NotionDatabase / NotionProperty) to a new rr slice `notion-shell`. Zero-peer-dep design — icon-picker dropped in favor of `renderIcon` + `renderIconPicker` props so host wires any icon library (we wire @/features/icon-picker at the template layer). NotionBlock dispatches via a `blockRenderers` prop — the template registers equation/code/divider from notion-blocks, falls back to contentEditable for text-shape blocks. Template store extended with `docs` + `databases` slices alongside existing pages/snippets/landingSections; storageKey bumped v2-landing → v3-docs. Reducer split into `notion-reducer.ts` to stay under the 200-LOC cap.",
+    groups: [
+      {
+        heading: "Slices touched",
+        bullets: [
+          { text: "notion-shell — NEW: six portable Notion wrappers + types subset", slug: "notion-shell" },
+          { text: "notion-blocks — registered as block renderers inside notion-shell's NotionBlock", slug: "notion-blocks" },
+        ],
+      },
+      {
+        heading: "Templates touched",
+        bullets: [
+          { text: "notion-page-clone-os — public surface = full Notion-clone dashboard (replaces marketing landing)", slug: "notion-page-clone-os", kind: "template" },
+        ],
+      },
+      {
+        heading: "Site",
+        bullets: [
+          "frontend/slices/notion-shell/ NEW — 6 wrapper components + types subset + slice metadata trio + /preview demo",
+          "components/templates/notion-page-clone/slices/notion-app/ NEW — Dashboard / DocView / DatabaseView + block-renderers registry + sidebar hooks",
+          "components/templates/notion-page-clone/shared/types.ts — added docs/databases + 14 action types (doc.*, db.*, db.row.*)",
+          "components/templates/notion-page-clone/shared/store.tsx — wired notion-reducer; storageKey v2-landing → v3-docs",
+          "components/templates/notion-page-clone/shared/notion-reducer.ts NEW — pulled out for 200-LOC cap",
+          "components/templates/notion-page-clone/shared/seed.ts — seeded 3 docs + 1 Roadmap database (3 rows)",
+          "app/preview/notion-page-clone-os/public/page.tsx — opens to dashboard@doc-welcome",
+          "app/preview/notion-page-clone-os/public/d/[id]/ + db/[id]/ NEW — dynamic dashboard surfaces",
+          "lib/content/slices.ts + layouts.ts — added notion-shell entry; template pullPaths cascade notion-shell + icon-picker; stale notion-page-clone-os dir refs renamed to notion-page-clone",
+        ],
+      },
+    ],
+  },
+  {
     id: "AZ",
     version: "AZ-wave",
     date: Date.parse("2026-05-19"),

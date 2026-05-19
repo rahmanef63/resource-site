@@ -1,0 +1,10 @@
+{
+  "name": "notion-shell",
+  "description": "Portable Notion-style wrapper primitives (Page / Header / Sidebar / Block / Database / Property). Pure / props-driven; pair with notion-blocks for editor primitives.",
+  "deps": {
+    "shared": [],
+    "slices": [],
+    "convex": []
+  },
+  "notes": "Lifted from notion-page-clone/frontend/shared/components/notion. Cover + icon-picker dependencies intentionally stripped — host provides `renderIcon` + `renderIconPicker` props (pair with @/features/icon-picker for full Lucide support). NotionBlock dispatches via `blockRenderers` prop (host owns the registry)."
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "notion-shell",
+  "version": "0.1.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "Notion Shell — page/sidebar/database wrapper primitives",
+  "description": "Portable Notion-style wrapper primitives: NotionPage (header + body shell), NotionHeader (icon + title), NotionSidebar (tree nav with full page CRUD), NotionBlock (single-block renderer dispatching via prop registry), NotionDatabase (table view + per-cell CRUD), NotionProperty (value + schema editor). Pure / props-driven — host owns data + change handlers. Drop into any React surface; pair with notion-blocks for the four editor primitives (equation, code, notify, grid). Lifted from notion-page-clone's shared/components/notion.",
+  "namespace": "@/features/notion-shell",
+  "registers": [],
+  "audit": [],
+  "frontend": {
+    "slicePath": "frontend/slices/notion-shell",
+    "configExport": ""
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": ["button", "input", "checkbox"],
+    "env": [],
+    "peers": []
+  }
+}
