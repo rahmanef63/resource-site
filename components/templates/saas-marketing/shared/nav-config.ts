@@ -9,6 +9,7 @@ import {
   Settings,
   Sparkles,
   Users,
+  LayoutTemplate,
 } from "lucide-react";
 import type {
   AdminNavItem,
@@ -61,6 +62,7 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
   const customPages = state.pages.filter((p) => !p.systemPage).length;
   return [
     { id: "dashboard",     label: "Dashboard",     href: ADMIN_BASE,                       icon: LayoutDashboard, count: null },
+    { id: "landing",       label: "Landing",       href: `${ADMIN_BASE}/landing`,          icon: LayoutTemplate,  count: state.landingSections.filter((s) => s.enabled).length || null },
     { id: "pages",         label: "Pages",         href: `${ADMIN_BASE}/pages`,            icon: Newspaper,       count: customPages || null },
     { id: "customers",     label: "Customers",     href: `${ADMIN_BASE}/customers`,        icon: Users,           count: activeCustomers || null },
     { id: "subscriptions", label: "Subscriptions", href: `${ADMIN_BASE}/subscriptions`,    icon: CreditCard,      count: activeSubs || null },

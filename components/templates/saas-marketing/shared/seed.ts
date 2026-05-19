@@ -4,6 +4,7 @@ import type {
   ChangelogEntry,
   Customer,
   FeatureItem,
+  LandingSection,
   Lead,
   PricingTier,
   State,
@@ -140,6 +141,14 @@ const ADMIN_POSTS: BlogPost[] = SEED_POSTS.map((p, i) => ({
 
 import { SEED_PAGES } from "./pages-seed";
 
+export const SEED_LANDING_SECTIONS: LandingSection[] = [
+  { id: "ls-hero", order: 10, kind: "hero", title: "Sign anything, anywhere.", subtitle: "End-to-end secure document signing for distributed teams.", enabled: true },
+  { id: "ls-features", order: 20, kind: "features", title: "Why teams switch", subtitle: "Eight reasons our customers replaced legacy e-sign tools.", enabled: true },
+  { id: "ls-pricing", order: 30, kind: "pricing", title: "Pricing", subtitle: "Start free, upgrade when you outgrow it.", enabled: true },
+  { id: "ls-changelog", order: 40, kind: "changelog", title: "What's new", subtitle: "Shipped this month.", enabled: false },
+  { id: "ls-cta", order: 50, kind: "cta", title: "Ready to ship?", subtitle: "Spin up a workspace in 60 seconds.", enabled: true },
+];
+
 export const SEED_STATE: State = {
   pricing: SEED_PRICING,
   features: SEED_FEATURES,
@@ -150,4 +159,5 @@ export const SEED_STATE: State = {
   leads: SEED_LEADS,
   changelogEntries: SEED_CHANGELOG,
   pages: SEED_PAGES,
+  landingSections: SEED_LANDING_SECTIONS,
 };

@@ -139,10 +139,11 @@ export function AdminSidebar(props: SidebarProps) {
 }
 
 /**
- * Mobile / collapse trigger button. Plain wrapper over shadcn
- * `SidebarTrigger` — kept as a named export for backward compat with
- * existing topbar imports.
+ * Sidebar collapse trigger. Renders at ALL breakpoints — under md it
+ * toggles the offcanvas sheet, at md+ it toggles between expanded and
+ * the icon-rail (collapsible="icon" on Sidebar). Previously `md:hidden`
+ * meant desktop users had no way to collapse the sidebar; that's fixed.
  */
 export function AdminSidebarMobileTrigger(_props: SidebarProps) {
-  return <SidebarTrigger className="md:hidden" />;
+  return <SidebarTrigger />;
 }

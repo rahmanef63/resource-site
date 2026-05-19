@@ -107,6 +107,20 @@ function reducer(state: State, action: Action): State {
     case "FEATURE_DELETE":
       return { ...state, features: state.features.filter((f) => f.id !== action.payload.id) };
 
+    case "LANDING_UPSERT": {
+      const idx = state.landingSections.findIndex((s) => s.id === action.payload.id);
+      const landingSections =
+        idx >= 0
+          ? state.landingSections.map((s) => (s.id === action.payload.id ? action.payload : s))
+          : [...state.landingSections, action.payload];
+      return { ...state, landingSections };
+    }
+    case "LANDING_DELETE":
+      return {
+        ...state,
+        landingSections: state.landingSections.filter((s) => s.id !== action.payload.id),
+      };
+
     default:
       return state;
   }
@@ -152,5 +166,6 @@ export const usePost = (slug: string) =>
   usePosts().find((p) => p.slug === slug) ?? null;
 export const useChangelog = () => useStore().state.changelog;
 export const usePages = () => useStore().state.pages;
+export const useLandingSections = () => useStore().state.landingSections;
 
 export { fmtDate, rel } from "@/components/templates/_shared/utils";
