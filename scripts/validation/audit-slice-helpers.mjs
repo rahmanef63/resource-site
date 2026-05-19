@@ -8,6 +8,9 @@ export const ALLOWED_IMPORT_PREFIXES = [
   // App-relative shared / UI
   "@/components/ui/",
   "@/components/shared/",
+  // _shared template primitives (CRUD shell, landing, pages, etc.) —
+  // sibling slices declared as peer deps. Allowed cross-slice import.
+  "@/components/templates/_shared/",
   "@/lib/shared/",
   "@/lib/utils",
   "@/lib/utils.ts",
