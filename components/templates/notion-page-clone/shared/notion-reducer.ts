@@ -51,6 +51,28 @@ export function notionReducer(state: State, action: Action): State {
           d.id !== action.docId ? d : { ...d, blocks: d.blocks.filter((b) => b.id !== action.blockId), updatedAt: Date.now() },
         ),
       };
+    case "doc.block.duplicate":
+      return {
+        ...state,
+        docs: state.docs.map((d) => {
+          if (d.id !== action.docId) return d;
+          const i = d.blocks.findIndex((b) => b.id === action.blockId);
+          if (i < 0) return d;
+          const src = d.blocks[i];
+          const dup = { ...src, id: genId("b") };
+          const blocks = [...d.blocks.slice(0, i + 1), dup, ...d.blocks.slice(i + 1)];
+          return { ...d, blocks, updatedAt: Date.now() };
+        }),
+      };
+    case "doc.block.turnInto":
+      return {
+        ...state,
+        docs: state.docs.map((d) =>
+          d.id !== action.docId
+            ? d
+            : { ...d, blocks: d.blocks.map((b) => (b.id === action.blockId ? { ...b, type: action.blockType } : b)), updatedAt: Date.now() },
+        ),
+      };
 
     case "db.create":
       return { ...state, databases: [...state.databases, action.db] };

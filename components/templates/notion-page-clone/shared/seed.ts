@@ -205,6 +205,7 @@ export const SEED_STATE: State = {
       createdAt: now(),
       updatedAt: now(),
       systemPage: true,
+    isLanding: true,
     },
   ],
   snippets: SEED_SNIPPETS,

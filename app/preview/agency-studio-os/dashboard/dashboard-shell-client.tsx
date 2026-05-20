@@ -8,18 +8,18 @@ import {
   ADMIN_PANEL_BASE,
   ADMIN_SETTINGS_NAV,
   OWNER_USER,
-  buildAdminPrimaryNav,
+  buildAdminNav,
 } from "@/components/templates/agency-studio/shared/nav-config";
 
 export function DashboardShellClient({ children }: { children: ReactNode }) {
   const { state } = useStore();
-  const primaryNav = buildAdminPrimaryNav(state);
+  const primaryNavGroups = buildAdminNav(state);
   return (
     <DashboardShell
       brand={DEFAULT_SITE_CONFIG}
       appLabel="Agency Studio OS"
       homeHref={ADMIN_PANEL_BASE}
-      primaryNav={primaryNav}
+      primaryNavGroups={primaryNavGroups}
       settingsNav={ADMIN_SETTINGS_NAV}
       user={OWNER_USER}
       searchPlaceholder="Search projects, clients, leads…"

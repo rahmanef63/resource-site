@@ -21,6 +21,7 @@ import type {
 import { DEFAULT_SITE_CONFIG } from "./site-config";
 import type { State } from "./types";
 import { buildCustomPageNavItems } from "@/components/templates/_shared/pages/nav-builder";
+import { buildAdminPanelNav } from "@/components/templates/_shared/admin-panel/feature-blocks";
 
 export const PUBLIC_BASE = "/preview/saas-marketing-os/public";
 export const DASHBOARD_BASE = "/preview/saas-marketing-os/dashboard";
@@ -110,6 +111,11 @@ export function buildAdminNav(state: State): AdminNavGroup[] {
         { id: "subscriptions", label: "Subscriptions", href: `${ADMIN_BASE}/subscriptions`, icon: CreditCard, count: activeSubs || null },
         { id: "leads",         label: "Leads",         href: `${ADMIN_BASE}/leads`,         icon: Inbox,      count: newLeads || null },
       ],
+    },
+    {
+      id: "admin-panel",
+      label: "Admin Panel",
+      items: buildAdminPanelNav(ADMIN_BASE),
     },
   ];
 }

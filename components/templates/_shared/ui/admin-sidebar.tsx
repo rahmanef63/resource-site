@@ -41,6 +41,10 @@ type SidebarProps = {
   primaryNavGroups?: AdminNavGroup[];
   settingsNav?: AdminNavItem[];
   user: User;
+  /** BG-wave (Advanced archetype) — override the sidebar header
+   *  (defaults to BrandHeader). Used by DashboardShellAdvanced to
+   *  mount a `<WorkspaceSwitcher>` instead. */
+  headerSlot?: React.ReactNode;
 };
 
 function NavGroup({
@@ -124,7 +128,9 @@ export function AdminSidebar(props: SidebarProps) {
   return (
     <Sidebar collapsible="icon" className="border-r border-border/60">
       <SidebarHeader>
-        <BrandHeader brand={props.brand} appLabel={props.appLabel} homeHref={props.homeHref} />
+        {props.headerSlot ?? (
+          <BrandHeader brand={props.brand} appLabel={props.appLabel} homeHref={props.homeHref} />
+        )}
       </SidebarHeader>
       <SidebarSeparator />
       <SidebarContent>

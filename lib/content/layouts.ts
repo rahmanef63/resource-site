@@ -551,6 +551,7 @@ export default function Layout({ children }) {
       "components/templates/notion-page-clone/slices/notion-app/DatabaseView.tsx",
       "components/templates/notion-page-clone/slices/notion-app/hooks.ts",
       "components/templates/notion-page-clone/slices/notion-app/block-renderers.tsx",
+      "components/templates/notion-page-clone/shared/notion-reducer.ts",
     ],
     dependencies: [
       "next@^16",

@@ -6,15 +6,17 @@
  *  block primitives (equation, code, notify, drag-fill grid).
  *
  *  Composition:
- *    <NotionPage>           — page shell w/ header + body slot
- *      <NotionHeader>       — editable icon + title
+ *    <NotionPage>             — page shell w/ header + body slot
+ *      <NotionHeader>         — editable icon + title
  *      …user blocks
- *        <NotionBlock>      — single-block renderer (dispatches via prop registry)
+ *        <NotionBlock>        — single-block renderer (dispatches via prop registry,
+ *                               live inline-markdown decorator, hover actions menu)
+ *      <InsertBlockButton>    — "+" trigger w/ SlashMenu popover
  *      …embedded data
- *        <NotionDatabase>   — table view w/ property + row CRUD
- *          <NotionProperty> — value + schema editor (per-cell)
+ *        <NotionDatabase>     — table view w/ property + row CRUD
+ *          <NotionProperty>   — value + schema editor (per-cell)
  *
- *    <NotionSidebar>        — tree nav w/ page CRUD (standalone) */
+ *    <NotionSidebar>          — tree nav w/ page CRUD (standalone) */
 
 export { NotionPage, type NotionPageProps } from "./components/NotionPage";
 export { NotionHeader, type NotionHeaderProps } from "./components/NotionHeader";
@@ -22,7 +24,20 @@ export { NotionSidebar, type NotionSidebarProps, type NotionSidebarPage } from "
 export { NotionBlock, type NotionBlockProps } from "./components/NotionBlock";
 export { NotionDatabase, type NotionDatabaseProps } from "./components/NotionDatabase";
 export { NotionProperty, type NotionPropertyProps } from "./components/NotionProperty";
+export { SlashMenu, type SlashMenuProps } from "./components/SlashMenu";
+export { BlockActionsMenu, type BlockActionsMenuProps } from "./components/BlockActionsMenu";
+export { InsertBlockButton, type InsertBlockButtonProps } from "./components/InsertBlockButton";
 export { TOP_LEVEL_PLACEHOLDERS } from "./components/placeholders";
+
+export { BLOCK_SPECS, specFor, type BlockSpec } from "./lib/blockSpecs";
+export { tokenizeInline, stripMd, type Token } from "./lib/inlineMd";
+export {
+  decorateInPlace,
+  decorateLineToFragment,
+  getCaretOffset,
+  setCaretAtOffset,
+  visibleLength,
+} from "./lib/inlineDecorator";
 
 export type {
   Block, BlockType, BlockRenderers, BlockRendererProps,

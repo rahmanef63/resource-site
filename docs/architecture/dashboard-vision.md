@@ -1,11 +1,26 @@
-# Dashboard architecture — two archetypes
+# Dashboard architecture — two archetypes + 3-group nav
 
-**Status:** Direction set 2026-05-20 after the BB / BC / BD waves. This
-doc supersedes the earlier "single dashboard with workspace switcher"
-direction. The corrective insight: most templates only need a simple
-admin; only a few need the workspace chassis. Forcing every template
-through the same shell creates menu noise for the simple case and a
-weak abstraction for the complex case.
+**Status:** Direction set 2026-05-20 after BB / BC / BD / BE / BF / BG.
+This doc supersedes the earlier "single dashboard with workspace
+switcher" direction. The corrective insight: most templates only need
+a simple admin; only a few need the workspace chassis. Forcing every
+template through the same shell creates menu noise for the simple
+case and a weak abstraction for the complex case.
+
+## Three sidebar groups (BG-wave, applied to all 8 templates)
+
+Every template's admin sidebar now renders three labeled groups:
+
+| Group | Concern | Example items |
+|---|---|---|
+| **Pages** (CMS) | Public-facing content the operator authors | Landing, Blog, Pricing, custom pages (dynamic via BF helper) |
+| **Features** (Domain) | Template-specific business entities | Clients, Customers, Subscriptions, Leads, Projects |
+| **Admin Panel** (Operational) | Cross-template operator tooling | AI Config, Analytics, User Management, Audit Log, Webhooks, Settings |
+
+Best practice — CMS and Admin Panel are **siblings, not nested**. Same
+idiom as WordPress / Strapi / Shopify (storefront editor ≠ admin
+settings). Different mental models, different roles, different update
+cadences.
 
 ## TL;DR — pick one of two
 

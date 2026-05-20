@@ -23,10 +23,11 @@ import {
   Users,
   Wand2,
 } from "lucide-react";
-import type { AdminNavItem, FooterColumn, NavItem, User } from "@/components/templates/_shared/types/common";
+import type { AdminNavGroup, AdminNavItem, FooterColumn, NavItem, User } from "@/components/templates/_shared/types/common";
 import type { State } from "./types";
 import { DEFAULT_SITE_CONFIG } from "./site-config";
 import { buildCustomPageNavItems } from "@/components/templates/_shared/pages/nav-builder";
+import { buildAdminPanelNav } from "@/components/templates/_shared/admin-panel/feature-blocks";
 
 export const PUBLIC_BASE = "/preview/personal-brand-os/public";
 export const DASHBOARD_BASE = "/preview/personal-brand-os/dashboard";
@@ -118,3 +119,29 @@ export const ADMIN_SETTINGS_NAV: AdminNavItem[] = [
   { id: "team", label: "Team",      href: `${ADMIN_BASE}/settings/team`, icon: Users },
   { id: "site", label: "Site",      href: `${ADMIN_BASE}/settings/site`, icon: Settings },
 ];
+
+
+/**
+ * BG-wave — grouped admin nav: [Overview, Pages, Features, Admin Panel].
+ * Pages = CMS items (every admin route bound to a public surface).
+ * Features = template-specific domain entities (clients / leads / etc).
+ * Admin Panel = cross-template operational tools (AI / Analytics /
+ * Users / Audit / Webhooks / Settings) — same blocks every template.
+ *
+ * Derives from the legacy flat `buildAdminPrimaryNav` so the source
+ * of truth for per-template items stays in one place.
+ */
+export function buildAdminNav(state: State): AdminNavGroup[] {
+  const flat = buildAdminPrimaryNav(state);
+  const dashboard = flat.find((i) => i.id === "dashboard");
+  const pagesParent = flat.find((i) => i.id === "pages");
+  const features = flat.filter((i) => i.id !== "dashboard" && i.id !== "pages");
+  const groups: AdminNavGroup[] = [];
+  if (dashboard) groups.push({ id: "overview", label: "Overview", homeAware: true, items: [dashboard] });
+  if (pagesParent?.children?.length) {
+    groups.push({ id: "pages", label: "Pages", items: pagesParent.children });
+  }
+  if (features.length) groups.push({ id: "features", label: "Features", items: features });
+  groups.push({ id: "admin-panel", label: "Admin Panel", items: buildAdminPanelNav(ADMIN_BASE) });
+  return groups;
+}

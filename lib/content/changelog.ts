@@ -10,6 +10,136 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "BH",
+    version: "BH-wave",
+    date: Date.parse("2026-05-20"),
+    kind: "feature",
+    title: "notion-shell page-editor depth — slash menu, actions menu, live inline-markdown decorator, toggle + callout renderers",
+    body:
+      "notion-shell wrappers level up from barebones contentEditable to a Notion-grade editing surface. (1) <SlashMenu> — searchable block-type picker with keyboard nav (↑↓ Enter Esc), 18-spec baseline (text / h1-h3 / todo / bullet / numbered / toggle / quote / callout / code / equation / image / divider / page / database / table / embed). (2) <BlockActionsMenu> — popover with turn-into submenu + duplicate + delete, current type marker. (3) <InsertBlockButton> — \"+ Add block\" trigger wrapping SlashMenu in a popover with search input. (4) Live inline-markdown decorator — caret-preserving, IME-safe DOM pass that wraps **bold** _italic_ ~~strike~~ `code` $math$ [label](url) markers in semantic tags inside the contentEditable. Source-of-truth stays plain text (innerText round-trips verbatim) so the host store reads source markers, not decorated HTML. Headings hide markers visually via zero-size span. (5) NotionBlock extended — hover reveals \"⋯\" actions handle when onTurnInto provided; runs decorator on mount + every input (skipping composition); composition-end handler for IME. (6) Template wired — DocView's fixed +paragraph/+h2/+list buttons replaced with one InsertBlockButton; toggle + callout block-renderers added (ChevronRight expand + Lightbulb callout); notion-reducer gains doc.block.duplicate + doc.block.turnInto actions; types.ts adds matching Action variants. Slash-key trigger (`/` in block → menu opens at caret) deferred to BJ-wave alongside drag handle + cover + image/embed renderers. Bumps notion-shell to v0.2.0.",
+    groups: [
+      {
+        heading: "notion-shell (NEW components)",
+        bullets: [
+          { text: "components/SlashMenu.tsx — searchable block-type picker w/ keyboard nav", slug: "notion-shell", kind: "slice" },
+          { text: "components/BlockActionsMenu.tsx — turn-into / duplicate / delete popover", slug: "notion-shell", kind: "slice" },
+          { text: "components/InsertBlockButton.tsx — `+` trigger w/ SlashMenu + search input", slug: "notion-shell", kind: "slice" },
+        ],
+      },
+      {
+        heading: "notion-shell (NEW lib)",
+        bullets: [
+          { text: "lib/blockSpecs.ts — 18-spec BLOCK_SPECS registry + specFor() lookup", slug: "notion-shell", kind: "slice" },
+          { text: "lib/inlineMd.ts — pure tokenizer (Slack model: **bold** _it_ ~~s~~ `code` $math$ links)", slug: "notion-shell", kind: "slice" },
+          { text: "lib/inline-decorator/caret.ts — getCaretOffset / setCaretAtOffset (DOM-walk, BR-aware)", slug: "notion-shell", kind: "slice" },
+          { text: "lib/inline-decorator/decorate.ts — decorateLineToFragment (pure DOM construction)", slug: "notion-shell", kind: "slice" },
+          { text: "lib/inlineDecorator.ts — decorateInPlace facade (caret save → mutate → restore)", slug: "notion-shell", kind: "slice" },
+        ],
+      },
+      {
+        heading: "notion-shell (extended)",
+        bullets: [
+          { text: "components/NotionBlock.tsx — decorator pass on mount + input, IME-safe, hover \"⋯\" actions handle", slug: "notion-shell", kind: "slice" },
+          { text: "index.ts + slice.contract + slice.json + slice.manifest — bump v0.2.0, export 3 new components + 8 new utils + 2 new types", slug: "notion-shell", kind: "slice" },
+        ],
+      },
+      {
+        heading: "Template touched — notion-page-clone-os",
+        bullets: [
+          { text: "slices/notion-app/DocView.tsx — InsertBlockButton replaces fixed +block bar; NotionBlock wired with onTurnInto + onDuplicate", slug: "notion-page-clone-os", kind: "template" },
+          { text: "slices/notion-app/block-renderers.tsx — toggle + callout specialised renderers added", slug: "notion-page-clone-os", kind: "template" },
+          { text: "shared/types.ts + shared/notion-reducer.ts — doc.block.duplicate + doc.block.turnInto actions", slug: "notion-page-clone-os", kind: "template" },
+        ],
+      },
+      {
+        heading: "Catalog",
+        bullets: [
+          "lib/content/slices.ts — notion-shell v0.2.0 description + tags + recipe (slash-menu / decorator / wysiwyg)",
+          "lib/content/layouts.ts — notion-page-clone-os files list adds shared/notion-reducer.ts",
+        ],
+      },
+      {
+        heading: "Up next (BI + BJ)",
+        bullets: [
+          "BI-wave — database depth: view tabs + Board/List/Gallery/Calendar/Feed + sort/filter/search + column-header menu + multi-select/date/status/url/email/phone cells",
+          "BJ-wave — polish: DnD-kit drag handle, cover image revive, image/embed block renderers, page actions menu, slash-key trigger in NotionBlock",
+        ],
+      },
+    ],
+  },
+  {
+    id: "BG",
+    version: "BG-wave",
+    date: Date.parse("2026-05-20"),
+    kind: "feature",
+    title: "Admin Panel chassis + 3-group sidebar (Pages / Features / Admin Panel) on all 8 templates",
+    body:
+      "Big foundation wave so the next batch can sync real implementations from notion-page-clone + superspace into the admin-panel blocks. Three slices land here. (1) Admin Panel chassis at _shared/admin-panel/ — FeatureBlock registry, buildAdminPanelNav helper, AdminPanelOverview grid, AdminFeatureCard placeholder, AdminFeatureStubPage shared route renderer. 6 stub blocks ship: AI Config, Analytics, User Management, Audit Log, Webhooks, Settings — each annotated with the rr slice that will power it (ai-router, event-tracking, rbac-roles, audit-log). (2) All 7 flat-nav templates migrated to grouped nav: buildAdminNav(state) returns [Overview, Pages, Features, Admin Panel] groups derived from the legacy buildAdminPrimaryNav so per-template source of truth stays in one place. saas-marketing-os Admin Panel group added too. (3) 48 admin-panel route stubs scaffolded across 8 templates (6 features × 8 templates) — each calls the shared AdminFeatureStubPage. Plus BG-D Advanced primitives chassis (workspace-switcher, secondary-sidebar, dashboard-shell-advanced — opt-in, no canary yet) and BG-E public-nav CRUD primitives (types + reducer with auto-shift orders + resolvePublicNavHref helper — per-template wiring deferred). BG-F: each template's landing page seed flagged with isLanding: true (forward-compat for landing-as-page migration). CMS vs Admin Panel architectural distinction documented in dashboard-vision.md.",
+    groups: [
+      {
+        heading: "Templates touched (3-group sidebar + 48 admin-panel routes)",
+        bullets: [
+          { text: "saas-marketing-os — Admin Panel group added; 6 stub routes scaffolded", slug: "saas-marketing-os", kind: "template" },
+          { text: "personal-brand-os — migrated to grouped nav; Admin Panel group + 6 stubs", slug: "personal-brand-os", kind: "template" },
+          { text: "agency-studio-os — migrated to grouped nav; Admin Panel group + 6 stubs", slug: "agency-studio-os", kind: "template" },
+          { text: "konsultan-os — migrated to grouped nav; Admin Panel group + 6 stubs", slug: "konsultan-os", kind: "template" },
+          { text: "kreator-studio-os — migrated to grouped nav; Admin Panel group + 6 stubs", slug: "kreator-studio-os", kind: "template" },
+          { text: "riset-kit — migrated to grouped nav; Admin Panel group + 6 stubs", slug: "riset-kit", kind: "template" },
+          { text: "wirausaha-os — migrated to grouped nav; Admin Panel group + 6 stubs", slug: "wirausaha-os", kind: "template" },
+          { text: "notion-page-clone-os — migrated to grouped nav; Admin Panel group + 6 stubs", slug: "notion-page-clone-os", kind: "template" },
+        ],
+      },
+      {
+        heading: "Admin Panel chassis (_shared/admin-panel/)",
+        bullets: [
+          "feature-blocks.ts NEW — FeatureBlock type + ADMIN_PANEL_BLOCKS registry (6 blocks) + buildAdminPanelNav helper",
+          "AdminFeatureCard.tsx NEW — placeholder card with icon + description + 'powered by <slice>' hint",
+          "AdminPanelOverview.tsx NEW — grid of feature-block cards at /dashboard/admin/admin-panel",
+          "AdminFeatureStubPage.tsx NEW — shared route renderer (every per-template stub calls it)",
+        ],
+      },
+      {
+        heading: "Advanced primitives chassis (BG-D — opt-in, no canary yet)",
+        bullets: [
+          "_shared/types/common.ts — WorkspaceContext + SecondaryNavItem types",
+          "_shared/ui/workspace-switcher.tsx NEW — opt-in workspace-CONTEXT picker (multi-tenant). Lifted from notion-page-clone pattern. ⌘N keyboard hints not included this wave",
+          "_shared/ui/secondary-sidebar.tsx NEW — narrow contextual sub-nav + SecondarySidebarLayout wrapper (three-column composition)",
+          "_shared/ui/dashboard-shell-advanced.tsx NEW — composes admin-sidebar + workspaceSwitcher headerSlot + secondary-sidebar slot in main",
+          "_shared/ui/admin-sidebar.tsx — headerSlot prop added so DashboardShellAdvanced can swap BrandHeader for WorkspaceSwitcher",
+        ],
+      },
+      {
+        heading: "Public-nav CRUD chassis (BG-E — primitives only, per-template wiring deferred)",
+        bullets: [
+          "_shared/public-nav/types.ts NEW — PublicNavItem (label + pageRef OR href + order + enabled), PublicNavSlice, PublicNavAction",
+          "_shared/public-nav/reducer.ts NEW — publicNavReducer with auto-shift orders + resolvePublicNavHref helper (binds pageRef → page slug)",
+        ],
+      },
+      {
+        heading: "Forward-compat (BG-F)",
+        bullets: [
+          "7 templates' pages-seed.ts — landing page (slug: \"\") flagged with isLanding: true. Sets up BH landing-as-page migration without changing runtime behavior",
+        ],
+      },
+      {
+        heading: "Docs",
+        bullets: [
+          "docs/architecture/dashboard-vision.md — Three sidebar groups (Pages / Features / Admin Panel) documented; CMS vs Admin Panel best practice (siblings, not nested) explained",
+        ],
+      },
+      {
+        heading: "Up next (BH-wave)",
+        bullets: [
+          "Sync notion-page-clone + superspace slices into admin-panel blocks (replace stubs with real implementations — AI Config from ai-router, Analytics from event-tracking, Users from rbac-roles, Audit from audit-log)",
+          "Wire notion-page-clone-os as DashboardShellAdvanced canary (workspace switcher + secondary sidebar live)",
+          "Per-template public-nav CRUD wiring (state.publicNav + admin /navigation editor + site-nav reads from state)",
+          "Landing-as-page full migration (drop state.landingSections in favor of isLanding Page.sections)",
+          "Extract landing-sections as installable rr slice",
+        ],
+      },
+    ],
+  },
+  {
     id: "BF",
     version: "BF-wave",
     date: Date.parse("2026-05-20"),

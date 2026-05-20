@@ -1,11 +1,11 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "notion-shell",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "category": "ui",
   "kind": "ui",
-  "title": "Notion Shell — page/sidebar/database wrapper primitives",
-  "description": "Portable Notion-style wrapper primitives: NotionPage (header + body shell), NotionHeader (icon + title), NotionSidebar (tree nav with full page CRUD), NotionBlock (single-block renderer dispatching via prop registry), NotionDatabase (table view + per-cell CRUD), NotionProperty (value + schema editor). Pure / props-driven — host owns data + change handlers. Drop into any React surface; pair with notion-blocks for the four editor primitives (equation, code, notify, grid). Lifted from notion-page-clone's shared/components/notion.",
+  "title": "Notion Shell — page/sidebar/database wrapper primitives + slash menu + decorator",
+  "description": "Portable Notion-style wrapper primitives: NotionPage (header + body shell), NotionHeader (icon + title), NotionSidebar (tree nav with full page CRUD), NotionBlock (single-block renderer dispatching via prop registry, live inline-markdown decorator, hover actions menu), NotionDatabase (table view + per-cell CRUD), NotionProperty (value + schema editor), SlashMenu (searchable block-type picker with keyboard nav), BlockActionsMenu (turn-into / duplicate / delete popover), InsertBlockButton (\"+\" trigger w/ SlashMenu popover). Pure / props-driven — host owns data + change handlers. Drop into any React surface; pair with notion-blocks for the four editor primitives (equation, code, notify, grid). Lifted from notion-page-clone's shared/components/notion + editor slice.",
   "namespace": "@/features/notion-shell",
   "registers": [],
   "audit": [],
@@ -15,7 +15,7 @@
   },
   "deps": {
     "npm": [],
-    "shadcn": ["button", "input", "checkbox"],
+    "shadcn": ["button", "input", "checkbox", "dropdown-menu", "popover"],
     "env": [],
     "peers": []
   }

@@ -58,6 +58,38 @@ export type Cta = {
   href: string;
 };
 
+/**
+ * BG-wave (Advanced archetype) — workspace context. Templates that
+ * opt into multi-tenant workspaces (e.g. notion-page-clone-os) expose
+ * an array of these to the WorkspaceSwitcher in the sidebar header.
+ * Generic shape — per-template entity (workspace / project / org)
+ * adapts to this contract.
+ */
+export type WorkspaceContext = {
+  id: string;
+  name: string;
+  /** Emoji or short string rendered in the avatar tile. */
+  icon?: string;
+  /** Optional sublabel (role / plan / tier). */
+  sublabel?: string;
+};
+
+/**
+ * BG-wave — secondary sidebar item (three-column layout). Narrow
+ * contextual sub-nav shown between the primary sidebar and main content.
+ * Used by admin pages that have rich sub-navigation (e.g. RBAC config,
+ * notion-style page tree). Simpler shape than AdminNavItem — no nested
+ * children, no counts.
+ */
+export type SecondaryNavItem = {
+  id: string;
+  label: string;
+  href: string;
+  icon?: any;
+  /** Optional small descriptor under the label. */
+  meta?: string;
+};
+
 export type FooterColumn = {
   heading: string;
   items: { label: string; href: string }[];

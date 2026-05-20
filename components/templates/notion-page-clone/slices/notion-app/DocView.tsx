@@ -1,10 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { Plus } from "lucide-react";
-import { NotionPage, NotionBlock, type Block, type BlockType } from "@/features/notion-shell";
+import {
+  NotionPage, NotionBlock, InsertBlockButton,
+  type Block, type BlockType,
+} from "@/features/notion-shell";
 import { DynamicIcon, IconPickerPopover } from "@/features/icon-picker";
-import { Button } from "@/components/ui/button";
 import { useDocs, useStore } from "../../shared/store";
 import { NOTION_BLOCK_RENDERERS } from "./block-renderers";
 
@@ -27,9 +28,9 @@ function renderIconPicker({
 }
 
 /** Renders one notion-clone doc selected by id. Bound to template store —
- *  block edits dispatch DOC_* actions; the +Block bar appends a new empty
- *  paragraph. For richer slash-menu / drag handle UX, lift the editor
- *  slice from nosion (deferred). */
+ *  block edits dispatch doc.* actions; the +Block bar opens SlashMenu
+ *  popover. Hover on any block reveals "⋯" → turn-into / duplicate /
+ *  delete. For richer slash-key trigger / drag-handle UX, see BJ-wave. */
 export function DocView({ docId }: { docId: string }) {
   const docs = useDocs();
   const { dispatch } = useStore();
@@ -47,6 +48,10 @@ export function DocView({ docId }: { docId: string }) {
     dispatch({ type: "doc.block.update", docId: doc.id, blockId, patch });
   const handleBlockRemove = (blockId: string) =>
     dispatch({ type: "doc.block.remove", docId: doc.id, blockId });
+  const handleBlockDuplicate = (blockId: string) =>
+    dispatch({ type: "doc.block.duplicate", docId: doc.id, blockId });
+  const handleBlockTurnInto = (blockId: string, type: BlockType) =>
+    dispatch({ type: "doc.block.turnInto", docId: doc.id, blockId, blockType: type });
   const handleAppend = (type: BlockType = "paragraph") => {
     const block: Block = { id: `b-${Date.now().toString(36)}`, type, text: "" };
     dispatch({ type: "doc.block.append", docId: doc.id, block });
@@ -61,37 +66,21 @@ export function DocView({ docId }: { docId: string }) {
       renderIcon={renderIcon}
       renderIconPicker={renderIconPicker}
     >
-      {doc.blocks.map((b) => (
-        <NotionBlock
-          key={b.id}
-          block={b}
-          blockRenderers={NOTION_BLOCK_RENDERERS}
-          onUpdate={(patch) => handleBlockUpdate(b.id, patch)}
-          onRemove={() => handleBlockRemove(b.id)}
-        />
-      ))}
-      <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-dashed border-border/60 pt-3">
-        <Button variant="ghost" size="sm" onClick={() => handleAppend("paragraph")} className="h-7 gap-1 px-2 text-xs text-muted-foreground">
-          <Plus className="h-3 w-3" /> Paragraph
-        </Button>
-        <Button variant="ghost" size="sm" onClick={() => handleAppend("h2")} className="h-7 gap-1 px-2 text-xs text-muted-foreground">
-          <Plus className="h-3 w-3" /> Heading
-        </Button>
-        <Button variant="ghost" size="sm" onClick={() => handleAppend("bullet")} className="h-7 gap-1 px-2 text-xs text-muted-foreground">
-          <Plus className="h-3 w-3" /> List
-        </Button>
-        <Button variant="ghost" size="sm" onClick={() => handleAppend("quote")} className="h-7 gap-1 px-2 text-xs text-muted-foreground">
-          <Plus className="h-3 w-3" /> Quote
-        </Button>
-        <Button variant="ghost" size="sm" onClick={() => handleAppend("code")} className="h-7 gap-1 px-2 text-xs text-muted-foreground">
-          <Plus className="h-3 w-3" /> Code
-        </Button>
-        <Button variant="ghost" size="sm" onClick={() => handleAppend("equation")} className="h-7 gap-1 px-2 text-xs text-muted-foreground">
-          <Plus className="h-3 w-3" /> Equation
-        </Button>
-        <Button variant="ghost" size="sm" onClick={() => handleAppend("divider")} className="h-7 gap-1 px-2 text-xs text-muted-foreground">
-          <Plus className="h-3 w-3" /> Divider
-        </Button>
+      <div className="pl-8">
+        {doc.blocks.map((b) => (
+          <NotionBlock
+            key={b.id}
+            block={b}
+            blockRenderers={NOTION_BLOCK_RENDERERS}
+            onUpdate={(patch) => handleBlockUpdate(b.id, patch)}
+            onRemove={() => handleBlockRemove(b.id)}
+            onDuplicate={() => handleBlockDuplicate(b.id)}
+            onTurnInto={(type) => handleBlockTurnInto(b.id, type)}
+          />
+        ))}
+      </div>
+      <div className="mt-3 flex items-center gap-2 border-t border-dashed border-border/60 pt-3 pl-8">
+        <InsertBlockButton onInsert={handleAppend} label="Add block" />
       </div>
     </NotionPage>
   );

@@ -20,6 +20,7 @@ export const SEED_PAGES: PageEntry[] = [
     createdAt: day(180),
     updatedAt: day(180),
     systemPage: true,
+    isLanding: true,
   },
   {
     id: "sys-services",
