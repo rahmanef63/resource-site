@@ -9,7 +9,7 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "notion-shell",
-  version: "0.2.0",
+  version: "0.3.0",
   category: "ui",
   kind: "ui",
   provides: {
@@ -17,6 +17,8 @@ export const contract = defineSliceContract({
       "NotionPage", "NotionHeader", "NotionSidebar",
       "NotionBlock", "NotionDatabase", "NotionProperty",
       "SlashMenu", "BlockActionsMenu", "InsertBlockButton",
+      "ViewTabs", "ViewOptions", "ColumnHeaderMenu",
+      "TableView", "BoardView", "ListView", "GalleryView", "CalendarView", "FeedView",
     ],
     utils: [
       "TOP_LEVEL_PLACEHOLDERS",
@@ -24,12 +26,17 @@ export const contract = defineSliceContract({
       "tokenizeInline", "stripMd",
       "decorateInPlace", "decorateLineToFragment",
       "getCaretOffset", "setCaretAtOffset", "visibleLength",
+      "applyView", "groupBy", "bucketByDate",
+      "renderPropertyCell",
+      "VIEW_REGISTRY",
     ],
     hooks: [],
     types: [
       "NotionPageProps", "NotionHeaderProps", "NotionSidebarProps", "NotionSidebarPage",
       "NotionBlockProps", "NotionDatabaseProps", "NotionPropertyProps",
       "SlashMenuProps", "BlockActionsMenuProps", "InsertBlockButtonProps",
+      "ViewTabsProps", "ViewOptionsProps", "ColumnHeaderMenuProps",
+      "ViewRegistry", "ViewProps",
       "BlockSpec", "Token",
       "Block", "BlockType", "BlockRenderers", "BlockRendererProps",
       "Page", "Property", "PropertyValue", "PropertyType", "SelectOption", "NumberFormat",

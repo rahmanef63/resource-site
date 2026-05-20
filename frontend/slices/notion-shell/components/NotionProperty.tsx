@@ -3,16 +3,17 @@
 /** <NotionProperty /> — single property cell + schema editor (per
  *  Notion canon: VALUE edit + SCHEMA edit merged into one primitive).
  *
- *  Intentionally minimal — text/number/checkbox/select. For complex
- *  per-type editors (date picker, relation picker, etc.), pair with
- *  the full databases slice. */
+ *  Per-type cells live in property-cells.tsx (text / number / checkbox
+ *  / select / multi_select / status / date / url / email / phone). For
+ *  richer cells (relation / rollup / formula / files), pair with the
+ *  full databases slice. */
 
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { cn } from "rahman-shared/lib/utils";
+import { renderPropertyCell } from "./property-cells";
 import type { Property, PropertyValue } from "../types";
 
 export interface NotionPropertyProps {
@@ -45,6 +46,14 @@ export function NotionProperty({
     setEditingName(false);
   };
 
+  if (hideSchemaControls) {
+    return (
+      <div className={className}>
+        {renderPropertyCell({ prop, value, readOnly: ro, onChange })}
+      </div>
+    );
+  }
+
   return (
     <div className={cn("flex items-center gap-2 py-1", className)}>
       <div className="flex w-32 shrink-0 items-center gap-1 text-xs text-muted-foreground">
@@ -54,70 +63,37 @@ export function NotionProperty({
             value={draftName}
             onChange={(e) => setDraftName(e.target.value)}
             onBlur={commitName}
-            onKeyDown={(e) => { if (e.key === "Enter") commitName(); if (e.key === "Escape") { setDraftName(prop.name); setEditingName(false); } }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") commitName();
+              if (e.key === "Escape") { setDraftName(prop.name); setEditingName(false); }
+            }}
             className="h-6 border-0 bg-transparent px-1 py-0 text-xs shadow-none focus-visible:ring-0"
           />
         ) : (
           <span className="flex-1 truncate">{prop.name}</span>
         )}
-        {!hideSchemaControls && onSchemaChange && !editingName && (
-          <Button variant="ghost" size="icon" onClick={() => setEditingName(true)} className="h-4 w-4 text-muted-foreground/60 hover:text-foreground"><Pencil className="h-3 w-3" /></Button>
+        {onSchemaChange && !editingName && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setEditingName(true)}
+            className="h-4 w-4 text-muted-foreground/60 hover:text-foreground"
+          >
+            <Pencil className="h-3 w-3" />
+          </Button>
         )}
-        {!hideSchemaControls && onSchemaRemove && (
-          <Button variant="ghost" size="icon" onClick={onSchemaRemove} className="h-4 w-4 text-muted-foreground/60 hover:text-destructive"><Trash2 className="h-3 w-3" /></Button>
+        {onSchemaRemove && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onSchemaRemove}
+            className="h-4 w-4 text-muted-foreground/60 hover:text-destructive"
+          >
+            <Trash2 className="h-3 w-3" />
+          </Button>
         )}
       </div>
-      <div className="flex-1">{renderValue(prop, value, ro, onChange)}</div>
+      <div className="flex-1">{renderPropertyCell({ prop, value, readOnly: ro, onChange })}</div>
     </div>
   );
-}
-
-function renderValue(
-  prop: Property,
-  value: PropertyValue,
-  readOnly: boolean,
-  onChange?: (next: PropertyValue) => void,
-): ReactNode {
-  switch (prop.type) {
-    case "checkbox":
-      return <Checkbox checked={!!value} disabled={readOnly} onCheckedChange={(v) => onChange?.(!!v)} />;
-    case "number":
-      return (
-        <Input
-          type="number"
-          value={(value as number | null) ?? ""}
-          disabled={readOnly}
-          onChange={(e) => onChange?.(e.target.value === "" ? null : Number(e.target.value))}
-          className="h-7 text-sm"
-        />
-      );
-    case "select":
-    case "status": {
-      const id = value as string | null;
-      const opt = prop.options?.find((o) => o.id === id);
-      return (
-        <select
-          disabled={readOnly}
-          value={id ?? ""}
-          onChange={(e) => onChange?.(e.target.value || null)}
-          className="h-7 w-full rounded-md border border-border bg-background px-2 text-sm disabled:opacity-60"
-        >
-          <option value="">{opt ? "" : "—"}</option>
-          {prop.options?.map((o) => (
-            <option key={o.id} value={o.id}>{o.name}</option>
-          ))}
-        </select>
-      );
-    }
-    default:
-      return (
-        <Input
-          value={String(value ?? "")}
-          disabled={readOnly}
-          onChange={(e) => onChange?.(e.target.value)}
-          className="h-7 text-sm"
-          type={prop.type === "url" ? "url" : prop.type === "email" ? "email" : "text"}
-        />
-      );
-  }
 }

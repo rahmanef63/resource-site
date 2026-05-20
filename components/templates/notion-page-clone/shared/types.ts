@@ -74,6 +74,16 @@ export type Action =
   /** Database row mutations — operate on doc + db.rowIds atomically. */
   | { type: "db.row.add"; dbId: string }
   | { type: "db.row.update"; dbId: string; rowId: string; propId: string; value: PropertyValue }
-  | { type: "db.row.remove"; dbId: string; rowId: string };
+  | { type: "db.row.remove"; dbId: string; rowId: string }
+  /** View CRUD — sort / filter / search lives in db.views[].config. */
+  | { type: "db.view.activate"; dbId: string; viewId: string }
+  | { type: "db.view.add"; dbId: string; viewType: NotionDatabase["views"][number]["type"] }
+  | { type: "db.view.remove"; dbId: string; viewId: string }
+  | {
+      type: "db.view.config";
+      dbId: string;
+      viewId: string;
+      patch: Partial<NotionDatabase["views"][number]>;
+    };
 
 export type { PageEntry, LandingSection, NotionBlock, NotionDatabase, NotionDoc };

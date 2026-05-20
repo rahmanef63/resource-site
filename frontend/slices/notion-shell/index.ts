@@ -13,7 +13,7 @@
  *                               live inline-markdown decorator, hover actions menu)
  *      <InsertBlockButton>    — "+" trigger w/ SlashMenu popover
  *      …embedded data
- *        <NotionDatabase>     — table view w/ property + row CRUD
+ *        <NotionDatabase>     — full DB surface w/ ViewTabs + ViewOptions + 6 views
  *          <NotionProperty>   — value + schema editor (per-cell)
  *
  *    <NotionSidebar>          — tree nav w/ page CRUD (standalone) */
@@ -27,6 +27,15 @@ export { NotionProperty, type NotionPropertyProps } from "./components/NotionPro
 export { SlashMenu, type SlashMenuProps } from "./components/SlashMenu";
 export { BlockActionsMenu, type BlockActionsMenuProps } from "./components/BlockActionsMenu";
 export { InsertBlockButton, type InsertBlockButtonProps } from "./components/InsertBlockButton";
+export { ViewTabs, type ViewTabsProps } from "./components/ViewTabs";
+export { ViewOptions, type ViewOptionsProps } from "./components/ViewOptions";
+export { ColumnHeaderMenu, type ColumnHeaderMenuProps } from "./components/ColumnHeaderMenu";
+export { renderPropertyCell } from "./components/property-cells";
+export {
+  VIEW_REGISTRY,
+  TableView, BoardView, ListView, GalleryView, CalendarView, FeedView,
+  type ViewRegistry, type ViewProps,
+} from "./components/views";
 export { TOP_LEVEL_PLACEHOLDERS } from "./components/placeholders";
 
 export { BLOCK_SPECS, specFor, type BlockSpec } from "./lib/blockSpecs";
@@ -38,6 +47,7 @@ export {
   setCaretAtOffset,
   visibleLength,
 } from "./lib/inlineDecorator";
+export { applyView, groupBy, bucketByDate } from "./lib/viewData";
 
 export type {
   Block, BlockType, BlockRenderers, BlockRendererProps,
