@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CopyPageButton } from "@/components/site/copy-page-button";
@@ -11,6 +11,7 @@ import { RecentlyUpdatedBadge } from "@/components/site/recently-updated-badge";
 import { useFeatureManifest, type Selections } from "@/components/site/feature-context";
 import { buildPreviewManifest } from "@/components/site/preview";
 import { getTemplateConfig } from "@/lib/templates/configs";
+import { getDemoUrl } from "@/lib/content/template-subdomains";
 import { CodeTab } from "@/components/site/template-detail/code-tab";
 import { PromptTab } from "@/components/site/template-detail/prompt-tab";
 import { StaticInspector } from "@/components/site/template-detail/static-inspector";
@@ -31,6 +32,7 @@ type Props = {
 
 export function TemplateDetail({ kind, basePath, data, prev, next, prompt, siteUrl }: Props) {
   const tplConfig = React.useMemo(() => getTemplateConfig(data.slug), [data.slug]);
+  const demoUrl = React.useMemo(() => getDemoUrl(data.slug), [data.slug]);
 
   const manifest = React.useMemo(() => {
     const inspectorRender = tplConfig
@@ -103,6 +105,14 @@ export function TemplateDetail({ kind, basePath, data, prev, next, prompt, siteU
         <h1 className="truncate text-lg font-semibold tracking-tight">{data.title}</h1>
       </div>
       <div className="flex items-center gap-1">
+        {demoUrl && (
+          <Button asChild variant="outline" size="sm" className="hidden gap-1.5 text-xs sm:inline-flex">
+            <Link href={demoUrl} target="_blank" rel="noopener noreferrer">
+              <ExternalLink className="size-3" />
+              Live demo
+            </Link>
+          </Button>
+        )}
         <CopyPageButton title={data.title} url={`${siteUrl}${basePath}/${data.slug}`} body={data.exampleCode} />
         {prev && (
           <Button asChild variant="ghost" size="icon" className="size-8" aria-label="Previous">

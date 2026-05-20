@@ -10,6 +10,54 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "BR",
+    version: "BR-wave",
+    date: Date.parse("2026-05-20"),
+    kind: "feature",
+    title: "Wildcard subdomain demo routing — 8 templates × portfolio-grade domain via host-based rewriter (one codebase, zero sync)",
+    body:
+      "8 website templates now each get a portfolio-quality demo URL: demo-konsultan.rahmanef.com, demo-personal-branding.rahmanef.com, etc. ARCHITECTURE: all 8 subdomains resolve to the same Next.js deployment — proxy.ts inspects the Host header and rewrites /demo-<short>.rahmanef.com → /preview/<slug>/public (or /admin → /preview/<slug>/dashboard/admin). Zero fork, zero sync engine, zero webhook. Editing any template in rr → push to main → Dokploy rebuilds → all 8 subdomains reflect change in next request because they ARE the same codebase, just different entry points. CHOSEN OVER FORK-rr-per-template (rejected — 95% dead-weight: catalog, CLI, MCP, 38 other layouts) AND multi-tenant single-deployment without subdomain (rejected — no portfolio storytelling value). FILES: lib/content/template-subdomains.ts (NEW — SSOT map subdomain→slug, helpers resolveDemoSlug + getDemoUrl); proxy.ts (NEW — Next.js 16 root proxy, pass-through for _next/api/brand-assets/favicon/sitemap/robots/llms, rewrite for demo-* hosts); components/site/template-detail.tsx (Live demo button on /layouts/<slug> detail page); docs/architecture/subdomain-routing.md (NEW — full ops doc for Cloudflare wildcard DNS + Dokploy custom domain + SSL setup). MANUAL OPS REQUIRED (Rahman, one-time): (1) Cloudflare DNS add wildcard A record *.rahmanef.com → Dokploy IP, proxied. (2) Dokploy add *.rahmanef.com to resource-site deployment custom domains. (3) Verify SSL via Cloudflare proxy (orange cloud) OR Let's Encrypt DNS-01.",
+    groups: [
+      {
+        heading: "NEW infrastructure",
+        bullets: [
+          "lib/content/template-subdomains.ts — SSOT mapping (subdomain → slug); resolveDemoSlug(host) + getDemoUrl(slug) helpers",
+          "proxy.ts — Next 16 root proxy, host-based rewriter with safe pass-through list (_next, api, brand-assets, favicon, sitemap, robots, llms, manifest)",
+          "docs/architecture/subdomain-routing.md — Cloudflare + Dokploy ops walkthrough",
+        ],
+      },
+      {
+        heading: "8 demo subdomains live (after DNS+Dokploy setup)",
+        bullets: [
+          "demo-personal-branding.rahmanef.com → personal-brand-os",
+          "demo-konsultan.rahmanef.com → konsultan-os",
+          "demo-kreator.rahmanef.com → kreator-studio-os",
+          "demo-wirausaha.rahmanef.com → wirausaha-os",
+          "demo-riset.rahmanef.com → riset-kit",
+          "demo-agency.rahmanef.com → agency-studio-os",
+          "demo-saas.rahmanef.com → saas-marketing-os",
+          "demo-nosion.rahmanef.com → notion-page-clone-os",
+        ],
+      },
+      {
+        heading: "User-visible",
+        bullets: [
+          "Each /layouts/<slug> detail page (template subset) now shows a 'Live demo' button linking to the matching subdomain",
+          "Subdomain root → public landing. /admin → dashboard admin panel. localStorage isolated per subdomain.",
+        ],
+      },
+      {
+        heading: "What this is NOT",
+        bullets: [
+          "Not a per-template repo fork (rejected — inherits 95% dead-weight)",
+          "Not a per-template Convex backend (deferred — `npx rr eject` future CLI)",
+          "Not affecting rahmanef.com personal site (different deployment, untouched)",
+          "Not affecting resource.rahmanef.com canonical main site (pass-through)",
+        ],
+      },
+    ],
+  },
+  {
     id: "BQ",
     version: "BQ-wave",
     date: Date.parse("2026-05-20"),

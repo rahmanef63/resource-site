@@ -258,8 +258,13 @@ flavoring. Extracted `parseConfigBadge` instead — 5 templates had
 identical 8-line inline function. Net: -40 LOC.
 
 Post-Mise resumes development:
-- BR — sync `notion-page-clone` slice into admin-panel real impl
-- BS — `notion-page-clone-os` as `DashboardShellAdvanced` canary
+- **BR — ✅ shipped (this wave): Wildcard subdomain demo routing.**
+  8 templates each get `demo-<short>.rahmanef.com` via host-based
+  `proxy.ts` rewriter. One codebase, zero sync engine. See
+  [docs/architecture/subdomain-routing.md](./subdomain-routing.md).
+  Manual ops required: Cloudflare wildcard DNS + Dokploy custom domain.
+- BS — sync `notion-page-clone` slice into admin-panel real impl
+- BT — `notion-page-clone-os` as `DashboardShellAdvanced` canary
 
 ## How to resume
 
