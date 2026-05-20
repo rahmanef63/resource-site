@@ -352,7 +352,6 @@ Each PR also:
 - [ ] Add `lift` to `packages/cli/bin/cli.js` (new subcommand + helpers `parseLiftSource`, `pullFromSource`, `applySliceManifest`).
 - [ ] Add `publish-slice` to `packages/cli/bin/cli.js` (validates locally then `gh pr create` via spawn).
 - [ ] Update `CLAUDE.md` source map table — replace path-copy guidance with `lift` commands.
-- [ ] Update `MEMORY.md` reference for project: add a pointer to this doc + new lift commands.
 
 ### Acceptance criteria
 

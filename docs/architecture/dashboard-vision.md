@@ -220,11 +220,45 @@ notion-page-clone/
 └── frontend/slices/workspace-sidebar/                                 ← page-tree DnD primary sidebar
 ```
 
+## BG–BK shipped (2026-05-20)
+
+- **BG** — Admin panel chassis (3rd sidebar group, distinct from CMS).
+  6 FeatureBlock stubs (`ai-config`, `analytics`, `users`, `audit-log`,
+  `webhooks`, `settings`) × 8 templates = 48 route stubs. Shared
+  `AdminFeatureStubPage` renderer.
+- **BH** — Dynamic Pages sidebar. Every created custom page surfaces
+  as a live menu item via `buildCustomPageNavItems()` derived from
+  store.
+- **BI / BK** — Unified `PageSectionsEditor`. Custom pages and landing
+  share the SAME `LandingSection` composition primitive (row + dialog
+  UX). Pages reducer learns `PAGE_SECTION_UPSERT` + `PAGE_SECTION_DELETE`
+  with auto-shift order algorithm.
+- **BJ** — notion-shell polish (DnD-kit drag handle, cover, image/embed
+  renderers, page actions menu).
+- **Feature manifest coverage** 77.6% → **98.0%** (`defineFeature()`
+  helper, audited via `scripts/audit-feature-manifest.mjs`).
+
+## Operasi Mise (in progress, 2026-05-20)
+
+Kitchen prep before continuing development. 5 phases:
+
+| Phase | Wave | Goal | Risk |
+|---|---|---|---|
+| M1 | BL | Docs SSOT + dead code cleanup | LOW |
+| M2 | BM | Route SSOT — `buildTemplatePaths(slug)` helper, dedupe 160+ hardcoded `/preview/<slug>-os/...` | LOW |
+| M3 | BN | Derived `lib/content/resources.ts` registry + `/api/knowledge` exposes slices | MEDIUM |
+| M4 | BO | Manifest sync (`sync-slice-manifests.mjs`) + `_templates` config backfill + LandingRenderer base extraction | MEDIUM |
+| M5 | BP | Public taxonomy rollout — rename `Features` → `Modules`, `Recipes` → `Blocks`, add `type/runtime/domain/maturity` fields. **Needs user approval before exec.** | HIGH |
+
+Post-Mise resumes development:
+- BQ — sync `notion-page-clone` slice into admin-panel real impl
+- BR — `notion-page-clone-os` as `DashboardShellAdvanced` canary
+
 ## How to resume
 
 Next session:
 
 ```
-You: read docs/architecture/dashboard-vision.md and continue with BE-wave
-Claude: <reads, builds workspace-switcher + secondary-sidebar + dashboard-shell-advanced, wires notion-page-clone-os as canary>
+You: read docs/architecture/dashboard-vision.md and continue with Operasi Mise M2 (route SSOT)
+Claude: <builds _shared/config/template-paths.ts, migrates 16 nav/site-config files>
 ```

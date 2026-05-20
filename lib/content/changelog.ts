@@ -10,6 +10,69 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "BK",
+    version: "BK-wave",
+    date: Date.parse("2026-05-20"),
+    kind: "feature",
+    title: "Unified PageSectionsEditor (custom pages share landing's section editor) + feature manifest 98% coverage",
+    body:
+      "Re-commit of BI files that didn't land (earlier BI commit cf18fc187 was empty after a parallel agent's interleaved commit reset the working tree). (1) Custom pages and landing share the SAME composition primitive (LandingSection). New PageSectionsEditor renders row-per-section + click-to-open CrudRowDialog. PageEditorView uses it when page.sections is defined OR legacy blocks[] empty; PageEditorBlocks kept for system pages with seeded blocks. Pages reducer learns PAGE_SECTION_UPSERT + PAGE_SECTION_DELETE with auto-shift order algorithm (siblings rebase so chosen position is unique). All 8 PagesAdapters dispatch the new actions. (2) Feature manifest backfilled — 10 slices added (ai-agents, ai-chat, ai-studio, code-block, database-cell-selection, equation, icon-picker, notifications, notion-blocks, notion-shell) + 4 updated (pages, admin-panel, event-tracking, rbac-roles), coverage 77.6% → 98.0% (48/49). scripts/audit-feature-manifest.mjs NEW. Only outlier _templates intentionally skipped (scaffolding, not a functional slice).",
+    groups: [
+      {
+        heading: "_shared/pages (NEW components)",
+        bullets: [
+          { text: "PageSectionsEditor.tsx — row-per-section + click-to-open dialog; same LandingSection schema as landing surface", slug: "pages", kind: "slice" },
+          { text: "page-editor-helpers.tsx — extracted Field / PageNotFound / SystemPageNotice (200-LOC cap)", slug: "pages", kind: "slice" },
+        ],
+      },
+      {
+        heading: "_shared/pages (extended)",
+        bullets: [
+          { text: "types.ts — PageEntry.isLanding + sections forward-compat; PagesAction adds PAGE_SECTION_UPSERT + PAGE_SECTION_DELETE", slug: "pages", kind: "slice" },
+          { text: "reducer.ts — section CRUD with auto-shift order (upsertWithAutoShift helper)", slug: "pages", kind: "slice" },
+          { text: "pages-context.tsx — PagesStore adds upsertSection + removeSection callbacks", slug: "pages", kind: "slice" },
+          { text: "PageEditorView.tsx — renders PageSectionsEditor when page.sections defined OR legacy blocks empty", slug: "pages", kind: "slice" },
+          { text: "_shared/crud/CrudListView.tsx — editPath now optional (dialog-only flow)", slug: "pages", kind: "slice" },
+        ],
+      },
+      {
+        heading: "Templates touched — all 8 PagesAdapter",
+        bullets: [
+          { text: "store.tsx — upsertSection + removeSection wired; PAGE_SECTION_UPSERT + PAGE_SECTION_DELETE case labels added", slug: "agency-studio-os", kind: "template" },
+          { text: "store.tsx — same wiring", slug: "konsultan-os", kind: "template" },
+          { text: "store.tsx — same wiring", slug: "kreator-studio-os", kind: "template" },
+          { text: "store.tsx — same wiring (reducer split into store-reducer.ts)", slug: "personal-brand-os", kind: "template" },
+          { text: "store.tsx — same wiring", slug: "research-os", kind: "template" },
+          { text: "store.tsx — same wiring", slug: "saas-marketing-os", kind: "template" },
+          { text: "store.tsx — same wiring", slug: "wirausaha-os", kind: "template" },
+          { text: "store.tsx — same wiring", slug: "notion-page-clone-os", kind: "template" },
+        ],
+      },
+      {
+        heading: "Feature manifest (10 new config.ts)",
+        bullets: [
+          "ai-agents, ai-chat, ai-studio — AI surfaces",
+          "code-block, equation, notion-blocks — block primitives",
+          "database-cell-selection — table cell selection",
+          "icon-picker, notifications — UI utilities",
+          "notion-shell — outer Notion-clone surface",
+        ],
+      },
+      {
+        heading: "Feature manifest (4 updated to use defineFeature helper)",
+        bullets: [
+          "pages, admin-panel, event-tracking, rbac-roles — canonical shape via lib/shared/features/defineFeature",
+        ],
+      },
+      {
+        heading: "Tooling",
+        bullets: [
+          "scripts/audit-feature-manifest.mjs — NEW; reports coverage (currently 98.0% / 48 of 49 slices)",
+        ],
+      },
+    ],
+  },
+  {
     id: "BJ",
     version: "BJ-wave",
     date: Date.parse("2026-05-20"),

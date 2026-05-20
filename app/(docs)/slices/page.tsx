@@ -123,7 +123,7 @@ export default function SlicesPage() {
       <CatalogHero
         pill="Catalog"
         icon={Layers}
-        title="Feature slices"
+        title="Slices"
         subtitle={
           <>
             Tier-3 portable vertical slices. Each slice ships a frontend half +
