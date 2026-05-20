@@ -1,5 +1,7 @@
 // Riset Kit — single source of brand identity.
 
+import { buildTemplatePaths } from "@/components/templates/_shared/config/template-paths";
+
 export type SiteConfig = {
   brandLetter: string;
   brandName: string;
@@ -16,6 +18,11 @@ export type SiteConfig = {
   themeColor: string;
 };
 
+/** Canonical slug — rename here, all derived paths follow.
+ *  NOTE: dir name "research" but sandbox slug "riset-kit". */
+export const TEMPLATE_SLUG = "riset-kit";
+const paths = buildTemplatePaths(TEMPLATE_SLUG);
+
 export const DEFAULT_SITE_CONFIG: SiteConfig = {
   brandLetter: "R",
   brandName: "Riset Kit",
@@ -28,7 +35,7 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
   baseUrl: "https://riset.dev",
   twitter: "@risetkit",
   email: "halo@riset.dev",
-  bookCallHref: "/preview/riset-kit/public/about",
+  bookCallHref: `${paths.publicBase}/about`,
   defaultLocale: "id-ID",
   themeColor: "#0a0a0a",
 };

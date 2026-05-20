@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
-import { DEFAULT_SITE_CONFIG } from "@/components/templates/research/shared/site-config";
+import { DEFAULT_SITE_CONFIG, TEMPLATE_SLUG } from "@/components/templates/research/shared/site-config";
+import { buildTemplatePaths } from "@/components/templates/_shared/config/template-paths";
 
-const PUBLIC_BASE = "/preview/riset-kit/public";
+const PUBLIC_BASE = buildTemplatePaths(TEMPLATE_SLUG).publicBase;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const root = DEFAULT_SITE_CONFIG.baseUrl;

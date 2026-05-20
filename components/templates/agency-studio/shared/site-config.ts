@@ -1,3 +1,5 @@
+import { buildTemplatePaths } from "@/components/templates/_shared/config/template-paths";
+
 export type SiteConfig = {
   brandLetter: string;
   brandName: string;
@@ -13,6 +15,10 @@ export type SiteConfig = {
   themeColor: string;
 };
 
+/** Canonical slug — rename here, all derived paths follow. */
+export const TEMPLATE_SLUG = "agency-studio-os";
+const paths = buildTemplatePaths(TEMPLATE_SLUG);
+
 export const DEFAULT_SITE_CONFIG: SiteConfig = {
   brandLetter: "A",
   brandName: "atelier.studio",
@@ -24,7 +30,7 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
   baseUrl: "https://atelier.studio",
   twitter: "@atelierstudio",
   email: "halo@atelier.studio",
-  bookCallHref: "/preview/agency-studio-os/public/contact",
+  bookCallHref: `${paths.publicBase}/contact`,
   defaultLocale: "id-ID",
   themeColor: "#0a0a0a",
 };

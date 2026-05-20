@@ -1,5 +1,7 @@
 // Wirausaha OS — single source of brand identity.
 
+import { buildTemplatePaths } from "@/components/templates/_shared/config/template-paths";
+
 export type SiteConfig = {
   brandLetter: string;
   brandName: string;
@@ -16,6 +18,10 @@ export type SiteConfig = {
   themeColor: string;
 };
 
+/** Canonical slug — rename here, all derived paths follow. */
+export const TEMPLATE_SLUG = "wirausaha-os";
+const paths = buildTemplatePaths(TEMPLATE_SLUG);
+
 export const DEFAULT_SITE_CONFIG: SiteConfig = {
   brandLetter: "W",
   brandName: "Wirausaha OS",
@@ -28,7 +34,7 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
   baseUrl: "https://wirausaha.id",
   twitter: "@wirausahaos",
   email: "halo@wirausaha.id",
-  bookCallHref: "/preview/wirausaha-os/public/contact",
+  bookCallHref: `${paths.publicBase}/contact`,
   defaultLocale: "id-ID",
   themeColor: "#0a0a0a",
 };

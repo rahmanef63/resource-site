@@ -15,14 +15,16 @@ import {
 } from "lucide-react";
 import type { AdminNavGroup, AdminNavItem, FooterColumn, NavItem, User } from "@/components/templates/_shared/types/common";
 import type { State } from "./types";
-import { DEFAULT_SITE_CONFIG } from "./site-config";
+import { DEFAULT_SITE_CONFIG, TEMPLATE_SLUG } from "./site-config";
 import { buildCustomPageNavItems } from "@/components/templates/_shared/pages/nav-builder";
 import { buildAdminPanelNav } from "@/components/templates/_shared/admin-panel/feature-blocks";
+import { buildTemplatePaths } from "@/components/templates/_shared/config/template-paths";
 
-export const PUBLIC_BASE = "/preview/kreator-studio-os/public";
-export const DASHBOARD_BASE = "/preview/kreator-studio-os/dashboard";
-export const ADMIN_PANEL_BASE = `${DASHBOARD_BASE}/admin`;
-export const WORKSPACE_BASE = `${DASHBOARD_BASE}/workspace`;
+const paths = buildTemplatePaths(TEMPLATE_SLUG);
+export const PUBLIC_BASE = paths.publicBase;
+export const DASHBOARD_BASE = paths.dashboardBase;
+export const ADMIN_PANEL_BASE = paths.adminPanelBase;
+export const WORKSPACE_BASE = paths.workspaceBase;
 /** @deprecated use ADMIN_PANEL_BASE */
 export const ADMIN_BASE = ADMIN_PANEL_BASE;
 

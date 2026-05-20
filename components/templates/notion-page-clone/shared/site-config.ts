@@ -1,3 +1,5 @@
+import { buildTemplatePaths } from "@/components/templates/_shared/config/template-paths";
+
 export type SiteConfig = {
   brandLetter: string;
   brandName: string;
@@ -12,6 +14,10 @@ export type SiteConfig = {
   themeColor: string;
 };
 
+/** Canonical slug — rename here, all derived paths follow. */
+export const TEMPLATE_SLUG = "notion-page-clone-os";
+const paths = buildTemplatePaths(TEMPLATE_SLUG);
+
 export const DEFAULT_SITE_CONFIG: SiteConfig = {
   brandLetter: "N",
   brandName: "nosion",
@@ -22,7 +28,7 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
   baseUrl: "https://nosion.example.com",
   twitter: "@nosion",
   email: "hi@nosion.example.com",
-  ctaPrimary: { label: "Start writing", href: "/preview/notion-page-clone-os/dashboard/admin" },
+  ctaPrimary: { label: "Start writing", href: paths.adminPanelBase },
   defaultLocale: "en-US",
   themeColor: "#0a0a0a",
 };

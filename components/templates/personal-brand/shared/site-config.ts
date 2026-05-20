@@ -6,6 +6,8 @@
 // Consumers installing via `npx rr add personal-brand-os` (default `--at root`)
 // get this rewritten to `/services` by the CLI's `rewritePreviewPaths()`.
 
+import { buildTemplatePaths } from "@/components/templates/_shared/config/template-paths";
+
 export type SiteConfig = {
   brandLetter: string;
   brandName: string;
@@ -22,6 +24,10 @@ export type SiteConfig = {
   themeColor: string;
 };
 
+/** Canonical slug — rename here, all derived paths follow. */
+export const TEMPLATE_SLUG = "personal-brand-os";
+const paths = buildTemplatePaths(TEMPLATE_SLUG);
+
 export const DEFAULT_SITE_CONFIG: SiteConfig = {
   brandLetter: "L",
   brandName: "lorem.dev",
@@ -34,7 +40,7 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
   baseUrl: "https://lorem.dev",
   twitter: "@loremdev",
   email: "halo@lorem.dev",
-  bookCallHref: "/preview/personal-brand-os/public/services",
+  bookCallHref: `${paths.publicBase}/services`,
   defaultLocale: "id-ID",
   themeColor: "#0a0a0a",
 };

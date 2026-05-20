@@ -1,3 +1,5 @@
+import { buildTemplatePaths } from "@/components/templates/_shared/config/template-paths";
+
 export type SiteConfig = {
   brandLetter: string;
   brandName: string;
@@ -12,6 +14,10 @@ export type SiteConfig = {
   themeColor: string;
 };
 
+/** Canonical slug — rename here, all derived paths follow. */
+export const TEMPLATE_SLUG = "saas-marketing-os";
+const paths = buildTemplatePaths(TEMPLATE_SLUG);
+
 export const DEFAULT_SITE_CONFIG: SiteConfig = {
   brandLetter: "L",
   brandName: "lumen",
@@ -22,7 +28,7 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
   baseUrl: "https://lumen.dev",
   twitter: "@lumendev",
   email: "hi@lumen.dev",
-  ctaPrimary: { label: "Start free", href: "/preview/saas-marketing-os/public/pricing" },
+  ctaPrimary: { label: "Start free", href: `${paths.publicBase}/pricing` },
   defaultLocale: "en-US",
   themeColor: "#0a0a0a",
 };

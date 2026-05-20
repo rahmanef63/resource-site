@@ -1,5 +1,7 @@
 // Kreator Studio — single source of brand identity.
 
+import { buildTemplatePaths } from "@/components/templates/_shared/config/template-paths";
+
 export type SiteConfig = {
   brandLetter: string;
   brandName: string;
@@ -16,6 +18,10 @@ export type SiteConfig = {
   themeColor: string;
 };
 
+/** Canonical slug — rename here, all derived paths follow. */
+export const TEMPLATE_SLUG = "kreator-studio-os";
+const paths = buildTemplatePaths(TEMPLATE_SLUG);
+
 export const DEFAULT_SITE_CONFIG: SiteConfig = {
   brandLetter: "K",
   brandName: "Kreator Studio",
@@ -28,7 +34,7 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
   baseUrl: "https://kreator.dev",
   twitter: "@kreatorstudio",
   email: "halo@kreator.dev",
-  bookCallHref: "/preview/kreator-studio-os/public/posts",
+  bookCallHref: `${paths.publicBase}/posts`,
   defaultLocale: "id-ID",
   themeColor: "#0a0a0a",
 };
