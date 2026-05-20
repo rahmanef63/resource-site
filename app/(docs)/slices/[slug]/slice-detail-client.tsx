@@ -1,26 +1,43 @@
 "use client";
 
 import * as React from "react";
-import { ExternalLink, FileCode, Package, Terminal } from "lucide-react";
+import { ExternalLink, FileCode, Info, Package, Terminal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CodeBlock } from "@/components/site/code-block";
 import { ShowcaseCard } from "@/components/site/catalog/showcase-card";
 import { SliceCodeViewer } from "@/components/site/slice-code/code-viewer";
 import { useFeatureManifest } from "@/components/site/feature-context";
 import { buildPreviewManifest } from "@/components/site/preview";
+import { getDemoUrl } from "@/lib/content/template-subdomains";
 import type { SliceFile } from "@/lib/slice-files";
 import type { SliceEntry } from "@/lib/content/slices";
+import { DetailsTab } from "./details-tab";
+import { useRelatedGroups } from "./use-related-groups";
 
 interface Props {
   slice: SliceEntry;
   codeFiles?: SliceFile[];
   sourceHref: string;
+  installCommand: string;
 }
 
-/** Registers the same docs-shell tabbed preview manifest that
- *  `/layouts/[slug]` uses, so both routes expose Code / Public / Split
- *  / Admin in one consistent UI (AM-wave SSOT). */
-export function SliceDetailClient({ slice, codeFiles, sourceHref }: Props) {
+/** Registers the docs-shell tabbed preview manifest. Mirrors
+ *  `/layouts/[slug]` so both routes share the same chrome.
+ *
+ *  BS-fix (2026-05-20) — added a "Details" tab containing the slice
+ *  metadata (peers, npm, env, providers, agent recipe, related
+ *  slices, install command). Before this fix, those sections were
+ *  rendered as page `{children}` ABOVE the FeatureBar, which pushed
+ *  the actual preview off-screen since the docs-shell doesn't
+ *  scroll-wrap children when tabs are present. */
+export function SliceDetailClient({
+  slice,
+  codeFiles,
+  sourceHref,
+  installCommand,
+}: Props) {
+  const demoUrl = getDemoUrl(slice.slug);
+  const relatedGroups = useRelatedGroups(slice);
   const manifest = React.useMemo(() => {
     return buildPreviewManifest({
       id: `slice:${slice.slug}`,
@@ -28,6 +45,8 @@ export function SliceDetailClient({ slice, codeFiles, sourceHref }: Props) {
       subtitle: slice.description,
       publicPath: slice.previewPath,
       adminPath: slice.adminPreviewPath,
+      publicExternalUrl: demoUrl ? `${demoUrl}/` : undefined,
+      adminExternalUrl: demoUrl ? `${demoUrl}/admin` : undefined,
       defaultSurface: slice.defaultSurface,
       defaultView: slice.defaultView,
       defaultZoom: slice.defaultZoom,
@@ -43,6 +62,21 @@ export function SliceDetailClient({ slice, codeFiles, sourceHref }: Props) {
             />
           )
         : undefined,
+      extras: [
+        {
+          id: "details",
+          label: "Details",
+          icon: Info,
+          render: () => (
+            <DetailsTab
+              slice={slice}
+              relatedGroups={relatedGroups}
+              sourceHref={sourceHref}
+              installCommand={installCommand}
+            />
+          ),
+        },
+      ],
       sourceRepo: {
         owner: "rahmanef63",
         repo: "resource-site",
@@ -50,7 +84,7 @@ export function SliceDetailClient({ slice, codeFiles, sourceHref }: Props) {
         path: slice.slicePath ?? "",
       },
     });
-  }, [slice, codeFiles, sourceHref]);
+  }, [slice, codeFiles, sourceHref, relatedGroups, installCommand, demoUrl]);
 
   useFeatureManifest(manifest);
   return null;
