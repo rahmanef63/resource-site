@@ -1,17 +1,20 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { layouts } from "@/lib/content/layouts";
-import { recipes } from "@/lib/content/recipes";
+import { slices } from "@/lib/content/slices";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-export function ShowcaseGrid({ kind }: { kind: "layouts" | "recipes" }) {
-  const items = kind === "layouts" ? layouts : recipes;
-  const heading = kind === "layouts" ? "Cookbook layouts" : "Feature recipes";
+/** M5-BP — "recipes" surface retired. Homepage now showcases
+ *  Tier-3 slices ("Modules") instead. URL slug stays /slices for
+ *  back-compat with bookmarks. */
+export function ShowcaseGrid({ kind }: { kind: "layouts" | "slices" }) {
+  const items = kind === "layouts" ? layouts : slices;
+  const heading = kind === "layouts" ? "Cookbook layouts" : "Modules";
   const sub =
     kind === "layouts"
       ? "Production-grade layouts. Marketing, dashboard, and CMS shapes."
-      : "Drop-in features ported from real apps. Mount and ship.";
+      : "Tier-3 vertical slices. Auth, AI, payments, editor primitives — ported and audited.";
 
   return (
     <section className="border-b py-20">
@@ -44,7 +47,7 @@ export function ShowcaseGrid({ kind }: { kind: "layouts" | "recipes" }) {
                 </CardHeader>
                 <CardContent>
                   <div className="flex flex-wrap gap-1.5">
-                    {item.tags.slice(0, 3).map((t) => (
+                    {(item.tags ?? []).slice(0, 3).map((t) => (
                       <Badge key={t} variant="secondary" className="rounded-full text-xs">
                         {t}
                       </Badge>

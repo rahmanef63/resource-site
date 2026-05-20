@@ -11,7 +11,13 @@
 // upstream registry (`slices.ts` or `layouts.ts`) and resources.ts
 // follows automatically.
 
-import { slices, type SliceEntry } from "./slices";
+import {
+  slices,
+  type SliceEntry,
+  type ResourceType,
+  type Domain,
+  type Maturity,
+} from "./slices";
 import { layouts, type LayoutEntry } from "./layouts";
 
 /** Where this resource came from in the source-of-truth registries.
@@ -41,6 +47,12 @@ export type Resource = {
   previewPath?: string;
   /** Plain copy-paste install command. */
   install?: string;
+  /** M5-BP — public taxonomy fields. Optional. Defaults: maturity
+   *  falls back to `"stable"` when omitted; resourceType + domain
+   *  stay undefined until the upstream slice/layout is tagged. */
+  resourceType?: ResourceType;
+  domain?: Domain;
+  maturity: Maturity;
 };
 
 function sliceToResource(s: SliceEntry): Resource {
@@ -54,6 +66,9 @@ function sliceToResource(s: SliceEntry): Resource {
     href: `/slices/${s.slug}`,
     previewPath: s.previewPath,
     install: s.install ?? `npx rahman-resources add ${s.slug}`,
+    resourceType: s.resourceType,
+    domain: s.domain,
+    maturity: s.maturity ?? "stable",
   };
 }
 
@@ -69,6 +84,8 @@ function layoutToResource(l: LayoutEntry): Resource {
     href: isTemplate ? `/templates/${l.slug}` : `/layouts/${l.slug}`,
     previewPath: l.previewPath,
     install: `npx rahman-resources add ${l.slug}`,
+    // Layouts inherit "stable" until extended with maturity field.
+    maturity: "stable",
   };
 }
 

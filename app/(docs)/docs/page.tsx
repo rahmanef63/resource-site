@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { site } from "@/lib/content/site";
 import { layouts } from "@/lib/content/layouts";
-import { recipes } from "@/lib/content/recipes";
+import { slices } from "@/lib/content/slices";
 
 export const metadata = { title: "Introduction" };
 
@@ -23,8 +23,8 @@ export default function DocsIntroPage() {
             full app shells, dashboards, marketing sites you can copy and adapt.
           </li>
           <li>
-            <span className="text-foreground font-medium">{recipes.length} recipes</span> —
-            self-contained features (auth, editor, sidebar, contact form…) ported and audited.
+            <span className="text-foreground font-medium">{slices.length} modules</span> —
+            Tier-3 vertical slices (auth, editor, payments, AI router…) ported and audited.
           </li>
           <li>
             <span className="text-foreground font-medium">Install with Agent</span> — copyable
@@ -38,7 +38,7 @@ export default function DocsIntroPage() {
         {[
           { title: "Installation", href: "/installation", desc: "Clone + install + first build." },
           { title: "Layouts", href: "/layouts", desc: `${layouts.length} ready-to-copy shells.` },
-          { title: "Recipes", href: "/recipes", desc: `${recipes.length} composable features.` },
+          { title: "Modules", href: "/slices", desc: `${slices.length} vertical slices.` },
         ].map((c) => (
           <Link
             key={c.href}

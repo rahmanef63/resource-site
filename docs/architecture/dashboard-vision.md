@@ -238,17 +238,17 @@ notion-page-clone/
 - **Feature manifest coverage** 77.6% → **98.0%** (`defineFeature()`
   helper, audited via `scripts/audit-feature-manifest.mjs`).
 
-## Operasi Mise (80% done, 2026-05-20)
+## Operasi Mise (100% done, 2026-05-20)
 
-Kitchen prep before continuing development. 5 phases:
+Kitchen prep complete. All 5 phases shipped.
 
 | Phase | Wave | Goal | Risk | Status |
 |---|---|---|---|---|
 | M1 | BL | Docs SSOT + dead code cleanup | LOW | ✅ shipped 8320274 |
 | M2 | BM | Route SSOT — `buildTemplatePaths(slug)` helper, dedupe 39 hardcoded `/preview/<slug>-os/...` literals | LOW | ✅ shipped dddc490 |
 | M3 | BN | Derived `lib/content/resources.ts` registry + `/api/knowledge` exposes slices | MEDIUM | ✅ shipped f281096 |
-| M4 | BO | Manifest sync + 100% feature manifest coverage + `parseConfigBadge` extraction | MEDIUM | ✅ shipped (this wave) |
-| M5 | BP | Public taxonomy rollout — rename `Features` → `Modules`, `Recipes` → `Blocks`, add `type/runtime/domain/maturity` fields. **Needs user approval before exec.** | HIGH | ⏸ pending approval |
+| M4 | BO | Manifest sync + 100% feature manifest coverage + `parseConfigBadge` extraction | MEDIUM | ✅ shipped f79198f |
+| M5 | BQ | Public taxonomy: navbar Features → Modules, command palette/docs/agents/hero drop recipes, SliceEntry resourceType/domain/maturity (additive) | HIGH | ✅ shipped (this wave) |
 
 LandingRenderer base extraction (originally M4 target) revealed a
 shallow shared surface: each template's switch-case maps `section.kind`
@@ -258,8 +258,8 @@ flavoring. Extracted `parseConfigBadge` instead — 5 templates had
 identical 8-line inline function. Net: -40 LOC.
 
 Post-Mise resumes development:
-- BQ — sync `notion-page-clone` slice into admin-panel real impl
-- BR — `notion-page-clone-os` as `DashboardShellAdvanced` canary
+- BR — sync `notion-page-clone` slice into admin-panel real impl
+- BS — `notion-page-clone-os` as `DashboardShellAdvanced` canary
 
 ## How to resume
 

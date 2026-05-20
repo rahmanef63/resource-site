@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { InstallWithAgent } from "@/components/site/install-with-agent";
 import { buildAgentPrompt } from "@/lib/agent-prompt";
 import { layouts } from "@/lib/content/layouts";
-import { recipes } from "@/lib/content/recipes";
 import { site } from "@/lib/content/site";
 
 export const metadata = { title: "Install with Agent" };
@@ -17,7 +16,7 @@ export default function AgentsPage() {
         <p className="text-sm font-medium text-muted-foreground">Agents</p>
         <h1 className="mt-2 text-3xl font-bold tracking-tight">Install with Agent</h1>
         <p className="mt-3 text-base text-muted-foreground">
-          Hand any layout or recipe to your AI coding agent. Copy the prompt, paste it into
+          Hand any layout or module to your AI coding agent. Copy the prompt, paste it into
           Claude / Codex / Cursor — the agent reads <code className="font-mono text-xs">{site.url}/api/knowledge</code>{" "}
           and <code className="font-mono text-xs">{site.url}/llms.txt</code> to learn the rules.
         </p>
@@ -51,7 +50,7 @@ export default function AgentsPage() {
               <Link href="/api/knowledge" className="font-mono text-xs hover:text-foreground">
                 /api/knowledge
               </Link>{" "}
-              — JSON catalog of every layout + recipe + rule
+              — JSON catalog of every layout + module + resource + rule
             </li>
             <li>
               <Link href="/llms.txt" className="font-mono text-xs hover:text-foreground">
@@ -64,7 +63,7 @@ export default function AgentsPage() {
         <div className="rounded-lg border bg-card p-4">
           <h3 className="font-semibold">Source repo</h3>
           <p className="mt-1 text-sm text-muted-foreground">
-            All layouts and recipes live under one monorepo.
+            All layouts and modules live under one monorepo.
           </p>
           <Button asChild variant="outline" size="sm" className="mt-3 gap-1.5">
             <Link href={site.repo} target="_blank" rel="noopener noreferrer">
@@ -78,7 +77,7 @@ export default function AgentsPage() {
       <div className="flex items-center gap-3 rounded-lg border border-dashed bg-card/40 p-4">
         <Bot className="size-5 text-muted-foreground" />
         <p className="text-sm text-muted-foreground">
-          Recipes work standalone. Layouts assume Next 16 + React 19 + Tailwind 4 + Convex
+          Modules work standalone. Layouts assume Next 16 + React 19 + Tailwind 4 + Convex
           self-hosted + <code className="font-mono text-xs">@convex-dev/auth</code>.
         </p>
       </div>

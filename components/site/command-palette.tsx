@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { BookOpen, Layout, ChefHat, Bot, Download, Sun, Moon } from "lucide-react";
+import { BookOpen, Layout, Boxes, Bot, Download, Sun, Moon } from "lucide-react";
 import { IconBrandGithub as Github } from "@tabler/icons-react";
 import { useTheme } from "next-themes";
 import {
@@ -15,7 +15,7 @@ import {
   CommandSeparator,
 } from "@/components/ui/command";
 import { layouts } from "@/lib/content/layouts";
-import { recipes } from "@/lib/content/recipes";
+import { slices } from "@/lib/content/slices";
 import { site } from "@/lib/content/site";
 
 export function CommandPalette() {
@@ -69,8 +69,8 @@ export function CommandPalette() {
             <CommandItem onSelect={() => go("/layouts")}>
               <Layout /> Layouts
             </CommandItem>
-            <CommandItem onSelect={() => go("/recipes")}>
-              <ChefHat /> Recipes
+            <CommandItem onSelect={() => go("/slices")}>
+              <Boxes /> Modules
             </CommandItem>
             <CommandItem onSelect={() => go("/agents")}>
               <Bot /> Install with Agent
@@ -89,10 +89,11 @@ export function CommandPalette() {
             ))}
           </CommandGroup>
           <CommandSeparator />
-          <CommandGroup heading="Recipes">
-            {recipes.map((r) => (
-              <CommandItem key={r.slug} onSelect={() => go(`/recipes/${r.slug}`)}>
-                <ChefHat /> {r.title}
+          <CommandGroup heading="Modules">
+            {slices.map((s) => (
+              <CommandItem key={s.slug} onSelect={() => go(`/slices/${s.slug}`)}>
+                <Boxes /> {s.title}
+                <span className="ml-auto text-xs text-muted-foreground">{s.category}</span>
               </CommandItem>
             ))}
           </CommandGroup>

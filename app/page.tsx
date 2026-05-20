@@ -12,7 +12,7 @@ export default function HomePage() {
       <FeaturesGrid />
       <ComponentShowcase />
       <ShowcaseGrid kind="layouts" />
-      <ShowcaseGrid kind="recipes" />
+      <ShowcaseGrid kind="slices" />
       <StackStrip />
       <InstallSection />
     </>

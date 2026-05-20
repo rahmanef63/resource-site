@@ -13,12 +13,13 @@ import { ThemePresetSwitcher } from "./theme-preset-switcher";
 import { site } from "@/lib/content/site";
 import { cn } from "@/lib/utils";
 
-// Top-level nav label "Slices" → "Features" (URL stays /slices for
-// backward compat with existing inbound links + bookmarks).
+// M5-BP — public label is "Modules" (canonical taxonomy). URL stays
+// /slices for backward compat with inbound links + bookmarks; internal
+// code keeps "slice" naming (see slice.json contract).
 const NAV = [
   { label: "Docs", href: "/docs" },
   { label: "Layouts", href: "/layouts" },
-  { label: "Features", href: "/slices" },
+  { label: "Modules", href: "/slices" },
   { label: "Directory", href: "/directory" },
   { label: "Best Practice", href: "/best-practice" },
   { label: "Agents", href: "/agents" },

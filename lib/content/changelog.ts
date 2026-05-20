@@ -10,6 +10,50 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "BQ",
+    version: "BQ-wave",
+    date: Date.parse("2026-05-20"),
+    kind: "improvement",
+    title: "Operasi Mise M5 — public taxonomy rollout (Features → Modules, recipes retired) + SliceEntry resourceType/domain/maturity",
+    body:
+      "Final phase of Operasi Mise. Public-facing taxonomy rename + additive data model extension. CHANGES THAT USERS SEE: (1) Navbar 'Features' → 'Modules'. URL stays /slices for back-compat with inbound links + bookmarks; internal code keeps 'slice' naming (slice.json contract unchanged). (2) Command palette: 'Recipes' group removed (recipes.ts has been an empty deprecated stub since 2026-05-12), replaced with 'Modules' group sourcing from slices[]. Pages quick-action 'Recipes' → 'Modules'. (3) Homepage ShowcaseGrid kind='recipes' (which silently rendered 0 cards) → kind='slices'. Heading 'Feature recipes' → 'Modules'. (4) Hero subtitle: '{layouts} layouts, {recipes} recipes' → '{layouts} layouts, {slices} modules'. (5) Docs intro page: dropped recipe count line + Recipes card; replaced with Modules card pointing at /slices. (6) Agents page: 'recipe' → 'module'/'resource' in 4 spots. ADDITIVE DATA MODEL: SliceEntry gains optional resourceType ('primitive'|'component'|'block'|'module'), domain ('auth'|'rbac'|'cms'|'crm'|'commerce'|'payments'|'ai'|'data'|'search'|'messaging'|'admin'|'infra'), maturity ('draft'|'beta'|'stable'). None populated yet — backfill is a separate wave so site filter chips + builder UI can opt in incrementally. Resource type in resources.ts surfaces these (maturity defaults to 'stable' when omitted). recipes.ts retained as silent dead stub (10 import sites still reference it; coordinated removal is post-Mise). Mise complete: M1-M5 shipped, ready to resume development with BR (notion-page-clone sync to admin-panel real impl).",
+    groups: [
+      {
+        heading: "Public label renames",
+        bullets: [
+          "Navbar Features → Modules (top-navbar.tsx)",
+          "Command palette: Recipes group removed; Modules group added (sources from slices[])",
+          "Homepage ShowcaseGrid kind: recipes → slices",
+          "Hero subtitle: recipes count → slices count",
+          "Docs intro: Recipes card → Modules card",
+          "Agents page: 'recipe' → 'module' (4 mentions)",
+        ],
+      },
+      {
+        heading: "Data model extension (additive, optional)",
+        bullets: [
+          "SliceEntry.resourceType?: 'primitive'|'component'|'block'|'module'",
+          "SliceEntry.domain?: 'auth'|'rbac'|'cms'|'crm'|'commerce'|'payments'|'ai'|'data'|'search'|'messaging'|'admin'|'infra'",
+          "SliceEntry.maturity?: 'draft'|'beta'|'stable' (defaults to 'stable' when omitted)",
+          "Resource type in resources.ts surfaces all three; layout entries inherit maturity='stable'",
+        ],
+      },
+      {
+        heading: "Bug fix (side effect)",
+        bullets: [
+          "Homepage ShowcaseGrid kind='recipes' was rendering 0 cards (empty stub) — replaced with kind='slices' (44 cards live)",
+        ],
+      },
+      {
+        heading: "Operasi Mise complete (M1-M5)",
+        bullets: [
+          "M1 BL docs SSOT · M2 BM route SSOT · M3 BN resources registry · M4 BO manifest+helpers · M5 BQ taxonomy",
+          "Resume development next: BR — sync notion-page-clone slice into admin-panel real impl",
+        ],
+      },
+    ],
+  },
+  {
     id: "BP",
     version: "BP-wave",
     date: Date.parse("2026-05-20"),

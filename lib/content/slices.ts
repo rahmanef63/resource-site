@@ -35,6 +35,28 @@ export type SliceEnvVar = {
  */
 export type SliceKind = "ui" | "backend" | "full";
 
+/**
+ * M5-BP — public taxonomy fields. All optional + additive (no
+ * breaking change). Surfaces of consumption decide which to use:
+ *
+ *   resourceType — visual shape of the unit (primitive vs block vs
+ *                  module). Site filter chips read this to group
+ *                  /slices into "UI Primitives", "Blocks", "Modules".
+ *   domain      — business domain the slice belongs to. Replaces the
+ *                 less-specific `category` for ops-flavored grouping
+ *                 (auth/cms/crm/payments/admin/…).
+ *   maturity    — readiness signal for the builder UI. Hides
+ *                 "draft" from default catalog; flags "beta" in cards.
+ *
+ * Backfilling existing slices is a separate wave — only tag entries
+ * that are clearly classified to start.
+ */
+export type ResourceType = "primitive" | "component" | "block" | "module";
+export type Domain =
+  | "auth" | "rbac" | "cms" | "crm" | "commerce" | "payments"
+  | "ai" | "data" | "search" | "messaging" | "admin" | "infra";
+export type Maturity = "draft" | "beta" | "stable";
+
 /** Compat status per (template × slice) or (slice × slice) pairing. */
 export type CompatStatus = "native" | "recommended" | "warn" | "incompatible";
 export type SliceCompatEntry = { status: CompatStatus; note?: string };
@@ -99,6 +121,14 @@ export type SliceEntry = {
   /** Compatibility: per-template status + slice peer/conflict declarations.
    *  Was hand-curated in lib/build/compat.ts pre-Phase-4. */
   compat?: SliceCompat;
+  /** M5-BP — visual shape (primitive/component/block/module). Drives
+   *  /slices filter chips. Optional; omit means "uncategorized yet". */
+  resourceType?: ResourceType;
+  /** M5-BP — business domain (auth/cms/crm/…). More specific than
+   *  `category`. Optional; omit means "no domain mapping yet". */
+  domain?: Domain;
+  /** M5-BP — readiness signal. Omit = `"stable"` default. */
+  maturity?: Maturity;
 };
 
 export const slices: SliceEntry[] = [
