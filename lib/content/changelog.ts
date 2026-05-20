@@ -10,6 +10,50 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "BS",
+    version: "BS-wave",
+    date: Date.parse("2026-05-20"),
+    kind: "feature",
+    title: "notion-like tag + theme-presets slice + lift-status audit (open-silong sync round 1)",
+    body:
+      "Round 1 of pushing every nosion (open-silong) slice into rr. Outcome: 6 slices truly synced + tagged (1 NEW + 5 pre-existing), 31 slices identified as blocked-pending-adapter due to convex coupling, missing shared primitives (responsive-dialog / responsive-alert-dialog), or lucide-react version drift (rr ^1.16 vs nosion ^0.462). Tag `notion-like` added to all open-silong-derived catalog entries so consumers can filter by source upstream. Lift status audit lives upstream in docs/rr-sync/lift-status.md.",
+    groups: [
+      {
+        heading: "NEW slice",
+        bullets: [
+          { text: "theme-presets — tweakcn theme preset loader + 30+ color schemes (no backend, pure React + Tailwind v4 + next-themes; storage key `nosion:theme-preset` preserved verbatim for back-compat)", slug: "theme-presets", kind: "slice" },
+        ],
+      },
+      {
+        heading: "`notion-like` tag added (5 entries)",
+        bullets: [
+          { text: "command-menu — renderless ⌘K", slug: "command-menu", kind: "slice" },
+          { text: "icon-picker — emoji + lucide picker", slug: "icon-picker", kind: "slice" },
+          { text: "notion-blocks — 4-primitive bundle", slug: "notion-blocks", kind: "slice" },
+          { text: "notion-shell — 18-component wrapper set", slug: "notion-shell", kind: "slice" },
+          { text: "theme-presets — NEW (above)", slug: "theme-presets", kind: "slice" },
+        ],
+      },
+      {
+        heading: "Blocked-pending-adapter (31 slices, registry tracked at rr-sync.json upstream)",
+        bullets: [
+          "Convex coupling (admin-panel:18, editor:10, feedback:3, comments:3, ai-agent/cover/files/inbox/templates/workspace-io:2 each, plus 6 with 1 convex import) — need adapter pattern + storage-adapter interface to lift",
+          "Missing shared primitives — responsive-dialog, responsive-alert-dialog need lift first OR slice must adopt @/components/ui/dialog wrapper",
+          "lucide-react version drift — rr ^1.16 (missing Github icon used by shared/icon-picker copy); resolve via bump or icon swap",
+          "Nosion-named source files (comments/adapters/nosionStandalone.ts, command-palette/adapters/NosionCommandPalette.tsx) — scrub script renames CONTENT but not file BASENAMES; need post-scrub rename step",
+        ],
+      },
+      {
+        heading: "How to query (consumers)",
+        bullets: [
+          "rr catalog UI filter by tag `notion-like` shows everything open-silong-derived",
+          "node scripts/rr-sync-status.mjs (upstream) shows file-level drift for the 6 truly-synced",
+          "docs/rr-sync/lift-status.md (upstream) lists every slice + status + blocker reason",
+        ],
+      },
+    ],
+  },
+  {
     id: "BR",
     version: "BR-wave",
     date: Date.parse("2026-05-20"),
