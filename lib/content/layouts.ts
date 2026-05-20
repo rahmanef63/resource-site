@@ -504,12 +504,12 @@ export default function Layout({ children }) {
   },
   {
     slug: "notion-page-clone-os",
-    title: "Notion Page Clone OS",
+    title: "Notion Page Clone OS — localStorage demo (pointer to open-silong for production)",
     category: "website-template",
     status: "stable",
     description:
-      "Full Notion-clone website template: tree-structured sidebar + page editor + embedded databases. Built from rr's notion-shell wrappers (NotionSidebar / NotionPage / NotionBlock / NotionDatabase) + notion-blocks primitives (equation / code / notify / drag-fill grid). localStorage-persisted via createTemplateStore — no convex, no auth, no server. Drop-in starter for anyone building a Notion-like writing surface, doc site, or block editor.",
-    source: "synthesized + notion-shell wrappers + notion-blocks bundle",
+      "localStorage-only DEMO of a Notion-clone surface — tree-structured sidebar + page editor + embedded databases. Built from rr's notion-shell wrappers (NotionSidebar / NotionPage / NotionBlock / NotionDatabase) + notion-blocks primitives (equation / code / notify / drag-fill grid) + createTemplateStore (localStorage + BroadcastChannel). No Convex, no auth, no multi-user — drop-in starter for evaluating the UI or embedding a Notion-style editor in your own project. **For the production-grade Convex-backed product (multi-workspace + auth + sharing + comments + snapshots + MCP), use the open-source open-silong repo: https://github.com/rahmanef63/open-silong (silong.rahmanef.com).** This rr template is the DEMO; the github repo is the PRODUCT.",
+    source: "synthesized + notion-shell wrappers + notion-blocks bundle; production stack at github.com/rahmanef63/open-silong",
     repoPath: "app/preview/notion-page-clone-os",
     primaryFile: "app/preview/notion-page-clone-os/public/page.tsx",
     tags: ["template", "notion", "notes", "blocks", "katex", "code", "editor", "indonesia"],

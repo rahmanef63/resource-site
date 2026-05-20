@@ -10,6 +10,39 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "BP",
+    version: "BP-wave",
+    date: Date.parse("2026-05-20"),
+    kind: "chore",
+    title: "Pivot pointer — notion-page-clone-os DEMO + notion-shell SLICE link to open-silong OSS product",
+    body:
+      "Strategic positioning update. The upstream Notion-clone source (this rr's notion-shell + notion-page-clone-os) has been rebranded + open-sourced as github.com/rahmanef63/open-silong (silong.rahmanef.com, MIT). rr keeps both surfaces as DEMO + SLICE distribution; for production users (multi-workspace + auth + sharing + Convex), the rr catalog now points to the open-silong repo as the canonical product. Two-surface model documented in the upstream repo's docs/rr-sync/2026-05-20-pivot-nosion-source-of-truth.md. No code changes in rr — only catalog copy (description + agentRecipe) updates to call out the pointer.",
+    groups: [
+      {
+        heading: "Catalog copy updates",
+        bullets: [
+          { text: "notion-page-clone-os layouts entry — title clarifies 'localStorage demo'; description calls out github.com/rahmanef63/open-silong as the production stack pointer; source field updated", slug: "notion-page-clone-os", kind: "template" },
+          { text: "notion-shell slices entry — agentRecipe adds product-pointer block clarifying that rr's slice is the EMBED surface and open-silong repo is the FULL PRODUCT surface", slug: "notion-shell", kind: "slice" },
+        ],
+      },
+      {
+        heading: "Why",
+        bullets: [
+          "rr monorepo (40+ slices) too broad for outside OSS contributors — focused single-product repo lowers barrier",
+          "Real users want Convex-backed product (auth + multi-user + sharing); rr template is localStorage demo only",
+          "Two-surface model: rr = template marketplace + lifted slice; open-silong = production OSS Notion clone",
+        ],
+      },
+      {
+        heading: "Sync direction unchanged",
+        bullets: [
+          "open-silong → rr (lift-only via scripts/rr-sync/ in open-silong repo)",
+          "rr never modifies the lifted source; fixes originate in open-silong + re-sync",
+        ],
+      },
+    ],
+  },
+  {
     id: "BO",
     version: "BO-wave",
     date: Date.parse("2026-05-20"),
