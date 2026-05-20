@@ -1,0 +1,138 @@
+"use client";
+
+import * as React from "react";
+import {
+  AlertTriangle,
+  CheckCircle2,
+  Download,
+  Filter,
+  Search,
+  Shield,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ACTION_META, SEED_EVENTS } from "./seed";
+import { EventRow, SeverityCard } from "./event-row";
+import type { AuditAction, AuditSeverity } from "./types";
+
+/** Real admin-panel "Audit log" block — second BS-pattern impl
+ *  (after users). Pure client demo: filter chips + search + table.
+ *  No persistence. Backed by frontend/slices/audit-log/ types in real
+ *  ejected impl (see eject-spec.md + AuditLogBindings contract). */
+export function AuditLogBlockView() {
+  const [actionFilter, setActionFilter] = React.useState<AuditAction | "all">("all");
+  const [severityFilter, setSeverityFilter] = React.useState<AuditSeverity | "all">("all");
+  const [query, setQuery] = React.useState("");
+
+  const filtered = React.useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return SEED_EVENTS.filter((e) => {
+      if (actionFilter !== "all" && e.action !== actionFilter) return false;
+      if (severityFilter !== "all" && e.severity !== severityFilter) return false;
+      if (q) {
+        const blob = `${e.actor.name} ${e.entityLabel} ${e.entityType} ${e.diffSummary ?? ""}`.toLowerCase();
+        if (!blob.includes(q)) return false;
+      }
+      return true;
+    });
+  }, [actionFilter, severityFilter, query]);
+
+  const alertCount = SEED_EVENTS.filter((e) => e.severity === "alert").length;
+  const warnCount = SEED_EVENTS.filter((e) => e.severity === "warn").length;
+  const infoCount = SEED_EVENTS.length - alertCount - warnCount;
+
+  const actionOptions: Array<AuditAction | "all"> = [
+    "all", "create", "update", "delete", "publish", "invite", "revoke",
+  ];
+
+  return (
+    <div className="space-y-6 p-6">
+      <header className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="text-xl font-semibold tracking-tight">Audit log</h1>
+          <p className="mt-1 text-xs text-muted-foreground">
+            {SEED_EVENTS.length} events · {alertCount} alerts · {warnCount} warnings · {infoCount} info
+          </p>
+        </div>
+        <Button variant="outline" size="sm" className="gap-1.5">
+          <Download className="size-3.5" />
+          Export CSV
+        </Button>
+      </header>
+
+      <section className="grid gap-3 md:grid-cols-3">
+        <SeverityCard tone="info" label="Info" count={infoCount} icon={CheckCircle2} />
+        <SeverityCard tone="warn" label="Warnings" count={warnCount} icon={Shield} />
+        <SeverityCard tone="alert" label="Alerts" count={alertCount} icon={AlertTriangle} />
+      </section>
+
+      <section className="rounded-lg border bg-card">
+        <div className="flex flex-wrap items-center gap-2 border-b px-4 py-3">
+          <div className="relative flex-1 min-w-[200px]">
+            <Search className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search actor, entity, diff…"
+              className="h-8 pl-8 text-xs"
+            />
+          </div>
+          <div className="flex items-center gap-1">
+            <Filter className="size-3 text-muted-foreground" />
+            <span className="text-[10px] uppercase text-muted-foreground">Action</span>
+          </div>
+          <div className="flex flex-wrap gap-1">
+            {actionOptions.map((a) => (
+              <Button
+                key={a}
+                type="button"
+                size="sm"
+                variant={actionFilter === a ? "secondary" : "ghost"}
+                onClick={() => setActionFilter(a)}
+                className="h-6 rounded-full border border-border/50 px-2 text-[10px] capitalize"
+              >
+                {a === "all" ? "All" : ACTION_META[a].label}
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 border-b px-4 py-2">
+          <span className="text-[10px] uppercase text-muted-foreground">Severity</span>
+          {(["all", "info", "warn", "alert"] as const).map((s) => (
+            <Button
+              key={s}
+              type="button"
+              size="sm"
+              variant={severityFilter === s ? "secondary" : "ghost"}
+              onClick={() => setSeverityFilter(s)}
+              className="h-6 rounded-full border border-border/50 px-2 text-[10px] capitalize"
+            >
+              {s}
+            </Button>
+          ))}
+          <span className="ml-auto text-[10px] tabular-nums text-muted-foreground">
+            {filtered.length} / {SEED_EVENTS.length}
+          </span>
+        </div>
+
+        <div className="divide-y">
+          {filtered.length === 0 ? (
+            <div className="px-4 py-10 text-center text-xs text-muted-foreground">
+              No events match the current filter.
+            </div>
+          ) : (
+            filtered.map((e) => <EventRow key={e.id} event={e} />)
+          )}
+        </div>
+      </section>
+
+      <p className="text-[10px] text-muted-foreground">
+        Demo data — resets on browser reload. Real implementation backed by{" "}
+        <code className="rounded bg-muted px-1 py-0.5 text-[10px]">audit-log</code> slice with Convex
+        bindings (per <code className="rounded bg-muted px-1 py-0.5 text-[10px]">AuditLogBindings</code>{" "}
+        contract).
+      </p>
+    </div>
+  );
+}

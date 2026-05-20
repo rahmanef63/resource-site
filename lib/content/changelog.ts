@@ -10,6 +10,41 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "BT",
+    version: "BT-wave",
+    date: Date.parse("2026-05-20"),
+    kind: "feature",
+    title: "admin-panel/audit-log real impl — second BS-pattern block (after Users)",
+    body:
+      "Second admin-panel block graduates from generic AdminFeatureCard stub to real interactive view. AuditLogBlockView ships with 14 seed events covering all 10 actions (create/update/delete/publish/unpublish/invite/revoke/login/logout/export) across 8 entity types (page/user/role/webhook/setting/post/workflow/session) at 3 severities (info/warn/alert). Interactive filters: text search across actor + entity + diff, action chip filter (8 chips), severity chip filter (4 chips), live count badge. Each event row shows actor avatar + name, action badge with tone, entity type → entity label, optional diff summary (e.g. `permissions: +manage:workflows`), relative timestamp, IP, entity id. Pattern identical to BS Users canary: _shared/admin-panel/blocks/audit-log/{types.ts, seed.ts, AuditLogBlockView.tsx, event-row.tsx} + a single dispatch case in AdminFeatureStubPage. Single edit → all 8 templates' /admin/admin-panel/audit-log routes serve the real UI. Backed by frontend/slices/audit-log/ contract (AuditLogBindings → real Convex impl post-eject, see eject-spec.md). NEXT BLOCKS (4 remaining, one wave each): ai-config / analytics / webhooks / settings.",
+    groups: [
+      {
+        heading: "NEW files",
+        bullets: [
+          "_shared/admin-panel/blocks/audit-log/types.ts — AuditAction (10) + AuditEntityType (8) + AuditSeverity (3) + AuditEventRow shape mirroring slice's AuditEvent",
+          "_shared/admin-panel/blocks/audit-log/seed.ts — ACTION_META + SEVERITY_META tone tables + 14 demo events",
+          "_shared/admin-panel/blocks/audit-log/AuditLogBlockView.tsx — header stats + 3 severity cards + filter bar + filtered list",
+          "_shared/admin-panel/blocks/audit-log/event-row.tsx — EventRow + SeverityCard + formatRelative helpers (extracted to keep view ≤200 LOC)",
+        ],
+      },
+      {
+        heading: "Dispatcher update",
+        bullets: [
+          "AdminFeatureStubPage: added `if (segment === \"audit-log\") return <AuditLogBlockView />;` case",
+          { text: "Users block remains live from BS-wave (unchanged)", slug: "rbac-roles", kind: "slice" },
+          { text: "Real-impl pattern backed by audit-log slice contract", slug: "audit-log", kind: "slice" },
+        ],
+      },
+      {
+        heading: "Coverage",
+        bullets: [
+          "2 of 6 admin-panel blocks now real (users, audit-log). 4 still placeholder (ai-config, analytics, webhooks, settings).",
+          "All 8 templates' audit-log routes auto-updated via shared dispatcher. Zero per-template touchpoints.",
+        ],
+      },
+    ],
+  },
+  {
     id: "BS",
     version: "BS-wave",
     date: Date.parse("2026-05-20"),
