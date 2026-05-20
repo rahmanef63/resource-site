@@ -50,8 +50,9 @@ export function CrudListView<T>({
   controller: CrudController<T>;
   columns: ColumnDef<T>[];
   /** Used for deep-link rows (e.g. share a URL). Dialog handles inline
-   *  editing without navigation. */
-  editPath: (id: string) => string;
+   *  editing without navigation — when `fields` is provided this is
+   *  unused. Optional since BI-wave (PageSectionsEditor uses dialog-only). */
+  editPath?: (id: string) => string;
   /** Field schema for the inline dialog. Pass to enable row-click
    *  editing; omit to fall back to legacy navigate-on-click. */
   fields?: FieldDef<T>[];
@@ -67,7 +68,7 @@ export function CrudListView<T>({
     if (fields) {
       setOpenId(id);
     } else if (typeof window !== "undefined") {
-      window.location.href = editPath(id);
+      window.location.href = editPath?.(id) ?? "#";
     }
   }
 
@@ -78,7 +79,7 @@ export function CrudListView<T>({
     if (fields) {
       setOpenId(id);
     } else if (typeof window !== "undefined") {
-      window.location.href = editPath(id);
+      window.location.href = editPath?.(id) ?? "#";
     }
   }
 

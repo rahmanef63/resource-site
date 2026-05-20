@@ -27,21 +27,20 @@ function reducer(state: State, action: Action): State {
       return { ...SEED_STATE, ...action.state };
     case "reset":
       return SEED_STATE;
-
     case "PAGE_CREATE":
     case "PAGE_UPDATE":
     case "PAGE_DELETE":
-    case "PAGE_REORDER_BLOCK": {
+    case "PAGE_REORDER_BLOCK":
+    case "PAGE_SECTION_UPSERT":
+    case "PAGE_SECTION_DELETE": {
       const next = pagesReducer({ pages: state.pages }, action);
       return { ...state, pages: next.pages };
     }
-
     case "LANDING_UPSERT":
     case "LANDING_DELETE": {
       const next = landingReducer({ landingSections: state.landingSections }, action);
       return { ...state, landingSections: next.landingSections };
     }
-
     case "client.upsert": {
       const idx = state.clients.findIndex((c) => c.id === action.client.id);
       const clients =
@@ -52,7 +51,6 @@ function reducer(state: State, action: Action): State {
     }
     case "client.delete":
       return { ...state, clients: state.clients.filter((c) => c.id !== action.id) };
-
     case "proposal.upsert": {
       const idx = state.proposals.findIndex((p) => p.id === action.proposal.id);
       const proposals =
@@ -63,7 +61,6 @@ function reducer(state: State, action: Action): State {
     }
     case "proposal.delete":
       return { ...state, proposals: state.proposals.filter((p) => p.id !== action.id) };
-
     case "contract.upsert": {
       const idx = state.contracts.findIndex((c) => c.id === action.contract.id);
       const contracts =
@@ -74,7 +71,6 @@ function reducer(state: State, action: Action): State {
     }
     case "contract.delete":
       return { ...state, contracts: state.contracts.filter((c) => c.id !== action.id) };
-
     case "project.upsert": {
       const idx = state.projects.findIndex((p) => p.id === action.project.id);
       const projects =
@@ -85,7 +81,6 @@ function reducer(state: State, action: Action): State {
     }
     case "project.delete":
       return { ...state, projects: state.projects.filter((p) => p.id !== action.id) };
-
     case "invoice.upsert": {
       const idx = state.invoices.findIndex((i) => i.id === action.invoice.id);
       const invoices =
@@ -96,7 +91,6 @@ function reducer(state: State, action: Action): State {
     }
     case "invoice.delete":
       return { ...state, invoices: state.invoices.filter((i) => i.id !== action.id) };
-
     case "document.upsert": {
       const idx = state.documents.findIndex((d) => d.id === action.doc.id);
       const documents =
@@ -130,6 +124,8 @@ function PagesAdapter({ children }: { children: React.ReactNode }) {
       remove: (id: string) => dispatch({ type: "PAGE_DELETE", payload: { id } }),
       reorderBlock: (id, from, to) =>
         dispatch({ type: "PAGE_REORDER_BLOCK", payload: { id, from, to } }),
+      upsertSection: (pageId, section) => dispatch({ type: "PAGE_SECTION_UPSERT", payload: { pageId, section } }),
+      removeSection: (pageId, sectionId) => dispatch({ type: "PAGE_SECTION_DELETE", payload: { pageId, sectionId } }),
     }),
     [state.pages, dispatch],
   );

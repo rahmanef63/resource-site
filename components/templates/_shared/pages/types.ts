@@ -84,7 +84,11 @@ export type PagesAction =
   | { type: "PAGE_CREATE"; payload: PageEntry }
   | { type: "PAGE_UPDATE"; payload: { id: string; patch: Partial<Omit<PageEntry, "id" | "createdAt">> } }
   | { type: "PAGE_DELETE"; payload: { id: string } }
-  | { type: "PAGE_REORDER_BLOCK"; payload: { id: string; from: number; to: number } };
+  | { type: "PAGE_REORDER_BLOCK"; payload: { id: string; from: number; to: number } }
+  // BI-wave — section CRUD inside a page. Same LandingSection schema
+  // used by the landing slice — landing-as-page unification.
+  | { type: "PAGE_SECTION_UPSERT"; payload: { pageId: string; section: import("../landing/types").LandingSection } }
+  | { type: "PAGE_SECTION_DELETE"; payload: { pageId: string; sectionId: string } };
 
 /** Default empty block for the +Add block dropdown. */
 export function emptyBlock(kind: PageBlockKind): PageBlock {

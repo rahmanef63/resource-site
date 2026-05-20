@@ -36,6 +36,8 @@ function PagesAdapter({ children }: { children: React.ReactNode }) {
       remove: (id: string) => dispatch({ type: "PAGE_DELETE", payload: { id } }),
       reorderBlock: (id, from, to) =>
         dispatch({ type: "PAGE_REORDER_BLOCK", payload: { id, from, to } }),
+      upsertSection: (pageId, section) => dispatch({ type: "PAGE_SECTION_UPSERT", payload: { pageId, section } }),
+      removeSection: (pageId, sectionId) => dispatch({ type: "PAGE_SECTION_DELETE", payload: { pageId, sectionId } }),
     }),
     [state.pages, dispatch],
   );

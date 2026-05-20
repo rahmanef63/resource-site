@@ -19,7 +19,9 @@ export function reducer(state: State, action: Action): State {
     case "PAGE_CREATE":
     case "PAGE_UPDATE":
     case "PAGE_DELETE":
-    case "PAGE_REORDER_BLOCK": {
+    case "PAGE_REORDER_BLOCK":
+    case "PAGE_SECTION_UPSERT":
+    case "PAGE_SECTION_DELETE": {
       const next = pagesReducer({ pages: state.pages }, action);
       return { ...state, pages: next.pages };
     }

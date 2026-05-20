@@ -30,7 +30,9 @@ function reducer(state: State, action: Action): State {
     case "PAGE_CREATE":
     case "PAGE_UPDATE":
     case "PAGE_DELETE":
-    case "PAGE_REORDER_BLOCK": {
+    case "PAGE_REORDER_BLOCK":
+    case "PAGE_SECTION_UPSERT":
+    case "PAGE_SECTION_DELETE": {
       const next = pagesReducer({ pages: state.pages }, action);
       return { ...state, pages: next.pages };
     }
@@ -45,7 +47,6 @@ function reducer(state: State, action: Action): State {
       };
     case "POST_DELETE":
       return { ...state, posts: state.posts.filter((p) => p.id !== action.payload.id) };
-
     case "CUSTOMER_UPSERT": {
       const idx = state.customers.findIndex((c) => c.id === action.payload.id);
       const customers =
@@ -56,7 +57,6 @@ function reducer(state: State, action: Action): State {
     }
     case "CUSTOMER_DELETE":
       return { ...state, customers: state.customers.filter((c) => c.id !== action.payload.id) };
-
     case "SUBSCRIPTION_UPSERT": {
       const idx = state.subscriptions.findIndex((s) => s.id === action.payload.id);
       const subscriptions =
@@ -70,7 +70,6 @@ function reducer(state: State, action: Action): State {
         ...state,
         subscriptions: state.subscriptions.filter((s) => s.id !== action.payload.id),
       };
-
     case "LEAD_UPSERT": {
       const idx = state.leads.findIndex((l) => l.id === action.payload.id);
       const leads =
@@ -81,7 +80,6 @@ function reducer(state: State, action: Action): State {
     }
     case "LEAD_DELETE":
       return { ...state, leads: state.leads.filter((l) => l.id !== action.payload.id) };
-
     case "CHANGELOG_UPSERT": {
       const idx = state.changelog.findIndex((e) => e.id === action.payload.id);
       const changelog =
@@ -94,7 +92,6 @@ function reducer(state: State, action: Action): State {
       const changelog = state.changelog.filter((e) => e.id !== action.payload.id);
       return { ...state, changelog, changelogEntries: changelog };
     }
-
     case "PRICING_UPSERT": {
       const idx = state.pricing.findIndex((t) => t.id === action.payload.id);
       const pricing =
@@ -105,7 +102,6 @@ function reducer(state: State, action: Action): State {
     }
     case "PRICING_DELETE":
       return { ...state, pricing: state.pricing.filter((t) => t.id !== action.payload.id) };
-
     case "FEATURE_UPSERT": {
       const idx = state.features.findIndex((f) => f.id === action.payload.id);
       const features =
@@ -116,7 +112,6 @@ function reducer(state: State, action: Action): State {
     }
     case "FEATURE_DELETE":
       return { ...state, features: state.features.filter((f) => f.id !== action.payload.id) };
-
     case "LANDING_UPSERT":
     case "LANDING_DELETE": {
       const next = landingReducer({ landingSections: state.landingSections }, action);
@@ -146,6 +141,8 @@ function PagesAdapter({ children }: { children: React.ReactNode }) {
       remove: (id: string) => dispatch({ type: "PAGE_DELETE", payload: { id } }),
       reorderBlock: (id, from, to) =>
         dispatch({ type: "PAGE_REORDER_BLOCK", payload: { id, from, to } }),
+      upsertSection: (pageId, section) => dispatch({ type: "PAGE_SECTION_UPSERT", payload: { pageId, section } }),
+      removeSection: (pageId, sectionId) => dispatch({ type: "PAGE_SECTION_DELETE", payload: { pageId, sectionId } }),
     }),
     [state.pages, dispatch],
   );

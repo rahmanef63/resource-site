@@ -16,9 +16,18 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { PageEditorBlocks } from "./PageEditorBlocks";
+import { PageSectionsEditor } from "./PageSectionsEditor";
+import { Field, PageNotFound, SystemPageNotice } from "./page-editor-helpers";
 import { usePage, usePagesStore } from "./pages-context";
 import { emptyBlock, type PageBlock, type PageBlockKind, type PageEntry } from "./types";
 
+/**
+ * BI-wave — page editor now uses the unified `PageSectionsEditor`
+ * (same LandingSection schema + row+dialog UX as the landing surface).
+ * Legacy `PageEditorBlocks` is still rendered for pages whose store
+ * data uses the old `blocks[]` PageBlock primitive — gives existing
+ * seeds a non-breaking path.
+ */
 export function PageEditorView({
   id,
   publicBase,
@@ -29,7 +38,7 @@ export function PageEditorView({
   adminBase: string;
 }) {
   const page = usePage(id);
-  const { update, reorderBlock } = usePagesStore();
+  const { update, reorderBlock, upsertSection, removeSection } = usePagesStore();
   const [draft, setDraft] = React.useState<PageEntry | null>(page);
   const [addKind, setAddKind] = React.useState<PageBlockKind>("hero");
 
@@ -37,11 +46,13 @@ export function PageEditorView({
     setDraft(page);
   }, [page]);
 
-  if (!page) return <NotFound adminBase={adminBase} />;
+  if (!page) return <PageNotFound adminBase={adminBase} />;
   if (page.systemPage) return <SystemPageNotice adminBase={adminBase} />;
   if (!draft) return null;
 
   const dirty = JSON.stringify(draft) !== JSON.stringify(page);
+  // Section-based when sections explicitly defined OR legacy blocks empty.
+  const useSections = draft.sections != null || (draft.blocks?.length ?? 0) === 0;
 
   function patchDraft(patch: Partial<PageEntry>) {
     setDraft((d) => (d ? { ...d, ...patch } : d));
@@ -54,7 +65,7 @@ export function PageEditorView({
   const addBlock = () =>
     setDraft((d) => (d ? { ...d, blocks: [...d.blocks, emptyBlock(addKind)] } : d));
 
-  function save() {
+  function saveMeta() {
     if (!draft) return;
     update(draft.id, {
       slug: draft.slug,
@@ -80,7 +91,7 @@ export function PageEditorView({
               <ExternalLink className="size-3.5" /> View public
             </Link>
           </Button>
-          <Button size="sm" className="gap-1.5" disabled={!dirty} onClick={save}>
+          <Button size="sm" className="gap-1.5" disabled={!dirty} onClick={saveMeta}>
             <Save className="size-3.5" /> Save{dirty ? " (unsaved)" : ""}
           </Button>
         </div>
@@ -124,7 +135,12 @@ export function PageEditorView({
               </SelectContent>
             </Select>
           </Field>
-          <div className="flex items-end">
+          <div className="flex items-end gap-2">
+            {draft.isLanding && (
+              <Badge variant="default" className="bg-emerald-500/20 text-emerald-300">
+                landing
+              </Badge>
+            )}
             {draft.duplicatedFrom && (
               <Badge variant="outline" className="text-[10px]">
                 duplicated from {draft.duplicatedFrom.slice(0, 12)}…
@@ -134,59 +150,33 @@ export function PageEditorView({
         </div>
       </div>
 
-      <PageEditorBlocks
-        blocks={draft.blocks}
-        addKind={addKind}
-        setAddKind={setAddKind}
-        onAdd={addBlock}
-        onPatch={patchBlock}
-        onRemove={removeBlock}
-        onMoveUp={(i) => reorderBlock(draft.id, i, i - 1)}
-        onMoveDown={(i) => reorderBlock(draft.id, i, i + 1)}
-      />
+      {useSections ? (
+        <PageSectionsEditor
+          sections={page.sections ?? []}
+          onCreate={(section) =>
+            upsertSection?.(page.id, section)
+          }
+          onUpdate={(sid, patch) => {
+            const current = (page.sections ?? []).find((s) => s.id === sid);
+            if (!current) return;
+            upsertSection?.(page.id, { ...current, ...patch, id: sid });
+          }}
+          onRemove={(sid) => removeSection?.(page.id, sid)}
+          publicHref={`${publicBase}/${draft.slug}`}
+        />
+      ) : (
+        <PageEditorBlocks
+          blocks={draft.blocks}
+          addKind={addKind}
+          setAddKind={setAddKind}
+          onAdd={addBlock}
+          onPatch={patchBlock}
+          onRemove={removeBlock}
+          onMoveUp={(i) => reorderBlock(draft.id, i, i - 1)}
+          onMoveDown={(i) => reorderBlock(draft.id, i, i + 1)}
+        />
+      )}
     </div>
   );
 }
 
-function Field({ label, mono, children }: { label: string; mono?: boolean; children: React.ReactNode }) {
-  return (
-    <div className="space-y-1.5">
-      <Label className={mono ? "text-[10px] font-mono uppercase" : "text-xs"}>{label}</Label>
-      {children}
-    </div>
-  );
-}
-
-function NotFound({ adminBase }: { adminBase: string }) {
-  return (
-    <div className="space-y-3">
-      <Link
-        href={`${adminBase}/pages`}
-        className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="size-3" /> Pages
-      </Link>
-      <p className="text-sm text-muted-foreground">Page not found.</p>
-    </div>
-  );
-}
-
-function SystemPageNotice({ adminBase }: { adminBase: string }) {
-  return (
-    <div className="space-y-3">
-      <Link
-        href={`${adminBase}/pages`}
-        className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="size-3" /> Pages
-      </Link>
-      <div className="rounded-lg border border-amber-500/40 bg-amber-500/5 p-4 text-sm">
-        <p className="font-medium">System page — read-only.</p>
-        <p className="mt-1 text-xs text-muted-foreground">
-          This page is rendered from JSX in the template source. To customize, duplicate
-          it from the Pages list and edit the copy.
-        </p>
-      </div>
-    </div>
-  );
-}

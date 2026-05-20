@@ -27,21 +27,20 @@ function reducer(state: State, action: Action): State {
       return { ...SEED_STATE, ...action.state };
     case "reset":
       return SEED_STATE;
-
     case "PAGE_CREATE":
     case "PAGE_UPDATE":
     case "PAGE_DELETE":
-    case "PAGE_REORDER_BLOCK": {
+    case "PAGE_REORDER_BLOCK":
+    case "PAGE_SECTION_UPSERT":
+    case "PAGE_SECTION_DELETE": {
       const next = pagesReducer({ pages: state.pages }, action);
       return { ...state, pages: next.pages };
     }
-
     case "LANDING_UPSERT":
     case "LANDING_DELETE": {
       const next = landingReducer({ landingSections: state.landingSections }, action);
       return { ...state, landingSections: next.landingSections };
     }
-
     case "content.upsert": {
       const idx = state.contents.findIndex((c) => c.id === action.item.id);
       const contents =
@@ -52,7 +51,6 @@ function reducer(state: State, action: Action): State {
     }
     case "content.delete":
       return { ...state, contents: state.contents.filter((c) => c.id !== action.id) };
-
     case "voice.upsert": {
       const idx = state.voices.findIndex((v) => v.id === action.voice.id);
       const voices =
@@ -61,7 +59,6 @@ function reducer(state: State, action: Action): State {
     }
     case "voice.delete":
       return { ...state, voices: state.voices.filter((v) => v.id !== action.id) };
-
     case "script.upsert": {
       const idx = state.scripts.findIndex((s) => s.id === action.script.id);
       const scripts =
@@ -72,7 +69,6 @@ function reducer(state: State, action: Action): State {
     }
     case "script.delete":
       return { ...state, scripts: state.scripts.filter((s) => s.id !== action.id) };
-
     case "carousel.upsert": {
       const idx = state.carousels.findIndex((c) => c.id === action.carousel.id);
       const carousels =
@@ -83,7 +79,6 @@ function reducer(state: State, action: Action): State {
     }
     case "carousel.delete":
       return { ...state, carousels: state.carousels.filter((c) => c.id !== action.id) };
-
     case "asset.upsert": {
       const idx = state.assets.findIndex((a) => a.id === action.asset.id);
       const assets =
@@ -92,7 +87,6 @@ function reducer(state: State, action: Action): State {
     }
     case "asset.delete":
       return { ...state, assets: state.assets.filter((a) => a.id !== action.id) };
-
     case "newsletter.upsert": {
       const idx = state.newsletters.findIndex((n) => n.id === action.issue.id);
       const newsletters =
@@ -103,7 +97,6 @@ function reducer(state: State, action: Action): State {
     }
     case "newsletter.delete":
       return { ...state, newsletters: state.newsletters.filter((n) => n.id !== action.id) };
-
     case "performance.upsert": {
       const idx = state.performance.findIndex((p) => p.id === action.metric.id);
       const performance =
@@ -114,7 +107,6 @@ function reducer(state: State, action: Action): State {
     }
     case "performance.delete":
       return { ...state, performance: state.performance.filter((p) => p.id !== action.id) };
-
     case "comment.upsert": {
       const idx = state.commentDrafts.findIndex((c) => c.id === action.draft.id);
       const commentDrafts =
@@ -148,6 +140,8 @@ function PagesAdapter({ children }: { children: React.ReactNode }) {
       remove: (id: string) => dispatch({ type: "PAGE_DELETE", payload: { id } }),
       reorderBlock: (id, from, to) =>
         dispatch({ type: "PAGE_REORDER_BLOCK", payload: { id, from, to } }),
+      upsertSection: (pageId, section) => dispatch({ type: "PAGE_SECTION_UPSERT", payload: { pageId, section } }),
+      removeSection: (pageId, sectionId) => dispatch({ type: "PAGE_SECTION_DELETE", payload: { pageId, sectionId } }),
     }),
     [state.pages, dispatch],
   );
