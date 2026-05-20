@@ -11,7 +11,7 @@
  *  reveals a "⋯" button that opens BlockActionsMenu (turn-into /
  *  duplicate / delete) when handlers are provided. */
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { MoreHorizontal } from "lucide-react";
 import { cn } from "rahman-shared/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -31,6 +31,10 @@ export interface NotionBlockProps {
   onRemove?: () => void;
   onTurnInto?: (type: BlockType) => void;
   onDuplicate?: () => void;
+  /** Optional drag-handle slot (typically a grip icon wired to
+   *  SortableBlockList's `dragProps`). Renders next to the "⋯" button
+   *  on hover. */
+  dragHandle?: ReactNode;
   readOnly?: boolean;
   className?: string;
 }
@@ -39,6 +43,7 @@ export function NotionBlock({
   block, pageId,
   blockRenderers, placeholders,
   onUpdate, onRemove, onTurnInto, onDuplicate,
+  dragHandle,
   readOnly, className,
 }: NotionBlockProps) {
   const Renderer = blockRenderers?.[block.type];
@@ -69,6 +74,7 @@ export function NotionBlock({
             onTurnInto={onTurnInto}
             onDuplicate={onDuplicate}
             onRemove={onRemove}
+            dragHandle={dragHandle}
           />
         )}
       </div>
@@ -131,6 +137,7 @@ export function NotionBlock({
           onTurnInto={onTurnInto}
           onDuplicate={onDuplicate}
           onRemove={onRemove}
+          dragHandle={dragHandle}
         />
       )}
     </div>
@@ -138,15 +145,17 @@ export function NotionBlock({
 }
 
 function ActionsHandle({
-  currentType, onTurnInto, onDuplicate, onRemove,
+  currentType, onTurnInto, onDuplicate, onRemove, dragHandle,
 }: {
   currentType: BlockType;
   onTurnInto: (t: BlockType) => void;
   onDuplicate?: () => void;
   onRemove?: () => void;
+  dragHandle?: ReactNode;
 }) {
   return (
-    <div className="absolute -left-7 top-1 opacity-0 transition group-hover/block:opacity-100">
+    <div className="absolute -left-12 top-1 flex items-center gap-0.5 opacity-0 transition group-hover/block:opacity-100">
+      {dragHandle}
       <BlockActionsMenu
         currentType={currentType}
         onTurnInto={onTurnInto}

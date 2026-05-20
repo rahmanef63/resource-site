@@ -9,7 +9,7 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "notion-shell",
-  version: "0.3.0",
+  version: "0.4.0",
   category: "ui",
   kind: "ui",
   provides: {
@@ -19,6 +19,8 @@ export const contract = defineSliceContract({
       "SlashMenu", "BlockActionsMenu", "InsertBlockButton",
       "ViewTabs", "ViewOptions", "ColumnHeaderMenu",
       "TableView", "BoardView", "ListView", "GalleryView", "CalendarView", "FeedView",
+      "SortableBlockList", "PageActionsMenu",
+      "ImageRenderer", "EmbedRenderer",
     ],
     utils: [
       "TOP_LEVEL_PLACEHOLDERS",
@@ -37,6 +39,8 @@ export const contract = defineSliceContract({
       "SlashMenuProps", "BlockActionsMenuProps", "InsertBlockButtonProps",
       "ViewTabsProps", "ViewOptionsProps", "ColumnHeaderMenuProps",
       "ViewRegistry", "ViewProps",
+      "SortableBlockListProps", "SortableBlockDragProps",
+      "PageActionsMenuProps",
       "BlockSpec", "Token",
       "Block", "BlockType", "BlockRenderers", "BlockRendererProps",
       "Page", "Property", "PropertyValue", "PropertyType", "SelectOption", "NumberFormat",
@@ -44,7 +48,7 @@ export const contract = defineSliceContract({
     ],
   },
   requires: {
-    npm: [],
+    npm: ["@dnd-kit/core", "@dnd-kit/sortable", "@dnd-kit/utilities"],
     shadcn: ["button", "input", "checkbox", "dropdown-menu", "popover"],
     env: [],
     peers: [],

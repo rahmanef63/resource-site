@@ -64,6 +64,8 @@ export type Action =
   | { type: "doc.block.remove"; docId: string; blockId: string }
   | { type: "doc.block.duplicate"; docId: string; blockId: string }
   | { type: "doc.block.turnInto"; docId: string; blockId: string; blockType: NotionBlock["type"] }
+  | { type: "doc.block.reorder"; docId: string; from: number; to: number }
+  | { type: "doc.duplicate"; id: string }
   /** Database schema + view config. */
   | { type: "db.create"; db: NotionDatabase }
   | { type: "db.update"; id: string; patch: Partial<NotionDatabase> }

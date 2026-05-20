@@ -10,6 +10,66 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "BJ",
+    version: "BJ-wave",
+    date: Date.parse("2026-05-20"),
+    kind: "feature",
+    title: "notion-shell polish — DnD-kit drag handle, cover image, image/embed renderers, page actions menu",
+    body:
+      "Final wave on the notion-shell Notion-clone surface. (1) SortableBlockList — @dnd-kit/core + sortable + utilities render-prop wrapper for block reorder. Pointer + keyboard sensors; emits (fromIndex, toIndex) via onReorder. (2) NotionBlock gains optional dragHandle slot — caller mounts a grip button wired to SortableBlockList's dragProps; renders next to the hover \"⋯\" actions handle. (3) NotionPage gains optional cover prop — 200px image band above header; X button on hover triggers onCoverRemove. (4) ImageRenderer + EmbedRenderer specialised block renderers — Image: URL + caption + preview, click to edit. Embed: URL detection for YouTube/Vimeo/Loom/Figma/CodePen/Spotify with provider-specific rewrites + sandboxed iframe fallback. (5) PageActionsMenu — header dropdown for page-level actions: add cover, favorite toggle, duplicate, export, move to trash. (6) Template wired — DocView wraps blocks in SortableBlockList + passes a GripVertical drag handle button per block; NotionPage receives doc.cover + actions=<PageActionsMenu>; block-renderers maps image/embed to the new shell renderers; types.ts gains doc.block.reorder + doc.duplicate actions; notion-reducer.ts handles them. (7) Inline slash-key trigger (`/` in block → menu opens at caret) intentionally deferred — current ergonomics ride on InsertBlockButton + hover \"⋯\" menu which already cover the new-block + turn-into flows. Bumps notion-shell to v0.4.0. npm deps added: @dnd-kit/core, @dnd-kit/sortable, @dnd-kit/utilities.",
+    groups: [
+      {
+        heading: "notion-shell (NEW components)",
+        bullets: [
+          { text: "components/SortableBlockList.tsx — @dnd-kit render-prop wrapper for block reorder", slug: "notion-shell", kind: "slice" },
+          { text: "components/PageActionsMenu.tsx — header dropdown (add cover / favorite / duplicate / export / trash)", slug: "notion-shell", kind: "slice" },
+          { text: "components/blocks/ImageRenderer.tsx — URL + caption + preview, click to edit", slug: "notion-shell", kind: "slice" },
+          { text: "components/blocks/EmbedRenderer.tsx — YouTube/Vimeo/Loom/Figma/CodePen/Spotify auto-detect + iframe fallback", slug: "notion-shell", kind: "slice" },
+        ],
+      },
+      {
+        heading: "notion-shell (extended)",
+        bullets: [
+          { text: "components/NotionPage.tsx — optional `cover` prop (200px image band w/ hover X button via onCoverRemove)", slug: "notion-shell", kind: "slice" },
+          { text: "components/NotionBlock.tsx — optional `dragHandle` slot prop, mounts next to actions handle", slug: "notion-shell", kind: "slice" },
+          { text: "types.ts — Page gains optional `cover` field", slug: "notion-shell", kind: "slice" },
+          { text: "index.ts + slice.contract + slice.json + slice.manifest — bump v0.4.0; export 4 new components + 3 new types; @dnd-kit npm deps declared", slug: "notion-shell", kind: "slice" },
+        ],
+      },
+      {
+        heading: "Template touched — notion-page-clone-os",
+        bullets: [
+          { text: "slices/notion-app/DocView.tsx — SortableBlockList + per-block GripVertical drag handle; PageActionsMenu in header; cover prompt + remove", slug: "notion-page-clone-os", kind: "template" },
+          { text: "slices/notion-app/block-renderers.tsx — image + embed renderers mapped to ImageRenderer + EmbedRenderer", slug: "notion-page-clone-os", kind: "template" },
+          { text: "shared/types.ts — Action gains doc.block.reorder + doc.duplicate variants", slug: "notion-page-clone-os", kind: "template" },
+          { text: "shared/notion-reducer.ts — reorder splice + duplicate (clone w/ fresh ids)", slug: "notion-page-clone-os", kind: "template" },
+        ],
+      },
+      {
+        heading: "npm deps",
+        bullets: [
+          "@dnd-kit/core, @dnd-kit/sortable, @dnd-kit/utilities — sortable block list, pointer + keyboard sensors",
+        ],
+      },
+      {
+        heading: "Catalog",
+        bullets: [
+          "lib/content/slices.ts — notion-shell v0.4.0 description + tags (drag/cover/embed)",
+          "lib/content/layouts.ts — notion-page-clone-os deps + shadcnComponents already cover dnd-kit usage",
+        ],
+      },
+      {
+        heading: "Notion-clone parity status (post-BJ)",
+        bullets: [
+          "Page editor: slash menu ✓ · actions menu (turn-into/duplicate/delete) ✓ · inline-markdown decorator ✓ · drag-handle reorder ✓ · cover image ✓ · page actions ✓",
+          "Database: 6 views (Table/Board/List/Gallery/Calendar/Feed) ✓ · sort/filter/search ✓ · column header menu ✓ · 10 property cells ✓",
+          "Block renderers: equation ✓ · code ✓ · divider ✓ · toggle ✓ · callout ✓ · image ✓ · embed ✓",
+          "Deferred (next): inline `/` slash-key trigger in caret-position popover, drag-fill selection grid, comments/mentions/snapshots (covered by separate slices in nosion — lift if needed)",
+        ],
+      },
+    ],
+  },
+  {
     id: "BI",
     version: "BI-wave",
     date: Date.parse("2026-05-20"),

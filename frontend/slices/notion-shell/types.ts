@@ -58,6 +58,8 @@ export interface Page {
   parentId: string | null;
   title: string;
   icon: string;
+  /** Optional cover image URL. Rendered by NotionPage when set. */
+  cover?: string;
   blocks: Block[];
   favorite: boolean;
   trashed: boolean;

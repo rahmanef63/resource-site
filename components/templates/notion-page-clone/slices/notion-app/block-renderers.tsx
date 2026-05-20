@@ -12,6 +12,7 @@ import { ChevronRight, Lightbulb } from "lucide-react";
 import { cn } from "rahman-shared/lib/utils";
 import { Button } from "@/components/ui/button";
 import { EquationBlock, CodeBlock } from "@/features/notion-blocks";
+import { ImageRenderer, EmbedRenderer } from "@/features/notion-shell";
 import type { BlockRenderers, BlockRendererProps } from "@/features/notion-shell";
 
 function EquationRenderer({ block, onUpdate }: BlockRendererProps) {
@@ -96,4 +97,6 @@ export const NOTION_BLOCK_RENDERERS: BlockRenderers = {
   divider: DividerRenderer as ComponentType<BlockRendererProps>,
   toggle: ToggleRenderer as ComponentType<BlockRendererProps>,
   callout: CalloutRenderer as ComponentType<BlockRendererProps>,
+  image: ImageRenderer as ComponentType<BlockRendererProps>,
+  embed: EmbedRenderer as ComponentType<BlockRendererProps>,
 };

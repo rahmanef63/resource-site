@@ -36,6 +36,14 @@ export {
   TableView, BoardView, ListView, GalleryView, CalendarView, FeedView,
   type ViewRegistry, type ViewProps,
 } from "./components/views";
+export {
+  SortableBlockList,
+  type SortableBlockListProps,
+  type SortableBlockDragProps,
+} from "./components/SortableBlockList";
+export { PageActionsMenu, type PageActionsMenuProps } from "./components/PageActionsMenu";
+export { ImageRenderer } from "./components/blocks/ImageRenderer";
+export { EmbedRenderer } from "./components/blocks/EmbedRenderer";
 export { TOP_LEVEL_PLACEHOLDERS } from "./components/placeholders";
 
 export { BLOCK_SPECS, specFor, type BlockSpec } from "./lib/blockSpecs";

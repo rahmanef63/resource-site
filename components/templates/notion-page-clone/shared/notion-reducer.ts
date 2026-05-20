@@ -74,6 +74,31 @@ export function notionReducer(state: State, action: Action): State {
             : { ...d, blocks: d.blocks.map((b) => (b.id === action.blockId ? { ...b, type: action.blockType } : b)), updatedAt: Date.now() },
         ),
       };
+    case "doc.block.reorder":
+      return {
+        ...state,
+        docs: state.docs.map((d) => {
+          if (d.id !== action.docId) return d;
+          const next = [...d.blocks];
+          const [item] = next.splice(action.from, 1);
+          if (!item) return d;
+          next.splice(action.to, 0, item);
+          return { ...d, blocks: next, updatedAt: Date.now() };
+        }),
+      };
+    case "doc.duplicate": {
+      const src = state.docs.find((d) => d.id === action.id);
+      if (!src) return state;
+      const dup = {
+        ...src,
+        id: genId("doc"),
+        title: `${src.title} (copy)`,
+        blocks: src.blocks.map((b) => ({ ...b, id: genId("b") })),
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      };
+      return { ...state, docs: [...state.docs, dup] };
+    }
 
     default:
       if (action.type.startsWith("db.")) {

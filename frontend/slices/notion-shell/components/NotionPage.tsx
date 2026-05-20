@@ -1,15 +1,16 @@
 "use client";
 
-/** <NotionPage /> — top-level page shell. Header + body slot. Drop in
- *  any React surface, pass data + change handlers, plug your own block
- *  list into `children`. Cover support is intentionally omitted in
- *  this rr lift — host renders its own cover above NotionPage when
- *  needed.
+/** <NotionPage /> — top-level page shell. Optional cover image band on
+ *  top, then header (icon + title + actions slot), then body slot.
+ *  Drop in any React surface, pass data + change handlers, plug your
+ *  own block list into `children`.
  */
 
 import type { ReactNode } from "react";
-import { NotionHeader, type NotionHeaderProps } from "./NotionHeader";
+import { X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { cn } from "rahman-shared/lib/utils";
+import { NotionHeader, type NotionHeaderProps } from "./NotionHeader";
 
 export interface NotionPageProps {
   icon: string;
@@ -22,6 +23,10 @@ export interface NotionPageProps {
   renderIconPicker?: NotionHeaderProps["renderIconPicker"];
   /** Right-side header actions slot (share / more / history). */
   actions?: NotionHeaderProps["actions"];
+  /** Optional cover image URL. When set, renders a 200px image band
+   *  above the header. `onCoverRemove` adds an X button on hover. */
+  cover?: string;
+  onCoverRemove?: () => void;
   /** Page body — your blocks list, database embed, etc. */
   children?: ReactNode;
   className?: string;
@@ -33,10 +38,32 @@ export function NotionPage({
   icon, title,
   onIconChange, onTitleChange,
   renderIcon, renderIconPicker,
-  actions, children, className, headerless,
+  actions, cover, onCoverRemove,
+  children, className, headerless,
 }: NotionPageProps) {
   return (
     <div className={cn("flex h-full flex-col overflow-hidden", className)}>
+      {cover && (
+        <div className="group/cover relative h-48 w-full shrink-0 overflow-hidden bg-muted">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={cover}
+            alt=""
+            className="h-full w-full object-cover"
+          />
+          {onCoverRemove && (
+            <Button
+              variant="secondary"
+              size="icon"
+              aria-label="Remove cover"
+              onClick={onCoverRemove}
+              className="absolute right-3 top-3 h-7 w-7 opacity-0 transition group-hover/cover:opacity-100"
+            >
+              <X className="h-3.5 w-3.5" />
+            </Button>
+          )}
+        </div>
+      )}
       {!headerless && (
         <NotionHeader
           icon={icon}

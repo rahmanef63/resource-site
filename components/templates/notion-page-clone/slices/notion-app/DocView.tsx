@@ -1,11 +1,14 @@
 "use client";
 
 import * as React from "react";
+import { GripVertical } from "lucide-react";
 import {
   NotionPage, NotionBlock, InsertBlockButton,
-  type Block, type BlockType,
+  SortableBlockList, PageActionsMenu,
+  type Block, type BlockType, type SortableBlockDragProps,
 } from "@/features/notion-shell";
 import { DynamicIcon, IconPickerPopover } from "@/features/icon-picker";
+import { Button } from "@/components/ui/button";
 import { useDocs, useStore } from "../../shared/store";
 import { NOTION_BLOCK_RENDERERS } from "./block-renderers";
 
@@ -27,10 +30,26 @@ function renderIconPicker({
   );
 }
 
+function DragHandle({ drag }: { drag: SortableBlockDragProps }) {
+  return (
+    <Button
+      ref={drag.setActivatorNodeRef}
+      variant="ghost"
+      size="icon"
+      className="h-6 w-6 cursor-grab text-muted-foreground active:cursor-grabbing"
+      aria-label="Drag block"
+      {...drag.attributes}
+      {...drag.listeners}
+    >
+      <GripVertical className="h-3.5 w-3.5" />
+    </Button>
+  );
+}
+
 /** Renders one notion-clone doc selected by id. Bound to template store —
  *  block edits dispatch doc.* actions; the +Block bar opens SlashMenu
- *  popover. Hover on any block reveals "⋯" → turn-into / duplicate /
- *  delete. For richer slash-key trigger / drag-handle UX, see BJ-wave. */
+ *  popover. Hover on any block reveals "⋯" + drag-handle.
+ *  PageActionsMenu in the header dispatches doc-level actions. */
 export function DocView({ docId }: { docId: string }) {
   const docs = useDocs();
   const { dispatch } = useStore();
@@ -57,6 +76,9 @@ export function DocView({ docId }: { docId: string }) {
     dispatch({ type: "doc.block.append", docId: doc.id, block });
   };
 
+  const blockIds = doc.blocks.map((b) => b.id);
+  const blockById = new Map(doc.blocks.map((b) => [b.id, b] as const));
+
   return (
     <NotionPage
       icon={doc.icon}
@@ -65,19 +87,42 @@ export function DocView({ docId }: { docId: string }) {
       onTitleChange={(title) => dispatch({ type: "doc.update", id: doc.id, patch: { title } })}
       renderIcon={renderIcon}
       renderIconPicker={renderIconPicker}
+      cover={doc.cover}
+      onCoverRemove={() => dispatch({ type: "doc.update", id: doc.id, patch: { cover: undefined } })}
+      actions={
+        <PageActionsMenu
+          favorite={doc.favorite}
+          onAddCover={() => {
+            const url = window.prompt("Cover image URL");
+            if (url) dispatch({ type: "doc.update", id: doc.id, patch: { cover: url } });
+          }}
+          onToggleFavorite={() => dispatch({ type: "doc.update", id: doc.id, patch: { favorite: !doc.favorite } })}
+          onDuplicate={() => dispatch({ type: "doc.duplicate", id: doc.id })}
+          onTrash={() => dispatch({ type: "doc.update", id: doc.id, patch: { trashed: true } })}
+        />
+      }
     >
       <div className="pl-8">
-        {doc.blocks.map((b) => (
-          <NotionBlock
-            key={b.id}
-            block={b}
-            blockRenderers={NOTION_BLOCK_RENDERERS}
-            onUpdate={(patch) => handleBlockUpdate(b.id, patch)}
-            onRemove={() => handleBlockRemove(b.id)}
-            onDuplicate={() => handleBlockDuplicate(b.id)}
-            onTurnInto={(type) => handleBlockTurnInto(b.id, type)}
-          />
-        ))}
+        <SortableBlockList
+          items={blockIds}
+          onReorder={(from, to) => dispatch({ type: "doc.block.reorder", docId: doc.id, from, to })}
+        >
+          {(id, drag) => {
+            const b = blockById.get(id);
+            if (!b) return null;
+            return (
+              <NotionBlock
+                block={b}
+                blockRenderers={NOTION_BLOCK_RENDERERS}
+                onUpdate={(patch) => handleBlockUpdate(b.id, patch)}
+                onRemove={() => handleBlockRemove(b.id)}
+                onDuplicate={() => handleBlockDuplicate(b.id)}
+                onTurnInto={(type) => handleBlockTurnInto(b.id, type)}
+                dragHandle={<DragHandle drag={drag} />}
+              />
+            );
+          }}
+        </SortableBlockList>
       </div>
       <div className="mt-3 flex items-center gap-2 border-t border-dashed border-border/60 pt-3 pl-8">
         <InsertBlockButton onInsert={handleAppend} label="Add block" />
