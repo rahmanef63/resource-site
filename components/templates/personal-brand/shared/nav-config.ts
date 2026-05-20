@@ -26,6 +26,7 @@ import {
 import type { AdminNavItem, FooterColumn, NavItem, User } from "@/components/templates/_shared/types/common";
 import type { State } from "./types";
 import { DEFAULT_SITE_CONFIG } from "./site-config";
+import { buildCustomPageNavItems } from "@/components/templates/_shared/pages/nav-builder";
 
 export const PUBLIC_BASE = "/preview/personal-brand-os/public";
 export const DASHBOARD_BASE = "/preview/personal-brand-os/dashboard";
@@ -100,6 +101,8 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
         { id: "pages-portfolio", label: "Portfolio",    href: `${ADMIN_BASE}/portfolio`, icon: Briefcase,      count: state.portfolio.length || null },
         { id: "pages-services",  label: "Services",     href: `${ADMIN_BASE}/services`,  icon: Sparkles,       count: state.services.length || null },
         { id: "pages-resources", label: "Resources",    href: `${ADMIN_BASE}/resources`, icon: BookOpen,       count: state.resources.length || null },
+        // BF-wave — dynamic custom pages (every admin-created page shows here).
+        ...buildCustomPageNavItems(state.pages, `${ADMIN_BASE}/pages`),
       ],
     },
     { id: "leads",     label: "Leads",     href: `${ADMIN_BASE}/leads`,       icon: Inbox,           count: newLeads || null },

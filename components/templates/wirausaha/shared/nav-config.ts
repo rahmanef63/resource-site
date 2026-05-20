@@ -14,6 +14,7 @@ import {
 import type { AdminNavItem, FooterColumn, NavItem, User } from "@/components/templates/_shared/types/common";
 import type { State } from "./types";
 import { DEFAULT_SITE_CONFIG } from "./site-config";
+import { buildCustomPageNavItems } from "@/components/templates/_shared/pages/nav-builder";
 
 export const PUBLIC_BASE = "/preview/wirausaha-os/public";
 export const DASHBOARD_BASE = "/preview/wirausaha-os/dashboard";
@@ -69,6 +70,8 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
       children: [
         { id: "pages-all",     label: "All pages",    href: `${ADMIN_BASE}/pages`,   icon: Newspaper,      count: customPages || null },
         { id: "pages-landing", label: "Landing page", href: `${ADMIN_BASE}/landing`, icon: LayoutTemplate, count: enabledLanding || null },
+        // BF-wave — dynamic custom pages (every admin-created page shows here).
+        ...buildCustomPageNavItems(state.pages, `${ADMIN_BASE}/pages`),
       ],
     },
     { id: "businesses", label: "Businesses", href: `${ADMIN_BASE}/businesses`,   icon: Building2,       count: state.businesses.length },

@@ -20,6 +20,7 @@ import type {
 } from "@/components/templates/_shared/types/common";
 import { DEFAULT_SITE_CONFIG } from "./site-config";
 import type { State } from "./types";
+import { buildCustomPageNavItems } from "@/components/templates/_shared/pages/nav-builder";
 
 export const PUBLIC_BASE = "/preview/saas-marketing-os/public";
 export const DASHBOARD_BASE = "/preview/saas-marketing-os/dashboard";
@@ -95,6 +96,10 @@ export function buildAdminNav(state: State): AdminNavGroup[] {
         { id: "pages-pricing",   label: "Pricing",      href: `${ADMIN_BASE}/pricing`,   icon: DollarSign,     count: state.pricing.length || null },
         { id: "pages-features",  label: "Features",     href: `${ADMIN_BASE}/features`,  icon: Sparkles,       count: state.features.length || null },
         { id: "pages-changelog", label: "Changelog",    href: `${ADMIN_BASE}/changelog`, icon: Megaphone,      count: state.changelogEntries.length || null },
+        // BF-wave — dynamic custom pages. Every page created via admin
+        // appears here automatically (alphabetic). Drafts + published
+        // both shown so authors find their work-in-progress.
+        ...buildCustomPageNavItems(state.pages, `${ADMIN_BASE}/pages`),
       ],
     },
     {

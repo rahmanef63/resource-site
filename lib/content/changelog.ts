@@ -10,6 +10,53 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "BF",
+    version: "BF-wave",
+    date: Date.parse("2026-05-20"),
+    kind: "feature",
+    title: "Dynamic Pages sidebar — every admin-created page becomes a menu item live",
+    body:
+      "Sidebar now reflects the Pages CRUD store directly. Operator hits 'New page' in /admin/pages, fills the form, saves — the new page appears as a Pages-group sub-item in the sidebar immediately. No manual nav wiring. Implementation: pure helper `buildCustomPageNavItems(pages, baseHref, opts)` derives AdminNavItem[] from state.pages (skips systemPages, sorts alphabetic by default, supports updated/created sort + draft filter). All 8 templates wire it — saas-marketing-os spreads it into the grouped Pages bucket; the 7 flat-nav templates spread it into the Pages parent's children[]. Re-render is free because shell-client already subscribes to useStore(). Sets up BF-B / BF-C (landing-as-page + public nav CRUD) by proving the data-driven nav pattern works.",
+    groups: [
+      {
+        heading: "Templates touched (all 8 — Pages group now data-driven)",
+        bullets: [
+          { text: "saas-marketing-os — custom pages appended to Pages group (grouped nav)", slug: "saas-marketing-os", kind: "template" },
+          { text: "personal-brand-os — custom pages appended to Pages parent children", slug: "personal-brand-os", kind: "template" },
+          { text: "agency-studio-os — custom pages appended to Pages parent children", slug: "agency-studio-os", kind: "template" },
+          { text: "konsultan-os — custom pages appended to Pages parent children", slug: "konsultan-os", kind: "template" },
+          { text: "kreator-studio-os — custom pages appended to Pages parent children", slug: "kreator-studio-os", kind: "template" },
+          { text: "riset-kit — custom pages appended to Pages parent children", slug: "riset-kit", kind: "template" },
+          { text: "wirausaha-os — custom pages appended to Pages parent children", slug: "wirausaha-os", kind: "template" },
+          { text: "notion-page-clone-os — custom pages appended to Pages parent children", slug: "notion-page-clone-os", kind: "template" },
+        ],
+      },
+      {
+        heading: "Chassis",
+        bullets: [
+          "_shared/pages/nav-builder.ts NEW — buildCustomPageNavItems(pages, baseHref, opts) helper. Filters systemPages, sorts alphabetic / updated / created, supports published-only filter, default lucide FileText icon",
+        ],
+      },
+      {
+        heading: "Per-template wiring (8 nav-config.ts files)",
+        bullets: [
+          "Each nav-config imports buildCustomPageNavItems",
+          "Pages group / Pages-parent children spreads the helper's output after the static items",
+        ],
+      },
+      {
+        heading: "Up next (BF-B onwards)",
+        bullets: [
+          "BF-B — Landing-as-page migration: drop state.landingSections[] in favor of the landing-flagged Page.sections[]",
+          "BF-C — Public nav CRUD: admin can add / rename / reorder PUBLIC_NAV items + bind each to any page (including custom)",
+          "BF-D — Propagate BE's grouped Pages/Features nav to the 7 flat-nav templates (audit-by-template — konsultan-os Projects + Contact belong under Pages)",
+          "BF-E — Build Advanced primitives (workspace-switcher / secondary-sidebar / dashboard-shell-advanced) + wire notion-page-clone-os canary",
+          "BF-F — Extract landing-sections as installable headless CMS slice",
+        ],
+      },
+    ],
+  },
+  {
     id: "BE",
     version: "BE-wave",
     date: Date.parse("2026-05-20"),

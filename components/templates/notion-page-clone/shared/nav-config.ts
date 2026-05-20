@@ -13,6 +13,7 @@ import type {
 } from "@/components/templates/_shared/types/common";
 import { DEFAULT_SITE_CONFIG } from "./site-config";
 import type { State } from "./types";
+import { buildCustomPageNavItems } from "@/components/templates/_shared/pages/nav-builder";
 
 export const PUBLIC_BASE = "/preview/notion-page-clone-os/public";
 export const DASHBOARD_BASE = "/preview/notion-page-clone-os/dashboard";
@@ -74,6 +75,8 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
         { id: "pages-landing",  label: "Landing page", href: `${ADMIN_BASE}/landing`,  icon: LayoutTemplate, count: enabledLanding || null },
         { id: "pages-snippets", label: "Snippets",     href: `${ADMIN_BASE}/snippets`, icon: Sparkles,       count: publishedSnippets || null },
         { id: "pages-all",      label: "All pages",    href: `${ADMIN_BASE}/pages`,    icon: Newspaper,      count: customPages || null },
+        // BF-wave — dynamic custom pages (every admin-created page shows here).
+        ...buildCustomPageNavItems(state.pages, `${ADMIN_BASE}/pages`),
       ],
     },
   ];
