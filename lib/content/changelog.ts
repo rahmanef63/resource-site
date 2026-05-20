@@ -10,6 +10,66 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "BD",
+    version: "BD-wave",
+    date: Date.parse("2026-05-20"),
+    kind: "improvement",
+    title: "Two-archetype dashboard direction — revert switcher; simple is the default",
+    body:
+      "Corrective wave after BB / BC. BB-wave's DashboardSwitcher dropdown was the wrong primitive (shadcn TeamSwitcher applied to section toggle); BC-wave bolted multi-tenant workspaces onto personal-brand-os which doesn't need them. New direction: two opt-in archetypes. **Simple** (default) — single sidebar, BrandHeader, admin nav with collapsible sub-menus. **Advanced** (opt-in) — three-column layout with workspace switcher in the primary header and a secondary sidebar for active-section sub-nav. Simple is what 7 of 8 templates need; advanced is reserved for notion-page-clone-os and any future template with multi-tenant context + many non-CMS surfaces. The advanced primitives (WorkspaceSwitcher, SecondarySidebar, DashboardShellAdvanced) ship in BE-wave when notion-page-clone-os is wired as the canary.",
+    groups: [
+      {
+        heading: "Templates reverted to Simple archetype",
+        bullets: [
+          { text: "saas-marketing-os — DashboardSwitcher removed, workspace route deleted", slug: "saas-marketing-os", kind: "template" },
+          { text: "personal-brand-os — workspace surface fully reverted (state + reducer + views + seed); storageKey pbos:state:v6 → v7-simple", slug: "personal-brand-os", kind: "template" },
+          { text: "agency-studio-os — DashboardSwitcher removed, workspace route deleted", slug: "agency-studio-os", kind: "template" },
+          { text: "konsultan-os — DashboardSwitcher removed, workspace route deleted", slug: "konsultan-os", kind: "template" },
+          { text: "kreator-studio-os — DashboardSwitcher removed, workspace route deleted", slug: "kreator-studio-os", kind: "template" },
+          { text: "riset-kit — DashboardSwitcher removed, workspace route deleted", slug: "riset-kit", kind: "template" },
+          { text: "wirausaha-os — DashboardSwitcher removed, workspace route deleted", slug: "wirausaha-os", kind: "template" },
+          { text: "notion-page-clone-os — DashboardSwitcher removed; flagged as the BE-wave canary for the Advanced archetype", slug: "notion-page-clone-os", kind: "template" },
+        ],
+      },
+      {
+        heading: "Removed (dead chassis)",
+        bullets: [
+          "_shared/ui/dashboard-switcher.tsx — wrong primitive (TeamSwitcher pattern for section toggle)",
+          "_shared/ui/workspace-placeholder.tsx — Simple templates don't have a workspace surface",
+          "_shared/dashboard/sections.ts — buildDashboardSections + activeSectionFromPathname helpers",
+          "_shared/types/common.ts → DashboardSection type",
+          "_shared/ui/dashboard-shell.tsx — dashboardSections + activeSectionId props",
+          "_shared/ui/admin-sidebar.tsx — DashboardSwitcher conditional in SidebarHeader",
+          "personal-brand/shared/{workspace-types.ts,workspace-reducer.ts} + slices/workspace/*",
+          "Per-template DASHBOARD_SECTIONS export + workspace route directories (8 templates)",
+        ],
+      },
+      {
+        heading: "Kept",
+        bullets: [
+          "Per-template DASHBOARD_BASE / ADMIN_PANEL_BASE / WORKSPACE_BASE constants — zero cost and needed by the Advanced archetype",
+          "AZ-wave URL shift (/admin → /dashboard/admin) and permanent redirect",
+          "Simple shell + admin-sidebar + admin-nav-items (the canonical archetype)",
+        ],
+      },
+      {
+        heading: "Docs",
+        bullets: [
+          "docs/architecture/dashboard-vision.md REWRITTEN — two-archetype model, decision matrix per template, BE-wave plan, source map for primitive lifts from superspace + notion-page-clone",
+        ],
+      },
+      {
+        heading: "Up next (BE-wave)",
+        bullets: [
+          "Build _shared/ui/workspace-switcher.tsx (opt-in workspace-context picker, not a section toggle)",
+          "Build _shared/ui/secondary-sidebar.tsx (three-column layout primitive lifted from superspace FeatureThreeColumnLayout)",
+          "Build _shared/ui/dashboard-shell-advanced.tsx (composes the two)",
+          "Wire notion-page-clone-os as canary for the Advanced archetype",
+        ],
+      },
+    ],
+  },
+  {
     id: "BC",
     version: "BC-wave",
     date: Date.parse("2026-05-19"),

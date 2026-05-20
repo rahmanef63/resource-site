@@ -23,13 +23,7 @@ import {
   ParentNavItem,
   isPathActive,
 } from "./admin-nav-items";
-import { DashboardSwitcher } from "./dashboard-switcher";
-import type {
-  AdminNavItem,
-  Brand,
-  DashboardSection,
-  User,
-} from "../types/common";
+import type { AdminNavItem, Brand, User } from "../types/common";
 
 type SidebarProps = {
   brand: Pick<Brand, "brandLetter" | "brandName">;
@@ -38,10 +32,6 @@ type SidebarProps = {
   primaryNav: AdminNavItem[];
   settingsNav?: AdminNavItem[];
   user: User;
-  /** When provided, the sidebar header renders a DashboardSwitcher
-   *  instead of the static BrandHeader. Use with `activeSectionId`. */
-  dashboardSections?: DashboardSection[];
-  activeSectionId?: string;
 };
 
 function NavGroup({
@@ -125,16 +115,7 @@ export function AdminSidebar(props: SidebarProps) {
   return (
     <Sidebar collapsible="icon" className="border-r border-border/60">
       <SidebarHeader>
-        {props.dashboardSections && props.dashboardSections.length > 0 ? (
-          <DashboardSwitcher
-            brand={props.brand}
-            templateName={props.appLabel}
-            sections={props.dashboardSections}
-            activeId={props.activeSectionId ?? props.dashboardSections[0].id}
-          />
-        ) : (
-          <BrandHeader brand={props.brand} appLabel={props.appLabel} homeHref={props.homeHref} />
-        )}
+        <BrandHeader brand={props.brand} appLabel={props.appLabel} homeHref={props.homeHref} />
       </SidebarHeader>
       <SidebarSeparator />
       <SidebarContent>

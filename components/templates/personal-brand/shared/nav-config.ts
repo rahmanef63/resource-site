@@ -10,11 +10,9 @@ import {
   BookOpen,
   Bot,
   Briefcase,
-  CheckSquare,
   FileText,
   Inbox,
   LayoutDashboard,
-  LayoutPanelLeft,
   LayoutTemplate,
   LineChart,
   Mail,
@@ -22,14 +20,12 @@ import {
   Newspaper,
   Settings,
   Sparkles,
-  StickyNote,
   Users,
   Wand2,
 } from "lucide-react";
 import type { AdminNavItem, FooterColumn, NavItem, User } from "@/components/templates/_shared/types/common";
 import type { State } from "./types";
 import { DEFAULT_SITE_CONFIG } from "./site-config";
-import { buildDashboardSections } from "@/components/templates/_shared/dashboard/sections";
 
 export const PUBLIC_BASE = "/preview/personal-brand-os/public";
 export const DASHBOARD_BASE = "/preview/personal-brand-os/dashboard";
@@ -37,8 +33,6 @@ export const ADMIN_PANEL_BASE = `${DASHBOARD_BASE}/admin`;
 export const WORKSPACE_BASE = `${DASHBOARD_BASE}/workspace`;
 /** @deprecated use ADMIN_PANEL_BASE */
 export const ADMIN_BASE = ADMIN_PANEL_BASE;
-
-export const DASHBOARD_SECTIONS = buildDashboardSections({ adminPanelHref: ADMIN_PANEL_BASE, workspaceHref: WORKSPACE_BASE });
 
 export const PUBLIC_NAV: NavItem[] = [
   { label: "About", href: `${PUBLIC_BASE}/about` },
@@ -121,21 +115,3 @@ export const ADMIN_SETTINGS_NAV: AdminNavItem[] = [
   { id: "team", label: "Team",      href: `${ADMIN_BASE}/settings/team`, icon: Users },
   { id: "site", label: "Site",      href: `${ADMIN_BASE}/settings/site`, icon: Settings },
 ];
-
-/**
- * BC-wave — Workspace surface nav (distinct from admin). Operator's
- * productivity tools: dashboard overview, scoped notes + tasks for the
- * active workspace, and the workspace manager (CRUD over the
- * `workspaces[]` slice itself).
- */
-export function buildWorkspaceNav(state: State): AdminNavItem[] {
-  const activeWs = state.activeWorkspaceId;
-  const openNotes = state.notes.filter((n) => n.workspaceId === activeWs).length;
-  const openTasks = state.tasks.filter((t) => t.workspaceId === activeWs && !t.done).length;
-  return [
-    { id: "ws-dashboard", label: "Dashboard", href: WORKSPACE_BASE,             icon: LayoutPanelLeft, count: null },
-    { id: "ws-notes",     label: "Notes",     href: `${WORKSPACE_BASE}/notes`,  icon: StickyNote,      count: openNotes || null },
-    { id: "ws-tasks",     label: "Tasks",     href: `${WORKSPACE_BASE}/tasks`,  icon: CheckSquare,     count: openTasks || null },
-    { id: "ws-manage",    label: "Workspaces",href: `${WORKSPACE_BASE}/manage`, icon: Users,           count: state.workspaces.length },
-  ];
-}

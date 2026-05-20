@@ -280,21 +280,4 @@ export const SEED_STATE: State = {
   chatSessions: [],
   pages: SEED_PAGES,
   landingSections: SEED_LANDING_SECTIONS,
-  // BC-wave — workspace surface
-  workspaces: [
-    { id: "ws-personal",    name: "Personal",     icon: "🧠", createdAt: day(90) },
-    { id: "ws-side-project", name: "Side project", icon: "🚀", createdAt: day(20) },
-  ],
-  activeWorkspaceId: "ws-personal",
-  notes: [
-    { id: "note-1", workspaceId: "ws-personal", title: "Q3 OKRs",            body: "Ship rr v1 + 3 case studies + 50 newsletter subs.", createdAt: day(14), updatedAt: day(2) },
-    { id: "note-2", workspaceId: "ws-personal", title: "Content ideas",      body: "- Vertical slice deep dive\n- Convex auth tour\n- DOKU integration retro", createdAt: day(7), updatedAt: day(7) },
-    { id: "note-3", workspaceId: "ws-side-project", title: "Side project — landing copy",  body: "Hero: 'Ship faster, own less'.\nCTA: 'Start free'.", createdAt: day(3), updatedAt: day(1) },
-  ],
-  tasks: [
-    { id: "task-1", workspaceId: "ws-personal",    title: "Reply to lead — Reni", done: false, createdAt: day(2), dueDate: day(-1) },
-    { id: "task-2", workspaceId: "ws-personal",    title: "Draft case study #2",  done: false, createdAt: day(3) },
-    { id: "task-3", workspaceId: "ws-personal",    title: "Backup blog DB",       done: true,  createdAt: day(10) },
-    { id: "task-4", workspaceId: "ws-side-project", title: "Buy domain",          done: false, createdAt: day(5), dueDate: day(-3) },
-  ],
 };

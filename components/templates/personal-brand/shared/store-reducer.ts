@@ -5,12 +5,8 @@ import { pagesReducer } from "@/components/templates/_shared/pages/reducer";
 import { landingReducer } from "@/components/templates/_shared/landing/reducer";
 import type { Action, State } from "./types";
 import { SEED_STATE } from "./seed";
-import { workspaceReducer, isWorkspaceAction } from "./workspace-reducer";
 
 export function reducer(state: State, action: Action): State {
-  // BC-wave — delegate workspace/note/task actions before the main switch.
-  if (isWorkspaceAction(action)) return workspaceReducer(state, action);
-
   switch (action.type) {
     case "hydrate":
       // Shallow-merge with SEED_STATE so any field added in a newer

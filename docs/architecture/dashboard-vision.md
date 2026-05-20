@@ -1,172 +1,177 @@
-# Dashboard architecture vision
+# Dashboard architecture — two archetypes
 
-**Status:** Direction set 2026-05-19. Implementation queued for AZ-wave
-onward. This doc is the single source of truth for the next session —
-point Claude at it (`cat docs/architecture/dashboard-vision.md`) and
-the full vision lands without retracing the conversation.
+**Status:** Direction set 2026-05-20 after the BB / BC / BD waves. This
+doc supersedes the earlier "single dashboard with workspace switcher"
+direction. The corrective insight: most templates only need a simple
+admin; only a few need the workspace chassis. Forcing every template
+through the same shell creates menu noise for the simple case and a
+weak abstraction for the complex case.
 
-## TL;DR
+## TL;DR — pick one of two
 
-Replace the current flat `admin/` per-template surface with a unified
-**Dashboard** that has two top-level sections:
+| Archetype | Sidebar shape | Switcher | Secondary sidebar | When to use |
+|---|---|---|---|---|
+| **Simple** (default) | Single sidebar, BrandHeader at top, admin nav with collapsible sub-menus | none | none | Template's dashboard is just CMS work (Pages / Posts / Leads / …) |
+| **Advanced** (opt-in) | Three-column layout — primary nav, **secondary sidebar** for active section's sub-items, main content | **Workspace switcher** in primary header (only when multi-tenant) | yes | Template has many non-CMS features (notion editor, calendar, command menu, database views) **and/or** multi-tenant workspace context |
 
-```
-/preview/<template>/dashboard/
-├── admin/        ← current headless CMS lives here (was /admin/...)
-└── workspace/    ← new — productivity / app-mode surface
-```
+The rule: **simple is the default**. Advanced is an opt-in for a small
+set of templates whose dashboard is meaningfully more complex than
+"manage public content".
 
-The dashboard is the operator's home. Admin = the WHAT-CUSTOMERS-SEE
-side (CMS, public-page content). Workspace = the WHAT-OPERATOR-USES
-side (apps, tools, productivity slices).
+## Why this split
 
-## Why
+- **Simple keeps simple.** A solo creator marketing site has one
+  context, ~10 admin pages, no productivity surface. Bolt-on workspace
+  switcher + section toggle creates UI noise without value.
+- **Advanced needs space.** Notion / Linear / Slack patterns earn the
+  three-column layout because they juggle workspace context + many
+  sections + per-section sub-nav. A single sidebar can't carry that.
+- **No "two sections" toggle.** BB-wave's section dropdown (Admin Panel
+  ↔ Workspace) treated admin and workspace as equals. Wrong primitive:
+  in the simple case workspace doesn't exist; in the advanced case
+  admin is a privileged sub-link inside workspace, not a peer.
 
-1. **Conflation.** Today "admin" mixes content management (landing
-   sections, blog posts) with operator productivity (notion-style
-   editing, CRM, analytics). Two distinct mental modes glued together.
-2. **Composability.** Workspace becomes the natural home for
-   notion-page-clone's editor, command-menu, calendar, etc. — slices
-   that have nothing to do with the public site.
-3. **Sourceable.** Many workspace features already exist in
-   superspace + notion-page-clone + others. The dashboard split makes
-   it obvious where they should land.
+## Per-template decision matrix
 
-## Target nav structure
-
-```
-Dashboard (root, was /admin)
-├── Admin Panel  (sub-parent)
-│   ├── Pages          ← existing — landing-sections, all-pages, blog, etc.
-│   ├── RBAC           ← NEW (from superspace rbac-roles slice)
-│   ├── CMS menu       ← NEW (public-frontend nav editor)
-│   ├── Analytics      ← NEW (event-tracking slice already exists)
-│   ├── CRM            ← NEW (customer-relations — from superspace)
-│   ├── Audit log      ← (existing slice, surface here)
-│   └── … per-template entities (Leads, Subscriptions, Customers)
-└── Workspace   (sub-parent)
-    ├── Editor         ← notion-page-clone editor at MAX (block editor +
-    │                    slash menu + page tree)
-    ├── Calendar       ← cal-com-booking slice
-    ├── Command menu   ← existing slice
-    ├── Database       ← notion-clone database-views slice
-    ├── Comments       ← threaded comments slice
-    └── … other productivity tools
-```
-
-## Renames
-
-| Old | New | Why |
+| Template | Archetype | Reason |
 |---|---|---|
-| `/admin/...` | `/dashboard/admin/...` | Dashboard becomes root |
-| (none) | `/dashboard/workspace/...` | Workspace is new |
-| `AdminShell` | `DashboardShell` | Wraps everything; embeds AdminPanelNav + WorkspaceNav as collapsible groups |
-| `AdminSidebar` | `DashboardSidebar` | Routes by /admin or /workspace segment to highlight correct group |
-| `AdminNavItem` | `DashboardNavItem` (alias OK for migration) | |
-| `ADMIN_BASE` | `DASHBOARD_BASE` + nested constants | Per-template `DASHBOARD_BASE`, `ADMIN_PANEL_BASE = DASHBOARD_BASE + "/admin"`, `WORKSPACE_BASE = DASHBOARD_BASE + "/workspace"` |
-| `buildAdminPrimaryNav(state)` | `buildAdminPanelNav(state)` + `buildWorkspaceNav(state)` | Two builders, one per top-level section |
+| `saas-marketing-os` | Simple | Public-only marketing template; admin is just Pages + Posts + Pricing |
+| `personal-brand-os` | Simple | Solo creator; one context; admin owns Posts / Portfolio / Services / Leads |
+| `agency-studio-os` | Simple (advanced later?) | Per-client work could justify advanced if projects-as-workspaces lands |
+| `konsultan-os` | Simple | Solo consultant CMS |
+| `kreator-studio-os` | Simple | Solo creator CMS |
+| `riset-kit` | Simple | Researcher's review kit, single context |
+| `wirausaha-os` | Simple | Solo entrepreneur business CMS |
+| `notion-page-clone-os` | **Advanced** | Notion = workspace tool; native fit for multi-workspace + many non-CMS surfaces |
 
-## Migration plan (AZ → BC wave estimate)
+Today (post-BD): all 8 templates use Simple. Advanced primitives land
+in BE-wave with `notion-page-clone-os` as the canary.
 
-### AZ-wave — foundation rename (low-risk, mechanical)
+## Simple archetype — what exists today
 
-- Rename `admin-shell.tsx` → `dashboard-shell.tsx`, keep file structure
-- Add `DashboardShell` that wraps `AdminPanelShell` + `WorkspaceShell`
-  (or routes by segment)
-- Per-template constants: split `ADMIN_BASE` into
-  `DASHBOARD_BASE`, `ADMIN_PANEL_BASE`, `WORKSPACE_BASE`
-- Redirect `/admin/*` → `/dashboard/admin/*` in next.config (no breaking
-  consumer links)
-- Keep all existing admin routes inside `/dashboard/admin/...` — only
-  the URL prefix shifts
+```
+DashboardShell (single sidebar, SidebarProvider + SidebarInset)
+└── AdminSidebar
+    ├── BrandHeader (logo + template name; static)
+    ├── NavGroup "Workspace" — primaryNav from buildAdminPrimaryNav(state)
+    │   └── ParentNavItem with collapsible children (shadcn NavMain idiom)
+    │       └── e.g. Pages parent → All pages / Landing / Blog / Portfolio …
+    ├── NavGroup "Settings" — settingsNav (optional)
+    └── UserFooter
+```
 
-### BA-wave — Pages restructure inside Admin Panel
+Files:
+- `components/templates/_shared/ui/dashboard-shell.tsx`
+- `components/templates/_shared/ui/admin-sidebar.tsx`
+- `components/templates/_shared/ui/admin-nav-items.tsx` (LeafNavItem +
+  ParentNavItem with `Collapsible` group/state animation)
+- Per-template `shared/nav-config.ts` exports `buildAdminPrimaryNav(state)`
+- Per-template `app/preview/<slug>/dashboard/dashboard-shell-client.tsx`
+  wires it up
 
-- Current "Pages" parent (AV/AX-wave) becomes the first item under
-  Admin Panel
-- Same children: All pages / Landing page / Blog / Portfolio / etc.
-- Subsequent sub-items: RBAC, CMS menu, Analytics, CRM, Audit log
+## Advanced archetype — BE-wave plan
 
-### BB-wave — Workspace bootstrap
+Three new primitives, all in `components/templates/_shared/ui/`:
 
-- Scaffold `/dashboard/workspace/` route per template
-- Wire notion-page-clone editor here for templates that want it
-  (notion-page-clone-os obviously; others optional)
-- Sub-items: Editor, Calendar, Command menu
+### 1. `workspace-switcher.tsx`
 
-### BC-wave — feature harvesting
+Standalone, opt-in. Mounted in the primary sidebar header **only when
+the template has multiple workspaces**. Swaps `activeWorkspaceId` in
+the store. NOT a section toggle — sections are handled by the primary
+nav itself.
 
-Slices to lift from other projects (use `/rr lift` flow):
+Pattern: shadcn TeamSwitcher (SidebarMenuButton size="lg" +
+DropdownMenu) — but the dropdown items are real workspaces from store,
+not abstract "sections". Add: "New workspace" / "Manage workspaces"
+footer actions. Inspired by notion-page-clone WorkspaceSwitcher.
 
-| Feature | Source | Lands at |
-|---|---|---|
-| RBAC config | `superspace/convex/workspace/permissions` + `roles.config.ts` | `frontend/slices/rbac-roles/` (slice already exists, needs admin UI) |
-| CRM | `superspace/frontend/slices/crm/` (if exists) — else build from CareerPack | `frontend/slices/crm/` (NEW) |
-| Analytics dashboard | `superspace/frontend/slices/analytics/` | `frontend/slices/analytics-dashboard/` (NEW; complements existing event-tracking slice) |
-| CMS menu | `superspace/frontend/slices/cms-menu-builder/` or build new | `frontend/slices/cms-menu/` (NEW) |
-| Notion editor (workspace mode) | `notion-page-clone/frontend/slices/editor/` | already lifted as `notion-blocks` slice — needs workspace mounting |
-| Database views | `notion-page-clone/frontend/slices/databases/` | `frontend/slices/database-views/` (NEW — 11 view types) |
-| Calendar | `cescadesigns` + `cal-com-booking` slice | already exists; wire workspace mount |
-| Command menu | already exists | wire workspace mount |
+### 2. `secondary-sidebar.tsx`
 
-## What stays the same
+A narrow contextual sidebar that lives BETWEEN the primary sidebar and
+the main content. Holds the active section's sub-nav (e.g. for a
+"Database Views" section: list of views → click → main shows the view).
 
-- `_shared/landing/`, `_shared/pages/`, `_shared/crud/`, `_shared/ui/`
-  primitives — these are template-agnostic foundations and don't move
-- `landingSections` schema (kind, title, subtitle, imageUrl,
-  imageRatio, bgImageUrl, className, config, order, enabled)
-- `LandingSectionShell` wrapper, `LandingRenderer` per template
-- Shadcn Sidebar primitives (`SidebarMenuButton` /
-  `SidebarMenuSub` / `SidebarProvider`) — extend, never replace
-- `RecentlyUpdatedBadge` + changelog discipline
-- VersionWatcher, FeatureBar, buildPreviewManifest SSOT
+Pattern: lifted from superspace's `FeatureThreeColumnLayout`
+(`/frontend/shared/ui/layout/container/three-column/`). Persistent
+collapse via cookie like the primary sidebar.
 
-## Open questions for next session
+### 3. `dashboard-shell-advanced.tsx`
 
-1. **Per-template opt-in?** Should every template ship a Workspace, or
-   only those that actually have ops/productivity features
-   (notion-page-clone-os yes, saas-marketing-os maybe just stubbed)?
-2. **Shared workspace primitives?** `_shared/workspace/` mirroring
-   `_shared/pages/` + `_shared/landing/`?
-3. **Auth model.** Admin panel = workspace-admin role only. Workspace
-   = any signed-in user. RBAC slice gates the split.
-4. **Public vs operator nav.** Should the public site link to
-   `/login` → `/dashboard/...` based on role? Or two distinct
-   subdomains?
+Three-column composition:
 
-## Source map (where to read existing implementations)
+```
+DashboardShellAdvanced
+├── AdminSidebar (icon-rail mode collapsible="icon")
+│   ├── WorkspaceSwitcher (header)
+│   ├── Top-level surfaces (icons only when collapsed)
+│   └── User footer
+├── SecondarySidebar (contextual sub-nav for active surface)
+└── <main> (content)
+```
+
+The primary sidebar carries top-level surface icons (Workspace,
+Calendar, Database, Admin Panel — the last is just a role-gated link).
+Clicking a surface populates the SecondarySidebar with that surface's
+own nav (e.g. clicking Database → secondary shows view list).
+
+This matches Linear / Slack idiom while preserving the shadcn Sidebar
+primitive for the icon rail.
+
+## What BD-wave (today) actually delivered
+
+A clean revert + corrected docs. Specifically:
+
+- All 8 templates back to Simple archetype
+- DashboardSwitcher dropdown (BB-wave) deleted — it was a wrong
+  primitive (TeamSwitcher pattern applied to section toggle)
+- `WorkspacePlaceholder` deleted — Simple templates don't have a
+  workspace surface
+- `personal-brand-os` workspace surface (BC-wave) fully reverted —
+  workspace state / reducer / views / seed / nav builder all removed.
+  storageKey bumped pbos:state:v6 → v7-simple to invalidate stale
+  localStorage payloads
+- `DashboardShell` simplified back to single-mode (no
+  `dashboardSections` / `activeSectionId` props)
+- `AdminSidebar` reverted to always-BrandHeader
+- `DashboardSection` type deleted (no longer used)
+- `_shared/dashboard/sections.ts` helper deleted
+- `_shared/ui/dashboard-switcher.tsx` deleted
+
+Per-template `DASHBOARD_BASE` / `ADMIN_PANEL_BASE` / `WORKSPACE_BASE`
+constants are **kept**. They cost nothing and the advanced archetype
+needs them.
+
+## BE-wave to-do (when ready)
+
+1. Build the three primitives above (workspace-switcher,
+   secondary-sidebar, dashboard-shell-advanced)
+2. Wire `notion-page-clone-os` to use the advanced shell as canary
+3. Real Workspace CRUD inside the advanced shell (using the same
+   workspaceId-scoped pattern BC-wave proved out — but only on
+   templates that opt in)
+4. Surface secondary-sidebar example on at least one admin page that
+   benefits (e.g. RBAC config, CRM list-detail)
+
+## Source map (where to pull primitives from)
 
 ```
 superspace/
-├── convex/workspace/permissions.ts            ← RBAC core
-├── convex/workspace/roles.config.ts           ← Role tiers
-├── frontend/slices/platform-admin/            ← Admin-panel shell pattern
-├── frontend/slices/admin-panel/               ← 17-section shell
-├── frontend/shared/ui/layout/                 ← Three-column + sidebar layouts
-└── frontend/shared/lib/features/              ← Feature registry pattern
+├── frontend/slices/platform-admin/views/PlatformAdminPageNew.tsx     ← three-column page
+├── frontend/slices/platform-admin/components/navigation/AdminNavigation.tsx  ← left nav
+├── frontend/shared/ui/layout/container/three-column/                 ← FeatureThreeColumnLayout (lift target)
+├── frontend/shared/ui/layout/sidebar/primary/AppSidebar.tsx          ← workspace shell
+└── frontend/shared/ui/layout/sidebar/primary/NavSystem.tsx           ← "System" group with admin link
 
 notion-page-clone/
-├── frontend/slices/editor/                    ← Block editor (lifted as notion-blocks)
-├── frontend/slices/workspace-sidebar/         ← Page tree DnD sidebar
-├── frontend/slices/databases/                 ← 11 view types
-├── frontend/slices/comments/                  ← Threaded
-└── frontend/slices/block-selection/           ← Multi-block selection
-
-rahmanef.com/
-└── frontend/shared/ui/                        ← Motion primitives + theme presets
+├── frontend/slices/workspace-sidebar/components/WorkspaceSwitcher.tsx ← workspace picker pattern
+└── frontend/slices/workspace-sidebar/                                 ← page-tree DnD primary sidebar
 ```
-
-## End-of-session-2026-05-19 progress
-
-See `docs/sessions/2026-05-19-session.md` for the wave-by-wave log of
-what shipped this session. The Dashboard vision above is the
-direction for AZ→BC waves.
 
 ## How to resume
 
 Next session:
 
 ```
-You: read docs/architecture/dashboard-vision.md and continue from AZ-wave.
-Claude: <reads, picks up context, executes AZ-A foundation rename>
+You: read docs/architecture/dashboard-vision.md and continue with BE-wave
+Claude: <reads, builds workspace-switcher + secondary-sidebar + dashboard-shell-advanced, wires notion-page-clone-os as canary>
 ```

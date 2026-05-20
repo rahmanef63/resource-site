@@ -19,7 +19,6 @@ import type {
 } from "@/components/templates/_shared/types/common";
 import { DEFAULT_SITE_CONFIG } from "./site-config";
 import type { State } from "./types";
-import { buildDashboardSections } from "@/components/templates/_shared/dashboard/sections";
 
 export const PUBLIC_BASE = "/preview/saas-marketing-os/public";
 export const DASHBOARD_BASE = "/preview/saas-marketing-os/dashboard";
@@ -27,8 +26,6 @@ export const ADMIN_PANEL_BASE = `${DASHBOARD_BASE}/admin`;
 export const WORKSPACE_BASE = `${DASHBOARD_BASE}/workspace`;
 /** @deprecated use ADMIN_PANEL_BASE */
 export const ADMIN_BASE = ADMIN_PANEL_BASE;
-
-export const DASHBOARD_SECTIONS = buildDashboardSections({ adminPanelHref: ADMIN_PANEL_BASE, workspaceHref: WORKSPACE_BASE });
 
 export const PUBLIC_NAV: NavItem[] = [
   { label: "Features",  href: `${PUBLIC_BASE}/features` },

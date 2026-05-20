@@ -102,15 +102,6 @@ export type ChatSession = {
   messages: ChatMessage[];
 };
 
-// BC-wave — workspace primitives live in workspace-types.ts (200-LOC cap).
-export type {
-  Workspace,
-  Note,
-  Task,
-  WorkspaceAction,
-} from "./workspace-types";
-import type { WorkspaceAction, Workspace, Note, Task } from "./workspace-types";
-
 export type State = {
   posts: Post[];
   portfolio: PortfolioItem[];
@@ -124,11 +115,6 @@ export type State = {
   pages: import("@/components/templates/_shared/pages/types").PageEntry[];
   /** AB-wave: home-page section composition. Ordered + toggleable. */
   landingSections: import("@/components/templates/_shared/landing/types").LandingSection[];
-  /** BC-wave: workspace surface. */
-  workspaces: Workspace[];
-  activeWorkspaceId: string;
-  notes: Note[];
-  tasks: Task[];
 };
 
 export type LandingSection = import("@/components/templates/_shared/landing/types").LandingSection;
@@ -164,7 +150,5 @@ export type Action =
   | { type: "chat.session.upsert"; session: ChatSession }
   | { type: "chat.session.delete"; id: string }
   | { type: "chat.message"; sessionId: string; msg: ChatMessage; flag?: boolean }
-  // BC-wave — workspace surface (defined in workspace-types.ts)
-  | WorkspaceAction
   | { type: "hydrate"; state: State }
   | { type: "reset" };
