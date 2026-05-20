@@ -23,13 +23,22 @@ import {
   ParentNavItem,
   isPathActive,
 } from "./admin-nav-items";
-import type { AdminNavItem, Brand, User } from "../types/common";
+import type {
+  AdminNavGroup,
+  AdminNavItem,
+  Brand,
+  User,
+} from "../types/common";
 
 type SidebarProps = {
   brand: Pick<Brand, "brandLetter" | "brandName">;
   appLabel: string;
   homeHref: string;
-  primaryNav: AdminNavItem[];
+  /** Flat nav — legacy single-group shape (renders as "Workspace"). */
+  primaryNav?: AdminNavItem[];
+  /** Grouped nav — Pages / Features / Settings split. When provided,
+   *  takes precedence over `primaryNav`. */
+  primaryNavGroups?: AdminNavGroup[];
   settingsNav?: AdminNavItem[];
   user: User;
 };
@@ -119,7 +128,13 @@ export function AdminSidebar(props: SidebarProps) {
       </SidebarHeader>
       <SidebarSeparator />
       <SidebarContent>
-        <NavGroup label="Workspace" items={props.primaryNav} homeAware />
+        {props.primaryNavGroups && props.primaryNavGroups.length > 0 ? (
+          props.primaryNavGroups.map((g) => (
+            <NavGroup key={g.id} label={g.label} items={g.items} homeAware={g.homeAware} />
+          ))
+        ) : (
+          <NavGroup label="Workspace" items={props.primaryNav ?? []} homeAware />
+        )}
         {props.settingsNav && props.settingsNav.length > 0 && (
           <NavGroup label="Settings" items={props.settingsNav} />
         )}

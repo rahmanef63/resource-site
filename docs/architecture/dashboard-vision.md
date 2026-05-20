@@ -141,16 +141,54 @@ Per-template `DASHBOARD_BASE` / `ADMIN_PANEL_BASE` / `WORKSPACE_BASE`
 constants are **kept**. They cost nothing and the advanced archetype
 needs them.
 
-## BE-wave to-do (when ready)
+## BE-wave (shipped 2026-05-20) — grouped nav + Pages/Features split
 
-1. Build the three primitives above (workspace-switcher,
-   secondary-sidebar, dashboard-shell-advanced)
-2. Wire `notion-page-clone-os` to use the advanced shell as canary
-3. Real Workspace CRUD inside the advanced shell (using the same
-   workspaceId-scoped pattern BC-wave proved out — but only on
-   templates that opt in)
-4. Surface secondary-sidebar example on at least one admin page that
-   benefits (e.g. RBAC config, CRM list-detail)
+BE-wave repurposed (Advanced primitives deferred to BF) to land four
+foundation pieces user flagged:
+
+1. **AdminNavGroup type** — `_shared/types/common.ts`. Sidebar +
+   DashboardShell accept `primaryNavGroups?: AdminNavGroup[]` alongside
+   the legacy flat `primaryNav?: AdminNavItem[]`. Templates opt into
+   grouped rendering by passing the new shape.
+2. **PageEntry forward-compat** — `_shared/pages/types.ts` adds
+   `isLanding?: boolean` + `sections?: LandingSection[]`. Type only;
+   BF-wave does the data migration (landing-as-page).
+3. **Position dropdown** — `FieldDef.kind: "position"` + auto-shift in
+   landing reducer. LandingSection.order field switches from manual
+   number input to a sibling-aware Select. Reducer rebalances orders
+   on create / move / delete so no two sections share a position.
+4. **Responsive overlap fix** — `min-w-0` on `SidebarInset` + main flex
+   child. Prevents wide admin pages clipping under the shadcn sidebar.
+5. **saas-marketing-os catalog metadata** — `adminPreviewPath` +
+   admin file list added; "no admin" description corrected. Filesystem
+   always had the full admin; only the catalog entry lied.
+6. **saas-marketing-os canary nav** — `buildAdminNav(state)` returns
+   `[Overview, Pages, Features]` groups. Legacy `buildAdminPrimaryNav`
+   kept as flatten-wrapper for compat.
+
+## BF-wave plan
+
+1. **Landing-as-page migration** — move every template's
+   `state.landingSections[]` into the landing-flagged Page's
+   `sections[]`. Admin `/landing` redirects to `/pages/<landing-id>`.
+   Public landing renderer reads from the page. Drop `landingSections`
+   state field entirely.
+2. **Public nav CRUD** — make `PUBLIC_NAV` state-driven so admin can
+   add/rename/reorder nav items and bind each to any page (including
+   custom pages).
+3. **Propagate grouped admin nav (BE pattern)** to the other 7
+   templates. Audit per-template to catch missing Pages entries
+   (e.g. konsultan's Projects + Contact today flat at root — should
+   live under Pages group).
+4. **Build Advanced primitives** — workspace-switcher,
+   secondary-sidebar, dashboard-shell-advanced (originally planned for
+   BE, deferred to keep BE scope tight). Wire notion-page-clone-os as
+   canary.
+5. **Extract `landing-sections` as headless CMS slice** —
+   `frontend/slices/landing-sections/` already exists; promote it so
+   any template (or external project) can install via
+   `npx rr add landing-sections` and get the section editor +
+   renderer registry out of the box.
 
 ## Source map (where to pull primitives from)
 

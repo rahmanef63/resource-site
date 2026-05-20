@@ -65,6 +65,15 @@ export type PageEntry = {
   /** System pages = JSX-based originals. Listed read-only in admin; can be
    *  duplicated to custom, can never be deleted/edited via the page editor. */
   systemPage?: boolean;
+  /** BE-wave forward-compat — exactly ONE page per template should be
+   *  marked as landing. Admin sidebar's "Landing" link routes to this
+   *  page's editor. BF-wave will migrate `state.landingSections[]` to
+   *  live on this page as `sections[]`. */
+  isLanding?: boolean;
+  /** BE-wave forward-compat — section-based composition (richer than
+   *  blocks). LandingSection schema with image / ratio / bg / className
+   *  / config / order. Optional today; will replace `blocks[]` in BF. */
+  sections?: import("../landing/types").LandingSection[];
 };
 
 export type PagesSlice = {

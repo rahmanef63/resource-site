@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AdminSidebar } from "./admin-sidebar";
 import { AdminTopbar } from "./admin-topbar";
-import type { AdminNavItem, Brand, User } from "../types/common";
+import type { AdminNavGroup, AdminNavItem, Brand, User } from "../types/common";
 
 /**
  * Simple-archetype dashboard shell mounted under
@@ -22,6 +22,7 @@ export function DashboardShell({
   appLabel,
   homeHref,
   primaryNav,
+  primaryNavGroups,
   settingsNav,
   user,
   searchPlaceholder,
@@ -32,7 +33,10 @@ export function DashboardShell({
   brand: Brand;
   appLabel: string;
   homeHref: string;
-  primaryNav: AdminNavItem[];
+  /** Flat legacy nav (renders as one "Workspace" group). */
+  primaryNav?: AdminNavItem[];
+  /** Grouped nav (Pages / Features / etc). Takes precedence when set. */
+  primaryNavGroups?: AdminNavGroup[];
   settingsNav?: AdminNavItem[];
   user: User;
   searchPlaceholder?: string;
@@ -40,6 +44,9 @@ export function DashboardShell({
   topbarActions?: ReactNode;
   children: ReactNode;
 }) {
+  // Topbar needs a flat list for the mobile sheet — flatten groups when present.
+  const topbarNav: AdminNavItem[] =
+    primaryNavGroups?.flatMap((g) => g.items) ?? primaryNav ?? [];
   return (
     <SidebarProvider defaultOpen>
       <AdminSidebar
@@ -47,22 +54,23 @@ export function DashboardShell({
         appLabel={appLabel}
         homeHref={homeHref}
         primaryNav={primaryNav}
+        primaryNavGroups={primaryNavGroups}
         settingsNav={settingsNav}
         user={user}
       />
-      <SidebarInset className="bg-background text-foreground">
+      <SidebarInset className="bg-background text-foreground min-w-0">
         <AdminTopbar
           brand={brand}
           appLabel={appLabel}
           homeHref={homeHref}
-          primaryNav={primaryNav}
+          primaryNav={topbarNav}
           settingsNav={settingsNav}
           user={user}
           searchPlaceholder={searchPlaceholder}
           notifCount={notifCount}
           actions={topbarActions}
         />
-        <main className="flex-1 overflow-auto p-4 md:p-6">{children}</main>
+        <main className="flex-1 overflow-auto p-4 md:p-6 min-w-0">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );

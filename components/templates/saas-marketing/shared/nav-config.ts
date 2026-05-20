@@ -12,6 +12,7 @@ import {
   LayoutTemplate,
 } from "lucide-react";
 import type {
+  AdminNavGroup,
   AdminNavItem,
   FooterColumn,
   NavItem,
@@ -58,7 +59,17 @@ export const OWNER_USER: User = {
   initials: "MK",
 };
 
-export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
+/**
+ * BE-wave grouped admin nav. Returns [Pages, Features, Settings] —
+ * each group renders as a labeled `<SidebarGroup>` in the admin
+ * sidebar (separate from the AZ-wave's collapsible parent pattern).
+ *
+ * Pages group = every admin surface that maps to a public route.
+ * Features group = everything else (CRM, payments, lead pipeline,
+ * project-boost surfaces). Keeps simple/complex CMS work visually
+ * isolated so operators don't pick the wrong screen.
+ */
+export function buildAdminNav(state: State): AdminNavGroup[] {
   const activeSubs = state.subscriptions.filter((s) => s.status === "active").length;
   const newLeads = state.leads.filter((l) => l.status === "new").length;
   const draftPosts = state.posts.filter((p) => p.status === "draft").length;
@@ -66,29 +77,42 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
   const customPages = state.pages.filter((p) => !p.systemPage).length;
   const enabledLanding = state.landingSections.filter((s) => s.enabled).length;
   return [
-    { id: "dashboard", label: "Dashboard", href: ADMIN_BASE, icon: LayoutDashboard, count: null },
-    // "Pages" parent — collapsible group bundling every content surface
-    // that maps to a public page (landing, blog, pricing, etc.). Each
-    // child reuses an existing CRUD route.
+    {
+      id: "overview",
+      label: "Overview",
+      homeAware: true,
+      items: [
+        { id: "dashboard", label: "Dashboard", href: ADMIN_BASE, icon: LayoutDashboard, count: null },
+      ],
+    },
     {
       id: "pages",
       label: "Pages",
-      href: `${ADMIN_BASE}/pages`,
-      icon: Newspaper,
-      count: customPages || null,
-      children: [
-        { id: "pages-all",       label: "All pages",     href: `${ADMIN_BASE}/pages`,     icon: Newspaper,      count: customPages || null },
-        { id: "pages-landing",   label: "Landing page",  href: `${ADMIN_BASE}/landing`,   icon: LayoutTemplate, count: enabledLanding || null },
-        { id: "pages-blog",      label: "Blog",          href: `${ADMIN_BASE}/posts`,     icon: FileText,       count: draftPosts || null },
-        { id: "pages-pricing",   label: "Pricing",       href: `${ADMIN_BASE}/pricing`,   icon: DollarSign,     count: state.pricing.length || null },
-        { id: "pages-features",  label: "Features",      href: `${ADMIN_BASE}/features`,  icon: Sparkles,       count: state.features.length || null },
-        { id: "pages-changelog", label: "Changelog",     href: `${ADMIN_BASE}/changelog`, icon: Megaphone,      count: state.changelogEntries.length || null },
+      items: [
+        { id: "pages-all",       label: "All pages",    href: `${ADMIN_BASE}/pages`,     icon: Newspaper,      count: customPages || null },
+        { id: "pages-landing",   label: "Landing page", href: `${ADMIN_BASE}/landing`,   icon: LayoutTemplate, count: enabledLanding || null },
+        { id: "pages-blog",      label: "Blog",         href: `${ADMIN_BASE}/posts`,     icon: FileText,       count: draftPosts || null },
+        { id: "pages-pricing",   label: "Pricing",      href: `${ADMIN_BASE}/pricing`,   icon: DollarSign,     count: state.pricing.length || null },
+        { id: "pages-features",  label: "Features",     href: `${ADMIN_BASE}/features`,  icon: Sparkles,       count: state.features.length || null },
+        { id: "pages-changelog", label: "Changelog",    href: `${ADMIN_BASE}/changelog`, icon: Megaphone,      count: state.changelogEntries.length || null },
       ],
     },
-    { id: "customers",     label: "Customers",     href: `${ADMIN_BASE}/customers`,     icon: Users,      count: activeCustomers || null },
-    { id: "subscriptions", label: "Subscriptions", href: `${ADMIN_BASE}/subscriptions`, icon: CreditCard, count: activeSubs || null },
-    { id: "leads",         label: "Leads",         href: `${ADMIN_BASE}/leads`,         icon: Inbox,      count: newLeads || null },
+    {
+      id: "features",
+      label: "Features",
+      items: [
+        { id: "customers",     label: "Customers",     href: `${ADMIN_BASE}/customers`,     icon: Users,      count: activeCustomers || null },
+        { id: "subscriptions", label: "Subscriptions", href: `${ADMIN_BASE}/subscriptions`, icon: CreditCard, count: activeSubs || null },
+        { id: "leads",         label: "Leads",         href: `${ADMIN_BASE}/leads`,         icon: Inbox,      count: newLeads || null },
+      ],
+    },
   ];
+}
+
+/** @deprecated BE-wave — use {@link buildAdminNav}. Kept for any caller
+ *  outside this template that still passes the flat shape. */
+export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
+  return buildAdminNav(state).flatMap((g) => g.items);
 }
 
 export const ADMIN_SETTINGS_NAV: AdminNavItem[] = [

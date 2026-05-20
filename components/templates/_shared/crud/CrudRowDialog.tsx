@@ -107,7 +107,12 @@ export function CrudRowDialog<T>({
         </DialogHeader>
 
         <div className="min-h-0 flex-1 overflow-auto px-5 py-4">
-          <CrudFormBody fields={fields} draft={draft} onChange={patch} />
+          <CrudFormBody
+            fields={fields}
+            draft={draft}
+            onChange={patch}
+            ctx={{ total: controller.items.length, editing: true }}
+          />
         </div>
 
         <DialogFooter className="flex-shrink-0 flex-row items-center justify-between gap-2 border-t bg-muted/30 px-5 py-3 sm:justify-between">

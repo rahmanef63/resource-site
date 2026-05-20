@@ -35,12 +35,10 @@ export const LANDING_FIELDS: FieldDef<LandingSection>[] = [
     hint: "Decides which renderer the template picks for this section.",
   },
   {
-    kind: "number",
+    kind: "position",
     key: "order",
     label: "Order",
-    min: 1,
-    step: 1,
-    hint: "1 = top of the page; 2, 3, 4… render below. Auto-assigned on create — the list has up/down arrows for re-ordering.",
+    hint: "1 = top of the page. Dropdown lists all valid positions for this template; picking one auto-shifts the others to keep ordering consistent. Up/down arrows in the list also re-order.",
   },
   {
     kind: "switch",

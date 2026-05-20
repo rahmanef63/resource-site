@@ -20,8 +20,8 @@ export type ColumnDef<T> = {
 
 /** Field definition for CrudFormView.
  *
- *  `wide?: true` (text/select/number/image) makes the field span both
- *  columns (sm:col-span-2). textarea / tags are always wide.
+ *  `wide?: true` (text/select/number/image/position) makes the field
+ *  span both columns (sm:col-span-2). textarea / tags are always wide.
  *  `hint?` renders as muted helper text below the input. */
 export type FieldDef<T> =
   | { kind: "text"; key: keyof T & string; label: string; mono?: boolean; placeholder?: string; hint?: string; wide?: boolean }
@@ -32,7 +32,12 @@ export type FieldDef<T> =
   | { kind: "switch"; key: keyof T & string; label: string; hint?: string }
   | { kind: "date"; key: keyof T & string; label: string; hint?: string }
   /** URL text input with live preview thumbnail when value is a URL or path. */
-  | { kind: "image"; key: keyof T & string; label: string; placeholder?: string; hint?: string; wide?: boolean };
+  | { kind: "image"; key: keyof T & string; label: string; placeholder?: string; hint?: string; wide?: boolean }
+  /** BE-wave — dynamic position dropdown. Options are derived from the
+   *  CrudController's sibling items: 1..N (for existing row) or 1..N+1
+   *  (for new row). Prevents manual conflicts. CrudFieldInput needs the
+   *  `siblings` context which CrudRowDialog / CrudFormView thread through. */
+  | { kind: "position"; key: keyof T & string; label: string; hint?: string; wide?: boolean };
 
 /** Adapter the template wires from its store dispatch. Generic CRUD
  *  components consume this — no direct store coupling.

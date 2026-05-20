@@ -10,6 +10,59 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "BE",
+    version: "BE-wave",
+    date: Date.parse("2026-05-20"),
+    kind: "feature",
+    title: "Grouped admin nav (Pages / Features) + position-dropdown reorder + saas-marketing catalog fix",
+    body:
+      "Four foundation pieces landing in one wave so the next batch can build on a clean chassis. (1) AdminNavGroup type — sidebar + shell accept primaryNavGroups[] alongside legacy flat primaryNav. Templates opt into grouped Pages/Features rendering one by one. (2) Position dropdown — LandingSection.order field switches from manual number input to a sibling-aware Select; reducer auto-shifts other sections on create / move / delete so two sections can never share a position. (3) Responsive overlap fix — min-w-0 on SidebarInset + main flex child prevents wide admin pages clipping under the shadcn sidebar. (4) saas-marketing-os catalog metadata corrected — adminPreviewPath + full admin file list added; description no longer claims 'no admin' (the filesystem had it all along). (5) saas-marketing-os = canary for the new grouped nav — buildAdminNav(state) returns [Overview, Pages, Features] groups; legacy buildAdminPrimaryNav kept as flatten-wrapper for backwards compat. (6) PageEntry forward-compat — isLanding?: boolean + sections?: LandingSection[] added to the type. BF-wave does the data migration (landing-as-page).",
+    groups: [
+      {
+        heading: "Templates touched",
+        bullets: [
+          { text: "saas-marketing-os — admin entry now visible in catalog; sidebar uses Pages + Features groups", slug: "saas-marketing-os", kind: "template" },
+        ],
+      },
+      {
+        heading: "Chassis (_shared)",
+        bullets: [
+          "_shared/types/common.ts — AdminNavGroup type + PageEntry isLanding/sections forward-compat",
+          "_shared/ui/admin-sidebar.tsx — accepts primaryNavGroups optional; renders one <SidebarGroup> per group",
+          "_shared/ui/dashboard-shell.tsx — primaryNavGroups prop threaded; min-w-0 on SidebarInset + main",
+          "_shared/crud/types.ts — FieldDef kind \"position\" added",
+          "_shared/crud/CrudFieldInput.tsx — position renders sibling-aware Select",
+          "_shared/crud/CrudFormBody.tsx + CrudFormView.tsx + CrudRowDialog.tsx — ctx={ total, editing } threaded to fields",
+          "_shared/landing/landing-fields.ts — order field migrated to kind: 'position'",
+          "_shared/landing/reducer.ts — auto-shift sibling orders on LANDING_UPSERT + close gap on LANDING_DELETE",
+          "_shared/pages/types.ts — PageEntry.isLanding + sections added (forward-compat for BF migration)",
+        ],
+      },
+      {
+        heading: "Catalog",
+        bullets: [
+          "lib/content/layouts.ts — saas-marketing-os entry: adminPreviewPath set, 22 admin files added to files[], description corrected, 'admin' tag added",
+        ],
+      },
+      {
+        heading: "Docs",
+        bullets: [
+          "docs/architecture/dashboard-vision.md — BE-wave delivery summary + BF-wave plan (landing-as-page migration, public nav CRUD, propagate grouped nav to other 7 templates, build Advanced primitives, extract landing-sections as headless slice)",
+        ],
+      },
+      {
+        heading: "Up next (BF-wave)",
+        bullets: [
+          "Migrate landingSections[] into the landing-flagged Page.sections[] — single source of truth",
+          "Public nav CRUD — admin can add/rename/reorder nav items + bind to any page including custom",
+          "Propagate Pages/Features grouped nav to other 7 templates (audit per template — konsultan-os's Projects + Contact should live under Pages)",
+          "Build Advanced primitives (workspace-switcher, secondary-sidebar, dashboard-shell-advanced) + wire notion-page-clone-os as canary",
+          "Extract landing-sections as installable headless CMS slice",
+        ],
+      },
+    ],
+  },
+  {
     id: "BD",
     version: "BD-wave",
     date: Date.parse("2026-05-20"),

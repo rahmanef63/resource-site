@@ -17,10 +17,15 @@ export function CrudFieldInput<T>({
   field,
   value,
   onChange,
+  ctx,
 }: {
   field: FieldDef<T>;
   value: unknown;
   onChange: (next: unknown) => void;
+  /** Sibling-aware context for kinds that need it (e.g. `position`).
+   *  `total` = current count of items; `editing` = true if editing an
+   *  existing row (so range is 1..total instead of 1..total+1). */
+  ctx?: { total: number; editing: boolean };
 }) {
   switch (field.kind) {
     case "text":
@@ -90,6 +95,29 @@ export function CrudFieldInput<T>({
           value={iso}
           onChange={(e) => onChange(new Date(e.target.value).getTime())}
         />
+      );
+    }
+    case "position": {
+      const total = ctx?.total ?? 1;
+      const max = ctx?.editing ? Math.max(total, 1) : total + 1;
+      const positions = Array.from({ length: max }, (_, i) => i + 1);
+      const current = value == null ? 1 : Number(value);
+      return (
+        <Select
+          value={String(current)}
+          onValueChange={(v) => onChange(Number(v))}
+        >
+          <SelectTrigger>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {positions.map((p) => (
+              <SelectItem key={p} value={String(p)}>
+                {p === 1 ? "1 (top)" : p === max && !ctx?.editing ? `${p} (bottom — new)` : String(p)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       );
     }
     case "image": {

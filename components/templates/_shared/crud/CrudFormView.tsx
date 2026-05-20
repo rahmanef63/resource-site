@@ -71,7 +71,12 @@ export function CrudFormView<T>({
       </div>
 
       <div className="rounded-lg border bg-card p-4 sm:p-5">
-        <CrudFormBody fields={fields} draft={draft} onChange={patch} />
+        <CrudFormBody
+          fields={fields}
+          draft={draft}
+          onChange={patch}
+          ctx={{ total: controller.items.length, editing: true }}
+        />
       </div>
     </div>
   );

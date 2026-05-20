@@ -14,6 +14,7 @@ export function CrudFormBody<T>({
   fields,
   draft,
   onChange,
+  ctx,
 }: {
   fields: FieldDef<T>[];
   draft: T;
@@ -21,6 +22,10 @@ export function CrudFormBody<T>({
    *  to `unknown` so the parent doesn't have to thread the
    *  per-field-kind union through React.useState. */
   onChange: (key: keyof T & string, value: unknown) => void;
+  /** Sibling-aware context — passed to CrudFieldInput for kinds that
+   *  need it (e.g. `position`). `total` = current items count; `editing`
+   *  = true when editing an existing row. */
+  ctx?: { total: number; editing: boolean };
 }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2">
@@ -30,6 +35,7 @@ export function CrudFormBody<T>({
           field={f}
           value={(draft as Record<string, unknown>)[f.key]}
           onChange={(v) => onChange(f.key as keyof T & string, v)}
+          ctx={ctx}
         />
       ))}
     </div>
@@ -40,10 +46,12 @@ function FieldRender<T>({
   field,
   value,
   onChange,
+  ctx,
 }: {
   field: FieldDef<T>;
   value: unknown;
   onChange: (next: unknown) => void;
+  ctx?: { total: number; editing: boolean };
 }) {
   const alwaysWide = field.kind === "textarea" || field.kind === "tags";
   const optWide = "wide" in field && field.wide === true;
@@ -51,7 +59,7 @@ function FieldRender<T>({
   return (
     <div className={`space-y-1.5 ${wrapper}`}>
       <Label className="text-xs">{field.label}</Label>
-      <CrudFieldInput field={field} value={value} onChange={onChange} />
+      <CrudFieldInput field={field} value={value} onChange={onChange} ctx={ctx} />
       {"hint" in field && field.hint && (
         <p className="text-[10px] leading-relaxed text-muted-foreground">{field.hint}</p>
       )}

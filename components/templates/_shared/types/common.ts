@@ -32,6 +32,20 @@ export type AdminNavItem = NavItem & {
   children?: AdminNavItem[];
 };
 
+/**
+ * BE-wave — grouped admin nav. Each group renders as a labeled
+ * `<SidebarGroup>` in the admin sidebar. Templates that want the
+ * Pages/Features/Settings split return an array of these instead of
+ * a flat AdminNavItem[]. Flat shape stays supported for backwards compat.
+ */
+export type AdminNavGroup = {
+  id: string;
+  label: string;
+  items: AdminNavItem[];
+  /** When true, first item gets home-aware active matching (root link). */
+  homeAware?: boolean;
+};
+
 export type User = {
   name: string;
   role: string;
