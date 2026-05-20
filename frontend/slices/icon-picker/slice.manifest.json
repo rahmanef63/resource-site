@@ -20,6 +20,7 @@
     "components/picker-parts/Sections.tsx",
     "components/picker-parts/Toolbar.tsx",
     "components/picker-parts/cells.tsx",
+    "config.ts",
     "index.ts",
     "lib/colors.ts",
     "lib/defaults.ts",

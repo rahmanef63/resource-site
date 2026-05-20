@@ -11,6 +11,7 @@ import {
   type FeatureItem,
 } from "@/components/templates/_shared";
 import { LandingSectionShell } from "@/components/templates/_shared/landing/LandingSectionShell";
+import { parseConfigBadge } from "@/components/templates/_shared/landing/parse-config";
 import type { LandingSection } from "@/components/templates/_shared/landing/types";
 import { ADMIN_BASE, PUBLIC_BASE } from "../../shared/nav-config";
 import type { Business, Product } from "../../shared/types";
@@ -156,12 +157,3 @@ export function renderLanding(section: LandingSection, deps: Deps) {
   }
 }
 
-function parseConfigBadge(config?: string): string | undefined {
-  if (!config) return undefined;
-  try {
-    const parsed = JSON.parse(config) as { badge?: unknown };
-    return typeof parsed.badge === "string" ? parsed.badge : undefined;
-  } catch {
-    return undefined;
-  }
-}

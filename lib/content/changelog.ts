@@ -10,6 +10,138 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "BO",
+    version: "BO-wave",
+    date: Date.parse("2026-05-20"),
+    kind: "feature",
+    title: "Operasi Mise M4 — manifest sync + 100% feature coverage + LandingRenderer parseConfigBadge extracted",
+    body:
+      "Phase 4 of 5 in Operasi Mise (kitchen prep before continuing development). Goal: clean up structural debt the audit flagged — slice manifests drift, config title shortening, scaffolding dir counted in coverage stats, duplicated tiny helpers. (1) sync-slice-manifests.mjs: ran, wrote 4 manifests (ai-agents, ai-chat, ai-studio, icon-picker — config.ts added after manifest was last regenerated). Also taught the script to silently skip slices that have config.ts but no slice.json — those are catalog-only meta-slices (admin-panel, event-tracking, pages, rbac-roles) whose actual code lives in _shared/, not as standalone distributables. (2) Aligned 8 config.ts titles with their slice.json long-form (ai-agents/chat/studio, code-block, equation, notifications, notion-blocks, notion-shell). Pre-commit warnings now silent. (3) audit-feature-manifest.mjs: skip _-prefixed dirs (consistent with sync-slice-manifests convention) so _templates scaffolding doesn't count against coverage. Result: 98.0% → 100.0% (48/48). (4) Extracted parseConfigBadge to _shared/landing/parse-config.ts — 5 templates (kreator-studio, personal-brand, research, konsultan, wirausaha) had identical 8-line inline function. Now imported. Added generic parseConfigField<T>() helper for future config-key extraction. Net: -40 LOC across 5 templates. LandingRenderer base-class extraction (originally planned) revealed shallow shared surface — each template's switch-case maps to template-specific component imports (Hero, Stats, FeaturedPosts, etc), so no extraction beyond parseConfigBadge made sense.",
+    groups: [
+      {
+        heading: "Manifest sync",
+        bullets: [
+          "scripts/validation/sync-slice-manifests.mjs — skip catalog-only slices (config.ts only, no slice.json)",
+          "4 manifest files updated: ai-agents, ai-chat, ai-studio, icon-picker — files[] regenerated from disk",
+        ],
+      },
+      {
+        heading: "Feature manifest coverage 100% (48/48)",
+        bullets: [
+          "scripts/audit-feature-manifest.mjs — skip _-prefixed dirs (matches sync-slice-manifests convention)",
+          "_templates scaffolding now correctly excluded from coverage stats",
+        ],
+      },
+      {
+        heading: "Slice title alignment (config.ts ↔ slice.json)",
+        bullets: [
+          "ai-agents/ai-chat/ai-studio — long-form titles restored",
+          "code-block/equation/notifications/notion-blocks/notion-shell — same",
+        ],
+      },
+      {
+        heading: "Shared helper extracted",
+        bullets: [
+          { text: "components/templates/_shared/landing/parse-config.ts — parseConfigBadge + generic parseConfigField<T> (NEW)", slug: "landing-sections", kind: "slice" },
+          { text: "5 LandingRenderer.tsx files migrated: removed local parseConfigBadge, import from _shared", slug: "landing-sections", kind: "slice" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "BN",
+    version: "BN-wave",
+    date: Date.parse("2026-05-20"),
+    kind: "feature",
+    title: "Operasi Mise M3 — unified resources registry + slice exposure in /api/knowledge",
+    body:
+      "Phase 3 of Operasi Mise. NEW lib/content/resources.ts — derived layer over slices + layouts (additive, no upstream changes). Resource type with { source: 'slice'|'template'|'layout', slug, title, description, category, tags, href, previewPath, install }. /api/knowledge expanded to accept ?slice=, ?resource=, ?type= query params; response adds resources[], slices[], counts{} alongside the legacy layouts[]/recipes[]. llms.txt gets an Agent API section enumerating all endpoints + response shape so AI agents can discover the unified surface. Fixes ChatGPT's M-pre-audit finding that '/api/knowledge masih menerima recipe, mengembalikan recipes, dan belum expose slices sebagai first-class resource.'",
+    groups: [
+      {
+        heading: "NEW lib/content/resources.ts",
+        bullets: [
+          "Derived layer: spread slices.map(sliceToResource) + layouts.map(layoutToResource)",
+          "Templates = layouts.category === 'website-template'; rest = layout source",
+          "Helpers: getResource, getResourcesBySource, getResourcesByCategory, resourceCounts",
+        ],
+      },
+      {
+        heading: "/api/knowledge expanded (additive)",
+        bullets: [
+          "NEW query params: ?slice=<slug>, ?resource=<slug>, ?type=<source>",
+          "NEW response fields: resources[] (unified), slices[] (Tier-3 full), counts{}",
+          "Legacy layouts[], recipes[] preserved for pre-M3 consumers",
+        ],
+      },
+      {
+        heading: "llms.txt — Agent API section",
+        bullets: [
+          "Documents 7 endpoint variations with curl-paste examples",
+          "Lists response shape so agents skip the discovery roundtrip",
+        ],
+      },
+    ],
+  },
+  {
+    id: "BM",
+    version: "BM-wave",
+    date: Date.parse("2026-05-20"),
+    kind: "feature",
+    title: "Operasi Mise M2 — route SSOT via buildTemplatePaths(slug) helper",
+    body:
+      "Phase 2 of Operasi Mise. Goal: dedupe hardcoded /preview/<slug>-os/... paths across templates so renaming a template = change one constant instead of editing 16+ files. NEW components/templates/_shared/config/template-paths.ts: buildTemplatePaths(slug: string) factory returning publicBase, dashboardBase, adminPanelBase, workspaceBase. Each of 8 templates' site-config.ts exports canonical TEMPLATE_SLUG; nav-config.ts imports it and derives all BASE consts via helper. app/preview/<slug>/{sitemap,robots}.ts also migrated for the 6 templates that ship them. Hardcoded /preview/<slug> literals before: 39 across 29 files. After: 0 functional.",
+    groups: [
+      {
+        heading: "NEW _shared/config/template-paths.ts",
+        bullets: [
+          "buildTemplatePaths(slug: string): TemplatePaths factory",
+          "Returns previewRoot, publicBase, dashboardBase, adminPanelBase, workspaceBase",
+        ],
+      },
+      {
+        heading: "8 templates migrated",
+        bullets: [
+          "site-config.ts adds canonical TEMPLATE_SLUG constant",
+          "nav-config.ts derives PUBLIC_BASE / DASHBOARD_BASE / ADMIN_PANEL_BASE / WORKSPACE_BASE via helper",
+          "ADMIN_BASE deprecated alias preserved for callers",
+        ],
+      },
+      {
+        heading: "12 app/preview/<slug>/{sitemap,robots}.ts migrated",
+        bullets: [
+          "PUBLIC_BASE derives from helper",
+          "robots.ts disallow rebased from stale /preview/<slug>/admin to dashboardBase",
+        ],
+      },
+    ],
+  },
+  {
+    id: "BL",
+    version: "BL-wave",
+    date: Date.parse("2026-05-20"),
+    kind: "chore",
+    title: "Operasi Mise M1 — docs SSOT + dead code cleanup",
+    body:
+      "Phase 1 of Operasi Mise (kitchen prep before continuing development). Lowest risk wave. (1) lib/content/changelog.ts — append BK entry (the unified PageSectionsEditor + 98% feature manifest coverage that shipped at 9e5b72f had no changelog entry). (2) CLAUDE.md — version drift fixed. CLI 0.13.1 → 1.7.0, MCP 0.9.1 → 1.1.0 (matches npm published + local package.json). (3) app/(docs)/slices/page.tsx — h1 'Feature slices' → 'Slices' (navbar already says 'Features', metadata already says 'Slices'). (4) docs/slice-architecture.md — drop dangling MEMORY.md TODO (auto-memory lives in ~/.claude/projects). (5) docs/architecture/dashboard-vision.md — record BG–BK shipped + add Operasi Mise section with M1–M5 roadmap.",
+    groups: [
+      {
+        heading: "Docs catch-up",
+        bullets: [
+          "lib/content/changelog.ts — BK entry appended",
+          "CLAUDE.md — package versions corrected (CLI 1.7.0, MCP 1.1.0)",
+          "docs/architecture/dashboard-vision.md — Operasi Mise M1–M5 roadmap",
+        ],
+      },
+      {
+        heading: "Dead code / drift",
+        bullets: [
+          "app/(docs)/slices/page.tsx — h1 'Feature slices' → 'Slices'",
+          "docs/slice-architecture.md — dangling MEMORY.md TODO removed",
+        ],
+      },
+    ],
+  },
+  {
     id: "BK",
     version: "BK-wave",
     date: Date.parse("2026-05-20"),

@@ -34,7 +34,13 @@ for (const name of readdirSync(SLICES_ROOT)) {
   const dir = path.join(SLICES_ROOT, name);
   if (!statSync(dir).isDirectory()) continue;
   const manifestPath = path.join(dir, "slice.manifest.json");
+  const slicePath = path.join(dir, "slice.json");
   if (!existsSync(manifestPath)) {
+    // Catalog-only slices (M4-BO) — config.ts present but no slice.json
+    // means the slice's implementation lives in `_shared/` or another
+    // template-managed location, not as a stand-alone distributable.
+    // Skip silently — these are intentionally not in the CLI ship list.
+    if (!existsSync(slicePath)) continue;
     errors.push(`[${name}] missing slice.manifest.json — scaffold first`);
     continue;
   }

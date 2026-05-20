@@ -3,6 +3,7 @@
 import * as React from "react";
 import type { LandingSection } from "@/components/templates/_shared/landing/types";
 import { LandingSectionShell } from "@/components/templates/_shared/landing/LandingSectionShell";
+import { parseConfigBadge } from "@/components/templates/_shared/landing/parse-config";
 import { Hero } from "./Hero";
 import { NewsletterBlock } from "./NewsletterBlock";
 import {
@@ -116,13 +117,3 @@ export function renderLanding(section: LandingSection, deps: Deps) {
   }
 }
 
-/** Optional badge override from the section's config JSON: `{"badge":"…"}`. */
-function parseConfigBadge(config?: string): string | undefined {
-  if (!config) return undefined;
-  try {
-    const parsed = JSON.parse(config) as { badge?: unknown };
-    return typeof parsed.badge === "string" ? parsed.badge : undefined;
-  } catch {
-    return undefined;
-  }
-}

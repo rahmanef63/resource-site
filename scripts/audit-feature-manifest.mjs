@@ -10,6 +10,7 @@ const ROOT = "frontend/slices";
 function listSlices(root) {
   if (!existsSync(root)) return [];
   return readdirSync(root)
+    .filter((name) => !name.startsWith("_") && !name.startsWith(".")) // M4-BO — skip scaffolding (`_templates`) + dotfiles (matches sync-slice-manifests.mjs convention)
     .map((name) => ({ name, path: join(root, name) }))
     .filter((e) => statSync(e.path).isDirectory());
 }

@@ -10,6 +10,7 @@
   },
   "files": [
     "README.md",
+    "config.ts",
     "index.ts",
     "types.ts"
   ],
