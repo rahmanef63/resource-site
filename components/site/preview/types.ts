@@ -18,6 +18,14 @@ export type PreviewSource = {
   publicPath: string;
   /** Optional admin iframe src for dual-surface slices/templates. */
   adminPath?: string;
+  /** BR-wave — canonical external URLs for "Open in new tab" links
+   *  in the LivePreviewButton + detail-page split-pane toolbars.
+   *  Iframes still load publicPath/adminPath (same origin, localStorage
+   *  preserved); only the new-tab destinations switch to these. Set
+   *  by `normalizePreviewSource()` when the upstream entry has a
+   *  matching demo subdomain mapping. */
+  publicExternalUrl?: string;
+  adminExternalUrl?: string;
   /** Which surface opens first when both present. Default "public". */
   defaultSurface?: PreviewSurfaceMode;
   /** Initial viewport preset. Default PREVIEW_DEFAULTS.view. */

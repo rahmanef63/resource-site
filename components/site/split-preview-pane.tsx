@@ -12,6 +12,13 @@ import { useSplitRatio } from "./split-preview/use-split-ratio";
 type Props = {
   publicSrc: string;
   adminSrc: string;
+  /** BR-wave — optional canonical demo URLs for "Open in new tab".
+   *  When set, the per-pane new-tab link points here (e.g. subdomain
+   *  https://demo-konsultan.rahmanef.com/ + /admin). The iframe still
+   *  loads publicSrc/adminSrc internally so localStorage sync between
+   *  panes keeps working (same origin = same storage scope). */
+  publicExternalUrl?: string;
+  adminExternalUrl?: string;
   /** Seed view for both panes. Re-syncs both panes when this changes
    *  (lets the page-level main viewport selector drive both at once).
    *  Each pane can still diverge via its own selector after. */
@@ -32,6 +39,8 @@ function useOptionalFeatureContext(): ReturnType<typeof useFeatureContext> | nul
 export function SplitPreviewPane({
   publicSrc,
   adminSrc,
+  publicExternalUrl,
+  adminExternalUrl,
   view,
   storageKey,
 }: Props) {
@@ -138,6 +147,7 @@ export function SplitPreviewPane({
           <SplitPane
             key={"pub-" + iframeKey}
             src={publicSrc}
+            externalUrl={publicExternalUrl}
             label="Public"
             hint="visitor view"
             icon={Eye}
@@ -155,6 +165,7 @@ export function SplitPreviewPane({
           <SplitPane
             key={"adm-" + iframeKey}
             src={adminSrc}
+            externalUrl={adminExternalUrl}
             label="Admin"
             hint="owner dashboard"
             icon={LayoutDashboard}

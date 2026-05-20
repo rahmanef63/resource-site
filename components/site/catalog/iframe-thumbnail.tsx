@@ -46,6 +46,9 @@ type SourceProps = CommonProps & {
 
 type LegacyProps = CommonProps & {
   src: string;
+  /** BR-wave — override URL for the LivePreviewButton dialog's
+   *  "Open in new tab" link. Iframe still loads `src`. */
+  externalUrl?: string;
   liveTitle?: string;
   liveDefaultView?: PreviewView;
   liveDefaultZoom?: number;
@@ -56,6 +59,7 @@ type Props = SourceProps | LegacyProps;
 
 function resolveSource(props: Props): {
   src: string;
+  externalUrl?: string;
   liveTitle?: string;
   liveDefaultView?: PreviewView;
   liveDefaultZoom?: number;
@@ -63,6 +67,7 @@ function resolveSource(props: Props): {
   if ("source" in props && props.source) {
     return {
       src: props.source.publicPath,
+      externalUrl: props.source.publicExternalUrl,
       liveTitle: props.source.title,
       liveDefaultView: props.source.defaultView,
       liveDefaultZoom: props.source.defaultZoom,
@@ -70,6 +75,7 @@ function resolveSource(props: Props): {
   }
   return {
     src: props.src,
+    externalUrl: props.externalUrl,
     liveTitle: props.liveTitle,
     liveDefaultView: props.liveDefaultView,
     liveDefaultZoom: props.liveDefaultZoom,
@@ -84,7 +90,7 @@ export function IframeThumbnail(props: Props) {
     rootMargin,
     hideLiveTrigger,
   } = props;
-  const { src, liveTitle, liveDefaultView, liveDefaultZoom } = resolveSource(props);
+  const { src, externalUrl, liveTitle, liveDefaultView, liveDefaultZoom } = resolveSource(props);
   const { ref, visible } = useIframeLazyLoad<HTMLDivElement>(rootMargin);
   const { loaded, onLoad } = useIframeLoaded();
   return (
@@ -118,6 +124,7 @@ export function IframeThumbnail(props: Props) {
       {liveTitle && !hideLiveTrigger && (
         <LivePreviewButton
           src={src}
+          externalUrl={externalUrl}
           title={liveTitle}
           defaultView={liveDefaultView}
           defaultZoom={liveDefaultZoom}

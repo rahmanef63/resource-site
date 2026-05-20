@@ -44,6 +44,11 @@ export function TemplateDetail({ kind, basePath, data, prev, next, prompt, siteU
       subtitle: data.description,
       publicPath: data.previewPath,
       adminPath: data.adminPreviewPath,
+      // BR-wave — when slug has a demo subdomain, point the
+      // SplitPane new-tab buttons there (iframe srcs stay internal
+      // so localStorage stays in sync between public + admin panes).
+      publicExternalUrl: demoUrl ? `${demoUrl}/` : undefined,
+      adminExternalUrl: demoUrl ? `${demoUrl}/admin` : undefined,
       defaultSurface: data.defaultSurface,
       defaultView: data.defaultView,
       defaultZoom: data.defaultZoom,

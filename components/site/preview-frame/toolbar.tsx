@@ -16,6 +16,7 @@ import { ViewButtonStrip, ViewDropdown } from "./view-picker";
 
 export function PreviewToolbar({
   src,
+  externalUrl,
   view,
   setView,
   zoom,
@@ -31,6 +32,10 @@ export function PreviewToolbar({
   viewControls,
 }: {
   src: string;
+  /** BR-wave — override URL for the "Open in new tab" link. Falls
+   *  back to `src`. Set when caller wants the new-tab to land on a
+   *  canonical demo subdomain instead of the internal /preview path. */
+  externalUrl?: string;
   view: PreviewView;
   setView: (v: PreviewView) => void;
   zoom: number;
@@ -91,7 +96,7 @@ export function PreviewToolbar({
           aria-label="Fullscreen" title="Fullscreen">
           <Maximize2 className="size-3" />
         </Button>
-        <a href={src} target="_blank" rel="noopener noreferrer"
+        <a href={externalUrl ?? src} target="_blank" rel="noopener noreferrer"
           className="inline-flex size-6 items-center justify-center rounded text-muted-foreground hover:bg-accent hover:text-foreground"
           aria-label="Open in new tab" title="Open in new tab">
           <ExternalLink className="size-3" />

@@ -15,6 +15,11 @@ import { PreviewToolbar } from "@/components/site/preview-frame/toolbar";
 
 type Props = {
   src: string;
+  /** BR-wave — override URL for the "Open in new tab" link in the
+   *  toolbar. Iframe still loads `src` (so internal /preview path
+   *  preserves same-origin localStorage). When caller sets this to a
+   *  demo subdomain, the new-tab opens the canonical portfolio URL. */
+  externalUrl?: string;
   defaultView?: PreviewView;
   defaultZoom?: number;
   minZoom?: number;
@@ -31,6 +36,7 @@ type Props = {
 
 export function PreviewFrame({
   src,
+  externalUrl,
   defaultView = "desktop",
   defaultZoom,
   minZoom = 0.4,
@@ -65,6 +71,7 @@ export function PreviewFrame({
       >
         <PreviewToolbar
           src={src}
+          externalUrl={externalUrl}
           view={view}
           setView={setView}
           zoom={zoom}

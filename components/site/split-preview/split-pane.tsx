@@ -15,6 +15,7 @@ import { PaneViewSelector } from "./pane-view-selector";
 
 export function SplitPane({
   src,
+  externalUrl,
   label,
   hint,
   icon: Icon,
@@ -24,6 +25,12 @@ export function SplitPane({
   orientation = "portrait",
 }: {
   src: string;
+  /** BR-wave — override URL for the "Open in new tab" link. Iframe
+   *  still loads `src` (same-origin so localStorage + BroadcastChannel
+   *  sync between public/admin panes). New-tab opens this canonical
+   *  demo URL (subdomain) for portfolio/share use. Falls back to
+   *  `src` when not provided. */
+  externalUrl?: string;
   label: string;
   hint: string;
   icon: React.ComponentType<{ className?: string }>;
@@ -80,7 +87,7 @@ export function SplitPane({
             {preset.width}×{preset.height} · {Math.round(scale * 100)}%
           </span>
           <a
-            href={src}
+            href={externalUrl ?? src}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex size-6 items-center justify-center rounded text-muted-foreground hover:bg-accent hover:text-foreground"

@@ -22,6 +22,13 @@ export interface BuildPreviewManifestArgs {
   /** Preview surfaces. Tabs render conditionally on what's provided. */
   publicPath?: string;
   adminPath?: string;
+  /** BR-wave — optional canonical external URLs for "Open in new tab"
+   *  buttons inside the SplitPreviewPane toolbar. Iframes still load
+   *  publicPath/adminPath so same-origin localStorage stays in sync
+   *  between public + admin panes; only the new-tab destinations
+   *  change. Pass `https://demo-<short>.rahmanef.com/` here. */
+  publicExternalUrl?: string;
+  adminExternalUrl?: string;
   /** Which surface tab opens first ("public" | "admin"). Default "public". */
   defaultSurface?: "public" | "admin";
   /** Initial viewport preset for the iframe. */
@@ -89,6 +96,8 @@ export function buildPreviewManifest(args: BuildPreviewManifestArgs): FeatureMan
         <SplitPreviewPane
           publicSrc={args.publicPath!}
           adminSrc={args.adminPath!}
+          publicExternalUrl={args.publicExternalUrl}
+          adminExternalUrl={args.adminExternalUrl}
           storageKey={splitKey}
         />
       ),

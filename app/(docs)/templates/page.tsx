@@ -5,6 +5,7 @@ import { type CatalogSearchItem } from "@/components/site/catalog/catalog-search
 import { CatalogHero } from "@/components/site/catalog/catalog-hero";
 import { CatalogTabs } from "@/components/site/catalog/catalog-tabs";
 import { IframeThumbnail } from "@/components/site/catalog/iframe-thumbnail";
+import { getDemoUrl } from "@/lib/content/template-subdomains";
 import { MockThumbnail } from "@/components/site/catalog/mock-thumbnail";
 import { UseWideLayout } from "@/components/site/use-wide-layout";
 
@@ -35,6 +36,7 @@ export default function TemplatesPage() {
           l.previewPath ? (
             <IframeThumbnail
               src={l.previewPath}
+              externalUrl={getDemoUrl(l.slug) ? `${getDemoUrl(l.slug)}/` : undefined}
               liveTitle={l.title}
               liveDefaultView={l.defaultView}
               liveDefaultZoom={l.defaultZoom}

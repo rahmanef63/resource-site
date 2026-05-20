@@ -1,9 +1,11 @@
 import type { PreviewView } from "@/lib/preview-presets";
 import type { PreviewSource, PreviewSurfaceMode } from "../types";
+import { getDemoUrl } from "@/lib/content/template-subdomains";
 
 /** Loose input shape — anything with a previewPath becomes a
  *  PreviewSource. Lets us pass SliceEntry/LayoutEntry directly. */
 type PartialPreviewSource = {
+  slug?: string;
   previewPath?: string | null;
   adminPreviewPath?: string | null;
   defaultSurface?: PreviewSurfaceMode;
@@ -13,12 +15,21 @@ type PartialPreviewSource = {
 };
 
 /** Convert a catalog entry (Slice/Layout) into a normalized
- *  PreviewSource. Returns null if no public preview path. */
+ *  PreviewSource. Returns null if no public preview path.
+ *
+ *  BR-wave — when `slug` matches a demo subdomain mapping (see
+ *  lib/content/template-subdomains.ts), enriches the source with
+ *  publicExternalUrl + adminExternalUrl so "Open in new tab" lands
+ *  on the canonical demo subdomain instead of the internal
+ *  /preview/<slug>/... path. */
 export function normalizePreviewSource(input: PartialPreviewSource): PreviewSource | null {
   if (!input.previewPath) return null;
+  const demoUrl = input.slug ? getDemoUrl(input.slug) : null;
   return {
     publicPath: input.previewPath,
     adminPath: input.adminPreviewPath ?? undefined,
+    publicExternalUrl: demoUrl ? `${demoUrl}/` : undefined,
+    adminExternalUrl: demoUrl && input.adminPreviewPath ? `${demoUrl}/admin` : undefined,
     defaultSurface: input.defaultSurface,
     defaultView: input.defaultView,
     defaultZoom: input.defaultZoom,

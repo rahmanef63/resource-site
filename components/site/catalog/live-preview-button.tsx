@@ -17,6 +17,12 @@ import { cn } from "@/lib/utils";
 
 type Props = {
   src: string;
+  /** BR-wave — override URL for the PreviewFrame toolbar's "Open in
+   *  new tab" button. Iframe still loads `src` (same-origin so the
+   *  template's localStorage state is shared with other rr surfaces).
+   *  Set this to the demo subdomain when promoting the canonical
+   *  portfolio URL. */
+  externalUrl?: string;
   title: string;
   defaultView?: PreviewView;
   defaultZoom?: number;
@@ -44,6 +50,7 @@ type Props = {
  */
 export function LivePreviewButton({
   src,
+  externalUrl,
   title,
   defaultView,
   defaultZoom,
@@ -94,6 +101,7 @@ export function LivePreviewButton({
         <div className="min-h-0 flex-1 overflow-hidden bg-background">
           <PreviewFrame
             src={src}
+            externalUrl={externalUrl}
             defaultView={defaultView ?? PREVIEW_DEFAULTS.view}
             defaultZoom={defaultZoom}
             className="h-full rounded-none border-0"
