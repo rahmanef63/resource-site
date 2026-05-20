@@ -51,6 +51,23 @@ async function buildBody() {
     lines.push(`- detail: ${site.url}/slices/${s.slug}`);
     lines.push("");
   }
+  lines.push("## Agent API");
+  lines.push("");
+  lines.push("JSON catalog endpoints for AI agents:");
+  lines.push("");
+  lines.push("```");
+  lines.push("GET /api/knowledge                 # full catalog (resources + slices + layouts)");
+  lines.push("GET /api/knowledge?type=slice      # only Tier-3 slices");
+  lines.push("GET /api/knowledge?type=template   # only website templates");
+  lines.push("GET /api/knowledge?type=layout     # only layouts (sections, pages)");
+  lines.push("GET /api/knowledge?slice=<slug>    # detail for one slice");
+  lines.push("GET /api/knowledge?resource=<slug> # detail for any resource");
+  lines.push("GET /api/knowledge?layout=<slug>   # detail for one layout (legacy)");
+  lines.push("```");
+  lines.push("");
+  lines.push("Response shape: `{ resources: [...], slices: [...], layouts: [...], counts: {...}, rules: [...] }`.");
+  lines.push("Each `resources[]` entry has `{ source, slug, title, description, category, tags, href, previewPath, install }` — agents can install any via `install` field.");
+  lines.push("");
   lines.push("## Hard rules (12-rule doctrine — full text at /best-practice)");
   lines.push("");
   lines.push("- NO Clerk. Use @convex-dev/auth.");
