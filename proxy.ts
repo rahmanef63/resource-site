@@ -50,6 +50,18 @@ export default function proxy(request: NextRequest) {
     if (pathname.startsWith(prefix)) return NextResponse.next();
   }
 
+  // CG-wave (2026-05-21) — if the path is ALREADY correctly nested
+  // under this template's /preview/<slug>/ subtree, pass through.
+  // This happens when sidebar nav uses absolute hrefs like
+  // `/preview/konsultan-os/dashboard/admin/clients` (the canonical
+  // source URL). Without this guard, the proxy would re-rewrite to
+  // /preview/<slug>/public/preview/<slug>/dashboard/admin/clients
+  // and the catch-all renders notFound() → broken sidebar everywhere.
+  const previewPrefix = `/preview/${slug}`;
+  if (pathname === previewPrefix || pathname.startsWith(previewPrefix + "/")) {
+    return NextResponse.next();
+  }
+
   // Map subdomain paths onto the right /preview/<slug>/* sub-tree.
   //   /admin/* → /preview/<slug>/dashboard/admin/*
   //   /*       → /preview/<slug>/public/*  (default: public site)

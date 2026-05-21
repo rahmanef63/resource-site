@@ -10,6 +10,40 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CG",
+    version: "CG-wave",
+    date: Date.parse("2026-05-21"),
+    kind: "fix",
+    title: "subdomain 404 fix — proxy passes through already-prefixed /preview/<slug>/ URLs",
+    body:
+      "User report: 'banyak module features yang 404' (many module/features 404 on subdomains). ROOT CAUSE: every template's nav-config.ts uses ADMIN_PANEL_BASE = `/preview/<slug>/dashboard/admin` as the href root for sidebar links — those URLs are correct on the canonical resource.rahmanef.com but DOUBLE-NEST when clicked on a demo subdomain (proxy.ts re-rewrites `/preview/konsultan-os/dashboard/admin/clients` → `/preview/konsultan-os/public/preview/konsultan-os/dashboard/admin/clients`, the catch-all renders notFound() = page-not-found inside the template chrome with HTTP 200, looks like a broken endpoint). VERIFIED: every internal sidebar click on every demo subdomain was affected — admin/clients, admin/proposals, admin/contracts, admin/projects, admin/billing, admin/documents, admin/pages, admin/landing, admin/settings (~9 routes per template × 8 templates = ~72 broken links). FIX: 7-line proxy guard — if request path is already correctly nested under /preview/<slug>/ for this subdomain's resolved slug, pass through unchanged. canonical resource.rahmanef.com still works (different subdomain → falls through to default route). Subdomain root URL (demo-X.rahmanef.com/) still rewrites to /preview/<slug>/public. /admin shortcut still rewrites to /preview/<slug>/dashboard/admin. Single-file fix in proxy.ts (~7 LOC + comment). Aesthetic follow-up (clean URLs via short forms in nav-config) deferred to a future wave — current fix restores function without changing what's in the URL bar.",
+    groups: [
+      {
+        heading: "Behavior before / after",
+        bullets: [
+          "BEFORE: demo-konsultan.rahmanef.com/preview/konsultan-os/dashboard/admin/clients → notFound() rendered (header shows '404')",
+          "AFTER: same URL passes through, renders the real Clients admin page",
+          "Unchanged: /admin/clients shortcut still rewrites; / still rewrites to public; /contact still rewrites to public/contact",
+        ],
+      },
+      {
+        heading: "Audit",
+        bullets: [
+          "Slice catalog: 55/55 endpoints already returned 200 on canonical site (pre-fix scan)",
+          "Layout catalog: 36/36 endpoints 200",
+          "Docs section: 15/15 endpoints 200",
+          "Subdomain admin sidebar nav: ~72 broken links across 8 templates pre-fix — all unblocked post-fix",
+        ],
+      },
+      {
+        heading: "Followup (deferred)",
+        bullets: [
+          "Nav-config could emit subdomain-short URLs (/admin/clients) when running under a demo subdomain — would give cleaner URL bar. Requires context-aware Link wrapper. Defer to CH-wave.",
+        ],
+      },
+    ],
+  },
+  {
     id: "CF",
     version: "CF-wave",
     date: Date.parse("2026-05-21"),
