@@ -5,6 +5,7 @@ import { UsersBlockView } from "./blocks/users/UsersBlockView";
 import { AuditLogBlockView } from "./blocks/audit-log/AuditLogBlockView";
 import { AiConfigBlockView } from "./blocks/ai-config/AiConfigBlockView";
 import { AnalyticsBlockView } from "./blocks/analytics/AnalyticsBlockView";
+import { WebhooksBlockView } from "./blocks/webhooks/WebhooksBlockView";
 
 /**
  * BG-wave — shared stub renderer used by every per-template admin
@@ -27,5 +28,6 @@ export function AdminFeatureStubPage({ segment }: { segment: string }) {
   if (segment === "audit-log") return <AuditLogBlockView />;
   if (segment === "ai-config") return <AiConfigBlockView />;
   if (segment === "analytics") return <AnalyticsBlockView />;
+  if (segment === "webhooks") return <WebhooksBlockView />;
   return <AdminFeatureCard block={block} />;
 }

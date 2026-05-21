@@ -10,6 +10,40 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "BW",
+    version: "BW-wave",
+    date: Date.parse("2026-05-21"),
+    kind: "feature",
+    title: "admin-panel/webhooks real impl — fifth BS-pattern block",
+    body:
+      "Fifth admin-panel block graduates from generic AdminFeatureCard stub to a real interactive view. WebhooksBlockView ships with a 3-tab layout (Endpoints / Recent deliveries / Payload format) inside a shadcn Tabs. Endpoints tab shows 4 seed endpoints (Zapier CRM, Slack #ops, internal audit mirror, staging sandbox) with per-row status badge (active / paused / failing), event chips, masked secret tail, Test button, and a DropdownMenu with Pause/Resume + Rotate secret + Delete — all wired to local state so toggle/remove work live. Failing endpoint shows retry counter. Deliveries tab is a 12-row table (when, endpoint, event, status badge, HTTP code, ms, attempt-multiplier marker, replay action) covering delivered/failed/retry/pending. Payload tab shows a sample event body + the HMAC-SHA256 signature header consumers must verify (with 5-min replay protection note). Pattern identical to prior 4 blocks: _shared/admin-panel/blocks/webhooks/{types, seed, view, endpoint-row, delivery-table} + single dispatch case. No canonical slice yet — schema here would seed a future frontend/slices/webhooks/.",
+    groups: [
+      {
+        heading: "NEW files",
+        bullets: [
+          "_shared/admin-panel/blocks/webhooks/types.ts — WebhookEventName (8) + EndpointStatus (3) + WebhookEndpoint + DeliveryStatus (4) + WebhookDelivery",
+          "_shared/admin-panel/blocks/webhooks/seed.ts — STATUS_META + DELIVERY_META tone tables + 4 endpoints + 12 deliveries + SAMPLE_PAYLOAD + SAMPLE_SIGNATURE",
+          "_shared/admin-panel/blocks/webhooks/WebhooksBlockView.tsx — orchestrator (header stats + 3-tab Endpoints/Deliveries/Payload)",
+          "_shared/admin-panel/blocks/webhooks/endpoint-row.tsx — row with Test + DropdownMenu (Pause/Resume/Rotate/Delete) + event chips + secret tail",
+          "_shared/admin-panel/blocks/webhooks/delivery-table.tsx — 12-row recent deliveries grid with replay button",
+        ],
+      },
+      {
+        heading: "Dispatcher update",
+        bullets: [
+          "AdminFeatureStubPage: added `if (segment === \"webhooks\") return <WebhooksBlockView />;` case",
+        ],
+      },
+      {
+        heading: "Coverage",
+        bullets: [
+          "5 of 6 admin-panel blocks now real (users, audit-log, ai-config, analytics, webhooks). Only settings remains as placeholder.",
+          "All 8 templates' webhooks routes auto-updated via shared dispatcher.",
+        ],
+      },
+    ],
+  },
+  {
     id: "BV",
     version: "BV-wave",
     date: Date.parse("2026-05-21"),
