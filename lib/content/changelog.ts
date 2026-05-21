@@ -10,6 +10,52 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "BX",
+    version: "BX-wave",
+    date: Date.parse("2026-05-21"),
+    kind: "feature",
+    title: "admin-panel/settings real impl — sixth + final BS-pattern block (100% block coverage)",
+    body:
+      "Sixth and final admin-panel block graduates from generic AdminFeatureCard stub to a real interactive view. ALL 6 ADMIN PANEL BLOCKS NOW REAL (users + audit-log + ai-config + analytics + webhooks + settings). SettingsBlockView ships with a 4-tab layout (Identity / Integrations / API keys / Danger zone). Identity tab: live editable workspace name + URL slug (auto-sanitized to a-z0-9-) + timezone Select (7 IANA zones) + language Select (4 locales) + contact email — all wired to local state. Integrations tab: 6-service grid (Slack messaging, Resend email, Stripe payments, Vercel deploy, GitHub vcs, DOKU payments) each with connected/disconnected/error status badge, category label, status detail line, Connect/Configure/Reconnect button, and docs link. API keys tab: 3 seed keys with scope badge (read / read-write / admin), masked tail, created date + last-used relative, copy button, revoke action (wired). Danger zone: 3 destructive actions (Transfer ownership / Archive workspace / Delete workspace) with descriptive subtext and destructive Button variant. Pattern identical to prior 5: _shared/admin-panel/blocks/settings/{types, seed, view, identity-form, integration-grid, api-keys-list} + final dispatch case. AdminFeatureStubPage's comment block updated to reflect 100% coverage. AdminFeatureCard retained as fallback for any future segment added to ADMIN_PANEL_BLOCKS before a real view ships.",
+    groups: [
+      {
+        heading: "NEW files",
+        bullets: [
+          "_shared/admin-panel/blocks/settings/types.ts — WorkspaceIdentity + IntegrationStatus + Integration + ApiKey",
+          "_shared/admin-panel/blocks/settings/seed.ts — DEFAULT_IDENTITY + 7 TIMEZONES + 4 LANGUAGES + 6 INTEGRATIONS + 3 SEED_KEYS + tone tables",
+          "_shared/admin-panel/blocks/settings/SettingsBlockView.tsx — orchestrator (4-tab + DangerZone)",
+          "_shared/admin-panel/blocks/settings/identity-form.tsx — name + slug auto-sanitize + timezone + language + email",
+          "_shared/admin-panel/blocks/settings/integration-grid.tsx — 6-service status grid",
+          "_shared/admin-panel/blocks/settings/api-keys-list.tsx — list with revoke + masked tail + last-used relative",
+        ],
+      },
+      {
+        heading: "Dispatcher final state",
+        bullets: [
+          "AdminFeatureStubPage: added `if (segment === \"settings\") return <SettingsBlockView />;` case",
+          "Comment updated: BS-canary → BX-wave (2026-05-20 → 2026-05-21) — all 6 blocks real",
+          "AdminFeatureCard retained as the future-segment fallback",
+        ],
+      },
+      {
+        heading: "Final coverage",
+        bullets: [
+          "6 / 6 admin-panel blocks real (users · audit-log · ai-config · analytics · webhooks · settings) — 100%.",
+          "All 8 templates inherit all 6 real blocks via the shared dispatcher. Single edit propagates to 48 admin-panel routes (8 templates × 6 blocks).",
+          "BS-pattern (per-block: types + seed + view + sub-components + single-line dispatch case + ≤200 LOC cap) proven end-to-end.",
+        ],
+      },
+      {
+        heading: "What's next",
+        bullets: [
+          "Templates pivot — real Convex bindings for blocks that have a slice (users → rbac-roles, audit-log → audit-log, analytics → event-tracking, ai-config → ai-router). Webhooks + settings need new canonical slices.",
+          "Optional: extract a Mermaid/SVG architecture diagram for the dispatcher → block pattern, surface on /docs.",
+          "Optional: build `npx rr eject` per docs/architecture/eject-spec.md when commercialize trigger fires.",
+        ],
+      },
+    ],
+  },
+  {
     id: "BW",
     version: "BW-wave",
     date: Date.parse("2026-05-21"),

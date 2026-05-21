@@ -6,6 +6,7 @@ import { AuditLogBlockView } from "./blocks/audit-log/AuditLogBlockView";
 import { AiConfigBlockView } from "./blocks/ai-config/AiConfigBlockView";
 import { AnalyticsBlockView } from "./blocks/analytics/AnalyticsBlockView";
 import { WebhooksBlockView } from "./blocks/webhooks/WebhooksBlockView";
+import { SettingsBlockView } from "./blocks/settings/SettingsBlockView";
 
 /**
  * BG-wave — shared stub renderer used by every per-template admin
@@ -14,12 +15,10 @@ import { WebhooksBlockView } from "./blocks/webhooks/WebhooksBlockView";
  * `<AdminFeatureStubPage segment="ai-config" />` — no per-template
  * duplication.
  *
- * BS-canary (2026-05-20) — dispatches to a real block view when one
- * exists. BT-wave (2026-05-20) — audit-log added. Remaining 4 segments
- * (ai-config, analytics, webhooks, settings) still render
- * AdminFeatureCard placeholder. Add a new
- * `_shared/admin-panel/blocks/<segment>/<Segment>BlockView.tsx`
- * and a case here to graduate another block.
+ * BS-canary → BX-wave (2026-05-20 → 2026-05-21) — all 6 admin-panel
+ * blocks now have real implementations. AdminFeatureCard is retained
+ * as the fallback for future segments added to ADMIN_PANEL_BLOCKS
+ * before a real view ships.
  */
 export function AdminFeatureStubPage({ segment }: { segment: string }) {
   const block = ADMIN_PANEL_BLOCKS.find((b) => b.segment === segment);
@@ -29,5 +28,6 @@ export function AdminFeatureStubPage({ segment }: { segment: string }) {
   if (segment === "ai-config") return <AiConfigBlockView />;
   if (segment === "analytics") return <AnalyticsBlockView />;
   if (segment === "webhooks") return <WebhooksBlockView />;
+  if (segment === "settings") return <SettingsBlockView />;
   return <AdminFeatureCard block={block} />;
 }
