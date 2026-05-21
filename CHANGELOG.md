@@ -11,6 +11,16 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### CK-4 — 2026-05-21 — database-csv standalone slice
+
+- New peer slice `frontend/slices/database-csv/` — Notion-style CSV import + export for `notion-database`.
+- **CsvActions** — dropdown w/ Export (Blob-URL download) + Import items.
+- **CsvImportDialog** — file picker → auto-map columns → user re-pick (existing prop / Title / skip / + New of 12 types) → submit emits single `onImport({newProperties, rows})` callback. Host owns persistence.
+- **csv.ts** — `parseCsv` / `valueFromString` / `exportDatabaseToCsv` / `downloadCsv` helpers exported standalone.
+- Auto-seeds select / multi_select / status options from CSV values. Computed types (formula / created_time / last_edited_time / unique_id) recognised + never written.
+- Preview `/preview/slices/database-csv` — 3-row demo w/ working in-memory Export + Import.
+- Catalog: 44 → 45 slices. CSV coverage 0% → 100%. Database adaptation ~72% → ~76%.
+
 ### CK-3 — 2026-05-21 — notion-database +6 property cells
 
 - New cells: **FilesCell** (paste-URL chips), **PersonCell** (initials avatars), **FormulaCell** (expression engine w/ live preview), **CreatedTimeCell** + **LastEditedTimeCell** (readonly system timestamps), **UniqueIdCell** (auto-derived).

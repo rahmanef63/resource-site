@@ -10,6 +10,52 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CK4",
+    version: "CK-4",
+    date: Date.parse("2026-05-21"),
+    kind: "feature",
+    title: "database-csv standalone slice — import + export for notion-database",
+    body:
+      "Continuation of CK-wave (database completion). Lifted pre-staged database-csv from template-base/notion/slices/database-csv/ as new standalone slice frontend/slices/database-csv/. Simplified contract vs upstream: ONE onImport callback (was 5 useStore methods) — receives {newProperties, rows} and lets host translate to its own adapter calls. CsvActions = dropdown trigger w/ Export (Blob URL download) + Import. CsvImportDialog = file picker → auto-map columns (case-insensitive name match against db.properties) → user re-pick mapping (existing prop / Title / skip / + New of 12 supported types) → submit. Supports auto-seeding select/multi_select/status options from CSV value names. Computed types (formula / created_time / last_edited_time / unique_id) recognised as readonly — never written from CSV. Dropped vs upstream: relation cross-DB lookups (no pages reference exposed), created_by / last_edited_by / rollup branches (not in rr PropertyType). New peer slice in catalog: database-csv 0.1.0 with notion-database ^0.3 peer dep. Preview /preview/slices/database-csv demo: 3-row DB w/ working in-memory Export + Import (refresh clears state). Slice count 44 → 45.",
+    groups: [
+      {
+        heading: "New slice files",
+        bullets: [
+          "frontend/slices/database-csv/{slice.json, slice.manifest.json, slice.contract.ts, index.ts}",
+          "components/CsvActions.tsx — dropdown trigger (Export + Import items)",
+          "components/CsvImportDialog.tsx — file picker + mapping submit",
+          "components/csv-mapping.tsx — extracted column-mapping table (≤200 LOC budget)",
+          "lib/csv.ts — parseCsv + valueFromString + exportDatabaseToCsv + downloadCsv",
+        ],
+      },
+      {
+        heading: "API surface",
+        bullets: [
+          "Single `onImport({newProperties, rows})` callback — host owns persistence",
+          "CsvNewProperty: { type, name, options? } (options auto-seeded for select-family)",
+          "CsvRowDraft: { title, rowProps }",
+          "All exports also available as utility fns for custom toolbars",
+        ],
+      },
+      {
+        heading: "Catalog",
+        bullets: [
+          { text: "NEW database-csv 0.1.0 — peer of notion-database ^0.3", slug: "database-csv", kind: "slice" },
+          "Slice count: 44 → 45. CSV import/export coverage: 0% → 100%.",
+          "Database adaptation: ~72% → ~76%",
+        ],
+      },
+      {
+        heading: "Deferred",
+        bullets: [
+          "JSON import (similar pattern, lower demand — defer to mega-bundle)",
+          "Relation column type via CSV (needs cross-DB scope — same blocker)",
+          "CK-1C FormView — still pending",
+        ],
+      },
+    ],
+  },
+  {
     id: "CK3",
     version: "CK-3",
     date: Date.parse("2026-05-21"),
