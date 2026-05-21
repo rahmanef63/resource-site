@@ -4,12 +4,12 @@ import * as React from "react";
 import { Plus, Webhook } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { SAMPLE_PAYLOAD, SAMPLE_SIGNATURE, SEED_DELIVERIES, SEED_ENDPOINTS } from "./seed";
+import { SAMPLE_PAYLOAD, SAMPLE_SIGNATURE } from "./seed";
+import { useWebhooksBindings } from "./bindings";
 import { EndpointRow } from "./endpoint-row";
 import { DeliveryTable } from "./delivery-table";
 import { BlockHeader } from "../../ui/block-header";
 import { EmptyState } from "../../ui/empty-state";
-import type { WebhookEndpoint } from "./types";
 
 /** Real admin-panel "Webhooks" block — fifth BS-pattern impl.
  *  Pure client demo: endpoint list (active/paused/failing) with
@@ -18,27 +18,14 @@ import type { WebhookEndpoint } from "./types";
  *  showing HMAC-SHA256 signature header that real impl would emit.
  *  No persistence. */
 export function WebhooksBlockView() {
-  const [endpoints, setEndpoints] = React.useState<WebhookEndpoint[]>(SEED_ENDPOINTS);
+  const { endpoints, deliveries, togglePause, remove } = useWebhooksBindings();
   const activeCount = endpoints.filter((e) => e.status === "active").length;
   const failingCount = endpoints.filter((e) => e.status === "failing").length;
-  const last24h = SEED_DELIVERIES.length;
+  const last24h = deliveries.length;
   const successRate = (
-    (SEED_DELIVERIES.filter((d) => d.status === "delivered").length / SEED_DELIVERIES.length) *
+    (deliveries.filter((d) => d.status === "delivered").length / Math.max(1, deliveries.length)) *
     100
   ).toFixed(0);
-
-  function togglePause(id: string) {
-    setEndpoints((prev) =>
-      prev.map((e) =>
-        e.id === id
-          ? { ...e, status: e.status === "paused" ? "active" : "paused" }
-          : e,
-      ),
-    );
-  }
-  function remove(id: string) {
-    setEndpoints((prev) => prev.filter((e) => e.id !== id));
-  }
 
   return (
     <div className="space-y-6 p-6">

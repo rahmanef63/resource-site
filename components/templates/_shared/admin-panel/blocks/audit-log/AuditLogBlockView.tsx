@@ -11,7 +11,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ACTION_META, SEED_EVENTS } from "./seed";
+import { ACTION_META } from "./seed";
+import { useAuditLogBindings } from "./bindings";
 import { EventRow, SeverityCard } from "./event-row";
 import { BlockHeader } from "../../ui/block-header";
 import { EmptyState } from "../../ui/empty-state";
@@ -22,13 +23,14 @@ import type { AuditAction, AuditSeverity } from "./types";
  *  No persistence. Backed by frontend/slices/audit-log/ types in real
  *  ejected impl (see eject-spec.md + AuditLogBindings contract). */
 export function AuditLogBlockView() {
+  const { events } = useAuditLogBindings();
   const [actionFilter, setActionFilter] = React.useState<AuditAction | "all">("all");
   const [severityFilter, setSeverityFilter] = React.useState<AuditSeverity | "all">("all");
   const [query, setQuery] = React.useState("");
 
   const filtered = React.useMemo(() => {
     const q = query.trim().toLowerCase();
-    return SEED_EVENTS.filter((e) => {
+    return events.filter((e) => {
       if (actionFilter !== "all" && e.action !== actionFilter) return false;
       if (severityFilter !== "all" && e.severity !== severityFilter) return false;
       if (q) {
@@ -37,11 +39,11 @@ export function AuditLogBlockView() {
       }
       return true;
     });
-  }, [actionFilter, severityFilter, query]);
+  }, [events, actionFilter, severityFilter, query]);
 
-  const alertCount = SEED_EVENTS.filter((e) => e.severity === "alert").length;
-  const warnCount = SEED_EVENTS.filter((e) => e.severity === "warn").length;
-  const infoCount = SEED_EVENTS.length - alertCount - warnCount;
+  const alertCount = events.filter((e) => e.severity === "alert").length;
+  const warnCount = events.filter((e) => e.severity === "warn").length;
+  const infoCount = events.length - alertCount - warnCount;
 
   const actionOptions: Array<AuditAction | "all"> = [
     "all", "create", "update", "delete", "publish", "invite", "revoke",
@@ -51,7 +53,7 @@ export function AuditLogBlockView() {
     <div className="space-y-6 p-6">
       <BlockHeader
         title="Audit log"
-        meta={`${SEED_EVENTS.length} events · ${alertCount} alerts · ${warnCount} warnings · ${infoCount} info`}
+        meta={`${events.length} events · ${alertCount} alerts · ${warnCount} warnings · ${infoCount} info`}
         actions={
           <Button variant="outline" size="sm" className="gap-1.5">
             <Download className="size-3.5" />
@@ -116,7 +118,7 @@ export function AuditLogBlockView() {
             </Button>
           ))}
           <span className="ml-auto text-[10px] tabular-nums text-muted-foreground">
-            {filtered.length} / {SEED_EVENTS.length}
+            {filtered.length} / {events.length}
           </span>
         </div>
 

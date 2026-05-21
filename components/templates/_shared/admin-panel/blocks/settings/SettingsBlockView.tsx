@@ -4,13 +4,12 @@ import * as React from "react";
 import { AlertTriangle, Save, Settings2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DEFAULT_IDENTITY, INTEGRATIONS } from "./seed";
+import { useSettingsBindings } from "./bindings";
 import { IdentityForm } from "./identity-form";
 import { IntegrationGrid } from "./integration-grid";
 import { ApiKeysList } from "./api-keys-list";
 import { BlockHeader } from "../../ui/block-header";
 import { SectionHeader } from "../../ui/section-header";
-import type { WorkspaceIdentity } from "./types";
 
 /** Real admin-panel "Settings" block — sixth + final BS-pattern impl.
  *  Pure client demo: 4-tab layout (Identity, Integrations, API keys,
@@ -22,13 +21,13 @@ import type { WorkspaceIdentity } from "./types";
  *  zone has 3 confirmation actions (transfer / archive / delete) all
  *  marked destructive. No persistence — resets on browser reload. */
 export function SettingsBlockView() {
-  const [identity, setIdentity] = React.useState<WorkspaceIdentity>(DEFAULT_IDENTITY);
-  const connectedCount = INTEGRATIONS.filter((i) => i.status === "connected").length;
+  const { identity, integrations, setIdentity } = useSettingsBindings();
+  const connectedCount = integrations.filter((i) => i.status === "connected").length;
   return (
     <div className="space-y-6 p-6">
       <BlockHeader
         title="Workspace settings"
-        meta={`${identity.name} · ${identity.timezone} · ${connectedCount} of ${INTEGRATIONS.length} integrations connected`}
+        meta={`${identity.name} · ${identity.timezone} · ${connectedCount} of ${integrations.length} integrations connected`}
         actions={
           <Button size="sm" className="gap-1.5">
             <Save className="size-3.5" />

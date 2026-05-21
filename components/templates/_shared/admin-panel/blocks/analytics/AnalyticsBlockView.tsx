@@ -3,7 +3,8 @@
 import * as React from "react";
 import { ArrowDownRight, ArrowUpRight, Download, RefreshCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { KPI_CARDS, RANGE_LABELS, type RangeLabel } from "./seed";
+import { RANGE_LABELS, type RangeLabel } from "./seed";
+import { useAnalyticsBindings } from "./bindings";
 import { TrafficChart } from "./traffic-chart";
 import { SourcesDonut } from "./sources-donut";
 import { FunnelList, TopPagesTable } from "./funnel-and-pages";
@@ -20,6 +21,7 @@ import type { KpiCardData } from "./types";
  *  slice (today config-only — schema + ingest endpoint deferred to a
  *  separate wave). */
 export function AnalyticsBlockView() {
+  const { kpis } = useAnalyticsBindings();
   const [range, setRange] = React.useState<RangeLabel>("30d");
   return (
     <div className="space-y-6 p-6">
@@ -61,7 +63,7 @@ export function AnalyticsBlockView() {
       />
 
       <section className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
-        {KPI_CARDS.map((k) => (
+        {kpis.map((k) => (
           <KpiCard key={k.id} kpi={k} />
         ))}
       </section>

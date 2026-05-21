@@ -4,33 +4,21 @@ import * as React from "react";
 import { RotateCcw, Save, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DEFAULT_CONFIG, DEFAULT_MODERATION, MODELS, PROVIDERS } from "./seed";
+import { MODELS, PROVIDERS } from "./seed";
+import { useAiConfigBindings } from "./bindings";
 import { ProviderCard } from "./provider-card";
 import { ModerationRowItem } from "./moderation-row";
 import { ModelTab } from "./model-tab";
 import { BlockHeader } from "../../ui/block-header";
 import { SectionHeader } from "../../ui/section-header";
-import type { AiConfig, ModerationRule } from "./types";
 
 /** Real admin-panel "AI Config" block. BY-wave: 3-tab layout
  *  (Providers / Active model / Moderation) to reduce ~140vh scroll
  *  to per-tab focus. Header "Save changes" + "Reset" apply globally. */
 export function AiConfigBlockView() {
-  const [config, setConfig] = React.useState<AiConfig>(DEFAULT_CONFIG);
-  const [moderation, setModeration] =
-    React.useState<ModerationRule[]>(DEFAULT_MODERATION);
+  const { config, moderation, setConfig, toggleRule, setThreshold, reset } =
+    useAiConfigBindings();
   const enabledRules = moderation.filter((r) => r.enabled).length;
-
-  function toggleRule(id: string, enabled: boolean) {
-    setModeration((prev) => prev.map((r) => (r.id === id ? { ...r, enabled } : r)));
-  }
-  function setThreshold(id: string, threshold: number) {
-    setModeration((prev) => prev.map((r) => (r.id === id ? { ...r, threshold } : r)));
-  }
-  function reset() {
-    setConfig(DEFAULT_CONFIG);
-    setModeration(DEFAULT_MODERATION);
-  }
 
   return (
     <div className="space-y-6 p-6">

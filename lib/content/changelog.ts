@@ -10,6 +10,43 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CC",
+    version: "CC-wave",
+    date: Date.parse("2026-05-21"),
+    kind: "improvement",
+    title: "adapter pattern propagated — all 6 admin-panel blocks now go through bindings",
+    body:
+      "Follow-up to CB users-canary. The 5 remaining blocks (audit-log / ai-config / analytics / webhooks / settings) now each ship a bindings.tsx exposing a typed `<Block>Bindings` shape, a `useDefault<Block>Bindings()` hook (in-memory + SEED, the demo default), a `<Block>BindingsProvider value={...}>` context wrapper, and a `use<Block>Bindings()` consumer with default-fallback. Each BlockView refactored to consume via the hook instead of inline useState/SEED imports — all 6 views are now data-source agnostic. ZERO user-visible change (same seeded data, same optimistic mutations). FOUNDATION COMPLETE: any future Convex / REST / external-auth wire-up is a Provider override, not a view edit. PER-BLOCK bindings shape: audit-log = events + isLoading + optional logEvent; ai-config = config + moderation + isLoading + 4 mutators; analytics = kpis + series + sources + topPages + funnel + isLoading (read-only); webhooks = endpoints + deliveries + isLoading + togglePause + remove; settings = identity + integrations + apiKeys + isLoading + setIdentity + revokeKey. View JSDocs preserve the BS-canary pattern explanation + add the CC-wave adapter note. Eject (per docs/architecture/eject-spec.md Phase 2) is now a per-block file-swap operation: replace bindings.tsx with the Convex variant, leave everything else.",
+    groups: [
+      {
+        heading: "NEW files (5)",
+        bullets: [
+          "_shared/admin-panel/blocks/audit-log/bindings.tsx — AuditLogBindings (37 LOC, read-mostly)",
+          "_shared/admin-panel/blocks/ai-config/bindings.tsx — AiConfigBindings (57 LOC, config + moderation + mutators)",
+          "_shared/admin-panel/blocks/analytics/bindings.tsx — AnalyticsBindings (46 LOC, read-only)",
+          "_shared/admin-panel/blocks/webhooks/bindings.tsx — WebhooksBindings (61 LOC, endpoints + deliveries + mutators)",
+          "_shared/admin-panel/blocks/settings/bindings.tsx — SettingsBindings (53 LOC, identity + integrations + apiKeys + mutators)",
+        ],
+      },
+      {
+        heading: "Refactored",
+        bullets: [
+          "5 BlockViews: drop inline useState/SEED, consume via use<Block>Bindings() hook",
+          "Demo behavior identical — same seed, same mutations, same state lifecycle",
+        ],
+      },
+      {
+        heading: "Foundation complete — what this unlocks",
+        bullets: [
+          "Real Convex per block: 1 file swap (bindings.tsx → useQuery + useMutation impl)",
+          "npx rr eject Phase 2: bindings.tsx is the per-block override seam, see eject-spec.md",
+          "Mock for tests: wrap with <BlockBindingsProvider value={mockBindings}> in stories / Vitest",
+          "External auth flows: wrap dispatcher once at root with multi-block Provider stack",
+        ],
+      },
+    ],
+  },
+  {
     id: "CB",
     version: "CB-wave",
     date: Date.parse("2026-05-21"),
