@@ -42,7 +42,7 @@ export function SliceDetailClient({
     return buildPreviewManifest({
       id: `slice:${slice.slug}`,
       title: slice.title,
-      subtitle: slice.description,
+      subtitle: slice.tagline ?? slice.description,
       publicPath: slice.previewPath,
       adminPath: slice.adminPreviewPath,
       publicExternalUrl: demoUrl ? `${demoUrl}/` : undefined,

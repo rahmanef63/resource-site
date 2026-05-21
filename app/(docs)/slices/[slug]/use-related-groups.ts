@@ -46,7 +46,7 @@ export function useRelatedGroups(slice: SliceEntry): RelatedGroup[] {
         items: enhancesItems.map((s) => ({
           slug: s.slug,
           title: s.title,
-          description: s.description,
+          description: s.tagline ?? s.description,
           category: s.category,
         })),
       },
@@ -58,7 +58,7 @@ export function useRelatedGroups(slice: SliceEntry): RelatedGroup[] {
         items: siblingItems.map((s) => ({
           slug: s.slug,
           title: s.title,
-          description: s.description,
+          description: s.tagline ?? s.description,
           category: s.category,
         })),
       },

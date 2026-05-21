@@ -10,6 +10,49 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CH",
+    version: "CH-wave",
+    date: Date.parse("2026-05-21"),
+    kind: "improvement",
+    title: "slice catalog polish — 6 NEW preview routes (404 fix) + tagline field for compact cards",
+    body:
+      "User report: '/preview/slices/<slug>' returned 404 for 6 slices (the 4 CF-wave additions + 2 pre-existing — equation / code-block / notifications / database-cell-selection / theme-presets / files). All had `previewPath` in the catalog but no actual route file → clicking 'Try it' from the catalog card hit a 404. ALSO USER: 'descripsinya terlalu panjang dan user mungkin tidak perlu baca juga, kalau perlu pindahkan ke bagian detail' — descriptions too long, move long-form to detail tabs. TWO FIXES IN ONE WAVE. (1) Built 6 missing preview routes — each is a minimal interactive demo of the slice. equation: 4 LaTeX sample switcher + KaTeX live. code-block: editable TS snippet with language picker + copy. notifications: bell + popover demo. database-cell-selection: 5×3 grid with click-select + drag-fill. theme-presets: ThemePicker swatch grid (30+ presets, click swaps CSS vars live). files: localStorage adapter demo with upload + chip list. Each ≤60 LOC. (2) Added optional `tagline?: string` field to SliceEntry — short 1-sentence hook (≤ ~140 chars) shown in catalog cards + related-slice cards + detail-page subtitle. Full `description` preserved (canonical reference, shown on detail page only). Catalog card + detail subtitle + related-slices now read `tagline ?? description` with fallback. 10 entries got taglines this wave — the 4 CF additions (notion-style primitives) + theme-presets, files, notion-shell, notion-blocks, icon-picker, command-menu, convex-auth, ai-chat, landing-sections. Remaining 45 entries fall back to the old description (still works, just not yet shortened). Backfill is an opt-in chore — entries without tagline keep behaving as before.",
+    groups: [
+      {
+        heading: "NEW preview routes (6, fixes 404)",
+        bullets: [
+          "/preview/slices/equation — LaTeX sample switcher + KaTeX live",
+          "/preview/slices/code-block — editable TS + language picker + copy",
+          "/preview/slices/notifications — bell + frequency popover",
+          "/preview/slices/database-cell-selection — 5×3 grid + drag-fill",
+          "/preview/slices/theme-presets — ThemePicker swatch grid (30+ presets)",
+          "/preview/slices/files — localStorage adapter demo (upload + chip list)",
+        ],
+      },
+      {
+        heading: "Schema change",
+        bullets: [
+          "SliceEntry: NEW optional `tagline?: string` (≤ ~140 chars, 1 sentence). When set, catalog cards + related-slice cards + detail-page subtitle render tagline instead of description. Full description preserved + shown in detail page body.",
+          "catalog page (/slices) + slice-detail-client + use-related-groups all use `tagline ?? description` fallback — entries without tagline behave exactly as before",
+        ],
+      },
+      {
+        heading: "Taglines added (10 entries)",
+        bullets: [
+          "equation, code-block, notifications, database-cell-selection (the 4 CF-wave Notion peers)",
+          "theme-presets, files, notion-shell, notion-blocks, icon-picker, command-menu",
+          "convex-auth, ai-chat, landing-sections",
+        ],
+      },
+      {
+        heading: "Followup",
+        bullets: [
+          "Tagline backfill for remaining ~42 entries — opt-in chore. Worst remaining offenders: subscribers (447), hero (433), portfolio-section (414).",
+        ],
+      },
+    ],
+  },
+  {
     id: "CG",
     version: "CG-wave",
     date: Date.parse("2026-05-21"),

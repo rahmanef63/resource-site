@@ -76,14 +76,14 @@ export default function SlicesPage() {
       : (s.npm ?? []).slice(0, 3).map((p) => stripVersion(p));
     return {
       key: s.slug,
-      search: `${s.title} ${s.description} ${(s.tags ?? []).join(" ")}`.toLowerCase(),
+      search: `${s.title} ${s.tagline ?? s.description} ${(s.tags ?? []).join(" ")}`.toLowerCase(),
       tags: s.tags,
       group: s.category,
       node: (
         <CatalogCard
           href={`/slices/${s.slug}`}
           title={s.title}
-          description={s.description}
+          description={s.tagline ?? s.description}
           tags={s.tags}
           meta={
             <div className="flex items-center gap-2">
