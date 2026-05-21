@@ -70,7 +70,7 @@ export function Dashboard({
   };
 
   return (
-    <div className="flex h-[calc(100vh-8rem)] min-h-[640px] overflow-hidden rounded-lg border border-border bg-background">
+    <div className="flex h-dvh overflow-hidden bg-background">
       <NotionSidebar
         pages={pages}
         activeId={sidebarActive}

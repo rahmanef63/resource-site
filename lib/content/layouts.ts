@@ -544,7 +544,6 @@ export default function Layout({ children }) {
       "components/templates/notion-page-clone/shared/types.ts",
       "components/templates/notion-page-clone/shared/store.tsx",
       "components/templates/notion-page-clone/shared/seed.ts",
-      "components/templates/notion-page-clone/slices/home/HomePage.tsx",
       "components/templates/notion-page-clone/slices/admin/snippets/SnippetsView.tsx",
       "components/templates/notion-page-clone/slices/notion-app/Dashboard.tsx",
       "components/templates/notion-page-clone/slices/notion-app/DocView.tsx",

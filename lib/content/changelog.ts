@@ -10,6 +10,45 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "BZ",
+    version: "BZ-wave",
+    date: Date.parse("2026-05-21"),
+    kind: "improvement",
+    title: "notion-page-clone-os — strip marketing chrome, full-bleed workspace (real Notion-like)",
+    body:
+      "User request: 'tidak perlu ada header dan footer ... langsung saja workspacenya'. Template now opens directly into the Notion-clone workspace at the root URL (demo-nosion.rahmanef.com) with NO marketing header / footer / SiteShell wrapping. Behaves like the real Notion app, not a marketing site about one. CHANGES: (1) app/preview/notion-page-clone-os/public/layout.tsx — stripped SiteShell, PUBLIC_NAV, FOOTER_COLUMNS, brand object — now just Suspense + StoreProvider passthrough. Metadata preserved. (2) Dashboard.tsx h-[calc(100vh-8rem)] min-h-[640px] rounded border → h-dvh bg-background (full-bleed viewport, no rounded card). (3) DELETED dead components/templates/notion-page-clone/slices/home/ (HomePage + LandingRenderer never imported since BD-wave). (4) RESTYLED [...slug] catch-all: was meant to render custom pages INSIDE the SiteShell chrome; now renders standalone with a thin 'back to workspace' header at top + centered max-w-3xl canvas — mirrors Notion's 'publish to web' UX. Audit-bp's Pages CRUD requirement satisfied (8/8 templates have catch-all). (5) layouts.ts file manifest cleaned (HomePage.tsx ref removed). nav-config.ts kept (still consumed by the /dashboard side admin routes for ADMIN_BASE / PUBLIC_BASE / ADMIN_PANEL_BASE constants).",
+    groups: [
+      {
+        heading: "User-visible at demo-nosion.rahmanef.com",
+        bullets: [
+          "Root / → immediate Notion workspace (sidebar + welcome doc, full viewport)",
+          "Sidebar CRUD (create / rename / delete / move) — unchanged",
+          "/d/<id> → doc view, /db/<id> → database view (both full-bleed)",
+          "/<custom-slug> → published custom page, standalone with back-to-workspace link",
+          "No marketing landing, no top-navbar, no footer columns",
+        ],
+      },
+      {
+        heading: "Files",
+        bullets: [
+          "MODIFIED app/preview/notion-page-clone-os/public/layout.tsx — bare StoreProvider",
+          "MODIFIED components/templates/notion-page-clone/slices/notion-app/Dashboard.tsx — h-dvh",
+          "MODIFIED app/preview/notion-page-clone-os/public/[...slug]/catch-all-renderer.tsx — standalone framing",
+          "DELETED components/templates/notion-page-clone/slices/home/ (HomePage + LandingRenderer)",
+          "MODIFIED lib/content/layouts.ts — removed dead HomePage.tsx ref from manifest",
+        ],
+      },
+      {
+        heading: "Not affecting",
+        bullets: [
+          "Other 7 templates (konsultan / personal-brand / kreator / wirausaha / agency / saas / riset) — still keep marketing SiteShell, unchanged",
+          "Admin side (/admin/...) — DashboardShell + sidebar unchanged",
+          "Audit chain: 44 slices · 679 template files · pages-CRUD requirement still satisfied via standalone-render catch-all",
+        ],
+      },
+    ],
+  },
+  {
     id: "BY",
     version: "BY-wave",
     date: Date.parse("2026-05-21"),
