@@ -8,6 +8,8 @@ import { DEFAULT_IDENTITY, INTEGRATIONS } from "./seed";
 import { IdentityForm } from "./identity-form";
 import { IntegrationGrid } from "./integration-grid";
 import { ApiKeysList } from "./api-keys-list";
+import { BlockHeader } from "../../ui/block-header";
+import { SectionHeader } from "../../ui/section-header";
 import type { WorkspaceIdentity } from "./types";
 
 /** Real admin-panel "Settings" block — sixth + final BS-pattern impl.
@@ -24,19 +26,16 @@ export function SettingsBlockView() {
   const connectedCount = INTEGRATIONS.filter((i) => i.status === "connected").length;
   return (
     <div className="space-y-6 p-6">
-      <header className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight">Workspace settings</h1>
-          <p className="mt-1 text-xs text-muted-foreground">
-            {identity.name} · {identity.timezone} · {connectedCount} of {INTEGRATIONS.length}{" "}
-            integrations connected
-          </p>
-        </div>
-        <Button size="sm" className="gap-1.5">
-          <Save className="size-3.5" />
-          Save changes
-        </Button>
-      </header>
+      <BlockHeader
+        title="Workspace settings"
+        meta={`${identity.name} · ${identity.timezone} · ${connectedCount} of ${INTEGRATIONS.length} integrations connected`}
+        actions={
+          <Button size="sm" className="gap-1.5">
+            <Save className="size-3.5" />
+            Save changes
+          </Button>
+        }
+      />
 
       <Tabs defaultValue="identity">
         <TabsList>
@@ -55,12 +54,11 @@ export function SettingsBlockView() {
         </TabsList>
 
         <TabsContent value="identity" className="mt-4">
-          <div className="rounded-lg border bg-card p-4">
-            <div className="mb-3 flex items-center gap-2">
-              <Settings2 className="size-3.5 text-muted-foreground" />
-              <h2 className="text-sm font-semibold">Workspace identity</h2>
+          <div className="overflow-hidden rounded-lg border bg-card">
+            <SectionHeader icon={Settings2} title="Workspace identity" />
+            <div className="p-4">
+              <IdentityForm identity={identity} setIdentity={setIdentity} />
             </div>
-            <IdentityForm identity={identity} setIdentity={setIdentity} />
           </div>
         </TabsContent>
 

@@ -1,61 +1,28 @@
+import { TONES } from "../../ui/tones";
 import type { AiConfig, AiModel, AiProvider, ModerationRule } from "./types";
 
+// Provider tones are BRAND colors (not semantic) — kept literal so
+// they don't drift if the semantic palette is re-themed.
 export const PROVIDERS: AiProvider[] = [
-  {
-    id: "anthropic",
-    label: "Anthropic",
-    tone: "bg-amber-500/15 text-amber-300 border-amber-500/30",
-    status: "connected",
-    keyTail: "k7Q2",
-    docsUrl: "https://docs.anthropic.com/",
-  },
-  {
-    id: "openai",
-    label: "OpenAI",
-    tone: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
-    status: "connected",
-    keyTail: "4F9b",
-    docsUrl: "https://platform.openai.com/docs",
-  },
-  {
-    id: "mistral",
-    label: "Mistral",
-    tone: "bg-sky-500/15 text-sky-300 border-sky-500/30",
-    status: "rate-limited",
-    keyTail: "x12M",
-    docsUrl: "https://docs.mistral.ai/",
-  },
-  {
-    id: "google",
-    label: "Google AI",
-    tone: "bg-violet-500/15 text-violet-300 border-violet-500/30",
-    status: "missing-key",
-    docsUrl: "https://ai.google.dev/",
-  },
+  { id: "anthropic", label: "Anthropic", tone: "bg-amber-500/15 text-amber-300 border-amber-500/30",   status: "connected",    keyTail: "k7Q2", docsUrl: "https://docs.anthropic.com/" },
+  { id: "openai",    label: "OpenAI",    tone: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30", status: "connected",    keyTail: "4F9b", docsUrl: "https://platform.openai.com/docs" },
+  { id: "mistral",   label: "Mistral",   tone: "bg-sky-500/15 text-sky-300 border-sky-500/30",         status: "rate-limited", keyTail: "x12M", docsUrl: "https://docs.mistral.ai/" },
+  { id: "google",    label: "Google AI", tone: "bg-violet-500/15 text-violet-300 border-violet-500/30", status: "missing-key",                   docsUrl: "https://ai.google.dev/" },
 ];
 
 export const STATUS_META: Record<
   AiProvider["status"],
   { label: string; tone: string }
 > = {
-  connected: {
-    label: "Connected",
-    tone: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
-  },
-  "missing-key": {
-    label: "Missing key",
-    tone: "bg-rose-500/15 text-rose-300 border-rose-500/30",
-  },
-  "rate-limited": {
-    label: "Rate limited",
-    tone: "bg-amber-500/15 text-amber-300 border-amber-500/30",
-  },
+  connected:      { label: "Connected",    tone: TONES.success.badge },
+  "missing-key":  { label: "Missing key",  tone: TONES.danger.badge },
+  "rate-limited": { label: "Rate limited", tone: TONES.warn.badge },
 };
 
 export const TIER_META: Record<AiModel["tier"], { label: string; tone: string }> = {
-  fast: { label: "Fast", tone: "bg-sky-500/15 text-sky-300 border-sky-500/30" },
-  balanced: { label: "Balanced", tone: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" },
-  frontier: { label: "Frontier", tone: "bg-violet-500/15 text-violet-300 border-violet-500/30" },
+  fast:     { label: "Fast",     tone: TONES.info.badge },
+  balanced: { label: "Balanced", tone: TONES.success.badge },
+  frontier: { label: "Frontier", tone: TONES.accent.badge },
 };
 
 export const MODELS: AiModel[] = [

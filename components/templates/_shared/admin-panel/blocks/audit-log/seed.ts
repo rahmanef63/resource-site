@@ -1,23 +1,24 @@
+import { TONES } from "../../ui/tones";
 import type { AuditAction, AuditEventRow, AuditSeverity } from "./types";
 
 /** Action label + tone for badge rendering. */
 export const ACTION_META: Record<AuditAction, { label: string; tone: string }> = {
-  create: { label: "Created", tone: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" },
-  update: { label: "Updated", tone: "bg-sky-500/15 text-sky-300 border-sky-500/30" },
-  delete: { label: "Deleted", tone: "bg-rose-500/15 text-rose-300 border-rose-500/30" },
-  publish: { label: "Published", tone: "bg-violet-500/15 text-violet-300 border-violet-500/30" },
-  unpublish: { label: "Unpublished", tone: "bg-zinc-500/15 text-zinc-300 border-zinc-500/30" },
-  invite: { label: "Invited", tone: "bg-amber-500/15 text-amber-300 border-amber-500/30" },
-  revoke: { label: "Revoked", tone: "bg-rose-500/15 text-rose-300 border-rose-500/30" },
-  login: { label: "Signed in", tone: "bg-zinc-500/15 text-zinc-300 border-zinc-500/30" },
-  logout: { label: "Signed out", tone: "bg-zinc-500/15 text-zinc-300 border-zinc-500/30" },
-  export: { label: "Exported", tone: "bg-cyan-500/15 text-cyan-300 border-cyan-500/30" },
+  create: { label: "Created", tone: TONES.success.badge },
+  update: { label: "Updated", tone: TONES.info.badge },
+  delete: { label: "Deleted", tone: TONES.danger.badge },
+  publish: { label: "Published", tone: TONES.accent.badge },
+  unpublish: { label: "Unpublished", tone: TONES.neutral.badge },
+  invite: { label: "Invited", tone: TONES.warn.badge },
+  revoke: { label: "Revoked", tone: TONES.danger.badge },
+  login: { label: "Signed in", tone: TONES.neutral.badge },
+  logout: { label: "Signed out", tone: TONES.neutral.badge },
+  export: { label: "Exported", tone: TONES.info.badge },
 };
 
 export const SEVERITY_META: Record<AuditSeverity, { label: string; tone: string }> = {
-  info: { label: "Info", tone: "bg-zinc-500/15 text-zinc-300 border-zinc-500/30" },
-  warn: { label: "Warn", tone: "bg-amber-500/15 text-amber-300 border-amber-500/30" },
-  alert: { label: "Alert", tone: "bg-rose-500/15 text-rose-300 border-rose-500/30" },
+  info: { label: "Info", tone: TONES.neutral.badge },
+  warn: { label: "Warn", tone: TONES.warn.badge },
+  alert: { label: "Alert", tone: TONES.danger.badge },
 };
 
 /** Demo events — 14 rows. Reset on browser reload. */

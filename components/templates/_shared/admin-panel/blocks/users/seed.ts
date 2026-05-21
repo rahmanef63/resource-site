@@ -1,3 +1,4 @@
+import { TONES } from "../../ui/tones";
 import type { Role, UserRow } from "./types";
 
 /** System roles — 4-tier (owner > admin > editor > viewer).
@@ -8,7 +9,7 @@ export const ROLES: Role[] = [
   {
     id: "owner",
     label: "Owner",
-    badgeClass: "bg-amber-500/15 text-amber-300 border-amber-500/30",
+    badgeClass: TONES.elevated.badge,
     description: "Full workspace control. One per template install.",
     capabilities: [
       "Manage billing + workspace settings",
@@ -20,7 +21,7 @@ export const ROLES: Role[] = [
   {
     id: "admin",
     label: "Admin",
-    badgeClass: "bg-violet-500/15 text-violet-300 border-violet-500/30",
+    badgeClass: TONES.accent.badge,
     description: "Operates the workspace day-to-day. Multiple per workspace.",
     capabilities: [
       "Invite + remove members (not other admins)",
@@ -32,7 +33,7 @@ export const ROLES: Role[] = [
   {
     id: "editor",
     label: "Editor",
-    badgeClass: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
+    badgeClass: TONES.success.badge,
     description: "Creates and edits content. Cannot manage members.",
     capabilities: [
       "Create + edit + publish pages",
@@ -44,7 +45,7 @@ export const ROLES: Role[] = [
   {
     id: "viewer",
     label: "Viewer",
-    badgeClass: "bg-zinc-500/15 text-zinc-300 border-zinc-500/30",
+    badgeClass: TONES.neutral.badge,
     description: "Read-only access. Audit + reporting use case.",
     capabilities: [
       "View pages + content (no edit)",

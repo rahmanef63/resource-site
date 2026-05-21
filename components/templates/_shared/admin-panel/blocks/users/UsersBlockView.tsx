@@ -13,6 +13,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ROLES, SEED_USERS } from "./seed";
+import { BlockHeader } from "../../ui/block-header";
+import { EmptyState } from "../../ui/empty-state";
 import type { RoleId, UserRow } from "./types";
 
 /** Real admin-panel "User management" block — replaces the generic
@@ -42,18 +44,16 @@ export function UsersBlockView() {
 
   return (
     <div className="space-y-6 p-6">
-      <header className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight">User management</h1>
-          <p className="mt-1 text-xs text-muted-foreground">
-            {activeCount} active · {pendingCount} pending · {users.length} total · 4 system roles
-          </p>
-        </div>
-        <Button size="sm" className="gap-1.5">
-          <UserPlus className="size-3.5" />
-          Invite member
-        </Button>
-      </header>
+      <BlockHeader
+        title="User management"
+        meta={`${activeCount} active · ${pendingCount} pending · ${users.length} total · 4 system roles`}
+        actions={
+          <Button size="sm" className="gap-1.5">
+            <UserPlus className="size-3.5" />
+            Invite member
+          </Button>
+        }
+      />
 
       <section className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
         {ROLES.map((r) => (
@@ -68,7 +68,7 @@ export function UsersBlockView() {
               </span>
             </div>
             <p className="mt-2 text-xs text-muted-foreground">{r.description}</p>
-            <ul className="mt-2 space-y-1 text-[11px] text-muted-foreground">
+            <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
               {r.capabilities.slice(0, 2).map((c) => (
                 <li key={c} className="flex items-start gap-1.5">
                   <span className="mt-1.5 size-1 shrink-0 rounded-full bg-muted-foreground/40" />
@@ -89,14 +89,20 @@ export function UsersBlockView() {
           </Button>
         </div>
         <div className="divide-y">
-          {users.map((u) => (
-            <UserRow
-              key={u.id}
-              user={u}
-              onChangeRole={(role) => changeRole(u.id, role)}
-              onRevoke={() => revoke(u.id)}
-            />
-          ))}
+          {users.length === 0 ? (
+            <div className="p-2">
+              <EmptyState icon={UserPlus} label="No members yet" hint="Invite someone to get started." />
+            </div>
+          ) : (
+            users.map((u) => (
+              <UserRow
+                key={u.id}
+                user={u}
+                onChangeRole={(role) => changeRole(u.id, role)}
+                onRevoke={() => revoke(u.id)}
+              />
+            ))
+          )}
         </div>
       </section>
 
@@ -145,7 +151,7 @@ function UserRow({
       </p>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="size-7">
+          <Button variant="ghost" size="icon" className="size-7" aria-label={`Actions for ${user.name}`}>
             <MoreHorizontal className="size-3.5" />
           </Button>
         </DropdownMenuTrigger>

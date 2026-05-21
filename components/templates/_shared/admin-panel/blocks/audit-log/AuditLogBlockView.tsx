@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ACTION_META, SEED_EVENTS } from "./seed";
 import { EventRow, SeverityCard } from "./event-row";
+import { BlockHeader } from "../../ui/block-header";
+import { EmptyState } from "../../ui/empty-state";
 import type { AuditAction, AuditSeverity } from "./types";
 
 /** Real admin-panel "Audit log" block — second BS-pattern impl
@@ -47,18 +49,16 @@ export function AuditLogBlockView() {
 
   return (
     <div className="space-y-6 p-6">
-      <header className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight">Audit log</h1>
-          <p className="mt-1 text-xs text-muted-foreground">
-            {SEED_EVENTS.length} events · {alertCount} alerts · {warnCount} warnings · {infoCount} info
-          </p>
-        </div>
-        <Button variant="outline" size="sm" className="gap-1.5">
-          <Download className="size-3.5" />
-          Export CSV
-        </Button>
-      </header>
+      <BlockHeader
+        title="Audit log"
+        meta={`${SEED_EVENTS.length} events · ${alertCount} alerts · ${warnCount} warnings · ${infoCount} info`}
+        actions={
+          <Button variant="outline" size="sm" className="gap-1.5">
+            <Download className="size-3.5" />
+            Export CSV
+          </Button>
+        }
+      />
 
       <section className="grid gap-3 md:grid-cols-3">
         <SeverityCard tone="info" label="Info" count={infoCount} icon={CheckCircle2} />
@@ -81,15 +81,17 @@ export function AuditLogBlockView() {
             <Filter className="size-3 text-muted-foreground" />
             <span className="text-[10px] uppercase text-muted-foreground">Action</span>
           </div>
-          <div className="flex flex-wrap gap-1">
+          <div role="radiogroup" aria-label="Filter by action" className="flex flex-wrap gap-1">
             {actionOptions.map((a) => (
               <Button
                 key={a}
                 type="button"
+                role="radio"
+                aria-checked={actionFilter === a}
                 size="sm"
                 variant={actionFilter === a ? "secondary" : "ghost"}
                 onClick={() => setActionFilter(a)}
-                className="h-6 rounded-full border border-border/50 px-2 text-[10px] capitalize"
+                className="h-6 rounded-full border border-border px-2 text-[10px] capitalize"
               >
                 {a === "all" ? "All" : ACTION_META[a].label}
               </Button>
@@ -97,16 +99,18 @@ export function AuditLogBlockView() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 border-b px-4 py-2">
+        <div role="radiogroup" aria-label="Filter by severity" className="flex items-center gap-2 border-b px-4 py-2">
           <span className="text-[10px] uppercase text-muted-foreground">Severity</span>
           {(["all", "info", "warn", "alert"] as const).map((s) => (
             <Button
               key={s}
               type="button"
+              role="radio"
+              aria-checked={severityFilter === s}
               size="sm"
               variant={severityFilter === s ? "secondary" : "ghost"}
               onClick={() => setSeverityFilter(s)}
-              className="h-6 rounded-full border border-border/50 px-2 text-[10px] capitalize"
+              className="h-6 rounded-full border border-border px-2 text-[10px] capitalize"
             >
               {s}
             </Button>
@@ -118,8 +122,12 @@ export function AuditLogBlockView() {
 
         <div className="divide-y">
           {filtered.length === 0 ? (
-            <div className="px-4 py-10 text-center text-xs text-muted-foreground">
-              No events match the current filter.
+            <div className="p-3">
+              <EmptyState
+                icon={Filter}
+                label="No events match"
+                hint="Adjust action / severity / search to widen the view."
+              />
             </div>
           ) : (
             filtered.map((e) => <EventRow key={e.id} event={e} />)

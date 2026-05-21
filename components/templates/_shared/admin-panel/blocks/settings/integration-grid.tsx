@@ -27,7 +27,7 @@ export function IntegrationGrid() {
                 {meta.label}
               </Badge>
             </div>
-            <p className="mt-2 truncate text-[11px] text-muted-foreground">{i.detail}</p>
+            <p className="mt-2 truncate text-xs text-muted-foreground">{i.detail}</p>
             <p className="mt-0.5 text-[10px] uppercase text-muted-foreground">{i.category}</p>
             <div className="mt-3 flex gap-1.5">
               <Button variant="outline" size="sm" className="h-7 flex-1 text-xs">

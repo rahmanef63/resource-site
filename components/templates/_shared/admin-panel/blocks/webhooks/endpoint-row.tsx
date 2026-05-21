@@ -45,7 +45,12 @@ export function EndpointRow({
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="size-7">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="size-7"
+                aria-label={`Actions for ${endpoint.description}`}
+              >
                 <MoreHorizontal className="size-3.5" />
               </Button>
             </DropdownMenuTrigger>
@@ -78,7 +83,7 @@ export function EndpointRow({
       <p className="break-all font-mono text-[10px] text-muted-foreground">{endpoint.url}</p>
       <div className="flex flex-wrap items-center gap-1.5">
         {endpoint.events.map((e) => (
-          <span key={e} className="rounded-full border border-border/60 px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
+          <span key={e} className="rounded-full border border-border px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
             {e}
           </span>
         ))}

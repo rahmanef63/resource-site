@@ -1,3 +1,4 @@
+import { TONES } from "../../ui/tones";
 import type {
   DeliveryStatus,
   EndpointStatus,
@@ -18,16 +19,16 @@ export const ALL_EVENTS: WebhookEventName[] = [
 ];
 
 export const STATUS_META: Record<EndpointStatus, { label: string; tone: string }> = {
-  active: { label: "Active", tone: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" },
-  paused: { label: "Paused", tone: "bg-zinc-500/15 text-zinc-300 border-zinc-500/30" },
-  failing: { label: "Failing", tone: "bg-rose-500/15 text-rose-300 border-rose-500/30" },
+  active:  { label: "Active",  tone: TONES.success.badge },
+  paused:  { label: "Paused",  tone: TONES.neutral.badge },
+  failing: { label: "Failing", tone: TONES.danger.badge },
 };
 
 export const DELIVERY_META: Record<DeliveryStatus, { label: string; tone: string }> = {
-  delivered: { label: "Delivered", tone: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" },
-  failed: { label: "Failed", tone: "bg-rose-500/15 text-rose-300 border-rose-500/30" },
-  pending: { label: "Pending", tone: "bg-amber-500/15 text-amber-300 border-amber-500/30" },
-  retry: { label: "Retry", tone: "bg-sky-500/15 text-sky-300 border-sky-500/30" },
+  delivered: { label: "Delivered", tone: TONES.success.badge },
+  failed:    { label: "Failed",    tone: TONES.danger.badge },
+  pending:   { label: "Pending",   tone: TONES.warn.badge },
+  retry:     { label: "Retry",     tone: TONES.info.badge },
 };
 
 export const SEED_ENDPOINTS: WebhookEndpoint[] = [

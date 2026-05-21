@@ -7,6 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SAMPLE_PAYLOAD, SAMPLE_SIGNATURE, SEED_DELIVERIES, SEED_ENDPOINTS } from "./seed";
 import { EndpointRow } from "./endpoint-row";
 import { DeliveryTable } from "./delivery-table";
+import { BlockHeader } from "../../ui/block-header";
+import { EmptyState } from "../../ui/empty-state";
 import type { WebhookEndpoint } from "./types";
 
 /** Real admin-panel "Webhooks" block — fifth BS-pattern impl.
@@ -40,19 +42,16 @@ export function WebhooksBlockView() {
 
   return (
     <div className="space-y-6 p-6">
-      <header className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight">Webhooks</h1>
-          <p className="mt-1 text-xs text-muted-foreground">
-            {endpoints.length} endpoint{endpoints.length === 1 ? "" : "s"} · {activeCount} active ·{" "}
-            {failingCount} failing · {last24h} deliveries (24h) · {successRate}% success
-          </p>
-        </div>
-        <Button size="sm" className="gap-1.5">
-          <Plus className="size-3.5" />
-          Add endpoint
-        </Button>
-      </header>
+      <BlockHeader
+        title="Webhooks"
+        meta={`${endpoints.length} endpoint${endpoints.length === 1 ? "" : "s"} · ${activeCount} active · ${failingCount} failing · ${last24h} deliveries (24h) · ${successRate}% success`}
+        actions={
+          <Button size="sm" className="gap-1.5">
+            <Plus className="size-3.5" />
+            Add endpoint
+          </Button>
+        }
+      />
 
       <Tabs defaultValue="endpoints">
         <TabsList>
@@ -69,10 +68,7 @@ export function WebhooksBlockView() {
 
         <TabsContent value="endpoints" className="mt-4">
           {endpoints.length === 0 ? (
-            <div className="rounded-lg border border-dashed bg-muted/10 p-8 text-center text-xs text-muted-foreground">
-              <Webhook className="mx-auto size-5 text-muted-foreground/50" />
-              <p className="mt-2">No endpoints configured.</p>
-            </div>
+            <EmptyState icon={Webhook} label="No endpoints configured" hint="Add one to start delivering events." />
           ) : (
             <div className="divide-y rounded-lg border bg-card">
               {endpoints.map((e) => (
@@ -94,13 +90,13 @@ export function WebhooksBlockView() {
         <TabsContent value="payload" className="mt-4 space-y-3">
           <div>
             <p className="text-[10px] uppercase text-muted-foreground">Sample event body</p>
-            <pre className="mt-1 overflow-x-auto rounded-lg border bg-muted/30 p-3 font-mono text-[10px] leading-relaxed">
+            <pre className="mt-1 overflow-x-auto rounded-lg border bg-muted/60 p-3 font-mono text-[10px] leading-relaxed">
               {SAMPLE_PAYLOAD}
             </pre>
           </div>
           <div>
             <p className="text-[10px] uppercase text-muted-foreground">HMAC-SHA256 signature header</p>
-            <pre className="mt-1 overflow-x-auto rounded-lg border bg-muted/30 p-3 font-mono text-[10px] leading-relaxed">
+            <pre className="mt-1 overflow-x-auto rounded-lg border bg-muted/60 p-3 font-mono text-[10px] leading-relaxed">
               {SAMPLE_SIGNATURE}
             </pre>
           </div>

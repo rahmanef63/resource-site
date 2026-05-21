@@ -48,14 +48,14 @@ export function TrafficChart() {
           axisLine={false}
           tickMargin={8}
           minTickGap={24}
-          style={{ fontSize: 10 }}
+          tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }}
         />
         <YAxis
           tickLine={false}
           axisLine={false}
           tickMargin={6}
           width={32}
-          style={{ fontSize: 10 }}
+          tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }}
         />
         <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dot" />} />
         <Area

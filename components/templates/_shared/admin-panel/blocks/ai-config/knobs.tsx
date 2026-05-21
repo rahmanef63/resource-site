@@ -6,7 +6,7 @@ import { Slider } from "@/components/ui/slider";
 export function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-md border bg-background p-2">
-      <p className="text-[9px] uppercase tracking-wide text-muted-foreground">{label}</p>
+      <p className="text-[10px] uppercase tracking-wide text-muted-foreground">{label}</p>
       <p className="mt-0.5 font-mono text-xs">{value}</p>
     </div>
   );

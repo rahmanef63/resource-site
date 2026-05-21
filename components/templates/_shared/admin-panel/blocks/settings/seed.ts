@@ -1,3 +1,4 @@
+import { TONES } from "../../ui/tones";
 import type { ApiKey, Integration, WorkspaceIdentity } from "./types";
 
 export const DEFAULT_IDENTITY: WorkspaceIdentity = {
@@ -29,9 +30,9 @@ export const INTEGRATION_STATUS_META: Record<
   Integration["status"],
   { label: string; tone: string }
 > = {
-  connected: { label: "Connected", tone: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" },
-  disconnected: { label: "Not connected", tone: "bg-zinc-500/15 text-zinc-300 border-zinc-500/30" },
-  error: { label: "Error", tone: "bg-rose-500/15 text-rose-300 border-rose-500/30" },
+  connected:    { label: "Connected",     tone: TONES.success.badge },
+  disconnected: { label: "Not connected", tone: TONES.neutral.badge },
+  error:        { label: "Error",         tone: TONES.danger.badge },
 };
 
 export const INTEGRATIONS: Integration[] = [
@@ -113,7 +114,7 @@ export const SEED_KEYS: ApiKey[] = [
 ];
 
 export const SCOPE_META: Record<ApiKey["scope"], { tone: string }> = {
-  read: { tone: "bg-zinc-500/15 text-zinc-300 border-zinc-500/30" },
-  "read-write": { tone: "bg-sky-500/15 text-sky-300 border-sky-500/30" },
-  admin: { tone: "bg-amber-500/15 text-amber-300 border-amber-500/30" },
+  read:         { tone: TONES.neutral.badge },
+  "read-write": { tone: TONES.info.badge },
+  admin:        { tone: TONES.elevated.badge },
 };

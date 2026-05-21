@@ -7,6 +7,7 @@ import { KPI_CARDS, RANGE_LABELS, type RangeLabel } from "./seed";
 import { TrafficChart } from "./traffic-chart";
 import { SourcesDonut } from "./sources-donut";
 import { FunnelList, TopPagesTable } from "./funnel-and-pages";
+import { BlockHeader } from "../../ui/block-header";
 import type { KpiCardData } from "./types";
 
 /** Real admin-panel "Analytics" block — fourth BS-pattern impl
@@ -22,38 +23,42 @@ export function AnalyticsBlockView() {
   const [range, setRange] = React.useState<RangeLabel>("30d");
   return (
     <div className="space-y-6 p-6">
-      <header className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight">Analytics</h1>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Page views, sessions, traffic sources, top pages, funnel
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1 rounded-md border bg-card p-0.5">
-            {RANGE_LABELS.map((r) => (
-              <Button
-                key={r}
-                type="button"
-                size="sm"
-                variant={range === r ? "secondary" : "ghost"}
-                onClick={() => setRange(r)}
-                className="h-6 px-2 text-[10px]"
-              >
-                {r}
-              </Button>
-            ))}
-          </div>
-          <Button variant="outline" size="sm" className="gap-1.5">
-            <RefreshCcw className="size-3.5" />
-            Refresh
-          </Button>
-          <Button variant="outline" size="sm" className="gap-1.5">
-            <Download className="size-3.5" />
-            Export
-          </Button>
-        </div>
-      </header>
+      <BlockHeader
+        title="Analytics"
+        meta="Page views, sessions, traffic sources, top pages, funnel"
+        actions={
+          <>
+            <div
+              role="radiogroup"
+              aria-label="Time range"
+              className="flex items-center gap-1 rounded-md border bg-card p-0.5"
+            >
+              {RANGE_LABELS.map((r) => (
+                <Button
+                  key={r}
+                  type="button"
+                  role="radio"
+                  aria-checked={range === r}
+                  size="sm"
+                  variant={range === r ? "secondary" : "ghost"}
+                  onClick={() => setRange(r)}
+                  className="h-6 px-2 text-[10px]"
+                >
+                  {r}
+                </Button>
+              ))}
+            </div>
+            <Button variant="outline" size="sm" className="gap-1.5">
+              <RefreshCcw className="size-3.5" />
+              Refresh
+            </Button>
+            <Button variant="outline" size="sm" className="gap-1.5">
+              <Download className="size-3.5" />
+              Export
+            </Button>
+          </>
+        }
+      />
 
       <section className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
         {KPI_CARDS.map((k) => (

@@ -20,17 +20,24 @@ export function IdentityForm({
   identity: WorkspaceIdentity;
   setIdentity: React.Dispatch<React.SetStateAction<WorkspaceIdentity>>;
 }) {
+  const nameId = React.useId();
+  const slugId = React.useId();
+  const tzId = React.useId();
+  const langId = React.useId();
+  const emailId = React.useId();
   return (
     <div className="grid gap-3 md:grid-cols-2">
-      <Field label="Workspace name">
+      <Field id={nameId} label="Workspace name">
         <Input
+          id={nameId}
           value={identity.name}
           onChange={(e) => setIdentity((p) => ({ ...p, name: e.target.value }))}
           className="text-xs"
         />
       </Field>
-      <Field label="URL slug" hint={`/w/${identity.slug || "…"}`}>
+      <Field id={slugId} label="URL slug" hint={`/w/${identity.slug || "…"}`}>
         <Input
+          id={slugId}
           value={identity.slug}
           onChange={(e) =>
             setIdentity((p) => ({
@@ -41,12 +48,12 @@ export function IdentityForm({
           className="font-mono text-xs"
         />
       </Field>
-      <Field label="Timezone">
+      <Field id={tzId} label="Timezone">
         <Select
           value={identity.timezone}
           onValueChange={(v) => setIdentity((p) => ({ ...p, timezone: v }))}
         >
-          <SelectTrigger className="text-xs">
+          <SelectTrigger id={tzId} className="text-xs">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -58,12 +65,12 @@ export function IdentityForm({
           </SelectContent>
         </Select>
       </Field>
-      <Field label="Language">
+      <Field id={langId} label="Language">
         <Select
           value={identity.language}
           onValueChange={(v) => setIdentity((p) => ({ ...p, language: v }))}
         >
-          <SelectTrigger className="text-xs">
+          <SelectTrigger id={langId} className="text-xs">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -75,8 +82,9 @@ export function IdentityForm({
           </SelectContent>
         </Select>
       </Field>
-      <Field label="Contact email" hint="Used for billing + ops alerts">
+      <Field id={emailId} label="Contact email" hint="Used for billing + ops alerts">
         <Input
+          id={emailId}
           type="email"
           value={identity.contactEmail}
           onChange={(e) => setIdentity((p) => ({ ...p, contactEmail: e.target.value }))}
@@ -88,17 +96,21 @@ export function IdentityForm({
 }
 
 function Field({
+  id,
   label,
   hint,
   children,
 }: {
+  id: string;
   label: string;
   hint?: string;
   children: React.ReactNode;
 }) {
   return (
     <div className="space-y-1">
-      <Label className="text-[10px] uppercase text-muted-foreground">{label}</Label>
+      <Label htmlFor={id} className="text-[10px] uppercase text-muted-foreground">
+        {label}
+      </Label>
       {children}
       {hint && <p className="text-[10px] text-muted-foreground">{hint}</p>}
     </div>

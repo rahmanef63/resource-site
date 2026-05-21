@@ -41,17 +41,23 @@ export function ApiKeysList() {
                   </Badge>
                 </div>
                 <p className="font-mono text-[10px] text-muted-foreground">
-                  rr_sk_live_…{k.tail} · created {formatDate(k.createdAt)} · last used{" "}
-                  {k.lastUsedAt ? formatRelative(k.lastUsedAt) : "never"}
+                  rr_sk_live_…{k.tail} · created{" "}
+                  <time dateTime={k.createdAt}>{formatDate(k.createdAt)}</time> · last used{" "}
+                  {k.lastUsedAt ? (
+                    <time dateTime={k.lastUsedAt}>{formatRelative(k.lastUsedAt)}</time>
+                  ) : (
+                    "never"
+                  )}
                 </p>
               </div>
-              <Button variant="ghost" size="icon" className="size-7" title="Copy">
+              <Button variant="ghost" size="icon" className="size-7" aria-label={`Copy ${k.label}`} title="Copy">
                 <Copy className="size-3.5" />
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
                 className="size-7 text-destructive"
+                aria-label={`Revoke ${k.label}`}
                 title="Revoke"
                 onClick={() => remove(k.id)}
               >
