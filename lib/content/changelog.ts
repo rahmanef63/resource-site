@@ -10,6 +10,42 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "BU",
+    version: "BU-wave",
+    date: Date.parse("2026-05-21"),
+    kind: "feature",
+    title: "admin-panel/ai-config real impl — third BS-pattern block",
+    body:
+      "Third admin-panel block graduates to a real interactive view. AiConfigBlockView ships with 4 providers (Anthropic, OpenAI, Mistral, Google), 10 models across 3 tiers (fast / balanced / frontier) with per-model context window + input/output cost per 1M tokens, an active-model picker grouped by provider in a shadcn Select with full pricing metadata in each option, system prompt textarea (4000 char cap, live counter), temperature + max-output-tokens sliders, and a moderation rule list with 5 rules (toxicity threshold, PII redaction, off-topic refusal, competitor mention threshold, external-link allowlist) each toggleable via Switch with graded rules exposing a 0-1 Slider for threshold. Reset button restores defaults. Provider cards show status badge (connected / missing-key / rate-limited), masked key tail, and docs link. Pattern identical to BS+BT: _shared/admin-panel/blocks/ai-config/{types, seed, AiConfigBlockView, provider-card, moderation-row, knobs} + a single dispatch case in AdminFeatureStubPage. All 8 templates' /admin/admin-panel/ai-config routes auto-updated. Backed by frontend/slices/ai-router/ (barrel-only today, real impl deferred until a separate wave wires provider adapters + a Convex key vault).",
+    groups: [
+      {
+        heading: "NEW files",
+        bullets: [
+          "_shared/admin-panel/blocks/ai-config/types.ts — ProviderId + ProviderStatus + AiProvider + ModelTier + AiModel + ModerationRule + AiConfig",
+          "_shared/admin-panel/blocks/ai-config/seed.ts — 4 providers + STATUS_META + TIER_META + 10 models + DEFAULT_CONFIG + DEFAULT_MODERATION (5 rules)",
+          "_shared/admin-panel/blocks/ai-config/AiConfigBlockView.tsx — orchestrator (header stats + provider grid + active model card + prompt+sampling + moderation list)",
+          "_shared/admin-panel/blocks/ai-config/provider-card.tsx — provider tile (status badge + masked key + rotate/connect button + docs link)",
+          "_shared/admin-panel/blocks/ai-config/moderation-row.tsx — rule row (Switch + optional threshold Slider)",
+          "_shared/admin-panel/blocks/ai-config/knobs.tsx — Stat tile + Knob slider+label helpers (extracted to keep orchestrator ≤200 LOC)",
+        ],
+      },
+      {
+        heading: "Dispatcher update",
+        bullets: [
+          "AdminFeatureStubPage: added `if (segment === \"ai-config\") return <AiConfigBlockView />;` case",
+          { text: "Real impl backed by ai-router slice (today barrel-only)", slug: "ai-router", kind: "slice" },
+        ],
+      },
+      {
+        heading: "Coverage",
+        bullets: [
+          "3 of 6 admin-panel blocks now real (users, audit-log, ai-config). 3 still placeholder (analytics, webhooks, settings).",
+          "All 8 templates' ai-config routes auto-updated via shared dispatcher. Zero per-template touchpoints.",
+        ],
+      },
+    ],
+  },
+  {
     id: "BT",
     version: "BT-wave",
     date: Date.parse("2026-05-20"),
