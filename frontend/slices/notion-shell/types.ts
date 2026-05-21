@@ -100,7 +100,12 @@ export type PropertyValue =
   | string[]
   | { date?: string; end?: string; time?: string; endTime?: string };
 
-export type DbView = "table" | "board" | "list" | "gallery" | "calendar" | "feed";
+export type DbView =
+  | "table" | "board" | "list" | "gallery" | "calendar" | "feed"
+  | "chart" | "dashboard" | "form" | "map" | "timeline";
+
+export type ChartKind = "bar" | "line" | "area" | "pie" | "donut";
+export type ChartAggregate = "count" | "sum" | "avg" | "min" | "max";
 
 export interface DatabaseFilter {
   propertyId: string;
@@ -121,6 +126,44 @@ export interface DatabaseViewConfig {
   sorts: DatabaseSort[];
   filters: DatabaseFilter[];
   search: string;
+  /** Per-view hidden property ids — independent of any global flag so
+   *  hiding a column in one view never affects another. */
+  hiddenPropIds?: string[];
+
+  // ── Chart view ────────────────────────────────────────
+  chartKind?: ChartKind;
+  chartXProp?: string;
+  chartYProp?: string;
+  chartAggregate?: ChartAggregate;
+  chartPalette?: "warm" | "cool" | "rainbow" | "mono";
+  chartDecimals?: number;
+  chartShowGrid?: boolean;
+  chartShowLegend?: boolean;
+  chartShowValues?: boolean;
+  chartSortBy?: "name" | "value";
+  chartSortDir?: "asc" | "desc";
+  chartTopN?: number;
+  chartXLabel?: string;
+  chartYLabel?: string;
+  chartTitle?: string;
+  chartHeight?: "small" | "medium" | "large";
+
+  // ── Map view ──────────────────────────────────────────
+  mapLatProp?: string;
+  mapLngProp?: string;
+
+  // ── Form view ─────────────────────────────────────────
+  formRequiredProps?: string[];
+  formShownProps?: string[];
+  formSuccessMessage?: string;
+
+  // ── Dashboard view ────────────────────────────────────
+  dashboardKPIs?: string[];
+  dashboardBreakdowns?: string[];
+  dashboardRecentLimit?: number;
+
+  // ── Feed view ─────────────────────────────────────────
+  feedTimestamp?: "createdAt" | "updatedAt";
 }
 
 export interface Database {

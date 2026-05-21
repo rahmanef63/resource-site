@@ -60,4 +60,5 @@ export type {
   Page,
   Property, PropertyValue, PropertyType, SelectOption, NumberFormat,
   Database, DatabaseViewConfig, DatabaseFilter, DatabaseSort, DbView,
+  ChartKind, ChartAggregate,
 } from "./types";

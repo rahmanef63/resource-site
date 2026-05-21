@@ -4,7 +4,10 @@
  *  caller owns active view id and dispatches the view CRUD. Tab labels
  *  default to the view's `name`; type icon shown next to label. */
 
-import { Plus, Table, KanbanSquare, List, Image as ImageIcon, Calendar, Rss } from "lucide-react";
+import {
+  Plus, Table, KanbanSquare, List, Image as ImageIcon, Calendar, Rss,
+  BarChart3, LayoutDashboard, FileText, MapPin, GanttChart,
+} from "lucide-react";
 import { cn } from "rahman-shared/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,9 +25,17 @@ const VIEW_ICONS: Record<DbView, typeof Table> = {
   gallery: ImageIcon,
   calendar: Calendar,
   feed: Rss,
+  chart: BarChart3,
+  dashboard: LayoutDashboard,
+  form: FileText,
+  map: MapPin,
+  timeline: GanttChart,
 };
 
-const ADDABLE_TYPES: DbView[] = ["table", "board", "list", "gallery", "calendar", "feed"];
+const ADDABLE_TYPES: DbView[] = [
+  "table", "board", "list", "gallery", "calendar", "feed",
+  "chart", "dashboard", "form", "map", "timeline",
+];
 
 export interface ViewTabsProps {
   views: DatabaseViewConfig[];

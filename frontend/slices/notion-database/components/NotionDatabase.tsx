@@ -41,6 +41,9 @@ export interface NotionDatabaseProps {
   onViewConfigChange?: (viewId: string, patch: Partial<DatabaseViewConfig>) => void;
   /** Override / extend the view registry (e.g. add timeline / chart). */
   viewRegistry?: ViewRegistry;
+  /** Optional row-open callback — surfaced by Chart / Dashboard / Map /
+   *  Timeline views when a row is clicked. Host can open a detail sheet. */
+  onOpenRow?: (rowId: string) => void;
   readOnly?: boolean;
   className?: string;
 }
@@ -50,7 +53,7 @@ export function NotionDatabase({
   onPropertyAdd, onPropertyUpdate, onPropertyRemove,
   onRowAdd, onRowUpdate, onRowRemove,
   onViewActivate, onViewAdd, onViewRemove, onViewConfigChange,
-  viewRegistry,
+  viewRegistry, onOpenRow,
   readOnly, className,
 }: NotionDatabaseProps) {
   const activeView = db.views.find((v) => v.id === db.activeViewId) ?? db.views[0];
@@ -121,6 +124,8 @@ export function NotionDatabase({
         onRowAdd={onRowAdd}
         renderCell={renderCell}
         renderColumnHeader={renderColumnHeader}
+        onViewConfigChange={onViewConfigChange ? (patch) => onViewConfigChange(activeView.id, patch) : undefined}
+        onOpenRow={onOpenRow}
       />
       {!readOnly && onPropertyAdd && (
         <div className="flex items-center gap-2 border-t border-border p-2">

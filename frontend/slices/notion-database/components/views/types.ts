@@ -23,4 +23,11 @@ export interface ViewProps {
   /** Render-prop for one column header — host can wrap with
    *  ColumnHeaderMenu. */
   renderColumnHeader?: (prop: Property) => ReactNode;
+  /** Optional callbacks used by chart / dashboard / map / timeline / form
+   *  views — view-config edits (kind pickers, axis swaps, palette swaps)
+   *  fan out via this. */
+  onViewConfigChange?: (next: Partial<DatabaseViewConfig>) => void;
+  /** Optional row-open callback — Chart / Map / Timeline / Dashboard
+   *  views surface a row click here so the host can open a detail sheet. */
+  onOpenRow?: (rowId: string) => void;
 }

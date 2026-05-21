@@ -14,6 +14,8 @@
  */
 
 export type {
+  ChartAggregate,
+  ChartKind,
   Database,
   DatabaseFilter,
   DatabaseSort,
