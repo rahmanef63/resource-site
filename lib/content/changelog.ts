@@ -10,6 +10,39 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "BY",
+    version: "BY-wave",
+    date: Date.parse("2026-05-21"),
+    kind: "feature",
+    title: "files slice lifted from open-silong — storage-adapter pattern reference",
+    body:
+      "The `files` slice ships as the first proof of the storage-adapter pattern that unlocks the remaining open-silong blocked-pending-adapter wave (cover, workspace-io, templates, ai-agent, inbox, feedback, workspace-members, library, mobile-nav). Slice surface: <FileUploadButton>, <FileChip>, useFileUpload(), useFileUrl() — every read/write/url-resolve flows through a host-supplied FilesAdapter (upload + remove + useUrl). Bundled adapter: useLocalStorageFilesAdapter (data-URL bucket; small files only, capped by browser localStorage quota). Host wires its own via <FilesAdapterProvider adapter={...}> — open-silong drops in a Convex-backed adapter, an S3 deployment writes an S3 adapter, the rr demo uses the bundled localStorage one. The slice itself has ZERO backend coupling; the source-of-truth lives at https://github.com/rahmanef63/open-silong and syncs lift-only via scripts/sync-to-rr.mjs.",
+    groups: [
+      {
+        heading: "NEW files (synced from open-silong)",
+        bullets: [
+          "frontend/slices/files/adapter/types.ts — FilesAdapter interface",
+          "frontend/slices/files/adapter/context.tsx — Provider + useFilesAdapter()",
+          "frontend/slices/files/adapter/localStorageAdapter.ts — bundled demo adapter",
+          "frontend/slices/files/{hooks,components,lib,types}/* — pure consumers of the adapter",
+        ],
+      },
+      {
+        heading: "Catalog",
+        bullets: [
+          "lib/content/slices.ts — new slug `files` entry with tag `notion-like` + `adapter` + `portable`",
+          { text: "Pattern reference for the remaining open-silong adapter wave", slug: "notion-shell", kind: "slice" },
+        ],
+      },
+      {
+        heading: "Skip-list",
+        bullets: [
+          "open-silong-side rr-sync.json adds `convexAdapter.tsx` to skipFiles — the Convex production adapter never ships to rr, only the localStorage demo + the host-pluggable contract.",
+        ],
+      },
+    ],
+  },
+  {
     id: "BX",
     version: "BX-wave",
     date: Date.parse("2026-05-21"),
