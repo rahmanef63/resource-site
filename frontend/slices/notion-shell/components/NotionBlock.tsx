@@ -1,24 +1,24 @@
 "use client";
 
 /** <NotionBlock /> — single-block renderer primitive. Dispatches via
- *  the `blockRenderers` registry prop. For text-shape blocks
- *  (paragraph/headings/list/quote/callout/code) renders a minimal
+ *  the `blockRenderers` registry prop. Text-shape blocks
+ *  (paragraph/headings/list/quote/callout/code) render a minimal
  *  contentEditable shell with live inline-markdown decoration; for
- *  specialised types (image/embed/equation etc.) delegates to the
- *  registered renderer when provided.
+ *  specialised types delegates to the registered renderer.
  *
- *  Pure props — no store reach-around. Host owns the registry. Hover
- *  reveals a "⋯" button that opens BlockActionsMenu (turn-into /
- *  duplicate / delete) when handlers are provided. */
+ *  Hover reveals a "⋯" button (BlockActionsHandle → BlockActionsMenu).
+ *  Typing "/" opens an inline SlashMenu and MARKDOWN_TRIGGERS convert
+ *  on the fly (`# ` → h1, `- ` → bullet, `[] ` → todo, etc.) — both
+ *  gated on `onTurnInto` being provided. */
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { MoreHorizontal } from "lucide-react";
 import { cn } from "rahman-shared/lib/utils";
-import { Button } from "@/components/ui/button";
 import type { Block, BlockRenderers, BlockType } from "../types";
 import { TOP_LEVEL_PLACEHOLDERS } from "./placeholders";
-import { BlockActionsMenu } from "./BlockActionsMenu";
+import { BlockActionsHandle } from "./BlockActionsHandle";
+import { SlashMenu } from "./SlashMenu";
 import { decorateInPlace } from "../lib/inlineDecorator";
+import { decideBlockInput } from "../lib/blockInputHandler";
 
 const HEADING_TYPES = new Set<BlockType>(["h1", "h2", "h3", "h4", "h5", "h6"]);
 
@@ -31,9 +31,6 @@ export interface NotionBlockProps {
   onRemove?: () => void;
   onTurnInto?: (type: BlockType) => void;
   onDuplicate?: () => void;
-  /** Optional drag-handle slot (typically a grip icon wired to
-   *  SortableBlockList's `dragProps`). Renders next to the "⋯" button
-   *  on hover. */
   dragHandle?: ReactNode;
   readOnly?: boolean;
   className?: string;
@@ -50,6 +47,8 @@ export function NotionBlock({
   const ref = useRef<HTMLDivElement | null>(null);
   const composingRef = useRef(false);
   const [hover, setHover] = useState(false);
+  const [slashOpen, setSlashOpen] = useState(false);
+  const [slashQuery, setSlashQuery] = useState("");
 
   useEffect(() => {
     const el = ref.current;
@@ -58,6 +57,19 @@ export function NotionBlock({
     if (el.innerText === next) return;
     decorateInPlace(el, next, { hideMarkers: HEADING_TYPES.has(block.type) });
   }, [block.text, block.type]);
+
+  const closeSlash = () => {
+    setSlashOpen(false);
+    setSlashQuery("");
+  };
+
+  const handleSlashSelect = (type: BlockType) => {
+    const el = ref.current;
+    if (el) el.innerText = "";
+    onUpdate?.({ text: "" });
+    onTurnInto?.(type);
+    closeSlash();
+  };
 
   if (Renderer) {
     return (
@@ -69,7 +81,7 @@ export function NotionBlock({
           onReplace={(next) => onUpdate?.({ ...next, id: block.id } as Partial<Block>)}
         />
         {!readOnly && onTurnInto && (
-          <ActionsHandle
+          <BlockActionsHandle
             currentType={block.type}
             onTurnInto={onTurnInto}
             onDuplicate={onDuplicate}
@@ -82,6 +94,30 @@ export function NotionBlock({
   }
 
   const placeholder = placeholders?.[block.type] ?? TOP_LEVEL_PLACEHOLDERS[block.type] ?? "";
+  const handleInput = (e: React.FormEvent<HTMLElement>) => {
+    if (composingRef.current) return;
+    const el = e.currentTarget as HTMLElement;
+    const text = el.innerText;
+    const decision = decideBlockInput({ text, blockType: block.type, canTurnInto: !!onTurnInto, slashOpen });
+
+    if (decision.kind === "markdownTrigger") {
+      el.innerText = "";
+      onUpdate?.({ text: "", ...(decision.patch ?? {}) });
+      onTurnInto?.(decision.type);
+      closeSlash();
+      return;
+    }
+
+    onUpdate?.({ text });
+    if (decision.kind === "slashOpen") {
+      setSlashOpen(true);
+      setSlashQuery(decision.query);
+    } else if (decision.kind === "slashClose") {
+      closeSlash();
+    } else {
+      decorateInPlace(el, text, { hideMarkers: HEADING_TYPES.has(block.type) });
+    }
+  };
 
   return (
     <div
@@ -102,20 +138,20 @@ export function NotionBlock({
           onUpdate?.({ text });
           decorateInPlace(el, text, { hideMarkers: HEADING_TYPES.has(block.type) });
         }}
-        onInput={(e) => {
-          if (composingRef.current) return;
-          const el = e.currentTarget as HTMLElement;
-          const text = el.innerText;
-          onUpdate?.({ text });
-          decorateInPlace(el, text, { hideMarkers: HEADING_TYPES.has(block.type) });
-        }}
+        onInput={handleInput}
         onKeyDown={(e) => {
           if (readOnly) return;
+          if (e.key === "Escape" && slashOpen) {
+            e.preventDefault();
+            closeSlash();
+            return;
+          }
           if (e.key === "Backspace" && (e.currentTarget as HTMLElement).innerText === "") {
             e.preventDefault();
             onRemove?.();
           }
         }}
+        onBlur={() => { setTimeout(closeSlash, 150); }}
         data-placeholder={placeholder}
         className={cn(
           "outline-none whitespace-pre-wrap break-words py-1 empty:before:content-[attr(data-placeholder)] empty:before:text-muted-foreground/40",
@@ -131,8 +167,13 @@ export function NotionBlock({
           className,
         )}
       />
+      {slashOpen && onTurnInto && (
+        <div className="absolute left-0 top-full z-50 mt-1">
+          <SlashMenu query={slashQuery} onSelect={handleSlashSelect} onClose={closeSlash} />
+        </div>
+      )}
       {!readOnly && onTurnInto && hover && (
-        <ActionsHandle
+        <BlockActionsHandle
           currentType={block.type}
           onTurnInto={onTurnInto}
           onDuplicate={onDuplicate}
@@ -140,37 +181,6 @@ export function NotionBlock({
           dragHandle={dragHandle}
         />
       )}
-    </div>
-  );
-}
-
-function ActionsHandle({
-  currentType, onTurnInto, onDuplicate, onRemove, dragHandle,
-}: {
-  currentType: BlockType;
-  onTurnInto: (t: BlockType) => void;
-  onDuplicate?: () => void;
-  onRemove?: () => void;
-  dragHandle?: ReactNode;
-}) {
-  return (
-    <div className="absolute -left-12 top-1 flex items-center gap-0.5 opacity-0 transition group-hover/block:opacity-100">
-      {dragHandle}
-      <BlockActionsMenu
-        currentType={currentType}
-        onTurnInto={onTurnInto}
-        onDuplicate={onDuplicate}
-        onDelete={onRemove}
-      >
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-6 w-6 text-muted-foreground"
-          aria-label="Block actions"
-        >
-          <MoreHorizontal className="h-3.5 w-3.5" />
-        </Button>
-      </BlockActionsMenu>
     </div>
   );
 }

@@ -6,17 +6,18 @@ import {
   NotionSidebar,
   NotionBlock,
   NotionDatabase,
+  InsertBlockButton,
   type Block,
+  type BlockType,
   type Database,
   type Page,
   type PropertyValue,
 } from "@/features/notion-shell";
 import { SlicePreviewLayout, PreviewSection } from "@/components/slice-previews/preview-layout";
 
-/** Live demo for the six Notion-style wrapper primitives. Each demo
- *  is fully props-driven — state lives in this preview surface,
- *  callbacks update local React state. Pair with notion-blocks for
- *  richer block renderers. */
+/** Live demo for the Notion-style wrapper primitives. Each demo is
+ *  fully props-driven — state lives in this preview surface,
+ *  callbacks update local React state. */
 export default function Page() {
   return (
     <SlicePreviewLayout title="Notion Shell" kind="ui" maxWidth="none">
@@ -28,8 +29,8 @@ export default function Page() {
       </PreviewSection>
 
       <PreviewSection
-        title="2. NotionPage + NotionBlock — page shell + contentEditable blocks"
-        hint="click icon to change · edit title + body inline · empty backspace removes block"
+        title="2. NotionPage + NotionBlock — slash menu, markdown triggers, drag-handle slot"
+        hint='type "/" inside a block for the picker · "# ", "- ", "[] ", "> ", "``` " convert on the fly · backspace on empty removes · click "+ Add block" to insert'
       >
         <PageDemo />
       </PreviewSection>
@@ -72,30 +73,71 @@ function SidebarDemo() {
   );
 }
 
+const DEFAULT_BLOCKS: Block[] = [
+  { id: "b1", type: "h2", text: "Hello from NotionPage" },
+  {
+    id: "b2",
+    type: "paragraph",
+    text: 'Type "/" anywhere to open the block picker. Try "# " for heading, "- " for bullet, "> " for quote, "[] " for todo.',
+  },
+  { id: "b3", type: "quote", text: "Pure props-driven — host owns the data." },
+  { id: "b4", type: "paragraph", text: "" },
+];
+
 function PageDemo() {
   const [icon, setIcon] = React.useState("📘");
   const [title, setTitle] = React.useState("Untitled page");
-  const [blocks, setBlocks] = React.useState<Block[]>([
-    { id: "b1", type: "h2", text: "Hello from NotionPage" },
-    { id: "b2", type: "paragraph", text: "Type anywhere. Press backspace on an empty block to remove it." },
-    { id: "b3", type: "quote", text: "Pure props-driven — host owns the data." },
-  ]);
+  const [blocks, setBlocks] = React.useState<Block[]>(DEFAULT_BLOCKS);
+
+  const updateBlock = (id: string, patch: Partial<Block>) =>
+    setBlocks((cur) => cur.map((x) => (x.id === id ? { ...x, ...patch } : x)));
+
+  const turnInto = (id: string, type: BlockType) =>
+    setBlocks((cur) => cur.map((x) => (x.id === id ? { ...x, type } : x)));
+
+  const removeBlock = (id: string) =>
+    setBlocks((cur) => {
+      const next = cur.filter((x) => x.id !== id);
+      return next.length > 0 ? next : [{ id: `b${Date.now()}`, type: "paragraph", text: "" }];
+    });
+
+  const duplicateBlock = (id: string) =>
+    setBlocks((cur) => {
+      const idx = cur.findIndex((x) => x.id === id);
+      if (idx === -1) return cur;
+      const src = cur[idx];
+      const clone: Block = { ...src, id: `b${Date.now()}` };
+      const next = [...cur];
+      next.splice(idx + 1, 0, clone);
+      return next;
+    });
+
+  const insertBlock = (type: BlockType) =>
+    setBlocks((cur) => [...cur, { id: `b${Date.now()}`, type, text: "" }]);
+
   return (
-    <div className="h-96 rounded-lg border border-border bg-background">
+    <div className="h-[28rem] overflow-y-auto rounded-lg border border-border bg-background">
       <NotionPage
         icon={icon}
         title={title}
         onIconChange={setIcon}
         onTitleChange={setTitle}
       >
-        {blocks.map((b) => (
-          <NotionBlock
-            key={b.id}
-            block={b}
-            onUpdate={(patch) => setBlocks((cur) => cur.map((x) => (x.id === b.id ? { ...x, ...patch } : x)))}
-            onRemove={() => setBlocks((cur) => cur.filter((x) => x.id !== b.id))}
-          />
-        ))}
+        <div className="space-y-1">
+          {blocks.map((b) => (
+            <NotionBlock
+              key={b.id}
+              block={b}
+              onUpdate={(patch) => updateBlock(b.id, patch)}
+              onTurnInto={(type) => turnInto(b.id, type)}
+              onDuplicate={() => duplicateBlock(b.id)}
+              onRemove={() => removeBlock(b.id)}
+            />
+          ))}
+          <div className="pt-3">
+            <InsertBlockButton onInsert={insertBlock} label="Add block" />
+          </div>
+        </div>
       </NotionPage>
     </div>
   );
