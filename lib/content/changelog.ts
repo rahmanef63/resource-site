@@ -10,6 +10,49 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CF",
+    version: "CF-wave",
+    date: Date.parse("2026-05-21"),
+    kind: "improvement",
+    title: "notion peer slices surfaced — 4 NEW catalog entries + adaptation audit",
+    body:
+      "User asked: 'berapa persen pengadaptasian notion clone? berapa slices notion yang sudah terdaftar? tolong update slices features yang notion related, jadi search notion akan muncul list slicesnya.' Audit + fix landed in one wave. AUDIT: upstream notion-page-clone has 37 slices on disk; rr previously had 6 catalog entries tagged `notion-like` (command-menu, icon-picker, notion-blocks, notion-shell, theme-presets, files) — but notion-blocks is a BUNDLE that wraps 4 peer slices (equation, code-block, notifications, database-cell-selection) which existed on disk but had ZERO standalone catalog entries. Search for `notion` / `katex` / `highlight.js` did NOT surface them. ADAPTATION %: catalog entries 6/37 = 16% → 10/37 = 27%; lifted concepts 12/37 = 32%; UI-shareable surface coverage 12/15 = 80% (22 convex-coupled upstream slices remain blocked-pending-adapter per BS-wave audit). FIX: 4 standalone catalog entries added — equation (Notion-style KaTeX block), code-block (Notion-style syntax-highlighted code), notifications (Notion-style per-page Notify Me), database-cell-selection (Notion-style drag-fill + multi-select). Each entry: notion-inspired description, full `notion` + `notion-like` tag set, agentRecipe for AI installers, previewPath, npm + shadcn deps, source pointed at notion-page-clone. Total: 4 new entries × ~22 LOC = 88 LOC. Search now surfaces 10 notion-related slices when typing `notion`.",
+    groups: [
+      {
+        heading: "NEW catalog entries (4)",
+        bullets: [
+          { text: "equation — Notion-style KaTeX block primitive", slug: "equation", kind: "slice" },
+          { text: "code-block — Notion-style syntax-highlighted code primitive", slug: "code-block", kind: "slice" },
+          { text: "notifications — Notion-style per-page Notify Me popover", slug: "notifications", kind: "slice" },
+          { text: "database-cell-selection — Notion-style drag-fill + multi-select", slug: "database-cell-selection", kind: "slice" },
+        ],
+      },
+      {
+        heading: "Search 'notion' now returns 10 slices",
+        bullets: [
+          "command-menu, icon-picker, notion-blocks, notion-shell, theme-presets, files (existing 6)",
+          "equation, code-block, notifications, database-cell-selection (NEW 4)",
+        ],
+      },
+      {
+        heading: "Adaptation % — three framings",
+        bullets: [
+          "Catalog entries: 10 / 37 upstream slices = 27%",
+          "Lifted concepts: 12 / 37 = 32% (treating bundles as multi-concept; notion-shell wraps editor + workspace-sidebar + databases + cover)",
+          "UI-shareable coverage: 12 / 15 = 80% (22 upstream slices are convex-coupled and remain blocked-pending-adapter)",
+        ],
+      },
+      {
+        heading: "Remaining blocked (per BS-wave audit, future waves)",
+        bullets: [
+          "Convex-coupled (need adapter pattern): admin-panel, ai-agent, analytics, backlinks, comments (rr has own different impl), dashboard, database-csv/json/presets/templates, databases, editor, feedback, inbox, library, snapshots, templates, trash, wiki, workspace-io, workspace-members, workspace-sidebar",
+          "Missing shared primitives in rr: responsive-dialog, responsive-alert-dialog (block several lifts)",
+          "lucide-react version drift (rr ^1.16 vs notion-page-clone ^0.462) — affects icon-picker variants",
+        ],
+      },
+    ],
+  },
+  {
     id: "CE",
     version: "CE-wave",
     date: Date.parse("2026-05-21"),
