@@ -10,6 +10,35 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CA",
+    version: "CA-wave",
+    date: Date.parse("2026-05-21"),
+    kind: "improvement",
+    title: "/docs/architecture page refresh — current state of subdomain + dispatcher + block patterns",
+    body:
+      "The /docs/architecture page was stale (described the old template-base/ structure that no longer exists in this repo, didn't mention any of the BR→BZ waves). Rewritten to reflect today's actual state: (1) wildcard subdomain routing diagram (request → proxy.ts → host-resolve → path rewrite → BlockView), (2) AdminFeatureStubPage dispatcher pattern with the actual 7-line switch + an 8×6 block × template coverage matrix showing the 48-routes-from-one-dispatcher leverage, (3) per-block file shape (types + seed + view + sub-components ≤200 LOC, with shared chrome from _shared/admin-panel/ui/), (4) hard rules updated (added LOC cap + audit chain + no-marketing-chrome-on-workspace + proxy.ts-not-middleware), (5) NEW wave-progression timeline section showing BR→CA at a glance. Portfolio-grade: a viewer can understand the system in 30 seconds. Single file, 135 LOC.",
+    groups: [
+      {
+        heading: "Sections",
+        bullets: [
+          "Subdomain routing — ASCII flow diagram (proxy.ts → AdminFeatureStubPage)",
+          "Admin-panel dispatcher pattern — actual code + 8×6 coverage matrix",
+          "Block file shape — _shared/admin-panel/ui/ + blocks/<segment>/ tree",
+          "Hard rules — refreshed (NO Clerk / shadcn-only / copy-first / stack lock / ≤200 LOC / audit chain / no marketing chrome / proxy.ts)",
+          "Wave progression — BR / BS-BX / BY / BZ / CA quick timeline",
+        ],
+      },
+      {
+        heading: "What this isn't",
+        bullets: [
+          "Not a tutorial (Notion-clone vs Notion comparison page lives elsewhere)",
+          "Not a deploy guide (separate /docs section)",
+          "Not a slice deep-dive (per-slice pages at /slices/<slug>)",
+        ],
+      },
+    ],
+  },
+  {
     id: "BZ",
     version: "BZ-wave",
     date: Date.parse("2026-05-21"),
