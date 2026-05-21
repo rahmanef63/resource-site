@@ -11,6 +11,18 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### CK-J — 2026-05-21 — database-json standalone slice
+
+- New peer slice `frontend/slices/database-json/` — JSON wire format v1 (schema + rows) for notion-database.
+- **JsonActions** — dropdown w/ Export (Blob-URL download) + Import.
+- **JsonImportDialog** — file picker → schema diff preview → submit.
+- **lib/serialize.ts** — exportDatabase / parseExport / diffSchema / buildImportResult / downloadJson.
+- Schema match: property name (case-insensitive) + exact type. Mismatched listed as new.
+- **Result shape MIRRORS CsvImportResult** — single host onImport handler can serve both formats.
+- Dropped vs upstream: AI assist (AIAssistDialog + lib/ai.ts), cover, blocks, sub-items, templates.
+- Preview `/preview/slices/database-json` — 3-row demo + Export downloads .json + Import + collapsible wire-format viewer.
+- Catalog: 45 → 46. JSON 0% → 100%. Database adaptation ~80% → ~82%.
+
 ### CK-1C — 2026-05-21 — notion-database FormView (11/11 views)
 
 - **FormView** lifted — title input + per-property inputs via reused `renderPropertyCell` (no separate PropertyFormInput widget), submit → `onRowCreate({title, rowProps})` callback. Settings panel (show/required toggles + title + description + success message).

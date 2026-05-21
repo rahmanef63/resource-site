@@ -10,6 +10,51 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CKJ",
+    version: "CK-J",
+    date: Date.parse("2026-05-21"),
+    kind: "feature",
+    title: "database-json standalone slice — JSON import + export, twin of database-csv",
+    body:
+      "Lifted JSON wire format companion from upstream notion-page-clone. Mirrors database-csv API surface so a single host onImport handler can serve both formats — same {newProperties, rows} result shape. Wire format v1 carries database schema (name + icon + properties + views) + rows (title + icon + rowProps). On import: parses + diffs incoming property list against existing db.properties (case-insensitive name + exact type match); matched props keep existing ids, mismatched listed as `newProperties`; row values remapped through the id table. NEW slice frontend/slices/database-json/ at version 0.1.0, peer of notion-database ^0.4. Dropped vs upstream: lib/ai.ts + AIAssistDialog (needs AI router separately), cover + blocks + sub-items + templates wire fields (not in rr Page/Database minimal shape), DataMenu (consumer composes CsvActions + JsonActions themselves). Slice count 45 → 46. Preview /preview/slices/database-json: 3-row demo + working Export downloads .json + Import file picker + collapsible wire-format JSON viewer at bottom.",
+    groups: [
+      {
+        heading: "New slice files",
+        bullets: [
+          "frontend/slices/database-json/{slice.json, slice.manifest.json, slice.contract.ts, index.ts, types.ts}",
+          "components/JsonActions.tsx — Export + Import dropdown trigger",
+          "components/JsonImportDialog.tsx — file picker + preview + submit",
+          "lib/serialize.ts — exportDatabase + parseExport + diffSchema + buildImportResult + downloadJson",
+        ],
+      },
+      {
+        heading: "API",
+        bullets: [
+          "JsonActions: { db, rows, onImport, className? }",
+          "JsonImportDialog: { db, open, onOpenChange, onImport }",
+          "onImport: ({ newProperties, rows, importedDb }) => Promise<void> | void",
+          "Result shape MIRRORS CsvImportResult — single host handler works for both",
+          "Lower-level: exportDatabase / parseExport / diffSchema / buildImportResult exported standalone",
+        ],
+      },
+      {
+        heading: "Catalog",
+        bullets: [
+          { text: "NEW database-json 0.1.0 — peer of notion-database ^0.4", slug: "database-json", kind: "slice" },
+          "Slice count: 45 → 46. JSON import/export 0% → 100%.",
+          "Database adaptation: ~80% → ~82%",
+        ],
+      },
+      {
+        heading: "Deferred (post upstream mega-bundle)",
+        bullets: [
+          "AI-assisted row generation (AIAssistDialog + lib/ai.ts — separate AI router peer)",
+          "Cover + blocks + sub-items + templates wire fields (need cross-block + cross-DB context)",
+        ],
+      },
+    ],
+  },
+  {
     id: "CK1D",
     version: "CK-1D",
     date: Date.parse("2026-05-20"),
