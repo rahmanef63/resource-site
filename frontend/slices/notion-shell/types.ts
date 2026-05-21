@@ -74,7 +74,9 @@ export interface Page {
 
 export type PropertyType =
   | "text" | "number" | "select" | "multi_select" | "status"
-  | "date" | "checkbox" | "url" | "email" | "phone";
+  | "date" | "checkbox" | "url" | "email" | "phone"
+  | "person" | "files" | "formula"
+  | "created_time" | "last_edited_time" | "unique_id";
 
 export interface SelectOption {
   id: string;
@@ -93,6 +95,13 @@ export interface Property {
   options?: SelectOption[];
   numberFormat?: NumberFormat;
   numberDecimals?: number;
+  /** Formula expression — `{{title}}` / `{{Property Name}}` interpolation
+   *  plus fn(arg, …) syntax (concat, upper, if, round, …). Used only
+   *  when type === "formula". */
+  formulaExpression?: string;
+  /** unique_id prefix — e.g. "BUG" → "BUG-001". Used only when
+   *  type === "unique_id". */
+  uniqueIdPrefix?: string;
 }
 
 export type PropertyValue =
@@ -126,11 +135,9 @@ export interface DatabaseViewConfig {
   sorts: DatabaseSort[];
   filters: DatabaseFilter[];
   search: string;
-  /** Per-view hidden property ids — independent of any global flag so
-   *  hiding a column in one view never affects another. */
+  /** Per-view hidden property ids (independent of any global flag). */
   hiddenPropIds?: string[];
-
-  // ── Chart view ────────────────────────────────────────
+  // Chart view
   chartKind?: ChartKind;
   chartXProp?: string;
   chartYProp?: string;
@@ -147,27 +154,22 @@ export interface DatabaseViewConfig {
   chartYLabel?: string;
   chartTitle?: string;
   chartHeight?: "small" | "medium" | "large";
-
-  // ── Map view ──────────────────────────────────────────
+  // Map view
   mapLatProp?: string;
   mapLngProp?: string;
   mapPinColorProp?: string;
   mapShowList?: boolean;
-
-  // ── Form view ─────────────────────────────────────────
+  // Form view
   formRequiredProps?: string[];
   formShownProps?: string[];
   formSuccessMessage?: string;
-
-  // ── Dashboard view ────────────────────────────────────
+  // Dashboard view
   dashboardKPIs?: string[];
   dashboardBreakdowns?: string[];
   dashboardRecentLimit?: number;
-
-  // ── Feed view ─────────────────────────────────────────
+  // Feed view
   feedTimestamp?: "createdAt" | "updatedAt";
-
-  // ── Timeline view ─────────────────────────────────────
+  // Timeline view
   timelineStartProp?: string;
   timelineEndProp?: string;
   timelineColorByProp?: string;
@@ -184,6 +186,9 @@ export interface Database {
   activeViewId: string;
   createdAt: number;
   updatedAt: number;
+  /** Atomic counter for unique_id properties — increments on each new row.
+   *  Read-only at the cell layer; host owns the bump. */
+  uniqueIdCounter?: number;
 }
 
 export type ActionsSlot = ReactNode;

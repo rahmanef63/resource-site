@@ -35,6 +35,12 @@ const DB: Database = {
     { id: "blocked",  name: "Blocked", type: "checkbox" },
     { id: "lat",      name: "Lat",     type: "number" },
     { id: "lng",      name: "Lng",     type: "number" },
+    { id: "owners",   name: "Owners",  type: "person" },
+    { id: "attach",   name: "Files",   type: "files" },
+    { id: "summary",  name: "Summary", type: "formula", formulaExpression: "concat(upper({{title}}), \" · \", {{status}})" },
+    { id: "uid",      name: "ID",      type: "unique_id", uniqueIdPrefix: "TASK" },
+    { id: "created",  name: "Created", type: "created_time" },
+    { id: "edited",   name: "Edited",  type: "last_edited_time" },
   ],
   views: [
     { id: "v1", name: "Table", type: "table", filters: [], sorts: [], search: "" },
@@ -55,11 +61,11 @@ const DB: Database = {
 };
 
 const ROWS: Page[] = [
-  makeRow("t1", "Wire up provider adapters",   { status: "done",  priority: "p0", tags: ["infra"], due: { date: "2026-05-18" }, start: { date: "2026-05-14" }, end: { date: "2026-05-18" }, lat: 37.7749, lng: -122.4194 }),
-  makeRow("t2", "Polish admin-panel chrome",    { status: "done",  priority: "p1", tags: ["ui", "design"], due: { date: "2026-05-21" }, start: { date: "2026-05-19" }, end: { date: "2026-05-21" }, lat: 51.5074, lng: -0.1278 }),
-  makeRow("t3", "Audit-log diff tree",          { status: "done",  priority: "p1", tags: ["ui"], due: { date: "2026-05-21" }, start: { date: "2026-05-20" }, end: { date: "2026-05-21" }, lat: 35.6762, lng: 139.6503 }),
-  makeRow("t4", "Split notion-database slice",  { status: "doing", priority: "p0", tags: ["infra", "ui"], due: { date: "2026-05-22" }, start: { date: "2026-05-21" }, end: { date: "2026-05-23" }, blocked: false, lat: -6.2088, lng: 106.8456 }),
-  makeRow("t5", "Lift editor selection toolbar",{ status: "todo",  priority: "p2", tags: ["ui"], due: { date: "2026-05-25" }, start: { date: "2026-05-24" }, end: { date: "2026-05-27" }, blocked: true, lat: 48.8566, lng: 2.3522 }),
+  makeRow("t1", "Wire up provider adapters",   { status: "done",  priority: "p0", tags: ["infra"], due: { date: "2026-05-18" }, start: { date: "2026-05-14" }, end: { date: "2026-05-18" }, lat: 37.7749, lng: -122.4194, owners: ["Rahman"], attach: ["https://example.com/spec.pdf"] }),
+  makeRow("t2", "Polish admin-panel chrome",    { status: "done",  priority: "p1", tags: ["ui", "design"], due: { date: "2026-05-21" }, start: { date: "2026-05-19" }, end: { date: "2026-05-21" }, lat: 51.5074, lng: -0.1278, owners: ["Rahman", "Studio"] }),
+  makeRow("t3", "Audit-log diff tree",          { status: "done",  priority: "p1", tags: ["ui"], due: { date: "2026-05-21" }, start: { date: "2026-05-20" }, end: { date: "2026-05-21" }, lat: 35.6762, lng: 139.6503, owners: ["Rahman"] }),
+  makeRow("t4", "Split notion-database slice",  { status: "doing", priority: "p0", tags: ["infra", "ui"], due: { date: "2026-05-22" }, start: { date: "2026-05-21" }, end: { date: "2026-05-23" }, blocked: false, lat: -6.2088, lng: 106.8456, owners: ["Rahman"], attach: ["https://example.com/diagram.png", "https://example.com/notes.md"] }),
+  makeRow("t5", "Lift editor selection toolbar",{ status: "todo",  priority: "p2", tags: ["ui"], due: { date: "2026-05-25" }, start: { date: "2026-05-24" }, end: { date: "2026-05-27" }, blocked: true, lat: 48.8566, lng: 2.3522, owners: [] }),
 ];
 
 function makeRow(id: string, title: string, props: Record<string, PropertyValue>): Page {

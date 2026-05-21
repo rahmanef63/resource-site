@@ -75,6 +75,9 @@ export function NotionDatabase({
       value: (row.rowProps?.[prop.id] as PropertyValue) ?? null,
       readOnly: !!readOnly || !onRowUpdate,
       onChange: onRowUpdate ? (v) => onRowUpdate(row.id, prop.id, v) : undefined,
+      row,
+      db,
+      onPropertyChange: onPropertyUpdate ? (patch) => onPropertyUpdate(prop.id, patch) : undefined,
     });
 
   const renderColumnHeader = (prop: Property) => (

@@ -11,6 +11,16 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### CK-3 — 2026-05-21 — notion-database +6 property cells
+
+- New cells: **FilesCell** (paste-URL chips), **PersonCell** (initials avatars), **FormulaCell** (expression engine w/ live preview), **CreatedTimeCell** + **LastEditedTimeCell** (readonly system timestamps), **UniqueIdCell** (auto-derived).
+- New `lib/formula.ts` — `{{title}}` / `{{prop}}` interpolation + fn(arg, …) + `=expr` math. Pure, no backend.
+- PropertyType: 10 → 16 (+ person, files, formula, created_time, last_edited_time, unique_id).
+- Property: + formulaExpression?, + uniqueIdPrefix?. Database: + uniqueIdCounter?.
+- Existing select / multi_select extracted to dedicated cells for ≤200 LOC budget.
+- notion-database `0.2.0` → `0.3.0`. Coverage: 16/17 property types (94%). Adaptation ~65% → ~72%.
+- Deferred: relation + rollup (need cross-DB context — wait for upstream mega-bundle).
+
 ### CK-wave — 2026-05-21 — notion-database 10/11 views + Filter/Sort builders
 
 - **CK-1A** (`a7532da`) — Lifted **ChartView** (recharts) + **DashboardView**. Views 6→8/11. DatabaseViewConfig extended with chart/dashboard fields. ChartKind + ChartAggregate exported.

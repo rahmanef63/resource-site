@@ -9,32 +9,33 @@
 import type { ReactNode } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { cn } from "rahman-shared/lib/utils";
-import type { Property, PropertyValue, SelectOption } from "../types";
+import type { Database, Page, Property, PropertyValue } from "../types";
+import { FilesCell } from "./cells/FilesCell";
+import { PersonCell } from "./cells/PersonCell";
+import { FormulaCell } from "./cells/FormulaCell";
+import { MultiSelectCell } from "./cells/MultiSelectCell";
+import { SelectCell } from "./cells/SelectCell";
+import {
+  CreatedTimeCell, LastEditedTimeCell, UniqueIdCell,
+} from "./cells/timestamps";
 
 interface CellArgs {
   prop: Property;
   value: PropertyValue;
   readOnly: boolean;
   onChange?: (next: PropertyValue) => void;
+  /** Required by formula / created_time / last_edited_time / unique_id
+   *  cells (they read row + db metadata, not just value). NotionDatabase
+   *  passes these via renderCell — host can omit when rendering cells
+   *  outside a row context. */
+  row?: Page;
+  db?: Database;
+  onPropertyChange?: (patch: Partial<Property>) => void;
 }
 
-function optChip(opt: SelectOption | undefined, className?: string) {
-  if (!opt) return null;
-  return (
-    <span
-      className={cn(
-        "inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium",
-        "bg-muted text-foreground",
-        className,
-      )}
-    >
-      {opt.name}
-    </span>
-  );
-}
-
-export function renderPropertyCell({ prop, value, readOnly, onChange }: CellArgs): ReactNode {
+export function renderPropertyCell({
+  prop, value, readOnly, onChange, row, db, onPropertyChange,
+}: CellArgs): ReactNode {
   switch (prop.type) {
     case "checkbox":
       return (
@@ -57,58 +58,25 @@ export function renderPropertyCell({ prop, value, readOnly, onChange }: CellArgs
       );
 
     case "select":
-    case "status": {
-      const id = value as string | null;
-      const opt = prop.options?.find((o) => o.id === id);
-      if (readOnly) return optChip(opt) ?? <span className="text-muted-foreground/60">—</span>;
+    case "status":
       return (
-        <select
-          value={id ?? ""}
-          onChange={(e) => onChange?.(e.target.value || null)}
-          className="h-7 w-full rounded-md border border-border bg-background px-2 text-sm"
-        >
-          <option value="">—</option>
-          {prop.options?.map((o) => (
-            <option key={o.id} value={o.id}>{o.name}</option>
-          ))}
-        </select>
+        <SelectCell
+          options={prop.options ?? []}
+          value={value as string | null}
+          readOnly={readOnly}
+          onChange={onChange ? (next) => onChange(next) : undefined}
+        />
       );
-    }
 
-    case "multi_select": {
-      const ids = (Array.isArray(value) ? value : []) as string[];
-      const selected = (prop.options ?? []).filter((o) => ids.includes(o.id));
-      if (readOnly) {
-        return (
-          <div className="flex flex-wrap gap-1">
-            {selected.map((o) => optChip(o, "bg-primary/15 text-primary"))}
-          </div>
-        );
-      }
+    case "multi_select":
       return (
-        <div className="flex flex-wrap items-center gap-1">
-          {(prop.options ?? []).map((o) => {
-            const active = ids.includes(o.id);
-            return (
-              <button
-                key={o.id}
-                type="button"
-                onClick={() => {
-                  const next = active ? ids.filter((x) => x !== o.id) : [...ids, o.id];
-                  onChange?.(next);
-                }}
-                className={cn(
-                  "rounded-full border px-2 py-0.5 text-[10px]",
-                  active ? "border-primary bg-primary/15 text-primary" : "border-border text-muted-foreground",
-                )}
-              >
-                {o.name}
-              </button>
-            );
-          })}
-        </div>
+        <MultiSelectCell
+          options={prop.options ?? []}
+          value={(Array.isArray(value) ? value : []) as string[]}
+          readOnly={readOnly}
+          onChange={onChange ? (next) => onChange(next) : undefined}
+        />
       );
-    }
 
     case "date": {
       const v = (value && typeof value === "object" && "date" in value ? value.date : null) ?? "";
@@ -161,6 +129,48 @@ export function renderPropertyCell({ prop, value, readOnly, onChange }: CellArgs
           className="h-7 text-sm"
         />
       );
+
+    case "files":
+      return (
+        <FilesCell
+          value={(Array.isArray(value) ? value : []) as string[]}
+          readOnly={readOnly}
+          onChange={onChange ? (next) => onChange(next) : undefined}
+        />
+      );
+
+    case "person":
+      return (
+        <PersonCell
+          value={(Array.isArray(value) ? value : []) as string[]}
+          readOnly={readOnly}
+          onChange={onChange ? (next) => onChange(next) : undefined}
+        />
+      );
+
+    case "formula":
+      if (!row || !db) return <span className="text-xs text-muted-foreground/60">—</span>;
+      return (
+        <FormulaCell
+          db={db}
+          row={row}
+          prop={prop}
+          readOnly={readOnly}
+          onExpressionChange={onPropertyChange ? (formulaExpression) => onPropertyChange({ formulaExpression }) : undefined}
+        />
+      );
+
+    case "created_time":
+      if (!row) return <span className="text-xs text-muted-foreground/60">—</span>;
+      return <CreatedTimeCell row={row} />;
+
+    case "last_edited_time":
+      if (!row) return <span className="text-xs text-muted-foreground/60">—</span>;
+      return <LastEditedTimeCell row={row} />;
+
+    case "unique_id":
+      if (!row || !db) return <span className="text-xs text-muted-foreground/60">—</span>;
+      return <UniqueIdCell db={db} row={row} prop={prop} />;
 
     default:
       return (

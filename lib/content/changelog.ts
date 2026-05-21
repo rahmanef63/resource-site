@@ -10,6 +10,61 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CK3",
+    version: "CK-3",
+    date: Date.parse("2026-05-21"),
+    kind: "feature",
+    title: "notion-database +6 property cells (files / person / formula / created_time / last_edited_time / unique_id)",
+    body:
+      "Continuation of CK-wave. PropertyType union extended from 10 → 16 types. Lifted the pre-staged property cells from template-base/notion/slices/databases/ into frontend/slices/notion-database/components/cells/, plus the formula evaluation engine into lib/formula.ts (simplified — drops relation / rollup branches since those need cross-DB context that the standalone slice doesn't expose). Each cell is a self-contained component (≤105 LOC) with prop-driven mutations. NEW CELLS: (1) FilesCell — popover w/ chip list + paste-URL input, no upload UX (host plugs `files` slice adapter at a higher level). (2) PersonCell — initials avatar chips + comma-separated text picker (no user directory lookup vs upstream). (3) FormulaCell — readonly evaluated expression display + popover editor with live preview; expression syntax via {{title}}/{{prop_name}}/now/today + fn(arg, ...) (concat/upper/lower/length/if/and/or/not/empty/contains/replace/round/floor/ceil/abs/min/max) + `=expr` arithmetic. (4) CreatedTimeCell — readonly row.createdAt formatted. (5) LastEditedTimeCell — readonly row.updatedAt. (6) UniqueIdCell — auto-derived from row index + optional prefix (e.g. TASK-001). Existing multi_select + select/status cases extracted to MultiSelectCell + SelectCell to keep property-cells.tsx ≤200 LOC. CellArgs extended with optional row + db + onPropertyChange so the heavier cells can read metadata + write back formula expressions. NotionDatabase.renderCell wires all three through. Property type coverage: 10/17 (59%) → 16/17 (94%; only relation/rollup remain deferred). Adaptation ~65% → ~72%. Version 0.2.0 → 0.3.0. Preview demo extended with 6 new columns (Owners, Files, Summary formula, ID, Created, Edited).",
+    groups: [
+      {
+        heading: "New cells",
+        bullets: [
+          "FilesCell — popover list + paste-URL (no upload UX)",
+          "PersonCell — initials chips + comma text picker (no directory)",
+          "FormulaCell — evaluated display + popover editor w/ live preview",
+          "CreatedTimeCell — readonly row.createdAt",
+          "LastEditedTimeCell — readonly row.updatedAt",
+          "UniqueIdCell — derived from row index + optional prefix",
+        ],
+      },
+      {
+        heading: "Refactor",
+        bullets: [
+          "components/cells/ subfolder created",
+          "MultiSelectCell + SelectCell extracted from property-cells.tsx",
+          "renderPropertyCell now takes row + db + onPropertyChange (optional)",
+          "lib/formula.ts lifted (simplified, no relation/rollup branches)",
+          "All new files ≤200 LOC; property-cells.tsx trimmed to 185 LOC",
+        ],
+      },
+      {
+        heading: "Types (notion-shell)",
+        bullets: [
+          "PropertyType: 10 → 16 (+ person, files, formula, created_time, last_edited_time, unique_id)",
+          "Property: + formulaExpression? + uniqueIdPrefix?",
+          "Database: + uniqueIdCounter?",
+        ],
+      },
+      {
+        heading: "Catalog",
+        bullets: [
+          { text: "notion-database 0.2.0 → 0.3.0 — title says '10 views · 16 cells', tags include files/person/formula/timestamp/unique-id", slug: "notion-database", kind: "slice" },
+          "Property type coverage: 10/17 → 16/17 (94%); database adaptation ~65% → ~72%",
+        ],
+      },
+      {
+        heading: "Deferred",
+        bullets: [
+          "relation + rollup — need cross-DB context (lift via upstream notion mega-bundle)",
+          "CK-1C FormView — still pending",
+          "CK-4 database-csv — still pending",
+        ],
+      },
+    ],
+  },
+  {
     id: "CK",
     version: "CK-wave",
     date: Date.parse("2026-05-21"),
