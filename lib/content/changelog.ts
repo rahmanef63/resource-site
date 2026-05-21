@@ -10,6 +10,44 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CJ",
+    version: "CJ-wave",
+    date: Date.parse("2026-05-21"),
+    kind: "chore",
+    title: "catalog cleanup — drop dead `pages` skeleton + redundant `notion-blocks` aggregator",
+    body:
+      "User report: 'aku rasa banyak sampah, mari bersihkan module yang menurutmu tidak terlalu penting, atau bisa di gabung'. Cross-referenced docs/rr-sync/2026-05-21-notion-mega-lift-plan.md (upstream open-silong's incoming `notion/` mega-bundle, Phase 5 ~3wk out) — that plan will subsume the 4 notion atoms (equation, code-block, notifications, database-cell-selection) + notion-shell + notion-database behind one adapter. NOT consolidating those now — premature merge before the adapter contract lands = refactor twice. INSTEAD: tightened scope to two no-brainer cuts + one disambiguation. (1) DELETED frontend/slices/pages/ — dead `defineFeature` skeleton, routes:[], zero live imports (the `pages` ids in templates' nav-config are sidebar group keys, NOT slice refs). (2) DROPPED `notion-blocks` catalog entry — pure aggregator that re-exported the 4 atoms; atoms remain individually accessible in catalog. Slice dir + barrel KEPT so notion-page-clone template's `import { EquationBlock, CodeBlock } from \"@/features/notion-blocks\"` keeps resolving. (3) DELETED app/preview/slices/notion-blocks/page.tsx. (4) UPDATED notion-page-clone template nav link `/slices/notion-blocks` → `/slices/notion-shell` (avoids catalog detail 404). (5) RETITLED `theme-presets` catalog entry → 'tweakcn Theme Loader (30+ presets)' for unambiguous distinction from `theme-preset-switcher` (Convex-backed OKLch — different slice entirely). NO file moves on theme-presets (would cascade through CLAUDE.md + 5 docs + cookbook for marginal gain). Catalog: 45 → 44 slices. Backend slices spot-checked — rate-limit/subscribers/testimonials/services/socials all already `previewPath: undefined`, no janitor work needed.",
+    groups: [
+      {
+        heading: "Deleted",
+        bullets: [
+          "frontend/slices/pages/ — dead skeleton, only ref was in this changelog's history",
+          "app/preview/slices/notion-blocks/ — preview route paired with catalog drop",
+        ],
+      },
+      {
+        heading: "Catalog",
+        bullets: [
+          { text: "DROPPED notion-blocks — aggregator redundant, atoms individually listed", slug: "notion-blocks", kind: "slice" },
+          { text: "RETITLED theme-presets → tweakcn Theme Loader for clarity vs theme-preset-switcher", slug: "theme-presets", kind: "slice" },
+          "Catalog count: 45 → 44 slices",
+        ],
+      },
+      {
+        heading: "Template touch-ups",
+        bullets: [
+          "notion-page-clone/shared/nav-config.ts — link now points to notion-shell slice page (notion-blocks catalog no longer exists)",
+        ],
+      },
+      {
+        heading: "Deferred to upstream mega-bundle",
+        bullets: [
+          "notion atom consolidation (equation/code-block/notifications/database-cell-selection) — wait for docs/rr-sync/2026-05-21-notion-mega-lift-plan.md Phase 5 from open-silong (~3wk). Their adapter contract is the single converge point; pre-staging here would refactor twice.",
+        ],
+      },
+    ],
+  },
+  {
     id: "CI",
     version: "CI-wave",
     date: Date.parse("2026-05-21"),

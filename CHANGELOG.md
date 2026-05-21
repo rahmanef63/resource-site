@@ -11,7 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
-Nothing pending — main is shippable.
+### CJ-wave — 2026-05-21 — Catalog cleanup
+
+- **Deleted** `frontend/slices/pages/` — dead `defineFeature` skeleton (routes:[], zero live imports).
+- **Dropped** `notion-blocks` catalog entry — pure re-export aggregator of 4 atoms (equation / code-block / notifications / database-cell-selection). Atoms remain individually catalogued; slice dir + barrel kept so consumer imports still resolve.
+- **Deleted** `app/preview/slices/notion-blocks/page.tsx` preview route.
+- **Retitled** `theme-presets` → "tweakcn Theme Loader (30+ presets)" — disambiguate from `theme-preset-switcher` (Convex-backed OKLch). No file moves.
+- **Template** `notion-page-clone/shared/nav-config.ts` link `/slices/notion-blocks` → `/slices/notion-shell` to avoid catalog detail 404.
+- Catalog count: 45 → 44 slices.
+- **Deferred**: notion atom consolidation waits for upstream `notion/` mega-bundle (open-silong Phase 5, ~3wk per `docs/rr-sync/2026-05-21-notion-mega-lift-plan.md`).
 
 ---
 

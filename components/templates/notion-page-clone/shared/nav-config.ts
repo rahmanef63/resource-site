@@ -44,7 +44,7 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
   {
     heading: "Built with",
     items: [
-      { label: "notion-blocks slice", href: "/slices/notion-blocks" },
+      { label: "notion-shell slice", href: "/slices/notion-shell" },
       { label: "landing-sections slice", href: "/slices/landing-sections" },
       { label: "Rahman Resources", href: "/" },
     ],
