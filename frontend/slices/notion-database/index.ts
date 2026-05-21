@@ -24,10 +24,13 @@ export { NotionProperty, type NotionPropertyProps } from "./components/NotionPro
 export { ViewTabs, type ViewTabsProps } from "./components/ViewTabs";
 export { ViewOptions, type ViewOptionsProps } from "./components/ViewOptions";
 export { ColumnHeaderMenu, type ColumnHeaderMenuProps } from "./components/ColumnHeaderMenu";
+export { FilterBuilder, type FilterBuilderProps } from "./components/FilterBuilder";
+export { SortBuilder, type SortBuilderProps } from "./components/SortBuilder";
 export { renderPropertyCell } from "./components/property-cells";
 export {
   VIEW_REGISTRY,
   TableView, BoardView, ListView, GalleryView, CalendarView, FeedView,
+  ChartView, DashboardView, MapView, TimelineView,
   type ViewRegistry, type ViewProps,
 } from "./components/views";
 export { applyView, groupBy, bucketByDate } from "./lib/viewData";
