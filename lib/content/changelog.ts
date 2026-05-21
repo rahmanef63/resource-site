@@ -10,6 +10,42 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CD",
+    version: "CD-wave",
+    date: Date.parse("2026-05-21"),
+    kind: "feature",
+    title: "webhooks Test button — live mock POST → delivery row prepended",
+    body:
+      "First per-block depth feature after CC adapter pattern. Clicking the per-endpoint Test button now FIRES a synthetic delivery — bindings.fire(endpointId, event?) generates a delivery with random physics (70% delivered / 20% retry / 10% failed, 60-220ms latency on success, 5s on hard fail), prepends it to the deliveries list, and bumps the endpoint's lastDeliveryAt + failingRetries counters. The Recent deliveries tab updates in real time. Paused endpoints disable the Test button with an explanatory tooltip. Side effect: a hard-failed test marks the endpoint status as 'failing' — so a few rapid Tests on a 'good' endpoint can trip the failing state, demonstrating how the real system would surface intermittent endpoint health. Demo physics are intentionally rough (70/20/10) to make the demo feel alive without requiring 10 clicks to see a non-200. EXTRACTED rollDeliveryStatus() helper in bindings.tsx so a Convex impl can override the physics with real HTTP results. Side cleanup: DeliveryTable refactored to take {deliveries, endpoints} as props (single source of truth from the orchestrator's bindings), avoiding the multi-consumer-of-bindings duplicate-state pitfall.",
+    groups: [
+      {
+        heading: "Behavior",
+        bullets: [
+          "Click Test → new delivery row appears at top of the Recent deliveries tab",
+          "Endpoint lastDeliveryAt updates; failingRetries increments on retry/fail",
+          "Paused endpoints disable Test (tooltip: 'Resume endpoint to fire')",
+          "Hard-failed fire bumps endpoint status to 'failing' — visible in the Endpoints tab badge",
+        ],
+      },
+      {
+        heading: "Files",
+        bullets: [
+          "bindings.tsx — adds fire() to WebhooksBindings + rollDeliveryStatus helper (95 LOC)",
+          "endpoint-row.tsx — Test button wired to onFire prop; disabled when paused",
+          "WebhooksBlockView.tsx — passes onFire={() => fire(e.id)} to each row",
+          "delivery-table.tsx — takes {deliveries, endpoints} props (was bindings — fixes multi-consumer duplicate-state pitfall)",
+        ],
+      },
+      {
+        heading: "Pattern lessons",
+        bullets: [
+          "Default-fallback bindings (no Provider) → ONE consumer per block, or share via props. Don't call useDefault*Bindings twice in the same render tree.",
+          "Children that need block data either consume bindings (single consumer) or take props (multi consumer). Provider-wrap-self pattern deferred.",
+        ],
+      },
+    ],
+  },
+  {
     id: "CC",
     version: "CC-wave",
     date: Date.parse("2026-05-21"),

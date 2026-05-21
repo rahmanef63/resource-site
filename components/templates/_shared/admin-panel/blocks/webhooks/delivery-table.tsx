@@ -4,9 +4,16 @@ import * as React from "react";
 import { RefreshCcw } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { DELIVERY_META, SEED_DELIVERIES, SEED_ENDPOINTS } from "./seed";
+import { DELIVERY_META } from "./seed";
+import type { WebhookDelivery, WebhookEndpoint } from "./types";
 
-export function DeliveryTable() {
+export function DeliveryTable({
+  deliveries,
+  endpoints,
+}: {
+  deliveries: WebhookDelivery[];
+  endpoints: WebhookEndpoint[];
+}) {
   return (
     <div role="table" aria-label="Recent webhook deliveries" className="divide-y rounded-lg border bg-card">
       <div
@@ -20,8 +27,8 @@ export function DeliveryTable() {
         <span role="columnheader" className="text-right">ms</span>
         <span role="columnheader" aria-label="Actions" />
       </div>
-      {SEED_DELIVERIES.map((d) => {
-        const endpoint = SEED_ENDPOINTS.find((e) => e.id === d.endpointId);
+      {deliveries.map((d) => {
+        const endpoint = endpoints.find((e) => e.id === d.endpointId);
         const meta = DELIVERY_META[d.status];
         return (
           <div

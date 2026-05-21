@@ -18,7 +18,7 @@ import { EmptyState } from "../../ui/empty-state";
  *  showing HMAC-SHA256 signature header that real impl would emit.
  *  No persistence. */
 export function WebhooksBlockView() {
-  const { endpoints, deliveries, togglePause, remove } = useWebhooksBindings();
+  const { endpoints, deliveries, togglePause, remove, fire } = useWebhooksBindings();
   const activeCount = endpoints.filter((e) => e.status === "active").length;
   const failingCount = endpoints.filter((e) => e.status === "failing").length;
   const last24h = deliveries.length;
@@ -64,6 +64,7 @@ export function WebhooksBlockView() {
                   endpoint={e}
                   onToggle={() => togglePause(e.id)}
                   onDelete={() => remove(e.id)}
+                  onFire={() => fire(e.id)}
                 />
               ))}
             </div>
@@ -71,7 +72,7 @@ export function WebhooksBlockView() {
         </TabsContent>
 
         <TabsContent value="deliveries" className="mt-4">
-          <DeliveryTable />
+          <DeliveryTable deliveries={deliveries} endpoints={endpoints} />
         </TabsContent>
 
         <TabsContent value="payload" className="mt-4 space-y-3">

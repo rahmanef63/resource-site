@@ -18,10 +18,12 @@ export function EndpointRow({
   endpoint,
   onToggle,
   onDelete,
+  onFire,
 }: {
   endpoint: WebhookEndpoint;
   onToggle: () => void;
   onDelete: () => void;
+  onFire?: () => void;
 }) {
   const status = STATUS_META[endpoint.status];
   const isPaused = endpoint.status === "paused";
@@ -39,7 +41,14 @@ export function EndpointRow({
           </span>
         )}
         <div className="ml-auto flex items-center gap-1">
-          <Button variant="ghost" size="sm" className="h-7 gap-1 text-xs">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-7 gap-1 text-xs"
+            onClick={onFire}
+            disabled={!onFire || endpoint.status === "paused"}
+            title={endpoint.status === "paused" ? "Resume endpoint to fire" : "Fire a mock event"}
+          >
             <Send className="size-3" />
             Test
           </Button>
