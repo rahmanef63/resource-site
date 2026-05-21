@@ -1,11 +1,11 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "notion-database",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "category": "ui",
   "kind": "ui",
-  "title": "Notion Database — embedded DB surface with 6 views",
-  "description": "Portable Notion-style database surface. Optional companion to notion-shell. NotionDatabase ships full DB UI with ViewTabs + ViewOptions + per-column menu + 6 views (Table/Board/List/Gallery/Calendar/Feed) + 10 property-cell types. Pure / props-driven. Lifted from notion-page-clone (Nosion).",
+  "title": "Notion Database — embedded DB surface with 10 views",
+  "description": "Portable Notion-style database surface. Optional companion to notion-shell. NotionDatabase ships full DB UI with ViewTabs + ViewOptions + per-column menu + 10 views (Table / Board / List / Gallery / Calendar / Feed / Chart / Dashboard / Map / Timeline) + FilterBuilder + SortBuilder + 10 property-cell types. Pure / props-driven. Lifted from notion-page-clone (Nosion).",
   "namespace": "@/features/notion-database",
   "registers": [],
   "audit": [],
@@ -14,8 +14,8 @@
     "configExport": ""
   },
   "deps": {
-    "npm": [],
-    "shadcn": ["button", "input", "checkbox", "dropdown-menu", "popover"],
+    "npm": ["recharts@^2.13.0"],
+    "shadcn": ["button", "input", "checkbox", "dropdown-menu", "popover", "select"],
     "env": [],
     "peers": [
       { "slug": "notion-shell", "range": "^0.4", "reason": "Domain types (Database, Property, PropertyValue, DbView, DatabaseViewConfig, DatabaseFilter, DatabaseSort) live in notion-shell — the Page type references them via rowOfDatabaseId + rowProps so they stay in the shell's domain model." }

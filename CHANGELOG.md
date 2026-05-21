@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### CK-wave — 2026-05-21 — notion-database 10/11 views + Filter/Sort builders
+
+- **CK-1A** (`a7532da`) — Lifted **ChartView** (recharts) + **DashboardView**. Views 6→8/11. DatabaseViewConfig extended with chart/dashboard fields. ChartKind + ChartAggregate exported.
+- **CK-1B** (`e742c10`) — Lifted **MapView** (SVG world + lat/lng pins) + **TimelineView** (Gantt drag-to-shift). Views 8→10/11 (91%). New helpers: visibility / format / keyboard / timeline-helpers / map-svg.
+- **CK-2** (`7b81d41`) — Lifted **FilterBuilder** + **SortBuilder** (shadcn-Select-based). ViewOptions refactored to delegate. Coverage: filter/sort UI 0→100%.
+- **CK-final** — notion-database `0.1.0` → `0.2.0`. recharts npm dep added. Catalog title/description/tagline/tags refreshed.
+- **Adaptation**: notion-database ~35% → ~65% upstream parity.
+- **Deferred**: CK-1C (FormView), CK-3 (file/person/timestamp cells), CK-4 (database-csv standalone). All wait for upstream mega-bundle (Phase 5, ~3wk).
+
 ### CJ-wave — 2026-05-21 — Catalog cleanup
 
 - **Deleted** `frontend/slices/pages/` — dead `defineFeature` skeleton (routes:[], zero live imports).

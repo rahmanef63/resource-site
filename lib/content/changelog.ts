@@ -10,6 +10,60 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CK",
+    version: "CK-wave",
+    date: Date.parse("2026-05-21"),
+    kind: "feature",
+    title: "notion-database completion — 10/11 views + FilterBuilder + SortBuilder lifted",
+    body:
+      "User report: 'mari fokus menyelesaikan database'. Calculated current notion-database adaptation at ~35% (6 views / 11 + zero filter or sort UI + 10/17 property types). Goal: get database close to upstream parity in standalone slice form (the upstream open-silong mega-bundle is still ~3wk away per docs/rr-sync/2026-05-21-notion-mega-lift-plan.md Phase 5). EXECUTED in 3 commits: (1) CK-1A (commit a7532da) — lifted ChartView (recharts bar/line/area/pie/donut + inline picker for kind / X axis / aggregate / Y value + chartPalette/Decimals/TopN view-config fields) and DashboardView (KPI strip + group breakdowns by select/status + recent updates feed). 7 new files including chart-data.ts (pure aggregation helpers) and dashboard-parts.tsx (GroupBreakdown + Stat split out for ≤200 LOC). DatabaseViewConfig extended with 16 chart fields + dashboard fields. ChartKind + ChartAggregate types exported from notion-shell. (2) CK-1B (commit e742c10) — lifted MapView (SVG world projection w/ row pins read from lat/lng number-properties; optional select/status property maps to pin color — no leaflet, pure SVG) and TimelineView (Gantt-style horizontal timeline w/ drag-to-shift + drag-to-resize bars via pointer events; ChevronLeft/Right pan; auto-detects first date property). 5 new files including map-svg.tsx, timeline-bar.tsx, timeline-helpers.ts (TimelineView split because upstream was 354 LOC), lib/keyboard.ts (focusSiblingBySelector helper). Views now 10/11 (91%) — only FormView deferred (heavy PropertyFormInput + FormSettings + addRow-with-values plumbing). (3) CK-2 (commit 7b81d41) — lifted FilterBuilder + SortBuilder as standalone components (shadcn Select-based UI). ViewOptions refactored to delegate to them inside Sort / Filter popovers — replaces previous inline native-<select> builders. Exported from notion-database barrel for toolbar embedding. (FINAL CK) — notion-database version 0.1.0 → 0.2.0. Catalog title + description + tags updated. recharts@^2.13.0 added to npm deps. shadcn deps add Select. Adaptation moves 35% → ~65%. CK-3 (property type cells for file/person/timestamps), CK-4 (database-csv standalone), CK-1C (FormView) deferred to future waves.",
+    groups: [
+      {
+        heading: "Views lifted",
+        bullets: [
+          "ChartView — recharts bar/line/area/pie/donut + inline kind/X/agg/Y pickers",
+          "DashboardView — KPI strip + select-grouped breakdowns + recent updates feed",
+          "MapView — SVG world projection + lat/lng pins, optional color property",
+          "TimelineView — Gantt drag-to-shift / drag-to-resize bars",
+          "Views 6/11 → 10/11 (91%). FormView deferred to CK-1C.",
+        ],
+      },
+      {
+        heading: "Filter + Sort UI",
+        bullets: [
+          "FilterBuilder + SortBuilder — props-driven, shadcn Select-based",
+          "ViewOptions refactored — delegates to the new builders in its popovers",
+          "Coverage: filter/sort UI 0% → 100%",
+        ],
+      },
+      {
+        heading: "Type extensions (notion-shell types.ts)",
+        bullets: [
+          "DbView union: 6 → 11 (table/board/list/gallery/calendar/feed/chart/dashboard/form/map/timeline)",
+          "ChartKind + ChartAggregate types added",
+          "DatabaseViewConfig: 25 new optional view-specific fields (chart*, map*, form*, dashboard*, feed*, timeline*, hiddenPropIds)",
+          "ViewProps: onViewConfigChange + onOpenRow added (optional callbacks)",
+        ],
+      },
+      {
+        heading: "Catalog",
+        bullets: [
+          { text: "notion-database 0.1.0 → 0.2.0 — title + description + tagline + tags updated, recharts npm dep added", slug: "notion-database", kind: "slice" },
+          "Database adaptation: ~35% → ~65%",
+        ],
+      },
+      {
+        heading: "Deferred",
+        bullets: [
+          "CK-1C — FormView (PropertyFormInput + FormSettings + addRow-with-values plumbing)",
+          "CK-3 — property type cells (file/person/created_time/last_edited_time)",
+          "CK-4 — database-csv as standalone peer slice",
+          "Per docs/rr-sync/2026-05-21-notion-mega-lift-plan.md, upstream open-silong Phase 5 (~3wk) will land the full adapter-driven `notion/` mega-bundle that subsumes these gaps.",
+        ],
+      },
+    ],
+  },
+  {
     id: "CJ",
     version: "CJ-wave",
     date: Date.parse("2026-05-21"),
