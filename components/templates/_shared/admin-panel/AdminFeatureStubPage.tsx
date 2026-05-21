@@ -4,6 +4,7 @@ import { ADMIN_PANEL_BLOCKS } from "./feature-blocks";
 import { UsersBlockView } from "./blocks/users/UsersBlockView";
 import { AuditLogBlockView } from "./blocks/audit-log/AuditLogBlockView";
 import { AiConfigBlockView } from "./blocks/ai-config/AiConfigBlockView";
+import { AnalyticsBlockView } from "./blocks/analytics/AnalyticsBlockView";
 
 /**
  * BG-wave — shared stub renderer used by every per-template admin
@@ -25,5 +26,6 @@ export function AdminFeatureStubPage({ segment }: { segment: string }) {
   if (segment === "users") return <UsersBlockView />;
   if (segment === "audit-log") return <AuditLogBlockView />;
   if (segment === "ai-config") return <AiConfigBlockView />;
+  if (segment === "analytics") return <AnalyticsBlockView />;
   return <AdminFeatureCard block={block} />;
 }

@@ -10,6 +10,42 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "BV",
+    version: "BV-wave",
+    date: Date.parse("2026-05-21"),
+    kind: "feature",
+    title: "admin-panel/analytics real impl — fourth BS-pattern block (recharts)",
+    body:
+      "Fourth admin-panel block graduates from generic AdminFeatureCard stub to a real interactive view — first one to use charts. AnalyticsBlockView ships with 4 KPI cards (page views, sessions, conversion, bounce rate — each with signed delta-vs-prev-period and good/bad coloring), a 30-day stacked area chart (views + sessions, recharts via shadcn chart wrapper with proper CSS-variable theming), a traffic-source donut + legend (Direct / Organic search / Referral / Social / Email with deterministic visit counts), a 5-step conversion funnel showing drop-off % between steps, and a top-pages table (path / title / avg duration / bounce rate / views). Range chips (7d/30d/90d) wired but seed is single 30-day series. Pattern identical to BS+BT+BU: _shared/admin-panel/blocks/analytics/{types, seed, AnalyticsBlockView, traffic-chart, sources-donut, funnel-and-pages} + a single dispatch case. All 8 templates' /admin/admin-panel/analytics routes auto-updated. Backed by frontend/slices/event-tracking/ (today config-only — events schema + ingest endpoint deferred to a separate wave that wires real Convex writes).",
+    groups: [
+      {
+        heading: "NEW files",
+        bullets: [
+          "_shared/admin-panel/blocks/analytics/types.ts — DayPoint + TrafficSource + PageStat + FunnelStep + KpiCardData",
+          "_shared/admin-panel/blocks/analytics/seed.ts — buildSeries() deterministic 30-day series + 4 KPI cards + 5 sources + 6 top pages + 5-step funnel",
+          "_shared/admin-panel/blocks/analytics/AnalyticsBlockView.tsx — orchestrator (header range chips + KPI grid + chart + donut + funnel + top-pages table)",
+          "_shared/admin-panel/blocks/analytics/traffic-chart.tsx — recharts AreaChart with gradient fills via shadcn ChartContainer + ChartConfig",
+          "_shared/admin-panel/blocks/analytics/sources-donut.tsx — recharts PieChart donut + legend list with visit counts + %",
+          "_shared/admin-panel/blocks/analytics/funnel-and-pages.tsx — FunnelList (drop-off % per step) + TopPagesTable",
+        ],
+      },
+      {
+        heading: "Dispatcher update",
+        bullets: [
+          "AdminFeatureStubPage: added `if (segment === \"analytics\") return <AnalyticsBlockView />;` case",
+          { text: "Real impl backed by event-tracking slice", slug: "event-tracking", kind: "slice" },
+        ],
+      },
+      {
+        heading: "Coverage",
+        bullets: [
+          "4 of 6 admin-panel blocks now real (users, audit-log, ai-config, analytics). 2 still placeholder (webhooks, settings).",
+          "All 8 templates' analytics routes auto-updated via shared dispatcher. Zero per-template touchpoints.",
+        ],
+      },
+    ],
+  },
+  {
     id: "BU",
     version: "BU-wave",
     date: Date.parse("2026-05-21"),
