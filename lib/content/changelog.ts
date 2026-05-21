@@ -10,6 +10,43 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CE",
+    version: "CE-wave",
+    date: Date.parse("2026-05-21"),
+    kind: "feature",
+    title: "audit-log diff tree — expandable event rows showing before/after JSON",
+    body:
+      "Second per-block depth feature. Audit events that carry a `diff` field (Record<key, {before, after}>) are now CLICKABLE — the row becomes a button, hover-highlights, and on click expands an inline diff tree showing each changed field as a key + before / after pair side-by-side (rose for before, emerald for after, monospace, JSON-stringified for objects / arrays / nulls / numbers / booleans, quoted for strings). Type update: AuditEventRow gains optional `diff?: Record<string, { before: unknown; after: unknown }>` field — mirrors frontend/slices/audit-log AuditEvent shape. Seed update: 4 update events (role editor permissions, page pricing tiers, brand colors, owner transfer) now carry real diff data alongside their diffSummary preview line. Events without diff render as before (no chevron, not interactive). a11y: aria-expanded on the row button, aria-label describes the toggle target. Animation: chevron rotates 180° when expanded via CSS transform transition. Pattern: this is the per-block-depth shape every block can follow — keep the row compact, surface the depth via expansion. Aligns with what a 'real' audit-log impl always has: nobody just wants 'X changed Y'; they want to see what changed.",
+    groups: [
+      {
+        heading: "NEW + MODIFIED",
+        bullets: [
+          "_shared/admin-panel/blocks/audit-log/diff-tree.tsx — NEW (62 LOC). DiffTree + DiffValue tone-rendered key/before/after grid",
+          "_shared/admin-panel/blocks/audit-log/event-row.tsx — row becomes button when diff present; rotates chevron; expands DiffTree below",
+          "_shared/admin-panel/blocks/audit-log/types.ts — adds optional diff field to AuditEventRow",
+          "_shared/admin-panel/blocks/audit-log/seed.ts — 4 events gain real diff data (role permissions, pricing tiers, brand colors, ownership transfer)",
+          "_shared/admin-panel/blocks/audit-log/AuditLogBlockView.tsx — tracks expandedId state, passes expand handlers to EventRow",
+        ],
+      },
+      {
+        heading: "Demo events with diff (clickable)",
+        bullets: [
+          "ev_13 — Editor role permissions: +manage:workflows",
+          "ev_10 — Pricing tier 2: $99 → $129 + label change",
+          "ev_7  — Brand colors: primary + primaryForeground hex swap",
+          "ev_2  — Owner role transfer: u_old → u_1 + transferredAt timestamp",
+        ],
+      },
+      {
+        heading: "Pattern lesson",
+        bullets: [
+          "Per-block depth: compact row + expandable detail. Replicable for webhooks (full request/response inspect), settings (audit log of own changes), users (per-user role history).",
+          "Real impl will reuse DiffTree as-is — the component takes `Record<key, {before, after}>` which matches the audit-log slice's contract.",
+        ],
+      },
+    ],
+  },
+  {
     id: "CD",
     version: "CD-wave",
     date: Date.parse("2026-05-21"),

@@ -45,6 +45,12 @@ export const SEED_EVENTS: AuditEventRow[] = [
     entityLabel: "Editor role",
     severity: "warn",
     diffSummary: "permissions: +manage:workflows",
+    diff: {
+      permissions: {
+        before: ["create:pages", "edit:pages", "publish:pages"],
+        after: ["create:pages", "edit:pages", "publish:pages", "manage:workflows"],
+      },
+    },
     ipAddress: "203.0.113.22",
   },
   {
@@ -77,6 +83,11 @@ export const SEED_EVENTS: AuditEventRow[] = [
     entityLabel: "Pricing — tiers section",
     severity: "info",
     diffSummary: "tiers[2].price: $99 → $129",
+    diff: {
+      "tiers[2].price": { before: 99, after: 129 },
+      "tiers[2].label": { before: "Pro", after: "Pro (annual)" },
+      updatedAt: { before: "2026-05-15T10:00:00Z", after: "2026-05-20T06:55:00Z" },
+    },
   },
   {
     id: "ev_9",
@@ -108,6 +119,10 @@ export const SEED_EVENTS: AuditEventRow[] = [
     entityLabel: "Brand colors",
     severity: "info",
     diffSummary: "primary: #5b1d99 → #6d28d9",
+    diff: {
+      "colors.primary": { before: "#5b1d99", after: "#6d28d9" },
+      "colors.primaryForeground": { before: "#ffffff", after: "#fafafa" },
+    },
   },
   {
     id: "ev_6",
@@ -160,6 +175,10 @@ export const SEED_EVENTS: AuditEventRow[] = [
     entityLabel: "Owner role",
     severity: "warn",
     diffSummary: "transferred: u_old → u_1",
+    diff: {
+      ownerId: { before: "u_old", after: "u_1" },
+      transferredAt: { before: null, after: "2026-05-18T15:24:00Z" },
+    },
   },
   {
     id: "ev_1",

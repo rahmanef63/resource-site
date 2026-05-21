@@ -1,52 +1,92 @@
 "use client";
 
 import * as React from "react";
-import { ChevronRight, History } from "lucide-react";
+import { ChevronDown, ChevronRight, History } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { ACTION_META, SEVERITY_META } from "./seed";
+import { DiffTree } from "./diff-tree";
 import type { AuditEventRow, AuditSeverity } from "./types";
 
-export function EventRow({ event }: { event: AuditEventRow }) {
+export function EventRow({
+  event,
+  expanded,
+  onToggleExpand,
+}: {
+  event: AuditEventRow;
+  expanded?: boolean;
+  onToggleExpand?: () => void;
+}) {
   const action = ACTION_META[event.action];
   const sev = SEVERITY_META[event.severity];
+  const expandable = !!event.diff && Object.keys(event.diff).length > 0;
+  const isExpanded = !!expanded && expandable;
+
   return (
-    <div className="flex items-start gap-3 px-4 py-3">
-      <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-muted text-[10px] font-semibold">
-        {event.actor.initials}
-      </div>
-      <div className="min-w-0 flex-1">
-        <div className="flex flex-wrap items-center gap-1.5 text-xs">
-          <span className="font-medium">{event.actor.name}</span>
-          <Badge variant="outline" className={"text-[10px] uppercase " + action.tone}>
-            {action.label}
-          </Badge>
-          <span className="text-muted-foreground">{event.entityType}</span>
-          <ChevronRight className="size-3 text-muted-foreground/50" />
-          <span className="truncate">{event.entityLabel}</span>
-          {event.severity !== "info" && (
-            <Badge variant="outline" className={"text-[10px] uppercase " + sev.tone}>
-              {sev.label}
+    <div className="px-4 py-3">
+      <Button
+        type="button"
+        variant="ghost"
+        onClick={expandable ? onToggleExpand : undefined}
+        disabled={!expandable}
+        aria-expanded={isExpanded}
+        aria-label={expandable ? `${isExpanded ? "Collapse" : "Expand"} diff for ${event.entityLabel}` : undefined}
+        className={
+          "flex h-auto w-full items-start justify-start gap-3 whitespace-normal rounded p-0 text-left font-normal " +
+          (expandable ? "-mx-4 -my-3 cursor-pointer px-4 py-3 hover:bg-muted/30" : "hover:bg-transparent disabled:opacity-100")
+        }
+      >
+        <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-muted text-[10px] font-semibold">
+          {event.actor.initials}
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-1.5 text-xs">
+            <span className="font-medium">{event.actor.name}</span>
+            <Badge variant="outline" className={"text-[10px] uppercase " + action.tone}>
+              {action.label}
             </Badge>
+            <span className="text-muted-foreground">{event.entityType}</span>
+            <ChevronRight className="size-3 text-muted-foreground/50" />
+            <span className="truncate">{event.entityLabel}</span>
+            {event.severity !== "info" && (
+              <Badge variant="outline" className={"text-[10px] uppercase " + sev.tone}>
+                {sev.label}
+              </Badge>
+            )}
+            {expandable && (
+              <ChevronDown
+                className={
+                  "ml-auto size-3 text-muted-foreground transition-transform " +
+                  (isExpanded ? "rotate-180" : "")
+                }
+                aria-hidden
+              />
+            )}
+          </div>
+          {event.diffSummary && (
+            <p className="mt-1 font-mono text-[10px] text-muted-foreground">
+              {event.diffSummary}
+            </p>
           )}
+          <div className="mt-1 flex items-center gap-2 text-[10px] text-muted-foreground">
+            <History className="size-3" />
+            <time dateTime={event.at}>{formatRelative(event.at)}</time>
+            {event.ipAddress && (
+              <>
+                <span>·</span>
+                <span className="font-mono">{event.ipAddress}</span>
+              </>
+            )}
+            <span>·</span>
+            <span className="font-mono">{event.entityId}</span>
+          </div>
         </div>
-        {event.diffSummary && (
-          <p className="mt-1 font-mono text-[10px] text-muted-foreground">
-            {event.diffSummary}
-          </p>
-        )}
-        <div className="mt-1 flex items-center gap-2 text-[10px] text-muted-foreground">
-          <History className="size-3" />
-          <time dateTime={event.at}>{formatRelative(event.at)}</time>
-          {event.ipAddress && (
-            <>
-              <span>·</span>
-              <span className="font-mono">{event.ipAddress}</span>
-            </>
-          )}
-          <span>·</span>
-          <span className="font-mono">{event.entityId}</span>
+      </Button>
+      {isExpanded && event.diff && (
+        <div className="ml-10">
+          <DiffTree diff={event.diff} />
         </div>
-      </div>
+      )}
     </div>
   );
 }

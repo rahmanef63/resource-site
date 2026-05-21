@@ -27,6 +27,7 @@ export function AuditLogBlockView() {
   const [actionFilter, setActionFilter] = React.useState<AuditAction | "all">("all");
   const [severityFilter, setSeverityFilter] = React.useState<AuditSeverity | "all">("all");
   const [query, setQuery] = React.useState("");
+  const [expandedId, setExpandedId] = React.useState<string | null>(null);
 
   const filtered = React.useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -132,7 +133,14 @@ export function AuditLogBlockView() {
               />
             </div>
           ) : (
-            filtered.map((e) => <EventRow key={e.id} event={e} />)
+            filtered.map((e) => (
+              <EventRow
+                key={e.id}
+                event={e}
+                expanded={expandedId === e.id}
+                onToggleExpand={() => setExpandedId((prev) => (prev === e.id ? null : e.id))}
+              />
+            ))
           )}
         </div>
       </section>

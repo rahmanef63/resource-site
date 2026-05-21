@@ -49,5 +49,9 @@ export type AuditEventRow = {
   severity: AuditSeverity;
   /** Optional short diff summary line ("status: draft → published"). */
   diffSummary?: string;
+  /** Optional structured diff — mirrors frontend/slices/audit-log
+   *  AuditEvent.diff. When present, the event row becomes
+   *  expandable in the UI (CE-wave). */
+  diff?: Record<string, { before: unknown; after: unknown }>;
   ipAddress?: string;
 };
