@@ -151,6 +151,8 @@ export interface DatabaseViewConfig {
   // ── Map view ──────────────────────────────────────────
   mapLatProp?: string;
   mapLngProp?: string;
+  mapPinColorProp?: string;
+  mapShowList?: boolean;
 
   // ── Form view ─────────────────────────────────────────
   formRequiredProps?: string[];
@@ -164,6 +166,12 @@ export interface DatabaseViewConfig {
 
   // ── Feed view ─────────────────────────────────────────
   feedTimestamp?: "createdAt" | "updatedAt";
+
+  // ── Timeline view ─────────────────────────────────────
+  timelineStartProp?: string;
+  timelineEndProp?: string;
+  timelineColorByProp?: string;
+  timelineZoom?: "day" | "week" | "month" | "quarter";
 }
 
 export interface Database {

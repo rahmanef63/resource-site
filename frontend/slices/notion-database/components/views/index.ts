@@ -14,6 +14,8 @@ import { CalendarView } from "./CalendarView";
 import { FeedView } from "./FeedView";
 import { ChartView } from "./ChartView";
 import { DashboardView } from "./DashboardView";
+import { MapView } from "./MapView";
+import { TimelineView } from "./TimelineView";
 
 export type ViewRegistry = Partial<Record<DbView, ComponentType<ViewProps>>>;
 
@@ -26,10 +28,12 @@ export const VIEW_REGISTRY: ViewRegistry = {
   feed: FeedView,
   chart: ChartView,
   dashboard: DashboardView,
+  map: MapView,
+  timeline: TimelineView,
 };
 
 export {
   TableView, BoardView, ListView, GalleryView, CalendarView, FeedView,
-  ChartView, DashboardView,
+  ChartView, DashboardView, MapView, TimelineView,
 };
 export type { ViewProps };

@@ -13,24 +13,28 @@ const DB: Database = {
     { id: "title",    name: "Title",   type: "text" },
     { id: "status",   name: "Status",  type: "status",
       options: [
-        { id: "todo",  name: "Todo",        color: "zinc" },
-        { id: "doing", name: "In progress", color: "amber" },
-        { id: "done",  name: "Done",        color: "emerald" },
+        { id: "todo",  name: "Todo",        color: "gray" },
+        { id: "doing", name: "In progress", color: "yellow" },
+        { id: "done",  name: "Done",        color: "green" },
       ] },
     { id: "priority", name: "Priority", type: "select",
       options: [
-        { id: "p0", name: "P0", color: "rose" },
-        { id: "p1", name: "P1", color: "amber" },
-        { id: "p2", name: "P2", color: "sky" },
+        { id: "p0", name: "P0", color: "red" },
+        { id: "p1", name: "P1", color: "yellow" },
+        { id: "p2", name: "P2", color: "blue" },
       ] },
     { id: "tags",     name: "Tags",    type: "multi_select",
       options: [
-        { id: "ui",     name: "ui",     color: "violet" },
-        { id: "infra",  name: "infra",  color: "sky" },
-        { id: "design", name: "design", color: "rose" },
+        { id: "ui",     name: "ui",     color: "purple" },
+        { id: "infra",  name: "infra",  color: "blue" },
+        { id: "design", name: "design", color: "red" },
       ] },
+    { id: "start",    name: "Start",   type: "date" },
+    { id: "end",      name: "End",     type: "date" },
     { id: "due",      name: "Due",     type: "date" },
     { id: "blocked",  name: "Blocked", type: "checkbox" },
+    { id: "lat",      name: "Lat",     type: "number" },
+    { id: "lng",      name: "Lng",     type: "number" },
   ],
   views: [
     { id: "v1", name: "Table", type: "table", filters: [], sorts: [], search: "" },
@@ -39,6 +43,11 @@ const DB: Database = {
     { id: "v4", name: "Chart", type: "chart", filters: [], sorts: [], search: "",
       chartKind: "bar", chartXProp: "status", chartAggregate: "count", chartShowLegend: false },
     { id: "v5", name: "Dashboard", type: "dashboard", filters: [], sorts: [], search: "" },
+    { id: "v6", name: "Map",   type: "map",   filters: [], sorts: [], search: "",
+      mapLatProp: "lat", mapLngProp: "lng", mapPinColorProp: "status" },
+    { id: "v7", name: "Timeline", type: "timeline", filters: [], sorts: [], search: "",
+      timelineStartProp: "start", timelineEndProp: "end", timelineColorByProp: "status",
+      timelineZoom: "month" },
   ],
   activeViewId: "v1",
   createdAt: Date.now(),
@@ -46,11 +55,11 @@ const DB: Database = {
 };
 
 const ROWS: Page[] = [
-  makeRow("t1", "Wire up provider adapters",   { status: "done",  priority: "p0", tags: ["infra"],            due: { date: "2026-05-18" } }),
-  makeRow("t2", "Polish admin-panel chrome",    { status: "done",  priority: "p1", tags: ["ui", "design"],     due: { date: "2026-05-21" } }),
-  makeRow("t3", "Audit-log diff tree",          { status: "done",  priority: "p1", tags: ["ui"],               due: { date: "2026-05-21" } }),
-  makeRow("t4", "Split notion-database slice",  { status: "doing", priority: "p0", tags: ["infra", "ui"],      due: { date: "2026-05-22" }, blocked: false }),
-  makeRow("t5", "Lift editor selection toolbar",{ status: "todo",  priority: "p2", tags: ["ui"],               due: { date: "2026-05-25" }, blocked: true }),
+  makeRow("t1", "Wire up provider adapters",   { status: "done",  priority: "p0", tags: ["infra"], due: { date: "2026-05-18" }, start: { date: "2026-05-14" }, end: { date: "2026-05-18" }, lat: 37.7749, lng: -122.4194 }),
+  makeRow("t2", "Polish admin-panel chrome",    { status: "done",  priority: "p1", tags: ["ui", "design"], due: { date: "2026-05-21" }, start: { date: "2026-05-19" }, end: { date: "2026-05-21" }, lat: 51.5074, lng: -0.1278 }),
+  makeRow("t3", "Audit-log diff tree",          { status: "done",  priority: "p1", tags: ["ui"], due: { date: "2026-05-21" }, start: { date: "2026-05-20" }, end: { date: "2026-05-21" }, lat: 35.6762, lng: 139.6503 }),
+  makeRow("t4", "Split notion-database slice",  { status: "doing", priority: "p0", tags: ["infra", "ui"], due: { date: "2026-05-22" }, start: { date: "2026-05-21" }, end: { date: "2026-05-23" }, blocked: false, lat: -6.2088, lng: 106.8456 }),
+  makeRow("t5", "Lift editor selection toolbar",{ status: "todo",  priority: "p2", tags: ["ui"], due: { date: "2026-05-25" }, start: { date: "2026-05-24" }, end: { date: "2026-05-27" }, blocked: true, lat: 48.8566, lng: 2.3522 }),
 ];
 
 function makeRow(id: string, title: string, props: Record<string, PropertyValue>): Page {
