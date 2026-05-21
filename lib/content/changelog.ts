@@ -10,6 +10,49 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CK1D",
+    version: "CK-1D",
+    date: Date.parse("2026-05-20"),
+    kind: "feature",
+    title: "workspace-shell lifted from superspace — atomic NavContext",
+    body:
+      "New full-stack slice `workspace-shell` lifted from superspace. Unified workspace + menu navigation primitive replacing the silo'd menu-store + workspace-store. NavContext = (workspaceId, menuSetId) atomic pair with resolver chain (user cache → user assignment → workspace default → none). 2-tier dropdown switcher (workspace radio + menuSet picker), ContextBadge header chip, full editor with tabs (menus / workspace tree / settings), tiered RBAC (menus.manage for admin, menus.fork for user-personal copy). Convex tables prefixed `workspaceShell_*` (7 tables: menuSets, menuItems, itemComponents, wsAssignments, userAssignments, rolePerms, navContext). Audit-log dependency is graceful (try/catch — slice still works if audit-log not installed). 7-phase rollout: P0 scaffold + trio + schema → P1 idempotent migration menus/* → workspaceShell_* (in-memory map for 4096 read-op limit) → P2 NavContextProvider + useNavContext hook + getEffectiveMenuItems with role filter → P3 WorkspaceSwitcher v2 + ContextBadge + MenuSetPicker → P4 editor tabs with CRUD mutations → P5 dual-read wiring into primary sidebar (NavContext primary, legacy fallback) → P6 30-day deprecation shims for menu-store + workspace-store (auto-removal 2026-06-19).",
+    groups: [
+      {
+        heading: "New slice",
+        bullets: [
+          { text: "workspace-shell 1.0.0 — atomic NavContext primitive", slug: "workspace-shell", kind: "slice" },
+        ],
+      },
+      {
+        heading: "Tables (workspaceShell_*)",
+        bullets: [
+          "menuSets / menuItems / itemComponents",
+          "wsAssignments / userAssignments / rolePerms",
+          "navContext — per-user atomic (wsId, menuSetId) cache",
+        ],
+      },
+      {
+        heading: "Components",
+        bullets: [
+          "NavContextProvider + useNavContext + useNavContextRequired",
+          "WorkspaceSwitcher — 2-tier dropdown",
+          "MenuSetPicker — 3-tier (user / workspace / system) radio",
+          "ContextBadge — header chip",
+          "DeprecationBanner — 30-day countdown for legacy shims",
+        ],
+      },
+      {
+        heading: "RBAC",
+        bullets: [
+          "menus.manage — admin edits workspace-default menuSet",
+          "menus.fork — user creates personal copy via forkMenuSet",
+          "menus.view / savedViews.{view,manage,manage_shared} — already shipped",
+        ],
+      },
+    ],
+  },
+  {
     id: "CK1C",
     version: "CK-1C",
     date: Date.parse("2026-05-21"),
