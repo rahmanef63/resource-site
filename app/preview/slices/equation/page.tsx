@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { EquationBlock } from "@/features/equation";
+import { Button } from "@/components/ui/button";
 
 const SAMPLES = [
   String.raw`\int_0^\infty e^{-x^2}\,dx = \frac{\sqrt{\pi}}{2}`,
@@ -18,14 +19,16 @@ export default function Page() {
     <main className="mx-auto grid min-h-screen max-w-2xl place-items-center gap-6 bg-background p-6">
       <div className="flex flex-wrap gap-2">
         {SAMPLES.map((s, i) => (
-          <button
+          <Button
             key={i}
             type="button"
+            variant="outline"
+            size="sm"
             onClick={() => setText(s)}
-            className="rounded-full border px-2 py-0.5 font-mono text-[10px] text-muted-foreground hover:bg-muted"
+            className="h-6 rounded-full px-2 font-mono text-[10px] text-muted-foreground"
           >
             sample {i + 1}
-          </button>
+          </Button>
         ))}
       </div>
       <div className="w-full rounded-lg border bg-card p-6">

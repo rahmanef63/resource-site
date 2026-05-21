@@ -1,6 +1,6 @@
 "use client";
 
-import { NotionDatabase } from "@/features/notion-shell";
+import { NotionDatabase } from "@/features/notion-database";
 import { useDatabases, useDocs, useStore } from "../../shared/store";
 
 /** Renders one notion-clone database selected by id. Wires NotionDatabase

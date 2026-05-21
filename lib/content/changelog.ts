@@ -10,6 +10,56 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CI",
+    version: "CI-wave",
+    date: Date.parse("2026-05-21"),
+    kind: "improvement",
+    title: "split notion-database out of notion-shell — database is now an optional module",
+    body:
+      "User report after deep-comparing rr's notion-shell with the full notion-page-clone upstream: 'copy semua dari notion clone kecuali database sebagai opsional, karena bisa saja butuh database inline, bisa saja tidak, notion database akan menjadi features module sendiri tapi di gabung di website template'. EXECUTED: extracted the database surface from notion-shell into a NEW dedicated `notion-database` slice. Consumers can now install notion-shell ALONE for pages + sidebar + block editor without the database weight, OR add notion-database when they want embedded DBs. Both compose in the notion-page-clone-os website template (DocView imports from notion-shell, DatabaseView imports from notion-database). FILES MOVED from notion-shell → notion-database: components/{NotionDatabase, NotionProperty, ViewOptions, ViewTabs, ColumnHeaderMenu, property-cells}, components/views/* (TableView/BoardView/ListView/GalleryView/CalendarView/FeedView + types + registry), lib/viewData.ts. DOMAIN TYPES (Database, Property, PropertyValue, DbView, DatabaseViewConfig, DatabaseFilter, DatabaseSort, SelectOption, NumberFormat, PropertyType) STAY IN notion-shell — they're the single source of truth (Page.rowOfDatabaseId + rowProps reference them) — notion-database re-exports them as a convenience. Avoids circular shell↔database imports. PEER DECLARED: notion-database lists notion-shell as a peer (^0.4); npx rr add notion-database cascades the shell. SCHEMA CHANGES: notion-shell slice.json + slice.contract.ts + slice.manifest.json updated (no longer claims database components). NEW slice files for notion-database. CATALOG: new notion-database entry with notion-like tag set + tagline + agentRecipe + previewPath. /preview/slices/notion-database route built — minimal real DB demo with 3 views (Table / Board grouping by status / List), 6 property types (text/status/select/multi_select/date/checkbox), 5 seed rows. Audit chain green: 45 slices (was 44), all ≤200 LOC.",
+    groups: [
+      {
+        heading: "Files moved (notion-shell → notion-database)",
+        bullets: [
+          "components/NotionDatabase.tsx + NotionProperty.tsx + ViewOptions.tsx + ViewTabs.tsx + ColumnHeaderMenu.tsx + property-cells.tsx",
+          "components/views/ — TableView / BoardView / ListView / GalleryView / CalendarView / FeedView + types + index registry",
+          "lib/viewData.ts (applyView + groupBy + bucketByDate)",
+        ],
+      },
+      {
+        heading: "Domain types — stay in notion-shell (single source)",
+        bullets: [
+          "Database, Property, PropertyValue, DbView, DatabaseViewConfig, DatabaseFilter, DatabaseSort, SelectOption, NumberFormat, PropertyType",
+          "Page references these via rowOfDatabaseId + rowProps — moving them to notion-database would create circular shell↔database imports",
+          "notion-database/types.ts re-exports them as a convenience for downstream consumers",
+        ],
+      },
+      {
+        heading: "Catalog",
+        bullets: [
+          { text: "NEW notion-database — optional embeddable DB surface", slug: "notion-database", kind: "slice" },
+          { text: "notion-shell description + tagline updated — split is documented", slug: "notion-shell", kind: "slice" },
+          "Slice count: 44 → 45. Audit green.",
+        ],
+      },
+      {
+        heading: "Consumer wiring",
+        bullets: [
+          "DatabaseView.tsx (notion-page-clone-os template) — import path moved from notion-shell → notion-database",
+          "preview/slices/notion-shell/page.tsx — NotionDatabase imported from notion-database instead of notion-shell",
+          "/preview/slices/notion-database — NEW route, 5 seed rows × 6 property types × 3 views (Table/Board-by-status/List)",
+        ],
+      },
+      {
+        heading: "Followup (deferred)",
+        bullets: [
+          "CJ-wave (next) — lift more from upstream into notion-shell: editor depth (ColumnLayoutGroup, MentionTypeahead, SelectionToolbar, ColumnBlockEditor, RowPropertiesPanel), sidebar depth (WorkspaceSwitcher, NavUser, DragGhost, PagesPanel, SortablePageRow), provided they're pure-UI and not convex-coupled",
+          "CK-wave (later) — lift more database views from upstream into notion-database: ChartView, DashboardView, FormView, MapView, TimelineView (currently rr has 6 of 11)",
+        ],
+      },
+    ],
+  },
+  {
     id: "CH",
     version: "CH-wave",
     date: Date.parse("2026-05-21"),

@@ -5,7 +5,6 @@ import {
   NotionPage,
   NotionSidebar,
   NotionBlock,
-  NotionDatabase,
   InsertBlockButton,
   type Block,
   type BlockType,
@@ -13,6 +12,7 @@ import {
   type Page,
   type PropertyValue,
 } from "@/features/notion-shell";
+import { NotionDatabase } from "@/features/notion-database";
 import { SlicePreviewLayout, PreviewSection } from "@/components/slice-previews/preview-layout";
 
 /** Live demo for the Notion-style wrapper primitives. Each demo is

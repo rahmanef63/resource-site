@@ -18,24 +18,23 @@
  *
  *    <NotionSidebar>          — tree nav w/ page CRUD (standalone) */
 
+// CI-wave (2026-05-21) — database surface split out into the
+// `notion-database` slice. notion-shell is now PURE shell: page +
+// header + block + sidebar + slash menu + actions + sortable list.
+// For embedded databases (TableView / BoardView / ListView /
+// GalleryView / CalendarView / FeedView), add the notion-database
+// peer slice. Domain types (Database / Property / PropertyValue /
+// DbView / DatabaseViewConfig / etc.) remain here as the single
+// source of truth — Page references them via `rowOfDatabaseId` +
+// `rowProps`.
+
 export { NotionPage, type NotionPageProps } from "./components/NotionPage";
 export { NotionHeader, type NotionHeaderProps } from "./components/NotionHeader";
 export { NotionSidebar, type NotionSidebarProps, type NotionSidebarPage } from "./components/NotionSidebar";
 export { NotionBlock, type NotionBlockProps } from "./components/NotionBlock";
-export { NotionDatabase, type NotionDatabaseProps } from "./components/NotionDatabase";
-export { NotionProperty, type NotionPropertyProps } from "./components/NotionProperty";
 export { SlashMenu, type SlashMenuProps } from "./components/SlashMenu";
 export { BlockActionsMenu, type BlockActionsMenuProps } from "./components/BlockActionsMenu";
 export { InsertBlockButton, type InsertBlockButtonProps } from "./components/InsertBlockButton";
-export { ViewTabs, type ViewTabsProps } from "./components/ViewTabs";
-export { ViewOptions, type ViewOptionsProps } from "./components/ViewOptions";
-export { ColumnHeaderMenu, type ColumnHeaderMenuProps } from "./components/ColumnHeaderMenu";
-export { renderPropertyCell } from "./components/property-cells";
-export {
-  VIEW_REGISTRY,
-  TableView, BoardView, ListView, GalleryView, CalendarView, FeedView,
-  type ViewRegistry, type ViewProps,
-} from "./components/views";
 export {
   SortableBlockList,
   type SortableBlockListProps,
@@ -55,7 +54,6 @@ export {
   setCaretAtOffset,
   visibleLength,
 } from "./lib/inlineDecorator";
-export { applyView, groupBy, bucketByDate } from "./lib/viewData";
 
 export type {
   Block, BlockType, BlockRenderers, BlockRendererProps,
