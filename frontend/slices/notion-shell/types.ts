@@ -163,6 +163,8 @@ export interface DatabaseViewConfig {
   formRequiredProps?: string[];
   formShownProps?: string[];
   formSuccessMessage?: string;
+  formTitle?: string;
+  formDescription?: string;
   // Dashboard view
   dashboardKPIs?: string[];
   dashboardBreakdowns?: string[];

@@ -14,6 +14,7 @@ import { CalendarView } from "./CalendarView";
 import { FeedView } from "./FeedView";
 import { ChartView } from "./ChartView";
 import { DashboardView } from "./DashboardView";
+import { FormView } from "./FormView";
 import { MapView } from "./MapView";
 import { TimelineView } from "./TimelineView";
 
@@ -28,12 +29,13 @@ export const VIEW_REGISTRY: ViewRegistry = {
   feed: FeedView,
   chart: ChartView,
   dashboard: DashboardView,
+  form: FormView,
   map: MapView,
   timeline: TimelineView,
 };
 
 export {
   TableView, BoardView, ListView, GalleryView, CalendarView, FeedView,
-  ChartView, DashboardView, MapView, TimelineView,
+  ChartView, DashboardView, FormView, MapView, TimelineView,
 };
 export type { ViewProps };

@@ -30,4 +30,11 @@ export interface ViewProps {
   /** Optional row-open callback — Chart / Map / Timeline / Dashboard
    *  views surface a row click here so the host can open a detail sheet. */
   onOpenRow?: (rowId: string) => void;
+  /** Create a row with values — FormView submit + database-csv import
+   *  use this. Host translates to its store / adapter (typically addRow
+   *  then setRowValue for each prop). */
+  onRowCreate?: (draft: {
+    title: string;
+    rowProps: Record<string, PropertyValue>;
+  }) => Promise<void> | void;
 }

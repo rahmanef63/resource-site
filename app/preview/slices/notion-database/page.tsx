@@ -54,6 +54,12 @@ const DB: Database = {
     { id: "v7", name: "Timeline", type: "timeline", filters: [], sorts: [], search: "",
       timelineStartProp: "start", timelineEndProp: "end", timelineColorByProp: "status",
       timelineZoom: "month" },
+    { id: "v8", name: "Form", type: "form", filters: [], sorts: [], search: "",
+      formTitle: "Submit a task",
+      formDescription: "Click Submit to add a row to the database below.",
+      formRequiredProps: ["status", "priority"],
+      formShownProps: ["status", "priority", "tags", "start", "end", "due", "owners"],
+      formSuccessMessage: "Row added!" },
   ],
   activeViewId: "v1",
   createdAt: Date.now(),
@@ -78,26 +84,36 @@ function makeRow(id: string, title: string, props: Record<string, PropertyValue>
   };
 }
 
-/** Minimal interactive preview: real Notion-like database with
- *  table / board / list views. Click ViewTabs to swap views; the
- *  board groups by status, table is the default. All mutations are
- *  no-ops (preview-only) — same component shipped to consumers. */
+/** Minimal interactive preview: real Notion-like database with 11 views.
+ *  Form view submit + view activate persist to component state so the
+ *  demo can show round-trip behavior without a backend. */
 export default function Page() {
+  const [db, setDb] = React.useState(DB);
+  const [rows, setRows] = React.useState(ROWS);
   return (
     <main className="mx-auto min-h-screen max-w-5xl bg-background p-6">
       <NotionDatabase
-        db={DB}
-        rows={ROWS}
+        db={db}
+        rows={rows}
         onPropertyAdd={() => {}}
         onPropertyUpdate={() => {}}
         onPropertyRemove={() => {}}
         onRowAdd={() => {}}
         onRowUpdate={() => {}}
         onRowRemove={() => {}}
-        onViewActivate={() => {}}
+        onViewActivate={(viewId) => setDb({ ...db, activeViewId: viewId })}
         onViewAdd={() => {}}
         onViewRemove={() => {}}
-        onViewConfigChange={() => {}}
+        onViewConfigChange={(viewId, patch) => setDb({
+          ...db,
+          views: db.views.map((v) => (v.id === viewId ? { ...v, ...patch } : v)),
+        })}
+        onRowCreate={({ title, rowProps }) => {
+          const id = `f_${Date.now()}`;
+          const next = makeRow(id, title, rowProps);
+          setRows([...rows, next]);
+          setDb({ ...db, rowIds: [...db.rowIds, id] });
+        }}
       />
     </main>
   );

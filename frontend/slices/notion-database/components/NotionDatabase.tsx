@@ -44,6 +44,9 @@ export interface NotionDatabaseProps {
   /** Optional row-open callback — surfaced by Chart / Dashboard / Map /
    *  Timeline views when a row is clicked. Host can open a detail sheet. */
   onOpenRow?: (rowId: string) => void;
+  /** Create a row with values — used by FormView submit. Host
+   *  translates to addRow + setRowValue against its store. */
+  onRowCreate?: (draft: { title: string; rowProps: Record<string, PropertyValue> }) => Promise<void> | void;
   readOnly?: boolean;
   className?: string;
 }
@@ -53,7 +56,7 @@ export function NotionDatabase({
   onPropertyAdd, onPropertyUpdate, onPropertyRemove,
   onRowAdd, onRowUpdate, onRowRemove,
   onViewActivate, onViewAdd, onViewRemove, onViewConfigChange,
-  viewRegistry, onOpenRow,
+  viewRegistry, onOpenRow, onRowCreate,
   readOnly, className,
 }: NotionDatabaseProps) {
   const activeView = db.views.find((v) => v.id === db.activeViewId) ?? db.views[0];
@@ -129,6 +132,7 @@ export function NotionDatabase({
         renderColumnHeader={renderColumnHeader}
         onViewConfigChange={onViewConfigChange ? (patch) => onViewConfigChange(activeView.id, patch) : undefined}
         onOpenRow={onOpenRow}
+        onRowCreate={onRowCreate}
       />
       {!readOnly && onPropertyAdd && (
         <div className="flex items-center gap-2 border-t border-border p-2">

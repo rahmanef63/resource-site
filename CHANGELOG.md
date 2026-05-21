@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### CK-1C — 2026-05-21 — notion-database FormView (11/11 views)
+
+- **FormView** lifted — title input + per-property inputs via reused `renderPropertyCell` (no separate PropertyFormInput widget), submit → `onRowCreate({title, rowProps})` callback. Settings panel (show/required toggles + title + description + success message).
+- **ViewProps** + **NotionDatabaseProps** + **DatabaseViewConfig** extended (onRowCreate / formTitle / formDescription).
+- VIEW_REGISTRY now has all 11 entries.
+- notion-database `0.3.0` → `0.4.0`. Coverage: views 10/11 → 11/11 (100%). Adaptation ~76% → ~80%.
+- Preview /preview/slices/notion-database uses React state so Form submit actually appends a row.
+
 ### CK-4 — 2026-05-21 — database-csv standalone slice
 
 - New peer slice `frontend/slices/database-csv/` — Notion-style CSV import + export for `notion-database`.

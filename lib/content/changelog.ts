@@ -10,6 +10,52 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CK1C",
+    version: "CK-1C",
+    date: Date.parse("2026-05-21"),
+    kind: "feature",
+    title: "notion-database completes 11/11 views — FormView lifted",
+    body:
+      "Final view (FormView) lifted from upstream. Was deferred from CK-1B because of PropertyFormInput + FormSettings + addRow-with-values complexity. Resolved by REUSING the existing renderPropertyCell helper (already covers all 16 property types) instead of lifting a separate input widget — form-context just adds a label wrapper. PropertyFormInput is NOT lifted as a peer; renderPropertyCell is the single source. New files: FormView.tsx (155 LOC — title input + per-property labels + Submit button + success state), form-settings.tsx (102 LOC — show / required checkboxes per formable property + form title + description + success message editor), form-helpers.ts (32 LOC — isFormableProperty / emptyDraft / isEmptyValue / READ_ONLY_PROPERTY_TYPES). ViewProps extended with onRowCreate?: (draft: {title, rowProps}) => Promise<void>|void. NotionDatabase forwards it through. DatabaseViewConfig extended with formTitle? + formDescription? (existing formRequiredProps / formShownProps / formSuccessMessage already added in CK-1A). VIEW_REGISTRY now has all 11 entries — db.views.type === 'form' resolves to FormView. Coverage: views 10/11 → 11/11 (100%). Adaptation ~76% → ~80%. notion-database 0.3.0 → 0.4.0. Preview /preview/slices/notion-database: 8 view tabs (added Form view), preview now uses React state so Form submit actually appends a row to the table — round-trip demonstrable.",
+    groups: [
+      {
+        heading: "New files",
+        bullets: [
+          "components/views/FormView.tsx — main form (155 LOC)",
+          "components/views/form-settings.tsx — settings panel (102 LOC)",
+          "components/views/form-helpers.ts — predicates + draft factory (32 LOC)",
+        ],
+      },
+      {
+        heading: "API",
+        bullets: [
+          "ViewProps.onRowCreate — new optional callback",
+          "NotionDatabaseProps.onRowCreate — forwarded to view",
+          "DatabaseViewConfig.formTitle + formDescription — new optional fields",
+          "FormView reuses renderPropertyCell for per-property inputs — no separate widget",
+        ],
+      },
+      {
+        heading: "Coverage",
+        bullets: [
+          "Views: 10/11 → 11/11 (100%)",
+          "Property types: 16/17 (94%, unchanged)",
+          "Filter/Sort UI: 100% (unchanged)",
+          "CSV import/export: 100% (database-csv slice, CK-4)",
+          { text: "notion-database 0.3.0 → 0.4.0", slug: "notion-database", kind: "slice" },
+          "Database adaptation: ~76% → ~80%",
+        ],
+      },
+      {
+        heading: "Deferred (post upstream mega-bundle)",
+        bullets: [
+          "relation + rollup property types — need cross-DB context",
+          "JSON import — same pattern as CSV but lower demand",
+        ],
+      },
+    ],
+  },
+  {
     id: "CK4",
     version: "CK-4",
     date: Date.parse("2026-05-21"),
