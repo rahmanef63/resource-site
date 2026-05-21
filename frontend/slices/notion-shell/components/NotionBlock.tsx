@@ -9,16 +9,26 @@
  *  Hover reveals a "⋯" button (BlockActionsHandle → BlockActionsMenu).
  *  Typing "/" opens an inline SlashMenu and MARKDOWN_TRIGGERS convert
  *  on the fly (`# ` → h1, `- ` → bullet, `[] ` → todo, etc.) — both
- *  gated on `onTurnInto` being provided. */
+ *  gated on `onTurnInto` being provided. The SlashMenu rides on a
+ *  Radix Popover anchored to the contentEditable so it escapes any
+ *  clipping parent (e.g. an `overflow-y-auto` page shell) and stays
+ *  positioned correctly even when the block sits near the bottom of
+ *  the viewport. */
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { cn } from "rahman-shared/lib/utils";
+import {
+  Popover,
+  PopoverAnchor,
+  PopoverContent,
+} from "@/components/ui/popover";
 import type { Block, BlockRenderers, BlockType } from "../types";
 import { TOP_LEVEL_PLACEHOLDERS } from "./placeholders";
 import { BlockActionsHandle } from "./BlockActionsHandle";
 import { SlashMenu } from "./SlashMenu";
 import { decorateInPlace } from "../lib/inlineDecorator";
 import { decideBlockInput } from "../lib/blockInputHandler";
+import { blockEditableClass } from "../lib/blockClassName";
 
 const HEADING_TYPES = new Set<BlockType>(["h1", "h2", "h3", "h4", "h5", "h6"]);
 
@@ -69,6 +79,8 @@ export function NotionBlock({
     onUpdate?.({ text: "" });
     onTurnInto?.(type);
     closeSlash();
+    // Restore focus to the block so the user can keep typing.
+    requestAnimationFrame(() => ref.current?.focus());
   };
 
   if (Renderer) {
@@ -125,53 +137,53 @@ export function NotionBlock({
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
-      <div
-        ref={ref}
-        data-block-id={block.id}
-        contentEditable={!readOnly}
-        suppressContentEditableWarning
-        onCompositionStart={() => { composingRef.current = true; }}
-        onCompositionEnd={(e) => {
-          composingRef.current = false;
-          const el = e.currentTarget as HTMLElement;
-          const text = el.innerText;
-          onUpdate?.({ text });
-          decorateInPlace(el, text, { hideMarkers: HEADING_TYPES.has(block.type) });
-        }}
-        onInput={handleInput}
-        onKeyDown={(e) => {
-          if (readOnly) return;
-          if (e.key === "Escape" && slashOpen) {
-            e.preventDefault();
-            closeSlash();
-            return;
-          }
-          if (e.key === "Backspace" && (e.currentTarget as HTMLElement).innerText === "") {
-            e.preventDefault();
-            onRemove?.();
-          }
-        }}
-        onBlur={() => { setTimeout(closeSlash, 150); }}
-        data-placeholder={placeholder}
-        className={cn(
-          "outline-none whitespace-pre-wrap break-words py-1 empty:before:content-[attr(data-placeholder)] empty:before:text-muted-foreground/40",
-          block.type === "h1" && "text-3xl font-bold tracking-tight",
-          block.type === "h2" && "text-2xl font-semibold tracking-tight",
-          block.type === "h3" && "text-xl font-semibold tracking-tight",
-          block.type === "h4" && "text-lg font-semibold tracking-tight",
-          block.type === "quote" && "border-l-4 border-foreground/40 pl-4 italic text-foreground/80",
-          block.type === "code" && "rounded bg-muted px-2 py-1 font-mono text-sm",
-          block.type === "callout" && "rounded-md border border-primary/20 bg-primary/10 px-3 py-2",
-          block.type === "bullet" && "list-disc ml-5",
-          block.type === "numbered" && "list-decimal ml-5",
-          className,
-        )}
-      />
-      {slashOpen && onTurnInto && (
-        <div className="absolute left-0 top-full z-50 mt-1">
+      <Popover
+        open={slashOpen && !!onTurnInto}
+        onOpenChange={(open) => { if (!open) closeSlash(); }}
+        modal={false}
+      >
+        <PopoverAnchor asChild>
+          <div
+            ref={ref}
+            data-block-id={block.id}
+            contentEditable={!readOnly}
+            suppressContentEditableWarning
+            onCompositionStart={() => { composingRef.current = true; }}
+            onCompositionEnd={(e) => {
+              composingRef.current = false;
+              const el = e.currentTarget as HTMLElement;
+              const text = el.innerText;
+              onUpdate?.({ text });
+              decorateInPlace(el, text, { hideMarkers: HEADING_TYPES.has(block.type) });
+            }}
+            onInput={handleInput}
+            onKeyDown={(e) => {
+              if (readOnly) return;
+              if (e.key === "Escape" && slashOpen) {
+                e.preventDefault();
+                closeSlash();
+                return;
+              }
+              if (e.key === "Backspace" && (e.currentTarget as HTMLElement).innerText === "") {
+                e.preventDefault();
+                onRemove?.();
+              }
+            }}
+            data-placeholder={placeholder}
+            className={blockEditableClass(block.type, className)}
+          />
+        </PopoverAnchor>
+        <PopoverContent
+          side="bottom"
+          align="start"
+          sideOffset={4}
+          className="w-72 p-0"
+          onOpenAutoFocus={(e) => e.preventDefault()}
+          onCloseAutoFocus={(e) => e.preventDefault()}
+        >
           <SlashMenu query={slashQuery} onSelect={handleSlashSelect} onClose={closeSlash} />
-        </div>
-      )}
+        </PopoverContent>
+      </Popover>
       {!readOnly && onTurnInto && hover && (
         <BlockActionsHandle
           currentType={block.type}
