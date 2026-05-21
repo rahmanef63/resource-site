@@ -10,6 +10,39 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CB",
+    version: "CB-wave",
+    date: Date.parse("2026-05-21"),
+    kind: "improvement",
+    title: "users-bindings adapter canary — block IO routed through useUsersBindings() hook",
+    body:
+      "First adapter-pattern canary for the admin-panel blocks. Establishes the contract that lets a future Convex / REST / external auth swap happen WITHOUT touching the BlockView. NEW file: _shared/admin-panel/blocks/users/bindings.tsx exports `UsersBindings` type (users: UserRow[] + isLoading + changeRole + revoke), `useDefaultUsersBindings()` hook (in-memory useState + SEED — the demo default), `<UsersBindingsProvider value={...}>` context wrapper, and `useUsersBindings()` consumer hook that falls back to default when no Provider is in scope — so the demo iframe needs zero setup, but an ejected app or future Convex wire-up can plug in by wrapping the dispatcher with a Provider. UsersBlockView refactored to consume via the hook instead of inline useState/SEED — view is now data-source agnostic. Behavior identical for the demo (same SEED, same optimistic mutations). Pattern to replicate per block in subsequent waves (audit-log → CC, ai-config → CD, etc.) when Convex bindings come online. Foundation for npx rr eject (per docs/architecture/eject-spec.md Phase 2) and for the real-Convex canary that BS-wave's eject spec was always pointing toward.",
+    groups: [
+      {
+        heading: "NEW file",
+        bullets: [
+          "_shared/admin-panel/blocks/users/bindings.tsx — UsersBindings + useDefaultUsersBindings + UsersBindingsProvider + useUsersBindings (65 LOC)",
+        ],
+      },
+      {
+        heading: "Refactored",
+        bullets: [
+          "UsersBlockView.tsx — drops inline useState/SEED, consumes via useUsersBindings(); view now data-source agnostic",
+          "JSDoc updated: BS-canary pattern + CB-wave adapter pattern explanation",
+        ],
+      },
+      {
+        heading: "Why this matters",
+        bullets: [
+          "Real Convex swap (future): wrap dispatcher with <UsersBindingsProvider value={convexBindings}> — view code untouched",
+          "npx rr eject (future): bindings.tsx is the file the ejected app rewrites to wire its own backend",
+          "BSDL trauma avoided: no sync engine, no auto-detect, no .kitab.json — just a plain Provider override",
+          "Audit suggestion (BY-wave): adapter pattern next — done for users canary; 5 more blocks to follow same shape",
+        ],
+      },
+    ],
+  },
+  {
     id: "CA",
     version: "CA-wave",
     date: Date.parse("2026-05-21"),

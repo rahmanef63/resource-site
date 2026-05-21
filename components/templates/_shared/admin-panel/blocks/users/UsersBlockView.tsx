@@ -12,32 +12,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ROLES, SEED_USERS } from "./seed";
+import { ROLES } from "./seed";
+import { useUsersBindings } from "./bindings";
 import { BlockHeader } from "../../ui/block-header";
 import { EmptyState } from "../../ui/empty-state";
 import type { RoleId, UserRow } from "./types";
 
-/** Real admin-panel "User management" block — replaces the generic
- *  AdminFeatureCard stub. First canary for BS-wave's
- *  admin-panel-real-impl pattern. Pattern to replicate per block:
- *
- *    _shared/admin-panel/blocks/<segment>/
- *      ├── types.ts      — domain types (Role, UserRow, etc)
- *      ├── seed.ts       — demo data (no backend in iframe)
- *      └── <Segment>BlockView.tsx — the actual view
- *
- *  Then AdminFeatureStubPage dispatches by segment to the right view.
- */
+/** Real admin-panel "User management" block. BS-canary pattern +
+ *  CB-wave adapter pattern: data IO routed through useUsersBindings()
+ *  so the view doesn't know whether data came from SEED, Convex, REST,
+ *  or a mock. Demo iframe needs no Provider — the hook falls back to
+ *  the default (in-memory) bindings. An ejected app wraps the dispatcher
+ *  with <UsersBindingsProvider value={...}> to plug in real Convex. */
 export function UsersBlockView() {
-  const [users, setUsers] = React.useState<UserRow[]>(SEED_USERS);
-
-  function changeRole(userId: string, role: RoleId) {
-    setUsers((prev) => prev.map((u) => (u.id === userId ? { ...u, role } : u)));
-  }
-
-  function revoke(userId: string) {
-    setUsers((prev) => prev.filter((u) => u.id !== userId));
-  }
+  const { users, changeRole, revoke } = useUsersBindings();
 
   const activeCount = users.filter((u) => u.status === "active").length;
   const pendingCount = users.filter((u) => u.status === "pending").length;
@@ -94,7 +82,7 @@ export function UsersBlockView() {
               <EmptyState icon={UserPlus} label="No members yet" hint="Invite someone to get started." />
             </div>
           ) : (
-            users.map((u) => (
+            users.map((u: UserRow) => (
               <UserRow
                 key={u.id}
                 user={u}
