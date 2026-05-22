@@ -27,28 +27,30 @@ npm run dev                     # http://localhost:3000`;
   });
 
   return (
-    <section className="border-b py-20" id="install">
-      <div className="mx-auto max-w-5xl px-6">
+    <section className="border-b py-12 sm:py-16 md:py-20" id="install">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
             Two ways to install
           </h2>
-          <p className="mt-4 text-muted-foreground">
+          <p className="mt-3 text-sm text-muted-foreground sm:mt-4 sm:text-base">
             Roll your own, or hand it to an agent.
           </p>
         </div>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
-          <div className="space-y-3">
+        <div className="mt-8 grid gap-6 sm:mt-12 md:grid-cols-2">
+          <div className="flex min-w-0 flex-col gap-3">
             <h3 className="text-lg font-semibold">Manual</h3>
             <p className="text-sm text-muted-foreground">
               Copy from the repo. Adjust imports. Ship.
             </p>
             <CodeBlock code={cli} language="bash" filename="terminal" />
-            <RepoLink>Open repo</RepoLink>
+            <div className="flex flex-wrap gap-2">
+              <RepoLink>Open repo</RepoLink>
+            </div>
           </div>
 
-          <div className="space-y-3">
+          <div className="flex min-w-0 flex-col gap-3">
             <h3 className="text-lg font-semibold">With AI agent</h3>
             <p className="text-sm text-muted-foreground">
               Hand the prompt to Claude Code, Cursor, or any agent. Auto knowledge-base
@@ -59,7 +61,9 @@ npm run dev                     # http://localhost:3000`;
               language="markdown"
               filename="agent-prompt.md"
             />
-            <InstallWithAgent prompt={agentPrompt} />
+            <div className="flex flex-wrap gap-2">
+              <InstallWithAgent prompt={agentPrompt} />
+            </div>
           </div>
         </div>
       </div>

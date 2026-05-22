@@ -34,7 +34,7 @@ export function InstallWithAgent({
           {label}
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-3xl">
+      <DialogContent className="max-h-[85vh] max-w-3xl overflow-y-auto">
         <DialogHeader>
           <div className="flex items-center gap-2">
             <Bot className="size-5 text-primary" />
@@ -47,8 +47,8 @@ export function InstallWithAgent({
         </DialogHeader>
         <div className="space-y-3">
           <CodeBlock code={prompt} language="markdown" filename="agent-prompt.md" />
-          <div className="flex items-center justify-between gap-3">
-            <p className="text-xs text-muted-foreground">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="min-w-0 break-all text-xs text-muted-foreground">
               Knowledge base: <code className="font-mono">{site.url}/llms.txt</code>
             </p>
             <CopyButton value={prompt} size="sm" />
