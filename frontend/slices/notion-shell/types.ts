@@ -65,6 +65,9 @@ export interface Page {
   trashed: boolean;
   createdAt: number;
   updatedAt: number;
+  /** Author + last-editor user ids — `created_by` / `last_edited_by` cells. */
+  createdBy?: string;
+  lastEditedBy?: string;
   /** When set, this page is a row in a database — `rowProps` carries the cell values. */
   rowOfDatabaseId?: string;
   rowProps?: Record<string, PropertyValue>;
@@ -76,7 +79,8 @@ export type PropertyType =
   | "text" | "number" | "select" | "multi_select" | "status"
   | "date" | "checkbox" | "url" | "email" | "phone"
   | "person" | "files" | "formula"
-  | "created_time" | "last_edited_time" | "unique_id";
+  | "created_time" | "last_edited_time" | "unique_id"
+  | "created_by" | "last_edited_by";
 
 // PROPERTY_TYPE_META + derived lists live in ./property-type-meta.ts.
 
@@ -97,12 +101,9 @@ export interface Property {
   options?: SelectOption[];
   numberFormat?: NumberFormat;
   numberDecimals?: number;
-  /** Formula expression — `{{title}}` / `{{Property Name}}` interpolation
-   *  plus fn(arg, …) syntax (concat, upper, if, round, …). Used only
-   *  when type === "formula". */
+  /** Formula expression — `{{prop}}` interpolation + fn(). type=formula. */
   formulaExpression?: string;
-  /** unique_id prefix — e.g. "BUG" → "BUG-001". Used only when
-   *  type === "unique_id". */
+  /** Prefix for unique_id — e.g. "BUG" → "BUG-001". type=unique_id. */
   uniqueIdPrefix?: string;
 }
 

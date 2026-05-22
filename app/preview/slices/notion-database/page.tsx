@@ -25,6 +25,7 @@ import {
   newId,
   useLocalStorageState,
   PREVIEW_STORAGE_KEYS,
+  userLookup,
 } from "./previewState";
 
 /** Fully interactive preview with localStorage persistence. Every
@@ -163,6 +164,7 @@ export default function Page() {
         onViewRemove={onViewRemove}
         onViewConfigChange={onViewConfigChange}
         onRowCreate={onRowCreate}
+        userLookup={userLookup}
       />
     </main>
   );

@@ -45,3 +45,28 @@ export function UniqueIdCell({ db, row, prop }: { db: Database; row: Page; prop:
     </span>
   );
 }
+
+/** User-attribution cells. Render initials chip when userLookup
+ *  resolves the id; fall back to raw id string when no resolver. */
+function UserChip({ userId, userLookup }: { userId?: string; userLookup?: (id: string) => { name: string; icon?: string } | null }) {
+  if (!userId) return <span className="text-xs text-muted-foreground/60">—</span>;
+  const user = userLookup?.(userId);
+  const label = user?.name ?? userId;
+  const ini = label.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]?.toUpperCase() ?? "").join("");
+  return (
+    <span className="inline-flex items-center gap-1.5 text-xs text-foreground">
+      <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-primary/15 text-[10px] font-semibold text-primary">
+        {user?.icon ?? ini}
+      </span>
+      {label}
+    </span>
+  );
+}
+
+export function CreatedByCell({ row, userLookup }: { row: Page; userLookup?: (id: string) => { name: string; icon?: string } | null }) {
+  return <UserChip userId={row.createdBy} userLookup={userLookup} />;
+}
+
+export function LastEditedByCell({ row, userLookup }: { row: Page; userLookup?: (id: string) => { name: string; icon?: string } | null }) {
+  return <UserChip userId={row.lastEditedBy} userLookup={userLookup} />;
+}

@@ -47,6 +47,9 @@ export interface NotionDatabaseProps {
   /** Create a row with values — used by FormView submit. Host
    *  translates to addRow + setRowValue against its store. */
   onRowCreate?: (draft: { title: string; rowProps: Record<string, PropertyValue> }) => Promise<void> | void;
+  /** Resolves user id → { name, icon? } for person / created_by /
+   *  last_edited_by cells. Optional — falls back to raw id when omitted. */
+  userLookup?: (userId: string) => { id: string; name: string; icon?: string } | null;
   readOnly?: boolean;
   className?: string;
 }
@@ -57,6 +60,7 @@ export function NotionDatabase({
   onRowAdd, onRowUpdate, onRowRemove,
   onViewActivate, onViewAdd, onViewRemove, onViewConfigChange,
   viewRegistry, onOpenRow, onRowCreate,
+  userLookup,
   readOnly, className,
 }: NotionDatabaseProps) {
   const activeView = db.views.find((v) => v.id === db.activeViewId) ?? db.views[0];
@@ -81,6 +85,7 @@ export function NotionDatabase({
       row,
       db,
       onPropertyChange: onPropertyUpdate ? (patch) => onPropertyUpdate(prop.id, patch) : undefined,
+      userLookup,
     });
 
   const renderColumnHeader = (prop: Property) => (

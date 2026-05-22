@@ -50,6 +50,8 @@ export const PROPERTY_TYPE_META: Record<PropertyType, PropertyTypeMeta> = {
   created_time:     { label: "Created time",     category: "computed", userAddable: true,  csvImportable: false, computed: true  },
   last_edited_time: { label: "Last edited time", category: "computed", userAddable: true,  csvImportable: false, computed: true  },
   unique_id:        { label: "Unique ID",        category: "computed", userAddable: true,  csvImportable: false, computed: true  },
+  created_by:       { label: "Created by",       category: "computed", userAddable: true,  csvImportable: false, computed: true  },
+  last_edited_by:   { label: "Last edited by",   category: "computed", userAddable: true,  csvImportable: false, computed: true  },
 };
 
 const META_ENTRIES = Object.entries(PROPERTY_TYPE_META) as [PropertyType, PropertyTypeMeta][];
