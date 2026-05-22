@@ -78,6 +78,8 @@ export type PropertyType =
   | "person" | "files" | "formula"
   | "created_time" | "last_edited_time" | "unique_id";
 
+// PROPERTY_TYPE_META + derived lists live in ./property-type-meta.ts.
+
 export interface SelectOption {
   id: string;
   name: string;

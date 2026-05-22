@@ -62,3 +62,10 @@ export type {
   Database, DatabaseViewConfig, DatabaseFilter, DatabaseSort, DbView,
   ChartKind, ChartAggregate,
 } from "./types";
+
+export type { PropertyTypeMeta } from "./property-type-meta";
+export {
+  PROPERTY_TYPE_META,
+  PROPERTY_TYPES_USER_ADDABLE,
+  PROPERTY_TYPES_CSV_IMPORTABLE,
+} from "./property-type-meta";

@@ -11,6 +11,21 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### v0.5.2 (open-silong sync) — 2026-05-22 — PROPERTY_TYPE_META SSOT registry
+
+Closes type-list drift discovered during cross-slice audit. Three
+places hardcoded `PropertyType[]` arrays with mismatched counts
+(ColumnHeaderMenu: 10, csv-mapping NEW_TYPES: 12, types.ts union: 16).
+Adding a new type (v0.6 relation/rollup) would have required syncing
+all 3 sites — high drift risk.
+
+- **New** `notion-shell/property-type-meta.ts` (65 LOC) — `PropertyTypeMeta` interface + `PROPERTY_TYPE_META` registry (one entry per type with `label / category / userAddable / csvImportable / computed` flags) + derived `PROPERTY_TYPES_USER_ADDABLE` (16) + `PROPERTY_TYPES_CSV_IMPORTABLE` (12) constants.
+- **Refactored** `notion-database/components/ColumnHeaderMenu.tsx` — drops local `PROPERTY_TYPES` array; reads `PROPERTY_TYPES_USER_ADDABLE` + `PROPERTY_TYPE_META[t].label` from `@/features/notion-shell`. Now exposes ALL 16 user-addable types (was 10) — users can now add files / person / formula / created_time / last_edited_time / unique_id columns via the menu.
+- **Refactored** `database-io/components/csv-mapping.tsx` — `NEW_TYPES` const stays as deprecated re-export of `PROPERTY_TYPES_CSV_IMPORTABLE` (back-compat); render loop reads from canonical list + uses `PROPERTY_TYPE_META[t].label` (was raw type name).
+- **Adding new type** (e.g. v0.6 relation) now requires one edit (`property-type-meta.ts`) + the cell impl — every picker auto-discovers.
+- Cell editor SSOT unchanged: `notion-database/components/cells/` is still the only source. database-io re-uses via `renderPropertyCell` re-export, no duplication.
+- Open-silong typecheck + rr typecheck green. All files ≤ 200 LOC (types.ts split forced a sibling file to stay under the pre-commit gate).
+
 ### CK-1D — 2026-05-20 — workspace-shell slice (NavContext primitive)
 
 New canonical slice `frontend/slices/workspace-shell/` + `convex/features/workspaceShell/` — atomic `(workspaceId, menuSetId)` NavContext, supersedes silo'd `menu-store` + `workspace-store` editors.

@@ -11,12 +11,12 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
   DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { Property, PropertyType } from "../types";
-
-const PROPERTY_TYPES: PropertyType[] = [
-  "text", "number", "checkbox", "select", "multi_select",
-  "status", "date", "url", "email", "phone",
-];
+import {
+  type Property,
+  type PropertyType,
+  PROPERTY_TYPES_USER_ADDABLE,
+  PROPERTY_TYPE_META,
+} from "../types";
 
 export interface ColumnHeaderMenuProps {
   prop: Property;
@@ -59,13 +59,13 @@ export function ColumnHeaderMenu({
               <Shapes className="h-3 w-3" /> Change type
             </DropdownMenuLabel>
             <div className="max-h-48 overflow-y-auto pb-1">
-              {PROPERTY_TYPES.map((t) => (
+              {PROPERTY_TYPES_USER_ADDABLE.map((t) => (
                 <DropdownMenuItem
                   key={t}
                   onClick={() => onTypeChange(t)}
-                  className={`gap-2 text-sm capitalize ${t === prop.type ? "bg-accent/60" : ""}`}
+                  className={`gap-2 text-sm ${t === prop.type ? "bg-accent/60" : ""}`}
                 >
-                  {t.replace("_", " ")}
+                  {PROPERTY_TYPE_META[t].label}
                   {t === prop.type && <span className="ml-auto text-[10px] text-muted-foreground">current</span>}
                 </DropdownMenuItem>
               ))}

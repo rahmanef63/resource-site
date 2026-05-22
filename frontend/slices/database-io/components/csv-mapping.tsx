@@ -2,7 +2,11 @@
 
 /** CSV → property mapping editor. One row per detected column. */
 
-import type { Database } from "../types";
+import {
+  type Database,
+  PROPERTY_TYPES_CSV_IMPORTABLE,
+  PROPERTY_TYPE_META,
+} from "../types";
 
 const SKIP = "__skip__";
 const TITLE = "__title__";
@@ -12,10 +16,10 @@ export const CSV_SKIP = SKIP;
 export const CSV_TITLE = TITLE;
 export const CSV_NEW_PREFIX = NEW_PREFIX;
 
-export const NEW_TYPES = [
-  "text", "number", "select", "multi_select", "status", "date",
-  "person", "checkbox", "url", "email", "phone", "files",
-] as const;
+/** @deprecated use `PROPERTY_TYPES_CSV_IMPORTABLE` from `@/features/notion-shell`
+ *  — this re-export stays for back-compat with consumers that imported
+ *  `NEW_TYPES` before the SSOT registry landed (v0.5.2). */
+export const NEW_TYPES = PROPERTY_TYPES_CSV_IMPORTABLE;
 
 export function CsvMapping({
   db, headers, mapping, onSet,
@@ -47,8 +51,8 @@ export function CsvMapping({
               ))}
             </optgroup>
             <optgroup label="+ Create new property">
-              {NEW_TYPES.map((t) => (
-                <option key={t} value={`${NEW_PREFIX}${t}`}>+ New · {t}</option>
+              {PROPERTY_TYPES_CSV_IMPORTABLE.map((t) => (
+                <option key={t} value={`${NEW_PREFIX}${t}`}>+ New · {PROPERTY_TYPE_META[t].label}</option>
               ))}
             </optgroup>
           </select>
