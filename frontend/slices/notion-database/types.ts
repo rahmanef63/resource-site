@@ -14,6 +14,7 @@
  */
 
 export type {
+  CalcKind,
   ChartAggregate,
   ChartKind,
   Database,

@@ -119,6 +119,9 @@ export type DbView =
 export type ChartKind = "bar" | "line" | "area" | "pie" | "donut";
 export type ChartAggregate = "count" | "sum" | "avg" | "min" | "max";
 
+import type { CalcKind } from "./calc-types";
+export type { CalcKind };
+
 export interface DatabaseFilter {
   propertyId: string;
   op: "contains" | "equals" | "not_empty" | "is_empty" | "checked" | "unchecked";
@@ -140,7 +143,8 @@ export interface DatabaseViewConfig {
   search: string;
   /** Per-view hidden property ids (independent of any global flag). */
   hiddenPropIds?: string[];
-  // Chart view
+  /** Table view footer per-column aggregate. Unset / "none" hides cell. */
+  tableCalcs?: Record<string, CalcKind>;
   chartKind?: ChartKind;
   chartXProp?: string;
   chartYProp?: string;
@@ -157,24 +161,19 @@ export interface DatabaseViewConfig {
   chartYLabel?: string;
   chartTitle?: string;
   chartHeight?: "small" | "medium" | "large";
-  // Map view
   mapLatProp?: string;
   mapLngProp?: string;
   mapPinColorProp?: string;
   mapShowList?: boolean;
-  // Form view
   formRequiredProps?: string[];
   formShownProps?: string[];
   formSuccessMessage?: string;
   formTitle?: string;
   formDescription?: string;
-  // Dashboard view
   dashboardKPIs?: string[];
   dashboardBreakdowns?: string[];
   dashboardRecentLimit?: number;
-  // Feed view
   feedTimestamp?: "createdAt" | "updatedAt";
-  // Timeline view
   timelineStartProp?: string;
   timelineEndProp?: string;
   timelineColorByProp?: string;

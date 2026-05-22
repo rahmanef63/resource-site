@@ -19,7 +19,7 @@ import { ColumnHeaderMenu } from "./ColumnHeaderMenu";
 import { VIEW_REGISTRY, type ViewRegistry } from "./views";
 import { applyView } from "../lib/viewData";
 import type {
-  Database, DatabaseViewConfig, DbView, Page, Property, PropertyType, PropertyValue,
+  CalcKind, Database, DatabaseViewConfig, DbView, Page, Property, PropertyType, PropertyValue,
 } from "../types";
 
 const DEFAULT_NEW_PROP_TYPE: PropertyType = "text";
@@ -107,6 +107,8 @@ export function NotionDatabase({
       onDelete={onPropertyRemove ? () => onPropertyRemove(prop.id) : undefined}
       onSortAsc={onViewConfigChange ? () => onViewConfigChange(activeView.id, { sorts: [{ propertyId: prop.id, direction: "asc" }] }) : undefined}
       onSortDesc={onViewConfigChange ? () => onViewConfigChange(activeView.id, { sorts: [{ propertyId: prop.id, direction: "desc" }] }) : undefined}
+      currentCalc={(activeView.tableCalcs?.[prop.id] ?? "none") as CalcKind}
+      onSetCalc={onViewConfigChange && activeView.type === "table" ? (kind) => onViewConfigChange(activeView.id, { tableCalcs: { ...(activeView.tableCalcs ?? {}), [prop.id]: kind } }) : undefined}
     />
   );
 

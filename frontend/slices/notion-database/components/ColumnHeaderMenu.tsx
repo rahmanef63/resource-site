@@ -5,14 +5,16 @@
  *  view config + property schema mutations. */
 
 import {
-  Pencil, ArrowUp, ArrowDown, EyeOff, Trash2, ChevronDown, Shapes,
+  Pencil, ArrowUp, ArrowDown, EyeOff, Trash2, ChevronDown, Shapes, Sigma,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
   DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { calcLabel, validCalcs } from "../lib/calcAggregate";
 import {
+  type CalcKind,
   type Property,
   type PropertyType,
   PROPERTY_TYPES_USER_ADDABLE,
@@ -27,11 +29,17 @@ export interface ColumnHeaderMenuProps {
   onSortDesc?: () => void;
   onHide?: () => void;
   onDelete?: () => void;
+  /** Current TableView footer aggregate for this column. */
+  currentCalc?: CalcKind;
+  /** Set the TableView footer aggregate. Omit to hide the submenu. */
+  onSetCalc?: (kind: CalcKind) => void;
 }
 
 export function ColumnHeaderMenu({
   prop, onRename, onTypeChange, onSortAsc, onSortDesc, onHide, onDelete,
+  currentCalc, onSetCalc,
 }: ColumnHeaderMenuProps) {
+  const calcs = onSetCalc ? validCalcs(prop) : [];
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -84,6 +92,31 @@ export function ColumnHeaderMenu({
           <DropdownMenuItem onClick={onSortDesc} className="gap-2 text-sm">
             <ArrowDown className="h-3.5 w-3.5 text-muted-foreground" /> Sort descending
           </DropdownMenuItem>
+        )}
+        {onSetCalc && calcs.length > 0 && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuLabel className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-muted-foreground">
+              <Sigma className="h-3 w-3" /> Calculate
+            </DropdownMenuLabel>
+            <div className="max-h-48 overflow-y-auto pb-1">
+              <DropdownMenuItem
+                onClick={() => onSetCalc("none")}
+                className={`gap-2 text-sm ${(currentCalc ?? "none") === "none" ? "bg-accent/60" : ""}`}
+              >
+                {calcLabel("none")}
+              </DropdownMenuItem>
+              {calcs.map((c) => (
+                <DropdownMenuItem
+                  key={c}
+                  onClick={() => onSetCalc(c)}
+                  className={`gap-2 text-sm ${c === currentCalc ? "bg-accent/60" : ""}`}
+                >
+                  {calcLabel(c)}
+                </DropdownMenuItem>
+              ))}
+            </div>
+          </>
         )}
         {(onHide || onDelete) && <DropdownMenuSeparator />}
         {onHide && (

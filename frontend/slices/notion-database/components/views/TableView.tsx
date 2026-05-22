@@ -4,41 +4,47 @@
  *  cells delegated to host via renderCell. Header optionally wrapped by
  *  renderColumnHeader (typically ColumnHeaderMenu). */
 
+import { useMemo } from "react";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CalcFooter } from "./CalcFooter";
 import type { ViewProps } from "./types";
 
 export function TableView({
-  db, rows, readOnly, onRowUpdate: _onRowUpdate, onRowRemove,
+  db, view, rows, readOnly, onRowUpdate: _onRowUpdate, onRowRemove,
   renderCell, renderColumnHeader,
 }: ViewProps) {
+  const visibleProps = useMemo(() => db.properties.filter((p) => !p.hidden), [db.properties]);
+  const hasRowActions = !readOnly && !!onRowRemove;
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead className="border-b border-border bg-muted/30 text-left text-xs text-muted-foreground">
           <tr>
-            {db.properties.filter((p) => !p.hidden).map((p) => (
+            {visibleProps.map((p) => (
               <th key={p.id} className="px-3 py-1.5 font-normal">
                 {renderColumnHeader ? renderColumnHeader(p) : (
                   <span className="truncate">{p.name}</span>
                 )}
               </th>
             ))}
+            {hasRowActions && <th aria-hidden />}
           </tr>
         </thead>
         <tbody>
           {rows.map((r) => (
             <tr key={r.id} className="group/row border-b border-border/60 hover:bg-accent/30">
-              {db.properties.filter((p) => !p.hidden).map((p) => (
+              {visibleProps.map((p) => (
                 <td key={p.id} className="px-3 py-1.5">{renderCell(p, r)}</td>
               ))}
-              {!readOnly && onRowRemove && (
+              {hasRowActions && (
                 <td className="px-2">
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => onRowRemove(r.id)}
+                    onClick={() => onRowRemove!(r.id)}
                     className="h-5 w-5 text-muted-foreground/40 opacity-0 group-hover/row:opacity-100 hover:text-destructive"
+                    aria-label="Remove row"
                   >
                     <Trash2 className="h-3 w-3" />
                   </Button>
@@ -48,12 +54,13 @@ export function TableView({
           ))}
           {rows.length === 0 && (
             <tr>
-              <td colSpan={db.properties.length + 1} className="px-3 py-4 text-center text-xs italic text-muted-foreground">
+              <td colSpan={visibleProps.length + (hasRowActions ? 1 : 0)} className="px-3 py-4 text-center text-xs italic text-muted-foreground">
                 No rows match
               </td>
             </tr>
           )}
         </tbody>
+        <CalcFooter view={view} rows={rows} visibleProps={visibleProps} hasRowActions={hasRowActions} />
       </table>
     </div>
   );
