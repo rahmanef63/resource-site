@@ -1,9 +1,59 @@
+import { useCallback, useEffect, useState } from "react";
 import type { Database, Page, PropertyValue } from "@/features/notion-shell";
 
 export const newId = (): string =>
   (typeof crypto !== "undefined" && "randomUUID" in crypto)
     ? crypto.randomUUID()
     : `id_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+
+/** Namespaced storage keys for the preview. Versioned so a future
+ *  schema change can bump and invalidate stale demo data without
+ *  user intervention. */
+export const PREVIEW_STORAGE_KEYS = {
+  db:   "silong-preview:notion-database:v1:db",
+  rows: "silong-preview:notion-database:v1:rows",
+} as const;
+
+/** Drop-in useState replacement that hydrates from + persists to
+ *  localStorage. SSR-safe (returns initial on server, reads on mount).
+ *  Writes on every state change. Used by the preview so refreshing
+ *  the page keeps the demo state. */
+export function useLocalStorageState<T>(
+  key: string,
+  initial: T,
+): [T, (next: T | ((prev: T) => T)) => void] {
+  const [state, setState] = useState<T>(initial);
+  const [hydrated, setHydrated] = useState(false);
+
+  // Hydrate once on mount.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const raw = window.localStorage.getItem(key);
+      if (raw !== null) setState(JSON.parse(raw) as T);
+    } catch {
+      // Corrupt or unavailable — fall back to initial.
+    }
+    setHydrated(true);
+  }, [key]);
+
+  // Persist on change, but only after hydration to avoid stomping
+  // user state with the initial value during the first render.
+  useEffect(() => {
+    if (!hydrated || typeof window === "undefined") return;
+    try {
+      window.localStorage.setItem(key, JSON.stringify(state));
+    } catch {
+      // Quota exceeded / private mode — silently ignore.
+    }
+  }, [hydrated, key, state]);
+
+  const set = useCallback((next: T | ((prev: T) => T)) => {
+    setState((prev) => (typeof next === "function" ? (next as (p: T) => T)(prev) : next));
+  }, []);
+
+  return [state, set];
+}
 
 export function makeRow(
   id: string,

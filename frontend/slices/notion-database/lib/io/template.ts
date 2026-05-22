@@ -2,7 +2,7 @@
  *  db.properties — headers/schema match the current column set, with one
  *  placeholder row showing the expected format per property type. */
 
-import type { Database, Property, PropertyValue } from "../types";
+import type { Database, Property, PropertyValue } from "../../types";
 import { exportDatabaseToCsv } from "./csv";
 import { exportDatabase, type DatabaseExportV1 } from "./serialize";
 

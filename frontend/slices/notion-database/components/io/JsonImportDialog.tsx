@@ -8,11 +8,11 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
-import type { Database } from "../types";
+import type { Database } from "../../types";
 import {
   buildImportResult, parseExport,
   type DatabaseExportV1, type JsonImportResult,
-} from "../lib/serialize";
+} from "../../lib/io/serialize";
 
 export interface JsonImportDialogProps {
   db: Database;

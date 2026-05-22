@@ -6,7 +6,7 @@
 import type {
   Database, DatabaseViewConfig, Page, Property,
   PropertyType, PropertyValue, SelectOption,
-} from "../types";
+} from "../../types";
 
 const WIRE_VERSION = 1;
 
@@ -30,7 +30,10 @@ export interface RowExport {
 }
 
 export interface JsonImportResult {
-  newProperties: { type: PropertyType; name: string; options?: SelectOption[] }[];
+  /** New properties shape matches CsvNewProperty so host can use a
+   *  single import handler for both CSV + JSON. `tempId` is the
+   *  rowProps key to remap when persisting. */
+  newProperties: { tempId: string; type: PropertyType; name: string; options?: SelectOption[] }[];
   rows: { title: string; rowProps: Record<string, PropertyValue> }[];
   importedDb: { name: string; icon: string; propertyCount: number; viewCount: number };
 }
@@ -84,10 +87,10 @@ export function diffSchema(
   incoming: Property[],
   existing: Property[],
 ): {
-  newProperties: { type: PropertyType; name: string; options?: SelectOption[] }[];
+  newProperties: { tempId: string; type: PropertyType; name: string; options?: SelectOption[] }[];
   idMap: Map<string, string>;
 } {
-  const newProperties: { type: PropertyType; name: string; options?: SelectOption[] }[] = [];
+  const newProperties: { tempId: string; type: PropertyType; name: string; options?: SelectOption[] }[] = [];
   const idMap = new Map<string, string>();
   for (const inc of incoming) {
     const match = existing.find(
@@ -96,7 +99,7 @@ export function diffSchema(
     if (match) { idMap.set(inc.id, match.id); continue; }
     const tempId = `new:${inc.id}`;
     idMap.set(inc.id, tempId);
-    newProperties.push({ type: inc.type, name: inc.name, options: inc.options });
+    newProperties.push({ tempId, type: inc.type, name: inc.name, options: inc.options });
   }
   return { newProperties, idMap };
 }

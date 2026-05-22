@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/dialog";
 import type {
   Database, Property, PropertyType, PropertyValue, SelectOption,
-} from "../types";
-import { parseCsv, valueFromString, type ParsedCsv } from "../lib/csv";
+} from "../../types";
+import { parseCsv, valueFromString, type ParsedCsv } from "../../lib/io/csv";
 import {
   CSV_NEW_PREFIX, CSV_SKIP, CSV_TITLE, CsvMapping,
 } from "./csv-mapping";
@@ -19,6 +19,10 @@ import {
 const OPTION_COLORS = ["gray", "brown", "orange", "yellow", "green", "blue", "purple", "pink", "red"];
 
 export interface CsvNewProperty {
+  /** Synthetic id used as the rowProps key for values mapped to this
+   *  new column. Host must remap to its real property id when persisting
+   *  (see DatabaseIOActions agentRecipe in the catalog entry). */
+  tempId: string;
   type: PropertyType;
   name: string;
   options?: SelectOption[];
@@ -96,7 +100,7 @@ export function CsvImportDialog({ db, open, onOpenChange, onImport }: CsvImportD
             id: `${tempId}_opt_${idx}`, name: n, color: OPTION_COLORS[idx % OPTION_COLORS.length],
           }));
         }
-        newProperties.push({ type, name, options });
+        newProperties.push({ tempId, type, name, options });
       });
 
       const newPropByCol: Record<number, Property> = {};

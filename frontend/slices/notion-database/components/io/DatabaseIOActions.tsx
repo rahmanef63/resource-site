@@ -11,10 +11,10 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
   DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { Database, Page } from "../types";
-import { downloadCsv, exportDatabaseToCsv } from "../lib/csv";
-import { downloadJson, exportDatabase, type JsonImportResult } from "../lib/serialize";
-import { buildCsvTemplate, buildJsonTemplate } from "../lib/template";
+import type { Database, Page } from "../../types";
+import { downloadCsv, exportDatabaseToCsv } from "../../lib/io/csv";
+import { downloadJson, exportDatabase, type JsonImportResult } from "../../lib/io/serialize";
+import { buildCsvTemplate, buildJsonTemplate } from "../../lib/io/template";
 import { CsvImportDialog, type CsvImportResult } from "./CsvImportDialog";
 import { JsonImportDialog } from "./JsonImportDialog";
 

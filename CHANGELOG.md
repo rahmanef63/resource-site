@@ -11,6 +11,53 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### v0.6.0 (open-silong sync) — 2026-05-22 — notion-database mega-merge (Phase 7.10)
+
+Single-slice install path for full Notion-like database table. Closes
+the "2-slice install friction" reported by upstream consumer: previously
+required `npx rr add notion-database` + `npx rr add database-io` for
+the complete experience. Now just `npx rr add notion-database`.
+
+**Merged into notion-database (v0.5.3 → v0.6.0):**
+- `components/io/DatabaseIOActions.tsx` (was database-io/components/)
+- `components/io/CsvImportDialog.tsx` + `csv-mapping.tsx`
+- `components/io/JsonImportDialog.tsx`
+- `lib/io/csv.ts` + `serialize.ts` + `template.ts`
+- Re-exported from `@/features/notion-database` barrel
+
+**API fix:** `CsvNewProperty` + `JsonImportResult.newProperties[]` now
+expose `tempId: string` (was missing — host couldn't remap rowProps
+keys when persisting). Single import handler now serves both formats
+with proper id remapping.
+
+**Catalog renames:** notion-database title bumped to "Notion-like
+Database Table — full table with import/export (11 views · 16 cells
+· CSV + JSON)". Tags + csv, json, import, export, template, data,
+backup.
+
+**`database-io` slice DEPRECATED:**
+- `frontend/slices/database-io/index.ts` reduced to a thin re-export
+  shim from `@/features/notion-database` (back-compat).
+- Catalog entry marked `[DEPRECATED]` in title + tagline + description.
+- `previewPath` redirects to `/preview/slices/notion-database`.
+- Old `app/preview/slices/database-io/page.tsx` deleted.
+- Scheduled for full removal in v1.0.
+
+**Preview improvements:**
+- `InstallCTA` removed from `/preview/slices/notion-database/page.tsx`
+  (install info already lives in `/(docs)/slices/notion-database`
+  detail page header + Code tab — no duplication).
+- New `useLocalStorageState` hook in `previewState.ts` — demo state
+  rehydrates on page reload (was reset every refresh). Namespace key:
+  `silong-preview:notion-database:v1:{db,rows}`.
+- `DatabaseIOActions` toolbar mounted above NotionDatabase — CSV +
+  JSON import/export demoable end-to-end from the preview.
+- Reset button clears localStorage in addition to resetting state.
+
+**No CK conflict:** changes scoped to notion-database + database-io +
+their preview. CK agent's other work (workspace-shell, family-map,
+catalog-tabs RSC fix) untouched.
+
 ### v0.5.2 (open-silong sync) — 2026-05-22 — PROPERTY_TYPE_META SSOT registry
 
 Closes type-list drift discovered during cross-slice audit. Three

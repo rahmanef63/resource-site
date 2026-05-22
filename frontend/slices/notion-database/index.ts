@@ -56,3 +56,47 @@ export {
   PROPERTY_TYPES_USER_ADDABLE,
   PROPERTY_TYPES_CSV_IMPORTABLE,
 } from "./types";
+
+// ---- Import / Export surface (merged from former database-io slice, v0.6) ----
+
+export {
+  DatabaseIOActions,
+  type DatabaseIOActionsProps,
+} from "./components/io/DatabaseIOActions";
+
+export {
+  CsvImportDialog,
+  type CsvImportDialogProps,
+  type CsvImportResult,
+  type CsvNewProperty,
+  type CsvRowDraft,
+} from "./components/io/CsvImportDialog";
+
+export {
+  JsonImportDialog,
+  type JsonImportDialogProps,
+} from "./components/io/JsonImportDialog";
+
+export {
+  exportDatabaseToCsv,
+  parseCsv,
+  downloadCsv,
+  valueFromString,
+  type ParsedCsv,
+} from "./lib/io/csv";
+
+export {
+  exportDatabase,
+  downloadJson,
+  parseExport,
+  diffSchema,
+  buildImportResult,
+  type DatabaseExportV1,
+  type RowExport,
+  type JsonImportResult,
+} from "./lib/io/serialize";
+
+export {
+  buildCsvTemplate,
+  buildJsonTemplate,
+} from "./lib/io/template";

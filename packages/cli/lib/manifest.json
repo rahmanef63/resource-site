@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-22T07:22:50.857Z",
+  "generatedAt": "2026-05-22T08:22:17.039Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -2421,14 +2421,14 @@
     },
     {
       "slug": "notion-database",
-      "title": "Notion Database — embedded DB surface (11 views · 16 cells)",
+      "title": "Notion-like Database Table — full table with import/export (11 views · 16 cells · CSV + JSON)",
       "category": "ui",
-      "description": "Portable Notion-style database surface. Optional companion to notion-shell — install shell alone for pages + sidebar + block editor, add notion-database when you want embedded databases. Ships NotionDatabase (full DB UI w/ ViewTabs + ViewOptions + per-column menu + FilterBuilder/SortBuilder popovers), NotionProperty (value + schema editor), 16 property-cell types (text / number / checkbox / select / multi_select / status / date / url / email / phone / files / person / formula / created_time / last_edited_time / unique_id), 11 built-in views: Table / Board / List / Gallery / Calendar / Feed PLUS Chart (recharts bar/line/area/pie/donut + inline kind/X/agg/Y pickers) / Dashboard (KPI strip + group breakdowns + recent updates) / Form (public-facing submit-to-create — title + per-property inputs, optional required-field validation, configurable show/hide + success message via inline Settings panel) / Map (SVG world + lat/lng pins, no leaflet) / Timeline (Gantt-style with drag-to-shift / drag-to-resize). FilterBuilder + SortBuilder exported standalone for toolbar embedding. Formula cells use a pure expression engine ({{title}}/{{prop}} interpolation + concat/upper/lower/round/if/etc fns + `=expr` math). Files cells store URL refs (paste-URL workflow; host can plug `files` slice adapter for upload). Person cells are simplified vs upstream — no user directory lookup, just initials chips. Created_time / last_edited_time read row.createdAt / row.updatedAt directly. unique_id auto-derives from row position + optional prefix. Pure helpers: applyView, groupBy, bucketByDate. Domain types live in notion-shell (single source of truth — Page.rowOfDatabaseId + rowProps reference them) and re-exported here. Relation + rollup property types deferred to upstream open-silong mega-bundle (need cross-DB context). v0.5 adds drop-in Convex backend templates (dual-mode: minimal single-user OR full multi-workspace) from open-silong's template-base/.",
+      "description": "Portable Notion-style database table surface — full capability in one slice. Optional companion to notion-shell — install shell alone for pages + sidebar + block editor, add notion-database when you want embedded databases with full table capability. Ships NotionDatabase (full DB UI w/ ViewTabs + ViewOptions + per-column menu + FilterBuilder/SortBuilder popovers), NotionProperty (value + schema editor), 16 property-cell types (text / number / checkbox / select / multi_select / status / date / url / email / phone / files / person / formula / created_time / last_edited_time / unique_id), 11 built-in views: Table / Board / List / Gallery / Calendar / Feed PLUS Chart (recharts bar/line/area/pie/donut + inline kind/X/agg/Y pickers) / Dashboard (KPI strip + group breakdowns + recent updates) / Form (public-facing submit-to-create — title + per-property inputs, optional required-field validation, configurable show/hide + success message via inline Settings panel) / Map (SVG world + lat/lng pins, no leaflet) / Timeline (Gantt-style with drag-to-shift / drag-to-resize). FilterBuilder + SortBuilder exported standalone for toolbar embedding. Formula cells use a pure expression engine ({{title}}/{{prop}} interpolation + concat/upper/lower/round/if/etc fns + `=expr` math). Files cells store URL refs (paste-URL workflow; host can plug `files` slice adapter for upload). Person cells are simplified vs upstream — no user directory lookup, just initials chips. Created_time / last_edited_time read row.createdAt / row.updatedAt directly. unique_id auto-derives from row position + optional prefix. Pure helpers: applyView, groupBy, bucketByDate. Domain types live in notion-shell (single source of truth — Page.rowOfDatabaseId + rowProps reference them) and re-exported here. Relation + rollup property types deferred to upstream open-silong mega-bundle (need cross-DB context). v0.5 added drop-in Convex backend templates (dual-mode: minimal single-user OR full multi-workspace) from open-silong's template-base/. v0.6 (Phase 7.10) merges former database-io slice in-tree: DatabaseIOActions toolbar (Export CSV/JSON · Import CSV/JSON · Download dynamic CSV/JSON templates), CsvImportDialog (auto-map columns + create-new-of-type picker), JsonImportDialog (schema diff + import), exportDatabase / exportDatabaseToCsv / parseExport / parseCsv / buildCsvTemplate / buildJsonTemplate helpers — all from `@/features/notion-database`. CsvNewProperty + JsonImportResult.newProperties now expose `tempId` so host can remap rowProps keys when persisting (single import handler serves both formats). Cell editor UX consolidated v0.5.3 — SelectCell + MultiSelectCell share OptionPicker (shared/identical popover: search-as-create + per-option rename/color/delete). Property-type lists single-source via PROPERTY_TYPE_META registry (v0.5.2).",
       "source": "open-silong",
       "install": "npx rahman-resources add notion-database",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add notion-database` (cascades notion-shell as peer). Import: `import { NotionDatabase, NotionProperty, VIEW_REGISTRY } from \"@/features/notion-database\"`. NotionDatabase ships full props-driven DB UI — host owns rows + dispatches CRUD callbacks (db.* / db.row.* / db.view.* shape from the notion-page-clone-os template store). For just one view in isolation, import the specific view component (TableView / BoardView / etc.). Property cells auto-render via renderPropertyCell helper. Pure helpers: applyView (filter + sort + search), groupBy (board kanban), bucketByDate (calendar grid). For backend persistence, copy template-base/database-silong/convex/ from the open-silong repo: handlers go to convex/, schema fragment merges into convex/schema.ts. Pick _shared/minimal/ (single-user, noop authz) or _shared/full/ (requires @convex-dev/auth + workspaces tables). See CONVEX-BACKEND.md.",
+      "agentRecipe": "Run `npx rr add notion-database` (cascades notion-shell as peer). Import: `import { NotionDatabase, NotionProperty, VIEW_REGISTRY, DatabaseIOActions } from \"@/features/notion-database\"`. NotionDatabase ships full props-driven DB UI — host owns rows + dispatches CRUD callbacks. For just one view in isolation, import the specific view component (TableView / BoardView / etc.). Property cells auto-render via renderPropertyCell helper. Pure helpers: applyView / groupBy / bucketByDate. For import/export, mount `<DatabaseIOActions db={db} rows={rows} onImport={async ({ newProperties, rows }) => { const tempToReal: Record<string, string> = {}; for (const np of newProperties) { const realId = await dispatchAddProperty(np); tempToReal[np.tempId] = realId; } for (const r of rows) { const rowId = await dispatchAddRow(r.title); for (const [propKey, v] of Object.entries(r.rowProps)) { await dispatchSetValue(rowId, tempToReal[propKey] ?? propKey, v); } } }} />` next to your DB toolbar — exports CSV/JSON + imports w/ schema diff + downloads dynamic templates from live db.properties. tempId on each new property lets host remap rowProps keys to its real backend ids. For backend persistence, copy template-base/database-silong/convex/ from the open-silong repo: handlers go to convex/, schema fragment merges into convex/schema.ts. Pick _shared/minimal/ (single-user, noop authz) or _shared/full/ (requires @convex-dev/auth + workspaces tables). See CONVEX-BACKEND.md.",
       "tags": [
         "ui",
         "notion",
@@ -2456,6 +2456,13 @@
         "formula",
         "timestamp",
         "unique-id",
+        "csv",
+        "json",
+        "import",
+        "export",
+        "template",
+        "data",
+        "backup",
         "primitive",
         "optional",
         "embeddable"
@@ -2463,14 +2470,14 @@
     },
     {
       "slug": "database-io",
-      "title": "Database IO — combined CSV + JSON import/export with dynamic template",
+      "title": "[DEPRECATED] Database IO — merged into notion-database v0.6",
       "category": "ui",
-      "description": "Single combined import/export surface for notion-database. DatabaseIOActions ships one dropdown trigger with six items: Export CSV, Export JSON, Import CSV…, Import JSON…, Download CSV template, Download JSON template. Templates are generated dynamically from the live db.properties — header row (CSV) or wire-format v1 schema (JSON) reflects the current column set, with one placeholder row that hints at expected format per property type (e.g. `2026-01-01` for date, `Option1; Option2` for multi_select, `(computed — ignored on import)` for formula/created_time/etc.). CsvImportDialog parses + auto-maps headers (re-pickable: existing property / Title / skip / + New Property of 12 supported types, with select/status/multi_select auto-seeding options from CSV values). JsonImportDialog parses a previously-exported v1 file, diffs schema vs existing db.properties (name + type match), shows preview, emits same result shape so a single onImport handler serves both formats. Pure / props-driven. Replaces standalone database-csv + database-json (both removed CK-1E, 2026-05-22).",
+      "description": "DEPRECATED — all functionality merged into `notion-database` v0.6 (Phase 7.10, 2026-05-22). This slice is now a thin re-export shim from `@/features/notion-database` to keep existing consumers compiling. New code should `npx rr add notion-database` (now bundles CSV + JSON import/export + dynamic templates) instead of installing this separately. Slice will be removed in v1.0. Original surface (DatabaseIOActions / CsvImportDialog / JsonImportDialog / exportDatabase / buildCsvTemplate / buildJsonTemplate) remains exported from notion-database — see its catalog entry. Merge rationale: 100% peer coupling to notion-database (every file imported Database/Page/Property types from it) + zero independent install path (always installed alongside notion-database in practice) = no modularity benefit from separation.",
       "source": "notion-page-clone",
       "install": "npx rahman-resources add database-io",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add database-io` (cascades notion-database as peer). Import: `import { DatabaseIOActions } from \"@/features/database-io\"`. Mount in your DB toolbar: `<DatabaseIOActions db={db} rows={rows} onImport={async ({ newProperties, rows }) => { for (const p of newProperties) await dispatchAddProperty(p); for (const r of rows) { const newId = await dispatchAddRow(); await dispatchSetTitle(newId, r.title); for (const [propId, v] of Object.entries(r.rowProps)) await dispatchSetValue(newId, propId, v); } }} />`. Single handler works for both CSV + JSON imports. Templates are generated live from db.properties — users edit the placeholder row + re-import. For lower-level access: `buildCsvTemplate(db)` / `buildJsonTemplate(db)` return strings.",
+      "agentRecipe": "⚠️ DEPRECATED — use `npx rr add notion-database` (now bundles import/export). This slice is a thin re-export shim from `@/features/notion-database` for back-compat. New code: `import { DatabaseIOActions } from \"@/features/notion-database\"`. Remove when migration complete; slice scheduled for removal in v1.0.",
       "tags": [
         "ui",
         "notion",
@@ -4582,11 +4589,11 @@
     },
     {
       "slug": "notion-database",
-      "title": "Notion Database — embedded DB surface (11 views · 16 cells)",
+      "title": "Notion-like Database Table — full table with import/export (11 views · 16 cells · CSV + JSON)",
       "category": "ui",
       "kind": "ui",
-      "version": "0.5.0",
-      "description": "Portable Notion-style database surface. Optional companion to notion-shell — install shell alone for pages + sidebar + block editor, add notion-database when you want embedded databases. Ships NotionDatabase (full DB UI w/ ViewTabs + ViewOptions + per-column menu + FilterBuilder/SortBuilder popovers), NotionProperty (value + schema editor), 16 property-cell types (text / number / checkbox / select / multi_select / status / date / url / email / phone / files / person / formula / created_time / last_edited_time / unique_id), 11 built-in views: Table / Board / List / Gallery / Calendar / Feed PLUS Chart (recharts bar/line/area/pie/donut + inline kind/X/agg/Y pickers) / Dashboard (KPI strip + group breakdowns + recent updates) / Form (public-facing submit-to-create — title + per-property inputs, optional required-field validation, configurable show/hide + success message via inline Settings panel) / Map (SVG world + lat/lng pins, no leaflet) / Timeline (Gantt-style with drag-to-shift / drag-to-resize). FilterBuilder + SortBuilder exported standalone for toolbar embedding. Formula cells use a pure expression engine ({{title}}/{{prop}} interpolation + concat/upper/lower/round/if/etc fns + `=expr` math). Files cells store URL refs (paste-URL workflow; host can plug `files` slice adapter for upload). Person cells are simplified vs upstream — no user directory lookup, just initials chips. Created_time / last_edited_time read row.createdAt / row.updatedAt directly. unique_id auto-derives from row position + optional prefix. Pure helpers: applyView, groupBy, bucketByDate. Domain types live in notion-shell (single source of truth — Page.rowOfDatabaseId + rowProps reference them) and re-exported here. Relation + rollup property types deferred to upstream open-silong mega-bundle (need cross-DB context). v0.5 adds drop-in Convex backend templates (dual-mode: minimal single-user OR full multi-workspace) from open-silong's template-base/.",
+      "version": "0.6.0",
+      "description": "Portable Notion-style database table surface — full capability in one slice. Optional companion to notion-shell — install shell alone for pages + sidebar + block editor, add notion-database when you want embedded databases with full table capability. Ships NotionDatabase (full DB UI w/ ViewTabs + ViewOptions + per-column menu + FilterBuilder/SortBuilder popovers), NotionProperty (value + schema editor), 16 property-cell types (text / number / checkbox / select / multi_select / status / date / url / email / phone / files / person / formula / created_time / last_edited_time / unique_id), 11 built-in views: Table / Board / List / Gallery / Calendar / Feed PLUS Chart (recharts bar/line/area/pie/donut + inline kind/X/agg/Y pickers) / Dashboard (KPI strip + group breakdowns + recent updates) / Form (public-facing submit-to-create — title + per-property inputs, optional required-field validation, configurable show/hide + success message via inline Settings panel) / Map (SVG world + lat/lng pins, no leaflet) / Timeline (Gantt-style with drag-to-shift / drag-to-resize). FilterBuilder + SortBuilder exported standalone for toolbar embedding. Formula cells use a pure expression engine ({{title}}/{{prop}} interpolation + concat/upper/lower/round/if/etc fns + `=expr` math). Files cells store URL refs (paste-URL workflow; host can plug `files` slice adapter for upload). Person cells are simplified vs upstream — no user directory lookup, just initials chips. Created_time / last_edited_time read row.createdAt / row.updatedAt directly. unique_id auto-derives from row position + optional prefix. Pure helpers: applyView, groupBy, bucketByDate. Domain types live in notion-shell (single source of truth — Page.rowOfDatabaseId + rowProps reference them) and re-exported here. Relation + rollup property types deferred to upstream open-silong mega-bundle (need cross-DB context). v0.5 added drop-in Convex backend templates (dual-mode: minimal single-user OR full multi-workspace) from open-silong's template-base/. v0.6 (Phase 7.10) merges former database-io slice in-tree: DatabaseIOActions toolbar (Export CSV/JSON · Import CSV/JSON · Download dynamic CSV/JSON templates), CsvImportDialog (auto-map columns + create-new-of-type picker), JsonImportDialog (schema diff + import), exportDatabase / exportDatabaseToCsv / parseExport / parseCsv / buildCsvTemplate / buildJsonTemplate helpers — all from `@/features/notion-database`. CsvNewProperty + JsonImportResult.newProperties now expose `tempId` so host can remap rowProps keys when persisting (single import handler serves both formats). Cell editor UX consolidated v0.5.3 — SelectCell + MultiSelectCell share OptionPicker (shared/identical popover: search-as-create + per-option rename/color/delete). Property-type lists single-source via PROPERTY_TYPE_META registry (v0.5.2).",
       "source": "open-silong",
       "slicePath": "frontend/slices/notion-database",
       "convexPaths": [
@@ -4603,7 +4610,8 @@
         "checkbox",
         "dropdown-menu",
         "popover",
-        "select"
+        "select",
+        "dialog"
       ],
       "env": [],
       "peers": [
@@ -4641,19 +4649,26 @@
         "formula",
         "timestamp",
         "unique-id",
+        "csv",
+        "json",
+        "import",
+        "export",
+        "template",
+        "data",
+        "backup",
         "primitive",
         "optional",
         "embeddable"
       ],
-      "agentRecipe": "Run `npx rr add notion-database` (cascades notion-shell as peer). Import: `import { NotionDatabase, NotionProperty, VIEW_REGISTRY } from \"@/features/notion-database\"`. NotionDatabase ships full props-driven DB UI — host owns rows + dispatches CRUD callbacks (db.* / db.row.* / db.view.* shape from the notion-page-clone-os template store). For just one view in isolation, import the specific view component (TableView / BoardView / etc.). Property cells auto-render via renderPropertyCell helper. Pure helpers: applyView (filter + sort + search), groupBy (board kanban), bucketByDate (calendar grid). For backend persistence, copy template-base/database-silong/convex/ from the open-silong repo: handlers go to convex/, schema fragment merges into convex/schema.ts. Pick _shared/minimal/ (single-user, noop authz) or _shared/full/ (requires @convex-dev/auth + workspaces tables). See CONVEX-BACKEND.md."
+      "agentRecipe": "Run `npx rr add notion-database` (cascades notion-shell as peer). Import: `import { NotionDatabase, NotionProperty, VIEW_REGISTRY, DatabaseIOActions } from \"@/features/notion-database\"`. NotionDatabase ships full props-driven DB UI — host owns rows + dispatches CRUD callbacks. For just one view in isolation, import the specific view component (TableView / BoardView / etc.). Property cells auto-render via renderPropertyCell helper. Pure helpers: applyView / groupBy / bucketByDate. For import/export, mount `<DatabaseIOActions db={db} rows={rows} onImport={async ({ newProperties, rows }) => { const tempToReal: Record<string, string> = {}; for (const np of newProperties) { const realId = await dispatchAddProperty(np); tempToReal[np.tempId] = realId; } for (const r of rows) { const rowId = await dispatchAddRow(r.title); for (const [propKey, v] of Object.entries(r.rowProps)) { await dispatchSetValue(rowId, tempToReal[propKey] ?? propKey, v); } } }} />` next to your DB toolbar — exports CSV/JSON + imports w/ schema diff + downloads dynamic templates from live db.properties. tempId on each new property lets host remap rowProps keys to its real backend ids. For backend persistence, copy template-base/database-silong/convex/ from the open-silong repo: handlers go to convex/, schema fragment merges into convex/schema.ts. Pick _shared/minimal/ (single-user, noop authz) or _shared/full/ (requires @convex-dev/auth + workspaces tables). See CONVEX-BACKEND.md."
     },
     {
       "slug": "database-io",
-      "title": "Database IO — combined CSV + JSON import/export with dynamic template",
+      "title": "[DEPRECATED] Database IO — merged into notion-database v0.6",
       "category": "ui",
       "kind": "ui",
-      "version": "0.1.0",
-      "description": "Single combined import/export surface for notion-database. DatabaseIOActions ships one dropdown trigger with six items: Export CSV, Export JSON, Import CSV…, Import JSON…, Download CSV template, Download JSON template. Templates are generated dynamically from the live db.properties — header row (CSV) or wire-format v1 schema (JSON) reflects the current column set, with one placeholder row that hints at expected format per property type (e.g. `2026-01-01` for date, `Option1; Option2` for multi_select, `(computed — ignored on import)` for formula/created_time/etc.). CsvImportDialog parses + auto-maps headers (re-pickable: existing property / Title / skip / + New Property of 12 supported types, with select/status/multi_select auto-seeding options from CSV values). JsonImportDialog parses a previously-exported v1 file, diffs schema vs existing db.properties (name + type match), shows preview, emits same result shape so a single onImport handler serves both formats. Pure / props-driven. Replaces standalone database-csv + database-json (both removed CK-1E, 2026-05-22).",
+      "version": "0.2.0",
+      "description": "DEPRECATED — all functionality merged into `notion-database` v0.6 (Phase 7.10, 2026-05-22). This slice is now a thin re-export shim from `@/features/notion-database` to keep existing consumers compiling. New code should `npx rr add notion-database` (now bundles CSV + JSON import/export + dynamic templates) instead of installing this separately. Slice will be removed in v1.0. Original surface (DatabaseIOActions / CsvImportDialog / JsonImportDialog / exportDatabase / buildCsvTemplate / buildJsonTemplate) remains exported from notion-database — see its catalog entry. Merge rationale: 100% peer coupling to notion-database (every file imported Database/Page/Property types from it) + zero independent install path (always installed alongside notion-database in practice) = no modularity benefit from separation.",
       "source": "notion-page-clone",
       "slicePath": "frontend/slices/database-io",
       "convexPaths": [],
@@ -4689,7 +4704,7 @@
         "primitive",
         "optional"
       ],
-      "agentRecipe": "Run `npx rr add database-io` (cascades notion-database as peer). Import: `import { DatabaseIOActions } from \"@/features/database-io\"`. Mount in your DB toolbar: `<DatabaseIOActions db={db} rows={rows} onImport={async ({ newProperties, rows }) => { for (const p of newProperties) await dispatchAddProperty(p); for (const r of rows) { const newId = await dispatchAddRow(); await dispatchSetTitle(newId, r.title); for (const [propId, v] of Object.entries(r.rowProps)) await dispatchSetValue(newId, propId, v); } }} />`. Single handler works for both CSV + JSON imports. Templates are generated live from db.properties — users edit the placeholder row + re-import. For lower-level access: `buildCsvTemplate(db)` / `buildJsonTemplate(db)` return strings."
+      "agentRecipe": "⚠️ DEPRECATED — use `npx rr add notion-database` (now bundles import/export). This slice is a thin re-export shim from `@/features/notion-database` for back-compat. New code: `import { DatabaseIOActions } from \"@/features/notion-database\"`. Remove when migration complete; slice scheduled for removal in v1.0."
     },
     {
       "slug": "notion-shell",

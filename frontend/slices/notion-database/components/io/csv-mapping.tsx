@@ -6,7 +6,7 @@ import {
   type Database,
   PROPERTY_TYPES_CSV_IMPORTABLE,
   PROPERTY_TYPE_META,
-} from "../types";
+} from "../../types";
 
 const SKIP = "__skip__";
 const TITLE = "__title__";

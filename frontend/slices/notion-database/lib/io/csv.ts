@@ -5,7 +5,7 @@
 
 import type {
   Database, Page, Property, PropertyValue,
-} from "../types";
+} from "../../types";
 
 const CSV_DELIM = ",";
 const CSV_NL = "\n";
