@@ -11,6 +11,38 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### CK-1D — 2026-05-20 — workspace-shell slice (NavContext primitive)
+
+New canonical slice `frontend/slices/workspace-shell/` + `convex/features/workspaceShell/` — atomic `(workspaceId, menuSetId)` NavContext, supersedes silo'd `menu-store` + `workspace-store` editors.
+
+- **7 Convex tables** prefixed `workspaceShell_`: `menuSets`, `menuItems`, `itemComponents`, `wsAssignments`, `userAssignments`, `rolePerms`, `navContext`.
+- **Resolver chain** (server): user cache → user assignment → workspace default → system default. Single round-trip via `getNavContext`.
+- **Editor** at `/dashboard/workspace-shell?tab=menus|tree|settings` — FeatureShell.tabs primitive, URL-routed.
+- **WorkspaceSwitcher v2** — 2-tier dropdown (workspace × menuSet) + inline `ForkMenuSetDialog`. Mounts via `<NavContextMount>` inside `WorkspaceProvider`.
+- **Sidebar dual-read** — `useNavItems` prefers NavContext via `toLegacyMenuItems` adapter; falls back to legacy when empty (zero break for consumers w/o migration).
+- **Tiered RBAC** — `menus.manage` (admin set/CRUD) + `menus.fork` (user fork-from-system).
+- **Idempotent migration** `migrations/menusToWorkspaceShell:up` — in-memory map to dodge Convex 4096 read-op limit. Tested: 56 menuSets + 1106 menuItems + 56 wsAssignments. Rerun = all skipped via `metadata.__legacyId` stamp.
+- **30-day deprecation shims** — legacy `/dashboard/menu-store` + `/dashboard/workspace-store` wrapped w/ `DeprecationBanner` countdown. Hard-removal runbook at consumer's `docs/cleanup/2026-06-19-workspace-shell-cleanup.md`.
+- Catalog: 46 → 47 slices.
+
+**Consumer-test findings (2026-05-22, content-rahmanef-com)**:
+
+- 🐛 **CLI install empty** — `npx rahman-resources add workspace-shell` created empty dirs because template-base mirror not yet pushed to remote rr. CLI fetches from GitHub `main`; local catalog edits don't reach `gen-manifest` until commit lands. *Fix: stage `template-base/frontend/slices/workspace-shell/` + `template-base/convex/features/workspaceShell/` then push.*
+- 🐛 **8 hard SuperSpace deps** — slice imports `@/frontend/shared/{lib/features/defineFeature, foundation/provider/WorkspaceProvider, ui/components/ResponsiveDialog, ui/layout/feature-shell/FeatureShell, foundation/utils/convex/any-api, preview, settings, ai/agent}`. Consumer without a `frontend/shared/` tree = unmountable.
+- ✅ **3 working deps** — `@/lib/utils` (`cn`), `@/components/ui/{dropdown-menu, button, input, label, switch}` (standard shadcn paths).
+- ✅ **Migration consumer-safe** — idempotent + legacy tables untouched + shim banner preserves old URLs.
+
+**Lift-up work pending** (P0 for portability):
+1. Inline or slice-local `defineFeature` helper.
+2. Replace `WorkspaceProvider` with prop `workspaceId: Id<...>`.
+3. Drop `FeatureShell` wrapper — emit plain `<Tabs>` (one less primitive dep).
+4. Drop `any-api` cast — consumer Convex types may differ; ship slice-local `api.d.ts` shim or accept TS2589 risk.
+5. Drop `defineFeaturePreview` registration (SuperSpace-only registry).
+6. Drop `subAgentRegistry` (`agent/index.ts`) — SuperSpace-only AI surface.
+7. RHF + Zod check on `ForkMenuSetDialog` — currently no validator.
+
+Status: shipped to SSOT (superspace, commits `be72cd99`…`ee7dd006`). Catalog entry shipped (`lib/content/slices.ts` + `lib/content/changelog.ts`). Template-base mirror **uncommitted** — pre-commit hook blocked by pre-existing tsc errors in `lib/shared/store/*` (`a0d1f3f` database-json sweep) referencing `@convex/_generated/*` which tsconfig excludes. **Resolve upstream before pushing mirror.**
+
 ### CK-J — 2026-05-21 — database-json standalone slice
 
 - New peer slice `frontend/slices/database-json/` — JSON wire format v1 (schema + rows) for notion-database.
