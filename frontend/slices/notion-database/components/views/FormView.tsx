@@ -136,9 +136,9 @@ export function FormView({ db, view, onRowCreate, onViewConfigChange }: ViewProp
           <p className="text-xs italic text-muted-foreground">
             No properties to fill.{" "}
             {onViewConfigChange && (
-              <button type="button" onClick={() => setEditing(true)} className="underline">
+              <Button variant="link" type="button" onClick={() => setEditing(true)} className="h-auto p-0 text-xs underline">
                 Configure form
-              </button>
+              </Button>
             )}
           </p>
         )}
@@ -150,13 +150,15 @@ export function FormView({ db, view, onRowCreate, onViewConfigChange }: ViewProp
         )}
 
         <div className="flex items-center justify-between border-t border-border pt-2">
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             type="button"
             onClick={reset}
-            className="text-xs text-muted-foreground hover:text-foreground"
+            className="h-auto px-0 text-xs font-normal text-muted-foreground hover:bg-transparent hover:text-foreground"
           >
             Clear
-          </button>
+          </Button>
           <Button type="submit" size="sm" disabled={!onRowCreate}>
             {onRowCreate ? "Submit" : "(no onRowCreate wired)"}
           </Button>

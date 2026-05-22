@@ -75,7 +75,7 @@ export function EmbedRenderer({ block, onUpdate }: BlockRendererProps) {
   if (!embed) {
     return (
       <div className="my-2 rounded-md border border-destructive/30 bg-destructive/5 p-3 text-xs text-destructive">
-        Cannot embed this URL. <button type="button" onClick={() => setEditing(true)} className="underline">Edit</button>
+        Cannot embed this URL. <Button variant="link" type="button" onClick={() => setEditing(true)} className="h-auto p-0 text-xs underline">Edit</Button>
       </div>
     );
   }
@@ -94,7 +94,7 @@ export function EmbedRenderer({ block, onUpdate }: BlockRendererProps) {
       </div>
       <div className="flex items-center justify-between border-t border-border px-2 py-1 text-[10px] text-muted-foreground">
         <span className="truncate">{url}</span>
-        <button type="button" onClick={() => setEditing(true)} className="ml-2 underline">edit</button>
+        <Button variant="link" type="button" onClick={() => setEditing(true)} className="ml-2 h-auto p-0 text-[10px] underline">edit</Button>
       </div>
     </div>
   );

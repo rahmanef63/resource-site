@@ -55,13 +55,14 @@ export function ViewTabs({
         const Icon = VIEW_ICONS[v.type] ?? Table;
         const active = v.id === activeViewId;
         return (
-          <button
+          <Button
             key={v.id}
+            variant="ghost"
             type="button"
             onClick={() => onActivate(v.id)}
             onDoubleClick={() => onRemove && views.length > 1 && onRemove(v.id)}
             className={cn(
-              "group/tab flex items-center gap-1.5 px-2 py-1.5 text-xs transition",
+              "group/tab flex h-auto items-center gap-1.5 rounded-none px-2 py-1.5 text-xs font-normal transition hover:bg-transparent",
               active
                 ? "border-b-2 border-primary text-foreground"
                 : "border-b-2 border-transparent text-muted-foreground hover:text-foreground",
@@ -70,7 +71,7 @@ export function ViewTabs({
           >
             <Icon className="h-3 w-3" />
             <span>{v.name}</span>
-          </button>
+          </Button>
         );
       })}
       {onAdd && (

@@ -8,6 +8,7 @@
 import { useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import type { ViewProps } from "./types";
 import { TimelineBar } from "./timeline-bar";
 import {
@@ -67,16 +68,16 @@ export function TimelineView({ db, view, rows, onRowUpdate, onOpenRow, onRowAdd 
   return (
     <div className="overflow-x-auto p-3">
       <div className="mb-3 flex items-center gap-2">
-        <button type="button" onClick={() => setStartOffset((o) => o - 4)} className="rounded p-1 text-muted-foreground hover:bg-accent">
+        <Button variant="ghost" size="icon" type="button" onClick={() => setStartOffset((o) => o - 4)} className="h-auto w-auto rounded p-1 text-muted-foreground hover:bg-accent" aria-label="Previous">
           <ChevronLeft className="h-4 w-4" />
-        </button>
-        <button type="button" onClick={() => setStartOffset((o) => o + 4)} className="rounded p-1 text-muted-foreground hover:bg-accent">
+        </Button>
+        <Button variant="ghost" size="icon" type="button" onClick={() => setStartOffset((o) => o + 4)} className="h-auto w-auto rounded p-1 text-muted-foreground hover:bg-accent" aria-label="Next">
           <ChevronRight className="h-4 w-4" />
-        </button>
+        </Button>
         {startOffset !== 0 && (
-          <button type="button" onClick={() => setStartOffset(0)} className="rounded border border-border px-2 py-1 text-xs text-muted-foreground hover:bg-accent">
+          <Button variant="outline" size="sm" type="button" onClick={() => setStartOffset(0)} className="h-auto px-2 py-1 text-xs font-normal text-muted-foreground hover:bg-accent">
             Today
-          </button>
+          </Button>
         )}
         <span className="text-xs text-muted-foreground">
           {days[0].toLocaleDateString("default", { month: "short", day: "numeric" })}
@@ -87,13 +88,9 @@ export function TimelineView({ db, view, rows, onRowUpdate, onOpenRow, onRowAdd 
           <span className="ml-2 text-xs text-muted-foreground">(add a Date property to see bars)</span>
         )}
         {onRowAdd && (
-          <button
-            type="button"
-            onClick={onRowAdd}
-            className="ml-auto flex items-center gap-1 rounded-md border border-border bg-card px-2 py-1 text-xs text-muted-foreground hover:bg-accent"
-          >
+          <Button variant="outline" size="sm" type="button" onClick={onRowAdd} className="ml-auto h-auto gap-1 px-2 py-1 text-xs font-normal text-muted-foreground hover:bg-accent">
             <Plus className="h-3 w-3" /> New row
-          </button>
+          </Button>
         )}
       </div>
 
@@ -140,16 +137,18 @@ export function TimelineView({ db, view, rows, onRowUpdate, onOpenRow, onRowAdd 
           const inView = item && item.endMs >= rangeStart && item.startMs < rangeEnd;
           return (
             <div key={row.id} className="group flex border-b border-border/50 hover:bg-muted/20" style={{ minHeight: 32 }}>
-              <button
+              <Button
+                variant="ghost"
                 type="button"
                 style={{ width: LABEL_W }}
                 onClick={() => onOpenRow?.(row.id)}
                 data-db-nav-item
-                className="flex shrink-0 items-center gap-1 truncate border-r border-border px-2 text-left text-xs underline-offset-2 hover:underline"
+                className="flex h-auto shrink-0 items-center justify-start gap-1 truncate rounded-none border-r border-border px-2 text-left text-xs font-normal underline-offset-2 hover:bg-transparent hover:underline"
+                aria-label={`Open ${row.title || "Untitled"}`}
               >
                 <span>{row.icon}</span>
                 <span className="truncate">{row.title || "Untitled"}</span>
-              </button>
+              </Button>
               <div className="relative flex-1" style={{ width: DAYS * CELL_W }}>
                 {days.map((d, i) => (
                   <div

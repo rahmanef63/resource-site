@@ -8,6 +8,8 @@
 import { useState } from "react";
 import { Users, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Popover, PopoverContent, PopoverTrigger,
 } from "@/components/ui/popover";
@@ -48,14 +50,16 @@ export function PersonCell({ value, readOnly, onChange }: PersonCellProps) {
           </span>
           <span className="max-w-[80px] truncate">{p}</span>
           {!readOnly && (
-            <button
+            <Button
+              variant="ghost"
+              size="icon"
               type="button"
               onClick={() => remove(p)}
-              className="rounded text-muted-foreground hover:bg-accent"
+              className="h-auto w-auto rounded p-0 text-muted-foreground hover:bg-accent"
               aria-label={`Remove ${p}`}
             >
               <X className="h-2.5 w-2.5" />
-            </button>
+            </Button>
           )}
         </span>
       ))}
@@ -68,28 +72,32 @@ export function PersonCell({ value, readOnly, onChange }: PersonCellProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <button
+        <Button
+          variant="ghost"
           type="button"
-          className={cn("flex w-full items-center gap-1 rounded px-2 py-1 text-left hover:bg-accent/50")}
+          className={cn("flex h-auto w-full items-center justify-start gap-1 rounded px-2 py-1 text-left font-normal hover:bg-accent/50")}
+          aria-label="People"
         >
           <Users className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
           {chips}
-        </button>
+        </Button>
       </PopoverTrigger>
       <PopoverContent className="w-64 p-2" align="start">
         <form onSubmit={(e) => { e.preventDefault(); commit(); }} className="flex gap-1">
-          <input
+          <Input
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             placeholder="Name, name…"
-            className="h-7 flex-1 rounded-md border border-border bg-background px-2 text-xs"
+            className="h-7 flex-1 text-xs"
           />
-          <button
+          <Button
             type="submit"
-            className="rounded-md border border-border px-2 py-1 text-xs hover:bg-accent"
+            variant="outline"
+            size="sm"
+            className="h-7 px-2 text-xs"
           >
             Add
-          </button>
+          </Button>
         </form>
       </PopoverContent>
     </Popover>

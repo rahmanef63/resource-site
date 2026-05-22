@@ -7,6 +7,7 @@
 import { useMemo, useState } from "react";
 import { Check, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import type { SelectOption } from "../../types";
@@ -98,14 +99,14 @@ export function OptionPicker({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <button type="button" className={cn(
-          "flex min-h-7 w-full flex-wrap items-center gap-1 rounded-md border border-border bg-background px-2 py-1 text-left text-sm hover:bg-accent",
+        <Button variant="outline" type="button" className={cn(
+          "flex h-auto min-h-7 w-full flex-wrap items-center justify-start gap-1 rounded-md border-border bg-background px-2 py-1 text-left text-sm font-normal hover:bg-accent",
           triggerClassName,
-        )}>
+        )} aria-label={placeholder}>
           {selected.length === 0
             ? <span className="text-muted-foreground/60">{placeholder}</span>
             : selected.map((o) => <OptionChip key={o.id} opt={o} />)}
-        </button>
+        </Button>
       </PopoverTrigger>
       <PopoverContent className="w-72 p-0" align="start">
         <div className="flex flex-wrap items-center gap-1 border-b border-border p-2">
@@ -125,20 +126,20 @@ export function OptionPicker({
             const active = selectedIds.includes(o.id);
             return (
               <div key={o.id} className="group flex items-center gap-1 rounded px-1 py-0.5 hover:bg-accent">
-                <button type="button" onClick={() => toggle(o.id)} className="flex flex-1 items-center gap-2 py-1 text-left">
+                <Button variant="ghost" type="button" onClick={() => toggle(o.id)} className="flex h-auto flex-1 items-center justify-start gap-2 px-0 py-1 text-left font-normal hover:bg-transparent" aria-label={`Toggle ${o.name}`}>
                   <Check className={cn("h-3 w-3 shrink-0", active ? "text-primary" : "opacity-0")} />
                   <OptionChip opt={o} />
-                </button>
+                </Button>
                 {onOptionsChange && <OptionMenu opt={o} onRename={renameOption} onDelete={deleteOption} onSetColor={setColor} />}
               </div>
             );
           })}
           {canCreate && (
-            <button type="button" onClick={createOption} className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-sm hover:bg-accent">
+            <Button variant="ghost" type="button" onClick={createOption} className="flex h-auto w-full items-center justify-start gap-2 rounded px-2 py-1.5 text-left text-sm font-normal hover:bg-accent">
               <Plus className="h-3 w-3" />
               <span>Create</span>
               <OptionChip opt={{ id: "preview", name: search.trim(), color: "default" }} />
-            </button>
+            </Button>
           )}
         </div>
       </PopoverContent>

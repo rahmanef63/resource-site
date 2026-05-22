@@ -5,6 +5,7 @@
  *  AND-style (every row must match every filter). */
 
 import { Plus, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
@@ -76,24 +77,28 @@ export function FilterBuilder({ db, filters, onChange }: FilterBuilderProps) {
                 placeholder="value"
               />
             )}
-            <button
+            <Button
+              variant="ghost"
+              size="icon"
               type="button"
               onClick={() => remove(i)}
-              className="rounded p-1 text-muted-foreground hover:bg-accent"
+              className="h-auto w-auto rounded p-1 text-muted-foreground hover:bg-accent"
               aria-label="Remove filter"
             >
               <X className="h-3 w-3" />
-            </button>
+            </Button>
           </div>
         );
       })}
-      <button
+      <Button
+        variant="ghost"
+        size="sm"
         type="button"
         onClick={addFilter}
-        className="mt-1 flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+        className="mt-1 h-auto gap-1 px-0 text-xs font-normal text-muted-foreground hover:bg-transparent hover:text-foreground"
       >
         <Plus className="h-3 w-3" /> Add filter
-      </button>
+      </Button>
     </div>
   );
 }

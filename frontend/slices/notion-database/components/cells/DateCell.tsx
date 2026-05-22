@@ -83,14 +83,14 @@ export function DateCell({ value, readOnly, onChange }: DateCellProps) {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <button type="button" className={cn(
-          "flex h-7 w-full items-center gap-1.5 rounded-md border border-border bg-background px-2 text-left text-sm hover:bg-accent",
-        )}>
+        <Button variant="outline" type="button" className={cn(
+          "flex h-7 w-full items-center justify-start gap-1.5 rounded-md border-border bg-background px-2 text-left text-sm font-normal hover:bg-accent",
+        )} aria-label="Pick a date">
           <CalendarIcon className="h-3 w-3 shrink-0 text-muted-foreground" />
           {label
             ? <span className="truncate">{label}</span>
             : <span className="text-muted-foreground/60">Pick a date</span>}
-        </button>
+        </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
         <div className="flex items-center justify-between gap-2 border-b border-border px-3 py-2 text-xs">

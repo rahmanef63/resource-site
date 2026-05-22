@@ -8,6 +8,7 @@
  *  CRUD intents only. View routing dispatches via VIEW_REGISTRY
  *  (override at the host to plug custom views). */
 
+import { useMemo } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "rahman-shared/lib/utils";
@@ -72,8 +73,14 @@ export function NotionDatabase({
     );
   }
 
-  const visibleRows = applyView(rows, db, activeView);
-  const registry = { ...VIEW_REGISTRY, ...(viewRegistry ?? {}) };
+  const visibleRows = useMemo(
+    () => applyView(rows, db, activeView),
+    [rows, db, activeView],
+  );
+  const registry = useMemo(
+    () => ({ ...VIEW_REGISTRY, ...(viewRegistry ?? {}) }),
+    [viewRegistry],
+  );
   const View = registry[activeView.type] ?? registry.table!;
 
   const renderCell = (prop: Property, row: Page) =>

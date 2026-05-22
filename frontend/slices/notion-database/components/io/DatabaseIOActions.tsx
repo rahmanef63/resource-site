@@ -7,6 +7,7 @@
 
 import { useState } from "react";
 import { Download, FileDown, FileJson, FileText, Upload } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
   DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
@@ -46,17 +47,19 @@ export function DatabaseIOActions({
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             type="button"
             className={
               className
-              ?? "flex items-center gap-1 rounded-md px-2 py-1 text-xs text-muted-foreground hover:bg-accent"
+              ?? "flex h-auto items-center gap-1 rounded-md px-2 py-1 text-xs font-normal text-muted-foreground hover:bg-accent"
             }
             aria-label="Import / Export"
           >
             <Download className="h-3.5 w-3.5" />
             {label}
-          </button>
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="min-w-56">
           <DropdownMenuLabel className="text-xs">

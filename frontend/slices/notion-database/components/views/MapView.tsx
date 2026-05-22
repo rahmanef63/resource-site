@@ -8,6 +8,7 @@
 
 import { useMemo, useState } from "react";
 import { ChevronDown, MapPin, MoreHorizontal, Plus, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
   DropdownMenuLabel, DropdownMenuTrigger,
@@ -67,13 +68,15 @@ export function MapView({
           onPick={(id) => set({ mapLngProp: id })} />
         <span className="ml-auto text-muted-foreground">{pins.length} of {rows.length} pinned</span>
         {onRowAdd && (
-          <button
+          <Button
+            variant="outline"
+            size="sm"
             type="button"
             onClick={onRowAdd}
-            className="flex items-center gap-1 rounded-md border border-border bg-card px-2 py-1 text-muted-foreground hover:bg-accent"
+            className="h-auto gap-1 px-2 py-1 text-xs font-normal text-muted-foreground hover:bg-accent"
           >
             <Plus className="h-3 w-3" /> New row
-          </button>
+          </Button>
         )}
       </div>
 
@@ -89,26 +92,30 @@ export function MapView({
         <div className="max-h-48 divide-y divide-border overflow-y-auto rounded-lg border border-border bg-card">
           {pins.map((p) => (
             <div key={p.row.id} className="group flex items-center gap-2 px-3 py-1.5 text-xs hover:bg-accent/50">
-              <button
+              <Button
+                variant="ghost"
                 type="button"
                 onClick={() => onOpenRow?.(p.row.id)}
-                className="flex min-w-0 flex-1 items-center gap-2 text-left"
+                className="flex h-auto min-w-0 flex-1 items-center justify-start gap-2 px-0 py-0 text-left text-xs font-normal hover:bg-transparent"
+                aria-label={`Open ${p.row.title || "Untitled"}`}
               >
                 <MapPin className="h-3 w-3 shrink-0" style={{ color: p.color }} />
                 <span className="flex-1 truncate">{p.row.icon} {p.row.title || "Untitled"}</span>
                 <span className="tabular-nums text-muted-foreground">
                   {p.lat.toFixed(2)}, {p.lng.toFixed(2)}
                 </span>
-              </button>
+              </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button
+                  <Button
+                    variant="ghost"
+                    size="icon"
                     type="button"
-                    className="rounded p-0.5 text-muted-foreground opacity-0 hover:bg-accent group-hover:opacity-100"
+                    className="h-auto w-auto rounded p-0.5 text-muted-foreground opacity-0 hover:bg-accent group-hover:opacity-100"
                     aria-label="Row actions"
                   >
                     <MoreHorizontal className="h-3 w-3" />
-                  </button>
+                  </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem onClick={() => onOpenRow?.(p.row.id)}>Open</DropdownMenuItem>
@@ -145,11 +152,11 @@ function PropPicker({ label, value, props, onPick }: {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button type="button" className="flex items-center gap-1 rounded-md border border-border bg-card px-2 py-1 hover:bg-accent">
+        <Button variant="outline" size="sm" type="button" className="h-auto gap-1 px-2 py-1 text-xs font-normal hover:bg-accent" aria-label={label}>
           <span className="text-muted-foreground">{label}:</span>
           <span className="font-medium">{value}</span>
           <ChevronDown className="h-3 w-3 text-muted-foreground" />
-        </button>
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">
         <DropdownMenuLabel className="text-xs">{label}</DropdownMenuLabel>

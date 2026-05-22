@@ -7,6 +7,7 @@
 
 import { useMemo } from "react";
 import { Calendar as CalIcon, Hash, ListChecks, TrendingUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { getVisibleProps } from "../../lib/visibility";
 import type { ViewProps } from "./types";
 import { GroupBreakdown, Stat } from "./dashboard-parts";
@@ -111,11 +112,13 @@ export function DashboardView({ db, view, rows, onOpenRow }: ViewProps) {
             <div className="py-4 text-center text-xs text-muted-foreground">No rows yet</div>
           )}
           {recent.map((r) => (
-            <button
+            <Button
               key={r.id}
+              variant="ghost"
               type="button"
               onClick={() => onOpenRow?.(r.id)}
-              className="flex w-full items-center justify-between gap-2 rounded px-1 py-1.5 text-left hover:bg-accent/50"
+              className="flex h-auto w-full items-center justify-between gap-2 rounded px-1 py-1.5 text-left font-normal hover:bg-accent/50"
+              aria-label={`Open ${r.title || "Untitled"}`}
             >
               <span className="flex min-w-0 items-center gap-1.5 text-sm">
                 <span>{r.icon}</span>
@@ -124,7 +127,7 @@ export function DashboardView({ db, view, rows, onOpenRow }: ViewProps) {
               <span className="shrink-0 text-[10px] text-muted-foreground">
                 {new Date(r.updatedAt ?? Date.now()).toLocaleDateString()}
               </span>
-            </button>
+            </Button>
           ))}
         </div>
       </div>

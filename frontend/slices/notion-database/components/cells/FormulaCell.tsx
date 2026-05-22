@@ -11,6 +11,7 @@
 import { useState } from "react";
 import { Calculator } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Popover, PopoverContent, PopoverTrigger,
 } from "@/components/ui/popover";
@@ -47,12 +48,14 @@ export function FormulaCell({ db, row, prop, readOnly, onExpressionChange }: For
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <button
+        <Button
+          variant="ghost"
           type="button"
-          className={cn("flex w-full items-center gap-1 rounded px-2 py-1 text-left hover:bg-accent/50")}
+          className={cn("flex h-auto w-full items-center justify-start gap-1 rounded px-2 py-1 text-left font-normal hover:bg-accent/50")}
+          aria-label="Edit formula"
         >
           {display}
-        </button>
+        </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80 p-2" align="start">
         <form onSubmit={(e) => { e.preventDefault(); save(); }} className="space-y-2">
@@ -65,9 +68,9 @@ export function FormulaCell({ db, row, prop, readOnly, onExpressionChange }: For
           />
           <div className="flex items-center justify-between text-[10px] text-muted-foreground">
             <span>Preview: <span className="font-mono text-foreground">{evaluateFormula(draft, row, db) || "—"}</span></span>
-            <button type="submit" className="rounded-md border border-border px-2 py-1 text-xs hover:bg-accent">
+            <Button type="submit" variant="outline" size="sm" className="h-7 px-2 text-xs">
               Save
-            </button>
+            </Button>
           </div>
         </form>
       </PopoverContent>

@@ -34,9 +34,9 @@ export function OptionChip({ opt, onRemove }: { opt: SelectOption; onRemove?: ()
     <span className={cn("inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-xs", colorClass(opt.color))}>
       {opt.name}
       {onRemove && (
-        <button type="button" onClick={(e) => { e.stopPropagation(); onRemove(); }} className="opacity-60 hover:opacity-100">
+        <Button variant="ghost" size="icon" type="button" onClick={(e) => { e.stopPropagation(); onRemove(); }} className="h-auto w-auto p-0 opacity-60 hover:bg-transparent hover:opacity-100" aria-label="Remove option">
           <X className="h-3 w-3" />
-        </button>
+        </Button>
       )}
     </span>
   );

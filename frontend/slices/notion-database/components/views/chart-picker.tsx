@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
   DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
@@ -25,17 +26,20 @@ export function Picker({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button
+        <Button
+          variant="outline"
+          size="sm"
           type="button"
           className={cn(
-            "flex items-center gap-1 rounded-md border border-border bg-card px-2 py-1 hover:bg-accent",
+            "flex h-auto items-center gap-1 px-2 py-1 text-sm font-normal hover:bg-accent",
           )}
+          aria-label={label}
         >
           <span className="text-muted-foreground">{label}:</span>
           {Icon && <Icon className="h-3 w-3" />}
           <span className="font-medium">{value}</span>
           <ChevronDown className="h-3 w-3 text-muted-foreground" />
-        </button>
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">
         <DropdownMenuLabel className="text-xs">{label}</DropdownMenuLabel>

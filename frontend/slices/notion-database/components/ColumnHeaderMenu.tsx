@@ -7,6 +7,7 @@
 import {
   Pencil, ArrowUp, ArrowDown, EyeOff, Trash2, ChevronDown, Shapes,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
   DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
@@ -34,14 +35,15 @@ export function ColumnHeaderMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button
+        <Button
+          variant="ghost"
           type="button"
-          className="flex w-full items-center gap-1 truncate text-left text-xs text-muted-foreground hover:text-foreground"
+          className="flex h-auto w-full items-center justify-start gap-1 truncate px-0 text-left text-xs font-normal text-muted-foreground hover:bg-transparent hover:text-foreground"
           aria-label="Column menu"
         >
           <span className="truncate">{prop.name}</span>
           <ChevronDown className="h-3 w-3 opacity-60" />
-        </button>
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" side="bottom" className="w-52">
         <DropdownMenuLabel className="text-[10px] uppercase tracking-wider text-muted-foreground">
