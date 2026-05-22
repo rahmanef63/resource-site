@@ -65,6 +65,7 @@ export function renderPropertyCell({
           value={value as string | null}
           readOnly={readOnly}
           onChange={onChange ? (next) => onChange(next) : undefined}
+          onOptionsChange={onPropertyChange ? (nextOptions) => onPropertyChange({ options: nextOptions }) : undefined}
         />
       );
 
@@ -75,6 +76,7 @@ export function renderPropertyCell({
           value={(Array.isArray(value) ? value : []) as string[]}
           readOnly={readOnly}
           onChange={onChange ? (next) => onChange(next) : undefined}
+          onOptionsChange={onPropertyChange ? (nextOptions) => onPropertyChange({ options: nextOptions }) : undefined}
         />
       );
 
