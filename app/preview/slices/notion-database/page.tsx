@@ -4,6 +4,8 @@ import * as React from "react";
 import { NotionDatabase } from "@/features/notion-database";
 import type { Database, Page, PropertyValue } from "@/features/notion-shell";
 
+import { InstallCTA } from "./InstallCTA";
+
 const DB: Database = {
   id: "db-tasks",
   name: "Sprint tasks",
@@ -92,6 +94,7 @@ export default function Page() {
   const [rows, setRows] = React.useState(ROWS);
   return (
     <main className="mx-auto min-h-screen max-w-5xl bg-background p-6">
+      <InstallCTA />
       <NotionDatabase
         db={db}
         rows={rows}
