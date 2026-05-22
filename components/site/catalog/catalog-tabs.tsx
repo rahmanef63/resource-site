@@ -4,7 +4,7 @@ import * as React from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import type { CatalogSearchItem } from "./catalog-search";
 import {
-  CatalogGrid, CatalogGroupedGrid, type FamilyOf,
+  CatalogGrid, CatalogGroupedGrid,
   SearchRow, TagRow,
 } from "./catalog-tabs-parts";
 
@@ -24,7 +24,6 @@ export function CatalogTabs({
   allTags,
   groupOrder,
   groupLabel,
-  familyOf,
   familyLabel,
   placeholder = "Cari…",
   gridClassName = "grid gap-5 sm:grid-cols-2 lg:grid-cols-3",
@@ -35,8 +34,7 @@ export function CatalogTabs({
   /** Order of group/category tabs. Empty/undefined → no tab bar. */
   groupOrder?: string[];
   groupLabel?: Record<string, string>;
-  /** Optional sub-grouping within each category by family (notion-*, ai-*, …) */
-  familyOf?: FamilyOf;
+  /** Optional labels for families baked into `item.family` by the server. */
   familyLabel?: Record<string, string>;
   placeholder?: string;
   gridClassName?: string;
@@ -102,11 +100,11 @@ export function CatalogTabs({
     );
   }
 
+  const hasFamilies = items.some((it) => it.family);
   const renderGrid = (list: CatalogSearchItem[]) =>
-    familyOf ? (
+    hasFamilies ? (
       <CatalogGroupedGrid
         items={list}
-        familyOf={familyOf}
         familyLabel={familyLabel}
         gridClassName={gridClassName}
       />

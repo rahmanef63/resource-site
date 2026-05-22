@@ -80,6 +80,7 @@ export default function SlicesPage() {
       search: `${s.title} ${s.tagline ?? s.description} ${(s.tags ?? []).join(" ")}`.toLowerCase(),
       tags: s.tags,
       group: s.category,
+      family: familyOfSlug(s.slug),
       node: (
         <CatalogCard
           href={`/slices/${s.slug}`}
@@ -150,7 +151,6 @@ export default function SlicesPage() {
         placeholder="Cari slice…"
         groupOrder={CATEGORY_ORDER}
         groupLabel={CATEGORY_LABEL}
-        familyOf={(it) => familyOfSlug(it.key)}
         familyLabel={FAMILY_LABEL}
       />
     </div>

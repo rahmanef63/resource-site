@@ -16,6 +16,10 @@ export type CatalogSearchItem = {
   tags?: string[];
   /** Group bucket (e.g. category) — used when groupOrder is provided. */
   group?: string;
+  /** Optional family bucket — used for second-level sub-grouping inside each
+   *  category. Resolved server-side (function props don't cross the
+   *  server→client boundary). */
+  family?: string | null;
   node: React.ReactNode;
 };
 

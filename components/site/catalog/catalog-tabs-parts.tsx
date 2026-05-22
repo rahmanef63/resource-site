@@ -112,26 +112,22 @@ export function CatalogGrid({
   );
 }
 
-export type FamilyOf = (item: CatalogSearchItem) => string | null;
-
-/** Items grouped by family. Singleton families fall back to a flat top
- *  section so we never display a "family of 1". Families with ≥2 members
- *  render a labelled sub-section. */
+/** Items grouped by family (read from `item.family`). Singleton families
+ *  fall back to a flat top section so we never display a "family of 1".
+ *  Families with ≥2 members render a labelled sub-section. */
 export function CatalogGroupedGrid({
   items,
-  familyOf,
   familyLabel,
   gridClassName,
 }: {
   items: CatalogSearchItem[];
-  familyOf: FamilyOf;
   familyLabel?: Record<string, string>;
   gridClassName: string;
 }) {
   const groups = new Map<string, CatalogSearchItem[]>();
   const standalone: CatalogSearchItem[] = [];
   for (const it of items) {
-    const f = familyOf(it);
+    const f = it.family ?? null;
     if (!f) { standalone.push(it); continue; }
     if (!groups.has(f)) groups.set(f, []);
     groups.get(f)!.push(it);
