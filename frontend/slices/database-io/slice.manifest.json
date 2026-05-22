@@ -1,0 +1,15 @@
+{
+  "name": "database-io",
+  "description": "Combined CSV + JSON import/export with dynamic template generation.",
+  "deps": {
+    "shared": [
+      "lib/utils",
+      "ui/button",
+      "ui/dialog",
+      "ui/dropdown-menu"
+    ],
+    "slices": ["notion-database"],
+    "convex": []
+  },
+  "notes": "CK-1E (2026-05-22) — replaces database-csv + database-json. Single DatabaseIOActions dropdown with six items + dynamic-template helpers."
+}

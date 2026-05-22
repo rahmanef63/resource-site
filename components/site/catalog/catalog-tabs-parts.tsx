@@ -111,3 +111,59 @@ export function CatalogGrid({
     </div>
   );
 }
+
+export type FamilyOf = (item: CatalogSearchItem) => string | null;
+
+/** Items grouped by family. Singleton families fall back to a flat top
+ *  section so we never display a "family of 1". Families with ≥2 members
+ *  render a labelled sub-section. */
+export function CatalogGroupedGrid({
+  items,
+  familyOf,
+  familyLabel,
+  gridClassName,
+}: {
+  items: CatalogSearchItem[];
+  familyOf: FamilyOf;
+  familyLabel?: Record<string, string>;
+  gridClassName: string;
+}) {
+  const groups = new Map<string, CatalogSearchItem[]>();
+  const standalone: CatalogSearchItem[] = [];
+  for (const it of items) {
+    const f = familyOf(it);
+    if (!f) { standalone.push(it); continue; }
+    if (!groups.has(f)) groups.set(f, []);
+    groups.get(f)!.push(it);
+  }
+  for (const [f, list] of [...groups.entries()]) {
+    if (list.length < 2) {
+      standalone.push(...list);
+      groups.delete(f);
+    }
+  }
+  const ordered = [...groups.entries()].sort((a, b) => b[1].length - a[1].length);
+
+  if (ordered.length === 0) {
+    return <CatalogGrid items={items} gridClassName={gridClassName} />;
+  }
+
+  return (
+    <div className="space-y-6">
+      {standalone.length > 0 && (
+        <CatalogGrid items={standalone} gridClassName={gridClassName} />
+      )}
+      {ordered.map(([f, list]) => (
+        <div key={f} className="space-y-3">
+          <h3 className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-wider text-muted-foreground/80">
+            <span className="rounded-full bg-accent/40 px-2 py-0.5">
+              {familyLabel?.[f] ?? f}
+            </span>
+            <span className="font-normal text-muted-foreground/50">{list.length}</span>
+          </h3>
+          <CatalogGrid items={list} gridClassName={gridClassName} />
+        </div>
+      ))}
+    </div>
+  );
+}

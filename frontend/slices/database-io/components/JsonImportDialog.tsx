@@ -1,10 +1,6 @@
 "use client";
 
-/** JsonImportDialog — file picker for previously-exported .json files.
- *  Parses + diffs schema vs existing db.properties, shows preview, then
- *  emits `onImport({newProperties, rows, importedDb})` so host writes
- *  through its own adapter. Same result shape as CsvImportResult so a
- *  single onImport handler can serve both. */
+/** JsonImportDialog — file picker for previously-exported .json files. */
 
 import { useState } from "react";
 import { AlertCircle, Check, Upload } from "lucide-react";

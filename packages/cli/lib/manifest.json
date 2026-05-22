@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-22T06:42:10.734Z",
+  "generatedAt": "2026-05-22T07:22:50.857Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -2462,50 +2462,29 @@
       ]
     },
     {
-      "slug": "database-json",
-      "title": "Database JSON — import + export for notion-database",
+      "slug": "database-io",
+      "title": "Database IO — combined CSV + JSON import/export with dynamic template",
       "category": "ui",
-      "description": "JSON import + export companion for notion-database. JsonActions ships a dropdown trigger with Export (downloads `<dbname>.json` via Blob URL, wire format v1: schema + rows) + Import items. JsonImportDialog parses a previously-exported `.json` file, diffs incoming properties against existing db.properties (name + type match), shows a preview (DB icon + name + property/view/row counts + first 12 property types), then emits a single `onImport({newProperties, rows, importedDb})` callback so host writes through its own adapter (no useStore coupling). Result shape MIRRORS database-csv's CsvImportResult — a single host handler can serve both formats. Schema diff: properties matched by case-insensitive name + exact type stay mapped to existing ids; mismatched/missing properties listed as new. Pure / props-driven. Lifted from notion-page-clone, simplified for the standalone slice (dropped AI assist + cover + blocks + sub-items + templates wire fields).",
+      "description": "Single combined import/export surface for notion-database. DatabaseIOActions ships one dropdown trigger with six items: Export CSV, Export JSON, Import CSV…, Import JSON…, Download CSV template, Download JSON template. Templates are generated dynamically from the live db.properties — header row (CSV) or wire-format v1 schema (JSON) reflects the current column set, with one placeholder row that hints at expected format per property type (e.g. `2026-01-01` for date, `Option1; Option2` for multi_select, `(computed — ignored on import)` for formula/created_time/etc.). CsvImportDialog parses + auto-maps headers (re-pickable: existing property / Title / skip / + New Property of 12 supported types, with select/status/multi_select auto-seeding options from CSV values). JsonImportDialog parses a previously-exported v1 file, diffs schema vs existing db.properties (name + type match), shows preview, emits same result shape so a single onImport handler serves both formats. Pure / props-driven. Replaces standalone database-csv + database-json (both removed CK-1E, 2026-05-22).",
       "source": "notion-page-clone",
-      "install": "npx rahman-resources add database-json",
+      "install": "npx rahman-resources add database-io",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add database-json` (cascades notion-database as peer). Import: `import { JsonActions } from \"@/features/database-json\"`. Mount in your DB toolbar: `<JsonActions db={db} rows={rows} onImport={async ({ newProperties, rows, importedDb }) => { /* same handler shape as CsvActions onImport */ }} />`. Pair with CsvActions for both formats — single onImport handler works for both since result shape is identical. For lower-level use, import `exportDatabase` (DB+rows → JSON string), `parseExport` (string → DatabaseExportV1), `diffSchema` + `buildImportResult` (DatabaseExportV1 + existing properties → JsonImportResult).",
-      "tags": [
-        "ui",
-        "notion",
-        "notion-like",
-        "database",
-        "json",
-        "import",
-        "export",
-        "data",
-        "backup",
-        "wire-format",
-        "primitive",
-        "optional"
-      ]
-    },
-    {
-      "slug": "database-csv",
-      "title": "Database CSV — import + export for notion-database",
-      "category": "ui",
-      "description": "CSV import + export companion for notion-database. CsvActions ships a dropdown trigger with Export (downloads `<dbname>.csv` via Blob URL) + Import items. CsvImportDialog parses a .csv file, auto-maps headers to existing properties (case-insensitive name match), lets the user re-pick mapping (existing property / Title / skip / + New Property of 12 supported types incl. files / person / select / multi_select / status that auto-seed options from CSV values), then emits a single `onImport({newProperties, rows})` callback so the host writes through its own adapter (no useStore coupling, no hidden mutations). Computed-by-system types (formula / created_time / last_edited_time / unique_id) are recognised + never written from CSV. Pure / props-driven. Lifted from notion-page-clone, simplified for the standalone slice (dropped relation cross-DB lookups + created_by / last_edited_by / rollup branches).",
-      "source": "notion-page-clone",
-      "install": "npx rahman-resources add database-csv",
-      "npmPackages": [],
-      "exampleCode": "",
-      "agentRecipe": "Run `npx rr add database-csv` (cascades notion-database as peer). Import: `import { CsvActions } from \"@/features/database-csv\"`. Mount in your DB toolbar: `<CsvActions db={db} rows={rows} onImport={async ({ newProperties, rows }) => { for (const p of newProperties) await dispatchAddProperty(p); for (const r of rows) { const newId = await dispatchAddRow(); await dispatchSetTitle(newId, r.title); for (const [propId, v] of Object.entries(r.rowProps)) await dispatchSetValue(newId, propId, v); } }} />`. Or use CsvImportDialog directly if you want your own trigger UI.",
+      "agentRecipe": "Run `npx rr add database-io` (cascades notion-database as peer). Import: `import { DatabaseIOActions } from \"@/features/database-io\"`. Mount in your DB toolbar: `<DatabaseIOActions db={db} rows={rows} onImport={async ({ newProperties, rows }) => { for (const p of newProperties) await dispatchAddProperty(p); for (const r of rows) { const newId = await dispatchAddRow(); await dispatchSetTitle(newId, r.title); for (const [propId, v] of Object.entries(r.rowProps)) await dispatchSetValue(newId, propId, v); } }} />`. Single handler works for both CSV + JSON imports. Templates are generated live from db.properties — users edit the placeholder row + re-import. For lower-level access: `buildCsvTemplate(db)` / `buildJsonTemplate(db)` return strings.",
       "tags": [
         "ui",
         "notion",
         "notion-like",
         "database",
         "csv",
+        "json",
         "import",
         "export",
+        "template",
         "data",
+        "backup",
         "spreadsheet",
+        "wire-format",
         "primitive",
         "optional"
       ]
@@ -4669,55 +4648,14 @@
       "agentRecipe": "Run `npx rr add notion-database` (cascades notion-shell as peer). Import: `import { NotionDatabase, NotionProperty, VIEW_REGISTRY } from \"@/features/notion-database\"`. NotionDatabase ships full props-driven DB UI — host owns rows + dispatches CRUD callbacks (db.* / db.row.* / db.view.* shape from the notion-page-clone-os template store). For just one view in isolation, import the specific view component (TableView / BoardView / etc.). Property cells auto-render via renderPropertyCell helper. Pure helpers: applyView (filter + sort + search), groupBy (board kanban), bucketByDate (calendar grid). For backend persistence, copy template-base/database-silong/convex/ from the open-silong repo: handlers go to convex/, schema fragment merges into convex/schema.ts. Pick _shared/minimal/ (single-user, noop authz) or _shared/full/ (requires @convex-dev/auth + workspaces tables). See CONVEX-BACKEND.md."
     },
     {
-      "slug": "database-json",
-      "title": "Database JSON — import + export for notion-database",
+      "slug": "database-io",
+      "title": "Database IO — combined CSV + JSON import/export with dynamic template",
       "category": "ui",
       "kind": "ui",
       "version": "0.1.0",
-      "description": "JSON import + export companion for notion-database. JsonActions ships a dropdown trigger with Export (downloads `<dbname>.json` via Blob URL, wire format v1: schema + rows) + Import items. JsonImportDialog parses a previously-exported `.json` file, diffs incoming properties against existing db.properties (name + type match), shows a preview (DB icon + name + property/view/row counts + first 12 property types), then emits a single `onImport({newProperties, rows, importedDb})` callback so host writes through its own adapter (no useStore coupling). Result shape MIRRORS database-csv's CsvImportResult — a single host handler can serve both formats. Schema diff: properties matched by case-insensitive name + exact type stay mapped to existing ids; mismatched/missing properties listed as new. Pure / props-driven. Lifted from notion-page-clone, simplified for the standalone slice (dropped AI assist + cover + blocks + sub-items + templates wire fields).",
+      "description": "Single combined import/export surface for notion-database. DatabaseIOActions ships one dropdown trigger with six items: Export CSV, Export JSON, Import CSV…, Import JSON…, Download CSV template, Download JSON template. Templates are generated dynamically from the live db.properties — header row (CSV) or wire-format v1 schema (JSON) reflects the current column set, with one placeholder row that hints at expected format per property type (e.g. `2026-01-01` for date, `Option1; Option2` for multi_select, `(computed — ignored on import)` for formula/created_time/etc.). CsvImportDialog parses + auto-maps headers (re-pickable: existing property / Title / skip / + New Property of 12 supported types, with select/status/multi_select auto-seeding options from CSV values). JsonImportDialog parses a previously-exported v1 file, diffs schema vs existing db.properties (name + type match), shows preview, emits same result shape so a single onImport handler serves both formats. Pure / props-driven. Replaces standalone database-csv + database-json (both removed CK-1E, 2026-05-22).",
       "source": "notion-page-clone",
-      "slicePath": "frontend/slices/database-json",
-      "convexPaths": [],
-      "npm": [],
-      "shadcn": [
-        "button",
-        "dialog",
-        "dropdown-menu"
-      ],
-      "env": [],
-      "peers": [
-        {
-          "slug": "notion-database",
-          "range": "^0.4",
-          "reason": "Reuses Database / Page / Property / PropertyValue / PropertyType / SelectOption / DatabaseViewConfig types."
-        }
-      ],
-      "providers": [],
-      "tags": [
-        "ui",
-        "notion",
-        "notion-like",
-        "database",
-        "json",
-        "import",
-        "export",
-        "data",
-        "backup",
-        "wire-format",
-        "primitive",
-        "optional"
-      ],
-      "agentRecipe": "Run `npx rr add database-json` (cascades notion-database as peer). Import: `import { JsonActions } from \"@/features/database-json\"`. Mount in your DB toolbar: `<JsonActions db={db} rows={rows} onImport={async ({ newProperties, rows, importedDb }) => { /* same handler shape as CsvActions onImport */ }} />`. Pair with CsvActions for both formats — single onImport handler works for both since result shape is identical. For lower-level use, import `exportDatabase` (DB+rows → JSON string), `parseExport` (string → DatabaseExportV1), `diffSchema` + `buildImportResult` (DatabaseExportV1 + existing properties → JsonImportResult)."
-    },
-    {
-      "slug": "database-csv",
-      "title": "Database CSV — import + export for notion-database",
-      "category": "ui",
-      "kind": "ui",
-      "version": "0.1.0",
-      "description": "CSV import + export companion for notion-database. CsvActions ships a dropdown trigger with Export (downloads `<dbname>.csv` via Blob URL) + Import items. CsvImportDialog parses a .csv file, auto-maps headers to existing properties (case-insensitive name match), lets the user re-pick mapping (existing property / Title / skip / + New Property of 12 supported types incl. files / person / select / multi_select / status that auto-seed options from CSV values), then emits a single `onImport({newProperties, rows})` callback so the host writes through its own adapter (no useStore coupling, no hidden mutations). Computed-by-system types (formula / created_time / last_edited_time / unique_id) are recognised + never written from CSV. Pure / props-driven. Lifted from notion-page-clone, simplified for the standalone slice (dropped relation cross-DB lookups + created_by / last_edited_by / rollup branches).",
-      "source": "notion-page-clone",
-      "slicePath": "frontend/slices/database-csv",
+      "slicePath": "frontend/slices/database-io",
       "convexPaths": [],
       "npm": [],
       "shadcn": [
@@ -4730,7 +4668,7 @@
         {
           "slug": "notion-database",
           "range": "^0.3",
-          "reason": "Reuses Database / Property / PropertyValue / PropertyType / SelectOption domain types."
+          "reason": "Reuses Database / Page / Property / PropertyValue / PropertyType / SelectOption / DatabaseViewConfig types."
         }
       ],
       "providers": [],
@@ -4740,14 +4678,18 @@
         "notion-like",
         "database",
         "csv",
+        "json",
         "import",
         "export",
+        "template",
         "data",
+        "backup",
         "spreadsheet",
+        "wire-format",
         "primitive",
         "optional"
       ],
-      "agentRecipe": "Run `npx rr add database-csv` (cascades notion-database as peer). Import: `import { CsvActions } from \"@/features/database-csv\"`. Mount in your DB toolbar: `<CsvActions db={db} rows={rows} onImport={async ({ newProperties, rows }) => { for (const p of newProperties) await dispatchAddProperty(p); for (const r of rows) { const newId = await dispatchAddRow(); await dispatchSetTitle(newId, r.title); for (const [propId, v] of Object.entries(r.rowProps)) await dispatchSetValue(newId, propId, v); } }} />`. Or use CsvImportDialog directly if you want your own trigger UI."
+      "agentRecipe": "Run `npx rr add database-io` (cascades notion-database as peer). Import: `import { DatabaseIOActions } from \"@/features/database-io\"`. Mount in your DB toolbar: `<DatabaseIOActions db={db} rows={rows} onImport={async ({ newProperties, rows }) => { for (const p of newProperties) await dispatchAddProperty(p); for (const r of rows) { const newId = await dispatchAddRow(); await dispatchSetTitle(newId, r.title); for (const [propId, v] of Object.entries(r.rowProps)) await dispatchSetValue(newId, propId, v); } }} />`. Single handler works for both CSV + JSON imports. Templates are generated live from db.properties — users edit the placeholder row + re-import. For lower-level access: `buildCsvTemplate(db)` / `buildJsonTemplate(db)` return strings."
     },
     {
       "slug": "notion-shell",

@@ -3,7 +3,10 @@
 import * as React from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import type { CatalogSearchItem } from "./catalog-search";
-import { CatalogGrid, SearchRow, TagRow } from "./catalog-tabs-parts";
+import {
+  CatalogGrid, CatalogGroupedGrid, type FamilyOf,
+  SearchRow, TagRow,
+} from "./catalog-tabs-parts";
 
 /**
  * Tab-first catalog navigation. Mirrors shadcn/ui's /charts page nav:
@@ -21,6 +24,8 @@ export function CatalogTabs({
   allTags,
   groupOrder,
   groupLabel,
+  familyOf,
+  familyLabel,
   placeholder = "Cari…",
   gridClassName = "grid gap-5 sm:grid-cols-2 lg:grid-cols-3",
 }: {
@@ -30,6 +35,9 @@ export function CatalogTabs({
   /** Order of group/category tabs. Empty/undefined → no tab bar. */
   groupOrder?: string[];
   groupLabel?: Record<string, string>;
+  /** Optional sub-grouping within each category by family (notion-*, ai-*, …) */
+  familyOf?: FamilyOf;
+  familyLabel?: Record<string, string>;
   placeholder?: string;
   gridClassName?: string;
 }) {
@@ -94,12 +102,24 @@ export function CatalogTabs({
     );
   }
 
+  const renderGrid = (list: CatalogSearchItem[]) =>
+    familyOf ? (
+      <CatalogGroupedGrid
+        items={list}
+        familyOf={familyOf}
+        familyLabel={familyLabel}
+        gridClassName={gridClassName}
+      />
+    ) : (
+      <CatalogGrid items={list} gridClassName={gridClassName} />
+    );
+
   if (!hasTabs) {
     return (
       <div className="space-y-4">
         {searchRow}
         {tagRow}
-        <CatalogGrid items={filtered} gridClassName={gridClassName} />
+        {renderGrid(filtered)}
       </div>
     );
   }
@@ -143,7 +163,7 @@ export function CatalogTabs({
                     ({inGroup.length})
                   </span>
                 </h2>
-                <CatalogGrid items={inGroup} gridClassName={gridClassName} />
+                {renderGrid(inGroup)}
               </section>
             );
           })}
@@ -153,7 +173,7 @@ export function CatalogTabs({
           const inGroup = filtered.filter((it) => it.group === g);
           return (
             <TabsContent key={g} value={g}>
-              <CatalogGrid items={inGroup} gridClassName={gridClassName} />
+              {renderGrid(inGroup)}
             </TabsContent>
           );
         })}

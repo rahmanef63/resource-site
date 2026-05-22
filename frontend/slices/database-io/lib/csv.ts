@@ -1,10 +1,7 @@
-/** CSV export + import helpers for notion-database. Pure functions, no
- *  side effects beyond `downloadCsv` (which touches DOM to trigger a
- *  file download). Stripped from upstream:
- *    - relation lookups (cross-DB context not exposed here)
- *    - computed-by-user types (created_by / last_edited_by — not in rr)
- *  Rollup / formula / created_time / last_edited_time / unique_id are
- *  still recognised as computed (never written from CSV). */
+/** CSV export + import helpers. Pure functions, no side effects beyond
+ *  `downloadCsv` (DOM blob trigger). Computed types
+ *  (formula / created_time / last_edited_time / unique_id) are
+ *  recognised + never written from CSV. */
 
 import type {
   Database, Page, Property, PropertyValue,

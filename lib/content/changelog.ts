@@ -10,6 +10,57 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CK1E",
+    version: "CK-1E",
+    date: Date.parse("2026-05-22"),
+    kind: "feature",
+    title: "database-io merged slice — CSV + JSON + dynamic template in one dropdown; catalog gains family sub-grouping",
+    body:
+      "Two consolidations. (1) database-csv + database-json hard-merged into a single `database-io` slice. One DatabaseIOActions dropdown ships six items: Export CSV / Export JSON / Import CSV / Import JSON / Download CSV template / Download JSON template. Templates are generated dynamically from the live db.properties — header row (CSV) or wire-format v1 schema (JSON) reflects the current column set, with one placeholder row hinting at the expected format per property type (date → `2026-01-01`, multi_select → `Option1; Option2`, computed → `(computed — ignored on import)`). Single onImport callback still serves both formats because result shape stayed identical. Both legacy slugs hard-removed; consumers wanting CSV-only or JSON-only now install database-io and ignore the items they don't need (zero overhead — same shadcn deps). Slice count: 46 → 45. (2) /slices catalog UI gains second-level family sub-grouping. Within each category tab (or the All tab's category sections), slices that share a family slug-prefix (notion-*, ai-*, database-*, theme-*) or a manual override (payment, landing, admin, content) cluster under a labeled sub-header. Singletons fall back to the flat row — no `family of 1` labels.",
+    groups: [
+      {
+        heading: "New slice files",
+        bullets: [
+          "frontend/slices/database-io/{slice.json, slice.manifest.json, slice.contract.ts, index.ts, types.ts}",
+          "components/DatabaseIOActions.tsx — single combined dropdown (6 items + 2 dialogs)",
+          "components/CsvImportDialog.tsx + csv-mapping.tsx — column mapper (lifted from database-csv)",
+          "components/JsonImportDialog.tsx — file picker + preview (lifted from database-json)",
+          "lib/csv.ts — exportDatabaseToCsv + parseCsv + downloadCsv + valueFromString (lifted)",
+          "lib/serialize.ts — exportDatabase + parseExport + diffSchema + buildImportResult + downloadJson (lifted)",
+          "lib/template.ts — NEW buildCsvTemplate + buildJsonTemplate (per-type placeholder hints)",
+        ],
+      },
+      {
+        heading: "Removed (hard delete)",
+        bullets: [
+          "frontend/slices/database-csv/* (replaced by database-io)",
+          "frontend/slices/database-json/* (replaced by database-io)",
+          "app/preview/slices/database-csv/page.tsx (replaced by /preview/slices/database-io)",
+          "app/preview/slices/database-json/page.tsx (replaced by /preview/slices/database-io)",
+        ],
+      },
+      {
+        heading: "Catalog UI — family sub-grouping",
+        bullets: [
+          "components/site/catalog/catalog-tabs-parts.tsx — new CatalogGroupedGrid + FamilyOf type",
+          "components/site/catalog/catalog-tabs.tsx — accepts optional familyOf + familyLabel props",
+          "app/(docs)/slices/family-map.ts — FAMILY_OVERRIDES + FAMILY_LABEL + familyOfSlug()",
+          "app/(docs)/slices/page.tsx — passes familyOf to CatalogTabs",
+          "Singleton families fall back to flat row (no `family of 1` headers)",
+        ],
+      },
+      {
+        heading: "Catalog",
+        bullets: [
+          { text: "NEW database-io 0.1.0 — peer of notion-database ^0.3", slug: "database-io", kind: "slice" },
+          "REMOVED database-csv 0.1.0",
+          "REMOVED database-json 0.1.0",
+          "Slice count: 46 → 45 (net -1 after merge)",
+        ],
+      },
+    ],
+  },
+  {
     id: "CKJ",
     version: "CK-J",
     date: Date.parse("2026-05-21"),

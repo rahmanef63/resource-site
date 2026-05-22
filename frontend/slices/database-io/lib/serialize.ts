@@ -1,14 +1,7 @@
-/** JSON serialization for notion-database.
- *
- *  Wire format v1 carries database schema (name, icon, properties, views)
- *  + row payloads (title, icon, rowProps). On import, the dialog returns
- *  the same { newProperties, rows } shape as CsvImportResult so consumers
- *  can reuse a single onImport handler for both CSV + JSON.
- *
- *  NOT included vs upstream: cover image, blocks per row, sub-items
- *  hierarchy, database templates, AI-assisted row generation. Those need
- *  cross-DB / cross-block context that the standalone slice doesn't
- *  expose. */
+/** JSON serialization. Wire format v1 carries db schema (name, icon,
+ *  properties, views) + row payloads. On import, the dialog returns the
+ *  same shape as CsvImportResult so consumers can reuse a single
+ *  onImport handler for both CSV + JSON. */
 
 import type {
   Database, DatabaseViewConfig, Page, Property,
@@ -87,16 +80,11 @@ export function parseExport(text: string): DatabaseExportV1 {
   return data as DatabaseExportV1;
 }
 
-/** Diff incoming schema vs existing db.properties.
- *  Properties matched by NAME (case-insensitive). Mismatched type is
- *  treated as "new" (consumer can reconcile). Existing match returns
- *  the local property id so row values map correctly. */
 export function diffSchema(
   incoming: Property[],
   existing: Property[],
 ): {
   newProperties: { type: PropertyType; name: string; options?: SelectOption[] }[];
-  /** incoming.id → local property id (existing or new). */
   idMap: Map<string, string>;
 } {
   const newProperties: { type: PropertyType; name: string; options?: SelectOption[] }[] = [];

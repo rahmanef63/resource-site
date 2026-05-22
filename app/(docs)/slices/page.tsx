@@ -22,6 +22,7 @@ import { CatalogTabs } from "@/components/site/catalog/catalog-tabs";
 import { IframeThumbnail } from "@/components/site/catalog/iframe-thumbnail";
 import { MockThumbnail } from "@/components/site/catalog/mock-thumbnail";
 import { UseWideLayout } from "@/components/site/use-wide-layout";
+import { FAMILY_LABEL, familyOfSlug } from "./family-map";
 
 export const metadata = {
   title: "Slices — portable feature units",
@@ -149,6 +150,8 @@ export default function SlicesPage() {
         placeholder="Cari slice…"
         groupOrder={CATEGORY_ORDER}
         groupLabel={CATEGORY_LABEL}
+        familyOf={(it) => familyOfSlug(it.key)}
+        familyLabel={FAMILY_LABEL}
       />
     </div>
   );

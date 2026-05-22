@@ -1,8 +1,6 @@
 "use client";
 
-/** CsvImportDialog — file picker + column mapper + import preview.
- *  Single-callback API: parses + maps CSV, emits `onImport({newProperties,
- *  rows})`. Host owns persistence. */
+/** CsvImportDialog — file picker + column mapper + import preview. */
 
 import { useState } from "react";
 import { AlertCircle, Check, Upload } from "lucide-react";

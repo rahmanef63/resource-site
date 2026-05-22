@@ -1,13 +1,11 @@
 "use client";
 
-/** Minimal interactive preview: JSON Export + Import against an in-memory
- *  notion-database. Click "JSON" → Export downloads tasks.json, Import
- *  opens a file picker + preview; submitted result persists to component
- *  state for the session (refresh clears). Also shows JSON wire payload
- *  inline so users can inspect format. */
+/** Minimal interactive preview for database-io: combined CSV + JSON
+ *  import/export + dynamic template download against an in-memory
+ *  notion-database. */
 
 import * as React from "react";
-import { JsonActions, exportDatabase } from "@/features/database-json";
+import { DatabaseIOActions } from "@/features/database-io";
 import { NotionDatabase } from "@/features/notion-database";
 import type {
   Database, Page, Property, PropertyValue,
@@ -30,10 +28,13 @@ const INITIAL_DB: Database = {
       options: [
         { id: "p0", name: "P0", color: "red" },
         { id: "p1", name: "P1", color: "yellow" },
+        { id: "p2", name: "P2", color: "blue" },
       ] },
     { id: "due",      name: "Due",      type: "date" },
   ],
-  views: [{ id: "v1", name: "Table", type: "table", filters: [], sorts: [], search: "" }],
+  views: [
+    { id: "v1", name: "Table", type: "table", filters: [], sorts: [], search: "" },
+  ],
   activeViewId: "v1",
   createdAt: Date.now(),
   updatedAt: Date.now(),
@@ -52,45 +53,52 @@ function makeRow(id: string, title: string, props: Record<string, PropertyValue>
 const INITIAL_ROWS: Page[] = [
   makeRow("t1", "Wire up provider adapters", { status: "done",  priority: "p0", due: { date: "2026-05-18" } }),
   makeRow("t2", "Polish admin-panel chrome", { status: "done",  priority: "p1", due: { date: "2026-05-21" } }),
-  makeRow("t3", "Lift database-json slice",  { status: "doing", priority: "p0", due: { date: "2026-05-22" } }),
+  makeRow("t3", "Lift database-io slice",    { status: "doing", priority: "p0", due: { date: "2026-05-22" } }),
 ];
 
 export default function Page() {
   const [db, setDb] = React.useState<Database>(INITIAL_DB);
   const [rows, setRows] = React.useState<Page[]>(INITIAL_ROWS);
-  const wire = React.useMemo(() => exportDatabase(db, rows), [db, rows]);
 
   return (
-    <main className="mx-auto min-h-screen max-w-5xl space-y-4 bg-background p-6">
-      <header className="flex items-center justify-between">
+    <main className="mx-auto min-h-screen max-w-5xl bg-background p-6">
+      <header className="mb-4 flex items-center justify-between">
         <div>
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">database-json</p>
-          <h1 className="text-2xl font-semibold">Import + export (wire v1)</h1>
+          <p className="text-xs uppercase tracking-wide text-muted-foreground">database-io</p>
+          <h1 className="text-2xl font-semibold">Import + export + template</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Click <span className="font-mono">JSON</span> → Export to download the table.
-            Re-import the downloaded file to see schema diff + row remap in action.
+            One dropdown — CSV + JSON in both directions. Click
+            <span className="ml-1 font-mono">Download template</span> to get a
+            CSV or JSON skeleton built from the live column set.
           </p>
         </div>
-        <JsonActions
+        <DatabaseIOActions
           db={db}
           rows={rows}
-          onImport={({ newProperties, rows: drafts }) => {
+          onImport={(result) => {
+            const newProperties = result.newProperties ?? [];
+            const drafts = result.rows ?? [];
             const added: Property[] = newProperties.map((n, idx) => ({
               id: `np_${Date.now()}_${idx}`,
               name: n.name,
               type: n.type,
               options: n.options,
             }));
-            const nextRows: Page[] = drafts.map((d, idx) => {
-              const rid = `imp_${Date.now()}_${idx}`;
-              return makeRow(rid, d.title || "Untitled", d.rowProps);
-            });
-            setDb({
+            const nextDb: Database = {
               ...db,
               properties: [...db.properties, ...added],
-              rowIds: [...db.rowIds, ...nextRows.map((r) => r.id)],
               updatedAt: Date.now(),
+            };
+            const nextRows: Page[] = drafts.map((d, idx) => {
+              const rid = `imp_${Date.now()}_${idx}`;
+              const remapped: Record<string, PropertyValue> = {};
+              for (const [k, v] of Object.entries(d.rowProps)) {
+                const newProp = added.find((p) => p.id === k || k.startsWith("new:"));
+                remapped[newProp?.id ?? k] = v;
+              }
+              return makeRow(rid, d.title || "Untitled", remapped);
             });
+            setDb({ ...nextDb, rowIds: [...nextDb.rowIds, ...nextRows.map((r) => r.id)] });
             setRows([...rows, ...nextRows]);
           }}
         />
@@ -106,14 +114,6 @@ export default function Page() {
         onRowRemove={() => {}}
         onViewActivate={() => {}}
       />
-      <details className="rounded-lg border border-border bg-card p-3">
-        <summary className="cursor-pointer text-xs font-medium text-muted-foreground">
-          Wire format v1 — current export
-        </summary>
-        <pre className="mt-2 max-h-72 overflow-auto rounded-md bg-muted/40 p-3 text-[10px] leading-relaxed">
-          {wire}
-        </pre>
-      </details>
     </main>
   );
 }
