@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "category": "ui",
   "kind": "full",
-  "title": "Workspace Shell",
+  "title": "Workspace Shell — atomic (workspace × menuSet) NavContext",
   "description": "Unified workspace + menu navigation context. Atomic 2-axis switcher (workspace × menuSet) with tiered RBAC.",
   "namespace": "@/features/workspace-shell",
   "frontend": {

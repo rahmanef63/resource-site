@@ -1,10 +1,10 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "database-io",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "category": "ui",
   "kind": "ui",
-  "title": "Database IO — combined CSV + JSON import/export with dynamic template",
+  "title": "[DEPRECATED] Database IO — merged into notion-database v0.6",
   "description": "Single dropdown that combines CSV + JSON import/export for notion-database. DatabaseIOActions ships one trigger with six items: Export CSV, Export JSON, Import CSV…, Import JSON…, Download CSV template, Download JSON template. Templates generated from live db.properties — headers (CSV) or wire-format schema (JSON) reflect the current column set, with placeholder cells hinting at the expected format per property type. Pure / props-driven. Replaces standalone database-csv + database-json (both removed 2026-05-22 in CK-1E).",
   "namespace": "@/features/database-io",
   "registers": [],

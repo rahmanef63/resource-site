@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "category": "ui",
   "kind": "ui",
-  "title": "Code Block — Syntax-highlighted code primitive",
+  "title": "Code Block — Notion-style syntax-highlighted code primitive",
   "description": "Highlight.js-powered code block with language selector + copy button. Pure-UI primitive — no convex tables. Lifted from notion-page-clone (Nosion) via rr-sync.",
   "namespace": "@/features/code-block",
   "registers": [],

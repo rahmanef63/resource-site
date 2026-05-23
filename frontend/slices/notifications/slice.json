@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "category": "ui",
   "kind": "ui",
-  "title": "Notifications — Per-page Notify Me",
+  "title": "Notifications — Notion-style per-page Notify Me",
   "description": "Pure-client subscription state stored in localStorage. Surface as a `NotifyMePopover` toggled from a page-action button. Lifted from notion-page-clone (Nosion) via rr-sync pipeline.",
   "namespace": "@/features/notifications",
   "registers": [],

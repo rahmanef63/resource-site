@@ -4,7 +4,7 @@
   "version": "0.4.0",
   "category": "ui",
   "kind": "ui",
-  "title": "Notion Shell — page/sidebar/database wrappers + slash menu + decorator + 6 views",
+  "title": "Notion Shell — page + sidebar + block editor primitives (pure, no database)",
   "description": "Portable Notion-style wrapper primitives. PAGE EDITOR: NotionPage (header + body shell), NotionHeader (icon + title), NotionSidebar (tree nav with full page CRUD), NotionBlock (single-block renderer dispatching via prop registry, live inline-markdown decorator, hover actions menu), SlashMenu (searchable block-type picker w/ keyboard nav), BlockActionsMenu (turn-into / duplicate / delete popover), InsertBlockButton (\"+\" trigger w/ SlashMenu popover). DATABASE: NotionDatabase (full DB surface w/ tabs + options + per-column menu), NotionProperty (value + schema editor) plus 10 property-cell types (text/number/checkbox/select/multi-select/status/date/url/email/phone), 6 built-in views (TableView/BoardView/ListView/GalleryView/CalendarView/FeedView), ViewTabs (horizontal tab strip + add-view), ViewOptions (sort + filter + search popover), ColumnHeaderMenu (rename/change type/sort/hide/delete). Pure helpers: applyView (filter + sort + search), groupBy (board kanban), bucketByDate (calendar grid). Pure / props-driven — host owns data + change handlers. Drop into any React surface; pair with notion-blocks for the four editor primitives (equation, code, notify, grid).",
   "namespace": "@/features/notion-shell",
   "registers": [],
