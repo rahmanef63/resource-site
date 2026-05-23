@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "theme-presets",
+  "version": "0.2.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "Theme Presets — unified switcher with bundled tweakcn registry",
+  "description": "Runtime color preset swap on top of next-themes. Ships ONE component — ThemePresetSwitcher (Popover with light/dark/system mode tabs + grouped color preset list + hover preview + Default reset). Provider context (ThemePresetProvider) wraps state so deeply-nested consumers read via useThemePreset(). Registry (~30 curated tweakcn presets after HIDDEN filter) ships inside the slice as registry-data.json — no consumer public/ setup required, loaded lazily via dynamic import so the ~240KB JSON code-splits into its own chunk.",
+  "namespace": "@/features/theme-presets",
+  "registers": [],
+  "audit": [],
+  "frontend": {
+    "slicePath": "frontend/slices/theme-presets",
+    "configExport": ""
+  },
+  "deps": {
+    "npm": ["next-themes@^0.4.6"],
+    "shadcn": ["button", "popover"],
+    "env": [],
+    "peers": []
+  }
+}

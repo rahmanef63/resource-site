@@ -1,13 +1,17 @@
-export { ThemePicker } from "./components/ThemePicker";
-export { useThemePreset } from "./useThemePreset";
-export { THEME_PRESETS, getPreset, applyPresetVars, clearPresetVars } from "./presets";
-export type { ThemePreset, ThemePalette } from "./presets";
+/** theme-presets — bundled tweakcn-style color preset system + unified
+ *  switcher. Drop ThemePresetProvider near the app root (inside
+ *  next-themes' ThemeProvider), then mount ThemePresetSwitcher anywhere
+ *  in the header / sidebar / settings. Registry ships INSIDE the slice
+ *  (no consumer public/ setup needed; loaded lazily via dynamic import). */
 
-// Tweakcn registry-based preset system (additive — does not replace
-// the simple THEME_PRESETS above). Loads ~36 presets from
-// /r/registry.json. localStorage key: `host:theme-preset`.
-export { TweakcnSwitcher } from "./components/TweakcnSwitcher";
+export {
+  ThemePresetProvider,
+  useThemePreset,
+  DEFAULT_PRESET_NAME,
+} from "./components/ThemePresetProvider";
+export { ThemePresetSwitcher } from "./components/ThemePresetSwitcher";
 export { ThemeColorSync } from "./components/ThemeColorSync";
+
 export {
   applyTweakcnPreset,
   bootTweakcnPreset,
@@ -15,6 +19,7 @@ export {
   findTweakcnPreset,
   getSavedTweakcnPreset,
   groupTweakcnPresets,
+  HIDDEN_PRESETS,
   loadTweakcnRegistry,
   previewTweakcnPreset,
   restoreTweakcnPreset,

@@ -1,18 +1,26 @@
 import type { TweakcnPresetGroup, TweakcnPresetMeta } from "./types";
 
+/** Gimmicky presets hidden from the picker by default. Registry data
+ *  preserved — `?theme=doom-64` deep-links still resolve via the
+ *  unfiltered registry. */
+export const HIDDEN_PRESETS: ReadonlySet<string> = new Set([
+  "neo-brutalism",
+  "doom-64",
+  "retro-arcade",
+  "cyberpunk",
+  "bubblegum",
+  "candyland",
+  "pastel-dreams",
+]);
+
 export const TWEAKCN_PRESET_GROUPS: ReadonlyArray<{
   id: string;
   label: string;
   presets: ReadonlyArray<string>;
 }> = [
   {
-    id: "brutalism",
-    label: "Brutalism",
-    presets: ["neo-brutalism", "doom-64", "retro-arcade", "cyberpunk"],
-  },
-  {
     id: "refined",
-    label: "Refined",
+    label: "Profesional",
     presets: [
       "modern-minimal", "vercel", "claude", "supabase",
       "mono", "graphite", "clean-slate", "amber-minimal",
@@ -25,20 +33,17 @@ export const TWEAKCN_PRESET_GROUPS: ReadonlyArray<{
   },
   {
     id: "warm",
-    label: "Warm",
+    label: "Hangat",
     presets: ["mocha-mousse", "solar-dusk", "caffeine", "vintage-paper", "sunset-horizon"],
   },
   {
     id: "artistic",
-    label: "Artistic",
-    presets: [
-      "claymorphism", "kodama-grove", "bubblegum", "candyland",
-      "nature", "pastel-dreams", "northern-lights",
-    ],
+    label: "Artistik",
+    presets: ["claymorphism", "kodama-grove", "nature", "northern-lights"],
   },
   {
     id: "moody",
-    label: "Dark & Moody",
+    label: "Gelap",
     presets: [
       "cosmic-night", "perpetuity", "catppuccin", "elegant-luxury",
       "ocean-breeze", "midnight-bloom", "starry-night",
@@ -49,7 +54,8 @@ export const TWEAKCN_PRESET_GROUPS: ReadonlyArray<{
 export function groupTweakcnPresets<T extends TweakcnPresetMeta>(
   all: T[],
 ): TweakcnPresetGroup<T>[] {
-  const byName = new Map(all.map((p) => [p.name, p]));
+  const visible = all.filter((p) => !HIDDEN_PRESETS.has(p.name));
+  const byName = new Map(visible.map((p) => [p.name, p]));
   const seen = new Set<string>();
   const grouped: TweakcnPresetGroup<T>[] = TWEAKCN_PRESET_GROUPS.map((g) => ({
     id: g.id,
@@ -63,9 +69,9 @@ export function groupTweakcnPresets<T extends TweakcnPresetMeta>(
       }),
   })).filter((g) => g.items.length > 0);
 
-  const rest = all.filter((p) => !seen.has(p.name));
+  const rest = visible.filter((p) => !seen.has(p.name));
   if (rest.length) {
-    grouped.push({ id: "other", label: "Other", items: rest });
+    grouped.push({ id: "other", label: "Lainnya", items: rest });
   }
   return grouped;
 }

@@ -1,3 +1,8 @@
+"use client";
+
+/** Sticky display-mode row (light / dark / system) for the switcher
+ *  Popover. Extracted to keep ThemePresetSwitcher.tsx ≤200 LOC. */
+
 import { Monitor, Moon, Sun } from "lucide-react";
 import { cn } from "rahman-shared/lib/utils";
 
@@ -9,8 +14,9 @@ const MODES = [
 
 export type ModeId = (typeof MODES)[number]["id"];
 
-export function ModeRow({
-  activeMode, onPick,
+export function ModeTabs({
+  activeMode,
+  onPick,
 }: {
   activeMode: ModeId;
   onPick: (m: ModeId) => void;
@@ -28,7 +34,6 @@ export function ModeRow({
         {MODES.map(({ id, label, Icon }) => {
           const active = id === activeMode;
           return (
-            // shadcn Button skipped: role="tab" tablist semantics
             <button
               key={id}
               role="tab"

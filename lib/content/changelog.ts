@@ -10,6 +10,55 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CK1F",
+    version: "CK-1F",
+    date: Date.parse("2026-05-23"),
+    kind: "feature",
+    title: "theme-presets v0.2 — one unified switcher; registry bundled inside slice",
+    body:
+      "Consolidates the theme-preset surface in three directions. (1) Two switcher components → one: TweakcnSwitcher + ThemePicker merged into a single ThemePresetSwitcher (Palette-icon Popover with sticky light/dark/system mode tabs + sticky preset-count row with Default reset + scrollable grouped color list with hover-preview + click-commit). Pattern lifted from CareerPack production switcher. (2) ThemePresetProvider context added — wraps state so deeply-nested consumers read `useThemePreset()` instead of mounting the switcher directly. Bootstrap on first client mount, single registry load, exposes setPreset/preview/restore/isReady. (3) Catalog cleanup — dropped phantom `theme-preset-switcher` entry (pointed at template-base/frontend/shared/theme which doesn't exist on disk; was a legacy stub from rahmanef.com source map). User-requested extra: the ~240KB tweakcn registry now ships INSIDE the slice as registry-data.json and loads lazily via dynamic import — code-splits into its own chunk, no consumer public/ setup, no network roundtrip. HIDDEN_PRESETS filter drops gimmicky themes (Doom 64, Cyberpunk, Neo Brutalism, Bubblegum, Candyland, Pastel Dreams). Indonesian group labels (Profesional / Bold / Hangat / Artistik / Gelap / Lainnya). Slice count: 45 → 44 (net -1 after dropping phantom).",
+    groups: [
+      {
+        heading: "New files",
+        bullets: [
+          "components/ThemePresetSwitcher.tsx — single unified switcher (~190 LOC)",
+          "components/ThemePresetProvider.tsx — context + useThemePreset() hook + DEFAULT_PRESET_NAME",
+          "lib/tweakcn/registry-data.json — bundled tweakcn registry (~240KB, lazy-loaded)",
+          "slice.json + slice.contract.ts — slice now has full metadata trio",
+        ],
+      },
+      {
+        heading: "Removed",
+        bullets: [
+          "components/ThemePicker.tsx (4-grid picker, replaced)",
+          "components/TweakcnSwitcher.tsx (replaced by ThemePresetSwitcher)",
+          "components/tweakcn/{ModeRow,PresetList}.tsx (inlined into switcher)",
+          "useThemePreset.ts (old hook, replaced by context-backed one in Provider)",
+          "presets.ts + presets/ (old THEME_PRESETS path, never used externally)",
+          "app/preview/slices/theme-preset-switcher/* (phantom slice preview)",
+        ],
+      },
+      {
+        heading: "Updated",
+        bullets: [
+          "lib/tweakcn/registry.ts — dynamic import of registry-data.json (was fetch /r/registry.json)",
+          "lib/tweakcn/groups.ts — added HIDDEN_PRESETS + Indonesian group labels",
+          "lib/tweakcn/types.ts — dropped REGISTRY_URL constant (no longer needed)",
+          "index.ts barrel — new exports (drop ThemePicker, TweakcnSwitcher)",
+          "app/preview/slices/theme-presets/page.tsx — uses new ThemePresetSwitcher",
+        ],
+      },
+      {
+        heading: "Catalog",
+        bullets: [
+          { text: "theme-presets v0.1.0 → v0.2.0", slug: "theme-presets", kind: "slice" },
+          "DROPPED theme-preset-switcher (phantom, never on disk)",
+          "Slice count: 45 → 44",
+        ],
+      },
+    ],
+  },
+  {
     id: "CK1E",
     version: "CK-1E",
     date: Date.parse("2026-05-22"),

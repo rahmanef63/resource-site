@@ -1,21 +1,63 @@
 "use client";
 
-import { ThemePicker } from "@/features/theme-presets";
+import { ThemePresetProvider, ThemePresetSwitcher } from "@/features/theme-presets";
 
-/** Minimal interactive preview: 30+ theme preset swatches.
- *  Click any tile → applies CSS variable overrides live, persists to
- *  localStorage under nosion:theme-preset key. */
+/** Minimal interactive preview: the unified ThemePresetSwitcher.
+ *  Click Palette icon → Popover opens with mode tabs + grouped preset
+ *  list. Hover any preset to preview live; click to commit. Persists to
+ *  localStorage under `host:theme-preset`. */
 export default function Page() {
   return (
-    <main className="mx-auto min-h-screen max-w-4xl bg-background p-6">
-      <header className="mb-6 space-y-1">
-        <p className="text-xs uppercase tracking-wide text-muted-foreground">tweakcn loader</p>
-        <h1 className="text-2xl font-semibold">Theme presets</h1>
-        <p className="text-sm text-muted-foreground">
-          Click any preset. CSS vars apply live. Reload to see persistence.
-        </p>
-      </header>
-      <ThemePicker />
-    </main>
+    <ThemePresetProvider>
+      <main className="mx-auto min-h-screen max-w-4xl bg-background p-6">
+        <header className="mb-6 flex items-start justify-between gap-4">
+          <div className="space-y-1">
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">
+              theme-presets · v0.2.0
+            </p>
+            <h1 className="text-2xl font-semibold">One unified switcher</h1>
+            <p className="max-w-prose text-sm text-muted-foreground">
+              Light/dark/system mode tabs + ~30 tweakcn color presets, all in
+              one Popover. Hover any preset to preview live; click to commit.
+              Registry ships inside the slice — no public/ setup required.
+            </p>
+          </div>
+          <ThemePresetSwitcher />
+        </header>
+
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="rounded-lg border bg-card p-4">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+              Background + foreground
+            </p>
+            <p className="mt-2 text-lg font-semibold">Sample heading</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Tokens follow the active preset live.
+            </p>
+          </div>
+          <div className="rounded-lg border bg-primary p-4 text-primary-foreground">
+            <p className="text-[10px] font-semibold uppercase tracking-wider opacity-70">
+              Primary surface
+            </p>
+            <p className="mt-2 text-lg font-semibold">Primary action</p>
+            <button
+              type="button"
+              className="mt-3 rounded-md bg-primary-foreground/10 px-3 py-1.5 text-xs font-medium hover:bg-primary-foreground/20"
+            >
+              Click me
+            </button>
+          </div>
+          <div className="rounded-lg border bg-accent p-4 text-accent-foreground">
+            <p className="text-[10px] font-semibold uppercase tracking-wider opacity-70">
+              Accent surface
+            </p>
+            <p className="mt-2 text-lg font-semibold">Accent panel</p>
+            <p className="mt-1 text-sm opacity-80">
+              Uses --accent + --accent-foreground tokens.
+            </p>
+          </div>
+        </div>
+      </main>
+    </ThemePresetProvider>
   );
 }

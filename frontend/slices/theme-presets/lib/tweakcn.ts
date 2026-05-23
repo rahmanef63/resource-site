@@ -30,4 +30,4 @@ export {
   getSavedTweakcnPreset, clearTweakcnPreset, bootTweakcnPreset,
 } from "./tweakcn/apply";
 
-export { TWEAKCN_PRESET_GROUPS, groupTweakcnPresets } from "./tweakcn/groups";
+export { TWEAKCN_PRESET_GROUPS, groupTweakcnPresets, HIDDEN_PRESETS } from "./tweakcn/groups";

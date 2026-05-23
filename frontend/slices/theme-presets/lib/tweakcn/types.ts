@@ -30,4 +30,3 @@ export interface TweakcnPresetGroup<
 
 export const STORAGE_KEY = "host:theme-preset";
 export const STYLE_ID = "tweakcn-vars";
-export const REGISTRY_URL = "/r/registry.json";

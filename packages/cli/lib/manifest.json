@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-22T08:22:17.039Z",
+  "generatedAt": "2026-05-23T05:26:29.448Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -1822,23 +1822,6 @@
       ]
     },
     {
-      "slug": "theme-preset-switcher",
-      "title": "Theme Preset Switcher",
-      "category": "ui",
-      "description": "Runtime theme swap (colors + fonts + shadows + tracking). OKLch CSS vars per preset. Persists to localStorage + Convex. Add a new preset by appending a CSS block in app/globals.css with [data-theme=\"<name>\"], then register in preset-groups.ts.",
-      "source": "rahmanef.com",
-      "install": "npx rahman-resources add theme-preset-switcher",
-      "npmPackages": [],
-      "exampleCode": "",
-      "agentRecipe": "Run `npx rr add theme-preset-switcher`. Import ThemePresetSwitcher from @/frontend/shared/ui/components/theme-preset-switcher and mount in the topbar. Presets live in theme-presets.ts; preset-groups.ts groups them for the picker UI.",
-      "tags": [
-        "theme",
-        "presets",
-        "oklch",
-        "design-system"
-      ]
-    },
-    {
       "slug": "icon-picker",
       "title": "Icon Picker",
       "category": "ui",
@@ -2289,20 +2272,23 @@
     },
     {
       "slug": "theme-presets",
-      "title": "tweakcn Theme Loader (30+ presets)",
+      "title": "Theme Presets — unified switcher with bundled tweakcn registry",
       "category": "ui",
-      "description": "Tweakcn theme preset loader — fetches from /r/registry.json + applies CSS variable overrides to next-themes. Ships <ThemePicker> popover, <TweakcnSwitcher> for quick toggle, <ThemeColorSync> for live preview, and a 30+ preset catalog. localStorage key `nosion:theme-preset` (preserved verbatim — host can rename for new deploys). Pure React + Tailwind v4 + next-themes. No backend.",
-      "source": "notion-page-clone",
+      "description": "Single unified theme controller for next-themes apps. ThemePresetSwitcher ships a Palette-icon Popover trigger with three stacked sections: (1) sticky light/dark/system mode tabs, (2) sticky preset-count row with a Default reset button, (3) scrollable color-preset list grouped by mood (Profesional / Bold / Hangat / Artistik / Gelap + Lainnya). Hover-to-preview + click-to-commit + restore-on-close semantics. ThemePresetProvider context wraps state so deeply-nested consumers read via useThemePreset() instead of mounting the switcher directly. ThemeColorSync wrapper enables live tweakcn-CSS-variable preview on routes that need it. Tweakcn registry (~30 curated presets after HIDDEN_PRESETS filter drops Doom 64 / Cyberpunk / Neo Brutalism / Bubblegum / Candyland / Pastel Dreams) ships inside the slice as registry-data.json and loads lazily via dynamic import — code-splits into its own chunk, zero consumer public/ setup, no network roundtrip to a hosted URL. localStorage key `host:theme-preset` (rename via slice fork). CK-1F (2026-05-23) — collapsed prior TweakcnSwitcher + ThemePicker + phantom `theme-preset-switcher` catalog entry into this single component.",
+      "source": "CareerPack + notion-page-clone",
       "install": "npx rahman-resources add theme-presets",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add theme-presets`. Wrap dashboard with <ThemeColorSync> for live preview; drop <ThemePicker> in settings; use <TweakcnSwitcher> for quick toggle in header. Presets ship a 30+ catalog — call `applyTweakcnPreset(id)` to swap CSS variables at runtime. Storage key `nosion:theme-preset` preserved as legacy; rename via the host wrapper for new deploys.",
+      "agentRecipe": "Run `npx rr add theme-presets` (registry-data.json ships inside the slice — no separate public/ copy step). Wrap your tree once with `<ThemePresetProvider>` (inside next-themes' ThemeProvider). Mount `<ThemePresetSwitcher />` anywhere in your header / sidebar / settings — one component handles light/dark/system + preset palette. Wrap dashboard with `<ThemeColorSync>` if you need live tweakcn variable preview on inner routes. Deeply-nested consumers read state via `useThemePreset()` (returns `{ presetName, registry, setPreset, preview, restore, isReady }`). For lower-level access: `applyTweakcnPreset(name)`, `previewTweakcnPreset(name)`, `restoreTweakcnPreset()`, `groupTweakcnPresets(items)`, `tweakcnSwatches(preset)` all exported from `@/features/theme-presets`. To rename localStorage key, fork `STORAGE_KEY` in `lib/tweakcn/types.ts`.",
       "tags": [
         "ui",
         "theme",
         "tweakcn",
         "color",
         "preset",
+        "switcher",
+        "popover",
+        "next-themes",
         "notion-like"
       ]
     },
@@ -3508,29 +3494,6 @@
       "agentRecipe": "Run `npx rr add event-tracking`. Writes to analyticsEvents table (no new schema). Anonymous page_view allowed pre-signup; other events require workspaceId. Session id per tab (sessionStorage), first-touch UTM in localStorage. Flush every ~500ms via requestIdleCallback. Cap retry queue at 500."
     },
     {
-      "slug": "theme-preset-switcher",
-      "title": "Theme Preset Switcher",
-      "category": "ui",
-      "kind": "ui",
-      "version": "0.1.0",
-      "description": "Runtime theme swap (colors + fonts + shadows + tracking). OKLch CSS vars per preset. Persists to localStorage + Convex. Add a new preset by appending a CSS block in app/globals.css with [data-theme=\"<name>\"], then register in preset-groups.ts.",
-      "source": "rahmanef.com",
-      "slicePath": "template-base/frontend/shared/theme",
-      "convexPaths": [],
-      "npm": [],
-      "shadcn": [],
-      "env": [],
-      "peers": [],
-      "providers": [],
-      "tags": [
-        "theme",
-        "presets",
-        "oklch",
-        "design-system"
-      ],
-      "agentRecipe": "Run `npx rr add theme-preset-switcher`. Import ThemePresetSwitcher from @/frontend/shared/ui/components/theme-preset-switcher and mount in the topbar. Presets live in theme-presets.ts; preset-groups.ts groups them for the picker UI."
-    },
-    {
       "slug": "icon-picker",
       "title": "Icon Picker",
       "category": "ui",
@@ -4402,12 +4365,12 @@
     },
     {
       "slug": "theme-presets",
-      "title": "tweakcn Theme Loader (30+ presets)",
+      "title": "Theme Presets — unified switcher with bundled tweakcn registry",
       "category": "ui",
       "kind": "ui",
-      "version": "0.1.0",
-      "description": "Tweakcn theme preset loader — fetches from /r/registry.json + applies CSS variable overrides to next-themes. Ships <ThemePicker> popover, <TweakcnSwitcher> for quick toggle, <ThemeColorSync> for live preview, and a 30+ preset catalog. localStorage key `nosion:theme-preset` (preserved verbatim — host can rename for new deploys). Pure React + Tailwind v4 + next-themes. No backend.",
-      "source": "notion-page-clone",
+      "version": "0.2.0",
+      "description": "Single unified theme controller for next-themes apps. ThemePresetSwitcher ships a Palette-icon Popover trigger with three stacked sections: (1) sticky light/dark/system mode tabs, (2) sticky preset-count row with a Default reset button, (3) scrollable color-preset list grouped by mood (Profesional / Bold / Hangat / Artistik / Gelap + Lainnya). Hover-to-preview + click-to-commit + restore-on-close semantics. ThemePresetProvider context wraps state so deeply-nested consumers read via useThemePreset() instead of mounting the switcher directly. ThemeColorSync wrapper enables live tweakcn-CSS-variable preview on routes that need it. Tweakcn registry (~30 curated presets after HIDDEN_PRESETS filter drops Doom 64 / Cyberpunk / Neo Brutalism / Bubblegum / Candyland / Pastel Dreams) ships inside the slice as registry-data.json and loads lazily via dynamic import — code-splits into its own chunk, zero consumer public/ setup, no network roundtrip to a hosted URL. localStorage key `host:theme-preset` (rename via slice fork). CK-1F (2026-05-23) — collapsed prior TweakcnSwitcher + ThemePicker + phantom `theme-preset-switcher` catalog entry into this single component.",
+      "source": "CareerPack + notion-page-clone",
       "slicePath": "frontend/slices/theme-presets",
       "convexPaths": [],
       "npm": [
@@ -4426,9 +4389,12 @@
         "tweakcn",
         "color",
         "preset",
+        "switcher",
+        "popover",
+        "next-themes",
         "notion-like"
       ],
-      "agentRecipe": "Run `npx rr add theme-presets`. Wrap dashboard with <ThemeColorSync> for live preview; drop <ThemePicker> in settings; use <TweakcnSwitcher> for quick toggle in header. Presets ship a 30+ catalog — call `applyTweakcnPreset(id)` to swap CSS variables at runtime. Storage key `nosion:theme-preset` preserved as legacy; rename via the host wrapper for new deploys."
+      "agentRecipe": "Run `npx rr add theme-presets` (registry-data.json ships inside the slice — no separate public/ copy step). Wrap your tree once with `<ThemePresetProvider>` (inside next-themes' ThemeProvider). Mount `<ThemePresetSwitcher />` anywhere in your header / sidebar / settings — one component handles light/dark/system + preset palette. Wrap dashboard with `<ThemeColorSync>` if you need live tweakcn variable preview on inner routes. Deeply-nested consumers read state via `useThemePreset()` (returns `{ presetName, registry, setPreset, preview, restore, isReady }`). For lower-level access: `applyTweakcnPreset(name)`, `previewTweakcnPreset(name)`, `restoreTweakcnPreset()`, `groupTweakcnPresets(items)`, `tweakcnSwatches(preset)` all exported from `@/features/theme-presets`. To rename localStorage key, fork `STORAGE_KEY` in `lib/tweakcn/types.ts`."
     },
     {
       "slug": "files",
