@@ -30,3 +30,10 @@ export interface TweakcnPresetGroup<
 
 export const STORAGE_KEY = "host:theme-preset";
 export const STYLE_ID = "tweakcn-vars";
+
+/** First-time visitors land on this preset. Pick something opinionated
+ *  so the session is never "empty / unstyled" and the switcher's value
+ *  is discoverable from the first paint. Override by forking this
+ *  constant — must match a `name` in registry-data.json. Recommended
+ *  default = `"claude"` (warm minimal, works for both light + dark). */
+export const DEFAULT_PRESET = "claude";

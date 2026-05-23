@@ -98,19 +98,21 @@ export function ThemePresetSwitcher({
             Color Preset{" "}
             <span className="font-normal text-muted-foreground/70">({presetCount})</span>
           </span>
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             type="button"
             onClick={resetDefault}
             onMouseEnter={() => preview(null)}
             onMouseLeave={() => restore()}
             className={cn(
-              "flex items-center gap-1 rounded-md px-2 py-1 text-[11px] text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground",
+              "flex h-auto items-center gap-1 rounded-md px-2 py-1 text-[11px] font-normal text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground",
               presetName === null && "text-foreground",
             )}
           >
             <RotateCcw className="h-3 w-3" />
             Default
-          </button>
+          </Button>
         </div>
 
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
@@ -128,14 +130,15 @@ export function ThemePresetSwitcher({
                 const selected = p.name === presetName;
                 const swatches = tweakcnSwatches(p);
                 return (
-                  <button
+                  <Button
                     key={p.name}
+                    variant="ghost"
                     type="button"
                     onClick={() => commit(p.name)}
                     onMouseEnter={() => preview(p.name)}
                     onFocus={() => preview(p.name)}
                     className={cn(
-                      "flex w-full items-center gap-3 border-b border-border/40 px-3 py-2 text-left text-sm transition-colors",
+                      "flex h-auto w-full items-center justify-start gap-3 rounded-none border-b border-border/40 px-3 py-2 text-left text-sm font-normal transition-colors",
                       "hover:bg-accent hover:text-accent-foreground",
                       selected && "bg-accent text-accent-foreground",
                     )}
@@ -146,7 +149,7 @@ export function ThemePresetSwitcher({
                         <span
                           key={i}
                           aria-hidden
-                          className="block h-3 w-3 rounded-full border border-border/60"
+                          className="block h-3 w-3 rounded-full ring-1 ring-foreground/25"
                           style={{ background: c }}
                         />
                       ))}
@@ -155,7 +158,7 @@ export function ThemePresetSwitcher({
                     {selected && (
                       <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-foreground" />
                     )}
-                  </button>
+                  </Button>
                 );
               })}
             </div>
