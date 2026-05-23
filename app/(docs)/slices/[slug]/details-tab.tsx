@@ -10,8 +10,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ShowcaseCard } from "@/components/site/catalog/showcase-card";
 import { CodeBlock } from "@/components/site/code-block";
+import { InstallWithAgent } from "@/components/site/install-with-agent";
 import { RelatedFeatures, type RelatedGroup } from "@/components/site/related-features";
 import type { SliceEntry } from "@/lib/content/slices";
+import { buildSliceAgentPrompt } from "@/lib/slice-agent-prompt";
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -131,8 +133,25 @@ export function DetailsTab({
       )}
 
       {slice.agentRecipe && (
-        <ShowcaseCard icon={Bot} label="Agent recipe">
-          <p className="text-sm text-muted-foreground">{slice.agentRecipe}</p>
+        <ShowcaseCard icon={Bot} label="AI prompt">
+          <p className="mb-3 text-sm text-muted-foreground">{slice.agentRecipe}</p>
+          <CodeBlock
+            code={buildSliceAgentPrompt(slice)}
+            language="markdown"
+            filename={`${slice.slug}.prompt.md`}
+          />
+          <div className="mt-3 flex flex-wrap gap-2">
+            <InstallWithAgent
+              prompt={buildSliceAgentPrompt(slice)}
+              label="Install with AI agent"
+              size="sm"
+            />
+            <Button asChild variant="outline" size="sm">
+              <Link href={`/agents/${slice.slug}`}>
+                <Bot className="size-3.5" /> Dedicated prompt page
+              </Link>
+            </Button>
+          </div>
         </ShowcaseCard>
       )}
 

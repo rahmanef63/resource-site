@@ -10,6 +10,36 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CK1G",
+    version: "CK-1G",
+    date: Date.parse("2026-05-23"),
+    kind: "feature",
+    title: "AI prompts everywhere — per-slice agent.md, /agents/<slug> route, llms.txt expansion, copyable detail block",
+    body:
+      "Surfaces the existing agentRecipe metadata (already on all 56 slices + 56 features + 36 layouts) in four new places so AI coding agents have a one-stop install surface. (1) Per-slice detail page now renders the recipe inside a copyable CodeBlock + Install-with-AI-agent dialog + link to the dedicated prompt page, replacing the prior plain-text paragraph. (2) /llms.txt expanded so each slice entry now includes `agent recipe:` + `prompt:` link. (3) gen-slice-agent-md.mjs writes `agent.md` inside every slice dir (53 files written); the file ships with the slice when consumers run `npx rr add <slug>`, so the install prompt is available offline + in-tree alongside the code. Generation wired into slices:check pre-push gate. (4) New /agents/<slug> dedicated route resolves against slices OR layouts; renders full prompt + copy + install button + source link. /agents/ index now lists all 44 slices + 36 layouts (was only first 4 layouts).",
+    groups: [
+      {
+        heading: "New",
+        bullets: [
+          "lib/slice-agent-prompt.ts — buildSliceAgentPrompt + buildLayoutAgentPrompt formatters",
+          "scripts/features/gen-slice-agent-md.mjs — generator (run + --check modes)",
+          "package.json scripts: gen:agent-md, gen:agent-md:check",
+          "slices:check chain now includes gen:agent-md:check (drift gate)",
+          "app/(docs)/agents/[slug]/page.tsx — dedicated prompt page per slice/layout",
+          "frontend/slices/<slug>/agent.md × 53 — auto-generated, ships with `npx rr add`",
+        ],
+      },
+      {
+        heading: "Updated",
+        bullets: [
+          "app/(docs)/slices/[slug]/details-tab.tsx — agentRecipe block becomes CodeBlock + InstallWithAgent + dedicated-page link",
+          "app/llms.txt/route.ts — each slice gets `agent recipe:` + `prompt:` lines",
+          "app/(docs)/agents/page.tsx — full index of all slices + layouts (was only first 4)",
+        ],
+      },
+    ],
+  },
+  {
     id: "CK1F",
     version: "CK-1F",
     date: Date.parse("2026-05-23"),

@@ -1,10 +1,14 @@
-import { Bot } from "lucide-react";
+import { ArrowRight, Bot, Layers } from "lucide-react";
 import { IconBrandGithub as Github } from "@tabler/icons-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { InstallWithAgent } from "@/components/site/install-with-agent";
 import { buildAgentPrompt } from "@/lib/agent-prompt";
+import { buildSliceAgentPrompt } from "@/lib/slice-agent-prompt";
 import { layouts } from "@/lib/content/layouts";
+import { slices } from "@/lib/content/slices";
+import { isHidden } from "@/lib/content/hidden-slugs";
 import { site } from "@/lib/content/site";
 
 export const metadata = { title: "Install with Agent" };
@@ -81,6 +85,100 @@ export default function AgentsPage() {
           self-hosted + <code className="font-mono text-xs">@convex-dev/auth</code>.
         </p>
       </div>
+
+      <AgentIndex />
+    </div>
+  );
+}
+
+function AgentIndex() {
+  const visibleSlices = slices.filter((s) => !isHidden(s.slug));
+  const visibleLayouts = layouts.filter((l) => !isHidden(l.slug));
+  return (
+    <div className="space-y-8">
+      <section>
+        <div className="mb-3 flex items-center gap-2">
+          <h2 className="text-base font-semibold">All slice prompts</h2>
+          <Badge variant="secondary" className="text-[10px]">
+            {visibleSlices.length}
+          </Badge>
+        </div>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {visibleSlices.map((s) => (
+            <div
+              key={s.slug}
+              className="flex items-center justify-between gap-2 rounded-md border bg-card px-3 py-2 text-sm"
+            >
+              <div className="min-w-0 flex-1">
+                <Link
+                  href={`/agents/${s.slug}`}
+                  className="truncate font-medium hover:text-primary"
+                >
+                  {s.title}
+                </Link>
+                <p className="truncate text-xs text-muted-foreground">{s.slug}</p>
+              </div>
+              <div className="flex shrink-0 items-center gap-1">
+                <InstallWithAgent
+                  prompt={buildSliceAgentPrompt(s)}
+                  label="Copy"
+                  variant="ghost"
+                  size="sm"
+                />
+                <Button asChild variant="ghost" size="sm">
+                  <Link href={`/agents/${s.slug}`} aria-label={`Open ${s.title} prompt page`}>
+                    <ArrowRight className="size-3.5" />
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <div className="mb-3 flex items-center gap-2">
+          <h2 className="text-base font-semibold">All template prompts</h2>
+          <Badge variant="secondary" className="text-[10px]">
+            {visibleLayouts.length}
+          </Badge>
+        </div>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {visibleLayouts.map((l) => (
+            <div
+              key={l.slug}
+              className="flex items-center justify-between gap-2 rounded-md border bg-card px-3 py-2 text-sm"
+            >
+              <div className="min-w-0 flex-1">
+                <Link
+                  href={`/agents/${l.slug}`}
+                  className="truncate font-medium hover:text-primary"
+                >
+                  {l.title}
+                </Link>
+                <p className="truncate text-xs text-muted-foreground">{l.slug}</p>
+              </div>
+              <div className="flex shrink-0 items-center gap-1">
+                <InstallWithAgent
+                  prompt={buildAgentPrompt({
+                    layoutSlug: l.slug,
+                    layoutTitle: l.title,
+                    agentRecipe: l.agentRecipe,
+                  })}
+                  label="Copy"
+                  variant="ghost"
+                  size="sm"
+                />
+                <Button asChild variant="ghost" size="sm">
+                  <Link href={`/agents/${l.slug}`} aria-label={`Open ${l.title} prompt page`}>
+                    <Layers className="size-3.5" />
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

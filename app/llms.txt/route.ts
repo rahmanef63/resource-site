@@ -49,6 +49,10 @@ async function buildBody() {
     lines.push(`- ${s.description}`);
     lines.push(`- install: \`npx rr add ${s.slug}\``);
     lines.push(`- detail: ${site.url}/slices/${s.slug}`);
+    lines.push(`- prompt: ${site.url}/agents/${s.slug}`);
+    if (s.agentRecipe) {
+      lines.push(`- agent recipe: ${s.agentRecipe}`);
+    }
     lines.push("");
   }
   lines.push("## Agent API");
