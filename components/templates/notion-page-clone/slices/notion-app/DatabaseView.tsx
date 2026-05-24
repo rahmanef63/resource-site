@@ -1,10 +1,33 @@
 "use client";
 
+import * as React from "react";
 import { NotionDatabase } from "@/features/notion-database";
+import { NotionPage } from "@/features/notion-shell";
+import { DynamicIcon, IconPickerPopover } from "@/features/icon-picker";
 import { useDatabases, useDocs, useStore } from "../../shared/store";
 
+function renderIcon(icon: string, className?: string) {
+  return <DynamicIcon value={icon} className={className} />;
+}
+
+function renderIconPicker({
+  value, onChange, children,
+}: {
+  value: string;
+  onChange: (next: string) => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <IconPickerPopover value={value} onChange={onChange} onClear={() => onChange("🗂️")}>
+      {children}
+    </IconPickerPopover>
+  );
+}
+
 /** Renders one notion-clone database selected by id. Wires NotionDatabase
- *  CRUD callbacks to db.* / db.row.* / db.view.* reducer actions. */
+ *  CRUD callbacks to db.* / db.row.* / db.view.* reducer actions. Wraps
+ *  in NotionPage shell so the database surface gets the same icon + title
+ *  header chrome as DocView. */
 export function DatabaseView({ dbId }: { dbId: string }) {
   const databases = useDatabases();
   const docs = useDocs();
@@ -24,11 +47,14 @@ export function DatabaseView({ dbId }: { dbId: string }) {
     .filter((d): d is NonNullable<typeof d> => Boolean(d));
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-6 py-8">
-      <div className="mb-4 flex items-center gap-2">
-        <span className="text-3xl">{db.icon}</span>
-        <h1 className="text-2xl font-semibold tracking-tight">{db.name}</h1>
-      </div>
+    <NotionPage
+      icon={db.icon}
+      title={db.name}
+      onIconChange={(icon) => dispatch({ type: "db.update", id: db.id, patch: { icon } })}
+      onTitleChange={(name) => dispatch({ type: "db.update", id: db.id, patch: { name } })}
+      renderIcon={renderIcon}
+      renderIconPicker={renderIconPicker}
+    >
       <NotionDatabase
         db={db}
         rows={rows}
@@ -47,6 +73,6 @@ export function DatabaseView({ dbId }: { dbId: string }) {
           dispatch({ type: "db.view.config", dbId: db.id, viewId, patch })
         }
       />
-    </div>
+    </NotionPage>
   );
 }

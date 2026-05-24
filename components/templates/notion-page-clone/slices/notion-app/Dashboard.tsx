@@ -3,18 +3,21 @@
 import { useRouter, usePathname } from "next/navigation";
 import { NotionSidebar } from "@/features/notion-shell";
 import { DynamicIcon } from "@/features/icon-picker";
-import { useStore } from "../../shared/store";
+import { useStore, useDocs, useDatabases } from "../../shared/store";
+import { PUBLIC_BASE } from "../../shared/nav-config";
 import { useSidebarPages, hrefFor, activeIdForPath } from "./hooks";
 import { DocView } from "./DocView";
 import { DatabaseView } from "./DatabaseView";
+import { WorkspaceTopBar, type Crumb } from "./WorkspaceTopBar";
 
 function renderRowIcon(icon: string, className?: string) {
   return <DynamicIcon value={icon} className={className} />;
 }
 
 /** Notion-clone dashboard. Sidebar on left lists docs + databases; main
- *  panel renders the active entity (doc/database) based on the URL
- *  segment. Sidebar CRUD callbacks dispatch reducer actions + navigate. */
+ *  panel renders WorkspaceTopBar (breadcrumb + share/star) then the
+ *  active entity (doc/database). Sidebar CRUD callbacks dispatch
+ *  reducer actions + navigate. */
 export function Dashboard({
   activeKind, activeId,
 }: {
@@ -25,6 +28,8 @@ export function Dashboard({
   const pathname = usePathname();
   const { dispatch } = useStore();
   const pages = useSidebarPages();
+  const docs = useDocs();
+  const databases = useDatabases();
   const sidebarActive =
     activeKind && activeId
       ? `${activeKind === "db" ? "db" : "doc"}:${activeId}`
@@ -69,6 +74,16 @@ export function Dashboard({
     }
   };
 
+  const { crumbs, starred, onStar, onShare } = buildTopBar({
+    activeKind, activeId, docs, databases,
+    onToggleStar: (kind, id) => {
+      if (kind === "doc") {
+        const d = docs.find((x) => x.id === id);
+        if (d) dispatch({ type: "doc.update", id, patch: { favorite: !d.favorite } });
+      }
+    },
+  });
+
   return (
     <div className="flex h-dvh overflow-hidden bg-background">
       <NotionSidebar
@@ -81,17 +96,63 @@ export function Dashboard({
         renderIcon={renderRowIcon}
         label="Workspace"
       />
-      <div className="flex-1 overflow-hidden">
-        {activeKind === "db" && activeId ? (
-          <DatabaseView dbId={activeId} />
-        ) : activeKind === "doc" && activeId ? (
-          <DocView docId={activeId} />
-        ) : (
-          <EmptyState />
-        )}
+      <div className="flex flex-1 flex-col overflow-hidden">
+        <WorkspaceTopBar
+          crumbs={crumbs}
+          homeHref={PUBLIC_BASE}
+          starred={starred}
+          onToggleStar={onStar}
+          onShare={onShare}
+        />
+        <div className="flex-1 overflow-hidden">
+          {activeKind === "db" && activeId ? (
+            <DatabaseView dbId={activeId} />
+          ) : activeKind === "doc" && activeId ? (
+            <DocView docId={activeId} />
+          ) : (
+            <EmptyState />
+          )}
+        </div>
       </div>
     </div>
   );
+}
+
+function buildTopBar({
+  activeKind, activeId, docs, databases, onToggleStar,
+}: {
+  activeKind?: "doc" | "db";
+  activeId?: string;
+  docs: ReturnType<typeof useDocs>;
+  databases: ReturnType<typeof useDatabases>;
+  onToggleStar: (kind: "doc" | "db", id: string) => void;
+}): { crumbs: Crumb[]; starred: boolean; onStar?: () => void; onShare?: () => void } {
+  if (activeKind === "db" && activeId) {
+    const db = databases.find((d) => d.id === activeId);
+    return {
+      crumbs: [{ label: db?.name ?? "Database", icon: db?.icon }],
+      starred: false,
+      onShare: () => navigator.clipboard?.writeText(`${PUBLIC_BASE}/db/${activeId}`),
+    };
+  }
+  if (activeKind === "doc" && activeId) {
+    const doc = docs.find((d) => d.id === activeId);
+    const ancestors: Crumb[] = [];
+    let cursor = doc?.parentId ?? null;
+    while (cursor) {
+      const p = docs.find((d) => d.id === cursor);
+      if (!p) break;
+      ancestors.unshift({ label: p.title, icon: p.icon, href: `${PUBLIC_BASE}/d/${p.id}` });
+      cursor = p.parentId ?? null;
+    }
+    return {
+      crumbs: [...ancestors, { label: doc?.title ?? "Untitled", icon: doc?.icon }],
+      starred: !!doc?.favorite,
+      onStar: () => onToggleStar("doc", activeId),
+      onShare: () => navigator.clipboard?.writeText(`${PUBLIC_BASE}/d/${activeId}`),
+    };
+  }
+  return { crumbs: [{ label: "Workspace" }], starred: false };
 }
 
 function EmptyState() {
