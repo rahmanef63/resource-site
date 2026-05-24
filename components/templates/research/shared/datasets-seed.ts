@@ -1,0 +1,170 @@
+// Riset Kit — datasets + collaborators seed. Split from projects-seed.ts
+// to stay under the 200 LOC cap.
+
+import type { Collaborator, Dataset } from "./types";
+
+const now = Date.now();
+const day = (n: number) => now - n * 24 * 60 * 60 * 1000;
+
+export const SEED_DATASETS: Dataset[] = [
+  {
+    id: "ds-1",
+    name: "BPS Statistik UMKM Indonesia 2018-2024",
+    source: "Badan Pusat Statistik",
+    format: "csv",
+    rows: 48_320,
+    sizeMB: 12.4,
+    license: "Open Data Indonesia",
+    lastUpdated: day(45),
+    description:
+      "Data UMKM per provinsi, sektor, dan kategori omset. Cleaned, deduplicated, geocoded ke level kabupaten.",
+    url: "#",
+  },
+  {
+    id: "ds-2",
+    name: "Transkrip wawancara UMKM Bandung (n=12)",
+    source: "Riset primer",
+    format: "json",
+    rows: 12,
+    sizeMB: 4.8,
+    license: "Restricted — IRB approval required",
+    lastUpdated: day(60),
+    description:
+      "Transkrip verbatim 12 wawancara mendalam dengan pemilik UMKM kuliner Bandung. Anonymized. Coded dengan Taguette.",
+    url: "#",
+  },
+  {
+    id: "ds-3",
+    name: "Jakarta Traffic Volume — Dishub 2018-2024",
+    source: "Dinas Perhubungan DKI Jakarta",
+    format: "parquet",
+    rows: 2_847_120,
+    sizeMB: 184.6,
+    license: "CC-BY-4.0",
+    lastUpdated: day(20),
+    description:
+      "Volume kendaraan per koridor, per 15 menit, periode 2018-2024. Sudah dijoin dengan data ERP zonasi.",
+    url: "#",
+  },
+  {
+    id: "ds-4",
+    name: "Korpus paragraf akademik bahasa Indonesia (1.200 sampel)",
+    source: "Curated dari 240 tesis open-access",
+    format: "json",
+    rows: 1_200,
+    sizeMB: 2.1,
+    license: "CC-BY-SA-4.0",
+    lastUpdated: day(15),
+    description:
+      "Paragraf ekspositori dan argumentatif dari tesis S2 berbahasa Indonesia. Disertai parafrase manual sebagai gold standard.",
+    url: "#",
+  },
+  {
+    id: "ds-5",
+    name: "Survey kebijakan repositori institusional (n=64 kampus)",
+    source: "Riset primer",
+    format: "xlsx",
+    rows: 64,
+    sizeMB: 0.3,
+    license: "CC-BY-4.0",
+    lastUpdated: day(120),
+    description:
+      "Hasil survei kebijakan formal repositori, preprint, dan data sharing di 64 kampus Indonesia. 41 PTN, 23 PTS.",
+    url: "#",
+  },
+  {
+    id: "ds-6",
+    name: "Newsroom AI adoption pulse — wave 1",
+    source: "Riset primer",
+    format: "csv",
+    rows: 184,
+    sizeMB: 0.5,
+    license: "Restricted",
+    lastUpdated: day(8),
+    description:
+      "Survey 184 jurnalis dari 12 newsroom Indonesia tentang penggunaan AI generatif. Mei 2026.",
+    url: "#",
+  },
+  {
+    id: "ds-7",
+    name: "PDDikti Open Data — dosen aktif 2024",
+    source: "PDDikti Kemendikbudristek",
+    format: "csv",
+    rows: 312_840,
+    sizeMB: 28.7,
+    license: "Open Data Indonesia",
+    lastUpdated: day(180),
+    description:
+      "Daftar dosen aktif PT Indonesia per Oktober 2024. Useful untuk sampling frame studi kepegawaian akademik.",
+    url: "#",
+  },
+];
+
+export const SEED_COLLABORATORS: Collaborator[] = [
+  {
+    id: "col-1",
+    name: "Dr. Andi Pratama",
+    affiliation: "Universitas Indonesia — Psikologi Kognitif",
+    role: "co-author",
+    orcid: "0000-0001-2345-6789",
+    email: "andi.pratama@example.ac.id",
+    expertise: ["cognitive load", "meta-analysis", "experimental design"],
+    projectIds: ["proj-1", "proj-4"],
+    initials: "AP",
+  },
+  {
+    id: "col-2",
+    name: "Rina Sari, M.Sc",
+    affiliation: "Institut Teknologi Bandung — Desain Interaksi",
+    role: "co-author",
+    orcid: "0000-0002-3456-7890",
+    email: "rina.sari@example.ac.id",
+    expertise: ["UX research", "ethnography", "service design"],
+    projectIds: ["proj-1", "proj-5"],
+    initials: "RS",
+  },
+  {
+    id: "col-3",
+    name: "Dimas Nugroho",
+    affiliation: "Mozilla Foundation Indonesia",
+    role: "external",
+    orcid: "0000-0003-4567-8901",
+    email: "dimas.nugroho@example.org",
+    expertise: ["NLP bahasa Indonesia", "LLM evaluation", "open data"],
+    projectIds: ["proj-2", "proj-5"],
+    initials: "DN",
+  },
+  {
+    id: "col-4",
+    name: "Maya Lestari, Ph.D",
+    affiliation: "Universitas Gadjah Mada — Linguistik Komputasi",
+    role: "advisor",
+    orcid: "0000-0004-5678-9012",
+    email: "maya.lestari@example.ac.id",
+    expertise: ["computational linguistics", "Indonesian morphology"],
+    projectIds: ["proj-2"],
+    initials: "ML",
+  },
+  {
+    id: "col-5",
+    name: "Putri Maharani",
+    affiliation: "Jakarta Urban Lab",
+    role: "co-author",
+    orcid: "0000-0005-6789-0123",
+    email: "putri.m@example.org",
+    expertise: ["urban policy", "transportation economics"],
+    projectIds: ["proj-3"],
+    initials: "PM",
+  },
+  {
+    id: "col-6",
+    name: "Budi Hartono",
+    affiliation: "Riset Kit — Operations",
+    role: "RA",
+    orcid: "0000-0006-7890-1234",
+    email: "budi@example.org",
+    expertise: ["data cleaning", "survey administration", "R / tidyverse"],
+    projectIds: ["proj-4"],
+    initials: "BH",
+  },
+];

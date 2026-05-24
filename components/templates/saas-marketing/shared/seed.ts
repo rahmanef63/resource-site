@@ -102,6 +102,26 @@ export const SEED_POSTS: BlogPost[] = [
     publishedAt: day(48),
     tags: ["product", "onboarding"],
   },
+  {
+    id: "post-5",
+    slug: "scaling-to-1m-signed-pdfs",
+    title: "Scaling to 1M signed PDFs a month",
+    excerpt: "PG partitioning, worker pools, and why we ditched serverless for the render queue.",
+    body: `${LOREM}\n\n${LOREM}\n\n${LOREM}`,
+    author: "Sven A.",
+    publishedAt: day(67),
+    tags: ["engineering", "scaling"],
+  },
+  {
+    id: "post-6",
+    slug: "soc-2-type-ii-without-burning-out",
+    title: "Shipping SOC 2 Type II without burning out the team",
+    excerpt: "A pragmatic 90-day plan: scope, evidence collection, and where to spend money.",
+    body: `${LOREM}\n\n${LOREM}`,
+    author: "Theo L.",
+    publishedAt: day(91),
+    tags: ["compliance", "operations"],
+  },
 ];
 
 export const SEED_CHANGELOG: ChangelogEntry[] = [
@@ -140,6 +160,7 @@ const ADMIN_POSTS: BlogPost[] = SEED_POSTS.map((p, i) => ({
 }));
 
 import { SEED_PAGES } from "./pages-seed";
+import { SEED_ANALYTICS, SEED_INTEGRATIONS } from "./integrations-seed";
 
 export const SEED_LANDING_SECTIONS: LandingSection[] = [
   { id: "ls-hero", order: 10, kind: "hero", title: "Sign anything, anywhere.", subtitle: "End-to-end secure document signing for distributed teams.", enabled: true },
@@ -160,4 +181,6 @@ export const SEED_STATE: State = {
   changelogEntries: SEED_CHANGELOG,
   pages: SEED_PAGES,
   landingSections: SEED_LANDING_SECTIONS,
+  integrations: SEED_INTEGRATIONS,
+  analytics: SEED_ANALYTICS,
 };

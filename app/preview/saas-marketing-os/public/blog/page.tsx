@@ -1,2 +1,5 @@
-import { BlogList } from "@/components/templates/saas-marketing/slices/blog/BlogList";
-export default function Page() { return <BlogList />; }
+import { BlogPage } from "@/components/templates/saas-marketing/slices/blog/BlogPage";
+
+export default function Page() {
+  return <BlogPage />;
+}

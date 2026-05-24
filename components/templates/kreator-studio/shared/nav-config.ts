@@ -1,5 +1,7 @@
 import {
+  BarChart3,
   CalendarDays,
+  DollarSign,
   FileImage,
   FileText,
   Image as ImageIcon,
@@ -32,6 +34,7 @@ export const PUBLIC_NAV: NavItem[] = [
   { label: "Posts", href: `${PUBLIC_BASE}/posts` },
   { label: "Journal", href: `${PUBLIC_BASE}/journal` },
   { label: "Showcase", href: `${PUBLIC_BASE}/showcase` },
+  { label: "Testimonials", href: `${PUBLIC_BASE}/testimonials` },
   { label: "Pricing", href: `${PUBLIC_BASE}/pricing` },
   { label: "About", href: `${PUBLIC_BASE}/about` },
 ];
@@ -91,6 +94,8 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
     { id: "carousels",  label: "Carousels",   href: `${ADMIN_BASE}/carousels`,     icon: FileImage,       count: state.carousels.length },
     { id: "assets",     label: "Assets",      href: `${ADMIN_BASE}/assets`,        icon: ImageIcon,       count: state.assets.length },
     { id: "performance",label: "Performance", href: `${ADMIN_BASE}/performance`,   icon: LineChart,       count: null },
+    { id: "analytics",  label: "Analytics",   href: `${ADMIN_BASE}/analytics`,     icon: BarChart3,       count: null },
+    { id: "monetization",label: "Monetization",href: `${ADMIN_BASE}/monetization`, icon: DollarSign,      count: null },
     { id: "newsletter", label: "Newsletter",  href: `${ADMIN_BASE}/newsletter`,    icon: Mail,            count: newsletterDrafts || null },
     { id: "comments",   label: "Comments",    href: `${ADMIN_BASE}/comments`,      icon: MessageSquare,   count: pendingComments || null },
   ];

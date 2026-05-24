@@ -1,7 +1,10 @@
 import {
+  BarChart3,
   BookOpen,
   Bot,
+  Database,
   FileText,
+  FlaskConical,
   LayoutDashboard,
   LayoutTemplate,
   Library,
@@ -9,6 +12,7 @@ import {
   Quote,
   Settings,
   StickyNote,
+  Users,
   Wand2,
 } from "lucide-react";
 import type { AdminNavGroup, AdminNavItem, FooterColumn, NavItem, User } from "@/components/templates/_shared/types/common";
@@ -29,6 +33,7 @@ export const ADMIN_BASE = ADMIN_PANEL_BASE;
 export const PUBLIC_NAV: NavItem[] = [
   { label: "Library", href: `${PUBLIC_BASE}/library` },
   { label: "Publications", href: `${PUBLIC_BASE}/publications` },
+  { label: "Insights", href: `${PUBLIC_BASE}/insights` },
   { label: "Citations", href: `${PUBLIC_BASE}/citations` },
   { label: "Reading list", href: `${PUBLIC_BASE}/reading-list` },
   { label: "About", href: `${PUBLIC_BASE}/about` },
@@ -81,11 +86,15 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
         ...buildCustomPageNavItems(state.pages, `${ADMIN_BASE}/pages`),
       ],
     },
-    { id: "documents", label: "Documents",   href: `${ADMIN_BASE}/documents`,    icon: FileText,        count: newDocs || null },
-    { id: "notes",     label: "Notes",       href: `${ADMIN_BASE}/notes`,        icon: StickyNote,      count: state.notes.length },
-    { id: "citations", label: "Citations",   href: `${ADMIN_BASE}/citations`,    icon: Quote,           count: state.citations.length },
-    { id: "ai-reader", label: "AI Reader",   href: `${ADMIN_BASE}/ai-reader`,    icon: Bot,             count: null },
-    { id: "lit-review",label: "Lit Review",  href: `${ADMIN_BASE}/lit-review`,   icon: Library,         count: state.litReviews.length },
+    { id: "analytics",    label: "Analytics",    href: `${ADMIN_BASE}/analytics`,    icon: BarChart3,    count: null },
+    { id: "projects",     label: "Projects",     href: `${ADMIN_BASE}/projects`,     icon: FlaskConical, count: state.projects.length },
+    { id: "documents",    label: "Documents",    href: `${ADMIN_BASE}/documents`,    icon: FileText,     count: newDocs || null },
+    { id: "datasets",     label: "Datasets",     href: `${ADMIN_BASE}/datasets`,     icon: Database,     count: state.datasets.length },
+    { id: "notes",        label: "Notes",        href: `${ADMIN_BASE}/notes`,        icon: StickyNote,   count: state.notes.length },
+    { id: "citations",    label: "Citations",    href: `${ADMIN_BASE}/citations`,    icon: Quote,        count: state.citations.length },
+    { id: "ai-reader",    label: "AI Reader",    href: `${ADMIN_BASE}/ai-reader`,    icon: Bot,          count: null },
+    { id: "lit-review",   label: "Lit Review",   href: `${ADMIN_BASE}/lit-review`,   icon: Library,      count: state.litReviews.length },
+    { id: "collaborators",label: "Collaborators",href: `${ADMIN_BASE}/collaborators`,icon: Users,        count: state.collaborators.length },
   ];
 }
 

@@ -1,49 +1,15 @@
-import type { LandingSection } from "@/components/templates/_shared/landing/types";
 import { SEED_PAGES } from "./pages-seed";
-import type { Client, Lead, Project, Service, State } from "./types";
+import { SEED_ARTICLES } from "./journal-seed";
+import { SEED_COMMENTS } from "./comments-seed";
+import { SEED_LEADS } from "./leads-seed";
+import { SEED_LANDING_SECTIONS } from "./landing-seed";
+import { SEED_SUBSCRIBERS, SEED_NEWSLETTERS } from "./newsletter-seed";
+import { DEFAULT_AI_CONFIG } from "./ai-config-seed";
+import type { Article, Client, Project, Service, State } from "./types";
 
-export const SEED_LANDING_SECTIONS: LandingSection[] = [
-  {
-    id: "ls-hero",
-    order: 10,
-    kind: "hero",
-    title: "Brand, design system, and product partner for ambitious teams.",
-    subtitle: "Two-week sprints, multi-month builds, and embedded retainers — pick what fits.",
-    enabled: true,
-  },
-  {
-    id: "ls-portfolio",
-    order: 20,
-    kind: "portfolio",
-    title: "Recent client engagements",
-    subtitle: "A peek at what we've shipped lately.",
-    enabled: true,
-  },
-  {
-    id: "ls-services",
-    order: 30,
-    kind: "services",
-    title: "Productized + retainer engagements",
-    subtitle: "Pick a sprint, a system build, or an embedded retainer.",
-    enabled: true,
-  },
-  {
-    id: "ls-stats",
-    order: 40,
-    kind: "stats",
-    title: "By the numbers",
-    subtitle: "A few quick signals from recent quarters.",
-    enabled: true,
-  },
-  {
-    id: "ls-cta",
-    order: 50,
-    kind: "cta",
-    title: "Brief us — get a proposal in 5 days.",
-    subtitle: "No commitment. We respond within 24h.",
-    enabled: true,
-  },
-];
+// Re-export so existing public-side imports (`import { SEED_LANDING_SECTIONS }
+// from "../shared/seed"`) keep resolving unchanged.
+export { SEED_LANDING_SECTIONS };
 
 const now = Date.now();
 const day = (n: number) => now - n * 24 * 60 * 60 * 1000;
@@ -175,18 +141,29 @@ export const SEED_SERVICES: Service[] = [
   },
 ];
 
-export const SEED_LEADS: Lead[] = [
-  { id: "lead-1", name: "Rina Halim",  company: "Halim Furniture", email: "rina@halim.example", topic: "Visual identity refresh",     source: "Contact form",   budget: "Rp 80–120jt", status: "new",       ts: now - 2 * 60 * 60 * 1000 },
-  { id: "lead-2", name: "Bayu A.",     company: "PT Sumber Tani",  email: "bayu@stani.example", topic: "Brand strategy + naming",     source: "Service: Brand Strategy", budget: "Rp 65jt",    status: "contacted", ts: day(2) },
-  { id: "lead-3", name: "Cinta M.",    company: "Cinta & Co",      email: "cinta@cintaco.example", topic: "Web launch site",          source: "Referral",       budget: "Rp 40–60jt",  status: "qualified", ts: day(5) },
-  { id: "lead-4", name: "Tom P.",      company: "Tomo Tools",      email: "tom@tomotools.example", topic: "Design system audit",      source: "Service: Design System", budget: ">Rp 200jt",  status: "won",       ts: day(12) },
-];
+// CK-2A: enrich SEED_ARTICLES with admin-editor fields (status, tags, heroEmoji).
+const ENRICHED_ARTICLES: Article[] = SEED_ARTICLES.map((a, i) => ({
+  ...a,
+  status: i < 4 ? "published" : "draft",
+  heroEmoji: ["🧭", "📐", "⚡️", "🎛️", "🚀"][i % 5],
+  tags:
+    a.category === "case-study"
+      ? ["case-study", "B2B", "outcomes"]
+      : a.category === "essay"
+        ? ["essay", "process", "studio-ops"]
+        : ["field-notes", "workshop"],
+}));
 
 export const SEED_STATE: State = {
   projects: SEED_PROJECTS,
   clients: SEED_CLIENTS,
   services: SEED_SERVICES,
   leads: SEED_LEADS,
+  articles: ENRICHED_ARTICLES,
+  comments: SEED_COMMENTS,
+  subscribers: SEED_SUBSCRIBERS,
+  newsletters: SEED_NEWSLETTERS,
+  aiConfig: DEFAULT_AI_CONFIG,
   pages: SEED_PAGES,
   landingSections: SEED_LANDING_SECTIONS,
 };

@@ -1,6 +1,8 @@
 import type { LandingSection } from "@/components/templates/_shared/landing/types";
 import { SEED_PAGES } from "./pages-seed";
 import { SEED_CATALOG, SEED_JOURNAL, SEED_STORES } from "./data/public-seed";
+import { SEED_REVIEWS } from "./data/reviews-seed";
+import { SEED_PROMOTIONS, SEED_SUPPLIERS } from "./data/admin-seed";
 
 export const SEED_LANDING_SECTIONS: LandingSection[] = [
   {
@@ -134,4 +136,7 @@ export const SEED_STATE: State = {
   catalog: SEED_CATALOG,
   stores: SEED_STORES,
   journal: SEED_JOURNAL,
+  reviews: SEED_REVIEWS,
+  promotions: SEED_PROMOTIONS,
+  suppliers: SEED_SUPPLIERS,
 };

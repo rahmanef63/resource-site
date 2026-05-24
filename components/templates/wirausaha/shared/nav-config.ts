@@ -1,4 +1,5 @@
 import {
+  BarChart3,
   Building2,
   LayoutDashboard,
   LayoutTemplate,
@@ -7,6 +8,8 @@ import {
   Receipt,
   ShoppingCart,
   Settings,
+  Tag,
+  Truck,
   Users,
   Wallet,
   Wand2,
@@ -30,6 +33,7 @@ export const PUBLIC_NAV: NavItem[] = [
   { label: "Katalog",  href: `${PUBLIC_BASE}/catalog` },
   { label: "Outlet",   href: `${PUBLIC_BASE}/stores` },
   { label: "Jurnal",   href: `${PUBLIC_BASE}/journal` },
+  { label: "Testimoni",href: `${PUBLIC_BASE}/testimoni` },
   { label: "Services", href: `${PUBLIC_BASE}/services` },
   { label: "Contact",  href: `${PUBLIC_BASE}/contact` },
 ];
@@ -61,6 +65,7 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
   const lowStock = state.products.filter((p) => p.stock < 20).length;
   const customPages = state.pages.filter((p) => !p.systemPage).length;
   const enabledLanding = state.landingSections.filter((s) => s.enabled).length;
+  const activePromos = state.promotions.filter((p) => p.status === "active").length;
   return [
     { id: "dashboard",  label: "Dashboard",  href: ADMIN_BASE,                   icon: LayoutDashboard, count: null },
     // "Pages" parent — collapsible group bundling every content surface
@@ -82,9 +87,12 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
     },
     { id: "businesses", label: "Businesses", href: `${ADMIN_BASE}/businesses`,   icon: Building2,       count: state.businesses.length },
     { id: "inventory",  label: "Inventory",  href: `${ADMIN_BASE}/inventory`,    icon: Package,         count: lowStock || null },
+    { id: "suppliers",  label: "Suppliers",  href: `${ADMIN_BASE}/suppliers`,    icon: Truck,           count: state.suppliers.length },
     { id: "orders",     label: "Orders",     href: `${ADMIN_BASE}/orders`,       icon: ShoppingCart,    count: newOrders || null },
+    { id: "promotions", label: "Promotions", href: `${ADMIN_BASE}/promotions`,   icon: Tag,             count: activePromos || null },
     { id: "customers",  label: "Customers",  href: `${ADMIN_BASE}/customers`,    icon: Users,           count: state.customers.length },
     { id: "finance",    label: "Finance",    href: `${ADMIN_BASE}/finance`,      icon: Wallet,          count: null },
+    { id: "analytics",  label: "Analytics",  href: `${ADMIN_BASE}/analytics`,    icon: BarChart3,       count: null },
     { id: "staff",      label: "Staff",      href: `${ADMIN_BASE}/staff`,        icon: Receipt,         count: state.staff.length },
   ];
 }

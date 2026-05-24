@@ -69,6 +69,44 @@ export type Lead = {
   ts: number;
 };
 
+/** CK-2B — third-party integration registry shown on /admin/integrations. */
+export type IntegrationStatus = "connected" | "disconnected" | "error";
+export type IntegrationProvider =
+  | "slack"
+  | "linear"
+  | "hubspot"
+  | "resend"
+  | "stripe"
+  | "github"
+  | "intercom"
+  | "segment";
+export type Integration = {
+  id: string;
+  provider: IntegrationProvider;
+  label: string;
+  status: IntegrationStatus;
+  webhookUrl: string;
+  scopes: string[];
+  /** ms epoch — last successful sync */
+  lastSyncAt: number;
+  /** masked secret hint, e.g. "sk_live_…3Az9" */
+  secretHint: string;
+  notes?: string;
+};
+
+/** CK-2B — SaaS KPI snapshot powering /admin/analytics. Stored as a tiny
+ *  fixed seed (4 weeks of weekly samples) so the view renders deterministic
+ *  ASCII charts without a real warehouse. */
+export type AnalyticsKpi = {
+  /** week label, e.g. "W-04" (oldest) … "W-01" (current) */
+  week: string;
+  mrrCents: number;
+  newCustomers: number;
+  churnedCustomers: number;
+  trials: number;
+  trialsConverted: number;
+};
+
 export type State = {
   pricing: PricingTier[];
   features: FeatureItem[];
@@ -83,6 +121,10 @@ export type State = {
   pages: import("@/components/templates/_shared/pages/types").PageEntry[];
   /** AB-wave: home-page section composition. Ordered + toggleable. */
   landingSections: import("@/components/templates/_shared/landing/types").LandingSection[];
+  /** CK-2B — third-party integrations registry. */
+  integrations: Integration[];
+  /** CK-2B — last 4 weekly KPI samples for analytics view. */
+  analytics: AnalyticsKpi[];
 };
 
 export type LandingSection = import("@/components/templates/_shared/landing/types").LandingSection;
@@ -117,6 +159,10 @@ export type FeatureAction =
   | { type: "FEATURE_UPSERT"; payload: FeatureItem }
   | { type: "FEATURE_DELETE"; payload: { id: string } };
 
+export type IntegrationAction =
+  | { type: "INTEGRATION_UPSERT"; payload: Integration }
+  | { type: "INTEGRATION_DELETE"; payload: { id: string } };
+
 export type LandingAction = import("@/components/templates/_shared/landing/types").LandingAction;
 
 export type Action =
@@ -129,5 +175,6 @@ export type Action =
   | ChangelogAction
   | PricingAction
   | FeatureAction
+  | IntegrationAction
   | LandingAction
   | import("@/components/templates/_shared/pages/types").PagesAction;

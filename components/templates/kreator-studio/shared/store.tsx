@@ -192,5 +192,8 @@ export const useLandingSections = () => useStore().state.landingSections;
 export const usePackages = () => useStore().state.packages;
 export const useShowcase = () => useStore().state.showcase;
 export const useJournal = () => useStore().state.journal;
+export const useTestimonials = () => useStore().state.testimonials;
+export const useFeaturedClients = () => useStore().state.featuredClients;
+export const useMonetization = () => { const s = useStore().state; return { sources: s.monetizationSources, months: s.monetizationMonths, payouts: s.payouts }; };
 
 export { nid, slugify, fmtDate, rel } from "@/components/templates/_shared/utils";

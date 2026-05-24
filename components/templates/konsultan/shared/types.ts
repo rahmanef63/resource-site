@@ -78,6 +78,20 @@ export type ConsultDoc = {
   updatedAt: number;
 };
 
+// AZ-wave types (CalendarEvent, KbArticle, AnalyticsKpi, FaqItem) live in
+// ./types-az.ts to keep this file under the 200-LOC cap. Re-exported below.
+export type {
+  CalendarEvent,
+  CalendarEventKind,
+  KbArticle,
+  KbCategory,
+  KbStatus,
+  AnalyticsKpi,
+  FaqCategory,
+  FaqItem,
+} from "./types-az";
+import type { CalendarEvent, KbArticle } from "./types-az";
+
 /** Public-only seeds. Not in CRUD state — read directly from `public-seed.ts`. */
 export type Service = {
   id: string;
@@ -126,6 +140,10 @@ export type State = {
   projects: Project[];
   invoices: Invoice[];
   documents: ConsultDoc[];
+  /** AZ-wave: admin calendar — client sessions + deadlines. */
+  calendarEvents: CalendarEvent[];
+  /** AZ-wave: internal knowledge base / playbook articles. */
+  kbArticles: KbArticle[];
   /** O-wave: public pages CRUD slice. */
   pages: import("@/components/templates/_shared/pages/types").PageEntry[];
   /** AB-wave: home-page section composition. Ordered + toggleable. */
@@ -151,5 +169,9 @@ export type Action =
   | { type: "invoice.delete"; id: string }
   | { type: "document.upsert"; doc: ConsultDoc }
   | { type: "document.delete"; id: string }
+  | { type: "calendar.upsert"; event: CalendarEvent }
+  | { type: "calendar.delete"; id: string }
+  | { type: "kb.upsert"; article: KbArticle }
+  | { type: "kb.delete"; id: string }
   | { type: "hydrate"; state: State }
   | { type: "reset" };

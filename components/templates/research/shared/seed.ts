@@ -1,5 +1,6 @@
 import type { LandingSection } from "@/components/templates/_shared/landing/types";
 import { SEED_PAGES } from "./pages-seed";
+import { SEED_PROJECTS, SEED_DATASETS, SEED_COLLABORATORS } from "./projects-seed";
 import type { Citation, Document, LitReview, Note, State, AiReaderSession } from "./types";
 
 export const SEED_LANDING_SECTIONS: LandingSection[] = [
@@ -215,6 +216,9 @@ export const SEED_STATE: State = {
   citations: SEED_CITATIONS,
   litReviews: SEED_LIT_REVIEWS,
   aiReaderSessions: SEED_AI_SESSIONS,
+  projects: SEED_PROJECTS,
+  datasets: SEED_DATASETS,
+  collaborators: SEED_COLLABORATORS,
   pages: SEED_PAGES,
   landingSections: SEED_LANDING_SECTIONS,
 };

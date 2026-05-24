@@ -1,7 +1,22 @@
 // Kreator Studio — domain types.
 
-export type Channel = "instagram" | "tiktok" | "youtube" | "twitter" | "newsletter" | "linkedin";
-export type ContentStatus = "idea" | "draft" | "scheduled" | "published";
+export type { Channel, ContentStatus } from "./types-channels";
+import type { Channel, ContentStatus } from "./types-channels";
+export type {
+  FeaturedClient,
+  MonetizationKind,
+  MonetizationMonth,
+  MonetizationSource,
+  Payout,
+  Testimonial,
+} from "./types-monetization";
+import type {
+  FeaturedClient,
+  MonetizationMonth,
+  MonetizationSource,
+  Payout,
+  Testimonial,
+} from "./types-monetization";
 
 export type ContentItem = {
   id: string;
@@ -132,6 +147,11 @@ export type State = {
   packages: PricingPackage[];
   showcase: ShowcaseItem[];
   journal: JournalEntry[];
+  testimonials: Testimonial[];
+  featuredClients: FeaturedClient[];
+  monetizationSources: MonetizationSource[];
+  monetizationMonths: MonetizationMonth[];
+  payouts: Payout[];
   /** O-wave: public pages CRUD slice. */
   pages: import("@/components/templates/_shared/pages/types").PageEntry[];
   /** AB-wave: home-page section composition. Ordered + toggleable. */

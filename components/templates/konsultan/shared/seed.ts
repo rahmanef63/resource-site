@@ -54,6 +54,8 @@ import type {
   Proposal,
   State,
 } from "./types";
+import { SEED_CALENDAR_EVENTS } from "./calendar-seed";
+import { SEED_KB_ARTICLES } from "./kb-seed";
 
 const now = Date.now();
 const day = (n: number) => now - n * 24 * 60 * 60 * 1000;
@@ -249,6 +251,8 @@ export const SEED_STATE: State = {
   projects: SEED_PROJECTS,
   invoices: SEED_INVOICES,
   documents: SEED_DOCUMENTS,
+  calendarEvents: SEED_CALENDAR_EVENTS,
+  kbArticles: SEED_KB_ARTICLES,
   pages: SEED_PAGES,
   landingSections: SEED_LANDING_SECTIONS,
 };

@@ -92,6 +92,51 @@ export type StoreLocation = {
   gradient: string;
 };
 
+/** Customer review for the public testimoni wall. */
+export type Review = {
+  id: string;
+  author: string;
+  city: string;
+  category: string; // "Kuliner", "Retail", "Jasa", "Paket"
+  storeId?: string; // link to StoreLocation when scoped to one outlet
+  rating: number; // 1..5
+  body: string;
+  emoji: string;
+  publishedAt: number;
+};
+
+export type PromotionKind = "percent" | "rupiah";
+
+/** Discount / promo code (admin CRUD). */
+export type Promotion = {
+  id: string;
+  code: string; // "HEMAT10"
+  label: string;
+  kind: PromotionKind;
+  value: number; // % when "percent", Rp when "rupiah"
+  startAt: number;
+  endAt: number;
+  usageLimit: number; // 0 = unlimited
+  usedCount: number;
+  targetSku?: string; // SKU or category slug
+  targetCategory?: string;
+  status: "active" | "scheduled" | "expired" | "paused";
+};
+
+/** Supplier directory entry. */
+export type Supplier = {
+  id: string;
+  name: string;
+  contactPerson: string;
+  phone: string;
+  city: string;
+  leadTimeDays: number;
+  terms: string; // "Net 14", "COD", ...
+  category: string; // "Bahan baku", "Kemasan", "Logistik", ...
+  linkedSkus: string[]; // SKU strings inventory items can match
+  note?: string;
+};
+
 /** Promo / news / journal entry. */
 export type JournalEntry = {
   id: string;
@@ -113,14 +158,14 @@ export type State = {
   customers: Customer[];
   finance: FinanceRecord[];
   staff: StaffMember[];
-  /** O-wave: public pages CRUD slice. */
   pages: import("@/components/templates/_shared/pages/types").PageEntry[];
-  /** AB-wave: home-page section composition. Ordered + toggleable. */
   landingSections: import("@/components/templates/_shared/landing/types").LandingSection[];
-  /** Public-surface bulk-up (2026-05): catalog / outlets / journal. */
   catalog: CatalogItem[];
   stores: StoreLocation[];
   journal: JournalEntry[];
+  reviews: Review[];
+  promotions: Promotion[];
+  suppliers: Supplier[];
 };
 
 export type LandingSection = import("@/components/templates/_shared/landing/types").LandingSection;
@@ -142,5 +187,11 @@ export type Action =
   | { type: "finance.delete"; id: string }
   | { type: "staff.upsert"; member: StaffMember }
   | { type: "staff.delete"; id: string }
+  | { type: "review.upsert"; review: Review }
+  | { type: "review.delete"; id: string }
+  | { type: "promotion.upsert"; promotion: Promotion }
+  | { type: "promotion.delete"; id: string }
+  | { type: "supplier.upsert"; supplier: Supplier }
+  | { type: "supplier.delete"; id: string }
   | { type: "hydrate"; state: State }
   | { type: "reset" };

@@ -81,12 +81,72 @@ export type PublicReadingItem = {
   addedAt: number;
 };
 
+/** Public insights — short research-blog essays. Lebih ringan dari Publication. */
+export type Insight = {
+  id: string;
+  slug: string;
+  title: string;
+  author: string;
+  publishedAt: number;
+  readMinutes: number;
+  category: "methodology" | "tool-review" | "field-notes" | "opinion" | "tutorial";
+  excerpt: string;
+  body: string;             // markdown-ish plain text
+  tags: string[];
+};
+
+/** Research project — long-running line of inquiry. */
+export type ProjectStatus = "exploring" | "active" | "writing" | "submitted" | "archived";
+export type Project = {
+  id: string;
+  title: string;
+  hypothesis: string;
+  status: ProjectStatus;
+  startedAt: number;
+  updatedAt: number;
+  targetVenue: string;       // jurnal / konferensi sasaran
+  linkedDocIds: string[];
+  linkedNoteIds: string[];
+  collaboratorIds: string[];
+  progress: number;          // 0-100
+};
+
+/** Dataset registry — sumber data eksternal / olahan. */
+export type Dataset = {
+  id: string;
+  name: string;
+  source: string;            // institusi / portal
+  format: "csv" | "json" | "parquet" | "xlsx" | "geojson" | "sav";
+  rows: number;
+  sizeMB: number;
+  license: string;           // CC-BY-4.0 / proprietary / dst
+  lastUpdated: number;
+  description: string;
+  url: string;               // "#" placeholder
+};
+
+/** Collaborator / co-author directory. */
+export type Collaborator = {
+  id: string;
+  name: string;
+  affiliation: string;
+  role: "PI" | "co-author" | "advisor" | "RA" | "external";
+  orcid: string;             // placeholder format 0000-0000-0000-0000
+  email: string;
+  expertise: string[];
+  projectIds: string[];
+  initials: string;
+};
+
 export type State = {
   documents: Document[];
   notes: Note[];
   citations: Citation[];
   litReviews: LitReview[];
   aiReaderSessions: AiReaderSession[];
+  projects: Project[];
+  datasets: Dataset[];
+  collaborators: Collaborator[];
   /** O-wave: public pages CRUD slice. */
   pages: import("@/components/templates/_shared/pages/types").PageEntry[];
   /** AB-wave: home-page section composition. Ordered + toggleable. */
@@ -111,5 +171,11 @@ export type Action =
   | { type: "aireader.create"; session: AiReaderSession }
   | { type: "aireader.upsert"; session: AiReaderSession }
   | { type: "aireader.delete"; id: string }
+  | { type: "project.upsert"; project: Project }
+  | { type: "project.delete"; id: string }
+  | { type: "dataset.upsert"; dataset: Dataset }
+  | { type: "dataset.delete"; id: string }
+  | { type: "collaborator.upsert"; collaborator: Collaborator }
+  | { type: "collaborator.delete"; id: string }
   | { type: "hydrate"; state: State }
   | { type: "reset" };
