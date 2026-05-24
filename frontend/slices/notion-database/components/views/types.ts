@@ -37,4 +37,15 @@ export interface ViewProps {
     title: string;
     rowProps: Record<string, PropertyValue>;
   }) => Promise<void> | void;
+  /** Duplicate a row — surfaced by every per-view RowActionsMenu. */
+  onRowDuplicate?: (rowId: string) => void;
+  /** Board / Gallery / Calendar use this when the user clicks "+" in a
+   *  group, column, or day cell — caller creates a row with that bucket
+   *  value pre-set. `groupValue` is the option id (null = no value
+   *  bucket); for calendars it's the ISO date. `groupPropId` identifies
+   *  which property the group is bucketed on. */
+  onRowAddInGroup?: (args: {
+    groupPropId: string;
+    groupValue: string | null;
+  }) => void;
 }

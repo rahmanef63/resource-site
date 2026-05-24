@@ -59,7 +59,7 @@ export type {
   Block, BlockType, BlockRenderers, BlockRendererProps,
   Page,
   Property, PropertyValue, PropertyType, SelectOption, NumberFormat,
-  Database, DatabaseViewConfig, DatabaseFilter, DatabaseSort, DbView,
+  Database, DatabaseViewConfig, DatabaseFilter, DatabaseFilterOp, DatabaseSort, DbView,
   ChartKind, ChartAggregate, CalcKind,
 } from "./types";
 

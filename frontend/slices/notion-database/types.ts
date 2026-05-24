@@ -19,6 +19,7 @@ export type {
   ChartKind,
   Database,
   DatabaseFilter,
+  DatabaseFilterOp,
   DatabaseSort,
   DatabaseViewConfig,
   DbView,

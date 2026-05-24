@@ -122,9 +122,32 @@ export type ChartAggregate = "count" | "sum" | "avg" | "min" | "max";
 import type { CalcKind } from "./calc-types";
 export type { CalcKind };
 
+/** Filter operators, grouped by intended property type. The viewData
+ *  matcher tolerates op/type mismatches (returns true) so legacy
+ *  configs keep working when a property type changes. */
+export type DatabaseFilterOp =
+  // text / shared
+  | "contains" | "does_not_contain" | "starts_with" | "ends_with"
+  | "equals" | "not_equals"
+  | "is_empty" | "not_empty"
+  // checkbox
+  | "checked" | "unchecked"
+  // number
+  | "gt" | "lt" | "gte" | "lte" | "between"
+  // date
+  | "before" | "after" | "on" | "is_today" | "past_week" | "next_week"
+  // select / multi-select
+  | "is_any_of" | "is_none_of";
+
 export interface DatabaseFilter {
   propertyId: string;
-  op: "contains" | "equals" | "not_empty" | "is_empty" | "checked" | "unchecked";
+  op: DatabaseFilterOp;
+  /** Operand encoding:
+   *   - text/number/date single ops: plain string
+   *   - "between": "min|max" (numbers) or "ISO|ISO" (dates)
+   *   - "is_any_of" / "is_none_of": "id1,id2,id3" (select option ids)
+   *   - is_empty / not_empty / checked / unchecked / is_today / past_week / next_week: ignored
+   */
   value?: string;
 }
 

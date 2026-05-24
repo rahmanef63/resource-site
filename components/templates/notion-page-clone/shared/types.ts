@@ -73,10 +73,14 @@ export type Action =
   | { type: "db.property.add"; dbId: string; propType: PropertyType }
   | { type: "db.property.update"; dbId: string; propId: string; patch: Partial<Property> }
   | { type: "db.property.remove"; dbId: string; propId: string }
-  /** Database row mutations — operate on doc + db.rowIds atomically. */
-  | { type: "db.row.add"; dbId: string }
+  /** Database row mutations — operate on doc + db.rowIds atomically.
+   *  `initialProps` lets callers pre-set values at insert time (e.g.
+   *  BoardView "+" inside a column → row created with the group value
+   *  already on it). */
+  | { type: "db.row.add"; dbId: string; initialProps?: Record<string, PropertyValue> }
   | { type: "db.row.update"; dbId: string; rowId: string; propId: string; value: PropertyValue }
   | { type: "db.row.remove"; dbId: string; rowId: string }
+  | { type: "db.row.duplicate"; dbId: string; rowId: string }
   /** View CRUD — sort / filter / search lives in db.views[].config. */
   | { type: "db.view.activate"; dbId: string; viewId: string }
   | { type: "db.view.add"; dbId: string; viewType: NotionDatabase["views"][number]["type"] }

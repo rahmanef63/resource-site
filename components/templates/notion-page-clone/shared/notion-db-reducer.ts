@@ -66,7 +66,7 @@ export function dbReducer(state: State, action: Extract<Action, { type: `db.${st
         id: rowId, parentId: null, title: "Untitled", icon: "📄",
         blocks: [], favorite: false, trashed: false,
         createdAt: Date.now(), updatedAt: Date.now(),
-        rowOfDatabaseId: action.dbId, rowProps: {},
+        rowOfDatabaseId: action.dbId, rowProps: action.initialProps ?? {},
       };
       return {
         ...state,
@@ -74,6 +74,32 @@ export function dbReducer(state: State, action: Extract<Action, { type: `db.${st
         databases: state.databases.map((db) =>
           db.id === action.dbId ? { ...db, rowIds: [...db.rowIds, rowId], updatedAt: Date.now() } : db,
         ),
+      };
+    }
+    case "db.row.duplicate": {
+      const src = state.docs.find((d) => d.id === action.rowId);
+      if (!src) return state;
+      const rowId = genId("row");
+      const copy: NotionDoc = {
+        ...src,
+        id: rowId,
+        title: src.title ? `${src.title} (copy)` : "Untitled",
+        blocks: src.blocks.map((b) => ({ ...b })),
+        rowProps: { ...(src.rowProps ?? {}) },
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      };
+      return {
+        ...state,
+        docs: [...state.docs, copy],
+        databases: state.databases.map((db) => {
+          if (db.id !== action.dbId) return db;
+          const idx = db.rowIds.indexOf(action.rowId);
+          const next = [...db.rowIds];
+          if (idx === -1) next.push(rowId);
+          else next.splice(idx + 1, 0, rowId);
+          return { ...db, rowIds: next, updatedAt: Date.now() };
+        }),
       };
     }
     case "db.row.update":

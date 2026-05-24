@@ -1,10 +1,12 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 import { NotionDatabase } from "@/features/notion-database";
 import { NotionPage } from "@/features/notion-shell";
 import { DynamicIcon, IconPickerPopover } from "@/features/icon-picker";
 import { useDatabases, useDocs, useStore } from "../../shared/store";
+import { PUBLIC_BASE } from "../../shared/nav-config";
 
 function renderIcon(icon: string, className?: string) {
   return <DynamicIcon value={icon} className={className} />;
@@ -29,6 +31,7 @@ function renderIconPicker({
  *  in NotionPage shell so the database surface gets the same icon + title
  *  header chrome as DocView. */
 export function DatabaseView({ dbId }: { dbId: string }) {
+  const router = useRouter();
   const databases = useDatabases();
   const docs = useDocs();
   const { dispatch } = useStore();
@@ -62,10 +65,19 @@ export function DatabaseView({ dbId }: { dbId: string }) {
         onPropertyUpdate={(propId, patch) => dispatch({ type: "db.property.update", dbId: db.id, propId, patch })}
         onPropertyRemove={(propId) => dispatch({ type: "db.property.remove", dbId: db.id, propId })}
         onRowAdd={() => dispatch({ type: "db.row.add", dbId: db.id })}
+        onRowAddInGroup={({ groupPropId, groupValue }) =>
+          dispatch({
+            type: "db.row.add",
+            dbId: db.id,
+            initialProps: groupValue === null ? {} : { [groupPropId]: groupValue },
+          })
+        }
         onRowUpdate={(rowId, propId, value) =>
           dispatch({ type: "db.row.update", dbId: db.id, rowId, propId, value })
         }
         onRowRemove={(rowId) => dispatch({ type: "db.row.remove", dbId: db.id, rowId })}
+        onRowDuplicate={(rowId) => dispatch({ type: "db.row.duplicate", dbId: db.id, rowId })}
+        onOpenRow={(rowId) => router.push(`${PUBLIC_BASE}/d/${rowId}`)}
         onViewActivate={(viewId) => dispatch({ type: "db.view.activate", dbId: db.id, viewId })}
         onViewAdd={(viewType) => dispatch({ type: "db.view.add", dbId: db.id, viewType })}
         onViewRemove={(viewId) => dispatch({ type: "db.view.remove", dbId: db.id, viewId })}

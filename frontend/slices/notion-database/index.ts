@@ -39,6 +39,7 @@ export { applyView, groupBy, bucketByDate } from "./lib/viewData";
 export type {
   Database,
   DatabaseFilter,
+  DatabaseFilterOp,
   DatabaseSort,
   DatabaseViewConfig,
   DbView,

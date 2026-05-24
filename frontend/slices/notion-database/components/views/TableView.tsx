@@ -2,20 +2,21 @@
 
 /** TableView — Notion-canonical table layout. Pre-filtered rows in;
  *  cells delegated to host via renderCell. Header optionally wrapped by
- *  renderColumnHeader (typically ColumnHeaderMenu). */
+ *  renderColumnHeader (typically ColumnHeaderMenu). Row hover reveals
+ *  the RowActionsMenu (Open / Duplicate / Delete). */
 
 import { useMemo } from "react";
-import { Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { RowActionsMenu } from "../RowActionsMenu";
 import { CalcFooter } from "./CalcFooter";
 import type { ViewProps } from "./types";
 
 export function TableView({
-  db, view, rows, readOnly, onRowUpdate: _onRowUpdate, onRowRemove,
+  db, view, rows, readOnly,
+  onRowRemove, onOpenRow, onRowDuplicate,
   renderCell, renderColumnHeader,
 }: ViewProps) {
   const visibleProps = useMemo(() => db.properties.filter((p) => !p.hidden), [db.properties]);
-  const hasRowActions = !readOnly && !!onRowRemove;
+  const hasRowActions = !readOnly && (!!onRowRemove || !!onOpenRow || !!onRowDuplicate);
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
@@ -28,7 +29,7 @@ export function TableView({
                 )}
               </th>
             ))}
-            {hasRowActions && <th aria-hidden />}
+            {hasRowActions && <th aria-hidden className="w-8" />}
           </tr>
         </thead>
         <tbody>
@@ -38,16 +39,14 @@ export function TableView({
                 <td key={p.id} className="px-3 py-1.5">{renderCell(p, r)}</td>
               ))}
               {hasRowActions && (
-                <td className="px-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => onRowRemove!(r.id)}
-                    className="h-5 w-5 text-muted-foreground/40 opacity-0 group-hover/row:opacity-100 hover:text-destructive"
-                    aria-label="Remove row"
-                  >
-                    <Trash2 className="h-3 w-3" />
-                  </Button>
+                <td className="px-1">
+                  <span className="inline-flex opacity-0 transition group-hover/row:opacity-100">
+                    <RowActionsMenu
+                      onOpen={onOpenRow ? () => onOpenRow(r.id) : undefined}
+                      onDuplicate={onRowDuplicate ? () => onRowDuplicate(r.id) : undefined}
+                      onRemove={onRowRemove ? () => onRowRemove(r.id) : undefined}
+                    />
+                  </span>
                 </td>
               )}
             </tr>

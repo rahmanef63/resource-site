@@ -43,11 +43,16 @@ export interface NotionDatabaseProps {
   /** Override / extend the view registry (e.g. add timeline / chart). */
   viewRegistry?: ViewRegistry;
   /** Optional row-open callback — surfaced by Chart / Dashboard / Map /
-   *  Timeline views when a row is clicked. Host can open a detail sheet. */
+   *  Timeline + per-view RowActionsMenu (Open entry). */
   onOpenRow?: (rowId: string) => void;
   /** Create a row with values — used by FormView submit. Host
    *  translates to addRow + setRowValue against its store. */
   onRowCreate?: (draft: { title: string; rowProps: Record<string, PropertyValue> }) => Promise<void> | void;
+  /** Duplicate a row — surfaced by RowActionsMenu on every view. */
+  onRowDuplicate?: (rowId: string) => void;
+  /** "+" button in a Board column / Gallery row / Calendar day — caller
+   *  creates a row with the given bucket value pre-set on `groupPropId`. */
+  onRowAddInGroup?: (args: { groupPropId: string; groupValue: string | null }) => void;
   /** Resolves user id → { name, icon? } for person / created_by /
    *  last_edited_by cells. Optional — falls back to raw id when omitted. */
   userLookup?: (userId: string) => { id: string; name: string; icon?: string } | null;
@@ -61,6 +66,7 @@ export function NotionDatabase({
   onRowAdd, onRowUpdate, onRowRemove,
   onViewActivate, onViewAdd, onViewRemove, onViewConfigChange,
   viewRegistry, onOpenRow, onRowCreate,
+  onRowDuplicate, onRowAddInGroup,
   userLookup,
   readOnly, className,
 }: NotionDatabaseProps) {
@@ -147,6 +153,8 @@ export function NotionDatabase({
         onViewConfigChange={onViewConfigChange ? (patch) => onViewConfigChange(activeView.id, patch) : undefined}
         onOpenRow={onOpenRow}
         onRowCreate={onRowCreate}
+        onRowDuplicate={onRowDuplicate}
+        onRowAddInGroup={onRowAddInGroup}
       />
       {!readOnly && onPropertyAdd && (
         <div className="flex items-center gap-2 border-t border-border p-2">
