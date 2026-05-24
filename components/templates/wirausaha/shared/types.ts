@@ -62,6 +62,50 @@ export type StaffMember = {
   joinedAt: number;
 };
 
+/** Public catalog item — surfaces an inventory product publicly with
+ *  marketing copy + a slug/category for filtering. Distinct from `Product`
+ *  (admin/inventory) so we can show items even when stock = 0. */
+export type CatalogItem = {
+  id: string;
+  productId?: string; // optional link back to inventory
+  slug: string;
+  name: string;
+  category: string; // "Kuliner", "Retail", "Jasa", "Paket", "Promo"
+  priceLabel: string;
+  blurb: string;
+  badge?: string; // "Best seller", "Baru", "Promo"
+  emoji: string; // visual placeholder (no <img>)
+  gradient: string; // tailwind classes e.g. "from-amber-400 to-rose-500"
+};
+
+/** Physical outlet / store location. */
+export type StoreLocation = {
+  id: string;
+  name: string;
+  businessId?: string;
+  city: string;
+  address: string;
+  phone: string;
+  hours: string; // e.g. "Sen–Sab 08:00–21:00"
+  mapsUrl?: string;
+  emoji: string;
+  gradient: string;
+};
+
+/** Promo / news / journal entry. */
+export type JournalEntry = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  body: string; // plain text, paragraphs split by \n\n
+  category: string; // "Promo", "Produk Baru", "Liputan", "Tips"
+  author: string;
+  publishedAt: number;
+  emoji: string;
+  gradient: string;
+};
+
 export type State = {
   businesses: Business[];
   products: Product[];
@@ -73,6 +117,10 @@ export type State = {
   pages: import("@/components/templates/_shared/pages/types").PageEntry[];
   /** AB-wave: home-page section composition. Ordered + toggleable. */
   landingSections: import("@/components/templates/_shared/landing/types").LandingSection[];
+  /** Public-surface bulk-up (2026-05): catalog / outlets / journal. */
+  catalog: CatalogItem[];
+  stores: StoreLocation[];
+  journal: JournalEntry[];
 };
 
 export type LandingSection = import("@/components/templates/_shared/landing/types").LandingSection;

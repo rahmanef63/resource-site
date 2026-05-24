@@ -82,6 +82,44 @@ export type CommentDraft = {
   ts: number;
 };
 
+/** Public service package (pricing tier). */
+export type PricingPackage = {
+  id: string;
+  name: string;
+  tagline: string;
+  price: string; // "Rp 8jt", "Mulai 12jt"
+  period?: string; // "/issue", "/produksi"
+  bullets: string[];
+  turnaroundDays: number;
+  featured?: boolean;
+  badge?: string;
+};
+
+/** Showcase item — past work visual (carousel result, video thumb, campaign). */
+export type ShowcaseItem = {
+  id: string;
+  title: string;
+  kind: "carousel" | "video" | "campaign" | "newsletter";
+  client: string;
+  blurb: string;
+  metric: string; // "1.2M views"
+  gradient: string; // tailwind gradient util (placeholder visual)
+  emoji: string;
+  publishedAt: number;
+};
+
+/** Journal entry — long-form / behind-the-scenes (separate from newsletter feed). */
+export type JournalEntry = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  body: string; // simple paragraph text, split by \n\n
+  category: "behind-the-scenes" | "lesson" | "experiment" | "essay";
+  readMinutes: number;
+  publishedAt: number;
+};
+
 export type State = {
   contents: ContentItem[];
   voices: VoiceProfile[];
@@ -91,6 +129,9 @@ export type State = {
   newsletters: NewsletterIssue[];
   performance: PerformanceMetric[];
   commentDrafts: CommentDraft[];
+  packages: PricingPackage[];
+  showcase: ShowcaseItem[];
+  journal: JournalEntry[];
   /** O-wave: public pages CRUD slice. */
   pages: import("@/components/templates/_shared/pages/types").PageEntry[];
   /** AB-wave: home-page section composition. Ordered + toggleable. */

@@ -37,6 +37,40 @@ export type Service = {
   featured: boolean;
 };
 
+export type Article = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  body: string;
+  category: "case-study" | "essay" | "field-notes";
+  author: string;
+  readMinutes: number;
+  publishedAt: number;
+  cover?: string;
+  featured?: boolean;
+};
+
+export type TeamMember = {
+  id: string;
+  name: string;
+  role: string;
+  bio: string;
+  avatar: string;
+  initials: string;
+  location?: string;
+  links?: { label: string; href: string }[];
+};
+
+export type ProcessStep = {
+  id: string;
+  index: number;
+  phase: string;
+  blurb: string;
+  duration: string;
+  deliverables: string[];
+};
+
 export type LeadStatus = "new" | "contacted" | "qualified" | "won" | "lost";
 
 export type Lead = {

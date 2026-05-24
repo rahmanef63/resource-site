@@ -189,5 +189,8 @@ export const useNewsletters = () => useStore().state.newsletters;
 export const usePerformance = () => useStore().state.performance;
 export const useCommentDrafts = () => useStore().state.commentDrafts;
 export const useLandingSections = () => useStore().state.landingSections;
+export const usePackages = () => useStore().state.packages;
+export const useShowcase = () => useStore().state.showcase;
+export const useJournal = () => useStore().state.journal;
 
 export { nid, slugify, fmtDate, rel } from "@/components/templates/_shared/utils";

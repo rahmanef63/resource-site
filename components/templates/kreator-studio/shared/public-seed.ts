@@ -1,0 +1,161 @@
+// Public-side seeds — pricing packages + showcase items.
+// Journal entries split into journal-seed.ts to keep files under 200 LOC.
+
+import type { PricingPackage, ShowcaseItem } from "./types";
+export { SEED_JOURNAL } from "./journal-seed";
+
+const now = Date.now();
+const day = (n: number) => now - n * 24 * 60 * 60 * 1000;
+
+export const SEED_PACKAGES: PricingPackage[] = [
+  {
+    id: "pk-newsletter",
+    name: "Newsletter Sponsor",
+    tagline: "Sponsorship native di issue mingguan.",
+    price: "Rp 8jt",
+    period: "/issue",
+    bullets: [
+      "1 dedicated section di newsletter (~280 word)",
+      "Distribusi ke 12K+ subscribers (38% open rate)",
+      "Brief call 45 menit + 1 revisi draft",
+      "UTM tracking + report performa H+7",
+    ],
+    turnaroundDays: 7,
+  },
+  {
+    id: "pk-carousel",
+    name: "Carousel Pack",
+    tagline: "5 carousel siap-post untuk brand kamu.",
+    price: "Rp 12jt",
+    period: "/pack",
+    bullets: [
+      "5 carousel (8 slide each) — desain + copy",
+      "2 round revisi, file Figma + PNG export",
+      "Caption + hashtag set per carousel",
+      "Bonus: 1 reel script repurposed",
+    ],
+    turnaroundDays: 14,
+    featured: true,
+    badge: "Paling laku",
+  },
+  {
+    id: "pk-production",
+    name: "Custom Production",
+    tagline: "End-to-end content untuk launch campaign.",
+    price: "Mulai 35jt",
+    period: "/campaign",
+    bullets: [
+      "Strategy sprint 2 minggu — positioning + hook",
+      "10–15 piece content (mix carousel/reel/long-form)",
+      "Shooting day di Jakarta (kru + B-roll)",
+      "Distribution plan 30 hari + weekly check-in",
+    ],
+    turnaroundDays: 45,
+  },
+  {
+    id: "pk-strategy",
+    name: "Strategy Sprint",
+    tagline: "Audit + roadmap 90 hari untuk creator/brand.",
+    price: "Rp 6jt",
+    period: "/sprint",
+    bullets: [
+      "Audit 30 post terakhir + content pillars",
+      "Roadmap 90 hari (kalender + KPI)",
+      "Workshop 2 jam (recording disertakan)",
+      "Follow-up async 14 hari (Slack/WhatsApp)",
+    ],
+    turnaroundDays: 10,
+  },
+];
+
+export const SEED_SHOWCASE: ShowcaseItem[] = [
+  {
+    id: "sw-1",
+    title: "Launch Tokopedia Seller Center",
+    kind: "campaign",
+    client: "Tokopedia",
+    blurb: "8-piece campaign untuk relaunch seller dashboard. Mix carousel + reel + long-form.",
+    metric: "2.4M reach",
+    gradient: "from-emerald-500/40 via-teal-500/30 to-cyan-500/40",
+    emoji: "🛒",
+    publishedAt: day(12),
+  },
+  {
+    id: "sw-2",
+    title: "Carousel — 10 tools creator 2026",
+    kind: "carousel",
+    client: "Editorial",
+    blurb: "8 slide saved 14K kali, repost ke 6 publikasi creator economy.",
+    metric: "186K saves",
+    gradient: "from-fuchsia-500/40 via-pink-500/30 to-rose-500/40",
+    emoji: "🎨",
+    publishedAt: day(20),
+  },
+  {
+    id: "sw-3",
+    title: "Reel — Cara plan content 1 jam",
+    kind: "video",
+    client: "Editorial",
+    blurb: "POV-style reel yang viral di tiga platform sekaligus.",
+    metric: "1.2M views",
+    gradient: "from-amber-500/40 via-orange-500/30 to-red-500/40",
+    emoji: "🎬",
+    publishedAt: day(28),
+  },
+  {
+    id: "sw-4",
+    title: "Newsletter Issue #38 — BTS launch",
+    kind: "newsletter",
+    client: "Editorial",
+    blurb: "Long-form breakdown launch creator OS — 42% open, 6.2% click.",
+    metric: "8.1K opens",
+    gradient: "from-indigo-500/40 via-violet-500/30 to-purple-500/40",
+    emoji: "✉️",
+    publishedAt: day(35),
+  },
+  {
+    id: "sw-5",
+    title: "Campaign — Bibit financial literacy",
+    kind: "campaign",
+    client: "Bibit",
+    blurb: "12-piece edukasi investasi untuk audiens Gen-Z, mix story + carousel.",
+    metric: "920K reach",
+    gradient: "from-sky-500/40 via-blue-500/30 to-indigo-500/40",
+    emoji: "📈",
+    publishedAt: day(48),
+  },
+  {
+    id: "sw-6",
+    title: "Carousel — 5 mistake creator pemula",
+    kind: "carousel",
+    client: "Editorial",
+    blurb: "Mini-essay format, jadi entry-point banyak follower baru.",
+    metric: "82K saves",
+    gradient: "from-lime-500/40 via-green-500/30 to-emerald-500/40",
+    emoji: "📚",
+    publishedAt: day(60),
+  },
+  {
+    id: "sw-7",
+    title: "Reel — Behind editing studio",
+    kind: "video",
+    client: "Editorial",
+    blurb: "Studio tour 60 detik — sparked banyak DM tentang gear setup.",
+    metric: "640K views",
+    gradient: "from-rose-500/40 via-red-500/30 to-orange-500/40",
+    emoji: "🎥",
+    publishedAt: day(70),
+  },
+  {
+    id: "sw-8",
+    title: "Campaign — Gojek Tokopedia merge",
+    kind: "campaign",
+    client: "GoTo",
+    blurb: "Narrative campaign untuk merger announcement — internal + external.",
+    metric: "3.1M impressions",
+    gradient: "from-emerald-600/40 via-green-500/30 to-lime-500/40",
+    emoji: "🚀",
+    publishedAt: day(85),
+  },
+];
+

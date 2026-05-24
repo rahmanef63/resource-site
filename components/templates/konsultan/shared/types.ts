@@ -78,6 +78,47 @@ export type ConsultDoc = {
   updatedAt: number;
 };
 
+/** Public-only seeds. Not in CRUD state — read directly from `public-seed.ts`. */
+export type Service = {
+  id: string;
+  slug: string;
+  name: string;
+  tagline: string;
+  priceLabel: string;
+  durationLabel: string;
+  bullets: string[];
+  outcomes: string[];
+  featured?: boolean;
+  accent: "violet" | "amber" | "emerald" | "rose";
+};
+
+export type Article = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  author: string;
+  authorRole: string;
+  publishedAt: number;
+  readMinutes: number;
+  tag: "Strategi" | "Operasi" | "Organisasi" | "Industri";
+  /** Body as paragraph array — keeps file size small, no MDX needed. */
+  body: string[];
+};
+
+export type TeamMember = {
+  id: string;
+  slug: string;
+  name: string;
+  role: string;
+  city: string;
+  initials: string;
+  bio: string;
+  expertise: string[];
+  yearsExp: number;
+  linkedinUrl?: string;
+};
+
 export type State = {
   clients: Client[];
   proposals: Proposal[];

@@ -30,6 +30,9 @@ export const ADMIN_BASE = ADMIN_PANEL_BASE;
 
 export const PUBLIC_NAV: NavItem[] = [
   { label: "Posts", href: `${PUBLIC_BASE}/posts` },
+  { label: "Journal", href: `${PUBLIC_BASE}/journal` },
+  { label: "Showcase", href: `${PUBLIC_BASE}/showcase` },
+  { label: "Pricing", href: `${PUBLIC_BASE}/pricing` },
   { label: "About", href: `${PUBLIC_BASE}/about` },
 ];
 

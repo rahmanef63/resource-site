@@ -166,29 +166,14 @@ export { useStore };
 export const usePages = () => useStore().state.pages;
 export const useLandingSections = () => useStore().state.landingSections;
 
-export function useBusinesses() {
-  const { state } = useStore();
-  return state.businesses;
-}
-export function useProducts() {
-  const { state } = useStore();
-  return state.products;
-}
-export function useOrders() {
-  const { state } = useStore();
-  return state.orders;
-}
-export function useCustomers() {
-  const { state } = useStore();
-  return state.customers;
-}
-export function useFinance() {
-  const { state } = useStore();
-  return state.finance;
-}
-export function useStaff() {
-  const { state } = useStore();
-  return state.staff;
-}
+export const useBusinesses = () => useStore().state.businesses;
+export const useProducts = () => useStore().state.products;
+export const useOrders = () => useStore().state.orders;
+export const useCustomers = () => useStore().state.customers;
+export const useFinance = () => useStore().state.finance;
+export const useStaff = () => useStore().state.staff;
+export const useCatalog = () => useStore().state.catalog;
+export const useStores = () => useStore().state.stores;
+export const useJournal = () => useStore().state.journal;
 
 export { nid, slugify, fmtDate, rel } from "@/components/templates/_shared/utils";

@@ -27,6 +27,9 @@ export const WORKSPACE_BASE = paths.workspaceBase;
 export const ADMIN_BASE = ADMIN_PANEL_BASE;
 
 export const PUBLIC_NAV: NavItem[] = [
+  { label: "Katalog",  href: `${PUBLIC_BASE}/catalog` },
+  { label: "Outlet",   href: `${PUBLIC_BASE}/stores` },
+  { label: "Jurnal",   href: `${PUBLIC_BASE}/journal` },
   { label: "Services", href: `${PUBLIC_BASE}/services` },
   { label: "Contact",  href: `${PUBLIC_BASE}/contact` },
 ];

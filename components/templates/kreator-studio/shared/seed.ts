@@ -1,5 +1,6 @@
 import type { LandingSection } from "@/components/templates/_shared/landing/types";
 import { SEED_PAGES } from "./pages-seed";
+import { SEED_JOURNAL, SEED_PACKAGES, SEED_SHOWCASE } from "./public-seed";
 
 export const SEED_LANDING_SECTIONS: LandingSection[] = [
   {
@@ -309,6 +310,9 @@ export const SEED_STATE: State = {
   newsletters: SEED_NEWSLETTERS,
   performance: SEED_PERFORMANCE,
   commentDrafts: SEED_COMMENTS,
+  packages: SEED_PACKAGES,
+  showcase: SEED_SHOWCASE,
+  journal: SEED_JOURNAL,
   pages: SEED_PAGES,
   landingSections: SEED_LANDING_SECTIONS,
 };

@@ -53,6 +53,34 @@ export type AiReaderSession = {
   ts: number;
 };
 
+/** Public publications — peer-reviewed / preprint output dari workspace. */
+export type Publication = {
+  id: string;
+  slug: string;
+  title: string;
+  authors: string;
+  year: number;
+  venue: string;            // jurnal / konferensi / preprint server
+  type: "journal" | "preprint" | "conference" | "report" | "chapter";
+  doi: string;              // placeholder OK
+  abstract: string;
+  keywords: string[];
+  pages?: string;           // "88-104"
+  pdfHref?: string;         // "#" placeholder
+};
+
+/** Public reading-list — curated bacaan eksternal (bukan publikasi sendiri). */
+export type PublicReadingItem = {
+  id: string;
+  title: string;
+  source: string;           // jurnal / penulis / institusi
+  year: number;
+  category: "paper" | "essay" | "book" | "thread" | "report";
+  href: string;             // external URL ("#" placeholder)
+  why: string;              // why-it-matters blurb
+  addedAt: number;
+};
+
 export type State = {
   documents: Document[];
   notes: Note[];
