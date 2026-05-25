@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "icon-picker",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -16,7 +16,7 @@
     "components/PickerSkeleton.tsx",
     "components/picker-parts/ColorRow.tsx",
     "components/picker-parts/EmojiTab.tsx",
-    "components/picker-parts/LucideTab.tsx",
+    "components/picker-parts/IconTab.tsx",
     "components/picker-parts/Sections.tsx",
     "components/picker-parts/Toolbar.tsx",
     "components/picker-parts/cells.tsx",
@@ -29,6 +29,11 @@
     "lib/lucide-catalog.ts",
     "lib/lucide-icons.ts",
     "lib/parse.ts",
+    "lib/phosphor-catalog.ts",
+    "lib/phosphor-icons-a.ts",
+    "lib/phosphor-icons-b.ts",
+    "lib/phosphor-icons.ts",
+    "lib/picker-handlers.ts",
     "lib/recents.ts",
     "lib/search-haystacks.ts",
     "lib/style-pref.ts",
@@ -36,6 +41,7 @@
   ],
   "imports": {
     "shared": [
+      "@/components/ui/dialog",
       "@/components/ui/input",
       "@/components/ui/popover",
       "@/components/ui/scroll-area",
@@ -43,6 +49,8 @@
       "@/lib/utils"
     ],
     "external": [
+      "@phosphor-icons/react",
+      "@radix-ui/react-slot",
       "lucide-react",
       "react",
       "vitest"

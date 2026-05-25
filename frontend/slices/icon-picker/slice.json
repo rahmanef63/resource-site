@@ -1,13 +1,12 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "icon-picker",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "category": "ui",
   "kind": "ui",
   "title": "Icon Picker",
-  "description": "Emoji + lucide icon picker with search, 10-color Notion palette, Twemoji/native toggle, recents tracking. One string stores emoji OR `lucide:Name` OR with `?c=hex` tint — backwards-compat with raw-emoji fields. Two variants: Popover (compact trigger) and Inline (full sheet/dialog use).",
+  "description": "Emoji + lucide + phosphor icon picker with search, 10-color Notion palette, Twemoji/native toggle, recents tracking, smart positioning. Two-tab layout (Emoji|Icon) with sub-variant pills (Native|Twemoji / Lucide|Phosphor fill). One string stores emoji OR `lucide:Name` OR `phosphor:Name` OR with `?c=hex` tint — backwards-compat with raw-emoji fields. Popover auto-flips on collision and falls back to a centered Dialog when neither side fits. Two variants: Popover (compact trigger) and Inline (full sheet/dialog use).",
   "namespace": "@/features/icon-picker",
-  "kind": "ui",
   "convex": {
     "tablesExport": "",
     "schemaPath": "",
@@ -18,13 +17,13 @@
     "configExport": ""
   },
   "deps": {
-    "npm": ["lucide-react@^0.400.0"],
-    "shadcn": ["popover", "button", "input", "scroll-area", "tabs"],
+    "npm": ["lucide-react@^0.400.0", "@phosphor-icons/react@^2.1.10"],
+    "shadcn": ["popover", "dialog", "button", "input", "scroll-area", "tabs"],
     "env": [],
     "peers": []
   },
   "registers": [],
   "audit": [],
   "license": "MIT",
-  "tags": ["ui", "icon", "emoji", "lucide", "picker", "twemoji", "notion"]
+  "tags": ["ui", "icon", "emoji", "lucide", "phosphor", "picker", "twemoji", "notion", "responsive"]
 }

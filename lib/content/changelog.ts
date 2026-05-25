@@ -10,6 +10,38 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CK1H",
+    version: "CK-1H",
+    date: Date.parse("2026-05-25"),
+    kind: "feature",
+    title: "icon-picker 0.3.0 — Phosphor fill variant + smart positioning + dialog fallback",
+    body:
+      "Lifted from open-silong. The picker gains a second icon variant (Phosphor fill, color-aware) parallel to Lucide outline, surfaced via a two-tab layout (Emoji | Icon) with sub-variant pills (Native | Twemoji / Lucide | Phosphor). Storage adds a new `phosphor:Name?c=hex` form parallel to `lucide:Name?c=hex` — back-compat with every existing emoji + lucide value. Smart positioning: PopoverContent now caps height to Radix's `--radix-popover-content-available-height` CSS var and falls back to a centered Dialog when neither side fits ≥340px usable vertical (or viewport <360px wide) — fixes off-screen clipping on tight viewports + small mobile screens. Inline picker restructured to flex column with `min-h-0` so it adapts to either container. `style-pref.ts` renamed its localStorage key `nosion:iconStyle` → `icon-picker:style` with one-shot legacy migration so existing consumers keep their Twemoji/native preference.",
+    groups: [
+      {
+        heading: "Slices touched",
+        bullets: [
+          { text: "icon-picker — phosphor variant, smart popover positioning, flex-resizable inline body (0.2.0 → 0.3.0)", slug: "icon-picker" },
+        ],
+      },
+      {
+        heading: "New files",
+        bullets: [
+          "frontend/slices/icon-picker/lib/phosphor-catalog.ts — 190 phosphor names grouped by category",
+          "frontend/slices/icon-picker/lib/phosphor-icons.ts — curated named-import surface for @phosphor-icons/react (tree-shake-safe)",
+          "frontend/slices/icon-picker/components/picker-parts/IconTab.tsx — combined Lucide+Phosphor tab (replaces LucideTab.tsx)",
+        ],
+      },
+      {
+        heading: "Dependencies",
+        bullets: [
+          "@phosphor-icons/react@^2.1.10 added to dependencies",
+          "deps.shadcn += dialog (smart fallback uses it)",
+        ],
+      },
+    ],
+  },
+  {
     id: "CK1G",
     version: "CK-1G",
     date: Date.parse("2026-05-23"),

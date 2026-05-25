@@ -1,8 +1,8 @@
 /** Public barrel for the icon-picker module.
  *
  *  Portable to any Next.js + React 19 project. Consumers only need to
- *  install `lucide-react`, ship a Tailwind config that picks up the
- *  classes used here, and import:
+ *  install `lucide-react` + `@phosphor-icons/react`, ship a Tailwind
+ *  config that picks up the classes used here, and import:
  *    - `<DynamicIcon value={...} />` to render anywhere
  *    - `<IconPickerPopover value onChange ... />` to let users pick
  *    - `RawIcon` if you're rendering many icons in a grid (skip the
@@ -16,9 +16,12 @@ export { PickerSkeleton } from "./components/PickerSkeleton";
 export {
   parseIconValue,
   isLucideValue,
+  isPhosphorValue,
   lucideValue,
+  phosphorValue,
   withColor,
   LUCIDE_PREFIX,
+  PHOSPHOR_PREFIX,
   type IconValue,
 } from "./lib/parse";
 
@@ -27,6 +30,8 @@ export {
 export { EMOJI_GROUPS, ALL_EMOJIS } from "./lib/emoji-catalog";
 export { LUCIDE_GROUPS, ALL_LUCIDE } from "./lib/lucide-catalog";
 export { LUCIDE_ICONS, resolveLucideIcon, type LucideIconName } from "./lib/lucide-icons";
+export { PHOSPHOR_GROUPS, ALL_PHOSPHOR } from "./lib/phosphor-catalog";
+export { PHOSPHOR_ICONS, resolvePhosphorIcon, type PhosphorIconName } from "./lib/phosphor-icons";
 
 // Theming + style preference.
 export { ICON_COLORS, type IconColor } from "./lib/colors";

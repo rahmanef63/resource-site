@@ -1,7 +1,6 @@
 import * as React from "react";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { lucideValue } from "../../lib/parse";
+import { lucideValue, phosphorValue } from "../../lib/parse";
 import { RawIcon } from "../DynamicIcon";
 import type { Style } from "../../lib/style-pref";
 
@@ -38,23 +37,21 @@ interface EmojiCellProps extends CellProps {
 
 function EmojiCellImpl({ emoji, active, onClick, onMouseEnter, tabIndex, index, style }: EmojiCellProps) {
   return (
-    <Button
+    <button
       type="button"
-      variant="ghost"
-      size="icon"
       onClick={onClick}
       onMouseEnter={onMouseEnter}
       tabIndex={tabIndex}
       data-icon-cell-index={index}
       className={cn(
-        "h-8 w-8 rounded text-lg leading-none",
+        "flex h-8 w-8 items-center justify-center rounded text-lg leading-none transition",
         active ? "bg-brand/15 ring-1 ring-brand" : "hover:bg-accent",
       )}
       title={emoji}
       aria-label={`Pick ${emoji}`}
     >
       <RawIcon value={emoji} style={style} className="text-lg" />
-    </Button>
+    </button>
   );
 }
 
@@ -69,27 +66,54 @@ interface LucideCellProps extends CellProps {
 function LucideCellImpl({ name, color, active, onClick, onMouseEnter, tabIndex, index, style }: LucideCellProps) {
   const value = React.useMemo(() => lucideValue(name, color), [name, color]);
   return (
-    <Button
+    <button
       type="button"
-      variant="ghost"
-      size="icon"
       onClick={onClick}
       onMouseEnter={onMouseEnter}
       tabIndex={tabIndex}
       data-icon-cell-index={index}
       className={cn(
-        "h-8 w-8 rounded",
+        "flex h-8 w-8 items-center justify-center rounded transition",
         active ? "bg-brand/15 ring-1 ring-brand" : "hover:bg-accent",
       )}
       title={name}
       aria-label={`Pick ${name}`}
     >
       <RawIcon value={value} style={style} className="text-base" />
-    </Button>
+    </button>
   );
 }
 
 export const LucideCell = React.memo(LucideCellImpl);
+
+interface PhosphorCellProps extends CellProps {
+  name: string;
+  color: string | undefined;
+  style: Style;
+}
+
+function PhosphorCellImpl({ name, color, active, onClick, onMouseEnter, tabIndex, index, style }: PhosphorCellProps) {
+  const value = React.useMemo(() => phosphorValue(name, color), [name, color]);
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      tabIndex={tabIndex}
+      data-icon-cell-index={index}
+      className={cn(
+        "flex h-8 w-8 items-center justify-center rounded transition",
+        active ? "bg-brand/15 ring-1 ring-brand" : "hover:bg-accent",
+      )}
+      title={name}
+      aria-label={`Pick ${name}`}
+    >
+      <RawIcon value={value} style={style} className="text-base" />
+    </button>
+  );
+}
+
+export const PhosphorCell = React.memo(PhosphorCellImpl);
 
 /** Renders a recent entry — value may be either emoji or `lucide:Name`,
  *  with optional color suffix. */
@@ -100,23 +124,21 @@ interface RecentCellProps extends CellProps {
 
 function RecentCellImpl({ value, active, onClick, onMouseEnter, tabIndex, index, style }: RecentCellProps) {
   return (
-    <Button
+    <button
       type="button"
-      variant="ghost"
-      size="icon"
       onClick={onClick}
       onMouseEnter={onMouseEnter}
       tabIndex={tabIndex}
       data-icon-cell-index={index}
       className={cn(
-        "h-8 w-8 rounded",
+        "flex h-8 w-8 items-center justify-center rounded transition",
         active ? "bg-brand/15 ring-1 ring-brand" : "hover:bg-accent",
       )}
       title={value}
       aria-label={`Pick recent ${value}`}
     >
       <RawIcon value={value} style={style} className="text-base" />
-    </Button>
+    </button>
   );
 }
 

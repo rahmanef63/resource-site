@@ -3,7 +3,7 @@
 
 # Install `icon-picker` — Icon Picker
 
-> Emoji + lucide icon picker with search, 10-color palette, Twemoji/native toggle, recents tracking.
+> Emoji + lucide (outline) + phosphor (fill) icon picker with search, 10-color palette, Twemoji/native toggle, recents tracking, and smart positioning.
 
 📚 Knowledge base : https://resource.rahmanef.com/llms.txt
 📦 Slice detail   : https://resource.rahmanef.com/slices/icon-picker
@@ -19,11 +19,11 @@ npx rahman-resources add icon-picker
 
 ## 2. What it ships
 
-- tags: `icon`, `emoji`, `lucide`, `picker`, `twemoji`, `notion`, `notion-like`
+- tags: `icon`, `emoji`, `lucide`, `phosphor`, `picker`, `twemoji`, `notion`, `notion-like`, `responsive`
 
 ## 3. Wire it up
 
-Run `npx rr add icon-picker`. parseIconValue() decodes; lucideValue()/withColor() build. Add 'icon: v.string()' to Convex table — no migration needed for existing emoji fields. <IconPicker> wraps any trigger (Popover); <IconPickerInline> for sheets/dialogs. <DynamicIcon> renders from parsed value.
+Run `npx rr add icon-picker` then `pnpm add @phosphor-icons/react`. parseIconValue() decodes; lucideValue() / phosphorValue() / withColor() build. Storage forms: `lucide:Name?c=hex` (outline) or `phosphor:Name?c=hex` (fill) or raw emoji. Add 'icon: v.string()' to Convex table — no migration needed for existing emoji + lucide fields. <IconPickerPopover> wraps any trigger (auto-flips, falls back to centered Dialog on tight viewports); <IconPickerInline> for sheets/dialogs. <DynamicIcon> renders from parsed value.
 
 ## Rules of engagement
 
