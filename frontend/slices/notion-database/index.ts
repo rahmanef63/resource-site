@@ -35,6 +35,12 @@ export {
 } from "./components/views";
 export { applyView, groupBy, bucketByDate } from "./lib/viewData";
 
+// ---- Relation + Rollup (CK-1D Phase 2) ----
+export { RelationCell, type RelationCellProps } from "./components/cells/RelationCell";
+export { RollupCell, type RollupCellProps } from "./components/cells/RollupCell";
+export { filterRelationCandidates } from "./lib/relationCandidates";
+export { computeRollup } from "./lib/computeRollup";
+
 // Re-export domain types for convenience (source of truth is notion-shell).
 export type {
   Database,
@@ -49,6 +55,7 @@ export type {
   PropertyType,
   PropertyTypeMeta,
   PropertyValue,
+  RollupAggregate,
   SelectOption,
 } from "./types";
 

@@ -11,6 +11,52 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### CK-1D Phase 2 — 2026-05-26 — notion-database relation + rollup cells (silong port)
+
+Lifted **relation + rollup** subsystem from notion-page-clone. Closes
+the second-biggest gap from the upstream audit (linked-data + computed
+aggregates were both 0% in rr — host couldn't model cross-database
+references at all).
+
+**Shipped (notion-database v0.7.0 → v0.8.0, notion-shell v0.4.0 → v0.5.0):**
+- `cells/RelationCell.tsx` (182 LOC) — popover link picker w/ search,
+  inline target-db selector, stale-link healing ("Remove N stale
+  links"), optional "+ Create new row in <db>" affordance.
+- `cells/RollupCell.tsx` (155 LOC) — read-only aggregate display with
+  inline relation / aggregate / target-property pickers and
+  graceful "property removed" recovery.
+- `lib/relationCandidates.ts` (59 LOC) — pure candidate filter,
+  lifted verbatim from upstream.
+- `lib/computeRollup.ts` (95 LOC) — pure aggregator (count /
+  count_unique / values / sum / avg / min / max / earliest / latest /
+  checked / percent_checked). Stripped vs upstream: nested formula
+  recursion omitted (returns "—" for formula targets).
+
+**Type model extension (notion-shell):**
+- `PropertyType` += `"relation"` `"rollup"` (was 18 → now 20)
+- `RollupAggregate` new export
+- `Property` extended with `relationDatabaseId`, `rollupRelationPropertyId`,
+  `rollupTargetPropertyId`, `rollupAggregate`
+- `PROPERTY_TYPE_META` += 2 entries (relation = advanced/non-CSV;
+  rollup = computed)
+
+**Dispatcher wiring:**
+- `property-cells.tsx` adds 2 cases + 3 new optional `CellArgs`
+  fields (`pages`, `databases`, `onCreateRelatedRow`).
+- `NotionDatabase.tsx` surfaces matching 3 new top-level props so
+  the host stays the source of truth for cross-database state.
+
+**Architectural strip vs upstream:**
+- No `useDbAdapter()` — host wires mutations via `onPropertyChange` +
+  `onCreateRelatedRow` callbacks.
+- No `DynamicIcon` — minimal text fallback inside chips.
+- `<select>` swapped for shadcn `<Select>` (matches rest of rr).
+- Formula recursion in rollup stripped — keeps lib/computeRollup
+  pure and dependency-free (95 LOC vs upstream's ~50 LOC subset of
+  a 700+ LOC formula engine).
+
+**Parity uplift:** notion-database ~53% → ~58% vs upstream.
+
 ### CK-1D Phase 1 — 2026-05-26 — notion-database row-detail peek (silong port)
 
 Lifted **row-detail subsystem** from notion-page-clone (`row/components/Row*`)

@@ -15,6 +15,8 @@ import { SelectCell } from "./cells/SelectCell";
 import { NumberCell } from "./cells/NumberCell";
 import { LinkCell } from "./cells/LinkCell";
 import { DateCell } from "./cells/DateCell";
+import { RelationCell } from "./cells/RelationCell";
+import { RollupCell } from "./cells/RollupCell";
 import {
   CreatedTimeCell, LastEditedTimeCell, UniqueIdCell,
   CreatedByCell, LastEditedByCell,
@@ -34,10 +36,20 @@ interface CellArgs {
   /** Resolves user id → display info for `person` / `created_by` /
    *  `last_edited_by` cells. Optional — falls back to raw id. */
   userLookup?: UserLookup;
+  /** All workspace pages — required by `relation` (link picker) +
+   *  `rollup` (aggregate). Cells gracefully no-op when omitted. */
+  pages?: Page[];
+  /** All workspace databases — required by `relation` (target picker)
+   *  + `rollup` (target props). Cells gracefully no-op when omitted. */
+  databases?: Database[];
+  /** Creates a new row in the relation's target db and returns its id —
+   *  wires the "+ Create new row" button in RelationCell. */
+  onCreateRelatedRow?: (dbId: string, draft?: { title?: string }) => Promise<string>;
 }
 
 export function renderPropertyCell({
   prop, value, readOnly, onChange, row, db, onPropertyChange, userLookup,
+  pages, databases, onCreateRelatedRow,
 }: CellArgs): ReactNode {
   switch (prop.type) {
     case "checkbox":
@@ -119,6 +131,30 @@ export function renderPropertyCell({
         <FormulaCell
           db={db} row={row} prop={prop} readOnly={readOnly}
           onExpressionChange={onPropertyChange ? (formulaExpression) => onPropertyChange({ formulaExpression }) : undefined}
+        />
+      );
+
+    case "relation":
+      if (!row) return <span className="text-xs text-muted-foreground/60">—</span>;
+      return (
+        <RelationCell
+          prop={prop} row={row}
+          value={(Array.isArray(value) ? value : []) as string[]}
+          readOnly={readOnly}
+          pages={pages} databases={databases}
+          onChange={onChange ? (next) => onChange(next) : undefined}
+          onPropertyChange={onPropertyChange}
+          onCreateRelatedRow={onCreateRelatedRow}
+        />
+      );
+
+    case "rollup":
+      if (!row || !db) return <span className="text-xs text-muted-foreground/60">—</span>;
+      return (
+        <RollupCell
+          db={db} prop={prop} row={row}
+          pages={pages} databases={databases}
+          onPropertyChange={onPropertyChange}
         />
       );
 

@@ -47,6 +47,8 @@ export const PROPERTY_TYPE_META: Record<PropertyType, PropertyTypeMeta> = {
   person:           { label: "Person",           category: "advanced", userAddable: true,  csvImportable: true,  computed: false },
   files:            { label: "Files",            category: "advanced", userAddable: true,  csvImportable: true,  computed: false },
   formula:          { label: "Formula",          category: "advanced", userAddable: true,  csvImportable: false, computed: true  },
+  relation:         { label: "Relation",         category: "advanced", userAddable: true,  csvImportable: false, computed: false },
+  rollup:           { label: "Rollup",           category: "computed", userAddable: true,  csvImportable: false, computed: true  },
   created_time:     { label: "Created time",     category: "computed", userAddable: true,  csvImportable: false, computed: true  },
   last_edited_time: { label: "Last edited time", category: "computed", userAddable: true,  csvImportable: false, computed: true  },
   unique_id:        { label: "Unique ID",        category: "computed", userAddable: true,  csvImportable: false, computed: true  },

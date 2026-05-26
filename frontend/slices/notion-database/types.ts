@@ -29,6 +29,7 @@ export type {
   PropertyType,
   PropertyTypeMeta,
   PropertyValue,
+  RollupAggregate,
   SelectOption,
 } from "@/features/notion-shell";
 

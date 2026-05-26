@@ -56,6 +56,17 @@ export interface NotionDatabaseProps {
   /** Resolves user id → { name, icon? } for person / created_by /
    *  last_edited_by cells. Optional — falls back to raw id when omitted. */
   userLookup?: (userId: string) => { id: string; name: string; icon?: string } | null;
+  /** All workspace pages — required by `relation` (link picker) +
+   *  `rollup` (aggregate). When omitted, relation/rollup cells render a
+   *  graceful placeholder. */
+  pages?: Page[];
+  /** All workspace databases — required by `relation` (target picker) +
+   *  `rollup` (target props). Required when the schema includes
+   *  relation/rollup columns. */
+  databases?: Database[];
+  /** Wires the "+ Create new row" button in RelationCell. Host creates
+   *  a new row in `dbId` and resolves to its id. */
+  onCreateRelatedRow?: (dbId: string, draft?: { title?: string }) => Promise<string>;
   readOnly?: boolean;
   className?: string;
 }
@@ -67,7 +78,7 @@ export function NotionDatabase({
   onViewActivate, onViewAdd, onViewRemove, onViewConfigChange,
   viewRegistry, onOpenRow, onRowCreate,
   onRowDuplicate, onRowAddInGroup,
-  userLookup,
+  userLookup, pages, databases, onCreateRelatedRow,
   readOnly, className,
 }: NotionDatabaseProps) {
   const activeView = db.views.find((v) => v.id === db.activeViewId) ?? db.views[0];
@@ -99,6 +110,9 @@ export function NotionDatabase({
       db,
       onPropertyChange: onPropertyUpdate ? (patch) => onPropertyUpdate(prop.id, patch) : undefined,
       userLookup,
+      pages,
+      databases,
+      onCreateRelatedRow,
     });
 
   const renderColumnHeader = (prop: Property) => (

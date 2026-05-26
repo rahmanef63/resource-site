@@ -1,11 +1,11 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "notion-database",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "category": "ui",
   "kind": "ui",
-  "title": "Notion-like Database Table — full table with import/export + row peek (11 views · 16 cells · CSV + JSON)",
-  "description": "Portable Notion-style database surface. Optional companion to notion-shell. NotionDatabase ships full DB UI with ViewTabs + ViewOptions + per-column menu + 11 views (Table / Board / List / Gallery / Calendar / Feed / Chart / Dashboard / Form / Map / Timeline) + FilterBuilder + SortBuilder + 16 property-cell types (text / number / checkbox / select / multi_select / status / date / url / email / phone / files / person / formula / created_time / last_edited_time / unique_id). FormView submits via onRowCreate callback. v0.7 adds RowPeek (sheet + dialog + persisted mode toggle) — slot-driven row detail surface lifted from notion-page-clone. Pure / props-driven.",
+  "title": "Notion-like Database Table — full table with import/export + row peek + relation/rollup (11 views · 18 cells · CSV + JSON)",
+  "description": "Portable Notion-style database surface. Optional companion to notion-shell. NotionDatabase ships full DB UI with ViewTabs + ViewOptions + per-column menu + 11 views (Table / Board / List / Gallery / Calendar / Feed / Chart / Dashboard / Form / Map / Timeline) + FilterBuilder + SortBuilder + 18 property-cell types (text / number / checkbox / select / multi_select / status / date / url / email / phone / files / person / formula / relation / rollup / created_time / last_edited_time / unique_id). FormView submits via onRowCreate callback. v0.7 adds RowPeek (sheet + dialog + persisted mode toggle). v0.8 adds RelationCell (cross-database link picker w/ optional create-new affordance) + RollupCell (aggregates relation targets — count/sum/avg/min/max/values/earliest/latest/checked/percent_checked). Both wire via new NotionDatabase props (pages, databases, onCreateRelatedRow) so host stays the source of truth. Pure / props-driven.",
   "namespace": "@/features/notion-database",
   "registers": [],
   "audit": [],
@@ -18,7 +18,7 @@
     "shadcn": ["button", "input", "checkbox", "dropdown-menu", "popover", "select", "sheet", "dialog", "toggle-group", "tooltip"],
     "env": [],
     "peers": [
-      { "slug": "notion-shell", "range": "^0.4", "reason": "Domain types (Database, Property, PropertyValue, DbView, DatabaseViewConfig, DatabaseFilter, DatabaseSort) live in notion-shell — the Page type references them via rowOfDatabaseId + rowProps so they stay in the shell's domain model." }
+      { "slug": "notion-shell", "range": "^0.5", "reason": "Domain types (Database, Property, PropertyValue, DbView, RollupAggregate, DatabaseViewConfig, DatabaseFilter, DatabaseSort) live in notion-shell — the Page type references them via rowOfDatabaseId + rowProps so they stay in the shell's domain model. v0.5 extends Property with relation + rollup fields." }
     ]
   }
 }

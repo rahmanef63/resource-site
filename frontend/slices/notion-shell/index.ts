@@ -61,6 +61,7 @@ export type {
   Property, PropertyValue, PropertyType, SelectOption, NumberFormat,
   Database, DatabaseViewConfig, DatabaseFilter, DatabaseFilterOp, DatabaseSort, DbView,
   ChartKind, ChartAggregate, CalcKind,
+  RollupAggregate,
 } from "./types";
 
 export type { PropertyTypeMeta } from "./property-type-meta";
