@@ -70,6 +70,14 @@ export {
   type ShiftResult,
 } from "./lib/calendarDrag";
 
+// ---- Database wrapper (CK-1D Phase 4 — DB-level ops + full-page shell) ----
+export {
+  DatabaseMenu,
+  type DatabaseMenuProps,
+  DatabasePage,
+  type DatabasePageProps,
+} from "./components/database-shell";
+
 // ---- Format helpers (CK-1D Phase 7 — Intl-based number + date) ----
 export {
   resolveNumberFormat,

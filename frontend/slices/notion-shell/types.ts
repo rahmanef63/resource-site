@@ -153,6 +153,9 @@ export interface Database {
   /** Atomic counter for unique_id properties — increments on each new row.
    *  Read-only at the cell layer; host owns the bump. */
   uniqueIdCounter?: number;
+  /** When true the DatabaseMenu's Lock action is engaged — UI surfaces
+   *  read-only affordances; host enforces. */
+  locked?: boolean;
 }
 
 export type ActionsSlot = ReactNode;

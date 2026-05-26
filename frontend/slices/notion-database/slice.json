@@ -1,10 +1,10 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "notion-database",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "category": "ui",
   "kind": "ui",
-  "title": "Notion-like Database Table — full table with import/export + row peek + relation/rollup + row multi-select w/ checkboxes + calendar drag helpers (11 views · 18 cells · CSV + JSON)",
+  "title": "Notion-like Database Table — full table with import/export + row peek + relation/rollup + row multi-select + calendar drag + DB-level menu + full-page shell (11 views · 18 cells · CSV + JSON)",
   "description": "Portable Notion-style database surface. Optional companion to notion-shell. NotionDatabase ships full DB UI with ViewTabs + ViewOptions + per-column menu + 11 views (Table / Board / List / Gallery / Calendar / Feed / Chart / Dashboard / Form / Map / Timeline) + FilterBuilder + SortBuilder + 18 property-cell types (text / number / checkbox / select / multi_select / status / date / url / email / phone / files / person / formula / relation / rollup / created_time / last_edited_time / unique_id). FormView submits via onRowCreate callback. v0.7 adds RowPeek (sheet + dialog + persisted mode toggle). v0.8 adds RelationCell (cross-database link picker w/ optional create-new affordance) + RollupCell (aggregates relation targets — count/sum/avg/min/max/values/earliest/latest/checked/percent_checked). v0.9 adds row multi-select subsystem — RowSelectionProvider context, RowMarqueeOverlay (drag-band rubber-band w/ AutoCAD window/crossing modes), RowSelectionToolbar (floating action bar w/ count + Delete + extraSlot for host bulk-edit UI), RowSelectionKeyboard (Esc clear + Del/Backspace bulk delete shortcuts). TableView rows now carry data-row-shell-id + render a primary-tinted ring when selected. Pure / props-driven.",
   "namespace": "@/features/notion-database",
   "registers": [],
@@ -18,7 +18,7 @@
     "shadcn": ["button", "input", "checkbox", "dropdown-menu", "popover", "select", "sheet", "dialog", "toggle-group", "tooltip", "separator"],
     "env": [],
     "peers": [
-      { "slug": "notion-shell", "range": "^0.6", "reason": "Domain types live in notion-shell. v0.6 extends Property with numberCurrencyCode + dateFormat + timeFormat + dateIncludeTime; DatabaseViewConfig split into ./view-config-types.ts to honour the 200-LOC cap." }
+      { "slug": "notion-shell", "range": "^0.7", "reason": "Domain types live in notion-shell. v0.7 extends Database with `locked` flag for the DatabaseMenu lock-toggle action." }
     ]
   }
 }

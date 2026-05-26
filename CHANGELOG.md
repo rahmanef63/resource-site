@@ -11,6 +11,48 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### CK-1D Phase 4 — 2026-05-26 — notion-database DB-level menu + full-page shell (silong port)
+
+Final big functional gap from the upstream audit. Closes the "0% on
+database-level operations" finding without dragging Convex coupling
+into rr.
+
+**Shipped (notion-database v0.11.0 → v0.12.0, notion-shell v0.6.0 → v0.7.0):**
+- `components/database-shell/DatabaseMenu.tsx` (130 LOC) — popover w/
+  rename / duplicate (structure-only OR with rows) / lock-toggle /
+  delete (window.confirm fallback). Every action hidden when its
+  callback is omitted, so the same component serves read-only viewers
+  and full-edit admins.
+- `components/database-shell/DatabasePage.tsx` (75 LOC) — full-page
+  wrapper composing a big header (icon slot + inline title input +
+  DatabaseMenu) over a NotionDatabase body. Use for canonical
+  `/db/[id]` routes.
+- `components/notion-database-helpers.tsx` (43 LOC NEW) —
+  `buildColumnHeader` extracted from NotionDatabase to keep the
+  orchestrator under the 200-LOC cap after adding the `headerActions`
+  slot.
+- NotionDatabase grew a `headerActions?: ReactNode` slot — hosts can
+  drop a DatabaseMenu inline without switching to DatabasePage.
+  NotionDatabase 205 → 192 LOC after helpers extraction.
+
+**Type model extension (notion-shell):**
+- Database += `locked?: boolean` — read by DatabaseMenu's lock-toggle.
+
+**Architectural strip vs upstream:**
+- `useDbAdapter` (Convex hooks bundle) — host wires data + mutations.
+- SubItemsPicker (sub-items tree relation) — needs
+  `subItemsParentPropId` schema field + `subItemsTree.ts` lib. Tracked
+  as a sub-phase.
+- IconPickerPopover — lives in rr's separate `icon-picker` slice;
+  DatabasePage exposes `iconSlot` so host wires it explicitly.
+- DataMenu — lives in the deferred `database-json` slice (export /
+  template builders are in notion-database itself but no menu yet).
+- PropertiesMenu (inline visibility toggles) — already covered by the
+  per-column ColumnHeaderMenu.
+- Native window.confirm + window.prompt — keeps zero new dialog deps.
+
+**Parity uplift:** notion-database ~75% → ~83% vs upstream.
+
 ### CK-2D — 2026-05-26 — slice + template status tags (beta / wip / deprecated / experimental / coming-soon)
 
 Catalog UX upgrade. Surface readiness signals on slice + template

@@ -15,11 +15,11 @@ import { cn } from "rahman-shared/lib/utils";
 import { renderPropertyCell } from "./property-cells";
 import { ViewTabs } from "./ViewTabs";
 import { ViewOptions } from "./ViewOptions";
-import { ColumnHeaderMenu } from "./ColumnHeaderMenu";
 import { VIEW_REGISTRY, type ViewRegistry } from "./views";
+import { buildColumnHeader } from "./notion-database-helpers";
 import { applyView } from "../lib/viewData";
 import type {
-  CalcKind, Database, DatabaseViewConfig, DbView, Page, Property, PropertyType, PropertyValue,
+  Database, DatabaseViewConfig, DbView, Page, Property, PropertyType, PropertyValue,
 } from "../types";
 
 const DEFAULT_NEW_PROP_TYPE: PropertyType = "text";
@@ -67,6 +67,10 @@ export interface NotionDatabaseProps {
   /** Wires the "+ Create new row" button in RelationCell. Host creates
    *  a new row in `dbId` and resolves to its id. */
   onCreateRelatedRow?: (dbId: string, draft?: { title?: string }) => Promise<string>;
+  /** Optional chrome rendered to the right of the DB name in the
+   *  built-in header. Drop a `<DatabaseMenu />` here for rename /
+   *  duplicate / lock / delete actions. */
+  headerActions?: import("react").ReactNode;
   readOnly?: boolean;
   className?: string;
 }
@@ -79,6 +83,7 @@ export function NotionDatabase({
   viewRegistry, onOpenRow, onRowCreate,
   onRowDuplicate, onRowAddInGroup,
   userLookup, pages, databases, onCreateRelatedRow,
+  headerActions,
   readOnly, className,
 }: NotionDatabaseProps) {
   const activeView = db.views.find((v) => v.id === db.activeViewId) ?? db.views[0];
@@ -115,30 +120,20 @@ export function NotionDatabase({
       onCreateRelatedRow,
     });
 
-  const renderColumnHeader = (prop: Property) => (
-    <ColumnHeaderMenu
-      prop={prop}
-      onRename={onPropertyUpdate ? () => {
-        const next = window.prompt("Rename property", prop.name);
-        if (next && next.trim()) onPropertyUpdate(prop.id, { name: next.trim() });
-      } : undefined}
-      onTypeChange={onPropertyUpdate ? (type) => onPropertyUpdate(prop.id, { type }) : undefined}
-      onHide={onPropertyUpdate ? () => onPropertyUpdate(prop.id, { hidden: true }) : undefined}
-      onDelete={onPropertyRemove ? () => onPropertyRemove(prop.id) : undefined}
-      onSortAsc={onViewConfigChange ? () => onViewConfigChange(activeView.id, { sorts: [{ propertyId: prop.id, direction: "asc" }] }) : undefined}
-      onSortDesc={onViewConfigChange ? () => onViewConfigChange(activeView.id, { sorts: [{ propertyId: prop.id, direction: "desc" }] }) : undefined}
-      currentCalc={(activeView.tableCalcs?.[prop.id] ?? "none") as CalcKind}
-      onSetCalc={onViewConfigChange && activeView.type === "table" ? (kind) => onViewConfigChange(activeView.id, { tableCalcs: { ...(activeView.tableCalcs ?? {}), [prop.id]: kind } }) : undefined}
-    />
-  );
+  const renderColumnHeader = (prop: Property) => buildColumnHeader({
+    prop, activeView, onPropertyUpdate, onPropertyRemove, onViewConfigChange,
+  });
 
   return (
     <div className={cn("rounded-lg border border-border bg-card", className)}>
-      <div className="flex items-center justify-between border-b border-border px-3 py-2">
-        <h3 className="text-sm font-semibold">{db.name}</h3>
-        <span className="text-[10px] text-muted-foreground">
-          {visibleRows.length} / {rows.length} row{rows.length === 1 ? "" : "s"}
-        </span>
+      <div className="flex items-center justify-between gap-2 border-b border-border px-3 py-2">
+        <h3 className="truncate text-sm font-semibold">{db.name}</h3>
+        <div className="flex shrink-0 items-center gap-2">
+          <span className="text-[10px] text-muted-foreground">
+            {visibleRows.length} / {rows.length} row{rows.length === 1 ? "" : "s"}
+          </span>
+          {headerActions}
+        </div>
       </div>
       <ViewTabs
         views={db.views}
