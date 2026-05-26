@@ -11,6 +11,45 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### CK-1D Phase 1 — 2026-05-26 — notion-database row-detail peek (silong port)
+
+Lifted **row-detail subsystem** from notion-page-clone (`row/components/Row*`)
+into `frontend/slices/notion-database/components/row-detail/` — 6 files,
+409 LOC total, max 92 LOC/file (well under audit cap). Closes biggest
+parity gap surfaced in the upstream audit (row-detail was 0% in rr —
+host had to build its own sheet/dialog from scratch).
+
+**Shipped (notion-database v0.6.0 → v0.7.0):**
+- `useRowOpenMode` — localStorage-persisted "sheet"|"dialog" pref with
+  cross-tab sync (storage event). Lifted verbatim from upstream.
+- `RowOpenModeSwitcher` — three-button toggle (sheet / dialog /
+  open-as-page). Page button only renders when host passes
+  `onOpenAsPage` (no router → no button).
+- `RowDetailBody` — shared chrome: header (switcher + close) + icon
+  slot + editable title + properties slot + blocks slot. Pure /
+  slot-driven — upstream's `useDbAdapter` / `useNotionAdapter` /
+  `useDatabasesComponents` / `PageCommentsProvider` couplings ALL
+  stripped. Host supplies icon picker, properties form, and block
+  editor via render slots.
+- `RowDetailSheet` — right-side drawer wrapper around Body.
+- `RowDetailDialog` — centered modal wrapper around Body.
+- `RowPeek` — orchestrator: reads `useRowOpenMode`, picks Sheet or
+  Dialog, injects switcher into header, wires `onOpenAsPage` one-shot.
+
+**API exports (additive — no breaking changes):**
+- `RowPeek`, `RowDetailSheet`, `RowDetailDialog`, `RowDetailBody`
+- `RowOpenModeSwitcher`, `useRowOpenMode`
+- types: `RowPeekProps`, `RowDetailSheetProps`, `RowDetailDialogProps`,
+  `RowOpenMode`
+
+**Slice deps bumped:** shadcn list extended with `sheet`, `dialog`,
+`toggle-group`, `tooltip` (consumer's `npx rr add notion-database`
+will now scaffold these primitives if missing).
+
+**Audit parity uplift:** notion-database 45% → ~53% vs upstream (closes
+the row-detail gap, 4 files, ~1k upstream LOC — rr ships equivalent
+in 409 LOC by slot-decoupling the heavy editor/comments/Convex deps).
+
 ### v0.6.0 (open-silong sync) — 2026-05-22 — notion-database mega-merge (Phase 7.10)
 
 Single-slice install path for full Notion-like database table. Closes

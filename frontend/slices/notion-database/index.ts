@@ -101,3 +101,18 @@ export {
   buildCsvTemplate,
   buildJsonTemplate,
 } from "./lib/io/template";
+
+// ---- Row Detail surface (CK-1D Phase 1 — lifted from notion-page-clone) ----
+
+export {
+  RowPeek,
+  type RowPeekProps,
+  RowDetailSheet,
+  type RowDetailSheetProps,
+  RowDetailDialog,
+  type RowDetailDialogProps,
+  RowDetailBody,
+  RowOpenModeSwitcher,
+  useRowOpenMode,
+  type RowOpenMode,
+} from "./components/row-detail";
