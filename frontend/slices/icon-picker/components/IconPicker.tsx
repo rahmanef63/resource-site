@@ -154,7 +154,7 @@ export function IconPickerPopover({
       <Popover open={false} onOpenChange={() => {}}>
         <PopoverTrigger asChild>{trigger}</PopoverTrigger>
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogContent className="flex w-[min(400px,92vw)] max-h-[88dvh] flex-col gap-0 p-3">
+          <DialogContent className="flex h-[min(560px,88dvh)] w-[min(400px,92vw)] flex-col gap-0 p-3">
             {body}
           </DialogContent>
         </Dialog>

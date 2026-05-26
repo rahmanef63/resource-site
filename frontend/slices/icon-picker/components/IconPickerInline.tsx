@@ -15,8 +15,25 @@ import {
 } from "../lib/picker-handlers";
 import { PickerToolbar, VariantPills } from "./picker-parts/Toolbar";
 import { ColorRow } from "./picker-parts/ColorRow";
-import { EmojiTab } from "./picker-parts/EmojiTab";
-import { IconTab } from "./picker-parts/IconTab";
+
+// Per-tab code-split. EmojiTab carries the emoji catalog (~600 strings);
+// IconTab carries the lucide + phosphor icon component imports (~440
+// named imports). Splitting per tab means the user only downloads the
+// catalog for the tab they actually open.
+const EmojiTab = React.lazy(() =>
+  import("./picker-parts/EmojiTab").then((m) => ({ default: m.EmojiTab })),
+);
+const IconTab = React.lazy(() =>
+  import("./picker-parts/IconTab").then((m) => ({ default: m.IconTab })),
+);
+
+function TabFallback() {
+  return (
+    <div className="flex h-full min-h-0 flex-1 items-center justify-center text-xs text-muted-foreground">
+      Loading…
+    </div>
+  );
+}
 
 export interface IconPickerInlineProps {
   value: string | null | undefined;
@@ -68,15 +85,15 @@ export function IconPickerInline({ value, onChange, onClear, onSelect, className
   const filteredLucide = React.useMemo(() => filterLucide(query), [query]);
   const filteredPhosphor = React.useMemo(() => filterPhosphor(query), [query]);
 
+  const activeValue = value ?? "";
+
   const handlers = buildPickerHandlers({
     parsed, tab, iconVariant, currentColor, colorEnabled,
-    onChange, onClear, onSelect,
+    onChange, onClear, onSelect, currentValue: activeValue,
   });
 
   const gridRef = React.useRef<HTMLDivElement | null>(null);
   const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => handleGridArrowKey(e, gridRef);
-
-  const activeValue = value ?? "";
 
   return (
     <div
@@ -130,32 +147,36 @@ export function IconPickerInline({ value, onChange, onClear, onSelect, className
           />
         </div>
 
-        <TabsContent value="emoji" className="mt-2 flex-1 min-h-[120px] data-[state=inactive]:hidden">
-          <EmojiTab
-            filtered={filteredEmoji}
-            parsed={parsed}
-            iconStyle={iconStyle}
-            recents={recents}
-            activeValue={activeValue}
-            onPickEmoji={handlers.pickEmoji}
-            onPickRecent={handlers.pickRecent}
-          />
+        <TabsContent value="emoji" className="mt-2 flex flex-col flex-1 min-h-0 data-[state=inactive]:hidden">
+          <React.Suspense fallback={<TabFallback />}>
+            <EmojiTab
+              filtered={filteredEmoji}
+              parsed={parsed}
+              iconStyle={iconStyle}
+              recents={recents}
+              activeValue={activeValue}
+              onPickEmoji={handlers.pickEmoji}
+              onPickRecent={handlers.pickRecent}
+            />
+          </React.Suspense>
         </TabsContent>
 
-        <TabsContent value="icon" className="mt-2 flex-1 min-h-[120px] data-[state=inactive]:hidden">
-          <IconTab
-            variant={iconVariant}
-            filteredLucide={filteredLucide}
-            filteredPhosphor={filteredPhosphor}
-            parsed={parsed}
-            iconStyle={iconStyle}
-            currentColor={currentColor}
-            recents={recents}
-            activeValue={activeValue}
-            onPickLucide={handlers.pickLucide}
-            onPickPhosphor={handlers.pickPhosphor}
-            onPickRecent={handlers.pickRecent}
-          />
+        <TabsContent value="icon" className="mt-2 flex flex-col flex-1 min-h-0 data-[state=inactive]:hidden">
+          <React.Suspense fallback={<TabFallback />}>
+            <IconTab
+              variant={iconVariant}
+              filteredLucide={filteredLucide}
+              filteredPhosphor={filteredPhosphor}
+              parsed={parsed}
+              iconStyle={iconStyle}
+              currentColor={currentColor}
+              recents={recents}
+              activeValue={activeValue}
+              onPickLucide={handlers.pickLucide}
+              onPickPhosphor={handlers.pickPhosphor}
+              onPickRecent={handlers.pickRecent}
+            />
+          </React.Suspense>
         </TabsContent>
       </Tabs>
     </div>

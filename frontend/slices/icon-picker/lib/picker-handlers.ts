@@ -1,7 +1,7 @@
 /** Pick / commit handler factory for IconPickerInline. Extracted so the
  *  component file stays under the 200 LOC cap. */
 
-import type * as React from "react";
+import * as React from "react";
 import { lucideValue, phosphorValue, parseIconValue, withColor, type IconValue } from "./parse";
 import { pushRecent } from "./recents";
 import { ALL_EMOJIS } from "./emoji-catalog";
@@ -32,13 +32,22 @@ export interface PickerHandlers {
   handleClear: () => void;
 }
 
-export function buildPickerHandlers(deps: PickerHandlerDeps): PickerHandlers {
-  const { parsed, tab, iconVariant, currentColor, colorEnabled, onChange, onClear, onSelect } = deps;
+export function buildPickerHandlers(deps: PickerHandlerDeps & { currentValue: string }): PickerHandlers {
+  const { parsed, tab, iconVariant, currentColor, colorEnabled, onChange, onClear, onSelect, currentValue } = deps;
 
+  // Commit: fire onChange + close popover synchronously so the user
+  // sees an instant response, then push to recents in a low-priority
+  // transition so the recents-driven re-render doesn't compete with
+  // the close animation. Noop commits (re-picking the active value)
+  // short-circuit — keeps cells from re-rendering for nothing.
   function commit(nextValue: string) {
+    if (nextValue === currentValue) {
+      onSelect?.();
+      return;
+    }
     onChange(nextValue);
-    pushRecent(nextValue);
     onSelect?.();
+    React.startTransition(() => pushRecent(nextValue));
   }
 
   return {
@@ -48,7 +57,13 @@ export function buildPickerHandlers(deps: PickerHandlerDeps): PickerHandlers {
     pickRecent: (v) => {
       const re = parseIconValue(v);
       if (re.kind === "empty") return;
-      if (re.color) { onChange(v); pushRecent(v); onSelect?.(); return; }
+      if (re.color) {
+        if (v === currentValue) { onSelect?.(); return; }
+        onChange(v);
+        onSelect?.();
+        React.startTransition(() => pushRecent(v));
+        return;
+      }
       if (re.kind === "lucide") commit(lucideValue(re.name, currentColor));
       else if (re.kind === "phosphor") commit(phosphorValue(re.name, currentColor));
       else commit(withColor(re.emoji, undefined));

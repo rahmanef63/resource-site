@@ -28,7 +28,7 @@ export function EmojiTab({
   onPickRecent,
 }: EmojiTabProps) {
   return (
-    <ScrollArea className="h-full max-h-[40dvh] pr-2">
+    <ScrollArea className="h-full min-h-0 flex-1 pr-2">
       {filtered ? (
         <Grid>
           {filtered.length === 0 ? <Empty /> : filtered.map((e, i) => (

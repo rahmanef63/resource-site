@@ -24,7 +24,7 @@ export interface IconTabProps {
 }
 
 /** Combined Lucide + Phosphor tab. Branches on `variant`. ScrollArea
- *  uses `h-full max-h-[40dvh]` so the flex column in IconPickerInline
+ *  uses `h-full min-h-0 flex-1` so the flex column in IconPickerInline
  *  drives final height — works inside popover (capped by Radix avail-
  *  height var) AND inside dialog fallback (capped by dialog max-h). */
 export function IconTab({
@@ -41,7 +41,7 @@ export function IconTab({
   onPickRecent,
 }: IconTabProps) {
   return (
-    <ScrollArea className="h-full max-h-[40dvh] pr-2">
+    <ScrollArea className="h-full min-h-0 flex-1 pr-2">
       {variant === "lucide"
         ? renderLucide({ filteredLucide, parsed, iconStyle, currentColor, recents, activeValue, onPickLucide, onPickRecent })
         : renderPhosphor({ filteredPhosphor, parsed, iconStyle, currentColor, recents, activeValue, onPickPhosphor, onPickRecent })}
