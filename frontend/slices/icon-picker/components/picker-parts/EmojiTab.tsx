@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { EMOJI_GROUPS } from "../../lib/emoji-catalog";
 import type { Style } from "../../lib/style-pref";
 import type { IconValue } from "../../lib/parse";
@@ -28,7 +27,7 @@ export function EmojiTab({
   onPickRecent,
 }: EmojiTabProps) {
   return (
-    <ScrollArea className="h-full min-h-0 flex-1 pr-2">
+    <div className="h-full min-h-0 flex-1 overflow-y-auto pr-2">
       {filtered ? (
         <Grid>
           {filtered.length === 0 ? <Empty /> : filtered.map((e, i) => (
@@ -68,6 +67,6 @@ export function EmojiTab({
           ))}
         </div>
       )}
-    </ScrollArea>
+    </div>
   );
 }

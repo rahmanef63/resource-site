@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { LUCIDE_GROUPS } from "../../lib/lucide-catalog";
 import { PHOSPHOR_GROUPS } from "../../lib/phosphor-catalog";
 import type { Style } from "../../lib/style-pref";
@@ -41,11 +40,11 @@ export function IconTab({
   onPickRecent,
 }: IconTabProps) {
   return (
-    <ScrollArea className="h-full min-h-0 flex-1 pr-2">
+    <div className="h-full min-h-0 flex-1 overflow-y-auto pr-2">
       {variant === "lucide"
         ? renderLucide({ filteredLucide, parsed, iconStyle, currentColor, recents, activeValue, onPickLucide, onPickRecent })
         : renderPhosphor({ filteredPhosphor, parsed, iconStyle, currentColor, recents, activeValue, onPickPhosphor, onPickRecent })}
-    </ScrollArea>
+    </div>
   );
 }
 
