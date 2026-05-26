@@ -11,6 +11,51 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### CK-2D — 2026-05-26 — slice + template status tags (beta / wip / deprecated / experimental / coming-soon)
+
+Catalog UX upgrade. Surface readiness signals on slice + template
+detail pages so users can tell at a glance whether a resource is
+production-ready, mid-port, or on the way out.
+
+**Status taxonomy** (one badge per resource, defaults silently to
+"stable"):
+
+| Status | Color | Semantics |
+|---|---|---|
+| stable | none rendered | production-ready, default (available) |
+| beta | blue | feature-complete, polishing |
+| wip | amber | in-develop — visible but flagged not-ready |
+| draft | zinc | hidden from default catalog (truly unfinished) |
+| experimental | fuchsia | research preview, may break |
+| deprecated | red strike-through | scheduled for removal |
+| coming-soon | cyan | announced, not yet shipped (templates only) |
+
+**Shipped:**
+- `lib/content/slices.ts` — `Maturity` union widened from
+  `"draft"|"beta"|"stable"` to add `wip`, `experimental`, `deprecated`.
+- `lib/content/layouts.ts` — `LayoutStatus` widened similarly,
+  preserving `coming-soon`.
+- `components/site/maturity-badge.tsx` (47 LOC NEW) — single component
+  handles every value across both unions. `stable` renders nothing
+  (silent default to keep noise low).
+- `app/(docs)/slices/[slug]/slice-detail-header.tsx` — renders
+  `<MaturityBadge status={slice.maturity} />` in the header strip.
+- `components/site/template-detail.tsx` — same render point. Status
+  threaded through `TemplateDetailData.status` from the layout
+  detail page server prop.
+- `components/build/template-picker.tsx` — `TemplateOption.status`
+  union widened to match.
+
+**Seeded values:**
+- `notion-database` → `beta` (active multi-phase CK-1D port)
+- `notion-shell` → `beta` (Property + DatabaseViewConfig shape
+  evolving alongside notion-database)
+- `database-io` → `deprecated` (shim — merged into notion-database
+  v0.6; slated for removal in v1.0)
+
+Other entries remain default-stable. Future port waves can seed
+`beta` / `wip` as they touch each slice.
+
 ### CK-1D Phase 7 — 2026-05-26 — notion-database Intl number + date formatters (silong port)
 
 Lifted Intl-based formatters from notion-page-clone. Single source of

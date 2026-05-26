@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CopyPageButton } from "@/components/site/copy-page-button";
 import { RecentlyUpdatedBadge } from "@/components/site/recently-updated-badge";
+import { MaturityBadge } from "@/components/site/maturity-badge";
 import { getDemoUrl } from "@/lib/content/template-subdomains";
 import type { SliceEntry } from "@/lib/content/slices";
 
@@ -57,6 +58,7 @@ export function SliceDetailHeader({
               {slice.kind}
             </Badge>
           )}
+          <MaturityBadge status={slice.maturity} />
           <RecentlyUpdatedBadge slug={slice.slug} kind="slice" />
         </div>
         <h1 className="flex items-center gap-2 truncate text-lg font-semibold tracking-tight">

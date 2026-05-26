@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { CopyPageButton } from "@/components/site/copy-page-button";
 import { AssemblerInspector } from "@/components/site/assembler-inspector";
 import { RecentlyUpdatedBadge } from "@/components/site/recently-updated-badge";
+import { MaturityBadge } from "@/components/site/maturity-badge";
 import { useFeatureManifest, type Selections } from "@/components/site/feature-context";
 import { buildPreviewManifest } from "@/components/site/preview";
 import { getTemplateConfig } from "@/lib/templates/configs";
@@ -105,6 +106,7 @@ export function TemplateDetail({ kind, basePath, data, prev, next, prompt, siteU
               configurable
             </Badge>
           )}
+          <MaturityBadge status={data.status} />
           <RecentlyUpdatedBadge slug={data.slug} kind="template" />
         </div>
         <h1 className="truncate text-lg font-semibold tracking-tight">{data.title}</h1>

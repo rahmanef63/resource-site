@@ -63,6 +63,7 @@ export default async function LayoutDetailPage({ params }: { params: Promise<{ s
         defaultView: l.defaultView,
         defaultZoom: l.defaultZoom,
         badge: l.category,
+        status: l.status,
       }}
       prev={prev}
       next={next}

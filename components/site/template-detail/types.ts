@@ -25,6 +25,10 @@ export type TemplateDetailData = {
   defaultView?: PreviewView;
   defaultZoom?: number;
   badge?: string;
+  /** Maturity / status badge (beta / wip / deprecated / etc.). */
+  status?:
+    | "stable" | "beta" | "wip" | "draft" | "experimental"
+    | "deprecated" | "coming-soon";
 };
 
 export type TemplateDetailNeighbor = { slug: string; title: string };

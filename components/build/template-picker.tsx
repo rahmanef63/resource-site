@@ -17,7 +17,9 @@ export type TemplateOption = {
   title: string;
   description: string;
   category: string;
-  status?: "stable" | "draft" | "coming-soon";
+  status?:
+    | "stable" | "beta" | "wip" | "draft" | "experimental"
+    | "deprecated" | "coming-soon";
   previewPath?: string;
   adminPreviewPath?: string;
   defaultSurface?: "public" | "admin";

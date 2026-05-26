@@ -1,6 +1,13 @@
 import type { PreviewView } from "@/lib/preview-presets";
 
-export type LayoutStatus = "stable" | "draft" | "coming-soon";
+export type LayoutStatus =
+  | "stable"        // production-ready, default (available)
+  | "beta"          // feature-complete, polishing
+  | "wip"           // in-develop — visible but flagged not-ready
+  | "draft"         // hidden from default catalog
+  | "experimental"  // research preview, may break
+  | "deprecated"    // scheduled for removal
+  | "coming-soon";  // announced, not yet shipped
 
 export type LayoutEntry = {
   slug: string;
