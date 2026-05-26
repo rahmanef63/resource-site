@@ -1,14 +1,4 @@
-/** notion-shell — domain types subset.
- *
- *  Portable subset of nosion's shared/types/domain.ts. Strips fields
- *  that only make sense with the convex backend (workspaceId, wiki,
- *  shareSlug, snapshot machinery, etc.) and keeps the value-shape
- *  every consumer needs to render blocks, pages, and databases.
- *
- *  When a downstream needs richer state (relations / rollups /
- *  formulas / per-view filters), bump this subset — the wrappers
- *  are typed against it.
- */
+/** notion-shell domain types — portable subset of nosion's domain. */
 
 import type { ReactNode } from "react";
 import type { Block } from "./block-types";
@@ -42,7 +32,16 @@ export type PropertyType =
   | "date" | "checkbox" | "url" | "email" | "phone"
   | "person" | "files" | "formula"
   | "created_time" | "last_edited_time" | "unique_id"
-  | "created_by" | "last_edited_by";
+  | "created_by" | "last_edited_by"
+  | "relation" | "rollup";
+
+/** Rollup aggregation kinds. Determines how a rollup folds the values
+ *  pulled from its relation's target property. */
+export type RollupAggregate =
+  | "count" | "count_unique" | "values"
+  | "sum" | "avg" | "min" | "max"
+  | "earliest" | "latest"
+  | "checked" | "percent_checked";
 
 // PROPERTY_TYPE_META + derived lists live in ./property-type-meta.ts.
 
@@ -67,6 +66,16 @@ export interface Property {
   formulaExpression?: string;
   /** Prefix for unique_id — e.g. "BUG" → "BUG-001". type=unique_id. */
   uniqueIdPrefix?: string;
+  /** Target database for a relation cell. `null` / unset = "any database
+   *  row". type=relation. */
+  relationDatabaseId?: string | null;
+  /** Relation property id this rollup pulls linked rows from. type=rollup. */
+  rollupRelationPropertyId?: string | null;
+  /** Property id on the relation's target database whose values get
+   *  aggregated. Unset = aggregate page titles. type=rollup. */
+  rollupTargetPropertyId?: string | null;
+  /** Aggregation fold. Defaults to "count". type=rollup. */
+  rollupAggregate?: RollupAggregate;
 }
 
 export type PropertyValue =
