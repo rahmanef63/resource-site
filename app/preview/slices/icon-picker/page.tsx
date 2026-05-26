@@ -1,13 +1,21 @@
 "use client";
 
 import * as React from "react";
-import { IconPickerPopover, DynamicIcon, DEFAULT_ICON_SIZE } from "@/features/icon-picker";
+import { IconPickerPopover, DynamicIcon } from "@/features/icon-picker";
 import { Button } from "@/components/ui/button";
 
-/** Minimal interactive preview: one icon button.
- *  Click → IconPickerPopover opens with full picker (emoji, lucide,
- *  colors, search, recents). Same component shipped to consumer
- *  projects via `npx rr add icon-picker`. */
+/** Minimal interactive preview: one hero icon button.
+ *  Mirrors silong's `PageTitle` 1:1 — the canonical "Notion page hero
+ *  icon" recipe. Two CSS knobs do all the work:
+ *    - `text-[78px]` cascades font-size to DynamicIcon's wrapper, so
+ *      emoji glyphs (which render at font-size) hit 78px.
+ *    - `[&_svg]:size-[78px]` is the safety net: any SVG descendant
+ *      (lucide outline, phosphor fill) gets explicit width=78 height=78
+ *      via Tailwind's arbitrary descendant selector. Overrides lucide's
+ *      hardcoded `width=24` SVG attribute regardless of browser
+ *      cascade quirks.
+ *  DynamicIcon is called with NO `size` prop so the wrapper inherits
+ *  font-size from the button (same code path silong uses). */
 export default function Page() {
   const [icon, setIcon] = React.useState<string | null>("🪺");
   return (
@@ -19,17 +27,12 @@ export default function Page() {
         align="center"
       >
         <Button
-          variant="outline"
+          variant="ghost"
           type="button"
           aria-label="Open icon picker"
-          className="group/icon grid h-auto size-28 place-items-center rounded-xl border-border bg-card transition hover:bg-accent hover:shadow-md"
+          className="h-auto rounded-md p-1 text-[78px] font-normal leading-none transition [&_svg]:size-[78px]"
         >
-          <DynamicIcon
-            value={icon}
-            size={DEFAULT_ICON_SIZE}
-            className="transition group-hover/icon:scale-110"
-            fallback="🪺"
-          />
+          <DynamicIcon value={icon} fallback="🪺" />
         </Button>
       </IconPickerPopover>
     </main>
