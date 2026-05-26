@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { IconPickerPopover, DynamicIcon } from "@/features/icon-picker";
+import { IconPickerPopover, DynamicIcon, DEFAULT_ICON_SIZE } from "@/features/icon-picker";
 import { Button } from "@/components/ui/button";
 
 /** Minimal interactive preview: one icon button.
@@ -22,11 +22,12 @@ export default function Page() {
           variant="outline"
           type="button"
           aria-label="Open icon picker"
-          className="group/icon grid h-auto size-24 place-items-center rounded-xl border-border bg-card transition hover:bg-accent hover:shadow-md"
+          className="group/icon grid h-auto size-28 place-items-center rounded-xl border-border bg-card transition hover:bg-accent hover:shadow-md"
         >
           <DynamicIcon
             value={icon}
-            className="size-12 text-5xl leading-none transition group-hover/icon:scale-110"
+            size={DEFAULT_ICON_SIZE}
+            className="transition group-hover/icon:scale-110"
             fallback="🪺"
           />
         </Button>
