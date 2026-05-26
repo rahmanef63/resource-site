@@ -41,6 +41,22 @@ export { RollupCell, type RollupCellProps } from "./components/cells/RollupCell"
 export { filterRelationCandidates } from "./lib/relationCandidates";
 export { computeRollup } from "./lib/computeRollup";
 
+// ---- Row Selection multi-select (CK-1D Phase 3) ----
+export {
+  RowSelectionProvider,
+  useRowSelection,
+  useRowSelectionOptional,
+  RowMarqueeOverlay,
+  RowSelectionToolbar,
+  RowSelectionKeyboard,
+  Marquee,
+  type RowSelectionApi,
+  type RowSelectionState,
+  type MarqueeProps,
+  type MarqueeMode,
+  type Rect,
+} from "./components/row-selection";
+
 // Re-export domain types for convenience (source of truth is notion-shell).
 export type {
   Database,

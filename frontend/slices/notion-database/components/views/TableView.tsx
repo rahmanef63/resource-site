@@ -3,10 +3,15 @@
 /** TableView — Notion-canonical table layout. Pre-filtered rows in;
  *  cells delegated to host via renderCell. Header optionally wrapped by
  *  renderColumnHeader (typically ColumnHeaderMenu). Row hover reveals
- *  the RowActionsMenu (Open / Duplicate / Delete). */
+ *  the RowActionsMenu (Open / Duplicate / Delete). Rows carry
+ *  `data-row-shell-id` so RowMarqueeOverlay can hit-test against
+ *  them; when wrapped in `<RowSelectionProvider>` selected rows render
+ *  a subtle primary-tinted ring. */
 
 import { useMemo } from "react";
+import { cn } from "rahman-shared/lib/utils";
 import { RowActionsMenu } from "../RowActionsMenu";
+import { useRowSelectionOptional } from "../row-selection/RowSelectionProvider";
 import { CalcFooter } from "./CalcFooter";
 import type { ViewProps } from "./types";
 
@@ -17,6 +22,7 @@ export function TableView({
 }: ViewProps) {
   const visibleProps = useMemo(() => db.properties.filter((p) => !p.hidden), [db.properties]);
   const hasRowActions = !readOnly && (!!onRowRemove || !!onOpenRow || !!onRowDuplicate);
+  const sel = useRowSelectionOptional();
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
@@ -33,8 +39,18 @@ export function TableView({
           </tr>
         </thead>
         <tbody>
-          {rows.map((r) => (
-            <tr key={r.id} className="group/row border-b border-border/60 hover:bg-accent/30">
+          {rows.map((r) => {
+            const selected = sel?.isSelected(r.id) ?? false;
+            return (
+            <tr
+              key={r.id}
+              data-row-shell-id={r.id}
+              aria-selected={selected || undefined}
+              className={cn(
+                "group/row border-b border-border/60 hover:bg-accent/30",
+                selected && "bg-primary/5 ring-1 ring-inset ring-primary/40",
+              )}
+            >
               {visibleProps.map((p) => (
                 <td key={p.id} className="px-3 py-1.5">{renderCell(p, r)}</td>
               ))}
@@ -50,7 +66,8 @@ export function TableView({
                 </td>
               )}
             </tr>
-          ))}
+            );
+          })}
           {rows.length === 0 && (
             <tr>
               <td colSpan={visibleProps.length + (hasRowActions ? 1 : 0)} className="px-3 py-4 text-center text-xs italic text-muted-foreground">

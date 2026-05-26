@@ -11,6 +11,51 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### CK-1D Phase 3 — 2026-05-26 — notion-database row multi-select (silong port)
+
+Lifted **row-selection** subsystem from notion-page-clone. Third
+biggest gap from the upstream audit (multi-select + bulk delete +
+marquee drag-band were all 0% in rr).
+
+**Shipped (notion-database v0.8.0 → v0.9.0, 11 files, 617 LOC):**
+- `components/row-selection/RowSelectionProvider.tsx` (82) — Context
+  + state w/ stale-id pruning
+- `components/row-selection/RowMarqueeOverlay.tsx` (41) — selects
+  rows whose bounding rect intersects the band
+- `components/row-selection/RowSelectionToolbar.tsx` (78) — floating
+  bottom-center action bar
+- `components/row-selection/RowSelectionKeyboard.tsx` (68) — Esc
+  clear + Del/Backspace bulk delete
+- `components/row-selection/Marquee.tsx` (29) — portal-mounted rect
+  renderer
+- `components/row-selection/useMarqueeDrag.ts` (189) — gesture hook
+  w/ AutoCAD window/crossing modes + long-press text activation
+- `components/row-selection/marquee-collect.ts` (61) — pure DOM
+  hit-test (extracted to keep hook under cap)
+- `components/row-selection/marquee-predicates.ts` (21) — interactive
+  + text-target bail conditions
+- `components/row-selection/marquee-types.ts` (30) — primitive types
+- `components/row-selection/index.ts` (18) — barrel
+- TableView updated (66 → 83 LOC) — rows now carry
+  `data-row-shell-id` + render primary-tinted ring when wrapped
+
+**Architectural strip vs upstream:**
+- Toolbar: dropped "Edit property across selection" popover (depends
+  on PropertyFormInput, deferred slice). Host injects custom bulk-edit
+  UI via `extraSlot` prop.
+- Keyboard: replaced `useDbAdapter().deleteRow` with `onDelete`
+  callback prop.
+- Marquee primitive lifted in-tree (rr didn't have a shared marquee
+  helper); split into 5 sibling files to honour the 200-LOC cap.
+
+**Slice metadata:**
+- shadcn deps += `separator`
+- packages/cli/lib/manifest.json regen
+- lib/content/slices.ts SSOT synced
+- CHANGELOG appended Unreleased § CK-1D Phase 3
+
+**Parity uplift:** notion-database ~58% → ~66% vs upstream.
+
 ### CK-1D Phase 2 — 2026-05-26 — notion-database relation + rollup cells (silong port)
 
 Lifted **relation + rollup** subsystem from notion-page-clone. Closes
