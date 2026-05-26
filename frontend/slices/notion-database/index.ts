@@ -62,13 +62,32 @@ export {
 // ---- Calendar drag helpers (CK-1D Phase 5 — pure) ----
 export {
   parseExistingDate,
-  formatDateValue,
+  formatDateValue as formatCalendarDragDate,
   shiftYmd,
   computeDateShift,
   parseDropTargetId,
-  type DateValue,
+  type DateValue as CalendarDragDateValue,
   type ShiftResult,
 } from "./lib/calendarDrag";
+
+// ---- Format helpers (CK-1D Phase 7 — Intl-based number + date) ----
+export {
+  resolveNumberFormat,
+  formatPropertyNumber,
+  COMMON_CURRENCIES,
+} from "./lib/numberFormat";
+export {
+  parseYmdToLocal,
+  formatYmd,
+  formatTime,
+  formatDateValue,
+  DATE_FORMAT_LABELS,
+  TIME_FORMAT_LABELS,
+  DATE_FORMATS,
+  type DateFormatKind,
+  type TimeFormatKind,
+  type DateValue,
+} from "./lib/dateFormat";
 
 // Re-export domain types for convenience (source of truth is notion-shell).
 export type {

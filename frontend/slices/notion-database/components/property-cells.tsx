@@ -92,6 +92,7 @@ export function renderPropertyCell({
           value={value as { date?: string; end?: string } | null}
           readOnly={readOnly}
           onChange={onChange ? (next) => onChange(next) : undefined}
+          prop={prop}
         />
       );
 

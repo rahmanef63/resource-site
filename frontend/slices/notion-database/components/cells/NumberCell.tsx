@@ -8,12 +8,12 @@
 
 import type { NumberFormat, Property } from "../../types";
 
-const FORMATTERS: Record<NumberFormat, (n: number, decimals: number) => string> = {
+const FORMATTERS: Record<NumberFormat, (n: number, decimals: number, currency: string) => string> = {
   number:   (n, d) => Number.isFinite(n) ? n.toLocaleString(undefined, { maximumFractionDigits: d }) : "",
   decimal:  (n, d) => Number.isFinite(n) ? n.toFixed(d) : "",
   percent:  (n, d) => Number.isFinite(n) ? `${(n * 100).toFixed(d)}%` : "",
-  currency: (n, d) => Number.isFinite(n)
-    ? n.toLocaleString(undefined, { style: "currency", currency: "USD", minimumFractionDigits: d, maximumFractionDigits: d })
+  currency: (n, d, currency) => Number.isFinite(n)
+    ? n.toLocaleString(undefined, { style: "currency", currency, minimumFractionDigits: d, maximumFractionDigits: d })
     : "",
 };
 
@@ -23,7 +23,8 @@ export function formatNumber(value: unknown, prop: Property): string {
   if (!Number.isFinite(n)) return String(value);
   const fmt = prop.numberFormat ?? "number";
   const decimals = typeof prop.numberDecimals === "number" ? prop.numberDecimals : 2;
-  return FORMATTERS[fmt](n, decimals);
+  const currency = prop.numberCurrencyCode ?? "USD";
+  return FORMATTERS[fmt](n, decimals, currency);
 }
 
 interface NumberCellProps {

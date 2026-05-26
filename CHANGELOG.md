@@ -11,6 +11,39 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### CK-1D Phase 7 — 2026-05-26 — notion-database Intl number + date formatters (silong port)
+
+Lifted Intl-based formatters from notion-page-clone. Single source of
+truth so cells / cards / charts / rollups render identically and
+respect locale + currency-code preferences.
+
+**Shipped (notion-database v0.10.0 → v0.11.0, notion-shell v0.5.0 → v0.6.0):**
+- `lib/numberFormat.ts` (83 LOC) — resolveNumberFormat, formatPropertyNumber,
+  COMMON_CURRENCIES (USD/EUR/GBP/JPY/CNY/IDR/SGD/MYR/AUD/CAD/CHF/INR/KRW/THB/VND/PHP).
+- `lib/dateFormat.ts` (107 LOC) — parseYmdToLocal, formatYmd (6 patterns:
+  full/short/mdy/dmy/ymd/relative), formatTime (12h/24h), formatDateValue
+  (combined date + optional time + range), label maps.
+- NumberCell: currency renderer now reads `prop.numberCurrencyCode` (was
+  hardcoded "USD"). Backwards-compatible — defaults to "USD" when unset.
+- DateCell: now accepts optional `prop` — routes through `formatDateValue`
+  when any of `dateFormat` / `timeFormat` / `dateIncludeTime` is set,
+  otherwise falls back to the previous date-fns "LLL d, yyyy" output.
+  Wired from property-cells dispatcher.
+
+**Type model extension (notion-shell):**
+- Property += `numberCurrencyCode?: string`
+- Property += `dateFormat?: "full" | "short" | "mdy" | "dmy" | "ymd" | "relative"`
+- Property += `timeFormat?: "12h" | "24h"`
+- Property += `dateIncludeTime?: boolean`
+- `DatabaseViewConfig` extracted to `./view-config-types.ts` so
+  `types.ts` stays under the 200-LOC cap.
+
+**Strip vs upstream:** `dateNotification` field omitted — rr's
+notion-database doesn't ship a calendar reminder runtime, so the
+related labels stay in the editor slice when that lands.
+
+**Parity uplift:** notion-database ~70% → ~75% vs upstream.
+
 ### CK-1D Phase 5 — 2026-05-26 — notion-database checkbox gutter + calendarDrag helpers
 
 Light polish wave. Two additions, both wire into existing pieces

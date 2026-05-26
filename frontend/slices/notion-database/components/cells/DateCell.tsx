@@ -15,8 +15,10 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import type { Property } from "../../types";
+import { formatDateValue } from "../../lib/dateFormat";
 
-interface DateValue { date?: string; end?: string }
+interface DateValue { date?: string; end?: string; time?: string; endTime?: string }
 
 function toISO(d: Date | undefined): string | undefined {
   if (!d) return undefined;
@@ -28,7 +30,7 @@ function fromISO(s: string | null | undefined): Date | undefined {
   try { return parseISO(s); } catch { return undefined; }
 }
 
-function display(v: DateValue | null): string {
+function defaultDisplay(v: DateValue | null): string {
   if (!v?.date) return "";
   const start = fromISO(v.date);
   if (!start) return v.date;
@@ -40,13 +42,28 @@ function display(v: DateValue | null): string {
   return startFmt;
 }
 
+/** Display preference precedence: when the host passes `prop` and any
+ *  date-related setting (`dateFormat`, `timeFormat`, `dateIncludeTime`)
+ *  is set on it, route through the typed formatter; otherwise fall back
+ *  to the date-fns "LLL d, yyyy" rendering preserved from earlier rr
+ *  releases. Keeps Phase-7 changes opt-in. */
+function display(v: DateValue | null, prop?: Property): string {
+  if (!v?.date) return "";
+  const hasPropFmt = !!(prop && (prop.dateFormat || prop.timeFormat || prop.dateIncludeTime));
+  if (hasPropFmt) return formatDateValue(v, prop);
+  return defaultDisplay(v);
+}
+
 interface DateCellProps {
   value: DateValue | null;
   readOnly?: boolean;
   onChange?: (next: DateValue | null) => void;
+  /** When provided, dateFormat / timeFormat / dateIncludeTime on the
+   *  property drive the display string. */
+  prop?: Property;
 }
 
-export function DateCell({ value, readOnly, onChange }: DateCellProps) {
+export function DateCell({ value, readOnly, onChange, prop }: DateCellProps) {
   const [open, setOpen] = useState(false);
   const v = value && typeof value === "object" ? value : null;
   const isRange = !!v?.end;
@@ -57,7 +74,7 @@ export function DateCell({ value, readOnly, onChange }: DateCellProps) {
     return fromISO(v?.date);
   }, [rangeMode, v?.date, v?.end]);
 
-  const label = display(v);
+  const label = display(v, prop);
 
   if (readOnly) {
     return label
