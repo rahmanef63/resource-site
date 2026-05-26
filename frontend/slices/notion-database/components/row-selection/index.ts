@@ -16,3 +16,4 @@ export { RowSelectionToolbar } from "./RowSelectionToolbar";
 export { RowSelectionKeyboard } from "./RowSelectionKeyboard";
 export { Marquee } from "./Marquee";
 export type { MarqueeProps, MarqueeMode, Rect } from "./marquee-types";
+export { HeaderCheckboxGutter, RowCheckbox } from "./Checkboxes";

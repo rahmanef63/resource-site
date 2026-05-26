@@ -41,7 +41,7 @@ export { RollupCell, type RollupCellProps } from "./components/cells/RollupCell"
 export { filterRelationCandidates } from "./lib/relationCandidates";
 export { computeRollup } from "./lib/computeRollup";
 
-// ---- Row Selection multi-select (CK-1D Phase 3) ----
+// ---- Row Selection multi-select (CK-1D Phase 3 + Phase 5 Checkboxes) ----
 export {
   RowSelectionProvider,
   useRowSelection,
@@ -50,12 +50,25 @@ export {
   RowSelectionToolbar,
   RowSelectionKeyboard,
   Marquee,
+  HeaderCheckboxGutter,
+  RowCheckbox,
   type RowSelectionApi,
   type RowSelectionState,
   type MarqueeProps,
   type MarqueeMode,
   type Rect,
 } from "./components/row-selection";
+
+// ---- Calendar drag helpers (CK-1D Phase 5 — pure) ----
+export {
+  parseExistingDate,
+  formatDateValue,
+  shiftYmd,
+  computeDateShift,
+  parseDropTargetId,
+  type DateValue,
+  type ShiftResult,
+} from "./lib/calendarDrag";
 
 // Re-export domain types for convenience (source of truth is notion-shell).
 export type {

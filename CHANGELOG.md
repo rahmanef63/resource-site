@@ -11,6 +11,44 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### CK-1D Phase 5 — 2026-05-26 — notion-database checkbox gutter + calendarDrag helpers
+
+Light polish wave. Two additions, both wire into existing pieces
+without breaking the public API.
+
+**Shipped (notion-database v0.9.0 → v0.10.0):**
+- `components/row-selection/Checkboxes.tsx` (74 LOC) —
+  HeaderCheckboxGutter (tri-state select-all / clear with
+  `aria-checked="mixed"` indeterminate state) + RowCheckbox (per-row
+  toggle, stops propagation so it doesn't fight cell click-to-edit).
+  Both require RowSelectionProvider in scope. Raw `<button>` used
+  intentionally — wrapping in shadcn Button erases `role="checkbox"`
+  context and breaks screen reader announcements.
+- `lib/calendarDrag.ts` (75 LOC, pure, verbatim) — parseExistingDate,
+  formatDateValue, shiftYmd, computeDateShift, parseDropTargetId.
+  Hosts wire these inside their own DndContext to enable calendar /
+  timeline drag-to-move without taking on @dnd-kit coupling inside
+  the slice itself.
+- TableView updated 83 → 97 LOC — automatically renders a leading
+  checkbox gutter column when a RowSelectionProvider is in scope.
+  `colSpan` math adjusted; visual diff is invisible without provider.
+
+**Scope-down (deferred):**
+- SortableHeader (column drag-reorder) + SortableRow (row
+  drag-reorder) — upstream's implementations are tightly coupled to
+  a flexbox-table refactor + InlineRowTitle + SelectableCell. Porting
+  forces a TableView rewrite that blows the 200-LOC view cap. Tracked
+  for a future "table-dnd" sub-slice.
+- CalcFooter wiring — already active in rr's TableView since v0.6.
+
+**Slice metadata:**
+- shadcn deps unchanged (no new primitives)
+- packages/cli/lib/manifest.json regenerated
+- lib/content/slices.ts SSOT synced
+- CHANGELOG appended Unreleased § CK-1D Phase 5
+
+**Parity uplift:** notion-database ~66% → ~70% vs upstream.
+
 ### CK-1D Phase 3 — 2026-05-26 — notion-database row multi-select (silong port)
 
 Lifted **row-selection** subsystem from notion-page-clone. Third

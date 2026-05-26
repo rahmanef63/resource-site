@@ -12,6 +12,7 @@ import { useMemo } from "react";
 import { cn } from "rahman-shared/lib/utils";
 import { RowActionsMenu } from "../RowActionsMenu";
 import { useRowSelectionOptional } from "../row-selection/RowSelectionProvider";
+import { HeaderCheckboxGutter, RowCheckbox } from "../row-selection/Checkboxes";
 import { CalcFooter } from "./CalcFooter";
 import type { ViewProps } from "./types";
 
@@ -23,11 +24,19 @@ export function TableView({
   const visibleProps = useMemo(() => db.properties.filter((p) => !p.hidden), [db.properties]);
   const hasRowActions = !readOnly && (!!onRowRemove || !!onOpenRow || !!onRowDuplicate);
   const sel = useRowSelectionOptional();
+  const showCheckboxGutter = !!sel;
+  const rowIds = useMemo(() => rows.map((r) => r.id), [rows]);
+  const emptyColSpan = visibleProps.length + (hasRowActions ? 1 : 0) + (showCheckboxGutter ? 1 : 0);
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead className="border-b border-border bg-muted/30 text-left text-xs text-muted-foreground">
           <tr>
+            {showCheckboxGutter && (
+              <th aria-hidden className="w-8 px-2">
+                <HeaderCheckboxGutter rowIds={rowIds} />
+              </th>
+            )}
             {visibleProps.map((p) => (
               <th key={p.id} className="px-3 py-1.5 font-normal">
                 {renderColumnHeader ? renderColumnHeader(p) : (
@@ -51,6 +60,11 @@ export function TableView({
                 selected && "bg-primary/5 ring-1 ring-inset ring-primary/40",
               )}
             >
+              {showCheckboxGutter && (
+                <td className="w-8 px-2">
+                  <RowCheckbox rowId={r.id} />
+                </td>
+              )}
               {visibleProps.map((p) => (
                 <td key={p.id} className="px-3 py-1.5">{renderCell(p, r)}</td>
               ))}
@@ -70,7 +84,7 @@ export function TableView({
           })}
           {rows.length === 0 && (
             <tr>
-              <td colSpan={visibleProps.length + (hasRowActions ? 1 : 0)} className="px-3 py-4 text-center text-xs italic text-muted-foreground">
+              <td colSpan={emptyColSpan} className="px-3 py-4 text-center text-xs italic text-muted-foreground">
                 No rows match
               </td>
             </tr>
