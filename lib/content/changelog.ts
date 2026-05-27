@@ -10,6 +10,37 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CK1K",
+    version: "CK-1K",
+    date: Date.parse("2026-05-27"),
+    kind: "improvement",
+    title: "notion-database 0.13.0 — typed AST formula engine (CK-1D Phase 6)",
+    body:
+      "Last big CK-1D phase. Replaces the flat single-file regex evaluator (`lib/formula.ts`) with a typed AST engine under `lib/formulaEngine/` ported from notion-page-clone. Eight focused submodules, each ≤200 LOC: `types` (FormulaValue union + AST node shapes + FormulaError), `coerce` (toString/toNumber/toBoolean/toDate/isEmpty), `dateUtils` (UTC addUnit/diffUnit/formatDate), `ParserClass` (Pratt-style recursive-descent w/ source positions), `parser` (top-level dispatch — template / `=math` / bare call), `functions` (29-fn dispatch w/ arity throws), `evaluator` (AST walker w/ circular-ref guard + memoisation cache), `deps` (static `collectDeps` walker). New typed FormulaValue (string/number/boolean/date/null/list) replaces string-only returns — host gets exact runtime types. Circular-reference detection via visited-set throws FormulaError before infinite recursion. Per-call memoisation cache reuses evaluated formula values across an eval tree. New fn surface: `substring`, `dateAdd`, `dateSubtract`, `dateBetween`, `formatDate`, `count`, `sum`, `join` — on top of every existing fn (concat/lower/upper/length/contains/replace/if/and/or/not/empty/round/floor/ceil/abs/min/max/now/today). Relation refs (`{{Tasks}}`) now resolve to a `list` of target-page titles when `pages` is passed through NotionDatabase. FormulaCell upgraded — popover surfaces parse-error message + source position; cell display flips to destructive style + tooltip on invalid expression; preview line updates live as the user types. Legacy `evaluateFormula()` string wrapper preserved (back-compat) but routes through the new engine. New imports: `evalFormula`, `formatFormulaValue`, `collectDeps`, `parseFormula`, plus typed exports `FormulaValue`, `EvalContext`, `EvalResult`, `FormulaError`, `Node`, `ExprNode` from `@/features/notion-database`. Parity tracker: rr ↔ open-silong now ~88% (Phase 6 closes the formula gap; remaining deferred: SubItemsPicker, table-dnd column/row reorder, PropertyFormInput, RowActionsMenu keyboard nav).",
+    groups: [
+      {
+        heading: "Slices touched",
+        bullets: [
+          { text: "notion-database — typed AST formula engine + 8 new fns + circular-ref guard (0.12.0 → 0.13.0)", slug: "notion-database" },
+        ],
+      },
+      {
+        heading: "New files",
+        bullets: [
+          "frontend/slices/notion-database/lib/formulaEngine/{types,coerce,dateUtils,ParserClass,parser,functions,evaluator,deps,index}.ts — 9-file typed AST engine",
+        ],
+      },
+      {
+        heading: "Touched files",
+        bullets: [
+          "lib/formula.ts — slimmed to barrel + legacy evaluateFormula() wrapper",
+          "components/cells/FormulaCell.tsx — inline parse-error + live preview + relation-pages prop",
+          "components/property-cells.tsx — passes `pages` through to FormulaCell",
+        ],
+      },
+    ],
+  },
+  {
     id: "CK1J",
     version: "CK-1J",
     date: Date.parse("2026-05-27"),

@@ -130,7 +130,7 @@ export function renderPropertyCell({
       if (!row || !db) return <span className="text-xs text-muted-foreground/60">—</span>;
       return (
         <FormulaCell
-          db={db} row={row} prop={prop} readOnly={readOnly}
+          db={db} row={row} prop={prop} readOnly={readOnly} pages={pages}
           onExpressionChange={onPropertyChange ? (formulaExpression) => onPropertyChange({ formulaExpression }) : undefined}
         />
       );
