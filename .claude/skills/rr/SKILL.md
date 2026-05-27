@@ -78,10 +78,51 @@ ls slices/<slug>/
 test -f slices/<slug>/slice.json && echo "✓ installed"
 ```
 
-**rr-repo mode (scaffold new slice):**
+In rr-repo mode `add` is a no-op — use `scaffold-slice` instead (see below).
+
+### Verb: init <app>
+
+**Bootstraps a fresh Next 16 + Convex + Tailwind 4 consumer project.**
+Scaffolds package.json + tsconfig + Tailwind config + rr.json manifest
++ shadcn components.json + auth wiring (no Clerk — `@convex-dev/auth`).
+
+```bash
+npx rahman-resources init <app-name>      # alias: npx rr init <app-name>
+cd <app-name>
+pnpm install
+pnpm exec convex dev                       # if Convex backend wanted
+```
+
+Output `rr.json` is the consumer manifest schema (`packages/cli/lib/rr-schema.json`)
+used by every subsequent `rr add` / `rr update` call.
+
+Operator-only when scaffolding for someone else; otherwise users run themselves.
+
+### Verb: scaffold-slice <slug> (rr-repo mode only)
+
+**Creates a new slice skeleton under `frontend/slices/<slug>/`** with
+the canonical layout (slice.json + slice.contract.ts + slice.manifest.json
++ config.ts + index.ts + agent.md + components/ + lib/). Wires the new
+slug into `lib/content/slices.ts` as a TODO entry the operator fills
+in. Skips the cp-r ritual when the slice is greenfield (rare — prefer
+`lift` from a consumer when source exists).
+
 ```bash
 npx rahman-resources scaffold-slice <slug>
 ```
+
+Pre-flight: pick a category (`ui` / `data` / `auth` / `infra` / `ai` /
+`content` / `payment` / `email` / `realtime` / `search`). Decide
+`kind`: `ui` (no Convex), `full` (Convex + UI), `convex` (backend
+only).
+
+After scaffolding:
+1. Fill in `slice.json` description + title + tags
+2. Write `slice.contract.ts` with `defineSliceContract({...})`
+3. Add SliceEntry to `lib/content/slices.ts` (REQUIRED — `npm run audit:slices` gates)
+4. Append changelog entry in `lib/content/changelog.ts`
+5. Run `node scripts/features/gen-slice-agent-md.mjs` + `node packages/cli/scripts/gen-manifest.mjs`
+6. Verify: `npm run validate:all`
 
 ### Verb: update <slug>
 
@@ -349,32 +390,38 @@ component near `<Toaster />`.
 
 ## Catalog snapshot (so other projects know what to check)
 
-**Last refreshed: 2026-05-19.** Cross-check with rr repo before lift
+**Last refreshed: 2026-05-27.** Cross-check with rr repo before lift
 work — counts drift weekly.
 
-### Distributable slices (52)
+### Distributable slices (58)
 
 Pure UI:
-`blog-section`, `changelog-feed`, `cta`, `equation`, `faq-section`,
-`feature-grid`, `hero`, `landing-sections`, `motion-primitives`,
+`blog-section`, `changelog-feed`, `code-block`, `cta`, `equation`,
+`faq-section`, `feature-grid`, `full-width-toggle`, `hero`,
+`landing-sections`, `motion-primitives`, `notifications`,
 `portfolio-section`, `pricing-page`, `responsive-dialog`, `services`,
 `socials`, `subscribers`, `testimonials`, `testimonials-grid`,
-`theme-preset-switcher`, `three-column`
+`theme-presets`, `three-column`, `i18n-translate`
 
 Admin shells / infra:
 `admin`, `admin-panel`, `audit-log`, `dashboard-shell`,
-`event-tracking`, `full-width-toggle`, `notifications`,
-`platform-admin`, `rate-limit`, `seo`
+`event-tracking`, `platform-admin`, `rate-limit`, `seo`,
+`workspace-shell`
 
-Editor primitives:
-`code-block`, `command-menu`, `comments`, `database-cell-selection`,
-`document-checklist`, `icon-picker`, `mdx-blog`
+Editor primitives / data:
+`activity`, `command-menu`, `comments`, `database-cell-selection`,
+`document-checklist`, `files`, `icon-picker`, `mdx-blog`
+
+Notion family (split + composable):
+`notion-shell` (page + sidebar + editor, no DB),
+`notion-database` (full table — 11 views · 18 cells · AST formula engine),
+`database-io` (DEPRECATED — merged into notion-database v0.6)
 
 AI:
 `ai-admin`, `ai-agents`, `ai-chat`, `ai-router`, `ai-studio`,
 `vector-search`, `create-your-mcp`
 
-Auth + payments:
+Auth + payments + email:
 `convex-auth`, `rbac-roles`, `doku-payment`, `midtrans-payment`,
 `contact-form-resend`, `resend-newsletter`, `cal-com-booking`,
 `broadcast-channel-sync`
