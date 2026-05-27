@@ -125,6 +125,28 @@ export function Phase6() {
               <strong>Android Chrome</strong>: ⋮ → <strong>Install app</strong>
             </li>
           </ul>
+
+          <h3 className="text-base font-semibold">6.5 Operational CLI (optional)</h3>
+          <p className="text-sm text-muted-foreground">
+            Repo ships a standalone TypeScript CLI at{" "}
+            <code className="rounded bg-muted px-1 py-0.5">cli/</code> (<code className="rounded bg-muted px-1 py-0.5">@vps-control-room/cli</code>) — query host
+            snapshot, list apps, tail events, dispatch actions, manage agents, launch a
+            TUI. Reads from a Convex backend via{" "}
+            <code className="rounded bg-muted px-1 py-0.5">CONVEX_URL</code> +{" "}
+            <code className="rounded bg-muted px-1 py-0.5">CONVEX_ADMIN_KEY</code> (skip
+            if you don't run Convex — the web dashboard works HTTP-only).
+          </p>
+          <CodeBlock
+            code={`# from VPS
+cd ~/projects/vps-control-room
+npm --prefix cli run build
+npm --prefix cli run start -- status
+npm --prefix cli run start -- apps
+npm --prefix cli run start -- events --tail
+npm --prefix cli run start -- tui      # interactive`}
+            language="bash"
+            filename="terminal (VPS)"
+          />
         </>
       }
     />
