@@ -10,6 +10,77 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CK1J",
+    version: "CK-1J",
+    date: Date.parse("2026-05-27"),
+    kind: "feature",
+    title: "activity 0.1.0 — public productivity log + MCP-friendly Convex backend, lifted from rahmanef.com",
+    body:
+      "First 'now-page' / productivity-log slice in the catalog. Public-facing weekly activity log grouped by ISO week with schema.org-friendly markup, designed to maximise SEO so the question 'what is <person> working on this week?' lands here. Convex-backed: schema (`activities` table + `by_visibility_occurredAt` index), queries (`listAll`, `listPublic`, `get`, `statsThisWeek`), unauthenticated mutations (`create`, `update`, `remove`, `seed`) the consumer wraps. MCP-friendly — designed so AI workflows (Claude / GPT / custom agents) can append entries via the consumer's MCP server. ActivityFeed view split from a 225-LOC monolith into 1 view + 2 sub-components (`StatsPanel`, `ActivityItem`) + 4 lib helpers (`grouping`, `format`, `types`, `defaults`) for the 200-LOC cap. All user-facing copy + per-category labels + date/time locale are prop-driven with English defaults — original Indonesian strings + project-specific MCP-integration copy lifted out. Custom `<Section>`/`<Heading>` primitives + brutalist Tailwind utilities (`tracking-brutal-sm`, `border-foreground`) stripped — replaced with raw semantic elements + stock utilities (`tracking-wider`, `border-2`). Project-specific `seedDefaults` mutation (3 hardcoded rahmanef.com seed rows) dropped in favour of generic `seed`. Cross-slice `requireAdmin` import dropped — mutations ship as `internalMutation` and the consumer wraps them.",
+    groups: [
+      {
+        heading: "Slices touched",
+        bullets: [
+          { text: "activity — first release, lifted from rahmanef.com (0.0.0 → 0.1.0)", slug: "activity" },
+        ],
+      },
+      {
+        heading: "New files",
+        bullets: [
+          "convex/features/activity/{_schema,queries,mutations,index}.ts — Convex backend",
+          "frontend/slices/activity/views/ActivityFeed.tsx — top-level view (~90 LOC)",
+          "frontend/slices/activity/components/{StatsPanel,ActivityItem}.tsx — view sub-components",
+          "frontend/slices/activity/lib/{types,defaults,grouping,format}.ts — helpers + prop types + English copy defaults",
+          "frontend/slices/activity/{slice.json,slice.contract.ts,slice.manifest.json,README.md,config.ts,index.ts}",
+        ],
+      },
+      {
+        heading: "Dependencies",
+        bullets: [
+          "convex ^1.17 (schema + queries + mutations)",
+          "lucide-react ^0.400.0 (ArrowUpRight, Clock, Tag icons in ActivityItem)",
+          "next ^15 (next/link in ActivityItem)",
+          "react ^18",
+        ],
+      },
+    ],
+  },
+  {
+    id: "CK1I",
+    version: "CK-1I",
+    date: Date.parse("2026-05-27"),
+    kind: "feature",
+    title: "i18n-translate 0.1.0 — Google Translate widget, lifted from rahmanef.com",
+    body:
+      "First on-the-fly localization slice in the catalog. Drop `<GoogleTranslate />` anywhere — no API key, no Google Cloud billing, no hand-maintained dictionaries. Auto-detect browser language on first visit (cookie set BEFORE Google's script loads so first paint is already translated), persist user choice via localStorage, click-to-reload language switching with router-refresh + best-effort-in-place fallback strategies. Source was a 510-LOC monolith at rahmanef.com `slices/i18n-translate/components/GoogleTranslate.tsx`; split during lift into 8 sub-files (`components/GoogleTranslate.tsx`, `hooks/useGoogleTranslate.ts`, `lib/{widget,cookie,storage,styles,defaults,types}.ts`) for the 200-LOC cap. Project-specific Tailwind utilities (`tracking-brutal-sm`, `border-[length:var(--border-width,2px)]`) stripped from defaults — replaced with stock `tracking-wider` + `border-2` so the slice renders cleanly without a brutalism preset. Consumer must add the CSP allowlist in README.md to their middleware/proxy for Google's script to load.",
+    groups: [
+      {
+        heading: "Slices touched",
+        bullets: [
+          { text: "i18n-translate — first release, lifted from rahmanef.com (0.0.0 → 0.1.0)", slug: "i18n-translate" },
+        ],
+      },
+      {
+        heading: "New files",
+        bullets: [
+          "frontend/slices/i18n-translate/components/GoogleTranslate.tsx — dropdown UI (110 LOC)",
+          "frontend/slices/i18n-translate/hooks/useGoogleTranslate.ts — stateful hook (87 LOC)",
+          "frontend/slices/i18n-translate/lib/widget.ts — Google widget plumbing (script + combo dispatch) (102 LOC)",
+          "frontend/slices/i18n-translate/lib/{cookie,storage,styles,defaults,types}.ts — sub-module split for 200-LOC cap",
+          "frontend/slices/i18n-translate/{slice.json,slice.contract.ts,slice.manifest.json,README.md,config.ts,index.ts}",
+        ],
+      },
+      {
+        heading: "Dependencies",
+        bullets: [
+          "lucide-react ^0.400.0 (ChevronDown icon in trigger button)",
+          "next ^15 (useRouter for the \"router\" refresh strategy)",
+          "react ^18",
+        ],
+      },
+    ],
+  },
+  {
     id: "CK1H",
     version: "CK-1H",
     date: Date.parse("2026-05-25"),

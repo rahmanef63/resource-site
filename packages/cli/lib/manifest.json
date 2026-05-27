@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-26T18:20:27.506Z",
+  "generatedAt": "2026-05-27T21:04:36.314Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -1844,6 +1844,47 @@
       ]
     },
     {
+      "slug": "activity",
+      "title": "Activity — public productivity log",
+      "category": "data",
+      "description": "Public-facing weekly activity log. Lists user-facing activities grouped by ISO week with schema.org-friendly markup, designed to maximise SEO so the question 'what is <person> working on this week?' lands here. Convex-backed (schema + queries + unauthenticated mutations); MCP-friendly so AI workflows (Claude / GPT / custom agents) can append entries directly. All user-facing copy + per-category labels + date/time locale are prop-driven (English defaults). Lifted 2026-05-27 from rahmanef.com; 225-LOC view split into view + 2 sub-components + 4 lib helpers for the 200-LOC cap; Indonesian strings + custom primitives stripped; cross-slice auth import dropped (consumer wraps mutations).",
+      "source": "rahmanef.com",
+      "install": "npx rahman-resources add activity",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add activity`. Spread `activityTables` into your root Convex schema. Wrap the unauthenticated `create`/`update`/`remove` `internalMutation`s with your auth model (see README Install section). Render `<ActivityFeed rows={await fetchQuery(api.activity.listPublic)} stats={await fetchQuery(api.activity.statsThisWeek)} />`. Override `copy`, `categoryLabels`, `locale` per consumer. MCP integration: map `activity_create` tool → your wrapped `create` mutation.",
+      "tags": [
+        "activity",
+        "productivity",
+        "log",
+        "now-page",
+        "feed",
+        "mcp",
+        "seo",
+        "personal-brand"
+      ]
+    },
+    {
+      "slug": "i18n-translate",
+      "title": "i18n — Google Translate widget",
+      "category": "ui",
+      "description": "Drop-in Google Translate widget. Replaces hand-maintained locale dictionaries with on-the-fly translation to a curated locale list (16 default, prop-override). No API key, no Google Cloud billing. Auto-detect browser language on first visit, persist user choice via localStorage, click-to-reload language switching with router-refresh + in-place fallback strategies. Lifted 2026-05-27 from rahmanef.com; 510-LOC monolith split into 8 sub-files for the 200-LOC cap; project-specific Tailwind utilities stripped from defaults.",
+      "source": "rahmanef.com",
+      "install": "npx rahman-resources add i18n-translate",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add i18n-translate`. Mount `<GoogleTranslate />` anywhere (e.g. header). Add the CSP allowlist from README.md to your middleware/proxy — without it Google's script fails silently. Override `languages`, `storageKey`, and the four `*ClassName` props for per-project styling. Default `fallbackRefresh=\"reload\"` is the only path that works reliably across Next Cache Components — only opt into `\"router\"` or `\"none\"` if you've tested it on your tree.",
+      "tags": [
+        "i18n",
+        "translate",
+        "google-translate",
+        "ui",
+        "language-switcher",
+        "locale",
+        "widget"
+      ]
+    },
+    {
       "slug": "cta",
       "title": "Call to Action",
       "category": "ui",
@@ -3531,6 +3572,70 @@
         "responsive"
       ],
       "agentRecipe": "Run `npx rr add icon-picker` then `pnpm add @phosphor-icons/react`. parseIconValue() decodes; lucideValue() / phosphorValue() / withColor() build. Storage forms: `lucide:Name?c=hex` (outline) or `phosphor:Name?c=hex` (fill) or raw emoji. Add 'icon: v.string()' to Convex table — no migration needed for existing emoji + lucide fields. <IconPickerPopover> wraps any trigger (auto-flips, falls back to centered Dialog on tight viewports); <IconPickerInline> for sheets/dialogs. <DynamicIcon> renders from parsed value."
+    },
+    {
+      "slug": "activity",
+      "title": "Activity — public productivity log",
+      "category": "data",
+      "kind": "full",
+      "version": "0.1.0",
+      "description": "Public-facing weekly activity log. Lists user-facing activities grouped by ISO week with schema.org-friendly markup, designed to maximise SEO so the question 'what is <person> working on this week?' lands here. Convex-backed (schema + queries + unauthenticated mutations); MCP-friendly so AI workflows (Claude / GPT / custom agents) can append entries directly. All user-facing copy + per-category labels + date/time locale are prop-driven (English defaults). Lifted 2026-05-27 from rahmanef.com; 225-LOC view split into view + 2 sub-components + 4 lib helpers for the 200-LOC cap; Indonesian strings + custom primitives stripped; cross-slice auth import dropped (consumer wraps mutations).",
+      "source": "rahmanef.com",
+      "slicePath": "frontend/slices/activity",
+      "convexPaths": [
+        "convex/features/activity"
+      ],
+      "npm": [
+        "convex@^1.17",
+        "lucide-react@^0.400.0",
+        "next@^15",
+        "react@^18"
+      ],
+      "shadcn": [],
+      "env": [],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "activity",
+        "productivity",
+        "log",
+        "now-page",
+        "feed",
+        "mcp",
+        "seo",
+        "personal-brand"
+      ],
+      "agentRecipe": "Run `npx rr add activity`. Spread `activityTables` into your root Convex schema. Wrap the unauthenticated `create`/`update`/`remove` `internalMutation`s with your auth model (see README Install section). Render `<ActivityFeed rows={await fetchQuery(api.activity.listPublic)} stats={await fetchQuery(api.activity.statsThisWeek)} />`. Override `copy`, `categoryLabels`, `locale` per consumer. MCP integration: map `activity_create` tool → your wrapped `create` mutation."
+    },
+    {
+      "slug": "i18n-translate",
+      "title": "i18n — Google Translate widget",
+      "category": "ui",
+      "kind": "ui",
+      "version": "0.1.0",
+      "description": "Drop-in Google Translate widget. Replaces hand-maintained locale dictionaries with on-the-fly translation to a curated locale list (16 default, prop-override). No API key, no Google Cloud billing. Auto-detect browser language on first visit, persist user choice via localStorage, click-to-reload language switching with router-refresh + in-place fallback strategies. Lifted 2026-05-27 from rahmanef.com; 510-LOC monolith split into 8 sub-files for the 200-LOC cap; project-specific Tailwind utilities stripped from defaults.",
+      "source": "rahmanef.com",
+      "slicePath": "frontend/slices/i18n-translate",
+      "convexPaths": [],
+      "npm": [
+        "lucide-react@^0.400.0",
+        "next@^15",
+        "react@^18"
+      ],
+      "shadcn": [],
+      "env": [],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "i18n",
+        "translate",
+        "google-translate",
+        "ui",
+        "language-switcher",
+        "locale",
+        "widget"
+      ],
+      "agentRecipe": "Run `npx rr add i18n-translate`. Mount `<GoogleTranslate />` anywhere (e.g. header). Add the CSP allowlist from README.md to your middleware/proxy — without it Google's script fails silently. Override `languages`, `storageKey`, and the four `*ClassName` props for per-project styling. Default `fallbackRefresh=\"reload\"` is the only path that works reliably across Next Cache Components — only opt into `\"router\"` or `\"none\"` if you've tested it on your tree."
     },
     {
       "slug": "cta",
