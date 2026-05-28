@@ -245,6 +245,35 @@ Before publishing — **ensure the changelog entry exists** for the
 versions being published. CI does NOT enforce this yet but the
 `<RecentlyUpdatedBadge>` will be wrong if you skip it.
 
+**⚠ prepublishOnly gate — TS↔slice.json parity (learned 2026-05-28).**
+`packages/cli`'s `prepublishOnly` runs `sync-skills --check` +
+`validate` + `validate-slice --check` + `validate-slice-parity` +
+`validate-structure`. `npm publish` ABORTS on the first failure, so a
+drift you didn't cause can block your publish. The two that bite:
+- `validate-slice` — every `frontend/slices/*/slice.json` must satisfy
+  the schema. Common break: `deps.peers` must be `[{slug,range,reason}]`
+  objects, NOT bare strings (`peers: ["seo"]` → fails).
+- `validate-slice-parity` — each slice's `version` + `title` in
+  `lib/content/slices.ts` (TS) must EXACTLY match its `slice.json`. A
+  version bump in one but not the other, or an em-dash vs slash title
+  mismatch, fails the publish.
+
+Pre-flight (run BEFORE asking the user for the OTP — fix any drift,
+commit, push, THEN publish):
+```bash
+cd packages/cli
+node scripts/sync-skills.mjs --check && node scripts/validate.mjs \
+  && node scripts/validate-slice.mjs --check \
+  && node scripts/validate-slice-parity.mjs \
+  && node scripts/validate-structure.mjs
+echo "EXIT=$?"   # must be 0 before publish
+```
+If another agent's in-progress slice (uncommitted WIP) trips the gate,
+set it aside (stash the slices.ts entry + `mv` the untracked dirs to
+/tmp), publish clean, then restore byte-for-byte — never publish a
+manifest entry whose slice files aren't yet on main (`npx rr add
+<that-slug>` would break for users).
+
 ```bash
 # CLI
 cd packages/cli
@@ -390,7 +419,7 @@ component near `<Toaster />`.
 
 ## Catalog snapshot (so other projects know what to check)
 
-**Last refreshed: 2026-05-27.** Cross-check with rr repo before lift
+**Last refreshed: 2026-05-28.** Cross-check with rr repo before lift
 work — counts drift weekly.
 
 ### Distributable slices (58)
