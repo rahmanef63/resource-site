@@ -55,7 +55,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...commentsConfig,
     importPath: "@/features/comments/config",
-    version: "0.2.0",
+    version: "0.2.1",
   },
   {
     ...convexAuthConfig,
@@ -70,7 +70,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...dokuPaymentConfig,
     importPath: "@/features/doku-payment/config",
-    version: "0.1.0",
+    version: "0.1.1",
   },
   {
     ...mdxBlogConfig,
@@ -80,7 +80,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...midtransPaymentConfig,
     importPath: "@/features/midtrans-payment/config",
-    version: "0.1.0",
+    version: "0.1.1",
   },
   {
     ...platformAdminConfig,
@@ -90,12 +90,12 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...resendNewsletterConfig,
     importPath: "@/features/resend-newsletter/config",
-    version: "0.1.0",
+    version: "0.1.1",
   },
   {
     ...seoConfig,
     importPath: "@/features/seo/config",
-    version: "0.2.0",
+    version: "0.2.1",
   },
   {
     ...vectorSearchConfig,
