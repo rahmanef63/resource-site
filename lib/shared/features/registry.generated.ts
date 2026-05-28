@@ -60,7 +60,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...convexAuthConfig,
     importPath: "@/features/convex-auth/config",
-    version: "0.2.0",
+    version: "0.2.1",
   },
   {
     ...documentChecklistConfig,
@@ -90,7 +90,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...resendNewsletterConfig,
     importPath: "@/features/resend-newsletter/config",
-    version: "0.1.1",
+    version: "0.1.2",
   },
   {
     ...seoConfig,

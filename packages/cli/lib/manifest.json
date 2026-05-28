@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-28T09:24:04.164Z",
+  "generatedAt": "2026-05-28T09:42:28.925Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -2587,7 +2587,7 @@
       "title": "Convex Auth — Multi-Provider Sign-in",
       "category": "auth",
       "kind": "backend",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "description": "@convex-dev/auth with Password (PBKDF2-SHA256 100k, self-hosted-friendly), Anonymous (guest), Google OAuth, and Resend magic-link. Ships a production SignInPage with i18n, prop-driven provider list, and split Login/Register tabs. No Clerk.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/convex-auth",
@@ -2773,7 +2773,7 @@
       "title": "Resend — Transactional & Newsletter",
       "category": "email",
       "kind": "backend",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "description": "Transactional email + newsletter blast via Resend. Double opt-in flow + audience segmentation. Magic-link delivery for Convex Auth.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/resend-newsletter",

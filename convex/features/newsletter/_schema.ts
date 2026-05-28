@@ -21,4 +21,11 @@ export const newsletterTables = {
     sentAt: v.optional(v.number()),
     sentCount: v.optional(v.number()),
   }).index("by_status_createdAt", ["status", "createdAt"]),
+
+  // Per-email throttle for the public subscribe endpoint — mirrors the
+  // hardened `subscribers` slice (subscriberAttempts + by_email_time).
+  newsletterSubscribeAttempts: defineTable({
+    email: v.string(),
+    attemptedAt: v.number(),
+  }).index("by_email_time", ["email", "attemptedAt"]),
 };

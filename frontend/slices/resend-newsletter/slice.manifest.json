@@ -1,7 +1,7 @@
 {
   "$schema": "../../../docs/slice.manifest.schema.json",
   "name": "resend-newsletter",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Newsletter subscribe form + admin send-broadcast pipeline via Resend transactional email.",
   "category": "content",
   "stability": "beta",
