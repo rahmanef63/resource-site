@@ -84,14 +84,17 @@ export const broadcast = internalAction({
 
 // Public wrapper — gates authz then schedules the internal worker.
 // Schedule (vs awaiting) so the HTTP caller doesn't hang for the full fanout.
+//
+// Admin gate: callers must be present in userProfiles with role="admin"
+// (or be the SUPER_ADMIN_EMAIL account). Plain logged-in users cannot
+// fire broadcasts — they'd otherwise be able to spam every subscriber.
 export const broadcastPublic = action({
   args: { issueId: v.id("newsletterIssues") },
   handler: async (ctx, { issueId }) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Unauthorized — sign in required");
-    // Optional: enforce an admin role check here. Pattern:
-    //   const isAdmin = await ctx.runQuery(internal.admin.queries.isAdmin, { userId });
-    //   if (!isAdmin) throw new Error("Forbidden — admin role required");
+    const isAdmin = await ctx.runQuery(internal.features.newsletter.query.isAdminUser, { userId });
+    if (!isAdmin) throw new Error("Forbidden — admin role required");
     await ctx.scheduler.runAfter(0, internal.features.newsletter.actions.send.broadcast, {
       issueId,
     });

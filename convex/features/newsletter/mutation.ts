@@ -1,12 +1,27 @@
 import { internalMutation, mutation } from "../../_generated/server";
 import { v } from "convex/values";
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MAX_EMAIL_LEN = 200;
+
+// Public subscribe endpoint — validates + normalises + idempotent on
+// email. NOTE: this slice has no per-IP rate-limit table; bot abuse is
+// only defended by the email-shape check + per-email idempotency. For
+// production traffic prefer the `subscribers` slice (honeypot + windowed
+// per-email rate-limit + unsubscribe-token).
 export const subscribe = mutation({
   args: { email: v.string() },
   handler: async (ctx, { email }) => {
+    const normalized = email.trim().toLowerCase();
+    if (normalized.length === 0 || normalized.length > MAX_EMAIL_LEN) {
+      throw new Error("Email tidak valid");
+    }
+    if (!EMAIL_RE.test(normalized)) {
+      throw new Error("Email tidak valid");
+    }
     const existing = await ctx.db
       .query("newsletterSubscribers")
-      .withIndex("by_email", (q) => q.eq("email", email))
+      .withIndex("by_email", (q) => q.eq("email", normalized))
       .unique();
     if (existing) {
       if (existing.status === "active") return { ok: true, already: true };
@@ -15,7 +30,7 @@ export const subscribe = mutation({
       return { ok: true, already: false };
     }
     await ctx.db.insert("newsletterSubscribers", {
-      email,
+      email: normalized,
       status: "pending",
       subscribedAt: Date.now(),
     });

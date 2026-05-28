@@ -1,15 +1,30 @@
 /**
  * comments queries — v0.2.0 polymorphic TargetRef.
  *
- * `listForTarget` reads the new `comment_threads` table indexed by
- * (targetKind, targetId, [targetSubId]). Consumers wrap with their own
- * permission gate via `bindings.listEventsQuery`-style pattern (see
- * audit-log lib).
+ * `listForTarget` reads the `comment_threads` table indexed by
+ * (targetKind, targetId, [targetSubId]).
+ *
+ * Default deny: ships as `internalQuery`. Consumers MUST wrap with a
+ * public `query` that gates on their own target-visibility rule before
+ * proxying through. Direct exposure would let any authenticated user
+ * enumerate comments on arbitrary targets by guessing ids.
+ *
+ * Example consumer wrapper:
+ *   export const listForDoc = query({
+ *     args: { docId: v.id("docs") },
+ *     handler: async (ctx, { docId }) => {
+ *       const userId = await getAuthUserId(ctx);
+ *       const doc = await ctx.db.get(docId);
+ *       if (!doc || !canRead(doc, userId)) return [];
+ *       return ctx.runQuery(internal.features.comments.query._listForTarget, {
+ *         target: { kind: "doc", id: docId },
+ *       });
+ *     },
+ *   });
  */
 
-import { query } from "../../_generated/server";
+import { internalQuery } from "../../_generated/server";
 import { v } from "convex/values";
-import { getAuthUserId } from "@convex-dev/auth/server";
 
 const targetValidator = v.object({
   kind: v.string(),
@@ -17,11 +32,9 @@ const targetValidator = v.object({
   subId: v.optional(v.string()),
 });
 
-export const listForTarget = query({
+export const _listForTarget = internalQuery({
   args: { target: targetValidator },
   handler: async (ctx, args) => {
-    const actor = await getAuthUserId(ctx);
-    if (!actor) return [];
     const { kind, id, subId } = args.target;
     if (subId) {
       return await ctx.db

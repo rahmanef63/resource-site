@@ -18,22 +18,29 @@ export const listMine = query({
 export const get = query({
   args: { orderId: v.string() },
   handler: async (ctx, { orderId }) => {
-    return ctx.db
-      .query("paymentOrders")
-      .withIndex("by_orderId", (q) => q.eq("orderId", orderId))
-      .unique();
-  },
-});
-
-/** Public reactive accessor consumed by `<DokuStatusBadge>`. */
-export const getOrderByOrderId = query({
-  args: { orderId: v.string() },
-  handler: async (ctx, { orderId }) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) return null;
     const order = await ctx.db
       .query("paymentOrders")
       .withIndex("by_orderId", (q) => q.eq("orderId", orderId))
       .unique();
-    if (!order) return null;
+    if (!order || order.userId !== userId) return null;
+    return order;
+  },
+});
+
+/** Public reactive accessor consumed by `<DokuStatusBadge>`. Owner-only —
+ *  anon callers get null. */
+export const getOrderByOrderId = query({
+  args: { orderId: v.string() },
+  handler: async (ctx, { orderId }) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) return null;
+    const order = await ctx.db
+      .query("paymentOrders")
+      .withIndex("by_orderId", (q) => q.eq("orderId", orderId))
+      .unique();
+    if (!order || order.userId !== userId) return null;
     return {
       orderId: order.orderId,
       status: order.status,

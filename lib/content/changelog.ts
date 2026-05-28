@@ -10,6 +10,37 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CK1L",
+    version: "CK-1L",
+    date: Date.parse("2026-05-28"),
+    kind: "fix",
+    title: "Lane A: P0 security patch — 7 fixes across 8 backend slices",
+    body:
+      "Cross-slice security batch from the post-Phase-6 audit. Zero P0 surfaced, but seven P1 findings warranted same-day patches before more slices accreted around the same patterns. Per-slice changes: (1) `payment.markPaid` now verifies `order.userId === requireUser(ctx)` so a logged-in user can no longer flip another user's order to paid by guessing the (string) orderId. (2) `payment.get` and `payment.getOrderByOrderId` are now owner-only — anon callers + non-owner authenticated callers get null instead of full order detail (amount, channel, instructions). (3) `comments.listForTarget` flipped from public `query` to `_listForTarget` `internalQuery` with default-deny semantics — consumers MUST wrap with their own target-visibility gate; ships with doc-comment example. (4) `newsletter.broadcastPublic` admin gate is now enforced (`isAdminUser` internalQuery checks `userProfiles.role==='admin'` or `SUPER_ADMIN_EMAIL`) instead of the TODO comment that any-logged-in could bypass. (5) `newsletter.subscribe` validates email shape (`^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$`) + length cap (200 chars) + normalises before insert — partial defense; per-IP rate-limit table deferred to follow-up since it needs schema migration. The canonical `subscribers` slice already has the full hardened pattern (honeypot + windowed rate-limit + unsubscribe token); recommended for production. (6) Unbounded `.collect()` on public/internal queries replaced with explicit caps: `services.listAll` 500, `socials.listAll/listVisible` 200, `testimonials.listAll` 500, `seo.callsInWindow` 1000, `newsletter.activeSubscribers` 10000. Defense-in-depth — these tables would otherwise grow unboundedly on adopted projects with no read-time guard. Eight slice patch bumps: doku-payment 0.1.1, midtrans-payment 0.1.1, resend-newsletter 0.1.1, comments 0.2.1, services 0.1.1, socials 0.1.1, testimonials 0.1.1, seo 0.2.1.",
+    groups: [
+      {
+        heading: "Slices touched",
+        bullets: [
+          { text: "doku-payment + midtrans-payment — markPaid owner-check + get/getOrderByOrderId owner-only (0.1.0 → 0.1.1)", slug: "doku-payment" },
+          { text: "resend-newsletter — broadcastPublic admin gate + subscribe email validation (0.1.0 → 0.1.1)", slug: "resend-newsletter" },
+          { text: "comments — listForTarget flipped to internalQuery default-deny (0.2.0 → 0.2.1)", slug: "comments" },
+          { text: "services — listAll bounded to 500 (0.1.0 → 0.1.1)", slug: "services" },
+          { text: "socials — listAll/listVisible bounded to 200 (0.1.0 → 0.1.1)", slug: "socials" },
+          { text: "testimonials — listAll bounded to 500 (0.1.0 → 0.1.1)", slug: "testimonials" },
+          { text: "seo — callsInWindow .collect() bounded to 1000 (0.2.0 → 0.2.1)", slug: "seo" },
+        ],
+      },
+      {
+        heading: "Follow-ups (deferred)",
+        bullets: [
+          "newsletter/subscribe needs a `newsletterSubscribeAttempts` schema table for per-IP rate-limit on par with subscribers/mutation.ts",
+          "auth/checkEmail.ts references missing `_shared/clientIp` + `_shared/origin` — restore or delete (file is functional, just unwired)",
+          "convex/features/admin/query.ts:stats unauthenticated — gate for production-grade deployments",
+        ],
+      },
+    ],
+  },
+  {
     id: "CK1K",
     version: "CK-1K",
     date: Date.parse("2026-05-27"),

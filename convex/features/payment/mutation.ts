@@ -140,12 +140,13 @@ export const markWebhookProcessed = internalMutation({
 export const markPaid = mutation({
   args: { orderId: v.string(), providerTransactionId: v.string() },
   handler: async (ctx, { orderId, providerTransactionId }) => {
-    await requireUser(ctx);
+    const userId = await requireUser(ctx);
     const order = await ctx.db
       .query("paymentOrders")
       .withIndex("by_orderId", (q) => q.eq("orderId", orderId))
       .unique();
     if (!order) throw new Error(`Order not found: ${orderId}`);
+    if (order.userId !== userId) throw new Error("Forbidden");
     if (order.status === "paid") return; // idempotent
     await ctx.db.patch(order._id, {
       status: "paid",
