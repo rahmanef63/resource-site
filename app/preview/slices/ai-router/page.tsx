@@ -6,6 +6,7 @@ import { SlicePreviewLayout, PreviewSection, CodeBlock, FlowDiagram } from "@/co
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
 type Tier = "nano" | "mid" | "flagship";
@@ -62,11 +63,11 @@ export default function Page() {
 
       <PreviewSection title="Test prompt" hint="Mock — actual call goes to OpenRouter">
         <Card className="space-y-3 p-4">
-          <textarea
+          <Textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             rows={2}
-            className="w-full resize-none rounded-md border bg-background px-3 py-2 text-sm outline-none"
+            className="resize-none"
           />
           <div className="flex items-center justify-between gap-2">
             <Badge variant="outline" className="font-mono text-[10px]">

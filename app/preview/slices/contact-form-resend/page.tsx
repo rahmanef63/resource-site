@@ -3,6 +3,12 @@
 import * as React from "react";
 import { Mail, Send, Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
 
 export default function Page() {
   const [state, setState] = React.useState<"idle" | "sending" | "sent">("idle");
@@ -26,23 +32,31 @@ export default function Page() {
           </ul>
         </div>
         <form className="space-y-4 rounded-2xl border border-border/60 bg-card p-6" onSubmit={(e) => { e.preventDefault(); send(); }}>
-          <div>
-            <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Name</label>
-            <input className="mt-1.5 h-9 w-full rounded-md border border-border/60 bg-background px-3 text-sm outline-none focus:border-primary" placeholder="Jane Doe" />
+          <div className="space-y-1.5">
+            <Label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Name</Label>
+            <Input placeholder="Jane Doe" />
           </div>
-          <div>
-            <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Email</label>
-            <input type="email" className="mt-1.5 h-9 w-full rounded-md border border-border/60 bg-background px-3 text-sm outline-none focus:border-primary" placeholder="jane@example.com" />
+          <div className="space-y-1.5">
+            <Label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Email</Label>
+            <Input type="email" placeholder="jane@example.com" />
           </div>
-          <div>
-            <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Topic</label>
-            <select className="mt-1.5 h-9 w-full rounded-md border border-border/60 bg-background px-3 text-sm outline-none focus:border-primary">
-              <option>General inquiry</option><option>Bug report</option><option>Feature request</option><option>Other</option>
-            </select>
+          <div className="space-y-1.5">
+            <Label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Topic</Label>
+            <Select defaultValue="general">
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="general">General inquiry</SelectItem>
+                <SelectItem value="bug">Bug report</SelectItem>
+                <SelectItem value="feature">Feature request</SelectItem>
+                <SelectItem value="other">Other</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-          <div>
-            <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Message</label>
-            <textarea className="mt-1.5 min-h-[100px] w-full rounded-md border border-border/60 bg-background px-3 py-2 text-sm outline-none focus:border-primary" placeholder="What's on your mind?" />
+          <div className="space-y-1.5">
+            <Label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Message</Label>
+            <Textarea className="min-h-[100px]" placeholder="What's on your mind?" />
           </div>
           <Button
             type="submit"

@@ -16,6 +16,7 @@ import { slices as allSlices } from "@/lib/content/slices";
 import { isHidden } from "@/lib/content/hidden-slugs";
 import { Badge } from "@/components/ui/badge";
 import { CatalogCard } from "@/components/site/catalog/catalog-card";
+import { RecentlyUpdatedBadge } from "@/components/site/recently-updated-badge";
 import { type CatalogSearchItem } from "@/components/site/catalog/catalog-search";
 import { CatalogHero } from "@/components/site/catalog/catalog-hero";
 import { CatalogTabs } from "@/components/site/catalog/catalog-tabs";
@@ -87,6 +88,7 @@ export default function SlicesPage() {
           title={s.title}
           description={s.tagline ?? s.description}
           tags={s.tags}
+          cornerBadge={<RecentlyUpdatedBadge slug={s.slug} kind="slice" variant="card" />}
           meta={
             <div className="flex items-center gap-2">
               <Badge variant="secondary" className="text-[9px]">v{s.version}</Badge>

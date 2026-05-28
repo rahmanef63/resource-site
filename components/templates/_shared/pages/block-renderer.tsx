@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import type { PageBlock } from "./types";
 
@@ -108,8 +109,16 @@ export function BlockRenderer({ block }: { block: PageBlock }) {
             {block.heading && <h2 className="mb-6 text-2xl font-semibold tracking-tight">{block.heading}</h2>}
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {block.images.map((img, i) => (
-                /* eslint-disable-next-line @next/next/no-img-element */
-                <img key={i} src={img.src} alt={img.alt} className="aspect-[4/3] w-full rounded-md object-cover" />
+                <div key={i} className="relative aspect-[4/3] w-full overflow-hidden rounded-md">
+                  <Image
+                    src={img.src}
+                    alt={img.alt}
+                    fill
+                    unoptimized
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover"
+                  />
+                </div>
               ))}
             </div>
           </div>

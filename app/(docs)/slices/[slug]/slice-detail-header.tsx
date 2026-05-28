@@ -17,9 +17,9 @@ import { getDemoUrl } from "@/lib/content/template-subdomains";
 import type { SliceEntry } from "@/lib/content/slices";
 
 const KIND_CLASS = {
-  ui: "bg-emerald-500/15 text-emerald-300",
-  backend: "bg-blue-500/15 text-blue-300",
-  full: "bg-purple-500/15 text-purple-300",
+  ui: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300",
+  backend: "bg-blue-500/15 text-blue-700 dark:text-blue-300",
+  full: "bg-purple-500/15 text-purple-700 dark:text-purple-300",
 } as const;
 
 export function SliceDetailHeader({
@@ -33,7 +33,7 @@ export function SliceDetailHeader({
 }) {
   const demoUrl = getDemoUrl(slice.slug);
   return (
-    <header className="flex flex-wrap items-center justify-between gap-2 border-b bg-background/60 px-4 py-3">
+    <header className="flex flex-col items-start justify-between gap-2 border-b bg-background/60 px-4 py-3 sm:flex-row sm:items-center">
       <div className="min-w-0">
         <div className="mb-1 flex items-center gap-1.5">
           <Link

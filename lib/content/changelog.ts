@@ -10,6 +10,40 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CK1M",
+    version: "CK-1M",
+    date: Date.parse("2026-05-28"),
+    kind: "improvement",
+    title: "Lane B+C: catalog→install UX + responsive + a11y P0 fixes",
+    body:
+      "Eight P0 findings from the post-Phase-6 UI/UX + user-flow audit, shipped as one site wave (no consumer-slice API change beyond two preview pages). Flow: (1) catalog grid cards now carry a `RecentlyUpdatedBadge` corner overlay so freshness is scannable from /slices without opening each detail page — added a generic `cornerBadge` slot to `CatalogCard` (reusable by templates/layouts/recipes). (2) slice-detail HeroStrip gained a `CopyButton` next to the install command (was a truncated, un-copyable code chip — the page's primary CTA) plus an 'Already installed?' secondary line showing `npx rahman-resources update <slug>` so returning users find the update verb. (3) Branded `not-found.tsx` + `error.tsx` under `app/(docs)/` — typos/deleted-slice links + uncaught route errors now land on on-brand pages with recovery CTAs instead of the raw Next default (covers 60+ routes). Responsive + a11y: (4) slice-detail header strip stacks `flex-col` on mobile (was overflowing the action cluster below the h1 at ≤480px). (5) KIND_CLASS badge colors switched to dual-mode `text-{c}-700 dark:text-{c}-300` (were dark-only 300-level = WCAG contrast fail on light bg). Hard-rule compliance: (6) contact-form-resend preview raw `<input>/<select>/<textarea>` → shadcn `Input`/`Select`/`Textarea`/`Label` (this is the canonical contact slice consumers copy). (7) ai-router preview raw `<textarea>` → shadcn `Textarea`. (8) image-gallery block-renderer raw `<img>` (w/ eslint-disable) → `next/image` (unoptimized, since URLs are consumer-supplied). Deferred to a focused pass: /build mobile collapse (needs ThreeColumn→Tabs refactor + browser verification).",
+    groups: [
+      {
+        heading: "Site",
+        bullets: [
+          "CatalogCard — new `cornerBadge` slot; /slices grid shows RecentlyUpdatedBadge per card",
+          "HeroStrip — CopyButton on install command + 'Already installed?' update-command line",
+          "app/(docs)/not-found.tsx + error.tsx — branded 404 + error boundary with recovery CTAs",
+          "slice-detail-header — flex-col mobile stack + dual-mode KIND_CLASS badge colors (WCAG)",
+        ],
+      },
+      {
+        heading: "Slices touched",
+        bullets: [
+          { text: "contact-form-resend — preview page raw form inputs → shadcn primitives", slug: "resend-newsletter" },
+          { text: "ai-router — preview page raw textarea → shadcn Textarea", slug: "ai-router" },
+        ],
+      },
+      {
+        heading: "Follow-ups (deferred)",
+        bullets: [
+          "/build mobile: collapse nested ThreeColumnLayoutAdvanced to Tabs at <md (needs browser verification)",
+          "version-pin selector on install command (--ref vX.Y.Z)",
+        ],
+      },
+    ],
+  },
+  {
     id: "CK1L",
     version: "CK-1L",
     date: Date.parse("2026-05-28"),

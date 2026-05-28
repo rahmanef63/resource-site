@@ -16,6 +16,7 @@ export function CatalogCard({
   tags = [],
   thumbnail,
   meta,
+  cornerBadge,
   className,
 }: {
   href: string;
@@ -25,6 +26,9 @@ export function CatalogCard({
   thumbnail: React.ReactNode;
   /** Optional small line shown above the title (e.g., source, version). */
   meta?: React.ReactNode;
+  /** Optional overlay pinned to the top-right of the thumbnail — e.g. a
+   *  freshness badge. Renders null gracefully when undefined. */
+  cornerBadge?: React.ReactNode;
   className?: string;
 }) {
   return (
@@ -35,7 +39,14 @@ export function CatalogCard({
           className,
         )}
       >
-        {thumbnail}
+        <div className="relative">
+          {thumbnail}
+          {cornerBadge && (
+            <div className="pointer-events-none absolute right-2 top-2 z-10">
+              <div className="pointer-events-auto">{cornerBadge}</div>
+            </div>
+          )}
+        </div>
         <CardContent className="space-y-2.5 p-4">
           {meta && <div className="text-[11px] text-muted-foreground">{meta}</div>}
           <div className="flex items-start justify-between gap-3">

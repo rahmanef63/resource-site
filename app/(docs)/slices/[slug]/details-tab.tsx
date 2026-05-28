@@ -42,6 +42,7 @@ export function DetailsTab({
       <div className="mx-auto max-w-5xl space-y-4 p-4">
         <HeroStrip
           installCommand={installCommand}
+          updateCommand={`npx rahman-resources update ${slice.slug}`}
           sourceHref={sourceHref}
           description={slice.description}
           agentPrompt={agentPrompt}
