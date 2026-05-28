@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-28T00:07:10.171Z",
+  "generatedAt": "2026-05-28T05:49:41.822Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -3541,7 +3541,7 @@
       "title": "Icon Picker",
       "category": "ui",
       "kind": "ui",
-      "version": "0.4.0",
+      "version": "0.4.1",
       "description": "Emoji + lucide (outline) + phosphor (fill) icon picker with search, 10-color palette, Twemoji/native toggle, recents tracking, and smart positioning. Two-tab layout (Emoji | Icon) with sub-variant pills (Native | Twemoji / Lucide | Phosphor fill). One string stores emoji OR lucide:Name OR phosphor:Name OR with ?c=hex tint — backwards-compat with raw-emoji fields. Popover auto-flips on collision (caps to Radix `--radix-popover-content-available-height`) and falls back to centered Dialog when neither side fits. Two variants: Popover (compact trigger) and Inline (full sheet/dialog use). Lifted 2026-05-25 from open-silong.",
       "source": "open-silong",
       "slicePath": "frontend/slices/icon-picker",

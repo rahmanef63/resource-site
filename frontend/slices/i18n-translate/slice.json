@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "category": "ui",
   "kind": "ui",
-  "title": "i18n / Google Translate widget",
+  "title": "i18n — Google Translate widget",
   "description": "Drop-in Google Translate widget — replaces hand-maintained locale dictionaries with on-the-fly translation to any of a curated locale list (16 default, prop-override). No API key, no Google Cloud billing. Auto-detect browser language on first visit, persist user choice via localStorage. Reliable click-to-reload language switching (default), with router-refresh + best-effort-in-place fallback strategies. Sanitized from rahmanef.com on 2026-05-27: 510-LOC monolith split into 8 sub-files for the 200-LOC cap; project-specific Tailwind utilities stripped from defaults.",
   "namespace": "@/features/i18n-translate",
   "frontend": {
