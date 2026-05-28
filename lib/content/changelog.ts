@@ -10,6 +10,30 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CK1N",
+    version: "CK-1N",
+    date: Date.parse("2026-05-28"),
+    kind: "fix",
+    title: "Closes CK-1L deferral: admin.stats now requireAdmin-gated",
+    body:
+      "Follow-up to CK-1L (Lane A) closing the highest-severity deferred item: `convex/features/admin/query.ts:stats` was a public, unauthenticated `query` returning dashboard counts plus the 12 most-recent activity rows across every table — including contact-submission names/emails — so any caller could read it over WebSocket. The `admin` slice already advertised \"Gated by requireAdmin on Convex side\" in its slice.json, README, agent recipe, and catalog entry, so this is a documented-contract drift rather than a behaviour change: the handler now calls `await requireAdmin(ctx)` first (the same gate used by services/subscribers/testimonials/create-your-mcp, honouring the `SUPER_ADMIN_EMAIL` bypass). No call site in this repo is affected — the rr site's own /admin is cookie-gated and reads a local filesystem loader, never the Convex query; only consumer projects that `rr add admin` and wire `api.admin.stats` were exposed. admin slice patch bump 0.2.0 → 0.2.1. The two remaining CK-1L deferrals (newsletter per-IP rate-limit table; auth/checkEmail.ts missing `_shared` siblings) need a Convex dev loop to verify and are left for a focused pass.",
+    groups: [
+      {
+        heading: "Slices touched",
+        bullets: [
+          { text: "admin — stats query now requireAdmin-gated, matching its documented contract (0.2.0 → 0.2.1)", slug: "admin" },
+        ],
+      },
+      {
+        heading: "Follow-ups (deferred)",
+        bullets: [
+          "newsletter/subscribe per-IP rate-limit still needs a schema table (CK-1L item 1)",
+          "auth/checkEmail.ts missing `_shared/clientIp` + `_shared/origin` + `loginCheckIpEvents` schema — restore-or-delete needs Convex verification (CK-1L item 2)",
+        ],
+      },
+    ],
+  },
+  {
     id: "CK1M",
     version: "CK-1M",
     date: Date.parse("2026-05-28"),

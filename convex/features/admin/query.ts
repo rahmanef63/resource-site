@@ -1,4 +1,5 @@
 import { query } from "../../_generated/server";
+import { requireAdmin } from "../../_shared/auth";
 
 const COUNT_TABLES = [
   "contactSubmissions",
@@ -111,6 +112,9 @@ const ACTIVITY_TABLE_CAP = 200;
 export const stats = query({
   args: {},
   handler: async (ctx) => {
+    // Admin-only: aggregates counts + the 12 latest activity rows across
+    // every table (incl. contact names/emails) — never expose to anon.
+    await requireAdmin(ctx);
     const counts: Record<string, number | string> = {};
     for (const table of COUNT_TABLES) {
       const rows = await ctx.db.query(table).take(STATS_TABLE_CAP + 1);
