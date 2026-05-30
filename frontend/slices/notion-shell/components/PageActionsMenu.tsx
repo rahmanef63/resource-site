@@ -5,6 +5,7 @@
  *  callbacks — host wires to its store. Slots into NotionPage via the
  *  `actions` prop (or used standalone in custom headers). */
 
+import { type ComponentProps } from "react";
 import {
   MoreHorizontal, Copy, Star, StarOff, Trash2, Image as ImageIcon, Download,
 } from "lucide-react";
@@ -15,18 +16,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 
-export interface PageActionsMenuProps {
+export interface PageActionsMenuProps extends ComponentProps<typeof Button> {
   favorite?: boolean;
   onDuplicate?: () => void;
   onToggleFavorite?: () => void;
   onAddCover?: () => void;
   onExport?: () => void;
   onTrash?: () => void;
-  className?: string;
 }
 
 export function PageActionsMenu({
-  favorite, onDuplicate, onToggleFavorite, onAddCover, onExport, onTrash, className,
+  favorite, onDuplicate, onToggleFavorite, onAddCover, onExport, onTrash, className, ...props
 }: PageActionsMenuProps) {
   const hasTop = !!(onAddCover || onToggleFavorite);
   const hasMid = !!(onDuplicate || onExport);
@@ -34,6 +34,7 @@ export function PageActionsMenu({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
+          {...props}
           variant="ghost"
           size="icon"
           aria-label="Page actions"

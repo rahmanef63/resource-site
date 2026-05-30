@@ -17,12 +17,12 @@ import {
 import { SlashMenu, type SlashMenuProps } from "./SlashMenu";
 import type { BlockType } from "../types";
 
-export interface InsertBlockButtonProps {
+export interface InsertBlockButtonProps
+  extends React.ComponentProps<typeof Button> {
   onInsert: (type: BlockType) => void;
   /** Forwarded to <SlashMenu>. */
   specs?: SlashMenuProps["specs"];
   label?: string;
-  className?: string;
 }
 
 export function InsertBlockButton({
@@ -30,6 +30,7 @@ export function InsertBlockButton({
   specs,
   label = "Add block",
   className,
+  ...props
 }: InsertBlockButtonProps) {
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
@@ -50,6 +51,7 @@ export function InsertBlockButton({
     >
       <PopoverTrigger asChild>
         <Button
+          {...props}
           variant="ghost"
           size="sm"
           className={cn("h-7 gap-1 px-2 text-xs text-muted-foreground", className)}
