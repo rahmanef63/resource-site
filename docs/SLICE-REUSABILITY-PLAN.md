@@ -93,7 +93,7 @@ the consumer forks those internals anyway.
 | **P1** ✅ | copy externalization — 3 generic-chrome comps → `copy`/EN default (+ chat-fab raw `<input>`→shadcn Input) | low | shipped |
 | **P2** | `cva` variant API on ~6 leaf badge/button comps; define shared `sliceVariants` recipe | med | per-slice ver bump + manifest |
 | **P3** | `forwardRef` + `...props` on ~5 leaf interactive comps | med | per-slice ver bump + manifest |
-| **P4** | add `slice.contract.ts` to `event-tracking`, `files`, `rbac-roles` | low | none |
+| **P4** ✅ | add `slice.contract.ts` to `event-tracking`, `files`, `rbac-roles` (files=adapter UI contract; 2 nav-only stubs get coverage contracts) | low | shipped |
 | **P5** | codify in `scaffold-slice` template + `audit:slices` gate: lint raw-interp className (require cn), flag hardcoded non-brand color | low | tooling |
 
 **P2/P3 caveat:** they touch published-slice public surface → bump each slice's
