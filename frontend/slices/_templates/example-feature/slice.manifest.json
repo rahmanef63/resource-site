@@ -1,0 +1,10 @@
+{
+  "name": "example-feature",
+  "description": "Reference slice — minimal CRUD over one Convex table. Demonstrates the metadata trio (slice.json + slice.contract.ts + slice.manifest.json), the cn-merge className pattern, and shadcn-only UI. Copy this folder or run `npx rahman-resources scaffold-slice <slug>`.",
+  "deps": {
+    "shared": ["lib/utils", "ui/button"],
+    "slices": [],
+    "convex": []
+  },
+  "notes": "Scaffold target — identifiers (example-feature / ExampleFeature / exampleFeature) are rewritten to your slug on pull."
+}

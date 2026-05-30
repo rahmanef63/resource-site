@@ -25,6 +25,7 @@ import {
   isBareNpmImport,
   isOwnSliceImport,
   isRelativeWithinSlice,
+  lintStyleAntipatterns,
   readSliceConfig,
 } from "./audit-slice-helpers.mjs";
 
@@ -80,6 +81,11 @@ for (const slice of slices) {
       errors.push(
         `[${slice.folder}] disallowed import in ${path.relative(REPO, file)}: "${spec}"`,
       );
+    }
+    // 2b. style anti-patterns (P5) — advisory warnings (raw-interp className,
+    // hardcoded hex in className).
+    for (const w of lintStyleAntipatterns(path.relative(REPO, file), body)) {
+      warnings.push(`[${slice.folder}] ${w}`);
     }
   }
 

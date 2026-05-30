@@ -127,3 +127,40 @@ export function readSliceConfig(slice) {
     category: grab("category"),
   };
 }
+
+// ── style anti-pattern lint (P5) ────────────────────────────────────────────
+//
+// Two shadcn-parity guards, emitted as WARNINGS (advisory — won't fail CI):
+//
+//   1. raw-interp className — `className={`…${x}…`}` skips `cn()`, so a
+//      consumer override leaves BOTH classes and CSS source-order decides.
+//      Fix: `className={cn("…", x)}`.
+//   2. hardcoded hex inside a className string — should be a theme token.
+//      Escape hatch: a file containing the marker `audit-allow-hex` (in a
+//      comment) opts out of rule 2 — reserved for legit brand / third-party
+//      palettes (Google logo, Notion colors, GitHub code theme).
+//
+// Returns an array of human-readable warning strings (caller prefixes slug).
+export function lintStyleAntipatterns(relPath, body) {
+  const out = [];
+  const allowHex = /audit-allow-hex/.test(body);
+  const lines = body.split("\n");
+  lines.forEach((line, i) => {
+    const ln = i + 1;
+    // 1. className template-literal opened directly with a backtick (no cn()
+    //    wrapper) that interpolates `${…}`.
+    if (/className=\{`[^`]*\$\{/.test(line)) {
+      out.push(
+        `${relPath}:${ln} raw template-literal className without cn() — wrap as cn("…", expr) so consumer overrides merge`,
+      );
+    }
+    // 2. hex literal inside a className string/template, unless the file opts
+    //    out via the `audit-allow-hex` marker.
+    if (!allowHex && /className=("|'|`)[^"'`]*#[0-9a-fA-F]{3,8}/.test(line)) {
+      out.push(
+        `${relPath}:${ln} hardcoded hex in className — use a theme token, or add an "audit-allow-hex" comment for legit brand palettes`,
+      );
+    }
+  });
+  return out;
+}

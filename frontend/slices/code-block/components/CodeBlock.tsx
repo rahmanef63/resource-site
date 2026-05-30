@@ -40,6 +40,8 @@ export function CodeBlock({ text, lang, registerRef, onText, onLang, onKeyDown }
   };
 
   return (
+    // audit-allow-hex: bg-[#0d1117] is GitHub's dark code surface (third-party
+    // theme), intentionally a fixed hex — not a remappable theme token.
     <div className="flex-1 rounded-md bg-[#0d1117] border border-border overflow-hidden font-mono text-sm group/code relative">
       <div className="flex items-center justify-between px-3 py-1.5 bg-black/30 border-b border-white/5">
         <DropdownMenu>

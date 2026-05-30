@@ -94,11 +94,20 @@ the consumer forks those internals anyway.
 | **P2** | `cva` variant API on ~6 leaf badge/button comps; define shared `sliceVariants` recipe | med | per-slice ver bump + manifest |
 | **P3** | `forwardRef` + `...props` on ~5 leaf interactive comps | med | per-slice ver bump + manifest |
 | **P4** ✅ | add `slice.contract.ts` to `event-tracking`, `files`, `rbac-roles` (files=adapter UI contract; 2 nav-only stubs get coverage contracts) | low | shipped |
-| **P5** | codify in `scaffold-slice` template + `audit:slices` gate: lint raw-interp className (require cn), flag hardcoded non-brand color | low | tooling |
+| **P5** ✅ | scaffold template now ships the full trio (`slice.json` + `slice.contract.ts` + `slice.manifest.json`) + cn/`...props` parity in `example-button`; `audit:slices` gains 2 advisory lint rules (raw-interp className → require cn; hardcoded hex in className → token, escape via `audit-allow-hex`) | low | shipped |
 
 **P2/P3 caveat:** they touch published-slice public surface → bump each slice's
-`version` in `slice.json` + TS catalog, regen `manifest.json`, republish (OTP).
-P1/P4/P5 ship to main with no npm publish.
+`version` in `slice.json` + TS catalog, regen `manifest.json`, then **publish
+from `packages/cli`** (`cd packages/cli && npm publish --otp=…` — you run OTP;
+MCP republishes from `packages/mcp`). P1/P4/P5 ship to main with no npm publish.
+
+**P4 reality (correction):** `files` / `event-tracking` / `rbac-roles` have no
+`slice.json`, so `discoverSlices` skips them — `audit:slices` never sees their
+contracts. The contracts I added are documentation-grade (boundary intent +
+CLI metadata), not audit-enforced. Audit coverage on *discovered* slices was
+already 100% (the trio check would have errored otherwise). The durable fix is
+P5: the template now ships the trio, so every *scaffolded* slice is born
+audit-clean instead of erroring on first run.
 
 ---
 
