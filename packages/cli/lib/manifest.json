@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-28T09:42:28.925Z",
+  "generatedAt": "2026-05-30T14:20:07.066Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -2579,6 +2579,28 @@
         "convex",
         "rbac"
       ]
+    },
+    {
+      "slug": "library",
+      "title": "Library — resource hub (prompts · visuals · snippets · links)",
+      "category": "data",
+      "description": "Grab-bag resource hub. One polymorphic `libraryItems` table holds six kinds — prompt, image, video, link, download, snippet — with per-kind payload fields switched on `kind` (no joins). Attribution-first: every item carries optional source/license/tools so re-shares stay correct. Collections group items. Convex-backed (schema + queries + unauthenticated mutations); SEO override fields reused from the `seo` peer slice so the surface matches blog/projects rows. Public view = filterable card grid + per-item detail with copy-to-clipboard for prompts/snippets and an opt-in upvote control. Lifted 2026-05-28 from rahmanef.com; 432-LOC mutations + 330-LOC detail split for the 200-LOC cap; Indonesian copy + custom primitives stripped (prop-driven English defaults); cross-slice auth + comments-votes coupling dropped (consumer wraps mutations + supplies the upvote handler).",
+      "source": "rahmanef.com",
+      "install": "npx rahman-resources add library",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add seo` (peer) then `npx rr add library`. Spread `seoTables` + `libraryTables` into your root Convex schema. Wrap the unauthenticated CRUD `internalMutation`s with your auth model (see README Install). Render `<LibraryIndex items={await fetchQuery(api.library.listPublic)} />` and `<LibraryDetail item={await fetchQuery(api.library.getBySlug, { slug })} />`. Pass `onUpvote` to enable voting (consumer-owned backend); override `copy` + `kindLabels` per consumer.",
+      "tags": [
+        "library",
+        "resources",
+        "prompts",
+        "snippets",
+        "moodboard",
+        "downloads",
+        "attribution",
+        "seo",
+        "personal-brand"
+      ]
     }
   ],
   "slices": [
@@ -4877,6 +4899,46 @@
         "rbac"
       ],
       "agentRecipe": "Run `npx rr add workspace-shell`. Tables prefixed `workspaceShell_*` (menuSets, menuItems, itemComponents, wsAssignments, userAssignments, rolePerms, navContext). Mount `<NavContextProvider workspaceId={wsId}>` inside your auth provider; use `useNavContext(wsId)` to read `{workspace, menuSet, source, effectiveMenuItems, setMenuSet, forkMenuSet}`. Drop-in `<WorkspaceSwitcher canFork />` in sidebar header. Tiered RBAC: `menus.manage` for workspace-default editing, `menus.fork` for user-personal copy. Resolver chain: user cache → user assignment → workspace default → none. Pair with audit-log slice for context-switch / fork events (graceful try/catch if absent). Effective items query applies role filter via workspaceShell_rolePerms (no rolePerms → show all, pre-RBAC compat)."
+    },
+    {
+      "slug": "library",
+      "title": "Library — resource hub (prompts · visuals · snippets · links)",
+      "category": "data",
+      "kind": "full",
+      "version": "0.1.0",
+      "description": "Grab-bag resource hub. One polymorphic `libraryItems` table holds six kinds — prompt, image, video, link, download, snippet — with per-kind payload fields switched on `kind` (no joins). Attribution-first: every item carries optional source/license/tools so re-shares stay correct. Collections group items. Convex-backed (schema + queries + unauthenticated mutations); SEO override fields reused from the `seo` peer slice so the surface matches blog/projects rows. Public view = filterable card grid + per-item detail with copy-to-clipboard for prompts/snippets and an opt-in upvote control. Lifted 2026-05-28 from rahmanef.com; 432-LOC mutations + 330-LOC detail split for the 200-LOC cap; Indonesian copy + custom primitives stripped (prop-driven English defaults); cross-slice auth + comments-votes coupling dropped (consumer wraps mutations + supplies the upvote handler).",
+      "source": "rahmanef.com",
+      "slicePath": "frontend/slices/library",
+      "convexPaths": [
+        "convex/features/library"
+      ],
+      "npm": [
+        "convex@^1.17",
+        "next@^15",
+        "react@^18"
+      ],
+      "shadcn": [],
+      "env": [],
+      "peers": [
+        {
+          "slug": "seo",
+          "range": "^0.2",
+          "reason": "Library item SEO override fields reuse the seo slice's metadata shape so the surface matches blog/projects rows."
+        }
+      ],
+      "providers": [],
+      "tags": [
+        "library",
+        "resources",
+        "prompts",
+        "snippets",
+        "moodboard",
+        "downloads",
+        "attribution",
+        "seo",
+        "personal-brand"
+      ],
+      "agentRecipe": "Run `npx rr add seo` (peer) then `npx rr add library`. Spread `seoTables` + `libraryTables` into your root Convex schema. Wrap the unauthenticated CRUD `internalMutation`s with your auth model (see README Install). Render `<LibraryIndex items={await fetchQuery(api.library.listPublic)} />` and `<LibraryDetail item={await fetchQuery(api.library.getBySlug, { slug })} />`. Pass `onUpvote` to enable voting (consumer-owned backend); override `copy` + `kindLabels` per consumer."
     }
   ]
 }
