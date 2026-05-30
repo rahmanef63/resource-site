@@ -10,21 +10,24 @@ import { layouts } from "@/lib/content/layouts";
 import { slices } from "@/lib/content/slices";
 import { isHidden } from "@/lib/content/hidden-slugs";
 import { site } from "@/lib/content/site";
+import { PageHeader } from "@/components/site/page-header";
 
 export const metadata = { title: "Install with Agent" };
 
 export default function AgentsPage() {
   return (
     <div className="space-y-8">
-      <div>
-        <p className="text-sm font-medium text-muted-foreground">Agents</p>
-        <h1 className="mt-2 text-3xl font-bold tracking-tight">Install with Agent</h1>
-        <p className="mt-3 text-base text-muted-foreground">
-          Hand any layout or module to your AI coding agent. Copy the prompt, paste it into
-          Claude / Codex / Cursor — the agent reads <code className="font-mono text-xs">{site.url}/api/knowledge</code>{" "}
-          and <code className="font-mono text-xs">{site.url}/llms.txt</code> to learn the rules.
-        </p>
-      </div>
+      <PageHeader
+        eyebrow="Automation"
+        title="Install with Agent"
+        description={
+          <>
+            Hand any layout or module to your AI coding agent. Copy the prompt, paste it into
+            Claude / Codex / Cursor — the agent reads <code className="font-mono text-xs">{site.url}/api/knowledge</code>{" "}
+            and <code className="font-mono text-xs">{site.url}/llms.txt</code> to learn the rules.
+          </>
+        }
+      />
 
       <div className="rounded-lg border bg-card p-5 space-y-4">
         <div>

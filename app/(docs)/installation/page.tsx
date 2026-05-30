@@ -3,6 +3,7 @@ import { CodeBlock } from "@/components/site/code-block";
 import { RepoLink } from "@/components/site/repo-link";
 import { InstallWithAgent } from "@/components/site/install-with-agent";
 import { buildAgentPrompt } from "@/lib/agent-prompt";
+import { PageHeader } from "@/components/site/page-header";
 import { site } from "@/lib/content/site";
 
 export const metadata = { title: "Installation" };
@@ -10,12 +11,12 @@ export const metadata = { title: "Installation" };
 export default function InstallationPage() {
   const prompt = buildAgentPrompt({});
   return (
-    <div className="max-w-3xl">
-      <p className="text-sm font-medium text-muted-foreground">Get Started</p>
-      <h1 className="mt-2 text-3xl font-bold tracking-tight">Installation</h1>
-      <p className="mt-3 text-muted-foreground">
-        Two paths. Pick one.
-      </p>
+    <div>
+      <PageHeader
+        eyebrow="Get Started"
+        title="Installation"
+        description="Two paths. Pick one."
+      />
 
       <section className="mt-10 space-y-4">
         <h2 className="text-2xl font-semibold tracking-tight">CLI scaffold (recommended)</h2>

@@ -1,5 +1,6 @@
 import { CodeBlock } from "@/components/site/code-block";
 import { RepoLink } from "@/components/site/repo-link";
+import { PageHeader } from "@/components/site/page-header";
 
 export const metadata = { title: "Architecture" };
 
@@ -64,11 +65,12 @@ notion-clone   ✅        ✅          ✅          ✅          ✅         ✅
     └── <…>.tsx                  # sub-components`;
 
   return (
-    <div className="max-w-3xl">
-      <h1 className="text-4xl font-bold tracking-tight">Architecture</h1>
-      <p className="mt-3 text-muted-foreground">
-        Vertical-slice. Copy-first. One dispatcher across N templates. Subdomain demos. No fork.
-      </p>
+    <div>
+      <PageHeader
+        eyebrow="Get Started"
+        title="Architecture"
+        description="Vertical-slice. Copy-first. One dispatcher across N templates. Subdomain demos. No fork."
+      />
 
       <section className="mt-10 space-y-4">
         <h2 className="text-2xl font-semibold tracking-tight">Subdomain routing</h2>

@@ -15,7 +15,7 @@ const NPM = "https://www.npmjs.com/package/rahman-cr";
 
 export default function ControlRoomPage() {
   return (
-    <article className="max-w-3xl space-y-12">
+    <article className="space-y-12">
       <header>
         <p className="text-sm font-medium text-muted-foreground">Install guide</p>
         <h1 className="mt-2 text-3xl font-bold tracking-tight">VPS Control Room</h1>

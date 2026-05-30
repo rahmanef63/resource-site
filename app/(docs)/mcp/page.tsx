@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { McpInstallTabs } from "@/components/site/mcp-install-tabs";
 import { RepoLink } from "@/components/site/repo-link";
+import { PageHeader } from "@/components/site/page-header";
 import { site } from "@/lib/content/site";
 import { PACKAGE_VERSIONS } from "@/lib/content/package-versions";
 import { ToolsTable, ResourcesTable, WorkflowsSection } from "./page-tables";
@@ -22,16 +23,20 @@ const REPO_PATH = `${site.repo}/tree/main/packages/mcp`;
 
 export default function McpDocsPage() {
   return (
-    <div className="max-w-3xl">
-      <p className="text-sm font-medium text-muted-foreground">Tooling</p>
-      <h1 className="mt-2 text-3xl font-bold tracking-tight">MCP server</h1>
-      <p className="mt-3 text-muted-foreground">
-        <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">{NPM_PACKAGE}</code>{" "}
-        is a Model Context Protocol server that exposes the entire Rahman kitab —
-        every template, feature, recipe, and Claude Skill — to MCP-aware clients
-        (Claude Code, Cursor, Cline). Once wired, your agent can <em>discover</em>{" "}
-        and <em>compose</em> kitab artifacts without you copy-pasting slugs.
-      </p>
+    <div>
+      <PageHeader
+        eyebrow="Automation"
+        title="MCP server"
+        description={
+          <>
+            <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">{NPM_PACKAGE}</code>{" "}
+            is a Model Context Protocol server that exposes the entire Rahman kitab —
+            every template, feature, recipe, and Claude Skill — to MCP-aware clients
+            (Claude Code, Cursor, Cline). Once wired, your agent can <em>discover</em>{" "}
+            and <em>compose</em> kitab artifacts without you copy-pasting slugs.
+          </>
+        }
+      />
 
       <div className="mt-6 flex flex-wrap items-center gap-3 text-sm">
         <a

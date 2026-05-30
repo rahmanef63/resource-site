@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { PageHeader } from "@/components/site/page-header";
 import { site } from "@/lib/content/site";
 import { layouts } from "@/lib/content/layouts";
 import { slices } from "@/lib/content/slices";
@@ -9,11 +10,11 @@ export const metadata = { title: "Introduction" };
 export default function DocsIntroPage() {
   return (
     <div className="space-y-8">
-      <div>
-        <p className="text-sm font-medium text-muted-foreground">Documentation</p>
-        <h1 className="mt-2 text-3xl font-bold tracking-tight">Introduction</h1>
-        <p className="mt-3 text-base text-muted-foreground">{site.description}</p>
-      </div>
+      <PageHeader
+        eyebrow="Documentation"
+        title="Introduction"
+        description={site.description}
+      />
 
       <div className="rounded-lg border bg-card p-5">
         <h2 className="text-lg font-semibold">What's in the box</h2>

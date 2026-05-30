@@ -69,7 +69,7 @@ const GUARDS = [
 
 export default function AuditChainPage() {
   return (
-    <div className="max-w-3xl space-y-10">
+    <div className="space-y-10">
       <header className="space-y-3">
         <p className="text-sm font-medium text-muted-foreground">Operator</p>
         <h1 className="text-3xl font-bold tracking-tight">Audit Chain</h1>

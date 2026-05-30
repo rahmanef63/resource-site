@@ -14,14 +14,12 @@ export const metadata = {
  */
 export default function ChangelogPage() {
   return (
-    <div className="-mx-4">
-      <ChangelogFeedSection
-        eyebrow="Release notes"
-        title="Changelog"
-        subtitle="What changed in each rr release. Full prose history in CHANGELOG.md."
-        entries={releases}
-        layout="timeline"
-      />
-    </div>
+    <ChangelogFeedSection
+      eyebrow="Release notes"
+      title="Changelog"
+      subtitle="What changed in each rr release. Full prose history in CHANGELOG.md."
+      entries={releases}
+      layout="timeline"
+    />
   );
 }

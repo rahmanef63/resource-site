@@ -3,21 +3,19 @@ import { ArrowUpRight, Box } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { PageHeader } from "@/components/site/page-header";
 import { sources } from "@/lib/content/sources";
 
 export const metadata = { title: "Directory" };
 
 export default function DirectoryPage() {
   return (
-    <div className="max-w-3xl space-y-6">
-      <div>
-        <p className="text-sm font-medium text-muted-foreground">Catalog</p>
-        <h1 className="mt-2 text-3xl font-bold tracking-tight">Directory</h1>
-        <p className="mt-3 text-muted-foreground">
-          Source projects every layout and recipe is copied from. Each is a real shipped
-          app. Audit the originals before adopting.
-        </p>
-      </div>
+    <div className="space-y-8">
+      <PageHeader
+        eyebrow="Catalog"
+        title="Directory"
+        description="Source projects every layout and recipe is copied from. Each is a real shipped app. Audit the originals before adopting."
+      />
 
       <Alert className="border-amber-500/30 bg-amber-500/5">
         <AlertDescription className="text-sm text-foreground/80">

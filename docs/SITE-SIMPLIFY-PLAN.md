@@ -74,7 +74,17 @@ you prefer "Modules" as the public noun, it's a one-word flip in 2 files.)*
   "Modules" vs "Slices" label split — pick one term, use it everywhere).
 - Surface: ships via main, no publish. Pure nav data + labels; no route changes.
 
-### Q2 — Canonical `<PageHeader>` + shell discipline  ·  *layout consistency*
+### Q2 — Canonical `<PageHeader>` + shell discipline  ·  ✅ SHIPPED
+Created `components/site/page-header.tsx` (eyebrow/title/description, `text-3xl`
+title matched to CatalogHero). Adopted on 8 content pages (docs, best-practice,
+directory, installation, agents, stack, architecture, mcp); eyebrows aligned to
+the new cluster names. Stripped redundant `max-w-3xl` from directory, installation,
+architecture, mcp, stack, control-room, audit-chain (DocsShell owns width). Killed
+changelog `-mx-4`. Fixed architecture + stack h1 `text-4xl`→`text-3xl`. Normalized
+`space-y-6`→`space-y-8` roots. **build left as-is** — it's an interactive tool
+surface (compact toolbar header is correct, not a content doc).
+
+*(original target below)*
 - New `components/site/page-header.tsx`: `{ eyebrow, title, description }` →
   `text-3xl font-bold tracking-tight` h1, `text-sm text-muted-foreground` eyebrow,
   `text-base text-muted-foreground` desc. One header, everywhere.

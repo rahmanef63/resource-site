@@ -1,4 +1,5 @@
 import { FeatureGridSection } from "@/features/feature-grid";
+import { PageHeader } from "@/components/site/page-header";
 import { stack } from "@/lib/content/sections";
 
 export const metadata = { title: "Stack" };
@@ -24,12 +25,11 @@ const detail: Record<string, string> = {
 export default function StackPage() {
   return (
     <div>
-      <div className="max-w-3xl">
-        <h1 className="text-4xl font-bold tracking-tight">Stack</h1>
-        <p className="mt-3 text-muted-foreground">
-          Everything you'd pick if you were starting today.
-        </p>
-      </div>
+      <PageHeader
+        eyebrow="Get Started"
+        title="Stack"
+        description="Everything you'd pick if you were starting today."
+      />
 
       <FeatureGridSection
         className="!px-0 !py-10"
