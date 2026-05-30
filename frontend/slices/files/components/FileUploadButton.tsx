@@ -1,18 +1,23 @@
-import { useRef } from "react";
+import { useRef, type ComponentProps } from "react";
 import { Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useFileUpload } from "../hooks/useFileUpload";
 import type { FileRef } from "../types";
 
-interface Props {
+interface Props extends ComponentProps<typeof Button> {
   onUploaded: (ref: FileRef) => void;
   multiple?: boolean;
-  className?: string;
   label?: string;
 }
 
-export function FileUploadButton({ onUploaded, multiple = false, className, label = "Upload" }: Props) {
+export function FileUploadButton({
+  onUploaded,
+  multiple = false,
+  className,
+  label = "Upload",
+  ...props
+}: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const { upload, uploading } = useFileUpload();
 
@@ -39,6 +44,7 @@ export function FileUploadButton({ onUploaded, multiple = false, className, labe
         onChange={(e) => onPick(e.target.files)}
       />
       <Button
+        {...props}
         variant="ghost"
         onClick={() => inputRef.current?.click()}
         disabled={uploading}

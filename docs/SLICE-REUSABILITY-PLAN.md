@@ -91,14 +91,23 @@ the consumer forks those internals anyway.
 |---|---|---|---|
 | **P0** ✅ | cn normalize + merge (11 spots, 26 imports) | none | shipped |
 | **P1** ✅ | copy externalization — 3 generic-chrome comps → `copy`/EN default (+ chat-fab raw `<input>`→shadcn Input) | low | shipped |
-| **P2** | `cva` variant API on ~6 leaf badge/button comps; define shared `sliceVariants` recipe | med | per-slice ver bump + manifest |
-| **P3** | `forwardRef` + `...props` on ~5 leaf interactive comps | med | per-slice ver bump + manifest |
+| **P2** 🟡 | `cva` variant API — **code shipped** on the 3 real variant-axis leaves: `hero` `heroCtaVariants` (solid/outline), `create-your-mcp` `tokenStatusVariants` (active/inactive), `full-width-toggle` `segmentItemVariants` (active bool); all exported. **Skipped (documented):** `activity` badge (static, no axis), `notion-database` `option-shared` chip (10-color array IS the SSOT variant map — cva would duplicate it). | med | code via degit; ver bump + manifest **deferred** |
+| **P3** 🟡 | `...props` passthrough (React 19 = ref-as-prop, no `forwardRef` needed) — **code shipped** on leaf comps `files/FileUploadButton` + `full-width-toggle/FullWidthToggle` (button branches). **Skipped (altitude §3):** `notion-shell` `InsertBlockButton`/`PageActionsMenu` are subsystem internals (consumer rewires) — passthrough there = the wasted effort §3 warns against. `library/UpvotePanel` = concurrent WIP, untouchable. | med | code via degit; ver bump + manifest **deferred** |
 | **P4** ✅ | add `slice.contract.ts` to `event-tracking`, `files`, `rbac-roles` (files=adapter UI contract; 2 nav-only stubs get coverage contracts) | low | shipped |
 | **P5** ✅ | scaffold template now ships the full trio (`slice.json` + `slice.contract.ts` + `slice.manifest.json`) + cn/`...props` parity in `example-button`; `audit:slices` gains 2 advisory lint rules (raw-interp className → require cn; hardcoded hex in className → token, escape via `audit-allow-hex`) | low | shipped |
 
-**P2/P3 caveat:** they touch published-slice public surface → bump each slice's
-`version` in `slice.json` + TS catalog, regen `manifest.json`, then **publish
-from `packages/cli`** (`cd packages/cli && npm publish --otp=…` — you run OTP;
+**P2/P3 caveat — code ships free, version-bump is deferred:** slice component
+files reach consumers via `tiged`/degit from GitHub main (the CLI npm tarball is
+`bin`+`lib`+`README` only — no slice sources), so the cva/`...props` edits are
+live the moment they land on main. The **version bump is a separate publish-time
+step**, deferred because: (a) `validate-slice-parity` requires `version` to be
+EQUAL in `slice.json` AND the TS catalog `lib/content/slices.ts`, and (b) that
+catalog is currently concurrent-agent WIP (+`library` block, uncommitted). Doing
+half the bump now would either fail parity or entangle their WIP. **Publish
+checklist (after `library`+`seo` are committed):** bump `version` in each
+touched `slice.json` + the matching catalog entry → `npm version patch` in
+`packages/cli` (1.9.0 is already on npm) → regen `manifest.json` (runs in
+`prepublishOnly`) → `cd packages/cli && npm publish` (web-auth/2FA — you run it;
 MCP republishes from `packages/mcp`). P1/P4/P5 ship to main with no npm publish.
 
 **P4 reality (correction):** `files` / `event-tracking` / `rbac-roles` have no

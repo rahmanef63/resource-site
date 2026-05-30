@@ -1,7 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cva } from "class-variance-authority";
+
+/** CTA variants — exported so consumers can restyle or extend the recipe. */
+export const heroCtaVariants = cva(
+  "inline-flex items-center gap-2 rounded-md shadow-xs px-6 py-3 text-xs uppercase tracking-widest font-medium transition-colors border-2 border-foreground",
+  {
+    variants: {
+      variant: {
+        solid: "bg-foreground text-background hover:bg-background hover:text-foreground",
+        outline: "bg-background text-foreground hover:bg-foreground hover:text-background",
+      },
+    },
+    defaultVariants: { variant: "solid" },
+  },
+);
 
 export type HeroCta = {
   href: string;
@@ -52,21 +66,15 @@ export function HeroView({
           )}
           {ctas.length > 0 && (
             <div className="flex flex-wrap gap-3 pt-2">
-              {ctas.map((cta) => {
-                const isOutline = cta.variant === "outline";
-                const cls = isOutline
-                  ? "border-2 border-foreground bg-background text-foreground hover:bg-foreground hover:text-background"
-                  : "border-2 border-foreground bg-foreground text-background hover:bg-background hover:text-foreground";
-                return (
-                  <Link
-                    key={cta.href}
-                    href={cta.href}
-                    className={cn("inline-flex items-center gap-2 rounded-md shadow-xs px-6 py-3 text-xs uppercase tracking-widest font-medium transition-colors", cls)}
-                  >
-                    {cta.label} <ArrowUpRight className="w-4 h-4" />
-                  </Link>
-                );
-              })}
+              {ctas.map((cta) => (
+                <Link
+                  key={cta.href}
+                  href={cta.href}
+                  className={heroCtaVariants({ variant: cta.variant })}
+                >
+                  {cta.label} <ArrowUpRight className="w-4 h-4" />
+                </Link>
+              ))}
             </div>
           )}
         </div>

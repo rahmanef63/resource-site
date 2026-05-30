@@ -1,8 +1,22 @@
 "use client";
 
+import { cva } from "class-variance-authority";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { formatTime, statusOf, type McpTokenRow } from "./mcp-admin-helpers";
+
+/** Token status pill variants — exported for consumer restyle/extend. */
+export const tokenStatusVariants = cva(
+  "inline-block rounded-sm px-2 py-0.5 text-[10px] uppercase tracking-widest font-medium",
+  {
+    variants: {
+      status: {
+        active: "bg-foreground text-background",
+        inactive: "bg-muted text-muted-foreground",
+      },
+    },
+    defaultVariants: { status: "inactive" },
+  },
+);
 
 export type McpTokenTableProps = {
   rows: McpTokenRow[] | undefined;
@@ -58,12 +72,9 @@ export function McpTokenTable({ rows, onRevoke }: McpTokenTableProps) {
               <tr key={r._id} className="align-top">
                 <td className="px-3 py-3">
                   <span
-                    className={cn(
-                      "inline-block rounded-sm px-2 py-0.5 text-[10px] uppercase tracking-widest font-medium",
-                      s === "active"
-                        ? "bg-foreground text-background"
-                        : "bg-muted text-muted-foreground",
-                    )}
+                    className={tokenStatusVariants({
+                      status: s === "active" ? "active" : "inactive",
+                    })}
                   >
                     {s}
                   </span>

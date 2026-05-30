@@ -13,6 +13,7 @@
 
 import * as React from "react";
 import { Maximize2, Minimize2, ArrowLeftRight } from "lucide-react";
+import { cva } from "class-variance-authority";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useFullWidth, type WidthMode } from "../lib/use-full-width";
@@ -24,9 +25,23 @@ export interface FullWidthToggleCopy {
   title: Record<WidthMode, string>;
 }
 
-interface FullWidthToggleProps {
+/** Segment-item variants (active vs idle) — exported for consumer restyle. */
+export const segmentItemVariants = cva(
+  "h-auto gap-1.5 rounded px-2.5 py-1 text-xs",
+  {
+    variants: {
+      active: {
+        true: "bg-accent font-medium",
+        false: "hover:bg-accent/50 text-muted-foreground",
+      },
+    },
+    defaultVariants: { active: false },
+  },
+);
+
+interface FullWidthToggleProps
+  extends Omit<React.ComponentProps<typeof Button>, "variant"> {
   variant?: "icon" | "button" | "segment";
-  className?: string;
   /** Override any subset of the English default strings (i18n). */
   copy?: Partial<FullWidthToggleCopy>;
 }
@@ -50,7 +65,12 @@ const DEFAULT_COPY: FullWidthToggleCopy = {
   },
 };
 
-export function FullWidthToggle({ variant = "icon", className, copy }: FullWidthToggleProps) {
+export function FullWidthToggle({
+  variant = "icon",
+  className,
+  copy,
+  ...props
+}: FullWidthToggleProps) {
   const [mode, setMode, cycle] = useFullWidth();
   const LABEL = { ...DEFAULT_COPY.label, ...copy?.label };
   const TITLE = { ...DEFAULT_COPY.title, ...copy?.title };
@@ -68,10 +88,7 @@ export function FullWidthToggle({ variant = "icon", className, copy }: FullWidth
               variant="ghost"
               size="sm"
               onClick={() => setMode(m)}
-              className={cn(
-                "h-auto gap-1.5 rounded px-2.5 py-1 text-xs",
-                mode === m ? "bg-accent font-medium" : "hover:bg-accent/50 text-muted-foreground",
-              )}
+              className={segmentItemVariants({ active: mode === m })}
               title={TITLE[m]}
             >
               <Icon className="h-3.5 w-3.5" />
@@ -87,7 +104,7 @@ export function FullWidthToggle({ variant = "icon", className, copy }: FullWidth
 
   if (variant === "button") {
     return (
-      <Button variant="ghost" size="sm" onClick={cycle} title={TITLE[mode]} className={className}>
+      <Button {...props} variant="ghost" size="sm" onClick={cycle} title={TITLE[mode]} className={className}>
         <Icon className="h-4 w-4" />
         <span className="ml-1.5">{LABEL[mode]}</span>
       </Button>
@@ -96,6 +113,7 @@ export function FullWidthToggle({ variant = "icon", className, copy }: FullWidth
 
   return (
     <Button
+      {...props}
       variant="ghost"
       size="icon"
       onClick={cycle}
