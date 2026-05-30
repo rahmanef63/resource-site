@@ -9,7 +9,7 @@
 import type { ReactNode } from "react";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "rahman-shared/lib/utils";
+import { cn } from "@/lib/utils";
 import { NotionHeader, type NotionHeaderProps } from "./NotionHeader";
 
 export interface NotionPageProps {

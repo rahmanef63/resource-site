@@ -13,6 +13,7 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
   DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 
 export interface PageActionsMenuProps {
   favorite?: boolean;
@@ -36,7 +37,7 @@ export function PageActionsMenu({
           variant="ghost"
           size="icon"
           aria-label="Page actions"
-          className={`h-7 w-7 text-muted-foreground ${className ?? ""}`}
+          className={cn("h-7 w-7 text-muted-foreground", className)}
         >
           <MoreHorizontal className="h-4 w-4" />
         </Button>

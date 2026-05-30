@@ -18,7 +18,7 @@ import { useTheme } from "next-themes";
 import { ChevronDown, Palette, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { cn } from "rahman-shared/lib/utils";
+import { cn } from "@/lib/utils";
 import {
   groupTweakcnPresets, tweakcnSwatches,
   type TweakcnPresetGroup, type TweakcnPresetItem,

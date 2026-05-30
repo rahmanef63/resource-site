@@ -6,7 +6,7 @@
 
 import { useDroppable } from "@dnd-kit/core";
 import { Plus } from "lucide-react";
-import { cn } from "rahman-shared/lib/utils";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 const GROUP_PREFIX = "group:";

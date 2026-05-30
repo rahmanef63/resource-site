@@ -16,7 +16,7 @@
  *  the viewport. */
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { cn } from "rahman-shared/lib/utils";
+import { cn } from "@/lib/utils";
 import {
   Popover,
   PopoverAnchor,

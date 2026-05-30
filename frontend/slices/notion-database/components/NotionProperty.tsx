@@ -12,7 +12,7 @@ import { useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { cn } from "rahman-shared/lib/utils";
+import { cn } from "@/lib/utils";
 import { renderPropertyCell } from "./property-cells";
 import type { Property, PropertyValue } from "../types";
 

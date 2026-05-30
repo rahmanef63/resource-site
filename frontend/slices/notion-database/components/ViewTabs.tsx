@@ -8,7 +8,7 @@ import {
   Plus, Table, KanbanSquare, List, Image as ImageIcon, Calendar, Rss,
   BarChart3, LayoutDashboard, FileText, MapPin, GanttChart,
 } from "lucide-react";
-import { cn } from "rahman-shared/lib/utils";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,

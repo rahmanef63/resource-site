@@ -9,7 +9,7 @@
 
 import { type ReactNode } from "react";
 import { Input } from "@/components/ui/input";
-import { cn } from "rahman-shared/lib/utils";
+import { cn } from "@/lib/utils";
 import { NotionDatabase, type NotionDatabaseProps } from "../NotionDatabase";
 import { DatabaseMenu } from "./DatabaseMenu";
 

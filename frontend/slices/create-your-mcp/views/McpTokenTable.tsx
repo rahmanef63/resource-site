@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { formatTime, statusOf, type McpTokenRow } from "./mcp-admin-helpers";
 
 export type McpTokenTableProps = {
@@ -57,11 +58,12 @@ export function McpTokenTable({ rows, onRevoke }: McpTokenTableProps) {
               <tr key={r._id} className="align-top">
                 <td className="px-3 py-3">
                   <span
-                    className={`inline-block rounded-sm px-2 py-0.5 text-[10px] uppercase tracking-widest font-medium ${
+                    className={cn(
+                      "inline-block rounded-sm px-2 py-0.5 text-[10px] uppercase tracking-widest font-medium",
                       s === "active"
                         ? "bg-foreground text-background"
-                        : "bg-muted text-muted-foreground"
-                    }`}
+                        : "bg-muted text-muted-foreground",
+                    )}
                   >
                     {s}
                   </span>

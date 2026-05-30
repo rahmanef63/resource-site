@@ -11,7 +11,7 @@
 import { useMemo } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "rahman-shared/lib/utils";
+import { cn } from "@/lib/utils";
 import { renderPropertyCell } from "./property-cells";
 import { ViewTabs } from "./ViewTabs";
 import { ViewOptions } from "./ViewOptions";

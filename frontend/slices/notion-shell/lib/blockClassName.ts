@@ -1,4 +1,4 @@
-import { cn } from "rahman-shared/lib/utils";
+import { cn } from "@/lib/utils";
 import type { BlockType } from "../types";
 
 /** Tailwind class string for the contentEditable shell of a text-shape

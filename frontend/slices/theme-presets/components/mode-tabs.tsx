@@ -4,7 +4,7 @@
  *  Popover. Extracted to keep ThemePresetSwitcher.tsx ≤200 LOC. */
 
 import { Monitor, Moon, Sun } from "lucide-react";
-import { cn } from "rahman-shared/lib/utils";
+import { cn } from "@/lib/utils";
 
 const MODES = [
   { id: "light", label: "Light", Icon: Sun },

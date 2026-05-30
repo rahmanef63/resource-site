@@ -6,7 +6,7 @@
  *  keyword prefix match). Override / extend the spec list via `specs`. */
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { cn } from "rahman-shared/lib/utils";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { BLOCK_SPECS, type BlockSpec } from "../lib/blockSpecs";
 import type { BlockType } from "../types";

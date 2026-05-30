@@ -6,7 +6,7 @@
  *  popovers delegate to <SortBuilder /> and <FilterBuilder />. */
 
 import { ArrowUpDown, Filter, Search } from "lucide-react";
-import { cn } from "rahman-shared/lib/utils";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {

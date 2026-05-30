@@ -12,6 +12,7 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
   DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 import { calcLabel, validCalcs } from "../lib/calcAggregate";
 import {
   type CalcKind,
@@ -73,7 +74,7 @@ export function ColumnHeaderMenu({
                 <DropdownMenuItem
                   key={t}
                   onClick={() => onTypeChange(t)}
-                  className={`gap-2 text-sm ${t === prop.type ? "bg-accent/60" : ""}`}
+                  className={cn("gap-2 text-sm", t === prop.type && "bg-accent/60")}
                 >
                   {PROPERTY_TYPE_META[t].label}
                   {t === prop.type && <span className="ml-auto text-[10px] text-muted-foreground">current</span>}
@@ -102,7 +103,7 @@ export function ColumnHeaderMenu({
             <div className="max-h-48 overflow-y-auto pb-1">
               <DropdownMenuItem
                 onClick={() => onSetCalc("none")}
-                className={`gap-2 text-sm ${(currentCalc ?? "none") === "none" ? "bg-accent/60" : ""}`}
+                className={cn("gap-2 text-sm", (currentCalc ?? "none") === "none" && "bg-accent/60")}
               >
                 {calcLabel("none")}
               </DropdownMenuItem>
@@ -110,7 +111,7 @@ export function ColumnHeaderMenu({
                 <DropdownMenuItem
                   key={c}
                   onClick={() => onSetCalc(c)}
-                  className={`gap-2 text-sm ${c === currentCalc ? "bg-accent/60" : ""}`}
+                  className={cn("gap-2 text-sm", c === currentCalc && "bg-accent/60")}
                 >
                   {calcLabel(c)}
                 </DropdownMenuItem>

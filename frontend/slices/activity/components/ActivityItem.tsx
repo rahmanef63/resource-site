@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight, Clock, Tag as TagIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 import type { ActivityCopy, ActivityRow, CategoryLabelMap } from "../lib/types";
 import { fmtDate, fmtTime } from "../lib/format";
 
@@ -23,9 +24,10 @@ export function ActivityItem({
     (r.tags && r.tags.length > 0) || (r.links && r.links.length > 0);
   return (
     <li
-      className={`p-6 lg:p-7 ${
-        !isLast ? "border-b-2" : ""
-      } hover:bg-foreground hover:text-background transition-colors group/row`}
+      className={cn(
+        "p-6 lg:p-7 hover:bg-foreground hover:text-background transition-colors group/row",
+        !isLast && "border-b-2",
+      )}
     >
       <div className="flex flex-wrap items-center gap-3 text-[10px] uppercase tracking-wider font-medium opacity-70 mb-2">
         <span className="border-2 border-current rounded-sm px-2 py-0.5">

@@ -9,7 +9,7 @@
  *  a subtle primary-tinted ring. */
 
 import { useMemo } from "react";
-import { cn } from "rahman-shared/lib/utils";
+import { cn } from "@/lib/utils";
 import { RowActionsMenu } from "../RowActionsMenu";
 import { useRowSelectionOptional } from "../row-selection/RowSelectionProvider";
 import { HeaderCheckboxGutter, RowCheckbox } from "../row-selection/Checkboxes";

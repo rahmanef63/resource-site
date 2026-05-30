@@ -5,6 +5,7 @@
  *  view sorts and re-sorts by updated time for the timeline feel.
  *  Hover row reveals RowActionsMenu. */
 
+import { cn } from "@/lib/utils";
 import { RowActionsMenu } from "../RowActionsMenu";
 import type { ViewProps } from "./types";
 
@@ -31,7 +32,7 @@ export function FeedView({
           </div>
           <div className="flex-1">
             <div
-              className={"text-sm font-medium" + (onOpenRow ? " cursor-pointer hover:underline" : "")}
+              className={cn("text-sm font-medium", onOpenRow && "cursor-pointer hover:underline")}
               onClick={onOpenRow ? () => onOpenRow(r.id) : undefined}
             >
               {r.title || "Untitled"}

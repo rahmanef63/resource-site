@@ -5,6 +5,7 @@
  *  per-column comparison. Row hover reveals open/duplicate/delete via
  *  RowActionsMenu. */
 
+import { cn } from "@/lib/utils";
 import { RowActionsMenu } from "../RowActionsMenu";
 import type { ViewProps } from "./types";
 
@@ -22,7 +23,7 @@ export function ListView({
           className="group/row flex items-center gap-3 px-3 py-2 hover:bg-accent/30"
         >
           <span
-            className={"w-48 shrink-0 truncate text-sm font-medium" + (onOpenRow ? " cursor-pointer hover:underline" : "")}
+            className={cn("w-48 shrink-0 truncate text-sm font-medium", onOpenRow && "cursor-pointer hover:underline")}
             onClick={onOpenRow ? () => onOpenRow(r.id) : undefined}
           >
             {r.title || "Untitled"}

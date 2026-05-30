@@ -14,7 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { cn } from "rahman-shared/lib/utils";
+import { cn } from "@/lib/utils";
 import { filterRelationCandidates } from "../../lib/relationCandidates";
 import type { Database, Page, Property } from "../../types";
 

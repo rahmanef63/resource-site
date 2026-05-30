@@ -12,7 +12,7 @@ import { useMemo, useState, type ReactNode } from "react";
 import { ChevronRight, Plus, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { cn } from "rahman-shared/lib/utils";
+import { cn } from "@/lib/utils";
 
 export interface NotionSidebarPage {
   id: string;

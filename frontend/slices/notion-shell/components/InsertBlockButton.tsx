@@ -8,6 +8,7 @@
 import * as React from "react";
 import { Plus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import {
   Popover,
   PopoverContent,
@@ -51,7 +52,7 @@ export function InsertBlockButton({
         <Button
           variant="ghost"
           size="sm"
-          className={`h-7 gap-1 px-2 text-xs text-muted-foreground ${className ?? ""}`}
+          className={cn("h-7 gap-1 px-2 text-xs text-muted-foreground", className)}
         >
           <Plus className="h-3 w-3" /> {label}
         </Button>

@@ -5,7 +5,7 @@
  *  under the 200-LOC audit cap. */
 
 import { useDraggable } from "@dnd-kit/core";
-import { cn } from "rahman-shared/lib/utils";
+import { cn } from "@/lib/utils";
 import { RowActionsMenu } from "../RowActionsMenu";
 import type { Page, Property } from "../../types";
 import type { ViewProps } from "./types";

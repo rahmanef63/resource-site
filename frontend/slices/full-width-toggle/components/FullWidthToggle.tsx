@@ -14,6 +14,7 @@
 import * as React from "react";
 import { Maximize2, Minimize2, ArrowLeftRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { useFullWidth, type WidthMode } from "../lib/use-full-width";
 
 interface FullWidthToggleProps {
@@ -45,7 +46,7 @@ export function FullWidthToggle({ variant = "icon", className }: FullWidthToggle
   if (variant === "segment") {
     const order: WidthMode[] = ["contained", "wide", "full"];
     return (
-      <div className={"inline-flex rounded-md border border-input p-0.5 " + (className ?? "")}>
+      <div className={cn("inline-flex rounded-md border border-input p-0.5", className)}>
         {order.map((m) => {
           const Icon = ICONS[m];
           return (
@@ -55,10 +56,10 @@ export function FullWidthToggle({ variant = "icon", className }: FullWidthToggle
               variant="ghost"
               size="sm"
               onClick={() => setMode(m)}
-              className={
-                "h-auto gap-1.5 rounded px-2.5 py-1 text-xs " +
-                (mode === m ? "bg-accent font-medium" : "hover:bg-accent/50 text-muted-foreground")
-              }
+              className={cn(
+                "h-auto gap-1.5 rounded px-2.5 py-1 text-xs",
+                mode === m ? "bg-accent font-medium" : "hover:bg-accent/50 text-muted-foreground",
+              )}
               title={TITLE[m]}
             >
               <Icon className="h-3.5 w-3.5" />

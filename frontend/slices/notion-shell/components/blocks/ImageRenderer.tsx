@@ -8,7 +8,7 @@ import { useState } from "react";
 import { ImagePlus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { cn } from "rahman-shared/lib/utils";
+import { cn } from "@/lib/utils";
 import type { BlockRendererProps } from "../../types";
 
 export function ImageRenderer({ block, onUpdate }: BlockRendererProps) {

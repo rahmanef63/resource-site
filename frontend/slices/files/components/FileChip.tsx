@@ -2,7 +2,7 @@ import { File as FileIcon, Download, ExternalLink, X } from "lucide-react";
 import { parseFileRef } from "../lib/parse";
 import { useFileUrl } from "../hooks/useFileUrl";
 import type { FileRef } from "../types";
-import { cn } from "rahman-shared/lib/utils";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 interface Props {

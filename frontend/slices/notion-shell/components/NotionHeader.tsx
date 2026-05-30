@@ -10,7 +10,7 @@
 import { type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { cn } from "rahman-shared/lib/utils";
+import { cn } from "@/lib/utils";
 
 export interface NotionHeaderProps {
   icon: string;

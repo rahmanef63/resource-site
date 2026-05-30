@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export type HeroCta = {
   href: string;
@@ -60,7 +61,7 @@ export function HeroView({
                   <Link
                     key={cta.href}
                     href={cta.href}
-                    className={`inline-flex items-center gap-2 rounded-md shadow-xs px-6 py-3 text-xs uppercase tracking-widest font-medium transition-colors ${cls}`}
+                    className={cn("inline-flex items-center gap-2 rounded-md shadow-xs px-6 py-3 text-xs uppercase tracking-widest font-medium transition-colors", cls)}
                   >
                     {cta.label} <ArrowUpRight className="w-4 h-4" />
                   </Link>

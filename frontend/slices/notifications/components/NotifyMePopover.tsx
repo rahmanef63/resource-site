@@ -3,7 +3,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Button } from "@/components/ui/button";
 import { useSubscription } from "../hooks/useSubscription";
 import { SUBSCRIPTION_SCOPE_LABELS, type SubscriptionScope } from "../types";
-import { cn } from "rahman-shared/lib/utils";
+import { cn } from "@/lib/utils";
 
 interface Props {
   pageId: string;

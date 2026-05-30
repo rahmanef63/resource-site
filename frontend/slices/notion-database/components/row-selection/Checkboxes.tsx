@@ -13,7 +13,7 @@
  *  Lifted from notion-page-clone CK-1D Phase 5. */
 
 import { Check, Minus } from "lucide-react";
-import { cn } from "rahman-shared/lib/utils";
+import { cn } from "@/lib/utils";
 import { useRowSelection } from "./RowSelectionProvider";
 
 export function HeaderCheckboxGutter({ rowIds }: { rowIds: string[] }) {

@@ -7,7 +7,7 @@
  *  LOC and avoid radix sub-menu coordination. */
 
 import { Trash2, Copy, Shapes } from "lucide-react";
-import { cn } from "rahman-shared/lib/utils";
+import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
