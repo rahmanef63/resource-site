@@ -1,5 +1,4 @@
 import { layouts, type LayoutEntry } from "@/lib/content/layouts";
-import { recipes } from "@/lib/content/recipes";
 import { slices, type SliceEntry } from "@/lib/content/slices";
 import type { NavBranch, NavLeaf, NavSection } from "./nav-types";
 
@@ -29,6 +28,9 @@ export function buildSections(): NavSection[] {
   const slicesByCat = groupByCategory(slices, (s) => s.category as string);
   const SLICE_CATEGORY_ORDER = ["auth", "payment", "ai", "email", "data", "search", "realtime", "content", "storage", "ui", "infra"];
 
+  // 5-cluster IA (2026-05-30): onboarding → the three catalogs → standards →
+  // automation → releases. Replaces the 10-leaf "Get Started" dumping ground
+  // and surfaces Best Practice / Audit Chain (previously sidebar-invisible).
   return [
     {
       label: "Get Started",
@@ -38,19 +40,24 @@ export function buildSections(): NavSection[] {
         { kind: "leaf", title: "Architecture", href: "/architecture" },
         { kind: "leaf", title: "Stack", href: "/stack" },
         { kind: "leaf", title: "Directory", href: "/directory" },
-        { kind: "leaf", title: "Install with Agent", href: "/agents", badge: "new" },
-        { kind: "leaf", title: "Bundle Builder", href: "/build", badge: "new" },
-        { kind: "leaf", title: "MCP server", href: "/mcp", badge: "new" },
-        { kind: "leaf", title: "VPS Control Room", href: "/control-room", badge: "new" },
-        { kind: "leaf", title: "Changelog", href: "/changelog", badge: "new" },
       ],
     },
     {
-      label: "Website Templates",
+      label: "Slices",
       items: [
-        { kind: "leaf", title: "All website templates", href: "/templates", badge: "new" },
-        ...websiteTemplates.map(
-          (l): NavLeaf => ({ kind: "leaf", title: l.title, href: `/layouts/${l.slug}` }),
+        { kind: "leaf", title: "All slices", href: "/slices" },
+        ...SLICE_CATEGORY_ORDER.filter((cat) => slicesByCat[cat]?.length).map(
+          (cat): NavBranch => ({
+            kind: "branch",
+            title: cat.charAt(0).toUpperCase() + cat.slice(1),
+            items: slicesByCat[cat].map(
+              (s: SliceEntry): NavLeaf => ({
+                kind: "leaf",
+                title: s.title,
+                href: `/slices/${s.slug}`,
+              }),
+            ),
+          }),
         ),
       ],
     },
@@ -68,32 +75,33 @@ export function buildSections(): NavSection[] {
       ],
     },
     {
-      label: "Slices",
+      label: "Website Templates",
       items: [
-        { kind: "leaf", title: "All slices", href: "/slices", badge: "new" },
-        ...SLICE_CATEGORY_ORDER.filter((cat) => slicesByCat[cat]?.length).map(
-          (cat): NavBranch => ({
-            kind: "branch",
-            title: cat.charAt(0).toUpperCase() + cat.slice(1),
-            items: slicesByCat[cat].map(
-              (s: SliceEntry): NavLeaf => ({
-                kind: "leaf",
-                title: s.title,
-                href: `/slices/${s.slug}`,
-              }),
-            ),
-          }),
+        { kind: "leaf", title: "All website templates", href: "/templates" },
+        ...websiteTemplates.map(
+          (l): NavLeaf => ({ kind: "leaf", title: l.title, href: `/layouts/${l.slug}` }),
         ),
       ],
     },
     {
-      label: "Recipes",
+      label: "Standards",
       items: [
-        { kind: "leaf", title: "All recipes", href: "/recipes" },
-        ...recipes.map(
-          (r): NavLeaf => ({ kind: "leaf", title: r.title, href: `/recipes/${r.slug}` }),
-        ),
+        { kind: "leaf", title: "Best Practice", href: "/best-practice" },
+        { kind: "leaf", title: "Audit Chain", href: "/audit-chain" },
       ],
+    },
+    {
+      label: "Automation",
+      items: [
+        { kind: "leaf", title: "Install with Agent", href: "/agents", badge: "new" },
+        { kind: "leaf", title: "Bundle Builder", href: "/build" },
+        { kind: "leaf", title: "MCP server", href: "/mcp", badge: "new" },
+        { kind: "leaf", title: "VPS Control Room", href: "/control-room", badge: "new" },
+      ],
+    },
+    {
+      label: "Releases",
+      items: [{ kind: "leaf", title: "Changelog", href: "/changelog" }],
     },
   ];
 }

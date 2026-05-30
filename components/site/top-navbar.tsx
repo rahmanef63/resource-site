@@ -13,14 +13,15 @@ import { ThemePresetSwitcher } from "./theme-preset-switcher";
 import { site } from "@/lib/content/site";
 import { cn } from "@/lib/utils";
 
-// M5-BP — public label is "Modules" (canonical taxonomy). URL stays
-// /slices for backward compat with inbound links + bookmarks; internal
-// code keeps "slice" naming (see slice.json contract).
+// Top-nav mirrors the sidebar's 5-cluster IA (2026-05-30): one label per
+// destination, "Slices" everywhere (URL + sidebar + code agree — dropped the
+// "Modules" relabel that split the taxonomy three ways). Directory lives under
+// the Get Started sidebar cluster; the navbar keeps the curated quick-links.
 const NAV = [
   { label: "Docs", href: "/docs" },
+  { label: "Slices", href: "/slices" },
   { label: "Layouts", href: "/layouts" },
-  { label: "Modules", href: "/slices" },
-  { label: "Directory", href: "/directory" },
+  { label: "Templates", href: "/templates" },
   { label: "Best Practice", href: "/best-practice" },
   { label: "Agents", href: "/agents" },
   { label: "Install", href: "/installation" },

@@ -8,7 +8,7 @@ import { isHidden } from "@/lib/content/hidden-slugs";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   "use cache";
   const now = new Date();
-  const staticUrls = ["", "/installation", "/architecture", "/stack", "/layouts", "/recipes", "/mcp", "/agents", "/build", "/templates", "/slices", "/directory"];
+  const staticUrls = ["", "/docs", "/installation", "/architecture", "/stack", "/directory", "/slices", "/layouts", "/templates", "/build", "/best-practice", "/audit-chain", "/agents", "/mcp", "/control-room", "/changelog"];
   const fromStatic = staticUrls.map((p) => ({ url: `${site.url}${p}`, lastModified: now }));
   const fromLayouts = layouts
     .filter((l) => !isHidden(l.slug))
