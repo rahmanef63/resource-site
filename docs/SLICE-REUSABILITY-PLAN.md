@@ -51,12 +51,19 @@ nowhere.
 Targets (leaf interactive): `InsertBlockButton`, `PageActionsMenu`,
 `FileUploadButton`, `FullWidthToggle`, `UpvotePanel`.
 
-### Lever 4 — copy externalization
+### Lever 4 — copy externalization — **DONE (generic chrome)**
 Hardcoded strings → prop-driven `copy` object with English defaults (the pattern
 `activity` already ships: `copy: ActivityCopy`). Removes i18n lock-in.
-Targets: `full-width-toggle` `TITLE` (Indonesian) · `doku-payment/checkout-page` ·
-`ai-router/chat-fab` · `document-checklist`. (`document-checklist/data/indonesianData.ts`
-is intentional sample data — leave.)
+Done: `full-width-toggle` (label+title `copy`) · `doku-payment/checkout-page`
+(`copy` heading/sub/titles) · `ai-router/chat-fab` (greeting/title/placeholder
+props + EN stub + raw `<input>`→shadcn Input).
+
+**Scoping rule discovered:** externalize only *generic chrome* (tooltips,
+placeholders, headings). Do NOT externalize **localized-content verticals** whose
+domain copy IS the product — `document-checklist` is fully Indonesia-job-prep
+themed (tabs, SKCK paragraphs, `indonesianData.ts`); a consumer installs it FOR
+that content and forks to re-localize (copy-first). Treat like a content template,
+not a reusable component.
 
 ---
 
@@ -83,7 +90,7 @@ the consumer forks those internals anyway.
 | Phase | Work | Risk | Surface |
 |---|---|---|---|
 | **P0** ✅ | cn normalize + merge (11 spots, 26 imports) | none | shipped |
-| **P1** | copy externalization — 4 files → `copy` prop + EN default | low | minor ver bump |
+| **P1** ✅ | copy externalization — 3 generic-chrome comps → `copy`/EN default (+ chat-fab raw `<input>`→shadcn Input) | low | shipped |
 | **P2** | `cva` variant API on ~6 leaf badge/button comps; define shared `sliceVariants` recipe | med | per-slice ver bump + manifest |
 | **P3** | `forwardRef` + `...props` on ~5 leaf interactive comps | med | per-slice ver bump + manifest |
 | **P4** | add `slice.contract.ts` to `event-tracking`, `files`, `rbac-roles` | low | none |
@@ -99,7 +106,7 @@ P1/P4/P5 ship to main with no npm publish.
 
 - Raw `<button>` ×2 — documented exceptions (`role="checkbox"`, doc comment).
 - Non-token colors — Google brand SVG, Notion palette, GitHub code theme. Correct.
-- `document-checklist/data/indonesianData.ts` — intentional demo data.
+- `document-checklist` — intentionally-localized content vertical (Indonesia job-prep); domain copy is the product, not a leak. Consumer forks to re-localize.
 - Deep subsystem internals — consumer-owned, forwardRef there = noise.
 
 ---

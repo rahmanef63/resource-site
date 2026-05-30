@@ -11,6 +11,7 @@ import { useState, useRef, useEffect } from "react";
 import { Bot, Send, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 type Tier = "nano" | "mid" | "flagship";
@@ -19,11 +20,18 @@ type Message = { id: string; role: "user" | "assistant"; content: string };
 export function ChatFab({
   feature = "general-chat",
   tier = "mid",
-  greeting = "Halo — apa yang bisa saya bantu?",
+  greeting = "Hi — how can I help you?",
+  title = "Chat",
+  placeholder = "Type a message…",
 }: {
   feature?: string;
   tier?: Tier;
+  /** First assistant message (English default — override for i18n). */
   greeting?: string;
+  /** Panel header label. */
+  title?: string;
+  /** Composer input placeholder. */
+  placeholder?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
@@ -84,7 +92,7 @@ export function ChatFab({
       <header className="flex items-center justify-between border-b border-border/60 px-4 py-2">
         <div className="flex items-center gap-2">
           <Bot className="size-4 text-foreground/70" />
-          <span className="text-sm font-medium">Chat</span>
+          <span className="text-sm font-medium">{title}</span>
           <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] uppercase tracking-wider text-muted-foreground">
             {tier}
           </span>
@@ -120,12 +128,12 @@ export function ChatFab({
         )}
       </CardContent>
       <footer className="flex gap-2 border-t border-border/60 p-2">
-        <input
+        <Input
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send()}
-          placeholder="Ketik pesan…"
-          className="flex-1 rounded-md border border-border bg-background px-3 py-1.5 text-sm outline-none focus:border-foreground"
+          placeholder={placeholder}
+          className="flex-1 text-sm"
           disabled={pending}
         />
         <Button size="sm" onClick={send} disabled={pending || !input.trim()} aria-label="Send">
@@ -138,5 +146,5 @@ export function ChatFab({
 
 async function stubReply(prompt: string): Promise<string> {
   await new Promise((r) => setTimeout(r, 400));
-  return `(stub) Saya terima: "${prompt.slice(0, 80)}${prompt.length > 80 ? "…" : ""}". Wire ChatFab ke api.features.ai.actions.callModel untuk respon real.`;
+  return `(stub) Received: "${prompt.slice(0, 80)}${prompt.length > 80 ? "…" : ""}". Wire ChatFab to api.features.ai.actions.callModel for real responses.`;
 }

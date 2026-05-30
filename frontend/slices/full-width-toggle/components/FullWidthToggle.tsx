@@ -17,9 +17,18 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useFullWidth, type WidthMode } from "../lib/use-full-width";
 
+export interface FullWidthToggleCopy {
+  /** Short button label per width mode. */
+  label: Record<WidthMode, string>;
+  /** Tooltip/title per width mode (describes the next state on click). */
+  title: Record<WidthMode, string>;
+}
+
 interface FullWidthToggleProps {
   variant?: "icon" | "button" | "segment";
   className?: string;
+  /** Override any subset of the English default strings (i18n). */
+  copy?: Partial<FullWidthToggleCopy>;
 }
 
 const ICONS: Record<WidthMode, React.ComponentType<{ className?: string }>> = {
@@ -28,20 +37,23 @@ const ICONS: Record<WidthMode, React.ComponentType<{ className?: string }>> = {
   full: Maximize2,
 };
 
-const LABEL: Record<WidthMode, string> = {
-  contained: "Contained",
-  wide: "Wide",
-  full: "Full width",
+const DEFAULT_COPY: FullWidthToggleCopy = {
+  label: {
+    contained: "Contained",
+    wide: "Wide",
+    full: "Full width",
+  },
+  title: {
+    contained: "Comfortable width (~1280px) — click for Wide",
+    wide: "Large width (~1536px) — click for Full",
+    full: "Edge-to-edge — click for Contained",
+  },
 };
 
-const TITLE: Record<WidthMode, string> = {
-  contained: "Lebar nyaman (~1280px) — klik untuk Wide",
-  wide: "Lebar besar (~1536px) — klik untuk Full",
-  full: "Edge-to-edge — klik untuk Contained",
-};
-
-export function FullWidthToggle({ variant = "icon", className }: FullWidthToggleProps) {
+export function FullWidthToggle({ variant = "icon", className, copy }: FullWidthToggleProps) {
   const [mode, setMode, cycle] = useFullWidth();
+  const LABEL = { ...DEFAULT_COPY.label, ...copy?.label };
+  const TITLE = { ...DEFAULT_COPY.title, ...copy?.title };
 
   if (variant === "segment") {
     const order: WidthMode[] = ["contained", "wide", "full"];

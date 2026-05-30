@@ -17,12 +17,28 @@ import { DokuCheckout } from "./providers/doku";
 import { DokuDirectForm } from "./DokuDirectForm";
 import { DokuPaymentInstructions, type PaymentInstructions } from "./DokuPaymentInstructions";
 
+export interface CheckoutPageCopy {
+  heading: string;
+  subheading: string;
+  quickTitle: string;
+  directTitle: string;
+}
+
+const DEFAULT_COPY: CheckoutPageCopy = {
+  heading: "Checkout",
+  subheading: "Pick the fast hosted flow, or choose your own channel.",
+  quickTitle: "Quick checkout",
+  directTitle: "Choose your own channel",
+};
+
 interface CheckoutPageProps {
   amount?: number;
   orderId?: string;
   customer?: { name: string; email: string; phone?: string };
   callbackUrl?: string;
   allowedChannels?: string[];
+  /** Override any subset of the English default strings (i18n). */
+  copy?: Partial<CheckoutPageCopy>;
 }
 
 export default function CheckoutPage({
@@ -31,7 +47,9 @@ export default function CheckoutPage({
   customer = { name: "Demo User", email: "demo@example.com" },
   callbackUrl,
   allowedChannels,
+  copy,
 }: CheckoutPageProps) {
+  const c = { ...DEFAULT_COPY, ...copy };
   const id = React.useMemo(() => orderId ?? `ord_${Date.now()}`, [orderId]);
   const [result, setResult] = React.useState<{
     channel: string;
@@ -42,10 +60,8 @@ export default function CheckoutPage({
   return (
     <main className="mx-auto flex max-w-3xl flex-col gap-6 p-6">
       <header>
-        <h1 className="text-2xl font-semibold">Pembayaran</h1>
-        <p className="text-sm text-muted-foreground">
-          Pilih cara cepat (hosted) atau pilih channel sendiri.
-        </p>
+        <h1 className="text-2xl font-semibold">{c.heading}</h1>
+        <p className="text-sm text-muted-foreground">{c.subheading}</p>
       </header>
 
       {result ? (
@@ -58,7 +74,7 @@ export default function CheckoutPage({
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <section className="flex flex-col gap-2">
             <h2 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-              Quick checkout
+              {c.quickTitle}
             </h2>
             <DokuCheckout
               amount={amount}
@@ -71,7 +87,7 @@ export default function CheckoutPage({
 
           <section className="flex flex-col gap-2">
             <h2 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-              Pilih channel sendiri
+              {c.directTitle}
             </h2>
             <DokuDirectForm
               amount={amount}
