@@ -96,21 +96,24 @@ surface (compact toolbar header is correct, not a content doc).
 - Normalize page-root spacing to **`space-y-8`** (drop `space-y-6` + ad-hoc `mt-*`).
 - Fix architecture h1 `text-4xl`→`text-3xl`; build eyebrow `text-[11px]`→`text-sm`.
 
-### Q3 — Extract the 5 duplicated primitives  ·  *kill 70+ inline repeats*
-- `<DocCard>` ← `rounded-lg border bg-card p-4` (×9) — or just use the existing
-  shadcn `<Card>` consistently.
-- `<SectionBlock title>` ← `mt-12 space-y-4` heading+body wrapper (×16).
-- `.text-meta` utility ← `text-sm text-muted-foreground` (×39).
-- List-item row + feature-grid wrappers (×6).
-- Replace inline usages page-by-page. Reduces future drift; the new lint discipline
-  from the slice work can later guard it.
+### Q3 — Extract the 5 duplicated primitives  ·  ⏸ DEFERRED (judgment call)
+The 70+ inline repeats (`rounded-lg border bg-card p-4`, `mt-12 space-y-4`,
+`text-sm text-muted-foreground`, …) are **internal code dedup with ZERO visual
+change** — every instance already renders identically (same classes). The
+user-facing "pusing" is fully addressed by Q1 (IA) + Q2 (header/width). Doing 70
+mechanical swaps across ~10 files now = pure churn + regression risk for no
+readable gain. **Recommendation:** migrate incrementally as pages are next edited,
+and let an `audit:slices`-style lint rule (like the slice-work one) guard the
+pattern going forward — not a one-shot risky sweep. Pick this up only if the goal
+shifts from "readable site" to "DRY docs codebase."
 
-### Q4 — Typography + token polish  ·  *small*
-- Codify the scale (h1 `text-3xl` / h2 `text-2xl` / h3 `text-base` / meta `text-xs`);
-  reserve display `text-5xl/7xl` for the home hero only.
-- Remove the unused `--font-serif` fallback (docs never use serif — avoids accidental
-  serif render). *(Note: slice components like hero/activity DO use `font-serif` —
-  scope this to docs-site globals only, verify before touching.)*
+### Q4 — Typography + token polish  ·  ✅ done (safe parts) / ❌ serif-removal unsafe
+- Scale is now **enforced by `<PageHeader>`** (every content h1 = `text-3xl`);
+  architecture + stack `text-4xl` already fixed in Q2. Display `text-5xl/7xl` stays
+  home-hero-only. No further work needed.
+- **`--font-serif` removal CANCELLED — unsafe.** Verified hero (`HeroView`) +
+  theme-presets actively use `font-serif`; the token is global, so dropping it would
+  break slice rendering. Left in place.
 
 ---
 
