@@ -10,6 +10,23 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
  */
 export const releases: ChangelogEntry[] = [
   {
+    id: "CK1P",
+    version: "CK-1P",
+    date: Date.parse("2026-05-31"),
+    kind: "feature",
+    title: "appshell — manifest-driven desktop + mobile OS shell, lifted from os-vps",
+    body:
+      "New tier-3 slice: a generic, brand-free OS-style shell framework. One <AppShell manifest> wrapper provider gives any project a macOS-style window manager (drag/snap/maximize, dock with macOS click-to-focus + hover window switcher, menu bar, ⌘K Spotlight) AND an iOS-style mobile surface (home pager, app library, control center, widgets). Everything project-specific arrives through the manifest: brand, apps, features, surface regions, capabilities (data/auth/AI injection seam), persistence, keymap. The five shell features (search, inspector, notifications, control-center, widgets) ship bundled inside the slice as defineFeature() contributions that mount into named <Slot>s — `rr add appshell` installs the whole shell as one unit. Responsiveness is a single ResponsiveProvider + 4 DRY primitives (AppFrame, MasterDetail, ResponsiveToolbar, TouchList). Lift hardening: the slice was made fully self-contained (imports nothing but @/components/ui/* + @/lib/utils — ResponsiveDialog and a graceful useIsMobile were pulled in-slice), and four oversized files were split under the 200-LOC cap (store, responsive-dialog, menu-bar, mobile-app-library). Source: os-vps (Topside).",
+    groups: [
+      {
+        heading: "Slices touched",
+        bullets: [
+          { text: "appshell — lifted from os-vps; desktop+mobile shell, 5 features bundled (new, 0.1.0)", slug: "appshell" },
+        ],
+      },
+    ],
+  },
+  {
     id: "CK1O",
     version: "CK-1O",
     date: Date.parse("2026-05-28"),
