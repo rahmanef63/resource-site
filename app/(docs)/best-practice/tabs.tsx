@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Check, Copy } from "lucide-react";
+import { DocCard } from "@/components/site/doc-primitives";
 import type { BestPracticeSection } from "@/lib/content/best-practices";
 
 type Props = {
@@ -32,10 +33,7 @@ export function BestPracticeTabs({ sections, prompt }: Props) {
             </div>
             <div className="grid gap-3">
               {section.rules.map((r) => (
-                <div
-                  key={r.title}
-                  className="rounded-lg border bg-card p-4 space-y-2"
-                >
+                <DocCard key={r.title} className="p-4 space-y-2">
                   <h3 className="text-sm font-semibold">{r.title}</h3>
                   <p className="text-sm text-muted-foreground">{r.rule}</p>
                   {r.why && (
@@ -49,7 +47,7 @@ export function BestPracticeTabs({ sections, prompt }: Props) {
                       {r.example}
                     </pre>
                   )}
-                </div>
+                </DocCard>
               ))}
             </div>
           </section>
@@ -57,7 +55,7 @@ export function BestPracticeTabs({ sections, prompt }: Props) {
       </TabsContent>
 
       <TabsContent value="ai-prompt" className="mt-6 space-y-4">
-        <div className="rounded-lg border bg-card p-4 space-y-3">
+        <DocCard className="p-4 space-y-3">
           <div className="flex items-center justify-between gap-2">
             <div>
               <h2 className="text-base font-semibold">One-paste agent prompt</h2>
@@ -73,7 +71,7 @@ export function BestPracticeTabs({ sections, prompt }: Props) {
           <pre className="max-h-[60vh] overflow-auto rounded-md bg-muted p-4 text-xs font-mono whitespace-pre-wrap">
             {prompt}
           </pre>
-        </div>
+        </DocCard>
         <details className="rounded-lg border bg-card p-4 text-sm">
           <summary className="cursor-pointer font-semibold">How to use</summary>
           <div className="mt-3 space-y-2 text-muted-foreground">

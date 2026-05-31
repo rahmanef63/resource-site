@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { PageHeader } from "@/components/site/page-header";
+import { DocCard } from "@/components/site/doc-primitives";
 import { site } from "@/lib/content/site";
 import { layouts } from "@/lib/content/layouts";
 import { slices } from "@/lib/content/slices";
@@ -16,7 +17,7 @@ export default function DocsIntroPage() {
         description={site.description}
       />
 
-      <div className="rounded-lg border bg-card p-5">
+      <DocCard className="p-5">
         <h2 className="text-lg font-semibold">What's in the box</h2>
         <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
           <li>
@@ -33,7 +34,7 @@ export default function DocsIntroPage() {
             them into your repo.
           </li>
         </ul>
-      </div>
+      </DocCard>
 
       <div className="grid gap-4 sm:grid-cols-3">
         {[

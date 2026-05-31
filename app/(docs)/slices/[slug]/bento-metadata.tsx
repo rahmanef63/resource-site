@@ -3,6 +3,7 @@
 import { Layers, Package, Server, Settings2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { DocCard } from "@/components/site/doc-primitives";
 import type { SliceEntry } from "@/lib/content/slices";
 
 function BentoCard({
@@ -13,7 +14,7 @@ function BentoCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-[7rem] flex-col rounded-lg border bg-card p-3">
+    <DocCard className="flex min-h-[7rem] flex-col p-3">
       <div className="mb-2 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
         <Icon className="size-3" /> {label}
       </div>
@@ -22,7 +23,7 @@ function BentoCard({
           <div className="pr-2">{children}</div>
         </ScrollArea>
       </div>
-    </div>
+    </DocCard>
   );
 }
 

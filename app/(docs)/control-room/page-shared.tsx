@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
+import { DocCard } from "@/components/site/doc-primitives";
 
 export function Section({
   eyebrow,
@@ -66,7 +67,7 @@ export function PathMatrix() {
       <h2 className="text-2xl font-semibold tracking-tight">Three install paths</h2>
       <div className="grid gap-3 sm:grid-cols-3">
         {paths.map((p) => (
-          <div key={p.label} className="rounded-lg border bg-card p-4">
+          <DocCard key={p.label} className="p-4">
             <p className="text-2xl">{p.icon}</p>
             <p className="mt-2 font-semibold">{p.label}</p>
             <p className="mt-1 text-xs text-muted-foreground">{p.time}</p>
@@ -74,7 +75,7 @@ export function PathMatrix() {
               {p.command}
             </code>
             <p className="mt-3 text-xs text-muted-foreground">{p.best}</p>
-          </div>
+          </DocCard>
         ))}
       </div>
     </section>

@@ -18,6 +18,7 @@ import { ExternalLink, Plug } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { RelatedFeatures, type RelatedGroup } from "@/components/site/related-features";
+import { DocCard } from "@/components/site/doc-primitives";
 import type { SliceEntry } from "@/lib/content/slices";
 import { buildSliceAgentPrompt } from "@/lib/slice-agent-prompt";
 import { HeroStrip } from "./hero-strip";
@@ -81,7 +82,7 @@ export function DetailsTab({
 
 function ProvidersStrip({ providers }: { providers: string[] }) {
   return (
-    <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-card px-3 py-2">
+    <DocCard className="flex flex-wrap items-center gap-2 px-3 py-2">
       <Plug className="size-3.5 shrink-0 text-muted-foreground" />
       <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
         Providers
@@ -89,6 +90,6 @@ function ProvidersStrip({ providers }: { providers: string[] }) {
       {providers.map((p) => (
         <Badge key={p} variant="secondary" className="capitalize text-[10px]">{p}</Badge>
       ))}
-    </div>
+    </DocCard>
   );
 }

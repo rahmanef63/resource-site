@@ -4,6 +4,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/site/page-header";
+import { DocCard } from "@/components/site/doc-primitives";
 import { sources } from "@/lib/content/sources";
 
 export const metadata = { title: "Directory" };
@@ -24,7 +25,7 @@ export default function DirectoryPage() {
         </AlertDescription>
       </Alert>
 
-      <div className="divide-y divide-border rounded-lg border bg-card">
+      <DocCard className="divide-y divide-border">
         {sources.map((s) => (
           <div key={s.id} className="flex items-center gap-4 px-4 py-4">
             <div className="flex size-12 shrink-0 items-center justify-center rounded-lg border bg-muted/40 text-muted-foreground">
@@ -61,7 +62,7 @@ export default function DirectoryPage() {
             )}
           </div>
         ))}
-      </div>
+      </DocCard>
 
       <p className="text-xs text-muted-foreground">
         Don't see a source? File an issue on the kitab repo.

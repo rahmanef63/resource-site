@@ -4,6 +4,7 @@ import { Bot, ExternalLink, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CodeBlock } from "@/components/site/code-block";
 import { InstallWithAgent } from "@/components/site/install-with-agent";
+import { DocCard } from "@/components/site/doc-primitives";
 import { slices, getSlice } from "@/lib/content/slices";
 import { layouts, getLayout } from "@/lib/content/layouts";
 import { site } from "@/lib/content/site";
@@ -69,7 +70,7 @@ export default async function AgentPromptPage({ params }: { params: Promise<{ sl
         </Button>
       </div>
 
-      <div className="rounded-lg border bg-card p-4">
+      <DocCard className="p-4">
         <div className="mb-3 flex items-center gap-2 text-sm font-semibold">
           <Bot className="size-4 text-primary" />
           Copy this prompt into Claude / Codex / Cursor
@@ -79,9 +80,9 @@ export default async function AgentPromptPage({ params }: { params: Promise<{ sl
           language="markdown"
           filename={`${slug}.prompt.md`}
         />
-      </div>
+      </DocCard>
 
-      <div className="rounded-lg border bg-card p-4 text-sm text-muted-foreground">
+      <DocCard className="p-4 text-sm text-muted-foreground">
         <p>
           The agent will fetch{" "}
           <Link href="/llms.txt" className="font-mono text-xs hover:text-foreground">
@@ -93,7 +94,7 @@ export default async function AgentPromptPage({ params }: { params: Promise<{ sl
           </Link>{" "}
           for the JSON catalog.
         </p>
-      </div>
+      </DocCard>
     </div>
   );
 }
