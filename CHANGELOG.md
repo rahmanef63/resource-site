@@ -11,6 +11,24 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-05-31 — notion-database date-range cell fix + catalog tidy
+
+- **DateCell range now visible in the column.** `dateRange` was derived
+  only at mount, so toggling the date property's End-date switch left
+  already-rendered cells unchanged. Range is now derived live (`!!v.end
+  || !!prop.dateRange`) and the cell shows a `Start → End date` slot
+  whenever range is active — so the End-date toggle visibly affects the
+  column. Per-cell override (popover Switch) still wins for one row.
+- **Catalog tidy.** `notion-database` title/description were a multi-
+  paragraph wall — trimmed to a short title ("Notion Database") + a
+  one-paragraph description; release history stays here in CHANGELOG.
+  `manifest.json` regenerated (was stale at v0.13 with the old title).
+- **"Doubled" slice — not a bug.** Every slice appears in both the
+  manifest's `features[]` and `slices[]` arrays because `loadFeatures()`
+  derives features 1:1 from slices (legacy back-compat for old
+  `--features` CLI + MCP `rr_list_features`; `features.ts` was deleted
+  2026-05-09). The site catalog reads `slices.ts` directly — one entry.
+
 ### 2026-05-31 — notion-database per-type Edit-property config panel + date ranges in views
 
 Follow-up to the config-driven menu: the dropdown now differs **per

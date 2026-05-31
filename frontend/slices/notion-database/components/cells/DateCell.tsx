@@ -66,8 +66,13 @@ interface DateCellProps {
 export function DateCell({ value, readOnly, onChange, prop }: DateCellProps) {
   const [open, setOpen] = useState(false);
   const v = value && typeof value === "object" ? value : null;
-  const isRange = !!v?.end;
-  const [rangeMode, setRangeMode] = useState(isRange || !!prop?.dateRange);
+  // Range is "active" (the column shows start→end) when the property
+  // defaults to a range OR this cell already has an end — derived live so
+  // toggling `dateRange` on the header updates every mounted cell. The
+  // per-cell override lets a single row opt in/out via the popover Switch.
+  const rangeActive = !!v?.end || !!prop?.dateRange;
+  const [rangeOverride, setRangeOverride] = useState<boolean | null>(null);
+  const rangeMode = rangeOverride ?? rangeActive;
 
   const selected = useMemo(() => {
     if (rangeMode) return { from: fromISO(v?.date), to: fromISO(v?.end) };
@@ -77,10 +82,37 @@ export function DateCell({ value, readOnly, onChange, prop }: DateCellProps) {
   const label = display(v, prop);
 
   if (readOnly) {
+    if (label && rangeMode && !v?.end) {
+      return (
+        <span className="text-sm text-foreground">
+          {label} <span className="text-muted-foreground/50">→ —</span>
+        </span>
+      );
+    }
     return label
       ? <span className="text-sm text-foreground">{label}</span>
       : <span className="text-muted-foreground/60">—</span>;
   }
+
+  // Trigger content. In range mode the end slot is always visible (even
+  // when empty) so the column visibly reflects the End-date toggle.
+  const triggerContent = rangeMode ? (
+    v?.end ? (
+      <span className="truncate">{label}</span>
+    ) : (
+      <span className="flex items-center gap-1 truncate">
+        <span className={cn("truncate", !label && "text-muted-foreground/60")}>
+          {label || "Start date"}
+        </span>
+        <span className="text-muted-foreground/50">→</span>
+        <span className="text-muted-foreground/60">End date</span>
+      </span>
+    )
+  ) : label ? (
+    <span className="truncate">{label}</span>
+  ) : (
+    <span className="text-muted-foreground/60">Pick a date</span>
+  );
 
   const handleSingle = (d: Date | undefined) => {
     const iso = toISO(d);
@@ -104,15 +136,13 @@ export function DateCell({ value, readOnly, onChange, prop }: DateCellProps) {
           "flex h-7 w-full items-center justify-start gap-1.5 rounded-md border-border bg-background px-2 text-left text-sm font-normal hover:bg-accent",
         )} aria-label="Pick a date">
           <CalendarIcon className="h-3 w-3 shrink-0 text-muted-foreground" />
-          {label
-            ? <span className="truncate">{label}</span>
-            : <span className="text-muted-foreground/60">Pick a date</span>}
+          {triggerContent}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
         <div className="flex items-center justify-between gap-2 border-b border-border px-3 py-2 text-xs">
           <label className="flex items-center gap-2 text-muted-foreground">
-            <Switch checked={rangeMode} onCheckedChange={(c) => setRangeMode(!!c)} />
+            <Switch checked={rangeMode} onCheckedChange={(c) => setRangeOverride(!!c)} />
             Include end date
           </label>
           {v?.date && (
