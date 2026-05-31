@@ -264,7 +264,15 @@ Post-Mise resumes development:
   [docs/architecture/subdomain-routing.md](./subdomain-routing.md).
   Manual ops required: Cloudflare wildcard DNS + Dokploy custom domain.
 - BS — sync `notion-page-clone` slice into admin-panel real impl
-- BT — `notion-page-clone-os` as `DashboardShellAdvanced` canary
+- **BT — ✅ canary wired (2026-05-31).** `notion-page-clone-os` dashboard now
+  mounts `DashboardShellAdvanced` with a real 3-workspace `WorkspaceSwitcher`
+  in the sidebar header (replaces BrandHeader). Store gained
+  `workspaces[]` + `activeWorkspaceId` + `workspace.switch` action; storageKey
+  bumped `v3-docs`→`v4-workspaces`. **Next layers:** (a) per-surface
+  `SecondarySidebar` adoption (Database views → contextual sub-nav inside main),
+  (b) workspace-scoped content filtering (switching is persisted + reflected in
+  the header today, but docs/databases are not yet partitioned by workspace),
+  (c) `onCreate`/`onManage` footer flows (omitted — no create/manage page yet).
 
 ## How to resume
 

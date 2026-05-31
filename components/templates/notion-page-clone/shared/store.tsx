@@ -51,13 +51,18 @@ function reducer(state: State, action: Action): State {
     case "snippet.delete":
       return { ...state, snippets: state.snippets.filter((s) => s.id !== action.id) };
 
+    case "workspace.switch":
+      return state.workspaces.some((w) => w.id === action.id)
+        ? { ...state, activeWorkspaceId: action.id }
+        : state;
+
     default:
       return isNotionAction(action) ? notionReducer(state, action) : state;
   }
 }
 
 const { Provider, useStore } = createTemplateStore<State, Action>({
-  storageKey: "nosion-os:state:v3-docs",
+  storageKey: "nosion-os:state:v4-workspaces",
   channel: "nosion-os:sync",
   seed: SEED_STATE,
   reducer,
@@ -117,3 +122,4 @@ export const useSnippets = () => useStore().state.snippets;
 export const useLandingSections = () => useStore().state.landingSections;
 export const useDocs = () => useStore().state.docs;
 export const useDatabases = () => useStore().state.databases;
+export const useWorkspaces = () => useStore().state.workspaces;

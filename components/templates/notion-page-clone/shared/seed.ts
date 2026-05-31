@@ -237,4 +237,10 @@ export const SEED_STATE: State = {
   landingSections: nosionLandingSections(),
   docs: SEED_DOCS,
   databases: SEED_DATABASES,
+  workspaces: [
+    { id: "ws-personal", name: "Personal", icon: "🏠", sublabel: "Free" },
+    { id: "ws-team", name: "Team Space", icon: "👥", sublabel: "Pro" },
+    { id: "ws-acme", name: "Acme Co", icon: "🏢", sublabel: "Client" },
+  ],
+  activeWorkspaceId: "ws-personal",
 };

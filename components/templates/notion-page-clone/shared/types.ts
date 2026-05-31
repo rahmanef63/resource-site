@@ -1,4 +1,5 @@
 import type { PageEntry, PagesAction } from "@/components/templates/_shared/pages/types";
+import type { WorkspaceContext } from "@/components/templates/_shared/types/common";
 import type {
   LandingAction,
   LandingSection,
@@ -41,6 +42,11 @@ export type State = {
   pages: PageEntry[];
   snippets: Snippet[];
   landingSections: LandingSection[];
+  /** Advanced-archetype multi-workspace context. Drives the
+   *  WorkspaceSwitcher in the primary sidebar header (canary for the
+   *  DashboardShellAdvanced shell). */
+  workspaces: WorkspaceContext[];
+  activeWorkspaceId: string;
   /** Notion-clone docs: tree-structured pages with block body. Database
    *  rows live here too — flagged via `rowOfDatabaseId`. */
   docs: NotionDoc[];
@@ -55,6 +61,8 @@ export type Action =
   | LandingAction
   | { type: "snippet.upsert"; snippet: Snippet }
   | { type: "snippet.delete"; id: string }
+  /** Advanced shell — swap the active workspace context. */
+  | { type: "workspace.switch"; id: string }
   /** Notion-clone doc CRUD. `doc` carries the full row on upsert. */
   | { type: "doc.create"; doc: NotionDoc }
   | { type: "doc.update"; id: string; patch: Partial<NotionDoc> }
