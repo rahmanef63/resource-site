@@ -11,6 +11,19 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-05-31 — notion-database: responsive view tabs + sharper AI recipe v0.16.1
+
+- **Responsive fix** — the `<ViewTabs>` strip now scrolls horizontally
+  (scrollbar hidden) instead of overflowing the card, and `<NotionDatabase>`
+  clips to its rounded border (`overflow-hidden`). With all 11 view types
+  added the tabs stay inside the container at every width; the "Add view"
+  trigger is pinned past a divider and collapses to its icon on narrow
+  screens.
+- **AI agent prompt rewrite** — `notion-database` `agentRecipe` restructured
+  from a single dense paragraph into numbered wire-up steps (install →
+  minimal `<NotionDatabase>` example → data shape → import/export → Convex
+  backend → single-view escape hatch). Regenerated `agent.md` + CLI manifest.
+
 ### 2026-05-31 — user-management: access matrix (P4c) v0.6.0 — epic complete
 
 - **Cross-tenant `<AccessMatrix>`** — users (rows) × tenants (columns) grid

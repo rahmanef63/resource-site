@@ -50,40 +50,44 @@ export function ViewTabs({
   views, activeViewId, onActivate, onAdd, onRemove, className,
 }: ViewTabsProps) {
   return (
-    <div className={cn("flex items-center gap-1 border-b border-border px-2", className)}>
-      {views.map((v) => {
-        const Icon = VIEW_ICONS[v.type] ?? Table;
-        const active = v.id === activeViewId;
-        return (
-          <Button
-            key={v.id}
-            variant="ghost"
-            type="button"
-            onClick={() => onActivate(v.id)}
-            onDoubleClick={() => onRemove && views.length > 1 && onRemove(v.id)}
-            className={cn(
-              "group/tab flex h-auto items-center gap-1.5 rounded-none px-2 py-1.5 text-xs font-normal transition hover:bg-transparent",
-              active
-                ? "border-b-2 border-primary text-foreground"
-                : "border-b-2 border-transparent text-muted-foreground hover:text-foreground",
-            )}
-            title={onRemove ? "Double-click to remove" : undefined}
-          >
-            <Icon className="h-3 w-3" />
-            <span>{v.name}</span>
-          </Button>
-        );
-      })}
+    <div className={cn("flex items-stretch border-b border-border", className)}>
+      {/* Tab strip scrolls horizontally so any number of views stays inside
+       *  the card; scrollbar hidden for chrome cleanliness. */}
+      <div className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto px-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {views.map((v) => {
+          const Icon = VIEW_ICONS[v.type] ?? Table;
+          const active = v.id === activeViewId;
+          return (
+            <Button
+              key={v.id}
+              variant="ghost"
+              type="button"
+              onClick={() => onActivate(v.id)}
+              onDoubleClick={() => onRemove && views.length > 1 && onRemove(v.id)}
+              className={cn(
+                "group/tab flex h-auto shrink-0 items-center gap-1.5 rounded-none px-2 py-1.5 text-xs font-normal transition hover:bg-transparent",
+                active
+                  ? "border-b-2 border-primary text-foreground"
+                  : "border-b-2 border-transparent text-muted-foreground hover:text-foreground",
+              )}
+              title={onRemove ? "Double-click to remove" : undefined}
+            >
+              <Icon className="h-3 w-3" />
+              <span className="whitespace-nowrap">{v.name}</span>
+            </Button>
+          );
+        })}
+      </div>
       {onAdd && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
               size="sm"
-              className="h-7 gap-1 px-2 text-xs text-muted-foreground"
+              className="h-auto shrink-0 gap-1 self-center rounded-none border-l border-border px-2 text-xs text-muted-foreground"
               aria-label="Add view"
             >
-              <Plus className="h-3 w-3" /> Add view
+              <Plus className="h-3 w-3" /> <span className="hidden sm:inline">Add view</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" side="bottom" className="w-44">

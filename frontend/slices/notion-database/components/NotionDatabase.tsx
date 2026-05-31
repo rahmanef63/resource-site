@@ -131,7 +131,7 @@ export function NotionDatabase({
   });
 
   return (
-    <div className={cn("rounded-lg border border-border bg-card", className)}>
+    <div className={cn("overflow-hidden rounded-lg border border-border bg-card", className)}>
       <div className="flex items-center justify-between gap-2 border-b border-border px-3 py-2">
         <h3 className="truncate text-sm font-semibold">{db.name}</h3>
         <div className="flex shrink-0 items-center gap-2">

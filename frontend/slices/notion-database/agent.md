@@ -23,7 +23,35 @@ npx rahman-resources add notion-database
 
 ## 3. Wire it up
 
-Run `npx rr add notion-database` (cascades notion-shell as peer). Import: `import { NotionDatabase, NotionProperty, VIEW_REGISTRY, DatabaseIOActions, RowPeek } from "@/features/notion-database"`. NotionDatabase ships full props-driven DB UI — host owns rows + dispatches CRUD callbacks. For just one view in isolation, import the specific view component (TableView / BoardView / etc.). Property cells auto-render via renderPropertyCell helper. Pure helpers: applyView / groupBy / bucketByDate. For import/export, mount `<DatabaseIOActions db={db} rows={rows} onImport={async ({ newProperties, rows }) => { const tempToReal: Record<string, string> = {}; for (const np of newProperties) { const realId = await dispatchAddProperty(np); tempToReal[np.tempId] = realId; } for (const r of rows) { const rowId = await dispatchAddRow(r.title); for (const [propKey, v] of Object.entries(r.rowProps)) { await dispatchSetValue(rowId, tempToReal[propKey] ?? propKey, v); } } }} />` next to your DB toolbar — exports CSV/JSON + imports w/ schema diff + downloads dynamic templates from live db.properties. tempId on each new property lets host remap rowProps keys to its real backend ids. For backend persistence, copy template-base/database-silong/convex/ from the open-silong repo: handlers go to convex/, schema fragment merges into convex/schema.ts. Pick _shared/minimal/ (single-user, noop authz) or _shared/full/ (requires @convex-dev/auth + workspaces tables). See CONVEX-BACKEND.md.
+**Controlled component.** `<NotionDatabase />` renders the whole surface — 11 views (table, board, list, gallery, calendar, feed, chart, dashboard, form, map, timeline), 18 cell types, filter / sort / group / calculate, row peek + multi-select, table cell drag-fill, CSV / JSON import-export. It is 100% props-driven: it owns NO data state — you hold `db` + `rows` and persist every change callback. The view tab strip scrolls horizontally and the card clips to its border, so it stays inside any container width.
+
+**1. Install** — `npx rr add notion-database`. Cascades the `notion-shell` peer (the domain types live there). Components import from `@/features/notion-database`; types from `@/features/notion-shell`.
+
+**2. Minimal wire-up** — keep `db: Database` + `rows: Page[]` in your store (a Convex query result or `useState`) and pass change handlers:
+```tsx
+import { NotionDatabase } from '@/features/notion-database';
+
+<NotionDatabase
+  db={db}
+  rows={rows}
+  onRowAdd={addRow}
+  onRowUpdate={(rowId, propId, value) => setValue(rowId, propId, value)}
+  onRowRemove={removeRow}
+  onPropertyAdd={addProperty}
+  onViewActivate={setActiveView}
+  onViewAdd={addView}
+  onViewConfigChange={(viewId, patch) => patchView(viewId, patch)}
+/>
+```
+Omit any callback and that affordance goes read-only; pass `readOnly` to freeze everything at once.
+
+**3. Data shape** — `Database = { id, name, properties: Property[], views: DatabaseViewConfig[], activeViewId }`; each row `Page = { id, title, rowProps: Record<propId, PropertyValue> }`. For `relation` / `rollup` cells also pass `pages` + `databases`; for `person` / `created_by` cells pass `userLookup(id)`.
+
+**4. Import / export** — mount `<DatabaseIOActions db={db} rows={rows} onImport={handleImport} />` in your toolbar: CSV/JSON in (with schema-diff), CSV/JSON + live-schema templates out. New columns arrive with a `tempId` — map it to your real backend id before writing their `rowProps`.
+
+**5. Backend (optional)** — the UI is store-agnostic. For Convex persistence copy `template-base/database-silong/convex/` (handlers → `convex/`, schema fragment merges into `convex/schema.ts`). Pick `_shared/minimal/` (single-user, noop authz) or `_shared/full/` (`@convex-dev/auth` + workspaces). See CONVEX-BACKEND.md.
+
+**Just one view?** Import it directly — `import { TableView } from '@/features/notion-database'` — and feed it `rows` + `renderCell` + `renderColumnHeader`.
 
 ## Rules of engagement
 
