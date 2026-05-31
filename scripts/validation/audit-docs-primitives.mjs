@@ -23,9 +23,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(__dirname, "../..");
 const SCAN_ROOT = path.join(REPO, "app/(docs)");
 
-// `<div …rounded-lg border bg-card…>` on a single line. Link/details openers
-// don't match (different tag), so they're skipped by construction.
-const PANEL_DIV = /<div\b[^>]*\brounded-lg border bg-card\b/;
+// `<div className=…rounded-lg border bg-card…>` on a single line. Requiring an
+// explicit `className=` skips (a) Link/<details> openers — different tag — and
+// (b) prose/doc strings that merely mention the chrome (e.g. this rule's own
+// description), which carry no className attribute.
+const PANEL_DIV = /<div\b[^>]*className=["'{][^>]*\brounded-lg border bg-card\b/;
 
 const hits = [];
 
