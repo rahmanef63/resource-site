@@ -11,6 +11,26 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-05-31 — convex-auth: props-driven AuthCard + tabbed preview (v0.3.0)
+
+- **New `<AuthCard>`** — a presentational, props-driven sign-in card in the
+  convex-auth slice. Pick `methods` (`google`, `github`, `magic-link`,
+  `password` with signin/signup tabs, `phone` OTP, `anonymous`); order =
+  render order; layout is OAuth row → divider → one field method → optional
+  anonymous. Every handler is optional and defaults to a mock that resolves
+  `{ ok: true }`, so the card is fully interactive in previews/modals with
+  zero Convex wiring; real apps pass handlers wired to `useAuthFlow()`.
+  Reuses the existing `GoogleButton` / `MagicLinkForm` / `AnonymousButton`
+  blocks; adds `GithubButton` (inline SVG — lucide dropped brand icons),
+  `PasswordBlock` (signin/signup Tabs), and `PhoneForm` (2-step phone →
+  6-digit OTP via `input-otp`). New files `components/AuthCard.tsx` +
+  `components/auth-card-blocks.tsx`; barrel exports `AuthCard` / `AuthCardProps`
+  / `AuthMethod`. The production full-page `SignInPage` is unchanged.
+- **convex-auth preview** rebuilt as Tabs over AuthCard variants — Magic
+  link · Email + password · Google · Phone · Combined — each tab is the same
+  `<AuthCard>` with a different `methods` prop.
+- slice + catalog bumped 0.2.1 → 0.3.0; `input-otp` added to shadcn deps.
+
 ### 2026-05-31 — merge database-cell-selection into notion-database + warning sweep
 
 - **`database-cell-selection` merged into `notion-database` v0.16.0** (NPC

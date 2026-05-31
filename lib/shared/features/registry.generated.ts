@@ -59,7 +59,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...convexAuthConfig,
     importPath: "@/features/convex-auth/config",
-    version: "0.2.1",
+    version: "0.3.0",
   },
   {
     ...dokuPaymentConfig,

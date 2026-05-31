@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-31T19:23:40.646Z",
+  "generatedAt": "2026-05-31T20:41:02.231Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -1360,7 +1360,7 @@
       "slug": "convex-auth",
       "title": "Convex Auth — Multi-Provider Sign-in",
       "category": "auth",
-      "description": "@convex-dev/auth with Password (PBKDF2-SHA256 100k, self-hosted-friendly), Anonymous (guest), Google OAuth, and Resend magic-link. Ships a production SignInPage with i18n, prop-driven provider list, and split Login/Register tabs. No Clerk.",
+      "description": "@convex-dev/auth with Password (PBKDF2-SHA256 100k, self-hosted-friendly), Anonymous (guest), Google OAuth, and Resend magic-link. Ships a production SignInPage plus a presentational, props-driven AuthCard (v0.3) — choose `methods` (google, github, magic-link, password signin/signup tabs, phone OTP, anonymous) and render the card anywhere with different props; handlers default to a mock so it's interactive with zero wiring. i18n via labels. No Clerk.",
       "source": "rahmanef63/resource-site",
       "docsUrl": "https://labs.convex.dev/auth",
       "install": "npm i @convex-dev/auth @auth/core resend",
@@ -2289,8 +2289,8 @@
       "title": "Convex Auth — Multi-Provider Sign-in",
       "category": "auth",
       "kind": "backend",
-      "version": "0.2.1",
-      "description": "@convex-dev/auth with Password (PBKDF2-SHA256 100k, self-hosted-friendly), Anonymous (guest), Google OAuth, and Resend magic-link. Ships a production SignInPage with i18n, prop-driven provider list, and split Login/Register tabs. No Clerk.",
+      "version": "0.3.0",
+      "description": "@convex-dev/auth with Password (PBKDF2-SHA256 100k, self-hosted-friendly), Anonymous (guest), Google OAuth, and Resend magic-link. Ships a production SignInPage plus a presentational, props-driven AuthCard (v0.3) — choose `methods` (google, github, magic-link, password signin/signup tabs, phone OTP, anonymous) and render the card anywhere with different props; handlers default to a mock so it's interactive with zero wiring. i18n via labels. No Clerk.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/convex-auth",
       "convexPaths": [
@@ -2307,7 +2307,8 @@
         "input",
         "label",
         "tabs",
-        "alert"
+        "alert",
+        "input-otp"
       ],
       "env": [
         {
