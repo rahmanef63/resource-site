@@ -162,8 +162,10 @@ export const slices: SliceEntry[] = [
     tags: ["shell", "window-manager", "desktop", "mobile", "responsive", "framework", "ui"],
     resourceType: "module",
     maturity: "beta",
+    previewPath: "/preview/slices/appshell",
+    defaultView: "desktop",
     agentRecipe:
-      "Run `npx rr add appshell`. Mount <AppShell manifest={…}> at the app root. The manifest declares brand + apps (each AppDescriptor has id/title/icon/slug/load()/multi) + features (import searchFeature/inspectorFeature/notificationsFeature/controlCenterFeature/widgetsFeature from @/features/appshell) + capabilities (inject useAppearance/useSearch/useSystemStats/useChat/useServerToggle — optional caps degrade via defaults). Windowing state is a module store (openWindow/focusApp); URL sync via the History API (UrlSync), NOT router.push. Add an app = manifest edit; add a shell feature = new defineFeature() + list it. No surface edits (open/closed).",
+      "Run `npx rr add appshell`, then import its theme once: `import \"@/features/appshell/appshell.css\"` (ships the glass/dock/window tokens the shell needs — they are not shadcn defaults). Mount <AppShell manifest={…}> at the app root. The manifest declares brand + apps (each AppDescriptor has id/title/icon/slug/load()/multi) + features (import searchFeature/inspectorFeature/notificationsFeature/controlCenterFeature/widgetsFeature from @/features/appshell) + capabilities (inject useAppearance/useSearch/useSystemStats/useChat/useServerToggle — optional caps degrade via defaults). Windowing state is a module store (openWindow/focusApp); URL sync via the History API (UrlSync), NOT router.push. Add an app = manifest edit; add a shell feature = new defineFeature() + list it. No surface edits (open/closed).",
   },
   {
     slug: "convex-auth",

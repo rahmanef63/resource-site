@@ -60,16 +60,26 @@ export type ShellCapabilities = {
   useServerToggle?: () => ServerToggle | null;
 };
 
+// Stable identities for the default hooks. These MUST be referentially stable
+// across renders: consumers wire the real ones into effect deps (e.g. Spotlight
+// depends on the search fn), so returning a fresh closure each call would spin
+// an infinite render loop. The real capabilities a consumer injects must be
+// equally stable (module-level / useCallback / store-backed).
+const NOOP = () => {};
+const DEFAULT_APPEARANCE: ShellAppearance = { theme: "light", setTheme: NOOP, device: "auto" };
+const EMPTY_SEARCH = async (): Promise<SearchHit[]> => [];
+const EMPTY_CHAT = async function* (): AsyncGenerator<string> {};
+
 // Standalone defaults so the shell renders with zero capabilities injected
 // (light theme, auto device, no wallpaper/CPU/search/stats/chat/server tile).
 // Every member is defined so the accessors below always call a hook at a stable
 // position regardless of what the consumer supplies.
 const DEFAULT_CAPABILITIES: Required<ShellCapabilities> = {
-  useAppearance: () => ({ theme: "light", setTheme: () => {}, device: "auto" }),
+  useAppearance: () => DEFAULT_APPEARANCE,
   useCpuPercent: () => null,
-  useSearch: () => async () => [],
+  useSearch: () => EMPTY_SEARCH,
   useSystemStats: () => null,
-  useChat: () => async function* () {},
+  useChat: () => EMPTY_CHAT,
   useServerToggle: () => null,
 };
 
