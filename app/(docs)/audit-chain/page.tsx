@@ -65,6 +65,16 @@ const GUARDS = [
     ],
     severity: "BANNED files + missing _schema.ts are errors. Naming + missing tables export are warnings.",
   },
+  {
+    name: "audit:docs-primitives",
+    script: "scripts/validation/audit-docs-primitives.mjs",
+    coverage: "app/(docs) .tsx",
+    rules: [
+      "Flags raw `<div … rounded-lg border bg-card …>` panels — prefer <DocCard> (components/site/doc-primitives) so panel chrome has one restyle source",
+      "Narrow by design: only <div> openers (Link / <details> panels keep the chrome inline), only app/(docs) (DocCard is docs-site-internal)",
+    ],
+    severity: "Advisory only — always exits 0, never blocks. A DRY nudge, not a gate.",
+  },
 ];
 
 export default function AuditChainPage() {
@@ -95,6 +105,7 @@ npm run audit:slices
 npm run audit:templates
 npm run audit:file-size
 npm run audit:convex-features
+npm run audit:docs-primitives
 npm run validate:manifests
 npm run validate:contracts:check
 

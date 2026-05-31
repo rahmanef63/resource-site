@@ -17,6 +17,7 @@ npm run audit:slices --silent
 npm run audit:templates --silent
 npm run audit:file-size --silent
 npm run audit:convex-features --silent
+npm run audit:docs-primitives --silent
 
 echo "→ pre-push: npm run build (catches Next-only errors tsc misses — cacheComponents conflicts, Turbopack loader issues, etc)"
 npm run build --silent > /tmp/rr-prepush-build.log 2>&1 || {
