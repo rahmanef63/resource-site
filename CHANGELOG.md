@@ -11,6 +11,29 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-05-31 — user-management: tenant hierarchy + propagating invites (P4b) v0.5.0
+
+- **Tenant hierarchy added to `user-management`.** rr deliberately does NOT
+  own the tenant entities (your workspace/org) — instead a generic
+  `um_tenant_links` edge table stores parent→child relationships, so
+  propagating invites can walk the tree.
+- **Convex** `convex/features/user-management/hierarchy/`: `linkTenant` /
+  `unlinkTenant` (members.manage), `listChildTenants` / `getDescendantTenants`
+  (BFS, cycle-safe, depth-capped), and `sendHierarchyInvite` — invites an
+  email to a root tenant + its descendants with a `same` (role everywhere) or
+  `decreasing` (steps one role down the rbac_roles level-ladder per depth)
+  strategy; skips tenants with a pending invite; gated `members.invite`.
+  (Lives in a `hierarchy/` subfolder — `mutation.ts` was already near the
+  200-LOC cap.)
+- **`<InviteDialog>`** gains optional hierarchy controls (a "propagate to
+  sub-workspaces" Switch + strategy select + max-depth) shown when the new
+  `allowPropagate` prop is set; `<MembersPanel>` threads it through.
+  `InviteInput` gains `propagate` / `strategy` / `maxDepth`.
+- New type `InviteStrategy`. Preview enables `allowPropagate` + shows
+  propagation feedback. Slice + catalog 0.4.0 → 0.5.0; `switch` added to
+  shadcn deps. Self-contained. P4c (cross-workspace access matrix) is the
+  last sub-phase.
+
 ### 2026-05-31 — user-management: teams (P4a) v0.4.0
 
 - **Teams added to `user-management`.** `<TeamsPanel>` — named user groups

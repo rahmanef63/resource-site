@@ -35,10 +35,18 @@ export interface Invite {
   expiresAt?: number;
 }
 
+/** Hierarchy propagation strategy (P4b). `same` keeps the role across the
+ *  tree; `decreasing` steps one role down the level-ladder per depth. */
+export type InviteStrategy = "same" | "decreasing";
+
 export interface InviteInput {
   email: string;
   roleSlug: string;
   message?: string;
+  /** Propagate the invite to descendant tenants (P4b). */
+  propagate?: boolean;
+  strategy?: InviteStrategy;
+  maxDepth?: number;
 }
 
 /** A role with its full permission set — for the roles admin (RolesPanel).
@@ -150,6 +158,12 @@ export interface MembersLabels {
   pendingTitle: string;
   resend: string;
   cancelInvite: string;
+  // Hierarchy propagation (P4b)
+  propagate: string;
+  propagateHint: string;
+  strategySame: string;
+  strategyStep: string;
+  maxDepth: string;
 }
 
 export const DEFAULT_MEMBERS_LABELS: MembersLabels = {
@@ -176,4 +190,9 @@ export const DEFAULT_MEMBERS_LABELS: MembersLabels = {
   pendingTitle: "Pending invitations",
   resend: "Resend invite",
   cancelInvite: "Cancel invite",
+  propagate: "Also invite to sub-workspaces",
+  propagateHint: "Send the invite down the workspace hierarchy.",
+  strategySame: "Same role everywhere",
+  strategyStep: "Step role down per level",
+  maxDepth: "Max depth",
 };

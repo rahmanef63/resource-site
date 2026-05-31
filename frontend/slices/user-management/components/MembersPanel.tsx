@@ -30,13 +30,15 @@ export interface MembersPanelProps {
   invites?: Invite[];
   onCancelInvite?: (i: { inviteId: string }) => void | Promise<void>;
   onResendInvite?: (i: { inviteId: string }) => void | Promise<void>;
+  /** Show hierarchy-propagation controls in the invite dialog (P4b). */
+  allowPropagate?: boolean;
   labels?: Partial<MembersLabels>;
   className?: string;
 }
 
 export function MembersPanel({
   members, roles, currentPerms, onUpdateRole, onRemove,
-  onInvite, invites, onCancelInvite, onResendInvite, labels: over, className,
+  onInvite, invites, onCancelInvite, onResendInvite, allowPropagate, labels: over, className,
 }: MembersPanelProps) {
   const labels: MembersLabels = { ...DEFAULT_MEMBERS_LABELS, ...over };
   const view = useMembersView(members);
@@ -84,7 +86,7 @@ export function MembersPanel({
       {onInvite ? (
         <InviteDialog
           open={inviteOpen} onOpenChange={setInviteOpen}
-          roles={roles} onSubmit={onInvite} labels={labels}
+          roles={roles} onSubmit={onInvite} labels={labels} allowPropagate={allowPropagate}
         />
       ) : null}
     </div>

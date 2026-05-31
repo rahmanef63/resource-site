@@ -1,10 +1,10 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "user-management",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "category": "auth",
   "title": "User Management",
-  "description": "Full members + invites + roles-admin surface ported from superspace, props-driven + RBAC-agnostic. <UserManagementPanel> tabs Members + Roles: member table (search / filter / sort, inline role dropdown, soft-remove), InviteDialog + PendingInvites (resend / cancel), and a RolesPanel to create / edit / delete custom roles via a permission matrix (system roles read-only). All permission-gated. You pass `roles` + `currentPerms` + the permission catalog (resolved from rbac-roles) + CRUD/invite/role callbacks; the slice imports no other slice's frontend. Plus a TeamsPanel (named user groups + add / remove members). Convex template ships um_members + um_invites + um_teams + um_team_members + member / invite / team endpoints (gated via rbac-roles' requirePermission); roles CRUD reuses rbac-roles' listRoles/upsertRole/removeRole. P1–P4a of the user-management epic — hierarchy + access matrix (P4b/c) next.",
+  "description": "Full members + invites + roles-admin surface ported from superspace, props-driven + RBAC-agnostic. <UserManagementPanel> tabs Members + Roles: member table (search / filter / sort, inline role dropdown, soft-remove), InviteDialog + PendingInvites (resend / cancel), and a RolesPanel to create / edit / delete custom roles via a permission matrix (system roles read-only). All permission-gated. You pass `roles` + `currentPerms` + the permission catalog (resolved from rbac-roles) + CRUD/invite/role callbacks; the slice imports no other slice's frontend. Plus a TeamsPanel (named user groups) and tenant-hierarchy support: a generic um_tenant_links edge tree + propagating invites (InviteDialog gains a 'propagate to sub-workspaces' toggle with same / step-down role strategy). Convex ships um_members + um_invites + um_teams + um_team_members + um_tenant_links + member / invite / team / hierarchy endpoints (gated via rbac-roles' requirePermission); roles CRUD reuses rbac-roles'. rr never owns the tenant entities — only the tree edges. P1–P4b of the user-management epic — cross-workspace access matrix (P4c) next.",
   "namespace": "@/features/user-management",
   "convex": {
     "tablesExport": "userManagementTables",
@@ -17,7 +17,7 @@
   },
   "deps": {
     "npm": [],
-    "shadcn": ["avatar", "badge", "button", "checkbox", "dialog", "dropdown-menu", "input", "label", "select", "table", "tabs", "textarea"],
+    "shadcn": ["avatar", "badge", "button", "checkbox", "dialog", "dropdown-menu", "input", "label", "select", "switch", "table", "tabs", "textarea"],
     "env": [],
     "peers": [
       { "slug": "rbac-roles", "range": "^0.2", "reason": "Roles + resolved permissions + the convex permission helpers (requirePermission, getActorPermissions)." },

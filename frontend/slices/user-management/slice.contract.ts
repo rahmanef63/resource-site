@@ -10,7 +10,7 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "user-management",
-  version: "0.4.0",
+  version: "0.5.0",
   category: "auth",
   kind: "full",
   provides: {
@@ -18,7 +18,7 @@ export const contract = defineSliceContract({
     hooks: ["useMembersView"],
     utils: ["can", "matchPermission"],
     convex: {
-      tables: ["um_members", "um_invites", "um_teams", "um_team_members"],
+      tables: ["um_members", "um_invites", "um_teams", "um_team_members", "um_tenant_links"],
       rbac: ["members.view", "members.manage", "members.invite", "roles.view", "roles.manage"],
     },
   },
@@ -27,7 +27,7 @@ export const contract = defineSliceContract({
       { npm: "next", range: "^15" },
       { npm: "react", range: "^18" },
     ],
-    shadcn: ["avatar", "badge", "button", "checkbox", "dialog", "dropdown-menu", "input", "label", "select", "table", "tabs", "textarea"],
+    shadcn: ["avatar", "badge", "button", "checkbox", "dialog", "dropdown-menu", "input", "label", "select", "switch", "table", "tabs", "textarea"],
     env: [],
     peers: [
       { slug: "rbac-roles", range: "^0.2" },

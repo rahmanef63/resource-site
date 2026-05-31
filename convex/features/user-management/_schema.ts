@@ -60,6 +60,18 @@ export const userManagementTables = {
   })
     .index("by_team", ["teamId"])
     .index("by_team_user", ["teamId", "userId"]),
+
+  // Tenant hierarchy (P4b) — generic parent→child edges. rr does NOT own
+  // the tenant entities (your workspace/org); it only stores the tree
+  // edges so propagating invites can walk descendants.
+  um_tenant_links: defineTable({
+    parentTenantId: v.union(v.string(), v.null()),
+    childTenantId: v.string(),
+    linkedBy: v.optional(v.string()),
+    linkedAt: v.number(),
+  })
+    .index("by_parent", ["parentTenantId"])
+    .index("by_child", ["childTenantId"]),
 };
 
 export default userManagementTables;

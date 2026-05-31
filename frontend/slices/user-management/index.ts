@@ -20,7 +20,7 @@ export { can, matchPermission } from "./lib/can";
 export {
   DEFAULT_MEMBERS_LABELS, DEFAULT_ROLES_LABELS, DEFAULT_TEAMS_LABELS,
   type Member, type MemberStatus, type RoleOption, type MembersLabels,
-  type Invite, type InviteInput, type InviteStatus,
+  type Invite, type InviteInput, type InviteStatus, type InviteStrategy,
   type ManagedRole, type PermissionGroupDef, type PermissionDefLite, type RolesLabels,
   type Team, type TeamsLabels,
 } from "./types";

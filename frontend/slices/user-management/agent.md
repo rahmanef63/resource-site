@@ -3,7 +3,7 @@
 
 # Install `user-management` — User Management
 
-> Full members + invites + roles-admin + teams surface ported from superspace, props-driven + RBAC-agnostic.
+> Full members + invites + roles-admin + teams + tenant-hierarchy surface ported from superspace, props-driven + RBAC-agnostic.
 
 📚 Knowledge base : https://resource.rahmanef.com/llms.txt
 📦 Slice detail   : https://resource.rahmanef.com/slices/user-management

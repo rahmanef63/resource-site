@@ -43,9 +43,11 @@ export default function Page() {
     setMembers((ms) => ms.map((m) => (m.userId === userId ? { ...m, roleSlug } : m)));
   const remove = ({ userId }: { userId: string }) =>
     setMembers((ms) => ms.map((m) => (m.userId === userId ? { ...m, status: "inactive" as const } : m)));
-  const sendInvite = (i: { email: string; roleSlug: string; message?: string }) => {
+  const sendInvite = (i: { email: string; roleSlug: string; message?: string; propagate?: boolean; strategy?: string; maxDepth?: number }) => {
     setInvites((p) => [...p, { id: `inv-${p.length}-${i.email}`, email: i.email, roleSlug: i.roleSlug, status: "pending", createdAt: Date.now() }]);
-    setNote(`Invite sent to ${i.email}.`);
+    setNote(i.propagate
+      ? `Invite sent to ${i.email} + propagated to sub-workspaces (${i.strategy}, depth ${i.maxDepth}).`
+      : `Invite sent to ${i.email}.`);
   };
   const cancelInvite = ({ inviteId }: { inviteId: string }) => setInvites((p) => p.filter((x) => x.id !== inviteId));
   const resendInvite = ({ inviteId }: { inviteId: string }) => {
@@ -83,6 +85,7 @@ export default function Page() {
             members, roles: roleOptions, currentPerms,
             onUpdateRole: updateRole, onRemove: remove,
             invites, onInvite: sendInvite, onCancelInvite: cancelInvite, onResendInvite: resendInvite,
+            allowPropagate: true,
           }}
           roles={{
             roles, currentPerms, permissionGroups: PERMISSION_GROUPS,
