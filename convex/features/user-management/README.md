@@ -3,9 +3,9 @@
 Backend half of the `user-management` slice — members.
 
 ## Files
-- `_schema.ts` — `userManagementTables` (`um_members` + `um_invites`). Spread into your root schema.
-- `query.ts` — `listMembers` (joins `users`; soft-denies without `members.view`), `listInvites` (pending by default; needs `members.invite`/`members.manage`).
-- `mutation.ts` — members: `addMember`, `updateMemberRole`, `removeMember` (soft-delete) gated on `members.manage`; invites: `sendInvite` (7-day token, rejects duplicate pending), `cancelInvite`, `resendInvite` gated on `members.invite`, and `acceptInvite(token)` (public — creates/reactivates the membership for the signed-in user).
+- `_schema.ts` — `userManagementTables` (`um_members`, `um_invites`, `um_teams`, `um_team_members`). Spread into your root schema.
+- `query.ts` — `listMembers` (joins `users`; soft-denies without `members.view`), `listInvites` (pending by default; needs `members.invite`/`members.manage`), `listTeams` (each with member ids).
+- `mutation.ts` — members: `addMember`, `updateMemberRole`, `removeMember` (soft-delete) gated on `members.manage`; invites: `sendInvite` (7-day token), `cancelInvite`, `resendInvite` gated on `members.invite`, `acceptInvite(token)` (public); teams: `createTeam`, `removeTeam`, `addTeamMember`, `removeTeamMember` gated on `members.manage`.
 
 ## Wiring
 1. Install the `rbac-roles` slice — this feature imports its permission

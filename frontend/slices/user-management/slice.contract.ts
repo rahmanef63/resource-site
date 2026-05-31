@@ -10,15 +10,15 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "user-management",
-  version: "0.3.0",
+  version: "0.4.0",
   category: "auth",
   kind: "full",
   provides: {
-    components: ["UserManagementPanel", "MembersPanel", "MembersTable", "MembersToolbar", "MemberRowActions", "RoleChip", "InviteDialog", "PendingInvites", "RolesPanel", "RoleEditor", "RolePermissionGrid"],
+    components: ["UserManagementPanel", "MembersPanel", "MembersTable", "MembersToolbar", "MemberRowActions", "RoleChip", "InviteDialog", "PendingInvites", "RolesPanel", "RoleEditor", "RolePermissionGrid", "TeamsPanel", "TeamDetail"],
     hooks: ["useMembersView"],
     utils: ["can", "matchPermission"],
     convex: {
-      tables: ["um_members", "um_invites"],
+      tables: ["um_members", "um_invites", "um_teams", "um_team_members"],
       rbac: ["members.view", "members.manage", "members.invite", "roles.view", "roles.manage"],
     },
   },

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ROLE_PRESETS, resolvePermissions, PERMISSION_GROUPS } from "@/features/rbac-roles";
 import {
   UserManagementPanel,
-  type Member, type RoleOption, type Invite, type ManagedRole,
+  type Member, type RoleOption, type Invite, type ManagedRole, type Team,
 } from "@/features/user-management";
 
 // Wiring happens here (app level): roles, resolved permissions and the
@@ -29,6 +29,10 @@ export default function Page() {
   const [members, setMembers] = React.useState<Member[]>(SEED_MEMBERS);
   const [invites, setInvites] = React.useState<Invite[]>([]);
   const [roles, setRoles] = React.useState<ManagedRole[]>(SEED_ROLES);
+  const [teams, setTeams] = React.useState<Team[]>([
+    { id: "t1", name: "Engineering", memberIds: ["u2", "u4"] },
+    { id: "t2", name: "Design", memberIds: ["u3"] },
+  ]);
   const [asAdmin, setAsAdmin] = React.useState(true);
   const [note, setNote] = React.useState("");
   const currentPerms = React.useMemo(() => resolvePermissions(asAdmin ? "admin" : "manager"), [asAdmin]);
@@ -53,6 +57,13 @@ export default function Page() {
       ? prev.map((x) => (x.slug === r.slug ? { ...x, ...r } : x))
       : [...prev, r]));
   const removeRole = ({ slug }: { slug: string }) => setRoles((prev) => prev.filter((x) => x.slug !== slug));
+  const createTeam = ({ name }: { name: string }) =>
+    setTeams((prev) => [...prev, { id: `t-${prev.length}-${name}`, name, memberIds: [] }]);
+  const removeTeam = ({ teamId }: { teamId: string }) => setTeams((prev) => prev.filter((t) => t.id !== teamId));
+  const addTeamMember = ({ teamId, userId }: { teamId: string; userId: string }) =>
+    setTeams((prev) => prev.map((t) => (t.id === teamId ? { ...t, memberIds: [...new Set([...t.memberIds, userId])] } : t)));
+  const removeTeamMember = ({ teamId, userId }: { teamId: string; userId: string }) =>
+    setTeams((prev) => prev.map((t) => (t.id === teamId ? { ...t, memberIds: t.memberIds.filter((id) => id !== userId) } : t)));
 
   return (
     <SlicePreviewLayout
@@ -76,6 +87,11 @@ export default function Page() {
           roles={{
             roles, currentPerms, permissionGroups: PERMISSION_GROUPS,
             onUpsert: upsertRole, onRemove: removeRole,
+          }}
+          teams={{
+            teams, allMembers: members, currentPerms,
+            onCreateTeam: createTeam, onRemoveTeam: removeTeam,
+            onAddMember: addTeamMember, onRemoveMember: removeTeamMember,
           }}
         />
         {note ? <p className="text-xs text-muted-foreground">{note}</p> : null}

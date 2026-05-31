@@ -74,6 +74,42 @@ export interface RolesLabels {
   emptyEditor: string;
 }
 
+/** A team — a named group of users within a tenant (P4a). */
+export interface Team {
+  id: string;
+  name: string;
+  description?: string;
+  memberIds: string[];
+}
+
+export interface TeamsLabels {
+  title: string;
+  newTeam: string;
+  teamNamePlaceholder: string;
+  create: string;
+  members: string;
+  addMember: string;
+  addMemberPlaceholder: string;
+  remove: string;
+  deleteTeam: string;
+  empty: string;
+  emptyDetail: string;
+}
+
+export const DEFAULT_TEAMS_LABELS: TeamsLabels = {
+  title: "Teams",
+  newTeam: "New team",
+  teamNamePlaceholder: "Team name…",
+  create: "Create",
+  members: "Members",
+  addMember: "Add member",
+  addMemberPlaceholder: "Add a member…",
+  remove: "Remove",
+  deleteTeam: "Delete team",
+  empty: "No teams yet.",
+  emptyDetail: "Select a team to manage its members.",
+};
+
 export const DEFAULT_ROLES_LABELS: RolesLabels = {
   title: "Roles",
   newRole: "New role",

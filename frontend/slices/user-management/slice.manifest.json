@@ -1,8 +1,8 @@
 {
   "$schema": "../../../docs/slice.manifest.schema.json",
   "name": "user-management",
-  "version": "0.3.0",
-  "description": "Members + invites + roles-admin surface (P1–P3): UserManagementPanel tabs Members + Roles. Member table, InviteDialog + PendingInvites, RolesPanel (create/edit custom roles via permission matrix). All permission-gated. Props-driven + RBAC-agnostic; pair with rbac-roles + convex-auth.",
+  "version": "0.4.0",
+  "description": "Members + invites + roles-admin + teams surface (P1–P4a): UserManagementPanel tabs Members + Roles + Teams. Member table, InviteDialog + PendingInvites, RolesPanel (permission matrix), TeamsPanel (user groups). All permission-gated. Props-driven + RBAC-agnostic; pair with rbac-roles + convex-auth.",
   "category": "auth",
   "stability": "alpha",
   "deps": {
@@ -31,6 +31,16 @@
       "name": "um_invites",
       "namespaced": true,
       "indexes": ["by_tenant", "by_tenant_status", "by_email", "by_token"]
+    },
+    {
+      "name": "um_teams",
+      "namespaced": true,
+      "indexes": ["by_tenant"]
+    },
+    {
+      "name": "um_team_members",
+      "namespaced": true,
+      "indexes": ["by_team", "by_team_user"]
     }
   ],
   "compatibility": {
@@ -41,5 +51,5 @@
     "auth": "convex-auth"
   },
   "tags": ["user-management", "members", "rbac", "auth", "team", "admin", "convex", "no-clerk"],
-  "notes": "0.3.0 (2026-05-31): P3 — roles admin (UserManagementPanel tabs; RolesPanel + RoleEditor + RolePermissionGrid create/edit/delete custom roles, system roles read-only). Roles CRUD reuses rbac-roles' listRoles/upsertRole/removeRole — no new convex here. 0.2.0: invite flow (um_invites). 0.1.0: members table. RBAC-agnostic by design — the slice imports no other slice's frontend; roles + resolved permissions + permission catalog are passed as props (wire from rbac-roles at the app level). Full-parity extras (P4: hierarchy/teams/access-matrix) follow."
+  "notes": "0.4.0 (2026-05-31): P4a — teams (um_teams + um_team_members; TeamsPanel + TeamDetail; createTeam/removeTeam/addTeamMember/removeTeamMember + listTeams, gated members.manage). UserManagementPanel gains an optional Teams tab. 0.3.0: P3 — roles admin (UserManagementPanel tabs; RolesPanel + RoleEditor + RolePermissionGrid create/edit/delete custom roles, system roles read-only). Roles CRUD reuses rbac-roles' listRoles/upsertRole/removeRole — no new convex here. 0.2.0: invite flow (um_invites). 0.1.0: members table. RBAC-agnostic by design — the slice imports no other slice's frontend; roles + resolved permissions + permission catalog are passed as props (wire from rbac-roles at the app level). Full-parity extras (P4: hierarchy/teams/access-matrix) follow."
 }

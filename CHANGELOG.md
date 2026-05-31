@@ -11,6 +11,25 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-05-31 — user-management: teams (P4a) v0.4.0
+
+- **Teams added to `user-management`.** `<TeamsPanel>` — named user groups
+  within a tenant: list teams (with member counts), create / delete, and
+  `<TeamDetail>` to add / remove members (picking from active members). Gated
+  on `members.manage`.
+- **`<UserManagementPanel>`** gains an optional **Teams** tab (renders only
+  when the `teams` prop bag is passed).
+- **Convex** (`convex/features/user-management/`): `um_teams` +
+  `um_team_members` tables; `listTeams` (each with member ids) +
+  `createTeam` / `removeTeam` (cascades memberships) / `addTeamMember` /
+  `removeTeamMember`, all gated `members.manage`. `mutation.ts` rewritten
+  cleaner (convex is tsc-excluded — dropped the defensive casts) to fit the
+  new endpoints under the 200-LOC cap.
+- New types `Team` / `TeamsLabels`. Preview gains the Teams tab (seeded with
+  Engineering + Design). Slice + catalog 0.3.0 → 0.4.0; no new shadcn deps.
+- First of the P4 full-parity sub-phases — hierarchy + propagating invites
+  (P4b) and the cross-workspace access matrix (P4c) follow.
+
 ### 2026-05-31 — user-management: roles admin + tabbed panel (P3) v0.3.0
 
 - **Roles admin added to `user-management`.** `<RolesPanel>` — list roles

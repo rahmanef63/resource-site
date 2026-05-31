@@ -43,6 +43,23 @@ export const userManagementTables = {
     .index("by_tenant_status", ["tenantId", "status"])
     .index("by_email", ["email"])
     .index("by_token", ["token"]),
+
+  // Teams (P4a) — named groups of users within a tenant.
+  um_teams: defineTable({
+    tenantId: v.union(v.string(), v.null()),
+    name: v.string(),
+    description: v.optional(v.string()),
+    createdBy: v.optional(v.string()),
+    createdAt: v.number(),
+  }).index("by_tenant", ["tenantId"]),
+
+  um_team_members: defineTable({
+    teamId: v.id("um_teams"),
+    userId: v.string(),
+    addedAt: v.number(),
+  })
+    .index("by_team", ["teamId"])
+    .index("by_team_user", ["teamId", "userId"]),
 };
 
 export default userManagementTables;

@@ -75,3 +75,29 @@ export const listInvites = query({
     }));
   },
 });
+
+/** List a tenant's teams, each with its member ids. Soft-denies without
+ *  members.view. */
+export const listTeams = query({
+  args: { tenantId: v.union(v.string(), v.null()) },
+  handler: async (ctx, { tenantId }) => {
+    const perms = await getActorPermissions(ctx, tenantId);
+    const canView = perms.some(
+      (p) => p === "*" || p === "members.*" || p === "members.view" || p === "members.manage",
+    );
+    if (!canView) return [];
+    const teams = await ctx.db
+      .query("um_teams")
+      .withIndex("by_tenant", (q) => q.eq("tenantId", tenantId))
+      .take(100);
+    return await Promise.all(
+      teams.map(async (t) => {
+        const tm = await ctx.db
+          .query("um_team_members")
+          .withIndex("by_team", (q) => q.eq("teamId", t._id))
+          .take(500);
+        return { id: t._id, name: t.name, description: t.description, memberIds: tm.map((x) => x.userId) };
+      }),
+    );
+  },
+});
