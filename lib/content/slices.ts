@@ -164,8 +164,95 @@ export const slices: SliceEntry[] = [
     maturity: "beta",
     previewPath: "/preview/slices/appshell",
     defaultView: "desktop",
-    agentRecipe:
-      "Run `npx rr add appshell`, then import its theme once: `import \"@/features/appshell/appshell.css\"` (ships the glass/dock/window tokens the shell needs — they are not shadcn defaults). Mount <AppShell manifest={…}> at the app root. The manifest declares brand + apps (each AppDescriptor has id/title/icon/slug/load()/multi) + features (import searchFeature/inspectorFeature/notificationsFeature/controlCenterFeature/widgetsFeature from @/features/appshell) + capabilities (inject useAppearance/useSearch/useSystemStats/useChat/useServerToggle — optional caps degrade via defaults). Windowing state is a module store (openWindow/focusApp); URL sync via the History API (UrlSync), NOT router.push. Add an app = manifest edit; add a shell feature = new defineFeature() + list it. No surface edits (open/closed).",
+    agentRecipe: `Stack required: Next 16 (App Router) + React 19 + Tailwind 4 + shadcn/ui. The slice is self-contained — it imports only @/components/ui/* + @/lib/utils (cn); everything project-specific arrives via the manifest. Follow ALL steps; the ⚠ ones are where installs break.
+
+STEP 1 — Install. \`npx rr add appshell\` (alias \`npx rahman-resources add appshell\`). It copies to your slices dir. Ensure \`@/features/appshell\` resolves in tsconfig paths (point it at that dir), and that Tailwind's content globs SCAN the slice folder (else the shell renders unstyled).
+
+STEP 2 — shadcn + npm deps. Add any missing shadcn primitives: \`npx shadcn@latest add button tooltip scroll-area sheet drawer dialog alert-dialog dropdown-menu\`. npm: lucide-react class-variance-authority clsx tailwind-merge vaul.
+
+STEP 3 — ⚠ Theme. Import the slice's tokens ONCE in the root layout: \`import "@/features/appshell/appshell.css"\`. These are the glass/dock/window/wallpaper CSS variables the shell needs — they are NOT shadcn defaults, so skipping this = an unstyled, broken-looking shell. It pairs with your shadcn tokens (--background etc.). Dark mode = toggle the \`.dark\` class on <html> (appshell.css ships light + dark).
+
+STEP 4 — Mount full-bleed. Render <AppShell manifest={manifest} /> from a CLIENT component that owns one full viewport (the page is h-dvh w-screen / the root). AppShell auto-picks the macOS desktop on wide viewports and the iOS surface on narrow — you write nothing extra for mobile.
+
+STEP 5 — Build the ShellManifest:
+• brand: { name, logo (string or ReactNode), idleAppName?, wallpaper?: "aurora"|"dusk"|"mist"|"noir" }.
+• apps: AppDescriptor[] — { id, title, icon (a lucide-react icon component), gradient (a CSS gradient string for the glossy icon), load: async () => ({ default: YourAppComponent }), slug?, defaultSize?: {w,h}, multi?: true (spawn a new window per open, e.g. a file manager), noDock?: true }. Your app component receives props { payload }.
+• features: import the ones you want from "@/features/appshell" and list them: searchFeature (⌘K Spotlight), inspectorFeature (⌘I AI/context panel), notificationsFeature (toasts + iOS dynamic island), controlCenterFeature (iOS control center), widgetsFeature (iOS Today widgets).
+• capabilities: ShellCapabilities — your data/auth/AI injection seam. useAppearance() and useCpuPercent() are REQUIRED; useSearch/useSystemStats/useChat/useServerToggle are optional (defaults degrade gracefully). ⚠ CRITICAL: every capability hook MUST return a REFERENTIALLY STABLE value — a module-level const, or useMemo/useCallback. Returning a fresh object/closure each render makes Spotlight's search effect re-fire forever ("Maximum update depth exceeded"). e.g. define APPEARANCE once at module scope and \`useAppearance: () => APPEARANCE\`.
+• persistKey?: localStorage namespace for the saved window layout (default "appshell:layout").
+• routing?: defaults TRUE — it mirrors the focused app to the URL via the History API (window.history, NOT router.push). ⚠ If true you MUST add a catch-all route \`app/[[...slug]]/page.tsx\` that renders the mount AND calls notFound() for reserved paths (slug[0] === "_next"), or missing chunks return wrong-MIME 200s. SIMPLEST first install: set \`routing: false\` to skip the catch-all entirely.
+
+Extending: add an app = one manifest entry; add a shell feature = a new defineFeature({id, slots}) listed in features[]. No surface edits ever (open/closed). See exampleCode for a complete, copy-paste mount.`,
+    exampleCode: `// app/page.tsx — mount AppShell full-bleed. Verified-working shape.
+"use client";
+
+import { FileText } from "lucide-react";
+import {
+  AppShell,
+  searchFeature,
+  inspectorFeature,
+  notificationsFeature,
+  controlCenterFeature,
+  widgetsFeature,
+  type ShellManifest,
+} from "@/features/appshell";
+import "@/features/appshell/appshell.css"; // REQUIRED — the shell's theme tokens
+
+// Your app. It receives { payload } (whatever opened the window).
+function NotesApp({ payload }: { payload?: unknown }) {
+  return (
+    <div className="h-full bg-background p-4 text-sm">
+      Your app UI here. payload: {String(payload ?? "—")}
+    </div>
+  );
+}
+
+// ⚠ Capability hooks MUST return STABLE references (module-level / useMemo),
+// or Spotlight's search effect loops forever. Define once, return the same ref.
+const NOOP = () => {};
+const APPEARANCE = {
+  theme: "light" as const,
+  setTheme: NOOP, // wire to your theme store; also toggle \`.dark\` on <html>
+  device: "auto" as const,
+  wallpaper: "aurora",
+};
+
+const manifest: ShellManifest = {
+  brand: { name: "My OS", logo: "▲", idleAppName: "Finder" },
+  apps: [
+    {
+      id: "notes",
+      title: "Notes",
+      icon: FileText,
+      gradient: "linear-gradient(160deg,#ffd34d,#ff9a3d)",
+      defaultSize: { w: 560, h: 380 },
+      multi: true, // several Notes windows at once
+      load: async () => ({ default: NotesApp }),
+    },
+    // add more apps = add more entries (each lazy-loads its own bundle)
+  ],
+  features: [
+    searchFeature,
+    inspectorFeature,
+    notificationsFeature,
+    controlCenterFeature,
+    widgetsFeature,
+  ],
+  routing: false, // set true ONLY if you add app/[[...slug]]/page.tsx (notFound _next)
+  capabilities: {
+    useAppearance: () => APPEARANCE,
+    useCpuPercent: () => null,
+    // optional, all must be stable refs:
+    // useSearch: () => myStableSearchFn,   // (q) => Promise<SearchHit[]>
+    // useSystemStats: () => myStatsOrNull,
+    // useChat: () => myStableChatFn,
+    // useServerToggle: () => myToggleOrNull,
+  },
+};
+
+export default function Page() {
+  return <AppShell manifest={manifest} />;
+}`,
   },
   {
     slug: "convex-auth",
