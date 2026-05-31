@@ -1,7 +1,7 @@
 import { mutation } from "../../_generated/server";
 import { v } from "convex/values";
 import { requireAdmin } from "../../_shared/auth";
-import { randomHex, verifyPkce, isAllowedRedirect } from "./pkce";
+import { randomHex, verifyPkce, isAllowedRedirect } from "./_pkce";
 
 const CODE_TTL_MS = 5 * 60 * 1000; // 5 min
 const TOKEN_TTL_MS = 365 * 24 * 60 * 60 * 1000; // 1 year

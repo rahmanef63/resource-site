@@ -21,7 +21,7 @@
 
 import { defineTable } from "convex/server";
 import { v } from "convex/values";
-import { seoFieldsShape, seoPatchShape } from "../seo/fields";
+import { seoFieldsShape, seoPatchShape } from "../seo/_fields";
 
 export const kindUnion = v.union(
   v.literal("prompt"),

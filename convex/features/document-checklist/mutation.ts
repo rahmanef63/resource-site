@@ -5,7 +5,7 @@ import {
   MAX_COUNTRY_LEN, MAX_DATE_LEN, MAX_DOCS, MAX_ID_LEN, MAX_NOTES_LEN,
   MAX_TYPE_LEN, applyDocStatus, computeProgress, mergePriorChecklist,
   mergeTemplateForInstantiate, normalizeSeedTemplate, trimLen,
-} from "./mutation-helpers";
+} from "./_mutation-helpers";
 
 /**
  * Idempotent seed of the user's checklist row. Re-running with a new

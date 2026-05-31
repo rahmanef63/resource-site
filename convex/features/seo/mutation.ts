@@ -1,7 +1,7 @@
 import { mutation, internalMutation } from "../../_generated/server";
 import { v } from "convex/values";
 import { requireAdmin } from "../../_shared/auth";
-import { seoPatchShape } from "./fields";
+import { seoPatchShape } from "./_fields";
 
 // Single mutation patches whichever surface table the action targets.
 // Action computes metadata, calls this to persist. Validator-level union

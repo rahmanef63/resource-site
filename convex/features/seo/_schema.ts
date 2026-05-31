@@ -4,7 +4,7 @@ import { v } from "convex/values";
 // Cost guard for AI-driven SEO metadata generation.
 // Mirror the classroom refiner pattern — each call logs user + tokens.
 // Action consults this within a 24h window before hitting Anthropic.
-export const tables = {
+export const seoTables = {
   seoGeneratorCalls: defineTable({
     userEmail: v.string(),
     table: v.string(),
