@@ -9,7 +9,7 @@
   "namespace": "@/features/appshell",
   "frontend": {
     "slicePath": "frontend/slices/appshell",
-    "configExport": "default"
+    "configExport": "appshellConfig"
   },
   "deps": {
     "npm": ["lucide-react", "class-variance-authority", "clsx", "tailwind-merge", "vaul"],

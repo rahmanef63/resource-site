@@ -51,7 +51,8 @@ export type {
 } from "./lib/inspector";
 export type { Toast, ToastOptions, ToastTone } from "./lib/toast";
 export type { AppDescriptor, WindowState, WinId, AppProps } from "./lib/types";
-export { default as osShellConfig } from "./config";
+export { appshellConfig } from "./config";
+export type { AppShellConfig } from "./config";
 
 // ── Responsive: the single source of truth (provider + hook + container) ─────
 export { ResponsiveProvider } from "./responsive/responsive-provider";
