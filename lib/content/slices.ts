@@ -182,8 +182,9 @@ STEP 5 — Build the ShellManifest:
 • persistKey?: localStorage namespace for the saved window layout (default "appshell:layout").
 • routing?: defaults TRUE — it mirrors the focused app to the URL via the History API (window.history, NOT router.push). ⚠ If true you MUST add a catch-all route \`app/[[...slug]]/page.tsx\` that renders the mount AND calls notFound() for reserved paths (slug[0] === "_next"), or missing chunks return wrong-MIME 200s. SIMPLEST first install: set \`routing: false\` to skip the catch-all entirely.
 
-Extending: add an app = one manifest entry; add a shell feature = a new defineFeature({id, slots}) listed in features[]. No surface edits ever (open/closed). See exampleCode for a complete, copy-paste mount.`,
-    exampleCode: `// app/page.tsx — mount AppShell full-bleed. Verified-working shape.
+Extending: add an app = one manifest entry; add a shell feature = a new defineFeature({id, slots}) listed in features[]. No surface edits ever (open/closed). exampleCode ships BOTH variants: Variant A = routing:false mount in app/page.tsx (simplest); Variant B = catch-all app/[[...slug]]/page.tsx with routing on + app slugs for addressable, deep-linkable URLs (the catch-all MUST notFound() "_next").`,
+    exampleCode: `// ════════ VARIANT A — simplest: no URL sync (app/page.tsx) ════════
+// Mount AppShell full-bleed. Verified-working shape.
 "use client";
 
 import { FileText } from "lucide-react";
@@ -252,6 +253,68 @@ const manifest: ShellManifest = {
 
 export default function Page() {
   return <AppShell manifest={manifest} />;
+}
+
+// ════════ VARIANT B — addressable URLs (deep-link /notes, back/forward) ════════
+// Same manifest as A, but: DROP \`routing: false\` (default is ON) and give each
+// app a \`slug\`. Mount from a CATCH-ALL route instead of app/page.tsx. The dock
+// uses History-API URL sync (window.history, NOT router.push) — handled inside
+// the slice; you only provide the catch-all route below.
+
+// 1) components/shell.tsx — the client mount (apps carry slugs, routing left ON)
+"use client";
+import { FileText } from "lucide-react";
+import {
+  AppShell, searchFeature, inspectorFeature, notificationsFeature,
+  controlCenterFeature, widgetsFeature, type ShellManifest,
+} from "@/features/appshell";
+import "@/features/appshell/appshell.css";
+
+function NotesApp({ payload }: { payload?: unknown }) {
+  return <div className="h-full bg-background p-4 text-sm">Notes · {String(payload ?? "—")}</div>;
+}
+const NOOP = () => {};
+const APPEARANCE = { theme: "light" as const, setTheme: NOOP, device: "auto" as const, wallpaper: "aurora" };
+
+const manifest: ShellManifest = {
+  brand: { name: "My OS", logo: "▲", idleAppName: "Finder" },
+  apps: [
+    {
+      id: "notes",
+      slug: "notes", // deep-link: /notes focuses (or opens) this app
+      title: "Notes",
+      icon: FileText,
+      gradient: "linear-gradient(160deg,#ffd34d,#ff9a3d)",
+      defaultSize: { w: 560, h: 380 },
+      multi: true,
+      load: async () => ({ default: NotesApp }),
+    },
+  ],
+  features: [searchFeature, inspectorFeature, notificationsFeature, controlCenterFeature, widgetsFeature],
+  // routing omitted => defaults TRUE => focused app + launch path mirror to the URL
+  capabilities: { useAppearance: () => APPEARANCE, useCpuPercent: () => null },
+};
+
+export function Shell() {
+  return <AppShell manifest={manifest} />;
+}
+
+// 2) app/[[...slug]]/page.tsx — ONE optional catch-all (server). No per-app pages;
+//    the window manager stays client-side, only the URL is mirrored.
+import { notFound } from "next/navigation";
+import { Shell } from "@/components/shell";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug?: string[] }> }) {
+  const { slug } = await params;
+  return { title: slug?.[0] ? \`\${slug[0]} — My OS\` : "My OS" };
+}
+
+export default async function Page({ params }: { params: Promise<{ slug?: string[] }> }) {
+  const { slug } = await params;
+  // ⚠ MUST notFound() reserved paths: a missing /_next/* chunk has to 404 — else
+  // this catch-all returns the app HTML with 200 (wrong MIME, no client recovery).
+  if (slug?.[0] === "_next") notFound();
+  return <Shell />;
 }`,
   },
   {

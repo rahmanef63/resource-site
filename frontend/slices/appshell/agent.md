@@ -41,7 +41,7 @@ STEP 5 — Build the ShellManifest:
 • persistKey?: localStorage namespace for the saved window layout (default "appshell:layout").
 • routing?: defaults TRUE — it mirrors the focused app to the URL via the History API (window.history, NOT router.push). ⚠ If true you MUST add a catch-all route `app/[[...slug]]/page.tsx` that renders the mount AND calls notFound() for reserved paths (slug[0] === "_next"), or missing chunks return wrong-MIME 200s. SIMPLEST first install: set `routing: false` to skip the catch-all entirely.
 
-Extending: add an app = one manifest entry; add a shell feature = a new defineFeature({id, slots}) listed in features[]. No surface edits ever (open/closed). See exampleCode for a complete, copy-paste mount.
+Extending: add an app = one manifest entry; add a shell feature = a new defineFeature({id, slots}) listed in features[]. No surface edits ever (open/closed). exampleCode ships BOTH variants: Variant A = routing:false mount in app/page.tsx (simplest); Variant B = catch-all app/[[...slug]]/page.tsx with routing on + app slugs for addressable, deep-linkable URLs (the catch-all MUST notFound() "_next").
 
 ## Rules of engagement
 
