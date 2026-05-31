@@ -11,6 +11,33 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-05-31 — catalog prune: cut generic/dead slices + merge sections
+
+- **Catalog 59 → 44.** Removed commodity slices that are widely available
+  elsewhere (shadcnblocks / magicui / tailwindui) or are dead/niche, keeping
+  the differentiators (notion-database, ai-stack, create-your-mcp, ID
+  payments).
+- **Hard-deleted** (dir + catalog + backend where present): `database-io`
+  (deprecated re-export shim), `i18n-translate` (Google-Translate widget),
+  `hero`, `cta`, `socials` (-6 convex fns), `document-checklist` (-7 convex
+  fns; niche job-search tracker). Dropped dead convex scaffolds
+  `audit-log` / `search` (0 endpoints) + `example-feature` (demo).
+- **Merged into `landing-sections` v0.2.0** (dropped standalone catalog
+  entries): the generic section renderers. Dirs that in-repo templates still
+  import (`blog-section`, `pricing-page`, `portfolio-section`,
+  `testimonials-grid`, `faq-section`, `feature-grid`, `changelog-feed`)
+  keep their code (keep-dir / drop-catalog precedent), so template builds are
+  unaffected — they're just no longer sold as separate slices.
+- **Merged `subscribers` → `resend-newsletter` v0.1.3.** Standalone
+  `subscribers` slice + catalog entry removed; its list backend
+  (`convex/features/subscribers`) is retained and now documented as part of
+  resend-newsletter.
+- **Dropped `full-width-toggle` from catalog** (kept dir — `dashboard-shell`
+  imports it; nulled its dangling peer).
+- Regenerated `registry.generated.ts`, `manifest.json`, per-slice `agent.md`;
+  pruned `family-map.ts`. Typecheck + audit:slices + validate:slices +
+  audit:convex-features + gen checks all green.
+
 ### 2026-05-31 — notion-database date-range cell fix + catalog tidy
 
 - **DateCell range now visible in the column.** `dateRange` was derived

@@ -8,18 +8,9 @@ const FAMILY_OVERRIDES: Record<string, string> = {
   "doku-payment": "payment",
   "midtrans-payment": "payment",
   // landing page sections
-  "blog-section": "landing",
-  "faq-section": "landing",
-  "portfolio-section": "landing",
-  "feature-grid": "landing",
-  "hero": "landing",
-  "cta": "landing",
   "landing-sections": "landing",
-  "pricing-page": "landing",
   "services": "landing",
-  "socials": "landing",
   "testimonials": "landing",
-  "testimonials-grid": "landing",
   "contact-form-resend": "landing",
   // admin / dashboard shells
   "admin": "admin",
@@ -32,9 +23,7 @@ const FAMILY_OVERRIDES: Record<string, string> = {
   "event-tracking": "admin",
   // content / editorial
   "mdx-blog": "content",
-  "changelog-feed": "content",
   "comments": "content",
-  "document-checklist": "content",
 };
 
 export const FAMILY_LABEL: Record<string, string> = {

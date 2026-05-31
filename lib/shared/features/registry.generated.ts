@@ -12,7 +12,6 @@ import { calComBookingConfig } from "@/features/cal-com-booking/config";
 import { commandMenuConfig } from "@/features/command-menu/config";
 import { commentsConfig } from "@/features/comments/config";
 import { convexAuthConfig } from "@/features/convex-auth/config";
-import { documentChecklistConfig } from "@/features/document-checklist/config";
 import { dokuPaymentConfig } from "@/features/doku-payment/config";
 import { mdxBlogConfig } from "@/features/mdx-blog/config";
 import { midtransPaymentConfig } from "@/features/midtrans-payment/config";
@@ -61,11 +60,6 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     ...convexAuthConfig,
     importPath: "@/features/convex-auth/config",
     version: "0.2.1",
-  },
-  {
-    ...documentChecklistConfig,
-    importPath: "@/features/document-checklist/config",
-    version: "0.1.0",
   },
   {
     ...dokuPaymentConfig,

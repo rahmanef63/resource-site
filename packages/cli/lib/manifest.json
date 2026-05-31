@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-31T15:12:04.704Z",
+  "generatedAt": "2026-05-31T18:45:34.059Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -1429,7 +1429,7 @@
       "slug": "resend-newsletter",
       "title": "Resend — Transactional & Newsletter",
       "category": "email",
-      "description": "Transactional email + newsletter blast via Resend. Double opt-in flow + audience segmentation. Magic-link delivery for Convex Auth.",
+      "description": "Transactional email + newsletter blast via Resend. Double opt-in flow + audience segmentation. Magic-link delivery for Convex Auth. Bundles the subscribers list backend (subscribe / confirm / unsubscribe / count) — formerly the standalone `subscribers` slice, merged here in v0.1.3.",
       "source": "rahmanef63/resource-site",
       "docsUrl": "https://resend.com/docs",
       "install": "npm i resend react-email @react-email/components",
@@ -1620,25 +1620,6 @@
         "scheduling",
         "cal-com",
         "bookings"
-      ]
-    },
-    {
-      "slug": "full-width-toggle",
-      "title": "Full Width Toggle",
-      "category": "ui",
-      "description": "Page-container width toggle (contained / wide / full). Per-device localStorage + cross-tab sync. Ships useFullWidth hook + FullWidthToggle button (icon/button/segment variants) + WidthContainer wrapper. Zero backend, zero env.",
-      "source": "rahmanef63/resource-site",
-      "docsUrl": "",
-      "install": "",
-      "npmPackages": [],
-      "exampleCode": "",
-      "agentRecipe": "Run `npx rr add full-width-toggle`. Drop <WidthContainer> around page content, <FullWidthToggle variant='icon' /> in topbar. Variant 'segment' best for settings page. Hook useFullWidth() returns [mode, setMode, cycle]. SSR-safe — defaults to 'contained' until hydrate.",
-      "tags": [
-        "ui",
-        "layout",
-        "preference",
-        "localstorage",
-        "dashboard"
       ]
     },
     {
@@ -1865,64 +1846,6 @@
       ]
     },
     {
-      "slug": "i18n-translate",
-      "title": "i18n — Google Translate widget",
-      "category": "ui",
-      "description": "Drop-in Google Translate widget. Replaces hand-maintained locale dictionaries with on-the-fly translation to a curated locale list (16 default, prop-override). No API key, no Google Cloud billing. Auto-detect browser language on first visit, persist user choice via localStorage, click-to-reload language switching with router-refresh + in-place fallback strategies. Lifted 2026-05-27 from rahmanef.com; 510-LOC monolith split into 8 sub-files for the 200-LOC cap; project-specific Tailwind utilities stripped from defaults.",
-      "source": "rahmanef.com",
-      "install": "npx rahman-resources add i18n-translate",
-      "npmPackages": [],
-      "exampleCode": "",
-      "agentRecipe": "Run `npx rr add i18n-translate`. Mount `<GoogleTranslate />` anywhere (e.g. header). Add the CSP allowlist from README.md to your middleware/proxy — without it Google's script fails silently. Override `languages`, `storageKey`, and the four `*ClassName` props for per-project styling. Default `fallbackRefresh=\"reload\"` is the only path that works reliably across Next Cache Components — only opt into `\"router\"` or `\"none\"` if you've tested it on your tree.",
-      "tags": [
-        "i18n",
-        "translate",
-        "google-translate",
-        "ui",
-        "language-switcher",
-        "locale",
-        "widget"
-      ]
-    },
-    {
-      "slug": "cta",
-      "title": "Call to Action",
-      "category": "ui",
-      "description": "Brutalist call-to-action section — eyebrow label, serif headline, body, arrow CTA. Pair with CtaButton standalone for inline placements. Lifted 2026-05-16 from rahmanef.com; assumes Tailwind tracking-brutal / tracking-brutal-sm utilities OR drop them for the default tracking scale.",
-      "source": "rahmanef.com",
-      "install": "npx rahman-resources add cta",
-      "npmPackages": [],
-      "exampleCode": "",
-      "agentRecipe": "Run `npx rr add cta`. <CtaView eyebrow title body href ctaLabel /> renders the full section; <CtaButton href label /> drops a standalone arrow button anywhere. Override tracking-brutal utilities in tailwind.config or swap for tracking-wide if your design system has no brutal preset.",
-      "tags": [
-        "ui",
-        "marketing",
-        "cta",
-        "section",
-        "brutalist"
-      ]
-    },
-    {
-      "slug": "hero",
-      "title": "Hero",
-      "category": "ui",
-      "description": "Editorial split-grid landing hero — eyebrow pill + large serif H1 + italic pull-quote + 1-2 button CTA row + right-column portrait card with optional caption. Fully props-driven (title/quote/ctas/image). Sanitized from rahmanef.com on 2026-05-16: SITE_CONFIG hardcode dropped, custom Heading/Section primitives replaced with raw semantic elements + stock Tailwind tracking-widest so the slice ships without consumer preset utilities.",
-      "source": "rahmanef.com",
-      "install": "npx rahman-resources add hero",
-      "npmPackages": [],
-      "exampleCode": "",
-      "agentRecipe": "Run `npx rr add hero`. <HeroView title eyebrow quote ctas image imageCaption /> — all props optional except title. Pass `image={undefined}` for text-only hero (auto-collapses to single 12-column row). Pairs visually with cta slice (same brutalist border + serif scale).",
-      "tags": [
-        "ui",
-        "hero",
-        "marketing",
-        "landing",
-        "section",
-        "editorial",
-        "brutalist"
-      ]
-    },
-    {
       "slug": "rate-limit",
       "title": "Rate Limit",
       "category": "infra",
@@ -1938,24 +1861,6 @@
         "convex",
         "backend",
         "throttle"
-      ]
-    },
-    {
-      "slug": "subscribers",
-      "title": "Subscribers",
-      "category": "email",
-      "description": "Newsletter list with honeypot + per-email rate-limit + token-based unsubscribe + admin remove. Public `subscribe` returns status strings (`created` / `already` / `resubscribed` / `honeypot`); admin `listAll` / `count` queries gated by `requireAdmin` (rr `_shared/auth`). Lifted 2026-05-16 from rahmanef.com; sanitized: token args dropped, sibling `analyticsEvents` insert removed — wrap subscribe in a consumer action if you want funnel telemetry.",
-      "source": "rahmanef.com",
-      "install": "npx rahman-resources add subscribers",
-      "npmPackages": [],
-      "exampleCode": "",
-      "agentRecipe": "Run `npx rr add subscribers`. Compose `subscribersTables` into root convex/schema.ts. Public form posts `api.features.subscribers.mutations.subscribe({ email, source, website })` — `website` is the honeypot, leave it `\"\"` from the form. Render unsubscribe link `/unsubscribe?t=<token>` and call `unsubscribe({ token })`.",
-      "tags": [
-        "email",
-        "newsletter",
-        "subscribers",
-        "convex",
-        "backend"
       ]
     },
     {
@@ -1993,25 +1898,6 @@
         "backend",
         "marketing",
         "agency"
-      ]
-    },
-    {
-      "slug": "socials",
-      "title": "Socials",
-      "category": "content",
-      "description": "Single source of truth for profile/social links. Powers JSON-LD `Person.sameAs` (Google entity graph), IndieWeb `<link rel=\"me\">` tags, and footer/contact/about UI surfaces. URL-deduped, ordered, `visible` / `featured` / `relMe` / `sameAs` flags. Lifted 2026-05-16 from rahmanef.com; token-based admin gate swapped, baked-in 14-platform rahmanef seed dropped — `seed` now takes items via args so each adopter ships their own list.",
-      "source": "rahmanef.com",
-      "install": "npx rahman-resources add socials",
-      "npmPackages": [],
-      "exampleCode": "",
-      "agentRecipe": "Run `npx rr add socials`. Compose `socialsTables` into root schema. Bootstrap with `npx convex run internal.features.socials.mutations.seed '{\"items\":[{\"platform\":\"github\",\"url\":\"https://github.com/<you>\",\"order\":1,\"visible\":true,\"featured\":true,\"sameAs\":true,\"relMe\":true}]}'`. Wire `useQuery(api.features.socials.queries.listVisible)` into footer for entity-graph SEO.",
-      "tags": [
-        "content",
-        "socials",
-        "seo",
-        "indieweb",
-        "convex",
-        "backend"
       ]
     },
     {
@@ -2143,67 +2029,10 @@
       ]
     },
     {
-      "slug": "document-checklist",
-      "title": "Document Checklist — Job-Search Doc Tracker",
-      "category": "content",
-      "description": "Track required job-search documents (CV, KTP, ijazah, etc.) with country-scoped seed templates and per-user completion state. Ships an Indonesian default checklist. Toggle completed + notes + expiry per item.",
-      "source": "rahmanef63/CareerPack",
-      "install": "npx rahman-resources add document-checklist",
-      "npmPackages": [],
-      "exampleCode": "",
-      "agentRecipe": "Run `rr add document-checklist`. Wire <DocumentChecklist bindings={{ current, seed, updateStatus }} countryTemplateSlot={<CountryTemplateCard bindings={{ templates, getTemplate, instantiate }} />} /> — bindings sourced from api.features['document-checklist'].* queries/mutations.",
-      "tags": [
-        "career",
-        "documents",
-        "checklist",
-        "job-search",
-        "indonesia"
-      ]
-    },
-    {
-      "slug": "pricing-page",
-      "title": "Pricing Page",
-      "category": "ui",
-      "description": "Canonical pricing tier section — eyebrow + headline + 2/3/4 column tier grid with optional FAQ accordion below. Tiers fully data-driven (name/price/period/bullets/cta/featured/badge). Featured variant configurable (ring/scale/tint). Single SSOT — every saas/marketing template consumes this slice for pricing pages so admin-edited tiers propagate without per-template rewriting.",
-      "source": "rahman-resources",
-      "install": "npx rahman-resources add pricing-page",
-      "npmPackages": [],
-      "exampleCode": "",
-      "agentRecipe": "Run `npx rr add pricing-page`. <PricingSection eyebrow title subtitle tiers columns faq faqTitle featuredVariant /> — only `title` + `tiers` required. Each tier: `{ id, name, price, period?, blurb?, bullets[], cta?, featured?, badge? }`. Pass `featuredVariant=\"scale\"` for a popped-forward card or `\"tint\"` for a colored background. Wire admin CRUD via your store hook → useTiers() → pass array.",
-      "tags": [
-        "ui",
-        "pricing",
-        "section",
-        "marketing",
-        "saas",
-        "tiers",
-        "faq"
-      ]
-    },
-    {
-      "slug": "feature-grid",
-      "title": "Feature Grid",
-      "category": "ui",
-      "description": "Canonical features grid section — eyebrow + headline + 1/2/3/4 column item grid in three layout variants (cards, minimal, alternating). Items accept Lucide icon component OR string label, optional image (next/image), optional link CTA. Single SSOT — every template consumes this slice for features pages so admin-edited items propagate without per-template duplication.",
-      "source": "rahman-resources",
-      "install": "npx rahman-resources add feature-grid",
-      "npmPackages": [],
-      "exampleCode": "",
-      "agentRecipe": "Run `npx rr add feature-grid`. <FeatureGridSection eyebrow title subtitle items columns layout align /> — only `items` required. Each item: `{ id, title, body, icon?, image?, link? }`. `icon` can be a LucideIcon component (rendered as 5×5 inline) or a string (rendered as letter fallback). `layout=\"alternating\"` produces image+text rows that flip per index — set `image` per item for that variant.",
-      "tags": [
-        "ui",
-        "features",
-        "section",
-        "marketing",
-        "grid",
-        "saas"
-      ]
-    },
-    {
       "slug": "landing-sections",
       "title": "Landing Sections",
       "category": "infra",
-      "description": "CRUD-driven admin editor for the public landing-page composition. Ships a pure reducer + LandingProvider store adapter + admin LandingView/LandingEditorView built on the shared CRUD primitives, plus a per-section LandingSectionShell that handles background image + custom Tailwind className overlay. Sections carry { kind, order, title, subtitle, enabled, imageUrl, imageRatio, bgImageUrl, className, config (JSON) } with up/down reorder arrows. Consumers map each `kind` (hero, features, pricing, blog, changelog, testimonials, portfolio, services, stats, newsletter, faq, cta, custom) to their own renderer wrapped in <LandingSectionShell>. Canonical pattern used by all 7 rr website templates.",
+      "description": "Canonical landing-page composition slice — replaces the former standalone hero / cta / pricing-page / faq-section / feature-grid / testimonials-grid / blog-section / portfolio-section / changelog-feed slices (all merged here as `kind` variants in v0.2.0). Ships a pure reducer + LandingProvider store adapter + admin LandingView/LandingEditorView built on the shared CRUD primitives, plus a per-section LandingSectionShell that handles background image + custom Tailwind className overlay. Sections carry { kind, order, title, subtitle, enabled, imageUrl, imageRatio, bgImageUrl, className, config (JSON) } with up/down reorder arrows. Consumers map each `kind` (hero, features, pricing, blog, changelog, testimonials, portfolio, services, stats, newsletter, faq, cta, custom) to their own renderer wrapped in <LandingSectionShell>. Used by all 7 rr website templates.",
       "source": "rahman-resources",
       "install": "npx rahman-resources add landing-sections",
       "npmPackages": [],
@@ -2215,102 +2044,6 @@
         "cms",
         "sections",
         "crud"
-      ]
-    },
-    {
-      "slug": "faq-section",
-      "title": "FAQ Section",
-      "category": "ui",
-      "description": "Canonical FAQ accordion section — eyebrow + headline + accordion item list. Three layouts (single column, two-column, grouped by category). Optional footer CTA (\"Still have questions?\"). Items fully data-driven. Single SSOT — every template consumes this slice for FAQ blocks so admin-edited Q&A propagates without per-template rewrite.",
-      "source": "rahman-resources",
-      "install": "npx rahman-resources add faq-section",
-      "npmPackages": [],
-      "exampleCode": "",
-      "agentRecipe": "Run `npx rr add faq-section`. <FAQSection items title subtitle layout multiple defaultOpen footerCta /> — only `items` required. Each item: `{ id, q, a, category? }`. `layout=\"grouped\"` buckets by `category`. `multiple` lets users open several at once. `footerCta={{ label, href }}` wires a contact link below the accordion.",
-      "tags": [
-        "ui",
-        "faq",
-        "section",
-        "accordion",
-        "marketing"
-      ]
-    },
-    {
-      "slug": "testimonials-grid",
-      "title": "Testimonials Grid",
-      "category": "ui",
-      "description": "Canonical testimonials section — quote + author + role/company + optional avatar + optional star rating. Three layouts (uniform cards grid, centered quote-stack, CSS masonry). `featured` testimonials get a ring accent. Pairs naturally with the `testimonials` backend slice (Convex queries) but has zero coupling — pass any item array.",
-      "source": "rahman-resources",
-      "install": "npx rahman-resources add testimonials-grid",
-      "npmPackages": [],
-      "exampleCode": "",
-      "agentRecipe": "Run `npx rr add testimonials-grid`. <TestimonialsGridSection items title subtitle columns layout align /> — only `items` required. Each item: `{ id, quote, author, role?, company?, avatar?, rating?, featured? }`. `layout=\"quote-stack\"` renders a centered no-card scroll for editorial sites. `layout=\"masonry\"` uses CSS columns for variable-height quotes.",
-      "tags": [
-        "ui",
-        "testimonials",
-        "section",
-        "marketing",
-        "social-proof",
-        "saas"
-      ]
-    },
-    {
-      "slug": "blog-section",
-      "title": "Blog Section",
-      "category": "ui",
-      "description": "Canonical blog list + detail section. <BlogListSection> renders 3 layouts (cards grid, minimal list, featured-split with hero + side rail). <BlogPostView> renders the single-post page with cover + meta + paragraph-split body. Both pass through `hrefFor`/`backHref` so each template controls routing — single SSOT for /blog and /blog/[slug] across all templates.",
-      "source": "rahman-resources",
-      "install": "npx rahman-resources add blog-section",
-      "npmPackages": [],
-      "exampleCode": "",
-      "agentRecipe": "Run `npx rr add blog-section`. <BlogListSection posts hrefFor title columns layout limit /> for /blog — `hrefFor(post)` returns the per-post URL. <BlogPostView post backHref renderBody /> for /blog/[slug] — `renderBody` defaults to paragraph-split on `\\n\\n` (swap for an MDX renderer if you use mdx-blog).",
-      "tags": [
-        "ui",
-        "blog",
-        "section",
-        "marketing",
-        "content",
-        "list",
-        "detail"
-      ]
-    },
-    {
-      "slug": "changelog-feed",
-      "title": "Changelog Feed",
-      "category": "ui",
-      "description": "Canonical /changelog or /whats-new section. Entries support 5 kinds (feature/improvement/fix/chore/breaking) with color-coded badges. Three layouts (timeline with date-rail, large cards, minimal list). Optional `limit` for \"Recent updates\" excerpts on home pages. Optional `groups` per entry for sub-sectioned bullet lists.",
-      "source": "rahman-resources",
-      "install": "npx rahman-resources add changelog-feed",
-      "npmPackages": [],
-      "exampleCode": "",
-      "agentRecipe": "Run `npx rr add changelog-feed`. <ChangelogFeedSection entries title subtitle layout sortDescending limit /> — only `entries` required. Each entry: `{ id, version, date, kind, title, body, bullets?, groups? }`. `layout=\"timeline\"` adds a left date-rail; `layout=\"list\"` is the most compact. Pass `limit={3}` on home pages to show recent releases.",
-      "tags": [
-        "ui",
-        "changelog",
-        "section",
-        "saas",
-        "release-notes",
-        "marketing"
-      ]
-    },
-    {
-      "slug": "portfolio-section",
-      "title": "Portfolio Section",
-      "category": "ui",
-      "description": "Canonical portfolio list + detail section. <PortfolioListSection> renders 3 layouts (uniform 16:9 grid, CSS masonry, asymmetric with featured hero). <PortfolioDetailView> renders title + meta + cover + body + gallery + external link + related items. Both pass through `hrefFor`/`backHref` so each template controls routing — single SSOT for /portfolio and /portfolio/[slug] across agency-studio and personal-brand.",
-      "source": "rahman-resources",
-      "install": "npx rahman-resources add portfolio-section",
-      "npmPackages": [],
-      "exampleCode": "",
-      "agentRecipe": "Run `npx rr add portfolio-section`. <PortfolioListSection items hrefFor title columns layout limit /> for /portfolio — each item `{ id, slug, title, summary?, year?, client?, role?, tags?, cover: {src,alt}, gallery?, link? }`. <PortfolioDetailView item backHref renderBody related hrefForRelated /> for /portfolio/[slug] — `renderBody` defaults to paragraph split; override for project-specific layouts (problem/approach/result, brief/outcome, etc).",
-      "tags": [
-        "ui",
-        "portfolio",
-        "section",
-        "marketing",
-        "case-study",
-        "list",
-        "detail"
       ]
     },
     {
@@ -2495,34 +2228,6 @@
         "primitive",
         "optional",
         "embeddable"
-      ]
-    },
-    {
-      "slug": "database-io",
-      "title": "[DEPRECATED] Database IO — merged into notion-database v0.6",
-      "category": "ui",
-      "description": "DEPRECATED — all functionality merged into `notion-database` v0.6 (Phase 7.10, 2026-05-22). This slice is now a thin re-export shim from `@/features/notion-database` to keep existing consumers compiling. New code should `npx rr add notion-database` (now bundles CSV + JSON import/export + dynamic templates) instead of installing this separately. Slice will be removed in v1.0. Original surface (DatabaseIOActions / CsvImportDialog / JsonImportDialog / exportDatabase / buildCsvTemplate / buildJsonTemplate) remains exported from notion-database — see its catalog entry. Merge rationale: 100% peer coupling to notion-database (every file imported Database/Page/Property types from it) + zero independent install path (always installed alongside notion-database in practice) = no modularity benefit from separation.",
-      "source": "notion-page-clone",
-      "install": "npx rahman-resources add database-io",
-      "npmPackages": [],
-      "exampleCode": "",
-      "agentRecipe": "⚠️ DEPRECATED — use `npx rr add notion-database` (now bundles import/export). This slice is a thin re-export shim from `@/features/notion-database` for back-compat. New code: `import { DatabaseIOActions } from \"@/features/notion-database\"`. Remove when migration complete; slice scheduled for removal in v1.0.",
-      "tags": [
-        "ui",
-        "notion",
-        "notion-like",
-        "database",
-        "csv",
-        "json",
-        "import",
-        "export",
-        "template",
-        "data",
-        "backup",
-        "spreadsheet",
-        "wire-format",
-        "primitive",
-        "optional"
       ]
     },
     {
@@ -2795,12 +2500,13 @@
       "title": "Resend — Transactional & Newsletter",
       "category": "email",
       "kind": "backend",
-      "version": "0.1.2",
-      "description": "Transactional email + newsletter blast via Resend. Double opt-in flow + audience segmentation. Magic-link delivery for Convex Auth.",
+      "version": "0.1.3",
+      "description": "Transactional email + newsletter blast via Resend. Double opt-in flow + audience segmentation. Magic-link delivery for Convex Auth. Bundles the subscribers list backend (subscribe / confirm / unsubscribe / count) — formerly the standalone `subscribers` slice, merged here in v0.1.3.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/resend-newsletter",
       "convexPaths": [
-        "convex/features/newsletter"
+        "convex/features/newsletter",
+        "convex/features/subscribers"
       ],
       "npm": [
         "resend@^4.0.0"
@@ -3248,32 +2954,6 @@
       "agentRecipe": "Run `npx rr add cal-com-booking`. Embed Cal.com via @calcom/embed-react di halaman services. Configure webhook di Cal.com dashboard → POST ke /api/cal-webhook → upsert booking di Convex."
     },
     {
-      "slug": "full-width-toggle",
-      "title": "Full Width Toggle",
-      "category": "ui",
-      "kind": "ui",
-      "version": "0.1.1",
-      "description": "Page-container width toggle (contained / wide / full). Per-device localStorage + cross-tab sync. Ships useFullWidth hook + FullWidthToggle button (icon/button/segment variants) + WidthContainer wrapper. Zero backend, zero env.",
-      "source": "rahmanef63/resource-site",
-      "slicePath": "frontend/slices/full-width-toggle",
-      "convexPaths": [],
-      "npm": [],
-      "shadcn": [
-        "button"
-      ],
-      "env": [],
-      "peers": [],
-      "providers": [],
-      "tags": [
-        "ui",
-        "layout",
-        "preference",
-        "localstorage",
-        "dashboard"
-      ],
-      "agentRecipe": "Run `npx rr add full-width-toggle`. Drop <WidthContainer> around page content, <FullWidthToggle variant='icon' /> in topbar. Variant 'segment' best for settings page. Hook useFullWidth() returns [mode, setMode, cycle]. SSR-safe — defaults to 'contained' until hydrate."
-    },
-    {
       "slug": "command-menu",
       "title": "Command Menu",
       "category": "ui",
@@ -3376,13 +3056,7 @@
         "tooltip"
       ],
       "env": [],
-      "peers": [
-        {
-          "slug": "full-width-toggle",
-          "range": "^0.1",
-          "reason": "Topbar surfaces the width toggle when this is mounted."
-        }
-      ],
+      "peers": [],
       "providers": [],
       "tags": [
         "ui",
@@ -3630,90 +3304,6 @@
       "agentRecipe": "Run `npx rr add activity`. Spread `activityTables` into your root Convex schema. Wrap the unauthenticated `create`/`update`/`remove` `internalMutation`s with your auth model (see README Install section). Render `<ActivityFeed rows={await fetchQuery(api.activity.listPublic)} stats={await fetchQuery(api.activity.statsThisWeek)} />`. Override `copy`, `categoryLabels`, `locale` per consumer. MCP integration: map `activity_create` tool → your wrapped `create` mutation."
     },
     {
-      "slug": "i18n-translate",
-      "title": "i18n — Google Translate widget",
-      "category": "ui",
-      "kind": "ui",
-      "version": "0.1.0",
-      "description": "Drop-in Google Translate widget. Replaces hand-maintained locale dictionaries with on-the-fly translation to a curated locale list (16 default, prop-override). No API key, no Google Cloud billing. Auto-detect browser language on first visit, persist user choice via localStorage, click-to-reload language switching with router-refresh + in-place fallback strategies. Lifted 2026-05-27 from rahmanef.com; 510-LOC monolith split into 8 sub-files for the 200-LOC cap; project-specific Tailwind utilities stripped from defaults.",
-      "source": "rahmanef.com",
-      "slicePath": "frontend/slices/i18n-translate",
-      "convexPaths": [],
-      "npm": [
-        "lucide-react@^0.400.0",
-        "next@^15",
-        "react@^18"
-      ],
-      "shadcn": [],
-      "env": [],
-      "peers": [],
-      "providers": [],
-      "tags": [
-        "i18n",
-        "translate",
-        "google-translate",
-        "ui",
-        "language-switcher",
-        "locale",
-        "widget"
-      ],
-      "agentRecipe": "Run `npx rr add i18n-translate`. Mount `<GoogleTranslate />` anywhere (e.g. header). Add the CSP allowlist from README.md to your middleware/proxy — without it Google's script fails silently. Override `languages`, `storageKey`, and the four `*ClassName` props for per-project styling. Default `fallbackRefresh=\"reload\"` is the only path that works reliably across Next Cache Components — only opt into `\"router\"` or `\"none\"` if you've tested it on your tree."
-    },
-    {
-      "slug": "cta",
-      "title": "Call to Action",
-      "category": "ui",
-      "kind": "ui",
-      "version": "0.1.0",
-      "description": "Brutalist call-to-action section — eyebrow label, serif headline, body, arrow CTA. Pair with CtaButton standalone for inline placements. Lifted 2026-05-16 from rahmanef.com; assumes Tailwind tracking-brutal / tracking-brutal-sm utilities OR drop them for the default tracking scale.",
-      "source": "rahmanef.com",
-      "slicePath": "frontend/slices/cta",
-      "convexPaths": [],
-      "npm": [
-        "lucide-react@^0.400.0"
-      ],
-      "shadcn": [],
-      "env": [],
-      "peers": [],
-      "providers": [],
-      "tags": [
-        "ui",
-        "marketing",
-        "cta",
-        "section",
-        "brutalist"
-      ],
-      "agentRecipe": "Run `npx rr add cta`. <CtaView eyebrow title body href ctaLabel /> renders the full section; <CtaButton href label /> drops a standalone arrow button anywhere. Override tracking-brutal utilities in tailwind.config or swap for tracking-wide if your design system has no brutal preset."
-    },
-    {
-      "slug": "hero",
-      "title": "Hero",
-      "category": "ui",
-      "kind": "ui",
-      "version": "0.1.1",
-      "description": "Editorial split-grid landing hero — eyebrow pill + large serif H1 + italic pull-quote + 1-2 button CTA row + right-column portrait card with optional caption. Fully props-driven (title/quote/ctas/image). Sanitized from rahmanef.com on 2026-05-16: SITE_CONFIG hardcode dropped, custom Heading/Section primitives replaced with raw semantic elements + stock Tailwind tracking-widest so the slice ships without consumer preset utilities.",
-      "source": "rahmanef.com",
-      "slicePath": "frontend/slices/hero",
-      "convexPaths": [],
-      "npm": [
-        "lucide-react@^0.400.0"
-      ],
-      "shadcn": [],
-      "env": [],
-      "peers": [],
-      "providers": [],
-      "tags": [
-        "ui",
-        "hero",
-        "marketing",
-        "landing",
-        "section",
-        "editorial",
-        "brutalist"
-      ],
-      "agentRecipe": "Run `npx rr add hero`. <HeroView title eyebrow quote ctas image imageCaption /> — all props optional except title. Pass `image={undefined}` for text-only hero (auto-collapses to single 12-column row). Pairs visually with cta slice (same brutalist border + serif scale)."
-    },
-    {
       "slug": "rate-limit",
       "title": "Rate Limit",
       "category": "infra",
@@ -3738,45 +3328,6 @@
         "throttle"
       ],
       "agentRecipe": "Run `npx rr add rate-limit`. Compose `rateLimitTables` into root convex/schema.ts. Wire `internal.features.rate_limit.mutations._pruneExpired` into convex/crons.ts every 5 min. Call `api.features.rate_limit.mutations.consume({ key, limit, windowMs })` from server-side handlers — keep a fail-open wrapper so a Convex outage doesn't 503 the route."
-    },
-    {
-      "slug": "subscribers",
-      "title": "Subscribers",
-      "category": "email",
-      "kind": "backend",
-      "version": "0.1.0",
-      "description": "Newsletter list with honeypot + per-email rate-limit + token-based unsubscribe + admin remove. Public `subscribe` returns status strings (`created` / `already` / `resubscribed` / `honeypot`); admin `listAll` / `count` queries gated by `requireAdmin` (rr `_shared/auth`). Lifted 2026-05-16 from rahmanef.com; sanitized: token args dropped, sibling `analyticsEvents` insert removed — wrap subscribe in a consumer action if you want funnel telemetry.",
-      "source": "rahmanef.com",
-      "slicePath": "frontend/slices/subscribers",
-      "convexPaths": [
-        "convex/features/subscribers"
-      ],
-      "npm": [],
-      "shadcn": [],
-      "env": [
-        {
-          "name": "SUPER_ADMIN_EMAIL",
-          "scope": "convex",
-          "required": false,
-          "description": "Optional super-admin gate for admin queries."
-        }
-      ],
-      "peers": [
-        {
-          "slug": "convex-auth",
-          "range": "^0.1",
-          "reason": "requireAdmin uses getAuthUserId from @convex-dev/auth."
-        }
-      ],
-      "providers": [],
-      "tags": [
-        "email",
-        "newsletter",
-        "subscribers",
-        "convex",
-        "backend"
-      ],
-      "agentRecipe": "Run `npx rr add subscribers`. Compose `subscribersTables` into root convex/schema.ts. Public form posts `api.features.subscribers.mutations.subscribe({ email, source, website })` — `website` is the honeypot, leave it `\"\"` from the form. Render unsubscribe link `/unsubscribe?t=<token>` and call `unsubscribe({ token })`."
     },
     {
       "slug": "testimonials",
@@ -3854,45 +3405,6 @@
         "agency"
       ],
       "agentRecipe": "Run `npx rr add services`. Compose `servicesTables` into root schema. Use `useQuery(api.features.services.queries.listAll)` from a server component / route to render service cards. CRUD via admin UI calling `create` / `update` / `remove` after `requireAdmin` passes."
-    },
-    {
-      "slug": "socials",
-      "title": "Socials",
-      "category": "content",
-      "kind": "backend",
-      "version": "0.1.1",
-      "description": "Single source of truth for profile/social links. Powers JSON-LD `Person.sameAs` (Google entity graph), IndieWeb `<link rel=\"me\">` tags, and footer/contact/about UI surfaces. URL-deduped, ordered, `visible` / `featured` / `relMe` / `sameAs` flags. Lifted 2026-05-16 from rahmanef.com; token-based admin gate swapped, baked-in 14-platform rahmanef seed dropped — `seed` now takes items via args so each adopter ships their own list.",
-      "source": "rahmanef.com",
-      "slicePath": "frontend/slices/socials",
-      "convexPaths": [
-        "convex/features/socials"
-      ],
-      "npm": [],
-      "shadcn": [],
-      "env": [
-        {
-          "name": "SUPER_ADMIN_EMAIL",
-          "scope": "convex",
-          "required": false
-        }
-      ],
-      "peers": [
-        {
-          "slug": "convex-auth",
-          "range": "^0.1",
-          "reason": "requireAdmin uses getAuthUserId from @convex-dev/auth."
-        }
-      ],
-      "providers": [],
-      "tags": [
-        "content",
-        "socials",
-        "seo",
-        "indieweb",
-        "convex",
-        "backend"
-      ],
-      "agentRecipe": "Run `npx rr add socials`. Compose `socialsTables` into root schema. Bootstrap with `npx convex run internal.features.socials.mutations.seed '{\"items\":[{\"platform\":\"github\",\"url\":\"https://github.com/<you>\",\"order\":1,\"visible\":true,\"featured\":true,\"sameAs\":true,\"relMe\":true}]}'`. Wire `useQuery(api.features.socials.queries.listVisible)` into footer for entity-graph SEO."
     },
     {
       "slug": "create-your-mcp",
@@ -4188,121 +3700,12 @@
       "agentRecipe": "Run `rr add seo`. Call seo.generate from server actions or admin mutations with `personaContext` describing your brand voice (or rely on the generic default). Cost guard rate-limits per-user within 24h via callsInWindow query."
     },
     {
-      "slug": "document-checklist",
-      "title": "Document Checklist — Job-Search Doc Tracker",
-      "category": "content",
-      "kind": "full",
-      "version": "0.1.0",
-      "description": "Track required job-search documents (CV, KTP, ijazah, etc.) with country-scoped seed templates and per-user completion state. Ships an Indonesian default checklist. Toggle completed + notes + expiry per item.",
-      "source": "rahmanef63/CareerPack",
-      "slicePath": "frontend/slices/document-checklist",
-      "convexPaths": [
-        "convex/features/document-checklist"
-      ],
-      "npm": [
-        "lucide-react"
-      ],
-      "shadcn": [
-        "badge",
-        "button",
-        "card",
-        "dialog",
-        "label",
-        "popover",
-        "calendar",
-        "progress",
-        "scroll-area",
-        "skeleton",
-        "tabs",
-        "textarea"
-      ],
-      "env": [],
-      "peers": [
-        {
-          "slug": "convex-auth",
-          "range": "^0.1",
-          "reason": "Auth identity for user-scoped checklist state."
-        }
-      ],
-      "providers": [],
-      "tags": [
-        "career",
-        "documents",
-        "checklist",
-        "job-search",
-        "indonesia"
-      ],
-      "agentRecipe": "Run `rr add document-checklist`. Wire <DocumentChecklist bindings={{ current, seed, updateStatus }} countryTemplateSlot={<CountryTemplateCard bindings={{ templates, getTemplate, instantiate }} />} /> — bindings sourced from api.features['document-checklist'].* queries/mutations."
-    },
-    {
-      "slug": "pricing-page",
-      "title": "Pricing Page",
-      "category": "ui",
-      "kind": "ui",
-      "version": "0.1.0",
-      "description": "Canonical pricing tier section — eyebrow + headline + 2/3/4 column tier grid with optional FAQ accordion below. Tiers fully data-driven (name/price/period/bullets/cta/featured/badge). Featured variant configurable (ring/scale/tint). Single SSOT — every saas/marketing template consumes this slice for pricing pages so admin-edited tiers propagate without per-template rewriting.",
-      "source": "rahman-resources",
-      "slicePath": "frontend/slices/pricing-page",
-      "convexPaths": [],
-      "npm": [
-        "lucide-react@^0.400.0"
-      ],
-      "shadcn": [
-        "button",
-        "card",
-        "accordion"
-      ],
-      "env": [],
-      "peers": [],
-      "providers": [],
-      "tags": [
-        "ui",
-        "pricing",
-        "section",
-        "marketing",
-        "saas",
-        "tiers",
-        "faq"
-      ],
-      "agentRecipe": "Run `npx rr add pricing-page`. <PricingSection eyebrow title subtitle tiers columns faq faqTitle featuredVariant /> — only `title` + `tiers` required. Each tier: `{ id, name, price, period?, blurb?, bullets[], cta?, featured?, badge? }`. Pass `featuredVariant=\"scale\"` for a popped-forward card or `\"tint\"` for a colored background. Wire admin CRUD via your store hook → useTiers() → pass array."
-    },
-    {
-      "slug": "feature-grid",
-      "title": "Feature Grid",
-      "category": "ui",
-      "kind": "ui",
-      "version": "0.1.0",
-      "description": "Canonical features grid section — eyebrow + headline + 1/2/3/4 column item grid in three layout variants (cards, minimal, alternating). Items accept Lucide icon component OR string label, optional image (next/image), optional link CTA. Single SSOT — every template consumes this slice for features pages so admin-edited items propagate without per-template duplication.",
-      "source": "rahman-resources",
-      "slicePath": "frontend/slices/feature-grid",
-      "convexPaths": [],
-      "npm": [
-        "lucide-react@^0.400.0"
-      ],
-      "shadcn": [
-        "button",
-        "card"
-      ],
-      "env": [],
-      "peers": [],
-      "providers": [],
-      "tags": [
-        "ui",
-        "features",
-        "section",
-        "marketing",
-        "grid",
-        "saas"
-      ],
-      "agentRecipe": "Run `npx rr add feature-grid`. <FeatureGridSection eyebrow title subtitle items columns layout align /> — only `items` required. Each item: `{ id, title, body, icon?, image?, link? }`. `icon` can be a LucideIcon component (rendered as 5×5 inline) or a string (rendered as letter fallback). `layout=\"alternating\"` produces image+text rows that flip per index — set `image` per item for that variant."
-    },
-    {
       "slug": "landing-sections",
       "title": "Landing Sections",
       "category": "infra",
       "kind": "ui",
-      "version": "0.1.0",
-      "description": "CRUD-driven admin editor for the public landing-page composition. Ships a pure reducer + LandingProvider store adapter + admin LandingView/LandingEditorView built on the shared CRUD primitives, plus a per-section LandingSectionShell that handles background image + custom Tailwind className overlay. Sections carry { kind, order, title, subtitle, enabled, imageUrl, imageRatio, bgImageUrl, className, config (JSON) } with up/down reorder arrows. Consumers map each `kind` (hero, features, pricing, blog, changelog, testimonials, portfolio, services, stats, newsletter, faq, cta, custom) to their own renderer wrapped in <LandingSectionShell>. Canonical pattern used by all 7 rr website templates.",
+      "version": "0.2.0",
+      "description": "Canonical landing-page composition slice — replaces the former standalone hero / cta / pricing-page / faq-section / feature-grid / testimonials-grid / blog-section / portfolio-section / changelog-feed slices (all merged here as `kind` variants in v0.2.0). Ships a pure reducer + LandingProvider store adapter + admin LandingView/LandingEditorView built on the shared CRUD primitives, plus a per-section LandingSectionShell that handles background image + custom Tailwind className overlay. Sections carry { kind, order, title, subtitle, enabled, imageUrl, imageRatio, bgImageUrl, className, config (JSON) } with up/down reorder arrows. Consumers map each `kind` (hero, features, pricing, blog, changelog, testimonials, portfolio, services, stats, newsletter, faq, cta, custom) to their own renderer wrapped in <LandingSectionShell>. Used by all 7 rr website templates.",
       "source": "rahman-resources",
       "slicePath": "frontend/slices/landing-sections",
       "convexPaths": [],
@@ -4331,171 +3734,6 @@
         "crud"
       ],
       "agentRecipe": "Run `npx rr add landing-sections`. Fold `landingReducer` into your root reducer (cases LANDING_UPSERT + LANDING_DELETE), seed State.landingSections with `defaultLandingSections()`, wrap your StoreProvider with `<LandingProvider value={adapter}/>` where adapter maps {items, publicBase, adminBase, create, update, remove} from your dispatch. Mount `<LandingView/>` at `/admin/landing` and `<LandingEditorView id={params.id}/>` at `/admin/landing/[id]`. In HomePage iterate `state.landingSections.filter(s => s.enabled).sort((a,b) => a.order - b.order)` and render each through `<LandingSectionShell section={s}>` wrapping your own per-`kind` renderer."
-    },
-    {
-      "slug": "faq-section",
-      "title": "FAQ Section",
-      "category": "ui",
-      "kind": "ui",
-      "version": "0.1.0",
-      "description": "Canonical FAQ accordion section — eyebrow + headline + accordion item list. Three layouts (single column, two-column, grouped by category). Optional footer CTA (\"Still have questions?\"). Items fully data-driven. Single SSOT — every template consumes this slice for FAQ blocks so admin-edited Q&A propagates without per-template rewrite.",
-      "source": "rahman-resources",
-      "slicePath": "frontend/slices/faq-section",
-      "convexPaths": [],
-      "npm": [],
-      "shadcn": [
-        "accordion",
-        "button"
-      ],
-      "env": [],
-      "peers": [],
-      "providers": [],
-      "tags": [
-        "ui",
-        "faq",
-        "section",
-        "accordion",
-        "marketing"
-      ],
-      "agentRecipe": "Run `npx rr add faq-section`. <FAQSection items title subtitle layout multiple defaultOpen footerCta /> — only `items` required. Each item: `{ id, q, a, category? }`. `layout=\"grouped\"` buckets by `category`. `multiple` lets users open several at once. `footerCta={{ label, href }}` wires a contact link below the accordion."
-    },
-    {
-      "slug": "testimonials-grid",
-      "title": "Testimonials Grid",
-      "category": "ui",
-      "kind": "ui",
-      "version": "0.1.0",
-      "description": "Canonical testimonials section — quote + author + role/company + optional avatar + optional star rating. Three layouts (uniform cards grid, centered quote-stack, CSS masonry). `featured` testimonials get a ring accent. Pairs naturally with the `testimonials` backend slice (Convex queries) but has zero coupling — pass any item array.",
-      "source": "rahman-resources",
-      "slicePath": "frontend/slices/testimonials-grid",
-      "convexPaths": [],
-      "npm": [
-        "lucide-react@^0.400.0"
-      ],
-      "shadcn": [
-        "avatar",
-        "button",
-        "card"
-      ],
-      "env": [],
-      "peers": [
-        {
-          "slug": "testimonials",
-          "range": "^0.1",
-          "reason": "Optional — pair with backend testimonials slice for full admin CRUD + storage."
-        }
-      ],
-      "providers": [],
-      "tags": [
-        "ui",
-        "testimonials",
-        "section",
-        "marketing",
-        "social-proof",
-        "saas"
-      ],
-      "agentRecipe": "Run `npx rr add testimonials-grid`. <TestimonialsGridSection items title subtitle columns layout align /> — only `items` required. Each item: `{ id, quote, author, role?, company?, avatar?, rating?, featured? }`. `layout=\"quote-stack\"` renders a centered no-card scroll for editorial sites. `layout=\"masonry\"` uses CSS columns for variable-height quotes."
-    },
-    {
-      "slug": "blog-section",
-      "title": "Blog Section",
-      "category": "ui",
-      "kind": "ui",
-      "version": "0.1.0",
-      "description": "Canonical blog list + detail section. <BlogListSection> renders 3 layouts (cards grid, minimal list, featured-split with hero + side rail). <BlogPostView> renders the single-post page with cover + meta + paragraph-split body. Both pass through `hrefFor`/`backHref` so each template controls routing — single SSOT for /blog and /blog/[slug] across all templates.",
-      "source": "rahman-resources",
-      "slicePath": "frontend/slices/blog-section",
-      "convexPaths": [],
-      "npm": [
-        "lucide-react@^0.400.0"
-      ],
-      "shadcn": [
-        "badge",
-        "button",
-        "card",
-        "separator"
-      ],
-      "env": [],
-      "peers": [
-        {
-          "slug": "mdx-blog",
-          "range": "^0.1",
-          "reason": "Optional — pair with mdx-blog backend slice for MDX-rendered posts."
-        }
-      ],
-      "providers": [],
-      "tags": [
-        "ui",
-        "blog",
-        "section",
-        "marketing",
-        "content",
-        "list",
-        "detail"
-      ],
-      "agentRecipe": "Run `npx rr add blog-section`. <BlogListSection posts hrefFor title columns layout limit /> for /blog — `hrefFor(post)` returns the per-post URL. <BlogPostView post backHref renderBody /> for /blog/[slug] — `renderBody` defaults to paragraph-split on `\\n\\n` (swap for an MDX renderer if you use mdx-blog)."
-    },
-    {
-      "slug": "changelog-feed",
-      "title": "Changelog Feed",
-      "category": "ui",
-      "kind": "ui",
-      "version": "0.1.0",
-      "description": "Canonical /changelog or /whats-new section. Entries support 5 kinds (feature/improvement/fix/chore/breaking) with color-coded badges. Three layouts (timeline with date-rail, large cards, minimal list). Optional `limit` for \"Recent updates\" excerpts on home pages. Optional `groups` per entry for sub-sectioned bullet lists.",
-      "source": "rahman-resources",
-      "slicePath": "frontend/slices/changelog-feed",
-      "convexPaths": [],
-      "npm": [],
-      "shadcn": [
-        "badge",
-        "card",
-        "separator"
-      ],
-      "env": [],
-      "peers": [],
-      "providers": [],
-      "tags": [
-        "ui",
-        "changelog",
-        "section",
-        "saas",
-        "release-notes",
-        "marketing"
-      ],
-      "agentRecipe": "Run `npx rr add changelog-feed`. <ChangelogFeedSection entries title subtitle layout sortDescending limit /> — only `entries` required. Each entry: `{ id, version, date, kind, title, body, bullets?, groups? }`. `layout=\"timeline\"` adds a left date-rail; `layout=\"list\"` is the most compact. Pass `limit={3}` on home pages to show recent releases."
-    },
-    {
-      "slug": "portfolio-section",
-      "title": "Portfolio Section",
-      "category": "ui",
-      "kind": "ui",
-      "version": "0.1.0",
-      "description": "Canonical portfolio list + detail section. <PortfolioListSection> renders 3 layouts (uniform 16:9 grid, CSS masonry, asymmetric with featured hero). <PortfolioDetailView> renders title + meta + cover + body + gallery + external link + related items. Both pass through `hrefFor`/`backHref` so each template controls routing — single SSOT for /portfolio and /portfolio/[slug] across agency-studio and personal-brand.",
-      "source": "rahman-resources",
-      "slicePath": "frontend/slices/portfolio-section",
-      "convexPaths": [],
-      "npm": [
-        "lucide-react@^0.400.0"
-      ],
-      "shadcn": [
-        "badge",
-        "button",
-        "card",
-        "separator"
-      ],
-      "env": [],
-      "peers": [],
-      "providers": [],
-      "tags": [
-        "ui",
-        "portfolio",
-        "section",
-        "marketing",
-        "case-study",
-        "list",
-        "detail"
-      ],
-      "agentRecipe": "Run `npx rr add portfolio-section`. <PortfolioListSection items hrefFor title columns layout limit /> for /portfolio — each item `{ id, slug, title, summary?, year?, client?, role?, tags?, cover: {src,alt}, gallery?, link? }`. <PortfolioDetailView item backHref renderBody related hrefForRelated /> for /portfolio/[slug] — `renderBody` defaults to paragraph split; override for project-specific layouts (problem/approach/result, brief/outcome, etc)."
     },
     {
       "slug": "theme-presets",
@@ -4765,50 +4003,6 @@
         "embeddable"
       ],
       "agentRecipe": "Run `npx rr add notion-database` (cascades notion-shell as peer). Import: `import { NotionDatabase, NotionProperty, VIEW_REGISTRY, DatabaseIOActions, RowPeek } from \"@/features/notion-database\"`. NotionDatabase ships full props-driven DB UI — host owns rows + dispatches CRUD callbacks. For just one view in isolation, import the specific view component (TableView / BoardView / etc.). Property cells auto-render via renderPropertyCell helper. Pure helpers: applyView / groupBy / bucketByDate. For import/export, mount `<DatabaseIOActions db={db} rows={rows} onImport={async ({ newProperties, rows }) => { const tempToReal: Record<string, string> = {}; for (const np of newProperties) { const realId = await dispatchAddProperty(np); tempToReal[np.tempId] = realId; } for (const r of rows) { const rowId = await dispatchAddRow(r.title); for (const [propKey, v] of Object.entries(r.rowProps)) { await dispatchSetValue(rowId, tempToReal[propKey] ?? propKey, v); } } }} />` next to your DB toolbar — exports CSV/JSON + imports w/ schema diff + downloads dynamic templates from live db.properties. tempId on each new property lets host remap rowProps keys to its real backend ids. For backend persistence, copy template-base/database-silong/convex/ from the open-silong repo: handlers go to convex/, schema fragment merges into convex/schema.ts. Pick _shared/minimal/ (single-user, noop authz) or _shared/full/ (requires @convex-dev/auth + workspaces tables). See CONVEX-BACKEND.md."
-    },
-    {
-      "slug": "database-io",
-      "title": "[DEPRECATED] Database IO — merged into notion-database v0.6",
-      "category": "ui",
-      "kind": "ui",
-      "version": "0.2.0",
-      "description": "DEPRECATED — all functionality merged into `notion-database` v0.6 (Phase 7.10, 2026-05-22). This slice is now a thin re-export shim from `@/features/notion-database` to keep existing consumers compiling. New code should `npx rr add notion-database` (now bundles CSV + JSON import/export + dynamic templates) instead of installing this separately. Slice will be removed in v1.0. Original surface (DatabaseIOActions / CsvImportDialog / JsonImportDialog / exportDatabase / buildCsvTemplate / buildJsonTemplate) remains exported from notion-database — see its catalog entry. Merge rationale: 100% peer coupling to notion-database (every file imported Database/Page/Property types from it) + zero independent install path (always installed alongside notion-database in practice) = no modularity benefit from separation.",
-      "source": "notion-page-clone",
-      "slicePath": "frontend/slices/database-io",
-      "convexPaths": [],
-      "npm": [],
-      "shadcn": [
-        "button",
-        "dialog",
-        "dropdown-menu"
-      ],
-      "env": [],
-      "peers": [
-        {
-          "slug": "notion-database",
-          "range": "^0.3",
-          "reason": "Reuses Database / Page / Property / PropertyValue / PropertyType / SelectOption / DatabaseViewConfig types."
-        }
-      ],
-      "providers": [],
-      "tags": [
-        "ui",
-        "notion",
-        "notion-like",
-        "database",
-        "csv",
-        "json",
-        "import",
-        "export",
-        "template",
-        "data",
-        "backup",
-        "spreadsheet",
-        "wire-format",
-        "primitive",
-        "optional"
-      ],
-      "agentRecipe": "⚠️ DEPRECATED — use `npx rr add notion-database` (now bundles import/export). This slice is a thin re-export shim from `@/features/notion-database` for back-compat. New code: `import { DatabaseIOActions } from \"@/features/notion-database\"`. Remove when migration complete; slice scheduled for removal in v1.0."
     },
     {
       "slug": "notion-shell",

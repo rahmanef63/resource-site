@@ -3,7 +3,7 @@
 
 # Install `landing-sections` — Landing Sections
 
-> CRUD-driven admin editor for the public landing-page composition.
+> Canonical landing-page composition slice — replaces the former standalone hero / cta / pricing-page / faq-section / feature-grid / testimonials-grid / blog-section / portfolio-section / changelog-feed slices (all merged here as `kind` variants in v0.
 
 📚 Knowledge base : https://resource.rahmanef.com/llms.txt
 📦 Slice detail   : https://resource.rahmanef.com/slices/landing-sections
