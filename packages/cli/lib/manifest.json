@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-31T22:32:07.418Z",
+  "generatedAt": "2026-05-31T22:50:50.026Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -1789,7 +1789,7 @@
       "slug": "user-management",
       "title": "User Management",
       "category": "auth",
-      "description": "Members + invites surface ported from superspace, props-driven + RBAC-agnostic. <MembersPanel>: searchable / role-filterable / sortable member table (avatar + name + email), inline role dropdown, soft-remove, an InviteDialog (email + role + message) and a PendingInvites list with resend / cancel — all permission-gated. You pass `roles` + `currentPerms` (resolved from rbac-roles at the app level) + CRUD/invite callbacks; the slice imports no other slice's frontend. Convex template ships um_members + um_invites + listMembers / listInvites + addMember / updateMemberRole / removeMember + sendInvite / cancelInvite / resendInvite / acceptInvite (7-day token), all gated via rbac-roles' requirePermission. P1+P2 of the user-management epic — roles admin (P3) next.",
+      "description": "Full members + invites + roles-admin surface ported from superspace, props-driven + RBAC-agnostic. <UserManagementPanel> tabs Members + Roles: member table (search / filter / sort, inline role dropdown, soft-remove), InviteDialog + PendingInvites (resend / cancel), and a RolesPanel to create / edit / delete custom roles via a permission matrix (system roles read-only). All permission-gated. You pass `roles` + `currentPerms` + the permission catalog (resolved from rbac-roles at the app level) + CRUD/invite/role callbacks; the slice imports no other slice's frontend. Convex template ships um_members + um_invites + member & invite endpoints (gated via rbac-roles' requirePermission); roles CRUD reuses rbac-roles' listRoles / upsertRole / removeRole. P1–P3 of the user-management epic — full-parity extras (P4) next.",
       "source": "superspace",
       "install": "npx rahman-resources add user-management",
       "npmPackages": [],
@@ -3232,8 +3232,8 @@
       "title": "User Management",
       "category": "auth",
       "kind": "full",
-      "version": "0.2.0",
-      "description": "Members + invites surface ported from superspace, props-driven + RBAC-agnostic. <MembersPanel>: searchable / role-filterable / sortable member table (avatar + name + email), inline role dropdown, soft-remove, an InviteDialog (email + role + message) and a PendingInvites list with resend / cancel — all permission-gated. You pass `roles` + `currentPerms` (resolved from rbac-roles at the app level) + CRUD/invite callbacks; the slice imports no other slice's frontend. Convex template ships um_members + um_invites + listMembers / listInvites + addMember / updateMemberRole / removeMember + sendInvite / cancelInvite / resendInvite / acceptInvite (7-day token), all gated via rbac-roles' requirePermission. P1+P2 of the user-management epic — roles admin (P3) next.",
+      "version": "0.3.0",
+      "description": "Full members + invites + roles-admin surface ported from superspace, props-driven + RBAC-agnostic. <UserManagementPanel> tabs Members + Roles: member table (search / filter / sort, inline role dropdown, soft-remove), InviteDialog + PendingInvites (resend / cancel), and a RolesPanel to create / edit / delete custom roles via a permission matrix (system roles read-only). All permission-gated. You pass `roles` + `currentPerms` + the permission catalog (resolved from rbac-roles at the app level) + CRUD/invite/role callbacks; the slice imports no other slice's frontend. Convex template ships um_members + um_invites + member & invite endpoints (gated via rbac-roles' requirePermission); roles CRUD reuses rbac-roles' listRoles / upsertRole / removeRole. P1–P3 of the user-management epic — full-parity extras (P4) next.",
       "source": "superspace",
       "slicePath": "frontend/slices/user-management",
       "convexPaths": [
@@ -3244,12 +3244,14 @@
         "avatar",
         "badge",
         "button",
+        "checkbox",
         "dialog",
         "dropdown-menu",
         "input",
         "label",
         "select",
         "table",
+        "tabs",
         "textarea"
       ],
       "env": [],

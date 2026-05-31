@@ -41,6 +41,54 @@ export interface InviteInput {
   message?: string;
 }
 
+/** A role with its full permission set — for the roles admin (RolesPanel).
+ *  Map from rbac-roles' `listRoles` query or ROLE_PRESETS. */
+export interface ManagedRole {
+  slug: string;
+  name: string;
+  color?: string;
+  level?: number;
+  description?: string;
+  permissions: string[];
+  isSystem?: boolean;
+  isDefault?: boolean;
+}
+
+/** Grouped permission catalog injected into the roles editor (the slice
+ *  doesn't import rbac-roles' PERMISSION_GROUPS — pass it at the app level). */
+export interface PermissionDefLite { key: string; label: string }
+export interface PermissionGroupDef { group: string; permissions: PermissionDefLite[] }
+
+export interface RolesLabels {
+  title: string;
+  newRole: string;
+  permissions: string;
+  roleName: string;
+  roleNamePlaceholder: string;
+  roleDescription: string;
+  roleDescriptionPlaceholder: string;
+  save: string;
+  saving: string;
+  delete: string;
+  systemRole: string;
+  emptyEditor: string;
+}
+
+export const DEFAULT_ROLES_LABELS: RolesLabels = {
+  title: "Roles",
+  newRole: "New role",
+  permissions: "Permissions",
+  roleName: "Name",
+  roleNamePlaceholder: "e.g. Editor",
+  roleDescription: "Description",
+  roleDescriptionPlaceholder: "What can this role do?",
+  save: "Save role",
+  saving: "Saving…",
+  delete: "Delete",
+  systemRole: "System role — permissions are fixed and can't be edited.",
+  emptyEditor: "Select a role to view its permissions, or create a new one.",
+};
+
 export interface MembersLabels {
   searchPlaceholder: string;
   allRoles: string;

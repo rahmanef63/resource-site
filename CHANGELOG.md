@@ -11,6 +11,24 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-05-31 — user-management: roles admin + tabbed panel (P3) v0.3.0
+
+- **Roles admin added to `user-management`.** `<RolesPanel>` — list roles
+  (color + permission count), create / edit / delete custom roles; system
+  roles are read-only. `<RoleEditor>` (name + description + permission grid +
+  save/delete) and a local `<RolePermissionGrid>` (the slice can't import
+  rbac-roles' PermissionMatrix, so the permission catalog comes in as the
+  `permissionGroups` prop). All editing gated on `roles.manage`.
+- **`<UserManagementPanel>`** — the composed surface: Tabs(Members, Roles),
+  each fed its own prop bag. Invites live inside the Members tab.
+- **No new convex** — roles CRUD reuses rbac-roles' `listRoles` /
+  `upsertRole` / `removeRole` (built in P0). Wire `RolesPanel.onUpsert/onRemove`
+  to those mutations + `roles` to `listRoles` at the app level.
+- New types `ManagedRole` / `PermissionGroupDef` / `RolesLabels`. Preview
+  rebuilt as the tabbed panel with the Admin/Manager view-as toggle (Admin
+  edits roles; Manager read-only). Slice + catalog 0.2.0 → 0.3.0; `checkbox`
+  + `tabs` added to shadcn deps. Still self-contained.
+
 ### 2026-05-31 — user-management: invite flow (P2 of the epic) v0.2.0
 
 - **Invite flow added to `user-management`.** `<InviteDialog>` (email + role

@@ -1,8 +1,8 @@
-// user-management — members + invites surface (props-driven, RBAC-agnostic).
-// Pair with rbac-roles (provides roles + resolved permissions) and
-// convex-auth (user identity). P1 Members + P2 Invites shipped; roles
-// admin (P3) lands next.
+// user-management — members + invites + roles admin (props-driven,
+// RBAC-agnostic). Pair with rbac-roles (roles + resolved permissions +
+// permission catalog) and convex-auth (identity). P1–P3 shipped.
 
+export { UserManagementPanel, type UserManagementPanelProps } from "./components/UserManagementPanel";
 export { MembersPanel, type MembersPanelProps } from "./components/MembersPanel";
 export { MembersTable } from "./components/MembersTable";
 export { MembersToolbar } from "./components/MembersToolbar";
@@ -10,10 +10,14 @@ export { MemberRowActions } from "./components/MemberRowActions";
 export { RoleChip } from "./components/RoleChip";
 export { InviteDialog } from "./components/InviteDialog";
 export { PendingInvites } from "./components/PendingInvites";
+export { RolesPanel, type RolesPanelProps } from "./components/RolesPanel";
+export { RoleEditor } from "./components/RoleEditor";
+export { RolePermissionGrid } from "./components/RolePermissionGrid";
 export { useMembersView, type MembersView, type SortKey } from "./hooks/useMembersView";
 export { can, matchPermission } from "./lib/can";
 export {
-  DEFAULT_MEMBERS_LABELS,
+  DEFAULT_MEMBERS_LABELS, DEFAULT_ROLES_LABELS,
   type Member, type MemberStatus, type RoleOption, type MembersLabels,
   type Invite, type InviteInput, type InviteStatus,
+  type ManagedRole, type PermissionGroupDef, type PermissionDefLite, type RolesLabels,
 } from "./types";
