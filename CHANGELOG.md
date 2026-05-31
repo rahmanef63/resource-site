@@ -11,6 +11,42 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-05-31 — notion-database config-driven column-header menu (nosion parity)
+
+Live `/slices/notion-database` had a flat per-column menu identical for
+every property type; notion-page-clone's is config-driven and adapts to
+the column. Rebuilt rr's to match the structure (prop-driven, no
+`useDbAdapter`).
+
+**Shipped (notion-database v0.13.0 → v0.14.0):**
+- `components/column-header/menu-config.ts` — `PROPERTY_TYPE_MENU_CONFIG`
+  maps every `PropertyType` → an ordered `mainMenu` of item keys (number →
+  Calculate, select/status → Group, computed types drop irrelevant ops).
+  `sectionOf` drives automatic separator placement; `inferFilterOp` seeds
+  the right filter op per type.
+- `components/column-header/items.tsx` — `MenuItemKey → renderer`
+  registry: rename · change-type submenu (full dynamic type list) ·
+  filter · sort submenu · group · calculate submenu · hide · duplicate ·
+  insert-left/right · move-left/right · delete. Each self-hides when its
+  host callback is absent.
+- `components/column-header/actions.ts` — pure prop-driven stand-in for
+  upstream's `useColumnHeaderActions` hook; closes over callbacks instead
+  of a store, computes `flags` (filtered / currentSort / grouped /
+  groupable / currentCalc / calcs / isTable / canMove*).
+- `components/column-header/types.ts` — `MenuItemKey`, `ColumnHeaderActions`,
+  `ColumnHeaderFlags`, `MenuItemContext`, `PropertyTypeMenuConfig`.
+- `ColumnHeaderMenu.tsx` rewritten as a config render loop; **props
+  changed** — now `view` + `index` + `propertyCount` + the new callbacks
+  instead of the old flat `onSortAsc/onSortDesc/onSetCalc`. Re-pull on
+  `rr update`.
+- `NotionDatabase` gained optional `onPropertyDuplicate` /
+  `onPropertyInsert` / `onPropertyMove` (items appear only when wired).
+- Preview (`/preview/slices/notion-database`) wires all three via new
+  `previewColumnOps.ts` transforms — duplicate copies per-row values,
+  insert adds an adjacent text column, move reorders one slot.
+
+tsc green · audit:slices + file-size + docs-primitives clean.
+
 ### CK-1D Phase 4 — 2026-05-26 — notion-database DB-level menu + full-page shell (silong port)
 
 Final big functional gap from the upstream audit. Closes the "0% on

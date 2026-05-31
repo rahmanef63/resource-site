@@ -27,6 +27,12 @@ import {
   PREVIEW_STORAGE_KEYS,
   userLookup,
 } from "./previewState";
+import {
+  reorderProperty,
+  insertPropertyNear,
+  duplicatePropertyInDb,
+  copyPropertyValues,
+} from "./previewColumnOps";
 
 /** Fully interactive preview with localStorage persistence. Every
  *  callback mutates state; useLocalStorageState rehydrates on mount
@@ -52,6 +58,15 @@ export default function Page() {
       properties: d.properties.filter((p) => p.id !== propId),
       updatedAt: Date.now(),
     }));
+  const onPropertyDuplicate = (propId: string) => {
+    const copyId = newId();
+    setDb((d) => duplicatePropertyInDb(d, propId, copyId));
+    setRows((rs) => copyPropertyValues(rs, propId, copyId));
+  };
+  const onPropertyInsert = (propId: string, offset: -1 | 1) =>
+    setDb((d) => insertPropertyNear(d, propId, offset, newId()));
+  const onPropertyMove = (propId: string, offset: -1 | 1) =>
+    setDb((d) => reorderProperty(d, propId, offset));
 
   const onRowAdd = () => {
     const id = newId();
@@ -156,6 +171,9 @@ export default function Page() {
         onPropertyAdd={onPropertyAdd}
         onPropertyUpdate={onPropertyUpdate}
         onPropertyRemove={onPropertyRemove}
+        onPropertyDuplicate={onPropertyDuplicate}
+        onPropertyInsert={onPropertyInsert}
+        onPropertyMove={onPropertyMove}
         onRowAdd={onRowAdd}
         onRowUpdate={onRowUpdate}
         onRowRemove={onRowRemove}

@@ -1,12 +1,9 @@
 "use client";
 
-/** <NotionDatabase /> — full database surface with view tabs, view
- *  options (sort / filter / search), per-column header menu, and 6
- *  built-in views (table / board / list / gallery / calendar / feed).
- *
+/** <NotionDatabase /> — full database surface: view tabs, view options
+ *  (sort / filter / search), per-column header menu, + built-in views.
  *  Pure / callback-based — hand it `db` + `rows` + handlers; it emits
- *  CRUD intents only. View routing dispatches via VIEW_REGISTRY
- *  (override at the host to plug custom views). */
+ *  CRUD intents only. View routing dispatches via VIEW_REGISTRY. */
 
 import { useMemo } from "react";
 import { Plus } from "lucide-react";
@@ -31,6 +28,12 @@ export interface NotionDatabaseProps {
   onPropertyAdd?: (type: PropertyType) => void;
   onPropertyUpdate?: (propId: string, patch: Partial<Property>) => void;
   onPropertyRemove?: (propId: string) => void;
+  /** Duplicate a column (schema + values) — Duplicate item. */
+  onPropertyDuplicate?: (propId: string) => void;
+  /** Insert a column next to `propId` (offset -1 left / +1 right). */
+  onPropertyInsert?: (propId: string, offset: -1 | 1) => void;
+  /** Reorder a column one slot (offset -1 left / +1 right). */
+  onPropertyMove?: (propId: string, offset: -1 | 1) => void;
   // Row CRUD
   onRowAdd?: () => void;
   onRowUpdate?: (rowId: string, propId: string, value: PropertyValue) => void;
@@ -78,6 +81,7 @@ export interface NotionDatabaseProps {
 export function NotionDatabase({
   db, rows,
   onPropertyAdd, onPropertyUpdate, onPropertyRemove,
+  onPropertyDuplicate, onPropertyInsert, onPropertyMove,
   onRowAdd, onRowUpdate, onRowRemove,
   onViewActivate, onViewAdd, onViewRemove, onViewConfigChange,
   viewRegistry, onOpenRow, onRowCreate,
@@ -121,7 +125,9 @@ export function NotionDatabase({
     });
 
   const renderColumnHeader = (prop: Property) => buildColumnHeader({
-    prop, activeView, onPropertyUpdate, onPropertyRemove, onViewConfigChange,
+    prop, db, activeView,
+    onPropertyUpdate, onPropertyRemove, onPropertyDuplicate,
+    onPropertyInsert, onPropertyMove, onViewConfigChange,
   });
 
   return (

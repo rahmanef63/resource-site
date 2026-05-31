@@ -1,138 +1,101 @@
 "use client";
 
-/** ColumnHeaderMenu — per-column dropdown: rename / change type /
- *  sort asc/desc / hide / delete. Pure callbacks — host wires to db
- *  view config + property schema mutations. */
+/** ColumnHeaderMenu — per-column dropdown, config-driven per property
+ *  type (à la nosion). The visible items + their order come from
+ *  `PROPERTY_TYPE_MENU_CONFIG[prop.type]` (./column-header/menu-config),
+ *  so a number column shows Calculate, select/status show Group,
+ *  computed types drop irrelevant ops — instead of one hardcoded list
+ *  for every column. Items also self-hide when their host callback is
+ *  absent, and section separators are inserted automatically between
+ *  the items that actually render.
+ *
+ *  Pure callbacks — host wires each to its property-schema / view-config
+ *  mutations. Pass only what the column should offer; omit the rest. */
 
-import {
-  Pencil, ArrowUp, ArrowDown, EyeOff, Trash2, ChevronDown, Shapes, Sigma,
-} from "lucide-react";
+import { Fragment, type ReactNode } from "react";
+import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem,
-  DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
+  DropdownMenu, DropdownMenuContent, DropdownMenuLabel,
+  DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
-import { calcLabel, validCalcs } from "../lib/calcAggregate";
-import {
-  type CalcKind,
-  type Property,
-  type PropertyType,
-  PROPERTY_TYPES_USER_ADDABLE,
-  PROPERTY_TYPE_META,
+import type {
+  DatabaseViewConfig, Property, PropertyType,
 } from "../types";
+import { buildColumnHeaderActions } from "./column-header/actions";
+import { PROPERTY_TYPE_MENU_CONFIG, sectionOf } from "./column-header/menu-config";
+import { renderMenuItem } from "./column-header/items";
 
 export interface ColumnHeaderMenuProps {
   prop: Property;
+  /** Active view — drives filter / sort / group / calculate state. */
+  view: DatabaseViewConfig;
+  /** Column position within `db.properties` (move-left/right bounds). */
+  index: number;
+  propertyCount: number;
+  /** Override the trigger. Defaults to the column name + chevron. */
+  trigger?: ReactNode;
   onRename?: () => void;
   onTypeChange?: (type: PropertyType) => void;
-  onSortAsc?: () => void;
-  onSortDesc?: () => void;
   onHide?: () => void;
   onDelete?: () => void;
-  /** Current TableView footer aggregate for this column. */
-  currentCalc?: CalcKind;
-  /** Set the TableView footer aggregate. Omit to hide the submenu. */
-  onSetCalc?: (kind: CalcKind) => void;
+  onDuplicate?: () => void;
+  /** offset -1 = insert left, +1 = insert right. */
+  onInsert?: (offset: -1 | 1) => void;
+  /** offset -1 = move left, +1 = move right. */
+  onMove?: (offset: -1 | 1) => void;
+  /** Patches the active view (filter / sort / group / calculate). */
+  onViewConfigChange?: (patch: Partial<DatabaseViewConfig>) => void;
 }
 
 export function ColumnHeaderMenu({
-  prop, onRename, onTypeChange, onSortAsc, onSortDesc, onHide, onDelete,
-  currentCalc, onSetCalc,
+  prop, view, index, propertyCount, trigger,
+  onRename, onTypeChange, onHide, onDelete, onDuplicate, onInsert, onMove,
+  onViewConfigChange,
 }: ColumnHeaderMenuProps) {
-  const calcs = onSetCalc ? validCalcs(prop) : [];
+  const { actions, flags } = buildColumnHeaderActions({
+    prop, view, index, propertyCount,
+    onRename, onTypeChange, onHide, onDelete, onDuplicate, onInsert, onMove,
+    onViewConfigChange,
+  });
+  const config = PROPERTY_TYPE_MENU_CONFIG[prop.type] ?? PROPERTY_TYPE_MENU_CONFIG.text;
+  const ctx = { type: prop.type, actions, flags };
+
+  // Render items first, drop the self-hidden ones, then place a
+  // separator only between rendered items whose section differs.
+  const rendered = config.mainMenu
+    .map((key) => ({ key, node: renderMenuItem(key, ctx) }))
+    .filter((r) => r.node !== null);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          type="button"
-          className="flex h-auto w-full items-center justify-start gap-1 truncate px-0 text-left text-xs font-normal text-muted-foreground hover:bg-transparent hover:text-foreground"
-          aria-label="Column menu"
-        >
-          <span className="truncate">{prop.name}</span>
-          <ChevronDown className="h-3 w-3 opacity-60" />
-        </Button>
+        {trigger ?? (
+          <Button
+            variant="ghost"
+            type="button"
+            className="flex h-auto w-full items-center justify-start gap-1 truncate px-0 text-left text-xs font-normal text-muted-foreground hover:bg-transparent hover:text-foreground"
+            aria-label="Column menu"
+          >
+            <span className="truncate">{prop.name}</span>
+            <ChevronDown className="h-3 w-3 opacity-60" />
+          </Button>
+        )}
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" side="bottom" className="w-52">
+      <DropdownMenuContent align="start" side="bottom" className="w-56">
         <DropdownMenuLabel className="text-[10px] uppercase tracking-wider text-muted-foreground">
           {prop.name} · {prop.type}
         </DropdownMenuLabel>
-        {onRename && (
-          <DropdownMenuItem onClick={onRename} className="gap-2 text-sm">
-            <Pencil className="h-3.5 w-3.5 text-muted-foreground" /> Rename
-          </DropdownMenuItem>
-        )}
-        {onTypeChange && (
-          <>
-            <DropdownMenuSeparator />
-            <DropdownMenuLabel className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-muted-foreground">
-              <Shapes className="h-3 w-3" /> Change type
-            </DropdownMenuLabel>
-            <div className="max-h-48 overflow-y-auto pb-1">
-              {PROPERTY_TYPES_USER_ADDABLE.map((t) => (
-                <DropdownMenuItem
-                  key={t}
-                  onClick={() => onTypeChange(t)}
-                  className={cn("gap-2 text-sm", t === prop.type && "bg-accent/60")}
-                >
-                  {PROPERTY_TYPE_META[t].label}
-                  {t === prop.type && <span className="ml-auto text-[10px] text-muted-foreground">current</span>}
-                </DropdownMenuItem>
-              ))}
-            </div>
-          </>
-        )}
-        {(onSortAsc || onSortDesc) && <DropdownMenuSeparator />}
-        {onSortAsc && (
-          <DropdownMenuItem onClick={onSortAsc} className="gap-2 text-sm">
-            <ArrowUp className="h-3.5 w-3.5 text-muted-foreground" /> Sort ascending
-          </DropdownMenuItem>
-        )}
-        {onSortDesc && (
-          <DropdownMenuItem onClick={onSortDesc} className="gap-2 text-sm">
-            <ArrowDown className="h-3.5 w-3.5 text-muted-foreground" /> Sort descending
-          </DropdownMenuItem>
-        )}
-        {onSetCalc && calcs.length > 0 && (
-          <>
-            <DropdownMenuSeparator />
-            <DropdownMenuLabel className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-muted-foreground">
-              <Sigma className="h-3 w-3" /> Calculate
-            </DropdownMenuLabel>
-            <div className="max-h-48 overflow-y-auto pb-1">
-              <DropdownMenuItem
-                onClick={() => onSetCalc("none")}
-                className={cn("gap-2 text-sm", (currentCalc ?? "none") === "none" && "bg-accent/60")}
-              >
-                {calcLabel("none")}
-              </DropdownMenuItem>
-              {calcs.map((c) => (
-                <DropdownMenuItem
-                  key={c}
-                  onClick={() => onSetCalc(c)}
-                  className={cn("gap-2 text-sm", c === currentCalc && "bg-accent/60")}
-                >
-                  {calcLabel(c)}
-                </DropdownMenuItem>
-              ))}
-            </div>
-          </>
-        )}
-        {(onHide || onDelete) && <DropdownMenuSeparator />}
-        {onHide && (
-          <DropdownMenuItem onClick={onHide} className="gap-2 text-sm">
-            <EyeOff className="h-3.5 w-3.5 text-muted-foreground" /> Hide
-          </DropdownMenuItem>
-        )}
-        {onDelete && (
-          <DropdownMenuItem
-            onClick={onDelete}
-            className="gap-2 text-sm text-destructive focus:text-destructive"
-          >
-            <Trash2 className="h-3.5 w-3.5" /> Delete property
-          </DropdownMenuItem>
-        )}
+        {rendered.map((r, i) => {
+          const prev = rendered[i - 1];
+          const needsSeparator = prev !== undefined && sectionOf(prev.key) !== sectionOf(r.key);
+          return (
+            <Fragment key={r.key}>
+              {needsSeparator && <DropdownMenuSeparator />}
+              {r.node}
+            </Fragment>
+          );
+        })}
       </DropdownMenuContent>
     </DropdownMenu>
   );
