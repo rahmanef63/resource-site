@@ -11,6 +11,29 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-05-31 — merge database-cell-selection into notion-database + warning sweep
+
+- **`database-cell-selection` merged into `notion-database` v0.16.0** (NPC
+  parity). The `useDragFill` hook + `SelectableCell` component now live in
+  `notion-database` (`hooks/useDragFill.ts`, `components/cells/SelectableCell.tsx`)
+  and are **wired into `TableView`**: click a cell to select it, drag the
+  bottom-right handle up/down to copy its value into the spanned rows via the
+  `onRowUpdate` callback. Active only when interactive (not `readOnly` +
+  `onRowUpdate` supplied). `brand` token swapped for `primary` to match the
+  existing row-selection styling. Barrel re-exports `useDragFill` / `FillSource`
+  / `SelectableCell`; `notion-blocks` re-points its drag-fill re-export at
+  `notion-database`. Standalone slice dir + catalog entry + preview route
+  removed; `layouts.ts` ref dropped. Catalog 44 → 43.
+- **Swept the pre-existing audit warnings.**
+  - `config.ts` titles aligned to `slice.json` for `code-block`, `equation`,
+    `notifications`, `notion-shell` (audit:slices now 0 warnings).
+  - Raw `<button>` in `app/preview/slices/theme-presets/page.tsx` wrapped in
+    shadcn `<Button>`.
+  - `audit-convex-features`: documented the two intentional `@convex-dev/auth`
+    deviations as carve-outs (`auth.ts` is the convexAuth entry by convention;
+    `auth/_schema.ts` exports `authTablesExt` because it *extends* the library's
+    own `authTables`). Audit now reports "all features canonical".
+
 ### 2026-05-31 — catalog prune: cut generic/dead slices + merge sections
 
 - **Catalog 59 → 44.** Removed commodity slices that are widely available

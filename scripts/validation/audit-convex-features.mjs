@@ -44,6 +44,7 @@ const ALLOWED_TOPLEVEL = new Set([
   "slice.contract.ts",
   "slice.manifest.json",
   "auth.config.ts", // Convex auth config — special, framework-required name
+  "auth.ts", // @convex-dev/auth entry — convexAuth() handlers live here by convention
 ]);
 const ALLOWED_PREFIX = "_";
 
@@ -90,8 +91,11 @@ function main() {
       warnings.push(`${slug}/${f}: non-canonical name (consider _${f} for private, or fold into action/query/mutation)`);
     }
 
+    // `auth` extends @convex-dev/auth's library-owned `authTables`, so it
+    // exports `authTablesExt` (spread AFTER the library tables) rather than
+    // its own `authTables` — the canonical name would shadow the library's.
     const schemaPath = path.join(dir, "_schema.ts");
-    if (fs.existsSync(schemaPath)) {
+    if (fs.existsSync(schemaPath) && slug !== "auth") {
       const src = fs.readFileSync(schemaPath, "utf8");
       const slugCamel = slug.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
       const expectedExport = new RegExp(`export\\s+const\\s+${slugCamel}Tables\\b`);

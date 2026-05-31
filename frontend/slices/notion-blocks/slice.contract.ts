@@ -26,7 +26,7 @@ export const contract = defineSliceContract({
       { slug: "equation", range: "^0.1", reason: "Re-exports EquationBlock." },
       { slug: "code-block", range: "^0.1", reason: "Re-exports CodeBlock." },
       { slug: "notifications", range: "^0.1", reason: "Re-exports NotifyMePopover + useSubscription." },
-      { slug: "database-cell-selection", range: "^0.1", reason: "Re-exports useDragFill + SelectableCell." },
+      { slug: "notion-database", range: "^0.16", reason: "Re-exports useDragFill + SelectableCell (merged from database-cell-selection)." },
     ],
     routes: [],
     tables: [],

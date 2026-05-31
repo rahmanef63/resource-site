@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
+/** Drag-to-fill for table cells — Notion-canonical. Grab a cell's fill
+ *  handle and drag up/down to copy its value into the spanned rows.
+ *  Folded in from the former `database-cell-selection` slice (v0.16). */
 export interface FillSource {
   rowId: string;
   propId: string;

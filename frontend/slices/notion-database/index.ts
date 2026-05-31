@@ -59,6 +59,10 @@ export {
   type Rect,
 } from "./components/row-selection";
 
+// ---- Cell selection + drag-fill (merged from database-cell-selection, v0.16) ----
+export { useDragFill, type FillSource } from "./hooks/useDragFill";
+export { SelectableCell } from "./components/cells/SelectableCell";
+
 // ---- Calendar drag helpers (CK-1D Phase 5 — pure) ----
 export {
   parseExistingDate,

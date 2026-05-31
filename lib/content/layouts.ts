@@ -535,7 +535,6 @@ export default function Layout({ children }) {
       "frontend/slices/equation",
       "frontend/slices/code-block",
       "frontend/slices/notifications",
-      "frontend/slices/database-cell-selection",
     ],
     files: [
       "app/preview/notion-page-clone-os/public/layout.tsx",

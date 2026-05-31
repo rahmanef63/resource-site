@@ -8,8 +8,9 @@
  *     from "@/features/notion-blocks";
  *
  * vs. importing each peer slice individually. The peer slices stay
- * available at @/features/{equation,code-block,notifications,
- * database-cell-selection} for narrow imports.
+ * available at @/features/{equation,code-block,notifications} for narrow
+ * imports; drag-fill cell selection now lives in @/features/notion-database
+ * (merged from the former database-cell-selection slice, v0.16).
  */
 
 // Equation block (KaTeX)
@@ -24,6 +25,6 @@ export type { CodeBlockProps } from "@/features/code-block";
 export { NotifyMePopover, useSubscription, SUBSCRIPTION_SCOPE_LABELS } from "@/features/notifications";
 export type { PageSubscription, SubscriptionScope } from "@/features/notifications";
 
-// Drag-fill grid selection
-export { SelectableCell, useDragFill } from "@/features/database-cell-selection";
-export type { FillSource } from "@/features/database-cell-selection";
+// Drag-fill grid selection (merged into notion-database)
+export { SelectableCell, useDragFill } from "@/features/notion-database";
+export type { FillSource } from "@/features/notion-database";

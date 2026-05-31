@@ -1,6 +1,7 @@
 "use client";
 
 import { ThemePresetProvider, ThemePresetSwitcher } from "@/features/theme-presets";
+import { Button } from "@/components/ui/button";
 
 /** Minimal interactive preview: the unified ThemePresetSwitcher.
  *  Click Palette icon → Popover opens with mode tabs + grouped preset
@@ -40,12 +41,14 @@ export default function Page() {
               Primary surface
             </p>
             <p className="mt-2 text-lg font-semibold">Primary action</p>
-            <button
+            <Button
               type="button"
-              className="mt-3 rounded-md bg-primary-foreground/10 px-3 py-1.5 text-xs font-medium hover:bg-primary-foreground/20"
+              variant="ghost"
+              size="sm"
+              className="mt-3 h-auto rounded-md bg-primary-foreground/10 px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary-foreground/20 hover:text-primary-foreground"
             >
               Click me
-            </button>
+            </Button>
           </div>
           <div className="rounded-lg border bg-accent p-4 text-accent-foreground">
             <p className="text-[10px] font-semibold uppercase tracking-wider opacity-70">
