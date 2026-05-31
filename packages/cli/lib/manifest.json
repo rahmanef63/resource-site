@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-31T21:27:10.928Z",
+  "generatedAt": "2026-05-31T22:10:37.630Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -1365,7 +1365,7 @@
       "install": "npx rahman-resources add appshell",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add appshell`. Mount <AppShell manifest={…}> at the app root. The manifest declares brand + apps (each AppDescriptor has id/title/icon/slug/load()/multi) + features (import searchFeature/inspectorFeature/notificationsFeature/controlCenterFeature/widgetsFeature from @/features/appshell) + capabilities (inject useAppearance/useSearch/useSystemStats/useChat/useServerToggle — optional caps degrade via defaults). Windowing state is a module store (openWindow/focusApp); URL sync via the History API (UrlSync), NOT router.push. Add an app = manifest edit; add a shell feature = new defineFeature() + list it. No surface edits (open/closed).",
+      "agentRecipe": "Run `npx rr add appshell`, then import its theme once: `import \"@/features/appshell/appshell.css\"` (ships the glass/dock/window tokens the shell needs — they are not shadcn defaults). Mount <AppShell manifest={…}> at the app root. The manifest declares brand + apps (each AppDescriptor has id/title/icon/slug/load()/multi) + features (import searchFeature/inspectorFeature/notificationsFeature/controlCenterFeature/widgetsFeature from @/features/appshell) + capabilities (inject useAppearance/useSearch/useSystemStats/useChat/useServerToggle — optional caps degrade via defaults). Windowing state is a module store (openWindow/focusApp); URL sync via the History API (UrlSync), NOT router.push. Add an app = manifest edit; add a shell feature = new defineFeature() + list it. No surface edits (open/closed).",
       "tags": [
         "shell",
         "window-manager",
@@ -1783,6 +1783,27 @@
         "authorization",
         "no-clerk",
         "convex"
+      ]
+    },
+    {
+      "slug": "user-management",
+      "title": "User Management",
+      "category": "auth",
+      "description": "Members surface ported from superspace, props-driven + RBAC-agnostic. <MembersPanel>: searchable / role-filterable / sortable member table with avatar + name + email, inline role dropdown, soft-remove, and a permission-gated invite button. You pass `roles` (options) + `currentPerms` (resolved permission strings, wired from rbac-roles at the app level) + CRUD callbacks; the slice imports no other slice's frontend. Convex template ships um_members + listMembers (joins users) + addMember / updateMemberRole / removeMember, all gated via rbac-roles' requirePermission. P1 of the user-management epic — invites (P2) + roles admin (P3) next.",
+      "source": "superspace",
+      "install": "npx rahman-resources add user-management",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add user-management` (pulls rbac-roles + convex-auth). Frontend: <MembersPanel members={useQuery(api[\"features/user-management/query\"].listMembers,{tenantId})} roles={ROLE_PRESETS.map(r=>({slug:r.slug,name:r.name,color:r.color}))} currentPerms={actorPerms} onUpdateRole={useMutation(...updateMemberRole)} onRemove={useMutation(...removeMember)} onInvite={openInvite} />. Wire roles + currentPerms from rbac-roles at the app level — the slice itself imports no other slice. Convex: spread userManagementTables; listMembers/mutations gate via rbac-roles requirePermission.",
+      "tags": [
+        "user-management",
+        "members",
+        "rbac",
+        "auth",
+        "team",
+        "admin",
+        "convex",
+        "no-clerk"
       ]
     },
     {
@@ -2345,7 +2366,7 @@
         "framework",
         "ui"
       ],
-      "agentRecipe": "Run `npx rr add appshell`. Mount <AppShell manifest={…}> at the app root. The manifest declares brand + apps (each AppDescriptor has id/title/icon/slug/load()/multi) + features (import searchFeature/inspectorFeature/notificationsFeature/controlCenterFeature/widgetsFeature from @/features/appshell) + capabilities (inject useAppearance/useSearch/useSystemStats/useChat/useServerToggle — optional caps degrade via defaults). Windowing state is a module store (openWindow/focusApp); URL sync via the History API (UrlSync), NOT router.push. Add an app = manifest edit; add a shell feature = new defineFeature() + list it. No surface edits (open/closed)."
+      "agentRecipe": "Run `npx rr add appshell`, then import its theme once: `import \"@/features/appshell/appshell.css\"` (ships the glass/dock/window tokens the shell needs — they are not shadcn defaults). Mount <AppShell manifest={…}> at the app root. The manifest declares brand + apps (each AppDescriptor has id/title/icon/slug/load()/multi) + features (import searchFeature/inspectorFeature/notificationsFeature/controlCenterFeature/widgetsFeature from @/features/appshell) + capabilities (inject useAppearance/useSearch/useSystemStats/useChat/useServerToggle — optional caps degrade via defaults). Windowing state is a module store (openWindow/focusApp); URL sync via the History API (UrlSync), NOT router.push. Add an app = manifest edit; add a shell feature = new defineFeature() + list it. No surface edits (open/closed)."
     },
     {
       "slug": "convex-auth",
@@ -3205,6 +3226,54 @@
         "convex"
       ],
       "agentRecipe": "Run `npx rr add rbac-roles`. Frontend: import { PermissionGate, usePermissions, RoleBadge, PermissionMatrix, resolvePermissions, ROLE_PRESETS } from \"@/features/rbac-roles\". Feed usePermissions/PermissionGate the actor's resolved permission list (from your membership query or resolvePermissions(roleSlug)). Convex: spread rbacRolesTables into your schema, call seedSystemRoles({tenantId}) once, gate privileged fns with requirePermission(ctx, tenantId, \"members.manage\"). Set PLATFORM_ADMIN_EMAILS for superadmins. Add the user-management slice for the members/invites UI (provides um_members)."
+    },
+    {
+      "slug": "user-management",
+      "title": "User Management",
+      "category": "auth",
+      "kind": "full",
+      "version": "0.1.0",
+      "description": "Members surface ported from superspace, props-driven + RBAC-agnostic. <MembersPanel>: searchable / role-filterable / sortable member table with avatar + name + email, inline role dropdown, soft-remove, and a permission-gated invite button. You pass `roles` (options) + `currentPerms` (resolved permission strings, wired from rbac-roles at the app level) + CRUD callbacks; the slice imports no other slice's frontend. Convex template ships um_members + listMembers (joins users) + addMember / updateMemberRole / removeMember, all gated via rbac-roles' requirePermission. P1 of the user-management epic — invites (P2) + roles admin (P3) next.",
+      "source": "superspace",
+      "slicePath": "frontend/slices/user-management",
+      "convexPaths": [
+        "convex/features/user-management"
+      ],
+      "npm": [],
+      "shadcn": [
+        "avatar",
+        "badge",
+        "button",
+        "dropdown-menu",
+        "input",
+        "select",
+        "table"
+      ],
+      "env": [],
+      "peers": [
+        {
+          "slug": "rbac-roles",
+          "range": "^0.2",
+          "reason": "Roles + resolved permissions + convex permission helpers (requirePermission, getActorPermissions)."
+        },
+        {
+          "slug": "convex-auth",
+          "range": "^0.1",
+          "reason": "Member identity (name/email/avatar) joined from the users table."
+        }
+      ],
+      "providers": [],
+      "tags": [
+        "user-management",
+        "members",
+        "rbac",
+        "auth",
+        "team",
+        "admin",
+        "convex",
+        "no-clerk"
+      ],
+      "agentRecipe": "Run `npx rr add user-management` (pulls rbac-roles + convex-auth). Frontend: <MembersPanel members={useQuery(api[\"features/user-management/query\"].listMembers,{tenantId})} roles={ROLE_PRESETS.map(r=>({slug:r.slug,name:r.name,color:r.color}))} currentPerms={actorPerms} onUpdateRole={useMutation(...updateMemberRole)} onRemove={useMutation(...removeMember)} onInvite={openInvite} />. Wire roles + currentPerms from rbac-roles at the app level — the slice itself imports no other slice. Convex: spread userManagementTables; listMembers/mutations gate via rbac-roles requirePermission."
     },
     {
       "slug": "admin-panel",

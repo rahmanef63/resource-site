@@ -1,0 +1,46 @@
+// user-management queries. Reuses rbac-roles' permission resolver.
+
+import { v } from "convex/values";
+import { query } from "../../_generated/server";
+import { getActorPermissions } from "../rbac-roles/lib/permissions";
+
+/** List a tenant's members, enriched with profile fields from `users`.
+ *  Soft-denies to [] without members.view. Inactive members hidden unless
+ *  `includeInactive`. */
+export const listMembers = query({
+  args: {
+    tenantId: v.union(v.string(), v.null()),
+    includeInactive: v.optional(v.boolean()),
+  },
+  handler: async (ctx, { tenantId, includeInactive }) => {
+    const perms = await getActorPermissions(ctx, tenantId);
+    const canView = perms.some(
+      (p) => p === "*" || p === "members.*" || p === "members.view" || p === "members.manage",
+    );
+    if (!canView) return [];
+
+    const rows = await ctx.db
+      .query("um_members")
+      .withIndex("by_tenant", (q) => q.eq("tenantId", tenantId))
+      .take(1000);
+    const visible = includeInactive ? rows : rows.filter((m) => m.status !== "inactive");
+
+    return await Promise.all(
+      visible.map(async (m) => {
+        const user = (await ctx.db.get(m.userId as never)) as
+          | { name?: string; email?: string; image?: string; avatarUrl?: string }
+          | null;
+        return {
+          userId: m.userId,
+          name: user?.name,
+          email: user?.email,
+          avatarUrl: user?.avatarUrl ?? user?.image,
+          roleSlug: m.roleSlug,
+          status: m.status,
+          joinedAt: m.joinedAt,
+          additionalPermissions: m.additionalPermissions ?? [],
+        };
+      }),
+    );
+  },
+});

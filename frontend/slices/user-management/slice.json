@@ -1,0 +1,31 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "user-management",
+  "version": "0.1.0",
+  "category": "auth",
+  "title": "User Management",
+  "description": "Members surface ported from superspace, props-driven + RBAC-agnostic. <MembersPanel>: searchable / role-filterable / sortable member table with avatar + name + email, inline role dropdown, soft-remove, and a permission-gated invite button. You pass `roles` (options) + `currentPerms` (resolved permission strings, wired from rbac-roles) + CRUD callbacks; the slice imports no other slice's frontend. Convex template ships um_members + listMembers (joins users) + addMember / updateMemberRole / removeMember, all gated via rbac-roles' requirePermission. P1 of the user-management epic — invites (P2) + roles admin (P3) next.",
+  "namespace": "@/features/user-management",
+  "convex": {
+    "tablesExport": "userManagementTables",
+    "schemaPath": "convex/features/user-management/_schema.ts",
+    "rootPaths": ["convex/features/user-management"]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/user-management",
+    "configExport": "userManagementFeature"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": ["avatar", "badge", "button", "dropdown-menu", "input", "select", "table"],
+    "env": [],
+    "peers": [
+      { "slug": "rbac-roles", "range": "^0.2", "reason": "Roles + resolved permissions + the convex permission helpers (requirePermission, getActorPermissions)." },
+      { "slug": "convex-auth", "range": "^0.1", "reason": "Member identity (name/email/avatar) joined from the users table." }
+    ]
+  },
+  "registers": [],
+  "audit": ["bp:public-fn-validator"],
+  "license": "MIT",
+  "tags": ["user-management", "members", "rbac", "auth", "team", "admin", "convex", "no-clerk"]
+}

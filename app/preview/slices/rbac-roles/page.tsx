@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { SlicePreviewLayout } from "@/components/slice-previews/preview-layout";
+import { Button } from "@/components/ui/button";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
@@ -30,9 +31,16 @@ export default function Page() {
       <div className="space-y-6">
         <div className="flex flex-wrap items-center gap-2">
           {ROLE_PRESETS.map((r) => (
-            <button key={r.slug} type="button" onClick={() => setRole(r.slug)} className="appearance-none">
+            <Button
+              key={r.slug}
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setRole(r.slug)}
+              className="h-auto p-0 hover:bg-transparent"
+            >
               <RoleBadge role={r.slug} className={role === r.slug ? "ring-2 ring-primary ring-offset-1" : ""} />
-            </button>
+            </Button>
           ))}
         </div>
 

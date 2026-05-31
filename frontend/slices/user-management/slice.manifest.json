@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../docs/slice.manifest.schema.json",
+  "name": "user-management",
+  "version": "0.1.0",
+  "description": "Members surface (P1): searchable/sortable member table with inline role dropdown, soft-remove, permission-gated invite. Props-driven + RBAC-agnostic; pair with rbac-roles + convex-auth.",
+  "category": "auth",
+  "stability": "alpha",
+  "deps": {
+    "shared": [],
+    "slices": ["rbac-roles", "convex-auth"],
+    "convexFeatures": ["user-management", "rbac-roles"],
+    "npm": {},
+    "env": []
+  },
+  "files": {
+    "include": ["**/*"],
+    "exclude": ["*.test.ts", "*.test.tsx"]
+  },
+  "convexFiles": {
+    "include": ["**/*.ts"],
+    "exclude": ["*.test.ts"]
+  },
+  "permissions": ["members.view", "members.manage", "members.invite"],
+  "schemaTables": [
+    {
+      "name": "um_members",
+      "namespaced": true,
+      "indexes": ["by_tenant", "by_tenant_user", "by_user"]
+    }
+  ],
+  "compatibility": {
+    "next": ">=15 <17",
+    "react": "^19",
+    "convex": "^1.36",
+    "tailwind": "4",
+    "auth": "convex-auth"
+  },
+  "tags": ["user-management", "members", "rbac", "auth", "team", "admin", "convex", "no-clerk"],
+  "notes": "0.1.0 (2026-05-31): P1 of the user-management epic. Members table only. RBAC-agnostic by design — the slice imports no other slice's frontend; roles + resolved permissions are passed as props (wire from rbac-roles at the app level). Convex side reuses rbac-roles' requirePermission/getActorPermissions. Invites (P2) + roles admin (P3) + full-parity extras (P4) follow."
+}

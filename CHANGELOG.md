@@ -11,6 +11,29 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-05-31 — user-management: Members surface (P1 of the epic) v0.1.0
+
+- **New `user-management` slice** — the members surface, ported from
+  superspace. `<MembersPanel>`: searchable / role-filterable / sortable
+  member table (avatar + name + email), inline role dropdown, soft-remove,
+  and a permission-gated invite button. Sub-parts `MembersTable`,
+  `MembersToolbar`, `MemberRowActions`, `RoleChip`, `useMembersView`.
+- **Props-driven + RBAC-agnostic.** The slice imports no other slice's
+  frontend (per the slice-boundary rule audit-slices enforces): it takes
+  `roles` (options) + `currentPerms` (resolved permission strings) + CRUD
+  callbacks as props. Cross-slice wiring (rbac-roles → roles + perms) happens
+  at the app level — see the preview, which composes both. Local `can()` /
+  `RoleChip` keep it self-contained.
+- **Convex template** (`convex/features/user-management/`): `um_members`
+  table (generic `tenantId`), `listMembers` (joins `users` for profile
+  fields), `addMember` / `updateMemberRole` / `removeMember` (soft-delete) —
+  all gated via rbac-roles' `requirePermission`.
+- Preview: live members table with an Admin/Manager "view as" toggle showing
+  permission gating. slice.json + contract + manifest; catalog +1 (new
+  `user-management` entry); `registers: []`.
+- **Fixed P0 debt:** wrapped the raw `<button>` in the rbac-roles preview in
+  shadcn `<Button>`.
+
 ### 2026-05-31 — rbac-roles: real RBAC engine (P0 of user-management epic) v0.2.0
 
 - **rbac-roles upgraded from config-only stub to a real RBAC engine**, ported
