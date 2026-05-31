@@ -1,0 +1,32 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "rbac-roles",
+  "version": "0.2.0",
+  "category": "auth",
+  "title": "RBAC — Roles & Permissions",
+  "description": "RBAC engine ported from superspace: 6 system role presets (owner/admin/manager/staff/client/guest with levels), dot-namespaced permissions with `*` / `feature.*` wildcard matching, pure check helpers (resolvePermissions / hasPermission / roleHasPermission), and props-driven UI primitives — <PermissionGate>, usePermissions, <RoleBadge>, <PermissionMatrix>. Convex template ships a tenant-scoped rbac_roles table + checkPermission / requirePermission helpers + seedSystemRoles. No Clerk. Pair with `user-management` for the members/invites UI.",
+  "namespace": "@/features/rbac-roles",
+  "convex": {
+    "tablesExport": "rbacRolesTables",
+    "schemaPath": "convex/features/rbac-roles/_schema.ts",
+    "rootPaths": ["convex/features/rbac-roles"]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/rbac-roles",
+    "configExport": "rbacRolesFeature"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": ["badge", "checkbox", "label"],
+    "env": [
+      { "name": "PLATFORM_ADMIN_EMAILS", "scope": "convex", "description": "Comma-separated emails granted cross-tenant superadmin (`*`)." }
+    ],
+    "peers": [
+      { "slug": "convex-auth", "range": "^0.1", "reason": "Permission checks resolve the authed user via getAuthUserId." }
+    ]
+  },
+  "registers": [],
+  "audit": ["bp:public-fn-validator"],
+  "license": "MIT",
+  "tags": ["rbac", "auth", "permissions", "roles", "authorization", "no-clerk", "convex"]
+}

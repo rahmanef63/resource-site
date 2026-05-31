@@ -1,55 +1,88 @@
-import { ShieldCheck, Check, Minus } from "lucide-react";
+"use client";
 
-const ROLES = [
-  { name: "Owner", color: "bg-purple-500/15 text-purple-600 dark:text-purple-300", users: 1 },
-  { name: "Admin", color: "bg-rose-500/15 text-rose-600 dark:text-rose-300", users: 3 },
-  { name: "Editor", color: "bg-blue-500/15 text-blue-600 dark:text-blue-300", users: 12 },
-  { name: "Member", color: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-300", users: 48 },
-  { name: "Viewer", color: "bg-amber-500/15 text-amber-600 dark:text-amber-300", users: 17 },
-  { name: "Guest", color: "bg-zinc-500/15 text-zinc-600 dark:text-zinc-300", users: 5 },
-];
-const PERMS = [
-  { name: "Read", values: [true, true, true, true, true, true] },
-  { name: "Comment", values: [true, true, true, true, true, false] },
-  { name: "Write", values: [true, true, true, true, false, false] },
-  { name: "Invite", values: [true, true, true, false, false, false] },
-  { name: "Manage roles", values: [true, true, false, false, false, false] },
-  { name: "Delete workspace", values: [true, false, false, false, false, false] },
-];
+import * as React from "react";
+import { SlicePreviewLayout } from "@/components/slice-previews/preview-layout";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
+import {
+  ROLE_PRESETS, RoleBadge, PermissionMatrix, PermissionGate,
+  usePermissions, resolvePermissions, type RoleSlug,
+} from "@/features/rbac-roles";
 
+/** Live RBAC engine demo: pick a role preset → see its resolved
+ *  permissions in the matrix + how <PermissionGate> / usePermissions
+ *  react to it. All pure — no backend. */
 export default function Page() {
+  const [role, setRole] = React.useState<RoleSlug>("manager");
+  const perms = React.useMemo(() => resolvePermissions(role), [role]);
+  const { can } = usePermissions(perms);
+
+  const GATES = ["members.manage", "content.edit", "billing.manage", "workspace.delete"];
+
   return (
-    <main className="min-h-screen bg-background p-8">
-      <header className="mb-6 flex items-center gap-3">
-        <div className="grid size-10 place-items-center rounded-lg bg-primary/10"><ShieldCheck className="size-5 text-primary" /></div>
-        <div>
-          <h1 className="text-xl font-bold">RBAC Roles</h1>
-          <p className="text-xs text-muted-foreground">6 system roles, permission matrix, workspace-isolated.</p>
+    <SlicePreviewLayout
+      title="RBAC — Roles & Permissions"
+      kind="full"
+      description="6 system role presets · dot-namespaced permissions with `*` / `feature.*` matching · <PermissionGate> + usePermissions + <PermissionMatrix>. Pure & props-driven. Pair with user-management for the members UI."
+      sourceUrl="https://github.com/rahmanef63/resource-site/tree/main/frontend/slices/rbac-roles"
+    >
+      <div className="space-y-6">
+        <div className="flex flex-wrap items-center gap-2">
+          {ROLE_PRESETS.map((r) => (
+            <button key={r.slug} type="button" onClick={() => setRole(r.slug)} className="appearance-none">
+              <RoleBadge role={r.slug} className={role === r.slug ? "ring-2 ring-primary ring-offset-1" : ""} />
+            </button>
+          ))}
         </div>
-      </header>
-      <div className="mb-6 grid gap-3 md:grid-cols-3 lg:grid-cols-6">
-        {ROLES.map((r) => (
-          <div key={r.name} className="rounded-lg border border-border/60 bg-card p-4">
-            <span className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${r.color}`}>{r.name}</span>
-            <p className="mt-3 text-2xl font-bold">{r.users}</p>
-            <p className="text-[10px] text-muted-foreground">members</p>
+
+        <div className="grid gap-6 lg:grid-cols-[1fr_1.4fr]">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <p className="text-sm font-medium">Role</p>
+              <Select value={role} onValueChange={(v) => setRole(v as RoleSlug)}>
+                <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {ROLE_PRESETS.map((r) => (
+                    <SelectItem key={r.slug} value={r.slug}>
+                      {r.name} · level {r.level}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                {ROLE_PRESETS.find((r) => r.slug === role)?.description}
+              </p>
+            </div>
+
+            <div className="space-y-2 rounded-lg border p-4">
+              <p className="text-sm font-medium">&lt;PermissionGate&gt; · usePermissions</p>
+              <ul className="space-y-1.5 text-sm">
+                {GATES.map((p) => (
+                  <li key={p} className="flex items-center gap-2">
+                    <span className={can(p) ? "text-emerald-600" : "text-muted-foreground/60"}>
+                      {can(p) ? "✓" : "✗"}
+                    </span>
+                    <code className="text-xs">{p}</code>
+                  </li>
+                ))}
+              </ul>
+              <PermissionGate
+                permissions={perms}
+                require="members.manage"
+                fallback={<p className="pt-1 text-xs text-muted-foreground">🔒 “Manage members” button hidden — needs <code>members.manage</code>.</p>}
+              >
+                <p className="pt-1 text-xs text-emerald-600">✅ “Manage members” button visible for this role.</p>
+              </PermissionGate>
+            </div>
           </div>
-        ))}
-      </div>
-      <div className="overflow-hidden rounded-lg border border-border/60 bg-card">
-        <div className="grid grid-cols-7 border-b border-border/60 bg-muted/30 px-4 py-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-          <div>Permission</div>
-          {ROLES.map((r) => <div key={r.name} className="text-center">{r.name}</div>)}
+
+          <div className="rounded-lg border p-4">
+            <p className="mb-3 text-sm font-medium">Resolved permissions</p>
+            <PermissionMatrix value={perms} readOnly />
+          </div>
         </div>
-        {PERMS.map((p) => (
-          <div key={p.name} className="grid grid-cols-7 border-b border-border/30 px-4 py-2 text-xs last:border-0">
-            <div className="font-medium">{p.name}</div>
-            {p.values.map((v, i) => (
-              <div key={i} className="flex justify-center">{v ? <Check className="size-3.5 text-emerald-500" /> : <Minus className="size-3.5 text-muted-foreground/40" />}</div>
-            ))}
-          </div>
-        ))}
       </div>
-    </main>
+    </SlicePreviewLayout>
   );
 }

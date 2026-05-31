@@ -11,6 +11,34 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-05-31 — rbac-roles: real RBAC engine (P0 of user-management epic) v0.2.0
+
+- **rbac-roles upgraded from config-only stub to a real RBAC engine**, ported
+  from superspace. First of a split: this is the engine; a future
+  `user-management` slice (peers this) carries the members/invites/roles-admin
+  UI. Full superspace parity is the multi-phase goal (P0–P4).
+- **Engine (pure, props-driven):**
+  - `lib/permissions.ts` — `PERMS` (~30 curated dot-namespaced keys, open
+    union) + `matchPermission` (`*` | exact | `feature.*`).
+  - `lib/roles.ts` — the 6 system role presets (owner/admin/manager/staff/
+    client/guest, levels 0–90, colors) + `ROLE_MAP`.
+  - `lib/check.ts` — `resolvePermissions` / `hasPermission` /
+    `roleHasPermission` / `roleLevel` / `isAtLeast`.
+  - `lib/permission-catalog.ts` — grouped catalog for the matrix.
+  - `hooks/usePermissions` — feed it the actor's resolved permissions →
+    `{ can, canAny, canAll }`.
+  - `components/` — `<PermissionGate>`, `<RoleBadge>`, `<PermissionMatrix>`.
+- **Convex template** (`convex/features/rbac-roles/`): `rbac_roles` table
+  (generic `tenantId`), `listRoles`, `seedSystemRoles` / `upsertRole` /
+  `removeRole` (system roles immutable), and `checkPermission` /
+  `requirePermission` / `getActorPermissions` helpers with a
+  `PLATFORM_ADMIN_EMAILS` superadmin bypass. Reads `um_members` (provided by
+  the upcoming user-management slice).
+- Preview rebuilt as a live engine demo (pick a role → resolved permission
+  matrix + PermissionGate/usePermissions reactions). slice.json + manifest +
+  contract added; catalog bumped 0.1.0 → 0.2.0 (kind backend → full).
+  `registers: []` (pure engine, no nav route).
+
 ### 2026-05-31 — convex-auth: props-driven AuthCard + tabbed preview (v0.3.0)
 
 - **New `<AuthCard>`** — a presentational, props-driven sign-in card in the

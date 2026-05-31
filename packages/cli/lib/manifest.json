@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-31T20:41:02.231Z",
+  "generatedAt": "2026-05-31T21:27:10.928Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -1357,6 +1357,26 @@
   "recipes": [],
   "features": [
     {
+      "slug": "appshell",
+      "title": "AppShell — Desktop + Mobile OS Shell",
+      "category": "ui",
+      "description": "Generic, brand-free OS-style shell framework. One <AppShell manifest> wrapper provider gives a project a macOS-style window manager (drag/snap/maximize, dock, menu bar, Spotlight) AND an iOS-style mobile surface (home pager, app library, control center, widgets), driven entirely by a manifest: brand, apps, features, surface regions, capabilities, persistence, keymap. Five shell features (search, inspector, notifications, control-center, widgets) are bundled as defineFeature() contributions inside the slice and mount via named <Slot>s. Responsiveness is a single ResponsiveProvider + 4 DRY primitives (AppFrame, MasterDetail, ResponsiveToolbar, TouchList). Imports nothing project-specific — the consumer injects data/auth/AI through manifest.capabilities. Lifted from os-vps (Topside).",
+      "source": "rahmanef63/os-vps",
+      "install": "npx rahman-resources add appshell",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add appshell`. Mount <AppShell manifest={…}> at the app root. The manifest declares brand + apps (each AppDescriptor has id/title/icon/slug/load()/multi) + features (import searchFeature/inspectorFeature/notificationsFeature/controlCenterFeature/widgetsFeature from @/features/appshell) + capabilities (inject useAppearance/useSearch/useSystemStats/useChat/useServerToggle — optional caps degrade via defaults). Windowing state is a module store (openWindow/focusApp); URL sync via the History API (UrlSync), NOT router.push. Add an app = manifest edit; add a shell feature = new defineFeature() + list it. No surface edits (open/closed).",
+      "tags": [
+        "shell",
+        "window-manager",
+        "desktop",
+        "mobile",
+        "responsive",
+        "framework",
+        "ui"
+      ]
+    },
+    {
       "slug": "convex-auth",
       "title": "Convex Auth — Multi-Provider Sign-in",
       "category": "auth",
@@ -1747,20 +1767,22 @@
     },
     {
       "slug": "rbac-roles",
-      "title": "RBAC — Tiered System Roles",
+      "title": "RBAC — Roles & Permissions",
       "category": "auth",
-      "description": "Workspace-scoped RBAC with 6 system roles (owner/admin/manager/staff/client/guest) and three tier presets — solo, influencer, organization. Env-based platform admin bypass via PLATFORM_ADMIN_EMAILS. checkPermission / requirePermission helpers, role seeding mutation, @convex-dev/auth aware (no Clerk).",
+      "description": "RBAC engine ported from superspace. 6 system role presets (owner/admin/manager/staff/client/guest with levels), dot-namespaced permissions with `*` / `feature.*` wildcard matching, and pure check helpers (resolvePermissions / hasPermission / roleHasPermission). Props-driven UI primitives: <PermissionGate>, usePermissions, <RoleBadge>, <PermissionMatrix>. Convex template ships a tenant-scoped rbac_roles table + checkPermission / requirePermission helpers + idempotent seedSystemRoles, with a PLATFORM_ADMIN_EMAILS superadmin bypass. Pair with `user-management` for the members / invites / roles-admin UI. @convex-dev/auth aware — no Clerk.",
       "source": "superspace",
       "install": "npx rahman-resources add rbac-roles",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add rbac-roles`. Three tier presets pick which system roles to seed: solo (owner+admin), influencer (+manager), organization (6 roles). Platform admin via env PLATFORM_ADMIN_EMAILS bypasses all checks. Resolution: platform admin → workspace owner → membership.additionalPermissions → role.permissions.",
+      "agentRecipe": "Run `npx rr add rbac-roles`. Frontend: import { PermissionGate, usePermissions, RoleBadge, PermissionMatrix, resolvePermissions, ROLE_PRESETS } from \"@/features/rbac-roles\". Feed usePermissions/PermissionGate the actor's resolved permission list (from your membership query or resolvePermissions(roleSlug)). Convex: spread rbacRolesTables into your schema, call seedSystemRoles({tenantId}) once, gate privileged fns with requirePermission(ctx, tenantId, \"members.manage\"). Set PLATFORM_ADMIN_EMAILS for superadmins. Add the user-management slice for the members/invites UI (provides um_members).",
       "tags": [
         "rbac",
         "auth",
         "permissions",
         "roles",
-        "workspaces"
+        "authorization",
+        "no-clerk",
+        "convex"
       ]
     },
     {
@@ -2284,6 +2306,47 @@
     }
   ],
   "slices": [
+    {
+      "slug": "appshell",
+      "title": "AppShell — Desktop + Mobile OS Shell",
+      "category": "ui",
+      "kind": "full",
+      "version": "0.1.0",
+      "description": "Generic, brand-free OS-style shell framework. One <AppShell manifest> wrapper provider gives a project a macOS-style window manager (drag/snap/maximize, dock, menu bar, Spotlight) AND an iOS-style mobile surface (home pager, app library, control center, widgets), driven entirely by a manifest: brand, apps, features, surface regions, capabilities, persistence, keymap. Five shell features (search, inspector, notifications, control-center, widgets) are bundled as defineFeature() contributions inside the slice and mount via named <Slot>s. Responsiveness is a single ResponsiveProvider + 4 DRY primitives (AppFrame, MasterDetail, ResponsiveToolbar, TouchList). Imports nothing project-specific — the consumer injects data/auth/AI through manifest.capabilities. Lifted from os-vps (Topside).",
+      "source": "rahmanef63/os-vps",
+      "slicePath": "frontend/slices/appshell",
+      "convexPaths": [],
+      "npm": [
+        "lucide-react",
+        "class-variance-authority",
+        "clsx",
+        "tailwind-merge",
+        "vaul"
+      ],
+      "shadcn": [
+        "button",
+        "tooltip",
+        "scroll-area",
+        "sheet",
+        "drawer",
+        "dialog",
+        "alert-dialog",
+        "dropdown-menu"
+      ],
+      "env": [],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "shell",
+        "window-manager",
+        "desktop",
+        "mobile",
+        "responsive",
+        "framework",
+        "ui"
+      ],
+      "agentRecipe": "Run `npx rr add appshell`. Mount <AppShell manifest={…}> at the app root. The manifest declares brand + apps (each AppDescriptor has id/title/icon/slug/load()/multi) + features (import searchFeature/inspectorFeature/notificationsFeature/controlCenterFeature/widgetsFeature from @/features/appshell) + capabilities (inject useAppearance/useSearch/useSystemStats/useChat/useServerToggle — optional caps degrade via defaults). Windowing state is a module store (openWindow/focusApp); URL sync via the History API (UrlSync), NOT router.push. Add an app = manifest edit; add a shell feature = new defineFeature() + list it. No surface edits (open/closed)."
+    },
     {
       "slug": "convex-auth",
       "title": "Convex Auth — Multi-Provider Sign-in",
@@ -3101,30 +3164,34 @@
     },
     {
       "slug": "rbac-roles",
-      "title": "RBAC — Tiered System Roles",
+      "title": "RBAC — Roles & Permissions",
       "category": "auth",
-      "kind": "backend",
-      "version": "0.1.0",
-      "description": "Workspace-scoped RBAC with 6 system roles (owner/admin/manager/staff/client/guest) and three tier presets — solo, influencer, organization. Env-based platform admin bypass via PLATFORM_ADMIN_EMAILS. checkPermission / requirePermission helpers, role seeding mutation, @convex-dev/auth aware (no Clerk).",
+      "kind": "full",
+      "version": "0.2.0",
+      "description": "RBAC engine ported from superspace. 6 system role presets (owner/admin/manager/staff/client/guest with levels), dot-namespaced permissions with `*` / `feature.*` wildcard matching, and pure check helpers (resolvePermissions / hasPermission / roleHasPermission). Props-driven UI primitives: <PermissionGate>, usePermissions, <RoleBadge>, <PermissionMatrix>. Convex template ships a tenant-scoped rbac_roles table + checkPermission / requirePermission helpers + idempotent seedSystemRoles, with a PLATFORM_ADMIN_EMAILS superadmin bypass. Pair with `user-management` for the members / invites / roles-admin UI. @convex-dev/auth aware — no Clerk.",
       "source": "superspace",
-      "slicePath": "",
+      "slicePath": "frontend/slices/rbac-roles",
       "convexPaths": [
-        "template-base/convex/lib/rbac"
+        "convex/features/rbac-roles"
       ],
       "npm": [],
-      "shadcn": [],
+      "shadcn": [
+        "badge",
+        "checkbox",
+        "label"
+      ],
       "env": [
         {
           "name": "PLATFORM_ADMIN_EMAILS",
           "scope": "convex",
-          "description": "Comma-separated emails granted cross-workspace admin."
+          "description": "Comma-separated emails granted cross-tenant superadmin (`*`)."
         }
       ],
       "peers": [
         {
           "slug": "convex-auth",
           "range": "^0.1",
-          "reason": "RBAC checks the authed user identity."
+          "reason": "RBAC checks resolve the authed user via getAuthUserId."
         }
       ],
       "providers": [],
@@ -3133,9 +3200,11 @@
         "auth",
         "permissions",
         "roles",
-        "workspaces"
+        "authorization",
+        "no-clerk",
+        "convex"
       ],
-      "agentRecipe": "Run `npx rr add rbac-roles`. Three tier presets pick which system roles to seed: solo (owner+admin), influencer (+manager), organization (6 roles). Platform admin via env PLATFORM_ADMIN_EMAILS bypasses all checks. Resolution: platform admin → workspace owner → membership.additionalPermissions → role.permissions."
+      "agentRecipe": "Run `npx rr add rbac-roles`. Frontend: import { PermissionGate, usePermissions, RoleBadge, PermissionMatrix, resolvePermissions, ROLE_PRESETS } from \"@/features/rbac-roles\". Feed usePermissions/PermissionGate the actor's resolved permission list (from your membership query or resolvePermissions(roleSlug)). Convex: spread rbacRolesTables into your schema, call seedSystemRoles({tenantId}) once, gate privileged fns with requirePermission(ctx, tenantId, \"members.manage\"). Set PLATFORM_ADMIN_EMAILS for superadmins. Add the user-management slice for the members/invites UI (provides um_members)."
     },
     {
       "slug": "admin-panel",

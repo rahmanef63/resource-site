@@ -2,8 +2,8 @@ import { defineFeature } from "@/lib/shared/features/defineFeature";
 
 export const rbacRolesFeature = defineFeature({
   slug: "rbac-roles",
-  title: "User Management",
+  title: "RBAC — Roles & Permissions",
   category: "auth",
   routes: [],
-  nav: { label: "Users", group: "settings", icon: "Users", order: 3 },
+  nav: { label: "Roles", group: "settings", icon: "ShieldCheck", order: 3 },
 });
