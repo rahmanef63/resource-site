@@ -4,7 +4,7 @@ import * as React from "react";
 import { SlicePreviewLayout } from "@/components/slice-previews/preview-layout";
 import { Button } from "@/components/ui/button";
 import { ROLE_PRESETS, resolvePermissions } from "@/features/rbac-roles";
-import { MembersPanel, type Member, type RoleOption } from "@/features/user-management";
+import { MembersPanel, type Member, type RoleOption, type Invite } from "@/features/user-management";
 
 // Wiring happens here (app level): roles + resolved permissions come from
 // rbac-roles, the panel comes from user-management. The slices never import
@@ -22,6 +22,7 @@ const SEED: Member[] = [
 
 export default function Page() {
   const [members, setMembers] = React.useState<Member[]>(SEED);
+  const [invites, setInvites] = React.useState<Invite[]>([]);
   const [asAdmin, setAsAdmin] = React.useState(true);
   const [note, setNote] = React.useState("");
   const currentPerms = React.useMemo(() => resolvePermissions(asAdmin ? "admin" : "manager"), [asAdmin]);
@@ -31,17 +32,31 @@ export default function Page() {
   const remove = ({ userId }: { userId: string }) =>
     setMembers((ms) => ms.map((m) => (m.userId === userId ? { ...m, status: "inactive" as const } : m)));
 
+  const sendInvite = (i: { email: string; roleSlug: string; message?: string }) => {
+    setInvites((prev) => [
+      ...prev,
+      { id: `inv-${prev.length}-${i.email}`, email: i.email, roleSlug: i.roleSlug, status: "pending", createdAt: Date.now() },
+    ]);
+    setNote(`Invite sent to ${i.email}.`);
+  };
+  const cancelInvite = ({ inviteId }: { inviteId: string }) =>
+    setInvites((prev) => prev.filter((x) => x.id !== inviteId));
+  const resendInvite = ({ inviteId }: { inviteId: string }) => {
+    const inv = invites.find((x) => x.id === inviteId);
+    if (inv) setNote(`Invite resent to ${inv.email}.`);
+  };
+
   return (
     <SlicePreviewLayout
-      title="User Management — Members"
+      title="User Management — Members & Invites"
       kind="full"
-      description="Props-driven <MembersPanel>: search · role filter · sort · inline role change · soft-remove · permission-gated invite. RBAC-agnostic — roles + perms wired from rbac-roles. Mock data, no backend."
+      description="Props-driven <MembersPanel>: search · role filter · sort · inline role change · soft-remove · invite dialog · pending invites. RBAC-agnostic — roles + perms wired from rbac-roles. Mock data, no backend."
       sourceUrl="https://github.com/rahmanef63/resource-site/tree/main/frontend/slices/user-management"
     >
       <div className="space-y-4">
         <div className="flex flex-wrap items-center gap-2 text-sm">
           <span className="text-muted-foreground">View as:</span>
-          <Button size="sm" variant={asAdmin ? "default" : "outline"} onClick={() => setAsAdmin(true)}>Admin (manage)</Button>
+          <Button size="sm" variant={asAdmin ? "default" : "outline"} onClick={() => setAsAdmin(true)}>Admin (manage + invite)</Button>
           <Button size="sm" variant={!asAdmin ? "default" : "outline"} onClick={() => setAsAdmin(false)}>Manager (read-only)</Button>
         </div>
         <MembersPanel
@@ -50,7 +65,10 @@ export default function Page() {
           currentPerms={currentPerms}
           onUpdateRole={updateRole}
           onRemove={remove}
-          onInvite={() => setNote("Invite flow ships in P2.")}
+          invites={invites}
+          onInvite={sendInvite}
+          onCancelInvite={cancelInvite}
+          onResendInvite={resendInvite}
         />
         {note ? <p className="text-xs text-muted-foreground">{note}</p> : null}
       </div>

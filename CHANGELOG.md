@@ -11,6 +11,25 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-05-31 — user-management: invite flow (P2 of the epic) v0.2.0
+
+- **Invite flow added to `user-management`.** `<InviteDialog>` (email + role
+  select + optional message, shadcn Dialog) and `<PendingInvites>` (pending
+  list with resend / cancel) — both permission-gated on `members.invite`.
+  `<MembersPanel>` now owns the dialog state (toolbar invite button opens it)
+  and renders the pending list above the table. New props: `onInvite(input)`,
+  `invites`, `onCancelInvite`, `onResendInvite`. New types `Invite` /
+  `InviteInput` / `InviteStatus`.
+- **Convex** (`convex/features/user-management/`): `um_invites` table
+  (tenant-scoped, by_token index) + `listInvites` (soft-denied without
+  members.invite/manage) + `sendInvite` (7-day crypto token, rejects
+  duplicate pending) / `cancelInvite` / `resendInvite` (all gated
+  members.invite) + `acceptInvite(token)` (public; creates/reactivates the
+  membership for the signed-in user).
+- Preview wires the full flow with the Admin/Manager view-as toggle. Slice +
+  catalog bumped 0.1.0 → 0.2.0; `dialog` + `textarea` + `label` added to
+  shadcn deps.
+
 ### 2026-05-31 — user-management: Members surface (P1 of the epic) v0.1.0
 
 - **New `user-management` slice** — the members surface, ported from

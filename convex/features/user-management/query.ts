@@ -44,3 +44,34 @@ export const listMembers = query({
     );
   },
 });
+
+/** List a tenant's invitations (pending by default). Soft-denies to []
+ *  without members.invite / members.manage. */
+export const listInvites = query({
+  args: {
+    tenantId: v.union(v.string(), v.null()),
+    status: v.optional(v.union(
+      v.literal("pending"), v.literal("accepted"), v.literal("declined"), v.literal("expired"),
+    )),
+  },
+  handler: async (ctx, { tenantId, status }) => {
+    const perms = await getActorPermissions(ctx, tenantId);
+    const canView = perms.some(
+      (p) => p === "*" || p === "members.*" || p === "members.invite" || p === "members.manage",
+    );
+    if (!canView) return [];
+    const wanted = status ?? "pending";
+    const rows = await ctx.db
+      .query("um_invites")
+      .withIndex("by_tenant_status", (q) => q.eq("tenantId", tenantId).eq("status", wanted))
+      .take(500);
+    return rows.map((i) => ({
+      id: i._id,
+      email: i.email,
+      roleSlug: i.roleSlug,
+      status: i.status,
+      createdAt: i.createdAt,
+      expiresAt: i.expiresAt,
+    }));
+  },
+});

@@ -1,24 +1,23 @@
 /**
- * user-management slice contract — members surface (P1).
+ * user-management slice contract — members + invites surface (P1+P2).
  *
  * Props-driven + RBAC-agnostic. Peers rbac-roles (roles + permission
- * helpers) and convex-auth (identity). Invites (P2) + roles admin (P3)
- * extend this.
+ * helpers) and convex-auth (identity). Roles admin (P3) extends this.
  */
 
 import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "user-management",
-  version: "0.1.0",
+  version: "0.2.0",
   category: "auth",
   kind: "full",
   provides: {
-    components: ["MembersPanel", "MembersTable", "MembersToolbar", "MemberRowActions", "RoleChip"],
+    components: ["MembersPanel", "MembersTable", "MembersToolbar", "MemberRowActions", "RoleChip", "InviteDialog", "PendingInvites"],
     hooks: ["useMembersView"],
     utils: ["can", "matchPermission"],
     convex: {
-      tables: ["um_members"],
+      tables: ["um_members", "um_invites"],
       rbac: ["members.view", "members.manage", "members.invite"],
     },
   },
@@ -27,7 +26,7 @@ export const contract = defineSliceContract({
       { npm: "next", range: "^15" },
       { npm: "react", range: "^18" },
     ],
-    shadcn: ["avatar", "badge", "button", "dropdown-menu", "input", "select", "table"],
+    shadcn: ["avatar", "badge", "button", "dialog", "dropdown-menu", "input", "label", "select", "table", "textarea"],
     env: [],
     peers: [
       { slug: "rbac-roles", range: "^0.2" },

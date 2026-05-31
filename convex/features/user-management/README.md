@@ -3,9 +3,9 @@
 Backend half of the `user-management` slice — members.
 
 ## Files
-- `_schema.ts` — `userManagementTables` (`um_members`). Spread into your root schema.
-- `query.ts` — `listMembers` (joins `users` for name/email/avatar; soft-denies to `[]` without `members.view`).
-- `mutation.ts` — `addMember`, `updateMemberRole`, `removeMember` (soft-delete) — all gated on `members.manage`.
+- `_schema.ts` — `userManagementTables` (`um_members` + `um_invites`). Spread into your root schema.
+- `query.ts` — `listMembers` (joins `users`; soft-denies without `members.view`), `listInvites` (pending by default; needs `members.invite`/`members.manage`).
+- `mutation.ts` — members: `addMember`, `updateMemberRole`, `removeMember` (soft-delete) gated on `members.manage`; invites: `sendInvite` (7-day token, rejects duplicate pending), `cancelInvite`, `resendInvite` gated on `members.invite`, and `acceptInvite(token)` (public — creates/reactivates the membership for the signed-in user).
 
 ## Wiring
 1. Install the `rbac-roles` slice — this feature imports its permission

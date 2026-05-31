@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-31T22:10:37.630Z",
+  "generatedAt": "2026-05-31T22:32:07.418Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -1789,7 +1789,7 @@
       "slug": "user-management",
       "title": "User Management",
       "category": "auth",
-      "description": "Members surface ported from superspace, props-driven + RBAC-agnostic. <MembersPanel>: searchable / role-filterable / sortable member table with avatar + name + email, inline role dropdown, soft-remove, and a permission-gated invite button. You pass `roles` (options) + `currentPerms` (resolved permission strings, wired from rbac-roles at the app level) + CRUD callbacks; the slice imports no other slice's frontend. Convex template ships um_members + listMembers (joins users) + addMember / updateMemberRole / removeMember, all gated via rbac-roles' requirePermission. P1 of the user-management epic — invites (P2) + roles admin (P3) next.",
+      "description": "Members + invites surface ported from superspace, props-driven + RBAC-agnostic. <MembersPanel>: searchable / role-filterable / sortable member table (avatar + name + email), inline role dropdown, soft-remove, an InviteDialog (email + role + message) and a PendingInvites list with resend / cancel — all permission-gated. You pass `roles` + `currentPerms` (resolved from rbac-roles at the app level) + CRUD/invite callbacks; the slice imports no other slice's frontend. Convex template ships um_members + um_invites + listMembers / listInvites + addMember / updateMemberRole / removeMember + sendInvite / cancelInvite / resendInvite / acceptInvite (7-day token), all gated via rbac-roles' requirePermission. P1+P2 of the user-management epic — roles admin (P3) next.",
       "source": "superspace",
       "install": "npx rahman-resources add user-management",
       "npmPackages": [],
@@ -3232,8 +3232,8 @@
       "title": "User Management",
       "category": "auth",
       "kind": "full",
-      "version": "0.1.0",
-      "description": "Members surface ported from superspace, props-driven + RBAC-agnostic. <MembersPanel>: searchable / role-filterable / sortable member table with avatar + name + email, inline role dropdown, soft-remove, and a permission-gated invite button. You pass `roles` (options) + `currentPerms` (resolved permission strings, wired from rbac-roles at the app level) + CRUD callbacks; the slice imports no other slice's frontend. Convex template ships um_members + listMembers (joins users) + addMember / updateMemberRole / removeMember, all gated via rbac-roles' requirePermission. P1 of the user-management epic — invites (P2) + roles admin (P3) next.",
+      "version": "0.2.0",
+      "description": "Members + invites surface ported from superspace, props-driven + RBAC-agnostic. <MembersPanel>: searchable / role-filterable / sortable member table (avatar + name + email), inline role dropdown, soft-remove, an InviteDialog (email + role + message) and a PendingInvites list with resend / cancel — all permission-gated. You pass `roles` + `currentPerms` (resolved from rbac-roles at the app level) + CRUD/invite callbacks; the slice imports no other slice's frontend. Convex template ships um_members + um_invites + listMembers / listInvites + addMember / updateMemberRole / removeMember + sendInvite / cancelInvite / resendInvite / acceptInvite (7-day token), all gated via rbac-roles' requirePermission. P1+P2 of the user-management epic — roles admin (P3) next.",
       "source": "superspace",
       "slicePath": "frontend/slices/user-management",
       "convexPaths": [
@@ -3244,10 +3244,13 @@
         "avatar",
         "badge",
         "button",
+        "dialog",
         "dropdown-menu",
         "input",
+        "label",
         "select",
-        "table"
+        "table",
+        "textarea"
       ],
       "env": [],
       "peers": [

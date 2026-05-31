@@ -24,6 +24,25 @@ export const userManagementTables = {
     .index("by_tenant", ["tenantId"])
     .index("by_tenant_user", ["tenantId", "userId"])
     .index("by_user", ["userId"]),
+
+  um_invites: defineTable({
+    tenantId: v.union(v.string(), v.null()),
+    inviterId: v.string(),
+    email: v.string(),
+    roleSlug: v.string(),
+    status: v.union(
+      v.literal("pending"), v.literal("accepted"), v.literal("declined"), v.literal("expired"),
+    ),
+    message: v.optional(v.string()),
+    token: v.string(),
+    createdAt: v.number(),
+    expiresAt: v.number(),
+    acceptedAt: v.optional(v.number()),
+  })
+    .index("by_tenant", ["tenantId"])
+    .index("by_tenant_status", ["tenantId", "status"])
+    .index("by_email", ["email"])
+    .index("by_token", ["token"]),
 };
 
 export default userManagementTables;

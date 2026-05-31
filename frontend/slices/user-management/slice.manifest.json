@@ -1,8 +1,8 @@
 {
   "$schema": "../../../docs/slice.manifest.schema.json",
   "name": "user-management",
-  "version": "0.1.0",
-  "description": "Members surface (P1): searchable/sortable member table with inline role dropdown, soft-remove, permission-gated invite. Props-driven + RBAC-agnostic; pair with rbac-roles + convex-auth.",
+  "version": "0.2.0",
+  "description": "Members + invites surface (P1+P2): member table (inline role dropdown, soft-remove), InviteDialog + PendingInvites (resend/cancel), all permission-gated. Props-driven + RBAC-agnostic; pair with rbac-roles + convex-auth.",
   "category": "auth",
   "stability": "alpha",
   "deps": {
@@ -26,6 +26,11 @@
       "name": "um_members",
       "namespaced": true,
       "indexes": ["by_tenant", "by_tenant_user", "by_user"]
+    },
+    {
+      "name": "um_invites",
+      "namespaced": true,
+      "indexes": ["by_tenant", "by_tenant_status", "by_email", "by_token"]
     }
   ],
   "compatibility": {
@@ -36,5 +41,5 @@
     "auth": "convex-auth"
   },
   "tags": ["user-management", "members", "rbac", "auth", "team", "admin", "convex", "no-clerk"],
-  "notes": "0.1.0 (2026-05-31): P1 of the user-management epic. Members table only. RBAC-agnostic by design — the slice imports no other slice's frontend; roles + resolved permissions are passed as props (wire from rbac-roles at the app level). Convex side reuses rbac-roles' requirePermission/getActorPermissions. Invites (P2) + roles admin (P3) + full-parity extras (P4) follow."
+  "notes": "0.2.0 (2026-05-31): P2 — invite flow added (InviteDialog email+role+message, PendingInvites resend/cancel; convex um_invites + sendInvite/cancelInvite/resendInvite/acceptInvite, 7-day token). 0.1.0: P1 members table. RBAC-agnostic by design — the slice imports no other slice's frontend; roles + resolved permissions are passed as props (wire from rbac-roles at the app level). Convex reuses rbac-roles' requirePermission/getActorPermissions. Roles admin (P3) + full-parity extras (P4) follow."
 }

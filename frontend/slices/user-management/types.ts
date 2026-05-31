@@ -24,6 +24,23 @@ export interface RoleOption {
   color?: string;
 }
 
+export type InviteStatus = "pending" | "accepted" | "declined" | "expired";
+
+export interface Invite {
+  id: string;
+  email: string;
+  roleSlug: string;
+  status: InviteStatus;
+  createdAt?: number;
+  expiresAt?: number;
+}
+
+export interface InviteInput {
+  email: string;
+  roleSlug: string;
+  message?: string;
+}
+
 export interface MembersLabels {
   searchPlaceholder: string;
   allRoles: string;
@@ -36,6 +53,19 @@ export interface MembersLabels {
   remove: string;
   pending: string;
   inactive: string;
+  // Invite flow
+  inviteTitle: string;
+  inviteDescription: string;
+  inviteEmail: string;
+  inviteRole: string;
+  inviteMessage: string;
+  inviteMessagePlaceholder: string;
+  inviteSubmit: string;
+  inviteSending: string;
+  cancel: string;
+  pendingTitle: string;
+  resend: string;
+  cancelInvite: string;
 }
 
 export const DEFAULT_MEMBERS_LABELS: MembersLabels = {
@@ -50,4 +80,16 @@ export const DEFAULT_MEMBERS_LABELS: MembersLabels = {
   remove: "Remove from workspace",
   pending: "Pending",
   inactive: "Inactive",
+  inviteTitle: "Invite a member",
+  inviteDescription: "Send an email invite. They'll join with the role you pick.",
+  inviteEmail: "Email",
+  inviteRole: "Role",
+  inviteMessage: "Message (optional)",
+  inviteMessagePlaceholder: "Add a short note to the invite…",
+  inviteSubmit: "Send invite",
+  inviteSending: "Sending…",
+  cancel: "Cancel",
+  pendingTitle: "Pending invitations",
+  resend: "Resend invite",
+  cancelInvite: "Cancel invite",
 };
