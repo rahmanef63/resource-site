@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "notion-shell",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "category": "ui",
   "kind": "ui",
   "title": "Notion Shell — page + sidebar + block editor primitives (pure, no database)",
