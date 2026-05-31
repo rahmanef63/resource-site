@@ -6,7 +6,7 @@ Backend half of the `user-management` slice — members.
 - `_schema.ts` — `userManagementTables` (`um_members`, `um_invites`, `um_teams`, `um_team_members`). Spread into your root schema.
 - `query.ts` — `listMembers` (joins `users`; soft-denies without `members.view`), `listInvites` (pending by default; needs `members.invite`/`members.manage`), `listTeams` (each with member ids).
 - `mutation.ts` — members: `addMember`, `updateMemberRole`, `removeMember` (soft-delete) gated on `members.manage`; invites: `sendInvite` (7-day token), `cancelInvite`, `resendInvite` gated on `members.invite`, `acceptInvite(token)` (public); teams: `createTeam`, `removeTeam`, `addTeamMember`, `removeTeamMember` gated on `members.manage`.
-- `hierarchy/` (P4b) — `query.ts`: `listChildTenants`, `getDescendantTenants` (BFS). `mutation.ts`: `linkTenant` / `unlinkTenant` (generic parent→child edges in `um_tenant_links`; members.manage) + `sendHierarchyInvite` (root + descendants, `same` | `decreasing` role strategy; members.invite). rr never owns the tenant entities — only the tree edges.
+- `hierarchy/` (P4b/c) — `query.ts`: `listChildTenants`, `getDescendantTenants` (BFS), `getAccessMatrix` (users × tenants → roleSlug across root + descendants; members.view). `mutation.ts`: `linkTenant` / `unlinkTenant` (generic parent→child edges in `um_tenant_links`; members.manage) + `sendHierarchyInvite` (root + descendants, `same` | `decreasing` role strategy; members.invite). rr never owns the tenant entities — only the tree edges.
 
 ## Wiring
 1. Install the `rbac-roles` slice — this feature imports its permission

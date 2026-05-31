@@ -5,9 +5,16 @@ import { SlicePreviewLayout } from "@/components/slice-previews/preview-layout";
 import { Button } from "@/components/ui/button";
 import { ROLE_PRESETS, resolvePermissions, PERMISSION_GROUPS } from "@/features/rbac-roles";
 import {
-  UserManagementPanel,
+  UserManagementPanel, tenantKey,
   type Member, type RoleOption, type Invite, type ManagedRole, type Team,
+  type TenantNode, type MatrixUser, type AccessCells,
 } from "@/features/user-management";
+
+const ACCESS_TENANTS: TenantNode[] = [
+  { id: "root", name: "Acme HQ", depth: 0 },
+  { id: "eu", name: "Acme EU", depth: 1 },
+  { id: "apac", name: "Acme APAC", depth: 1 },
+];
 
 // Wiring happens here (app level): roles, resolved permissions and the
 // permission catalog come from rbac-roles; the panel comes from
@@ -33,6 +40,13 @@ export default function Page() {
     { id: "t1", name: "Engineering", memberIds: ["u2", "u4"] },
     { id: "t2", name: "Design", memberIds: ["u3"] },
   ]);
+  const [cells, setCells] = React.useState<AccessCells>({
+    u1: { root: "owner", eu: "admin" },
+    u2: { root: "admin", apac: "manager" },
+    u3: { root: "manager" },
+    u4: { root: "staff", eu: "staff" },
+    u5: { root: "client" },
+  });
   const [asAdmin, setAsAdmin] = React.useState(true);
   const [note, setNote] = React.useState("");
   const currentPerms = React.useMemo(() => resolvePermissions(asAdmin ? "admin" : "manager"), [asAdmin]);
@@ -66,6 +80,10 @@ export default function Page() {
     setTeams((prev) => prev.map((t) => (t.id === teamId ? { ...t, memberIds: [...new Set([...t.memberIds, userId])] } : t)));
   const removeTeamMember = ({ teamId, userId }: { teamId: string; userId: string }) =>
     setTeams((prev) => prev.map((t) => (t.id === teamId ? { ...t, memberIds: t.memberIds.filter((id) => id !== userId) } : t)));
+  const accessUsers: MatrixUser[] = React.useMemo(
+    () => members.map((m) => ({ userId: m.userId, name: m.name, email: m.email, avatarUrl: m.avatarUrl })), [members]);
+  const assignAccess = ({ userId, tenantId, roleSlug }: { userId: string; tenantId: string | null; roleSlug: string }) =>
+    setCells((prev) => ({ ...prev, [userId]: { ...prev[userId], [tenantKey(tenantId)]: roleSlug } }));
 
   return (
     <SlicePreviewLayout
@@ -95,6 +113,10 @@ export default function Page() {
             teams, allMembers: members, currentPerms,
             onCreateTeam: createTeam, onRemoveTeam: removeTeam,
             onAddMember: addTeamMember, onRemoveMember: removeTeamMember,
+          }}
+          access={{
+            tenants: ACCESS_TENANTS, users: accessUsers, cells,
+            roles: roleOptions, currentPerms, onAssign: assignAccess,
           }}
         />
         {note ? <p className="text-xs text-muted-foreground">{note}</p> : null}

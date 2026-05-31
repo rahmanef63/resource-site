@@ -60,3 +60,34 @@ export const getDescendantTenants = query({
     return await collectDescendants(ctx, rootTenantId, maxDepth ?? 10);
   },
 });
+
+/** Cross-tenant access matrix (P4c): users × tenants → roleSlug, across a
+ *  root + its descendants. Soft-denies (empty) without members.view on the
+ *  root. The cell key mirrors the frontend `tenantKey` (null → "__root__"). */
+export const getAccessMatrix = query({
+  args: { rootTenantId: tenantArg, maxDepth: v.optional(v.number()) },
+  handler: async (ctx, { rootTenantId, maxDepth }) => {
+    if (!(await canViewMembers(ctx, rootTenantId))) return { tenants: [], users: [], cells: {} };
+    const tenants = [{ id: rootTenantId, depth: 0 }, ...(await collectDescendants(ctx, rootTenantId, maxDepth ?? 10))];
+    const cells = {};
+    const userIds = new Set();
+    for (const t of tenants) {
+      const members = await ctx.db
+        .query("um_members")
+        .withIndex("by_tenant", (q) => q.eq("tenantId", t.id))
+        .take(1000);
+      for (const m of members) {
+        if (m.status !== "active") continue;
+        userIds.add(m.userId);
+        (cells[m.userId] ??= {})[t.id ?? "__root__"] = m.roleSlug;
+      }
+    }
+    const users = await Promise.all(
+      [...userIds].map(async (uid) => {
+        const u = await ctx.db.get(uid);
+        return { userId: uid, name: u?.name, email: u?.email, avatarUrl: u?.avatarUrl ?? u?.image };
+      }),
+    );
+    return { tenants, users, cells };
+  },
+});

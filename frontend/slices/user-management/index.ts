@@ -15,6 +15,11 @@ export { RoleEditor } from "./components/RoleEditor";
 export { RolePermissionGrid } from "./components/RolePermissionGrid";
 export { TeamsPanel, type TeamsPanelProps } from "./components/TeamsPanel";
 export { TeamDetail } from "./components/TeamDetail";
+export { AccessMatrix, type AccessMatrixProps } from "./components/AccessMatrix";
+export {
+  DEFAULT_ACCESS_LABELS, tenantKey,
+  type TenantNode, type MatrixUser, type AccessCells, type AccessMatrixLabels,
+} from "./access-types";
 export { useMembersView, type MembersView, type SortKey } from "./hooks/useMembersView";
 export { can, matchPermission } from "./lib/can";
 export {

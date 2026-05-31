@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-31T23:34:26.979Z",
+  "generatedAt": "2026-05-31T23:41:24.473Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -1789,7 +1789,7 @@
       "slug": "user-management",
       "title": "User Management",
       "category": "auth",
-      "description": "Full members + invites + roles-admin + teams + tenant-hierarchy surface ported from superspace, props-driven + RBAC-agnostic. <UserManagementPanel> tabs Members + Roles + Teams: member table (search / filter / sort, inline role dropdown, soft-remove), InviteDialog (with an optional 'propagate to sub-workspaces' toggle — same / step-down role strategy) + PendingInvites, a RolesPanel (custom roles via permission matrix; system roles read-only), and a TeamsPanel (named user groups). All permission-gated. You pass `roles` + `currentPerms` + the permission catalog (resolved from rbac-roles) + callbacks; the slice imports no other slice's frontend. Convex ships um_members + um_invites + um_teams + um_team_members + um_tenant_links + member / invite / team / hierarchy endpoints (gated via rbac-roles' requirePermission); roles CRUD reuses rbac-roles'. The hierarchy is a generic edge tree — rr never owns the tenant entities. P1–P4b of the user-management epic — cross-workspace access matrix (P4c) next.",
+      "description": "Full superspace-parity user management, props-driven + RBAC-agnostic. <UserManagementPanel> tabs Members + Roles + Teams + Access: member table (search / filter / sort, inline role dropdown, soft-remove), InviteDialog (with an optional 'propagate to sub-workspaces' toggle — same / step-down role strategy) + PendingInvites, a RolesPanel (custom roles via permission matrix; system roles read-only), a TeamsPanel (named user groups), and an AccessMatrix (users × tenants grid with inline role assignment). All permission-gated. You pass `roles` + `currentPerms` + the permission catalog (resolved from rbac-roles) + callbacks; the slice imports no other slice's frontend. Convex ships um_members + um_invites + um_teams + um_team_members + um_tenant_links + member / invite / team / hierarchy endpoints + getAccessMatrix (gated via rbac-roles' requirePermission); roles CRUD reuses rbac-roles'. The hierarchy is a generic edge tree — rr never owns the tenant entities. P0–P4c: the complete user-management epic.",
       "source": "superspace",
       "install": "npx rahman-resources add user-management",
       "npmPackages": [],
@@ -3232,8 +3232,8 @@
       "title": "User Management",
       "category": "auth",
       "kind": "full",
-      "version": "0.5.0",
-      "description": "Full members + invites + roles-admin + teams + tenant-hierarchy surface ported from superspace, props-driven + RBAC-agnostic. <UserManagementPanel> tabs Members + Roles + Teams: member table (search / filter / sort, inline role dropdown, soft-remove), InviteDialog (with an optional 'propagate to sub-workspaces' toggle — same / step-down role strategy) + PendingInvites, a RolesPanel (custom roles via permission matrix; system roles read-only), and a TeamsPanel (named user groups). All permission-gated. You pass `roles` + `currentPerms` + the permission catalog (resolved from rbac-roles) + callbacks; the slice imports no other slice's frontend. Convex ships um_members + um_invites + um_teams + um_team_members + um_tenant_links + member / invite / team / hierarchy endpoints (gated via rbac-roles' requirePermission); roles CRUD reuses rbac-roles'. The hierarchy is a generic edge tree — rr never owns the tenant entities. P1–P4b of the user-management epic — cross-workspace access matrix (P4c) next.",
+      "version": "0.6.0",
+      "description": "Full superspace-parity user management, props-driven + RBAC-agnostic. <UserManagementPanel> tabs Members + Roles + Teams + Access: member table (search / filter / sort, inline role dropdown, soft-remove), InviteDialog (with an optional 'propagate to sub-workspaces' toggle — same / step-down role strategy) + PendingInvites, a RolesPanel (custom roles via permission matrix; system roles read-only), a TeamsPanel (named user groups), and an AccessMatrix (users × tenants grid with inline role assignment). All permission-gated. You pass `roles` + `currentPerms` + the permission catalog (resolved from rbac-roles) + callbacks; the slice imports no other slice's frontend. Convex ships um_members + um_invites + um_teams + um_team_members + um_tenant_links + member / invite / team / hierarchy endpoints + getAccessMatrix (gated via rbac-roles' requirePermission); roles CRUD reuses rbac-roles'. The hierarchy is a generic edge tree — rr never owns the tenant entities. P0–P4c: the complete user-management epic.",
       "source": "superspace",
       "slicePath": "frontend/slices/user-management",
       "convexPaths": [

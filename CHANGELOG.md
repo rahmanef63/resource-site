@@ -11,6 +11,25 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-05-31 — user-management: access matrix (P4c) v0.6.0 — epic complete
+
+- **Cross-tenant `<AccessMatrix>`** — users (rows) × tenants (columns) grid
+  showing each user's role per tenant across a hierarchy. Read-only by
+  default; when `currentPerms` grants `members.manage` and `onAssign` is
+  passed, each cell becomes a role select. Matrix types live in a new
+  `access-types.ts` (TenantNode / MatrixUser / AccessCells) so `types.ts`
+  stays under the 200-LOC cap.
+- **`<UserManagementPanel>`** gains an optional **Access** tab (renders when
+  the `access` prop bag is passed).
+- **Convex** `hierarchy/query.ts`: `getAccessMatrix(rootTenantId, maxDepth?)`
+  — walks root + descendants, builds `{ tenants, users, cells }` (cell key
+  mirrors the frontend `tenantKey`). Soft-denied without `members.view`.
+- Preview gains the Access tab (3-tenant mock hierarchy + inline assignment).
+  Slice + catalog 0.5.0 → 0.6.0; no new shadcn deps.
+- **This completes the user-management epic (P0–P4c): full superspace
+  parity** — engine + members + invites + roles admin + teams + hierarchy +
+  access matrix, all props-driven, RBAC-agnostic, self-contained.
+
 ### 2026-05-31 — user-management: tenant hierarchy + propagating invites (P4b) v0.5.0
 
 - **Tenant hierarchy added to `user-management`.** rr deliberately does NOT
