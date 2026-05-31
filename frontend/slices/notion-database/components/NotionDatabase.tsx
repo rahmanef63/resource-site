@@ -125,7 +125,7 @@ export function NotionDatabase({
     });
 
   const renderColumnHeader = (prop: Property) => buildColumnHeader({
-    prop, db, activeView,
+    prop, db, activeView, databases,
     onPropertyUpdate, onPropertyRemove, onPropertyDuplicate,
     onPropertyInsert, onPropertyMove, onViewConfigChange,
   });

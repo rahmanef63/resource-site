@@ -55,8 +55,13 @@ export function TimelineView({ db, view, rows, onRowUpdate, onOpenRow, onRowAdd 
     if (!dateProp) return [];
     return rows
       .map((r) => {
-        const startStr = (r.rowProps?.[dateProp.id] as { date?: string })?.date;
-        const endStr = endProp ? (r.rowProps?.[endProp.id] as { date?: string })?.date : null;
+        const startVal = r.rowProps?.[dateProp.id] as { date?: string; end?: string } | undefined;
+        const startStr = startVal?.date;
+        // Configured end-prop wins; else fall back to the start date's
+        // own `end` so a single range column drives the bar.
+        const endStr = endProp
+          ? (r.rowProps?.[endProp.id] as { date?: string })?.date
+          : startVal?.end ?? null;
         if (!startStr) return null;
         const startMs = toMs(startStr);
         const endMs = endStr ? toMs(endStr) : startMs;

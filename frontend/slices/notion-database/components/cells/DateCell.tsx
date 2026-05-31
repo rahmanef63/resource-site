@@ -67,7 +67,7 @@ export function DateCell({ value, readOnly, onChange, prop }: DateCellProps) {
   const [open, setOpen] = useState(false);
   const v = value && typeof value === "object" ? value : null;
   const isRange = !!v?.end;
-  const [rangeMode, setRangeMode] = useState(isRange);
+  const [rangeMode, setRangeMode] = useState(isRange || !!prop?.dateRange);
 
   const selected = useMemo(() => {
     if (rangeMode) return { from: fromISO(v?.date), to: fromISO(v?.end) };

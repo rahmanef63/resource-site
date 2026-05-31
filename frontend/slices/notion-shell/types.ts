@@ -86,6 +86,12 @@ export interface Property {
   /** When true the date cell renders the optional `time` / `endTime`
    *  components alongside the date(s). type=date. */
   dateIncludeTime?: boolean;
+  /** When true the date column defaults to a start→end range (the cell
+   *  opens in range mode; Calendar spans the days; Timeline reads the
+   *  value's own `end` when no separate end-prop is configured). The
+   *  per-cell "Include end date" toggle still overrides per row.
+   *  type=date. */
+  dateRange?: boolean;
 }
 
 export type PropertyValue =

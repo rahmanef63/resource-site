@@ -20,7 +20,7 @@ import {
   DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type {
-  DatabaseViewConfig, Property, PropertyType,
+  Database, DatabaseViewConfig, Property, PropertyType,
 } from "../types";
 import { buildColumnHeaderActions } from "./column-header/actions";
 import { PROPERTY_TYPE_MENU_CONFIG, sectionOf } from "./column-header/menu-config";
@@ -35,7 +35,13 @@ export interface ColumnHeaderMenuProps {
   propertyCount: number;
   /** Override the trigger. Defaults to the column name + chevron. */
   trigger?: ReactNode;
-  onRename?: () => void;
+  /** Host database + workspace catalog — relation / rollup config panels
+   *  need them to populate target pickers. Optional. */
+  db?: Database;
+  databases?: Database[];
+  /** Merge a partial Property — backs the Edit-property panel (name,
+   *  description, per-type config). */
+  onPatch?: (patch: Partial<Property>) => void;
   onTypeChange?: (type: PropertyType) => void;
   onHide?: () => void;
   onDelete?: () => void;
@@ -49,17 +55,17 @@ export interface ColumnHeaderMenuProps {
 }
 
 export function ColumnHeaderMenu({
-  prop, view, index, propertyCount, trigger,
-  onRename, onTypeChange, onHide, onDelete, onDuplicate, onInsert, onMove,
+  prop, view, index, propertyCount, trigger, db, databases,
+  onPatch, onTypeChange, onHide, onDelete, onDuplicate, onInsert, onMove,
   onViewConfigChange,
 }: ColumnHeaderMenuProps) {
   const { actions, flags } = buildColumnHeaderActions({
     prop, view, index, propertyCount,
-    onRename, onTypeChange, onHide, onDelete, onDuplicate, onInsert, onMove,
+    onPatch, onTypeChange, onHide, onDelete, onDuplicate, onInsert, onMove,
     onViewConfigChange,
   });
   const config = PROPERTY_TYPE_MENU_CONFIG[prop.type] ?? PROPERTY_TYPE_MENU_CONFIG.text;
-  const ctx = { type: prop.type, actions, flags };
+  const ctx = { type: prop.type, prop, actions, flags, db, databases };
 
   // Render items first, drop the self-hidden ones, then place a
   // separator only between rendered items whose section differs.

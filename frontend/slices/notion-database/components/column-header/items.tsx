@@ -7,7 +7,7 @@
  *  key from any type's `mainMenu` (./menu-config). */
 
 import {
-  Pencil, Repeat, Filter, ArrowUpDown, Group, Sigma, EyeOff, Copy,
+  Sliders, Repeat, Filter, ArrowUpDown, Group, Sigma, EyeOff, Copy,
   ArrowLeftToLine, ArrowRightToLine, ArrowLeft, ArrowRight, Trash2, Check,
 } from "lucide-react";
 import {
@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { calcLabel } from "../../lib/calcAggregate";
 import { PROPERTY_TYPE_META, PROPERTY_TYPES_USER_ADDABLE } from "../../types";
+import { EditPropertyPanel } from "./panels/EditPropertyPanel";
 import type { MenuItemContext, MenuItemKey, MenuItemRenderer } from "./types";
 
 const Spacer = () => <span className="mr-2 inline-block w-3.5" />;
@@ -24,11 +25,21 @@ const Badge = ({ text }: { text: string }) => (
   <span className="ml-auto truncate text-[10px] text-muted-foreground">{text}</span>
 );
 
-const RenameItem: MenuItemRenderer = ({ actions }) =>
-  actions.rename ? (
-    <DropdownMenuItem onClick={actions.rename}>
-      <Pencil className="mr-2 h-3.5 w-3.5" /> Rename
-    </DropdownMenuItem>
+const EditPropertyItem: MenuItemRenderer = ({ prop, actions, db, databases }) =>
+  actions.patch ? (
+    <DropdownMenuSub>
+      <DropdownMenuSubTrigger>
+        <Sliders className="mr-2 h-3.5 w-3.5" /> Edit property
+      </DropdownMenuSubTrigger>
+      <DropdownMenuSubContent
+        className="w-auto p-0"
+        sideOffset={2}
+        onKeyDown={(e) => e.stopPropagation()}
+        onPointerDown={(e) => e.stopPropagation()}
+      >
+        <EditPropertyPanel prop={prop} onPatch={actions.patch} db={db} databases={databases} />
+      </DropdownMenuSubContent>
+    </DropdownMenuSub>
   ) : null;
 
 const ChangeTypeItem: MenuItemRenderer = ({ type, actions }) =>
@@ -162,7 +173,7 @@ const DeleteItem: MenuItemRenderer = ({ actions }) =>
   ) : null;
 
 export const MENU_ITEM_REGISTRY: Record<MenuItemKey, MenuItemRenderer> = {
-  rename: RenameItem,
+  edit_property: EditPropertyItem,
   change_type: ChangeTypeItem,
   filter: FilterItem,
   sort: SortItem,

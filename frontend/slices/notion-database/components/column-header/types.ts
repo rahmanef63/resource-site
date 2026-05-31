@@ -16,11 +16,13 @@
  */
 
 import type { ReactElement } from "react";
-import type { CalcKind, PropertyType } from "../../types";
+import type {
+  CalcKind, Database, Property, PropertyType,
+} from "../../types";
 
 /** Every supported main-menu item. Keep in sync with `MENU_ITEM_REGISTRY`. */
 export type MenuItemKey =
-  | "rename"
+  | "edit_property"
   | "change_type"
   | "filter"
   | "sort"
@@ -38,7 +40,9 @@ export type MenuItemKey =
  *  optional — when the host omits the underlying callback the matching
  *  menu item renders nothing. */
 export interface ColumnHeaderActions {
-  rename?: () => void;
+  /** Merge a partial Property — backs the Edit-property panel (name,
+   *  description, + every per-type config field). */
+  patch?: (patch: Partial<Property>) => void;
   changeType?: (t: PropertyType) => void;
   filter?: () => void;
   setSortDir?: (dir: "asc" | "desc") => void;
@@ -70,8 +74,13 @@ export interface ColumnHeaderFlags {
 /** Uniform render context handed to every menu-item renderer. */
 export interface MenuItemContext {
   type: PropertyType;
+  /** The full property — the Edit-property panel reads every field. */
+  prop: Property;
   actions: ColumnHeaderActions;
   flags: ColumnHeaderFlags;
+  /** Host database + workspace catalog — relation / rollup config need them. */
+  db?: Database;
+  databases?: Database[];
 }
 
 export type MenuItemRenderer = (ctx: MenuItemContext) => ReactElement | null;

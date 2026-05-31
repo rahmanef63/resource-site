@@ -11,6 +11,37 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-05-31 — notion-database per-type Edit-property config panel + date ranges in views
+
+Follow-up to the config-driven menu: the dropdown now differs **per
+property type** in a second dimension — an "Edit property" submenu whose
+body is type-specific. Plus the date example the user asked for: an
+End-date toggle that actually feeds Calendar + Timeline.
+
+**Shipped (notion-database v0.14.0 → v0.15.0, notion-shell v0.7.1 → v0.7.2):**
+- `components/column-header/panels/` — `PROPERTY_TYPE_PANEL` registry +
+  per-type config panels:
+  - `NumberPanel` — format (number/decimal/percent/currency) · decimals · currency code.
+  - `DatePanel` — date format · include-time · time format · **End date (range)** toggle (editable `date` only).
+  - `FormulaPanel` — expression input. `UniqueIdPanel` — prefix. `SelectPanel` — options summary.
+  - `RelationPanel` — target database. `RollupPanel` — relation prop · target prop · aggregate.
+  - `EditPropertyPanel` router — shared Name + Description + the routed type panel; every edit flows through one `onPatch(Partial<Property>)`.
+- Menu: `edit_property` replaces the standalone `rename` item (Name lives
+  in the panel now). `MenuItemContext` gained `prop` / `db` / `databases`;
+  `ColumnHeaderActions.patch` replaces `rename`.
+- `ColumnHeaderMenu` props: `onPatch` replaces `onRename`; added optional
+  `db` + `databases` (relation/rollup pickers; degrade to a hint when
+  absent). Re-pull on `rr update`.
+- **notion-shell `Property.dateRange`** (new field) — date column defaults
+  to a start→end range. `DateCell` opens in range mode when set.
+- **Date ranges now drive views** (the user's ask):
+  - `bucketByDate` spans every day from `date`→`end` → `CalendarView`
+    renders multi-day bars (no view edit needed).
+  - `TimelineView` falls back to the start column's own `end` when no
+    separate end-prop is configured → a single range column draws the bar.
+
+tsc green · audit:slices + file-size + docs-primitives clean · build green.
+
 ### 2026-05-31 — notion-database config-driven column-header menu (nosion parity)
 
 Live `/slices/notion-database` had a flat per-column menu identical for

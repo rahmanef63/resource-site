@@ -19,7 +19,8 @@ export interface BuildActionsArgs {
   /** Position of this column within `db.properties` (move bounds). */
   index: number;
   propertyCount: number;
-  onRename?: () => void;
+  /** Merge a partial Property — backs the Edit-property panel. */
+  onPatch?: (patch: Partial<Property>) => void;
   onTypeChange?: (type: PropertyType) => void;
   onHide?: () => void;
   onDelete?: () => void;
@@ -38,7 +39,7 @@ export function buildColumnHeaderActions(args: BuildActionsArgs): {
 } {
   const {
     prop, view, index, propertyCount,
-    onRename, onTypeChange, onHide, onDelete, onDuplicate, onInsert, onMove,
+    onPatch, onTypeChange, onHide, onDelete, onDuplicate, onInsert, onMove,
     onViewConfigChange: onView,
   } = args;
 
@@ -55,7 +56,7 @@ export function buildColumnHeaderActions(args: BuildActionsArgs): {
   };
 
   const actions: ColumnHeaderActions = {
-    rename: onRename,
+    patch: onPatch,
     changeType: onTypeChange,
     hide: onHide,
     remove: onDelete,

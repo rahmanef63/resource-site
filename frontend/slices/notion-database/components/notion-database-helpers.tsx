@@ -11,6 +11,8 @@ interface Args {
   prop: Property;
   db: Database;
   activeView: DatabaseViewConfig;
+  /** Workspace catalog — relation / rollup config panels need it. */
+  databases?: Database[];
   onPropertyUpdate?: (propId: string, patch: Partial<Property>) => void;
   onPropertyRemove?: (propId: string) => void;
   onPropertyDuplicate?: (propId: string) => void;
@@ -22,7 +24,7 @@ interface Args {
 }
 
 export function buildColumnHeader({
-  prop, db, activeView,
+  prop, db, activeView, databases,
   onPropertyUpdate, onPropertyRemove, onPropertyDuplicate,
   onPropertyInsert, onPropertyMove, onViewConfigChange,
 }: Args) {
@@ -33,10 +35,9 @@ export function buildColumnHeader({
       view={activeView}
       index={index}
       propertyCount={db.properties.length}
-      onRename={onPropertyUpdate ? () => {
-        const next = window.prompt("Rename property", prop.name);
-        if (next && next.trim()) onPropertyUpdate(prop.id, { name: next.trim() });
-      } : undefined}
+      db={db}
+      databases={databases}
+      onPatch={onPropertyUpdate ? (patch) => onPropertyUpdate(prop.id, patch) : undefined}
       onTypeChange={onPropertyUpdate ? (type) => onPropertyUpdate(prop.id, { type }) : undefined}
       onHide={onPropertyUpdate ? () => onPropertyUpdate(prop.id, { hidden: true }) : undefined}
       onDelete={onPropertyRemove ? () => onPropertyRemove(prop.id) : undefined}

@@ -15,7 +15,7 @@
 import type { DatabaseFilterOp, PropertyType } from "../../types";
 import type { MenuItemKey, PropertyTypeMenuConfig } from "./types";
 
-const HEAD: MenuItemKey[] = ["rename", "change_type"];
+const HEAD: MenuItemKey[] = ["edit_property", "change_type"];
 const TAIL: MenuItemKey[] = [
   "hide", "duplicate", "insert_left", "insert_right", "move_left", "move_right", "delete",
 ];
@@ -57,7 +57,7 @@ export const PROPERTY_TYPE_MENU_CONFIG: Record<PropertyType, PropertyTypeMenuCon
  *  changes between two consecutive items, so per-type configs need not
  *  place dividers by hand. */
 const SECTION_OF: Record<MenuItemKey, number> = {
-  rename: 0,
+  edit_property: 0,
   change_type: 0,
   filter: 1,
   sort: 1,

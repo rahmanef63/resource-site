@@ -102,16 +102,29 @@ export function bucketByDate(
   prop: Property,
 ): Map<string, Page[]> {
   const out = new Map<string, Page[]>();
-  for (const r of rows) {
-    const raw = r.rowProps?.[prop.id];
-    const date =
-      typeof raw === "object" && raw && "date" in raw && raw.date
-        ? raw.date
-        : null;
-    if (!date) continue;
-    const key = String(date).slice(0, 10);
+  const push = (key: string, r: Page) => {
     if (!out.has(key)) out.set(key, []);
     out.get(key)!.push(r);
+  };
+  for (const r of rows) {
+    const raw = r.rowProps?.[prop.id];
+    const obj = typeof raw === "object" && raw ? (raw as { date?: string; end?: string }) : null;
+    const date = obj?.date ? String(obj.date).slice(0, 10) : null;
+    if (!date) continue;
+    const end = obj?.end ? String(obj.end).slice(0, 10) : null;
+    // Range (start→end): place the row on every spanned day so the
+    // Calendar shows it across the bar. Capped at 366 days as a guard.
+    if (end && end > date) {
+      for (let d = date, i = 0; d <= end && i < 366; d = addDay(d), i++) push(d, r);
+    } else {
+      push(date, r);
+    }
   }
   return out;
+}
+
+/** Next calendar day for a "YYYY-MM-DD" string (UTC-safe). */
+function addDay(ymd: string): string {
+  const [y, m, d] = ymd.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, d + 1)).toISOString().slice(0, 10);
 }
