@@ -6,6 +6,7 @@ import {
   NotionSidebar,
   NotionBlock,
   InsertBlockButton,
+  InlineFormatToolbar,
   type Block,
   type BlockType,
   type Database,
@@ -121,12 +122,8 @@ function PageDemo() {
 
   return (
     <div className="h-[28rem] overflow-y-auto rounded-lg border border-border bg-background">
-      <NotionPage
-        icon={icon}
-        title={title}
-        onIconChange={setIcon}
-        onTitleChange={setTitle}
-      >
+      <InlineFormatToolbar />
+      <NotionPage icon={icon} title={title} onIconChange={setIcon} onTitleChange={setTitle}>
         <div className="space-y-1">
           {blocks.map((b) => (
             <NotionBlock

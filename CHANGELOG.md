@@ -11,6 +11,18 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-05-31 — notion-shell: inline format toolbar (page-features P3) v0.10.0
+
+- **`InlineFormatToolbar`** — a floating rich-text toolbar that appears over
+  any non-empty selection inside a notion-shell contentEditable: **bold /
+  italic / strikethrough / code / link**. It wraps the selection in the
+  markdown markers the live decorator already renders, editing the focused
+  editable in place via `insertText` (re-fires the block's own `onInput`) —
+  so it needs zero block wiring; mount `<InlineFormatToolbar />` once in the
+  page surface. Buttons mousedown-preventDefault so the selection survives.
+- Preview mounts it over the block demo. Next (P3b): @mentions typeahead
+  (page / person / date), props-driven.
+
 ### 2026-05-31 — notion-shell: toggle nesting + media blocks (page-features P2) v0.9.0
 
 - **ToggleBlock** — collapsible section (chevron) with an inline-editable
