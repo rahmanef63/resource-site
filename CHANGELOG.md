@@ -11,6 +11,24 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-01 — NEW `cover` slice: full page cover picker (upload · Unsplash · gallery · reposition)
+
+- **NEW slice `cover` (0.1.0)** — the entire notion-page-clone cover feature,
+  lifted and made portable. `CoverBanner` (band + hover Change / Reposition /
+  Remove), `CoverPicker` (4 tabs: **Gallery** colours/gradients/Notion textures,
+  **Upload** drag/click ≤8MB, **Link** paste URL, **Unsplash** curated + live
+  search), `AddCoverButton`, `parseCover` (legacy string covers), `coverStyle`,
+  `unsplashSearchVia`. Imports **no other slice + no backend** — `onUpload` and
+  `searchUnsplash` are injected props; ships a curated Unsplash + gallery so it
+  works with zero config. New `/preview/slices/cover` demo.
+- **notion-shell 0.22→0.23** — `NotionPage` gains a `coverSlot`; `Page.cover`
+  widened to a structural `CoverValue` (notion-database's type peer untouched).
+- **notion-page-clone template** — `DocView` replaces the `window.prompt` cover
+  with the real picker; new `DocCover` glue wires `onUpload`→the `files` slice
+  (localStorage adapter via `FilesAdapterProvider`), resolves upload FileRefs to
+  URLs, and points Unsplash at a new **`app/api/unsplash`** server proxy
+  (holds `UNSPLASH_ACCESS_KEY` server-side). Layout bundles cover + files + route.
+
 ### 2026-06-01 — notion-sidebar split out of notion-shell (rename · dnd · icon picker)
 
 - **NEW slice `notion-sidebar` (0.1.0)** — the tree-nav sidebar is now its own
