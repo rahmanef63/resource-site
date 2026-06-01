@@ -11,6 +11,7 @@ import { TextOverlay } from "./text-overlay";
 import { ZoomHud } from "./zoom-hud";
 import { CropOverlay } from "./crop-overlay";
 import { MaskSurface } from "./mask-surface";
+import { FilteredGroup } from "./filtered-group";
 
 type AnyNode = Konva.Node | null;
 
@@ -18,7 +19,7 @@ type AnyNode = Konva.Node | null;
 // scaled by `zoom`. Wheel/pinch zoom, hand/space drag-pan, fit-to-screen (HUD).
 // A Transformer attaches to the selection when the Move tool is active.
 export function EditorStage() {
-  const { doc, zoom, pan, tool, selectedId, select, setPan, setZoom, setBrush, setTool, update, applyCrop, maskEditId, stageRef } = useEditor();
+  const { doc, zoom, pan, tool, selectedId, select, setPan, setZoom, setBrush, setTool, update, applyCrop, maskEditId, version, stageRef } = useEditor();
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const [size, setSize] = useState({ w: 800, h: 600 });
   const [editId, setEditId] = useState<string | null>(null);
@@ -65,6 +66,27 @@ export function EditorStage() {
   };
   const editing = editId ? doc.layers.find((l) => l.id === editId) ?? null : null;
 
+  // Render loop (accumulator): an adjustment layer wraps everything below it in
+  // a filtered cached group; other layers stack on top. See ARCHITECTURE.md.
+  const registerNode = (id: string, n: Konva.Node | null) => {
+    if (n) nodes.current.set(id, n);
+    else nodes.current.delete(id);
+  };
+  let acc: React.ReactNode[] = [];
+  for (const l of doc.layers) {
+    if (l.kind === "adjustment") {
+      if (!l.visible) continue; // hidden adjustment = pass-through
+      const below = acc;
+      acc = [
+        <FilteredGroup key={`adj-${l.id}`} adj={l.adj} width={doc.width} height={doc.height} version={version}>
+          {below}
+        </FilteredGroup>,
+      ];
+    } else {
+      acc.push(<LayerNode key={l.id} layer={l} isSelected={l.id === selectedId} registerNode={registerNode} />);
+    }
+  }
+
   return (
     <div
       ref={wrapRef}
@@ -101,14 +123,7 @@ export function EditorStage() {
           {doc.bg !== "transparent" && (
             <Rect name="doc-bg" x={0} y={0} width={doc.width} height={doc.height} fill={doc.bg} />
           )}
-          {doc.layers.map((l) => (
-            <LayerNode
-              key={l.id}
-              layer={l}
-              isSelected={l.id === selectedId}
-              registerNode={(id, n) => { if (n) nodes.current.set(id, n); else nodes.current.delete(id); }}
-            />
-          ))}
+          {acc}
           {maskEditId && <MaskSurface layerId={maskEditId} />}
         </KLayer>
         <KLayer>

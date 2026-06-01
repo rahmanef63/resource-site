@@ -9,6 +9,7 @@
     "consumerPath": "slices/image-editor"
   },
   "files": [
+    "ARCHITECTURE.md",
     "agent.md",
     "components/mobile-shell.tsx",
     "components/panels/adjust-panel.tsx",
@@ -25,6 +26,7 @@
     "components/side-panel.tsx",
     "components/stage/crop-overlay.tsx",
     "components/stage/editor-stage.tsx",
+    "components/stage/filtered-group.tsx",
     "components/stage/layer-node.tsx",
     "components/stage/mask-surface.tsx",
     "components/stage/masked-group.tsx",

@@ -22,7 +22,9 @@ export type BlendMode =
   | "color"
   | "luminosity";
 
-export type LayerKind = "image" | "text" | "shape" | "paint";
+// "adjustment" = a content-less layer whose `adj` filters everything BELOW it
+// (rendered via filtered-group in the editor-stage accumulator).
+export type LayerKind = "image" | "text" | "shape" | "paint" | "adjustment";
 export type ShapeKind = "rect" | "ellipse" | "line";
 
 // Photoshop "Blending Options" → mapped onto Konva node props in konva-helpers.

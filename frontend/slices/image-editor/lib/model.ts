@@ -52,7 +52,9 @@ export function createLayer(kind: LayerKind, extra: Partial<Layer> = {}): Layer 
         ? { name: "Shape", shape: "rect", fillColor: "#3b82f6" }
         : kind === "paint"
           ? { name: "Paint" }
-          : { name: "Image" };
+          : kind === "adjustment"
+            ? { name: "Adjustment" }
+            : { name: "Image" };
   const s = freshStyle();
   return {
     name: kind,

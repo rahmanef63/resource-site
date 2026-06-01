@@ -42,6 +42,17 @@ export function LayerThumb({ layer }: { layer: Layer }) {
       ctx.fillStyle = layer.fillType === "gradient" && layer.gradient ? layer.gradient.from : layer.fillColor ?? "#3b82f6";
       if (layer.shape === "ellipse") { ctx.beginPath(); ctx.ellipse(SIZE / 2, SIZE / 2, 11, 8, 0, 0, Math.PI * 2); ctx.fill(); }
       else { ctx.fillRect(5, 7, 20, 16); }
+    } else if (layer.kind === "adjustment") {
+      // half-tone tile + "fx" to read as an adjustment layer
+      ctx.fillStyle = "#0f172a";
+      ctx.fillRect(0, 0, SIZE / 2, SIZE);
+      ctx.fillStyle = "#f1f5f9";
+      ctx.fillRect(SIZE / 2, 0, SIZE / 2, SIZE);
+      ctx.fillStyle = "#64748b";
+      ctx.font = "bold 12px sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("fx", SIZE / 2, SIZE / 2 + 1);
     } else {
       ctx.fillStyle = layer.fill ?? "#111827";
       ctx.font = "bold 18px sans-serif";

@@ -1,6 +1,6 @@
 "use client"
 
-import { Brush, Copy, Crop, Plus, Square, SquareDashed, Trash2, Type } from "lucide-react"
+import { Brush, Copy, Crop, Plus, SlidersHorizontal, Square, SquareDashed, Trash2, Type } from "lucide-react"
 
 import {
   DropdownMenu,
@@ -80,6 +80,13 @@ export function LayersFooter() {
           >
             <Square className="size-4" />
             Shape
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="gap-2 text-xs"
+            onSelect={() => addLayer(createLayer("adjustment"))}
+          >
+            <SlidersHorizontal className="size-4" />
+            Adjustment Layer
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
