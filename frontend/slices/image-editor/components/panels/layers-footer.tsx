@@ -20,7 +20,7 @@ import { useEditor } from "../../lib/store"
 import { createLayer } from "../../lib/model"
 
 export function LayersFooter() {
-  const { doc, selected, selectedId, addLayer, removeLayer, setTool, duplicateLayer, addMask, setMaskEdit, maskEditId } =
+  const { doc, selected, selectedId, addLayer, removeLayer, setTool, duplicateLayer, addMask, setMaskEdit, maskEditId, fg } =
     useEditor()
 
   const onMask = () => {
@@ -69,14 +69,14 @@ export function LayersFooter() {
           </DropdownMenuItem>
           <DropdownMenuItem
             className="gap-2 text-xs"
-            onSelect={() => addLayer(createLayer("text"))}
+            onSelect={() => addLayer(createLayer("text", { fill: fg }))}
           >
             <Type className="size-4" />
             Text
           </DropdownMenuItem>
           <DropdownMenuItem
             className="gap-2 text-xs"
-            onSelect={() => addLayer(createLayer("shape"))}
+            onSelect={() => addLayer(createLayer("shape", { fillColor: fg }))}
           >
             <Square className="size-4" />
             Shape

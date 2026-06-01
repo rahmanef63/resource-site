@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Stage, Layer as KLayer, Rect, Transformer } from "react-konva";
 import type Konva from "konva";
 import type { KonvaEventObject } from "konva/lib/Node";
@@ -20,13 +20,13 @@ type AnyNode = Konva.Node | null;
 // scaled by `zoom`. Wheel/pinch zoom, hand/space drag-pan, fit-to-screen (HUD).
 // A Transformer attaches to the selection when the Move tool is active.
 export function EditorStage() {
-  const { doc, zoom, pan, tool, selectedId, select, setPan, setZoom, setBrush, setTool, update, applyCrop, maskEditId, version, stageRef } = useEditor();
+  const { doc, zoom, pan, tool, selectedId, select, setPan, setTool, setFg, update, applyCrop, maskEditId, version, stageRef } = useEditor();
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const [size, setSize] = useState({ w: 800, h: 600 });
   const [editId, setEditId] = useState<string | null>(null);
   const nodes = useRef<Map<string, AnyNode>>(new Map());
   const trRef = useRef<Konva.Transformer | null>(null);
-  const { panMode, fit, onWheel, onTouchMove, onTouchEnd, zoomTo } = useStageView(size);
+  const { panMode, fit, center100, clampPan, onWheel, onTouchMove, onTouchEnd, zoomTo } = useStageView(size);
 
   useEffect(() => {
     const el = wrapRef.current;
@@ -55,7 +55,7 @@ export function EditorStage() {
       // pixelRatio:1 → output px match CSS pointer coords.
       const ctx = stage.toCanvas({ pixelRatio: 1 }).getContext("2d");
       const d = ctx?.getImageData(Math.round(p.x), Math.round(p.y), 1, 1).data;
-      if (d && d[3] > 0) setBrush({ color: `#${hex(d[0])}${hex(d[1])}${hex(d[2])}` });
+      if (d && d[3] > 0) setFg(`#${hex(d[0])}${hex(d[1])}${hex(d[2])}`);
       return;
     }
     if (e.target === e.target.getStage() || e.target.name() === "doc-bg") select(null);
@@ -66,6 +66,22 @@ export function EditorStage() {
     if (l?.kind === "text" && !l.locked) { select(l.id); setEditId(l.id); }
   };
   const editing = editId ? doc.layers.find((l) => l.id === editId) ?? null : null;
+
+  // Transparency checker pattern, painted only INSIDE the document (the
+  // surrounding area is a flat gray pasteboard, Photoshop-style).
+  const checker = useMemo(() => {
+    const c = document.createElement("canvas");
+    c.width = c.height = 16;
+    const x = c.getContext("2d");
+    if (x) {
+      x.fillStyle = "#ffffff";
+      x.fillRect(0, 0, 16, 16);
+      x.fillStyle = "#cbd1d9";
+      x.fillRect(0, 0, 8, 8);
+      x.fillRect(8, 8, 8, 8);
+    }
+    return c;
+  }, []);
 
   // Render loop (accumulator): an adjustment layer wraps everything below it in
   // a filtered cached group; other layers stack on top. See ARCHITECTURE.md.
@@ -91,15 +107,8 @@ export function EditorStage() {
   return (
     <div
       ref={wrapRef}
-      className="relative h-full w-full overflow-hidden"
-      style={{
-        cursor: panMode ? "grab" : "default",
-        backgroundColor: "#e9eaee",
-        backgroundImage:
-          "linear-gradient(45deg,#cfd2da 25%,transparent 25%),linear-gradient(-45deg,#cfd2da 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#cfd2da 75%),linear-gradient(-45deg,transparent 75%,#cfd2da 75%)",
-        backgroundSize: "20px 20px",
-        backgroundPosition: "0 0,0 10px,10px -10px,-10px 0",
-      }}
+      className="relative h-full w-full overflow-hidden bg-neutral-200 dark:bg-neutral-800"
+      style={{ cursor: panMode ? "grab" : "default" }}
     >
       <Stage
         ref={stageRef}
@@ -119,11 +128,22 @@ export function EditorStage() {
           scaleX={zoom}
           scaleY={zoom}
           draggable={panMode}
-          onDragEnd={(e) => setPan({ x: e.target.x(), y: e.target.y() })}
+          onDragEnd={(e) => setPan(clampPan({ x: e.target.x(), y: e.target.y() }, zoom))}
         >
-          {doc.bg !== "transparent" && (
-            <Rect name="doc-bg" x={0} y={0} width={doc.width} height={doc.height} fill={doc.bg} />
-          )}
+          <Rect
+            name="doc-bg"
+            x={0}
+            y={0}
+            width={doc.width}
+            height={doc.height}
+            {...(doc.bg === "transparent"
+              ? { fillPatternImage: checker as unknown as HTMLImageElement, fillPatternRepeat: "repeat" }
+              : { fill: doc.bg })}
+            shadowColor="#000000"
+            shadowOpacity={0.25}
+            shadowBlur={16}
+            shadowOffsetY={3}
+          />
           {acc}
           {maskEditId && <MaskSurface layerId={maskEditId} />}
         </KLayer>
@@ -141,7 +161,7 @@ export function EditorStage() {
         </KLayer>
       </Stage>
 
-      <ZoomHud zoom={zoom} onOut={() => zoomStep(-1)} onIn={() => zoomStep(1)} onReset={() => setZoom(1)} onFit={fit} />
+      <ZoomHud zoom={zoom} onOut={() => zoomStep(-1)} onIn={() => zoomStep(1)} onReset={center100} onFit={fit} />
 
       {tool === "crop" && (
         <CropOverlay

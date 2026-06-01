@@ -13,6 +13,7 @@
     "agent.md",
     "components/mobile-shell.tsx",
     "components/panels/adjust-panel.tsx",
+    "components/panels/color-swatches.tsx",
     "components/panels/export-panel.tsx",
     "components/panels/layer-actions-menu.tsx",
     "components/panels/layer-styles-panel.tsx",

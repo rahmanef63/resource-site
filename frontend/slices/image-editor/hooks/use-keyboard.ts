@@ -16,12 +16,14 @@ const TOOL_KEYS: Record<string, "move" | "select" | "brush" | "eraser" | "eyedro
 // Delete/Backspace removes the selection, V/B/E/H pick tools. Ignored while a
 // text field is focused so typing in panels isn't hijacked.
 export function useKeyboard() {
-  const { undo, redo, removeLayer, selectedId, setTool } = useEditor();
+  const { undo, redo, removeLayer, selectedId, setTool, swapColors, resetColors } = useEditor();
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const el = e.target as HTMLElement;
       if (el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable)) return;
       const mod = e.metaKey || e.ctrlKey;
+      if (!mod && e.key.toLowerCase() === "x") { e.preventDefault(); swapColors(); return; }
+      if (!mod && e.key.toLowerCase() === "d") { e.preventDefault(); resetColors(); return; }
       if (mod && e.key.toLowerCase() === "z") {
         e.preventDefault();
         if (e.shiftKey) redo();
@@ -43,5 +45,5 @@ export function useKeyboard() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [undo, redo, removeLayer, selectedId, setTool]);
+  }, [undo, redo, removeLayer, selectedId, setTool, swapColors, resetColors]);
 }

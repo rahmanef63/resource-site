@@ -3,80 +3,92 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { KonvaEventObject } from "konva/lib/Node";
 import { useEditor } from "../lib/store";
+import type { Pan } from "../lib/types";
 
 const MIN = 0.05;
 const MAX = 8;
+const MARGIN = 64; // px of the doc that must stay on-screen (can't lose the canvas)
 const clampZoom = (z: number) => Math.min(MAX, Math.max(MIN, z));
 
-// Canvas navigation: wheel zoom-to-cursor, hand/space drag-pan, 2-finger pinch
-// (mobile), and fit-to-screen. The doc group is positioned purely by `pan` and
-// scaled by `zoom` (no separate centering term) so the zoom math stays simple:
-//   pointInDoc = (pointer - pan) / zoom ;  pan' = pointer - pointInDoc * zoom'.
+// Canvas navigation (Photoshop-like): wheel zoom-to-cursor, hand/space drag-pan,
+// pinch, fit-to-screen, 100%, AND pan is clamped so the document can never fully
+// leave the viewport. Auto-refits when the doc size changes; re-clamps on
+// container resize. ⌘0 = Fit, ⌘1 = 100%.
 export function useStageView(size: { w: number; h: number }) {
   const { doc, zoom, pan, tool, setZoom, setPan } = useEditor();
   const [space, setSpace] = useState(false);
-  const fitted = useRef(false);
-  const pinch = useRef<{ dist: number; cx: number; cy: number } | null>(null);
-
+  const lastDoc = useRef("");
+  const pinch = useRef<{ dist: number } | null>(null);
   const panMode = tool === "hand" || space;
+
+  const clampPan = useCallback((p: Pan, z: number): Pan => {
+    const dw = doc.width * z, dh = doc.height * z;
+    return {
+      x: Math.min(size.w - MARGIN, Math.max(MARGIN - dw, p.x)),
+      y: Math.min(size.h - MARGIN, Math.max(MARGIN - dh, p.y)),
+    };
+  }, [doc.width, doc.height, size.w, size.h]);
+
+  const centerAt = useCallback((z: number) => ({ x: (size.w - doc.width * z) / 2, y: (size.h - doc.height * z) / 2 }), [size.w, size.h, doc.width, doc.height]);
 
   const fit = useCallback(() => {
     if (!size.w || !size.h) return;
     const z = clampZoom(Math.min(size.w / doc.width, size.h / doc.height) * 0.9);
     setZoom(z);
-    setPan({ x: (size.w - doc.width * z) / 2, y: (size.h - doc.height * z) / 2 });
-  }, [size.w, size.h, doc.width, doc.height, setZoom, setPan]);
+    setPan(centerAt(z));
+  }, [size.w, size.h, doc.width, doc.height, setZoom, setPan, centerAt]);
 
-  // Fit once on first real measure.
-  useEffect(() => {
-    if (!fitted.current && size.w > 0 && size.h > 0) {
-      fitted.current = true;
-      fit();
-    }
-  }, [size.w, size.h, fit]);
+  const center100 = useCallback(() => { setZoom(1); setPan(centerAt(1)); }, [setZoom, setPan, centerAt]);
 
-  // Space = temporary pan (ignored while typing in a field).
+  // Fit on first measure AND whenever the doc dimensions change (new/crop/aspect).
   useEffect(() => {
-    const tag = () => (document.activeElement?.tagName ?? "").toLowerCase();
-    const down = (e: KeyboardEvent) => { if (e.code === "Space" && tag() !== "input" && tag() !== "textarea") { e.preventDefault(); setSpace(true); } };
+    if (!size.w || !size.h) return;
+    const key = `${doc.width}x${doc.height}`;
+    if (lastDoc.current !== key) { lastDoc.current = key; fit(); }
+  }, [size.w, size.h, doc.width, doc.height, fit]);
+
+  // Keep the canvas on-screen when the container resizes.
+  useEffect(() => { setPan(clampPan(pan, zoom)); /* eslint-disable-next-line */ }, [size.w, size.h]);
+
+  useEffect(() => {
+    const typing = () => ["input", "textarea"].includes((document.activeElement?.tagName ?? "").toLowerCase());
+    const down = (e: KeyboardEvent) => {
+      if (e.code === "Space" && !typing()) { e.preventDefault(); setSpace(true); }
+      else if ((e.metaKey || e.ctrlKey) && e.key === "0") { e.preventDefault(); fit(); }
+      else if ((e.metaKey || e.ctrlKey) && e.key === "1") { e.preventDefault(); center100(); }
+    };
     const up = (e: KeyboardEvent) => { if (e.code === "Space") setSpace(false); };
     window.addEventListener("keydown", down);
     window.addEventListener("keyup", up);
     return () => { window.removeEventListener("keydown", down); window.removeEventListener("keyup", up); };
-  }, []);
+  }, [fit, center100]);
 
   const zoomTo = useCallback((nextZoom: number, px: number, py: number) => {
     const z2 = clampZoom(nextZoom);
-    const inDocX = (px - pan.x) / zoom;
-    const inDocY = (py - pan.y) / zoom;
+    const inDocX = (px - pan.x) / zoom, inDocY = (py - pan.y) / zoom;
     setZoom(z2);
-    setPan({ x: px - inDocX * z2, y: py - inDocY * z2 });
-  }, [zoom, pan.x, pan.y, setZoom, setPan]);
+    setPan(clampPan({ x: px - inDocX * z2, y: py - inDocY * z2 }, z2));
+  }, [zoom, pan.x, pan.y, setZoom, setPan, clampPan]);
 
   const onWheel = useCallback((e: KonvaEventObject<WheelEvent>) => {
     e.evt.preventDefault();
-    const stage = e.target.getStage();
-    const p = stage?.getPointerPosition();
-    if (!p) return;
-    const factor = e.evt.deltaY > 0 ? 0.92 : 1.08;
-    zoomTo(zoom * factor, p.x, p.y);
+    const p = e.target.getStage()?.getPointerPosition();
+    if (p) zoomTo(zoom * (e.evt.deltaY > 0 ? 0.92 : 1.08), p.x, p.y);
   }, [zoom, zoomTo]);
 
   const onTouchMove = useCallback((e: KonvaEventObject<TouchEvent>) => {
     const t = e.evt.touches;
     if (t.length !== 2) return;
     e.evt.preventDefault();
-    const rect = (e.target.getStage()?.container())?.getBoundingClientRect();
-    const ox = rect?.left ?? 0, oy = rect?.top ?? 0;
-    const dx = t[0].clientX - t[1].clientX, dy = t[0].clientY - t[1].clientY;
-    const dist = Math.hypot(dx, dy);
-    const cx = (t[0].clientX + t[1].clientX) / 2 - ox;
-    const cy = (t[0].clientY + t[1].clientY) / 2 - oy;
+    const rect = e.target.getStage()?.container().getBoundingClientRect();
+    const cx = (t[0].clientX + t[1].clientX) / 2 - (rect?.left ?? 0);
+    const cy = (t[0].clientY + t[1].clientY) / 2 - (rect?.top ?? 0);
+    const dist = Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
     if (pinch.current) zoomTo(zoom * (dist / pinch.current.dist), cx, cy);
-    pinch.current = { dist, cx, cy };
+    pinch.current = { dist };
   }, [zoom, zoomTo]);
 
   const onTouchEnd = useCallback(() => { pinch.current = null; }, []);
 
-  return { panMode, fit, onWheel, onTouchMove, onTouchEnd, zoomTo };
+  return { panMode, fit, center100, clampPan, onWheel, onTouchMove, onTouchEnd, zoomTo };
 }

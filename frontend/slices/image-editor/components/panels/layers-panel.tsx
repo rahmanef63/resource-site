@@ -9,6 +9,14 @@ import { useEditor } from "../../lib/store";
 import type { Layer } from "../../lib/types";
 import { LayerThumb } from "./layer-thumb";
 import { LayerActionsMenu } from "./layer-actions-menu";
+
+const KIND_LABEL: Record<Layer["kind"], string> = {
+  image: "IMG",
+  text: "TEXT",
+  shape: "SHAPE",
+  paint: "PIXEL",
+  adjustment: "ADJ",
+};
 import { LayersHeader } from "./layers-header";
 import { LayersFooter } from "./layers-footer";
 
@@ -89,6 +97,9 @@ export function LayersPanel() {
                     {l.name}
                   </span>
                 )}
+                <span className="shrink-0 rounded bg-muted px-1 text-[9px] font-semibold tracking-wide text-muted-foreground">
+                  {KIND_LABEL[l.kind]}
+                </span>
                 {l.mask && (
                   <button
                     type="button"

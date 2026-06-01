@@ -17,12 +17,13 @@ import { cn } from "@/lib/utils";
 import { useEditor } from "../lib/store";
 import { createLayer } from "../lib/model";
 import type { Tool } from "../lib/types";
+import { ColorSwatches } from "./panels/color-swatches";
 
 // Vertical tool rail. Top group = persistent tool MODES (move/brush/eraser/
 // hand). Bottom group = quick "add layer" actions (text / rect / ellipse) that
 // drop a new layer centered on the canvas and switch to Move to position it.
 export function ToolRail({ orientation = "vertical" }: { orientation?: "vertical" | "horizontal" }) {
-  const { tool, setTool, doc, addLayer } = useEditor();
+  const { tool, setTool, doc, addLayer, fg } = useEditor();
   const horizontal = orientation === "horizontal";
   const tipSide = horizontal ? "top" : "right";
 
@@ -46,9 +47,9 @@ export function ToolRail({ orientation = "vertical" }: { orientation?: "vertical
   });
 
   const adds: { icon: LucideIcon; key: string; label: string; run: () => void }[] = [
-    { icon: Type, key: "T", label: "Add text", run: () => { addLayer(createLayer("text", { t: center(400, 80) })); setTool("move"); } },
-    { icon: Square, key: "R", label: "Add rectangle", run: () => { addLayer(createLayer("shape", { shape: "rect", t: center(320, 220) })); setTool("move"); } },
-    { icon: Circle, key: "O", label: "Add ellipse", run: () => { addLayer(createLayer("shape", { shape: "ellipse", t: center(260, 260) })); setTool("move"); } },
+    { icon: Type, key: "T", label: "Add text", run: () => { addLayer(createLayer("text", { fill: fg, t: center(400, 80) })); setTool("move"); } },
+    { icon: Square, key: "R", label: "Add rectangle", run: () => { addLayer(createLayer("shape", { shape: "rect", fillColor: fg, t: center(320, 220) })); setTool("move"); } },
+    { icon: Circle, key: "O", label: "Add ellipse", run: () => { addLayer(createLayer("shape", { shape: "ellipse", fillColor: fg, t: center(260, 260) })); setTool("move"); } },
   ];
 
   const Btn = ({ icon: Icon, label, active, onClick }: { icon: LucideIcon; label: string; active?: boolean; onClick: () => void }) => (
@@ -87,6 +88,9 @@ export function ToolRail({ orientation = "vertical" }: { orientation?: "vertical
       {adds.map((a) => (
         <Btn key={a.label} icon={a.icon} label={`${a.label} (${a.key})`} onClick={a.run} />
       ))}
+      <div className={cn(horizontal ? "ml-auto" : "mt-auto")}>
+        <ColorSwatches />
+      </div>
     </div>
   );
 }

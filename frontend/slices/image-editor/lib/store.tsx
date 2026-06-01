@@ -31,6 +31,9 @@ import { useMaskOps } from "./mask";
 export type Brush = { size: number; color: string; opacity: number; hardness: number };
 export type { Pan };
 
+const DEFAULT_FG = "#111827";
+const DEFAULT_BG = "#ffffff";
+
 type Ctx = {
   doc: Doc;
   selectedId: string | null;
@@ -39,6 +42,10 @@ type Ctx = {
   zoom: number;
   pan: Pan;
   brush: Brush;
+  /** Photoshop foreground/background colors. Tools paint with `fg`. */
+  fg: string;
+  bg: string;
+  recentColors: string[];
   canUndo: boolean;
   canRedo: boolean;
   /** History revision — bumps on every change; masked-group caches off it. */
@@ -53,6 +60,11 @@ type Ctx = {
   setPan: (p: Pan) => void;
   setMaskEdit: (id: string | null) => void;
   setBrush: (b: Partial<Brush>) => void;
+  /** Set foreground color (mirrors into the brush) + push to recents. */
+  setFg: (c: string) => void;
+  setBg: (c: string) => void;
+  swapColors: () => void;
+  resetColors: () => void;
   setDocSize: (w: number, h: number) => void;
   update: (id: string, patch: Partial<Layer>) => void;
   patchStyle: (id: string, patch: Partial<LayerStyle>) => void;
@@ -88,8 +100,21 @@ export function EditorProvider({ initialDoc, children }: { initialDoc?: Doc; chi
   const [tool, setTool] = useState<Tool>("move");
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState<Pan>({ x: 0, y: 0 });
-  const [brush, setBrushState] = useState<Brush>({ size: 28, color: "#111827", opacity: 1, hardness: 0.8 });
+  const [brush, setBrushState] = useState<Brush>({ size: 28, color: DEFAULT_FG, opacity: 1, hardness: 0.8 });
+  const [fg, setFgState] = useState(DEFAULT_FG);
+  const [bg, setBgState] = useState(DEFAULT_BG);
+  const [recentColors, setRecent] = useState<string[]>([]);
   const [maskEditId, setMaskEditId] = useState<string | null>(null);
+
+  const setFg = useCallback((c: string) => {
+    setFgState(c);
+    setBrushState((s) => ({ ...s, color: c }));
+    setRecent((r) => [c, ...r.filter((x) => x !== c)].slice(0, 12));
+  }, []);
+  const swapColors = useCallback(() => {
+    setFgState((f) => { setBrushState((s) => ({ ...s, color: bg })); setBgState(f); return bg; });
+  }, [bg]);
+  const resetColors = useCallback(() => { setFgState(DEFAULT_FG); setBgState(DEFAULT_BG); setBrushState((s) => ({ ...s, color: DEFAULT_FG })); }, []);
   const canvases = useRef<Map<string, HTMLCanvasElement>>(new Map());
   const stageRef = useRef<Konva.Stage | null>(null);
 
@@ -145,13 +170,14 @@ export function EditorProvider({ initialDoc, children }: { initialDoc?: Doc; chi
 
   const value = useMemo<Ctx>(() => ({
     doc, selectedId, selected: doc.layers.find((l) => l.id === selectedId) ?? null,
-    tool, zoom, pan, brush, canUndo, canRedo, version: rev, maskEditId, stageRef, canvasFor,
+    tool, zoom, pan, brush, fg, bg, recentColors, canUndo, canRedo, version: rev, maskEditId, stageRef, canvasFor,
     select: setSelectedId, setTool, setZoom, setPan, setMaskEdit: setMaskEditId,
     setBrush: (b) => setBrushState((s) => ({ ...s, ...b })),
+    setFg, setBg: setBgState, swapColors, resetColors,
     setDocSize, update, patchStyle, patchShadow, patchGlow, patchStroke, patchAdj,
     addLayer, removeLayer, duplicateLayer, reorder, raise, lower, applyCrop, addMask, removeMask,
     recordPaint, exportProject, loadProject, undo, redo,
-  }), [doc, selectedId, tool, zoom, pan, brush, canUndo, canRedo, rev, maskEditId, canvasFor, setDocSize, update, patchStyle, patchShadow, patchGlow, patchStroke, patchAdj, addLayer, removeLayer, duplicateLayer, reorder, raise, lower, applyCrop, addMask, removeMask, recordPaint, exportProject, loadProject, undo, redo]);
+  }), [doc, selectedId, tool, zoom, pan, brush, fg, bg, recentColors, canUndo, canRedo, rev, maskEditId, canvasFor, setFg, swapColors, resetColors, setDocSize, update, patchStyle, patchShadow, patchGlow, patchStroke, patchAdj, addLayer, removeLayer, duplicateLayer, reorder, raise, lower, applyCrop, addMask, removeMask, recordPaint, exportProject, loadProject, undo, redo]);
 
   return <EditorContext.Provider value={value}>{children}</EditorContext.Provider>;
 }
