@@ -11,6 +11,22 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-01 — theme playground preview + full Wiring-out-of-public-preview sweep
+
+- **theme-presets preview → "Theme playground"** — the slice's switcher is a
+  compact header icon that was easy to miss, so the preview now **spotlights**
+  it (labelled ringed pill + bouncing arrow: "Click to change theme & color
+  preset") and renders a **shadcn widget board** (buttons, badges, revenue stat
+  + bar chart + progress, form controls, tabs + alert, team list, primary
+  surface) that re-skins live on every preset pick. Preview-only.
+- **Wiring out of every public preview** — finished the pattern: the remaining
+  11 preview pages no longer show a Wiring code block in the live demo. Each
+  snippet is lifted into its catalog entry's `wiring` field (rendered in the
+  **Code tab**): cal-com-booking, command-menu, midtrans-payment,
+  resend-newsletter, mdx-blog, motion-primitives, doku-payment, vector-search,
+  broadcast-channel-sync, ai-router (+ full-width-toggle's section removed; it
+  has no catalog entry — the snippet already lives in dashboard-shell's wiring).
+
 ### 2026-06-01 — notion cleanup + date cell parity + canvas group-move + preview tab moves
 
 - **notion-shell 0.20→0.21.1** — `code` (highlight.js) + `equation` (KaTeX)
