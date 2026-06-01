@@ -6,7 +6,7 @@
  *  is rendered inline (no nested dropdown) to keep the component <200
  *  LOC and avoid radix sub-menu coordination. */
 
-import { Trash2, Copy, Shapes } from "lucide-react";
+import { Trash2, Copy, Shapes, Palette } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
@@ -17,6 +17,7 @@ import {
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import { BLOCK_SPECS, specFor, type BlockSpec } from "../lib/blockSpecs";
+import { BlockColorPicker } from "./BlockColorPicker";
 import type { BlockType } from "../types";
 
 const TURN_INTO_DEFAULT: BlockType[] = [
@@ -34,6 +35,11 @@ export interface BlockActionsMenuProps {
   turnIntoTypes?: BlockType[];
   /** Override the spec source (matched by type). */
   specs?: BlockSpec[];
+  /** Current block colour ids — drive the picker's active swatches. */
+  color?: string;
+  bgColor?: string;
+  /** Set text + background colour. When omitted the Color section hides. */
+  onSetColor?: (color?: string, bgColor?: string) => void;
   children: React.ReactNode;
 }
 
@@ -44,6 +50,9 @@ export function BlockActionsMenu({
   onDelete,
   turnIntoTypes = TURN_INTO_DEFAULT,
   specs = BLOCK_SPECS,
+  color,
+  bgColor,
+  onSetColor,
   children,
 }: BlockActionsMenuProps) {
   const current = specFor(currentType);
@@ -75,6 +84,16 @@ export function BlockActionsMenu({
             );
           })}
         </div>
+        {onSetColor && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuLabel className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Palette className="h-3.5 w-3.5" />
+              Color
+            </DropdownMenuLabel>
+            <BlockColorPicker color={color} bgColor={bgColor} onSet={onSetColor} />
+          </>
+        )}
         {(onDuplicate || onDelete) && <DropdownMenuSeparator />}
         {onDuplicate && (
           <DropdownMenuItem onClick={onDuplicate} className="gap-2 text-sm">

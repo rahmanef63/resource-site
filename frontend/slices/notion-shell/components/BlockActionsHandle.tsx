@@ -18,10 +18,14 @@ export interface BlockActionsHandleProps {
   onDuplicate?: () => void;
   onRemove?: () => void;
   dragHandle?: ReactNode;
+  color?: string;
+  bgColor?: string;
+  onSetColor?: (color?: string, bgColor?: string) => void;
 }
 
 export function BlockActionsHandle({
   currentType, onTurnInto, onDuplicate, onRemove, dragHandle,
+  color, bgColor, onSetColor,
 }: BlockActionsHandleProps) {
   return (
     <div className="absolute -left-12 top-1 flex items-center gap-0.5 opacity-0 transition group-hover/block:opacity-100">
@@ -31,6 +35,9 @@ export function BlockActionsHandle({
         onTurnInto={onTurnInto}
         onDuplicate={onDuplicate}
         onDelete={onRemove}
+        color={color}
+        bgColor={bgColor}
+        onSetColor={onSetColor}
       >
         <Button
           variant="ghost"

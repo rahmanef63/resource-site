@@ -29,6 +29,7 @@ import { SlashMenu } from "./SlashMenu";
 import { decorateInPlace } from "../lib/inlineDecorator";
 import { decideBlockInput } from "../lib/blockInputHandler";
 import { blockEditableClass } from "../lib/blockClassName";
+import { blockColorClass } from "../lib/blockColors";
 
 const HEADING_TYPES = new Set<BlockType>(["h1", "h2", "h3", "h4", "h5", "h6"]);
 
@@ -83,9 +84,11 @@ export function NotionBlock({
     requestAnimationFrame(() => ref.current?.focus());
   };
 
+  const setColor = (color?: string, bgColor?: string) => onUpdate?.({ color, bgColor });
+
   if (Renderer) {
     return (
-      <div className={cn("group/block relative my-1", className)} data-block-id={block.id}>
+      <div className={cn("group/block relative my-1", blockColorClass(block.color, block.bgColor), className)} data-block-id={block.id}>
         <Renderer
           block={block}
           pageId={pageId}
@@ -94,11 +97,9 @@ export function NotionBlock({
         />
         {!readOnly && onTurnInto && (
           <BlockActionsHandle
-            currentType={block.type}
-            onTurnInto={onTurnInto}
-            onDuplicate={onDuplicate}
-            onRemove={onRemove}
-            dragHandle={dragHandle}
+            currentType={block.type} onTurnInto={onTurnInto}
+            onDuplicate={onDuplicate} onRemove={onRemove} dragHandle={dragHandle}
+            color={block.color} bgColor={block.bgColor} onSetColor={setColor}
           />
         )}
       </div>
@@ -133,7 +134,7 @@ export function NotionBlock({
 
   return (
     <div
-      className="group/block relative"
+      className={cn("group/block relative", blockColorClass(block.color, block.bgColor))}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
@@ -186,11 +187,9 @@ export function NotionBlock({
       </Popover>
       {!readOnly && onTurnInto && hover && (
         <BlockActionsHandle
-          currentType={block.type}
-          onTurnInto={onTurnInto}
-          onDuplicate={onDuplicate}
-          onRemove={onRemove}
-          dragHandle={dragHandle}
+          currentType={block.type} onTurnInto={onTurnInto}
+          onDuplicate={onDuplicate} onRemove={onRemove} dragHandle={dragHandle}
+          color={block.color} bgColor={block.bgColor} onSetColor={setColor}
         />
       )}
     </div>

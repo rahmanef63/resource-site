@@ -42,6 +42,8 @@ export {
 } from "./components/SortableBlockList";
 export { PageActionsMenu, type PageActionsMenuProps } from "./components/PageActionsMenu";
 export { InlineFormatToolbar } from "./components/InlineFormatToolbar";
+export { BlockColorPicker } from "./components/BlockColorPicker";
+export { BLOCK_COLORS, blockColorClass, type BlockColor } from "./lib/blockColors";
 export { ImageRenderer } from "./components/blocks/ImageRenderer";
 export { EmbedRenderer } from "./components/blocks/EmbedRenderer";
 export { CalloutBlock } from "./components/blocks/CalloutBlock";

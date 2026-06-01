@@ -11,6 +11,18 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-05-31 — notion-shell: block colour (page-features P4) v0.11.0
+
+- **Block colour** — the `color` (text tint) + `bgColor` (background) fields
+  finally have UI. The block "⋯" menu gains a **Color** section
+  (`BlockColorPicker`): two swatch rows — 10 Notion text tints + 10
+  backgrounds, independent, current swatches ringed. `NotionBlock` applies
+  `blockColorClass(color, bgColor)` to the block wrapper (works for both
+  text-shape and registry-rendered blocks); the picker writes through the
+  block's own `onUpdate`, so no extra host wiring. Tailwind palette names
+  (not hex) → dark mode resolves automatically.
+- Next (P4b): copy-link-to-block + move up/down; then P5 page chrome.
+
 ### 2026-05-31 — notion-shell: inline format toolbar (page-features P3) v0.10.0
 
 - **`InlineFormatToolbar`** — a floating rich-text toolbar that appears over
