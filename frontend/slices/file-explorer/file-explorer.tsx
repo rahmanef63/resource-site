@@ -1,15 +1,19 @@
 "use client";
 
+import { useMemo } from "react";
 import {
   FileExplorerAdapterProvider,
   type FileExplorerAdapter,
   type FsEntry,
 } from "./adapter";
+import { getFileExplorerAdapter } from "./lib/backend";
 import { ExplorerView } from "./components/explorer-view";
 
 export type FileExplorerProps = {
-  /** Required backend. Use `createMockAdapter()` for a zero-config in-memory demo. */
-  adapter: FileExplorerAdapter;
+  /** Backend. Omit to use the one configured in `lib/backend.ts`
+   * (defaults to the in-memory mock). Pass `createMockAdapter()` /
+   * `createLiveAdapter(...)` / `createConvexAdapter(...)` to override. */
+  adapter?: FileExplorerAdapter;
   initialPath?: string;
   /** Breadcrumb root label, default "Files". */
   rootLabel?: string;
@@ -19,8 +23,9 @@ export type FileExplorerProps = {
 };
 
 // Standalone, backend-agnostic file explorer. Wraps itself in the adapter
-// provider so `<FileExplorer adapter={…} />` Just Works without the consumer
-// wiring a provider. Full-height: the consumer owns the surrounding box.
+// provider so `<FileExplorer />` Just Works with no props — it falls back to
+// the backend chosen in lib/backend.ts (mock by default). Full-height: the
+// consumer owns the surrounding box.
 export function FileExplorer({
   adapter,
   initialPath,
@@ -28,8 +33,9 @@ export function FileExplorer({
   onOpenFile,
   className,
 }: FileExplorerProps) {
+  const resolved = useMemo(() => adapter ?? getFileExplorerAdapter(), [adapter]);
   return (
-    <FileExplorerAdapterProvider adapter={adapter}>
+    <FileExplorerAdapterProvider adapter={resolved}>
       <ExplorerView
         initialPath={initialPath}
         rootLabel={rootLabel}

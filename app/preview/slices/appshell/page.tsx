@@ -5,6 +5,7 @@ import { FileText, Info, Rocket } from "lucide-react";
 import {
   AppShell,
   openWindow,
+  mockCapabilities,
   searchFeature,
   inspectorFeature,
   notificationsFeature,
@@ -88,12 +89,6 @@ const apps: ShellManifest["apps"] = [
   },
 ];
 
-// Stable references: capability hooks must return the SAME object across
-// renders (real consumers back these with a store/memo). An inline object
-// literal would change identity every render → setState-in-effect loop.
-const NOOP = () => {};
-const APPEARANCE = { theme: "light" as const, setTheme: NOOP, device: "auto" as const, wallpaper: "aurora" };
-
 const demoManifest: ShellManifest = {
   brand: { name: "AppShell", logo: "▲", idleAppName: "Finder" },
   apps,
@@ -105,10 +100,10 @@ const demoManifest: ShellManifest = {
     widgetsFeature,
   ],
   routing: false,
-  capabilities: {
-    useAppearance: () => APPEARANCE,
-    useCpuPercent: () => null,
-  },
+  // The mock pack drives every feature with data (search hits, ticking CPU/mem
+  // widgets, server toggle, echoing AI inspector) — zero backend. Swap this one
+  // object for real capabilities to go live.
+  capabilities: mockCapabilities,
 };
 
 export default function Page() {

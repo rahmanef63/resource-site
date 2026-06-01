@@ -46,6 +46,7 @@
     "index.ts",
     "lib/activity.ts",
     "lib/inspector.ts",
+    "lib/mock-capabilities.ts",
     "lib/registry.tsx",
     "lib/store-geometry.ts",
     "lib/store-state.ts",

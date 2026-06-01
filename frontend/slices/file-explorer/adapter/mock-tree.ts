@@ -88,42 +88,89 @@ export function transfer(tree: Tree, from: string, to: string, mode: "move" | "c
   }
 }
 
-// A believable demo tree: ~ with Documents / Projects / Downloads + files.
+// A believable, full home directory so the explorer looks live out of the box
+// (mirrors the os-vps seed: Desktop / Documents / Pictures / Music / Projects /
+// Downloads, nested folders, mixed file types). CRUD really mutates this.
 export function seedTree(): Tree {
   return {
     "/": [
+      dir("Desktop"),
       dir("Documents"),
-      dir("Projects"),
       dir("Downloads"),
+      dir("Music"),
+      dir("Pictures"),
+      dir("Projects"),
       file("readme.md", 1840, "md"),
       file("notes.txt", 612, "txt"),
+      file(".bashrc", 480, ""),
+    ],
+    "/Desktop": [
+      file("Getting Started.pdf", 142_000, "pdf"),
+      file("screenshot.png", 884_000, "png"),
     ],
     "/Documents": [
       dir("Invoices"),
+      dir("Contracts"),
       file("resume.pdf", 320_000, "pdf"),
       file("plan.md", 2300, "md"),
       file("budget.csv", 18_400, "csv"),
+      file("meeting-notes.txt", 4_200, "txt"),
     ],
     "/Documents/Invoices": [
       file("2026-01.pdf", 88_000, "pdf"),
       file("2026-02.pdf", 91_000, "pdf"),
+      file("2026-03.pdf", 87_500, "pdf"),
     ],
-    "/Projects": [dir("file-explorer"), file("TODO.md", 980, "md")],
+    "/Documents/Contracts": [
+      file("nda.pdf", 64_000, "pdf"),
+      file("msa-v2.docx", 38_000, "docx"),
+    ],
+    "/Music": [
+      dir("Playlists"),
+      file("track-01.mp3", 6_200_000, "mp3"),
+      file("track-02.mp3", 5_800_000, "mp3"),
+    ],
+    "/Music/Playlists": [file("focus.m3u", 1_240, "m3u")],
+    "/Pictures": [
+      dir("Camera"),
+      dir("Wallpapers"),
+      file("avatar.jpg", 240_000, "jpg"),
+    ],
+    "/Pictures/Camera": [
+      file("IMG_0001.jpg", 3_100_000, "jpg"),
+      file("IMG_0002.jpg", 2_900_000, "jpg"),
+      file("IMG_0003.heic", 1_700_000, "heic"),
+    ],
+    "/Pictures/Wallpapers": [
+      file("aurora.png", 4_400_000, "png"),
+      file("mountain.jpg", 3_600_000, "jpg"),
+    ],
+    "/Projects": [
+      dir("file-explorer"),
+      dir("website"),
+      file("TODO.md", 980, "md"),
+    ],
     "/Projects/file-explorer": [
       dir("src"),
       file("package.json", 2040, "json"),
       file("README.md", 4120, "md"),
+      file("tsconfig.json", 640, "json"),
     ],
     "/Projects/file-explorer/src": [
       file("index.ts", 3200, "ts"),
       file("app.tsx", 5600, "tsx"),
       file("styles.css", 1400, "css"),
     ],
+    "/Projects/website": [
+      file("index.html", 2200, "html"),
+      file("main.js", 7800, "js"),
+    ],
     "/Downloads": [
       file("invoice.pdf", 240_000, "pdf"),
       file("backup.zip", 156_000_000, "zip"),
       file("photo.jpg", 2_400_000, "jpg"),
       file("archive.tar.gz", 64_000_000, "gz"),
+      file("installer.dmg", 412_000_000, "dmg"),
     ],
     "/.Trash": [],
   };
@@ -131,7 +178,9 @@ export function seedTree(): Tree {
 
 export const MOCK_ROOTS = [
   { label: "Home", path: "~" },
+  { label: "Desktop", path: "/Desktop" },
   { label: "Documents", path: "/Documents" },
+  { label: "Pictures", path: "/Pictures" },
   { label: "Projects", path: "/Projects" },
   { label: "Downloads", path: "/Downloads" },
 ];

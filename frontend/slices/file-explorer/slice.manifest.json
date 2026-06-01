@@ -10,7 +10,9 @@
   },
   "files": [
     "adapter/context.tsx",
+    "adapter/convex.ts",
     "adapter/index.ts",
+    "adapter/live.ts",
     "adapter/mock-tree.ts",
     "adapter/mock.ts",
     "adapter/types.ts",
@@ -37,6 +39,7 @@
     "hooks/use-is-mobile.ts",
     "hooks/use-window-drop.ts",
     "index.ts",
+    "lib/backend.ts",
     "lib/format.ts",
     "lib/icons.ts",
     "lib/read-drop.ts",

@@ -140,3 +140,8 @@ export const DEFAULT_FEATURES = [
   controlCenterFeature,
   widgetsFeature,
 ];
+
+// Mock capabilities pack — inject as `manifest.capabilities` to drive all five
+// features with realistic data and NO backend (search/stats/chat/server toggle).
+// The single switch: swap this object for your real capabilities to go live.
+export { mockCapabilities } from "./lib/mock-capabilities";
