@@ -6,7 +6,7 @@
  *  is rendered inline (no nested dropdown) to keep the component <200
  *  LOC and avoid radix sub-menu coordination. */
 
-import { Trash2, Copy, Shapes, Palette } from "lucide-react";
+import { Trash2, Copy, Shapes, Palette, Link2, ArrowUp, ArrowDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
@@ -40,6 +40,11 @@ export interface BlockActionsMenuProps {
   bgColor?: string;
   /** Set text + background colour. When omitted the Color section hides. */
   onSetColor?: (color?: string, bgColor?: string) => void;
+  /** Copy a deep link to this block. */
+  onCopyLink?: () => void;
+  /** Reorder one slot. When omitted the row hides. */
+  onMoveUp?: () => void;
+  onMoveDown?: () => void;
   children: React.ReactNode;
 }
 
@@ -53,6 +58,9 @@ export function BlockActionsMenu({
   color,
   bgColor,
   onSetColor,
+  onCopyLink,
+  onMoveUp,
+  onMoveDown,
   children,
 }: BlockActionsMenuProps) {
   const current = specFor(currentType);
@@ -99,6 +107,24 @@ export function BlockActionsMenu({
           <DropdownMenuItem onClick={onDuplicate} className="gap-2 text-sm">
             <Copy className="h-3.5 w-3.5 text-muted-foreground" />
             Duplicate
+          </DropdownMenuItem>
+        )}
+        {onCopyLink && (
+          <DropdownMenuItem onClick={onCopyLink} className="gap-2 text-sm">
+            <Link2 className="h-3.5 w-3.5 text-muted-foreground" />
+            Copy link to block
+          </DropdownMenuItem>
+        )}
+        {onMoveUp && (
+          <DropdownMenuItem onClick={onMoveUp} className="gap-2 text-sm">
+            <ArrowUp className="h-3.5 w-3.5 text-muted-foreground" />
+            Move up
+          </DropdownMenuItem>
+        )}
+        {onMoveDown && (
+          <DropdownMenuItem onClick={onMoveDown} className="gap-2 text-sm">
+            <ArrowDown className="h-3.5 w-3.5 text-muted-foreground" />
+            Move down
           </DropdownMenuItem>
         )}
         {onDelete && (

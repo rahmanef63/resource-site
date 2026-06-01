@@ -9,7 +9,7 @@ import {
   ListTodo, List, ListOrdered,
   Quote, Code, Minus, Lightbulb, FileText, Database,
   ChevronRight, Image as ImageIcon, Sigma, Table, Tv2,
-  Film, Music,
+  Film, Music, MousePointerClick,
   type LucideIcon,
 } from "lucide-react";
 import type { BlockType } from "../types";
@@ -38,6 +38,7 @@ export const BLOCK_SPECS: BlockSpec[] = [
   { type: "image", label: "Image", hint: "Embed an image from a URL", icon: ImageIcon, keywords: ["image", "img", "photo", "picture"] },
   { type: "divider", label: "Divider", hint: "Visual separator", icon: Minus, keywords: ["divider", "hr"] },
   { type: "page", label: "Page", hint: "Embed or create a sub-page", icon: FileText, keywords: ["page", "subpage", "doc"] },
+  { type: "button", label: "Button", hint: "A clickable button that opens a link", icon: MousePointerClick, keywords: ["button", "cta", "action", "link"] },
   { type: "database", label: "Database", hint: "Inline database with multiple views", icon: Database, keywords: ["database", "db", "kanban", "board"] },
   { type: "table", label: "Table", hint: "Plain table grid", icon: Table, keywords: ["table", "grid", "spreadsheet"] },
   { type: "embed", label: "Embed", hint: "YouTube · Vimeo · Loom · Figma · CodePen", icon: Tv2, keywords: ["embed", "iframe", "youtube", "vimeo"] },

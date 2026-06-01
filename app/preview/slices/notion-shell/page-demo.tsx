@@ -22,7 +22,9 @@ const DEFAULT_BLOCKS: Block[] = [
   { id: "b6", type: "equation", text: "E = mc^2" },
   { id: "b7", type: "table", text: "", tableHeader: true, tableRows: [["Feature", "Status"], ["Callout", "✓"], ["Table", "✓"]] },
   { id: "b8", type: "toggle", text: "Toggle — click the chevron; blocks nest inside", collapsed: false, children: [{ id: "b8a", type: "paragraph", text: "A nested child block." }, { id: "b8b", type: "callout", calloutKind: "note", text: "Even callouts nest." }] },
-  { id: "b9", type: "divider", text: "" },
+  { id: "b9", type: "page", text: "A sub-page reference" },
+  { id: "b10", type: "button", text: "Open docs", url: "https://resource.rahmanef.com" },
+  { id: "b11", type: "divider", text: "" },
 ];
 
 export function PageDemo() {
@@ -53,6 +55,15 @@ export function PageDemo() {
     });
   const insert = (type: BlockType) =>
     setBlocks((cur) => [...cur, { id: `b${Date.now()}`, type, text: "" }]);
+  const move = (id: string, dir: -1 | 1) =>
+    setBlocks((cur) => {
+      const i = cur.findIndex((x) => x.id === id);
+      const j = i + dir;
+      if (i < 0 || j < 0 || j >= cur.length) return cur;
+      const next = [...cur];
+      [next[i], next[j]] = [next[j]!, next[i]!];
+      return next;
+    });
 
   return (
     <div className="h-[28rem] overflow-y-auto rounded-lg border border-border bg-background">
@@ -82,6 +93,8 @@ export function PageDemo() {
               onTurnInto={locked ? undefined : (type) => turnInto(b.id, type)}
               onDuplicate={() => duplicate(b.id)}
               onRemove={() => remove(b.id)}
+              onMoveUp={() => move(b.id, -1)}
+              onMoveDown={() => move(b.id, 1)}
             />
           ))}
           {!locked && (

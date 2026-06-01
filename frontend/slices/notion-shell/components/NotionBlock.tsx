@@ -42,6 +42,9 @@ export interface NotionBlockProps {
   onRemove?: () => void;
   onTurnInto?: (type: BlockType) => void;
   onDuplicate?: () => void;
+  /** Reorder one slot — surfaced in the block actions menu. */
+  onMoveUp?: () => void;
+  onMoveDown?: () => void;
   dragHandle?: ReactNode;
   readOnly?: boolean;
   className?: string;
@@ -50,7 +53,7 @@ export interface NotionBlockProps {
 export function NotionBlock({
   block, pageId,
   blockRenderers, placeholders,
-  onUpdate, onRemove, onTurnInto, onDuplicate,
+  onUpdate, onRemove, onTurnInto, onDuplicate, onMoveUp, onMoveDown,
   dragHandle,
   readOnly, className,
 }: NotionBlockProps) {
@@ -85,6 +88,17 @@ export function NotionBlock({
   };
 
   const setColor = (color?: string, bgColor?: string) => onUpdate?.({ color, bgColor });
+  const copyLink = () => navigator.clipboard?.writeText(
+    `${typeof location !== "undefined" ? location.href.split("#")[0] : ""}#block-${block.id}`,
+  );
+  const actionsHandle = !readOnly && onTurnInto ? (
+    <BlockActionsHandle
+      currentType={block.type} onTurnInto={onTurnInto}
+      onDuplicate={onDuplicate} onRemove={onRemove} dragHandle={dragHandle}
+      color={block.color} bgColor={block.bgColor} onSetColor={setColor}
+      onCopyLink={copyLink} onMoveUp={onMoveUp} onMoveDown={onMoveDown}
+    />
+  ) : null;
 
   if (Renderer) {
     return (
@@ -95,13 +109,7 @@ export function NotionBlock({
           onUpdate={(patch) => onUpdate?.(patch)}
           onReplace={(next) => onUpdate?.({ ...next, id: block.id } as Partial<Block>)}
         />
-        {!readOnly && onTurnInto && (
-          <BlockActionsHandle
-            currentType={block.type} onTurnInto={onTurnInto}
-            onDuplicate={onDuplicate} onRemove={onRemove} dragHandle={dragHandle}
-            color={block.color} bgColor={block.bgColor} onSetColor={setColor}
-          />
-        )}
+        {actionsHandle}
       </div>
     );
   }
@@ -185,13 +193,7 @@ export function NotionBlock({
           <SlashMenu query={slashQuery} onSelect={handleSlashSelect} onClose={closeSlash} />
         </PopoverContent>
       </Popover>
-      {!readOnly && onTurnInto && hover && (
-        <BlockActionsHandle
-          currentType={block.type} onTurnInto={onTurnInto}
-          onDuplicate={onDuplicate} onRemove={onRemove} dragHandle={dragHandle}
-          color={block.color} bgColor={block.bgColor} onSetColor={setColor}
-        />
-      )}
+      {hover && actionsHandle}
     </div>
   );
 }

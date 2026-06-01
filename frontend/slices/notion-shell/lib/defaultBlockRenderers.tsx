@@ -25,6 +25,8 @@ import { CalloutBlock } from "../components/blocks/CalloutBlock";
 import { TableBlock } from "../components/blocks/TableBlock";
 import { DividerBlock } from "../components/blocks/DividerBlock";
 import { VideoBlock, AudioBlock } from "../components/blocks/MediaBlock";
+import { PageLinkBlock } from "../components/blocks/PageLinkBlock";
+import { ButtonBlock } from "../components/blocks/ButtonBlock";
 import { makeToggleBlock } from "../components/blocks/ToggleBlock";
 
 export interface DefaultBlockRendererOpts {
@@ -49,6 +51,8 @@ export function createDefaultBlockRenderers(
     divider: DividerBlock,
     video: VideoBlock,
     audio: AudioBlock,
+    page: PageLinkBlock,
+    button: ButtonBlock,
     ...(opts.code ? { code: opts.code } : {}),
     ...(opts.equation ? { equation: opts.equation } : {}),
   };

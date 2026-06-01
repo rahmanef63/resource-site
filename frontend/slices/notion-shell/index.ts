@@ -51,6 +51,8 @@ export { CalloutBlock } from "./components/blocks/CalloutBlock";
 export { TableBlock } from "./components/blocks/TableBlock";
 export { DividerBlock } from "./components/blocks/DividerBlock";
 export { VideoBlock, AudioBlock } from "./components/blocks/MediaBlock";
+export { PageLinkBlock } from "./components/blocks/PageLinkBlock";
+export { ButtonBlock } from "./components/blocks/ButtonBlock";
 export { makeToggleBlock } from "./components/blocks/ToggleBlock";
 export { EditableLine } from "./components/blocks/EditableLine";
 export {

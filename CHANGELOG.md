@@ -11,6 +11,18 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-05-31 — notion-shell: page + button blocks, copy-link + move (page-features P4b) v0.13.0
+
+- **Two more block renderers** — `PageLinkBlock` (block-type `page`: a
+  sub-page reference row, file icon + editable title) and `ButtonBlock`
+  (block-type `button`: a CTA that opens a URL, with a gear popover to edit
+  label + link). Both registered in `createDefaultBlockRenderers` + added to
+  the slash menu. Block-renderer coverage now ~24/30 Notion types.
+- **Richer block actions** — the block "⋯" menu gains **Copy link to block**
+  (writes a `#block-<id>` deep link to the clipboard) and **Move up / Move
+  down** (host supplies `onMoveUp`/`onMoveDown`; preview wires array reorder).
+  Consolidated the two `BlockActionsHandle` call-sites into one shared element.
+
 ### 2026-05-31 — notion-shell: page layout chrome (page-features P5a) v0.12.0
 
 - **Page layout controls** — `NotionPage` gains `font` (default / serif / mono),

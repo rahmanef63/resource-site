@@ -21,11 +21,14 @@ export interface BlockActionsHandleProps {
   color?: string;
   bgColor?: string;
   onSetColor?: (color?: string, bgColor?: string) => void;
+  onCopyLink?: () => void;
+  onMoveUp?: () => void;
+  onMoveDown?: () => void;
 }
 
 export function BlockActionsHandle({
   currentType, onTurnInto, onDuplicate, onRemove, dragHandle,
-  color, bgColor, onSetColor,
+  color, bgColor, onSetColor, onCopyLink, onMoveUp, onMoveDown,
 }: BlockActionsHandleProps) {
   return (
     <div className="absolute -left-12 top-1 flex items-center gap-0.5 opacity-0 transition group-hover/block:opacity-100">
@@ -38,6 +41,9 @@ export function BlockActionsHandle({
         color={color}
         bgColor={bgColor}
         onSetColor={onSetColor}
+        onCopyLink={onCopyLink}
+        onMoveUp={onMoveUp}
+        onMoveDown={onMoveDown}
       >
         <Button
           variant="ghost"
