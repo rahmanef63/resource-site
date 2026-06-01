@@ -29,22 +29,22 @@ STEP 1 — Install. `npx rr add file-explorer`. Ensure `@/features/file-explorer
 
 STEP 2 — shadcn + npm. `npx shadcn@latest add button input scroll-area separator dropdown-menu sheet`. npm: lucide-react.
 
-STEP 3 — Mount with an adapter. The component needs a FileExplorerAdapter. The fastest start is the bundled mock (a writable in-memory tree — real CRUD, no backend):
+STEP 3 — Mount it. Drop it in with NO adapter prop — it falls back to the backend configured in lib/backend.ts (the writable in-memory mock by default), so it works out of the box with realistic seed data and full CRUD:
 ```tsx
 "use client";
-import { useMemo } from "react";
-import { FileExplorer, createMockAdapter } from "@/features/file-explorer";
+import { FileExplorer } from "@/features/file-explorer";
 export default function Page() {
-  const adapter = useMemo(() => createMockAdapter(), []);
   return (
     <div className="h-dvh">
-      <FileExplorer adapter={adapter} rootLabel="Files" onOpenFile={(path) => console.log("open", path)} />
+      <FileExplorer rootLabel="Files" onOpenFile={(path) => console.log("open", path)} />
     </div>
   );
 }
 ```
 
-STEP 4 — Real backend. Implement FileExplorerAdapter against your API: { mode: "live"|"mock"|"readonly", list(path), mkdir(path), remove(path), move(from,to), copy(from,to), upload(dest,files), usage(), rawUrl(path) }. `list` returns { path, entries:[{name,kind,size,ext?}], roots?, parent? }. Set mode:"readonly" to show an inline notice instead of mutating. `rawUrl(path)` returns a bytes URL for image thumbnails (return "" to fall back to icons).
+STEP 4 — The backend switch (ONE file). Go to a real filesystem without touching any component: edit `slices/file-explorer/lib/backend.ts` and set `FILE_EXPLORER_BACKEND = "mock" | "live" | "convex"` (or set env `NEXT_PUBLIC_FILE_EXPLORER_BACKEND`). "live" = REST host fs (os-vps /api/v1/fs shape, base via NEXT_PUBLIC_FILES_API_URL — see adapter/live.ts). "convex" = self-hosted Convex fs functions, PREPARED but inert until you wire your generated client + api in the switch (see adapter/convex.ts; the slice imports nothing from @convex so the build stays green even without Convex). You can still pass `adapter={…}` to override per-instance.
+
+STEP 5 — Custom adapter. Implement FileExplorerAdapter: { mode: "live"|"mock"|"readonly", list(path), mkdir(path), remove(path), move(from,to), copy(from,to), upload(dest,files), usage(), rawUrl(path), write?(path,content) }. `list` returns { path, entries:[{name,kind,size,ext?}], roots?, parent? }. Set mode:"readonly" to show an inline notice instead of mutating. `rawUrl(path)` returns a bytes URL for image thumbnails (return "" to fall back to icons).
 
 The container owns the box — render <FileExplorer> inside something with a height (h-dvh / h-full). It self-provides its adapter context; no extra provider needed.
 
