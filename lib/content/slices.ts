@@ -114,6 +114,11 @@ export type SliceEntry = {
   usedBy?: string[];
   /** Brief recipe for an AI agent installing the slice manually. */
   agentRecipe?: string;
+  /** Copy-paste wiring/usage snippet shown in the Code tab (not the live
+   *  preview — keeps the public preview to the demo itself). */
+  wiring?: string;
+  /** Named variants of the slice, listed in the Code tab. */
+  variants?: { title: string; desc: string }[];
   /** Live preview route, e.g. "/preview/slices/full-width-toggle". When set,
    *  the slice detail page renders a PreviewFrame iframing this URL. */
   previewPath?: string;
@@ -974,6 +979,28 @@ export default convexAuthNextjsMiddleware();`,
     previewPath: "/preview/slices/responsive-dialog",
     defaultView: "tablet",
     defaultZoom: 0.85,
+    variants: [
+      { title: "modal", desc: "Standard centered dialog with backdrop." },
+      { title: "panel", desc: "Edge-anchored sheet on both viewports — for settings, filters." },
+      { title: "alert", desc: "Tighter, destructive-confirm flavor. Disable backdrop dismiss." },
+    ],
+    wiring: `import {
+  ResponsiveDialog,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+  ResponsiveDialogBody,
+  ResponsiveDialogFooter,
+} from "@/features/responsive-dialog";
+
+<ResponsiveDialog open={open} onOpenChange={setOpen} variant="modal" size="md">
+  <ResponsiveDialogHeader>
+    <ResponsiveDialogTitle>Konfirmasi</ResponsiveDialogTitle>
+  </ResponsiveDialogHeader>
+  <ResponsiveDialogBody>…</ResponsiveDialogBody>
+  <ResponsiveDialogFooter>
+    <Button onClick={onSubmit}>Lanjut</Button>
+  </ResponsiveDialogFooter>
+</ResponsiveDialog>`,
   },
   {
     slug: "dashboard-shell",
@@ -997,6 +1024,16 @@ export default convexAuthNextjsMiddleware();`,
     previewPath: "/preview/slices/dashboard-shell",
     defaultView: "desktop",
     defaultZoom: 0.6,
+    wiring: `import { ResponsiveDashboardShell } from "@/features/dashboard-shell";
+import { FullWidthToggle } from "@/features/full-width-toggle";
+
+<ResponsiveDashboardShell
+  mode="authenticated"
+  sidebar={<AppSidebar />}
+  topbar={<><BreadcrumbSlot /><FullWidthToggle /></>}
+>
+  {children}
+</ResponsiveDashboardShell>`,
   },
   {
     slug: "three-column",
@@ -1492,72 +1529,6 @@ export default convexAuthNextjsMiddleware();`,
     defaultZoom: 1,
   },
   {
-    slug: "equation",
-    title: "Equation — Notion-style KaTeX block primitive",
-    category: "ui",
-    kind: "ui",
-    version: "0.1.0",
-    tagline: "Notion-style LaTeX equation block. KaTeX-rendered, edit/preview toggle, zero state.",
-    description: "Inline-or-display LaTeX equation block — Notion-inspired primitive. KaTeX-rendered with edit/preview toggle, raw-text fallback when KaTeX fails to parse. Pure UI primitive (zero Convex tables, zero global state). Lifted from notion-page-clone (Nosion). Use standalone OR bundled via the notion-blocks bundle. Drop into any React surface — docs, marketing landing, editor.",
-    source: "notion-page-clone",
-    slicePath: "frontend/slices/equation",
-    convexPaths: [],
-    npm: ["katex@^0.16.45"],
-    shadcn: ["button"],
-    env: [],
-    peers: [],
-    tags: ["ui", "notion", "notion-like", "equation", "katex", "latex", "math", "block", "primitive", "editor"],
-    usedBy: ["notion-page-clone-os"],
-    agentRecipe: "Run `npx rr add equation`. Single npm dep: katex. Import `import { EquationBlock } from \"@/features/equation\"`. Props-driven: pass `value` (LaTeX string) + `onChange`. For display-mode (block-level) pass `displayMode`. Renders raw text if KaTeX parse fails. Bundled inside notion-blocks if you also want code/notify/drag-fill.",
-    previewPath: "/preview/slices/equation",
-    defaultView: "desktop",
-    defaultZoom: 1,
-  },
-  {
-    slug: "code-block",
-    title: "Code Block — Notion-style syntax-highlighted code primitive",
-    category: "ui",
-    kind: "ui",
-    version: "0.1.0",
-    tagline: "Notion-style highlight.js code block with language picker + copy.",
-    description: "Highlight.js-powered code block — Notion-inspired primitive. Language selector dropdown (auto-detect + 50+ language packs), copy-to-clipboard button, line-wrap toggle. Pure-UI primitive — no Convex tables. Lifted from notion-page-clone (Nosion). Use standalone OR bundled via notion-blocks.",
-    source: "notion-page-clone",
-    slicePath: "frontend/slices/code-block",
-    convexPaths: [],
-    npm: ["highlight.js@^11.11.1"],
-    shadcn: ["button", "dropdown-menu"],
-    env: [],
-    peers: [],
-    tags: ["ui", "notion", "notion-like", "code", "syntax", "highlight", "highlight.js", "block", "primitive", "editor"],
-    usedBy: ["notion-page-clone-os"],
-    agentRecipe: "Run `npx rr add code-block`. Single npm dep: highlight.js. Import `import { CodeBlock, languageLabel } from \"@/features/code-block\"`. Props: `value` + `onChange` + `language` + `onLanguageChange`. Bundled inside notion-blocks if you also want equation/notify/drag-fill.",
-    previewPath: "/preview/slices/code-block",
-    defaultView: "desktop",
-    defaultZoom: 1,
-  },
-  {
-    slug: "notifications",
-    title: "Notifications — Notion-style per-page Notify Me",
-    category: "ui",
-    kind: "ui",
-    version: "0.1.0",
-    tagline: "Notion-style per-page Notify Me bell + popover. localStorage state.",
-    description: "Pure-client per-page subscription primitive — Notion-inspired bell button + popover. State stored in localStorage (no backend needed). Shipped as a `NotifyMePopover` toggled from a page-action bell. Frequency choices: instant / daily digest / weekly digest. Lifted from notion-page-clone (Nosion). Use standalone OR bundled via notion-blocks.",
-    source: "notion-page-clone",
-    slicePath: "frontend/slices/notifications",
-    convexPaths: [],
-    npm: [],
-    shadcn: ["button", "popover"],
-    env: [],
-    peers: [],
-    tags: ["ui", "notion", "notion-like", "notifications", "subscribe", "notify", "bell", "popover", "localstorage", "primitive"],
-    usedBy: ["notion-page-clone-os"],
-    agentRecipe: "Run `npx rr add notifications`. Zero npm deps (only shadcn button + popover). Import `import { NotifyMePopover, useSubscription } from \"@/features/notifications\"`. Drop the popover anywhere; useSubscription(pageId) hook returns `{ isSubscribed, frequency, subscribe, unsubscribe, setFrequency }` reading from localStorage. To wire a real backend, swap the localStorage hook for your own.",
-    previewPath: "/preview/slices/notifications",
-    defaultView: "desktop",
-    defaultZoom: 1,
-  },
-  {
     slug: "notion-database",
     title: "Notion Database",
     category: "ui",
@@ -1591,20 +1562,20 @@ export default convexAuthNextjsMiddleware();`,
     title: "Notion Shell — page + sidebar + block editor primitives (pure, no database)",
     category: "ui",
     kind: "ui",
-    version: "0.20.0",
+    version: "0.21.0",
     maturity: "beta",
-    tagline: "Portable Notion-style UI: page editor + sidebar + slash menu + drag + cover. Pair with notion-database for embedded DBs.",
+    tagline: "Portable Notion-style UI: page editor + sidebar + slash menu + drag + cover + built-in code/equation blocks. Pair with notion-database for embedded DBs.",
     description: "Portable Notion-style PAGE + SIDEBAR + BLOCK editor primitives. CI-wave (2026-05-21) split the database surface out — install the optional `notion-database` peer for embedded TableView / BoardView / ListView / GalleryView / CalendarView / FeedView, NotionDatabase, NotionProperty, ViewTabs, ViewOptions, ColumnHeaderMenu, property-cells. notion-shell alone gives you Notion-clone pages + sidebar + editor without the database weight. Domain types (Database, Property, PropertyValue, DbView, DatabaseViewConfig, DatabaseFilter, DatabaseSort) remain in notion-shell as the single source of truth (Page.rowOfDatabaseId + rowProps reference them). FULL OLD DESC BELOW: Portable Notion-style wrapper primitives. PAGE EDITOR: NotionPage (optional cover image band + header + body), NotionHeader / NotionSidebar / NotionBlock (live inline-markdown decorator, hover actions menu, optional dragHandle slot), SlashMenu (searchable block-type picker w/ keyboard nav), BlockActionsMenu (turn-into / duplicate / delete), InsertBlockButton (`+` trigger w/ SlashMenu), SortableBlockList (@dnd-kit render-prop wrapper for block reorder), PageActionsMenu (header dropdown: cover/favorite/duplicate/export/trash). DATABASE: NotionDatabase (full DB surface w/ tabs + options + per-column menu), NotionProperty (10 property-cell types), 6 built-in views (Table/Board/List/Gallery/Calendar/Feed), ViewTabs, ViewOptions (sort + filter + search popover), ColumnHeaderMenu. SPECIALISED BLOCK RENDERERS: ImageRenderer (URL + caption + preview), EmbedRenderer (YouTube/Vimeo/Loom/Figma/CodePen/Spotify auto-detect + iframe fallback). Pure helpers: applyView, groupBy, bucketByDate. Pure / props-driven — host owns data + change handlers. v0.7.2: Property gained `dateRange` (date columns default to a start→end range — the per-PropertyType Edit-property panel in notion-database toggles it; Calendar + Timeline read the range).",
     source: "notion-page-clone",
     slicePath: "frontend/slices/notion-shell",
     convexPaths: [],
-    npm: ["@dnd-kit/core", "@dnd-kit/sortable", "@dnd-kit/utilities"],
+    npm: ["@dnd-kit/core", "@dnd-kit/sortable", "@dnd-kit/utilities", "katex@^0.16.45", "highlight.js@^11.11.1"],
     shadcn: ["button", "input", "checkbox", "dropdown-menu", "popover"],
     env: [],
     peers: [],
     tags: ["ui", "notion", "shell", "wrapper", "sidebar", "page", "database", "primitive", "portable", "slash-menu", "decorator", "wysiwyg", "views", "kanban", "calendar", "gallery", "drag", "cover", "embed", "image", "notion-like"],
     usedBy: ["notion-page-clone-os"],
-    agentRecipe: "Run `npx rr add notion-shell` for the portable UI wrappers ONLY (no backend). NPM deps: @dnd-kit/core, @dnd-kit/sortable, @dnd-kit/utilities. Import: `import { NotionPage, NotionSidebar, NotionBlock, NotionDatabase, SortableBlockList, PageActionsMenu, InsertBlockButton, ViewTabs, ImageRenderer, EmbedRenderer } from \"@/features/notion-shell\"`. NotionBlock ships slash menu + decorator + actions menu + dragHandle slot. **v0.8: `createDefaultBlockRenderers({ code, equation })` returns the block-renderer registry — pass it to `<NotionBlock blockRenderers={…}>` so callout (icon+kind picker), table (editable grid), divider, image + embed actually render. code + equation live in sibling slices (`@/features/code-block`, `@/features/equation`) — wrap each as a `BlockRendererProps` adapter at the app level (notion-shell can't import another slice's frontend) and pass into the factory.** NotionPage ships optional cover prop. SortableBlockList wraps a render-prop callback `(id, dragProps) => <NotionBlock dragHandle={...} />`. NotionDatabase ships 6 views via VIEW_REGISTRY. Property cells: text/number/checkbox/select/multi-select/status/date/url/email/phone all built in. For rich icon UX wire `renderIcon` + `renderIconPicker` to `@/features/icon-picker`. **v0.17 — Notion-canonical editing keys (`blockKeyHandler.ts`): Enter splits at the caret into a new block (lists continue their type; an empty list item exits to paragraph); Backspace on an empty non-paragraph downgrades it to a plain paragraph (re-triggerable with `/`); a second Backspace on an empty paragraph merges into the previous block; Arrow up/down at a line edge hops blocks. Wire the host callbacks on `<NotionBlock>`: `onInsertAfter(type, init) => newId`, `onMergeBack()`, `onFocusSibling(dir)` — plus `focusBlock(id, offset?)` exported to move the caret after a host state change. The preview `page-demo.tsx` and the notion-clone template `DocView` show full array- and reducer-based wirings.** PRODUCT POINTER: the full Convex-backed Notion-clone OS (multi-workspace + auth + sharing + comments + snapshots + MCP) lives at https://github.com/rahmanef63/open-silong — clone that repo for the production stack; use this slice when you only need to embed the Notion-style UI in another project.**",
+    agentRecipe: "Run `npx rr add notion-shell` for the portable UI wrappers ONLY (no backend). NPM deps: @dnd-kit/core, @dnd-kit/sortable, @dnd-kit/utilities. Import: `import { NotionPage, NotionSidebar, NotionBlock, NotionDatabase, SortableBlockList, PageActionsMenu, InsertBlockButton, ViewTabs, ImageRenderer, EmbedRenderer } from \"@/features/notion-shell\"`. NotionBlock ships slash menu + decorator + actions menu + dragHandle slot. **`createDefaultBlockRenderers()` returns the block-renderer registry — pass it to `<NotionBlock blockRenderers={…}>` so callout (icon+kind picker), table (editable grid), divider, image, embed, code (highlight.js) + equation (KaTeX) all render. code + equation are now BUILT-IN to notion-shell (npm: katex + highlight.js) — no adapter needed. Only `database` + `toc` are injected at the app level (they depend on host data + the sibling notion-database slice).** NotionPage ships optional cover prop. SortableBlockList wraps a render-prop callback `(id, dragProps) => <NotionBlock dragHandle={...} />`. NotionDatabase ships 6 views via VIEW_REGISTRY. Property cells: text/number/checkbox/select/multi-select/status/date/url/email/phone all built in. For rich icon UX wire `renderIcon` + `renderIconPicker` to `@/features/icon-picker`. **v0.17 — Notion-canonical editing keys (`blockKeyHandler.ts`): Enter splits at the caret into a new block (lists continue their type; an empty list item exits to paragraph); Backspace on an empty non-paragraph downgrades it to a plain paragraph (re-triggerable with `/`); a second Backspace on an empty paragraph merges into the previous block; Arrow up/down at a line edge hops blocks. Wire the host callbacks on `<NotionBlock>`: `onInsertAfter(type, init) => newId`, `onMergeBack()`, `onFocusSibling(dir)` — plus `focusBlock(id, offset?)` exported to move the caret after a host state change. The preview `page-demo.tsx` and the notion-clone template `DocView` show full array- and reducer-based wirings.** PRODUCT POINTER: the full Convex-backed Notion-clone OS (multi-workspace + auth + sharing + comments + snapshots + MCP) lives at https://github.com/rahmanef63/open-silong — clone that repo for the production stack; use this slice when you only need to embed the Notion-style UI in another project.**",
     previewPath: "/preview/slices/notion-shell",
     defaultView: "desktop",
     defaultZoom: 1,

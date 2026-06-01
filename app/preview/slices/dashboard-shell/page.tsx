@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { SlicePreviewLayout, PreviewSection, CodeBlock } from "@/components/slice-previews/preview-layout";
+import { SlicePreviewLayout, PreviewSection } from "@/components/slice-previews/preview-layout";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { DesktopShell, MobileShell } from "./shells";
@@ -45,19 +45,6 @@ export default function Page() {
             {viewport === "desktop" ? <DesktopShell /> : <MobileShell open={mobileOpen} setOpen={setMobileOpen} />}
           </div>
         </div>
-      </PreviewSection>
-
-      <PreviewSection title="Wiring">
-        <CodeBlock>{`import { ResponsiveDashboardShell } from "@/features/dashboard-shell";
-import { FullWidthToggle } from "@/features/full-width-toggle";
-
-<ResponsiveDashboardShell
-  mode="authenticated"
-  sidebar={<AppSidebar />}
-  topbar={<><BreadcrumbSlot /><FullWidthToggle /></>}
->
-  {children}
-</ResponsiveDashboardShell>`}</CodeBlock>
       </PreviewSection>
     </SlicePreviewLayout>
   );

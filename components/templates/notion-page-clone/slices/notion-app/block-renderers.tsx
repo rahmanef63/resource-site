@@ -1,11 +1,11 @@
 "use client";
 
-/** App-level block-renderer wiring for the notion-clone template. Maps the
- *  sibling code/equation/database slices' own prop shapes onto
- *  BlockRendererProps (notion-shell can't import another slice's frontend —
- *  compose here), then builds the FULL default registry. This is what gives
- *  the editor callout/table/divider/nested-toggle/columns/video/audio/
- *  page/button/database/colour — not the old hand-rolled 7-renderer stub. */
+/** App-level block-renderer wiring for the notion-clone template. notion-shell
+ *  ships every self-contained renderer built-in (incl. code/equation); the
+ *  host only injects `database` + `toc`, which depend on host data + the
+ *  sibling notion-database slice (notion-shell can't import it — compose
+ *  here). This is what gives the editor callout/table/divider/nested-toggle/
+ *  columns/video/audio/page/button/code/equation/database/toc. */
 
 import { createContext, useContext, useState, type ComponentType } from "react";
 import {
@@ -16,37 +16,11 @@ import {
   type BlockRendererProps,
   type TocHeading,
 } from "@/features/notion-shell";
-import { EquationBlock, CodeBlock } from "@/features/notion-blocks";
 import {
   NotionDatabase,
   type Database,
   type Page,
 } from "@/features/notion-database";
-
-const noop = () => {};
-
-function CodeRenderer({ block, onUpdate, registerRef }: BlockRendererProps) {
-  return (
-    <CodeBlock
-      text={block.text}
-      lang={block.lang ?? "plaintext"}
-      registerRef={registerRef ?? noop}
-      onText={(text) => onUpdate({ text })}
-      onLang={(lang) => onUpdate({ lang })}
-      onKeyDown={noop}
-    />
-  );
-}
-
-function EquationRenderer({ block, onUpdate, registerRef }: BlockRendererProps) {
-  return (
-    <EquationBlock
-      text={block.text}
-      registerRef={registerRef ?? noop}
-      onText={(text) => onUpdate({ text })}
-    />
-  );
-}
 
 /** Inline database block — mounts the full notion-database surface. A real
  *  host resolves block.databaseId to its stored db/rows; the template keeps
@@ -103,8 +77,6 @@ function TocRenderer(_props: BlockRendererProps) {
 }
 
 export const NOTION_BLOCK_RENDERERS: BlockRenderers = createDefaultBlockRenderers({
-  code: CodeRenderer as ComponentType<BlockRendererProps>,
-  equation: EquationRenderer as ComponentType<BlockRendererProps>,
   database: DatabaseRenderer as ComponentType<BlockRendererProps>,
   toc: TocRenderer as ComponentType<BlockRendererProps>,
 });

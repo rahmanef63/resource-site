@@ -1,10 +1,10 @@
 "use client";
 
 import * as React from "react";
-import { SlicePreviewLayout, PreviewSection, CodeBlock } from "@/components/slice-previews/preview-layout";
+import { SlicePreviewLayout, PreviewSection } from "@/components/slice-previews/preview-layout";
 import { Button } from "@/components/ui/button";
 import {
-  Frame, PageMock, Dialog, Seg, VariantCard, type Mobile, type Variant,
+  Frame, PageMock, Dialog, Seg, type Mobile, type Variant,
 } from "./parts";
 
 export default function Page() {
@@ -50,34 +50,6 @@ export default function Page() {
           )}
           {!open && <PageMock />}
         </Frame>
-      </PreviewSection>
-
-      <PreviewSection title="Variants" hint="modal · panel · alert">
-        <div className="grid gap-3 sm:grid-cols-3">
-          <VariantCard title="modal" desc="Standard centered dialog with backdrop." />
-          <VariantCard title="panel" desc="Edge-anchored sheet on both viewports — for settings, filters." />
-          <VariantCard title="alert" desc="Tighter, destructive-confirm flavor. Disable backdrop dismiss." />
-        </div>
-      </PreviewSection>
-
-      <PreviewSection title="Wiring">
-        <CodeBlock>{`import {
-  ResponsiveDialog,
-  ResponsiveDialogHeader,
-  ResponsiveDialogTitle,
-  ResponsiveDialogBody,
-  ResponsiveDialogFooter,
-} from "@/features/responsive-dialog";
-
-<ResponsiveDialog open={open} onOpenChange={setOpen} variant="modal" size="md">
-  <ResponsiveDialogHeader>
-    <ResponsiveDialogTitle>Konfirmasi</ResponsiveDialogTitle>
-  </ResponsiveDialogHeader>
-  <ResponsiveDialogBody>…</ResponsiveDialogBody>
-  <ResponsiveDialogFooter>
-    <Button onClick={onSubmit}>Lanjut</Button>
-  </ResponsiveDialogFooter>
-</ResponsiveDialog>`}</CodeBlock>
       </PreviewSection>
     </SlicePreviewLayout>
   );

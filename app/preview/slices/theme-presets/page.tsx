@@ -10,23 +10,21 @@ import { Button } from "@/components/ui/button";
 export default function Page() {
   return (
     <ThemePresetProvider>
-      <main className="mx-auto min-h-screen max-w-4xl bg-background p-6">
-        <header className="mb-6 flex items-start justify-between gap-4">
-          <div className="space-y-1">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">
-              theme-presets · v0.2.0
-            </p>
-            <h1 className="text-2xl font-semibold">One unified switcher</h1>
-            <p className="max-w-prose text-sm text-muted-foreground">
-              Light/dark/system mode tabs + ~30 tweakcn color presets, all in
-              one Popover. Hover any preset to preview live; click to commit.
-              Registry ships inside the slice — no public/ setup required.
-            </p>
-          </div>
+      <main className="mx-auto flex min-h-screen max-w-4xl flex-col items-center justify-center gap-6 bg-background p-6">
+        <header className="flex flex-col items-center gap-2 text-center">
+          <p className="text-xs uppercase tracking-wide text-muted-foreground">
+            theme-presets · v0.2.0
+          </p>
+          <h1 className="text-2xl font-semibold">One unified switcher</h1>
+          <p className="max-w-prose text-sm text-muted-foreground">
+            Light/dark/system mode tabs + ~30 tweakcn color presets, all in
+            one Popover. Hover any preset to preview live; click to commit.
+            Registry ships inside the slice — no public/ setup required.
+          </p>
           <ThemePresetSwitcher />
         </header>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid w-full gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <div className="rounded-lg border bg-card p-4">
             <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
               Background + foreground

@@ -24,9 +24,19 @@ export function SelectionCanvas() {
   const surfaceRef = React.useRef<HTMLDivElement | null>(null);
   const ids = nodes.map((n) => n.id);
 
+  const dragBase = React.useRef<Map<string, { x: number; y: number }>>(new Map());
+
   const add = (x = 60, y = 60) => setNodes((c) => [...c, { id: nid(), x, y, text: "New node" }]);
-  const move = (id: string, x: number, y: number) =>
-    setNodes((c) => c.map((n) => (n.id === id ? { ...n, x: Math.max(0, x), y: Math.max(0, y) } : n)));
+  const dragStart = (movingIds: string[]) => {
+    const m = new Map<string, { x: number; y: number }>();
+    nodes.forEach((n) => { if (movingIds.includes(n.id)) m.set(n.id, { x: n.x, y: n.y }); });
+    dragBase.current = m;
+  };
+  const dragMove = (dx: number, dy: number) =>
+    setNodes((c) => c.map((n) => {
+      const b = dragBase.current.get(n.id);
+      return b ? { ...n, x: Math.max(0, b.x + dx), y: Math.max(0, b.y + dy) } : n;
+    }));
   const edit = (id: string, text: string) =>
     setNodes((c) => c.map((n) => (n.id === id ? { ...n, text } : n)));
   const removeOne = (id: string) => setNodes((c) => c.filter((n) => n.id !== id));
@@ -57,7 +67,7 @@ export function SelectionCanvas() {
       >
         <SelectionMarquee containerRef={surfaceRef} />
         {nodes.map((n) => (
-          <CanvasNode key={n.id} node={n} orderedIds={ids} onMove={move} onEdit={edit} onDelete={removeOne} />
+          <CanvasNode key={n.id} node={n} orderedIds={ids} onDragStart={dragStart} onDragMove={dragMove} onEdit={edit} onDelete={removeOne} />
         ))}
       </div>
     </SelectionProvider>

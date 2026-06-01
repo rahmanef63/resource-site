@@ -515,8 +515,8 @@ export default function Layout({ children }) {
     category: "website-template",
     status: "stable",
     description:
-      "localStorage-only DEMO of a Notion-clone surface — tree-structured sidebar + page editor + embedded databases. Built from rr's notion-shell wrappers (NotionSidebar / NotionPage / NotionBlock / NotionDatabase) + notion-blocks primitives (equation / code / notify / drag-fill grid) + createTemplateStore (localStorage + BroadcastChannel). No Convex, no auth, no multi-user — drop-in starter for evaluating the UI or embedding a Notion-style editor in your own project. **For the production-grade Convex-backed product (multi-workspace + auth + sharing + comments + snapshots + MCP), use the open-source open-silong repo: https://github.com/rahmanef63/open-silong (silong.rahmanef.com).** This rr template is the DEMO; the github repo is the PRODUCT.",
-    source: "synthesized + notion-shell wrappers + notion-blocks bundle; production stack at github.com/rahmanef63/open-silong",
+      "localStorage-only DEMO of a Notion-clone surface — tree-structured sidebar + page editor + embedded databases. Built from rr's notion-shell wrappers (NotionSidebar / NotionPage / NotionBlock / NotionDatabase — code + equation blocks built-in) + notion-database (drag-fill grid) + createTemplateStore (localStorage + BroadcastChannel). No Convex, no auth, no multi-user — drop-in starter for evaluating the UI or embedding a Notion-style editor in your own project. **For the production-grade Convex-backed product (multi-workspace + auth + sharing + comments + snapshots + MCP), use the open-source open-silong repo: https://github.com/rahmanef63/open-silong (silong.rahmanef.com).** This rr template is the DEMO; the github repo is the PRODUCT.",
+    source: "synthesized + notion-shell wrappers (built-in code/equation); production stack at github.com/rahmanef63/open-silong",
     repoPath: "app/preview/notion-page-clone-os",
     primaryFile: "app/preview/notion-page-clone-os/public/page.tsx",
     tags: ["template", "notion", "notes", "blocks", "katex", "code", "editor", "indonesia"],
@@ -529,12 +529,8 @@ export default function Layout({ children }) {
       "app/preview/notion-page-clone-os",
       "components/templates/_shared",
       "components/templates/notion-page-clone",
-      "frontend/slices/notion-blocks",
       "frontend/slices/notion-shell",
       "frontend/slices/icon-picker",
-      "frontend/slices/equation",
-      "frontend/slices/code-block",
-      "frontend/slices/notifications",
     ],
     files: [
       "app/preview/notion-page-clone-os/public/layout.tsx",
@@ -574,7 +570,7 @@ export default function Layout({ children }) {
 import { Dashboard } from "@/components/templates/notion-page-clone/slices/notion-app/Dashboard";
 export default function Page() { return <Dashboard activeKind="doc" activeId="doc-welcome" />; }`,
     agentRecipe:
-      "Run `npx rr init <app> --template notion-page-clone-os`. Cascades notion-shell (wrappers) + notion-blocks (4 editor primitives) + icon-picker. Edit components/templates/notion-page-clone/shared/site-config.ts to set brand; seed.ts to bootstrap docs + databases. Sidebar CRUD already wired — hover a row → +/✎/🗑.",
+      "Run `npx rr init <app> --template notion-page-clone-os`. Cascades notion-shell (wrappers, built-in code/equation blocks) + notion-database + icon-picker. Edit components/templates/notion-page-clone/shared/site-config.ts to set brand; seed.ts to bootstrap docs + databases. Sidebar CRUD already wired — hover a row → +/✎/🗑.",
   },
   {
     slug: "saas-marketing-os",

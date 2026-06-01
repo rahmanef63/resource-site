@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ExternalLink, FileCode, Info, Package, Terminal } from "lucide-react";
+import { ExternalLink, FileCode, Info, Package, SquareStack, Terminal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CodeBlock } from "@/components/site/code-block";
 import { ShowcaseCard } from "@/components/site/catalog/showcase-card";
@@ -59,6 +59,8 @@ export function SliceDetailClient({
               codeFiles={codeFiles}
               dependencies={slice.npm ?? []}
               sourceHref={sourceHref}
+              wiring={slice.wiring}
+              variants={slice.variants}
             />
           )
         : undefined,
@@ -96,12 +98,16 @@ function CodeTab({
   codeFiles,
   dependencies,
   sourceHref,
+  wiring,
+  variants,
 }: {
   slug: string;
   slicePath: string;
   codeFiles?: SliceFile[];
   dependencies: string[];
   sourceHref: string;
+  wiring?: string;
+  variants?: { title: string; desc: string }[];
 }) {
   const cliCmd = `npx rahman-resources add ${slug} my-app`;
   return (
@@ -120,6 +126,25 @@ function CodeTab({
       >
         <CodeBlock code={cliCmd} language="bash" filename="install.sh" />
       </ShowcaseCard>
+
+      {variants && variants.length > 0 && (
+        <ShowcaseCard icon={SquareStack} label={`Variants (${variants.length})`} variant="static">
+          <ul className="space-y-1.5 text-xs">
+            {variants.map((v) => (
+              <li key={v.title} className="flex gap-2">
+                <code className="shrink-0 rounded bg-muted px-1.5 py-0.5 font-mono text-[11px]">{v.title}</code>
+                <span className="text-muted-foreground">{v.desc}</span>
+              </li>
+            ))}
+          </ul>
+        </ShowcaseCard>
+      )}
+
+      {wiring && (
+        <ShowcaseCard icon={FileCode} label="Wiring" variant="code">
+          <CodeBlock code={wiring} language="tsx" filename="usage.tsx" />
+        </ShowcaseCard>
+      )}
 
       {dependencies.length > 0 && (
         <ShowcaseCard

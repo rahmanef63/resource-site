@@ -9,30 +9,31 @@ export interface CanvasNodeData { id: string; x: number; y: number; text: string
 interface Props {
   node: CanvasNodeData;
   orderedIds: string[];
-  onMove: (id: string, x: number, y: number) => void;
+  onDragStart: (ids: string[]) => void;
+  onDragMove: (dx: number, dy: number) => void;
   onEdit: (id: string, text: string) => void;
   onDelete: (id: string) => void;
 }
 
 /** A free-floating, draggable, editable node on the selection canvas. The
  *  grip moves it (drag) and selects it (click); the marquee can rubber-band
- *  it; ✕ or Backspace deletes it. */
-export function CanvasNode({ node, orderedIds, onMove, onEdit, onDelete }: Props) {
+ *  it; ✕ or Backspace deletes it. When >1 node is selected, dragging any
+ *  selected node moves the whole selection together. */
+export function CanvasNode({ node, orderedIds, onDragStart, onDragMove, onEdit, onDelete }: Props) {
   const sel = useSelection();
-  const drag = React.useRef<{ px: number; py: number; x: number; y: number } | null>(null);
 
   const startDrag = (e: React.PointerEvent) => {
     e.preventDefault();
-    if (e.shiftKey || e.metaKey || e.ctrlKey) sel?.toggle(node.id);
+    const mod = e.shiftKey || e.metaKey || e.ctrlKey;
+    if (mod) sel?.toggle(node.id);
     else if (!sel?.isSelected(node.id)) sel?.selectOnly(node.id);
-    drag.current = { px: e.clientX, py: e.clientY, x: node.x, y: node.y };
-    const move = (ev: PointerEvent) => {
-      const d = drag.current;
-      if (!d) return;
-      onMove(node.id, d.x + (ev.clientX - d.px), d.y + (ev.clientY - d.py));
-    };
+    // Group-move: drag the whole selection when this node is already part of a
+    // multi-select; otherwise just this node.
+    const multi = !mod && sel?.isSelected(node.id) && (sel?.size ?? 0) > 1;
+    onDragStart(multi ? (sel?.snapshot() ?? [node.id]) : [node.id]);
+    const px = e.clientX, py = e.clientY;
+    const move = (ev: PointerEvent) => onDragMove(ev.clientX - px, ev.clientY - py);
     const up = () => {
-      drag.current = null;
       window.removeEventListener("pointermove", move);
       window.removeEventListener("pointerup", up);
     };

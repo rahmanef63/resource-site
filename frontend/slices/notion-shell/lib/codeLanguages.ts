@@ -1,3 +1,7 @@
+/** Code-block language registry for the built-in `code` renderer (was the
+ *  standalone @/features/code-block slice; inlined into notion-shell so the
+ *  notion page block ships syntax highlighting out of the box). */
+
 export const CODE_LANGUAGES: { value: string; label: string }[] = [
   { value: "plaintext", label: "Plain text" },
   { value: "javascript", label: "JavaScript" },
@@ -35,15 +39,8 @@ export function normalizeLang(lang?: string): string {
   if (!lang) return "plaintext";
   const l = lang.toLowerCase();
   const map: Record<string, string> = {
-    js: "javascript",
-    ts: "typescript",
-    py: "python",
-    rb: "ruby",
-    sh: "bash",
-    cs: "csharp",
-    "c++": "cpp",
-    md: "markdown",
-    yml: "yaml",
+    js: "javascript", ts: "typescript", py: "python", rb: "ruby",
+    sh: "bash", cs: "csharp", "c++": "cpp", md: "markdown", yml: "yaml",
   };
   return map[l] ?? l;
 }
