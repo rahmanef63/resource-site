@@ -11,6 +11,21 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-05-31 — notion-shell: toggle nesting + media blocks (page-features P2) v0.9.0
+
+- **ToggleBlock** — collapsible section (chevron) with an inline-editable
+  heading and **nested child blocks**. Children render through the *same*
+  registry (callouts, code, even nested toggles work inside), with child
+  CRUD — add / turn-into / duplicate / delete — patched back via
+  `onUpdate({ children })`. Bound to the registry by the factory.
+- **Video + Audio blocks** (`MediaBlock`) — paste a URL → native
+  `<video controls>` / `<audio controls>` player + caption; added to the
+  slash menu.
+- **`EditableLine`** — extracted the inline-editable contentEditable +
+  live-decorator into one reusable primitive; CalloutBlock + ToggleBlock
+  both ride it (keeps every block file ≤200 LOC). Preview now demos a
+  toggle with nested callout + child blocks.
+
 ### 2026-05-31 — notion-shell: default block-renderer pack (page-features P1) v0.8.0
 
 - **`createDefaultBlockRenderers()`** — a real block-renderer registry so

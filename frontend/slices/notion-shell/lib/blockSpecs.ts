@@ -9,6 +9,7 @@ import {
   ListTodo, List, ListOrdered,
   Quote, Code, Minus, Lightbulb, FileText, Database,
   ChevronRight, Image as ImageIcon, Sigma, Table, Tv2,
+  Film, Music,
   type LucideIcon,
 } from "lucide-react";
 import type { BlockType } from "../types";
@@ -39,7 +40,9 @@ export const BLOCK_SPECS: BlockSpec[] = [
   { type: "page", label: "Page", hint: "Embed or create a sub-page", icon: FileText, keywords: ["page", "subpage", "doc"] },
   { type: "database", label: "Database", hint: "Inline database with multiple views", icon: Database, keywords: ["database", "db", "kanban", "board"] },
   { type: "table", label: "Table", hint: "Plain table grid", icon: Table, keywords: ["table", "grid", "spreadsheet"] },
-  { type: "embed", label: "Embed", hint: "YouTube · Vimeo · Loom · Figma · CodePen", icon: Tv2, keywords: ["embed", "iframe", "video", "youtube", "vimeo"] },
+  { type: "embed", label: "Embed", hint: "YouTube · Vimeo · Loom · Figma · CodePen", icon: Tv2, keywords: ["embed", "iframe", "youtube", "vimeo"] },
+  { type: "video", label: "Video", hint: "Embed a video by URL", icon: Film, keywords: ["video", "mp4", "movie", "clip"] },
+  { type: "audio", label: "Audio", hint: "Embed an audio clip by URL", icon: Music, keywords: ["audio", "mp3", "sound", "music", "podcast"] },
 ];
 
 /** Spec lookup by block type — returns `undefined` for unknown types. */

@@ -24,6 +24,8 @@ import { EmbedRenderer } from "../components/blocks/EmbedRenderer";
 import { CalloutBlock } from "../components/blocks/CalloutBlock";
 import { TableBlock } from "../components/blocks/TableBlock";
 import { DividerBlock } from "../components/blocks/DividerBlock";
+import { VideoBlock, AudioBlock } from "../components/blocks/MediaBlock";
+import { makeToggleBlock } from "../components/blocks/ToggleBlock";
 
 export interface DefaultBlockRendererOpts {
   /** Adapter for block-type "code" (e.g. wraps `@/features/code-block`). */
@@ -39,13 +41,19 @@ export interface DefaultBlockRendererOpts {
 export function createDefaultBlockRenderers(
   opts: DefaultBlockRendererOpts = {},
 ): BlockRenderers {
-  return {
+  const renderers: BlockRenderers = {
     image: opts.image ?? ImageRenderer,
     embed: opts.embed ?? EmbedRenderer,
     callout: CalloutBlock,
     table: TableBlock,
     divider: DividerBlock,
+    video: VideoBlock,
+    audio: AudioBlock,
     ...(opts.code ? { code: opts.code } : {}),
     ...(opts.equation ? { equation: opts.equation } : {}),
   };
+  // Toggle renders its children through the SAME registry (incl. nested
+  // toggles), so it's bound after the object exists.
+  renderers.toggle = makeToggleBlock(renderers);
+  return renderers;
 }

@@ -148,7 +148,7 @@ export const slices: SliceEntry[] = [
     title: "AppShell — Desktop + Mobile OS Shell",
     category: "ui",
     kind: "full",
-    version: "0.1.0",
+    version: "1.0.0",
     tagline: "Manifest-driven macOS-style window manager + iOS-style mobile surface in one slice.",
     description:
       "Generic, brand-free OS-style shell framework. One <AppShell manifest> wrapper provider gives a project a macOS-style window manager (drag/snap/maximize, dock, menu bar, Spotlight) AND an iOS-style mobile surface (home pager, app library, control center, widgets), driven entirely by a manifest: brand, apps, features, surface regions, capabilities, persistence, keymap. Five shell features (search, inspector, notifications, control-center, widgets) are bundled as defineFeature() contributions inside the slice and mount via named <Slot>s. Responsiveness is a single ResponsiveProvider + 4 DRY primitives (AppFrame, MasterDetail, ResponsiveToolbar, TouchList). Imports nothing project-specific — the consumer injects data/auth/AI through manifest.capabilities. Lifted from os-vps (Topside).",
@@ -161,7 +161,7 @@ export const slices: SliceEntry[] = [
     peers: [],
     tags: ["shell", "window-manager", "desktop", "mobile", "responsive", "framework", "ui"],
     resourceType: "module",
-    maturity: "beta",
+    maturity: "stable",
     previewPath: "/preview/slices/appshell",
     defaultView: "desktop",
     agentRecipe: `Stack required: Next 16 (App Router) + React 19 + Tailwind 4 + shadcn/ui. The slice is self-contained — it imports only @/components/ui/* + @/lib/utils (cn); everything project-specific arrives via the manifest. Follow ALL steps; the ⚠ ones are where installs break.
@@ -177,7 +177,7 @@ STEP 4 — Mount full-bleed. Render <AppShell manifest={manifest} /> from a CLIE
 STEP 5 — Build the ShellManifest:
 • brand: { name, logo (string or ReactNode), idleAppName?, wallpaper?: "aurora"|"dusk"|"mist"|"noir" }.
 • apps: AppDescriptor[] — { id, title, icon (a lucide-react icon component), gradient (a CSS gradient string for the glossy icon), load: async () => ({ default: YourAppComponent }), slug?, defaultSize?: {w,h}, multi?: true (spawn a new window per open, e.g. a file manager), noDock?: true }. Your app component receives props { payload }.
-• features: import the ones you want from "@/features/appshell" and list them: searchFeature (⌘K Spotlight), inspectorFeature (⌘I AI/context panel), notificationsFeature (toasts + iOS dynamic island), controlCenterFeature (iOS control center), widgetsFeature (iOS Today widgets).
+• features: the fastest path is \`features: DEFAULT_FEATURES\` — the bundled default system-feature set (all five, generic + brand-free) exported from "@/features/appshell". Or import individually and list only what you want: searchFeature (⌘K Spotlight), inspectorFeature (⌘I AI/context panel), notificationsFeature (toasts + iOS dynamic island), controlCenterFeature (iOS control center), widgetsFeature (iOS Today widgets). The surfaces are slot-driven, so spreading/trimming DEFAULT_FEATURES just mounts/omits a feature — \`features: [...DEFAULT_FEATURES.filter(f => f.id !== "widgets")]\`.
 • capabilities: ShellCapabilities — your data/auth/AI injection seam. useAppearance() and useCpuPercent() are REQUIRED; useSearch/useSystemStats/useChat/useServerToggle are optional (defaults degrade gracefully). ⚠ CRITICAL: every capability hook MUST return a REFERENTIALLY STABLE value — a module-level const, or useMemo/useCallback. Returning a fresh object/closure each render makes Spotlight's search effect re-fire forever ("Maximum update depth exceeded"). e.g. define APPEARANCE once at module scope and \`useAppearance: () => APPEARANCE\`.
 • persistKey?: localStorage namespace for the saved window layout (default "appshell:layout").
 • routing?: defaults TRUE — it mirrors the focused app to the URL via the History API (window.history, NOT router.push). ⚠ If true you MUST add a catch-all route \`app/[[...slug]]/page.tsx\` that renders the mount AND calls notFound() for reserved paths (slug[0] === "_next"), or missing chunks return wrong-MIME 200s. SIMPLEST first install: set \`routing: false\` to skip the catch-all entirely.
@@ -1445,7 +1445,7 @@ export default convexAuthNextjsMiddleware();`,
     title: "Notion Shell — page + sidebar + block editor primitives (pure, no database)",
     category: "ui",
     kind: "ui",
-    version: "0.8.0",
+    version: "0.9.0",
     maturity: "beta",
     tagline: "Portable Notion-style UI: page editor + sidebar + slash menu + drag + cover. Pair with notion-database for embedded DBs.",
     description: "Portable Notion-style PAGE + SIDEBAR + BLOCK editor primitives. CI-wave (2026-05-21) split the database surface out — install the optional `notion-database` peer for embedded TableView / BoardView / ListView / GalleryView / CalendarView / FeedView, NotionDatabase, NotionProperty, ViewTabs, ViewOptions, ColumnHeaderMenu, property-cells. notion-shell alone gives you Notion-clone pages + sidebar + editor without the database weight. Domain types (Database, Property, PropertyValue, DbView, DatabaseViewConfig, DatabaseFilter, DatabaseSort) remain in notion-shell as the single source of truth (Page.rowOfDatabaseId + rowProps reference them). FULL OLD DESC BELOW: Portable Notion-style wrapper primitives. PAGE EDITOR: NotionPage (optional cover image band + header + body), NotionHeader / NotionSidebar / NotionBlock (live inline-markdown decorator, hover actions menu, optional dragHandle slot), SlashMenu (searchable block-type picker w/ keyboard nav), BlockActionsMenu (turn-into / duplicate / delete), InsertBlockButton (`+` trigger w/ SlashMenu), SortableBlockList (@dnd-kit render-prop wrapper for block reorder), PageActionsMenu (header dropdown: cover/favorite/duplicate/export/trash). DATABASE: NotionDatabase (full DB surface w/ tabs + options + per-column menu), NotionProperty (10 property-cell types), 6 built-in views (Table/Board/List/Gallery/Calendar/Feed), ViewTabs, ViewOptions (sort + filter + search popover), ColumnHeaderMenu. SPECIALISED BLOCK RENDERERS: ImageRenderer (URL + caption + preview), EmbedRenderer (YouTube/Vimeo/Loom/Figma/CodePen/Spotify auto-detect + iframe fallback). Pure helpers: applyView, groupBy, bucketByDate. Pure / props-driven — host owns data + change handlers. v0.7.2: Property gained `dateRange` (date columns default to a start→end range — the per-PropertyType Edit-property panel in notion-database toggles it; Calendar + Timeline read the range).",

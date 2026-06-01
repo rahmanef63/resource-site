@@ -6,7 +6,6 @@
  *  shared decorator). Click the icon to switch kind. Pure callback —
  *  writes `{ text }` + `{ calloutKind }` through `onUpdate`. */
 
-import { useEffect, useRef } from "react";
 import {
   Lightbulb, Info, AlertTriangle, Megaphone, OctagonAlert,
   type LucideIcon,
@@ -16,7 +15,7 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { Block, BlockRendererProps } from "../../types";
-import { decorateInPlace } from "../../lib/inlineDecorator";
+import { EditableLine } from "./EditableLine";
 
 type CalloutKind = NonNullable<Block["calloutKind"]>;
 
@@ -37,16 +36,6 @@ export function CalloutBlock({ block, onUpdate }: BlockRendererProps) {
   const kind = (block.calloutKind ?? "default") as CalloutKind;
   const meta = KINDS[kind];
   const Icon = meta.icon;
-  const ref = useRef<HTMLDivElement | null>(null);
-  const composingRef = useRef(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || composingRef.current) return;
-    const next = block.text ?? "";
-    if (el.innerText === next) return;
-    decorateInPlace(el, next, { hideMarkers: false });
-  }, [block.text]);
 
   return (
     <div className={cn("flex items-start gap-2 rounded-md border px-3 py-2", meta.box)}>
@@ -69,25 +58,10 @@ export function CalloutBlock({ block, onUpdate }: BlockRendererProps) {
           })}
         </DropdownMenuContent>
       </DropdownMenu>
-      <div
-        ref={ref}
-        contentEditable
-        suppressContentEditableWarning
-        data-placeholder="Type a callout…"
-        onCompositionStart={() => { composingRef.current = true; }}
-        onCompositionEnd={(e) => {
-          composingRef.current = false;
-          const text = (e.currentTarget as HTMLElement).innerText;
-          onUpdate({ text });
-          decorateInPlace(e.currentTarget as HTMLElement, text, { hideMarkers: false });
-        }}
-        onInput={(e) => {
-          if (composingRef.current) return;
-          const el = e.currentTarget as HTMLElement;
-          const text = el.innerText;
-          onUpdate({ text });
-          decorateInPlace(el, text, { hideMarkers: false });
-        }}
+      <EditableLine
+        text={block.text}
+        onChange={(text) => onUpdate({ text })}
+        placeholder="Type a callout…"
         className="min-w-0 flex-1 whitespace-pre-wrap break-words text-sm outline-none empty:before:text-muted-foreground/40 empty:before:content-[attr(data-placeholder)]"
       />
     </div>

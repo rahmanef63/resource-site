@@ -84,8 +84,8 @@ const DEFAULT_BLOCKS: Block[] = [
   { id: "b5", type: "code", lang: "ts", text: "const greet = (n: string) => `hi ${n}`;" },
   { id: "b6", type: "equation", text: "E = mc^2" },
   { id: "b7", type: "table", text: "", tableHeader: true, tableRows: [["Feature", "Status"], ["Callout", "✓"], ["Table", "✓"]] },
-  { id: "b8", type: "divider", text: "" },
-  { id: "b9", type: "paragraph", text: "" },
+  { id: "b8", type: "toggle", text: "Toggle — click the chevron; blocks nest inside", collapsed: false, children: [{ id: "b8a", type: "paragraph", text: "A nested child block." }, { id: "b8b", type: "callout", calloutKind: "note", text: "Even callouts nest." }] },
+  { id: "b9", type: "divider", text: "" },
 ];
 
 function PageDemo() {
