@@ -41,6 +41,7 @@ export {
   type SortableBlockDragProps,
 } from "./components/SortableBlockList";
 export { PageActionsMenu, type PageActionsMenuProps } from "./components/PageActionsMenu";
+export { PageLayoutSection, type PageLayoutSectionProps, type PageFont } from "./components/PageLayoutSection";
 export { InlineFormatToolbar } from "./components/InlineFormatToolbar";
 export { BlockColorPicker } from "./components/BlockColorPicker";
 export { BLOCK_COLORS, blockColorClass, type BlockColor } from "./lib/blockColors";

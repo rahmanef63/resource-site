@@ -32,6 +32,15 @@ export interface NotionPageProps {
   className?: string;
   /** Skip the header chrome (for embedded contexts). */
   headerless?: boolean;
+  /** Body typeface. Applies to title + blocks. Default = sans. */
+  font?: "default" | "serif" | "mono";
+  /** Expand content to full container width (else centred max-w-3xl). */
+  fullWidth?: boolean;
+  /** Shrink the body font a notch (Notion "Small text"). */
+  smallText?: boolean;
+  /** Read-only page — disables the title/icon editors. (Block-level
+   *  read-only stays the host's call — pass `readOnly` to your blocks.) */
+  locked?: boolean;
 }
 
 export function NotionPage({
@@ -40,9 +49,12 @@ export function NotionPage({
   renderIcon, renderIconPicker,
   actions, cover, onCoverRemove,
   children, className, headerless,
+  font = "default", fullWidth, smallText, locked,
 }: NotionPageProps) {
+  const widthClass = fullWidth ? "max-w-none" : "max-w-3xl";
+  const fontClass = font === "serif" ? "font-serif" : font === "mono" ? "font-mono" : "";
   return (
-    <div className={cn("flex h-full flex-col overflow-hidden", className)}>
+    <div className={cn("flex h-full flex-col overflow-hidden", fontClass, className)}>
       {cover && (
         <div className="group/cover relative h-48 w-full shrink-0 overflow-hidden bg-muted">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -68,15 +80,16 @@ export function NotionPage({
         <NotionHeader
           icon={icon}
           title={title}
-          onIconChange={onIconChange}
-          onTitleChange={onTitleChange}
+          onIconChange={locked ? undefined : onIconChange}
+          onTitleChange={locked ? undefined : onTitleChange}
           renderIcon={renderIcon}
           renderIconPicker={renderIconPicker}
           actions={actions}
+          widthClassName={widthClass}
         />
       )}
       <div className="flex-1 overflow-y-auto">
-        <div className="mx-auto w-full max-w-3xl px-4 py-6">
+        <div className={cn("mx-auto w-full px-4 py-6", widthClass, smallText && "text-sm")}>
           {children}
         </div>
       </div>

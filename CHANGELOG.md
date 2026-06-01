@@ -11,6 +11,18 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-05-31 — notion-shell: page layout chrome (page-features P5a) v0.12.0
+
+- **Page layout controls** — `NotionPage` gains `font` (default / serif / mono),
+  `fullWidth`, `smallText`, and `locked` props; the body + header width stay
+  aligned (header takes a `widthClassName`). `locked` disables the title/icon
+  editors. `PageActionsMenu` gains a **Layout** section (`PageLayoutSection`):
+  Font cycle · Full width · Small text · Lock — items keep the menu open so
+  several toggle in one pass.
+- Preview's PageDemo (extracted to `page-demo.tsx`) wires all four live, with
+  `locked` cascading `readOnly` to the blocks. Next (P5b): cover picker +
+  position, breadcrumbs, subpages list.
+
 ### 2026-05-31 — notion-shell: block colour (page-features P4) v0.11.0
 
 - **Block colour** — the `color` (text tint) + `bgColor` (background) fields

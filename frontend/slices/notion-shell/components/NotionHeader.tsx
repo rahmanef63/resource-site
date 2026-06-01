@@ -35,6 +35,9 @@ export interface NotionHeaderProps {
   actions?: ReactNode;
   placeholder?: string;
   className?: string;
+  /** Max-width class for the header row — keep aligned with the page body
+   *  (NotionPage passes it so full-width pages stay flush). */
+  widthClassName?: string;
 }
 
 function defaultRenderIcon(icon: string, className?: string) {
@@ -47,7 +50,7 @@ export function NotionHeader({
   renderIcon = defaultRenderIcon,
   renderIconPicker,
   actions, placeholder = "Untitled",
-  className,
+  className, widthClassName = "max-w-3xl",
 }: NotionHeaderProps) {
   const readonly = !onTitleChange;
   const iconButton = (
@@ -62,7 +65,7 @@ export function NotionHeader({
   );
   return (
     <div className={cn("w-full", className)}>
-      <div className="mx-auto flex w-full max-w-3xl items-start gap-3 px-4 pt-6">
+      <div className={cn("mx-auto flex w-full items-start gap-3 px-4 pt-6", widthClassName)}>
         <div className="flex-1">
           <div className="flex items-center gap-2">
             {onIconChange && renderIconPicker

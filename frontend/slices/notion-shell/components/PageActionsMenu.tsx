@@ -15,8 +15,9 @@ import {
   DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { PageLayoutSection, type PageLayoutSectionProps } from "./PageLayoutSection";
 
-export interface PageActionsMenuProps extends ComponentProps<typeof Button> {
+export interface PageActionsMenuProps extends ComponentProps<typeof Button>, PageLayoutSectionProps {
   favorite?: boolean;
   onDuplicate?: () => void;
   onToggleFavorite?: () => void;
@@ -26,8 +27,12 @@ export interface PageActionsMenuProps extends ComponentProps<typeof Button> {
 }
 
 export function PageActionsMenu({
-  favorite, onDuplicate, onToggleFavorite, onAddCover, onExport, onTrash, className, ...props
+  favorite, onDuplicate, onToggleFavorite, onAddCover, onExport, onTrash, className,
+  font, fullWidth, smallText, locked,
+  onSetFont, onToggleFullWidth, onToggleSmallText, onToggleLock,
+  ...props
 }: PageActionsMenuProps) {
+  const hasLayout = !!(onSetFont || onToggleFullWidth || onToggleSmallText || onToggleLock);
   const hasTop = !!(onAddCover || onToggleFavorite);
   const hasMid = !!(onDuplicate || onExport);
   return (
@@ -81,6 +86,13 @@ export function PageActionsMenu({
           >
             <Trash2 className="h-3.5 w-3.5" /> Move to trash
           </DropdownMenuItem>
+        )}
+        {hasLayout && (
+          <PageLayoutSection
+            font={font} fullWidth={fullWidth} smallText={smallText} locked={locked}
+            onSetFont={onSetFont} onToggleFullWidth={onToggleFullWidth}
+            onToggleSmallText={onToggleSmallText} onToggleLock={onToggleLock}
+          />
         )}
       </DropdownMenuContent>
     </DropdownMenu>
