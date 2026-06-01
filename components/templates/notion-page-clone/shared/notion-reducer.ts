@@ -45,6 +45,31 @@ export function notionReducer(state: State, action: Action): State {
           d.id !== action.docId ? d : { ...d, blocks: [...d.blocks, action.block], updatedAt: Date.now() },
         ),
       };
+    case "doc.block.insertAfter":
+      return {
+        ...state,
+        docs: state.docs.map((d) => {
+          if (d.id !== action.docId) return d;
+          const i = d.blocks.findIndex((b) => b.id === action.afterId);
+          const at = i < 0 ? d.blocks.length : i + 1;
+          const blocks = [...d.blocks.slice(0, at), action.block, ...d.blocks.slice(at)];
+          return { ...d, blocks, updatedAt: Date.now() };
+        }),
+      };
+    case "doc.block.mergeBack":
+      return {
+        ...state,
+        docs: state.docs.map((d) => {
+          if (d.id !== action.docId) return d;
+          const i = d.blocks.findIndex((b) => b.id === action.blockId);
+          if (i <= 0) return d; // first block — nothing to merge into
+          const prev = d.blocks[i - 1];
+          const cur = d.blocks[i];
+          const merged = { ...prev, text: (prev.text ?? "") + (cur.text ?? "") };
+          const blocks = [...d.blocks.slice(0, i - 1), merged, ...d.blocks.slice(i + 1)];
+          return { ...d, blocks, updatedAt: Date.now() };
+        }),
+      };
     case "doc.block.remove":
       return {
         ...state,

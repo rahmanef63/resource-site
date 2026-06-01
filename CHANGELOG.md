@@ -11,6 +11,31 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-01 — notion-shell: Notion-canonical Enter / Backspace / Arrow editing keys v0.17.0
+
+- **The real "nothing changed" bug.** The editor had NO Enter or merge
+  behaviour: pressing Enter inserted a literal newline *inside* the same
+  contentEditable, and Backspace-on-empty just deleted the block outright
+  (no list→paragraph downgrade, no merge into the previous line). The block
+  renderers shipped earlier never made the editor *feel* like Notion.
+- **`blockKeyHandler.ts`** (new, pure) — the canonical text-block key flow:
+  - **Enter** splits at the caret into a new block. Lists (`bullet` /
+    `numbered` / `todo`) continue their own type; an **empty list item**
+    exits the list (converts to paragraph) instead of stacking another.
+  - **Backspace on an empty non-paragraph** (heading / quote / callout /
+    list) downgrades it to a plain empty paragraph — re-triggerable with
+    `/`. A **second Backspace** on the empty paragraph **merges into the
+    previous block** (carrying any text, caret at the join point).
+  - **Arrow up/down** at a line edge hops to the adjacent block.
+- **`NotionBlock`** gains host callbacks `onInsertAfter(type, init) => id`,
+  `onMergeBack()`, `onFocusSibling(dir)`; the old inline key handling moved
+  into the new file. **`focusBlock(id, offset?)`** exported to place the
+  caret after a host state change.
+- **Hosts wired** — the notion-clone template (`DocView` + two new reducer
+  actions `doc.block.insertAfter` / `doc.block.mergeBack`) and the preview
+  `page-demo.tsx` (array state) both implement the full flow, so the os
+  editor and the slice preview now type like Notion.
+
 ### 2026-06-01 — notion-clone template: adopt full block-renderer registry (page-features wiring)
 
 - **Root cause of "no change in rr"** — the notion-clone *template* (the

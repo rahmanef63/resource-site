@@ -32,6 +32,7 @@ export { NotionPage, type NotionPageProps } from "./components/NotionPage";
 export { NotionHeader, type NotionHeaderProps } from "./components/NotionHeader";
 export { NotionSidebar, type NotionSidebarProps, type NotionSidebarPage } from "./components/NotionSidebar";
 export { NotionBlock, type NotionBlockProps } from "./components/NotionBlock";
+export { focusBlock } from "./lib/focusBlock";
 export { SlashMenu, type SlashMenuProps } from "./components/SlashMenu";
 export { BlockActionsMenu, type BlockActionsMenuProps } from "./components/BlockActionsMenu";
 export { InsertBlockButton, type InsertBlockButtonProps } from "./components/InsertBlockButton";

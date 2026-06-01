@@ -7,13 +7,10 @@
  *  specialised types delegates to the registered renderer.
  *
  *  Hover reveals a "⋯" button (BlockActionsHandle → BlockActionsMenu).
- *  Typing "/" opens an inline SlashMenu and MARKDOWN_TRIGGERS convert
- *  on the fly (`# ` → h1, `- ` → bullet, `[] ` → todo, etc.) — both
- *  gated on `onTurnInto` being provided. The SlashMenu rides on a
- *  Radix Popover anchored to the contentEditable so it escapes any
- *  clipping parent (e.g. an `overflow-y-auto` page shell) and stays
- *  positioned correctly even when the block sits near the bottom of
- *  the viewport. */
+ *  Typing "/" opens an inline SlashMenu (Radix Popover anchored to the
+ *  contentEditable) and MARKDOWN_TRIGGERS convert on the fly (`# ` → h1,
+ *  `- ` → bullet, etc.) — both gated on `onTurnInto`. Enter/Backspace/
+ *  Arrow editing flow lives in blockKeyHandler.ts. */
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
@@ -28,6 +25,7 @@ import { BlockActionsHandle } from "./BlockActionsHandle";
 import { SlashMenu } from "./SlashMenu";
 import { decorateInPlace } from "../lib/inlineDecorator";
 import { decideBlockInput } from "../lib/blockInputHandler";
+import { handleBlockKeyDown } from "../lib/blockKeyHandler";
 import { blockEditableClass } from "../lib/blockClassName";
 import { blockColorClass } from "../lib/blockColors";
 
@@ -45,6 +43,10 @@ export interface NotionBlockProps {
   /** Reorder one slot — surfaced in the block actions menu. */
   onMoveUp?: () => void;
   onMoveDown?: () => void;
+  // Editing-flow callbacks — see blockKeyHandler.ts (Enter/Backspace/Arrow).
+  onInsertAfter?: (type: BlockType, init?: Partial<Block>) => string | void;
+  onMergeBack?: () => void;
+  onFocusSibling?: (dir: -1 | 1) => void;
   dragHandle?: ReactNode;
   readOnly?: boolean;
   className?: string;
@@ -54,6 +56,7 @@ export function NotionBlock({
   block, pageId,
   blockRenderers, placeholders,
   onUpdate, onRemove, onTurnInto, onDuplicate, onMoveUp, onMoveDown,
+  onInsertAfter, onMergeBack, onFocusSibling,
   dragHandle,
   readOnly, className,
 }: NotionBlockProps) {
@@ -168,15 +171,11 @@ export function NotionBlock({
             onInput={handleInput}
             onKeyDown={(e) => {
               if (readOnly) return;
-              if (e.key === "Escape" && slashOpen) {
-                e.preventDefault();
-                closeSlash();
-                return;
-              }
-              if (e.key === "Backspace" && (e.currentTarget as HTMLElement).innerText === "") {
-                e.preventDefault();
-                onRemove?.();
-              }
+              handleBlockKeyDown(e, {
+                block, slashOpen, closeSlash,
+                onTurnInto, onUpdate, onRemove,
+                onInsertAfter, onMergeBack, onFocusSibling,
+              });
             }}
             data-placeholder={placeholder}
             className={blockEditableClass(block.type, className)}

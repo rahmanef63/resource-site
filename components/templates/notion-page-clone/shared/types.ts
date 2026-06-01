@@ -69,6 +69,8 @@ export type Action =
   | { type: "doc.delete"; id: string }
   | { type: "doc.block.update"; docId: string; blockId: string; patch: Partial<NotionBlock> }
   | { type: "doc.block.append"; docId: string; block: NotionBlock }
+  | { type: "doc.block.insertAfter"; docId: string; afterId: string; block: NotionBlock }
+  | { type: "doc.block.mergeBack"; docId: string; blockId: string }
   | { type: "doc.block.remove"; docId: string; blockId: string }
   | { type: "doc.block.duplicate"; docId: string; blockId: string }
   | { type: "doc.block.turnInto"; docId: string; blockId: string; blockType: NotionBlock["type"] }

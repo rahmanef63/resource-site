@@ -4,7 +4,7 @@ import * as React from "react";
 import { GripVertical } from "lucide-react";
 import {
   NotionPage, NotionBlock, InsertBlockButton,
-  SortableBlockList, PageActionsMenu, InlineFormatToolbar,
+  SortableBlockList, PageActionsMenu, InlineFormatToolbar, focusBlock,
   type Block, type BlockType, type SortableBlockDragProps,
 } from "@/features/notion-shell";
 import { DynamicIcon, IconPickerPopover } from "@/features/icon-picker";
@@ -81,6 +81,24 @@ export function DocView({ docId }: { docId: string }) {
     if (from < 0 || to < 0 || to >= doc.blocks.length) return;
     dispatch({ type: "doc.block.reorder", docId: doc.id, from, to });
   };
+  const handleInsertAfter = (afterId: string, type: BlockType, init?: Partial<Block>) => {
+    const id = `b-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
+    dispatch({ type: "doc.block.insertAfter", docId: doc.id, afterId, block: { id, type, text: "", ...init } });
+    return id;
+  };
+  const handleMergeBack = (blockId: string) => {
+    const i = doc.blocks.findIndex((b) => b.id === blockId);
+    if (i <= 0) return;
+    const prev = doc.blocks[i - 1];
+    const caret = (prev.text ?? "").length;
+    dispatch({ type: "doc.block.mergeBack", docId: doc.id, blockId });
+    focusBlock(prev.id, caret);
+  };
+  const handleFocusSibling = (blockId: string, dir: -1 | 1) => {
+    const i = doc.blocks.findIndex((b) => b.id === blockId);
+    const sib = doc.blocks[i + dir];
+    if (sib) focusBlock(sib.id, dir > 0 ? 0 : undefined);
+  };
 
   const blockIds = doc.blocks.map((b) => b.id);
   const blockById = new Map(doc.blocks.map((b) => [b.id, b] as const));
@@ -126,6 +144,9 @@ export function DocView({ docId }: { docId: string }) {
                 onTurnInto={(type) => handleBlockTurnInto(b.id, type)}
                 onMoveUp={() => handleMove(b.id, -1)}
                 onMoveDown={() => handleMove(b.id, 1)}
+                onInsertAfter={(type, init) => handleInsertAfter(b.id, type, init)}
+                onMergeBack={() => handleMergeBack(b.id)}
+                onFocusSibling={(dir) => handleFocusSibling(b.id, dir)}
                 dragHandle={<DragHandle drag={drag} />}
               />
             );

@@ -9,6 +9,7 @@ import {
   PageActionsMenu,
   PageBreadcrumbs,
   Subpages,
+  focusBlock,
   type Block,
   type BlockType,
   type PageFont,
@@ -68,6 +69,33 @@ export function PageDemo() {
       [next[i], next[j]] = [next[j]!, next[i]!];
       return next;
     });
+  const insertAfter = (afterId: string, type: BlockType, init?: Partial<Block>) => {
+    const id = `b${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+    setBlocks((cur) => {
+      const i = cur.findIndex((x) => x.id === afterId);
+      const next = [...cur];
+      next.splice(i + 1, 0, { id, type, text: "", ...init });
+      return next;
+    });
+    return id;
+  };
+  const mergeBack = (id: string) => {
+    const i = blocks.findIndex((x) => x.id === id);
+    if (i <= 0) return;
+    const prev = blocks[i - 1]!;
+    focusBlock(prev.id, (prev.text ?? "").length);
+    setBlocks((cur) => {
+      const j = cur.findIndex((x) => x.id === id);
+      if (j <= 0) return cur;
+      const p = cur[j - 1]!;
+      const merged = { ...p, text: (p.text ?? "") + (cur[j]!.text ?? "") };
+      return [...cur.slice(0, j - 1), merged, ...cur.slice(j + 1)];
+    });
+  };
+  const focusSibling = (id: string, dir: -1 | 1) => {
+    const sib = blocks[blocks.findIndex((x) => x.id === id) + dir];
+    if (sib) focusBlock(sib.id, dir > 0 ? 0 : undefined);
+  };
 
   return (
     <div className="h-[28rem] overflow-y-auto rounded-lg border border-border bg-background">
@@ -103,6 +131,9 @@ export function PageDemo() {
               onRemove={() => remove(b.id)}
               onMoveUp={() => move(b.id, -1)}
               onMoveDown={() => move(b.id, 1)}
+              onInsertAfter={(type, init) => insertAfter(b.id, type, init)}
+              onMergeBack={() => mergeBack(b.id)}
+              onFocusSibling={(dir) => focusSibling(b.id, dir)}
             />
           ))}
           {!locked && (
