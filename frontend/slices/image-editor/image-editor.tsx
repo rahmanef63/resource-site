@@ -11,7 +11,9 @@ import { ToolRail } from "./components/tool-rail";
 import { TopBar } from "./components/top-bar";
 import { ToolOptionsBar } from "./components/tool-options-bar";
 import { SidePanel } from "./components/side-panel";
+import { MobileShell } from "./components/mobile-shell";
 import { useKeyboard } from "./hooks/use-keyboard";
+import { useIsMobile } from "./hooks/use-is-mobile";
 import type { Doc } from "./lib/types";
 
 // The Konva stage touches `window`/`canvas` at import time, so it is loaded
@@ -32,21 +34,29 @@ export type ImageEditorProps = {
   className?: string;
 };
 
+// Desktop layout: left tool rail · canvas · right dock (adjust top, layers bottom).
+function DesktopShell({ stage, onSave }: { stage: React.ReactNode; onSave?: (d: string) => void }) {
+  return (
+    <div className="flex h-full w-full flex-col overflow-hidden bg-background text-foreground">
+      <TopBar onSave={onSave} />
+      <ToolOptionsBar />
+      <div className="flex min-h-0 flex-1">
+        <ToolRail />
+        <div className="min-w-0 flex-1">{stage}</div>
+        <SidePanel />
+      </div>
+    </div>
+  );
+}
+
+// Picks desktop vs mobile layout; both share ONE EditorStage element + provider.
 function Shell({ onSave }: { onSave?: (d: string) => void }) {
   useKeyboard();
+  const mobile = useIsMobile();
+  const stage = <EditorStage />;
   return (
     <TooltipProvider delayDuration={300}>
-      <div className="flex h-full w-full flex-col overflow-hidden bg-background text-foreground">
-        <TopBar onSave={onSave} />
-        <ToolOptionsBar />
-        <div className="flex min-h-0 flex-1">
-          <ToolRail />
-          <div className="min-w-0 flex-1">
-            <EditorStage />
-          </div>
-          <SidePanel />
-        </div>
-      </div>
+      {mobile ? <MobileShell stage={stage} onSave={onSave} /> : <DesktopShell stage={stage} onSave={onSave} />}
     </TooltipProvider>
   );
 }

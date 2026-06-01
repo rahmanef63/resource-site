@@ -67,6 +67,9 @@ export type Adjustments = {
   sepia: boolean;
 };
 
+/** Canvas pan offset (the doc group's top-left position in stage pixels). */
+export type Pan = { x: number; y: number };
+
 export type Transform = {
   x: number;
   y: number;

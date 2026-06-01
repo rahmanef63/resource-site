@@ -28,7 +28,7 @@ export function LayerNode({
   isSelected: boolean;
   registerNode: (id: string, node: NodeRef) => void;
 }) {
-  const { tool, update, select, commit } = useEditor();
+  const { tool, update, select } = useEditor();
   const ref = useRef<NodeRef>(null);
   const img = useKonvaImage(layer.kind === "image" ? layer.src : undefined);
   const set = (n: NodeRef) => {
@@ -63,6 +63,7 @@ export function LayerNode({
   }
 
   const common = {
+    name: layer.id,
     x: layer.t.x,
     y: layer.t.y,
     rotation: layer.t.rotation,
@@ -74,7 +75,6 @@ export function LayerNode({
     globalCompositeOperation: (layer.style.clipBelow ? "source-atop" : blendToGCO(layer.style.blend)) as GlobalCompositeOperation,
     onClick: () => tool === "move" && select(layer.id),
     onTap: () => tool === "move" && select(layer.id),
-    onDragStart: () => commit(),
     onDragEnd: (e: KonvaEventObject<DragEvent>) =>
       update(layer.id, { t: { ...layer.t, x: e.target.x(), y: e.target.y() } }),
     onTransformEnd: (e: KonvaEventObject<Event>) => {

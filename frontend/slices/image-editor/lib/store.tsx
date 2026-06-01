@@ -17,13 +17,16 @@ import type {
   Layer,
   LayerStyle,
   OuterGlow,
+  Pan,
   Stroke,
   Tool,
 } from "./types";
 import { blankDoc, createLayer } from "./model";
 import { useLayerMutators } from "./layer-mutators";
+import { useHistory } from "./history";
 
 export type Brush = { size: number; color: string; opacity: number; hardness: number };
+export type { Pan };
 
 type Ctx = {
   doc: Doc;
@@ -31,15 +34,16 @@ type Ctx = {
   selected: Layer | null;
   tool: Tool;
   zoom: number;
+  pan: Pan;
   brush: Brush;
   canUndo: boolean;
   canRedo: boolean;
   stageRef: React.MutableRefObject<Konva.Stage | null>;
-  /** Offscreen pixel buffers for paint layers, keyed by layer id. */
   canvasFor: (id: string, w: number, h: number) => HTMLCanvasElement;
   select: (id: string | null) => void;
   setTool: (t: Tool) => void;
   setZoom: (z: number) => void;
+  setPan: (p: Pan) => void;
   setBrush: (b: Partial<Brush>) => void;
   setDocSize: (w: number, h: number) => void;
   update: (id: string, patch: Partial<Layer>) => void;
@@ -54,49 +58,56 @@ type Ctx = {
   reorder: (from: number, to: number) => void;
   raise: (id: string) => void;
   lower: (id: string) => void;
+  /** Record a brush/eraser stroke (before+after PNG of the layer canvas). */
+  recordPaint: (id: string, before: string, after: string) => void;
   undo: () => void;
   redo: () => void;
-  commit: () => void;
 };
 
 const EditorContext = createContext<Ctx | null>(null);
-const HISTORY = 60;
 
-export function EditorProvider({
-  initialDoc,
-  children,
-}: {
-  initialDoc?: Doc;
-  children: ReactNode;
-}) {
+export function EditorProvider({ initialDoc, children }: { initialDoc?: Doc; children: ReactNode }) {
   const [doc, setDocState] = useState<Doc>(() => initialDoc ?? blankDoc());
   const [selectedId, setSelectedId] = useState<string | null>(doc.layers.at(-1)?.id ?? null);
   const [tool, setTool] = useState<Tool>("move");
   const [zoom, setZoom] = useState(1);
+  const [pan, setPan] = useState<Pan>({ x: 0, y: 0 });
   const [brush, setBrushState] = useState<Brush>({ size: 28, color: "#111827", opacity: 1, hardness: 0.8 });
-  const past = useRef<Doc[]>([]);
-  const future = useRef<Doc[]>([]);
-  const [, force] = useState(0);
   const canvases = useRef<Map<string, HTMLCanvasElement>>(new Map());
   const stageRef = useRef<Konva.Stage | null>(null);
 
-  // Push history then apply. `track:false` = transient (drag tick) — no snapshot.
+  // Restore a paint layer's pixels from a PNG snapshot (undo/redo of strokes).
+  const applyPaint = useCallback((id: string, dataUrl: string) => {
+    const c = canvases.current.get(id);
+    if (!c) return;
+    const img = new window.Image();
+    img.onload = () => {
+      const ctx = c.getContext("2d");
+      if (!ctx) return;
+      ctx.clearRect(0, 0, c.width, c.height);
+      ctx.drawImage(img, 0, 0);
+      stageRef.current?.draw();
+    };
+    img.src = dataUrl;
+  }, []);
+
+  const history = useHistory({ doc: setDocState, paint: applyPaint });
+  const { push, undo, redo, rev, canUndo, canRedo } = history;
+
+  // Apply a doc change, pushing a {before,after} step unless transient (track:false).
   const setDoc = useCallback((next: Doc | ((d: Doc) => Doc), track = true) => {
     setDocState((prev) => {
-      if (track) {
-        past.current = [...past.current.slice(-(HISTORY - 1)), prev];
-        future.current = [];
-      }
-      return typeof next === "function" ? next(prev) : next;
+      const n = typeof next === "function" ? next(prev) : next;
+      if (track) push({ type: "doc", before: prev, after: n });
+      return n;
     });
-  }, []);
+  }, [push]);
 
   const mapLayer = useCallback(
     (id: string, fn: (l: Layer) => Layer, track = true) =>
       setDoc((d) => ({ ...d, layers: d.layers.map((l) => (l.id === id ? fn(l) : l)) }), track),
     [setDoc],
   );
-
   const { update, patchStyle, patchShadow, patchGlow, patchStroke, patchAdj } = useLayerMutators(mapLayer);
 
   const addLayer = useCallback((layer: Layer, opts?: { select?: boolean }) => {
@@ -141,30 +152,7 @@ export function EditorProvider({
   }, [setDoc]);
 
   const setDocSize = useCallback((w: number, h: number) => setDoc((d) => ({ ...d, width: w, height: h })), [setDoc]);
-
-  const undo = useCallback(() => {
-    if (!past.current.length) return;
-    setDocState((cur) => {
-      future.current = [cur, ...future.current].slice(0, HISTORY);
-      const prev = past.current[past.current.length - 1];
-      past.current = past.current.slice(0, -1);
-      return prev;
-    });
-    force((n) => n + 1);
-  }, []);
-
-  const redo = useCallback(() => {
-    if (!future.current.length) return;
-    setDocState((cur) => {
-      past.current = [...past.current, cur].slice(-HISTORY);
-      const next = future.current[0];
-      future.current = future.current.slice(1);
-      return next;
-    });
-    force((n) => n + 1);
-  }, []);
-
-  const commit = useCallback(() => { past.current = [...past.current.slice(-(HISTORY - 1)), doc]; future.current = []; }, [doc]);
+  const recordPaint = useCallback((id: string, before: string, after: string) => push({ type: "paint", id, before, after }), [push]);
 
   const canvasFor = useCallback((id: string, w: number, h: number) => {
     let c = canvases.current.get(id);
@@ -179,15 +167,14 @@ export function EditorProvider({
 
   const value = useMemo<Ctx>(() => ({
     doc, selectedId, selected: doc.layers.find((l) => l.id === selectedId) ?? null,
-    tool, zoom, brush, canUndo: past.current.length > 0, canRedo: future.current.length > 0,
-    stageRef, canvasFor,
-    select: setSelectedId, setTool, setZoom,
+    tool, zoom, pan, brush, canUndo, canRedo, stageRef, canvasFor,
+    select: setSelectedId, setTool, setZoom, setPan,
     setBrush: (b) => setBrushState((s) => ({ ...s, ...b })),
     setDocSize, update, patchStyle, patchShadow, patchGlow, patchStroke, patchAdj,
     addLayer, removeLayer, duplicateLayer, reorder,
     raise: (id) => move(id, 1), lower: (id) => move(id, -1),
-    undo, redo, commit,
-  }), [doc, selectedId, tool, zoom, brush, canvasFor, setDoc, setDocSize, update, patchStyle, patchShadow, patchGlow, patchStroke, patchAdj, addLayer, removeLayer, duplicateLayer, reorder, move, undo, redo, commit]);
+    recordPaint, undo, redo,
+  }), [doc, selectedId, tool, zoom, pan, brush, canUndo, canRedo, rev, canvasFor, setDoc, setDocSize, update, patchStyle, patchShadow, patchGlow, patchStroke, patchAdj, addLayer, removeLayer, duplicateLayer, reorder, move, recordPaint, undo, redo]);
 
   return <EditorContext.Provider value={value}>{children}</EditorContext.Provider>;
 }

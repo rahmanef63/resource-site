@@ -4,6 +4,7 @@ import {
   MousePointer2,
   Brush,
   Eraser,
+  Pipette,
   Hand,
   Type,
   Square,
@@ -19,13 +20,16 @@ import type { Tool } from "../lib/types";
 // Vertical tool rail. Top group = persistent tool MODES (move/brush/eraser/
 // hand). Bottom group = quick "add layer" actions (text / rect / ellipse) that
 // drop a new layer centered on the canvas and switch to Move to position it.
-export function ToolRail() {
+export function ToolRail({ orientation = "vertical" }: { orientation?: "vertical" | "horizontal" }) {
   const { tool, setTool, doc, addLayer } = useEditor();
+  const horizontal = orientation === "horizontal";
+  const tipSide = horizontal ? "top" : "right";
 
   const modes: { id: Tool; icon: LucideIcon; key: string; label: string }[] = [
     { id: "move", icon: MousePointer2, key: "V", label: "Move" },
     { id: "brush", icon: Brush, key: "B", label: "Brush" },
     { id: "eraser", icon: Eraser, key: "E", label: "Eraser" },
+    { id: "eyedropper", icon: Pipette, key: "I", label: "Eyedropper" },
     { id: "hand", icon: Hand, key: "H", label: "Pan" },
   ];
 
@@ -61,16 +65,23 @@ export function ToolRail() {
           <Icon className="size-[18px]" />
         </button>
       </TooltipTrigger>
-      <TooltipContent side="right">{label}</TooltipContent>
+      <TooltipContent side={tipSide}>{label}</TooltipContent>
     </Tooltip>
   );
 
   return (
-    <div className="flex w-12 shrink-0 flex-col items-center gap-1.5 border-r border-border bg-card py-2.5">
+    <div
+      className={cn(
+        "flex shrink-0 items-center gap-1.5 border-border bg-card",
+        horizontal
+          ? "h-12 w-full flex-row overflow-x-auto border-t px-2"
+          : "w-12 flex-col border-r py-2.5",
+      )}
+    >
       {modes.map((m) => (
         <Btn key={m.id} icon={m.icon} label={`${m.label} (${m.key})`} active={tool === m.id} onClick={() => setTool(m.id)} />
       ))}
-      <div className="my-1 h-px w-6 bg-border" />
+      <div className={cn("bg-border", horizontal ? "mx-1 h-6 w-px" : "my-1 h-px w-6")} />
       {adds.map((a) => (
         <Btn key={a.label} icon={a.icon} label={`${a.label} (${a.key})`} onClick={a.run} />
       ))}

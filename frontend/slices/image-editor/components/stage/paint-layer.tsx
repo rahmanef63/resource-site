@@ -26,10 +26,11 @@ export function PaintLayer({
   onSelect: () => void;
   onChange: (patch: Partial<Layer>) => void;
 }) {
-  const { doc, tool, brush, canvasFor, commit } = useEditor();
+  const { doc, tool, brush, canvasFor, recordPaint } = useEditor();
   const ref = useRef<Konva.Image | null>(null);
   const drawing = useRef(false);
   const last = useRef<{ x: number; y: number } | null>(null);
+  const strokeBefore = useRef<string | null>(null);
   const canvas = canvasFor(layer.id, doc.width, doc.height);
   const painting = (tool === "brush" || tool === "eraser") && isSelected && !layer.locked;
 
@@ -64,7 +65,8 @@ export function PaintLayer({
   const start = (e: KonvaEventObject<MouseEvent | TouchEvent>) => {
     if (!painting) return;
     e.cancelBubble = true;
-    commit();
+    // Snapshot pixels BEFORE the stroke so the whole stroke is one undo step.
+    strokeBefore.current = canvas.toDataURL();
     drawing.current = true;
     last.current = null;
     const pt = e.target.getRelativePointerPosition();
@@ -76,6 +78,10 @@ export function PaintLayer({
     if (pt) strokeTo(pt.x, pt.y);
   };
   const end = () => {
+    if (drawing.current && strokeBefore.current) {
+      recordPaint(layer.id, strokeBefore.current, canvas.toDataURL());
+    }
+    strokeBefore.current = null;
     drawing.current = false;
     last.current = null;
   };
