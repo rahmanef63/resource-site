@@ -6,7 +6,8 @@
 
 import type { NextRequest } from "next/server";
 
-export const runtime = "nodejs";
+// (Node.js is the default runtime; an explicit `runtime` export is incompatible
+// with next.config cacheComponents and broke the build, so it's omitted.)
 
 interface RawPhoto {
   id: string;
