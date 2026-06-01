@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-06-01T22:28:36.039Z",
+  "generatedAt": "2026-06-01T23:04:30.920Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -421,7 +421,7 @@
       "title": "Notion Page Clone OS — localStorage demo (pointer to open-silong for production)",
       "category": "website-template",
       "status": "stable",
-      "description": "localStorage-only DEMO of a Notion-clone surface — tree-structured sidebar + page editor + embedded databases. It is the COMBINATION of three independently-reusable rr slices: notion-sidebar (tree nav + page CRUD — double-click rename, drag-reorder/reparent, icon picker), notion-shell (NotionPage / NotionBlock page editor — code + equation blocks built-in), and notion-database (11 views + drag-fill grid + relation/rollup) — glued by createTemplateStore (localStorage + BroadcastChannel). No Convex, no auth, no multi-user — drop-in starter for evaluating the UI or embedding a Notion-style editor in your own project. **For the production-grade Convex-backed product (multi-workspace + auth + sharing + comments + snapshots + MCP), use the open-source open-silong repo: https://github.com/rahmanef63/open-silong (silong.rahmanef.com).** This rr template is the DEMO; the github repo is the PRODUCT.",
+      "description": "localStorage-only DEMO of a Notion-clone surface — tree-structured sidebar + page editor + embedded databases. It is the COMBINATION of independently-reusable rr slices: notion-sidebar (tree nav + page CRUD — double-click rename, drag-reorder/reparent, icon picker), notion-shell (NotionPage / NotionBlock page editor — code + equation blocks built-in), notion-database (11 views + drag-fill grid + relation/rollup), cover (full page cover picker — gallery / upload / link / Unsplash + reposition, wired to the files slice + an /api/unsplash proxy), icon-picker, and files — glued by createTemplateStore (localStorage + BroadcastChannel). No Convex, no auth, no multi-user — drop-in starter for evaluating the UI or embedding a Notion-style editor in your own project. **For the production-grade Convex-backed product (multi-workspace + auth + sharing + comments + snapshots + MCP), use the open-source open-silong repo: https://github.com/rahmanef63/open-silong (silong.rahmanef.com).** This rr template is the DEMO; the github repo is the PRODUCT.",
       "source": "synthesized + notion-shell wrappers (built-in code/equation); production stack at github.com/rahmanef63/open-silong",
       "repoPath": "app/preview/notion-page-clone-os",
       "pullPaths": [
@@ -431,7 +431,10 @@
         "frontend/slices/notion-sidebar",
         "frontend/slices/notion-shell",
         "frontend/slices/notion-database",
-        "frontend/slices/icon-picker"
+        "frontend/slices/cover",
+        "frontend/slices/files",
+        "frontend/slices/icon-picker",
+        "app/api/unsplash"
       ],
       "files": [
         "app/preview/notion-page-clone-os/public/layout.tsx",
@@ -450,6 +453,7 @@
         "components/templates/notion-page-clone/slices/admin/snippets/SnippetsView.tsx",
         "components/templates/notion-page-clone/slices/notion-app/Dashboard.tsx",
         "components/templates/notion-page-clone/slices/notion-app/DocView.tsx",
+        "components/templates/notion-page-clone/slices/notion-app/DocCover.tsx",
         "components/templates/notion-page-clone/slices/notion-app/DatabaseView.tsx",
         "components/templates/notion-page-clone/slices/notion-app/hooks.ts",
         "components/templates/notion-page-clone/slices/notion-app/block-renderers.tsx",
@@ -2241,6 +2245,32 @@
         "primitive",
         "optional",
         "embeddable"
+      ]
+    },
+    {
+      "slug": "cover",
+      "title": "Cover — page cover image picker (gallery · upload · link · Unsplash · reposition)",
+      "category": "ui",
+      "description": "The complete Notion-style page cover feature, lifted from notion-page-clone and made portable. CoverBanner renders the cover band (colour / gradient / texture / uploaded / linked / Unsplash image) with hover controls — Change (opens the picker), Reposition (drag the vertical focal point), Remove. AddCoverButton is the no-cover affordance. CoverPicker is the 4-tab chooser: Gallery (12 colours + 8 gradients + Notion textures), Upload (drag/click, ≤8MB), Link (paste any https image URL), Unsplash (bundled curated landscapes + live search). The slice imports NO other slice and NO backend — the upload backend and Unsplash search are INJECTED as props (onUpload + searchUnsplash), so it drops into any app: wire onUpload to the `files` slice and searchUnsplash to a server route via unsplashSearchVia('/api/unsplash') that holds UNSPLASH_ACCESS_KEY server-side (never NEXT_PUBLIC). Ships a curated Unsplash fallback + gallery so it works with zero config. Cover values are CoverData ({ type, value, positionY?, metadata? }); parseCover normalizes legacy raw-string covers; coverStyle builds the focal-point CSS. Wired into the notion-page-clone template via NotionPage's coverSlot.",
+      "source": "notion-page-clone",
+      "install": "npx rahman-resources add cover",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add cover`. Render `<CoverBanner cover={page.cover} onChange={(c)=>save(c)} resolvedUrl={…} onUpload={…} searchUnsplash={…} />` as your page cover band (or pass it to notion-shell's `<NotionPage coverSlot={…} />`). Use `<AddCoverButton onPick={save} />` for the no-cover state. Inject the backend: `onUpload` = the `files` slice's useFileUpload().upload (returns a FileRef); resolve upload covers for display with `resolvedUrl` = files useFileUrl(parseFileRef(coverRef(parseCover(cover))).storageId). `searchUnsplash` = `unsplashSearchVia('/api/unsplash')` — add a server route that proxies api.unsplash.com with UNSPLASH_ACCESS_KEY (never expose the key client-side). Ships a curated Unsplash + gallery fallback so it works with zero wiring. CoverData = { type, value, positionY?, metadata? }; parseCover handles legacy string covers.",
+      "tags": [
+        "ui",
+        "notion",
+        "cover",
+        "image",
+        "picker",
+        "upload",
+        "unsplash",
+        "gallery",
+        "reposition",
+        "files",
+        "primitive",
+        "portable",
+        "notion-like"
       ]
     },
     {
@@ -4129,6 +4159,49 @@
       "agentRecipe": "**Controlled component.** `<NotionDatabase />` renders the whole surface — 11 views (table, board, list, gallery, calendar, feed, chart, dashboard, form, map, timeline), 18 cell types, filter / sort / group / calculate, row peek + multi-select, table cell drag-fill, CSV / JSON import-export. It is 100% props-driven: it owns NO data state — you hold `db` + `rows` and persist every change callback. The view tab strip scrolls horizontally and the card clips to its border, so it stays inside any container width.\n\n**1. Install** — `npx rr add notion-database`. Cascades the `notion-shell` peer (the domain types live there). Components import from `@/features/notion-database`; types from `@/features/notion-shell`.\n\n**2. Minimal wire-up** — keep `db: Database` + `rows: Page[]` in your store (a Convex query result or `useState`) and pass change handlers:\n```tsx\nimport { NotionDatabase } from '@/features/notion-database';\n\n<NotionDatabase\n  db={db}\n  rows={rows}\n  onRowAdd={addRow}\n  onRowUpdate={(rowId, propId, value) => setValue(rowId, propId, value)}\n  onRowRemove={removeRow}\n  onPropertyAdd={addProperty}\n  onViewActivate={setActiveView}\n  onViewAdd={addView}\n  onViewConfigChange={(viewId, patch) => patchView(viewId, patch)}\n/>\n```\nOmit any callback and that affordance goes read-only; pass `readOnly` to freeze everything at once.\n\n**3. Data shape** — `Database = { id, name, properties: Property[], views: DatabaseViewConfig[], activeViewId }`; each row `Page = { id, title, rowProps: Record<propId, PropertyValue> }`. For `relation` / `rollup` cells also pass `pages` + `databases`; for `person` / `created_by` cells pass `userLookup(id)`.\n\n**4. Import / export** — mount `<DatabaseIOActions db={db} rows={rows} onImport={handleImport} />` in your toolbar: CSV/JSON in (with schema-diff), CSV/JSON + live-schema templates out. New columns arrive with a `tempId` — map it to your real backend id before writing their `rowProps`.\n\n**5. Backend (optional)** — the UI is store-agnostic. For Convex persistence copy `template-base/database-silong/convex/` (handlers → `convex/`, schema fragment merges into `convex/schema.ts`). Pick `_shared/minimal/` (single-user, noop authz) or `_shared/full/` (`@convex-dev/auth` + workspaces). See CONVEX-BACKEND.md.\n\n**Just one view?** Import it directly — `import { TableView } from '@/features/notion-database'` — and feed it `rows` + `renderCell` + `renderColumnHeader`."
     },
     {
+      "slug": "cover",
+      "title": "Cover — page cover image picker (gallery · upload · link · Unsplash · reposition)",
+      "category": "ui",
+      "kind": "ui",
+      "version": "0.1.0",
+      "description": "The complete Notion-style page cover feature, lifted from notion-page-clone and made portable. CoverBanner renders the cover band (colour / gradient / texture / uploaded / linked / Unsplash image) with hover controls — Change (opens the picker), Reposition (drag the vertical focal point), Remove. AddCoverButton is the no-cover affordance. CoverPicker is the 4-tab chooser: Gallery (12 colours + 8 gradients + Notion textures), Upload (drag/click, ≤8MB), Link (paste any https image URL), Unsplash (bundled curated landscapes + live search). The slice imports NO other slice and NO backend — the upload backend and Unsplash search are INJECTED as props (onUpload + searchUnsplash), so it drops into any app: wire onUpload to the `files` slice and searchUnsplash to a server route via unsplashSearchVia('/api/unsplash') that holds UNSPLASH_ACCESS_KEY server-side (never NEXT_PUBLIC). Ships a curated Unsplash fallback + gallery so it works with zero config. Cover values are CoverData ({ type, value, positionY?, metadata? }); parseCover normalizes legacy raw-string covers; coverStyle builds the focal-point CSS. Wired into the notion-page-clone template via NotionPage's coverSlot.",
+      "source": "notion-page-clone",
+      "slicePath": "frontend/slices/cover",
+      "convexPaths": [],
+      "npm": [],
+      "shadcn": [
+        "dialog",
+        "button",
+        "input"
+      ],
+      "env": [
+        {
+          "name": "UNSPLASH_ACCESS_KEY",
+          "scope": "server",
+          "required": false,
+          "description": "Server-side only (e.g. on the /api/unsplash route). Without it the Unsplash tab falls back to the curated set."
+        }
+      ],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "ui",
+        "notion",
+        "cover",
+        "image",
+        "picker",
+        "upload",
+        "unsplash",
+        "gallery",
+        "reposition",
+        "files",
+        "primitive",
+        "portable",
+        "notion-like"
+      ],
+      "agentRecipe": "Run `npx rr add cover`. Render `<CoverBanner cover={page.cover} onChange={(c)=>save(c)} resolvedUrl={…} onUpload={…} searchUnsplash={…} />` as your page cover band (or pass it to notion-shell's `<NotionPage coverSlot={…} />`). Use `<AddCoverButton onPick={save} />` for the no-cover state. Inject the backend: `onUpload` = the `files` slice's useFileUpload().upload (returns a FileRef); resolve upload covers for display with `resolvedUrl` = files useFileUrl(parseFileRef(coverRef(parseCover(cover))).storageId). `searchUnsplash` = `unsplashSearchVia('/api/unsplash')` — add a server route that proxies api.unsplash.com with UNSPLASH_ACCESS_KEY (never expose the key client-side). Ships a curated Unsplash + gallery fallback so it works with zero wiring. CoverData = { type, value, positionY?, metadata? }; parseCover handles legacy string covers."
+    },
+    {
       "slug": "notion-sidebar",
       "title": "Notion Sidebar — tree nav + page CRUD (rename · drag · icon picker)",
       "category": "ui",
@@ -4175,7 +4248,7 @@
       "title": "Notion Shell — page + block editor primitives (pure, no sidebar/database)",
       "category": "ui",
       "kind": "ui",
-      "version": "0.22.0",
+      "version": "0.23.0",
       "description": "Portable Notion-style PAGE EDITOR primitives. v0.22 split the tree-nav SIDEBAR out into the standalone `notion-sidebar` slice (so the page editor and the sidebar are independently reusable); embedded DATABASES already live in the `notion-database` peer. notion-shell ships: NotionPage (optional cover image band + header + body), NotionHeader, NotionBlock (live inline-markdown decorator, hover actions menu, optional dragHandle slot, BUILT-IN code (highlight.js) + equation (KaTeX) blocks), SlashMenu (searchable block-type picker w/ keyboard nav), BlockActionsMenu (turn-into / duplicate / delete), InsertBlockButton (`+` trigger w/ SlashMenu), SortableBlockList (@dnd-kit render-prop wrapper for block reorder), PageActionsMenu (header dropdown: cover/favorite/duplicate/export/trash), InlineFormatToolbar + BlockColorPicker (colour) + MentionTypeahead + PageLayoutSection (layout). SPECIALISED BLOCK RENDERERS: ImageRenderer, EmbedRenderer (YouTube/Vimeo/Loom/Figma/CodePen/Spotify auto-detect). Domain types (Database, Property, PropertyValue, DbView, DatabaseViewConfig, DatabaseFilter, DatabaseSort) remain in notion-shell as the single source of truth (Page.rowOfDatabaseId + rowProps reference them). Pure / props-driven — host owns data + change handlers. Compose notion-sidebar + notion-shell + notion-database for the full Notion-clone OS.",
       "source": "notion-page-clone",
       "slicePath": "frontend/slices/notion-shell",

@@ -10,9 +10,11 @@ import {
 } from "@/features/notion-shell";
 import { SelectionProvider, SelectableBlock, SelectionMarquee } from "@/features/selection";
 import { DynamicIcon, IconPickerPopover } from "@/features/icon-picker";
+import type { CoverData, CoverField } from "@/features/cover";
 import { Button } from "@/components/ui/button";
 import { useDocs, useStore } from "../../shared/store";
 import { NOTION_BLOCK_RENDERERS, TocHeadingsContext } from "./block-renderers";
+import { CoverArea, AddCoverPicker } from "./DocCover";
 
 function renderIcon(icon: string, className?: string) {
   return <DynamicIcon value={icon} className={className} />;
@@ -55,6 +57,7 @@ function DragHandle({ drag }: { drag: SortableBlockDragProps }) {
 export function DocView({ docId }: { docId: string }) {
   const docs = useDocs();
   const { dispatch } = useStore();
+  const [coverPickerOpen, setCoverPickerOpen] = React.useState(false);
   const doc = docs.find((d) => d.id === docId);
 
   if (!doc) {
@@ -64,6 +67,9 @@ export function DocView({ docId }: { docId: string }) {
       </div>
     );
   }
+
+  const setCover = (c: CoverData | null) =>
+    dispatch({ type: "doc.update", id: doc.id, patch: { cover: c ?? undefined } });
 
   const handleBlockUpdate = (blockId: string, patch: Partial<Block>) =>
     dispatch({ type: "doc.block.update", docId: doc.id, blockId, patch });
@@ -129,15 +135,11 @@ export function DocView({ docId }: { docId: string }) {
       onTitleChange={(title) => dispatch({ type: "doc.update", id: doc.id, patch: { title } })}
       renderIcon={renderIcon}
       renderIconPicker={renderIconPicker}
-      cover={doc.cover}
-      onCoverRemove={() => dispatch({ type: "doc.update", id: doc.id, patch: { cover: undefined } })}
+      coverSlot={doc.cover ? <CoverArea cover={doc.cover as CoverField} onChange={setCover} /> : undefined}
       actions={
         <PageActionsMenu
           favorite={doc.favorite}
-          onAddCover={() => {
-            const url = window.prompt("Cover image URL");
-            if (url) dispatch({ type: "doc.update", id: doc.id, patch: { cover: url } });
-          }}
+          onAddCover={() => setCoverPickerOpen(true)}
           onToggleFavorite={() => dispatch({ type: "doc.update", id: doc.id, patch: { favorite: !doc.favorite } })}
           onDuplicate={() => dispatch({ type: "doc.duplicate", id: doc.id })}
           onTrash={() => dispatch({ type: "doc.update", id: doc.id, patch: { trashed: true } })}
@@ -181,6 +183,7 @@ export function DocView({ docId }: { docId: string }) {
       </div>
       <InlineFormatToolbar />
       <MentionTypeahead mentionables={mentionables} />
+      <AddCoverPicker open={coverPickerOpen} onOpenChange={setCoverPickerOpen} onPick={setCover} />
     </NotionPage>
     </TocHeadingsContext.Provider>
   );

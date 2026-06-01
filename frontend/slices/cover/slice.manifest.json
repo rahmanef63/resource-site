@@ -1,0 +1,10 @@
+{
+  "name": "cover",
+  "description": "Full Notion-style page cover image picker — Gallery (colours/gradients/textures), Upload (inject storage), Link (URL), Unsplash (curated + live search), drag-to-reposition focal point. CoverBanner + CoverPicker + AddCoverButton. Props-driven, imports no other slice + no backend.",
+  "deps": {
+    "shared": ["lib/utils"],
+    "slices": [],
+    "convex": []
+  },
+  "notes": "Pure client-side slice. The upload backend + Unsplash search are INJECTED: wire onUpload to the `files` slice (useFileUpload) and searchUnsplash to a server route via unsplashSearchVia('/api/unsplash') that holds UNSPLASH_ACCESS_KEY server-side (never NEXT_PUBLIC). Ships a curated Unsplash fallback + Notion texture gallery so it works with zero config. resolvedUrl for upload (FileRef) covers is resolved by the host (files useFileUrl)."
+}

@@ -29,6 +29,10 @@ export interface NotionPageProps {
   onCoverRemove?: () => void;
   /** Vertical focal point of the cover image, 0–100 (default 50). */
   coverPosition?: number;
+  /** Full custom cover band — when provided it renders in the cover slot
+   *  INSTEAD of the built-in `cover` img (wire e.g. the `cover` slice's
+   *  <CoverBanner /> for upload / Unsplash / reposition). */
+  coverSlot?: ReactNode;
   /** Page body — your blocks list, database embed, etc. */
   children?: ReactNode;
   className?: string;
@@ -49,7 +53,7 @@ export function NotionPage({
   icon, title,
   onIconChange, onTitleChange,
   renderIcon, renderIconPicker,
-  actions, cover, onCoverRemove, coverPosition = 50,
+  actions, cover, onCoverRemove, coverPosition = 50, coverSlot,
   children, className, headerless,
   font = "default", fullWidth, smallText, locked,
 }: NotionPageProps) {
@@ -57,7 +61,7 @@ export function NotionPage({
   const fontClass = font === "serif" ? "font-serif" : font === "mono" ? "font-mono" : "";
   return (
     <div className={cn("flex h-full flex-col overflow-hidden", fontClass, className)}>
-      {cover && (
+      {coverSlot ?? (cover && (
         <div className="group/cover relative h-48 w-full shrink-0 overflow-hidden bg-muted">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -78,7 +82,7 @@ export function NotionPage({
             </Button>
           )}
         </div>
-      )}
+      ))}
       {!headerless && (
         <NotionHeader
           icon={icon}

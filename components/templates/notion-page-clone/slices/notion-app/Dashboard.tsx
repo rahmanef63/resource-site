@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { NotionSidebar } from "@/features/notion-sidebar";
 import { DynamicIcon, IconPickerPopover } from "@/features/icon-picker";
+import { FilesAdapterProvider, useLocalStorageFilesAdapter } from "@/features/files";
 import { useStore, useDocs, useDatabases } from "../../shared/store";
 import { PUBLIC_BASE } from "../../shared/nav-config";
 import { useSidebarPages, hrefFor, activeIdForPath } from "./hooks";
@@ -41,6 +42,7 @@ export function Dashboard({
   const pages = useSidebarPages();
   const docs = useDocs();
   const databases = useDatabases();
+  const filesAdapter = useLocalStorageFilesAdapter();
   const sidebarActive =
     activeKind && activeId
       ? `${activeKind === "db" ? "db" : "doc"}:${activeId}`
@@ -109,6 +111,7 @@ export function Dashboard({
   });
 
   return (
+    <FilesAdapterProvider adapter={filesAdapter}>
     <div className="flex h-dvh overflow-hidden bg-background">
       <NotionSidebar
         pages={pages}
@@ -142,6 +145,7 @@ export function Dashboard({
         </div>
       </div>
     </div>
+    </FilesAdapterProvider>
   );
 }
 

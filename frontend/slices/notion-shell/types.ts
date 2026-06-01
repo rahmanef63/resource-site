@@ -5,13 +5,25 @@ import type { Block } from "./block-types";
 
 export type { Block, BlockType, BlockRenderers, BlockRendererProps } from "./block-types";
 
+/** Structural cover value — a raw URL/CSS string OR a rich cover object
+ *  (colour / gradient / texture / upload / link / unsplash + focal point).
+ *  Defined structurally so notion-shell stays decoupled from the `cover`
+ *  slice; the cover slice's CoverData is assignable to this. */
+export interface CoverValue {
+  type: string;
+  value: string;
+  positionY?: number;
+  metadata?: Record<string, unknown>;
+}
+
 export interface Page {
   id: string;
   parentId: string | null;
   title: string;
   icon: string;
-  /** Optional cover image URL. Rendered by NotionPage when set. */
-  cover?: string;
+  /** Optional cover — a URL/CSS string or a rich CoverValue. Rendered by the
+   *  host (e.g. the `cover` slice's CoverBanner via NotionPage's coverSlot). */
+  cover?: string | CoverValue;
   blocks: Block[];
   favorite: boolean;
   trashed: boolean;
