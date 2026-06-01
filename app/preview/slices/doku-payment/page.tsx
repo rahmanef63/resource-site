@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Copy, Check, ExternalLink, QrCode, Wallet, Building2 } from "lucide-react";
-import { SlicePreviewLayout, PreviewSection, CodeBlock } from "@/components/slice-previews/preview-layout";
+import { SlicePreviewLayout, PreviewSection } from "@/components/slice-previews/preview-layout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -66,15 +66,6 @@ export default function Page() {
             <Row label="processed">true</Row>
           </RowCard>
         </div>
-      </PreviewSection>
-
-      <PreviewSection title="Wiring">
-        <CodeBlock>{`// app/checkout/page.tsx
-export { default } from "@/features/doku-payment/components/checkout-page";
-
-// convex/http.ts
-import { dokuWebhook } from "./features/payment/http";
-http.route({ path: "/webhooks/doku", method: "POST", handler: dokuWebhook });`}</CodeBlock>
       </PreviewSection>
     </SlicePreviewLayout>
   );

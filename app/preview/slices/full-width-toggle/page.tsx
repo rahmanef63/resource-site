@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Maximize2, Minimize2, ArrowLeftRight } from "lucide-react";
-import { SlicePreviewLayout, PreviewSection, CodeBlock } from "@/components/slice-previews/preview-layout";
+import { SlicePreviewLayout, PreviewSection } from "@/components/slice-previews/preview-layout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -81,12 +81,6 @@ export default function Page() {
         </div>
       </PreviewSection>
 
-      <PreviewSection title="Wiring" hint="3-line install">
-        <CodeBlock>{`import { WidthContainer, FullWidthToggle } from "@/features/full-width-toggle";
-
-<WidthContainer as="main">{children}</WidthContainer>
-<FullWidthToggle variant="segment" />`}</CodeBlock>
-      </PreviewSection>
     </SlicePreviewLayout>
   );
 }

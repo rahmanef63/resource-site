@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { SlicePreviewLayout, PreviewSection, CodeBlock } from "@/components/slice-previews/preview-layout";
+import { SlicePreviewLayout, PreviewSection } from "@/components/slice-previews/preview-layout";
 import { Card } from "@/components/ui/card";
 import { MarqueeMock, KineticMock, MagneticMock, SpotlightMock } from "./mocks-text";
 import { CounterMock, ReadingMock, GrainMock, LightboxMock } from "./mocks-visual";
@@ -30,14 +30,6 @@ export default function Page() {
         <Tile title="Grain" hint="Film-grain overlay"><GrainMock /></Tile>
         <Tile title="Lightbox" hint="Image gallery zoom"><LightboxMock /></Tile>
       </div>
-
-      <PreviewSection title="Wiring" className="mt-6">
-        <CodeBlock>{`import { Marquee, KineticHeading, Magnetic } from "@/features/motion-primitives";
-
-<KineticHeading>Membangun masa depan</KineticHeading>
-<Marquee items={logos} durationSec={40} />
-<Magnetic><button>Click me</button></Magnetic>`}</CodeBlock>
-      </PreviewSection>
     </SlicePreviewLayout>
   );
 }

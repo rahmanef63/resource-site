@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { CalendarDays, Clock, ChevronLeft, ChevronRight } from "lucide-react";
-import { SlicePreviewLayout, PreviewSection, CodeBlock, FlowDiagram } from "@/components/slice-previews/preview-layout";
+import { SlicePreviewLayout, PreviewSection, FlowDiagram } from "@/components/slice-previews/preview-layout";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -118,27 +118,6 @@ export default function Page() {
           <StatCard label="This week" value="8" />
           <StatCard label="No-shows (30d)" value="3" tone="warn" />
         </div>
-      </PreviewSection>
-
-      <PreviewSection title="Wiring">
-        <CodeBlock>{`// app/(public)/booking/page.tsx
-import { getCalApi } from "@calcom/embed-react";
-useEffect(() => {
-  (async () => {
-    const cal = await getCalApi();
-    cal("ui", { theme: "light" });
-  })();
-}, []);
-<Cal calLink={\`\${process.env.NEXT_PUBLIC_CALCOM_USERNAME}/diskusi-30m\`} />
-
-// convex/features/bookings/webhook.ts
-export const calComWebhook = httpAction(async (ctx, req) => {
-  // verify X-Cal-Signature-256 with CALCOM_WEBHOOK_SECRET
-  const { triggerEvent, payload } = await req.json();
-  if (triggerEvent === "BOOKING_CREATED") {
-    await ctx.runMutation(internal.features.bookings.mutations.create, payload);
-  }
-});`}</CodeBlock>
       </PreviewSection>
     </SlicePreviewLayout>
   );

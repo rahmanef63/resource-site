@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Bot, Cpu, Brain, Zap, Send } from "lucide-react";
-import { SlicePreviewLayout, PreviewSection, CodeBlock, FlowDiagram } from "@/components/slice-previews/preview-layout";
+import { SlicePreviewLayout, PreviewSection, FlowDiagram } from "@/components/slice-previews/preview-layout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -109,25 +109,6 @@ export default function Page() {
             { title: "Persist usage", detail: "ai_usage row — tokens × price" },
           ]}
         />
-      </PreviewSection>
-
-      <PreviewSection title="Wiring">
-        <CodeBlock>{`// convex/features/ai/router.ts
-import { action } from "../../_generated/server";
-import { v } from "convex/values";
-
-export const complete = action({
-  args: { tier: v.union(v.literal("nano"), v.literal("mid"), v.literal("flagship")), messages: v.array(v.any()) },
-  handler: async (ctx, { tier, messages }) => {
-    const model = { nano: "claude-haiku-4-5", mid: "claude-sonnet-4-6", flagship: "claude-opus-4-7" }[tier];
-    const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: { Authorization: \`Bearer \${process.env.OPENROUTER_API_KEY}\`, "Content-Type": "application/json" },
-      body: JSON.stringify({ model, messages }),
-    });
-    return res.json();
-  },
-});`}</CodeBlock>
       </PreviewSection>
     </SlicePreviewLayout>
   );

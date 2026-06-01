@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Mail, Users, Send } from "lucide-react";
-import { SlicePreviewLayout, PreviewSection, CodeBlock, FlowDiagram } from "@/components/slice-previews/preview-layout";
+import { SlicePreviewLayout, PreviewSection, FlowDiagram } from "@/components/slice-previews/preview-layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -83,27 +83,6 @@ export default function Page() {
             <Badge variant="outline" className="mt-2 font-mono text-[10px]">resend.broadcasts.send()</Badge>
           </Card>
         </div>
-      </PreviewSection>
-
-      <PreviewSection title="Wiring">
-        <CodeBlock>{`// convex/features/newsletter/subscribe.ts
-import { mutation } from "../../_generated/server";
-import { v } from "convex/values";
-import { Resend } from "resend";
-
-export const subscribe = mutation({
-  args: { email: v.string() },
-  handler: async (ctx, { email }) => {
-    const token = crypto.randomUUID();
-    await ctx.db.insert("subscribers", { email, status: "pending", token, createdAt: Date.now() });
-    const resend = new Resend(process.env.RESEND_API_KEY);
-    await resend.emails.send({
-      from: process.env.RESEND_FROM!, to: email,
-      subject: "Konfirmasi langganan",
-      html: \`<a href="\${process.env.SITE_URL}/newsletter/confirm?token=\${token}">Konfirmasi</a>\`,
-    });
-  },
-});`}</CodeBlock>
       </PreviewSection>
     </SlicePreviewLayout>
   );

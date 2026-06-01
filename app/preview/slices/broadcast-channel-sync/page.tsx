@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Radio, Plus, Minus, RefreshCw, MonitorPlay } from "lucide-react";
-import { SlicePreviewLayout, PreviewSection, CodeBlock } from "@/components/slice-previews/preview-layout";
+import { SlicePreviewLayout, PreviewSection } from "@/components/slice-previews/preview-layout";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -98,14 +98,6 @@ export default function Page() {
             same-origin dan tidak survive reload.
           </p>
         </div>
-      </PreviewSection>
-
-      <PreviewSection title="Wiring">
-        <CodeBlock>{`import { useBroadcastSync } from "@/features/broadcast-channel-sync";
-
-const [count, setCount] = useBroadcastSync("rr:counter", 0);
-<button onClick={() => setCount(count + 1)}>{count}</button>
-// Any tab on the same origin sees the change instantly.`}</CodeBlock>
       </PreviewSection>
     </SlicePreviewLayout>
   );

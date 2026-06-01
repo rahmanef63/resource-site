@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Search, Sparkles } from "lucide-react";
-import { SlicePreviewLayout, PreviewSection, CodeBlock, FlowDiagram } from "@/components/slice-previews/preview-layout";
+import { SlicePreviewLayout, PreviewSection, FlowDiagram } from "@/components/slice-previews/preview-layout";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
@@ -78,20 +78,6 @@ export default function Page() {
             { title: "Hybrid filter", detail: "Combine with .filter()/.withIndex() for facets" },
           ]}
         />
-      </PreviewSection>
-
-      <PreviewSection title="Wiring">
-        <CodeBlock>{`// convex/features/search/schema.ts
-documents: defineTable({ title, body, embedding: v.array(v.number()) })
-  .vectorIndex("by_embedding", { vectorField: "embedding", dimensions: 1536 }),
-
-// convex/features/search/upsert.ts
-const emb = await openai.embeddings.create({ model: "text-embedding-3-small", input: body });
-await ctx.db.insert("documents", { title, body, embedding: emb.data[0].embedding });
-
-// convex/features/search/query.ts
-const queryEmb = await openai.embeddings.create({ model: "text-embedding-3-small", input: q });
-const hits = await ctx.vectorSearch("documents", "by_embedding", { vector: queryEmb.data[0].embedding, limit: 10 });`}</CodeBlock>
       </PreviewSection>
     </SlicePreviewLayout>
   );

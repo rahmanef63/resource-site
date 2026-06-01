@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { ExternalLink, ShieldCheck } from "lucide-react";
-import { SlicePreviewLayout, PreviewSection, CodeBlock } from "@/components/slice-previews/preview-layout";
+import { SlicePreviewLayout, PreviewSection } from "@/components/slice-previews/preview-layout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -63,18 +63,6 @@ export default function Page() {
             </div>
           </Card>
         </div>
-      </PreviewSection>
-
-      <PreviewSection title="Wiring">
-        <CodeBlock>{`// app/checkout/page.tsx
-export { default } from "@/features/midtrans-payment/components/checkout-page";
-
-// app/layout.tsx
-<Script src="https://app.sandbox.midtrans.com/snap/snap.js"
-        data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY} />
-
-// convex/http.ts
-http.route({ path: "/webhooks/midtrans", method: "POST", handler: midtransWebhook });`}</CodeBlock>
       </PreviewSection>
     </SlicePreviewLayout>
   );

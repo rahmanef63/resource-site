@@ -14,7 +14,7 @@ import {
   Sparkles,
   ArrowRight,
 } from "lucide-react";
-import { SlicePreviewLayout, PreviewSection, CodeBlock } from "@/components/slice-previews/preview-layout";
+import { SlicePreviewLayout, PreviewSection } from "@/components/slice-previews/preview-layout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -172,16 +172,6 @@ export default function Page() {
             </div>
           )}
         </div>
-      </PreviewSection>
-
-      <PreviewSection title="Wiring">
-        <CodeBlock>{`import { CommandMenu } from "@/features/command-menu";
-
-const actions = [
-  { id: "new-post", label: "New post", icon: "Plus", onSelect: () => router.push("/posts/new") },
-];
-
-<CommandMenu actions={actions} />`}</CodeBlock>
       </PreviewSection>
     </SlicePreviewLayout>
   );

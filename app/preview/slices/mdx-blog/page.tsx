@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { SlicePreviewLayout, PreviewSection, CodeBlock } from "@/components/slice-previews/preview-layout";
+import { SlicePreviewLayout, PreviewSection } from "@/components/slice-previews/preview-layout";
 import { Badge } from "@/components/ui/badge";
 
 export default function Page() {
@@ -69,27 +69,6 @@ export default function Page() {
           <Feature label="Frontmatter" desc="gray-matter parse title/date/tags/cover." />
           <Feature label="No DB" desc="File-based — git diff = audit log." />
         </div>
-      </PreviewSection>
-
-      <PreviewSection title="Wiring">
-        <CodeBlock>{`// content/blog/setup-convex-dokploy.mdx
----
-title: Setup Convex Self-Hosted di Dokploy
-date: 2026-05-11
-tags: [tutorial, convex, dokploy]
----
-
-import { Callout } from "@/components/Callout";
-
-# Setup Convex …
-
-<Callout>Tip: pakai wildcard DNS.</Callout>
-
-// app/(public)/blog/[slug]/page.tsx
-import { MDXRemote } from "next-mdx-remote/rsc";
-const file = await fs.readFile(\`content/blog/\${slug}.mdx\`, "utf8");
-const { content, data } = matter(file);
-return <MDXRemote source={content} />;`}</CodeBlock>
       </PreviewSection>
     </SlicePreviewLayout>
   );

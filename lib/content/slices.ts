@@ -527,6 +527,12 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os", "konsultan-os", "wirausaha-os", "kreator-studio-os", "riset-kit", "agency-studio-os", "cms-public-storefront"],
     agentRecipe: "Run `npx rr add doku-payment`. DOKU dual-mode: Checkout (hosted, all channels) atau Direct (single channel, returns VA/QRIS/deeplink). Webhook di /webhooks/doku verify HMAC-SHA256 (canonical: Client-Id + Request-Id + Request-Timestamp + Request-Target + Digest). Idempotency by request_id index. Server-only — no NEXT_PUBLIC_*. Sandbox default (api-sandbox.doku.com); flip DOKU_IS_PRODUCTION=true for live.",
     previewPath: "/preview/slices/doku-payment",
+    wiring: `// app/checkout/page.tsx
+export { default } from "@/features/doku-payment/components/checkout-page";
+
+// convex/http.ts
+import { dokuWebhook } from "./features/payment/http";
+http.route({ path: "/webhooks/doku", method: "POST", handler: dokuWebhook });`,
     defaultView: "mobile",
     defaultZoom: 1,
     compat: {
@@ -569,6 +575,15 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["wirausaha-os", "konsultan-os", "kreator-studio-os"],
     agentRecipe: "Run `npx rr add midtrans-payment`. Midtrans Snap untuk pembayaran instant. Webhook ke Convex HTTP action /api/midtrans-callback untuk update order status. Ingat: PPN 11% sudah included di amount, jangan double-count.",
     previewPath: "/preview/slices/midtrans-payment",
+    wiring: `// app/checkout/page.tsx
+export { default } from "@/features/midtrans-payment/components/checkout-page";
+
+// app/layout.tsx
+<Script src="https://app.sandbox.midtrans.com/snap/snap.js"
+        data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY} />
+
+// convex/http.ts
+http.route({ path: "/webhooks/midtrans", method: "POST", handler: midtransWebhook });`,
     defaultView: "mobile",
     defaultZoom: 1,
     compat: {
@@ -608,6 +623,24 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os", "kreator-studio-os", "wirausaha-os"],
     agentRecipe: "Run `npx rr add resend-newsletter`. Use Resend Audiences API for newsletter — store subscriber emails in Convex too for segmentation. Double opt-in: subscriber.create with status 'pending' → click link → status 'confirmed'.",
     previewPath: "/preview/slices/resend-newsletter",
+    wiring: `// convex/features/newsletter/subscribe.ts
+import { mutation } from "../../_generated/server";
+import { v } from "convex/values";
+import { Resend } from "resend";
+
+export const subscribe = mutation({
+  args: { email: v.string() },
+  handler: async (ctx, { email }) => {
+    const token = crypto.randomUUID();
+    await ctx.db.insert("subscribers", { email, status: "pending", token, createdAt: Date.now() });
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    await resend.emails.send({
+      from: process.env.RESEND_FROM!, to: email,
+      subject: "Konfirmasi langganan",
+      html: \`<a href="\${process.env.SITE_URL}/newsletter/confirm?token=\${token}">Konfirmasi</a>\`,
+    });
+  },
+});`,
     defaultView: "tablet",
     defaultZoom: 0.8,
     compat: {
@@ -806,6 +839,22 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os"],
     agentRecipe: "Run `npx rr add ai-router`. Wrap every AI call through ai-router. Tiers: nano = quick classification (spam-flag, headline-suggest), mid = chat / draft, flagship = methodology-review / deep-think. Token usage logs to ai_usage table for the cost dashboard.",
     previewPath: "/preview/slices/ai-router",
+    wiring: `// convex/features/ai/router.ts
+import { action } from "../../_generated/server";
+import { v } from "convex/values";
+
+export const complete = action({
+  args: { tier: v.union(v.literal("nano"), v.literal("mid"), v.literal("flagship")), messages: v.array(v.any()) },
+  handler: async (ctx, { tier, messages }) => {
+    const model = { nano: "claude-haiku-4-5", mid: "claude-sonnet-4-6", flagship: "claude-opus-4-7" }[tier];
+    const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: { Authorization: \`Bearer \${process.env.OPENROUTER_API_KEY}\`, "Content-Type": "application/json" },
+      body: JSON.stringify({ model, messages }),
+    });
+    return res.json();
+  },
+});`,
     defaultView: "desktop",
     defaultZoom: 0.7,
     compat: {
@@ -837,6 +886,17 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os", "riset-kit"],
     agentRecipe: "Run `npx rr add vector-search`. Add embedding field + vectorIndex per searchable table. Re-embed on upsert via Convex action. Cache embeddings — don't re-call OpenAI on every read.",
     previewPath: "/preview/slices/vector-search",
+    wiring: `// convex/features/search/schema.ts
+documents: defineTable({ title, body, embedding: v.array(v.number()) })
+  .vectorIndex("by_embedding", { vectorField: "embedding", dimensions: 1536 }),
+
+// convex/features/search/upsert.ts
+const emb = await openai.embeddings.create({ model: "text-embedding-3-small", input: body });
+await ctx.db.insert("documents", { title, body, embedding: emb.data[0].embedding });
+
+// convex/features/search/query.ts
+const queryEmb = await openai.embeddings.create({ model: "text-embedding-3-small", input: q });
+const hits = await ctx.vectorSearch("documents", "by_embedding", { vector: queryEmb.data[0].embedding, limit: 10 });`,
     defaultView: "tablet",
     defaultZoom: 0.8,
     compat: {
@@ -865,6 +925,24 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os", "konsultan-os", "saas-marketing-os"],
     agentRecipe: "Run `npx rr add mdx-blog`. Store post body sebagai markdown di content/blog/*.mdx. Render dengan MDXRemote di [slug]/page.tsx. Auto-extract headings ke ToC via remark plugin custom.",
     previewPath: "/preview/slices/mdx-blog",
+    wiring: `// content/blog/setup-convex-dokploy.mdx
+---
+title: Setup Convex Self-Hosted di Dokploy
+date: 2026-05-11
+tags: [tutorial, convex, dokploy]
+---
+
+import { Callout } from "@/components/Callout";
+
+# Setup Convex …
+
+<Callout>Tip: pakai wildcard DNS.</Callout>
+
+// app/(public)/blog/[slug]/page.tsx
+import { MDXRemote } from "next-mdx-remote/rsc";
+const file = await fs.readFile(\`content/blog/\${slug}.mdx\`, "utf8");
+const { content, data } = matter(file);
+return <MDXRemote source={content} />;`,
     defaultView: "tablet",
     defaultZoom: 0.8,
     compat: {
@@ -899,6 +977,24 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os", "konsultan-os"],
     agentRecipe: "Run `npx rr add cal-com-booking`. Embed Cal.com via @calcom/embed-react di halaman services. Configure webhook di Cal.com dashboard → POST ke /api/cal-webhook → upsert booking di Convex.",
     previewPath: "/preview/slices/cal-com-booking",
+    wiring: `// app/(public)/booking/page.tsx
+import { getCalApi } from "@calcom/embed-react";
+useEffect(() => {
+  (async () => {
+    const cal = await getCalApi();
+    cal("ui", { theme: "light" });
+  })();
+}, []);
+<Cal calLink={\`\${process.env.NEXT_PUBLIC_CALCOM_USERNAME}/diskusi-30m\`} />
+
+// convex/features/bookings/webhook.ts
+export const calComWebhook = httpAction(async (ctx, req) => {
+  // verify X-Cal-Signature-256 with CALCOM_WEBHOOK_SECRET
+  const { triggerEvent, payload } = await req.json();
+  if (triggerEvent === "BOOKING_CREATED") {
+    await ctx.runMutation(internal.features.bookings.mutations.create, payload);
+  }
+});`,
     defaultView: "mobile",
     defaultZoom: 1,
     compat: {
@@ -931,6 +1027,13 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os", "agency-studio-os", "konsultan-os", "wirausaha-os", "kreator-studio-os", "saas-marketing-os", "riset-kit", "cms-public-storefront"],
     agentRecipe: "Run `npx rr add command-menu`. Wire <CommandPalette groups={...} onHistorySelect={...} labels={...} /> at the dashboard shell. Build groups from your feature registry; each item.onSelect handles navigation. Use <SearchModal bindings={{ pages, databases, recents, isLoading, onQueryChange, onSelectPage, onSelectDatabase }} /> for the search dialog — see slice README.md for adapter shapes.",
     previewPath: "/preview/slices/command-menu",
+    wiring: `import { CommandMenu } from "@/features/command-menu";
+
+const actions = [
+  { id: "new-post", label: "New post", icon: "Plus", onSelect: () => router.push("/posts/new") },
+];
+
+<CommandMenu actions={actions} />`,
     defaultView: "mobile",
     defaultZoom: 1,
   },
@@ -954,6 +1057,11 @@ export default convexAuthNextjsMiddleware();`,
     usedBy: ["personal-brand-os", "agency-studio-os", "kreator-studio-os", "saas-marketing-os"],
     agentRecipe: "Run `npx rr add motion-primitives`. Each primitive is independently importable from @/features/motion-primitives. Use marquee for logo strips, kinetic-heading for hero text, magnetic for CTA buttons, cursor-spotlight for hover-reveal panels, stat-counter for animated numbers, reading-progress for blog top bar, grain for film texture, lightbox for image gallery.",
     previewPath: "/preview/slices/motion-primitives",
+    wiring: `import { Marquee, KineticHeading, Magnetic } from "@/features/motion-primitives";
+
+<KineticHeading>Membangun masa depan</KineticHeading>
+<Marquee items={logos} durationSec={40} />
+<Magnetic><button>Click me</button></Magnetic>`,
     defaultView: "desktop",
     defaultZoom: 0.6,
   },
@@ -1078,6 +1186,11 @@ import { FullWidthToggle } from "@/features/full-width-toggle";
     usedBy: ["personal-brand-os"],
     agentRecipe: "Run `npx rr add broadcast-channel-sync`. Use BroadcastChannel only for demo / cross-iframe state mirroring. Production data still goes through Convex realtime. Use the useBroadcastSync(channelName, initial) hook from @/features/broadcast-channel-sync.",
     previewPath: "/preview/slices/broadcast-channel-sync",
+    wiring: `import { useBroadcastSync } from "@/features/broadcast-channel-sync";
+
+const [count, setCount] = useBroadcastSync("rr:counter", 0);
+<button onClick={() => setCount(count + 1)}>{count}</button>
+// Any tab on the same origin sees the change instantly.`,
     defaultView: "tablet",
     defaultZoom: 0.8,
     compat: {
