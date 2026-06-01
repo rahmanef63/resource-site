@@ -14,10 +14,9 @@ import {
 } from "@/features/notion-shell";
 import { NotionDatabase } from "@/features/notion-database";
 import { SlicePreviewLayout, PreviewSection } from "@/components/slice-previews/preview-layout";
+import { BLOCK_RENDERERS } from "./block-renderers";
 
-/** Live demo for the Notion-style wrapper primitives. Each demo is
- *  fully props-driven — state lives in this preview surface,
- *  callbacks update local React state. */
+/** Live demo for the Notion-style wrapper primitives — fully props-driven. */
 export default function Page() {
   return (
     <SlicePreviewLayout title="Notion Shell" kind="ui" maxWidth="none">
@@ -81,7 +80,12 @@ const DEFAULT_BLOCKS: Block[] = [
     text: 'Type "/" anywhere to open the block picker. Try "# " for heading, "- " for bullet, "> " for quote, "[] " for todo.',
   },
   { id: "b3", type: "quote", text: "Pure props-driven — host owns the data." },
-  { id: "b4", type: "paragraph", text: "" },
+  { id: "b4", type: "callout", calloutKind: "tip", text: "Callout block — click the icon to switch kind (note / tip / warning / important / caution)." },
+  { id: "b5", type: "code", lang: "ts", text: "const greet = (n: string) => `hi ${n}`;" },
+  { id: "b6", type: "equation", text: "E = mc^2" },
+  { id: "b7", type: "table", text: "", tableHeader: true, tableRows: [["Feature", "Status"], ["Callout", "✓"], ["Table", "✓"]] },
+  { id: "b8", type: "divider", text: "" },
+  { id: "b9", type: "paragraph", text: "" },
 ];
 
 function PageDemo() {
@@ -128,6 +132,7 @@ function PageDemo() {
             <NotionBlock
               key={b.id}
               block={b}
+              blockRenderers={BLOCK_RENDERERS}
               onUpdate={(patch) => updateBlock(b.id, patch)}
               onTurnInto={(type) => turnInto(b.id, type)}
               onDuplicate={() => duplicateBlock(b.id)}

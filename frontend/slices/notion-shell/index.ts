@@ -43,6 +43,13 @@ export {
 export { PageActionsMenu, type PageActionsMenuProps } from "./components/PageActionsMenu";
 export { ImageRenderer } from "./components/blocks/ImageRenderer";
 export { EmbedRenderer } from "./components/blocks/EmbedRenderer";
+export { CalloutBlock } from "./components/blocks/CalloutBlock";
+export { TableBlock } from "./components/blocks/TableBlock";
+export { DividerBlock } from "./components/blocks/DividerBlock";
+export {
+  createDefaultBlockRenderers,
+  type DefaultBlockRendererOpts,
+} from "./lib/defaultBlockRenderers";
 export { TOP_LEVEL_PLACEHOLDERS } from "./components/placeholders";
 
 export { BLOCK_SPECS, specFor, type BlockSpec } from "./lib/blockSpecs";

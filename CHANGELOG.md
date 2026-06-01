@@ -11,6 +11,24 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-05-31 — notion-shell: default block-renderer pack (page-features P1) v0.8.0
+
+- **`createDefaultBlockRenderers()`** — a real block-renderer registry so
+  `<NotionBlock>` stops rendering specialised blocks as gray text. notion-shell
+  now ships **CalloutBlock** (leading kind icon + picker for note / tip /
+  warning / important / caution + coloured box + inline-editable text),
+  **TableBlock** (editable grid — add row/column, header-row toggle), and
+  **DividerBlock**, plus the existing image + embed renderers, all wired into
+  the factory.
+- **code + equation** plug in via adapter: the factory takes optional
+  `{ code, equation }` `BlockRendererProps` components, composed at the app
+  level (slice-boundary keeps notion-shell from importing sibling slices). The
+  notion-shell preview now demos callout / code / equation / table / divider
+  live.
+- First phase of the **page-features epic** (full notion-page-clone parity,
+  user-requested). Next: toggle nesting, inline selection toolbar + @mentions,
+  block colour, page chrome, columns, synced blocks, multi-block selection.
+
 ### 2026-05-31 — notion-database: date cell range + time editing v0.16.2
 
 - **Date cell rewrite** — the `date` cell now matches notion-page-clone: a
