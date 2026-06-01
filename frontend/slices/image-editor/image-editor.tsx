@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import dynamic from "next/dynamic";
 import { cn } from "@/lib/utils";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { EditorProvider } from "./lib/store";
 import { blankDoc, createLayer } from "./lib/model";
 import { imageEditorConfig } from "./config";
@@ -34,17 +35,19 @@ export type ImageEditorProps = {
 function Shell({ onSave }: { onSave?: (d: string) => void }) {
   useKeyboard();
   return (
-    <div className="flex h-full w-full flex-col overflow-hidden bg-background text-foreground">
-      <TopBar onSave={onSave} />
-      <ToolOptionsBar />
-      <div className="flex min-h-0 flex-1">
-        <ToolRail />
-        <div className="min-w-0 flex-1">
-          <EditorStage />
+    <TooltipProvider delayDuration={300}>
+      <div className="flex h-full w-full flex-col overflow-hidden bg-background text-foreground">
+        <TopBar onSave={onSave} />
+        <ToolOptionsBar />
+        <div className="flex min-h-0 flex-1">
+          <ToolRail />
+          <div className="min-w-0 flex-1">
+            <EditorStage />
+          </div>
+          <SidePanel />
         </div>
-        <SidePanel />
       </div>
-    </div>
+    </TooltipProvider>
   );
 }
 
