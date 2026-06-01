@@ -28,6 +28,7 @@ import { VideoBlock, AudioBlock } from "../components/blocks/MediaBlock";
 import { PageLinkBlock } from "../components/blocks/PageLinkBlock";
 import { ButtonBlock } from "../components/blocks/ButtonBlock";
 import { makeToggleBlock } from "../components/blocks/ToggleBlock";
+import { makeColumnsBlock } from "../components/blocks/ColumnsBlock";
 
 export interface DefaultBlockRendererOpts {
   /** Adapter for block-type "code" (e.g. wraps `@/features/code-block`). */
@@ -56,8 +57,12 @@ export function createDefaultBlockRenderers(
     ...(opts.code ? { code: opts.code } : {}),
     ...(opts.equation ? { equation: opts.equation } : {}),
   };
-  // Toggle renders its children through the SAME registry (incl. nested
-  // toggles), so it's bound after the object exists.
+  // Toggle + columns render their children through the SAME registry
+  // (incl. nesting), so they're bound after the object exists.
   renderers.toggle = makeToggleBlock(renderers);
+  const columns = makeColumnsBlock(renderers);
+  renderers.columns2 = columns;
+  renderers.columns3 = columns;
+  renderers.columns4 = columns;
   return renderers;
 }

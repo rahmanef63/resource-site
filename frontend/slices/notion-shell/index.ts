@@ -56,6 +56,7 @@ export { VideoBlock, AudioBlock } from "./components/blocks/MediaBlock";
 export { PageLinkBlock } from "./components/blocks/PageLinkBlock";
 export { ButtonBlock } from "./components/blocks/ButtonBlock";
 export { makeToggleBlock } from "./components/blocks/ToggleBlock";
+export { makeColumnsBlock } from "./components/blocks/ColumnsBlock";
 export { EditableLine } from "./components/blocks/EditableLine";
 export {
   createDefaultBlockRenderers,

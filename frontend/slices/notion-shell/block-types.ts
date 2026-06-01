@@ -14,7 +14,8 @@ export type BlockType =
   | "quote" | "code" | "divider"
   | "callout" | "page" | "database"
   | "image" | "equation" | "table" | "embed" | "button"
-  | "toc" | "audio" | "video" | "toggle";
+  | "toc" | "audio" | "video" | "toggle"
+  | "columns2" | "columns3" | "columns4";
 
 export interface Block {
   id: string;
@@ -25,6 +26,9 @@ export interface Block {
   pageId?: string;
   databaseId?: string;
   children?: Block[];
+  /** Column buckets for "columns*" blocks — each entry is one column's
+   *  block list. Length should match the type's column count. */
+  columns?: Block[][];
   collapsed?: boolean;
   url?: string;
   caption?: string;

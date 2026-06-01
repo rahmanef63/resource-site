@@ -9,7 +9,7 @@ import {
   ListTodo, List, ListOrdered,
   Quote, Code, Minus, Lightbulb, FileText, Database,
   ChevronRight, Image as ImageIcon, Sigma, Table, Tv2,
-  Film, Music, MousePointerClick,
+  Film, Music, MousePointerClick, Columns2, Columns3, Columns4,
   type LucideIcon,
 } from "lucide-react";
 import type { BlockType } from "../types";
@@ -42,6 +42,9 @@ export const BLOCK_SPECS: BlockSpec[] = [
   { type: "database", label: "Database", hint: "Inline database with multiple views", icon: Database, keywords: ["database", "db", "kanban", "board"] },
   { type: "table", label: "Table", hint: "Plain table grid", icon: Table, keywords: ["table", "grid", "spreadsheet"] },
   { type: "embed", label: "Embed", hint: "YouTube · Vimeo · Loom · Figma · CodePen", icon: Tv2, keywords: ["embed", "iframe", "youtube", "vimeo"] },
+  { type: "columns2", label: "2 columns", hint: "Two side-by-side columns", icon: Columns2, keywords: ["columns", "column", "2", "layout", "split"] },
+  { type: "columns3", label: "3 columns", hint: "Three side-by-side columns", icon: Columns3, keywords: ["columns", "column", "3", "layout"] },
+  { type: "columns4", label: "4 columns", hint: "Four side-by-side columns", icon: Columns4, keywords: ["columns", "column", "4", "layout"] },
   { type: "video", label: "Video", hint: "Embed a video by URL", icon: Film, keywords: ["video", "mp4", "movie", "clip"] },
   { type: "audio", label: "Audio", hint: "Embed an audio clip by URL", icon: Music, keywords: ["audio", "mp3", "sound", "music", "podcast"] },
 ];

@@ -11,6 +11,17 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-05-31 — notion-shell: column layouts (page-features P6) v0.15.0
+
+- **Columns** — new block types `columns2` / `columns3` / `columns4` +
+  `ColumnsBlock`. Lays a block's `columns` (Block[][]) out side by side;
+  each column is an independent block list rendered through the *same*
+  registry (any block nests inside, including toggles and further columns),
+  with per-column add/turn-into/duplicate/delete patched via
+  `onUpdate({ columns })`. Stacks vertically on narrow screens. Added to the
+  slash menu; preview demos a 2-column row. Block-renderer coverage now
+  ~27/30 Notion types (remaining: synced, toc, inline-database).
+
 ### 2026-05-31 — notion-shell: breadcrumbs + subpages + cover position (page-features P5b) v0.14.0
 
 - **`PageBreadcrumbs`** — ancestor trail (root → current); pass the chain +
