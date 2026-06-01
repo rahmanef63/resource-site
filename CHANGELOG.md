@@ -11,6 +11,16 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-05-31 — notion-shell: breadcrumbs + subpages + cover position (page-features P5b) v0.14.0
+
+- **`PageBreadcrumbs`** — ancestor trail (root → current); pass the chain +
+  `onNavigate`, last crumb renders muted.
+- **`Subpages`** — a grid of child-page cards for the bottom of a page,
+  with optional "New sub-page". Both pure / props-driven.
+- **Cover focal point** — `NotionPage` gains `coverPosition` (0–100) driving
+  the cover image's vertical `object-position`. Preview wires breadcrumbs +
+  subpages live.
+
 ### 2026-05-31 — notion-shell: page + button blocks, copy-link + move (page-features P4b) v0.13.0
 
 - **Two more block renderers** — `PageLinkBlock` (block-type `page`: a

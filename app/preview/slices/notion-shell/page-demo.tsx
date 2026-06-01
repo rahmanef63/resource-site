@@ -7,6 +7,8 @@ import {
   InsertBlockButton,
   InlineFormatToolbar,
   PageActionsMenu,
+  PageBreadcrumbs,
+  Subpages,
   type Block,
   type BlockType,
   type PageFont,
@@ -82,6 +84,10 @@ export function PageDemo() {
           />
         }
       >
+        <PageBreadcrumbs
+          items={[{ id: "root", label: "Workspace" }, { id: "p2", label: "Projects" }, { id: "cur", label: title }]}
+          onNavigate={() => {}}
+        />
         <div className="space-y-1">
           {blocks.map((b) => (
             <NotionBlock
@@ -102,6 +108,11 @@ export function PageDemo() {
               <InsertBlockButton onInsert={insert} label="Add block" />
             </div>
           )}
+          <Subpages
+            pages={[{ id: "s1", title: "Meeting notes" }, { id: "s2", title: "Spec draft" }]}
+            onOpen={() => {}}
+            onCreate={() => {}}
+          />
         </div>
       </NotionPage>
     </div>

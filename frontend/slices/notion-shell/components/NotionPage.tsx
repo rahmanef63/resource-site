@@ -27,6 +27,8 @@ export interface NotionPageProps {
    *  above the header. `onCoverRemove` adds an X button on hover. */
   cover?: string;
   onCoverRemove?: () => void;
+  /** Vertical focal point of the cover image, 0–100 (default 50). */
+  coverPosition?: number;
   /** Page body — your blocks list, database embed, etc. */
   children?: ReactNode;
   className?: string;
@@ -47,7 +49,7 @@ export function NotionPage({
   icon, title,
   onIconChange, onTitleChange,
   renderIcon, renderIconPicker,
-  actions, cover, onCoverRemove,
+  actions, cover, onCoverRemove, coverPosition = 50,
   children, className, headerless,
   font = "default", fullWidth, smallText, locked,
 }: NotionPageProps) {
@@ -62,6 +64,7 @@ export function NotionPage({
             src={cover}
             alt=""
             className="h-full w-full object-cover"
+            style={{ objectPosition: `center ${coverPosition}%` }}
           />
           {onCoverRemove && (
             <Button

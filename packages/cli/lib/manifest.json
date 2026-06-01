@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-06-01T15:30:56.679Z",
+  "generatedAt": "2026-06-01T15:34:38.795Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -4156,7 +4156,7 @@
       "title": "Notion Shell — page + sidebar + block editor primitives (pure, no database)",
       "category": "ui",
       "kind": "ui",
-      "version": "0.13.0",
+      "version": "0.14.0",
       "description": "Portable Notion-style PAGE + SIDEBAR + BLOCK editor primitives. CI-wave (2026-05-21) split the database surface out — install the optional `notion-database` peer for embedded TableView / BoardView / ListView / GalleryView / CalendarView / FeedView, NotionDatabase, NotionProperty, ViewTabs, ViewOptions, ColumnHeaderMenu, property-cells. notion-shell alone gives you Notion-clone pages + sidebar + editor without the database weight. Domain types (Database, Property, PropertyValue, DbView, DatabaseViewConfig, DatabaseFilter, DatabaseSort) remain in notion-shell as the single source of truth (Page.rowOfDatabaseId + rowProps reference them). FULL OLD DESC BELOW: Portable Notion-style wrapper primitives. PAGE EDITOR: NotionPage (optional cover image band + header + body), NotionHeader / NotionSidebar / NotionBlock (live inline-markdown decorator, hover actions menu, optional dragHandle slot), SlashMenu (searchable block-type picker w/ keyboard nav), BlockActionsMenu (turn-into / duplicate / delete), InsertBlockButton (`+` trigger w/ SlashMenu), SortableBlockList (@dnd-kit render-prop wrapper for block reorder), PageActionsMenu (header dropdown: cover/favorite/duplicate/export/trash). DATABASE: NotionDatabase (full DB surface w/ tabs + options + per-column menu), NotionProperty (10 property-cell types), 6 built-in views (Table/Board/List/Gallery/Calendar/Feed), ViewTabs, ViewOptions (sort + filter + search popover), ColumnHeaderMenu. SPECIALISED BLOCK RENDERERS: ImageRenderer (URL + caption + preview), EmbedRenderer (YouTube/Vimeo/Loom/Figma/CodePen/Spotify auto-detect + iframe fallback). Pure helpers: applyView, groupBy, bucketByDate. Pure / props-driven — host owns data + change handlers. v0.7.2: Property gained `dateRange` (date columns default to a start→end range — the per-PropertyType Edit-property panel in notion-database toggles it; Calendar + Timeline read the range).",
       "source": "notion-page-clone",
       "slicePath": "frontend/slices/notion-shell",
