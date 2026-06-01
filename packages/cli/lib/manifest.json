@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-06-01T19:04:53.327Z",
+  "generatedAt": "2026-06-01T19:31:43.941Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -2419,7 +2419,8 @@
         "tooltip",
         "label",
         "switch",
-        "popover"
+        "popover",
+        "resizable"
       ],
       "env": [],
       "peers": [],

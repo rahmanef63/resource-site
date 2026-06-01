@@ -48,6 +48,7 @@
       "@/components/ui/separator",
       "@/components/ui/tooltip",
       "@/components/ui/label",
+      "@/components/ui/resizable",
       "@/lib/utils"
     ],
     "external": [

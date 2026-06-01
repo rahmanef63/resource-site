@@ -24,7 +24,7 @@ export const contract = defineSliceContract({
       { npm: "@imgly/background-removal", range: "^1.6.0" },
       { npm: "lucide-react", range: "^0.400.0" },
     ],
-    shadcn: ["button", "input", "slider", "select", "tabs", "scroll-area", "separator", "tooltip", "popover", "switch", "label", "dropdown-menu"],
+    shadcn: ["button", "input", "slider", "select", "tabs", "scroll-area", "separator", "tooltip", "popover", "switch", "label", "dropdown-menu", "resizable"],
     peers: [],
   },
   provides: {

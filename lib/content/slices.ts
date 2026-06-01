@@ -156,7 +156,7 @@ export const slices: SliceEntry[] = [
     slicePath: "frontend/slices/image-editor",
     convexPaths: [],
     npm: ["konva", "react-konva", "@imgly/background-removal", "lucide-react"],
-    shadcn: ["button", "input", "slider", "select", "tabs", "scroll-area", "separator", "tooltip", "label", "switch", "popover"],
+    shadcn: ["button", "input", "slider", "select", "tabs", "scroll-area", "separator", "tooltip", "label", "switch", "popover", "resizable"],
     env: [],
     peers: [],
     tags: ["image-editor", "photoshop", "canvas", "konva", "layers", "filters", "background-removal", "paint", "crop", "ui"],
