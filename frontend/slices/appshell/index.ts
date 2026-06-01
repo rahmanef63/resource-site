@@ -117,8 +117,26 @@ export type {
 // Each is a defineFeature() contribution mounted via `manifest.features`. They
 // live inside this slice (appshell/features/*) so the whole shell installs as
 // one unit. Re-exported LAST so the core bindings they read are already live.
+import { searchFeature } from "./features/search";
+import { inspectorFeature } from "./features/inspector";
+import { notificationsFeature } from "./features/notifications";
+import { controlCenterFeature } from "./features/control-center";
+import { widgetsFeature } from "./features/widgets";
+
 export { searchFeature } from "./features/search";
 export { inspectorFeature } from "./features/inspector";
 export { notificationsFeature } from "./features/notifications";
 export { controlCenterFeature } from "./features/control-center";
 export { widgetsFeature } from "./features/widgets";
+
+// The default system-feature set — generic, brand-free, app-agnostic. Drop all
+// five into any consumer's manifest in one line (`features: DEFAULT_FEATURES`).
+// Spread + override/trim per project; each entry is independently removable since
+// the surfaces are slot-driven (a feature absent from the array just doesn't mount).
+export const DEFAULT_FEATURES = [
+  searchFeature,
+  inspectorFeature,
+  notificationsFeature,
+  controlCenterFeature,
+  widgetsFeature,
+];
