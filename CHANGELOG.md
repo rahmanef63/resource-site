@@ -11,6 +11,23 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-05-31 — notion-database: date cell range + time editing v0.16.2
+
+- **Date cell rewrite** — the `date` cell now matches notion-page-clone: a
+  range opens **two separate single calendars** (Start + End, the end picker
+  disables days before the start) instead of one flaky `mode="range"`
+  calendar, so a range takes two explicit picks. Picking now also writes the
+  end reliably.
+- **Time editing wired** — the `dateIncludeTime` property toggle ("Include
+  time") previously had no effect on the cell; it now renders `HH:mm` time
+  inputs for the start (and the end, in range mode). Values stored as 24h
+  internal, displayed per the column's 12h/24h `timeFormat`.
+- Extracted the popover body into `DateCellEditor.tsx` (keeps both files
+  ≤200 LOC); dropped the `as never` casts. Audited all 18 cell types vs
+  notion-page-clone — date was the only behavioural gap; number / select /
+  status / multi_select / url / email / phone / person / files / formula /
+  relation / rollup / system cells already at or above parity.
+
 ### 2026-05-31 — notion-database: responsive view tabs + sharper AI recipe v0.16.1
 
 - **Responsive fix** — the `<ViewTabs>` strip now scrolls horizontally
