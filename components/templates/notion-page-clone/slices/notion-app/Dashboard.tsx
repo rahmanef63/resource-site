@@ -1,8 +1,9 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { NotionSidebar } from "@/features/notion-shell";
-import { DynamicIcon } from "@/features/icon-picker";
+import { NotionSidebar } from "@/features/notion-sidebar";
+import { DynamicIcon, IconPickerPopover } from "@/features/icon-picker";
 import { useStore, useDocs, useDatabases } from "../../shared/store";
 import { PUBLIC_BASE } from "../../shared/nav-config";
 import { useSidebarPages, hrefFor, activeIdForPath } from "./hooks";
@@ -12,6 +13,16 @@ import { WorkspaceTopBar, type Crumb } from "./WorkspaceTopBar";
 
 function renderRowIcon(icon: string, className?: string) {
   return <DynamicIcon value={icon} className={className} />;
+}
+
+function renderRowIconPicker({
+  value, onChange, children,
+}: { value: string; onChange: (next: string) => void; children: ReactNode }) {
+  return (
+    <IconPickerPopover value={value} onChange={onChange} onClear={() => onChange("📄")}>
+      {children}
+    </IconPickerPopover>
+  );
 }
 
 /** Notion-clone dashboard. Sidebar on left lists docs + databases; main
@@ -74,6 +85,19 @@ export function Dashboard({
     }
   };
 
+  // Drag-reorder/reparent — only docs nest; databases stay top-level.
+  const handleMove = (sid: string, parentSid: string | null, beforeSid: string | null) => {
+    if (!sid.startsWith("doc:")) return;
+    const parentId = parentSid?.startsWith("doc:") ? parentSid.slice(4) : null;
+    const beforeId = beforeSid?.startsWith("doc:") ? beforeSid.slice(4) : null;
+    dispatch({ type: "doc.move", id: sid.slice(4), parentId, beforeId });
+  };
+
+  const handleIconChange = (sid: string, icon: string) => {
+    if (sid.startsWith("db:")) dispatch({ type: "db.update", id: sid.slice(3), patch: { icon } });
+    else dispatch({ type: "doc.update", id: sid.slice(4), patch: { icon } });
+  };
+
   const { crumbs, starred, onStar, onShare } = buildTopBar({
     activeKind, activeId, docs, databases,
     onToggleStar: (kind, id) => {
@@ -93,7 +117,10 @@ export function Dashboard({
         onCreate={handleCreate}
         onRename={handleRename}
         onDelete={handleDelete}
+        onMove={handleMove}
+        onIconChange={handleIconChange}
         renderIcon={renderRowIcon}
+        renderIconPicker={renderRowIconPicker}
         label="Workspace"
       />
       <div className="flex flex-1 flex-col overflow-hidden">

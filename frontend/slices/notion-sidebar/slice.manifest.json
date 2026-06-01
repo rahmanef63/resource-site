@@ -1,0 +1,10 @@
+{
+  "name": "notion-sidebar",
+  "description": "Standalone Notion-style tree-nav sidebar with full page CRUD — double-click rename, @dnd-kit drag-reorder/reparent, collapse/expand, hover +subpage/delete, and an optional per-row icon picker. Props-driven + decoupled (owns its own NotionSidebarPage type).",
+  "deps": {
+    "shared": ["lib/utils"],
+    "slices": [],
+    "convex": []
+  },
+  "notes": "Pure client-side slice. npm: @dnd-kit/core + sortable + utilities (tree drag). Host owns the page list and dispatches onSelect/onCreate/onRename/onDelete/onMove/onIconChange. Wire renderIcon + renderIconPicker to @/features/icon-picker for rich icons. Pair with notion-shell (page editor) + notion-database (embedded DBs)."
+}

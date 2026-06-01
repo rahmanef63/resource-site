@@ -9,12 +9,12 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "notion-shell",
-  version: "0.4.0",
+  version: "0.5.0",
   category: "ui",
   kind: "ui",
   provides: {
     components: [
-      "NotionPage", "NotionHeader", "NotionSidebar",
+      "NotionPage", "NotionHeader",
       "NotionBlock", "NotionDatabase", "NotionProperty",
       "SlashMenu", "BlockActionsMenu", "InsertBlockButton",
       "ViewTabs", "ViewOptions", "ColumnHeaderMenu",
@@ -34,7 +34,7 @@ export const contract = defineSliceContract({
     ],
     hooks: [],
     types: [
-      "NotionPageProps", "NotionHeaderProps", "NotionSidebarProps", "NotionSidebarPage",
+      "NotionPageProps", "NotionHeaderProps",
       "NotionBlockProps", "NotionDatabaseProps", "NotionPropertyProps",
       "SlashMenuProps", "BlockActionsMenuProps", "InsertBlockButtonProps",
       "ViewTabsProps", "ViewOptionsProps", "ColumnHeaderMenuProps",

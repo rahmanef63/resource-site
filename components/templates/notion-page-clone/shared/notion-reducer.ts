@@ -111,6 +111,15 @@ export function notionReducer(state: State, action: Action): State {
           return { ...d, blocks: next, updatedAt: Date.now() };
         }),
       };
+    case "doc.move": {
+      const src = state.docs.find((d) => d.id === action.id);
+      if (!src || action.id === action.parentId) return state;
+      const moved = { ...src, parentId: action.parentId, updatedAt: Date.now() };
+      const rest = state.docs.filter((d) => d.id !== action.id);
+      const at = action.beforeId ? rest.findIndex((d) => d.id === action.beforeId) : -1;
+      if (at < 0) rest.push(moved); else rest.splice(at, 0, moved);
+      return { ...state, docs: rest };
+    }
     case "doc.duplicate": {
       const src = state.docs.find((d) => d.id === action.id);
       if (!src) return state;

@@ -515,7 +515,7 @@ export default function Layout({ children }) {
     category: "website-template",
     status: "stable",
     description:
-      "localStorage-only DEMO of a Notion-clone surface — tree-structured sidebar + page editor + embedded databases. Built from rr's notion-shell wrappers (NotionSidebar / NotionPage / NotionBlock / NotionDatabase — code + equation blocks built-in) + notion-database (drag-fill grid) + createTemplateStore (localStorage + BroadcastChannel). No Convex, no auth, no multi-user — drop-in starter for evaluating the UI or embedding a Notion-style editor in your own project. **For the production-grade Convex-backed product (multi-workspace + auth + sharing + comments + snapshots + MCP), use the open-source open-silong repo: https://github.com/rahmanef63/open-silong (silong.rahmanef.com).** This rr template is the DEMO; the github repo is the PRODUCT.",
+      "localStorage-only DEMO of a Notion-clone surface — tree-structured sidebar + page editor + embedded databases. It is the COMBINATION of three independently-reusable rr slices: notion-sidebar (tree nav + page CRUD — double-click rename, drag-reorder/reparent, icon picker), notion-shell (NotionPage / NotionBlock page editor — code + equation blocks built-in), and notion-database (11 views + drag-fill grid + relation/rollup) — glued by createTemplateStore (localStorage + BroadcastChannel). No Convex, no auth, no multi-user — drop-in starter for evaluating the UI or embedding a Notion-style editor in your own project. **For the production-grade Convex-backed product (multi-workspace + auth + sharing + comments + snapshots + MCP), use the open-source open-silong repo: https://github.com/rahmanef63/open-silong (silong.rahmanef.com).** This rr template is the DEMO; the github repo is the PRODUCT.",
     source: "synthesized + notion-shell wrappers (built-in code/equation); production stack at github.com/rahmanef63/open-silong",
     repoPath: "app/preview/notion-page-clone-os",
     primaryFile: "app/preview/notion-page-clone-os/public/page.tsx",
@@ -529,7 +529,9 @@ export default function Layout({ children }) {
       "app/preview/notion-page-clone-os",
       "components/templates/_shared",
       "components/templates/notion-page-clone",
+      "frontend/slices/notion-sidebar",
       "frontend/slices/notion-shell",
+      "frontend/slices/notion-database",
       "frontend/slices/icon-picker",
     ],
     files: [

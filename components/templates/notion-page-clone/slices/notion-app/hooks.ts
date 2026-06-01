@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import type { NotionSidebarPage } from "@/features/notion-shell";
+import type { NotionSidebarPage } from "@/features/notion-sidebar";
 import { useDocs, useDatabases } from "../../shared/store";
 import { PUBLIC_BASE } from "../../shared/nav-config";
 

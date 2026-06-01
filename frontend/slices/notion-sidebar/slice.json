@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "notion-sidebar",
+  "version": "0.1.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "Notion Sidebar — tree nav + page CRUD (rename · drag · icon picker)",
+  "description": "Standalone Notion-style tree-nav sidebar, lifted out of notion-shell so it is reusable on its own. Props-driven + fully decoupled (owns its own lightweight NotionSidebarPage type — id/title/icon/parentId). Click a row to open; DOUBLE-CLICK a title to rename inline; drag the grip to reorder AND reparent (@dnd-kit sortable tree with horizontal-offset projection); collapse/expand subtrees; hover a row for +subpage / delete. Optional per-row icon PICKER — wire renderIconPicker + onIconChange (e.g. @/features/icon-picker's IconPickerPopover) so clicking a row icon opens the picker. The host owns the data and dispatches onSelect/onCreate/onRename/onDelete/onMove/onIconChange. Pair with notion-shell (page editor) + notion-database (embedded DBs) for the full Notion-clone OS.",
+  "namespace": "@/features/notion-sidebar",
+  "registers": [],
+  "audit": [],
+  "frontend": {
+    "slicePath": "frontend/slices/notion-sidebar",
+    "configExport": ""
+  },
+  "deps": {
+    "npm": ["@dnd-kit/core", "@dnd-kit/sortable", "@dnd-kit/utilities"],
+    "shadcn": ["button", "input"],
+    "env": [],
+    "peers": []
+  }
+}
