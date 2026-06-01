@@ -7,8 +7,6 @@ import {
   InsertBlockButton,
   InlineFormatToolbar,
   MentionTypeahead,
-  BlockSelectionProvider,
-  SelectableBlock,
   PageActionsMenu,
   PageBreadcrumbs,
   Subpages,
@@ -18,6 +16,7 @@ import {
   type BlockType,
   type PageFont,
 } from "@/features/notion-shell";
+import { BlockSelectionProvider, SelectableBlock } from "@/features/block-selection";
 import { BLOCK_RENDERERS, TocHeadingsContext } from "./block-renderers";
 
 const MENTIONABLES = [

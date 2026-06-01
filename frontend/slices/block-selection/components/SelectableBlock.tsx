@@ -1,9 +1,10 @@
 "use client";
 
-/** SelectableBlock — wrap each <NotionBlock> with this to opt a block into
- *  multi-selection (needs a <BlockSelectionProvider> ancestor; without one it
- *  renders children untouched). Thin top/bottom edge strips select on click:
- *  Shift = range from the anchor, Cmd/Ctrl = toggle, plain = select only. */
+/** SelectableBlock — wrap each list item with this to opt it into multi-
+ *  selection (needs a <BlockSelectionProvider> ancestor; without one it
+ *  renders children untouched, so it's safe to leave in place). Thin top /
+ *  bottom edge strips select on click: Shift = range from the anchor,
+ *  Cmd/Ctrl = toggle, plain = select only. */
 
 import type { MouseEvent, ReactNode } from "react";
 import { cn } from "@/lib/utils";
@@ -13,9 +14,10 @@ export interface SelectableBlockProps {
   id: string;
   orderedIds: string[];
   children: ReactNode;
+  className?: string;
 }
 
-export function SelectableBlock({ id, orderedIds, children }: SelectableBlockProps) {
+export function SelectableBlock({ id, orderedIds, children, className }: SelectableBlockProps) {
   const sel = useBlockSelection();
   if (!sel) return <>{children}</>;
 
@@ -30,7 +32,7 @@ export function SelectableBlock({ id, orderedIds, children }: SelectableBlockPro
   return (
     <div
       data-block-selected={selected || undefined}
-      className={cn("relative rounded-sm", selected && "bg-primary/10 ring-2 ring-primary/40")}
+      className={cn("relative rounded-sm", selected && "bg-primary/10 ring-2 ring-primary/40", className)}
     >
       <div onMouseDown={onEdge} aria-hidden className="absolute inset-x-0 top-0 z-10 h-1.5 cursor-pointer" />
       {children}

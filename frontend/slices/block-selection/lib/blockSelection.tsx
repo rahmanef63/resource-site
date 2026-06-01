@@ -1,11 +1,15 @@
 "use client";
 
-/** Block multi-selection — a small context the host opts into by wrapping its
- *  block list in <BlockSelectionProvider onBulkDelete>. Each block is wrapped
- *  in <SelectableBlock> (sibling file), whose thin top/bottom edge strips
- *  select on click (Shift = range, Cmd/Ctrl = toggle). Backspace/Delete with a
- *  non-empty selection (and focus outside any editable) deletes them all;
- *  Escape clears. A floating count toolbar offers the same. */
+/** Block multi-selection — a small, framework-agnostic context for selecting
+ *  items in any vertical list (Notion-style blocks, table rows, cards…). Wrap
+ *  the list in <BlockSelectionProvider onBulkDelete>; wrap each item in
+ *  <SelectableBlock> (sibling file), whose thin top/bottom edge strips select
+ *  on click (Shift = range from the anchor, Cmd/Ctrl = toggle). Backspace /
+ *  Delete with a non-empty selection (and focus outside any editable) deletes
+ *  them all; Escape clears. A floating count toolbar offers the same.
+ *
+ *  Pure UI — owns only the selected-id set; the host owns the data and
+ *  performs the actual delete via `onBulkDelete(ids)`. */
 
 import {
   createContext, useCallback, useContext, useEffect, useRef, useState,

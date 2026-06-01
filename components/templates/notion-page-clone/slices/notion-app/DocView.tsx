@@ -5,10 +5,10 @@ import { GripVertical } from "lucide-react";
 import {
   NotionPage, NotionBlock, InsertBlockButton,
   SortableBlockList, PageActionsMenu, InlineFormatToolbar, MentionTypeahead,
-  BlockSelectionProvider, SelectableBlock,
   focusBlock, collectHeadings,
   type Block, type BlockType, type SortableBlockDragProps,
 } from "@/features/notion-shell";
+import { BlockSelectionProvider, SelectableBlock } from "@/features/block-selection";
 import { DynamicIcon, IconPickerPopover } from "@/features/icon-picker";
 import { Button } from "@/components/ui/button";
 import { useDocs, useStore } from "../../shared/store";

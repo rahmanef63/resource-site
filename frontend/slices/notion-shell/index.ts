@@ -47,8 +47,6 @@ export { PageBreadcrumbs, type PageBreadcrumbsProps, type Crumb } from "./compon
 export { Subpages, SubpageIcon, type SubpagesProps, type SubpageItem } from "./components/Subpages";
 export { InlineFormatToolbar } from "./components/InlineFormatToolbar";
 export { MentionTypeahead, type MentionTypeaheadProps, type Mentionable } from "./components/MentionTypeahead";
-export { BlockSelectionProvider, useBlockSelection, type BlockSelectionCtx } from "./lib/blockSelection";
-export { SelectableBlock, type SelectableBlockProps } from "./components/SelectableBlock";
 export { wrapSelection } from "./lib/selectionFormat";
 export { TocBlock, type TocBlockProps, type TocHeading } from "./components/blocks/TocBlock";
 export { collectHeadings } from "./lib/collectHeadings";

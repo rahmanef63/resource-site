@@ -11,6 +11,23 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-01 — NEW slice `block-selection` v0.1.0 + notion-shell extraction v0.20.0
+
+- **New `block-selection` slice** — the multi-selection that shipped inside
+  notion-shell (v0.19.0) is now its own framework-agnostic slice (mirrors
+  notion-page-clone's architecture). `BlockSelectionProvider` +
+  `SelectableBlock` + `useBlockSelection`: edge-click select (Shift = range,
+  Cmd/Ctrl = toggle), Backspace/Delete bulk-delete, Escape clear, floating
+  count toolbar. Zero deps; the host owns the data via `onBulkDelete(ids)`.
+  Works on any vertical list (blocks, table rows, cards), with a standalone
+  preview at `/preview/slices/block-selection`.
+- **notion-shell 0.19.0 → 0.20.0** — removed `BlockSelectionProvider` /
+  `SelectableBlock` / `useBlockSelection` (moved to the new slice; import
+  them from `@/features/block-selection`). Keeps notion-shell a focused
+  editor primitive; selection is now reusable beyond it.
+- **Hosts repointed** — the notion-clone template `DocView` and the preview
+  `page-demo` import the selection from `@/features/block-selection`.
+
 ### 2026-06-01 — notion-shell: markdown paste + multi-block selection v0.19.0
 
 - **Markdown paste** (`blockPaste.ts`) — pasting multi-line text parses each

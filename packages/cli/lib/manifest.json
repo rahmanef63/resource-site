@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-06-01T18:35:43.754Z",
+  "generatedAt": "2026-06-01T18:58:00.741Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -2152,6 +2152,27 @@
       ]
     },
     {
+      "slug": "block-selection",
+      "title": "Block Selection — multi-select + bulk delete",
+      "category": "ui",
+      "description": "Framework-agnostic multi-selection for any vertical list (Notion-style blocks, table rows, cards). BlockSelectionProvider owns the selected-id set; wrap each item in SelectableBlock — thin top/bottom edge strips select on click (Shift = range from the anchor, Cmd/Ctrl = toggle). Backspace/Delete bulk-deletes when focus is outside an editable, Escape clears, and a floating count toolbar offers Delete/Clear. Pure UI — the host owns the data and runs onBulkDelete(ids). Pairs with notion-shell (the notion-clone template wires it onto the editor); lifted from notion-page-clone's block-selection slice.",
+      "source": "notion-page-clone",
+      "install": "npx rahman-resources add block-selection",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add block-selection`. Zero deps. Wrap your list in `<BlockSelectionProvider onBulkDelete={(ids) => removeMany(ids)}>` and each item in `<SelectableBlock id={item.id} orderedIds={allIds}>…</SelectableBlock>`. Click an item's top/bottom edge strip to select (Shift = range, Cmd/Ctrl = toggle); Backspace/Delete bulk-deletes (when focus is outside a contentEditable), Escape clears, and a floating `N selected · Delete · Clear` toolbar appears. Read selection state anywhere under the provider via `useBlockSelection()`. The slice owns ONLY the id set — you own the data + perform the delete. Generic: works on table rows or cards too, not just notion blocks.",
+      "tags": [
+        "ui",
+        "selection",
+        "multi-select",
+        "bulk",
+        "notion",
+        "blocks",
+        "list",
+        "primitive"
+      ]
+    },
+    {
       "slug": "equation",
       "title": "Equation — Notion-style KaTeX block primitive",
       "category": "ui",
@@ -3974,6 +3995,33 @@
       "agentRecipe": "Run `npx rr add files`. Wrap your tree with `<FilesAdapterProvider adapter={...}>` — pass `useLocalStorageFilesAdapter()` for a quick demo or implement `FilesAdapter` (upload + remove + useUrl) against your backend. Then drop `<FileUploadButton onUploaded={...}>` anywhere; pair with `<FileChip fileRef={...}>` for rendered chips. Hooks: `useFileUpload()` returns `{upload, uploading, progress, removeFromStorage}`; `useFileUrl(storageId)` resolves to a fetchable URL (Convex adapter uses useQuery for live invalidation; demo reads localStorage synchronously). To wire S3: implement the FilesAdapter interface with presigned URLs + DELETE; the slice doesn't care which backend you pick."
     },
     {
+      "slug": "block-selection",
+      "title": "Block Selection — multi-select + bulk delete",
+      "category": "ui",
+      "kind": "ui",
+      "version": "0.1.0",
+      "description": "Framework-agnostic multi-selection for any vertical list (Notion-style blocks, table rows, cards). BlockSelectionProvider owns the selected-id set; wrap each item in SelectableBlock — thin top/bottom edge strips select on click (Shift = range from the anchor, Cmd/Ctrl = toggle). Backspace/Delete bulk-deletes when focus is outside an editable, Escape clears, and a floating count toolbar offers Delete/Clear. Pure UI — the host owns the data and runs onBulkDelete(ids). Pairs with notion-shell (the notion-clone template wires it onto the editor); lifted from notion-page-clone's block-selection slice.",
+      "source": "notion-page-clone",
+      "slicePath": "frontend/slices/block-selection",
+      "convexPaths": [],
+      "npm": [],
+      "shadcn": [],
+      "env": [],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "ui",
+        "selection",
+        "multi-select",
+        "bulk",
+        "notion",
+        "blocks",
+        "list",
+        "primitive"
+      ],
+      "agentRecipe": "Run `npx rr add block-selection`. Zero deps. Wrap your list in `<BlockSelectionProvider onBulkDelete={(ids) => removeMany(ids)}>` and each item in `<SelectableBlock id={item.id} orderedIds={allIds}>…</SelectableBlock>`. Click an item's top/bottom edge strip to select (Shift = range, Cmd/Ctrl = toggle); Backspace/Delete bulk-deletes (when focus is outside a contentEditable), Escape clears, and a floating `N selected · Delete · Clear` toolbar appears. Read selection state anywhere under the provider via `useBlockSelection()`. The slice owns ONLY the id set — you own the data + perform the delete. Generic: works on table rows or cards too, not just notion blocks."
+    },
+    {
       "slug": "equation",
       "title": "Equation — Notion-style KaTeX block primitive",
       "category": "ui",
@@ -4156,7 +4204,7 @@
       "title": "Notion Shell — page + sidebar + block editor primitives (pure, no database)",
       "category": "ui",
       "kind": "ui",
-      "version": "0.19.0",
+      "version": "0.20.0",
       "description": "Portable Notion-style PAGE + SIDEBAR + BLOCK editor primitives. CI-wave (2026-05-21) split the database surface out — install the optional `notion-database` peer for embedded TableView / BoardView / ListView / GalleryView / CalendarView / FeedView, NotionDatabase, NotionProperty, ViewTabs, ViewOptions, ColumnHeaderMenu, property-cells. notion-shell alone gives you Notion-clone pages + sidebar + editor without the database weight. Domain types (Database, Property, PropertyValue, DbView, DatabaseViewConfig, DatabaseFilter, DatabaseSort) remain in notion-shell as the single source of truth (Page.rowOfDatabaseId + rowProps reference them). FULL OLD DESC BELOW: Portable Notion-style wrapper primitives. PAGE EDITOR: NotionPage (optional cover image band + header + body), NotionHeader / NotionSidebar / NotionBlock (live inline-markdown decorator, hover actions menu, optional dragHandle slot), SlashMenu (searchable block-type picker w/ keyboard nav), BlockActionsMenu (turn-into / duplicate / delete), InsertBlockButton (`+` trigger w/ SlashMenu), SortableBlockList (@dnd-kit render-prop wrapper for block reorder), PageActionsMenu (header dropdown: cover/favorite/duplicate/export/trash). DATABASE: NotionDatabase (full DB surface w/ tabs + options + per-column menu), NotionProperty (10 property-cell types), 6 built-in views (Table/Board/List/Gallery/Calendar/Feed), ViewTabs, ViewOptions (sort + filter + search popover), ColumnHeaderMenu. SPECIALISED BLOCK RENDERERS: ImageRenderer (URL + caption + preview), EmbedRenderer (YouTube/Vimeo/Loom/Figma/CodePen/Spotify auto-detect + iframe fallback). Pure helpers: applyView, groupBy, bucketByDate. Pure / props-driven — host owns data + change handlers. v0.7.2: Property gained `dateRange` (date columns default to a start→end range — the per-PropertyType Edit-property panel in notion-database toggles it; Calendar + Timeline read the range).",
       "source": "notion-page-clone",
       "slicePath": "frontend/slices/notion-shell",
