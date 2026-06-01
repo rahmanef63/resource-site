@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-06-01T19:31:43.941Z",
+  "generatedAt": "2026-06-01T19:36:17.106Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -2175,24 +2175,25 @@
       ]
     },
     {
-      "slug": "block-selection",
-      "title": "Block Selection — multi-select + bulk delete",
+      "slug": "selection",
+      "title": "Selection — marquee multi-select + bulk actions",
       "category": "ui",
-      "description": "Framework-agnostic multi-selection for any vertical list (Notion-style blocks, table rows, cards). BlockSelectionProvider owns the selected-id set; wrap each item in SelectableBlock — thin top/bottom edge strips select on click (Shift = range from the anchor, Cmd/Ctrl = toggle). Backspace/Delete bulk-deletes when focus is outside an editable, Escape clears, and a floating count toolbar offers Delete/Clear. Pure UI — the host owns the data and runs onBulkDelete(ids). Pairs with notion-shell (the notion-clone template wires it onto the editor); lifted from notion-page-clone's block-selection slice.",
+      "description": "Framework-agnostic multi-selection for any vertical list (Notion-style blocks, table rows, cards). Hold-and-drag on empty space draws a rubber-band rectangle — AutoCAD-style: drag RIGHT selects only fully-enclosed items (solid ring), drag LEFT selects anything the rectangle touches (dashed green ring). Click an item's edge to select (Shift = range, Cmd/Ctrl = toggle). Selecting activates items with a ring + data-block-selected attribute. Backspace/Delete bulk-deletes, Escape and click-outside clear, and a floating count toolbar offers Delete/Clear. SelectionProvider owns only the id set — the host owns the data via onBulkDelete(ids). Pairs with notion-shell (the notion-clone template wires it onto the editor); lifted from notion-page-clone's block-selection slice.",
       "source": "notion-page-clone",
-      "install": "npx rahman-resources add block-selection",
+      "install": "npx rahman-resources add selection",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add block-selection`. Zero deps. Wrap your list in `<BlockSelectionProvider onBulkDelete={(ids) => removeMany(ids)}>` and each item in `<SelectableBlock id={item.id} orderedIds={allIds}>…</SelectableBlock>`. Click an item's top/bottom edge strip to select (Shift = range, Cmd/Ctrl = toggle); Backspace/Delete bulk-deletes (when focus is outside a contentEditable), Escape clears, and a floating `N selected · Delete · Clear` toolbar appears. Read selection state anywhere under the provider via `useBlockSelection()`. The slice owns ONLY the id set — you own the data + perform the delete. Generic: works on table rows or cards too, not just notion blocks.",
+      "agentRecipe": "Run `npx rr add selection`. Zero deps (react-dom only). Wrap your list area in `<SelectionProvider onBulkDelete={(ids) => removeMany(ids)}>`, give the surface a `position: relative` div with a ref, drop `<SelectionMarquee containerRef={ref} />` inside it, and wrap each item in `<SelectableBlock id={item.id} orderedIds={allIds}>…</SelectableBlock>`. Hold-drag on empty space to rubber-band: drag RIGHT = window (only fully-enclosed, solid ring), drag LEFT = crossing (anything touched, dashed green). Edge-click an item to pick it (Shift = range, Cmd/Ctrl = toggle). Backspace/Delete bulk-deletes (focus outside a contentEditable), Escape + click-outside clear, floating `N selected · Delete · Clear` toolbar. Read state anywhere via `useSelection()`. The slice owns ONLY the id set — you own the data + the delete. Works on table rows / cards too, not just notion blocks.",
       "tags": [
         "ui",
         "selection",
+        "marquee",
+        "rubber-band",
         "multi-select",
         "bulk",
         "notion",
         "blocks",
-        "list",
-        "primitive"
+        "list"
       ]
     },
     {
@@ -4065,14 +4066,14 @@
       "agentRecipe": "Run `npx rr add files`. Wrap your tree with `<FilesAdapterProvider adapter={...}>` — pass `useLocalStorageFilesAdapter()` for a quick demo or implement `FilesAdapter` (upload + remove + useUrl) against your backend. Then drop `<FileUploadButton onUploaded={...}>` anywhere; pair with `<FileChip fileRef={...}>` for rendered chips. Hooks: `useFileUpload()` returns `{upload, uploading, progress, removeFromStorage}`; `useFileUrl(storageId)` resolves to a fetchable URL (Convex adapter uses useQuery for live invalidation; demo reads localStorage synchronously). To wire S3: implement the FilesAdapter interface with presigned URLs + DELETE; the slice doesn't care which backend you pick."
     },
     {
-      "slug": "block-selection",
-      "title": "Block Selection — multi-select + bulk delete",
+      "slug": "selection",
+      "title": "Selection — marquee multi-select + bulk actions",
       "category": "ui",
       "kind": "ui",
       "version": "0.1.0",
-      "description": "Framework-agnostic multi-selection for any vertical list (Notion-style blocks, table rows, cards). BlockSelectionProvider owns the selected-id set; wrap each item in SelectableBlock — thin top/bottom edge strips select on click (Shift = range from the anchor, Cmd/Ctrl = toggle). Backspace/Delete bulk-deletes when focus is outside an editable, Escape clears, and a floating count toolbar offers Delete/Clear. Pure UI — the host owns the data and runs onBulkDelete(ids). Pairs with notion-shell (the notion-clone template wires it onto the editor); lifted from notion-page-clone's block-selection slice.",
+      "description": "Framework-agnostic multi-selection for any vertical list (Notion-style blocks, table rows, cards). Hold-and-drag on empty space draws a rubber-band rectangle — AutoCAD-style: drag RIGHT selects only fully-enclosed items (solid ring), drag LEFT selects anything the rectangle touches (dashed green ring). Click an item's edge to select (Shift = range, Cmd/Ctrl = toggle). Selecting activates items with a ring + data-block-selected attribute. Backspace/Delete bulk-deletes, Escape and click-outside clear, and a floating count toolbar offers Delete/Clear. SelectionProvider owns only the id set — the host owns the data via onBulkDelete(ids). Pairs with notion-shell (the notion-clone template wires it onto the editor); lifted from notion-page-clone's block-selection slice.",
       "source": "notion-page-clone",
-      "slicePath": "frontend/slices/block-selection",
+      "slicePath": "frontend/slices/selection",
       "convexPaths": [],
       "npm": [],
       "shadcn": [],
@@ -4082,14 +4083,15 @@
       "tags": [
         "ui",
         "selection",
+        "marquee",
+        "rubber-band",
         "multi-select",
         "bulk",
         "notion",
         "blocks",
-        "list",
-        "primitive"
+        "list"
       ],
-      "agentRecipe": "Run `npx rr add block-selection`. Zero deps. Wrap your list in `<BlockSelectionProvider onBulkDelete={(ids) => removeMany(ids)}>` and each item in `<SelectableBlock id={item.id} orderedIds={allIds}>…</SelectableBlock>`. Click an item's top/bottom edge strip to select (Shift = range, Cmd/Ctrl = toggle); Backspace/Delete bulk-deletes (when focus is outside a contentEditable), Escape clears, and a floating `N selected · Delete · Clear` toolbar appears. Read selection state anywhere under the provider via `useBlockSelection()`. The slice owns ONLY the id set — you own the data + perform the delete. Generic: works on table rows or cards too, not just notion blocks."
+      "agentRecipe": "Run `npx rr add selection`. Zero deps (react-dom only). Wrap your list area in `<SelectionProvider onBulkDelete={(ids) => removeMany(ids)}>`, give the surface a `position: relative` div with a ref, drop `<SelectionMarquee containerRef={ref} />` inside it, and wrap each item in `<SelectableBlock id={item.id} orderedIds={allIds}>…</SelectableBlock>`. Hold-drag on empty space to rubber-band: drag RIGHT = window (only fully-enclosed, solid ring), drag LEFT = crossing (anything touched, dashed green). Edge-click an item to pick it (Shift = range, Cmd/Ctrl = toggle). Backspace/Delete bulk-deletes (focus outside a contentEditable), Escape + click-outside clear, floating `N selected · Delete · Clear` toolbar. Read state anywhere via `useSelection()`. The slice owns ONLY the id set — you own the data + the delete. Works on table rows / cards too, not just notion blocks."
     },
     {
       "slug": "equation",

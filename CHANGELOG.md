@@ -11,6 +11,24 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-01 — slice renamed `block-selection` → `selection` + marquee rubber-band v0.1.0
+
+- **Renamed** the slice to `selection` (`@/features/selection`); API is now
+  `SelectionProvider` / `useSelection` / `SelectableBlock` / `SelectionMarquee`
+  / `useMarquee`. The old `block-selection` slice is removed.
+- **Marquee / rubber-band — the missing capability.** Hold-and-drag on empty
+  space now draws a selection rectangle (`SelectionMarquee` + `useMarquee`,
+  portal-rendered). **Direction-aware, AutoCAD-style** (matches npc): drag
+  **RIGHT** = *window* (selects only fully-enclosed items, solid ring), drag
+  **LEFT** = *crossing* (selects anything the rect touches, dashed green ring).
+  Shift/Cmd-drag is additive (unions with the current selection).
+- **Selecting visibly activates items** — each `SelectableBlock` tags itself
+  `data-selectable-id` (so the marquee can hit-test it) and shows a ring +
+  `data-block-selected` when selected. Click-outside now clears too.
+- **Hosts rewired** — the notion-clone template `DocView` and the preview
+  `page-demo` mount `<SelectionMarquee>` on a relative surface. New standalone
+  preview at `/preview/slices/selection` demonstrating both drag directions.
+
 ### 2026-06-01 — NEW slice `block-selection` v0.1.0 + notion-shell extraction v0.20.0
 
 - **New `block-selection` slice** — the multi-selection that shipped inside

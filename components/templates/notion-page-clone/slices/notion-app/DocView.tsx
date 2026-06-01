@@ -8,7 +8,7 @@ import {
   focusBlock, collectHeadings,
   type Block, type BlockType, type SortableBlockDragProps,
 } from "@/features/notion-shell";
-import { BlockSelectionProvider, SelectableBlock } from "@/features/block-selection";
+import { SelectionProvider, SelectableBlock, SelectionMarquee } from "@/features/selection";
 import { DynamicIcon, IconPickerPopover } from "@/features/icon-picker";
 import { Button } from "@/components/ui/button";
 import { useDocs, useStore } from "../../shared/store";
@@ -104,6 +104,7 @@ export function DocView({ docId }: { docId: string }) {
   const handleBulkDelete = (ids: string[]) =>
     ids.forEach((blockId) => dispatch({ type: "doc.block.remove", docId: doc.id, blockId }));
 
+  const surfaceRef = React.useRef<HTMLDivElement | null>(null);
   const blockIds = doc.blocks.map((b) => b.id);
   const blockById = new Map(doc.blocks.map((b) => [b.id, b] as const));
   const headings = React.useMemo(() => collectHeadings(doc.blocks), [doc.blocks]);
@@ -141,8 +142,9 @@ export function DocView({ docId }: { docId: string }) {
         />
       }
     >
-      <BlockSelectionProvider onBulkDelete={handleBulkDelete}>
-      <div className="pl-8">
+      <SelectionProvider onBulkDelete={handleBulkDelete}>
+      <div ref={surfaceRef} className="relative pl-8">
+        <SelectionMarquee containerRef={surfaceRef} />
         <SortableBlockList
           items={blockIds}
           onReorder={(from, to) => dispatch({ type: "doc.block.reorder", docId: doc.id, from, to })}
@@ -171,7 +173,7 @@ export function DocView({ docId }: { docId: string }) {
           }}
         </SortableBlockList>
       </div>
-      </BlockSelectionProvider>
+      </SelectionProvider>
       <div className="mt-3 flex items-center gap-2 border-t border-dashed border-border/60 pt-3 pl-8">
         <InsertBlockButton onInsert={handleAppend} label="Add block" />
       </div>

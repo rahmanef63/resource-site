@@ -16,7 +16,7 @@ import {
   type BlockType,
   type PageFont,
 } from "@/features/notion-shell";
-import { BlockSelectionProvider, SelectableBlock } from "@/features/block-selection";
+import { SelectionProvider, SelectableBlock, SelectionMarquee } from "@/features/selection";
 import { BLOCK_RENDERERS, TocHeadingsContext } from "./block-renderers";
 
 const MENTIONABLES = [
@@ -107,6 +107,7 @@ export function PageDemo() {
     const sib = blocks[blocks.findIndex((x) => x.id === id) + dir];
     if (sib) focusBlock(sib.id, dir > 0 ? 0 : undefined);
   };
+  const surfaceRef = React.useRef<HTMLDivElement | null>(null);
   const removeMany = (ids: string[]) =>
     setBlocks((cur) => {
       const next = cur.filter((x) => !ids.includes(x.id));
@@ -138,8 +139,9 @@ export function PageDemo() {
           items={[{ id: "root", label: "Workspace" }, { id: "p2", label: "Projects" }, { id: "cur", label: title }]}
           onNavigate={() => {}}
         />
-        <BlockSelectionProvider onBulkDelete={removeMany}>
-        <div className="space-y-1">
+        <SelectionProvider onBulkDelete={removeMany}>
+        <div ref={surfaceRef} className="relative space-y-1">
+          <SelectionMarquee containerRef={surfaceRef} />
           {blocks.map((b) => (
             <SelectableBlock key={b.id} id={b.id} orderedIds={blockIds}>
             <NotionBlock
@@ -169,7 +171,7 @@ export function PageDemo() {
             onCreate={() => {}}
           />
         </div>
-        </BlockSelectionProvider>
+        </SelectionProvider>
       </NotionPage>
     </div>
     </TocHeadingsContext.Provider>
