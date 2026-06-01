@@ -7,6 +7,8 @@ import {
   InsertBlockButton,
   InlineFormatToolbar,
   MentionTypeahead,
+  BlockSelectionProvider,
+  SelectableBlock,
   PageActionsMenu,
   PageBreadcrumbs,
   Subpages,
@@ -106,6 +108,12 @@ export function PageDemo() {
     const sib = blocks[blocks.findIndex((x) => x.id === id) + dir];
     if (sib) focusBlock(sib.id, dir > 0 ? 0 : undefined);
   };
+  const removeMany = (ids: string[]) =>
+    setBlocks((cur) => {
+      const next = cur.filter((x) => !ids.includes(x.id));
+      return next.length ? next : [{ id: `b${Date.now()}`, type: "paragraph", text: "" }];
+    });
+  const blockIds = blocks.map((b) => b.id);
   const headings = React.useMemo(() => collectHeadings(blocks), [blocks]);
 
   return (
@@ -131,10 +139,11 @@ export function PageDemo() {
           items={[{ id: "root", label: "Workspace" }, { id: "p2", label: "Projects" }, { id: "cur", label: title }]}
           onNavigate={() => {}}
         />
+        <BlockSelectionProvider onBulkDelete={removeMany}>
         <div className="space-y-1">
           {blocks.map((b) => (
+            <SelectableBlock key={b.id} id={b.id} orderedIds={blockIds}>
             <NotionBlock
-              key={b.id}
               block={b}
               blockRenderers={BLOCK_RENDERERS}
               readOnly={locked}
@@ -148,6 +157,7 @@ export function PageDemo() {
               onMergeBack={() => mergeBack(b.id)}
               onFocusSibling={(dir) => focusSibling(b.id, dir)}
             />
+            </SelectableBlock>
           ))}
           {!locked && (
             <div className="pt-3">
@@ -160,6 +170,7 @@ export function PageDemo() {
             onCreate={() => {}}
           />
         </div>
+        </BlockSelectionProvider>
       </NotionPage>
     </div>
     </TocHeadingsContext.Provider>

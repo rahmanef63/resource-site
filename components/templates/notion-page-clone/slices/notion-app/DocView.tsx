@@ -5,6 +5,7 @@ import { GripVertical } from "lucide-react";
 import {
   NotionPage, NotionBlock, InsertBlockButton,
   SortableBlockList, PageActionsMenu, InlineFormatToolbar, MentionTypeahead,
+  BlockSelectionProvider, SelectableBlock,
   focusBlock, collectHeadings,
   type Block, type BlockType, type SortableBlockDragProps,
 } from "@/features/notion-shell";
@@ -100,6 +101,8 @@ export function DocView({ docId }: { docId: string }) {
     const sib = doc.blocks[i + dir];
     if (sib) focusBlock(sib.id, dir > 0 ? 0 : undefined);
   };
+  const handleBulkDelete = (ids: string[]) =>
+    ids.forEach((blockId) => dispatch({ type: "doc.block.remove", docId: doc.id, blockId }));
 
   const blockIds = doc.blocks.map((b) => b.id);
   const blockById = new Map(doc.blocks.map((b) => [b.id, b] as const));
@@ -138,6 +141,7 @@ export function DocView({ docId }: { docId: string }) {
         />
       }
     >
+      <BlockSelectionProvider onBulkDelete={handleBulkDelete}>
       <div className="pl-8">
         <SortableBlockList
           items={blockIds}
@@ -147,6 +151,7 @@ export function DocView({ docId }: { docId: string }) {
             const b = blockById.get(id);
             if (!b) return null;
             return (
+              <SelectableBlock id={b.id} orderedIds={blockIds}>
               <NotionBlock
                 block={b}
                 blockRenderers={NOTION_BLOCK_RENDERERS}
@@ -161,10 +166,12 @@ export function DocView({ docId }: { docId: string }) {
                 onFocusSibling={(dir) => handleFocusSibling(b.id, dir)}
                 dragHandle={<DragHandle drag={drag} />}
               />
+              </SelectableBlock>
             );
           }}
         </SortableBlockList>
       </div>
+      </BlockSelectionProvider>
       <div className="mt-3 flex items-center gap-2 border-t border-dashed border-border/60 pt-3 pl-8">
         <InsertBlockButton onInsert={handleAppend} label="Add block" />
       </div>

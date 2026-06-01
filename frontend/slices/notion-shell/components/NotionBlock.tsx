@@ -26,6 +26,7 @@ import { SlashMenu } from "./SlashMenu";
 import { decorateInPlace } from "../lib/inlineDecorator";
 import { decideBlockInput } from "../lib/blockInputHandler";
 import { handleBlockKeyDown } from "../lib/blockKeyHandler";
+import { handleBlockPaste } from "../lib/blockPaste";
 import { blockEditableClass } from "../lib/blockClassName";
 import { blockColorClass } from "../lib/blockColors";
 
@@ -123,7 +124,6 @@ export function NotionBlock({
     const el = e.currentTarget as HTMLElement;
     const text = el.innerText;
     const decision = decideBlockInput({ text, blockType: block.type, canTurnInto: !!onTurnInto, slashOpen });
-
     if (decision.kind === "markdownTrigger") {
       el.innerText = "";
       onUpdate?.({ text: "", ...(decision.patch ?? {}) });
@@ -169,6 +169,7 @@ export function NotionBlock({
               decorateInPlace(el, text, { hideMarkers: HEADING_TYPES.has(block.type) });
             }}
             onInput={handleInput}
+            onPaste={(e) => { if (!readOnly) handleBlockPaste(e, { block, onUpdate, onTurnInto, onInsertAfter }); }}
             onKeyDown={(e) => {
               if (readOnly) return;
               handleBlockKeyDown(e, {

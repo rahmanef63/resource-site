@@ -11,6 +11,22 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-01 — notion-shell: markdown paste + multi-block selection v0.19.0
+
+- **Markdown paste** (`blockPaste.ts`) — pasting multi-line text parses each
+  line into a real block (headings, lists, todo, quote, code, divider via the
+  same trigger map) instead of dumping raw text into one block. A single
+  plain line still uses the browser's default inline paste (keeps markers).
+  Wired with one `onPaste` on the NotionBlock editable.
+- **Multi-block selection** (`BlockSelectionProvider` + `SelectableBlock` +
+  `useBlockSelection`) — wrap the block list in the provider and each block in
+  `SelectableBlock`; thin top/bottom edge strips select on click (Shift =
+  range from the anchor, Cmd/Ctrl = toggle). Backspace/Delete with a
+  selection (focus outside any editable) deletes them all, Escape clears, and
+  a floating "N selected · Delete · Clear" toolbar offers the same. The host
+  supplies `onBulkDelete(ids)`. Both the preview and the notion-clone template
+  `DocView` wire it. notion-shell 0.18.0 → 0.19.0.
+
 ### 2026-06-01 — notion-shell: keyboard shortcuts + indent + @mentions + ToC v0.18.0
 
 After a full feature audit against notion-page-clone, closed the biggest
