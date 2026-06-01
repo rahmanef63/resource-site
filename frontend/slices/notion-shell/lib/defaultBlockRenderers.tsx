@@ -35,6 +35,10 @@ export interface DefaultBlockRendererOpts {
   code?: ComponentType<BlockRendererProps>;
   /** Adapter for block-type "equation" (e.g. wraps `@/features/equation`). */
   equation?: ComponentType<BlockRendererProps>;
+  /** Adapter for block-type "database" — an inline database surface (wraps
+   *  `@/features/notion-database`'s `<NotionDatabase>`; the host resolves
+   *  `block.databaseId` to its data). Composed at the app level. */
+  database?: ComponentType<BlockRendererProps>;
   /** Override the built-in image renderer. */
   image?: ComponentType<BlockRendererProps>;
   /** Override the built-in embed renderer. */
@@ -56,6 +60,7 @@ export function createDefaultBlockRenderers(
     button: ButtonBlock,
     ...(opts.code ? { code: opts.code } : {}),
     ...(opts.equation ? { equation: opts.equation } : {}),
+    ...(opts.database ? { database: opts.database } : {}),
   };
   // Toggle + columns render their children through the SAME registry
   // (incl. nesting), so they're bound after the object exists.

@@ -25,6 +25,7 @@ const DEFAULT_BLOCKS: Block[] = [
   { id: "b7", type: "table", text: "", tableHeader: true, tableRows: [["Feature", "Status"], ["Callout", "✓"], ["Table", "✓"]] },
   { id: "b8", type: "toggle", text: "Toggle — click the chevron; blocks nest inside", collapsed: false, children: [{ id: "b8a", type: "paragraph", text: "A nested child block." }, { id: "b8b", type: "callout", calloutKind: "note", text: "Even callouts nest." }] },
   { id: "bc", type: "columns2", text: "", columns: [[{ id: "bc1", type: "paragraph", text: "Left column." }], [{ id: "bc2", type: "callout", calloutKind: "tip", text: "Right column — blocks nest in each." }]] },
+  { id: "bd", type: "database", text: "", databaseId: "inline" },
   { id: "b9", type: "page", text: "A sub-page reference" },
   { id: "b10", type: "button", text: "Open docs", url: "https://resource.rahmanef.com" },
   { id: "b11", type: "divider", text: "" },

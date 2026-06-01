@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-05-31 — notion-shell: inline database block (page-features P7) v0.16.0
+
+- **Inline database block** — `createDefaultBlockRenderers` gains a
+  `database` adapter slot, so a `database` block can mount the full
+  `notion-database` surface inside a page. Composed at the app level
+  (slice-boundary: notion-shell can't import notion-database) — the preview
+  wires a `DatabaseAdapter` rendering `<NotionDatabase>` with a small inline
+  table. Block-renderer coverage now ~28/30 Notion types.
+
 ### 2026-05-31 — notion-shell: column layouts (page-features P6) v0.15.0
 
 - **Columns** — new block types `columns2` / `columns3` / `columns4` +
