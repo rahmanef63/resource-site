@@ -144,6 +144,71 @@ export type SliceEntry = {
 
 export const slices: SliceEntry[] = [
   {
+    slug: "file-explorer",
+    title: "File Explorer — Tree + CRUD + Breadcrumb",
+    category: "ui",
+    kind: "full",
+    version: "1.0.0",
+    tagline: "Backend-agnostic file manager: directory tree sidebar, breadcrumb nav, grid/list views, full CRUD.",
+    description:
+      "A complete, portable file-directory explorer: a collapsible folder TREE sidebar (lazy-loaded per dir), a responsive BREADCRUMB that auto-collapses to a dropdown, grid + list views with sort, multi-select, a right-click context menu, drag-and-drop (internal move + external file/folder upload), inline rename, and full CRUD (new folder, rename, cut/copy/paste, move, delete/trash, empty trash). The filesystem backend is INJECTED via a small FileExplorerAdapter (list/mkdir/remove/move/copy/upload/usage/rawUrl) — point it at a real API or use the bundled createMockAdapter() (a writable in-memory tree) so it works with zero backend. Opening a file fires an onOpenFile(path, entry) callback you wire to your own viewer/editor. Self-contained: imports only @/components/ui/* + @/lib/utils. Ported from os-vps (Topside) files manager. Pairs with appshell as the file-dir counterpart to a notion-style sidebar.",
+    source: "rahmanef63/os-vps",
+    slicePath: "frontend/slices/file-explorer",
+    convexPaths: [],
+    npm: ["lucide-react"],
+    shadcn: ["button", "input", "scroll-area", "separator", "dropdown-menu", "sheet"],
+    env: [],
+    peers: [],
+    tags: ["files", "file-manager", "explorer", "tree", "breadcrumb", "crud", "sidebar", "ui"],
+    resourceType: "module",
+    maturity: "stable",
+    compat: { enhances: ["appshell"] },
+    previewPath: "/preview/slices/file-explorer",
+    defaultView: "desktop",
+    agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. The slice is self-contained — imports only @/components/ui/* + @/lib/utils (cn). The filesystem backend is injected; nothing is hardcoded.
+
+STEP 1 — Install. \`npx rr add file-explorer\`. Ensure \`@/features/file-explorer\` resolves in tsconfig paths and Tailwind's content globs scan the slice folder.
+
+STEP 2 — shadcn + npm. \`npx shadcn@latest add button input scroll-area separator dropdown-menu sheet\`. npm: lucide-react.
+
+STEP 3 — Mount with an adapter. The component needs a FileExplorerAdapter. The fastest start is the bundled mock (a writable in-memory tree — real CRUD, no backend):
+\`\`\`tsx
+"use client";
+import { useMemo } from "react";
+import { FileExplorer, createMockAdapter } from "@/features/file-explorer";
+export default function Page() {
+  const adapter = useMemo(() => createMockAdapter(), []);
+  return (
+    <div className="h-dvh">
+      <FileExplorer adapter={adapter} rootLabel="Files" onOpenFile={(path) => console.log("open", path)} />
+    </div>
+  );
+}
+\`\`\`
+
+STEP 4 — Real backend. Implement FileExplorerAdapter against your API: { mode: "live"|"mock"|"readonly", list(path), mkdir(path), remove(path), move(from,to), copy(from,to), upload(dest,files), usage(), rawUrl(path) }. \`list\` returns { path, entries:[{name,kind,size,ext?}], roots?, parent? }. Set mode:"readonly" to show an inline notice instead of mutating. \`rawUrl(path)\` returns a bytes URL for image thumbnails (return "" to fall back to icons).
+
+The container owns the box — render <FileExplorer> inside something with a height (h-dvh / h-full). It self-provides its adapter context; no extra provider needed.`,
+    exampleCode: `"use client";
+import { useMemo } from "react";
+import { FileExplorer, createMockAdapter } from "@/features/file-explorer";
+
+export default function FileExplorerDemo() {
+  // createMockAdapter() = a writable in-memory tree, so create/rename/delete/
+  // move/upload all work with no backend. Swap for your own adapter in prod.
+  const adapter = useMemo(() => createMockAdapter(), []);
+  return (
+    <div className="h-dvh w-full">
+      <FileExplorer
+        adapter={adapter}
+        rootLabel="Files"
+        onOpenFile={(path, entry) => console.log("open file", entry.name, path)}
+      />
+    </div>
+  );
+}`,
+  },
+  {
     slug: "appshell",
     title: "AppShell — Desktop + Mobile OS Shell",
     category: "ui",

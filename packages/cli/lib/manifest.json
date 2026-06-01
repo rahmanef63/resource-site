@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-06-01T14:56:00.127Z",
+  "generatedAt": "2026-06-01T15:12:30.383Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -1357,6 +1357,27 @@
   "recipes": [],
   "features": [
     {
+      "slug": "file-explorer",
+      "title": "File Explorer — Tree + CRUD + Breadcrumb",
+      "category": "ui",
+      "description": "A complete, portable file-directory explorer: a collapsible folder TREE sidebar (lazy-loaded per dir), a responsive BREADCRUMB that auto-collapses to a dropdown, grid + list views with sort, multi-select, a right-click context menu, drag-and-drop (internal move + external file/folder upload), inline rename, and full CRUD (new folder, rename, cut/copy/paste, move, delete/trash, empty trash). The filesystem backend is INJECTED via a small FileExplorerAdapter (list/mkdir/remove/move/copy/upload/usage/rawUrl) — point it at a real API or use the bundled createMockAdapter() (a writable in-memory tree) so it works with zero backend. Opening a file fires an onOpenFile(path, entry) callback you wire to your own viewer/editor. Self-contained: imports only @/components/ui/* + @/lib/utils. Ported from os-vps (Topside) files manager. Pairs with appshell as the file-dir counterpart to a notion-style sidebar.",
+      "source": "rahmanef63/os-vps",
+      "install": "npx rahman-resources add file-explorer",
+      "npmPackages": [],
+      "exampleCode": "\"use client\";\nimport { useMemo } from \"react\";\nimport { FileExplorer, createMockAdapter } from \"@/features/file-explorer\";\n\nexport default function FileExplorerDemo() {\n  // createMockAdapter() = a writable in-memory tree, so create/rename/delete/\n  // move/upload all work with no backend. Swap for your own adapter in prod.\n  const adapter = useMemo(() => createMockAdapter(), []);\n  return (\n    <div className=\"h-dvh w-full\">\n      <FileExplorer\n        adapter={adapter}\n        rootLabel=\"Files\"\n        onOpenFile={(path, entry) => console.log(\"open file\", entry.name, path)}\n      />\n    </div>\n  );\n}",
+      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. The slice is self-contained — imports only @/components/ui/* + @/lib/utils (cn). The filesystem backend is injected; nothing is hardcoded.\n\nSTEP 1 — Install. `npx rr add file-explorer`. Ensure `@/features/file-explorer` resolves in tsconfig paths and Tailwind's content globs scan the slice folder.\n\nSTEP 2 — shadcn + npm. `npx shadcn@latest add button input scroll-area separator dropdown-menu sheet`. npm: lucide-react.\n\nSTEP 3 — Mount with an adapter. The component needs a FileExplorerAdapter. The fastest start is the bundled mock (a writable in-memory tree — real CRUD, no backend):\n```tsx\n\"use client\";\nimport { useMemo } from \"react\";\nimport { FileExplorer, createMockAdapter } from \"@/features/file-explorer\";\nexport default function Page() {\n  const adapter = useMemo(() => createMockAdapter(), []);\n  return (\n    <div className=\"h-dvh\">\n      <FileExplorer adapter={adapter} rootLabel=\"Files\" onOpenFile={(path) => console.log(\"open\", path)} />\n    </div>\n  );\n}\n```\n\nSTEP 4 — Real backend. Implement FileExplorerAdapter against your API: { mode: \"live\"|\"mock\"|\"readonly\", list(path), mkdir(path), remove(path), move(from,to), copy(from,to), upload(dest,files), usage(), rawUrl(path) }. `list` returns { path, entries:[{name,kind,size,ext?}], roots?, parent? }. Set mode:\"readonly\" to show an inline notice instead of mutating. `rawUrl(path)` returns a bytes URL for image thumbnails (return \"\" to fall back to icons).\n\nThe container owns the box — render <FileExplorer> inside something with a height (h-dvh / h-full). It self-provides its adapter context; no extra provider needed.",
+      "tags": [
+        "files",
+        "file-manager",
+        "explorer",
+        "tree",
+        "breadcrumb",
+        "crud",
+        "sidebar",
+        "ui"
+      ]
+    },
+    {
       "slug": "appshell",
       "title": "AppShell — Desktop + Mobile OS Shell",
       "category": "ui",
@@ -2327,6 +2348,42 @@
     }
   ],
   "slices": [
+    {
+      "slug": "file-explorer",
+      "title": "File Explorer — Tree + CRUD + Breadcrumb",
+      "category": "ui",
+      "kind": "full",
+      "version": "1.0.0",
+      "description": "A complete, portable file-directory explorer: a collapsible folder TREE sidebar (lazy-loaded per dir), a responsive BREADCRUMB that auto-collapses to a dropdown, grid + list views with sort, multi-select, a right-click context menu, drag-and-drop (internal move + external file/folder upload), inline rename, and full CRUD (new folder, rename, cut/copy/paste, move, delete/trash, empty trash). The filesystem backend is INJECTED via a small FileExplorerAdapter (list/mkdir/remove/move/copy/upload/usage/rawUrl) — point it at a real API or use the bundled createMockAdapter() (a writable in-memory tree) so it works with zero backend. Opening a file fires an onOpenFile(path, entry) callback you wire to your own viewer/editor. Self-contained: imports only @/components/ui/* + @/lib/utils. Ported from os-vps (Topside) files manager. Pairs with appshell as the file-dir counterpart to a notion-style sidebar.",
+      "source": "rahmanef63/os-vps",
+      "slicePath": "frontend/slices/file-explorer",
+      "convexPaths": [],
+      "npm": [
+        "lucide-react"
+      ],
+      "shadcn": [
+        "button",
+        "input",
+        "scroll-area",
+        "separator",
+        "dropdown-menu",
+        "sheet"
+      ],
+      "env": [],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "files",
+        "file-manager",
+        "explorer",
+        "tree",
+        "breadcrumb",
+        "crud",
+        "sidebar",
+        "ui"
+      ],
+      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. The slice is self-contained — imports only @/components/ui/* + @/lib/utils (cn). The filesystem backend is injected; nothing is hardcoded.\n\nSTEP 1 — Install. `npx rr add file-explorer`. Ensure `@/features/file-explorer` resolves in tsconfig paths and Tailwind's content globs scan the slice folder.\n\nSTEP 2 — shadcn + npm. `npx shadcn@latest add button input scroll-area separator dropdown-menu sheet`. npm: lucide-react.\n\nSTEP 3 — Mount with an adapter. The component needs a FileExplorerAdapter. The fastest start is the bundled mock (a writable in-memory tree — real CRUD, no backend):\n```tsx\n\"use client\";\nimport { useMemo } from \"react\";\nimport { FileExplorer, createMockAdapter } from \"@/features/file-explorer\";\nexport default function Page() {\n  const adapter = useMemo(() => createMockAdapter(), []);\n  return (\n    <div className=\"h-dvh\">\n      <FileExplorer adapter={adapter} rootLabel=\"Files\" onOpenFile={(path) => console.log(\"open\", path)} />\n    </div>\n  );\n}\n```\n\nSTEP 4 — Real backend. Implement FileExplorerAdapter against your API: { mode: \"live\"|\"mock\"|\"readonly\", list(path), mkdir(path), remove(path), move(from,to), copy(from,to), upload(dest,files), usage(), rawUrl(path) }. `list` returns { path, entries:[{name,kind,size,ext?}], roots?, parent? }. Set mode:\"readonly\" to show an inline notice instead of mutating. `rawUrl(path)` returns a bytes URL for image thumbnails (return \"\" to fall back to icons).\n\nThe container owns the box — render <FileExplorer> inside something with a height (h-dvh / h-full). It self-provides its adapter context; no extra provider needed."
+    },
     {
       "slug": "appshell",
       "title": "AppShell — Desktop + Mobile OS Shell",
