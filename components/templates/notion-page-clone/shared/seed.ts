@@ -139,6 +139,7 @@ const SEED_DOCS: NotionDoc[] = [
       { id: "w-feat-3",  type: "bullet",    text: "**Snippets** — admin-editable equations, code, grid demos for marketing surfaces" } satisfies NotionBlock,
       { id: "w-feat-4",  type: "bullet",    text: "**Admin panel** — users, audit log, AI config, analytics, webhooks, settings" } satisfies NotionBlock,
       { id: "w-divider3", type: "divider",  text: "" } satisfies NotionBlock,
+      { id: "w-toc",     type: "toc",        text: "" } satisfies NotionBlock,
       { id: "w-h2-gal",  type: "h2",        text: "Block gallery — every type is live" } satisfies NotionBlock,
       { id: "w-gal-tip", type: "paragraph", text: "Select any text for the format toolbar. Hover a block → ⋯ for colour, move, duplicate. Click the toggle chevron, edit a table cell, switch the callout icon." } satisfies NotionBlock,
       { id: "w-gal-tog", type: "toggle",    text: "Toggle — blocks nest inside (click the chevron)", collapsed: false, children: [

@@ -43,6 +43,10 @@ export interface DefaultBlockRendererOpts {
   image?: ComponentType<BlockRendererProps>;
   /** Override the built-in embed renderer. */
   embed?: ComponentType<BlockRendererProps>;
+  /** Adapter for block-type "toc" — a table of contents. The host reads its
+   *  own page headings and wraps `<TocBlock headings onJump>` (toc can't see
+   *  sibling blocks from inside the registry). Composed at the app level. */
+  toc?: ComponentType<BlockRendererProps>;
 }
 
 export function createDefaultBlockRenderers(
@@ -61,6 +65,7 @@ export function createDefaultBlockRenderers(
     ...(opts.code ? { code: opts.code } : {}),
     ...(opts.equation ? { equation: opts.equation } : {}),
     ...(opts.database ? { database: opts.database } : {}),
+    ...(opts.toc ? { toc: opts.toc } : {}),
   };
   // Toggle + columns render their children through the SAME registry
   // (incl. nesting), so they're bound after the object exists.

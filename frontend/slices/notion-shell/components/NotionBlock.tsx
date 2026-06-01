@@ -172,12 +172,12 @@ export function NotionBlock({
             onKeyDown={(e) => {
               if (readOnly) return;
               handleBlockKeyDown(e, {
-                block, slashOpen, closeSlash,
-                onTurnInto, onUpdate, onRemove,
-                onInsertAfter, onMergeBack, onFocusSibling,
+                block, slashOpen, closeSlash, onTurnInto, onUpdate, onRemove,
+                onDuplicate, onMoveUp, onMoveDown, onInsertAfter, onMergeBack, onFocusSibling,
               });
             }}
             data-placeholder={placeholder}
+            style={block.indent ? { marginLeft: block.indent * 24 } : undefined}
             className={blockEditableClass(block.type, className)}
           />
         </PopoverAnchor>

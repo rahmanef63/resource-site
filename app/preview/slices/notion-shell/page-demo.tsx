@@ -6,15 +6,23 @@ import {
   NotionBlock,
   InsertBlockButton,
   InlineFormatToolbar,
+  MentionTypeahead,
   PageActionsMenu,
   PageBreadcrumbs,
   Subpages,
   focusBlock,
+  collectHeadings,
   type Block,
   type BlockType,
   type PageFont,
 } from "@/features/notion-shell";
-import { BLOCK_RENDERERS } from "./block-renderers";
+import { BLOCK_RENDERERS, TocHeadingsContext } from "./block-renderers";
+
+const MENTIONABLES = [
+  { id: "s1", label: "Meeting notes", href: "#meeting-notes", icon: "📝" },
+  { id: "s2", label: "Spec draft", href: "#spec-draft", icon: "📄" },
+  { id: "p2", label: "Projects", href: "#projects", icon: "📁" },
+];
 
 const DEFAULT_BLOCKS: Block[] = [
   { id: "b1", type: "h2", text: "Hello from NotionPage" },
@@ -26,6 +34,8 @@ const DEFAULT_BLOCKS: Block[] = [
   { id: "b7", type: "table", text: "", tableHeader: true, tableRows: [["Feature", "Status"], ["Callout", "✓"], ["Table", "✓"]] },
   { id: "b8", type: "toggle", text: "Toggle — click the chevron; blocks nest inside", collapsed: false, children: [{ id: "b8a", type: "paragraph", text: "A nested child block." }, { id: "b8b", type: "callout", calloutKind: "note", text: "Even callouts nest." }] },
   { id: "bc", type: "columns2", text: "", columns: [[{ id: "bc1", type: "paragraph", text: "Left column." }], [{ id: "bc2", type: "callout", calloutKind: "tip", text: "Right column — blocks nest in each." }]] },
+  { id: "btoc", type: "toc", text: "" },
+  { id: "bment", type: "paragraph", text: 'Type "@" to mention a page (try @spec).' },
   { id: "bd", type: "database", text: "", databaseId: "inline" },
   { id: "b9", type: "page", text: "A sub-page reference" },
   { id: "b10", type: "button", text: "Open docs", url: "https://resource.rahmanef.com" },
@@ -96,10 +106,13 @@ export function PageDemo() {
     const sib = blocks[blocks.findIndex((x) => x.id === id) + dir];
     if (sib) focusBlock(sib.id, dir > 0 ? 0 : undefined);
   };
+  const headings = React.useMemo(() => collectHeadings(blocks), [blocks]);
 
   return (
+    <TocHeadingsContext.Provider value={headings}>
     <div className="h-[28rem] overflow-y-auto rounded-lg border border-border bg-background">
       <InlineFormatToolbar />
+      <MentionTypeahead mentionables={MENTIONABLES} />
       <NotionPage
         icon={icon} title={title}
         onIconChange={setIcon} onTitleChange={setTitle}
@@ -149,5 +162,6 @@ export function PageDemo() {
         </div>
       </NotionPage>
     </div>
+    </TocHeadingsContext.Provider>
   );
 }

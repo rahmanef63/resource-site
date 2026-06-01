@@ -11,6 +11,33 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-01 — notion-shell: keyboard shortcuts + indent + @mentions + ToC v0.18.0
+
+After a full feature audit against notion-page-clone, closed the biggest
+editor-core gaps (the pure, no-backend ones):
+
+- **Keyboard shortcuts** (`blockKeyHandler.ts`): **Shift+Enter** soft line
+  break; **Tab / Shift+Tab** indent/outdent list items (persisted on
+  `block.indent`, rendered as left margin); **Cmd/Ctrl+B/I/E** and
+  **Cmd/Ctrl+Shift+X** wrap selection bold/italic/code/strike;
+  **Cmd/Ctrl+D** duplicate; **Cmd/Ctrl+Shift+↑/↓** move block;
+  **Cmd/Ctrl+Alt+1/2/3** → h1/h2/h3; **Cmd/Ctrl+Shift+7/8** → todo/bullet.
+  Enter now also carries the list indent into the continued item.
+- **`MentionTypeahead`** — `@`-trigger page/person mention popover. Mount
+  once (like `InlineFormatToolbar`); props-driven `mentionables` list;
+  arrow/Enter/Tab insert a markdown link over the `@query`. Zero NotionBlock
+  wiring — it edits the focused contentEditable in place.
+- **`TocBlock` + `toc` renderer slot** — a real table of contents.
+  `collectHeadings(blocks)` walks h1–h3 (incl. toggle/column children); the
+  host wraps a `toc` adapter that reads headings from context (stable
+  identity → no caret-dropping remount) and jumps via `focusBlock`.
+- **`wrapSelection`** extracted to `lib/selectionFormat.ts`, shared by the
+  toolbar and the keyboard shortcuts.
+- **Hosts wired** — preview `page-demo` (demo mentionables + ToC block) and
+  the notion-clone template `DocView` (mentions from the page list, ToC from
+  `doc.blocks`, seed welcome doc gets a live ToC). notion-shell
+  0.17.0 → 0.18.0.
+
 ### 2026-06-01 — notion-shell: Notion-canonical Enter / Backspace / Arrow editing keys v0.17.0
 
 - **The real "nothing changed" bug.** The editor had NO Enter or merge

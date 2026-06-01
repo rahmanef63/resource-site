@@ -7,11 +7,14 @@
  *  the editor callout/table/divider/nested-toggle/columns/video/audio/
  *  page/button/database/colour — not the old hand-rolled 7-renderer stub. */
 
-import { useState, type ComponentType } from "react";
+import { createContext, useContext, useState, type ComponentType } from "react";
 import {
   createDefaultBlockRenderers,
+  TocBlock,
+  focusBlock,
   type BlockRenderers,
   type BlockRendererProps,
+  type TocHeading,
 } from "@/features/notion-shell";
 import { EquationBlock, CodeBlock } from "@/features/notion-blocks";
 import {
@@ -91,8 +94,17 @@ function DatabaseRenderer(_props: BlockRendererProps) {
   );
 }
 
+/** ToC reads live headings from context so the stable adapter never remounts
+ *  (rebuilding the registry would drop caret focus while typing). */
+export const TocHeadingsContext = createContext<TocHeading[]>([]);
+function TocRenderer(_props: BlockRendererProps) {
+  const headings = useContext(TocHeadingsContext);
+  return <TocBlock headings={headings} onJump={(id) => focusBlock(id, 0)} />;
+}
+
 export const NOTION_BLOCK_RENDERERS: BlockRenderers = createDefaultBlockRenderers({
   code: CodeRenderer as ComponentType<BlockRendererProps>,
   equation: EquationRenderer as ComponentType<BlockRendererProps>,
   database: DatabaseRenderer as ComponentType<BlockRendererProps>,
+  toc: TocRenderer as ComponentType<BlockRendererProps>,
 });

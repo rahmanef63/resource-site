@@ -8,8 +8,11 @@
 import * as React from "react";
 import {
   createDefaultBlockRenderers,
+  TocBlock,
+  focusBlock,
   type BlockRendererProps,
   type BlockRenderers,
+  type TocHeading,
 } from "@/features/notion-shell";
 import { CodeBlock } from "@/features/code-block";
 import { EquationBlock } from "@/features/equation";
@@ -67,8 +70,17 @@ function DatabaseAdapter(_props: BlockRendererProps) {
   );
 }
 
+/** ToC reads live page headings from context so the stable adapter never
+ *  remounts (rebuilding the registry would drop caret focus mid-type). */
+export const TocHeadingsContext = React.createContext<TocHeading[]>([]);
+function TocAdapter(_props: BlockRendererProps) {
+  const headings = React.useContext(TocHeadingsContext);
+  return <TocBlock headings={headings} onJump={(id) => focusBlock(id, 0)} />;
+}
+
 export const BLOCK_RENDERERS: BlockRenderers = createDefaultBlockRenderers({
   code: CodeAdapter,
   equation: EquationAdapter,
   database: DatabaseAdapter,
+  toc: TocAdapter,
 });

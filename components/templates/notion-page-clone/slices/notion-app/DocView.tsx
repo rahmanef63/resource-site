@@ -4,13 +4,14 @@ import * as React from "react";
 import { GripVertical } from "lucide-react";
 import {
   NotionPage, NotionBlock, InsertBlockButton,
-  SortableBlockList, PageActionsMenu, InlineFormatToolbar, focusBlock,
+  SortableBlockList, PageActionsMenu, InlineFormatToolbar, MentionTypeahead,
+  focusBlock, collectHeadings,
   type Block, type BlockType, type SortableBlockDragProps,
 } from "@/features/notion-shell";
 import { DynamicIcon, IconPickerPopover } from "@/features/icon-picker";
 import { Button } from "@/components/ui/button";
 import { useDocs, useStore } from "../../shared/store";
-import { NOTION_BLOCK_RENDERERS } from "./block-renderers";
+import { NOTION_BLOCK_RENDERERS, TocHeadingsContext } from "./block-renderers";
 
 function renderIcon(icon: string, className?: string) {
   return <DynamicIcon value={icon} className={className} />;
@@ -102,8 +103,19 @@ export function DocView({ docId }: { docId: string }) {
 
   const blockIds = doc.blocks.map((b) => b.id);
   const blockById = new Map(doc.blocks.map((b) => [b.id, b] as const));
+  const headings = React.useMemo(() => collectHeadings(doc.blocks), [doc.blocks]);
+  const mentionables = docs
+    .filter((d) => !d.trashed && d.id !== doc.id)
+    .slice(0, 50)
+    .map((d) => ({
+      id: d.id,
+      label: d.title || "Untitled",
+      href: `#${d.id}`,
+      icon: /^[A-Za-z]/.test(d.icon ?? "") ? undefined : d.icon,
+    }));
 
   return (
+    <TocHeadingsContext.Provider value={headings}>
     <NotionPage
       icon={doc.icon}
       title={doc.title}
@@ -157,6 +169,8 @@ export function DocView({ docId }: { docId: string }) {
         <InsertBlockButton onInsert={handleAppend} label="Add block" />
       </div>
       <InlineFormatToolbar />
+      <MentionTypeahead mentionables={mentionables} />
     </NotionPage>
+    </TocHeadingsContext.Provider>
   );
 }

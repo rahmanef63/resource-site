@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { Bold, Italic, Strikethrough, Code, Link as LinkIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { wrapSelection } from "../lib/selectionFormat";
 
 interface Pos { top: number; left: number }
 
@@ -42,14 +43,7 @@ export function InlineFormatToolbar({ className }: { className?: string }) {
 
   if (!pos) return null;
 
-  const wrap = (prefix: string, suffix = prefix) => {
-    const sel = window.getSelection();
-    if (!sel || sel.isCollapsed) return;
-    const selected = sel.toString();
-    // execCommand is deprecated but the de-facto contentEditable mutation
-    // API — it fires `input`, so the host block re-reads + re-decorates.
-    document.execCommand("insertText", false, `${prefix}${selected}${suffix}`);
-  };
+  const wrap = wrapSelection;
 
   const link = () => {
     const sel = window.getSelection();
