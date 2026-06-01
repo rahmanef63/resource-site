@@ -11,6 +11,26 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-01 — notion-clone template: adopt full block-renderer registry (page-features wiring)
+
+- **Root cause of "no change in rr"** — the notion-clone *template* (the
+  `notion-page-clone-os` preview the user actually browses) still rendered
+  blocks through a stale 7-renderer stub (`NOTION_BLOCK_RENDERERS`) whose
+  toggle literally said *"wire nested blocks in a future wave"* and which had
+  no columns / table / video / audio / page / button / database / colour. All
+  the P1–P7 notion-shell work never reached it.
+- **Fix** — template `block-renderers.tsx` now builds its registry via
+  `createDefaultBlockRenderers({ code, equation, database })` (composing the
+  sibling `notion-blocks` + `notion-database` slices at the template level,
+  same slice-boundary pattern as the preview). The os editor now renders all
+  ~28 block types live, with nested toggles/columns and block colour.
+- **`DocView`** — mounts `InlineFormatToolbar` (select-text formatting) and
+  wires `onMoveUp` / `onMoveDown` to `doc.block.reorder`, so the block ⋯ menu
+  can move blocks without dragging.
+- **Welcome seed** — added a live "Block gallery" section (toggle-with-
+  children, 2-column layout, editable table, equation, button) so the rich
+  blocks are visible on first load instead of only after inserting them.
+
 ### 2026-05-31 — notion-shell: inline database block (page-features P7) v0.16.0
 
 - **Inline database block** — `createDefaultBlockRenderers` gains a

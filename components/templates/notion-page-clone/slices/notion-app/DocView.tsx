@@ -4,7 +4,7 @@ import * as React from "react";
 import { GripVertical } from "lucide-react";
 import {
   NotionPage, NotionBlock, InsertBlockButton,
-  SortableBlockList, PageActionsMenu,
+  SortableBlockList, PageActionsMenu, InlineFormatToolbar,
   type Block, type BlockType, type SortableBlockDragProps,
 } from "@/features/notion-shell";
 import { DynamicIcon, IconPickerPopover } from "@/features/icon-picker";
@@ -75,6 +75,12 @@ export function DocView({ docId }: { docId: string }) {
     const block: Block = { id: `b-${Date.now().toString(36)}`, type, text: "" };
     dispatch({ type: "doc.block.append", docId: doc.id, block });
   };
+  const handleMove = (blockId: string, dir: -1 | 1) => {
+    const from = doc.blocks.findIndex((b) => b.id === blockId);
+    const to = from + dir;
+    if (from < 0 || to < 0 || to >= doc.blocks.length) return;
+    dispatch({ type: "doc.block.reorder", docId: doc.id, from, to });
+  };
 
   const blockIds = doc.blocks.map((b) => b.id);
   const blockById = new Map(doc.blocks.map((b) => [b.id, b] as const));
@@ -118,6 +124,8 @@ export function DocView({ docId }: { docId: string }) {
                 onRemove={() => handleBlockRemove(b.id)}
                 onDuplicate={() => handleBlockDuplicate(b.id)}
                 onTurnInto={(type) => handleBlockTurnInto(b.id, type)}
+                onMoveUp={() => handleMove(b.id, -1)}
+                onMoveDown={() => handleMove(b.id, 1)}
                 dragHandle={<DragHandle drag={drag} />}
               />
             );
@@ -127,6 +135,7 @@ export function DocView({ docId }: { docId: string }) {
       <div className="mt-3 flex items-center gap-2 border-t border-dashed border-border/60 pt-3 pl-8">
         <InsertBlockButton onInsert={handleAppend} label="Add block" />
       </div>
+      <InlineFormatToolbar />
     </NotionPage>
   );
 }
