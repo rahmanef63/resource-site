@@ -57,5 +57,28 @@ export function useDocOps(
 
   const setDocSize = useCallback((w: number, h: number) => setDoc((d) => ({ ...d, width: w, height: h })), [setDoc]);
 
-  return { addLayer, removeLayer, duplicateLayer, reorder, raise: (id: string) => move(id, 1), lower: (id: string) => move(id, -1), setDocSize };
+  // Crop: resize the doc to (w,h) anchored at (x,y), shift every layer by (-x,-y),
+  // and re-bake each paint layer's pixels into a new (w,h) canvas at the offset.
+  const applyCrop = useCallback((x: number, y: number, w: number, h: number) => {
+    setDoc((d) => {
+      for (const l of d.layers) {
+        if (l.kind !== "paint") continue;
+        const old = canvases.current.get(l.id);
+        if (!old) continue;
+        const nc = document.createElement("canvas");
+        nc.width = w;
+        nc.height = h;
+        nc.getContext("2d")?.drawImage(old, -x, -y);
+        canvases.current.set(l.id, nc);
+      }
+      return {
+        ...d,
+        width: Math.round(w),
+        height: Math.round(h),
+        layers: d.layers.map((l) => ({ ...l, t: { ...l.t, x: l.t.x - x, y: l.t.y - y } })),
+      };
+    });
+  }, [setDoc, canvases]);
+
+  return { addLayer, removeLayer, duplicateLayer, reorder, raise: (id: string) => move(id, 1), lower: (id: string) => move(id, -1), setDocSize, applyCrop };
 }

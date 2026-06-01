@@ -60,6 +60,8 @@ type Ctx = {
   reorder: (from: number, to: number) => void;
   raise: (id: string) => void;
   lower: (id: string) => void;
+  /** Crop the document to (x,y,w,h): resize + shift layers + re-bake paint pixels. */
+  applyCrop: (x: number, y: number, w: number, h: number) => void;
   /** Record a brush/eraser stroke (before+after PNG of the layer canvas). */
   recordPaint: (id: string, before: string, after: string) => void;
   /** Editable-project (doc + paint pixels) save/restore — Save/Open/autosave. */
@@ -114,7 +116,7 @@ export function EditorProvider({ initialDoc, children }: { initialDoc?: Doc; chi
     [setDoc],
   );
   const { update, patchStyle, patchShadow, patchGlow, patchStroke, patchAdj } = useLayerMutators(mapLayer);
-  const { addLayer, removeLayer, duplicateLayer, reorder, raise, lower, setDocSize } = useDocOps(setDoc, canvases, setSelectedId);
+  const { addLayer, removeLayer, duplicateLayer, reorder, raise, lower, setDocSize, applyCrop } = useDocOps(setDoc, canvases, setSelectedId);
   const recordPaint = useCallback((id: string, before: string, after: string) => push({ type: "paint", id, before, after }), [push]);
 
   const canvasFor = useCallback((id: string, w: number, h: number) => {
@@ -141,9 +143,9 @@ export function EditorProvider({ initialDoc, children }: { initialDoc?: Doc; chi
     select: setSelectedId, setTool, setZoom, setPan,
     setBrush: (b) => setBrushState((s) => ({ ...s, ...b })),
     setDocSize, update, patchStyle, patchShadow, patchGlow, patchStroke, patchAdj,
-    addLayer, removeLayer, duplicateLayer, reorder, raise, lower,
+    addLayer, removeLayer, duplicateLayer, reorder, raise, lower, applyCrop,
     recordPaint, exportProject, loadProject, undo, redo,
-  }), [doc, selectedId, tool, zoom, pan, brush, canUndo, canRedo, rev, canvasFor, setDocSize, update, patchStyle, patchShadow, patchGlow, patchStroke, patchAdj, addLayer, removeLayer, duplicateLayer, reorder, raise, lower, recordPaint, exportProject, loadProject, undo, redo]);
+  }), [doc, selectedId, tool, zoom, pan, brush, canUndo, canRedo, rev, canvasFor, setDocSize, update, patchStyle, patchShadow, patchGlow, patchStroke, patchAdj, addLayer, removeLayer, duplicateLayer, reorder, raise, lower, applyCrop, recordPaint, exportProject, loadProject, undo, redo]);
 
   return <EditorContext.Provider value={value}>{children}</EditorContext.Provider>;
 }

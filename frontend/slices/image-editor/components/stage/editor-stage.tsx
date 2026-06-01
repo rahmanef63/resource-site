@@ -2,13 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Stage, Layer as KLayer, Rect, Transformer } from "react-konva";
-import { Minus, Plus, Maximize } from "lucide-react";
 import type Konva from "konva";
 import type { KonvaEventObject } from "konva/lib/Node";
 import { useEditor } from "../../lib/store";
 import { useStageView } from "../../hooks/use-stage-view";
 import { LayerNode } from "./layer-node";
 import { TextOverlay } from "./text-overlay";
+import { ZoomHud } from "./zoom-hud";
+import { CropOverlay } from "./crop-overlay";
 
 type AnyNode = Konva.Node | null;
 
@@ -16,7 +17,7 @@ type AnyNode = Konva.Node | null;
 // scaled by `zoom`. Wheel/pinch zoom, hand/space drag-pan, fit-to-screen (HUD).
 // A Transformer attaches to the selection when the Move tool is active.
 export function EditorStage() {
-  const { doc, zoom, pan, tool, selectedId, select, setPan, setZoom, setBrush, update, stageRef } = useEditor();
+  const { doc, zoom, pan, tool, selectedId, select, setPan, setZoom, setBrush, setTool, update, applyCrop, stageRef } = useEditor();
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const [size, setSize] = useState({ w: 800, h: 600 });
   const [editId, setEditId] = useState<string | null>(null);
@@ -122,21 +123,17 @@ export function EditorStage() {
         </KLayer>
       </Stage>
 
-      {/* Zoom HUD */}
-      <div className="absolute bottom-3 left-3 flex items-center gap-1 rounded-lg border border-border bg-card/90 px-1 py-0.5 shadow-sm backdrop-blur">
-        <button type="button" aria-label="Zoom out" onClick={() => zoomStep(-1)} className="grid size-7 place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground">
-          <Minus className="size-4" />
-        </button>
-        <button type="button" onClick={() => setZoom(1)} className="w-12 text-center text-xs tabular-nums text-muted-foreground hover:text-foreground">
-          {Math.round(zoom * 100)}%
-        </button>
-        <button type="button" aria-label="Zoom in" onClick={() => zoomStep(1)} className="grid size-7 place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground">
-          <Plus className="size-4" />
-        </button>
-        <button type="button" aria-label="Fit to screen" onClick={fit} className="grid size-7 place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground">
-          <Maximize className="size-4" />
-        </button>
-      </div>
+      <ZoomHud zoom={zoom} onOut={() => zoomStep(-1)} onIn={() => zoomStep(1)} onReset={() => setZoom(1)} onFit={fit} />
+
+      {tool === "crop" && (
+        <CropOverlay
+          doc={doc}
+          zoom={zoom}
+          pan={pan}
+          onApply={(x, y, w, h) => { applyCrop(x, y, w, h); setTool("move"); }}
+          onCancel={() => setTool("move")}
+        />
+      )}
 
       {editing && (
         <TextOverlay
