@@ -31,6 +31,7 @@
     "components/stage/mask-surface.tsx",
     "components/stage/masked-group.tsx",
     "components/stage/paint-layer.tsx",
+    "components/stage/selection-overlay.tsx",
     "components/stage/text-overlay.tsx",
     "components/stage/zoom-hud.tsx",
     "components/tool-options-bar.tsx",

@@ -2,6 +2,7 @@
 
 import {
   MousePointer2,
+  BoxSelect,
   Brush,
   Eraser,
   Pipette,
@@ -27,6 +28,7 @@ export function ToolRail({ orientation = "vertical" }: { orientation?: "vertical
 
   const modes: { id: Tool; icon: LucideIcon; key: string; label: string }[] = [
     { id: "move", icon: MousePointer2, key: "V", label: "Move" },
+    { id: "select", icon: BoxSelect, key: "M", label: "Select" },
     { id: "brush", icon: Brush, key: "B", label: "Brush" },
     { id: "eraser", icon: Eraser, key: "E", label: "Eraser" },
     { id: "eyedropper", icon: Pipette, key: "I", label: "Eyedropper" },

@@ -121,6 +121,7 @@ export type Tool =
   | "ellipse"
   | "eyedropper"
   | "crop"
+  | "select"
   | "hand";
 
 export type Doc = {

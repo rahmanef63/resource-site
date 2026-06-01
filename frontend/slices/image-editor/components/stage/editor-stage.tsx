@@ -10,6 +10,7 @@ import { LayerNode } from "./layer-node";
 import { TextOverlay } from "./text-overlay";
 import { ZoomHud } from "./zoom-hud";
 import { CropOverlay } from "./crop-overlay";
+import { SelectionOverlay } from "./selection-overlay";
 import { MaskSurface } from "./mask-surface";
 import { FilteredGroup } from "./filtered-group";
 
@@ -151,6 +152,8 @@ export function EditorStage() {
           onCancel={() => setTool("move")}
         />
       )}
+
+      {tool === "select" && <SelectionOverlay onDone={() => setTool("move")} />}
 
       {editing && (
         <TextOverlay

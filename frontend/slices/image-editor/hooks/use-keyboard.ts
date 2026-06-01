@@ -3,8 +3,9 @@
 import { useEffect } from "react";
 import { useEditor } from "../lib/store";
 
-const TOOL_KEYS: Record<string, "move" | "brush" | "eraser" | "eyedropper" | "hand"> = {
+const TOOL_KEYS: Record<string, "move" | "select" | "brush" | "eraser" | "eyedropper" | "hand"> = {
   v: "move",
+  m: "select",
   b: "brush",
   e: "eraser",
   i: "eyedropper",
