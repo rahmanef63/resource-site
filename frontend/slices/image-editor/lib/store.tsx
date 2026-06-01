@@ -25,7 +25,8 @@ import { blankDoc } from "./model";
 import { useLayerMutators } from "./layer-mutators";
 import { useDocOps } from "./doc-ops";
 import { useHistory } from "./history";
-import { buildProject, restorePaint, type Project } from "./project";
+import { useProjectIO, type Project } from "./project";
+import { useMaskOps } from "./mask";
 
 export type Brush = { size: number; color: string; opacity: number; hardness: number };
 export type { Pan };
@@ -40,12 +41,17 @@ type Ctx = {
   brush: Brush;
   canUndo: boolean;
   canRedo: boolean;
+  /** History revision — bumps on every change; masked-group caches off it. */
+  version: number;
+  /** Id of the layer whose MASK the brush currently paints (null = none). */
+  maskEditId: string | null;
   stageRef: React.MutableRefObject<Konva.Stage | null>;
   canvasFor: (id: string, w: number, h: number) => HTMLCanvasElement;
   select: (id: string | null) => void;
   setTool: (t: Tool) => void;
   setZoom: (z: number) => void;
   setPan: (p: Pan) => void;
+  setMaskEdit: (id: string | null) => void;
   setBrush: (b: Partial<Brush>) => void;
   setDocSize: (w: number, h: number) => void;
   update: (id: string, patch: Partial<Layer>) => void;
@@ -62,6 +68,9 @@ type Ctx = {
   lower: (id: string) => void;
   /** Crop the document to (x,y,w,h): resize + shift layers + re-bake paint pixels. */
   applyCrop: (x: number, y: number, w: number, h: number) => void;
+  /** Add / remove a layer mask (doc-aligned alpha buffer). */
+  addMask: (id: string) => void;
+  removeMask: (id: string) => void;
   /** Record a brush/eraser stroke (before+after PNG of the layer canvas). */
   recordPaint: (id: string, before: string, after: string) => void;
   /** Editable-project (doc + paint pixels) save/restore — Save/Open/autosave. */
@@ -80,6 +89,7 @@ export function EditorProvider({ initialDoc, children }: { initialDoc?: Doc; chi
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState<Pan>({ x: 0, y: 0 });
   const [brush, setBrushState] = useState<Brush>({ size: 28, color: "#111827", opacity: 1, hardness: 0.8 });
+  const [maskEditId, setMaskEditId] = useState<string | null>(null);
   const canvases = useRef<Map<string, HTMLCanvasElement>>(new Map());
   const stageRef = useRef<Konva.Stage | null>(null);
 
@@ -130,22 +140,18 @@ export function EditorProvider({ initialDoc, children }: { initialDoc?: Doc; chi
     return c;
   }, []);
 
-  const exportProject = useCallback(() => buildProject(doc, canvases.current), [doc]);
-  const loadProject = useCallback((p: Project) => {
-    setDocState(p.doc);
-    setSelectedId(p.doc.layers.at(-1)?.id ?? null);
-    restorePaint(p, canvasFor, () => stageRef.current?.draw());
-  }, [canvasFor]);
+  const { exportProject, loadProject } = useProjectIO({ doc, canvases, canvasFor, setDoc: setDocState, setSelected: setSelectedId, stageRef });
+  const { addMask, removeMask } = useMaskOps({ canvasFor, canvases, update, docSize: () => ({ w: doc.width, h: doc.height }), setMaskEdit: setMaskEditId });
 
   const value = useMemo<Ctx>(() => ({
     doc, selectedId, selected: doc.layers.find((l) => l.id === selectedId) ?? null,
-    tool, zoom, pan, brush, canUndo, canRedo, stageRef, canvasFor,
-    select: setSelectedId, setTool, setZoom, setPan,
+    tool, zoom, pan, brush, canUndo, canRedo, version: rev, maskEditId, stageRef, canvasFor,
+    select: setSelectedId, setTool, setZoom, setPan, setMaskEdit: setMaskEditId,
     setBrush: (b) => setBrushState((s) => ({ ...s, ...b })),
     setDocSize, update, patchStyle, patchShadow, patchGlow, patchStroke, patchAdj,
-    addLayer, removeLayer, duplicateLayer, reorder, raise, lower, applyCrop,
+    addLayer, removeLayer, duplicateLayer, reorder, raise, lower, applyCrop, addMask, removeMask,
     recordPaint, exportProject, loadProject, undo, redo,
-  }), [doc, selectedId, tool, zoom, pan, brush, canUndo, canRedo, rev, canvasFor, setDocSize, update, patchStyle, patchShadow, patchGlow, patchStroke, patchAdj, addLayer, removeLayer, duplicateLayer, reorder, raise, lower, applyCrop, recordPaint, exportProject, loadProject, undo, redo]);
+  }), [doc, selectedId, tool, zoom, pan, brush, canUndo, canRedo, rev, maskEditId, canvasFor, setDocSize, update, patchStyle, patchShadow, patchGlow, patchStroke, patchAdj, addLayer, removeLayer, duplicateLayer, reorder, raise, lower, applyCrop, addMask, removeMask, recordPaint, exportProject, loadProject, undo, redo]);
 
   return <EditorContext.Provider value={value}>{children}</EditorContext.Provider>;
 }

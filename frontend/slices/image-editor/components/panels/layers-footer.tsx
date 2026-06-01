@@ -1,6 +1,6 @@
 "use client"
 
-import { Brush, Copy, Crop, Plus, Square, Trash2, Type } from "lucide-react"
+import { Brush, Copy, Crop, Plus, Square, SquareDashed, Trash2, Type } from "lucide-react"
 
 import {
   DropdownMenu,
@@ -20,8 +20,14 @@ import { useEditor } from "../../lib/store"
 import { createLayer } from "../../lib/model"
 
 export function LayersFooter() {
-  const { doc, selectedId, addLayer, removeLayer, setTool, duplicateLayer } =
+  const { doc, selected, selectedId, addLayer, removeLayer, setTool, duplicateLayer, addMask, setMaskEdit, maskEditId } =
     useEditor()
+
+  const onMask = () => {
+    if (!selected) return
+    if (selected.mask) setMaskEdit(maskEditId === selected.id ? null : selected.id)
+    else addMask(selected.id)
+  }
 
   const newPaint = () =>
     addLayer(
@@ -107,6 +113,22 @@ export function LayersFooter() {
           </Button>
         </TooltipTrigger>
         <TooltipContent>Crop</TooltipContent>
+      </Tooltip>
+
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            size="icon"
+            variant="ghost"
+            className={cn("size-7", selected?.mask && maskEditId === selected.id && "bg-primary text-primary-foreground")}
+            aria-label="Layer mask"
+            disabled={!selected}
+            onClick={onMask}
+          >
+            <SquareDashed className="size-4" />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>{selected?.mask ? "Edit mask" : "Add mask"}</TooltipContent>
       </Tooltip>
 
       <div className="flex-1" />

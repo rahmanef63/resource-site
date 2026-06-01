@@ -10,6 +10,7 @@ import { LayerNode } from "./layer-node";
 import { TextOverlay } from "./text-overlay";
 import { ZoomHud } from "./zoom-hud";
 import { CropOverlay } from "./crop-overlay";
+import { MaskSurface } from "./mask-surface";
 
 type AnyNode = Konva.Node | null;
 
@@ -17,7 +18,7 @@ type AnyNode = Konva.Node | null;
 // scaled by `zoom`. Wheel/pinch zoom, hand/space drag-pan, fit-to-screen (HUD).
 // A Transformer attaches to the selection when the Move tool is active.
 export function EditorStage() {
-  const { doc, zoom, pan, tool, selectedId, select, setPan, setZoom, setBrush, setTool, update, applyCrop, stageRef } = useEditor();
+  const { doc, zoom, pan, tool, selectedId, select, setPan, setZoom, setBrush, setTool, update, applyCrop, maskEditId, stageRef } = useEditor();
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const [size, setSize] = useState({ w: 800, h: 600 });
   const [editId, setEditId] = useState<string | null>(null);
@@ -108,6 +109,7 @@ export function EditorStage() {
               registerNode={(id, n) => { if (n) nodes.current.set(id, n); else nodes.current.delete(id); }}
             />
           ))}
+          {maskEditId && <MaskSurface layerId={maskEditId} />}
         </KLayer>
         <KLayer>
           <Transformer

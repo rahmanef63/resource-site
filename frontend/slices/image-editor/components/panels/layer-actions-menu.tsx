@@ -7,6 +7,7 @@ import {
   Lock,
   MoreVertical,
   Pencil,
+  SquareDashed,
   Trash2,
   Unlock,
 } from "lucide-react"
@@ -31,7 +32,7 @@ export function LayerActionsMenu({
   layer: Layer
   onRename: () => void
 }) {
-  const { duplicateLayer, removeLayer, raise, lower, update } = useEditor()
+  const { duplicateLayer, removeLayer, raise, lower, update, addMask, removeMask, setMaskEdit, maskEditId } = useEditor()
 
   return (
     <DropdownMenu>
@@ -83,6 +84,24 @@ export function LayerActionsMenu({
           )}
           {layer.locked ? "Unlock" : "Lock"}
         </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        {layer.mask ? (
+          <>
+            <DropdownMenuItem className="gap-2 text-xs" onSelect={() => setMaskEdit(maskEditId === layer.id ? null : layer.id)}>
+              <SquareDashed className="size-4" />
+              {maskEditId === layer.id ? "Stop editing mask" : "Edit mask"}
+            </DropdownMenuItem>
+            <DropdownMenuItem className="gap-2 text-xs" onSelect={() => removeMask(layer.id)}>
+              <SquareDashed className="size-4" />
+              Delete mask
+            </DropdownMenuItem>
+          </>
+        ) : (
+          <DropdownMenuItem className="gap-2 text-xs" onSelect={() => addMask(layer.id)}>
+            <SquareDashed className="size-4" />
+            Add mask
+          </DropdownMenuItem>
+        )}
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className={cn("gap-2 text-xs text-destructive")}

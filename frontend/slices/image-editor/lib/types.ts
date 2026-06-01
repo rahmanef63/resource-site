@@ -90,6 +90,8 @@ export type Layer = {
   t: Transform;
   style: LayerStyle;
   adj: Adjustments;
+  /** Has a layer mask (doc-aligned alpha buffer in the canvas map at maskKey(id)). */
+  mask?: boolean;
   // image
   src?: string; // data URL / remote URL
   // paint — pixels live in an offscreen <canvas> kept in the store's canvas map,

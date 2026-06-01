@@ -17,6 +17,8 @@ import {
   strokeProps,
 } from "../../lib/konva-helpers";
 import { PaintLayer } from "./paint-layer";
+import { MaskedGroup } from "./masked-group";
+import { maskKey } from "../../lib/mask";
 
 type NodeRef = Konva.Image | Konva.Text | Konva.Rect | Konva.Ellipse | null;
 
@@ -29,7 +31,7 @@ export function LayerNode({
   isSelected: boolean;
   registerNode: (id: string, node: NodeRef) => void;
 }) {
-  const { tool, update, select } = useEditor();
+  const { tool, update, select, version, canvasFor, doc } = useEditor();
   const ref = useRef<NodeRef>(null);
   const img = useKonvaImage(layer.kind === "image" ? layer.src : undefined);
   const set = (n: NodeRef) => {
@@ -51,15 +53,26 @@ export function LayerNode({
     n.getLayer()?.batchDraw();
   }, [layer.adj, img, layer.t.width, layer.t.height, layer.text, layer.fontSize, layer.fillColor, layer.shape]);
 
+  // Wrap the rendered content through a layer mask when present (cached group +
+  // destination-in). Computed below as `content`, wrapped at the end.
+  const wrap = (content: React.ReactNode) =>
+    layer.mask ? (
+      <MaskedGroup maskCanvas={canvasFor(maskKey(layer.id), doc.width, doc.height)} width={doc.width} height={doc.height} version={version}>
+        {content}
+      </MaskedGroup>
+    ) : (
+      <>{content}</>
+    );
+
   if (layer.kind === "paint") {
-    return (
+    return wrap(
       <PaintLayer
         layer={layer}
         isSelected={isSelected}
         nodeRef={(n) => set(n)}
         onSelect={() => select(layer.id)}
         onChange={(patch) => update(layer.id, patch)}
-      />
+      />,
     );
   }
 
@@ -90,13 +103,13 @@ export function LayerNode({
     if (!img) return null;
     const w = layer.t.width || img.width;
     const h = layer.t.height || img.height;
-    return (
+    return wrap(
       <>
         {layer.style.glow.enabled && (
           <KonvaImage image={img} x={layer.t.x} y={layer.t.y} width={w} height={h} rotation={layer.t.rotation} scaleX={layer.t.scaleX} scaleY={layer.t.scaleY} opacity={layer.opacity} visible={layer.visible} listening={false} {...glowProps(layer.style)} />
         )}
         <KonvaImage ref={set} image={img} width={w} height={h} {...common} {...shadowProps(layer.style)} />
-      </>
+      </>,
     );
   }
 
@@ -109,11 +122,11 @@ export function LayerNode({
       align: layer.align ?? "left",
       fill: layer.fill ?? "#ffffff",
     };
-    return (
+    return wrap(
       <>
         {layer.style.glow.enabled && <Text {...textProps} x={layer.t.x} y={layer.t.y} rotation={layer.t.rotation} scaleX={layer.t.scaleX} scaleY={layer.t.scaleY} opacity={layer.opacity} visible={layer.visible} listening={false} {...glowProps(layer.style)} />}
         <Text ref={set as (n: Konva.Text | null) => void} {...textProps} {...common} {...shadowProps(layer.style)} {...strokeProps(layer.style)} />
-      </>
+      </>,
     );
   }
 
@@ -122,11 +135,11 @@ export function LayerNode({
   const h = layer.t.height || 160;
   const fill = fillProps(layer, w, h);
   if (layer.shape === "ellipse") {
-    return (
-      <Ellipse ref={set as (n: Konva.Ellipse | null) => void} radiusX={w / 2} radiusY={h / 2} {...fill} {...common} {...shadowProps(layer.style)} {...strokeProps(layer.style)} />
+    return wrap(
+      <Ellipse ref={set as (n: Konva.Ellipse | null) => void} radiusX={w / 2} radiusY={h / 2} {...fill} {...common} {...shadowProps(layer.style)} {...strokeProps(layer.style)} />,
     );
   }
-  return (
-    <Rect ref={set as (n: Konva.Rect | null) => void} width={w} height={h} {...fill} cornerRadius={8} {...common} {...shadowProps(layer.style)} {...strokeProps(layer.style)} />
+  return wrap(
+    <Rect ref={set as (n: Konva.Rect | null) => void} width={w} height={h} {...fill} cornerRadius={8} {...common} {...shadowProps(layer.style)} {...strokeProps(layer.style)} />,
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Eye, EyeOff, GripVertical, Lock } from "lucide-react";
+import { Eye, EyeOff, GripVertical, Lock, SquareDashed } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
@@ -88,6 +88,19 @@ export function LayersPanel() {
                   >
                     {l.name}
                   </span>
+                )}
+                {l.mask && (
+                  <button
+                    type="button"
+                    aria-label="Edit mask"
+                    onClick={(e) => { e.stopPropagation(); ed.setMaskEdit(ed.maskEditId === l.id ? null : l.id); }}
+                    className={cn(
+                      "grid size-5 shrink-0 place-items-center rounded",
+                      ed.maskEditId === l.id ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground",
+                    )}
+                  >
+                    <SquareDashed className="size-3.5" />
+                  </button>
                 )}
                 {l.locked && <Lock className="size-3 shrink-0 text-muted-foreground" />}
                 <span onClick={(e) => e.stopPropagation()}>
