@@ -21,9 +21,11 @@ import type {
   Stroke,
   Tool,
 } from "./types";
-import { blankDoc, createLayer } from "./model";
+import { blankDoc } from "./model";
 import { useLayerMutators } from "./layer-mutators";
+import { useDocOps } from "./doc-ops";
 import { useHistory } from "./history";
+import { buildProject, restorePaint, type Project } from "./project";
 
 export type Brush = { size: number; color: string; opacity: number; hardness: number };
 export type { Pan };
@@ -60,6 +62,9 @@ type Ctx = {
   lower: (id: string) => void;
   /** Record a brush/eraser stroke (before+after PNG of the layer canvas). */
   recordPaint: (id: string, before: string, after: string) => void;
+  /** Editable-project (doc + paint pixels) save/restore — Save/Open/autosave. */
+  exportProject: () => Project;
+  loadProject: (p: Project) => void;
   undo: () => void;
   redo: () => void;
 };
@@ -109,49 +114,7 @@ export function EditorProvider({ initialDoc, children }: { initialDoc?: Doc; chi
     [setDoc],
   );
   const { update, patchStyle, patchShadow, patchGlow, patchStroke, patchAdj } = useLayerMutators(mapLayer);
-
-  const addLayer = useCallback((layer: Layer, opts?: { select?: boolean }) => {
-    setDoc((d) => ({ ...d, layers: [...d.layers, layer] }));
-    if (opts?.select !== false) setSelectedId(layer.id);
-  }, [setDoc]);
-
-  const removeLayer = useCallback((id: string) => {
-    canvases.current.delete(id);
-    setDoc((d) => ({ ...d, layers: d.layers.filter((l) => l.id !== id) }));
-    setSelectedId((s) => (s === id ? null : s));
-  }, [setDoc]);
-
-  const duplicateLayer = useCallback((id: string) => {
-    setDoc((d) => {
-      const i = d.layers.findIndex((l) => l.id === id);
-      if (i < 0) return d;
-      const src = d.layers[i];
-      const copy = createLayer(src.kind, { ...src, name: `${src.name} copy`, t: { ...src.t, x: src.t.x + 24, y: src.t.y + 24 } });
-      return { ...d, layers: [...d.layers.slice(0, i + 1), copy, ...d.layers.slice(i + 1)] };
-    });
-  }, [setDoc]);
-
-  const reorder = useCallback((from: number, to: number) => {
-    setDoc((d) => {
-      const ls = [...d.layers];
-      const [m] = ls.splice(from, 1);
-      ls.splice(to, 0, m);
-      return { ...d, layers: ls };
-    });
-  }, [setDoc]);
-
-  const move = useCallback((id: string, dir: 1 | -1) => {
-    setDoc((d) => {
-      const i = d.layers.findIndex((l) => l.id === id);
-      const j = i + dir;
-      if (i < 0 || j < 0 || j >= d.layers.length) return d;
-      const ls = [...d.layers];
-      [ls[i], ls[j]] = [ls[j], ls[i]];
-      return { ...d, layers: ls };
-    });
-  }, [setDoc]);
-
-  const setDocSize = useCallback((w: number, h: number) => setDoc((d) => ({ ...d, width: w, height: h })), [setDoc]);
+  const { addLayer, removeLayer, duplicateLayer, reorder, raise, lower, setDocSize } = useDocOps(setDoc, canvases, setSelectedId);
   const recordPaint = useCallback((id: string, before: string, after: string) => push({ type: "paint", id, before, after }), [push]);
 
   const canvasFor = useCallback((id: string, w: number, h: number) => {
@@ -165,16 +128,22 @@ export function EditorProvider({ initialDoc, children }: { initialDoc?: Doc; chi
     return c;
   }, []);
 
+  const exportProject = useCallback(() => buildProject(doc, canvases.current), [doc]);
+  const loadProject = useCallback((p: Project) => {
+    setDocState(p.doc);
+    setSelectedId(p.doc.layers.at(-1)?.id ?? null);
+    restorePaint(p, canvasFor, () => stageRef.current?.draw());
+  }, [canvasFor]);
+
   const value = useMemo<Ctx>(() => ({
     doc, selectedId, selected: doc.layers.find((l) => l.id === selectedId) ?? null,
     tool, zoom, pan, brush, canUndo, canRedo, stageRef, canvasFor,
     select: setSelectedId, setTool, setZoom, setPan,
     setBrush: (b) => setBrushState((s) => ({ ...s, ...b })),
     setDocSize, update, patchStyle, patchShadow, patchGlow, patchStroke, patchAdj,
-    addLayer, removeLayer, duplicateLayer, reorder,
-    raise: (id) => move(id, 1), lower: (id) => move(id, -1),
-    recordPaint, undo, redo,
-  }), [doc, selectedId, tool, zoom, pan, brush, canUndo, canRedo, rev, canvasFor, setDoc, setDocSize, update, patchStyle, patchShadow, patchGlow, patchStroke, patchAdj, addLayer, removeLayer, duplicateLayer, reorder, move, recordPaint, undo, redo]);
+    addLayer, removeLayer, duplicateLayer, reorder, raise, lower,
+    recordPaint, exportProject, loadProject, undo, redo,
+  }), [doc, selectedId, tool, zoom, pan, brush, canUndo, canRedo, rev, canvasFor, setDocSize, update, patchStyle, patchShadow, patchGlow, patchStroke, patchAdj, addLayer, removeLayer, duplicateLayer, reorder, raise, lower, recordPaint, exportProject, loadProject, undo, redo]);
 
   return <EditorContext.Provider value={value}>{children}</EditorContext.Provider>;
 }

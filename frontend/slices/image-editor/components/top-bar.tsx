@@ -9,6 +9,8 @@ import {
   ZoomIn,
   ZoomOut,
   Save,
+  FolderOpen,
+  FileDown,
   Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,13 +20,20 @@ import { createLayer } from "../lib/model";
 import { loadImage } from "../lib/konva-helpers";
 import { removeImageBackground } from "../lib/bg-removal";
 import { stageToDataURL } from "../lib/export";
+import { downloadProject, parseProject } from "../lib/project";
 
 // Top command bar: open an image, remove its background (free, in-browser),
 // undo/redo, zoom, and Save (fires onSave with a PNG data URL).
 export function TopBar({ onSave }: { onSave?: (dataUrl: string) => void }) {
-  const { doc, selected, addLayer, update, undo, redo, canUndo, canRedo, zoom, setZoom, stageRef } = useEditor();
+  const { doc, selected, addLayer, update, undo, redo, canUndo, canRedo, zoom, setZoom, stageRef, exportProject, loadProject } = useEditor();
   const fileRef = useRef<HTMLInputElement | null>(null);
+  const projRef = useRef<HTMLInputElement | null>(null);
   const [busy, setBusy] = useState(false);
+
+  async function openProject(file: File) {
+    const p = parseProject(await file.text());
+    if (p) loadProject(p);
+  }
 
   async function openFile(file: File) {
     const url = URL.createObjectURL(file);
@@ -64,11 +73,25 @@ export function TopBar({ onSave }: { onSave?: (dataUrl: string) => void }) {
           e.target.value = "";
         }}
       />
+      <input
+        ref={projRef}
+        type="file"
+        accept=".json,application/json"
+        className="hidden"
+        onChange={(e) => { const f = e.target.files?.[0]; if (f) void openProject(f); e.target.value = ""; }}
+      />
       <Button variant="ghost" size="sm" onClick={() => fileRef.current?.click()}>
         <Upload className="size-4" /> Open
       </Button>
       <Button variant="ghost" size="sm" disabled={!canCut || busy} onClick={() => void removeBg()}>
         {busy ? <Loader2 className="size-4 animate-spin" /> : <Scissors className="size-4" />} Remove BG
+      </Button>
+      <Separator orientation="vertical" className="mx-1 h-6" />
+      <Button variant="ghost" size="sm" onClick={() => projRef.current?.click()}>
+        <FolderOpen className="size-4" /> Open Project
+      </Button>
+      <Button variant="ghost" size="sm" onClick={() => downloadProject(exportProject())}>
+        <FileDown className="size-4" /> Save Project
       </Button>
       <Separator orientation="vertical" className="mx-1 h-6" />
       <Button variant="ghost" size="icon" disabled={!canUndo} onClick={undo} aria-label="Undo">

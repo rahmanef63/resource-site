@@ -10,6 +10,7 @@ import { useKonvaImage } from "../../hooks/use-konva-image";
 import {
   blendToGCO,
   buildFilters,
+  fillProps,
   glowProps,
   hasFilters,
   shadowProps,
@@ -119,13 +120,13 @@ export function LayerNode({
   // shape
   const w = layer.t.width || 240;
   const h = layer.t.height || 160;
-  const fill = layer.fillColor ?? "#3b82f6";
+  const fill = fillProps(layer, w, h);
   if (layer.shape === "ellipse") {
     return (
-      <Ellipse ref={set as (n: Konva.Ellipse | null) => void} radiusX={w / 2} radiusY={h / 2} fill={fill} {...common} {...shadowProps(layer.style)} {...strokeProps(layer.style)} />
+      <Ellipse ref={set as (n: Konva.Ellipse | null) => void} radiusX={w / 2} radiusY={h / 2} {...fill} {...common} {...shadowProps(layer.style)} {...strokeProps(layer.style)} />
     );
   }
   return (
-    <Rect ref={set as (n: Konva.Rect | null) => void} width={w} height={h} fill={fill} cornerRadius={8} {...common} {...shadowProps(layer.style)} {...strokeProps(layer.style)} />
+    <Rect ref={set as (n: Konva.Rect | null) => void} width={w} height={h} {...fill} cornerRadius={8} {...common} {...shadowProps(layer.style)} {...strokeProps(layer.style)} />
   );
 }

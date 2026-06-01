@@ -1,11 +1,12 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { EditorProvider } from "./lib/store";
+import { EditorProvider, useEditor } from "./lib/store";
 import { blankDoc, createLayer } from "./lib/model";
+import { loadAutosave, saveAutosave } from "./lib/project";
 import { imageEditorConfig } from "./config";
 import { ToolRail } from "./components/tool-rail";
 import { TopBar } from "./components/top-bar";
@@ -49,9 +50,26 @@ function DesktopShell({ stage, onSave }: { stage: React.ReactNode; onSave?: (d: 
   );
 }
 
+// Autosave the editable project to localStorage (debounced); restore it on mount
+// when the editor opened blank (no initialImage) so a reload doesn't lose work.
+function useAutosave(autoRestore: boolean) {
+  const { doc, exportProject, loadProject } = useEditor();
+  useEffect(() => {
+    if (!autoRestore) return;
+    const a = loadAutosave();
+    if (a) loadProject(a);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    const t = setTimeout(() => saveAutosave(exportProject()), 800);
+    return () => clearTimeout(t);
+  }, [doc, exportProject]);
+}
+
 // Picks desktop vs mobile layout; both share ONE EditorStage element + provider.
-function Shell({ onSave }: { onSave?: (d: string) => void }) {
+function Shell({ onSave, autoRestore }: { onSave?: (d: string) => void; autoRestore: boolean }) {
   useKeyboard();
+  useAutosave(autoRestore);
   const mobile = useIsMobile();
   const stage = <EditorStage />;
   return (
@@ -72,7 +90,7 @@ export function ImageEditor({ initialImage, width, height, onSave, className }: 
   return (
     <div className={cn("h-full w-full", className)}>
       <EditorProvider initialDoc={initialDoc}>
-        <Shell onSave={onSave} />
+        <Shell onSave={onSave} autoRestore={!initialImage} />
       </EditorProvider>
     </div>
   );

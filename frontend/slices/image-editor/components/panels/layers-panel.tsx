@@ -9,7 +9,6 @@ import {
   Eye,
   EyeOff,
   GripVertical,
-  Image as ImageIcon,
   Lock,
   Square,
   Trash2,
@@ -27,13 +26,7 @@ import { cn } from "@/lib/utils";
 import { useEditor } from "../../lib/store";
 import { createLayer } from "../../lib/model";
 import { BLEND_MODES, type BlendMode, type Layer } from "../../lib/types";
-
-const KIND_ICON = {
-  image: ImageIcon,
-  text: Type,
-  shape: Square,
-  paint: Brush,
-} as const;
+import { LayerThumb } from "./layer-thumb";
 
 function IconBtn({ label, onClick, children }: { label: string; onClick: () => void; children: React.ReactNode }) {
   return (
@@ -86,7 +79,6 @@ export function LayersPanel() {
       <ScrollArea className="flex-1">
         <div className="flex flex-col">
           {rows.map((l: Layer, di: number) => {
-            const KindIcon = KIND_ICON[l.kind];
             const isSel = l.id === selectedId;
             const isOver = overIdx === di && dragIdx !== null && dragIdx !== di;
             return (
@@ -110,7 +102,7 @@ export function LayersPanel() {
                   className={cn("flex items-center gap-2 px-2 py-1.5 cursor-pointer hover:bg-accent/50", isSel && "bg-accent")}
                 >
                   <GripVertical className="size-4 shrink-0 cursor-grab text-muted-foreground/60 active:cursor-grabbing" />
-                  <KindIcon className="size-4 shrink-0 text-muted-foreground" />
+                  <LayerThumb layer={l} />
                   {editing === l.id ? (
                     <Input
                       autoFocus

@@ -104,6 +104,8 @@ export type Layer = {
   // shape
   shape?: ShapeKind;
   fillColor?: string;
+  fillType?: "solid" | "gradient";
+  gradient?: { from: string; to: string; angle: number }; // linear, angle in deg
 };
 
 export type Tool =

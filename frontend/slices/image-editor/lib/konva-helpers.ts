@@ -37,6 +37,20 @@ export function glowProps(style: LayerStyle) {
   };
 }
 
+// Shape fill: a solid color, or a linear gradient across the w×h box at `angle`.
+export function fillProps(layer: { fillColor?: string; fillType?: string; gradient?: { from: string; to: string; angle: number } }, w: number, h: number) {
+  if (layer.fillType === "gradient" && layer.gradient) {
+    const rad = (layer.gradient.angle * Math.PI) / 180;
+    return {
+      fillPriority: "linear-gradient" as const,
+      fillLinearGradientStartPoint: { x: 0, y: 0 },
+      fillLinearGradientEndPoint: { x: w * Math.cos(rad), y: h * Math.sin(rad) },
+      fillLinearGradientColorStops: [0, layer.gradient.from, 1, layer.gradient.to],
+    };
+  }
+  return { fill: layer.fillColor ?? "#3b82f6" };
+}
+
 export function strokeProps(style: LayerStyle) {
   const s = style.stroke;
   if (!s.enabled) return {};
