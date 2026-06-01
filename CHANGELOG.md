@@ -11,6 +11,25 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-01 — notion-sidebar split out of notion-shell (rename · dnd · icon picker)
+
+- **NEW slice `notion-sidebar` (0.1.0)** — the tree-nav sidebar is now its own
+  standalone, reusable slice (decoupled: owns its `NotionSidebarPage` type,
+  imports no sibling slice). Enhancements over the old in-shell sidebar:
+  **double-click a title to rename**, **drag the grip to reorder + reparent**
+  (@dnd-kit sortable tree with horizontal-offset depth projection, collapse/
+  expand), and an **optional per-row icon picker** (`renderIconPicker` +
+  `onIconChange`). New `/preview/slices/notion-sidebar` demo.
+- **notion-shell 0.21.1→0.22.0** — now the PAGE EDITOR only (NotionPage /
+  NotionBlock / slash / inline toolbar / colour / layout + built-in code +
+  equation). `NotionSidebar` export removed; domain types stay here so
+  notion-database's type peer is unaffected. Its preview refocused to the page.
+- **notion-page-clone template** — `Dashboard` imports the sidebar from
+  `@/features/notion-sidebar`, wires `onMove` (new `doc.move` reducer action:
+  reparent + reorder), `renderIconPicker`, and `onIconChange`.
+- **notion-page-clone-os layout** is documented as the COMBINATION of three
+  independently-reusable slices — notion-sidebar + notion-shell + notion-database.
+
 ### 2026-06-01 — theme playground preview + full Wiring-out-of-public-preview sweep
 
 - **theme-presets preview → "Theme playground"** — the slice's switcher is a
