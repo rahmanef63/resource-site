@@ -1,0 +1,62 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "image-editor",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add image-editor",
+    "consumerPath": "slices/image-editor"
+  },
+  "files": [
+    "agent.md",
+    "components/panels/adjust-panel.tsx",
+    "components/panels/export-panel.tsx",
+    "components/panels/layer-styles-panel.tsx",
+    "components/panels/layers-panel.tsx",
+    "components/panels/shape-props.tsx",
+    "components/panels/text-props.tsx",
+    "components/panels/transform-panel.tsx",
+    "components/side-panel.tsx",
+    "components/stage/editor-stage.tsx",
+    "components/stage/layer-node.tsx",
+    "components/stage/paint-layer.tsx",
+    "components/tool-options-bar.tsx",
+    "components/tool-rail.tsx",
+    "components/top-bar.tsx",
+    "config.ts",
+    "hooks/use-keyboard.ts",
+    "hooks/use-konva-image.ts",
+    "image-editor.tsx",
+    "index.ts",
+    "lib/bg-removal.ts",
+    "lib/export.ts",
+    "lib/konva-helpers.ts",
+    "lib/layer-mutators.ts",
+    "lib/model.ts",
+    "lib/store.tsx",
+    "lib/types.ts"
+  ],
+  "imports": {
+    "shared": [
+      "@/components/ui/button",
+      "@/components/ui/input",
+      "@/components/ui/slider",
+      "@/components/ui/select",
+      "@/components/ui/tabs",
+      "@/components/ui/scroll-area",
+      "@/components/ui/separator",
+      "@/components/ui/tooltip",
+      "@/components/ui/label",
+      "@/lib/utils"
+    ],
+    "external": [
+      "react",
+      "next",
+      "konva",
+      "react-konva",
+      "@imgly/background-removal",
+      "lucide-react"
+    ]
+  }
+}

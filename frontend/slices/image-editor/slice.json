@@ -1,0 +1,24 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "image-editor",
+  "version": "1.0.0",
+  "category": "ui",
+  "kind": "full",
+  "title": "Image Editor — Photoshop-style canvas (Konva)",
+  "description": "A layered raster image editor built on Konva: layers panel (reorder, opacity, visibility, lock, blend modes), free transform (move/scale/rotate/flip), text + shape + image + paint layers, brush & eraser, non-destructive adjustments and filters (brightness/contrast/hue/saturation/blur/grayscale/invert/sepia), crop & resize, layer styles (stroke, drop shadow with angle/distance/size, outer glow, clipping mask), one-click background removal via @imgly/background-removal (free, in-browser, no API key), undo/redo, zoom/pan, and PNG/JPG/WebP export. Opens a file or starts blank; image in/out is via props (initialImage, onSave) so it drops into any app.",
+  "namespace": "@/features/image-editor",
+  "frontend": {
+    "slicePath": "frontend/slices/image-editor",
+    "configExport": "imageEditorConfig"
+  },
+  "deps": {
+    "npm": ["konva", "react-konva", "@imgly/background-removal", "lucide-react"],
+    "shadcn": ["button", "input", "slider", "select", "tabs", "scroll-area", "separator", "tooltip", "popover", "switch", "label", "dropdown-menu"],
+    "env": [],
+    "peers": []
+  },
+  "registers": [],
+  "audit": ["bp:ui-consistency"],
+  "license": "MIT",
+  "tags": ["image-editor", "photoshop", "canvas", "konva", "layers", "filters", "background-removal", "paint", "crop", "ui"]
+}

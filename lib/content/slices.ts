@@ -144,6 +144,66 @@ export type SliceEntry = {
 
 export const slices: SliceEntry[] = [
   {
+    slug: "image-editor",
+    title: "Image Editor — Photoshop-style canvas (Konva)",
+    category: "ui",
+    kind: "full",
+    version: "1.0.0",
+    tagline: "Layered raster editor: layers, transform, paint, filters, layer styles, 1-click background removal, export.",
+    description:
+      "A Photoshop-style raster image editor built on Konva. Layers panel (reorder, opacity, visibility, lock, 16 blend modes), free transform (move/scale/rotate/flip via a Transformer), image + text + shape + paint layers, brush & eraser with size/opacity/hardness, non-destructive adjustments + filters (brightness/contrast/hue/saturation/blur/grayscale/invert/sepia, applied via Konva.Filters), canvas resize/aspect presets, and Photoshop-style LAYER STYLES: stroke, drop shadow (angle/distance/size/opacity), outer glow, clipping mask (clip to layer below), per-layer blend mode. One-click BACKGROUND REMOVAL runs fully in-browser via @imgly/background-removal (free, MIT, no API key, no server — downloads a small ONNX model to the browser cache on first use) and drops the cutout back as a transparent layer. Undo/redo, zoom/pan, keyboard shortcuts, and PNG/JPG/WebP export at 1×/2×/3×. Self-contained: image I/O is via props (initialImage / onSave) so it drops into any app with zero backend.",
+    source: "rahmanef63/os-vps",
+    slicePath: "frontend/slices/image-editor",
+    convexPaths: [],
+    npm: ["konva", "react-konva", "@imgly/background-removal", "lucide-react"],
+    shadcn: ["button", "input", "slider", "select", "tabs", "scroll-area", "separator", "tooltip", "label", "switch", "popover"],
+    env: [],
+    peers: [],
+    tags: ["image-editor", "photoshop", "canvas", "konva", "layers", "filters", "background-removal", "paint", "crop", "ui"],
+    resourceType: "module",
+    maturity: "beta",
+    compat: { enhances: ["appshell", "file-explorer"] },
+    previewPath: "/preview/slices/image-editor",
+    defaultView: "desktop",
+    agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui + Konva. A layered raster image editor. Image I/O is via props; background removal runs in-browser (no backend).
+
+STEP 1 — Install. \`npx rr add image-editor\`. Ensure \`@/features/image-editor\` resolves in tsconfig paths and Tailwind scans the slice folder.
+
+STEP 2 — Deps. npm: \`konva react-konva @imgly/background-removal lucide-react\`. shadcn: \`npx shadcn@latest add button input slider select tabs scroll-area separator tooltip label switch popover\`.
+
+STEP 3 — Mount. It is fully self-contained; the Konva stage is loaded client-only (next/dynamic ssr:false) inside the slice, so just render it in a height-bearing box:
+\`\`\`tsx
+"use client";
+import { ImageEditor } from "@/features/image-editor";
+export default function Page() {
+  return (
+    <div className="h-dvh">
+      <ImageEditor onSave={(dataUrl) => console.log(dataUrl)} />
+    </div>
+  );
+}
+\`\`\`
+Props: \`initialImage?\` (data/object/remote URL opened on mount), \`width?\`/\`height?\` (blank canvas size, default 1080²), \`onSave?(dataUrl)\` (fires from the Save button with a PNG data URL; omit to hide Save), \`className?\`.
+
+STEP 4 — Background removal. The "Remove BG" button calls removeImageBackground() from @imgly/background-removal — free, in-browser, no key. First run downloads a small model to the browser cache, then runs locally via WASM. You can also import \`removeImageBackground(src) => Promise<pngDataUrl>\` directly.
+
+STEP 5 — Export. PNG/JPG/WebP at 1×/2×/3× via the Export tab, or call \`exportStage(stage, {...})\` / \`stageToDataURL(stage, {...})\`. The container owns the box — render inside h-dvh / h-full.`,
+    exampleCode: `"use client";
+import { ImageEditor } from "@/features/image-editor";
+
+export default function ImageEditorDemo() {
+  // No props → opens a blank 1080×1080 canvas with one paint layer. Brush/erase,
+  // add text/shapes, open an image + remove its background (free, in-browser),
+  // apply layer styles + filters, then export PNG/JPG/WebP. Konva stage is
+  // client-only (loaded via next/dynamic) so SSR never touches canvas/window.
+  return (
+    <div className="h-dvh w-full">
+      <ImageEditor onSave={(dataUrl) => console.log("save", dataUrl.slice(0, 32))} />
+    </div>
+  );
+}`,
+  },
+  {
     slug: "file-explorer",
     title: "File Explorer — Tree + CRUD + Breadcrumb",
     category: "ui",
