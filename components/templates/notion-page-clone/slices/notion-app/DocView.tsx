@@ -103,6 +103,8 @@ export function DocView({ docId }: { docId: string }) {
   };
   const handleBulkDelete = (ids: string[]) =>
     ids.forEach((blockId) => dispatch({ type: "doc.block.remove", docId: doc.id, blockId }));
+  const handleBulkDuplicate = (ids: string[]) =>
+    ids.forEach((blockId) => dispatch({ type: "doc.block.duplicate", docId: doc.id, blockId }));
 
   const surfaceRef = React.useRef<HTMLDivElement | null>(null);
   const blockIds = doc.blocks.map((b) => b.id);
@@ -142,8 +144,8 @@ export function DocView({ docId }: { docId: string }) {
         />
       }
     >
-      <SelectionProvider onBulkDelete={handleBulkDelete}>
-      <div ref={surfaceRef} className="relative pl-8">
+      <SelectionProvider onBulkDelete={handleBulkDelete} onBulkDuplicate={handleBulkDuplicate}>
+      <div ref={surfaceRef} className="relative min-h-[16rem] pb-12 pl-8">
         <SelectionMarquee containerRef={surfaceRef} />
         <SortableBlockList
           items={blockIds}

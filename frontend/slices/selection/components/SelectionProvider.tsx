@@ -31,10 +31,11 @@ const Ctx = createContext<SelectionCtx | null>(null);
 export const useSelection = () => useContext(Ctx);
 
 export function SelectionProvider({
-  children, onBulkDelete,
+  children, onBulkDelete, onBulkDuplicate,
 }: {
   children: ReactNode;
   onBulkDelete?: (ids: string[]) => void;
+  onBulkDuplicate?: (ids: string[]) => void;
 }) {
   const [selected, setSelected] = useState<Set<string>>(() => new Set());
   const anchorRef = useRef<string | null>(null);
@@ -68,6 +69,10 @@ export function SelectionProvider({
     onBulkDelete?.([...liveRef.current]);
     clear();
   }, [onBulkDelete, clear]);
+  const dup = useCallback(() => {
+    if (liveRef.current.size === 0) return;
+    onBulkDuplicate?.([...liveRef.current]);
+  }, [onBulkDuplicate]);
 
   useEffect(() => {
     if (selected.size === 0) return;
@@ -79,7 +84,9 @@ export function SelectionProvider({
     const onDown = (e: PointerEvent) => {
       if (e.shiftKey || e.metaKey || e.ctrlKey) return; // additive marquee/click
       const t = e.target as HTMLElement;
-      if (t.closest("[data-selection-toolbar]") || t.closest("[data-selectable-edge]")) return;
+      // Don't clear when interacting with a selectable item, its handles, or
+      // the selection toolbar — only a bare empty-surface click clears.
+      if (t.closest("[data-selectable-id]") || t.closest("[data-no-marquee]") || t.closest("[data-selection-toolbar]")) return;
       clear();
     };
     document.addEventListener("keydown", onKey, true);
@@ -96,6 +103,9 @@ export function SelectionProvider({
       {selected.size > 0 && (
         <div data-selection-toolbar className="fixed bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-md border border-border bg-popover px-3 py-1.5 text-sm shadow-md">
           <span className="text-muted-foreground">{selected.size} selected</span>
+          {onBulkDuplicate && (
+            <button type="button" onClick={dup} className="rounded px-2 py-0.5 font-medium text-foreground hover:bg-muted">Duplicate</button>
+          )}
           <button type="button" onClick={del} className="rounded px-2 py-0.5 font-medium text-destructive hover:bg-destructive/10">Delete</button>
           <button type="button" onClick={clear} className="rounded px-2 py-0.5 text-muted-foreground hover:bg-muted">Clear</button>
         </div>

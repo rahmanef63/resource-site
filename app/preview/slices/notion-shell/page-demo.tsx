@@ -113,6 +113,11 @@ export function PageDemo() {
       const next = cur.filter((x) => !ids.includes(x.id));
       return next.length ? next : [{ id: `b${Date.now()}`, type: "paragraph", text: "" }];
     });
+  const duplicateMany = (ids: string[]) =>
+    setBlocks((cur) => [
+      ...cur,
+      ...cur.filter((x) => ids.includes(x.id)).map((x) => ({ ...x, id: `b${Date.now()}-${Math.random().toString(36).slice(2, 6)}` })),
+    ]);
   const blockIds = blocks.map((b) => b.id);
   const headings = React.useMemo(() => collectHeadings(blocks), [blocks]);
 
@@ -139,8 +144,8 @@ export function PageDemo() {
           items={[{ id: "root", label: "Workspace" }, { id: "p2", label: "Projects" }, { id: "cur", label: title }]}
           onNavigate={() => {}}
         />
-        <SelectionProvider onBulkDelete={removeMany}>
-        <div ref={surfaceRef} className="relative space-y-1">
+        <SelectionProvider onBulkDelete={removeMany} onBulkDuplicate={duplicateMany}>
+        <div ref={surfaceRef} className="relative min-h-[22rem] space-y-1 pb-10 pl-6">
           <SelectionMarquee containerRef={surfaceRef} />
           {blocks.map((b) => (
             <SelectableBlock key={b.id} id={b.id} orderedIds={blockIds}>

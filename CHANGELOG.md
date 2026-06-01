@@ -11,6 +11,25 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-01 — selection v0.2.0 — canvas CRUD demo + bulk-duplicate + applied to notion
+
+- **Full-bleed canvas preview** (`/preview/slices/selection`) — an empty
+  dotted canvas with **floating nodes** and full **CRUD on the selection**, so
+  the capability is actually visible: **create** (Add node / double-click
+  canvas), **update** (drag the grip to move, type to edit), **delete** (✕ or
+  select + Backspace), **duplicate** (floating toolbar). Marquee-select works
+  across the whole 2-D surface — drag right = enclose (blue), left = cross
+  (green). Full width + height with padding.
+- **`SelectableBlock`** gains `style` + `edges` props (free-floating canvas
+  nodes position absolutely and opt out of the edge strips).
+- **`SelectionProvider`** gains optional `onBulkDuplicate` → a Duplicate button
+  on the floating toolbar; click-outside-clear now ignores any selectable item
+  / handle so dragging a node no longer drops the selection.
+- **Applied to notion-shell** — the notion-clone template `DocView` and the
+  preview `page-demo` now wire `onBulkDuplicate` (duplicate selected blocks)
+  and give the marquee surface a left gutter + bottom padding + min-height so
+  there's empty space to start a rubber-band drag.
+
 ### 2026-06-01 — slice renamed `block-selection` → `selection` + marquee rubber-band v0.1.0
 
 - **Renamed** the slice to `selection` (`@/features/selection`); API is now

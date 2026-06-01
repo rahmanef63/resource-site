@@ -6,7 +6,7 @@
  *  the selected ring, and its thin edge strips click-select (Shift = range,
  *  Cmd/Ctrl = toggle). */
 
-import type { MouseEvent, ReactNode } from "react";
+import type { CSSProperties, MouseEvent, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { useSelection } from "./SelectionProvider";
 
@@ -15,9 +15,14 @@ export interface SelectableBlockProps {
   orderedIds: string[];
   children: ReactNode;
   className?: string;
+  style?: CSSProperties;
+  /** Render the thin top/bottom click-select edge strips. Default true; set
+   *  false for free-floating canvas nodes where you select via the marquee or
+   *  your own handle. */
+  edges?: boolean;
 }
 
-export function SelectableBlock({ id, orderedIds, children, className }: SelectableBlockProps) {
+export function SelectableBlock({ id, orderedIds, children, className, style, edges = true }: SelectableBlockProps) {
   const sel = useSelection();
   if (!sel) return <>{children}</>;
 
@@ -33,11 +38,12 @@ export function SelectableBlock({ id, orderedIds, children, className }: Selecta
     <div
       data-selectable-id={id}
       data-block-selected={selected || undefined}
+      style={style}
       className={cn("relative rounded-sm transition-colors", selected && "bg-primary/10 ring-2 ring-primary/50", className)}
     >
-      <div data-selectable-edge data-no-marquee onMouseDown={onEdge} aria-hidden className="absolute inset-x-0 top-0 z-10 h-1.5 cursor-pointer" />
+      {edges && <div data-selectable-edge data-no-marquee onMouseDown={onEdge} aria-hidden className="absolute inset-x-0 top-0 z-10 h-1.5 cursor-pointer" />}
       {children}
-      <div data-selectable-edge data-no-marquee onMouseDown={onEdge} aria-hidden className="absolute inset-x-0 bottom-0 z-10 h-1.5 cursor-pointer" />
+      {edges && <div data-selectable-edge data-no-marquee onMouseDown={onEdge} aria-hidden className="absolute inset-x-0 bottom-0 z-10 h-1.5 cursor-pointer" />}
     </div>
   );
 }
