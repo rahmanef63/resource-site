@@ -93,6 +93,7 @@ export function renderPropertyCell({
           readOnly={readOnly}
           onChange={onChange ? (next) => onChange(next) : undefined}
           prop={prop}
+          onPropPatch={onPropertyChange ? (patch) => onPropertyChange(patch) : undefined}
         />
       );
 

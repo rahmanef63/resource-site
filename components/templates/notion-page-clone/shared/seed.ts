@@ -198,12 +198,11 @@ const SEED_DOCS: NotionDoc[] = [
       { id: "r-intro", type: "paragraph", text: "Open the Roadmap database to see the table view + property editor." } satisfies NotionBlock,
     ],
   },
-  // Roadmap database rows (rowOfDatabaseId = "db-roadmap")
-  { id: "row-r1", parentId: null, title: "Ship notion-shell", icon: "📦", favorite: false, trashed: false, createdAt: now(), updatedAt: now(), blocks: [], rowOfDatabaseId: "db-roadmap", rowProps: { name: "Ship notion-shell", status: "done", done: true } },
-  { id: "row-r2", parentId: null, title: "Wire template",     icon: "🔌", favorite: false, trashed: false, createdAt: now(), updatedAt: now(), blocks: [], rowOfDatabaseId: "db-roadmap", rowProps: { name: "Wire template",     status: "doing", done: false } },
-  { id: "row-r3", parentId: null, title: "Add command palette", icon: "⌨️", favorite: false, trashed: false, createdAt: now(), updatedAt: now(), blocks: [], rowOfDatabaseId: "db-roadmap", rowProps: { name: "Add command palette", status: "todo",  done: false } },
 ];
 
+// Empty by design — the Roadmap database ships with columns (incl. End date +
+// Due date) but NO demo rows. Add rows from the table view; spin up a second
+// database with the "+ New database" button to test relation + rollup.
 const SEED_DATABASES: NotionDatabase[] = [
   {
     id: "db-roadmap",
@@ -220,8 +219,10 @@ const SEED_DATABASES: NotionDatabase[] = [
         ],
       },
       { id: "done", name: "Done", type: "checkbox" },
+      { id: "end", name: "End date", type: "date", dateRange: true, dateIncludeTime: true },
+      { id: "due", name: "Due date", type: "date" },
     ],
-    rowIds: ["row-r1", "row-r2", "row-r3"],
+    rowIds: [],
     views: [
       { id: "v-table", name: "All", type: "table", sorts: [], filters: [], search: "" },
       { id: "v-board", name: "Board", type: "board", groupBy: "status", sorts: [], filters: [], search: "" },

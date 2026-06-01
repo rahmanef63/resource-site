@@ -5,14 +5,15 @@
  *  explicit picks and the end calendar disables days before the start.
  *  Optional `time` / `endTime` inputs appear when the property opts into
  *  `dateIncludeTime` — written as "HH:mm" (24h internal; the dateFormat
- *  formatter renders 12h/24h on display). Value shape:
+ *  formatter renders 12h/24h on display). A notion-page-clone-style options
+ *  list (End date · Date format · Include time · Time format · Remind ·
+ *  Clear) sits at the foot via <DateCellSettings>. Value shape:
  *  `{ date, end?, time?, endTime? }`. */
 
-import { X } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
+import type { Property } from "../../types";
+import { DateCellSettings } from "./DateCellSettings";
 
 export interface DateEditorValue { date?: string; end?: string; time?: string; endTime?: string }
 
@@ -37,10 +38,14 @@ interface Props {
   onChange: (next: DateEditorValue | null) => void;
   /** Fired after a terminal pick so the host can close the popover. */
   onAfterPick?: () => void;
+  /** The date property — drives the settings list (format / remind). */
+  prop?: Property;
+  /** Patch property-level date settings (format / include time / remind). */
+  onPropPatch?: (patch: Partial<Property>) => void;
 }
 
 export function DateCellEditor({
-  value, includeTime, rangeMode, onRangeToggle, onChange, onAfterPick,
+  value, includeTime, rangeMode, onRangeToggle, onChange, onAfterPick, prop, onPropPatch,
 }: Props) {
   const v = value ?? {};
   const start = fromISO(v.date);
@@ -71,18 +76,6 @@ export function DateCellEditor({
 
   return (
     <div className="w-auto">
-      <div className="flex items-center justify-between gap-2 border-b border-border px-3 py-2 text-xs">
-        <label className="flex items-center gap-2 text-muted-foreground">
-          <Switch checked={rangeMode} onCheckedChange={(c) => toggleRange(!!c)} />
-          Include end date
-        </label>
-        {v.date && (
-          <Button variant="ghost" size="sm" onClick={() => onChange(null)} className="h-6 gap-1 px-2 text-xs">
-            <X className="h-3 w-3" /> Clear
-          </Button>
-        )}
-      </div>
-
       <div className="p-2">
         <div className="px-1 pb-1 text-[10px] uppercase tracking-wide text-muted-foreground">
           {rangeMode ? "Start" : "Date"}
@@ -113,6 +106,16 @@ export function DateCellEditor({
           )}
         </div>
       )}
+
+      <DateCellSettings
+        prop={prop}
+        rangeMode={rangeMode}
+        includeTime={includeTime}
+        hasValue={!!v.date}
+        onRangeToggle={toggleRange}
+        onPropPatch={onPropPatch}
+        onClear={() => onChange(null)}
+      />
     </div>
   );
 }

@@ -38,9 +38,12 @@ interface DateCellProps {
   /** When provided, dateFormat / timeFormat / dateIncludeTime / dateRange
    *  on the property drive display + which inputs the editor shows. */
   prop?: Property;
+  /** Patch property-level date settings from the cell popover's options
+   *  list (Date format / Include time / Remind). */
+  onPropPatch?: (patch: Partial<Property>) => void;
 }
 
-export function DateCell({ value, readOnly, onChange, prop }: DateCellProps) {
+export function DateCell({ value, readOnly, onChange, prop, onPropPatch }: DateCellProps) {
   const [open, setOpen] = useState(false);
   const v = value && typeof value === "object" ? value : null;
   // Range is "active" when the column defaults to a range OR this cell
@@ -100,6 +103,8 @@ export function DateCell({ value, readOnly, onChange, prop }: DateCellProps) {
           onRangeToggle={setRangeOverride}
           onChange={onChange ?? (() => {})}
           onAfterPick={() => setOpen(false)}
+          prop={prop}
+          onPropPatch={onPropPatch}
         />
       </PopoverContent>
     </Popover>

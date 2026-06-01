@@ -11,6 +11,30 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-01 — notion cleanup + date cell parity + canvas group-move + preview tab moves
+
+- **notion-shell 0.20→0.21.1** — `code` (highlight.js) + `equation` (KaTeX)
+  block renderers are now **built-in** to `createDefaultBlockRenderers()` (npm
+  += katex, highlight.js). No more app-level adapter wiring — hosts only inject
+  `database` + `toc`. Added `Property.dateNotification` (cosmetic "Remind").
+- **DELETED slices** `equation`, `code-block`, `notifications`, `notion-blocks`
+  (catalog + manifest + previews + `notion-page-clone-os` pullPaths). The two
+  primitives live inside notion-shell now; notifications dropped entirely.
+- **notion-database 0.16.2→0.17.0** — the date cell popover now mirrors
+  notion-page-clone: an options list with **End date** toggle, **Date format**
+  (Full date…), **Include time**, **Time format**, **Remind** (None…), and
+  **Clear** (`DateCellSettings`). `DatePanel` (column config) gains Remind too.
+- **notion-page-clone template** — database demo rows removed (starts empty);
+  Roadmap db ships **End date** (range + time) and **Due date** columns; a
+  **+ New database** button in `DatabaseView` spins up a second db pre-linked
+  via a relation column, and `databases`/`pages` are now passed so **relation +
+  rollup** are testable.
+- **selection canvas** — dragging a node that's part of a multi-select now
+  moves the **whole selection** together (drag baseline snapshots in the canvas).
+- **theme-presets preview** — content centered (vertical + horizontal).
+- **responsive-dialog / dashboard-shell** — Variants + Wiring moved out of the
+  public preview into the **Code tab** (new `SliceEntry.wiring` + `variants`).
+
 ### 2026-06-01 — selection v0.2.0 — canvas CRUD demo + bulk-duplicate + applied to notion
 
 - **Full-bleed canvas preview** (`/preview/slices/selection`) — an empty

@@ -2,8 +2,10 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { NotionDatabase } from "@/features/notion-database";
+import { Plus } from "lucide-react";
+import { NotionDatabase, type Database } from "@/features/notion-database";
 import { NotionPage } from "@/features/notion-shell";
+import { Button } from "@/components/ui/button";
 import { DynamicIcon, IconPickerPopover } from "@/features/icon-picker";
 import { useDatabases, useDocs, useStore } from "../../shared/store";
 import { PUBLIC_BASE } from "../../shared/nav-config";
@@ -49,6 +51,30 @@ export function DatabaseView({ dbId }: { dbId: string }) {
     .map((id) => docs.find((d) => d.id === id))
     .filter((d): d is NonNullable<typeof d> => Boolean(d));
 
+  // Every doc that is a database row — fed to NotionDatabase so the relation
+  // link-picker + rollup can resolve rows across ALL databases.
+  const allRows = docs.filter((d) => d.rowOfDatabaseId);
+
+  /** Spin up a second database (pre-linked to this one via a relation column)
+   *  so relation + rollup are testable out of the box. */
+  const handleCreateDatabase = () => {
+    const id = `db-${Date.now().toString(36)}`;
+    const next: Database = {
+      id, name: "New database", icon: "🗃️",
+      properties: [
+        { id: "name", name: "Name", type: "text" },
+        { id: "rel", name: `${db.name} link`, type: "relation", relationDatabaseId: db.id },
+      ],
+      rowIds: [],
+      views: [{ id: "v-table", name: "All", type: "table", sorts: [], filters: [], search: "" }],
+      activeViewId: "v-table",
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    };
+    dispatch({ type: "db.create", db: next });
+    router.push(`${PUBLIC_BASE}/db/${id}`);
+  };
+
   return (
     <NotionPage
       icon={db.icon}
@@ -58,9 +84,16 @@ export function DatabaseView({ dbId }: { dbId: string }) {
       renderIcon={renderIcon}
       renderIconPicker={renderIconPicker}
     >
+      <div className="mb-2 flex justify-end">
+        <Button type="button" size="sm" variant="outline" onClick={handleCreateDatabase}>
+          <Plus className="mr-1 h-3.5 w-3.5" /> New database
+        </Button>
+      </div>
       <NotionDatabase
         db={db}
         rows={rows}
+        databases={databases}
+        pages={allRows}
         onPropertyAdd={(propType) => dispatch({ type: "db.property.add", dbId: db.id, propType })}
         onPropertyUpdate={(propId, patch) => dispatch({ type: "db.property.update", dbId: db.id, propId, patch })}
         onPropertyRemove={(propId) => dispatch({ type: "db.property.remove", dbId: db.id, propId })}

@@ -92,6 +92,10 @@ export interface Property {
    *  per-cell "Include end date" toggle still overrides per row.
    *  type=date. */
   dateRange?: boolean;
+  /** Reminder lead time for the date (cosmetic — stored on the property,
+   *  surfaced in the date cell's "Remind" submenu; no runtime scheduler).
+   *  type=date. Unset / "none" = no reminder. */
+  dateNotification?: "none" | "at_time" | "5m" | "10m" | "30m" | "1h" | "1d" | "2d";
 }
 
 export type PropertyValue =

@@ -7,14 +7,15 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import {
-  DATE_FORMAT_LABELS, TIME_FORMAT_LABELS,
-  type DateFormatKind, type TimeFormatKind,
+  DATE_FORMAT_LABELS, TIME_FORMAT_LABELS, NOTIFICATION_LABELS,
+  type DateFormatKind, type TimeFormatKind, type NotificationKind,
 } from "../../../lib/dateFormat";
 import { Label, type PanelProps } from "./atoms";
 
 export function DatePanel({ prop, onPatch }: PanelProps) {
   const fmt = prop.dateFormat ?? "full";
   const tfmt = prop.timeFormat ?? "12h";
+  const notif = prop.dateNotification ?? "none";
   const includeTime = !!prop.dateIncludeTime;
   const isEditableDate = prop.type === "date";
 
@@ -53,6 +54,18 @@ export function DatePanel({ prop, onPatch }: PanelProps) {
           </Select>
         </div>
       )}
+
+      <div>
+        <Label>Remind</Label>
+        <Select value={notif} onValueChange={(v) => onPatch({ dateNotification: v === "none" ? undefined : (v as NotificationKind) })}>
+          <SelectTrigger className="mt-1 h-8 text-sm"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            {(Object.keys(NOTIFICATION_LABELS) as NotificationKind[]).map((k) => (
+              <SelectItem key={k} value={k}>{NOTIFICATION_LABELS[k]}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
       {isEditableDate && (
         <div className="flex items-center justify-between gap-2 rounded-md border border-border px-2 py-1.5">

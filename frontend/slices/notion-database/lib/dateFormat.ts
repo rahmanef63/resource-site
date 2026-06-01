@@ -99,3 +99,18 @@ export const TIME_FORMAT_LABELS: Record<TimeFormatKind, string> = {
 };
 
 export const DATE_FORMATS: DateFormatKind[] = ["full", "short", "mdy", "dmy", "ymd", "relative"];
+
+export type NotificationKind = "none" | "at_time" | "5m" | "10m" | "30m" | "1h" | "1d" | "2d";
+
+/** "Remind" lead-time labels (mirrors notion-page-clone's date cell). The
+ *  value is cosmetic — stored on the property; rr ships no reminder runtime. */
+export const NOTIFICATION_LABELS: Record<NotificationKind, string> = {
+  none: "None",
+  at_time: "At time of event",
+  "5m": "5 minutes before",
+  "10m": "10 minutes before",
+  "30m": "30 minutes before",
+  "1h": "1 hour before",
+  "1d": "1 day before",
+  "2d": "2 days before",
+};
