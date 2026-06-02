@@ -167,9 +167,8 @@ npm run validate:all
 
 # 5. Update catalog
 # Edit lib/content/slices.ts — add SliceEntry for <slug>
-# Regenerate manifest
-cd packages/cli && node scripts/gen-manifest.mjs
-cd ..
+# Regenerate manifest (run from repo root — same path used everywhere else)
+node packages/cli/scripts/gen-manifest.mjs
 
 # 6. MANDATORY — append changelog entry (see Changelog discipline below)
 # Edit lib/content/changelog.ts — add a release entry with bullet
@@ -232,9 +231,10 @@ Schema rules:
 - The `id` field becomes the `<RecentlyUpdatedBadge>` deep-link target
   via `/changelog#<id>` (scroll-mt-24 already wired).
 
-After editing, verify:
+After editing, verify with the repo's real gate (don't hand-craft
+`grep -v` filters for slices that may not exist):
 ```bash
-npx tsc --noEmit 2>&1 | grep -v "lib/shared\|frontend/slices/mentions" | head
+npm run validate:all       # tsc + slice/contract/manifest audits
 ```
 
 ### Verb: publish (rr-repo mode only)
@@ -417,71 +417,32 @@ component near `<Toaster />`.
 
 ---
 
-## Catalog snapshot (so other projects know what to check)
+## Catalog — query live, never hardcode
 
-**Last refreshed: 2026-05-28.** Cross-check with rr repo before lift
-work — counts drift weekly.
+The catalog drifts every wave, so this skill does NOT embed a slice
+list (a baked snapshot rots — e.g. it once named `database-io` and a
+`mentions` slice that no longer exist). Always read it live from the
+SSOT instead:
 
-### Distributable slices (58)
+```bash
+# Slices + counts (SSOT = lib/content/slices.ts → manifest):
+node packages/cli/scripts/gen-manifest.mjs >/dev/null
+node -e "const m=require('./packages/cli/lib/manifest.json'); \
+  console.log('slices',m.slices.length,'| layouts',m.layouts.length,'| features',m.features.length)"
+npx rahman-resources list slices         # human-readable, from anywhere
 
-Pure UI:
-`blog-section`, `changelog-feed`, `code-block`, `cta`, `equation`,
-`faq-section`, `feature-grid`, `full-width-toggle`, `hero`,
-`landing-sections`, `motion-primitives`, `notifications`,
-`portfolio-section`, `pricing-page`, `responsive-dialog`, `services`,
-`socials`, `subscribers`, `testimonials`, `testimonials-grid`,
-`theme-presets`, `three-column`, `i18n-translate`
+# Templates (the `*-os` family) + layout snippets:
+grep slug: lib/content/layouts.ts
+ls components/templates/                  # one dir per website template
+```
 
-Admin shells / infra:
-`admin`, `admin-panel`, `audit-log`, `dashboard-shell`,
-`event-tracking`, `platform-admin`, `rate-limit`, `seo`,
-`workspace-shell`
-
-Editor primitives / data:
-`activity`, `command-menu`, `comments`, `database-cell-selection`,
-`document-checklist`, `files`, `icon-picker`, `mdx-blog`
-
-Notion family (split + composable):
-`notion-shell` (page + sidebar + editor, no DB),
-`notion-database` (full table — 11 views · 18 cells · AST formula engine),
-`database-io` (DEPRECATED — merged into notion-database v0.6)
-
-AI:
-`ai-admin`, `ai-agents`, `ai-chat`, `ai-router`, `ai-studio`,
-`vector-search`, `create-your-mcp`
-
-Auth + payments + email:
-`convex-auth`, `rbac-roles`, `doku-payment`, `midtrans-payment`,
-`contact-form-resend`, `resend-newsletter`, `cal-com-booking`,
-`broadcast-channel-sync`
-
-### Website templates (7 of `os` family + `riset-kit`)
-
-| Slug | Purpose |
-|---|---|
-| `saas-marketing-os` | Marketing site (pricing/features/blog/changelog) |
-| `personal-brand-os` | Solo creator (hero/services/portfolio/blog/newsletter) |
-| `agency-studio-os` | Agency/studio (clients/portfolio/services/leads) |
-| `konsultan-os` | Consulting (projects/proposals/contracts/billing) |
-| `kreator-studio-os` | Creator (content/newsletter/community/performance) |
-| `wirausaha-os` | SMB (businesses/products/orders/finance/staff) |
-| `riset-kit` | Research (documents/citations/ai-reader/lit-review/notes) |
-
-All 7 share:
-- Landing-sections admin↔public live-sync via BroadcastChannel
-  (storageKey `<template>:state:v4-landing-sync` or later)
-- `<LandingSectionShell>` wrapping every renderer kind (bgImage scrim +
-  custom className via admin)
-- CRUD entities use `<CrudListView>` + row-click `<CrudRowDialog>` with
-  `<FieldDef>` schemas (image kind with aspect-ratio dropdown, wide
-  fields, hints with examples)
-- `<RecentlyUpdatedBadge>` on detail page header reading the changelog
-
-### Layout snippets (cookbook layouts, 28)
-
-Hero / pricing / accordion / blog catalogs at `/layouts/<slug>`.
-Standalone JSX recipes (not full apps). See
-`grep slug: lib/content/layouts.ts` for the full list.
+Shared template facts (stable, safe to remember):
+- Every `*-os` template shares landing-sections admin↔public live-sync
+  via BroadcastChannel, `<LandingSectionShell>` per renderer kind, CRUD
+  via `<CrudListView>` + `<CrudRowDialog>` with `<FieldDef>` schemas,
+  and `<RecentlyUpdatedBadge>` on the detail header.
+- Layout snippets = standalone JSX recipes at `/layouts/<slug>` (not
+  full apps).
 
 ---
 
