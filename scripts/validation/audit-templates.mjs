@@ -67,6 +67,11 @@ const TEMPLATE_ROOTS = [
   // copy. Treat as warnings (not blockers) since they're not in the install
   // payload — but we want visibility.
   path.join(REPO, "app", "preview", "slices"),
+  // Slice source itself (`npx rr add <slug>` copies these into consumers).
+  // Previously OUTSIDE the gate, so raw <button>/<input> slipped in. Scanned
+  // as WARNINGS during burndown (~67 raw <button> at widening, 2026-06-02);
+  // flip severityFor() → "error" once the count hits zero.
+  path.join(REPO, "frontend", "slices"),
 ];
 
 let scanned = 0;
@@ -113,8 +118,12 @@ for (const root of TEMPLATE_ROOTS) {
     }
 
     // Rule 2 — /preview/<slug> only in rewriter-handled files. Always an
-    // error: leaks to consumer install regardless of template kind.
-    if (!REWRITER_FILE_NAMES.has(base)) {
+    // error: leaks to consumer install regardless of template kind. Scoped to
+    // template code only — slices ship via `rr add`, not the layout rewriter,
+    // so a /preview/ token there is not a leak.
+    const relParts = rel.split(path.sep);
+    const isSliceFile = relParts[0] === "frontend" && relParts[1] === "slices";
+    if (!isSliceFile && !REWRITER_FILE_NAMES.has(base)) {
       for (const s of slugs) {
         const needle = `/preview/${s}`;
         if (body.includes(needle)) {

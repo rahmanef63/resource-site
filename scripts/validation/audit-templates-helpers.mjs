@@ -33,6 +33,12 @@ export function severityFor(file, repoRoot) {
   if (parts[0] === "app" && parts[1] === "preview" && parts[2] === "slices") {
     return "warning";
   }
+  // frontend/slices/<slug>/* → slice source (copied into consumers by
+  // `rr add`). Warning during the raw-<button> burndown; flip to "error"
+  // here once `audit:templates` reports zero slice warnings.
+  if (parts[0] === "frontend" && parts[1] === "slices") {
+    return "warning";
+  }
   // cookbook/layouts/<slug>/* → real ship code, blocker
   if (parts[0] === "cookbook" && parts[1] === "layouts") {
     return "error";
