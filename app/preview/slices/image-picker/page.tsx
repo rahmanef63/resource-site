@@ -18,25 +18,25 @@ const INITIAL: ImageValue = {
   positionY: 50,
 };
 
-/** image-picker preview — a "change wallpaper" card. ONE button opens the
- *  picker (gallery / upload / link / Unsplash); the banner above shows the
- *  chosen image and lets you drag to reposition or remove it. Upload persists
- *  to localStorage (files slice); live Unsplash search needs UNSPLASH_ACCESS_KEY
+/** image-picker preview — a "set an image" card. ONE button opens the picker
+ *  (gallery / upload / link / Unsplash); the banner above shows the chosen
+ *  image and lets you drag to reposition or remove it. Upload persists to
+ *  localStorage (files slice); live Unsplash search needs UNSPLASH_ACCESS_KEY
  *  on the /api/unsplash route — otherwise it falls back to the curated set. */
 function Demo() {
-  const [wallpaper, setWallpaper] = React.useState<ImageValue | null>(INITIAL);
+  const [image, setImage] = React.useState<ImageValue | null>(INITIAL);
   const { upload } = useFileUpload();
-  const ref = imageRef(parseImage(wallpaper));
+  const ref = imageRef(parseImage(image));
   const parsed = ref ? parseFileRef(ref) : null;
   const resolvedUrl = useFileUrl(parsed && parsed.kind === "storage" ? parsed.storageId : null);
 
   return (
     <div className="mx-auto max-w-2xl py-10">
       <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-xl">
-        {wallpaper ? (
+        {image ? (
           <ImageBanner
-            image={wallpaper}
-            onChange={setWallpaper}
+            image={image}
+            onChange={setImage}
             resolvedUrl={resolvedUrl}
             onUpload={upload}
             searchUnsplash={searchUnsplash}
@@ -44,21 +44,21 @@ function Demo() {
           />
         ) : (
           <div className="flex h-56 items-center justify-center bg-muted/40 text-sm text-muted-foreground md:h-72">
-            No wallpaper set
+            No image set
           </div>
         )}
         <div className="flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-lg font-semibold">Wallpaper</h1>
+            <h1 className="text-lg font-semibold">Image</h1>
             <p className="text-sm text-muted-foreground">
               One button opens the picker — gallery, upload, paste a link, or Unsplash.
               Hover the banner to reposition or remove.
             </p>
           </div>
           <ImagePickerButton
-            label="Change wallpaper"
-            title="Choose a wallpaper"
-            onChange={setWallpaper}
+            label="Change image"
+            title="Choose image"
+            onChange={setImage}
             onUpload={upload}
             searchUnsplash={searchUnsplash}
             variant="default"

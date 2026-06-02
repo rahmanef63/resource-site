@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-06-02T00:52:10.334Z",
+  "generatedAt": "2026-06-02T01:10:36.381Z",
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "layouts": [
@@ -2256,7 +2256,7 @@
       "install": "npx rahman-resources add image-picker",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add image-picker`. The headline component is `<ImagePickerButton label=\"Change wallpaper\" onChange={(img)=>save(img)} onUpload={…} searchUnsplash={…} />` — ONE button that opens the 4-tab dialog (gallery / upload / link / Unsplash). For a reposition-able cover/hero band use `<ImageBanner image={value} onChange={save} resolvedUrl={…} onUpload={…} searchUnsplash={…} />` (also passable to notion-shell's `<NotionPage coverSlot={…} />`). Inject the backend: `onUpload` = the `files` slice's useFileUpload().upload (returns a FileRef); resolve upload images for display with `resolvedUrl` = files useFileUrl(parseFileRef(imageRef(parseImage(value))).storageId). `searchUnsplash` = `unsplashSearchVia('/api/unsplash')` — add a server route that proxies api.unsplash.com with UNSPLASH_ACCESS_KEY (never expose the key client-side). Ships a curated Unsplash + gallery fallback so it works with zero wiring. ImageValue = { type, value, positionY?, metadata? }; parseImage handles legacy string values.",
+      "agentRecipe": "Run `npx rr add image-picker`. The headline component is `<ImagePickerButton label=\"Change image\" onChange={(img)=>save(img)} onUpload={…} searchUnsplash={…} />` — ONE button that opens the 4-tab dialog (gallery / upload / link / Unsplash). For a reposition-able cover/hero band use `<ImageBanner image={value} onChange={save} resolvedUrl={…} onUpload={…} searchUnsplash={…} />` (also passable to notion-shell's `<NotionPage coverSlot={…} />`). Inject the backend: `onUpload` = the `files` slice's useFileUpload().upload (returns a FileRef); resolve upload images for display with `resolvedUrl` = files useFileUrl(parseFileRef(imageRef(parseImage(value))).storageId). `searchUnsplash` = `unsplashSearchVia('/api/unsplash')` — add a server route that proxies api.unsplash.com with UNSPLASH_ACCESS_KEY (never expose the key client-side). Ships a curated Unsplash + gallery fallback so it works with zero wiring. ImageValue = { type, value, positionY?, metadata? }; parseImage handles legacy string values.",
       "tags": [
         "ui",
         "image",
@@ -4199,7 +4199,7 @@
         "portable",
         "dialog"
       ],
-      "agentRecipe": "Run `npx rr add image-picker`. The headline component is `<ImagePickerButton label=\"Change wallpaper\" onChange={(img)=>save(img)} onUpload={…} searchUnsplash={…} />` — ONE button that opens the 4-tab dialog (gallery / upload / link / Unsplash). For a reposition-able cover/hero band use `<ImageBanner image={value} onChange={save} resolvedUrl={…} onUpload={…} searchUnsplash={…} />` (also passable to notion-shell's `<NotionPage coverSlot={…} />`). Inject the backend: `onUpload` = the `files` slice's useFileUpload().upload (returns a FileRef); resolve upload images for display with `resolvedUrl` = files useFileUrl(parseFileRef(imageRef(parseImage(value))).storageId). `searchUnsplash` = `unsplashSearchVia('/api/unsplash')` — add a server route that proxies api.unsplash.com with UNSPLASH_ACCESS_KEY (never expose the key client-side). Ships a curated Unsplash + gallery fallback so it works with zero wiring. ImageValue = { type, value, positionY?, metadata? }; parseImage handles legacy string values."
+      "agentRecipe": "Run `npx rr add image-picker`. The headline component is `<ImagePickerButton label=\"Change image\" onChange={(img)=>save(img)} onUpload={…} searchUnsplash={…} />` — ONE button that opens the 4-tab dialog (gallery / upload / link / Unsplash). For a reposition-able cover/hero band use `<ImageBanner image={value} onChange={save} resolvedUrl={…} onUpload={…} searchUnsplash={…} />` (also passable to notion-shell's `<NotionPage coverSlot={…} />`). Inject the backend: `onUpload` = the `files` slice's useFileUpload().upload (returns a FileRef); resolve upload images for display with `resolvedUrl` = files useFileUrl(parseFileRef(imageRef(parseImage(value))).storageId). `searchUnsplash` = `unsplashSearchVia('/api/unsplash')` — add a server route that proxies api.unsplash.com with UNSPLASH_ACCESS_KEY (never expose the key client-side). Ships a curated Unsplash + gallery fallback so it works with zero wiring. ImageValue = { type, value, positionY?, metadata? }; parseImage handles legacy string values."
     },
     {
       "slug": "notion-sidebar",

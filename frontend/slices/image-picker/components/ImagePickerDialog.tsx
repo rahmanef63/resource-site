@@ -53,7 +53,7 @@ export function ImagePickerDialog({ open, onOpenChange, onSelect, onUpload, sear
             </button>
           ))}
         </div>
-        <div className="max-h-[60vh] overflow-y-auto">
+        <div className="h-[440px] overflow-y-auto">
           {tab === "gallery" && <GalleryTab onSelect={handle} />}
           {tab === "upload" && onUpload && <UploadTab onSelect={handle} onUpload={onUpload} />}
           {tab === "link" && <LinkTab onSelect={handle} />}
