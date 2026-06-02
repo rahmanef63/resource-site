@@ -7,8 +7,8 @@ export type { Block, BlockType, BlockRenderers, BlockRendererProps } from "./blo
 
 /** Structural cover value — a raw URL/CSS string OR a rich cover object
  *  (colour / gradient / texture / upload / link / unsplash + focal point).
- *  Defined structurally so notion-shell stays decoupled from the `cover`
- *  slice; the cover slice's CoverData is assignable to this. */
+ *  Defined structurally so notion-shell stays decoupled from the `image-picker`
+ *  slice; the image-picker slice's ImageValue is assignable to this. */
 export interface CoverValue {
   type: string;
   value: string;
@@ -22,7 +22,7 @@ export interface Page {
   title: string;
   icon: string;
   /** Optional cover — a URL/CSS string or a rich CoverValue. Rendered by the
-   *  host (e.g. the `cover` slice's CoverBanner via NotionPage's coverSlot). */
+   *  host (e.g. the `image-picker` slice's ImageBanner via NotionPage's coverSlot). */
   cover?: string | CoverValue;
   blocks: Block[];
   favorite: boolean;

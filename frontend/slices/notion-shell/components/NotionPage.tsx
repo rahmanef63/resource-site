@@ -30,8 +30,8 @@ export interface NotionPageProps {
   /** Vertical focal point of the cover image, 0–100 (default 50). */
   coverPosition?: number;
   /** Full custom cover band — when provided it renders in the cover slot
-   *  INSTEAD of the built-in `cover` img (wire e.g. the `cover` slice's
-   *  <CoverBanner /> for upload / Unsplash / reposition). */
+   *  INSTEAD of the built-in `cover` img (wire e.g. the `image-picker` slice's
+   *  <ImageBanner /> for upload / Unsplash / reposition). */
   coverSlot?: ReactNode;
   /** Page body — your blocks list, database embed, etc. */
   children?: ReactNode;

@@ -2,7 +2,7 @@
  *  / Convex action that holds the secret UNSPLASH_ACCESS_KEY server-side — the
  *  key must never reach the client). The endpoint is expected to return
  *  `{ photos: UnsplashPhoto[], total?, error? }`. Wire it into the picker:
- *    <CoverPicker searchUnsplash={unsplashSearchVia("/api/unsplash")} … /> */
+ *    <ImagePickerButton searchUnsplash={unsplashSearchVia("/api/unsplash")} … /> */
 
 import type { UnsplashSearchFn, UnsplashSearchResult } from "../types";
 

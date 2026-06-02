@@ -1,10 +1,10 @@
 "use client";
 
 import { GALLERY_SECTIONS } from "../../lib/galleryPresets";
-import { coverStyle } from "../../lib/coverStyle";
-import type { CoverData } from "../../types";
+import { imageStyle } from "../../lib/imageStyle";
+import type { ImageValue } from "../../types";
 
-export function GalleryTab({ onPick }: { onPick: (c: CoverData) => void }) {
+export function GalleryTab({ onSelect }: { onSelect: (c: ImageValue) => void }) {
   return (
     <div className="space-y-4 p-4">
       {GALLERY_SECTIONS.map((sec) => (
@@ -17,8 +17,8 @@ export function GalleryTab({ onPick }: { onPick: (c: CoverData) => void }) {
               <button
                 key={i}
                 type="button"
-                onClick={() => onPick(item)}
-                style={coverStyle(item)}
+                onClick={() => onSelect(item)}
+                style={imageStyle(item)}
                 aria-label={`${sec.label} ${i + 1}`}
                 className="h-12 rounded-md ring-1 ring-border transition hover:ring-2 hover:ring-primary"
               />

@@ -1,21 +1,22 @@
 "use client";
 
-/** Template glue between the `cover` slice and the `files` slice. The cover
- *  slice is backend-agnostic (props-driven); here at the composition layer we
- *  wire its upload to the files localStorage adapter, resolve upload FileRefs
- *  to display URLs, and point Unsplash search at the /api/unsplash proxy. */
+/** Template glue between the `image-picker` slice and the `files` slice. The
+ *  image-picker slice is backend-agnostic (props-driven); here at the
+ *  composition layer we wire its upload to the files localStorage adapter,
+ *  resolve upload FileRefs to display URLs, and point Unsplash search at the
+ *  /api/unsplash proxy. The page "cover" is just an ImageBanner. */
 
 import {
-  CoverBanner, CoverPicker, parseCover, coverRef, unsplashSearchVia,
-  type CoverData, type CoverField,
-} from "@/features/cover";
+  ImageBanner, ImagePickerDialog, parseImage, imageRef, unsplashSearchVia,
+  type ImageValue, type ImageField,
+} from "@/features/image-picker";
 import { useFileUpload, useFileUrl, parseFileRef } from "@/features/files";
 
 const searchUnsplash = unsplashSearchVia("/api/unsplash");
 
 /** Resolve an upload (FileRef) cover to a display URL; null for non-uploads. */
-function useResolvedCover(cover: CoverField): string | null {
-  const ref = coverRef(parseCover(cover));
+function useResolvedCover(cover: ImageField): string | null {
+  const ref = imageRef(parseImage(cover));
   const parsed = ref ? parseFileRef(ref) : null;
   const storageId = parsed && parsed.kind === "storage" ? parsed.storageId : null;
   return useFileUrl(storageId);
@@ -24,12 +25,12 @@ function useResolvedCover(cover: CoverField): string | null {
 /** The cover band — render as NotionPage's `coverSlot`. */
 export function CoverArea({
   cover, onChange,
-}: { cover: CoverField; onChange: (c: CoverData | null) => void }) {
+}: { cover: ImageField; onChange: (c: ImageValue | null) => void }) {
   const { upload } = useFileUpload();
   const resolvedUrl = useResolvedCover(cover);
   return (
-    <CoverBanner
-      cover={cover}
+    <ImageBanner
+      image={cover}
       onChange={onChange}
       resolvedUrl={resolvedUrl}
       onUpload={upload}
@@ -41,15 +42,16 @@ export function CoverArea({
 /** The "Add cover" picker (no-cover state — opened from the page menu). */
 export function AddCoverPicker({
   open, onOpenChange, onPick,
-}: { open: boolean; onOpenChange: (o: boolean) => void; onPick: (c: CoverData) => void }) {
+}: { open: boolean; onOpenChange: (o: boolean) => void; onPick: (c: ImageValue) => void }) {
   const { upload } = useFileUpload();
   return (
-    <CoverPicker
+    <ImagePickerDialog
       open={open}
       onOpenChange={onOpenChange}
-      onPick={onPick}
+      onSelect={onPick}
       onUpload={upload}
       searchUnsplash={searchUnsplash}
+      title="Page cover"
     />
   );
 }

@@ -3,11 +3,11 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import type { CoverData } from "../../types";
+import type { ImageValue } from "../../types";
 
 const URL_RX = /^https?:\/\/[^\s]+/i;
 
-export function LinkTab({ onPick }: { onPick: (c: CoverData) => void }) {
+export function LinkTab({ onSelect }: { onSelect: (c: ImageValue) => void }) {
   const [url, setUrl] = React.useState("");
   const [verifying, setVerifying] = React.useState(false);
   const [err, setErr] = React.useState<string | null>(null);
@@ -24,7 +24,7 @@ export function LinkTab({ onPick }: { onPick: (c: CoverData) => void }) {
       img.src = v;
     });
     setVerifying(false);
-    onPick({ type: "link", value: v, positionY: 50 });
+    onSelect({ type: "link", value: v, positionY: 50 });
   };
 
   return (

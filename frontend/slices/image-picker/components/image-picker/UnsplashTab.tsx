@@ -5,11 +5,11 @@ import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CURATED_UNSPLASH } from "../../lib/unsplashCurated";
-import type { CoverData, UnsplashPhoto, UnsplashSearchFn } from "../../types";
+import type { ImageValue, UnsplashPhoto, UnsplashSearchFn } from "../../types";
 
 export function UnsplashTab({
-  onPick, searchUnsplash,
-}: { onPick: (c: CoverData) => void; searchUnsplash?: UnsplashSearchFn }) {
+  onSelect, searchUnsplash,
+}: { onSelect: (c: ImageValue) => void; searchUnsplash?: UnsplashSearchFn }) {
   const [q, setQ] = React.useState("");
   const [photos, setPhotos] = React.useState<UnsplashPhoto[]>(CURATED_UNSPLASH);
   const [curated, setCurated] = React.useState(true);
@@ -28,7 +28,7 @@ export function UnsplashTab({
   };
 
   const pick = (p: UnsplashPhoto) =>
-    onPick({
+    onSelect({
       type: "unsplash", value: p.regular, positionY: 50,
       metadata: { id: p.id, thumb: p.thumb, full: p.full, photographer: p.photographer, photographerUrl: p.photographerUrl, source: p.source },
     });

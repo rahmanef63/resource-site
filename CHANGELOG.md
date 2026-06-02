@@ -11,6 +11,24 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-02 — `cover` → `image-picker`: generic one-button image/wallpaper chooser
+
+- **RENAMED slice `cover` → `image-picker` (0.1.0)** — degeneralized from the
+  Notion framing. Headline API is now ONE button: `<ImagePickerButton onChange>`
+  opens the 4-tab dialog (**Gallery** colours/gradients/textures · **Upload** ·
+  **Link** · **Unsplash** curated+live) — drop it anywhere you set an image
+  (wallpaper, cover, profile header, hero). `ImageBanner` is the optional
+  reposition-able band (was `CoverBanner`); `ImagePickerDialog` (was
+  `CoverPicker`). Renamed utils: `parseImage` / `isCssImage` / `isUrlImage` /
+  `imageRef` / `imageStyle`; types `ImageValue` / `ImageField` / `ImageSource`.
+  Still imports **no other slice + no backend** (onUpload + searchUnsplash
+  injected). New `/preview/slices/image-picker` "change wallpaper" demo.
+- **notion-shell** — `coverSlot` / `Page.cover` doc comments now point at the
+  `image-picker` slice (structural `CoverValue` unchanged; no API change).
+- **notion-page-clone template** — `DocCover` glue + `DocView` swap to
+  `ImageBanner` / `ImagePickerDialog`; the page cover is now just an image-picker
+  banner. Layout pullPaths `frontend/slices/cover` → `frontend/slices/image-picker`.
+
 ### 2026-06-01 — NEW `cover` slice: full page cover picker (upload · Unsplash · gallery · reposition)
 
 - **NEW slice `cover` (0.1.0)** — the entire notion-page-clone cover feature,

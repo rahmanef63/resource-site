@@ -1,8 +1,8 @@
-/** Normalize a stored cover field into a CoverData object (or null). Keeps
- *  legacy raw-string covers working — raw URLs / CSS colours / gradients are
- *  detected and wrapped. Ported verbatim from notion-page-clone. */
+/** Normalize a stored image field into an ImageValue (or null). Keeps legacy
+ *  raw-string values working — raw URLs / CSS colours / gradients are detected
+ *  and wrapped. */
 
-import type { CoverData, CoverField } from "../types";
+import type { ImageValue, ImageField } from "../types";
 
 function looksLikeGradient(s: string): boolean {
   return /^(linear|radial|conic)-gradient\(/i.test(s.trim());
@@ -19,7 +19,7 @@ function looksLikeUrl(s: string): boolean {
   return /^https?:\/\//i.test(s.trim()) || /^storage:/i.test(s.trim());
 }
 
-export function parseCover(field: CoverField): CoverData | null {
+export function parseImage(field: ImageField): ImageValue | null {
   if (!field) return null;
   if (typeof field === "object") return field;
   const value = field.trim();
@@ -31,16 +31,16 @@ export function parseCover(field: CoverField): CoverData | null {
 }
 
 /** color / gradient — value is a CSS background, no URL resolution needed. */
-export function isCssCover(c: CoverData): boolean {
+export function isCssImage(c: ImageValue): boolean {
   return c.type === "color" || c.type === "gradient";
 }
 
 /** texture / upload / link / unsplash — value is an image URL or FileRef. */
-export function isImageCover(c: CoverData): boolean {
-  return !isCssCover(c);
+export function isUrlImage(c: ImageValue): boolean {
+  return !isCssImage(c);
 }
 
-/** Storage-backed (upload) covers need the host to resolve their FileRef. */
-export function coverRef(c: CoverData | null): string | null {
+/** Storage-backed (upload) values need the host to resolve their FileRef. */
+export function imageRef(c: ImageValue | null): string | null {
   return c && c.type === "upload" ? c.value : null;
 }

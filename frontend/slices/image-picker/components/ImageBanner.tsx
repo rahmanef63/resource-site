@@ -1,29 +1,31 @@
 "use client";
 
-/** CoverBanner — the cover band at the top of a page. Shows the cover (colour /
- *  gradient / texture / uploaded / linked / unsplash image), with hover
- *  controls: Change (opens CoverPicker) · Reposition (drag the focal point) ·
- *  Remove. `resolvedUrl` is the host-resolved URL for upload (FileRef) covers
- *  — for every other type the value IS the URL. Pure / props-driven. */
+/** ImageBanner — render an ImageValue as a full-width band (colour / gradient /
+ *  texture / uploaded / linked / unsplash image) with hover controls: Change
+ *  (opens the picker dialog) · Reposition (drag the vertical focal point) ·
+ *  Remove. Optional — use it for a page cover, profile header, or card hero;
+ *  for a plain set-an-image control use ImagePickerButton instead. `resolvedUrl`
+ *  is the host-resolved URL for upload (FileRef) values — for every other type
+ *  the value IS the URL. Pure / props-driven. */
 
 import * as React from "react";
 import { Image as ImageIcon, Move, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import type { CoverData, CoverField, CoverSourceProps } from "../types";
-import { parseCover } from "../lib/parseCover";
-import { coverStyle } from "../lib/coverStyle";
-import { CoverPicker } from "./CoverPicker";
+import type { ImageValue, ImageField, ImageSourceProps } from "../types";
+import { parseImage } from "../lib/parseImage";
+import { imageStyle } from "../lib/imageStyle";
+import { ImagePickerDialog } from "./ImagePickerDialog";
 
-interface Props extends CoverSourceProps {
-  cover: CoverField;
-  onChange: (next: CoverData | null) => void;
+interface Props extends ImageSourceProps {
+  image: ImageField;
+  onChange: (next: ImageValue | null) => void;
   resolvedUrl?: string | null;
   className?: string;
 }
 
-export function CoverBanner({ cover, onChange, resolvedUrl, onUpload, searchUnsplash, className }: Props) {
-  const data = parseCover(cover);
+export function ImageBanner({ image, onChange, resolvedUrl, onUpload, searchUnsplash, className }: Props) {
+  const data = parseImage(image);
   const [pickerOpen, setPickerOpen] = React.useState(false);
   const [reposition, setReposition] = React.useState(false);
   const ref = React.useRef<HTMLDivElement>(null);
@@ -49,25 +51,25 @@ export function CoverBanner({ cover, onChange, resolvedUrl, onUpload, searchUnsp
   if (!data) return null;
 
   return (
-    <div className="group/cover relative w-full shrink-0">
+    <div className="group/banner relative w-full shrink-0">
       <div
         ref={ref}
         onMouseDown={(e) => { if (!reposition) return; dragging.current = true; setY(e.clientY, e.currentTarget); }}
         className={cn("h-44 w-full md:h-56", reposition && "cursor-ns-resize ring-2 ring-inset ring-primary", className)}
-        style={coverStyle(data, resolvedUrl)}
+        style={imageStyle(data, resolvedUrl)}
       />
-      <div className={cn("absolute bottom-3 right-3 flex gap-1.5 opacity-0 transition group-hover/cover:opacity-100", reposition && "opacity-100")}>
+      <div className={cn("absolute bottom-3 right-3 flex gap-1.5 opacity-0 transition group-hover/banner:opacity-100", reposition && "opacity-100")}>
         {reposition ? (
           <Button size="sm" variant="secondary" onClick={() => setReposition(false)}>Save position</Button>
         ) : (
           <>
             <Button size="sm" variant="secondary" onClick={() => setPickerOpen(true)}><ImageIcon className="mr-1 h-3 w-3" />Change</Button>
             <Button size="sm" variant="secondary" onClick={() => setReposition(true)}><Move className="mr-1 h-3 w-3" />Reposition</Button>
-            <Button size="icon" variant="secondary" aria-label="Remove cover" onClick={() => onChange(null)}><X className="h-3.5 w-3.5" /></Button>
+            <Button size="icon" variant="secondary" aria-label="Remove image" onClick={() => onChange(null)}><X className="h-3.5 w-3.5" /></Button>
           </>
         )}
       </div>
-      <CoverPicker open={pickerOpen} onOpenChange={setPickerOpen} onPick={onChange} onUpload={onUpload} searchUnsplash={searchUnsplash} />
+      <ImagePickerDialog open={pickerOpen} onOpenChange={setPickerOpen} onSelect={onChange} onUpload={onUpload} searchUnsplash={searchUnsplash} />
     </div>
   );
 }

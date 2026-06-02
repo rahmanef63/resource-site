@@ -1,6 +1,6 @@
-/** Curated Unsplash landscape covers — the no-API-key fallback the Unsplash
- *  tab shows by default (and when `searchUnsplash` isn't wired). URLs are built
- *  from stable photo IDs via the images.unsplash.com CDN. */
+/** Curated Unsplash landscapes — the no-API-key fallback the Unsplash tab shows
+ *  by default (and when `searchUnsplash` isn't wired). URLs are built from
+ *  stable photo IDs via the images.unsplash.com CDN. */
 
 import type { UnsplashPhoto } from "../types";
 

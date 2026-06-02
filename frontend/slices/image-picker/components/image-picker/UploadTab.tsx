@@ -3,11 +3,11 @@
 import * as React from "react";
 import { UploadCloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { CoverData, UploadFn } from "../../types";
+import type { ImageValue, UploadFn } from "../../types";
 
 const MAX = 8 * 1024 * 1024;
 
-export function UploadTab({ onPick, onUpload }: { onPick: (c: CoverData) => void; onUpload: UploadFn }) {
+export function UploadTab({ onSelect, onUpload }: { onSelect: (c: ImageValue) => void; onUpload: UploadFn }) {
   const [file, setFile] = React.useState<File | null>(null);
   const [preview, setPreview] = React.useState<string | null>(null);
   const [busy, setBusy] = React.useState(false);
@@ -28,7 +28,7 @@ export function UploadTab({ onPick, onUpload }: { onPick: (c: CoverData) => void
     setErr(null);
     try {
       const ref = await onUpload(file);
-      onPick({ type: "upload", value: ref, positionY: 50, metadata: { filename: file.name } });
+      onSelect({ type: "upload", value: ref, positionY: 50, metadata: { filename: file.name } });
     } catch (e) {
       setErr(`Upload failed: ${(e as Error).message}`);
     } finally {
@@ -56,7 +56,7 @@ export function UploadTab({ onPick, onUpload }: { onPick: (c: CoverData) => void
       </label>
       {err && <p className="text-xs text-destructive">{err}</p>}
       <Button onClick={apply} disabled={!file || busy} className="w-full">
-        {busy ? "Uploading…" : "Upload & set cover"}
+        {busy ? "Uploading…" : "Upload & set image"}
       </Button>
     </div>
   );

@@ -10,7 +10,7 @@ import {
 } from "@/features/notion-shell";
 import { SelectionProvider, SelectableBlock, SelectionMarquee } from "@/features/selection";
 import { DynamicIcon, IconPickerPopover } from "@/features/icon-picker";
-import type { CoverData, CoverField } from "@/features/cover";
+import type { ImageValue, ImageField } from "@/features/image-picker";
 import { Button } from "@/components/ui/button";
 import { useDocs, useStore } from "../../shared/store";
 import { NOTION_BLOCK_RENDERERS, TocHeadingsContext } from "./block-renderers";
@@ -68,7 +68,7 @@ export function DocView({ docId }: { docId: string }) {
     );
   }
 
-  const setCover = (c: CoverData | null) =>
+  const setCover = (c: ImageValue | null) =>
     dispatch({ type: "doc.update", id: doc.id, patch: { cover: c ?? undefined } });
 
   const handleBlockUpdate = (blockId: string, patch: Partial<Block>) =>
@@ -135,7 +135,7 @@ export function DocView({ docId }: { docId: string }) {
       onTitleChange={(title) => dispatch({ type: "doc.update", id: doc.id, patch: { title } })}
       renderIcon={renderIcon}
       renderIconPicker={renderIconPicker}
-      coverSlot={doc.cover ? <CoverArea cover={doc.cover as CoverField} onChange={setCover} /> : undefined}
+      coverSlot={doc.cover ? <CoverArea cover={doc.cover as ImageField} onChange={setCover} /> : undefined}
       actions={
         <PageActionsMenu
           favorite={doc.favorite}

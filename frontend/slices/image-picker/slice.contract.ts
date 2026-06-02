@@ -1,5 +1,5 @@
 /**
- * cover — portable Notion-style page cover image picker.
+ * image-picker — portable one-button image / wallpaper chooser.
  *
  * Pure / props-driven · imports no sibling slice + no backend. The upload
  * backend (onUpload) and Unsplash search (searchUnsplash) are injected by the
@@ -9,15 +9,15 @@
 import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
-  id: "cover",
+  id: "image-picker",
   version: "0.1.0",
   category: "ui",
   kind: "ui",
   provides: {
-    components: ["CoverBanner", "CoverPicker", "AddCoverButton"],
-    utils: ["parseCover", "isCssCover", "isImageCover", "coverRef", "coverStyle", "GALLERY_SECTIONS", "CURATED_UNSPLASH", "unsplashSearchVia"],
+    components: ["ImagePickerButton", "ImagePickerDialog", "ImageBanner"],
+    utils: ["parseImage", "isCssImage", "isUrlImage", "imageRef", "imageStyle", "GALLERY_SECTIONS", "CURATED_UNSPLASH", "unsplashSearchVia"],
     hooks: [],
-    types: ["CoverData", "CoverField", "CoverType", "UnsplashPhoto", "UnsplashSearchResult", "UploadFn", "UnsplashSearchFn", "CoverSourceProps"],
+    types: ["ImageValue", "ImageField", "ImageSource", "UnsplashPhoto", "UnsplashSearchResult", "UploadFn", "UnsplashSearchFn", "ImageSourceProps"],
   },
   requires: {
     npm: [],
