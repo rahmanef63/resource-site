@@ -1,6 +1,7 @@
 import { useRef, type ComponentProps } from "react";
 import { Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { FilePicker, type FilePickerHandle } from "@/shared/ui/FilePicker";
 import { cn } from "@/lib/utils";
 import { useFileUpload } from "../hooks/useFileUpload";
 import type { FileRef } from "../types";
@@ -18,12 +19,11 @@ export function FileUploadButton({
   label = "Upload",
   ...props
 }: Props) {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const pickerRef = useRef<FilePickerHandle>(null);
   const { upload, uploading } = useFileUpload();
 
-  const onPick = async (files: FileList | null) => {
-    if (!files) return;
-    for (const f of Array.from(files)) {
+  const onPick = async (files: File[]) => {
+    for (const f of files) {
       try {
         const ref = await upload(f);
         onUploaded(ref);
@@ -31,22 +31,15 @@ export function FileUploadButton({
         console.error("Upload failed", e);
       }
     }
-    if (inputRef.current) inputRef.current.value = "";
   };
 
   return (
     <>
-      <input
-        ref={inputRef}
-        type="file"
-        multiple={multiple}
-        className="hidden"
-        onChange={(e) => onPick(e.target.files)}
-      />
+      <FilePicker ref={pickerRef} multiple={multiple} onFiles={onPick} />
       <Button
         {...props}
         variant="ghost"
-        onClick={() => inputRef.current?.click()}
+        onClick={() => pickerRef.current?.open()}
         disabled={uploading}
         className={cn("h-auto gap-1 p-0 text-xs font-normal text-muted-foreground hover:bg-transparent hover:text-foreground [&_svg]:size-3", className)}
       >

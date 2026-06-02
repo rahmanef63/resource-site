@@ -3,6 +3,7 @@
 import * as React from "react";
 import { UploadCloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { FilePicker } from "@/shared/ui/FilePicker";
 import type { ImageValue, UploadFn } from "../../types";
 
 const MAX = 8 * 1024 * 1024;
@@ -38,9 +39,10 @@ export function UploadTab({ onSelect, onUpload }: { onSelect: (c: ImageValue) =>
 
   return (
     <div className="space-y-3 p-4">
-      <label
-        onDragOver={(e) => e.preventDefault()}
-        onDrop={(e) => { e.preventDefault(); pick(e.dataTransfer.files?.[0]); }}
+      <FilePicker
+        accept="image/*"
+        aria-label="Choose an image"
+        onFiles={(files) => pick(files[0])}
         className="flex h-32 cursor-pointer flex-col items-center justify-center gap-2 overflow-hidden rounded-md border-2 border-dashed border-border text-sm text-muted-foreground transition hover:border-primary"
       >
         {preview ? (
@@ -52,8 +54,7 @@ export function UploadTab({ onSelect, onUpload }: { onSelect: (c: ImageValue) =>
             <span>Drag an image or click to choose (≤ 8 MB)</span>
           </>
         )}
-        <input type="file" accept="image/*" className="hidden" onChange={(e) => pick(e.target.files?.[0] ?? undefined)} />
-      </label>
+      </FilePicker>
       {err && <p className="text-xs text-destructive">{err}</p>}
       <Button onClick={apply} disabled={!file || busy} className="w-full">
         {busy ? "Uploading…" : "Upload & set image"}

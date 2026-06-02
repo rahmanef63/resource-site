@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { FilePicker, type FilePickerHandle } from "@/shared/ui/FilePicker";
 import { useEditor } from "../lib/store";
 import { createLayer } from "../lib/model";
 import { loadImage } from "../lib/konva-helpers";
@@ -26,8 +27,8 @@ import { downloadProject, parseProject } from "../lib/project";
 // undo/redo, zoom, and Save (fires onSave with a PNG data URL).
 export function TopBar({ onSave }: { onSave?: (dataUrl: string) => void }) {
   const { doc, selected, addLayer, update, undo, redo, canUndo, canRedo, zoom, setZoom, stageRef, exportProject, loadProject } = useEditor();
-  const fileRef = useRef<HTMLInputElement | null>(null);
-  const projRef = useRef<HTMLInputElement | null>(null);
+  const fileRef = useRef<FilePickerHandle | null>(null);
+  const projRef = useRef<FilePickerHandle | null>(null);
   const [busy, setBusy] = useState(false);
 
   async function openProject(file: File) {
@@ -62,32 +63,24 @@ export function TopBar({ onSave }: { onSave?: (dataUrl: string) => void }) {
   return (
     <div className="flex h-12 shrink-0 items-center gap-1 border-b border-border bg-card px-3">
       <span className="mr-2 text-sm font-semibold">Image Editor</span>
-      <input
+      <FilePicker
         ref={fileRef}
-        type="file"
         accept="image/*"
-        className="hidden"
-        onChange={(e) => {
-          const f = e.target.files?.[0];
-          if (f) void openFile(f);
-          e.target.value = "";
-        }}
+        onFiles={(files) => { const f = files[0]; if (f) void openFile(f); }}
       />
-      <input
+      <FilePicker
         ref={projRef}
-        type="file"
         accept=".json,application/json"
-        className="hidden"
-        onChange={(e) => { const f = e.target.files?.[0]; if (f) void openProject(f); e.target.value = ""; }}
+        onFiles={(files) => { const f = files[0]; if (f) void openProject(f); }}
       />
-      <Button variant="ghost" size="sm" onClick={() => fileRef.current?.click()}>
+      <Button variant="ghost" size="sm" onClick={() => fileRef.current?.open()}>
         <Upload className="size-4" /> Open
       </Button>
       <Button variant="ghost" size="sm" disabled={!canCut || busy} onClick={() => void removeBg()}>
         {busy ? <Loader2 className="size-4 animate-spin" /> : <Scissors className="size-4" />} Remove BG
       </Button>
       <Separator orientation="vertical" className="mx-1 h-6" />
-      <Button variant="ghost" size="sm" onClick={() => projRef.current?.click()}>
+      <Button variant="ghost" size="sm" onClick={() => projRef.current?.open()}>
         <FolderOpen className="size-4" /> Open Project
       </Button>
       <Button variant="ghost" size="sm" onClick={() => downloadProject(exportProject())}>

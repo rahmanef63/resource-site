@@ -13,6 +13,7 @@ import { FileContextMenu } from "./file-context-menu";
 import { FileDetails } from "./file-details";
 import { FileStatusBar } from "./file-status-bar";
 import { UploadInput } from "./upload-input";
+import type { FilePickerHandle } from "@/shared/ui/FilePicker";
 import { useFiles } from "../hooks/use-files";
 import { useFileSelection } from "../hooks/use-file-selection";
 import { useFileCommands } from "../hooks/use-file-commands";
@@ -38,8 +39,8 @@ export function ExplorerView({
   const cmd = useFileCommands(fs, sel, onOpenFile);
   const dnd = useDnd(sel.selected, sel.selectOne, fs.move, fs.upload);
   const win = useWindowDrop(dnd, fs.path);
-  const uploadRef = useRef<HTMLInputElement>(null);
-  const folderRef = useRef<HTMLInputElement>(null);
+  const uploadRef = useRef<FilePickerHandle>(null);
+  const folderRef = useRef<FilePickerHandle>(null);
   const [view, setView] = useState<ViewMode>("grid");
   const [sort, setSort] = useState<SortKey>("name");
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -56,8 +57,8 @@ export function ExplorerView({
     sel.selected.size === 1
       ? (fs.entries?.find((e) => sel.selected.has(e.name)) ?? null)
       : null;
-  const openPicker = () => uploadRef.current?.click();
-  const openFolderPicker = () => folderRef.current?.click();
+  const openPicker = () => uploadRef.current?.open();
+  const openFolderPicker = () => folderRef.current?.open();
 
   const sidebar = (
     <FilesSidebar

@@ -34,10 +34,13 @@ export function severityFor(file, repoRoot) {
     return "warning";
   }
   // frontend/slices/<slug>/* → slice source (copied into consumers by
-  // `rr add`). Warning during the raw-<button> burndown; flip to "error"
-  // here once `audit:templates` reports zero slice warnings.
+  // `rr add`). HARD GATE (2026-06-02): burndown complete — 66 raw <button>
+  // converted to shadcn Button, 7 raw <input type=file> moved behind the
+  // FilePicker primitive (@/shared/ui/FilePicker). Any new raw primitive in
+  // slice source now fails CI; use a shadcn primitive or wrap the native
+  // element in a shared/ primitive (shared/ is out of scope by design).
   if (parts[0] === "frontend" && parts[1] === "slices") {
-    return "warning";
+    return "error";
   }
   // cookbook/layouts/<slug>/* → real ship code, blocker
   if (parts[0] === "cookbook" && parts[1] === "layouts") {

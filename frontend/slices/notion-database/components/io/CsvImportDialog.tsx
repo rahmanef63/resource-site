@@ -5,6 +5,7 @@
 import { useState } from "react";
 import { AlertCircle, Check, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { FilePicker } from "@/shared/ui/FilePicker";
 import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
@@ -154,12 +155,15 @@ export function CsvImportDialog({ db, open, onOpenChange, onImport }: CsvImportD
           </DialogDescription>
         </DialogHeader>
         {!parsed && (
-          <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-md border border-dashed border-border p-8 transition hover:bg-accent/30">
+          <FilePicker
+            accept=".csv,text/csv"
+            aria-label="Choose a .csv file"
+            onFiles={(files) => { const f = files[0]; if (f) void onFile(f); }}
+            className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-md border border-dashed border-border p-8 transition hover:bg-accent/30"
+          >
             <Upload className="h-6 w-6 text-muted-foreground" />
             <span className="text-sm">Click to choose .csv file</span>
-            <input type="file" accept=".csv,text/csv" hidden
-              onChange={(e) => { const f = e.target.files?.[0]; if (f) void onFile(f); }} />
-          </label>
+          </FilePicker>
         )}
         {parsed && done === null && (
           <CsvMapping

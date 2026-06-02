@@ -68,9 +68,9 @@ const TEMPLATE_ROOTS = [
   // payload — but we want visibility.
   path.join(REPO, "app", "preview", "slices"),
   // Slice source itself (`npx rr add <slug>` copies these into consumers).
-  // Previously OUTSIDE the gate, so raw <button>/<input> slipped in. Scanned
-  // as WARNINGS during burndown (~67 raw <button> at widening, 2026-06-02);
-  // flip severityFor() → "error" once the count hits zero.
+  // Previously OUTSIDE the gate, so raw <button>/<input> slipped in. Burndown
+  // done 2026-06-02 (66 <button> → shadcn Button, 7 <input type=file> →
+  // FilePicker primitive); severityFor() now classes this an ERROR.
   path.join(REPO, "frontend", "slices"),
 ];
 
