@@ -13,6 +13,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useEditor } from "../lib/store";
 import { createLayer } from "../lib/model";
@@ -55,8 +56,10 @@ export function ToolRail({ orientation = "vertical" }: { orientation?: "vertical
   const Btn = ({ icon: Icon, label, active, onClick }: { icon: LucideIcon; label: string; active?: boolean; onClick: () => void }) => (
     <Tooltip>
       <TooltipTrigger asChild>
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="icon"
           aria-label={label}
           aria-pressed={active}
           onClick={onClick}
@@ -66,7 +69,7 @@ export function ToolRail({ orientation = "vertical" }: { orientation?: "vertical
           )}
         >
           <Icon className="size-[18px]" />
-        </button>
+        </Button>
       </TooltipTrigger>
       <TooltipContent side={tipSide}>{label}</TooltipContent>
     </Tooltip>

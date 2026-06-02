@@ -4,6 +4,7 @@
  *  Popover. Extracted to keep ThemePresetSwitcher.tsx ≤200 LOC. */
 
 import { Monitor, Moon, Sun } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const MODES = [
@@ -34,14 +35,15 @@ export function ModeTabs({
         {MODES.map(({ id, label, Icon }) => {
           const active = id === activeMode;
           return (
-            <button
+            <Button
               key={id}
               role="tab"
               aria-selected={active}
               type="button"
+              variant="ghost"
               onClick={() => onPick(id)}
               className={cn(
-                "flex items-center justify-center gap-1.5 rounded px-2 py-1.5 text-xs font-medium transition-colors",
+                "flex h-auto items-center justify-center gap-1.5 rounded px-2 py-1.5 text-xs font-medium transition-colors",
                 active
                   ? "bg-background text-foreground shadow-sm"
                   : "text-muted-foreground hover:text-foreground",
@@ -49,7 +51,7 @@ export function ModeTabs({
             >
               <Icon className="h-3.5 w-3.5" />
               {label}
-            </button>
+            </Button>
           );
         })}
       </div>

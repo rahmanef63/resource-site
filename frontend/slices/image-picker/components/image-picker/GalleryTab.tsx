@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { GALLERY_SECTIONS } from "../../lib/galleryPresets";
 import { imageStyle } from "../../lib/imageStyle";
 import type { ImageValue } from "../../types";
@@ -14,13 +15,15 @@ export function GalleryTab({ onSelect }: { onSelect: (c: ImageValue) => void }) 
           </p>
           <div className="grid grid-cols-4 gap-2 sm:grid-cols-6">
             {sec.items.map((item, i) => (
-              <button
+              <Button
                 key={i}
                 type="button"
+                variant="ghost"
+                size="icon"
                 onClick={() => onSelect(item)}
                 style={imageStyle(item)}
                 aria-label={`${sec.label} ${i + 1}`}
-                className="h-12 rounded-md ring-1 ring-border transition hover:ring-2 hover:ring-primary"
+                className="h-12 w-full rounded-md ring-1 ring-border transition hover:ring-2 hover:ring-primary"
               />
             ))}
           </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { type DragEvent, type MouseEvent, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useIsMobile } from "../hooks/use-is-mobile";
 import { cn } from "@/lib/utils";
@@ -101,7 +102,9 @@ export function FileItem({
 
   if (view === "grid") {
     return (
-      <button
+      <Button
+        type="button"
+        variant="ghost"
         draggable
         onDragStart={onDragStart}
         {...dropProps}
@@ -143,7 +146,7 @@ export function FileItem({
             {entry.name}
           </span>
         )}
-      </button>
+      </Button>
     );
   }
 

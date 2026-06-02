@@ -6,6 +6,7 @@
 
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -133,14 +134,16 @@ export function FieldPassword({
           required
           aria-describedby={hint ? `${id}-hint` : undefined}
         />
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="icon"
           onClick={onToggleShow}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+          className="absolute right-3 top-1/2 h-auto w-auto -translate-y-1/2 p-0 text-muted-foreground hover:text-foreground"
           aria-label={show ? "Hide password" : "Show password"}
         >
           {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-        </button>
+        </Button>
       </div>
       {hint ? (
         <p id={`${id}-hint`} className="text-xs text-muted-foreground">

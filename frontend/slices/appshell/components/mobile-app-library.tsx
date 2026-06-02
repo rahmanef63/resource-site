@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import type { AppDescriptor } from "../lib/types";
 import { AppIcon } from "./app-icon";
 import { FolderCard, AlphaList } from "./mobile-app-library-parts";
@@ -93,12 +94,12 @@ export function MobileAppLibrary({
             <h3 className="mb-3 text-center text-base font-semibold">{folder}</h3>
             <div className="grid grid-cols-4 gap-x-3 gap-y-4">
               {folderApps.map((a) => (
-                <button key={a.id} onClick={() => onOpen(a)} className="flex flex-col items-center gap-1.5">
+                <Button key={a.id} type="button" variant="ghost" onClick={() => onOpen(a)} className="h-auto p-0 hover:bg-transparent flex flex-col items-center gap-1.5">
                   <span className="aspect-square w-full max-w-[56px]">
                     <AppIcon app={a} />
                   </span>
                   <span className="max-w-full truncate text-[11px] font-medium">{a.title}</span>
-                </button>
+                </Button>
               ))}
             </div>
           </div>

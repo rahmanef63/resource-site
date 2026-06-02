@@ -1,6 +1,7 @@
 "use client";
 
 import { Cpu, HardDrive, MemoryStick } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useApps, useShellUI, useSystemStats, AppIcon, type AppDescriptor } from "@/features/appshell";
 
 function gb(bytes: number): string {
@@ -52,12 +53,12 @@ export function MobileWidgets() {
           <span className="mb-2 block text-[12px] font-semibold text-muted-foreground">Quick open</span>
           <div className="flex gap-4">
             {quick.map((app) => (
-              <button key={app.id} onClick={() => onOpen(app)} className="flex flex-col items-center gap-1.5">
+              <Button key={app.id} type="button" variant="ghost" onClick={() => onOpen(app)} className="h-auto p-0 hover:bg-transparent flex flex-col items-center gap-1.5">
                 <span className="size-12">
                   <AppIcon app={app} />
                 </span>
                 <span className="max-w-[56px] truncate text-[10.5px] font-medium">{app.title}</span>
-              </button>
+              </Button>
             ))}
           </div>
         </Card>

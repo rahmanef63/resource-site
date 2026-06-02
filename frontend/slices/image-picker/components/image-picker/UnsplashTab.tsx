@@ -54,16 +54,16 @@ export function UnsplashTab({
       )}
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
         {photos.map((p) => (
-          <button
-            key={p.id} type="button" onClick={() => pick(p)}
-            className="group relative h-20 overflow-hidden rounded-md ring-1 ring-border transition hover:ring-2 hover:ring-primary"
+          <Button
+            key={p.id} type="button" variant="ghost" onClick={() => pick(p)}
+            className="group relative h-20 overflow-hidden rounded-md p-0 ring-1 ring-border transition hover:ring-2 hover:ring-primary"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={p.thumb} alt={p.alt} loading="lazy" className="h-full w-full object-cover" />
             <span className="absolute inset-x-0 bottom-0 truncate bg-black/50 px-1 py-0.5 text-[9px] text-white opacity-0 transition group-hover:opacity-100">
               {p.photographer}
             </span>
-          </button>
+          </Button>
         ))}
       </div>
     </div>

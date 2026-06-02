@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { AppDescriptor } from "../lib/types";
 import { AppIcon } from "./app-icon";
@@ -22,7 +23,7 @@ export function FolderCard({
   const rest = overflow ? apps.slice(3) : [];
 
   return (
-    <button onClick={onExpand} className="flex flex-col items-center gap-1.5" aria-label={`${name} folder`}>
+    <Button type="button" variant="ghost" onClick={onExpand} className="h-auto p-0 hover:bg-transparent flex flex-col items-center gap-1.5" aria-label={`${name} folder`}>
       <div
         className="grid aspect-square w-full grid-cols-2 grid-rows-2 gap-2 rounded-[22px] border border-white/15 p-2.5 backdrop-blur-xl"
         style={{ background: "rgba(255,255,255,.14)" }}
@@ -56,7 +57,7 @@ export function FolderCard({
       <span className={cn("max-w-full truncate text-[12px] font-medium text-white [text-shadow:0_1px_3px_rgba(0,0,0,0.5)]")}>
         {name}
       </span>
-    </button>
+    </Button>
   );
 }
 
@@ -85,15 +86,17 @@ export function AlphaList({
                 {header}
               </div>
             )}
-            <button
+            <Button
+              type="button"
+              variant="ghost"
               onClick={() => onOpen(a)}
-              className="flex w-full items-center gap-3 rounded-xl px-1 py-1.5 text-left hover:bg-white/10"
+              className="h-auto flex w-full items-center gap-3 rounded-xl px-1 py-1.5 text-left hover:bg-white/10"
             >
               <span className="size-9 shrink-0">
                 <AppIcon app={a} />
               </span>
               <span className="text-sm font-medium text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.5)]">{a.title}</span>
-            </button>
+            </Button>
           </div>
         );
       })}

@@ -1,6 +1,7 @@
 "use client";
 
 import { Check, X, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useActivities, useShellUI } from "@/features/appshell";
 
 // iPhone Dynamic Island: a top-center pill that appears ONLY while something is
@@ -17,11 +18,12 @@ export function DynamicIsland() {
 
   return (
     <div className="pointer-events-none absolute inset-x-0 top-1.5 z-[60] flex justify-center">
-      <button
+      <Button
         type="button"
+        variant="ghost"
         disabled={!a.appId}
         onClick={() => a.appId && openAppById(a.appId)}
-        className="pointer-events-auto flex max-w-[80%] items-center gap-2.5 rounded-full bg-black/85 px-3.5 py-2 text-white shadow-xl backdrop-blur disabled:cursor-default"
+        className="h-auto hover:bg-black/85 pointer-events-auto flex max-w-[80%] items-center gap-2.5 rounded-full bg-black/85 px-3.5 py-2 text-white shadow-xl backdrop-blur disabled:cursor-default"
         style={{ animation: "appOpen .25s cubic-bezier(.2,.8,.2,1)" }}
       >
         <span className="grid size-5 shrink-0 place-items-center">
@@ -43,7 +45,7 @@ export function DynamicIsland() {
             {a.detail}
           </span>
         )}
-      </button>
+      </Button>
     </div>
   );
 }

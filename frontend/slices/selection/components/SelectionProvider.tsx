@@ -15,6 +15,7 @@ import {
   createContext, useCallback, useContext, useEffect, useRef, useState,
   type ReactNode,
 } from "react";
+import { Button } from "@/components/ui/button";
 
 export interface SelectionCtx {
   isSelected: (id: string) => boolean;
@@ -104,10 +105,10 @@ export function SelectionProvider({
         <div data-selection-toolbar className="fixed bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-md border border-border bg-popover px-3 py-1.5 text-sm shadow-md">
           <span className="text-muted-foreground">{selected.size} selected</span>
           {onBulkDuplicate && (
-            <button type="button" onClick={dup} className="rounded px-2 py-0.5 font-medium text-foreground hover:bg-muted">Duplicate</button>
+            <Button type="button" variant="ghost" onClick={dup} className="h-auto rounded px-2 py-0.5 font-medium text-foreground hover:bg-muted">Duplicate</Button>
           )}
-          <button type="button" onClick={del} className="rounded px-2 py-0.5 font-medium text-destructive hover:bg-destructive/10">Delete</button>
-          <button type="button" onClick={clear} className="rounded px-2 py-0.5 text-muted-foreground hover:bg-muted">Clear</button>
+          <Button type="button" variant="ghost" onClick={del} className="h-auto rounded px-2 py-0.5 font-medium text-destructive hover:bg-destructive/10">Delete</Button>
+          <Button type="button" variant="ghost" onClick={clear} className="h-auto rounded px-2 py-0.5 text-muted-foreground hover:bg-muted">Clear</Button>
         </div>
       )}
     </Ctx.Provider>

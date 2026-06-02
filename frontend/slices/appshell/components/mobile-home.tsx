@@ -1,6 +1,7 @@
 "use client";
 
 import { useLayoutEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { AppDescriptor } from "../lib/types";
 import { AppIcon } from "./app-icon";
@@ -90,9 +91,9 @@ export function MobileHome({
           style={{ background: "rgba(255,255,255,.18)" }}
         >
           {dockApps.map((app) => (
-            <button key={app.id} onClick={() => onLaunch(app)} className="size-[60px] p-0">
+            <Button key={app.id} type="button" variant="ghost" size="icon" aria-label={app.title} onClick={() => onLaunch(app)} className="h-auto w-auto hover:bg-transparent size-[60px] p-0">
               <AppIcon app={app} />
-            </button>
+            </Button>
           ))}
         </div>
       )}
@@ -143,14 +144,14 @@ function AppsGrid({
       className="grid h-full grid-cols-4 content-start gap-x-2.5 gap-y-5 px-[18px] py-3.5 [touch-action:pan-x]"
     >
       {apps.map((app) => (
-        <button key={app.id} onClick={() => onLaunch(app)} className="flex flex-col items-center gap-1.5">
+        <Button key={app.id} type="button" variant="ghost" onClick={() => onLaunch(app)} className="h-auto p-0 hover:bg-transparent flex flex-col items-center gap-1.5">
           <span className="aspect-square w-full max-w-[62px]">
             <AppIcon app={app} />
           </span>
           <span className="max-w-full truncate text-[11px] font-medium text-white [text-shadow:0_1px_3px_rgba(0,0,0,0.5)]">
             {app.title}
           </span>
-        </button>
+        </Button>
       ))}
     </div>
   );

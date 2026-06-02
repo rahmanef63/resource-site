@@ -8,6 +8,7 @@
  *  inserts a markdown link `[icon Label](href)` over the `@que` trigger. */
 
 import { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export interface Mentionable {
@@ -108,19 +109,20 @@ export function MentionTypeahead({ mentionables, className }: MentionTypeaheadPr
       )}
     >
       {matches.map((m, i) => (
-        <button
+        <Button
           key={m.id}
           type="button"
+          variant="ghost"
           onMouseDown={(e) => { e.preventDefault(); insert(m); }}
           onMouseEnter={() => setActive(i)}
           className={cn(
-            "flex w-full items-center gap-2 rounded px-2 py-1 text-left text-sm",
+            "flex h-auto w-full items-center justify-start gap-2 rounded px-2 py-1 text-left text-sm font-normal",
             i === active ? "bg-accent text-accent-foreground" : "text-foreground/80",
           )}
         >
           {m.icon && <span className="shrink-0">{m.icon}</span>}
           <span className="truncate">{m.label}</span>
-        </button>
+        </Button>
       ))}
     </div>
   );

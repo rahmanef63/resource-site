@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { ContextState } from "../lib/types";
 
@@ -13,19 +14,21 @@ type Action = {
 
 function Row({ a, onClose }: { a: Action; onClose: () => void }) {
   return (
-    <button
+    <Button
+      type="button"
+      variant="ghost"
       onClick={() => {
         a.run();
         onClose();
       }}
       className={cn(
-        "flex w-full items-center justify-between gap-6 rounded-md px-2.5 py-1.5 text-left text-[13px] outline-none transition-colors hover:bg-primary hover:text-primary-foreground",
+        "flex h-auto w-full items-center justify-between gap-6 rounded-md px-2.5 py-1.5 text-left text-[13px] outline-none transition-colors hover:bg-primary hover:text-primary-foreground",
         a.danger && "text-destructive hover:bg-destructive hover:text-white",
       )}
     >
       <span>{a.label}</span>
       {a.shortcut && <span className="text-xs opacity-50">{a.shortcut}</span>}
-    </button>
+    </Button>
   );
 }
 

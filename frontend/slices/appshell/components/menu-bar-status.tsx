@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Sun, Moon, Activity, Search, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useShellAppearance, useCpuPercent } from "../registry/capabilities";
 import { toggleSpotlight, toggleInspector } from "../lib/store";
 
@@ -19,27 +20,36 @@ export function StatusCluster() {
           {cpu}%
         </span>
       )}
-      <button
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
         aria-label="Spotlight (⌘K)"
         onClick={toggleSpotlight}
-        className="grid size-6 place-items-center rounded-md hover:bg-[var(--hover-strong)]"
+        className="h-auto grid size-6 place-items-center rounded-md hover:bg-[var(--hover-strong)]"
       >
         <Search className="size-4" />
-      </button>
-      <button
+      </Button>
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
         aria-label="AI Inspector (⌘I)"
         onClick={toggleInspector}
-        className="grid size-6 place-items-center rounded-md hover:bg-[var(--hover-strong)]"
+        className="h-auto grid size-6 place-items-center rounded-md hover:bg-[var(--hover-strong)]"
       >
         <Sparkles className="size-4" />
-      </button>
-      <button
+      </Button>
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
         aria-label="Toggle theme"
         onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-        className="grid size-6 place-items-center rounded-md hover:bg-[var(--hover-strong)]"
+        className="h-auto grid size-6 place-items-center rounded-md hover:bg-[var(--hover-strong)]"
       >
         {theme === "dark" ? <Moon className="size-4" /> : <Sun className="size-4" />}
-      </button>
+      </Button>
       <time className="px-1.5 font-semibold tabular-nums text-foreground">{clock}</time>
     </div>
   );

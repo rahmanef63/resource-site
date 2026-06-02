@@ -68,15 +68,16 @@ export function SidebarRow({ item, active, collapsed, onToggle, renderIcon, pick
           className="h-auto flex-1 border-0 bg-transparent px-1 py-0 text-xs shadow-none focus-visible:ring-0"
         />
       ) : (
-        <button
+        <Button
           type="button"
+          variant="ghost"
           onClick={() => onSelect?.(item.id)}
           onDoubleClick={startRename}
-          className="flex-1 truncate px-1 py-0 text-left text-xs font-normal"
+          className="h-auto flex-1 justify-start truncate px-1 py-0 text-left text-xs font-normal"
           title="Click to open · double-click to rename"
         >
           {item.title || "Untitled"}
-        </button>
+        </Button>
       )}
       <div className="ml-auto hidden items-center gap-0.5 group-hover:flex">
         {onCreate && <IconBtn label="New subpage" onClick={() => onCreate(item.id)}><Plus className="h-3 w-3" /></IconBtn>}

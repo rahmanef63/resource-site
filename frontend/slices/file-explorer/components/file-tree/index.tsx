@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { DirChildren, type TreeCtx } from "./dir";
@@ -31,14 +32,17 @@ export function FileTree({
         <span className="flex-1 truncate text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
           {rootLabel}
         </span>
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="icon"
+          aria-label="Refresh"
           title="Refresh"
           onClick={() => setNonce((n) => n + 1)}
           className="grid size-6 place-items-center rounded text-muted-foreground hover:bg-secondary"
         >
           <RefreshCw className="size-3.5" />
-        </button>
+        </Button>
       </div>
       <ScrollArea className="min-h-0 flex-1">
         <div className="pb-2">

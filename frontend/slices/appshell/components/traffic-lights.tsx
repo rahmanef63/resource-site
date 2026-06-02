@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+
 // macOS window controls. Glyphs fade in on hover of the cluster (os-rr).
 export function TrafficLights({
   onClose,
@@ -37,14 +39,17 @@ function Light({
   children: React.ReactNode;
 }) {
   return (
-    <button
+    <Button
+      type="button"
+      variant="ghost"
+      size="icon"
       aria-label="window control"
       onClick={(e) => {
         e.stopPropagation();
         onClick();
       }}
       onPointerDown={(e) => e.stopPropagation()}
-      className="grid size-3 place-items-center rounded-full shadow-[inset_0_0_0_0.5px_rgba(0,0,0,0.18)]"
+      className="h-auto w-auto hover:bg-transparent grid size-3 place-items-center rounded-full shadow-[inset_0_0_0_0.5px_rgba(0,0,0,0.18)]"
       style={{ background: color }}
     >
       <svg
@@ -54,6 +59,6 @@ function Light({
       >
         {children}
       </svg>
-    </button>
+    </Button>
   );
 }

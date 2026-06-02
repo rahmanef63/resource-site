@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { Button } from "@/components/ui/button";
 import { useApps } from "../lib/registry";
 import { useWindowOrder, useWindow } from "../hooks/use-shell";
 import { closeWindow, closeAll } from "../lib/store";
@@ -51,15 +52,17 @@ export function MobileSwitcher({
         {cards.length > 0 ? (
           <>
             <span className="text-[13px] text-white/70">Tap to open · swipe up to close</span>
-            <button
+            <Button
+              type="button"
+              variant="ghost"
               onClick={() => {
                 closeAll();
                 onHome();
               }}
-              className="rounded-full bg-white/15 px-4 py-1.5 text-[13px] font-semibold text-white hover:bg-white/25"
+              className="h-auto rounded-full bg-white/15 px-4 py-1.5 text-[13px] font-semibold text-white hover:bg-white/25"
             >
               Close All
-            </button>
+            </Button>
           </>
         ) : (
           <span className="text-[13px] text-white/50">No open apps</span>

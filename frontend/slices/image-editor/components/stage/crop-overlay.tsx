@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Check, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { Doc, Pan } from "../../lib/types";
 
@@ -65,12 +66,12 @@ export function CropOverlay({
       </div>
       <div className="absolute left-1/2 top-3 flex -translate-x-1/2 items-center gap-2 rounded-lg border border-border bg-card/95 px-2 py-1 text-xs shadow-sm">
         <span className="tabular-nums text-muted-foreground">{Math.round(box.w)}×{Math.round(box.h)}</span>
-        <button type="button" onClick={() => onApply(box.x, box.y, box.w, box.h)} className="flex items-center gap-1 rounded bg-primary px-2 py-0.5 text-primary-foreground">
+        <Button type="button" variant="default" onClick={() => onApply(box.x, box.y, box.w, box.h)} className="flex h-auto items-center gap-1 rounded bg-primary px-2 py-0.5 text-primary-foreground">
           <Check className="size-3" /> Apply
-        </button>
-        <button type="button" onClick={onCancel} className="flex items-center gap-1 rounded px-2 py-0.5 text-muted-foreground hover:bg-accent">
+        </Button>
+        <Button type="button" variant="ghost" onClick={onCancel} className="flex h-auto items-center gap-1 rounded px-2 py-0.5 text-muted-foreground hover:bg-accent">
           <X className="size-3" /> Cancel
-        </button>
+        </Button>
       </div>
     </div>
   );

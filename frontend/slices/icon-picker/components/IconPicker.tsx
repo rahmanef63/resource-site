@@ -4,6 +4,7 @@ import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { DynamicIcon } from "./DynamicIcon";
 import { PickerSkeleton } from "./PickerSkeleton";
 import type { IconPickerInlineProps } from "./IconPickerInline";
@@ -125,13 +126,15 @@ export function IconPickerPopover({
   const trigger = (
     <Slot ref={setTriggerRef}>
       {children ?? (
-        <button
+        <Button
           type="button"
-          className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border text-2xl hover:bg-accent transition"
+          variant="ghost"
+          size="icon"
+          className="inline-flex h-auto h-10 w-10 items-center justify-center rounded-md border border-border text-2xl hover:bg-accent transition"
           aria-label="Change icon"
         >
           <DynamicIcon value={value} size={24} />
-        </button>
+        </Button>
       )}
     </Slot>
   );

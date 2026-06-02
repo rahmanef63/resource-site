@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Send } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useShellChat, type InspectorInfo, type ChatMessage } from "@/features/appshell";
 
@@ -96,15 +97,16 @@ export function InspectorAI({ appId, subject, info }: { appId: string; subject: 
       {info.suggestions?.length ? (
         <div className="flex flex-wrap gap-1.5 border-t border-border p-2">
           {info.suggestions.map((s) => (
-            <button
+            <Button
               key={s}
               type="button"
+              variant="outline"
               disabled={busy}
               onClick={() => send(s)}
-              className="rounded-full border border-border bg-card px-2 py-0.5 text-[11px] text-muted-foreground hover:bg-secondary disabled:opacity-50"
+              className="h-auto rounded-full border border-border bg-card px-2 py-0.5 text-[11px] text-muted-foreground hover:bg-secondary disabled:opacity-50"
             >
               {s}
-            </button>
+            </Button>
           ))}
         </div>
       ) : null}
@@ -122,13 +124,16 @@ export function InspectorAI({ appId, subject, info }: { appId: string; subject: 
           placeholder={`Ask about ${subject}…`}
           className="min-w-0 flex-1 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs outline-none focus:ring-2 focus:ring-ring"
         />
-        <button
+        <Button
           type="submit"
+          variant="ghost"
+          size="icon"
+          aria-label="Send"
           disabled={busy || !draft.trim()}
-          className="grid size-7 shrink-0 place-items-center rounded-md bg-primary text-primary-foreground disabled:opacity-50"
+          className="h-auto w-auto hover:bg-primary/90 grid size-7 shrink-0 place-items-center rounded-md bg-primary text-primary-foreground disabled:opacity-50"
         >
           <Send className="size-3.5" />
-        </button>
+        </Button>
       </form>
     </div>
   );

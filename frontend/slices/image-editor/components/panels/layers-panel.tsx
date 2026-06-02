@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Eye, EyeOff, GripVertical, Lock, SquareDashed } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
@@ -65,14 +66,16 @@ export function LayersPanel() {
                   isOver && "ring-2 ring-inset ring-primary",
                 )}
               >
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="icon"
                   aria-label={l.visible ? "Hide" : "Show"}
                   onClick={(e) => { e.stopPropagation(); ed.update(l.id, { visible: !l.visible }); }}
-                  className="grid size-6 shrink-0 place-items-center rounded text-muted-foreground hover:text-foreground"
+                  className="grid size-6 h-auto shrink-0 place-items-center rounded text-muted-foreground hover:text-foreground"
                 >
                   {l.visible ? <Eye className="size-4" /> : <EyeOff className="size-4 opacity-60" />}
-                </button>
+                </Button>
                 <LayerThumb layer={l} />
                 {editing === l.id ? (
                   <Input
@@ -101,17 +104,19 @@ export function LayersPanel() {
                   {KIND_LABEL[l.kind]}
                 </span>
                 {l.mask && (
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="icon"
                     aria-label="Edit mask"
                     onClick={(e) => { e.stopPropagation(); ed.setMaskEdit(ed.maskEditId === l.id ? null : l.id); }}
                     className={cn(
-                      "grid size-5 shrink-0 place-items-center rounded",
+                      "grid size-5 h-auto shrink-0 place-items-center rounded",
                       ed.maskEditId === l.id ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground",
                     )}
                   >
                     <SquareDashed className="size-3.5" />
-                  </button>
+                  </Button>
                 )}
                 {l.locked && <Lock className="size-3 shrink-0 text-muted-foreground" />}
                 <span onClick={(e) => e.stopPropagation()}>

@@ -61,20 +61,21 @@ export function VariantPills<T extends string>({
       {options.map((opt) => {
         const active = opt.value === value;
         return (
-          <button
+          <Button
             key={opt.value}
             type="button"
+            variant="ghost"
             onClick={() => onChange(opt.value)}
             title={opt.hint}
             className={
-              "flex h-6 flex-1 items-center justify-center rounded-[5px] px-2 text-[11px] font-medium transition " +
+              "flex h-auto h-6 flex-1 items-center justify-center rounded-[5px] px-2 text-[11px] font-medium transition " +
               (active
                 ? "bg-background text-foreground shadow-sm"
                 : "text-muted-foreground hover:text-foreground")
             }
           >
             {opt.label}
-          </button>
+          </Button>
         );
       })}
     </div>

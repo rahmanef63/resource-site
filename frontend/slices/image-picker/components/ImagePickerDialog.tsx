@@ -7,6 +7,7 @@
  *  owns the trigger + open state. */
 
 import * as React from "react";
+import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import type { ImageValue, ImageSourceProps } from "../types";
@@ -42,15 +43,15 @@ export function ImagePickerDialog({ open, onOpenChange, onSelect, onUpload, sear
         </DialogHeader>
         <div className="flex items-center gap-1 border-b border-border px-2 py-1.5">
           {tabs.map((t) => (
-            <button
-              key={t.id} type="button" onClick={() => setTab(t.id)}
+            <Button
+              key={t.id} type="button" variant="ghost" onClick={() => setTab(t.id)}
               className={cn(
-                "rounded-md px-3 py-1 text-xs font-medium transition",
+                "h-auto rounded-md px-3 py-1 text-xs font-medium transition",
                 tab === t.id ? "bg-accent text-foreground" : "text-muted-foreground hover:bg-accent/50",
               )}
             >
               {t.label}
-            </button>
+            </Button>
           ))}
         </div>
         <div className="h-[440px] overflow-y-auto">

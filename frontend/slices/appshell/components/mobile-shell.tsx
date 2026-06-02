@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { useApps } from "../lib/registry";
 import { useWindowOrder, useFocused } from "../hooks/use-shell";
 import { shellStore, openWindow, minimizeWindow, restoreWindow, toggleSpotlight } from "../lib/store";
@@ -60,17 +61,18 @@ export function MobileShell() {
   // real iPhone bottom-edge gesture. Tap → app switcher; "Done" covers home.
   const Indicator = ({ light = true }: { light?: boolean }) => (
     <div className="flex justify-center pb-[7px] pt-[5px]">
-      <button
+      <Button
         type="button"
+        variant="ghost"
         aria-label="App switcher"
         onClick={() => setSwitcher(true)}
-        className="flex items-center justify-center px-12 py-1.5 [touch-action:manipulation]"
+        className="h-auto hover:bg-transparent flex items-center justify-center px-12 py-1.5 [touch-action:manipulation]"
       >
         <span
           className="h-[5px] w-[134px] rounded-full"
           style={{ background: light ? "rgba(255,255,255,.75)" : "rgba(0,0,0,.3)" }}
         />
-      </button>
+      </Button>
     </div>
   );
 
@@ -108,9 +110,9 @@ export function MobileShell() {
               <AppIcon app={activeApp} />
             </span>
             <strong className="flex-1 truncate text-base">{activeApp.title}</strong>
-            <button onClick={goHome} className="rounded-md px-3 py-1 text-sm font-medium text-primary">
+            <Button type="button" variant="ghost" onClick={goHome} className="h-auto rounded-md px-3 py-1 text-sm font-medium text-primary">
               Done
-            </button>
+            </Button>
           </header>
           <main className="relative min-h-0 flex-1 overflow-auto [container-type:inline-size]">
             <WindowContent app={top.app} payload={top.payload} />

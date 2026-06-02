@@ -48,13 +48,15 @@ function Picker({
         {recent.length > 0 && (
           <div className="grid grid-cols-8 gap-1">
             {recent.map((c, i) => (
-              <button
+              <Button
                 key={`${c}-${i}`}
                 type="button"
+                variant="ghost"
+                size="icon"
                 title={c}
                 onClick={() => onPick(c)}
                 style={{ backgroundColor: c }}
-                className={cn("size-4 rounded-sm border border-border")}
+                className={cn("size-4 h-auto rounded-sm border border-border")}
               />
             ))}
           </div>
@@ -70,22 +72,26 @@ export function ColorSwatches() {
   return (
     <div className="relative mx-auto h-11 w-11">
       <Picker color={bg} onPick={setBg} recent={recentColors}>
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="icon"
           title="Background color"
           style={{ backgroundColor: bg }}
           className={cn(
-            "absolute bottom-0 right-0 size-[22px] rounded-sm border border-border shadow-sm",
+            "absolute bottom-0 right-0 size-[22px] h-auto rounded-sm border border-border shadow-sm",
           )}
         />
       </Picker>
       <Picker color={fg} onPick={setFg} recent={recentColors}>
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="icon"
           title="Foreground color"
           style={{ backgroundColor: fg }}
           className={cn(
-            "absolute left-0 top-0 z-10 size-[22px] rounded-sm border border-border shadow-sm",
+            "absolute left-0 top-0 z-10 size-[22px] h-auto rounded-sm border border-border shadow-sm",
           )}
         />
       </Picker>

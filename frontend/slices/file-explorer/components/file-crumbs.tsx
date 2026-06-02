@@ -93,19 +93,21 @@ export function FileCrumbs({
           {crumbs.map((c, i) => (
             <span key={c.path} className="flex min-w-0 items-center gap-0.5">
               {i > 0 && <ChevronRight className="size-3 shrink-0 opacity-50" />}
-              <button
+              <Button
+                type="button"
+                variant="ghost"
                 onClick={() => onNavigate(c.path)}
                 onDragOver={(e) => onDragOver(e, c.path)}
                 onDragLeave={() => onDragLeave(c.path)}
                 onDrop={(e) => onDrop(e, c.path)}
                 className={cn(
-                  "truncate rounded px-1.5 py-0.5 hover:bg-accent",
+                  "h-auto truncate rounded px-1.5 py-0.5 hover:bg-accent",
                   i === crumbs.length - 1 ? "font-medium text-foreground" : "",
                   dropTarget === c.path && "ring-2 ring-primary ring-inset",
                 )}
               >
                 {c.name}
-              </button>
+              </Button>
             </span>
           ))}
         </nav>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
   useApps,
@@ -160,11 +161,13 @@ export function Spotlight() {
           <ul className="max-h-80 overflow-y-auto border-t border-border p-2">
             {results.map((c, i) => (
               <li key={c.id}>
-                <button
+                <Button
+                  type="button"
+                  variant="ghost"
                   onMouseMove={() => setSel(i)}
                   onClick={() => runAt(i)}
                   className={cn(
-                    "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm",
+                    "h-auto flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm",
                     i === sel ? "bg-primary/15 text-foreground" : "text-foreground/80",
                   )}
                 >
@@ -176,7 +179,7 @@ export function Spotlight() {
                   </span>
                   <span className="flex-1 truncate">{c.label}</span>
                   <span className="text-[11px] text-muted-foreground">{c.hint}</span>
-                </button>
+                </Button>
               </li>
             ))}
           </ul>

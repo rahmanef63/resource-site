@@ -1,6 +1,7 @@
 "use client";
 
 import { CheckCircle2, AlertCircle, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useToasts, dismissToast, type ToastTone } from "@/features/appshell";
 
@@ -37,23 +38,28 @@ export function ToastHost() {
             {Icon && <Icon className={cn("size-4 shrink-0", toneColor[t.tone])} />}
             <span className="flex-1 leading-snug">{t.message}</span>
             {t.action && (
-              <button
+              <Button
+                type="button"
+                variant="ghost"
                 onClick={() => {
                   t.action?.onClick();
                   dismissToast(t.id);
                 }}
-                className="shrink-0 rounded-md bg-primary px-2 py-1 text-[11.5px] font-semibold text-primary-foreground hover:opacity-90"
+                className="h-auto shrink-0 rounded-md bg-primary px-2 py-1 text-[11.5px] font-semibold text-primary-foreground hover:bg-primary hover:opacity-90"
               >
                 {t.action.label}
-              </button>
+              </Button>
             )}
-            <button
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
               aria-label="Dismiss"
               onClick={() => dismissToast(t.id)}
-              className="grid size-5 shrink-0 place-items-center rounded-md text-muted-foreground hover:bg-[var(--hover-strong)]"
+              className="h-auto w-auto grid size-5 shrink-0 place-items-center rounded-md text-muted-foreground hover:bg-[var(--hover-strong)]"
             >
               <X className="size-3.5" />
-            </button>
+            </Button>
           </div>
         );
       })}

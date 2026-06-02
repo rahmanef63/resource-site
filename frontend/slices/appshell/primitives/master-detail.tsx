@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { ChevronLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useResponsive } from "../responsive/use-responsive";
 
@@ -50,14 +51,15 @@ export function MasterDetail({
       {hasSelection ? (
         <div className={cn("flex h-full min-h-0 flex-col", detailClassName)}>
           {onBack && (
-            <button
+            <Button
               type="button"
+              variant="ghost"
               onClick={onBack}
-              className="flex flex-none items-center gap-1 border-b border-border px-2 py-2 text-sm text-muted-foreground"
+              className="h-auto flex flex-none items-center gap-1 border-b border-border px-2 py-2 text-sm text-muted-foreground"
             >
               <ChevronLeft className="size-4" />
               {backLabel}
-            </button>
+            </Button>
           )}
           <div className="min-h-0 flex-1 overflow-auto">{detail}</div>
         </div>

@@ -6,6 +6,7 @@
  *  Wrap it in a `toc` adapter at the app level and pass to
  *  createDefaultBlockRenderers({ toc }). */
 
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { stripMd } from "../../lib/inlineMd";
 
@@ -34,17 +35,18 @@ export function TocBlock({ headings, onJump }: TocBlockProps) {
   return (
     <nav className="my-1 flex flex-col gap-0.5 text-sm">
       {headings.map((h) => (
-        <button
+        <Button
           key={h.id}
           type="button"
+          variant="ghost"
           onClick={() => onJump?.(h.id)}
           className={cn(
-            "truncate rounded px-1 py-0.5 text-left text-muted-foreground hover:bg-muted hover:text-foreground",
+            "h-auto justify-start truncate rounded px-1 py-0.5 text-left font-normal text-muted-foreground hover:bg-muted hover:text-foreground",
             INDENT[h.level] ?? "pl-8",
           )}
         >
           {stripMd(h.text) || "Untitled heading"}
-        </button>
+        </Button>
       ))}
     </nav>
   );

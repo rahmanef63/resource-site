@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { LayoutGrid, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useApps } from "../lib/registry";
 import { useWindowOrder, useFocused } from "../hooks/use-shell";
@@ -81,26 +82,30 @@ function DockIcon({
       <HoverPanel>
         <div className="px-2 py-1 text-[11px] font-semibold text-muted-foreground">{app.title}</div>
         {windows.map((w, i) => (
-          <button
+          <Button
             key={w.id}
+            type="button"
+            variant="ghost"
             onClick={() => restoreWindow(w.id)}
             className={cn(
-              "flex w-full items-center gap-2 rounded-md px-2 py-1 text-left text-[12px]",
+              "h-auto flex w-full items-center gap-2 rounded-md px-2 py-1 text-left text-[12px]",
               w.id === focused ? "bg-primary/15 text-foreground" : "text-foreground/80 hover:bg-[var(--hover-strong)]",
             )}
           >
             <span className="truncate">{w.title}</span>
             {windows.length > 1 && <span className="ml-auto text-[10px] text-muted-foreground">{i + 1}</span>}
             {w.minimized && <span className="text-[10px] text-muted-foreground">hidden</span>}
-          </button>
+          </Button>
         ))}
         {app.multi && (
-          <button
+          <Button
+            type="button"
+            variant="ghost"
             onClick={() => openWindow(app.id, app.title, app.defaultSize, undefined, { multi: true })}
-            className="flex w-full items-center gap-2 rounded-md px-2 py-1 text-left text-[12px] text-foreground/80 hover:bg-[var(--hover-strong)]"
+            className="h-auto flex w-full items-center gap-2 rounded-md px-2 py-1 text-left text-[12px] text-foreground/80 hover:bg-[var(--hover-strong)]"
           >
             <Plus className="size-3.5" /> New Window
-          </button>
+          </Button>
         )}
       </HoverPanel>
 
@@ -141,9 +146,9 @@ function PlainIcon({
       <HoverPanel>
         <div className="px-2 py-1 text-[12px] font-medium text-foreground/80">{label}</div>
       </HoverPanel>
-      <button onClick={onClick} className={ICON}>
+      <Button type="button" variant="ghost" size="icon" aria-label={label} onClick={onClick} className={cn("h-auto w-auto hover:bg-transparent", ICON)}>
         {children}
-      </button>
+      </Button>
     </div>
   );
 }

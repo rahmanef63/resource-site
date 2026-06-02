@@ -2,6 +2,7 @@
 
 import { type LucideIcon, Moon, Sun, Server, Cloud, Sparkles, Layers, Search } from "lucide-react";
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
   useWindowOrder,
@@ -82,12 +83,13 @@ function Tile({
   onClick: () => void;
 }) {
   return (
-    <button
+    <Button
       type="button"
+      variant="ghost"
       disabled={disabled}
       onClick={onClick}
       className={cn(
-        "flex items-center gap-3 rounded-2xl border border-border px-3.5 py-3 text-left transition-colors disabled:opacity-40",
+        "h-auto flex items-center gap-3 rounded-2xl border border-border px-3.5 py-3 text-left transition-colors disabled:opacity-40",
         on ? "bg-primary text-primary-foreground" : "bg-background/60 hover:bg-background",
       )}
     >
@@ -105,6 +107,6 @@ function Tile({
           {value}
         </span>
       </span>
-    </button>
+    </Button>
   );
 }

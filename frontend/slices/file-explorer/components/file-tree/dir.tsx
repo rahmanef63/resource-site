@@ -10,6 +10,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { useFsAdapter, type FsEntry } from "../../adapter";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export type TreeCtx = {
@@ -108,12 +109,12 @@ export function DirChildren({
         </div>
       ) : (
         <div style={{ paddingLeft: pad + 14 }} className="flex items-center gap-1 py-0.5 opacity-0 hover:opacity-100 focus-within:opacity-100">
-          <button type="button" title="New file" onClick={() => setAdding("file")} className="grid size-5 place-items-center rounded text-muted-foreground hover:bg-secondary">
+          <Button type="button" variant="ghost" size="icon" aria-label="New file" title="New file" onClick={() => setAdding("file")} className="grid size-5 place-items-center rounded text-muted-foreground hover:bg-secondary">
             <FilePlus className="size-3" />
-          </button>
-          <button type="button" title="New folder" onClick={() => setAdding("dir")} className="grid size-5 place-items-center rounded text-muted-foreground hover:bg-secondary">
+          </Button>
+          <Button type="button" variant="ghost" size="icon" aria-label="New folder" title="New folder" onClick={() => setAdding("dir")} className="grid size-5 place-items-center rounded text-muted-foreground hover:bg-secondary">
             <FolderPlus className="size-3" />
-          </button>
+          </Button>
         </div>
       )}
     </div>
@@ -128,35 +129,37 @@ function Node({ entry, parent, depth, ctx }: { entry: FsEntry; parent: string; d
   if (entry.kind === "file") {
     const on = ctx.activePath === path;
     return (
-      <button
+      <Button
         type="button"
+        variant="ghost"
         onClick={() => ctx.onOpenFile?.(path)}
         style={pad}
         className={cn(
-          "flex w-full items-center gap-1.5 py-1 pr-2 text-left text-xs",
+          "flex h-auto w-full items-center gap-1.5 py-1 pr-2 text-left text-xs",
           on ? "bg-secondary text-foreground" : "text-muted-foreground hover:bg-secondary/60",
         )}
       >
         <FileIcon className="size-3.5 shrink-0 opacity-70" />
         <span className="truncate">{entry.name}</span>
-      </button>
+      </Button>
     );
   }
 
   return (
     <div>
-      <button
+      <Button
         type="button"
+        variant="ghost"
         onClick={() => {
           setOpen((v) => !v);
           ctx.onSelectDir?.(path);
         }}
         style={pad}
-        className="flex w-full items-center gap-1 py-1 pr-2 text-left text-xs font-medium text-foreground hover:bg-secondary/60"
+        className="flex h-auto w-full items-center gap-1 py-1 pr-2 text-left text-xs font-medium text-foreground hover:bg-secondary/60"
       >
         {open ? <ChevronDown className="size-3.5 shrink-0" /> : <ChevronRight className="size-3.5 shrink-0" />}
         <span className="truncate">{entry.name}</span>
-      </button>
+      </Button>
       {open ? <DirChildren path={path} depth={depth + 1} ctx={ctx} /> : null}
     </div>
   );

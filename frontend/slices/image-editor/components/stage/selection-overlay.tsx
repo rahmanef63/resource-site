@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Eraser, PaintBucket, Crop, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useEditor } from "../../lib/store";
 
@@ -68,18 +69,18 @@ export function SelectionOverlay({ onDone }: { onDone: () => void }) {
         <span className={cn(corner, "-bottom-1.5 -right-1.5 cursor-nwse-resize")} onPointerDown={start("se")} />
       </div>
       <div className="absolute left-1/2 top-3 flex -translate-x-1/2 items-center gap-2 rounded-lg border border-border bg-card/95 px-2 py-1 text-xs shadow-sm">
-        <button type="button" disabled={!paint} onClick={clear} className={cn(btn, "text-foreground hover:bg-accent disabled:opacity-40")}>
+        <Button type="button" variant="ghost" disabled={!paint} onClick={clear} className={cn(btn, "h-auto text-foreground hover:bg-accent disabled:opacity-40")}>
           <Eraser className="size-3" /> Clear
-        </button>
-        <button type="button" disabled={!paint} onClick={fill} className={cn(btn, "text-foreground hover:bg-accent disabled:opacity-40")}>
+        </Button>
+        <Button type="button" variant="ghost" disabled={!paint} onClick={fill} className={cn(btn, "h-auto text-foreground hover:bg-accent disabled:opacity-40")}>
           <PaintBucket className="size-3" /> Fill
-        </button>
-        <button type="button" onClick={() => { applyCrop(box.x, box.y, box.w, box.h); onDone(); }} className={cn(btn, "text-foreground hover:bg-accent")}>
+        </Button>
+        <Button type="button" variant="ghost" onClick={() => { applyCrop(box.x, box.y, box.w, box.h); onDone(); }} className={cn(btn, "h-auto text-foreground hover:bg-accent")}>
           <Crop className="size-3" /> Crop
-        </button>
-        <button type="button" onClick={onDone} className={cn(btn, "text-muted-foreground hover:bg-accent")}>
+        </Button>
+        <Button type="button" variant="ghost" onClick={onDone} className={cn(btn, "h-auto text-muted-foreground hover:bg-accent")}>
           <X className="size-3" /> Done
-        </button>
+        </Button>
       </div>
     </div>
   );
