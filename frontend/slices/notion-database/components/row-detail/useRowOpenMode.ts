@@ -17,10 +17,10 @@ function readMode(): RowOpenMode {
     const v = localStorage.getItem(KEY);
     if (v === "sheet" || v === "dialog") return v;
     if (v === "page") {
-      try { localStorage.setItem(KEY, DEFAULT); } catch {}
+      try { localStorage.setItem(KEY, DEFAULT); } catch { /* storage blocked (private mode / quota) — ignore */ }
       return DEFAULT;
     }
-  } catch {}
+  } catch { /* localStorage unavailable — fall back to default */ }
   return DEFAULT;
 }
 
@@ -38,7 +38,7 @@ export function useRowOpenMode(): [RowOpenMode, (m: RowOpenMode) => void] {
 
   const set = (m: RowOpenMode) => {
     setMode(m);
-    try { localStorage.setItem(KEY, m); } catch {}
+    try { localStorage.setItem(KEY, m); } catch { /* storage blocked (private mode / quota) — keep in-memory only */ }
   };
 
   return [mode, set];

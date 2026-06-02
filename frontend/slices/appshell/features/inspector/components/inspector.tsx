@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { PanelRightClose, Sparkles, SlidersHorizontal } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
   useFocusedApp,
@@ -38,14 +39,16 @@ export function Inspector() {
             <p className="truncate text-[10px] text-muted-foreground">{info.subject}</p>
           ) : null}
         </div>
-        <button
-          type="button"
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label="Close inspector (⌘I)"
           title="Close inspector (⌘I)"
           onClick={() => setInspectorOpen(false)}
-          className="grid size-6 place-items-center rounded text-muted-foreground hover:bg-secondary"
+          className="size-6 rounded text-muted-foreground hover:bg-secondary"
         >
           <PanelRightClose className="size-4" />
-        </button>
+        </Button>
       </header>
 
       <div className="flex gap-1 border-b border-border p-1.5">
@@ -66,17 +69,17 @@ export function Inspector() {
 
 function TabBtn({ icon, label, on, onClick }: { icon: React.ReactNode; label: string; on: boolean; onClick: () => void }) {
   return (
-    <button
-      type="button"
+    <Button
+      variant="ghost"
       onClick={onClick}
       className={cn(
-        "flex flex-1 items-center justify-center gap-1.5 rounded-md py-1.5 text-xs font-medium transition-colors",
+        "h-auto flex-1 gap-1.5 rounded-md py-1.5 text-xs font-medium",
         on ? "bg-secondary text-foreground" : "text-muted-foreground hover:bg-secondary/60",
       )}
     >
       {icon}
       {label}
-    </button>
+    </Button>
   );
 }
 
@@ -108,14 +111,14 @@ function PropsTab({ info }: { info: ReturnType<typeof useInspectorInfo> }) {
             </p>
             <div className="flex flex-wrap gap-1.5">
               {info.actions.map((a) => (
-                <button
+                <Button
                   key={a.id}
-                  type="button"
+                  variant="outline"
                   onClick={() => void a.run()}
-                  className="rounded-md border border-border bg-background px-2.5 py-1 text-xs hover:bg-secondary"
+                  className="h-auto rounded-md px-2.5 py-1 text-xs"
                 >
                   {a.label}
-                </button>
+                </Button>
               ))}
             </div>
           </div>

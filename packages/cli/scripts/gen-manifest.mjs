@@ -136,9 +136,10 @@ for (const [kind, list] of [["layout", layouts], ["recipe", recipes], ["slice", 
   }
 }
 
+// No `generatedAt` — a timestamp here rewrites the committed manifest on every
+// run, producing empty diffs + noisy blame even when nothing changed.
 const manifest = {
   version: 2,
-  generatedAt: new Date().toISOString(),
   repo: "rahmanef63/resource-site",
   branch: "main",
   layouts,
