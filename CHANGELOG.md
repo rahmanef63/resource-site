@@ -11,6 +11,13 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-03 — date picking reliable (single-mode calendar)
+
+- **notion-database** — react-day-picker's range mode wasn't registering day
+  clicks. Switched to single mode for both modes: range now uses an active-field
+  model (two fields, click to pick which the calendar edits — Notion's blue
+  active field) with the start→end span shaded via modifiers. Dates pick again.
+
 ### 2026-06-03 — date range picking fix + End-date toggle sync
 
 - **notion-database** — dates couldn't be picked in range mode (an empty cell

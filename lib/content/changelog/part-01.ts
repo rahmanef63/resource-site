@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "DB-DATE4",
+    "version": "notion-database",
+    "date": 1780444800000,
+    "kind": "fix",
+    "title": "Date picking reliable again — single-mode calendar + active field",
+    "body": "react-day-picker range mode wasn't registering clicks. Switched the calendar to single mode (the proven path) for both modes: range now uses an active-field model (two fields, click to choose which the calendar edits — matching Notion's blue active field) with the start→end span shaded via modifiers. Picking works again.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          {
+            "text": "notion-database — date picking fix (single-mode active field)",
+            "slug": "notion-database"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "DB-DATE3",
     "version": "notion-database",
     "date": 1780444800000,

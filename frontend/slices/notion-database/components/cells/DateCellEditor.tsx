@@ -1,20 +1,13 @@
 "use client";
 
-/** DateCellEditor — popover body for DateCell, matching notion-page-clone's
- *  date editor.
- *
- *  Single mode: one date display (+ Today) and one calendar.
- *  Range mode (End date on): two date displays SIDE BY SIDE (start | end) over
- *  ONE range-highlighting calendar — the whole start→end span is shaded, like
- *  Notion. Toggling End date on seeds `end = start` so the end fields are
- *  immediately usable.
- *
- *  The calendar is the picker, so the date displays are read-only formatted
- *  boxes (a native date input is forbidden here). Times use the shadcn time
- *  input — start + end side by side in range mode — and appear only when
- *  `dateIncludeTime` is on. Value shape: `{ date, end?, time?, endTime? }`. */
+/** DateCellEditor — DateCell popover body. Range mode shows two date fields
+ *  side by side; the ACTIVE one (blue ring) is what the calendar edits (click
+ *  to switch, like Notion). Calendar runs in `single` mode (reliable picking)
+ *  and shades the start→end span via modifiers. Fields are formatted boxes (no
+ *  native date input); times use the shadcn time input. Value: `{date, end?,
+ *  time?, endTime?}`. */
 
-import type { DateRange } from "react-day-picker";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
@@ -22,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import type { Property } from "../../types";
 import { formatYmd } from "../../lib/dateFormat";
 import { DateCellSettings } from "./DateCellSettings";
+import { DateBox } from "./DateBox";
 
 export interface DateEditorValue { date?: string; end?: string; time?: string; endTime?: string }
 
@@ -36,17 +30,6 @@ function fromISO(s?: string): Date | undefined {
   if (!s) return undefined;
   const m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
   return m ? new Date(+m[1]!, +m[2]! - 1, +m[3]!) : undefined;
-}
-
-function DateBox({ label, placeholder }: { label: string; placeholder: string }) {
-  return (
-    <div className={cn(
-      "flex h-8 min-w-0 flex-1 items-center truncate rounded-md border border-border bg-background px-2 text-sm",
-      !label && "text-muted-foreground/60",
-    )}>
-      {label || placeholder}
-    </div>
-  );
 }
 
 interface Props {
@@ -67,6 +50,8 @@ export function DateCellEditor({
   const fmt = prop?.dateFormat ?? "full";
   const start = fromISO(v.date);
   const end = fromISO(v.end);
+  // Which field the single calendar edits in range mode.
+  const [editing, setEditing] = useState<"start" | "end">("start");
 
   const patch = (p: Partial<DateEditorValue>) => {
     const next = { ...v, ...p };
@@ -81,30 +66,50 @@ export function DateCellEditor({
     if (!rangeMode && !includeTime) onAfterPick?.();
   };
 
-  const onRangeSelect = (range: DateRange | undefined) => {
-    const from = toISO(range?.from);
-    if (!from) { onChange(null); return; }
-    const to = toISO(range?.to);
-    onChange({ ...v, date: from, end: to, endTime: to ? v.endTime : undefined });
+  const setEnd = (d: Date | undefined) => {
+    if (!d) { patch({ end: undefined, endTime: undefined }); return; }
+    const iso = toISO(d)!;
+    // Keep end ≥ start: picking an earlier "end" swaps the two.
+    if (v.date && iso < v.date) { patch({ date: iso, end: v.date }); return; }
+    patch({ end: iso });
+  };
+
+  // Calendar click target depends on the active field (range mode only).
+  const onPick = (d: Date | undefined) => {
+    if (rangeMode && editing === "end") { setEnd(d); return; }
+    setStart(d);
+    if (rangeMode && !v.end) setEditing("end"); // start → next click sets end
   };
 
   // End date is a PROPERTY-level setting (`prop.dateRange`) — the same switch
-  // the column header's edit-property panel (DatePanel) toggles — so the two
-  // surfaces stay in sync. Turning it on seeds end = start so the end fields
-  // are immediately usable; turning it off clears this cell's end values.
+  // the column header's edit-property panel toggles — so the two stay in sync.
   const toggleRange = (on: boolean) => {
     onPropPatch?.({ dateRange: on || undefined });
     if (on && v.date && !v.end) patch({ end: v.date });
     else if (!on && (v.end || v.endTime)) patch({ end: undefined, endTime: undefined });
+    setEditing("start");
   };
+
+  const rangeModifiers: Record<string, Date | { after: Date; before: Date }> = {};
+  if (start) rangeModifiers.rstart = start;
+  if (end) rangeModifiers.rend = end;
+  if (start && end) rangeModifiers.rmiddle = { after: start, before: end };
+
+  const calSelected = rangeMode ? (editing === "end" ? end : start) : start;
 
   return (
     <div className="w-[18rem] p-2">
-      {/* Date display(s) */}
+      {/* Date field(s) */}
       {rangeMode ? (
         <div className="mb-2 grid grid-cols-2 gap-2">
-          <DateBox label={v.date ? formatYmd(v.date, fmt) : ""} placeholder="Start date" />
-          <DateBox label={v.end ? formatYmd(v.end, fmt) : ""} placeholder="End date" />
+          <DateBox
+            label={v.date ? formatYmd(v.date, fmt) : ""} placeholder="Start date"
+            active={editing === "start"} onClick={() => setEditing("start")}
+          />
+          <DateBox
+            label={v.end ? formatYmd(v.end, fmt) : ""} placeholder="End date"
+            active={editing === "end"} onClick={() => setEditing("end")}
+          />
         </div>
       ) : (
         <div className="mb-2 flex items-center gap-2">
@@ -143,18 +148,19 @@ export function DateCellEditor({
         )
       )}
 
-      {/* One calendar — range-highlighting in range mode */}
-      {rangeMode ? (
-        <Calendar
-          mode="range"
-          selected={start ? { from: start, to: end } : undefined}
-          onSelect={onRangeSelect}
-          defaultMonth={start}
-          numberOfMonths={1}
-        />
-      ) : (
-        <Calendar mode="single" selected={start} onSelect={setStart} defaultMonth={start} numberOfMonths={1} />
-      )}
+      <Calendar
+        mode="single"
+        selected={calSelected}
+        onSelect={onPick}
+        defaultMonth={calSelected ?? start}
+        numberOfMonths={1}
+        modifiers={rangeMode ? rangeModifiers : undefined}
+        modifiersClassNames={{
+          rstart: "bg-primary text-primary-foreground rounded-l-md",
+          rend: "bg-primary text-primary-foreground rounded-r-md",
+          rmiddle: "bg-accent/60 rounded-none",
+        }}
+      />
 
       <DateCellSettings
         prop={prop}
