@@ -15,6 +15,11 @@ export const ALLOWED_IMPORT_PREFIXES = [
   "@/lib/utils",
   "@/lib/utils.ts",
   "@/shared/",
+  // Nested-cluster internal alias (CLAUDE.md "Notion Slice Convention").
+  // @notion/* → frontend/slices/notion/* — the cluster's private shared
+  // layer (vendored block/page types, uid, inlineMd). Cluster-internal, same
+  // spirit as relative-within-slice but across the slice-of-slices tree.
+  "@notion/",
   // Convex barrels
   "@convex/",
   // Standard libs / frameworks

@@ -17,6 +17,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      "@notion": path.resolve(__dirname, "frontend/slices/notion"),
       "@": path.resolve(__dirname, "."),
     },
   },

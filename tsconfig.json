@@ -27,6 +27,7 @@
       "@/*": ["./*"],
       "@/shared/*": ["./components/shared/*", "./lib/shared/*"],
       "@/features/*": ["./frontend/slices/*"],
+      "@notion/*": ["./frontend/slices/notion/*"],
       "@convex/*": ["./convex/*"]
     }
   },

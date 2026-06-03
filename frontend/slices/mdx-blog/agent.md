@@ -3,7 +3,7 @@
 
 # Install `mdx-blog` — MDX Blog
 
-> Markdown-with-JSX untuk blog post.
+> DEPRECATED in favour of the notion-editor block slice for app rich text.
 
 📚 Knowledge base : https://resource.rahmanef.com/llms.txt
 📦 Slice detail   : https://resource.rahmanef.com/slices/mdx-blog

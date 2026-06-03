@@ -1,0 +1,23 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "notion",
+  "version": "0.1.0",
+  "category": "content",
+  "title": "Notion — Block Editor",
+  "description": "Nested vertical slice (slice-of-slices) porting the notion-page-clone block editor as rr's rich-text content engine. Cluster-private shared layer under @notion/* (vendored block/page model, uid, inline markdown). WIP: milestone 1 ships the decoupled pure core (block specs + block-tree/turn-into/markdown-triggers/inline-decorator/synced/layout utils, 151 tests). Components + convex + the EditorAdapter cross-slice seam land in later milestones.",
+  "namespace": "@/features/notion",
+  "kind": "full",
+  "frontend": {
+    "slicePath": "frontend/slices/notion",
+    "configExport": "notionConfig"
+  },
+  "deps": {
+    "npm": ["sonner", "@dnd-kit/core", "@dnd-kit/sortable", "@dnd-kit/utilities", "katex"],
+    "shadcn": ["button", "dropdown-menu", "popover", "separator", "checkbox", "input", "switch", "skeleton"],
+    "env": [],
+    "peers": []
+  },
+  "registers": ["registry"],
+  "license": "MIT",
+  "tags": ["content", "notion", "editor", "block-editor", "rich-text", "wip"]
+}

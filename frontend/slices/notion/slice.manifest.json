@@ -1,0 +1,37 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "notion",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add notion",
+    "consumerPath": "slices/notion"
+  },
+  "files": [
+    "README.md",
+    "config.ts",
+    "index.ts",
+    "shared/types/blocks.ts",
+    "shared/types/index.ts",
+    "shared/lib/uid.ts",
+    "shared/lib/inlineMd.tsx",
+    "slices/editor/index.ts",
+    "slices/editor/blockSpecs.ts",
+    "slices/editor/lib/adapter.ts"
+  ],
+  "imports": {
+    "shared": [
+      "@/components/ui/button",
+      "@/components/ui/dropdown-menu",
+      "@/components/ui/popover"
+    ],
+    "external": [
+      "react",
+      "lucide-react",
+      "sonner",
+      "@dnd-kit/core",
+      "katex"
+    ]
+  }
+}
