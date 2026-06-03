@@ -10,11 +10,14 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "convex:dev": "convex dev",
-    "convex:codegen": "convex dev --once"
+    "convex:codegen": "convex dev --once",
+    "build:auto": "if [ -n \"$CONVEX_DEPLOY_KEY\" ]; then node scripts/setup-auth.mjs && convex deploy --cmd 'next build'; else next build; fi",
+    "smoke": "node scripts/smoke-test.mjs"
   },
   "dependencies": {
     "@auth/core": "^0.37.0",
     "@convex-dev/auth": "^0.0.84",
+    "jose": "^5.9.6",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "class-variance-authority": "^0.7.1",
