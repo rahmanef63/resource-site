@@ -39,6 +39,7 @@ as the `comments` slice.
 | EditorAdapter seam — interface + runtime context (`EditorAdapterProvider`/`useEditorAdapter`) | ✅ |
 | **M2a** — block rendering: `BlockBody` (text/heading/list/quote/code/callout), special-block registry (image/embed/button/audio/video/divider), built-in `SimpleCodeBlock`, image/media dropzones (uploads via `adapter.page.uploadFile` + `FilePicker`) | ✅ |
 | **M2a** — editing layer: SlashMenu, key/input/slash handlers, block-decorate, column layout, selection-toolbar + mention-typeahead helpers, page-action submenus | ✅ |
-| M2b — block chrome (BlockShell/Controls, Toggle/Nested/Synced) behind selection+comments adapters | ⏳ |
-| M2c — page shell (BlockEditor, PageEditor, page-actions) + database blocks + AI + live mentions | ⏳ |
+| **M2b.1** — adapter seam expanded: `EditorDataAdapter` (block+page CRUD, no-op fallback) + revised `SelectionAdapter` (selectOne/range/toggle) + `CommentsAdapter` (hook+popover, no-op default) + `AiAdapter`; context hooks `useEditorData`/`useSelection`/`useComments`/`useAi`. `BlockShell` wired to selection. | ✅ |
+| M2b.2 — block chrome (BlockControls, ToggleBlock, Nested/Synced) against the frozen seam (comments + AI wired) | ⏳ |
+| M2c — page shell (BlockEditor, PageEditor, page-actions) + database blocks + live mentions | ⏳ |
 | Convex (blocks / blockOps) | ⏳ |

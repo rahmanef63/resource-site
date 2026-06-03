@@ -11,6 +11,16 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-03 — notion M2b.1 + changelog newest-first fix
+
+- **notion** — expanded the `EditorAdapter` seam: `EditorDataAdapter` (block +
+  page CRUD with a no-op fallback), revised `SelectionAdapter`, `CommentsAdapter`
+  (hook + popover, no-op default), `AiAdapter`, and `useEditorData` /
+  `useSelection` / `useComments` / `useAi` hooks. `BlockShell` wired to
+  selection. Freezes the interface for the M2b.2 chrome port.
+- **Site** — `/changelog` now renders newest-first per page (was sorting each
+  page ascending).
+
 ### 2026-06-03 — notion block-editor port (M1+M2a) + content-slice pass
 
 - **notion** (new, WIP cluster) — port of the notion-page-clone block editor as

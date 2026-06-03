@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "NB-M2B1",
+    "version": "notion M2b.1",
+    "date": 1780444800000,
+    "kind": "feature",
+    "title": "notion-editor M2b.1 — block-CRUD + selection/comments/AI adapter seam",
+    "body": "Expanded the EditorAdapter seam: EditorDataAdapter (block + page CRUD, no-op fallback), revised SelectionAdapter, CommentsAdapter (hook + popover with no-op default), AiAdapter, plus useEditorData/useSelection/useComments/useAi context hooks. BlockShell wired to selection. Sets up the chrome port (M2b.2).",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          {
+            "text": "notion — M2b.1 adapter seam + BlockShell (WIP cluster)",
+            "slug": "notion"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "RM-MDX",
     "version": "cleanup",
     "date": 1780444800000,

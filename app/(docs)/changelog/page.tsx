@@ -48,7 +48,7 @@ async function ChangelogPaged({
         title="Changelog"
         subtitle={`What changed in each rr release — page ${page} of ${totalPages}. Full prose history in CHANGELOG.md.`}
         entries={entries}
-        sortDescending={false}
+        sortDescending
         layout="timeline"
       />
       <Pager page={page} totalPages={totalPages} />

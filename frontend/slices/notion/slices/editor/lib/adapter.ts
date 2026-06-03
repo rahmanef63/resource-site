@@ -1,5 +1,6 @@
-import type { ReactNode } from "react";
+import type { ComponentType, ReactNode } from "react";
 import type { Block, Page } from "@notion/shared/types";
+import type { EditorDataAdapter } from "./dataAdapter";
 
 /**
  * EditorAdapter — the seam that decouples the block editor from its host app.
@@ -17,21 +18,53 @@ import type { Block, Page } from "@notion/shared/types";
  * against it instead of reaching into peer slices.
  */
 
-/** Multi-block selection store (was @/slices/block-selection). */
+/** Multi-block selection store (was @/slices/block-selection). Mirrors the
+ *  source `useBlockSelectionOptional()` surface the block chrome calls. */
 export interface SelectionAdapter {
-  selectedIds: ReadonlySet<string>;
   isSelected: (blockId: string) => boolean;
-  toggle: (blockId: string, additive?: boolean) => void;
-  clear: () => void;
+  /** Replace the selection with just this block. */
+  selectOne: (blockId: string) => void;
+  /** Add/remove this block from the selection (⌘/ctrl-click). */
+  toggle: (blockId: string) => void;
+  /** Extend the selection to this block (shift-click). */
+  range: (blockId: string) => void;
 }
 
-/** Comment affordances on a block (was @/slices/comments). */
-export interface CommentsAdapter {
-  /** Open-thread count for a block, for the gutter indicator. */
-  openCount: (blockId: string) => number;
-  /** Host opens its own comment UI anchored to the block. */
-  openThread: (blockId: string) => void;
+/** Per-block comment state (open count + create), mirroring the source
+ *  `useBlockComments(blockId)` hook return. */
+export interface BlockCommentsState {
+  openCount: number;
+  create: (text: string) => void | Promise<void>;
 }
+
+/** Comment affordances on a block (was @/slices/comments). Modelled as a
+ *  hook + a popover component so the chrome can call them unconditionally;
+ *  the cluster supplies a no-op default (DEFAULT_COMMENTS) when the host
+ *  wires none, keeping rules-of-hooks satisfied. */
+export interface CommentsAdapter {
+  useBlockComments: (blockId: string) => BlockCommentsState;
+  BlockCommentsPopover: ComponentType<{
+    pageId: string;
+    blockId: string;
+    trigger: ReactNode;
+  }>;
+}
+
+/** Inline "Ask AI" panel for a block (was @/slices/notion AI). Optional —
+ *  the chrome hides the affordance when absent. */
+export interface AiAdapter {
+  AskAIPanel: ComponentType<{
+    pageId: string;
+    block: Block;
+    index: number;
+    onClose: () => void;
+  }>;
+}
+
+export const DEFAULT_COMMENTS: CommentsAdapter = {
+  useBlockComments: () => ({ openCount: 0, create: () => {} }),
+  BlockCommentsPopover: () => null,
+};
 
 /** Database block + picker (was @/slices/databases). */
 export interface DatabaseAdapter {
@@ -68,8 +101,11 @@ export interface PageAdapter {
  * light up as adapters are supplied.
  */
 export interface EditorAdapter {
+  /** Block + page CRUD. Absent → a no-op data layer (read-only editor). */
+  data?: EditorDataAdapter;
   selection?: SelectionAdapter;
   comments?: CommentsAdapter;
+  ai?: AiAdapter;
   database?: DatabaseAdapter;
   mention?: MentionAdapter;
   page?: PageAdapter;

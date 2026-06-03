@@ -6,17 +6,30 @@
 // Block model + slash specs
 export { BLOCK_SPECS, type BlockSpec } from "./blockSpecs";
 
-// The host-integration seam — interface + runtime provider/hook
+// The host-integration seam — interfaces + runtime provider/hooks
 export type {
   EditorAdapter,
   SelectionAdapter,
   CommentsAdapter,
+  BlockCommentsState,
+  AiAdapter,
   DatabaseAdapter,
   MentionAdapter,
   MentionResult,
   PageAdapter,
 } from "./lib/adapter";
-export { EditorAdapterProvider, useEditorAdapter } from "./lib/adapterContext";
+export type { EditorDataAdapter, UserProfile } from "./lib/dataAdapter";
+export {
+  EditorAdapterProvider,
+  useEditorAdapter,
+  useEditorData,
+  useSelection,
+  useComments,
+  useAi,
+} from "./lib/adapterContext";
+
+// Block chrome (selection-aware wrapper)
+export { BlockShell } from "./blocks/BlockShell";
 
 // Block rendering — content body + special-block renderer registry
 export { BlockBody } from "./blocks/BlockBody";
