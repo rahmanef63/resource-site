@@ -4,10 +4,8 @@ import { CatalogCard } from "@/components/site/catalog/catalog-card";
 import { type CatalogSearchItem } from "@/components/site/catalog/catalog-search";
 import { CatalogHero } from "@/components/site/catalog/catalog-hero";
 import { CatalogTabs } from "@/components/site/catalog/catalog-tabs";
-import { IframeThumbnail } from "@/components/site/catalog/iframe-thumbnail";
-import { getDemoUrl, getExternalDemoUrl } from "@/lib/content/template-subdomains";
-import { MockThumbnail } from "@/components/site/catalog/mock-thumbnail";
-import { DemoThumbnail } from "@/components/site/catalog/demo-thumbnail";
+import { getExternalDemoUrl } from "@/lib/content/template-subdomains";
+import { PosterThumbnail } from "@/components/site/catalog/poster-thumbnail";
 import { UseWideLayout } from "@/components/site/use-wide-layout";
 
 export const metadata = {
@@ -34,20 +32,14 @@ export default function TemplatesPage() {
         tags={l.tags}
         meta={<span className="font-mono">{l.source}</span>}
         thumbnail={
-          getExternalDemoUrl(l.slug) ? (
-            // Published external Vercel demo — light poster, live app on demand.
-            <DemoThumbnail demoUrl={getExternalDemoUrl(l.slug)!} title={l.title} />
-          ) : l.previewPath ? (
-            <IframeThumbnail
-              src={l.previewPath}
-              externalUrl={getDemoUrl(l.slug) ? `${getDemoUrl(l.slug)}/` : undefined}
-              liveTitle={l.title}
-              liveDefaultView={l.defaultView}
-              liveDefaultZoom={l.defaultZoom}
-            />
-          ) : (
-            <MockThumbnail kind="dashboard" category="dashboard" label={l.slug} />
-          )
+          <PosterThumbnail
+            slug={l.slug}
+            title={l.title}
+            demoUrl={getExternalDemoUrl(l.slug)}
+            previewPath={l.previewPath}
+            defaultView={l.defaultView}
+            defaultZoom={l.defaultZoom}
+          />
         }
       />
     ),
