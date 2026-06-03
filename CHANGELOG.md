@@ -11,6 +11,22 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-03 — notion block-editor port (M1+M2a) + content-slice pass
+
+- **notion** (new, WIP cluster) — port of the notion-page-clone block editor as
+  rr's rich-text engine. M1: vendored block model + 151-test pure core +
+  `EditorAdapter` seam (13 cross-slice deps → optional host adapters). M2a:
+  block rendering (BlockBody, registry, built-in code block) + editing layer
+  (slash menu, key/input/slash handlers); uploads via the adapter, raw file
+  inputs → `FilePicker`. Not yet in catalog.
+- **comments** — real reply threading: `parentId` end-to-end + `buildThread` tree.
+- **seo / comments / services / testimonials** — preview overhaul (responsive;
+  services + testimonials gain public + admin previews).
+- **mdx-blog** — deprecated (superseded by `notion`).
+- **workspace-shell** — preview rebuilt as a clean shadcn sidebar-07 dashboard.
+- **Site** — `/changelog` paginated; release data split into
+  `lib/content/changelog/part-*.ts` (bin-packed by line budget).
+
 ### 2026-06-02 — `cover` → `image-picker`: generic one-button image/wallpaper chooser
 
 - **RENAMED slice `cover` → `image-picker` (0.1.0)** — degeneralized from the
