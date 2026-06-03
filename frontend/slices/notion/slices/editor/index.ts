@@ -6,7 +6,7 @@
 // Block model + slash specs
 export { BLOCK_SPECS, type BlockSpec } from "./blockSpecs";
 
-// The host-integration seam
+// The host-integration seam — interface + runtime provider/hook
 export type {
   EditorAdapter,
   SelectionAdapter,
@@ -16,6 +16,19 @@ export type {
   MentionResult,
   PageAdapter,
 } from "./lib/adapter";
+export { EditorAdapterProvider, useEditorAdapter } from "./lib/adapterContext";
+
+// Block rendering — content body + special-block renderer registry
+export { BlockBody } from "./blocks/BlockBody";
+export { SimpleCodeBlock } from "./blocks/SimpleCodeBlock";
+export {
+  BLOCK_RENDERERS,
+  getBlockRenderer,
+  type BlockRendererProps,
+} from "./blocks/registry";
+
+// Slash command menu
+export { SlashMenu } from "./SlashMenu";
 
 // Pure block-operation utilities
 export { BLOCK_COLORS, BLOCK_COLOR_KEYS, colorClass, bgColorClass, type BlockColorKey } from "./lib/colors";

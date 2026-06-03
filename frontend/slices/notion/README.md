@@ -36,6 +36,9 @@ as the `comments` slice.
 | Block/Page model (vendored, decoupled) | ✅ |
 | blockSpecs + slash specs | ✅ |
 | Pure utils (tree / turn-into / markdown / inline-decorator / synced / layout / list-ordinals / colors / covers) | ✅ 151 tests |
-| EditorAdapter seam | ✅ defined |
-| Components (BlockEditor, SlashMenu, blocks/*) | ⏳ |
+| EditorAdapter seam — interface + runtime context (`EditorAdapterProvider`/`useEditorAdapter`) | ✅ |
+| **M2a** — block rendering: `BlockBody` (text/heading/list/quote/code/callout), special-block registry (image/embed/button/audio/video/divider), built-in `SimpleCodeBlock`, image/media dropzones (uploads via `adapter.page.uploadFile` + `FilePicker`) | ✅ |
+| **M2a** — editing layer: SlashMenu, key/input/slash handlers, block-decorate, column layout, selection-toolbar + mention-typeahead helpers, page-action submenus | ✅ |
+| M2b — block chrome (BlockShell/Controls, Toggle/Nested/Synced) behind selection+comments adapters | ⏳ |
+| M2c — page shell (BlockEditor, PageEditor, page-actions) + database blocks + AI + live mentions | ⏳ |
 | Convex (blocks / blockOps) | ⏳ |
