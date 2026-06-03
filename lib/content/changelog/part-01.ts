@@ -2,6 +2,41 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "DB-DATE",
+    "version": "notion-database",
+    "date": 1780444800000,
+    "kind": "improvement",
+    "title": "Date cell editor relaid out to match notion-page-clone",
+    "body": "The date-type cell popover now mirrors NCP: a date+time header row, one calendar, an inline End-date section, then the options list — so start/end time sit beside their date instead of stacked. Uses a formatted display + shadcn time input (no native date input).",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          {
+            "text": "notion-database — date cell editor relayout",
+            "slug": "notion-database"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "CL-LINKS",
+    "version": "changelog",
+    "date": 1780444800000,
+    "kind": "fix",
+    "title": "Changelog bullets no longer link to dead slugs",
+    "body": "Bullets pointing at a slug that isn't in the catalog (renamed, merged, deleted, or WIP like notion) now render as plain text instead of linking to a 404. Valid slugs — including ones that ship later — still link.",
+    "groups": [
+      {
+        "heading": "Site",
+        "bullets": [
+          "changelog — sanitize bullet links against the live catalog"
+        ]
+      }
+    ]
+  },
+  {
     "id": "NB-M2B1",
     "version": "notion M2b.1",
     "date": 1780444800000,

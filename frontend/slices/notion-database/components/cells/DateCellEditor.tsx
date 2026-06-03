@@ -1,18 +1,21 @@
 "use client";
 
-/** DateCellEditor — popover body for DateCell. Two SINGLE calendars
- *  (start + end) mirroring notion-page-clone, so a range needs two
- *  explicit picks and the end calendar disables days before the start.
- *  Optional `time` / `endTime` inputs appear when the property opts into
- *  `dateIncludeTime` — written as "HH:mm" (24h internal; the dateFormat
- *  formatter renders 12h/24h on display). A notion-page-clone-style options
- *  list (End date · Date format · Include time · Time format · Remind ·
- *  Clear) sits at the foot via <DateCellSettings>. Value shape:
- *  `{ date, end?, time?, endTime? }`. */
+/** DateCellEditor — popover body for DateCell, matching notion-page-clone's
+ *  date editor: a date+time HEADER ROW, one calendar, an inline End section
+ *  when range mode is on, then the options list (End date · Date format ·
+ *  Include time · Time format · Remind · Clear) via <DateCellSettings>.
+ *
+ *  The calendar is the date picker, so the header shows a read-only FORMATTED
+ *  display (a native date input is forbidden here). Times use the shadcn time
+ *  input and appear only when `dateIncludeTime` is on.
+ *  Value shape: `{ date, end?, time?, endTime? }`. */
 
+import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import type { Property } from "../../types";
+import { formatYmd } from "../../lib/dateFormat";
 import { DateCellSettings } from "./DateCellSettings";
 
 export interface DateEditorValue { date?: string; end?: string; time?: string; endTime?: string }
@@ -48,6 +51,7 @@ export function DateCellEditor({
   value, includeTime, rangeMode, onRangeToggle, onChange, onAfterPick, prop, onPropPatch,
 }: Props) {
   const v = value ?? {};
+  const fmt = prop?.dateFormat ?? "full";
   const start = fromISO(v.date);
   const end = fromISO(v.end);
 
@@ -74,36 +78,56 @@ export function DateCellEditor({
     if (!on && (v.end || v.endTime)) patch({ end: undefined, endTime: undefined });
   };
 
+  const dateBox = (label: string, placeholder: string) => (
+    <div className={cn(
+      "flex h-8 flex-1 items-center truncate rounded-md border border-border bg-background px-2 text-sm",
+      !label && "text-muted-foreground/60",
+    )}>
+      {label || placeholder}
+    </div>
+  );
+
   return (
-    <div className="w-auto">
-      <div className="p-2">
-        <div className="px-1 pb-1 text-[10px] uppercase tracking-wide text-muted-foreground">
-          {rangeMode ? "Start" : "Date"}
-        </div>
-        <Calendar mode="single" selected={start} onSelect={setStart} numberOfMonths={1} />
+    <div className="w-[18rem] p-2">
+      {/* Start — date display + Today + optional time */}
+      <div className="mb-2 flex items-center gap-2">
+        {dateBox(v.date ? formatYmd(v.date, fmt) : "", rangeMode ? "Start date" : "Empty")}
+        <Button
+          variant="ghost" type="button"
+          onClick={() => setStart(new Date())}
+          className="h-8 px-2 text-xs font-normal text-muted-foreground"
+        >
+          Today
+        </Button>
         {includeTime && (
           <Input
             type="time" value={v.time ?? ""} disabled={!v.date}
             onChange={(e) => patch({ time: e.target.value || undefined })}
-            aria-label="Start time" className="mt-1 h-7 text-xs"
+            aria-label="Start time" className="h-8 w-24 text-xs"
           />
         )}
       </div>
+      <Calendar mode="single" selected={start} onSelect={setStart} defaultMonth={start} numberOfMonths={1} />
 
+      {/* End — inline, only when range mode is on */}
       {rangeMode && (
-        <div className="border-t border-border p-2">
-          <div className="px-1 pb-1 text-[10px] uppercase tracking-wide text-muted-foreground">End</div>
+        <div className="mt-2 border-t border-border pt-2">
+          <div className="mb-1 px-1 text-[11px] text-muted-foreground">End</div>
+          <div className="mb-2 flex items-center gap-2">
+            {dateBox(v.end ? formatYmd(v.end, fmt) : "", "End date")}
+            {includeTime && (
+              <Input
+                type="time" value={v.endTime ?? ""} disabled={!v.date}
+                onChange={(e) => patch({ endTime: e.target.value || undefined })}
+                aria-label="End time" className="h-8 w-24 text-xs"
+              />
+            )}
+          </div>
           <Calendar
-            mode="single" selected={end} onSelect={setEnd} numberOfMonths={1}
+            mode="single" selected={end} onSelect={setEnd}
+            defaultMonth={end ?? start} numberOfMonths={1}
             disabled={start ? { before: start } : undefined}
           />
-          {includeTime && (
-            <Input
-              type="time" value={v.endTime ?? ""} disabled={!v.date}
-              onChange={(e) => patch({ endTime: e.target.value || undefined })}
-              aria-label="End time" className="mt-1 h-7 text-xs"
-            />
-          )}
         </div>
       )}
 

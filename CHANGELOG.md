@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-03 — date cell relayout + changelog link sanitizer
+
+- **notion-database** — rebuilt the date-type cell popover to match
+  notion-page-clone: date+time header row, one calendar, inline End-date
+  section, then the options list (start/end time beside their date, not
+  stacked). Formatted display + shadcn time input — no native date input.
+- **Site** — changelog bullets pointing at dead/renamed/WIP slugs now render as
+  plain text instead of 404 links (`lib/content/changelog/sanitize.ts`).
+
 ### 2026-06-03 — notion M2b.1 + changelog newest-first fix
 
 - **notion** — expanded the `EditorAdapter` seam: `EditorDataAdapter` (block +

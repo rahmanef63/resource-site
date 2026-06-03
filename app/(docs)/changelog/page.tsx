@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { ChangelogFeedSection } from "@/features/changelog-feed";
 import { releases } from "@/lib/content/changelog";
+import { sanitizeEntries } from "@/lib/content/changelog/sanitize";
 import { Button } from "@/components/ui/button";
 
 export const metadata = {
@@ -39,7 +40,7 @@ async function ChangelogPaged({
   const totalPages = Math.max(1, Math.ceil(releases.length / PAGE_SIZE));
   const page = Math.min(Math.max(1, Number(pageParam) || 1), totalPages);
   const start = (page - 1) * PAGE_SIZE;
-  const entries = releases.slice(start, start + PAGE_SIZE);
+  const entries = sanitizeEntries(releases.slice(start, start + PAGE_SIZE));
 
   return (
     <>
