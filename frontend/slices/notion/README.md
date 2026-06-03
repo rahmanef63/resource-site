@@ -41,6 +41,6 @@ as the `comments` slice.
 | **M2a** — editing layer: SlashMenu, key/input/slash handlers, block-decorate, column layout, selection-toolbar + mention-typeahead helpers, page-action submenus | ✅ |
 | **M2b.1** — adapter seam expanded: `EditorDataAdapter` (block+page CRUD, no-op fallback) + revised `SelectionAdapter` (selectOne/range/toggle) + `CommentsAdapter` (hook+popover, no-op default) + `AiAdapter`; context hooks `useEditorData`/`useSelection`/`useComments`/`useAi`. `BlockShell` wired to selection. | ✅ |
 | **M2b.2a** — block toolbar: `BlockControls` (hub) + `MenuHierarchy` (action menu) + `QuickButtons`/`GripButton`, wired to data/selection/comments/ai adapters (AI panel optional, comment popover via adapter). | ✅ |
-| M2b.2b — nested rendering subtree (NestedBlock/NestedContent, ToggleBlock, ColumnBlockEditor split, SyncedBlock split + pages/workspace adapter) | ⏳ |
-| M2c — page shell (BlockEditor, PageEditor, page-actions) + database blocks + live mentions | ⏳ |
+| **M2b.2b** — nested-rendering subtree: `NestedBlock` (recursive dispatcher, self-registers) + `NestedContent` (by-type renderer, database→`adapter.database`, nav→`adapter.page`, icon→`PageIcon`) + `ToggleBlock` + `ColumnBlockEditor` (split → `column/panes`) + `SyncedBlock` (split → `synced/{views,ChildrenList}`, uses `pages`/`workspaceId`) + `NestedBlockControls`. **M2b complete.** | ✅ |
+| M2c — page shell (BlockEditor, PageEditor, page-actions) that composes the chrome + nested tree into a working editor; database blocks + live mentions; catalog entry + preview | ⏳ |
 | Convex (blocks / blockOps) | ⏳ |

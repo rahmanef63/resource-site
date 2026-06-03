@@ -35,6 +35,17 @@ export { BlockControls } from "./blocks/BlockControls";
 export { QuickButtons, GripButton } from "./blocks/block-controls/QuickButtons";
 export { MenuHierarchy } from "./blocks/block-controls/MenuHierarchy";
 
+// Nested-rendering subtree — recursive block dispatcher + container blocks.
+// Importing NestedBlock registers it into the nested-render registry
+// (side-effect) so container blocks can resolve it via requireNested().
+export { NestedBlock } from "./blocks/NestedBlock";
+export { NestedBlockControls } from "./blocks/NestedBlockControls";
+export { NestedContent } from "./blocks/nested-block/NestedContent";
+export { ToggleBlock, ToggleContent } from "./blocks/ToggleBlock";
+export { ColumnBlockEditor } from "./ColumnBlockEditor";
+export { SyncedBlockContent } from "./blocks/SyncedBlock";
+export { requireNested, nestedRegistry } from "./blocks/nestedRegistry";
+
 // Block rendering — content body + special-block renderer registry
 export { BlockBody } from "./blocks/BlockBody";
 export { SimpleCodeBlock } from "./blocks/SimpleCodeBlock";

@@ -11,6 +11,16 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-03 — notion M2b.2b: nested-rendering subtree (M2b complete)
+
+- **notion** — ported the recursive nested-block tree behind the adapter seam:
+  `NestedBlock` (self-registering dispatcher), `NestedContent` (by-type renderer
+  — database→`adapter.database`, page nav→`adapter.page`, icon→built-in
+  `PageIcon`, code→`SimpleCodeBlock`), `ToggleBlock`, `ColumnBlockEditor` (split
+  into `column/panes`), `SyncedBlock` (split into `synced/{views,ChildrenList}`,
+  cross-page source via `pages`/`workspaceId`), `NestedBlockControls`. Completes
+  M2b (chrome + nested rendering). Next: M2c BlockEditor/page shell.
+
 ### 2026-06-03 — date picking reliable (single-mode calendar)
 
 - **notion-database** — react-day-picker's range mode wasn't registering day

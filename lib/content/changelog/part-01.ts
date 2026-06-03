@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "NB-M2B2B",
+    "version": "notion M2b.2b",
+    "date": 1780444800000,
+    "kind": "feature",
+    "title": "notion-editor M2b.2b — nested-rendering subtree (M2b complete)",
+    "body": "Ported the recursive nested-block tree behind the adapter seam: NestedBlock (self-registering dispatcher) + NestedContent (by-type renderer — database via adapter.database, page nav via adapter.page, page icon via a built-in PageIcon, code via SimpleCodeBlock) + ToggleBlock + ColumnBlockEditor (split into column/panes) + SyncedBlock (split into synced/views + ChildrenList, cross-page source via pages/workspaceId) + NestedBlockControls. Completes M2b — chrome + nested rendering done. Next: M2c BlockEditor/page shell.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          {
+            "text": "notion — M2b.2b nested rendering (WIP cluster)",
+            "slug": "notion"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "DB-DATE4",
     "version": "notion-database",
     "date": 1780444800000,
