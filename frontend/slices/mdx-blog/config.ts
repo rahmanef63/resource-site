@@ -1,6 +1,6 @@
 // `mdx-blog` slice config — v0.2.0 portable factory.
 //
-// Per docs/contract-negotiations-2026-05-15.md §2: kitab `mdx-blog` is
+// Per docs/contract-negotiations-2026-05-15.md §2: the `mdx-blog` slice is
 // MDX-only. UP-synced from content-rahmanef-com (commit `c6729a5`,
 // Wave N+3.1) on 2026-05-15.
 //
@@ -14,7 +14,10 @@
 //   - contentDir    — filesystem glob root (default "content/blog")
 //   - labels.list   — page heading + nav label (default "Blog")
 //   - nav.{group,order} — sidebar grouping override (default content / 0)
-import { defineFeature } from "@/lib/shared/features/defineFeature";
+import {
+  defineFeature,
+  type SliceNavEntry,
+} from "@/lib/shared/features/defineFeature";
 
 export type MdxBlogOptions = {
   /** Route base path. Default: "/blog" */
@@ -28,7 +31,7 @@ export type MdxBlogOptions = {
   };
   /** Nav grouping override. */
   nav?: {
-    group?: string;
+    group?: SliceNavEntry["group"];
     order?: number;
   };
 };
@@ -59,7 +62,7 @@ export function defineMdxBlog(opts: MdxBlogOptions = {}) {
     title: "MDX Blog",
     category: "content",
     routes: [{ path: r.basePath, view: () => import("./components/list") }],
-    nav: { label: r.labels.list, group: r.nav.group as any, order: r.nav.order },
+    nav: { label: r.labels.list, group: r.nav.group, order: r.nav.order },
   });
 }
 

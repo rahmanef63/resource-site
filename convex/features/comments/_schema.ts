@@ -23,6 +23,8 @@ export const commentsTables = {
     targetId: v.string(),
     /** Optional secondary anchor (e.g. blockId within a page). */
     targetSubId: v.optional(v.string()),
+    /** Parent comment id for replies. Absent on top-level comments. */
+    parentId: v.optional(v.id("comment_threads")),
     body: v.string(),
     resolvedAt: v.optional(v.number()),
     deletedAt: v.optional(v.number()),
@@ -31,6 +33,7 @@ export const commentsTables = {
   })
     .index("by_target_kind_id", ["targetKind", "targetId"])
     .index("by_target_kind_id_subId", ["targetKind", "targetId", "targetSubId"])
+    .index("by_parent", ["parentId"])
     .index("by_tenant", ["tenantId"])
     .index("by_actor", ["actorId"]),
 }

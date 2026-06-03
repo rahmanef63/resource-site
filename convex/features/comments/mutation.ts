@@ -3,7 +3,7 @@
  *
  * Tenant + actor are resolved by the consumer's TenantAdapter (see
  * frontend/slices/audit-log/types/index.ts for the adapter shape — same
- * pattern reused). For kitab template purposes, this file uses
+ * pattern reused). For slice template purposes, this file uses
  * `getAuthUserId` directly; consumers should swap in their own resolver.
  */
 
@@ -23,6 +23,7 @@ export const create = mutation({
     target: targetValidator,
     body: v.string(),
     tenantId: v.union(v.string(), v.null()),
+    parentId: v.optional(v.id("comment_threads")),
   },
   handler: async (ctx, args) => {
     const actor = await getAuthUserId(ctx);
@@ -34,6 +35,7 @@ export const create = mutation({
       targetKind: args.target.kind,
       targetId: args.target.id,
       targetSubId: args.target.subId,
+      parentId: args.parentId,
       body: args.body,
       createdAt: now,
       updatedAt: now,

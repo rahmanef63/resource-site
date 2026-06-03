@@ -1,7 +1,7 @@
 /**
  * Polymorphic anchor for a comment thread.
  *
- * The kitab `comments` slice intentionally does NOT bake in consumer-specific
+ * The `comments` slice intentionally does NOT bake in consumer-specific
  * entity names. Consumer projects pick the `kind` literal (e.g. "page",
  * "blog-post", "task") and resolve `id`/`subId` to whatever primary +
  * optional sub-anchor matches their domain.
@@ -31,6 +31,8 @@ export interface Comment {
   resolved: boolean;
   createdAt: number;
   updatedAt: number;
+  /** Parent comment id for replies. Absent on top-level (root) comments. */
+  parentId?: string;
   /** Author user id. Absent on public-share DTOs (sanitized). */
   authorId?: string;
 }

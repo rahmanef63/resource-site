@@ -24,6 +24,7 @@ export const contract = defineSliceContract({
   provides: {
     tables: ["comment_threads"],
     hooks: ["useComments"],
+    utils: ["buildThread"],
     components: ["CommentsThread", "CommentsAnchor"],
   },
   conflicts: [],

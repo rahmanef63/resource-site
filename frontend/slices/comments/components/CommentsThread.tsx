@@ -2,22 +2,24 @@
 
 import type { ReactNode } from "react";
 import type { Comment, TargetRef } from "../types";
+import type { CommentNode } from "../lib/buildThread";
 import type { CommentsBindings } from "../hooks/useComments";
 import { useComments } from "../hooks/useComments";
 
 /**
- * Renderless thread wrapper — the kitab slice owns load state, list ordering,
+ * Renderless thread wrapper — the slice owns load state, list ordering,
  * and forbidden-word guards. The consumer supplies the visual host via
  * `children` (render-prop). Domain-neutral by design: no built-in skin.
  *
  * Usage:
  *
  *   <CommentsThread target={{ kind: "page", id: someId }} bindings={bindings}>
- *     {({ items, openCount, create, isLoading }) => (
+ *     {({ tree, openCount, create, isLoading }) => (
  *       <YourThreadSkin
- *         items={items}
+ *         tree={tree}               // nested replies, oldest-first per level
  *         openCount={openCount}
- *         onSubmit={(text) => create({ target: { kind: "page", id: someId }, text })}
+ *         onReply={(parentId, text) =>
+ *           create({ target: { kind: "page", id: someId }, text, parentId })}
  *         loading={isLoading}
  *       />
  *     )}
@@ -30,6 +32,8 @@ export type CommentsThreadProps = {
   children: (state: {
     isLoading: boolean;
     items: Comment[];
+    /** `items` nested into reply trees by `parentId` — render this for threads. */
+    tree: CommentNode[];
     openCount: number;
     create: CommentsBindings["create"];
     update: CommentsBindings["update"];

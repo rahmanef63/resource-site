@@ -12,7 +12,7 @@
  *    literals (no brand name, no URL, no audience). Consumers MUST inject
  *    their own persona via `buildSeoSystemPrompt({ personaContext })` or via
  *    the `personaContext` action arg. The default is intentionally bland so
- *    the AI generator still functions on a fresh kitab install but produces
+ *    the AI generator still functions on a fresh slice install but produces
  *    obviously generic output until customised.
  *
  * 2. {@link HARD_RULES} — slice-generic rules every consumer needs. Output
@@ -34,7 +34,7 @@
  * {@link buildSeoSystemPrompt}.
  *
  * Contains NO brand owner name, NO domain URL, NO industry vertical. A
- * fresh kitab install produces functional but obviously-generic SEO
+ * fresh slice install produces functional but obviously-generic SEO
  * metadata until the consumer wires their own persona.
  */
 export const DEFAULT_PERSONA_CONTEXT = `You generate SEO metadata for a generic content site.

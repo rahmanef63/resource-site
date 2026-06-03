@@ -1,4 +1,5 @@
 import type { Comment, TargetRef } from "../types";
+import { buildThread } from "../lib/buildThread";
 
 /**
  * Props-driven Convex adapter. The portable slice cannot import `convex/react`
@@ -29,6 +30,8 @@ export type CommentsBindings = {
   create: (input: {
     target: TargetRef;
     text: string;
+    /** Parent comment id when replying; omit for a top-level comment. */
+    parentId?: string;
   }) => Promise<void> | void;
   update: (input: { id: string; text: string }) => Promise<void> | void;
   resolve: (input: {
@@ -73,6 +76,8 @@ export function useComments(
   return {
     isLoading: raw === undefined,
     items,
+    /** Flat `items` nested into reply trees by `parentId`. */
+    tree: buildThread(items),
     openCount: items.filter((c) => !c.resolved).length,
     create,
     update: bindings.update,

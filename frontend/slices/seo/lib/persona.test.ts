@@ -22,7 +22,7 @@ describe("seo persona — v0.2.0 portable surface", () => {
 
     it("does NOT leak any consumer-domain literal (consumer bake-in guard)", () => {
       // Mirrors the contract's `forbiddenTerms` array. If this fires, the
-      // kitab-side default has drifted into consumer territory. Terms are
+      // slice-side default has drifted into consumer territory. Terms are
       // assembled from char codes so the forbidden-terms scanner does not
       // false-positive on the test source itself.
       const lower = DEFAULT_PERSONA_CONTEXT.toLowerCase()

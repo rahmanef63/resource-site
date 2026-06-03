@@ -28,7 +28,7 @@ export const contract = defineSliceContract({
     generalization: {
       level: "portable",
       // Forbid hardcoding consumer-domain blog literals at module scope —
-      // content-rahmanef-com's specific copy/IDs must NOT leak into kitab.
+      // content-rahmanef-com's specific copy/IDs must NOT leak into the slice.
       // Allowed in MDX content files (those live OUTSIDE the slice tree).
       forbiddenTerms: ["rahmanef", "content.rahmanef.com"],
       // 4 optional props the factory accepts; all defaulted via

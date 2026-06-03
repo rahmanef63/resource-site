@@ -42,7 +42,7 @@ export const contract = defineSliceContract({
     syncPolicy: "manual",
     generalization: {
       level: "portable",
-      // Forbid any rahmanef-domain literal from leaking into the kitab copy.
+      // Forbid any rahmanef-domain literal from leaking into the slice copy.
       // The action persona was hoisted as a `personaContext` prop in v0.2.0;
       // baked-in rahmanef brand text would defeat the generalisation gate.
       forbiddenTerms: ["rahmanef", "rahmanef.com"],

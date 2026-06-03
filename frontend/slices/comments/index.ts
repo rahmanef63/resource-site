@@ -9,4 +9,6 @@ export type {
   CommentsThreadProps,
   CommentsAnchorProps,
 } from "./components";
+export { buildThread } from "./lib/buildThread";
+export type { CommentNode } from "./lib/buildThread";
 export type { Comment, TargetRef } from "./types";
