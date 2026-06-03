@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-03 — date range picking fix + End-date toggle sync
+
+- **notion-database** — dates couldn't be picked in range mode (an empty cell
+  passed a `{from:undefined}` range that broke react-day-picker's first click);
+  now passes `undefined`. The cell's End-date toggle patches `prop.dateRange` —
+  the same switch the column header's edit-property panel toggles — so the two
+  surfaces stay in sync.
+
 ### 2026-06-03 — notion M2b.2a: block toolbar
 
 - **notion** — ported the per-block toolbar (`BlockControls` hub +

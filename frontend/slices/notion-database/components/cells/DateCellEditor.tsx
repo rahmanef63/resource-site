@@ -53,7 +53,6 @@ interface Props {
   value: DateEditorValue | null;
   includeTime: boolean;
   rangeMode: boolean;
-  onRangeToggle: (next: boolean) => void;
   onChange: (next: DateEditorValue | null) => void;
   /** Fired after a terminal pick so the host can close the popover. */
   onAfterPick?: () => void;
@@ -62,7 +61,7 @@ interface Props {
 }
 
 export function DateCellEditor({
-  value, includeTime, rangeMode, onRangeToggle, onChange, onAfterPick, prop, onPropPatch,
+  value, includeTime, rangeMode, onChange, onAfterPick, prop, onPropPatch,
 }: Props) {
   const v = value ?? {};
   const fmt = prop?.dateFormat ?? "full";
@@ -89,10 +88,14 @@ export function DateCellEditor({
     onChange({ ...v, date: from, end: to, endTime: to ? v.endTime : undefined });
   };
 
+  // End date is a PROPERTY-level setting (`prop.dateRange`) — the same switch
+  // the column header's edit-property panel (DatePanel) toggles — so the two
+  // surfaces stay in sync. Turning it on seeds end = start so the end fields
+  // are immediately usable; turning it off clears this cell's end values.
   const toggleRange = (on: boolean) => {
-    onRangeToggle(on);
-    if (on && v.date && !v.end) patch({ end: v.date }); // seed end = start
-    if (!on && (v.end || v.endTime)) patch({ end: undefined, endTime: undefined });
+    onPropPatch?.({ dateRange: on || undefined });
+    if (on && v.date && !v.end) patch({ end: v.date });
+    else if (!on && (v.end || v.endTime)) patch({ end: undefined, endTime: undefined });
   };
 
   return (
@@ -144,7 +147,7 @@ export function DateCellEditor({
       {rangeMode ? (
         <Calendar
           mode="range"
-          selected={{ from: start, to: end }}
+          selected={start ? { from: start, to: end } : undefined}
           onSelect={onRangeSelect}
           defaultMonth={start}
           numberOfMonths={1}

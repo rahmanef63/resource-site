@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "DB-DATE3",
+    "version": "notion-database",
+    "date": 1780444800000,
+    "kind": "fix",
+    "title": "Date range picking + End-date toggle synced with the column header",
+    "body": "Fixed: dates couldn't be picked in range mode (an empty cell passed a {from:undefined} range that broke react-day-picker's first click — now passes undefined). The cell's End-date toggle now patches prop.dateRange, the same switch the column header's edit-property panel toggles, so the two stay in sync.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          {
+            "text": "notion-database — range pick fix + End-date toggle sync",
+            "slug": "notion-database"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "NB-M2B2A",
     "version": "notion M2b.2a",
     "date": 1780444800000,

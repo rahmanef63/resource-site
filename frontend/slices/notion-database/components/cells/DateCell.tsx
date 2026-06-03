@@ -46,12 +46,11 @@ interface DateCellProps {
 export function DateCell({ value, readOnly, onChange, prop, onPropPatch }: DateCellProps) {
   const [open, setOpen] = useState(false);
   const v = value && typeof value === "object" ? value : null;
-  // Range is "active" when the column defaults to a range OR this cell
-  // already has an end — derived live so toggling `dateRange` on the
-  // header updates every mounted cell. The per-cell Switch overrides.
-  const rangeActive = !!v?.end || !!prop?.dateRange;
-  const [rangeOverride, setRangeOverride] = useState<boolean | null>(null);
-  const rangeMode = rangeOverride ?? rangeActive;
+  // Range is "active" when the column defaults to a range (`prop.dateRange`,
+  // toggled from EITHER the cell popover's End-date switch or the column
+  // header's edit-property panel — both patch the same property) OR this cell
+  // already has an end. Derived live so the two toggles stay in sync.
+  const rangeMode = !!v?.end || !!prop?.dateRange;
   const includeTime = !!prop?.dateIncludeTime;
 
   const label = display(v, prop);
@@ -100,7 +99,6 @@ export function DateCell({ value, readOnly, onChange, prop, onPropPatch }: DateC
           value={v}
           includeTime={includeTime}
           rangeMode={rangeMode}
-          onRangeToggle={setRangeOverride}
           onChange={onChange ?? (() => {})}
           onAfterPick={() => setOpen(false)}
           prop={prop}
