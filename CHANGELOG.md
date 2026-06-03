@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-03 — date cell: custom month grid (drop react-day-picker)
+
+- **notion-database** — react-day-picker v10 swallowed day clicks however it was
+  wired (state flow + value round-trip verified correct; same bug in
+  notion-page-clone). Replaced it for the date cell with a tiny self-contained
+  `DateCalendar` — each day is a plain shadcn `Button` with a direct `onClick`;
+  selected / range / today are className state we own. Clicks always fire.
+
 ### 2026-06-03 — date picking: decouple from react-day-picker v10 selection
 
 - **notion-database** — dates couldn't be picked (same bug in notion-page-clone)

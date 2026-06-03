@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "DB-DATE6",
+    "version": "notion-database",
+    "date": 1780444800000,
+    "kind": "fix",
+    "title": "Date cell: replace react-day-picker with a custom month grid (picking works)",
+    "body": "react-day-picker v10 swallowed day clicks no matter how it was wired (verified: state flow + value round-trip are correct; same bug in notion-page-clone). Replaced it for the date cell with a tiny self-contained DateCalendar — each day is a plain shadcn Button with a direct onClick, selected/range/today are className state we own. No rdp dependency; clicks always fire.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          {
+            "text": "notion-database — custom DateCalendar (drop react-day-picker)",
+            "slug": "notion-database"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "DB-DATE5",
     "version": "notion-database",
     "date": 1780444800000,

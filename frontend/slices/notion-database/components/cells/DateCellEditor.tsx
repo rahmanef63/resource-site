@@ -8,14 +8,13 @@
  *  time?, endTime?}`. */
 
 import { useState } from "react";
-import { cn } from "@/lib/utils";
-import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import type { Property } from "../../types";
 import { formatYmd } from "../../lib/dateFormat";
 import { DateCellSettings } from "./DateCellSettings";
 import { DateBox } from "./DateBox";
+import { DateCalendar } from "./DateCalendar";
 
 export interface DateEditorValue { date?: string; end?: string; time?: string; endTime?: string }
 
@@ -90,11 +89,6 @@ export function DateCellEditor({
     setEditing("start");
   };
 
-  const rangeModifiers: Record<string, Date | { after: Date; before: Date }> = {};
-  if (start) rangeModifiers.rstart = start;
-  if (end) rangeModifiers.rend = end;
-  if (start && end) rangeModifiers.rmiddle = { after: start, before: end };
-
   const calSelected = rangeMode ? (editing === "end" ? end : start) : start;
 
   return (
@@ -148,26 +142,15 @@ export function DateCellEditor({
         )
       )}
 
-      {/* Clicks handled via onDayClick (fires unconditionally for any enabled
-          day) instead of the mode/selected/onSelect state machine — that path
-          silently stopped registering clicks under react-day-picker v10 (same
-          bug in notion-page-clone). The selected-day + range highlight is
-          driven entirely by `modifiers`, so it stays correct without relying on
-          rdp's internal selection. */}
-      <Calendar
-        onDayClick={(d: Date) => onPick(d)}
+      {/* Custom month grid — NOT react-day-picker. rdp v10's selection path
+          stopped registering day clicks (same in notion-page-clone); here each
+          day is a plain Button with a direct onClick, so picking always works. */}
+      <DateCalendar
+        selected={calSelected}
+        rangeStart={rangeMode ? start : undefined}
+        rangeEnd={rangeMode ? end : undefined}
         defaultMonth={calSelected ?? start}
-        numberOfMonths={1}
-        modifiers={{
-          sel: calSelected ? [calSelected] : [],
-          ...(rangeMode ? rangeModifiers : {}),
-        }}
-        modifiersClassNames={{
-          sel: "bg-primary text-primary-foreground rounded-md",
-          rstart: "bg-primary text-primary-foreground rounded-l-md",
-          rend: "bg-primary text-primary-foreground rounded-r-md",
-          rmiddle: "bg-accent/60 rounded-none",
-        }}
+        onPick={onPick}
       />
 
       <DateCellSettings
