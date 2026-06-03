@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "DB-DATE2",
+    "version": "notion-database",
+    "date": 1780444800000,
+    "kind": "fix",
+    "title": "Date range: side-by-side start/end over one range calendar + clickable end time",
+    "body": "Range mode now shows two date fields side by side over a single range-highlighting calendar (was two stacked calendars), matching Notion. Toggling End date seeds end=start so the end-time field is immediately enabled — fixes end time being unclickable.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          {
+            "text": "notion-database — range date layout + end-time fix",
+            "slug": "notion-database"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "DB-DATE",
     "version": "notion-database",
     "date": 1780444800000,

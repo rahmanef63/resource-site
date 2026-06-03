@@ -11,6 +11,13 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-03 — date range: side-by-side + clickable end time
+
+- **notion-database** — range mode now shows two date fields side by side over
+  a single range-highlighting calendar (was two stacked calendars), matching
+  Notion. Toggling End date seeds `end = start` so the end-time field is
+  enabled — fixes end time being unclickable.
+
 ### 2026-06-03 — date cell relayout + changelog link sanitizer
 
 - **notion-database** — rebuilt the date-type cell popover to match
