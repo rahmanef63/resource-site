@@ -148,14 +148,22 @@ export function DateCellEditor({
         )
       )}
 
+      {/* Clicks handled via onDayClick (fires unconditionally for any enabled
+          day) instead of the mode/selected/onSelect state machine — that path
+          silently stopped registering clicks under react-day-picker v10 (same
+          bug in notion-page-clone). The selected-day + range highlight is
+          driven entirely by `modifiers`, so it stays correct without relying on
+          rdp's internal selection. */}
       <Calendar
-        mode="single"
-        selected={calSelected}
-        onSelect={onPick}
+        onDayClick={(d: Date) => onPick(d)}
         defaultMonth={calSelected ?? start}
         numberOfMonths={1}
-        modifiers={rangeMode ? rangeModifiers : undefined}
+        modifiers={{
+          sel: calSelected ? [calSelected] : [],
+          ...(rangeMode ? rangeModifiers : {}),
+        }}
         modifiersClassNames={{
+          sel: "bg-primary text-primary-foreground rounded-md",
           rstart: "bg-primary text-primary-foreground rounded-l-md",
           rend: "bg-primary text-primary-foreground rounded-r-md",
           rmiddle: "bg-accent/60 rounded-none",

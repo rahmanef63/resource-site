@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "DB-DATE5",
+    "version": "notion-database",
+    "date": 1780444800000,
+    "kind": "fix",
+    "title": "Date picking — decouple from react-day-picker v10 selection state",
+    "body": "Dates couldn't be picked (same in notion-page-clone) — the controlled mode/selected/onSelect path broke under react-day-picker v10. The calendar now handles clicks via onDayClick and drives the selected-day + range highlight purely from `modifiers`, both fed by our own value, so it no longer relies on rdp's internal selection state machine.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          {
+            "text": "notion-database — date picking via onDayClick (rdp-v10-proof)",
+            "slug": "notion-database"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "NB-M2B2B",
     "version": "notion M2b.2b",
     "date": 1780444800000,

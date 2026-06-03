@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-03 — date picking: decouple from react-day-picker v10 selection
+
+- **notion-database** — dates couldn't be picked (same bug in notion-page-clone)
+  because the controlled `mode`/`selected`/`onSelect` path broke under
+  react-day-picker v10. The date cell now handles day clicks via `onDayClick`
+  and drives the selected-day + range highlight purely from `modifiers` — both
+  fed by our own controlled value — so it no longer depends on rdp's internal
+  selection state machine.
+
 ### 2026-06-03 — notion M2b.2b: nested-rendering subtree (M2b complete)
 
 - **notion** — ported the recursive nested-block tree behind the adapter seam:
