@@ -28,8 +28,12 @@ export {
   useAi,
 } from "./lib/adapterContext";
 
-// Block chrome (selection-aware wrapper)
+// Block chrome — selection-aware wrapper + the per-block toolbar (menu,
+// quick buttons, grip) wired to the data/selection/comments/ai adapters.
 export { BlockShell } from "./blocks/BlockShell";
+export { BlockControls } from "./blocks/BlockControls";
+export { QuickButtons, GripButton } from "./blocks/block-controls/QuickButtons";
+export { MenuHierarchy } from "./blocks/block-controls/MenuHierarchy";
 
 // Block rendering — content body + special-block renderer registry
 export { BlockBody } from "./blocks/BlockBody";

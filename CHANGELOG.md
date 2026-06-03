@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-03 — notion M2b.2a: block toolbar
+
+- **notion** — ported the per-block toolbar (`BlockControls` hub +
+  `MenuHierarchy` + `QuickButtons`/`GripButton`) against the frozen adapter
+  seam: data CRUD + selection via `useEditorData`/`useSelection`, comments via
+  `useComments` (popover + count), AI panel via optional `useAi`. Nested
+  rendering (toggle/columns/synced) is M2b.2b.
+
 ### 2026-06-03 — date range: side-by-side + clickable end time
 
 - **notion-database** — range mode now shows two date fields side by side over

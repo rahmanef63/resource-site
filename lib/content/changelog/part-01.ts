@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "NB-M2B2A",
+    "version": "notion M2b.2a",
+    "date": 1780444800000,
+    "kind": "feature",
+    "title": "notion-editor M2b.2a — block toolbar wired to the adapters",
+    "body": "Ported the per-block toolbar (BlockControls hub + MenuHierarchy action menu + QuickButtons/GripButton) against the frozen seam: data CRUD + selection via useEditorData/useSelection, comments via useComments (popover + count), AI panel via optional useAi. The nested-rendering subtree (toggle/columns/synced) is the next slice (M2b.2b).",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          {
+            "text": "notion — M2b.2a block toolbar (WIP cluster)",
+            "slug": "notion"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "DB-DATE2",
     "version": "notion-database",
     "date": 1780444800000,

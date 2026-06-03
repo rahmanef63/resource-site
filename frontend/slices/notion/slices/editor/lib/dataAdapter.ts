@@ -20,6 +20,11 @@ export interface UserProfile {
  */
 export interface EditorDataAdapter {
   user: UserProfile;
+  /** All pages in the active workspace — used for cross-page lookups
+   *  (synced-block source resolution). Empty when the host wires none. */
+  pages: Page[];
+  /** Active workspace id, for scoping cross-page lookups. */
+  workspaceId?: string;
   getPage: (id: string) => Page | undefined;
   childrenOf: (parentId: string | null) => Page[];
 
@@ -48,6 +53,7 @@ export const DEFAULT_USER: UserProfile = {
  *  throwing, so a standalone read-only editor still mounts. */
 export const NOOP_DATA_ADAPTER: EditorDataAdapter = {
   user: DEFAULT_USER,
+  pages: [],
   getPage: () => undefined,
   childrenOf: () => [],
   addBlock: async () => "",
