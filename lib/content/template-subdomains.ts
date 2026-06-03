@@ -48,9 +48,14 @@ export const SLUG_TO_SUBDOMAIN: Record<string, string> = Object.fromEntries(
  *  not the per-deploy immutable URL. */
 export const SLUG_TO_DEMO_URL: Record<string, string> = {
   "personal-brand-os": "https://personal-brand-os-ten.vercel.app",
-  // konsultan-os: add once public (ssoProtection off) + content-complete
-  // kreator-studio-os: …
-  // wirausaha-os / riset-kit / agency-studio-os / saas-marketing-os / cms-public-storefront
+  "agency-studio-os": "https://agency-studio-os.vercel.app",
+  "konsultan-os": "https://konsultan-os.vercel.app",
+  "kreator-studio-os": "https://kreator-studio-os.vercel.app",
+  "riset-kit": "https://riset-kit.vercel.app",
+  "saas-marketing-os": "https://saas-marketing-os-omega.vercel.app",
+  "wirausaha-os": "https://wirausaha-os.vercel.app",
+  // notion-page-clone-os: no standalone content repo yet (the cms-public-storefront
+  // repo is the bare rr starter). Stays on poster/preview until a real deploy exists.
 };
 
 /** External Vercel demo URL for a slug, or null if not yet published. */
