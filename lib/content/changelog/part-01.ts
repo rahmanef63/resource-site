@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "DB-DATE7",
+    "version": "notion-database",
+    "date": 1780444800000,
+    "kind": "fix",
+    "title": "Date cell: back to the custom grid + range click-sequence",
+    "body": "Reverting to the shadcn Calendar broke picking again (it's the unreliable part here); the self-contained DateCalendar grid is what works. Restored it and added Notion-style range picking: with End date on, click 1 = start, click 2 = end (the earlier of the two is always kept as start, so clicking before the start swaps them); clicking once a full range exists starts a fresh range.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          {
+            "text": "notion-database — custom date grid + range click-sequence",
+            "slug": "notion-database"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "DB-DATE6",
     "version": "notion-database",
     "date": 1780444800000,

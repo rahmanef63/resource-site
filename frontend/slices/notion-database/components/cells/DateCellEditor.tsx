@@ -1,22 +1,20 @@
 "use client";
 
-/** DateCellEditor — DateCell popover body, the canonical shadcn date picker
- *  (Popover + Calendar). Single mode picks one date; range mode (End date on)
- *  shows two display fields over a `mode="range"` calendar that shades the
- *  start→end span. Times use the shadcn time input and appear only when
- *  `dateIncludeTime` is on. Value shape: `{ date, end?, time?, endTime? }`.
- *
- *  NOTE: the Calendar (react-day-picker) is pinned to v9 — v10 silently broke
- *  day clicks with this shadcn Calendar component. */
+/** DateCellEditor — DateCell popover body. Uses the custom DateCalendar grid
+ *  (plain buttons, no react-day-picker — rdp's selection path didn't register
+ *  clicks here). Single mode picks one date. Range mode (End date on) uses a
+ *  click sequence: 1st click = start, 2nd click = end (the earlier of the two
+ *  is always kept as start — clicking before the start swaps them); clicking
+ *  again once a full range exists starts a fresh range. Value shape:
+ *  `{ date, end?, time?, endTime? }`. */
 
-import type { DateRange } from "react-day-picker";
-import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import type { Property } from "../../types";
 import { formatYmd } from "../../lib/dateFormat";
 import { DateCellSettings } from "./DateCellSettings";
 import { DateBox } from "./DateBox";
+import { DateCalendar } from "./DateCalendar";
 
 export interface DateEditorValue { date?: string; end?: string; time?: string; endTime?: string }
 
@@ -62,22 +60,31 @@ export function DateCellEditor({
     const iso = toISO(d);
     if (!iso) { onChange(null); return; }
     patch({ date: iso });
-    if (!rangeMode && !includeTime) onAfterPick?.();
+    if (!includeTime) onAfterPick?.();
   };
 
-  const onRangeSelect = (range: DateRange | undefined) => {
-    const from = toISO(range?.from);
-    if (!from) { onChange(null); return; }
-    const to = toISO(range?.to);
-    onChange({ ...v, date: from, end: to, endTime: to ? v.endTime : undefined });
+  // Range click sequence:
+  //  - no start yet, or a complete range exists  → this click starts a fresh
+  //    range (sets start, clears end)
+  //  - start set, no end yet                      → this click sets the end,
+  //    swapping so the earlier date stays as start
+  const onPickRange = (d: Date) => {
+    const iso = toISO(d)!;
+    if (!v.date || v.end) {
+      onChange({ ...v, date: iso, end: undefined, endTime: undefined });
+      return;
+    }
+    if (iso < v.date) onChange({ ...v, date: iso, end: v.date });
+    else onChange({ ...v, date: v.date, end: iso });
   };
+
+  const onPick = (d: Date) => (rangeMode ? onPickRange(d) : setStart(d));
 
   // End date is a PROPERTY-level setting (`prop.dateRange`) — the same switch
   // the column header's edit-property panel toggles — so the two stay in sync.
   const toggleRange = (on: boolean) => {
     onPropPatch?.({ dateRange: on || undefined });
-    if (on && v.date && !v.end) patch({ end: v.date });
-    else if (!on && (v.end || v.endTime)) patch({ end: undefined, endTime: undefined });
+    if (!on && (v.end || v.endTime)) patch({ end: undefined, endTime: undefined });
   };
 
   return (
@@ -125,23 +132,13 @@ export function DateCellEditor({
         )
       )}
 
-      {rangeMode ? (
-        <Calendar
-          mode="range"
-          selected={start ? { from: start, to: end } : undefined}
-          onSelect={onRangeSelect}
-          defaultMonth={start}
-          numberOfMonths={1}
-        />
-      ) : (
-        <Calendar
-          mode="single"
-          selected={start}
-          onSelect={setStart}
-          defaultMonth={start}
-          numberOfMonths={1}
-        />
-      )}
+      <DateCalendar
+        selected={rangeMode ? undefined : start}
+        rangeStart={rangeMode ? start : undefined}
+        rangeEnd={rangeMode ? end : undefined}
+        defaultMonth={start}
+        onPick={onPick}
+      />
 
       <DateCellSettings
         prop={prop}

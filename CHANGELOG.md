@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-03 — date cell: custom grid (again) + range click-sequence
+
+- **notion-database** — reverting to the shadcn Calendar broke picking again
+  (it's the unreliable part here, not our state); restored the self-contained
+  `DateCalendar` grid. Added Notion-style range picking: End date on → click 1 =
+  start, click 2 = end (earlier of the two stays as start, so clicking before
+  the start swaps them); clicking once a full range exists starts a fresh range.
+
 ### 2026-06-03 — date picking: pin react-day-picker to v9 (shadcn Calendar target)
 
 - **notion-database** — the repo pinned `react-day-picker ^10.0.0`, but this
