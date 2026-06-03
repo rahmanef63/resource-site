@@ -17,7 +17,7 @@
 // Single source of truth for the subdomain map: lib/content/template-subdomains.ts.
 
 import { NextRequest, NextResponse } from "next/server";
-import { resolveDemoSlug } from "@/lib/content/template-subdomains";
+import { resolveDemoSlug, getExternalDemoUrl } from "@/lib/content/template-subdomains";
 
 // Paths the proxy must NEVER rewrite — Next.js internals + APIs +
 // well-known root files (sitemap/robots/og/etc).
@@ -41,6 +41,15 @@ export default function proxy(request: NextRequest) {
 
   // Not a demo subdomain — pass through.
   if (!slug) return NextResponse.next();
+
+  // Published external demo → redirect the WHOLE subdomain to the deployed
+  // Vercel app (it serves its own assets/API). Offloads demo traffic from rr;
+  // rr no longer renders this template's /preview for the demo subdomain.
+  const external = getExternalDemoUrl(slug);
+  if (external) {
+    const dest = new URL(request.nextUrl.pathname + request.nextUrl.search, external);
+    return NextResponse.redirect(dest, 307);
+  }
 
   const pathname = request.nextUrl.pathname;
 

@@ -39,6 +39,25 @@ export const SLUG_TO_SUBDOMAIN: Record<string, string> = Object.fromEntries(
   Object.entries(SUBDOMAIN_TO_SLUG).map(([sub, slug]) => [slug, sub]),
 );
 
+/** External Vercel demo SSOT — the deployed standalone app per template.
+ *  When a slug has an entry here, rr no longer renders its own /preview for
+ *  the catalog/subdomain: the catalog embeds this URL (poster → live iframe)
+ *  and proxy.ts redirects the demo subdomain straight to it (offloading demo
+ *  traffic from rr). Add a row once a template is deployed PUBLIC (Vercel
+ *  deployment-protection OFF) so the URL is iframe-able. Use a STABLE alias,
+ *  not the per-deploy immutable URL. */
+export const SLUG_TO_DEMO_URL: Record<string, string> = {
+  "personal-brand-os": "https://personal-brand-os-ten.vercel.app",
+  // konsultan-os: add once public (ssoProtection off) + content-complete
+  // kreator-studio-os: …
+  // wirausaha-os / riset-kit / agency-studio-os / saas-marketing-os / cms-public-storefront
+};
+
+/** External Vercel demo URL for a slug, or null if not yet published. */
+export function getExternalDemoUrl(slug: string): string | null {
+  return SLUG_TO_DEMO_URL[slug] ?? null;
+}
+
 /** Parse the leftmost label from a Host header and resolve to a slug.
  *  Returns null when not a known demo subdomain (caller should pass
  *  request through without rewriting). */
