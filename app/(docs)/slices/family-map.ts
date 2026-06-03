@@ -22,7 +22,6 @@ const FAMILY_OVERRIDES: Record<string, string> = {
   "rbac-roles": "admin",
   "event-tracking": "admin",
   // content / editorial
-  "mdx-blog": "content",
   "comments": "content",
 };
 

@@ -2,6 +2,22 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "RM-MDX",
+    "version": "cleanup",
+    "date": 1780444800000,
+    "kind": "chore",
+    "title": "Remove deprecated mdx-blog slice",
+    "body": "Deleted mdx-blog (superseded by the notion editor). Unwired from catalog, registry, family-map, and the saas-marketing-os template copy.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          "mdx-blog — removed"
+        ]
+      }
+    ]
+  },
+  {
     "id": "NB-M2A",
     "version": "notion M2a",
     "date": 1780444800000,

@@ -13,7 +13,6 @@ import { commandMenuConfig } from "@/features/command-menu/config";
 import { commentsConfig } from "@/features/comments/config";
 import { convexAuthConfig } from "@/features/convex-auth/config";
 import { dokuPaymentConfig } from "@/features/doku-payment/config";
-import { mdxBlogConfig } from "@/features/mdx-blog/config";
 import { midtransPaymentConfig } from "@/features/midtrans-payment/config";
 import { platformAdminConfig } from "@/features/platform-admin/config";
 import { resendNewsletterConfig } from "@/features/resend-newsletter/config";
@@ -65,11 +64,6 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     ...dokuPaymentConfig,
     importPath: "@/features/doku-payment/config",
     version: "0.1.1",
-  },
-  {
-    ...mdxBlogConfig,
-    importPath: "@/features/mdx-blog/config",
-    version: "0.2.0",
   },
   {
     ...midtransPaymentConfig,

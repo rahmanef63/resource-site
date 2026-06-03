@@ -22,7 +22,8 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 - **comments** — real reply threading: `parentId` end-to-end + `buildThread` tree.
 - **seo / comments / services / testimonials** — preview overhaul (responsive;
   services + testimonials gain public + admin previews).
-- **mdx-blog** — deprecated (superseded by `notion`).
+- **mdx-blog** — **removed** (superseded by `notion`); unwired from catalog,
+  registry, family-map, and the saas-marketing-os template copy.
 - **workspace-shell** — preview rebuilt as a clean shadcn sidebar-07 dashboard.
 - **Site** — `/changelog` paginated; release data split into
   `lib/content/changelog/part-*.ts` (bin-packed by line budget).

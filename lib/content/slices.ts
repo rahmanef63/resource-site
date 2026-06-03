@@ -28,7 +28,7 @@ export type SliceEnvVar = {
  *                 Lives under convex/features/*. `slicePath` may be empty.
  *                 Examples: vector-search index helper, ai-router proxy.
  *   "full"      — both frontend + Convex, full vertical feature.
- *                 Examples: doku-payment, midtrans-payment, mdx-blog.
+ *                 Examples: doku-payment, midtrans-payment.
  *
  * Builder UI filters by kind so users picking "just a UI primitive" don't
  * see env-var requirements for backend-coupled slices.
@@ -649,7 +649,7 @@ export const subscribe = mutation({
         "agency-studio-os": { status: "recommended", note: "Leads → broadcast wired through admin." },
         "saas-marketing-os": { status: "recommended" },
       },
-      enhances: ["mdx-blog"],
+
     },
   },
   // ─────────────────────────────────────────────────────────────
@@ -902,57 +902,6 @@ const hits = await ctx.vectorSearch("documents", "by_embedding", { vector: query
     compat: {
       templates: {
         "riset-kit": { status: "native", note: "Research kit pakai embedding search untuk konten." },
-      },
-    },
-  },
-  {
-    slug: "mdx-blog",
-    title: "MDX Blog",
-    category: "content",
-    kind: "ui",
-    version: "0.2.0",
-    maturity: "deprecated",
-    tagline: "Deprecated — git/file-based static blog. For DB-backed rich text prefer the notion-editor slice (block model + slash menu + md import).",
-    description: "DEPRECATED in favour of the notion-editor block slice for app rich text. Kept only for git/file-based static blogs (zero DB): Markdown-with-JSX, file-based MDX content collection, portable defineMdxBlog(opts) factory with 4 config props (basePath, contentDir, labels.list, nav) — defaults preserve legacy /blog + content/blog. Auto ToC, reading-time, syntax highlight, inline React components. Use this only when you specifically want content versioned in git instead of a database.",
-    source: "rahmanef63/resource-site",
-    docsUrl: "https://github.com/hashicorp/next-mdx-remote",
-    install: "npm i next-mdx-remote rehype-pretty-code remark-gfm reading-time",
-    slicePath: "frontend/slices/mdx-blog",
-    convexPaths: [],
-    npm: ["@next/mdx@^16.0.0", "gray-matter@^4.0.3", "rehype-pretty-code@^0.14.0"],
-    shadcn: ["card"],
-    env: [],
-    peers: [],
-    tags: ["content", "blog", "mdx", "static"],
-    usedBy: ["personal-brand-os", "konsultan-os", "saas-marketing-os"],
-    agentRecipe: "Run `npx rr add mdx-blog`. Store post body sebagai markdown di content/blog/*.mdx. Render dengan MDXRemote di [slug]/page.tsx. Auto-extract headings ke ToC via remark plugin custom.",
-    previewPath: "/preview/slices/mdx-blog",
-    wiring: `// content/blog/setup-convex-dokploy.mdx
----
-title: Setup Convex Self-Hosted di Dokploy
-date: 2026-05-11
-tags: [tutorial, convex, dokploy]
----
-
-import { Callout } from "@/components/Callout";
-
-# Setup Convex …
-
-<Callout>Tip: pakai wildcard DNS.</Callout>
-
-// app/(public)/blog/[slug]/page.tsx
-import { MDXRemote } from "next-mdx-remote/rsc";
-const file = await fs.readFile(\`content/blog/\${slug}.mdx\`, "utf8");
-const { content, data } = matter(file);
-return <MDXRemote source={content} />;`,
-    defaultView: "tablet",
-    defaultZoom: 0.8,
-    compat: {
-      templates: {
-        "saas-marketing-os": { status: "native", note: "Blog + changelog slices both render MDX." },
-        "personal-brand-os": { status: "recommended", note: "Blog slice expects MDX bodies in Convex posts table." },
-        "konsultan-os": { status: "recommended", note: "Konten ahli sebagai SEO funnel." },
-        "agency-studio-os": { status: "warn", note: "Agency template ships no blog slice — bring your own route." },
       },
     },
   },

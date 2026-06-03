@@ -585,7 +585,7 @@ export default function Page() { return <Dashboard activeKind="doc" activeId="do
     status: "stable",
     description:
       "Marketing site for a SaaS product — landing, pricing, features, blog, changelog, about, contact — backed by a full admin panel (Pages, Posts, Pricing, Features, Customers, Subscriptions, Leads, Changelog, Settings). Same grouped Pages + Features sidebar pattern as every other template.",
-    source: "synthesized + mdx-blog feature",
+    source: "synthesized",
     repoPath: "app/preview/saas-marketing-os",
     primaryFile: "app/preview/saas-marketing-os/public/page.tsx",
     tags: ["template", "saas", "marketing", "mdx", "blog", "changelog", "admin"],
@@ -668,7 +668,7 @@ export default function Page() { return <Dashboard activeKind="doc" activeId="do
 import { HomePage } from "@/components/templates/saas-marketing/slices/home/HomePage";
 export default function Page() { return <HomePage />; }`,
     agentRecipe:
-      "Run `npx rr init <app> --template saas-marketing-os`. SaaS Marketing OS = public-only marketing template. Blog + changelog use MDX (add the mdx-blog feature). Edit components/templates/saas-marketing/shared/site-config.ts to set product name, tagline, pricing tiers, contact email.",
+      "Run `npx rr init <app> --template saas-marketing-os`. SaaS Marketing OS = public-only marketing template. Edit components/templates/saas-marketing/shared/site-config.ts to set product name, tagline, pricing tiers, contact email.",
   },
   {
     slug: "kreator-studio-os",

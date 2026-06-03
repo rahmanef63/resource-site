@@ -500,7 +500,7 @@
       "category": "website-template",
       "status": "stable",
       "description": "Marketing site for a SaaS product — landing, pricing, features, blog, changelog, about, contact — backed by a full admin panel (Pages, Posts, Pricing, Features, Customers, Subscriptions, Leads, Changelog, Settings). Same grouped Pages + Features sidebar pattern as every other template.",
-      "source": "synthesized + mdx-blog feature",
+      "source": "synthesized",
       "repoPath": "app/preview/saas-marketing-os",
       "pullPaths": [
         "app/preview/saas-marketing-os",
@@ -575,7 +575,7 @@
         "sheet",
         "textarea"
       ],
-      "agentRecipe": "Run `npx rr init <app> --template saas-marketing-os`. SaaS Marketing OS = public-only marketing template. Blog + changelog use MDX (add the mdx-blog feature). Edit components/templates/saas-marketing/shared/site-config.ts to set product name, tagline, pricing tiers, contact email.",
+      "agentRecipe": "Run `npx rr init <app> --template saas-marketing-os`. SaaS Marketing OS = public-only marketing template. Edit components/templates/saas-marketing/shared/site-config.ts to set product name, tagline, pricing tiers, contact email.",
       "tags": [
         "template",
         "saas",
@@ -1641,29 +1641,6 @@
         "embeddings",
         "convex",
         "rag"
-      ]
-    },
-    {
-      "slug": "mdx-blog",
-      "title": "MDX Blog",
-      "category": "content",
-      "description": "DEPRECATED in favour of the notion-editor block slice for app rich text. Kept only for git/file-based static blogs (zero DB): Markdown-with-JSX, file-based MDX content collection, portable defineMdxBlog(opts) factory with 4 config props (basePath, contentDir, labels.list, nav) — defaults preserve legacy /blog + content/blog. Auto ToC, reading-time, syntax highlight, inline React components. Use this only when you specifically want content versioned in git instead of a database.",
-      "source": "rahmanef63/resource-site",
-      "docsUrl": "https://github.com/hashicorp/next-mdx-remote",
-      "install": "npm i next-mdx-remote rehype-pretty-code remark-gfm reading-time",
-      "npmPackages": [
-        "next-mdx-remote",
-        "rehype-pretty-code",
-        "remark-gfm",
-        "reading-time"
-      ],
-      "exampleCode": "",
-      "agentRecipe": "Run `npx rr add mdx-blog`. Store post body sebagai markdown di content/blog/*.mdx. Render dengan MDXRemote di [slug]/page.tsx. Auto-extract headings ke ToC via remark plugin custom.",
-      "tags": [
-        "content",
-        "blog",
-        "mdx",
-        "static"
       ]
     },
     {
@@ -3077,35 +3054,6 @@
         "rag"
       ],
       "agentRecipe": "Run `npx rr add vector-search`. Add embedding field + vectorIndex per searchable table. Re-embed on upsert via Convex action. Cache embeddings — don't re-call OpenAI on every read."
-    },
-    {
-      "slug": "mdx-blog",
-      "title": "MDX Blog",
-      "category": "content",
-      "kind": "ui",
-      "version": "0.2.0",
-      "description": "DEPRECATED in favour of the notion-editor block slice for app rich text. Kept only for git/file-based static blogs (zero DB): Markdown-with-JSX, file-based MDX content collection, portable defineMdxBlog(opts) factory with 4 config props (basePath, contentDir, labels.list, nav) — defaults preserve legacy /blog + content/blog. Auto ToC, reading-time, syntax highlight, inline React components. Use this only when you specifically want content versioned in git instead of a database.",
-      "source": "rahmanef63/resource-site",
-      "slicePath": "frontend/slices/mdx-blog",
-      "convexPaths": [],
-      "npm": [
-        "@next/mdx@^16.0.0",
-        "gray-matter@^4.0.3",
-        "rehype-pretty-code@^0.14.0"
-      ],
-      "shadcn": [
-        "card"
-      ],
-      "env": [],
-      "peers": [],
-      "providers": [],
-      "tags": [
-        "content",
-        "blog",
-        "mdx",
-        "static"
-      ],
-      "agentRecipe": "Run `npx rr add mdx-blog`. Store post body sebagai markdown di content/blog/*.mdx. Render dengan MDXRemote di [slug]/page.tsx. Auto-extract headings ke ToC via remark plugin custom."
     },
     {
       "slug": "cal-com-booking",
