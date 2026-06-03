@@ -11,13 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
-### 2026-06-03 — date cell: custom month grid (drop react-day-picker)
+### 2026-06-03 — date picking: pin react-day-picker to v9 (shadcn Calendar target)
 
-- **notion-database** — react-day-picker v10 swallowed day clicks however it was
-  wired (state flow + value round-trip verified correct; same bug in
-  notion-page-clone). Replaced it for the date cell with a tiny self-contained
-  `DateCalendar` — each day is a plain shadcn `Button` with a direct `onClick`;
-  selected / range / today are className state we own. Clicks always fire.
+- **notion-database** — the repo pinned `react-day-picker ^10.0.0`, but this
+  shadcn `Calendar` component is generated for **rdp v9**; v10's breaking changes
+  silently stopped the controlled `mode`/`selected`/`onSelect` path from
+  registering day clicks (same bug in notion-page-clone). Pinned react-day-picker
+  to `^9.14.0` and restored the canonical `Popover` + `Calendar` date picker
+  (`mode="single"` / `mode="range"`).
 
 ### 2026-06-03 — date picking: decouple from react-day-picker v10 selection
 

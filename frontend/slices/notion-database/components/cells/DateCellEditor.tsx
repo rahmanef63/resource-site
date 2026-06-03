@@ -1,20 +1,22 @@
 "use client";
 
-/** DateCellEditor — DateCell popover body. Range mode shows two date fields
- *  side by side; the ACTIVE one (blue ring) is what the calendar edits (click
- *  to switch, like Notion). Calendar runs in `single` mode (reliable picking)
- *  and shades the start→end span via modifiers. Fields are formatted boxes (no
- *  native date input); times use the shadcn time input. Value: `{date, end?,
- *  time?, endTime?}`. */
+/** DateCellEditor — DateCell popover body, the canonical shadcn date picker
+ *  (Popover + Calendar). Single mode picks one date; range mode (End date on)
+ *  shows two display fields over a `mode="range"` calendar that shades the
+ *  start→end span. Times use the shadcn time input and appear only when
+ *  `dateIncludeTime` is on. Value shape: `{ date, end?, time?, endTime? }`.
+ *
+ *  NOTE: the Calendar (react-day-picker) is pinned to v9 — v10 silently broke
+ *  day clicks with this shadcn Calendar component. */
 
-import { useState } from "react";
+import type { DateRange } from "react-day-picker";
+import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import type { Property } from "../../types";
 import { formatYmd } from "../../lib/dateFormat";
 import { DateCellSettings } from "./DateCellSettings";
 import { DateBox } from "./DateBox";
-import { DateCalendar } from "./DateCalendar";
 
 export interface DateEditorValue { date?: string; end?: string; time?: string; endTime?: string }
 
@@ -49,8 +51,6 @@ export function DateCellEditor({
   const fmt = prop?.dateFormat ?? "full";
   const start = fromISO(v.date);
   const end = fromISO(v.end);
-  // Which field the single calendar edits in range mode.
-  const [editing, setEditing] = useState<"start" | "end">("start");
 
   const patch = (p: Partial<DateEditorValue>) => {
     const next = { ...v, ...p };
@@ -65,19 +65,11 @@ export function DateCellEditor({
     if (!rangeMode && !includeTime) onAfterPick?.();
   };
 
-  const setEnd = (d: Date | undefined) => {
-    if (!d) { patch({ end: undefined, endTime: undefined }); return; }
-    const iso = toISO(d)!;
-    // Keep end ≥ start: picking an earlier "end" swaps the two.
-    if (v.date && iso < v.date) { patch({ date: iso, end: v.date }); return; }
-    patch({ end: iso });
-  };
-
-  // Calendar click target depends on the active field (range mode only).
-  const onPick = (d: Date | undefined) => {
-    if (rangeMode && editing === "end") { setEnd(d); return; }
-    setStart(d);
-    if (rangeMode && !v.end) setEditing("end"); // start → next click sets end
+  const onRangeSelect = (range: DateRange | undefined) => {
+    const from = toISO(range?.from);
+    if (!from) { onChange(null); return; }
+    const to = toISO(range?.to);
+    onChange({ ...v, date: from, end: to, endTime: to ? v.endTime : undefined });
   };
 
   // End date is a PROPERTY-level setting (`prop.dateRange`) — the same switch
@@ -86,24 +78,15 @@ export function DateCellEditor({
     onPropPatch?.({ dateRange: on || undefined });
     if (on && v.date && !v.end) patch({ end: v.date });
     else if (!on && (v.end || v.endTime)) patch({ end: undefined, endTime: undefined });
-    setEditing("start");
   };
 
-  const calSelected = rangeMode ? (editing === "end" ? end : start) : start;
-
   return (
-    <div className="w-[18rem] p-2">
+    <div className="w-auto p-2">
       {/* Date field(s) */}
       {rangeMode ? (
         <div className="mb-2 grid grid-cols-2 gap-2">
-          <DateBox
-            label={v.date ? formatYmd(v.date, fmt) : ""} placeholder="Start date"
-            active={editing === "start"} onClick={() => setEditing("start")}
-          />
-          <DateBox
-            label={v.end ? formatYmd(v.end, fmt) : ""} placeholder="End date"
-            active={editing === "end"} onClick={() => setEditing("end")}
-          />
+          <DateBox label={v.date ? formatYmd(v.date, fmt) : ""} placeholder="Start date" />
+          <DateBox label={v.end ? formatYmd(v.end, fmt) : ""} placeholder="End date" />
         </div>
       ) : (
         <div className="mb-2 flex items-center gap-2">
@@ -118,7 +101,7 @@ export function DateCellEditor({
         </div>
       )}
 
-      {/* Time input(s) — standalone + clickable */}
+      {/* Time input(s) */}
       {includeTime && (
         rangeMode ? (
           <div className="mb-2 grid grid-cols-2 gap-2">
@@ -142,16 +125,23 @@ export function DateCellEditor({
         )
       )}
 
-      {/* Custom month grid — NOT react-day-picker. rdp v10's selection path
-          stopped registering day clicks (same in notion-page-clone); here each
-          day is a plain Button with a direct onClick, so picking always works. */}
-      <DateCalendar
-        selected={calSelected}
-        rangeStart={rangeMode ? start : undefined}
-        rangeEnd={rangeMode ? end : undefined}
-        defaultMonth={calSelected ?? start}
-        onPick={onPick}
-      />
+      {rangeMode ? (
+        <Calendar
+          mode="range"
+          selected={start ? { from: start, to: end } : undefined}
+          onSelect={onRangeSelect}
+          defaultMonth={start}
+          numberOfMonths={1}
+        />
+      ) : (
+        <Calendar
+          mode="single"
+          selected={start}
+          onSelect={setStart}
+          defaultMonth={start}
+          numberOfMonths={1}
+        />
+      )}
 
       <DateCellSettings
         prop={prop}

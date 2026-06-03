@@ -6,8 +6,8 @@ export const entries: ChangelogEntry[] = [
     "version": "notion-database",
     "date": 1780444800000,
     "kind": "fix",
-    "title": "Date cell: replace react-day-picker with a custom month grid (picking works)",
-    "body": "react-day-picker v10 swallowed day clicks no matter how it was wired (verified: state flow + value round-trip are correct; same bug in notion-page-clone). Replaced it for the date cell with a tiny self-contained DateCalendar — each day is a plain shadcn Button with a direct onClick, selected/range/today are className state we own. No rdp dependency; clicks always fire.",
+    "title": "Date picking — pin react-day-picker to v9 (shadcn Calendar's target)",
+    "body": "Root cause: the repo pinned react-day-picker ^10.0.0, but this shadcn Calendar component is generated for rdp v9; v10's breaking changes silently stopped the controlled mode/selected/onSelect path from registering day clicks (same bug in notion-page-clone). Fix: pin react-day-picker to ^9.14.0 (what the shadcn Calendar targets) and restore the canonical Popover + Calendar date picker (mode=single / mode=range).",
     "groups": [
       {
         "heading": "Slices touched",
