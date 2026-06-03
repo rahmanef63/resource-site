@@ -30,7 +30,10 @@ export function PosterThumbnail({
 }) {
   const src = `/template-posters/${slug}.png`;
   return (
-    <div className="relative h-full w-full overflow-hidden bg-muted/30">
+    // Posters are 1280x800 (16:10). Set an explicit aspect so the slot has
+    // height — the card's thumbnail container is height-less and relies on the
+    // child to size itself (the old IframeThumbnail set its own aspectRatio).
+    <div className="relative aspect-[16/10] w-full overflow-hidden bg-muted/30">
       <Image
         src={src}
         alt={`${title} preview`}
