@@ -54,8 +54,10 @@ export const SLUG_TO_DEMO_URL: Record<string, string> = {
   "riset-kit": "https://riset-kit.vercel.app",
   "saas-marketing-os": "https://saas-marketing-os-omega.vercel.app",
   "wirausaha-os": "https://wirausaha-os.vercel.app",
-  // notion-page-clone-os: no standalone content repo yet (the cms-public-storefront
-  // repo is the bare rr starter). Stays on poster/preview until a real deploy exists.
+  // Live demo = the full open-silong app (github.com/rahmanef63/open-silong),
+  // workspace-first (no landing) + /setup owner-claim wizard. Convex cloud
+  // prod canny-flamingo-7. Deployed 2026-06-04.
+  "notion-page-clone-os": "https://notion-page-clone-os.vercel.app",
 };
 
 /** External Vercel demo URL for a slug, or null if not yet published. */
