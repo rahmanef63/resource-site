@@ -33,6 +33,10 @@ export type FieldDef<T> =
   | { kind: "date"; key: keyof T & string; label: string; hint?: string }
   /** URL text input with live preview thumbnail when value is a URL or path. */
   | { kind: "image"; key: keyof T & string; label: string; placeholder?: string; hint?: string; wide?: boolean }
+  /** Rich image picker (image-picker slice): color/gradient/URL/Unsplash + banner preview. */
+  | { kind: "imagePicker"; key: keyof T & string; label: string; hint?: string; wide?: boolean }
+  /** Icon picker (icon-picker slice): emoji / lucide / phosphor token. */
+  | { kind: "icon"; key: keyof T & string; label: string; hint?: string; wide?: boolean }
   /** BE-wave — dynamic position dropdown. Options are derived from the
    *  CrudController's sibling items: 1..N (for existing row) or 1..N+1
    *  (for new row). Prevents manual conflicts. CrudFieldInput needs the

@@ -6,10 +6,19 @@
  *
  *   import { ChatWorkbench, useChat } from "@/features/ai-chat";
  *
- * NOTE: this scaffold ships the contract + metadata only. The
- * component files are intentionally absent until the full impl lands
- * (see git history `b208621` for the preview surface and W5 in
- * roadmap for the real implementation).
+ * NOTE: the full three-column workbench is still roadmap (W5). What
+ * ships today is the minimal real implementation used across the
+ * template fleet:
+ *
+ *   - `<AiChatFab />` — floating assistant button + chat panel. Wires
+ *     to `convex/features/aiChat/action.ts` (generateText via the `ai`
+ *     SDK + @ai-sdk/anthropic, claude-3-5-haiku). Key-guarded: returns
+ *     `{ ok: false, notice }` when ANTHROPIC_API_KEY is unset so the
+ *     build/prerender never throws.
+ *
+ * Backend half lives at `convex/features/aiChat/` (camelCase — Convex
+ * module paths must not contain hyphens).
  */
 
+export { AiChatFab } from "./components/AiChatFab";
 export type { ChatMessage, ChatThread, ChatModel, ChatTool, ChatSkill } from "./types";

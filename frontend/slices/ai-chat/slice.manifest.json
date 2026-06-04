@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "ai-chat",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -10,14 +10,15 @@
   },
   "files": [
     "README.md",
+    "components/AiChatFab.tsx",
     "config.ts",
     "index.ts",
     "types.ts"
   ],
   "convex": {
-    "schemaPath": "convex/features/ai-chat/_schema.ts",
+    "schemaPath": "convex/features/aiChat/_schema.ts",
     "rootPaths": [
-      "convex/features/ai-chat"
+      "convex/features/aiChat"
     ]
   },
   "imports": {

@@ -11,6 +11,7 @@ export {
 } from "./components/ThemePresetProvider";
 export { ThemePresetSwitcher } from "./components/ThemePresetSwitcher";
 export { ThemeColorSync } from "./components/ThemeColorSync";
+export { ThemeProviders } from "./components/ThemeProviders";
 
 export {
   applyTweakcnPreset,
