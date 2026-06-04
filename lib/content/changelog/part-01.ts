@@ -2,6 +2,29 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "MD-READER1",
+    "version": "md-reader",
+    "date": 1780531200000,
+    "kind": "feature",
+    "title": "Markdown Reader slice — notion-synced rich-text page container",
+    "body": "New read-only surface that renders a markdown string as a clean document (headings, lists, todo, callouts, fenced code, KaTeX, tables, images, toggles, inline marks). Sync with the notion block editor is by shared grammar: a new notion bridge (blocksToMarkdown / markdownToBlocks) serialises blocks ↔ the exact markdown this reader parses — so anything readable as a notion page is readable here, and back. Self-contained (own parser + inline renderer, no notion runtime dep). 21 tests.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          {
+            "text": "md-reader — new: MarkdownReader container + parseMarkdown + inline renderer",
+            "slug": "md-reader"
+          },
+          {
+            "text": "notion — added shared/lib/markdown bridge (blocksToMarkdown / markdownToBlocks)",
+            "slug": "md-reader"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "DB-DATE7",
     "version": "notion-database",
     "date": 1780444800000,

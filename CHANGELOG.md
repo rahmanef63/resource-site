@@ -11,6 +11,17 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-04 — md-reader slice + notion ⇄ markdown bridge
+
+- **md-reader** (new) — read-only `<MarkdownReader content={md}/>` page
+  container rendering rich text (headings, lists, todo, callouts, fenced code,
+  KaTeX, tables, images, `<details>` toggles, inline marks). Self-contained
+  parser + inline renderer, no notion runtime dep.
+- **notion** — added `shared/lib/markdown` bridge: `blocksToMarkdown` /
+  `markdownToBlocks`. The wire format that syncs the block editor with
+  md-reader — same grammar both ways, so notion content reads in md-reader and
+  back. 21 tests.
+
 ### 2026-06-03 — date cell: custom grid (again) + range click-sequence
 
 - **notion-database** — reverting to the shadcn Calendar broke picking again

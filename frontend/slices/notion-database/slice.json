@@ -14,11 +14,33 @@
     "configExport": ""
   },
   "deps": {
-    "npm": ["recharts@^2.13.0"],
-    "shadcn": ["button", "input", "checkbox", "dropdown-menu", "popover", "select", "sheet", "dialog", "toggle-group", "tooltip", "separator"],
+    "npm": [
+      "recharts@^3",
+      "@dnd-kit/core@^6"
+    ],
+    "shadcn": [
+      "button",
+      "input",
+      "checkbox",
+      "dropdown-menu",
+      "popover",
+      "select",
+      "sheet",
+      "dialog",
+      "toggle-group",
+      "tooltip",
+      "separator"
+    ],
     "env": [],
     "peers": [
-      { "slug": "notion-shell", "range": "^0.7", "reason": "Domain types live in notion-shell. v0.7 extends Database with `locked` flag for the DatabaseMenu lock-toggle action." }
+      {
+        "slug": "notion-shell",
+        "range": "^0.7",
+        "reason": "Domain types live in notion-shell. v0.7 extends Database with `locked` flag for the DatabaseMenu lock-toggle action."
+      }
+    ],
+    "sharedFiles": [
+      "components/shared/ui/FilePicker.tsx"
     ]
   }
 }
