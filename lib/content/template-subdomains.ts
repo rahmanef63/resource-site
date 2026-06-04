@@ -56,8 +56,9 @@ export const SLUG_TO_DEMO_URL: Record<string, string> = {
   "wirausaha-os": "https://wirausaha-os.vercel.app",
   // Live demo = the full open-silong app (github.com/rahmanef63/open-silong),
   // workspace-first (no landing) + /setup owner-claim wizard. Convex cloud
-  // prod canny-flamingo-7. Deployed 2026-06-04.
-  "notion-page-clone-os": "https://notion-page-clone-os.vercel.app",
+  // prod canny-flamingo-7. Deployed 2026-06-04; Vercel domain renamed
+  // notion-page-clone-os → silong-os same day (old host = 404).
+  "notion-page-clone-os": "https://silong-os.vercel.app",
 };
 
 /** External Vercel demo URL for a slug, or null if not yet published. */
