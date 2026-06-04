@@ -1,10 +1,11 @@
-/** Markdown → MdNode parser for the read-only reader.
+/** Markdown → MdNode parser for the markdown slice.
  *
- *  Lean block model (reader only — no editing). Line-based scanner; inline
- *  markers are left verbatim in `text` and resolved at render time by
- *  `renderInline`. Grammar matches the notion ⇄ markdown bridge
- *  (`@notion/shared/lib/markdown`) so notion-exported content renders here
- *  identically — that is the sync contract. Pure / no React. */
+ *  Lean block model. Line-based scanner; inline markers are left verbatim in
+ *  `text` and resolved at render time by `renderInline`. Grammar matches the
+ *  notion ⇄ markdown bridge (`@notion/shared/lib/markdown`) so notion-exported
+ *  content renders here identically — that is the sync contract. Fenced
+ *  ```mermaid and ```chart blocks get dedicated diagram/chart nodes.
+ *  Pure / no React. */
 
 export type Align = "left" | "center" | "right";
 
@@ -17,6 +18,8 @@ export type MdNode =
   | { type: "quote"; text: string }
   | { type: "callout"; text: string; kind: string }
   | { type: "code"; text: string; lang?: string }
+  | { type: "diagram"; text: string }
+  | { type: "chart"; text: string }
   | { type: "equation"; text: string }
   | { type: "divider" }
   | { type: "image"; url: string; caption?: string }
@@ -47,7 +50,11 @@ export function parseMarkdown(md: string): MdNode[] {
       i++;
       while (i < lines.length && !lines[i]!.trim().startsWith("```")) body.push(lines[i++]!);
       i++;
-      nodes.push({ type: "code", text: body.join("\n"), lang: fence[1] || undefined });
+      const lang = fence[1] || undefined;
+      // dedicated rich views for diagram + chart fences
+      if (lang === "mermaid") nodes.push({ type: "diagram", text: body.join("\n") });
+      else if (lang === "chart") nodes.push({ type: "chart", text: body.join("\n") });
+      else nodes.push({ type: "code", text: body.join("\n"), lang });
       continue;
     }
 

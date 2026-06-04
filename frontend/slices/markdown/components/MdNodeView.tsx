@@ -9,6 +9,8 @@ import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { MdNode, Align } from "../lib/parse";
 import { renderInline } from "../lib/inline";
+import { MermaidBlock } from "./MermaidBlock";
+import { ChartBlock } from "./ChartBlock";
 
 const CALLOUT_STYLE: Record<string, string> = {
   note: "border-sky-500/40 bg-sky-500/5",
@@ -90,6 +92,10 @@ export function MdNodeView({ node }: { node: MdNode }): React.ReactNode {
           <code className="font-mono">{node.text}</code>
         </pre>
       );
+    case "diagram":
+      return <MermaidBlock text={node.text} />;
+    case "chart":
+      return <ChartBlock text={node.text} />;
     case "equation":
       return <BlockMath text={node.text} />;
     case "divider":

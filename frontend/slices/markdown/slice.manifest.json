@@ -1,0 +1,42 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "markdown",
+  "version": "0.2.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add markdown",
+    "consumerPath": "slices/markdown"
+  },
+  "files": [
+    "config.ts",
+    "index.ts",
+    "slice.json",
+    "slice.contract.ts",
+    "components/MarkdownPage.tsx",
+    "components/MarkdownReader.tsx",
+    "components/MdNodeView.tsx",
+    "components/MermaidBlock.tsx",
+    "components/ChartBlock.tsx",
+    "components/WriteTab.tsx",
+    "components/ReviewTab.tsx",
+    "lib/parse.ts",
+    "lib/parse.test.ts",
+    "lib/inline.tsx",
+    "lib/comments.ts"
+  ],
+  "imports": {
+    "shared": [],
+    "external": [
+      "react",
+      "katex",
+      "mermaid",
+      "recharts",
+      "lucide-react",
+      "@/lib/utils",
+      "@/components/ui/button",
+      "@/components/ui/tabs",
+      "@/components/ui/textarea"
+    ]
+  }
+}

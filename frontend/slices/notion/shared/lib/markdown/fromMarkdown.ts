@@ -2,7 +2,7 @@
  *
  *  Inverse of `blocksToMarkdown`. Line-based scanner; inline markers are left
  *  verbatim in `block.text` (they are already the editor's source of truth).
- *  Pure / no React. Same grammar as the md-reader parser. */
+ *  Pure / no React. Same grammar as the markdown-slice parser. */
 
 import type { Block, BlockType } from "../../types/blocks";
 import { uid } from "../uid";

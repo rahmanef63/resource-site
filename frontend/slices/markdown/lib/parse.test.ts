@@ -69,4 +69,24 @@ describe("parseMarkdown", () => {
     const nodes = parseMarkdown("with **bold**, _em_, `code`, [l](/x)");
     expect(nodes[0]).toMatchObject({ type: "paragraph", text: "with **bold**, _em_, `code`, [l](/x)" });
   });
+
+  it("routes mermaid + chart fences to dedicated nodes", () => {
+    const nodes = parseMarkdown([
+      "```mermaid",
+      "flowchart LR",
+      "  A --> B",
+      "```",
+      "",
+      "```chart",
+      '{ "type": "bar", "data": [{ "name": "A", "value": 3 }] }',
+      "```",
+      "",
+      "```ts",
+      "const keep = true",
+      "```",
+    ].join("\n"));
+    expect(nodes[0]).toMatchObject({ type: "diagram", text: "flowchart LR\n  A --> B" });
+    expect(nodes[1]?.type).toBe("chart");
+    expect(nodes[2]).toMatchObject({ type: "code", lang: "ts" });
+  });
 });

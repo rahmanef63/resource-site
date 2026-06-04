@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "MARKDOWN2",
+    "version": "markdown",
+    "date": 1780531200000,
+    "kind": "feature",
+    "title": "markdown slice — CRUD tabs (Read/Write/Review) + mermaid diagrams + charts",
+    "body": "md-reader renamed to `markdown` and maximised. <MarkdownPage> adds optional surfaces: Read (rich text), Write (raw source editor with snippet toolbar + live preview), Review (block-anchored comments with add/resolve — controlled callbacks or internal fallback). Fenced ```mermaid blocks render as SVG diagrams (dynamic-imported mermaid) and ```chart blocks as recharts bar/line/area/pie from a JSON spec. Notion sync grammar unchanged.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          {
+            "text": "markdown — MarkdownPage tabs + MermaidBlock + ChartBlock + comments model",
+            "slug": "markdown"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "MD-READER1",
     "version": "md-reader",
     "date": 1780531200000,
@@ -14,11 +33,11 @@ export const entries: ChangelogEntry[] = [
         "bullets": [
           {
             "text": "md-reader — new: MarkdownReader container + parseMarkdown + inline renderer",
-            "slug": "md-reader"
+            "slug": "markdown"
           },
           {
             "text": "notion — added shared/lib/markdown bridge (blocksToMarkdown / markdownToBlocks)",
-            "slug": "md-reader"
+            "slug": "markdown"
           }
         ]
       }

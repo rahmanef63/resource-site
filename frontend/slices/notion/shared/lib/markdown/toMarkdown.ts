@@ -1,13 +1,13 @@
 /** blocksToMarkdown — serialise a notion block tree to a markdown string.
  *
  *  The wire format that lets notion content be read by any markdown surface
- *  (e.g. the `md-reader` slice). Inline formatting already lives in
+ *  (e.g. the `markdown` slice). Inline formatting already lives in
  *  `block.text` as markdown markers (`**b**`, `_i_`, `~~s~~`, `` `c` ``,
  *  `[l](u)`, `$x$`) so inline round-trips for free — only block-level
  *  structure is mapped here. Structural-only blocks with no textual content
  *  (page link, database, button, synced, toc) are dropped. Pure / no React.
  *
- *  Grammar mirrors `fromMarkdown.markdownToBlocks` and the md-reader parser:
+ *  Grammar mirrors `fromMarkdown.markdownToBlocks` and the markdown-slice parser:
  *    headings  #..######          callouts  > [!NOTE] (GitHub alert)
  *    bullet    -                  toggle    <details><summary>…</summary>
  *    numbered  1.                 image     ![caption](url)

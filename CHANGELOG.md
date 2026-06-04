@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-04 — markdown slice: CRUD tabs + diagrams + charts
+
+- **markdown** (renamed from md-reader) — `<MarkdownPage>` adds optional CRUD
+  surfaces: Read (rich text), Write (source editor + snippet toolbar + live
+  preview), Review (block-anchored comments, add/resolve via controlled
+  callbacks or internal fallback). Fenced ```mermaid → SVG diagram
+  (dynamic-imported mermaid@11), ```chart → recharts bar/line/area/pie from a
+  JSON spec. Notion sync grammar unchanged.
+
 ### 2026-06-04 — md-reader slice + notion ⇄ markdown bridge
 
 - **md-reader** (new) — read-only `<MarkdownReader content={md}/>` page

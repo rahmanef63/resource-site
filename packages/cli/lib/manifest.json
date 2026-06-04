@@ -2093,19 +2093,24 @@
       ]
     },
     {
-      "slug": "md-reader",
-      "title": "Markdown Reader — rich-text page container",
+      "slug": "markdown",
+      "title": "Markdown — page container with CRUD tabs + diagrams",
       "category": "content",
-      "description": "Sibling read surface to the notion block editor. Feed <MarkdownReader content={md}/> a markdown string and it renders a clean document with rich text — headings, lists, todo, quote, GitHub-style callouts, fenced code, KaTeX equations, tables, images, <details> toggles, and inline **bold**/_em_/~~strike~~/`code`/$math$/links. Self-contained: ships its own parser (parseMarkdown → MdNode[]) + inline renderer, no notion runtime dependency. Sync is by shared grammar: the notion cluster's blocksToMarkdown / markdownToBlocks bridge (@notion/shared/lib/markdown) emits/consumes the exact same markdown this reader parses, so anything readable in the notion block page is readable here and vice-versa. Pure presentational — no store, no Convex.",
+      "description": "Markdown (.md) page container with optional CRUD surfaces. <MarkdownPage content={md} tabs={['read','write','review']}/> — Read renders rich text (headings, lists, todo, GitHub-style callouts, fenced code, KaTeX, tables, images, <details> toggles, inline marks); Write is a raw-source editor with snippet toolbar + live preview; Review overlays block-anchored comments (add/resolve, controlled via onAddComment/onResolveComment or internal fallback). Fenced ```mermaid blocks render as SVG diagrams (dynamic-imported mermaid) and ```chart blocks as recharts bar/line/area/pie from a JSON spec. Self-contained: ships its own parser (parseMarkdown → MdNode[]) + inline renderer, no notion runtime dependency. Sync is by shared grammar: the notion cluster's blocksToMarkdown / markdownToBlocks bridge (@notion/shared/lib/markdown) emits/consumes the exact same markdown this slice parses, so anything readable in the notion block page is readable here and vice-versa. No store, no Convex — comments CRUD is consumer-wired callbacks.",
       "source": "rahman-resources",
-      "install": "npx rahman-resources add md-reader",
+      "install": "npx rahman-resources add markdown",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add md-reader`. Render `<MarkdownReader content={markdownString} title={...} />`. To bridge from the notion editor, install the notion slice and call `blocksToMarkdown(page.blocks)` from `@notion/shared/lib/markdown`, then pass the result as `content`. For the reverse (markdown → notion blocks) use `markdownToBlocks(md)`.",
+      "agentRecipe": "Run `npx rr add markdown`. Read-only: `<MarkdownReader content={md}/>`. Full surface: `<MarkdownPage content={md} tabs={['read','write','review']} onContentChange={save} comments={list} onAddComment={add} onResolveComment={resolve}/>` (omit callbacks for internal-state demo mode). Diagrams: fence ```mermaid; charts: fence ```chart with { type: bar|line|area|pie, data: [...] }. To bridge from the notion editor call `blocksToMarkdown(page.blocks)` from `@notion/shared/lib/markdown`; reverse with `markdownToBlocks(md)`.",
       "tags": [
         "content",
         "markdown",
         "reader",
+        "editor",
+        "review",
+        "comments",
+        "mermaid",
+        "chart",
         "rich-text",
         "docs",
         "notion-sync"
@@ -3921,20 +3926,26 @@
       "agentRecipe": "Run `rr add seo`. Call seo.generate from server actions or admin mutations with `personaContext` describing your brand voice (or rely on the generic default). Cost guard rate-limits per-user within 24h via callsInWindow query."
     },
     {
-      "slug": "md-reader",
-      "title": "Markdown Reader — rich-text page container",
+      "slug": "markdown",
+      "title": "Markdown — page container with CRUD tabs + diagrams",
       "category": "content",
       "kind": "ui",
-      "version": "0.1.0",
-      "description": "Sibling read surface to the notion block editor. Feed <MarkdownReader content={md}/> a markdown string and it renders a clean document with rich text — headings, lists, todo, quote, GitHub-style callouts, fenced code, KaTeX equations, tables, images, <details> toggles, and inline **bold**/_em_/~~strike~~/`code`/$math$/links. Self-contained: ships its own parser (parseMarkdown → MdNode[]) + inline renderer, no notion runtime dependency. Sync is by shared grammar: the notion cluster's blocksToMarkdown / markdownToBlocks bridge (@notion/shared/lib/markdown) emits/consumes the exact same markdown this reader parses, so anything readable in the notion block page is readable here and vice-versa. Pure presentational — no store, no Convex.",
+      "version": "0.2.0",
+      "description": "Markdown (.md) page container with optional CRUD surfaces. <MarkdownPage content={md} tabs={['read','write','review']}/> — Read renders rich text (headings, lists, todo, GitHub-style callouts, fenced code, KaTeX, tables, images, <details> toggles, inline marks); Write is a raw-source editor with snippet toolbar + live preview; Review overlays block-anchored comments (add/resolve, controlled via onAddComment/onResolveComment or internal fallback). Fenced ```mermaid blocks render as SVG diagrams (dynamic-imported mermaid) and ```chart blocks as recharts bar/line/area/pie from a JSON spec. Self-contained: ships its own parser (parseMarkdown → MdNode[]) + inline renderer, no notion runtime dependency. Sync is by shared grammar: the notion cluster's blocksToMarkdown / markdownToBlocks bridge (@notion/shared/lib/markdown) emits/consumes the exact same markdown this slice parses, so anything readable in the notion block page is readable here and vice-versa. No store, no Convex — comments CRUD is consumer-wired callbacks.",
       "source": "rahman-resources",
-      "slicePath": "frontend/slices/md-reader",
+      "slicePath": "frontend/slices/markdown",
       "convexPaths": [],
       "npm": [
         "katex@^0.16",
+        "mermaid@^11",
+        "recharts@^3",
         "lucide-react@^0.400.0"
       ],
-      "shadcn": [],
+      "shadcn": [
+        "button",
+        "tabs",
+        "textarea"
+      ],
       "env": [],
       "peers": [],
       "providers": [],
@@ -3942,11 +3953,16 @@
         "content",
         "markdown",
         "reader",
+        "editor",
+        "review",
+        "comments",
+        "mermaid",
+        "chart",
         "rich-text",
         "docs",
         "notion-sync"
       ],
-      "agentRecipe": "Run `npx rr add md-reader`. Render `<MarkdownReader content={markdownString} title={...} />`. To bridge from the notion editor, install the notion slice and call `blocksToMarkdown(page.blocks)` from `@notion/shared/lib/markdown`, then pass the result as `content`. For the reverse (markdown → notion blocks) use `markdownToBlocks(md)`."
+      "agentRecipe": "Run `npx rr add markdown`. Read-only: `<MarkdownReader content={md}/>`. Full surface: `<MarkdownPage content={md} tabs={['read','write','review']} onContentChange={save} comments={list} onAddComment={add} onResolveComment={resolve}/>` (omit callbacks for internal-state demo mode). Diagrams: fence ```mermaid; charts: fence ```chart with { type: bar|line|area|pie, data: [...] }. To bridge from the notion editor call `blocksToMarkdown(page.blocks)` from `@notion/shared/lib/markdown`; reverse with `markdownToBlocks(md)`."
     },
     {
       "slug": "landing-sections",
