@@ -2,6 +2,29 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "PUBGATE1",
+    "version": "rahman-resources@1.10.0",
+    "date": 1780617600000,
+    "kind": "fix",
+    "title": "Unblock CLI 1.10.0 publish — slice.json drift + structure violations",
+    "body": "prepublishOnly gates were red. Fixed: image-picker deps.env string → typed object (UNSPLASH_ACCESS_KEY, scope server, optional); slice-schema gains optional deps.sharedFiles (notion-database / notion-shell already used it); version/title parity synced for resend-newsletter (0.1.3), ai-chat (0.2.0), landing-sections (0.2.0), markdown title; deleted stale template-base/frontend/slices/notion port-staging copy (R1 dual-home); AiChatFab refactored props-driven — convex/react import replaced with injected `chat` prop (R3).",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          {
+            "text": "image-picker — env dep typed (server-scoped, optional)",
+            "slug": "image-picker"
+          },
+          {
+            "text": "ai-chat — AiChatFab props-driven (`chat` prop, exported AiChatSend types)",
+            "slug": "ai-chat"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "MARKDOWN2",
     "version": "markdown",
     "date": 1780531200000,

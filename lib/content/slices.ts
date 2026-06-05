@@ -676,7 +676,7 @@ export const subscribe = mutation({
     title: "AI Chat — Workbench / Sidebar / Search",
     category: "ai",
     kind: "full",
-    version: "0.1.0",
+    version: "0.2.0",
     tagline: "One AI chat backend, 3 surfaces: ChatGPT-style workbench, sidebar copilot, or search.",
     description: "One conversational AI feature, three render modes. Same Convex backend (threads + streaming + tool calls + RAG), pick the surface via prop:\n\n  • workbench — Claude.ai / ChatGPT three-column page (default)\n  • sidebar — collapsible copilot panel inside another CRUD app\n  • search — single-question + answer + citations (Perplexity)\n\nUse cases:\n  – Customer-support chatbot embedded in your marketing site\n  – Developer copilot in your PR/docs admin\n  – Knowledge-base search over your blog + docs corpus\n  – Internal AI assistant in your dashboard\n\nWhat it ships: multi-provider (Anthropic / OpenAI / Google / Mistral / Ollama), multimodal (text + image + PDF + audio), typed tool calls with inline inspector, agent mode (plan→execute→reflect), branching threads, RAG citations, resumable streams, usage telemetry. Public surface = consumer chat; admin surface = persona, fallback, guardrails per-bot.",
     source: "rahmanef63/resource-site",

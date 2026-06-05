@@ -3,18 +3,20 @@
 /**
  * Real AI assistant FAB — replaces the old canned `ai-fab.tsx`.
  *
- * Wires to the ai-chat slice's convex action (`features/ai-chat/action.chat`)
- * which calls Claude via the `ai` SDK + @ai-sdk/anthropic. The action is
- * key-guarded: when ANTHROPIC_API_KEY is not set on the deployment it returns
- * a notice instead of throwing, so this widget renders and degrades gracefully
- * (shows a "set API key" notice) — the build / prerender never needs the key.
+ * Props-driven (portable-slice rule R3): the backend call is INJECTED via the
+ * `chat` prop instead of importing convex/react here. Typical wiring:
  *
- * Mounted on the public site alongside <DemoRibbon /> (kept as-is).
+ *   const chat = useAction(api.features.aiChat.action.chat);
+ *   <AiChatFab brand="acme" chat={chat} />
+ *
+ * The convex action (`convex/features/aiChat/action.ts`) is key-guarded:
+ * when ANTHROPIC_API_KEY is not set it returns `{ ok: false, notice }` so
+ * this widget degrades gracefully — the build / prerender never needs the key.
+ * Without a `chat` prop the widget still renders and answers with a
+ * wire-me-up notice.
  */
 
 import * as React from "react";
-import { useAction } from "convex/react";
-import { api } from "@convex/_generated/api";
 import { Bot, Send, Sparkles, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -23,14 +25,19 @@ import { cn } from "@/lib/utils";
 
 type Msg = { role: "user" | "assistant"; text: string; notice?: boolean };
 
+export type AiChatSendResult = { ok: boolean; text?: string; notice?: string };
+export type AiChatSend = (args: {
+  prompt: string;
+  history: Array<{ role: "user" | "assistant"; content: string }>;
+}) => Promise<AiChatSendResult>;
+
 const SUGGESTIONS = [
   "Apa saja layanan yang ditawarkan?",
   "Bagaimana cara mulai kerja sama?",
   "Berapa estimasi harga & waktunya?",
 ];
 
-export function AiChatFab({ brand = "kami" }: { brand?: string }) {
-  const chat = useAction(api.features.aiChat.action.chat);
+export function AiChatFab({ brand = "kami", chat }: { brand?: string; chat?: AiChatSend }) {
   const [open, setOpen] = React.useState(false);
   const [text, setText] = React.useState("");
   const [pending, setPending] = React.useState(false);
@@ -54,6 +61,17 @@ export function AiChatFab({ brand = "kami" }: { brand?: string }) {
       .filter((m) => !m.notice)
       .map((m) => ({ role: m.role, content: m.text }));
     setMsgs((m) => [...m, { role: "user", text: question }]);
+    if (!chat) {
+      setMsgs((m) => [
+        ...m,
+        {
+          role: "assistant",
+          text: "AI belum terhubung — pass the `chat` prop (e.g. useAction(api.features.aiChat.action.chat)).",
+          notice: true,
+        },
+      ]);
+      return;
+    }
     setPending(true);
     try {
       const res = await chat({ prompt: question, history });

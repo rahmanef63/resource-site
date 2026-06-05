@@ -4,7 +4,7 @@
   "version": "0.2.0",
   "category": "content",
   "kind": "ui",
-  "title": "Markdown",
+  "title": "Markdown — page container with CRUD tabs + diagrams",
   "description": "Markdown (.md) page container with optional CRUD surfaces — Read (rich text), Write (source editor + live preview), Review (block-anchored comments). Renders mermaid diagrams + recharts charts from fenced blocks. Same markdown grammar as the notion block editor (blocksToMarkdown bridge), so notion-exported content renders identically. Self-contained parser + inline renderer.",
   "namespace": "@/features/markdown",
   "frontend": {
@@ -17,13 +17,34 @@
     "rootPaths": []
   },
   "deps": {
-    "npm": ["katex@^0.16", "mermaid@^11", "recharts@^3", "lucide-react@^0.400.0"],
-    "shadcn": ["button", "tabs", "textarea"],
+    "npm": [
+      "katex@^0.16",
+      "mermaid@^11",
+      "recharts@^3",
+      "lucide-react@^0.400.0"
+    ],
+    "shadcn": [
+      "button",
+      "tabs",
+      "textarea"
+    ],
     "env": [],
     "peers": []
   },
   "registers": [],
   "audit": [],
   "license": "MIT",
-  "tags": ["content", "markdown", "reader", "editor", "review", "comments", "mermaid", "chart", "rich-text", "docs", "notion-sync"]
+  "tags": [
+    "content",
+    "markdown",
+    "reader",
+    "editor",
+    "review",
+    "comments",
+    "mermaid",
+    "chart",
+    "rich-text",
+    "docs",
+    "notion-sync"
+  ]
 }

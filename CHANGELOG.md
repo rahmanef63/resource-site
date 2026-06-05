@@ -11,6 +11,23 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-05 — unblock CLI 1.10.0 publish: slice.json drift + structure fixes
+
+- **CLI** — prepublishOnly gates red → green. `slice-schema.json` gains
+  optional `deps.sharedFiles` (string[]; notion-database / notion-shell
+  already shipped it). Parity drift synced: resend-newsletter 0.1.3,
+  ai-chat 0.2.0, landing-sections 0.2.0, markdown title.
+- **image-picker** — `deps.env` string → typed object
+  (`UNSPLASH_ACCESS_KEY`, scope `server`, optional — curated fallback works
+  keyless).
+- **ai-chat** — `AiChatFab` now props-driven (R3): `convex/react` import
+  removed, backend injected via `chat` prop
+  (`useAction(api.features.aiChat.action.chat)`); `AiChatSend` /
+  `AiChatSendResult` types exported. Without the prop it degrades to a
+  wire-me-up notice.
+- **Structure** — deleted stale `template-base/frontend/slices/notion/`
+  port-staging copy (R1 dual-home; root `frontend/slices/notion/` is canon).
+
 ### 2026-06-04 — markdown slice: CRUD tabs + diagrams + charts
 
 - **markdown** (renamed from md-reader) — `<MarkdownPage>` adds optional CRUD

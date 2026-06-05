@@ -15,8 +15,19 @@
   },
   "deps": {
     "npm": [],
-    "shadcn": ["dialog", "button", "input"],
-    "env": ["UNSPLASH_ACCESS_KEY"],
+    "shadcn": [
+      "dialog",
+      "button",
+      "input"
+    ],
+    "env": [
+      {
+        "name": "UNSPLASH_ACCESS_KEY",
+        "scope": "server",
+        "required": false,
+        "description": "Unsplash API key for live search via unsplashSearchVia('/api/unsplash'). Optional — bundled curated fallback works with zero config. Keep server-side, never NEXT_PUBLIC."
+      }
+    ],
     "peers": []
   }
 }

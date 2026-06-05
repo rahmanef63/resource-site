@@ -10,9 +10,11 @@
  * ships today is the minimal real implementation used across the
  * template fleet:
  *
- *   - `<AiChatFab />` — floating assistant button + chat panel. Wires
- *     to `convex/features/aiChat/action.ts` (generateText via the `ai`
- *     SDK + @ai-sdk/anthropic, claude-3-5-haiku). Key-guarded: returns
+ *   - `<AiChatFab />` — floating assistant button + chat panel.
+ *     Props-driven: inject the backend via the `chat` prop, e.g.
+ *     `chat={useAction(api.features.aiChat.action.chat)}`. The action
+ *     (`convex/features/aiChat/action.ts`, generateText via the `ai`
+ *     SDK + @ai-sdk/anthropic) is key-guarded: returns
  *     `{ ok: false, notice }` when ANTHROPIC_API_KEY is unset so the
  *     build/prerender never throws.
  *
@@ -21,4 +23,5 @@
  */
 
 export { AiChatFab } from "./components/AiChatFab";
+export type { AiChatSend, AiChatSendResult } from "./components/AiChatFab";
 export type { ChatMessage, ChatThread, ChatModel, ChatTool, ChatSkill } from "./types";

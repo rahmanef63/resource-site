@@ -135,6 +135,11 @@
               "reason": { "type": "string" }
             }
           }
+        },
+        "sharedFiles": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Repo-root shared files (relative to project root) this slice imports — the CLI copies them alongside the slice on add."
         }
       }
     },
