@@ -12,6 +12,9 @@ export interface SetupStatus {
   onboarded?: boolean;
   signupOpen?: boolean;
   signupKeyRequired?: boolean;
+  /** JWT auth keys present on the deployment? false = setup-auth.mjs could
+   *  not write them (deploy key lacks WriteEnvironmentVariables). */
+  authReady?: boolean;
 }
 
 /** `update.fetchUpstreamVersion` action result (raw version.json upstream). */
