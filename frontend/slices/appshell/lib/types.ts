@@ -22,8 +22,9 @@ export type WindowState = {
   payload?: unknown;
 };
 
-/** Props every app component receives. `payload` is whatever opened the window. */
-export type AppProps = { payload?: unknown };
+/** Props every app component receives. `payload` is whatever opened the window;
+ * `winId` lets an app address its own window (e.g. register a close guard). */
+export type AppProps = { payload?: unknown; winId?: string };
 
 export type SnapZone = "left" | "right" | "top" | "tl" | "tr" | "bl" | "br";
 

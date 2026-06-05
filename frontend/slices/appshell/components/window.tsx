@@ -62,7 +62,7 @@ export const Window = memo(function Window({ id }: { id: WinId }) {
         </div>
 
         <div className="relative min-h-0 flex-1 overflow-hidden bg-background [container-type:inline-size]">
-          <WindowContent app={win.app} payload={win.payload} />
+          <WindowContent app={win.app} payload={win.payload} winId={id} />
         </div>
 
         <Handle cls="left-0 top-0 h-full w-2 cursor-ew-resize" onDown={(e) => startResize(e, "l")} />

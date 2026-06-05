@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "file-explorer",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -40,6 +40,7 @@
     "hooks/use-window-drop.ts",
     "index.ts",
     "lib/backend.ts",
+    "lib/errors.ts",
     "lib/format.ts",
     "lib/icons.ts",
     "lib/read-drop.ts",

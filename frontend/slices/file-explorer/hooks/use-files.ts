@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useFsAdapter, type FsEntry, type FsRoot, type FsUsage, type UploadFile } from "../adapter";
 import { joinPath, uniqueName } from "../lib/format";
+import { friendly } from "../lib/errors";
 import { useFsHistory } from "./use-fs-history";
 import type { Clipboard } from "../lib/types";
 
@@ -70,7 +71,7 @@ export function useFiles(initialPath?: string, onToast?: ToastFn) {
         setReload((n) => n + 1);
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e);
-        setError(msg);
+        setError(friendly(msg));
       }
     },
     [api.mode],

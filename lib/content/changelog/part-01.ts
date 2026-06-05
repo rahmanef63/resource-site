@@ -2,6 +2,29 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SHELL-SYNC1",
+    "version": "appshell@1.1.0 + file-explorer@1.1.0",
+    "date": 1780617600000,
+    "kind": "improvement",
+    "title": "appshell + file-explorer synced with os-vps upstream fixes",
+    "body": "Drift burn-down after the editors lift. appshell 1.1.0 ports the per-window close guard (setCloseGuard + AppProps.winId — apps can block close on unsaved work); audit confirmed multi-window, snap-grid geometry and stable capability refs were already in the rr copy. file-explorer 1.1.0 ports the Files-app UX fixes: the details panel always renders (selected entry or current folder) with a copy-path button, and mutation errors surface the REAL backend message through a friendly() mapper instead of a generic mask.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          {
+            "text": "appshell — setCloseGuard close guard + AppProps.winId plumbing (from os-vps 6644ae3)",
+            "slug": "appshell"
+          },
+          {
+            "text": "file-explorer — copy-path in details panel + honest error surfacing (lib/errors.ts friendly mapper)",
+            "slug": "file-explorer"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "VP1",
     "version": "variant-previews",
     "date": 1780704000000,

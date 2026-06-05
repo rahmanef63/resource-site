@@ -7,6 +7,7 @@ export { AppRegistryProvider, useApp, useApps } from "./lib/registry";
 export {
   openWindow,
   closeWindow,
+  setCloseGuard,
   focusWindow,
   minimizeWindow,
   restoreWindow,

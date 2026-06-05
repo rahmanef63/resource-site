@@ -1,5 +1,5 @@
 /**
- * Slice contract for `file-explorer` — v1.0.0.
+ * Slice contract for `file-explorer` — v1.1.0.
  *
  * A backend-agnostic file explorer (tree + breadcrumb + grid/list + CRUD +
  * drag-drop + context menu + multi-select). Requires NOTHING external: the
@@ -11,7 +11,7 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "file-explorer",
-  version: "1.0.0",
+  version: "1.1.0",
   category: "ui",
   kind: "full",
   requires: {

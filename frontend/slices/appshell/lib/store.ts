@@ -1,11 +1,11 @@
 import type { WindowState, WinId, PersistedWindow, SnapZone } from "./types";
-import { M, emit, patch, topZ } from "./store-state";
+import { M, emit, patch, topZ, closeGuards } from "./store-state";
 import { GAP, workArea, snapRect, snapZoneAt } from "./store-geometry";
 
 // Public store barrel: window lifecycle + UI-panel actions. State + listeners
 // live in store-state (the `M` holder); pure geometry in store-geometry. These
 // re-exports keep `../lib/store` the single import site for every consumer.
-export { shellStore } from "./store-state";
+export { shellStore, setCloseGuard } from "./store-state";
 export { snapRect, snapZoneAt, GAP } from "./store-geometry";
 
 export function openWindow(
@@ -55,6 +55,9 @@ export function openWindow(
 
 export function closeWindow(id: WinId) {
   if (!M.state.windows[id]) return;
+  const guard = closeGuards.get(id);
+  if (guard && !guard()) return; // vetoed — the guard handles its own confirm flow
+  closeGuards.delete(id);
   const { [id]: _gone, ...rest } = M.state.windows;
   const order = M.state.order.filter((w) => w !== id);
   M.state = {

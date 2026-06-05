@@ -51,6 +51,16 @@ export const shellStore = {
   },
 };
 
+// Per-window close guards: an app (e.g. the editor with unsaved changes) can veto
+// a close. The guard returns false to BLOCK — it then drives its own confirm UI
+// and, once resolved, clears itself via setCloseGuard(id, null) and calls
+// closeWindow(id) again to actually close.
+export const closeGuards = new Map<WinId, () => boolean>();
+export function setCloseGuard(id: WinId, guard: (() => boolean) | null) {
+  if (guard) closeGuards.set(id, guard);
+  else closeGuards.delete(id);
+}
+
 export function topZ(): number {
   return M.state.order.reduce((m, id) => Math.max(m, M.state.windows[id]?.z ?? 0), 0);
 }

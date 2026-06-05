@@ -13,7 +13,7 @@ import type { AppProps } from "../lib/types";
 // window). A setState on import-resolve always re-renders, so the spinner clears
 // the instant the module is ready. The import is bundler-cached (and warmed on
 // dock hover), so this stays cheap.
-export function WindowContent({ app, payload }: { app: string; payload?: unknown }) {
+export function WindowContent({ app, payload, winId }: { app: string; payload?: unknown; winId?: string }) {
   const descriptor = useApp(app);
   const [Comp, setComp] = useState<ComponentType<AppProps> | null>(null);
 
@@ -50,5 +50,5 @@ export function WindowContent({ app, payload }: { app: string; payload?: unknown
     );
   }
 
-  return <Comp payload={payload} />;
+  return <Comp payload={payload} winId={winId} />;
 }
