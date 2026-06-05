@@ -3,30 +3,30 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Stage, Layer as KLayer, Rect, Transformer } from "react-konva";
 import type Konva from "konva";
-import type { KonvaEventObject } from "konva/lib/Node";
 import { useEditor } from "../../lib/store";
 import { useStageView } from "../../hooks/use-stage-view";
+import { useStageInteractions } from "../../hooks/use-stage-interactions";
 import { LayerNode } from "./layer-node";
-import { TextOverlay } from "./text-overlay";
-import { ZoomHud } from "./zoom-hud";
-import { CropOverlay } from "./crop-overlay";
-import { SelectionOverlay } from "./selection-overlay";
 import { MaskSurface } from "./mask-surface";
 import { FilteredGroup } from "./filtered-group";
-
-type AnyNode = Konva.Node | null;
+import { StageOverlays } from "./stage-overlays";
 
 // The canvas surface: a measured Stage with the document positioned by `pan` and
 // scaled by `zoom`. Wheel/pinch zoom, hand/space drag-pan, fit-to-screen (HUD).
 // A Transformer attaches to the selection when the Move tool is active.
 export function EditorStage() {
-  const { doc, zoom, pan, tool, selectedId, select, setPan, setTool, setFg, update, applyCrop, maskEditId, version, stageRef } = useEditor();
+  const { doc, zoom, pan, tool, selectedId, setPan, update, version, stageRef, canUndo } = useEditor();
+  // Pristine doc = untouched starter (no edits → a single empty Pixel layer).
+  const pristine = !canUndo && doc.layers.length <= 1 && doc.layers[0]?.kind === "paint";
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const [size, setSize] = useState({ w: 800, h: 600 });
-  const [editId, setEditId] = useState<string | null>(null);
-  const nodes = useRef<Map<string, AnyNode>>(new Map());
-  const trRef = useRef<Konva.Transformer | null>(null);
+  const docLayerRef = useRef<Konva.Layer | null>(null);
   const { panMode, fit, center100, clampPan, onWheel, onTouchMove, onTouchEnd, zoomTo } = useStageView(size);
+  const {
+    selected, paintBox, editing, maskEditId,
+    colorInput, boxRef, trRef,
+    onBgDown, onDbl, onPickColor, registerNode, setEditId,
+  } = useStageInteractions(panMode);
 
   useEffect(() => {
     const el = wrapRef.current;
@@ -44,36 +44,7 @@ export function EditorStage() {
     return () => ro.disconnect();
   }, []);
 
-  useEffect(() => {
-    const tr = trRef.current;
-    if (!tr) return;
-    const sel = selectedId ? nodes.current.get(selectedId) : null;
-    const locked = doc.layers.find((l) => l.id === selectedId)?.locked;
-    tr.nodes(tool === "move" && sel && !locked ? [sel] : []);
-    tr.getLayer()?.batchDraw();
-  }, [selectedId, tool, doc.layers]);
-
-  const hex = (n: number) => n.toString(16).padStart(2, "0");
-  const onBgDown = (e: KonvaEventObject<MouseEvent | TouchEvent>) => {
-    if (panMode) return;
-    if (tool === "eyedropper") {
-      const stage = e.target.getStage();
-      const p = stage?.getPointerPosition();
-      if (!stage || !p) return;
-      // pixelRatio:1 → output px match CSS pointer coords.
-      const ctx = stage.toCanvas({ pixelRatio: 1 }).getContext("2d");
-      const d = ctx?.getImageData(Math.round(p.x), Math.round(p.y), 1, 1).data;
-      if (d && d[3] > 0) setFg(`#${hex(d[0])}${hex(d[1])}${hex(d[2])}`);
-      return;
-    }
-    if (e.target === e.target.getStage() || e.target.name() === "doc-bg") select(null);
-  };
   const zoomStep = (d: number) => zoomTo(zoom * (d > 0 ? 1.2 : 0.83), size.w / 2, size.h / 2);
-  const onDbl = (e: KonvaEventObject<MouseEvent | TouchEvent>) => {
-    const l = doc.layers.find((x) => x.id === e.target.name());
-    if (l?.kind === "text" && !l.locked) { select(l.id); setEditId(l.id); }
-  };
-  const editing = editId ? doc.layers.find((l) => l.id === editId) ?? null : null;
 
   // Transparency checker pattern, painted only INSIDE the document (the
   // surrounding area is a flat gray pasteboard, Photoshop-style).
@@ -93,10 +64,6 @@ export function EditorStage() {
 
   // Render loop (accumulator): an adjustment layer wraps everything below it in
   // a filtered cached group; other layers stack on top. See ARCHITECTURE.md.
-  const registerNode = (id: string, n: Konva.Node | null) => {
-    if (n) nodes.current.set(id, n);
-    else nodes.current.delete(id);
-  };
   let acc: React.ReactNode[] = [];
   for (const l of doc.layers) {
     if (l.kind === "adjustment") {
@@ -131,12 +98,20 @@ export function EditorStage() {
         onDblTap={onDbl}
       >
         <KLayer
+          ref={docLayerRef}
           x={pan.x}
           y={pan.y}
           scaleX={zoom}
           scaleY={zoom}
           draggable={panMode}
-          onDragEnd={(e) => setPan(clampPan({ x: e.target.x(), y: e.target.y() }, zoom))}
+          // Konva drag events BUBBLE: dragging a child layer fires this too, with
+          // e.target = the child. Only commit a pan when the doc layer ITSELF was
+          // dragged (pan mode) — otherwise moving a layer would yank the canvas.
+          onDragEnd={(e) => {
+            const layer = docLayerRef.current;
+            if (!layer || (e.target as unknown) !== (layer as unknown)) return;
+            setPan(clampPan({ x: layer.x(), y: layer.y() }, zoom));
+          }}
         >
           <Rect
             name="doc-bg"
@@ -148,11 +123,27 @@ export function EditorStage() {
               ? { fillPatternImage: checker as unknown as HTMLImageElement, fillPatternRepeat: "repeat" }
               : { fill: doc.bg })}
             shadowColor="#000000"
-            shadowOpacity={0.25}
-            shadowBlur={16}
-            shadowOffsetY={3}
+            shadowOpacity={0.4}
+            shadowBlur={24}
+            shadowOffsetY={6}
           />
           {acc}
+          {/* Move handle for a paint layer: a near-invisible rect fitted to the
+              painted pixels. Dragging it shifts the whole layer (the transformer
+              draws the visible box around it). Empty layer → not rendered. */}
+          {tool === "move" && selected?.kind === "paint" && !selected.locked && paintBox && (
+            <Rect
+              ref={boxRef}
+              x={selected.t.x + paintBox.x}
+              y={selected.t.y + paintBox.y}
+              width={paintBox.w}
+              height={paintBox.h}
+              fill="#000"
+              opacity={0.001}
+              draggable
+              onDragEnd={(e) => update(selected.id, { t: { ...selected.t, x: e.target.x() - paintBox.x, y: e.target.y() - paintBox.y } })}
+            />
+          )}
           {maskEditId && <MaskSurface layerId={maskEditId} />}
         </KLayer>
         <KLayer>
@@ -169,29 +160,20 @@ export function EditorStage() {
         </KLayer>
       </Stage>
 
-      <ZoomHud zoom={zoom} onOut={() => zoomStep(-1)} onIn={() => zoomStep(1)} onReset={center100} onFit={fit} />
-
-      {tool === "crop" && (
-        <CropOverlay
-          doc={doc}
-          zoom={zoom}
-          pan={pan}
-          onApply={(x, y, w, h) => { applyCrop(x, y, w, h); setTool("move"); }}
-          onCancel={() => setTool("move")}
-        />
-      )}
-
-      {tool === "select" && <SelectionOverlay onDone={() => setTool("move")} />}
-
-      {editing && (
-        <TextOverlay
-          layer={editing}
-          zoom={zoom}
-          pan={pan}
-          onChange={(text) => update(editing.id, { text })}
-          onDone={() => setEditId(null)}
-        />
-      )}
+      <StageOverlays
+        doc={doc}
+        zoom={zoom}
+        pan={pan}
+        pristine={pristine}
+        maskEditId={maskEditId}
+        editing={editing}
+        colorInput={colorInput}
+        onPickColor={onPickColor}
+        onZoomStep={zoomStep}
+        onFit={fit}
+        onReset={center100}
+        onEditDone={() => setEditId(null)}
+      />
     </div>
   );
 }

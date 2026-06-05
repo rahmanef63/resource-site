@@ -1,6 +1,10 @@
 // Slice config (rr: frontend.configExport = "imageEditorConfig"). Cosmetic
 // defaults only — the editor takes its real input via <ImageEditor> props.
 export type ImageEditorConfig = {
+  /** Registry identity — MUST equal slice.json slug/title/category. */
+  slug: string;
+  title: string;
+  category: "ui";
   /** Default blank-canvas size when no initialImage is given. */
   defaultWidth: number;
   defaultHeight: number;
@@ -9,6 +13,9 @@ export type ImageEditorConfig = {
 };
 
 export const imageEditorConfig: ImageEditorConfig = {
+  slug: "image-editor",
+  title: "Image Editor — layered raster editor",
+  category: "ui",
   defaultWidth: 1080,
   defaultHeight: 1080,
   exportFormat: "png",

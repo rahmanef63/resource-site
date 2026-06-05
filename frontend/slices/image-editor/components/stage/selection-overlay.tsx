@@ -58,7 +58,7 @@ export function SelectionOverlay({ onDone }: { onDone: () => void }) {
 
   const sx = { left: pan.x + box.x * zoom, top: pan.y + box.y * zoom, width: box.w * zoom, height: box.h * zoom };
   const corner = "absolute size-3 rounded-sm border border-white bg-primary";
-  const btn = "flex items-center gap-1 rounded px-2 py-0.5";
+  const btn = "flex h-auto items-center gap-1 rounded px-2 py-0.5 font-normal hover:bg-transparent";
 
   return (
     <div className="absolute inset-0 z-20" onPointerMove={move} onPointerUp={end}>
@@ -69,16 +69,16 @@ export function SelectionOverlay({ onDone }: { onDone: () => void }) {
         <span className={cn(corner, "-bottom-1.5 -right-1.5 cursor-nwse-resize")} onPointerDown={start("se")} />
       </div>
       <div className="absolute left-1/2 top-3 flex -translate-x-1/2 items-center gap-2 rounded-lg border border-border bg-card/95 px-2 py-1 text-xs shadow-sm">
-        <Button type="button" variant="ghost" disabled={!paint} onClick={clear} className={cn(btn, "h-auto text-foreground hover:bg-accent disabled:opacity-40")}>
+        <Button type="button" variant="ghost" disabled={!paint} onClick={clear} className={cn(btn, "text-foreground hover:bg-accent disabled:opacity-40")}>
           <Eraser className="size-3" /> Clear
         </Button>
-        <Button type="button" variant="ghost" disabled={!paint} onClick={fill} className={cn(btn, "h-auto text-foreground hover:bg-accent disabled:opacity-40")}>
+        <Button type="button" variant="ghost" disabled={!paint} onClick={fill} className={cn(btn, "text-foreground hover:bg-accent disabled:opacity-40")}>
           <PaintBucket className="size-3" /> Fill
         </Button>
-        <Button type="button" variant="ghost" onClick={() => { applyCrop(box.x, box.y, box.w, box.h); onDone(); }} className={cn(btn, "h-auto text-foreground hover:bg-accent")}>
+        <Button type="button" variant="ghost" onClick={() => { applyCrop(box.x, box.y, box.w, box.h); onDone(); }} className={cn(btn, "text-foreground hover:bg-accent")}>
           <Crop className="size-3" /> Crop
         </Button>
-        <Button type="button" variant="ghost" onClick={onDone} className={cn(btn, "h-auto text-muted-foreground hover:bg-accent")}>
+        <Button type="button" variant="ghost" onClick={onDone} className={cn(btn, "text-muted-foreground hover:bg-accent")}>
           <X className="size-3" /> Done
         </Button>
       </div>

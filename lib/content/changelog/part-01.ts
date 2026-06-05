@@ -2,6 +2,39 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "EDITORS-LIFT",
+    "version": "image-editor@2.0.0 + reel-editor@1.0.0",
+    "date": 1780617600000,
+    "kind": "feature",
+    "title": "Video editor lifted + image editor v2 — both self-contained, every file ≤200 LOC",
+    "body": "Two os-vps creative apps land as catalog slices. reel-editor (NEW): a complete in-browser NLE — layered multi-track timeline (top row renders frontmost), one Canvas-2D draw path shared by preview AND realtime WebM exporter (real mixed audio), keyframes/easing/presets, transitions, text styling, color grading, 6 resizable workspace layouts, quick-import files pane on an injectable fs adapter (configureReelFs, in-memory mock default), sonner toasts. image-editor v2 (BREAKING): rebuilt editor replaces v1 — AI function-calling command registry (EDITOR_COMMANDS + useEditorCommands + in-editor chat) with an injectable stream bridge (configureAgentStream; chat optional), headless server.ts command runner, layer styles, tool rail chrome. Both slices were refactored upstream so every file passes the 200-LOC gate. dashboard-ide layout preview rebuilt as a real IDE: lazy explorer (per-folder fetch on expand, listing + DOM dropped on collapse — node_modules costs nothing until opened), open-file tabs, one-body editor, status bar.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          {
+            "text": "reel-editor — lifted from os-vps; self-contained host seam (sonner / no-op shell buses / injectable fs adapter); slice-local Segmented + native-range Slider primitives",
+            "slug": "reel-editor"
+          },
+          {
+            "text": "image-editor — v2.0.0 BREAKING: AI command registry + injectable configureAgentStream + headless server.ts; replaces the react-konva v1 surface",
+            "slug": "image-editor"
+          }
+        ]
+      },
+      {
+        "heading": "Templates touched",
+        "bullets": [
+          {
+            "text": "dashboard-ide — real-IDE recipe: lazy explorer (RAM ≈ visible rows), tabs, breadcrumb, status bar; production swap = file-explorer FileExplorerAdapter",
+            "slug": "dashboard-ide",
+            "kind": "template"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "PUBGATE1",
     "version": "rahman-resources@1.10.0",
     "date": 1780617600000,

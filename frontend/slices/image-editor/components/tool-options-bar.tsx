@@ -1,50 +1,45 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Slider } from "@/components/ui/slider";
 import { useEditor } from "../lib/store";
+import { BrushOptions } from "./options/brush-options";
+import { TextOptions } from "./options/text-options";
+import { ShapeOptions } from "./options/shape-options";
+import { AlignOptions } from "./options/align-options";
 
-// Contextual options bar for the active painting tool. Renders nothing unless
-// the Brush or Eraser is active.
+const TOOL_LABEL: Record<string, string> = {
+  move: "Move", brush: "Brush", eraser: "Eraser", text: "Text", rect: "Rectangle",
+  ellipse: "Ellipse", eyedropper: "Eyedropper", crop: "Crop", select: "Select", hand: "Pan",
+};
+
+// Always-present contextual options bar (Photoshop pattern): its controls follow
+// the active tool + selection — paint settings for brush/eraser, font/size for a
+// text layer, fill/stroke for a shape, align for an image — and it shows the doc
+// size + zoom on the right when nothing else applies. Staying mounted (fixed
+// height) avoids the canvas jumping when you switch tools.
 export function ToolOptionsBar() {
-  const { tool, brush, setBrush, fg, setFg, selected, maskEditId } = useEditor();
-  if (tool !== "brush" && tool !== "eraser") return null;
-  const isBrush = tool === "brush";
-  // Brush/eraser only mark pixels on a PAINT layer (or while editing a mask).
-  const canPaint = maskEditId != null || selected?.kind === "paint";
+  const { tool, selected, update, zoom, maskEditId } = useEditor();
+  const painting = tool === "brush" || tool === "eraser" || maskEditId != null;
+
+  const ctx = painting ? (
+    <BrushOptions />
+  ) : selected?.kind === "text" ? (
+    <TextOptions selected={selected} update={update} />
+  ) : selected?.kind === "shape" ? (
+    <ShapeOptions selected={selected} update={update} />
+  ) : tool === "crop" ? (
+    <span className="text-muted-foreground">Drag on the canvas to set the crop, then press Enter.</span>
+  ) : selected?.kind === "image" ? (
+    <AlignOptions selected={selected} />
+  ) : (
+    <span className="text-muted-foreground">{selected ? selected.name : "No selection"}</span>
+  );
 
   return (
-    <div className="flex h-11 shrink-0 items-center gap-4 border-b border-border bg-card/60 px-3 text-xs">
-      <span className="font-medium capitalize text-muted-foreground">{tool}</span>
-      {!canPaint && (
-        <span className="rounded bg-amber-500/15 px-2 py-0.5 text-amber-600 dark:text-amber-400">
-          Select a Pixel layer to paint
-        </span>
-      )}
-      {isBrush && (
-        <label className="flex items-center gap-2">
-          <Label className="text-muted-foreground">Color</Label>
-          <Input type="color" value={fg} onChange={(e) => setFg(e.target.value)} className="h-7 w-9 p-1" />
-        </label>
-      )}
-      <div className="flex items-center gap-2">
-        <Label className="text-muted-foreground">Size</Label>
-        <Slider className="w-32" min={1} max={200} value={[brush.size]} onValueChange={([v]) => setBrush({ size: v })} />
-        <span className="w-8 tabular-nums text-muted-foreground">{brush.size}</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <Label className="text-muted-foreground">Opacity</Label>
-        <Slider className="w-28" min={5} max={100} value={[Math.round(brush.opacity * 100)]} onValueChange={([v]) => setBrush({ opacity: v / 100 })} />
-        <span className="w-9 tabular-nums text-muted-foreground">{Math.round(brush.opacity * 100)}%</span>
-      </div>
-      {isBrush && (
-        <div className="flex items-center gap-2">
-          <Label className="text-muted-foreground">Hardness</Label>
-          <Slider className="w-28" min={0} max={100} value={[Math.round(brush.hardness * 100)]} onValueChange={([v]) => setBrush({ hardness: v / 100 })} />
-          <span className="w-9 tabular-nums text-muted-foreground">{Math.round(brush.hardness * 100)}%</span>
-        </div>
-      )}
+    <div className="flex h-11 shrink-0 items-center gap-3 border-b border-border bg-card/60 px-3 text-xs">
+      <span className="font-medium text-foreground">{TOOL_LABEL[tool] ?? tool}</span>
+      <span className="h-4 w-px bg-border" />
+      <div className="flex min-w-0 flex-1 items-center gap-3 overflow-x-auto">{ctx}</div>
+      <span className="shrink-0 tabular-nums text-muted-foreground">{Math.round(zoom * 100)}%</span>
     </div>
   );
 }

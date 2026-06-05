@@ -150,21 +150,21 @@ export type SliceEntry = {
 export const slices: SliceEntry[] = [
   {
     slug: "image-editor",
-    title: "Image Editor — Photoshop-style canvas (Konva)",
+    title: "Image Editor — layered raster editor",
     category: "ui",
-    kind: "full",
-    version: "1.0.0",
-    tagline: "Layered raster editor: layers, transform, paint, filters, layer styles, 1-click background removal, export.",
+    kind: "ui",
+    version: "2.0.0",
+    tagline: "Layered raster editor: layers, transform, paint, filters, layer styles, 1-click background removal, AI command registry, export.",
     description:
-      "A Photoshop-style raster image editor built on Konva. Layers panel (reorder, opacity, visibility, lock, 16 blend modes), free transform (move/scale/rotate/flip via a Transformer), image + text + shape + paint layers, brush & eraser with size/opacity/hardness, non-destructive adjustments + filters (brightness/contrast/hue/saturation/blur/grayscale/invert/sepia, applied via Konva.Filters), canvas resize/aspect presets, and Photoshop-style LAYER STYLES: stroke, drop shadow (angle/distance/size/opacity), outer glow, clipping mask (clip to layer below), per-layer blend mode. One-click BACKGROUND REMOVAL runs fully in-browser via @imgly/background-removal (free, MIT, no API key, no server — downloads a small ONNX model to the browser cache on first use) and drops the cutout back as a transparent layer. Undo/redo, zoom/pan, keyboard shortcuts, and PNG/JPG/WebP export at 1×/2×/3×. Self-contained: image I/O is via props (initialImage / onSave) so it drops into any app with zero backend.",
+      "A Photoshop-style raster image editor built on Konva. Layers panel (reorder, opacity, visibility, lock, 16 blend modes), free transform (move/scale/rotate/flip via a Transformer), image + text + shape + paint layers, brush & eraser with size/opacity/hardness, non-destructive adjustments + filters, canvas resize/aspect presets, and LAYER STYLES: stroke, drop shadow, outer glow, clipping mask. One-click BACKGROUND REMOVAL runs fully in-browser via @imgly/background-removal (free, no API key — downloads a small ONNX model on first use). Undo/redo, zoom/pan, shortcuts, PNG/JPG/WebP export. v2 adds an AI FUNCTION-CALLING layer: every editor operation is a named, schema'd command (EDITOR_COMMANDS registry + useEditorCommands binding) driven by an in-editor chat; the streaming bridge is injectable via configureAgentStream(fn) and everything except the chat works without it. A headless server barrel (server.ts) runs commands against documents with no DOM. Image I/O via props (initialImage / onSave).",
     source: "rahmanef63/os-vps",
     slicePath: "frontend/slices/image-editor",
     convexPaths: [],
-    npm: ["konva", "react-konva", "@imgly/background-removal", "lucide-react"],
-    shadcn: ["button", "input", "slider", "select", "tabs", "scroll-area", "separator", "tooltip", "label", "switch", "popover", "resizable"],
+    npm: ["lucide-react", "konva", "react-konva", "@imgly/background-removal", "class-variance-authority", "radix-ui"],
+    shadcn: ["button", "input", "label", "separator", "select", "scroll-area", "switch", "dropdown-menu", "tooltip", "resizable", "popover"],
     env: [],
     peers: [],
-    tags: ["image-editor", "photoshop", "canvas", "konva", "layers", "filters", "background-removal", "paint", "crop", "ui"],
+    tags: ["image-editor", "photoshop", "canvas", "konva", "layers", "filters", "background-removal", "paint", "ai", "ui"],
     resourceType: "module",
     maturity: "beta",
     compat: { enhances: ["appshell", "file-explorer"] },
@@ -204,6 +204,61 @@ export default function ImageEditorDemo() {
   return (
     <div className="h-dvh w-full">
       <ImageEditor onSave={(dataUrl) => console.log("save", dataUrl.slice(0, 32))} />
+    </div>
+  );
+}`,
+  },
+  {
+    slug: "reel-editor",
+    title: "Reel — video timeline editor",
+    category: "ui",
+    kind: "ui",
+    version: "1.0.0",
+    tagline: "In-browser NLE: layered multi-track timeline, keyframes, transitions, color grading, realtime WebM export with mixed audio.",
+    description:
+      "A complete in-browser video editor. Real media clips (image/video/audio) on a layered multi-track timeline — the top row renders frontmost, with ▲▼ reorder and per-track lock/hide/mute. ONE Canvas-2D draw path is shared by the live preview and the realtime MediaRecorder exporter, so what you see is exactly what renders (WebM with real mixed audio: per-clip volume/fades/auto-duck through a streaming audio graph). Per-clip trim/speed (0.25–4×)/reverse, dissolve/wipe/slide transitions via clip overlap, keyframes (opacity/scale/x/y/rotation) with easing + one-click In/Out animation presets, text styling with preset grid, color grading + vignette, filmstrip thumbnails + real waveforms, snapping, split/duplicate. The workspace is config-driven: 6 resizable layout presets (react-resizable-panels v4) incl. quick-import files-pane layouts, plus custom composition size. Drafts auto-save to localStorage. Self-contained: toasts via sonner, the files pane runs on an injectable fs adapter (configureReelFs; in-memory mock by default), and shell hooks (inspector/activity) are inert seams in lib/host.ts.",
+    source: "rahmanef63/os-vps",
+    slicePath: "frontend/slices/reel-editor",
+    convexPaths: [],
+    npm: ["lucide-react", "react-resizable-panels", "sonner"],
+    shadcn: ["button", "input", "slider", "tooltip", "dialog", "dropdown-menu", "resizable", "sheet", "sonner"],
+    env: [],
+    peers: [],
+    tags: ["video", "video-editor", "timeline", "nle", "keyframes", "transitions", "webm", "canvas", "ui"],
+    resourceType: "module",
+    maturity: "beta",
+    compat: { enhances: ["appshell", "file-explorer", "image-editor"] },
+    previewPath: "/preview/slices/reel-editor",
+    defaultView: "desktop",
+    agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. An in-browser video timeline editor with realtime WebM export. Fully client-side; no backend required.
+
+STEP 1 — Install. \`npx rr add reel-editor\`. Ensure \`@/features/reel-editor\` resolves in tsconfig paths and Tailwind scans the slice folder.
+
+STEP 2 — Deps. npm: \`lucide-react react-resizable-panels sonner\`. shadcn: \`npx shadcn@latest add button input slider tooltip dialog dropdown-menu resizable sheet sonner\`. Mount \`<Toaster />\` (sonner) once in your root layout.
+
+STEP 3 — Mount. Render in a height-bearing box:
+\`\`\`tsx
+"use client";
+import { ReelEditor } from "@/features/reel-editor";
+export default function Page() {
+  return <div className="h-dvh"><ReelEditor /></div>;
+}
+\`\`\`
+Or register the \`reelEditorApp\` descriptor in an appshell manifest for windowed hosts.
+
+STEP 4 — Files pane backend (optional). The quick-import pane ships with an in-memory mock. Wire a real filesystem with \`configureReelFs({ list, mkdir, rawUrl })\` — list/mkdir mirror a simple fs API, rawUrl resolves a listed path to a fetchable media URL.
+
+STEP 5 — Export. The Render button records the live canvas + mixed audio to WebM via MediaRecorder in realtime (duration = composition length). Users can also import local media via the file picker — object URLs, no upload needed.`,
+    exampleCode: `"use client";
+import { ReelEditor } from "@/features/reel-editor";
+
+export default function VideoEditorDemo() {
+  // Opens with a sample composition. Import media via File menu (local picker
+  // works with zero backend — object URLs), arrange clips on layered tracks,
+  // add text/transitions/keyframes, then Render → realtime WebM with audio.
+  return (
+    <div className="h-dvh w-full">
+      <ReelEditor />
     </div>
   );
 }`,

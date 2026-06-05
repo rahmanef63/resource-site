@@ -66,10 +66,10 @@ export function CropOverlay({
       </div>
       <div className="absolute left-1/2 top-3 flex -translate-x-1/2 items-center gap-2 rounded-lg border border-border bg-card/95 px-2 py-1 text-xs shadow-sm">
         <span className="tabular-nums text-muted-foreground">{Math.round(box.w)}×{Math.round(box.h)}</span>
-        <Button type="button" variant="default" onClick={() => onApply(box.x, box.y, box.w, box.h)} className="flex h-auto items-center gap-1 rounded bg-primary px-2 py-0.5 text-primary-foreground">
+        <Button type="button" variant="ghost" onClick={() => onApply(box.x, box.y, box.w, box.h)} className="flex h-auto items-center gap-1 rounded bg-primary px-2 py-0.5 font-normal text-primary-foreground hover:bg-primary">
           <Check className="size-3" /> Apply
         </Button>
-        <Button type="button" variant="ghost" onClick={onCancel} className="flex h-auto items-center gap-1 rounded px-2 py-0.5 text-muted-foreground hover:bg-accent">
+        <Button type="button" variant="ghost" onClick={onCancel} className="flex h-auto items-center gap-1 rounded px-2 py-0.5 font-normal text-muted-foreground hover:bg-accent">
           <X className="size-3" /> Cancel
         </Button>
       </div>

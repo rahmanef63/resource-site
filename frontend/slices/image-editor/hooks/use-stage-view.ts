@@ -47,8 +47,15 @@ export function useStageView(size: { w: number; h: number }) {
     if (lastDoc.current !== key) { lastDoc.current = key; fit(); }
   }, [size.w, size.h, doc.width, doc.height, fit]);
 
-  // Keep the canvas on-screen when the container resizes.
-  useEffect(() => { setPan(clampPan(pan, zoom)); /* eslint-disable-next-line */ }, [size.w, size.h]);
+  // On container resize (e.g. the side panel mounting, or the window resizing):
+  // re-CENTER the doc if it fully fits the new viewport (so it never ends up
+  // stuck off to one side), otherwise just clamp so a zoomed-in pan is preserved.
+  useEffect(() => {
+    if (!size.w || !size.h) return;
+    const fits = doc.width * zoom <= size.w && doc.height * zoom <= size.h;
+    setPan(fits ? centerAt(zoom) : clampPan(pan, zoom));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [size.w, size.h]);
 
   useEffect(() => {
     const typing = () => ["input", "textarea"].includes((document.activeElement?.tagName ?? "").toLowerCase());

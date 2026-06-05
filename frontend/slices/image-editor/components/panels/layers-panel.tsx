@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { Eye, EyeOff, GripVertical, Lock, SquareDashed } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { useEditor } from "../../lib/store";
@@ -31,6 +31,7 @@ export function LayersPanel() {
   const ed = useEditor();
   const { doc, selectedId } = ed;
   const [editing, setEditing] = useState<string | null>(null);
+  const [menuOpen, setMenuOpen] = useState<string | null>(null);
   const [dragIdx, setDragIdx] = useState<number | null>(null);
   const [overIdx, setOverIdx] = useState<number | null>(null);
 
@@ -60,6 +61,7 @@ export function LayersPanel() {
                 onDrop={(e) => { e.preventDefault(); onDrop(di); }}
                 onDragEnd={resetDrag}
                 onClick={() => ed.select(l.id)}
+                onContextMenu={(e) => { e.preventDefault(); ed.select(l.id); setMenuOpen(l.id); }}
                 className={cn(
                   "flex cursor-pointer items-center gap-2 border-b border-border px-1.5 py-1 hover:bg-accent/50",
                   isSel && "bg-accent",
@@ -69,10 +71,9 @@ export function LayersPanel() {
                 <Button
                   type="button"
                   variant="ghost"
-                  size="icon"
                   aria-label={l.visible ? "Hide" : "Show"}
                   onClick={(e) => { e.stopPropagation(); ed.update(l.id, { visible: !l.visible }); }}
-                  className="grid size-6 h-auto shrink-0 place-items-center rounded text-muted-foreground hover:text-foreground"
+                  className="grid size-6 shrink-0 place-items-center rounded p-0 font-normal text-muted-foreground hover:bg-transparent hover:text-foreground"
                 >
                   {l.visible ? <Eye className="size-4" /> : <EyeOff className="size-4 opacity-60" />}
                 </Button>
@@ -107,11 +108,10 @@ export function LayersPanel() {
                   <Button
                     type="button"
                     variant="ghost"
-                    size="icon"
                     aria-label="Edit mask"
                     onClick={(e) => { e.stopPropagation(); ed.setMaskEdit(ed.maskEditId === l.id ? null : l.id); }}
                     className={cn(
-                      "grid size-5 h-auto shrink-0 place-items-center rounded",
+                      "grid size-5 shrink-0 place-items-center rounded p-0 font-normal hover:bg-transparent",
                       ed.maskEditId === l.id ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground",
                     )}
                   >
@@ -120,7 +120,12 @@ export function LayersPanel() {
                 )}
                 {l.locked && <Lock className="size-3 shrink-0 text-muted-foreground" />}
                 <span onClick={(e) => e.stopPropagation()}>
-                  <LayerActionsMenu layer={l} onRename={() => setEditing(l.id)} />
+                  <LayerActionsMenu
+                    layer={l}
+                    onRename={() => setEditing(l.id)}
+                    open={menuOpen === l.id}
+                    onOpenChange={(o) => setMenuOpen(o ? l.id : null)}
+                  />
                 </span>
               </div>
             );

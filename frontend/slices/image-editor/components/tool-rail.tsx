@@ -59,13 +59,12 @@ export function ToolRail({ orientation = "vertical" }: { orientation?: "vertical
         <Button
           type="button"
           variant="ghost"
-          size="icon"
           aria-label={label}
           aria-pressed={active}
           onClick={onClick}
           className={cn(
-            "grid size-9 place-items-center rounded-lg transition-colors",
-            active ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent hover:text-foreground",
+            "grid size-9 place-items-center rounded-lg p-0 font-normal transition-colors hover:bg-transparent",
+            active ? "bg-primary/20 text-primary" : "text-foreground/70 hover:bg-accent hover:text-foreground",
           )}
         >
           <Icon className="size-[18px]" />

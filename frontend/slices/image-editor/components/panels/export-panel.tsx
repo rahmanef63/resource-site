@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
+import { Slider } from "@/features/image-editor/ui/slider";
 import { cn } from "@/lib/utils";
 import { useEditor } from "../../lib/store";
 import { exportStage, type ExportFormat } from "../../lib/export";

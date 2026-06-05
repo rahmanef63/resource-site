@@ -2,48 +2,14 @@
 
 import * as React from "react";
 import {
-  FileCode2, Search, GitBranch, Bug, Settings, Folder, ChevronRight, ChevronDown,
+  FileCode2, Search, GitBranch, Bug, Settings, ChevronRight,
   Terminal, AlertCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { TREE, type ThemeId, THEMES } from "./mock-data";
+import { readFile, type ThemeId, THEMES } from "./mock-data";
 
-export function Line({ n, children }: { n: number; children: React.ReactNode }) {
-  return (
-    <div className="flex gap-4">
-      <span className="w-6 select-none text-right text-zinc-600">{n}</span>
-      <span>{children}</span>
-    </div>
-  );
-}
-
-export function Tree({ node, depth = 0 }: { node: { name: string; expanded: boolean; children: string[] }; depth?: number }) {
-  const [open, setOpen] = React.useState(node.expanded);
-  return (
-    <div>
-      <Button
-        type="button"
-        variant="ghost"
-        onClick={() => setOpen((o) => !o)}
-        className="flex h-auto w-full items-center justify-start gap-1 rounded px-1 py-0.5 text-xs font-normal hover:bg-zinc-800/60"
-        style={{ paddingLeft: depth * 8 }}
-      >
-        {open ? <ChevronDown className="size-3" /> : <ChevronRight className="size-3" />}
-        <Folder className="size-3 text-amber-400" /> <span className="text-zinc-200">{node.name}</span>
-      </Button>
-      {open && (
-        <ul className="ml-3 border-l border-zinc-800/80 pl-1">
-          {node.children.map((c) => (
-            <li key={c} className="flex items-center gap-1 py-0.5 text-zinc-400 hover:text-zinc-100">
-              <FileCode2 className="size-3 text-sky-400" /> {c}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-}
+export { ExplorerSidebar } from "./explorer";
 
 export function ActivityBar({ t }: { t: typeof THEMES[ThemeId] }) {
   return (
@@ -65,25 +31,45 @@ export function ActivityBar({ t }: { t: typeof THEMES[ThemeId] }) {
   );
 }
 
-export function ExplorerSidebar() {
-  return (
-    <aside className="row-start-2 row-end-4 border-r border-zinc-800 bg-zinc-900/30 p-2 text-xs">
-      <p className="mb-2 px-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
-        Explorer
-      </p>
-      {TREE.map((node) => (
-        <Tree key={node.name} node={node} />
-      ))}
-    </aside>
-  );
+// Crude single-purpose highlighter — enough to read like an editor without
+// shipping a real tokenizer into a layout preview.
+function tint(line: string): React.ReactNode {
+  if (/^(import|export)/.test(line)) return <span className="text-violet-400">{line}</span>;
+  if (/^\s*(return|const|let)/.test(line)) return <span className="text-sky-300">{line}</span>;
+  if (/^\s*</.test(line) || /[{}]\s*$/.test(line)) return <span className="text-zinc-500">{line}</span>;
+  if (/^\s*"/.test(line)) return <span className="text-emerald-300">{line}</span>;
+  return <span>{line}</span>;
 }
 
-export function EditorContent({ minimap, breadcrumb }: { minimap: boolean; breadcrumb: boolean }) {
+export function EditorContent({ path, minimap, breadcrumb }: { path: string | null; minimap: boolean; breadcrumb: boolean }) {
+  const [lines, setLines] = React.useState<string[] | null>(null);
+
+  // Body is fetched when the tab becomes active and replaced on switch — the
+  // editor holds ONE file's content, not every opened file's.
+  React.useEffect(() => {
+    setLines(null);
+    if (!path) return;
+    let on = true;
+    void readFile(path).then((l) => on && setLines(l));
+    return () => {
+      on = false;
+    };
+  }, [path]);
+
+  if (!path) {
+    return <p className="mt-10 text-center text-xs text-zinc-600">Open a file from the Explorer</p>;
+  }
+
   return (
     <>
       {breadcrumb && (
         <div className="mb-2 flex items-center gap-1 text-[11px] text-muted-foreground">
-          <span>app</span><ChevronRight className="size-3" /><span>page.tsx</span>
+          {path.split("/").map((seg, i, all) => (
+            <React.Fragment key={i}>
+              {i > 0 && <ChevronRight className="size-3" />}
+              <span className={cn(i === all.length - 1 && "text-zinc-300")}>{seg}</span>
+            </React.Fragment>
+          ))}
         </div>
       )}
       {minimap && (
@@ -91,19 +77,13 @@ export function EditorContent({ minimap, breadcrumb }: { minimap: boolean; bread
           {Array.from({ length: 12 }).map((_, i) => <div key={i} className="mb-0.5 h-1 rounded-sm bg-current/30" style={{ width: `${30 + ((i * 17) % 60)}%` }} />)}
         </div>
       )}
-      <pre className="">
-        <Line n={1}><span className="text-violet-400">import</span> <span>{"{ Suspense }"}</span> <span className="text-violet-400">from</span> <span className="text-emerald-300">"react"</span>;</Line>
-        <Line n={2}><span className="text-violet-400">import</span> <span>{"{ HeroSection }"}</span> <span className="text-violet-400">from</span> <span className="text-emerald-300">"@/components/hero"</span>;</Line>
-        <Line n={3}> </Line>
-        <Line n={4}><span className="text-sky-400">export default function</span> <span className="text-amber-300">Page</span>() {`{`}</Line>
-        <Line n={5}>{"  "}<span className="text-violet-400">return</span> (</Line>
-        <Line n={6}>{"    "}<span className="text-zinc-500">{"<main className=\"min-h-screen\">"}</span></Line>
-        <Line n={7}>{"      "}<span className="text-zinc-500">{"<Suspense>"}</span></Line>
-        <Line n={8}>{"        "}<span className="text-zinc-500">{"<HeroSection />"}</span></Line>
-        <Line n={9}>{"      "}<span className="text-zinc-500">{"</Suspense>"}</span></Line>
-        <Line n={10}>{"    "}<span className="text-zinc-500">{"</main>"}</span></Line>
-        <Line n={11}>{"  "});</Line>
-        <Line n={12}>{`}`}</Line>
+      <pre>
+        {(lines ?? ["// loading…"]).map((l, i) => (
+          <div key={i} className="flex gap-4">
+            <span className="w-6 select-none text-right text-zinc-600">{i + 1}</span>
+            {tint(l)}
+          </div>
+        ))}
       </pre>
     </>
   );
@@ -133,10 +113,11 @@ export function BottomPanel({ t, problemsTab }: { t: typeof THEMES[ThemeId]; pro
   );
 }
 
-export function StatusBar({ t }: { t: typeof THEMES[ThemeId] }) {
+export function StatusBar({ t, path }: { t: typeof THEMES[ThemeId]; path: string | null }) {
+  const lang = !path ? "—" : path.endsWith(".json") ? "JSON" : path.endsWith(".css") ? "CSS" : "TypeScript React";
   return (
     <footer className={cn("col-start-2 col-end-4 flex items-center justify-between border-t px-3 text-[10px] opacity-80", t.border)}>
-      <div className="flex items-center gap-3"><span>main</span><span>UTF-8</span><span>TypeScript React</span></div>
+      <div className="flex items-center gap-3"><span className="flex items-center gap-1"><GitBranch className="size-2.5" /> main</span><span>UTF-8</span><span>{lang}</span></div>
       <div className="flex items-center gap-3"><span>Ln 7, Col 3</span><span>Spaces: 2</span></div>
     </footer>
   );

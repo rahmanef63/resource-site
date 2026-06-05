@@ -32,8 +32,22 @@ function Inner() {
   const showBottom = panels === "bottom" || panels === "both";
   const showRight = panels === "right" || panels === "both";
 
-  const [active, setActive] = React.useState("page.tsx");
-  const [tabs, setTabs] = React.useState<string[]>(["page.tsx", "layout.tsx"]);
+  // Tabs hold PATHS only — file bodies live in the editor and are dropped on
+  // tab switch/close (see EditorContent). Explorer click opens/focuses a tab.
+  const [tabs, setTabs] = React.useState<string[]>([]);
+  const [active, setActive] = React.useState<string | null>(null);
+
+  const open = (path: string) => {
+    setTabs((tt) => (tt.includes(path) ? tt : [...tt, path]));
+    setActive(path);
+  };
+  const close = (path: string) => {
+    setTabs((tt) => {
+      const next = tt.filter((x) => x !== path);
+      if (active === path) setActive(next[next.length - 1] ?? null);
+      return next;
+    });
+  };
 
   const gridRows = showBottom && statusBar ? "grid-rows-[34px_1fr_180px_22px]"
     : showBottom ? "grid-rows-[34px_1fr_180px]"
@@ -45,7 +59,7 @@ function Inner() {
       <ActivityBar t={t} />
 
       {/* tabs */}
-      <div className="col-start-2 col-end-4 flex items-center border-b border-zinc-800 bg-zinc-900/60">
+      <div className="col-start-2 col-end-4 flex items-center overflow-x-auto border-b border-zinc-800 bg-zinc-900/60">
         {tabs.map((tab) => (
           <Button
             type="button"
@@ -53,17 +67,16 @@ function Inner() {
             key={tab}
             onClick={() => setActive(tab)}
             className={cn(
-              "group flex h-full items-center gap-2 rounded-none border-r border-zinc-800 px-3 text-xs font-normal hover:bg-transparent",
+              "group flex h-full shrink-0 items-center gap-2 rounded-none border-r border-zinc-800 px-3 text-xs font-normal hover:bg-transparent",
               active === tab ? "bg-zinc-950 text-zinc-100 hover:bg-zinc-950 hover:text-zinc-100" : "text-zinc-500 hover:text-zinc-300",
             )}
           >
-            <FileCode2 className="size-3 text-sky-400" /> {tab}
+            <FileCode2 className="size-3 text-sky-400" /> {tab.split("/").pop()}
             <span
               role="button"
               onClick={(e) => {
                 e.stopPropagation();
-                setTabs((tt) => tt.filter((x) => x !== tab));
-                if (active === tab) setActive(tabs[0]);
+                close(tab);
               }}
               className="ml-1 rounded p-0.5 text-zinc-600 opacity-0 hover:bg-zinc-800 hover:text-zinc-200 group-hover:opacity-100"
             >
@@ -80,11 +93,11 @@ function Inner() {
         </div>
       </div>
 
-      <ExplorerSidebar />
+      <ExplorerSidebar active={active} onOpen={open} />
 
       <main className={cn("row-start-2 row-end-3 col-start-3 grid overflow-hidden", showRight ? "grid-cols-[1fr_280px]" : "grid-cols-1")}>
         <div className={cn("relative overflow-auto p-4 font-mono text-[12px] leading-relaxed", t.editor)}>
-          <EditorContent minimap={minimap} breadcrumb={breadcrumb} />
+          <EditorContent path={active} minimap={minimap} breadcrumb={breadcrumb} />
         </div>
         {showRight && (
           <aside className={cn("border-l p-3 text-xs", t.border)}>
@@ -95,7 +108,7 @@ function Inner() {
       </main>
 
       {showBottom && <BottomPanel t={t} problemsTab={problemsTab} />}
-      {statusBar && <StatusBar t={t} />}
+      {statusBar && <StatusBar t={t} path={active} />}
     </div>
   );
 }

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "reel-editor",
+  "version": "1.0.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "Reel — video timeline editor",
+  "description": "In-browser video editor: real media clips (image/video/audio) on a layered multi-track timeline (top row renders frontmost), unified Canvas-2D draw path shared by the live preview and the realtime WebM exporter (with real mixed audio), per-clip trim/speed/reverse, volume/fades/auto-duck, dissolve/wipe/slide transitions, keyframes with easing + animation presets, text styling, color grading, filmstrip thumbnails + waveforms, config-driven resizable workspace layouts, a project-files quick-import pane with an injectable fs adapter, draft auto-save, and an editor settings dialog. Self-contained: toasts via sonner, shell hooks are no-ops until wired.",
+  "namespace": "@/features/reel-editor",
+  "frontend": {
+    "slicePath": "frontend/slices/reel-editor",
+    "configExport": "reelEditorConfig"
+  },
+  "deps": {
+    "npm": ["lucide-react", "react-resizable-panels", "sonner"],
+    "shadcn": ["button", "input", "slider", "tooltip", "dialog", "dropdown-menu", "resizable", "sheet", "sonner"],
+    "env": [],
+    "peers": []
+  },
+  "registers": ["registry"],
+  "audit": ["bp:ui-consistency"],
+  "license": "MIT",
+  "tags": ["video", "timeline", "editor", "nle", "ui"]
+}

@@ -1,6 +1,6 @@
 // Public barrel — consumers import ONLY from here.
 export { ImageEditor } from "./image-editor";
-export type { ImageEditorProps } from "./image-editor";
+export type { ImageEditorProps, EditorApi } from "./image-editor";
 
 // Store (for embedding the editor in a custom chrome).
 export { EditorProvider, useEditor } from "./lib/store";
@@ -31,3 +31,15 @@ export type { ExportFormat } from "./lib/export";
 
 export { imageEditorConfig } from "./config";
 export type { ImageEditorConfig } from "./config";
+
+// AI function-calling: the command registry + the live-store binding hook. Every
+// editor operation is exposed as a named, schema'd command an AI can call.
+export { EDITOR_COMMANDS, EDITOR_TOOLS, findCommand } from "./commands/registry";
+export { useEditorCommands } from "./commands/use-editor-commands";
+export type { EditorCommand, AnthropicTool } from "./commands/types";
+export type { ToolInvocation, ToolOutcome } from "./commands/use-editor-commands";
+export { runEditorAgent } from "./lib/ai-agent";
+
+// Host wiring seam: inject the AI streaming bridge (optional — see lib/host).
+export { configureAgentStream } from "./lib/host";
+export type { AgentStreamFn, AgentMsg, AiTool, AgentTurn } from "./lib/host";

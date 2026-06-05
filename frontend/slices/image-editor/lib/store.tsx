@@ -4,93 +4,26 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useRef,
   useState,
   type ReactNode,
 } from "react";
 import type Konva from "konva";
-import type {
-  Adjustments,
-  Doc,
-  DropShadow,
-  Layer,
-  LayerStyle,
-  OuterGlow,
-  Pan,
-  Stroke,
-  Tool,
-} from "./types";
+import type { Doc, Layer, Pan, Tool } from "./types";
 import { blankDoc } from "./model";
 import { useLayerMutators } from "./layer-mutators";
 import { useDocOps } from "./doc-ops";
 import { useHistory } from "./history";
-import { useProjectIO, type Project } from "./project";
+import { useProjectIO } from "./project";
 import { useMaskOps } from "./mask";
+import type { Brush, Ctx } from "./store-types";
 
-export type Brush = { size: number; color: string; opacity: number; hardness: number };
-export type { Pan };
+export type { Brush, Pan } from "./store-types";
 
 const DEFAULT_FG = "#111827";
 const DEFAULT_BG = "#ffffff";
-
-type Ctx = {
-  doc: Doc;
-  selectedId: string | null;
-  selected: Layer | null;
-  tool: Tool;
-  zoom: number;
-  pan: Pan;
-  brush: Brush;
-  /** Photoshop foreground/background colors. Tools paint with `fg`. */
-  fg: string;
-  bg: string;
-  recentColors: string[];
-  canUndo: boolean;
-  canRedo: boolean;
-  /** History revision — bumps on every change; masked-group caches off it. */
-  version: number;
-  /** Id of the layer whose MASK the brush currently paints (null = none). */
-  maskEditId: string | null;
-  stageRef: React.MutableRefObject<Konva.Stage | null>;
-  canvasFor: (id: string, w: number, h: number) => HTMLCanvasElement;
-  select: (id: string | null) => void;
-  setTool: (t: Tool) => void;
-  setZoom: (z: number) => void;
-  setPan: (p: Pan) => void;
-  setMaskEdit: (id: string | null) => void;
-  setBrush: (b: Partial<Brush>) => void;
-  /** Set foreground color (mirrors into the brush) + push to recents. */
-  setFg: (c: string) => void;
-  setBg: (c: string) => void;
-  swapColors: () => void;
-  resetColors: () => void;
-  setDocSize: (w: number, h: number) => void;
-  update: (id: string, patch: Partial<Layer>) => void;
-  patchStyle: (id: string, patch: Partial<LayerStyle>) => void;
-  patchShadow: (id: string, patch: Partial<DropShadow>) => void;
-  patchGlow: (id: string, patch: Partial<OuterGlow>) => void;
-  patchStroke: (id: string, patch: Partial<Stroke>) => void;
-  patchAdj: (id: string, patch: Partial<Adjustments>) => void;
-  addLayer: (layer: Layer, opts?: { select?: boolean }) => void;
-  removeLayer: (id: string) => void;
-  duplicateLayer: (id: string) => void;
-  reorder: (from: number, to: number) => void;
-  raise: (id: string) => void;
-  lower: (id: string) => void;
-  /** Crop the document to (x,y,w,h): resize + shift layers + re-bake paint pixels. */
-  applyCrop: (x: number, y: number, w: number, h: number) => void;
-  /** Add / remove a layer mask (doc-aligned alpha buffer). */
-  addMask: (id: string) => void;
-  removeMask: (id: string) => void;
-  /** Record a brush/eraser stroke (before+after PNG of the layer canvas). */
-  recordPaint: (id: string, before: string, after: string) => void;
-  /** Editable-project (doc + paint pixels) save/restore — Save/Open/autosave. */
-  exportProject: () => Project;
-  loadProject: (p: Project) => void;
-  undo: () => void;
-  redo: () => void;
-};
 
 const EditorContext = createContext<Ctx | null>(null);
 
@@ -115,6 +48,17 @@ export function EditorProvider({ initialDoc, children }: { initialDoc?: Doc; chi
     setFgState((f) => { setBrushState((s) => ({ ...s, color: bg })); setBgState(f); return bg; });
   }, [bg]);
   const resetColors = useCallback(() => { setFgState(DEFAULT_FG); setBgState(DEFAULT_BG); setBrushState((s) => ({ ...s, color: DEFAULT_FG })); }, []);
+
+  // Mask-editing is scoped to the selected layer: entering it selects that layer,
+  // and switching layers exits it — so the brush can never silently keep painting
+  // a different layer's mask (the "my strokes vanish" bug).
+  const setMaskEdit = useCallback((id: string | null) => {
+    setMaskEditId(id);
+    if (id) setSelectedId(id);
+  }, []);
+  useEffect(() => {
+    setMaskEditId((m) => (m && m !== selectedId ? null : m));
+  }, [selectedId]);
   const canvases = useRef<Map<string, HTMLCanvasElement>>(new Map());
   const stageRef = useRef<Konva.Stage | null>(null);
 
@@ -171,13 +115,13 @@ export function EditorProvider({ initialDoc, children }: { initialDoc?: Doc; chi
   const value = useMemo<Ctx>(() => ({
     doc, selectedId, selected: doc.layers.find((l) => l.id === selectedId) ?? null,
     tool, zoom, pan, brush, fg, bg, recentColors, canUndo, canRedo, version: rev, maskEditId, stageRef, canvasFor,
-    select: setSelectedId, setTool, setZoom, setPan, setMaskEdit: setMaskEditId,
+    select: setSelectedId, setTool, setZoom, setPan, setMaskEdit,
     setBrush: (b) => setBrushState((s) => ({ ...s, ...b })),
     setFg, setBg: setBgState, swapColors, resetColors,
     setDocSize, update, patchStyle, patchShadow, patchGlow, patchStroke, patchAdj,
     addLayer, removeLayer, duplicateLayer, reorder, raise, lower, applyCrop, addMask, removeMask,
     recordPaint, exportProject, loadProject, undo, redo,
-  }), [doc, selectedId, tool, zoom, pan, brush, fg, bg, recentColors, canUndo, canRedo, rev, maskEditId, canvasFor, setFg, swapColors, resetColors, setDocSize, update, patchStyle, patchShadow, patchGlow, patchStroke, patchAdj, addLayer, removeLayer, duplicateLayer, reorder, raise, lower, applyCrop, addMask, removeMask, recordPaint, exportProject, loadProject, undo, redo]);
+  }), [doc, selectedId, tool, zoom, pan, brush, fg, bg, recentColors, canUndo, canRedo, rev, maskEditId, canvasFor, setFg, swapColors, resetColors, setMaskEdit, setDocSize, update, patchStyle, patchShadow, patchGlow, patchStroke, patchAdj, addLayer, removeLayer, duplicateLayer, reorder, raise, lower, applyCrop, addMask, removeMask, recordPaint, exportProject, loadProject, undo, redo]);
 
   return <EditorContext.Provider value={value}>{children}</EditorContext.Provider>;
 }

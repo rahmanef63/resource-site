@@ -6,6 +6,7 @@ import type { RegisteredSlice } from "./registry";
 
 import { adminConfig } from "@/features/admin/config";
 import { aiRouterConfig } from "@/features/ai-router/config";
+import { appshellConfig } from "@/features/appshell/config";
 import { auditLogConfig } from "@/features/audit-log/config";
 import { broadcastChannelSyncConfig } from "@/features/broadcast-channel-sync/config";
 import { calComBookingConfig } from "@/features/cal-com-booking/config";
@@ -13,8 +14,11 @@ import { commandMenuConfig } from "@/features/command-menu/config";
 import { commentsConfig } from "@/features/comments/config";
 import { convexAuthConfig } from "@/features/convex-auth/config";
 import { dokuPaymentConfig } from "@/features/doku-payment/config";
+import { imageEditorConfig } from "@/features/image-editor/config";
 import { midtransPaymentConfig } from "@/features/midtrans-payment/config";
+import { notionConfig } from "@/features/notion/config";
 import { platformAdminConfig } from "@/features/platform-admin/config";
+import { reelEditorConfig } from "@/features/reel-editor/config";
 import { resendNewsletterConfig } from "@/features/resend-newsletter/config";
 import { seoConfig } from "@/features/seo/config";
 import { vectorSearchConfig } from "@/features/vector-search/config";
@@ -29,6 +33,11 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     ...aiRouterConfig,
     importPath: "@/features/ai-router/config",
     version: "0.1.0",
+  },
+  {
+    ...appshellConfig,
+    importPath: "@/features/appshell/config",
+    version: "1.0.0",
   },
   {
     ...auditLogConfig,
@@ -66,9 +75,19 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     version: "0.1.1",
   },
   {
+    ...imageEditorConfig,
+    importPath: "@/features/image-editor/config",
+    version: "2.0.0",
+  },
+  {
     ...midtransPaymentConfig,
     importPath: "@/features/midtrans-payment/config",
     version: "0.1.1",
+  },
+  {
+    ...notionConfig,
+    importPath: "@/features/notion/config",
+    version: "0.1.0",
   },
   {
     ...platformAdminConfig,
@@ -76,9 +95,14 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     version: "0.1.0",
   },
   {
+    ...reelEditorConfig,
+    importPath: "@/features/reel-editor/config",
+    version: "1.0.0",
+  },
+  {
     ...resendNewsletterConfig,
     importPath: "@/features/resend-newsletter/config",
-    version: "0.1.2",
+    version: "0.1.3",
   },
   {
     ...seoConfig,

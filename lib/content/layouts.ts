@@ -436,7 +436,7 @@ export default function FeaturePage() {
     title: "Dashboard — IDE",
     category: "dashboard",
     description:
-      "Activity bar + tabs + editor + bottom panel. Editor-first apps (notion, code, doc tools).",
+      "Activity bar + tabs + LAZY explorer + editor + bottom panel + status bar. The explorer fetches each folder's children on expand and drops them on collapse (mounted rows ≈ visible rows — node_modules costs nothing until opened); the editor holds one file body at a time. Editor-first apps (notion, code, doc tools).",
     source: "synthesized",
     repoPath: "cookbook/layouts/dashboard-ide",
     primaryFile: "README.md",
@@ -454,7 +454,7 @@ export default function FeaturePage() {
   <Console className="border-t" />
 </div>`,
     agentRecipe:
-      "Run `npx rr add dashboard-ide`. Compose grid: 48px activity bar + tabs row + editor/inspector flex row + bottom console. Wire activity bar items to dispatch into tabs/inspector store.",
+      "Run `npx rr add dashboard-ide`. Compose grid: 44px activity bar + tabs row + lazy explorer column + editor/inspector flex row + bottom console + status bar. Explorer rule: fetch ONLY the expanded folder's children (listDir(path) per expand) and drop listing + DOM on collapse; tabs keep paths only and the editor fetches one body on focus. In production swap listDir for the file-explorer slice's FileExplorerAdapter.list(path). Wire activity bar items to dispatch into tabs/inspector store.",
   },
   {
     slug: "dashboard-mobile-dock",

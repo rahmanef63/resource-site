@@ -52,11 +52,10 @@ function Picker({
                 key={`${c}-${i}`}
                 type="button"
                 variant="ghost"
-                size="icon"
-                title={c}
                 onClick={() => onPick(c)}
+                title={c}
                 style={{ backgroundColor: c }}
-                className={cn("size-4 h-auto rounded-sm border border-border")}
+                className={cn("size-4 rounded-sm border border-border p-0 font-normal hover:bg-transparent")}
               />
             ))}
           </div>
@@ -75,11 +74,10 @@ export function ColorSwatches() {
         <Button
           type="button"
           variant="ghost"
-          size="icon"
           title="Background color"
           style={{ backgroundColor: bg }}
           className={cn(
-            "absolute bottom-0 right-0 size-[22px] h-auto rounded-sm border border-border shadow-sm",
+            "absolute bottom-0 right-0 size-[22px] rounded-sm border border-border p-0 font-normal shadow-sm hover:bg-transparent",
           )}
         />
       </Picker>
@@ -87,11 +85,10 @@ export function ColorSwatches() {
         <Button
           type="button"
           variant="ghost"
-          size="icon"
           title="Foreground color"
           style={{ backgroundColor: fg }}
           className={cn(
-            "absolute left-0 top-0 z-10 size-[22px] h-auto rounded-sm border border-border shadow-sm",
+            "absolute left-0 top-0 z-10 size-[22px] rounded-sm border border-border p-0 font-normal shadow-sm hover:bg-transparent",
           )}
         />
       </Picker>
@@ -101,7 +98,7 @@ export function ColorSwatches() {
         size="icon"
         title="Swap (X)"
         onClick={swapColors}
-        className="absolute -right-1 -top-1 size-4 rounded-sm p-0"
+        className="absolute right-0 -top-1 size-4 rounded-sm p-0"
       >
         <ArrowLeftRight className="size-3" />
       </Button>
@@ -111,7 +108,7 @@ export function ColorSwatches() {
         size="icon"
         title="Default (D)"
         onClick={resetColors}
-        className="absolute -bottom-1 -left-1 size-4 rounded-sm p-0"
+        className="absolute -bottom-1 left-0 size-4 rounded-sm p-0"
       >
         <RotateCcw className="size-3" />
       </Button>

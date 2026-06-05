@@ -104,7 +104,9 @@ export function PaintLayer({
       visible={layer.visible}
       globalCompositeOperation={layer.style.clipBelow ? "source-atop" : blendToGCO(layer.style.blend)}
       {...shadowProps(layer.style)}
-      draggable={tool === "move" && !layer.locked}
+      // Moving a paint layer is done via the content-fitted box proxy in
+      // editor-stage (so the box hugs the pixels), not by dragging the full node.
+      draggable={false}
       onMouseDown={start}
       onTouchStart={start}
       onMouseMove={move}

@@ -28,12 +28,14 @@ type Ops = {
 // add/removeMask each call update() (a tracked doc step), so the masked-group
 // re-caches off the shared history `version` — no separate mask revision needed.
 export function useMaskOps({ canvasFor, canvases, update, docSize, setMaskEdit }: Ops) {
+  // Adding a mask does NOT enter mask-edit — otherwise the brush would silently
+  // paint the (hiding) mask instead of the layer. Editing the mask is a deliberate
+  // toggle (the dashed-square button / "Edit mask" menu item).
   const addMask = useCallback((id: string) => {
     const { w, h } = docSize();
     initMaskCanvas(canvasFor(maskKey(id), w, h));
     update(id, { mask: true });
-    setMaskEdit(id);
-  }, [canvasFor, docSize, update, setMaskEdit]);
+  }, [canvasFor, docSize, update]);
 
   const removeMask = useCallback((id: string) => {
     canvases.current.delete(maskKey(id));

@@ -28,14 +28,19 @@ import type { Layer } from "../../lib/types"
 export function LayerActionsMenu({
   layer,
   onRename,
+  open,
+  onOpenChange,
 }: {
   layer: Layer
   onRename: () => void
+  // Optional controlled open — lets the layer row open this same menu on right-click.
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
 }) {
   const { duplicateLayer, removeLayer, raise, lower, update, addMask, removeMask, setMaskEdit, maskEditId } = useEditor()
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={onOpenChange}>
       <DropdownMenuTrigger asChild>
         <Button
           size="icon"
