@@ -99,7 +99,8 @@ function Checklist({ useStatus, adminPath }: { useStatus: () => SetupStatus | un
             <li>
               <a className="text-primary underline" href="https://dashboard.convex.dev" target="_blank" rel="noreferrer">dashboard.convex.dev</a>{" "}
               → project kamu → pilih <b>Production</b> → Settings → Deploy Keys →
-              <b> Generate production deploy key</b> (pakai akun admin team).
+              generate key dengan capability <b>deploy + env:view + env:write</b>{" "}
+              (atau full access), pakai akun admin team.
             </li>
             <li>Di Vercel → Settings → Environment Variables, ganti nilai <b>CONVEX_DEPLOY_KEY</b>.</li>
             <li>Klik <b>Redeploy</b> — kunci login dibuat otomatis saat build.</li>
