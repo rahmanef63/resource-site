@@ -38,10 +38,14 @@ export function StepBranding({
   f,
   set,
   ImageField,
+  presetOptions,
 }: {
   f: OnboardingFields;
   set: SetField;
   ImageField?: ImageFieldComponent;
+  /** tweakcn preset names the host offers ("" entry = template default).
+   *  Omit to hide the picker. */
+  presetOptions?: string[];
 }) {
   return (
     <div className="space-y-4">
@@ -76,6 +80,20 @@ export function StepBranding({
           ))}
         </div>
       </Field>
+      {presetOptions && presetOptions.length > 0 ? (
+        <Field label="Preset warna situs">
+          <select
+            value={f.themePreset}
+            onChange={(e) => set("themePreset", e.target.value)}
+            className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm shadow-xs outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+          >
+            <option value="">Bawaan template</option>
+            {presetOptions.map((p) => (
+              <option key={p} value={p}>{p}</option>
+            ))}
+          </select>
+        </Field>
+      ) : null}
       <Field label="Google Analytics ID (opsional)">
         <div className="flex items-center gap-2">
           <Input value={f.analyticsId} onChange={(e) => set("analyticsId", e.target.value)} placeholder="G-XXXXXXX" className="flex-1" />

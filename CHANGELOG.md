@@ -11,6 +11,21 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-05 — theme-presets 0.3.0: site-default layer
+
+- **theme-presets** — preset resolution is now 3-tier: visitor's explicit
+  choice (localStorage) → owner's site-wide default (`siteSettings.themePreset`,
+  pushed via new `useThemePreset().setSiteDefault`) → template's build-time
+  `hostDefault` (new `ThemePresetProvider`/`ThemeProviders` props
+  `hostDefault`/`defaultPreset` + `defaultMode`). Defaults apply WITHOUT
+  persisting, so later default changes propagate to visitors who never picked.
+  `setPreset(null)` resets to the default chain. New `SaveSiteDefaultButton`
+  ("Jadikan default situs", props-driven persistence) for admin Appearance.
+- **headless onboarding** — `OnboardingFields.themePreset` + optional
+  color-preset picker in the Branding step (`presetOptions` prop).
+- **settings contract** — `siteSettings.themePreset` (optional, additive) in
+  convex-templates/personal-brand-os + CLI starter schema/settings.
+
 ### 2026-06-05 — headless-OS UI backported into SSOT
 
 - **_shared/headless** (new) — canonical, props-driven (R3) ports of the

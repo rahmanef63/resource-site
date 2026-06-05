@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "theme-presets",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "category": "ui",
   "kind": "ui",
   "title": "Theme Presets — unified switcher with bundled tweakcn registry",

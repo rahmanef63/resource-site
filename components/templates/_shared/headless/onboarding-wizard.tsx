@@ -28,6 +28,7 @@ export function OnboardingWizard({
   seedSample,
   seeded,
   ImageField,
+  presetOptions,
   defaultBrandColor = "#c4583a",
 }: {
   onDone: () => void;
@@ -35,6 +36,8 @@ export function OnboardingWizard({
   seedSample?: () => Promise<unknown>;
   seeded?: boolean;
   ImageField?: ImageFieldComponent;
+  /** tweakcn preset names for the color-preset picker (omit to hide). */
+  presetOptions?: string[];
   defaultBrandColor?: string;
 }) {
   const [step, setStep] = React.useState(0);
@@ -47,6 +50,7 @@ export function OnboardingWizard({
     contactEmail: "",
     brandColor: defaultBrandColor,
     themeDefault: "system",
+    themePreset: "",
     logoUrl: "",
     faviconUrl: "",
     analyticsId: "",
@@ -64,6 +68,7 @@ export function OnboardingWizard({
         contactEmail: f.contactEmail || undefined,
         brandColor: f.brandColor || undefined,
         themeDefault: f.themeDefault || undefined,
+        themePreset: f.themePreset || undefined,
         logoUrl: f.logoUrl || undefined,
         faviconUrl: f.faviconUrl || undefined,
         analyticsId: f.analyticsId || undefined,
@@ -99,7 +104,7 @@ export function OnboardingWizard({
           <Progress value={((step + 1) / STEPS.length) * 100} className="mb-5 mt-2 h-1.5" />
 
           {step === 0 && <StepIdentity f={f} set={set} />}
-          {step === 1 && <StepBranding f={f} set={set} ImageField={ImageField} />}
+          {step === 1 && <StepBranding f={f} set={set} ImageField={ImageField} presetOptions={presetOptions} />}
           {step === 2 && <StepContent alreadySeeded={alreadySeeded} busy={busy} onSeed={doSeed} />}
           {step === 3 && <StepDone siteName={f.siteName} />}
 

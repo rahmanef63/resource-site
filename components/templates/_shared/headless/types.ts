@@ -44,6 +44,8 @@ export interface OnboardingFields {
   contactEmail: string;
   brandColor: string;
   themeDefault: string;
+  /** tweakcn preset name — the site-wide color preset ("" = template default). */
+  themePreset: string;
   logoUrl: string;
   faviconUrl: string;
   analyticsId: string;
