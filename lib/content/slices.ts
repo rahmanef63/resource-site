@@ -1619,7 +1619,7 @@ const [count, setCount] = useBroadcastSync("rr:counter", 0);
     title: "Notion Database",
     category: "ui",
     kind: "ui",
-    version: "0.17.0",
+    version: "0.17.1",
     maturity: "beta",
     tagline: "Drop-in Notion-style database — 11 views, 18 cell types, per-type column config, cell drag-fill. Pure & props-driven.",
     description: "Drop-in Notion-style database surface. 11 views (table, board, list, gallery, calendar, feed, chart, dashboard, form, map, timeline), 18 property/cell types, and a per-type column-header config menu (number format, date ranges, select, relation, rollup, formula) plus filter / sort / group / calculate, row peek, row multi-select, table cell selection + drag-to-fill (click a cell, drag the handle to copy down — merged from the former database-cell-selection slice in v0.16), and CSV + JSON import-export. Pure and props-driven — the host owns the data and dispatches change callbacks. Domain types live in notion-shell (install it as the peer). Full release history in CHANGELOG.md.",

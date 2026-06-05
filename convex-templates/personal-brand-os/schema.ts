@@ -1,14 +1,16 @@
-// Personal Brand OS — Convex schema.
-// Drop into convex/ at the root of your Next.js project. Adjust if you already
-// have a schema; merge tables into your existing `defineSchema({...})`.
-//
-// Tables mirror the localStorage shape used in the preview, so the same
-// frontend slices wire up to Convex with minimal changes.
-
+import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
+// Personal Brand OS — full schema (Convex Cloud target).
+// Drop into convex/ at the root of your Next.js project (merge if you already
+// have a schema). authTables = @convex-dev/auth. Content tables mirror the
+// localStorage shape the frontend store used, so the Convex-backed store
+// adapter maps 1:1. The standalone repo additionally spreads notionTables
+// (notion editor docs) — add that spread if you pull the notion slices.
 export default defineSchema({
+  ...authTables,
+
   posts: defineTable({
     slug: v.string(),
     title: v.string(),
@@ -84,11 +86,7 @@ export default defineSchema({
 
   subscribers: defineTable({
     email: v.string(),
-    status: v.union(
-      v.literal("pending"),
-      v.literal("confirmed"),
-      v.literal("unsubscribed"),
-    ),
+    status: v.union(v.literal("pending"), v.literal("confirmed"), v.literal("unsubscribed")),
     source: v.string(),
     ts: v.number(),
   }).index("by_email", ["email"]),
@@ -107,4 +105,36 @@ export default defineSchema({
     content: v.string(),
     ts: v.number(),
   }).index("by_session_ts", ["sessionId", "ts"]),
+
+  // Page-builder + landing: complex nested structures stored as blobs keyed by
+  // the frontend's string id (PageEntry.id / LandingSection.id).
+  pages: defineTable({
+    entryId: v.string(),
+    slug: v.string(),
+    data: v.any(),
+  })
+    .index("by_entryId", ["entryId"])
+    .index("by_slug", ["slug"]),
+
+  landingSections: defineTable({
+    sectionId: v.string(),
+    data: v.any(),
+  }).index("by_sectionId", ["sectionId"]),
+
+  // Singleton site config — everything the owner sets via the onboarding wizard
+  // and admin Settings. One row. Favicon/logo are Convex storage ids.
+  siteSettings: defineTable({
+    siteName: v.optional(v.string()),
+    tagline: v.optional(v.string()),
+    ownerName: v.optional(v.string()),
+    contactEmail: v.optional(v.string()),
+    brandColor: v.optional(v.string()),
+    themeDefault: v.optional(v.string()), // "light" | "dark" | "system"
+    logoUrl: v.optional(v.string()),
+    faviconUrl: v.optional(v.string()),
+    socials: v.optional(v.string()), // JSON string
+    seoDescription: v.optional(v.string()),
+    analyticsId: v.optional(v.string()),
+    onboardedAt: v.optional(v.number()),
+  }),
 });

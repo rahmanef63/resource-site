@@ -11,6 +11,30 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-05 — headless-OS UI backported into SSOT
+
+- **_shared/headless** (new) — canonical, props-driven (R3) ports of the
+  template-personal-brand-os v1.0.0 headless surface: `SetupHealth`
+  (self-diagnosing /setup checklist + env/backend error ladder),
+  `UpdateCard` (upstream version check + deploy-hook rebuild), `BackupCard`
+  (JSON export/restore), `OnboardingWizard` (4-step site config + seed).
+  No `convex/react` here — the standalone repo injects its hooks via props
+  (wiring recipe in `headless/README.md`). Tokens use `primary`, not pbo's
+  `--brand`.
+- **convex-templates/personal-brand-os** — reference backend synced from the
+  standalone repo: `setup.ts` (status + bootstrapAdmin), `settings.ts`
+  (siteSettings singleton), `users.ts` (derived owner/editor roles),
+  `update.ts` (fetchUpstreamVersion + triggerDeploy), `backup.ts`
+  (exportAll/importAll with FK remap); `schema.ts` now carries authTables +
+  pages/landingSections blobs + siteSettings.
+
+### 2026-06-05 — notion-database 0.17.1: complete dep declarations
+
+- **notion-database** — `slice.json` declares the two deps an import scan
+  found undeclared: shadcn `switch` (column-config toggles) and npm
+  `lucide-react`. Fleet integrations previously had to discover these by
+  build error; fresh `rr add notion-database` now installs clean.
+
 ### 2026-06-05 — unblock CLI 1.10.0 publish: slice.json drift + structure fixes
 
 - **CLI** — prepublishOnly gates red → green. `slice-schema.json` gains
