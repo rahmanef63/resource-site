@@ -31,7 +31,15 @@ export function EditorStage() {
   useEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
-    const ro = new ResizeObserver(([e]) => setSize({ w: e.contentRect.width, h: e.contentRect.height }));
+    // Round + bail-if-unchanged: sub-pixel contentRect jitter inside a flex/window
+    // container would otherwise feed back (setSize → re-render → layout → observe →
+    // setSize …) and trip React's "Maximum update depth" guard. Same object ref on
+    // no-op so React skips the render entirely.
+    const ro = new ResizeObserver(([e]) => {
+      const w = Math.round(e.contentRect.width);
+      const h = Math.round(e.contentRect.height);
+      setSize((prev) => (prev.w === w && prev.h === h ? prev : { w, h }));
+    });
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
