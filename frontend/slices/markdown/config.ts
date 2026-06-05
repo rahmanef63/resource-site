@@ -11,7 +11,7 @@ import { defineFeature } from "@/lib/shared/features/defineFeature";
  */
 export const markdownFeature = defineFeature({
   slug: "markdown",
-  title: "Markdown",
+  title: "Markdown — page container with CRUD tabs + diagrams",
   category: "content",
   routes: [],
   nav: { label: "Markdown", group: "content", order: 62 },

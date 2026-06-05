@@ -11,6 +11,33 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-05 — variant previews + AI builder (VP wave)
+
+- **Preview contract** — slice.json gains an optional `previews` block
+  (validated by slice-schema): enum variant axes (≤3, leaf slices) or
+  scenario presets (subsystems). Rendered by a sibling `preview.tsx`
+  (`SlicePreviewModule`, receives `{ variant }`). rr-internal: not in
+  slice.manifest.json and `rr add` strips it post-pull. Spec:
+  `docs/SLICE-PREVIEW-SPEC.md`.
+- **Generated registry** — `npm run gen:previews` scans slices → emits
+  `lib/preview/registry.gen.ts` (one code-split dynamic import per slug) +
+  `preview-meta.gen.json` (server-safe metadata). `gen:previews:check` wired
+  into `slices:check`. No hardcoded slice lists anywhere downstream.
+- **Demo data** — `createDemoStore` (`@/shared/preview/demo-store`):
+  localStorage `rr-demo:<slug>:v<n>`, seed-on-mount, write-through, reset.
+  Client-only — previews cost the VPS a static chunk, no compute.
+- **Builder** — `<VariantPreview>` cards with auto-generated knobs render for
+  every selected slice in /build; reset button clears the slice's demo data.
+- **Builder AI** — `/api/build-chat` (key-guarded: no ANTHROPIC_API_KEY →
+  notice) runs a server-side tool loop; tool defs are built at request time
+  from the catalog + preview metadata (`list_slices`, `get_slice`,
+  `preview_slice`, `compose_bundle`). Validated `preview_slice` calls return
+  as actions the chat panel renders live via `<VariantPreview>`. Model:
+  `RR_BUILDER_MODEL` env (default `claude-opus-4-8`).
+- **Pilots** — full-width-toggle (variant axis), markdown (tabs × content),
+  notion-database (table/board/list/chart scenarios).
+- **CLI** — `rr add`/`lift` strips `preview.tsx` from pulled slices.
+
 ### 2026-06-05 — theme-presets 0.3.0: site-default layer
 
 - **theme-presets** — preset resolution is now 3-tier: visitor's explicit

@@ -7,19 +7,50 @@
   "title": "Full Width Toggle",
   "description": "Page-container width toggle (contained / wide / full). Per-device localStorage with cross-tab sync. Three components: useFullWidth hook, FullWidthToggle button (icon / button / segment variants), WidthContainer wrapper. Drop in app shell.",
   "namespace": "@/features/full-width-toggle",
-  "convex": { "tablesExport": "", "schemaPath": "", "rootPaths": [] },
+  "convex": {
+    "tablesExport": "",
+    "schemaPath": "",
+    "rootPaths": []
+  },
   "frontend": {
     "slicePath": "frontend/slices/full-width-toggle",
     "configExport": "fullWidthToggleConfig"
   },
   "deps": {
     "npm": [],
-    "shadcn": ["button"],
+    "shadcn": [
+      "button"
+    ],
     "env": [],
     "peers": []
   },
   "registers": [],
   "license": "MIT",
-  "tags": ["ui", "layout", "preference", "localstorage", "dashboard"],
-  "providers": []
+  "tags": [
+    "ui",
+    "layout",
+    "preference",
+    "localstorage",
+    "dashboard"
+  ],
+  "providers": [],
+  "previews": [
+    {
+      "component": "FullWidthToggle",
+      "kind": "variants",
+      "axes": [
+        {
+          "prop": "variant",
+          "values": [
+            "icon",
+            "button",
+            "segment"
+          ],
+          "default": "icon",
+          "description": "Chrome shape — icon button, labeled button, or 3-segment toggle"
+        }
+      ],
+      "seed": "uses the slice's own localStorage width-mode key; sample container reacts live"
+    }
+  ]
 }

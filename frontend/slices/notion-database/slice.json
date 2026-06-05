@@ -44,5 +44,32 @@
     "sharedFiles": [
       "components/shared/ui/FilePicker.tsx"
     ]
-  }
+  },
+  "previews": [
+    {
+      "component": "NotionDatabase",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "table",
+          "title": "Table view"
+        },
+        {
+          "id": "board",
+          "title": "Board view",
+          "description": "grouped by Status"
+        },
+        {
+          "id": "list",
+          "title": "List view"
+        },
+        {
+          "id": "chart",
+          "title": "Chart view",
+          "description": "bar count by Status"
+        }
+      ],
+      "seed": "4-row sprint-tasks db in rr-demo:notion-database; cell edits persist"
+    }
+  ]
 }

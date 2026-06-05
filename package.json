@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0 --port 3000",
-    "build": "next build",
+    "build": "NODE_OPTIONS=--max-old-space-size=4096 next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --max-warnings 9999",
@@ -12,6 +12,8 @@
     "gen:slices:check": "node scripts/features/gen-slice-registries.mjs --check",
     "gen:agent-md": "node scripts/features/gen-slice-agent-md.mjs",
     "gen:agent-md:check": "node scripts/features/gen-slice-agent-md.mjs --check",
+    "gen:previews": "node packages/cli/scripts/gen-preview-registry.mjs",
+    "gen:previews:check": "node packages/cli/scripts/gen-preview-registry.mjs --check",
     "validate:slices": "node packages/cli/scripts/validate-slice.mjs",
     "audit:slices": "node scripts/validation/audit-slice.mjs",
     "audit:templates": "node scripts/validation/audit-templates.mjs",
@@ -29,7 +31,7 @@
     "validate:all:quick": "node scripts/validate-all.mjs --quick",
     "redeploy": "node scripts/dokploy-redeploy.mjs",
     "redeploy:status": "node scripts/dokploy-redeploy.mjs --status",
-    "slices:check": "npm run validate:slices && npm run audit:slices && npm run audit:templates && npm run audit:file-size && npm run audit:convex-features && npm run audit:docs-primitives && npm run gen:slices:check && npm run gen:agent-md:check && npm run validate:manifests && npm run validate:contracts",
+    "slices:check": "npm run validate:slices && npm run audit:slices && npm run audit:templates && npm run audit:file-size && npm run audit:convex-features && npm run audit:docs-primitives && npm run gen:slices:check && npm run gen:agent-md:check && npm run gen:previews:check && npm run validate:manifests && npm run validate:contracts",
     "new:slice": "node scripts/features/scaffold-slice.mjs",
     "new:template": "node scripts/features/scaffold-template.mjs",
     "modify:slice": "node scripts/features/modify-slice.mjs",
@@ -39,6 +41,7 @@
     "prepare": "git config core.hooksPath .githooks 2>/dev/null || true"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.100.1",
     "@base-ui/react": "^1.4.1",
     "@convex-dev/auth": "^0.0.90",
     "@dnd-kit/core": "^6.3.1",

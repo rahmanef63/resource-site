@@ -46,5 +46,32 @@
     "rich-text",
     "docs",
     "notion-sync"
+  ],
+  "previews": [
+    {
+      "component": "MarkdownPage",
+      "kind": "variants",
+      "axes": [
+        {
+          "prop": "tabs",
+          "values": [
+            "read",
+            "crud"
+          ],
+          "default": "read",
+          "description": "read = single read-only surface; crud = Read/Write/Review tabs"
+        },
+        {
+          "prop": "content",
+          "values": [
+            "basic",
+            "rich"
+          ],
+          "default": "basic",
+          "description": "basic = text doc; rich = mermaid diagram + recharts chart + KaTeX"
+        }
+      ],
+      "seed": "two markdown docs in rr-demo:markdown; Write-tab edits persist per content axis"
+    }
   ]
 }

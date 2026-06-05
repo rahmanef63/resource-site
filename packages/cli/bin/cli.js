@@ -1142,6 +1142,12 @@ async function runLift(rest) {
     } else {
       await pull(step.from, step.toAbs);
     }
+    // preview.tsx is the kitab-internal variant-preview harness (VP wave) —
+    // it imports @/shared/preview/* which consumers don't have. Strip it.
+    if (parsed.kind === "rahman") {
+      const previewFile = path.join(step.toAbs, "preview.tsx");
+      if (existsSync(previewFile)) rmSync(previewFile);
+    }
     console.log(kleur.green("ok"));
   }
 

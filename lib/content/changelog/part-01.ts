@@ -2,6 +2,33 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "VP1",
+    "version": "variant-previews",
+    "date": 1780704000000,
+    "kind": "feature",
+    "title": "Variant previews + AI builder — slices preview like shadcn primitives",
+    "body": "VP wave. Slices now declare a machine-readable `previews` block in slice.json (enum variant axes for leaf slices, scenario presets for subsystems) rendered by a sibling preview.tsx fed by localStorage demo data (createDemoStore, rr-demo:<slug> — client-only, zero VPS compute). gen-preview-registry.mjs emits lib/preview/{registry.gen.ts, preview-meta.gen.json} — one code-split dynamic import per slug, nothing hardcoded. The Bundle Builder mounts <VariantPreview> with auto-generated knobs for every selected slice, and a Builder AI panel (key-guarded /api/build-chat) function-calls the dynamic tool surface (list_slices / get_slice / preview_slice / compose_bundle — tool defs built at request time from the catalog + preview metadata) and renders validated preview_slice calls live. Pilots: full-width-toggle (variants), markdown (tabs × content axes), notion-database (table/board/list/chart scenarios). preview.tsx is rr-internal — `rr add` strips it. Spec: docs/SLICE-PREVIEW-SPEC.md.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          {
+            "text": "full-width-toggle — pilot leaf preview (variant axis: icon/button/segment)",
+            "slug": "full-width-toggle"
+          },
+          {
+            "text": "markdown — pilot medium preview (tabs read/crud × content basic/rich)",
+            "slug": "markdown"
+          },
+          {
+            "text": "notion-database — pilot subsystem scenarios (table/board/list/chart)",
+            "slug": "notion-database"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "EDITORS-LIFT",
     "version": "image-editor@2.0.0 + reel-editor@1.0.0",
     "date": 1780617600000,

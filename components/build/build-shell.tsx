@@ -18,6 +18,8 @@ import { ThreeColumnLayoutAdvanced } from "@/components/previews/three-column/Th
 import { TemplatePicker, type TemplateOption } from "./template-picker";
 import { type FeatureOption } from "./feature-picker";
 import { LivePreview } from "./live-preview";
+import { SlicePreviews } from "./variant-preview";
+import { AiAssistant } from "./ai-assistant";
 import { CommandOutput } from "./command-output";
 import { InputsPanel } from "./inputs-panel";
 import { type ParsedRr } from "./existing-rr-uploader";
@@ -209,6 +211,10 @@ function BuilderCenter({
         adminPath={tplMeta?.adminPreviewPath}
         defaultSurface={tplMeta?.defaultSurface}
       />
+      {/* VP wave — per-slice variant previews (generated registry, localStorage demo data) */}
+      <SlicePreviews selected={sel.slices} />
+      {/* VP wave — AI assistant: function-calls the dynamic slice tool surface */}
+      <AiAssistant />
     </div>
   );
 

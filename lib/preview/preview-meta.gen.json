@@ -1,0 +1,90 @@
+[
+  {
+    "slug": "full-width-toggle",
+    "title": "Full Width Toggle",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "FullWidthToggle",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "variant",
+            "values": [
+              "icon",
+              "button",
+              "segment"
+            ],
+            "default": "icon",
+            "description": "Chrome shape — icon button, labeled button, or 3-segment toggle"
+          }
+        ],
+        "seed": "uses the slice's own localStorage width-mode key; sample container reacts live"
+      }
+    ]
+  },
+  {
+    "slug": "markdown",
+    "title": "Markdown — page container with CRUD tabs + diagrams",
+    "category": "content",
+    "previews": [
+      {
+        "component": "MarkdownPage",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "tabs",
+            "values": [
+              "read",
+              "crud"
+            ],
+            "default": "read",
+            "description": "read = single read-only surface; crud = Read/Write/Review tabs"
+          },
+          {
+            "prop": "content",
+            "values": [
+              "basic",
+              "rich"
+            ],
+            "default": "basic",
+            "description": "basic = text doc; rich = mermaid diagram + recharts chart + KaTeX"
+          }
+        ],
+        "seed": "two markdown docs in rr-demo:markdown; Write-tab edits persist per content axis"
+      }
+    ]
+  },
+  {
+    "slug": "notion-database",
+    "title": "Notion Database",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "NotionDatabase",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "table",
+            "title": "Table view"
+          },
+          {
+            "id": "board",
+            "title": "Board view",
+            "description": "grouped by Status"
+          },
+          {
+            "id": "list",
+            "title": "List view"
+          },
+          {
+            "id": "chart",
+            "title": "Chart view",
+            "description": "bar count by Status"
+          }
+        ],
+        "seed": "4-row sprint-tasks db in rr-demo:notion-database; cell edits persist"
+      }
+    ]
+  }
+]

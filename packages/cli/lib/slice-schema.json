@@ -165,6 +165,64 @@
       "type": "array",
       "items": { "type": "string" },
       "description": "Optional sub-provider list when a slice routes between alternatives (e.g., payment slice with midtrans + doku siblings)."
+    },
+    "previews": {
+      "type": "array",
+      "description": "Variant-preview declarations (VP wave). Each entry maps a public component to either enum variant axes (leaf slices) or scenario presets (subsystem slices). Rendered by frontend/slices/<slug>/preview.tsx — rr-internal, stripped on `rr add`. See docs/SLICE-PREVIEW-SPEC.md.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["component", "kind"],
+        "properties": {
+          "component": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Za-z0-9]*$",
+            "description": "Public component export this preview renders."
+          },
+          "kind": {
+            "type": "string",
+            "enum": ["variants", "scenarios"],
+            "description": "variants = enum prop axes (leaf); scenarios = curated presets (subsystem)."
+          },
+          "axes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["prop", "values"],
+              "properties": {
+                "prop": { "type": "string", "pattern": "^[a-z][A-Za-z0-9]*$" },
+                "values": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": { "type": "string" }
+                },
+                "default": { "type": "string" },
+                "description": { "type": "string" }
+              }
+            },
+            "description": "Enum-only variant axes (max 3 — enforced by gen-preview-registry). preview.tsx maps value strings to real props."
+          },
+          "scenarios": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["id"],
+              "properties": {
+                "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+                "title": { "type": "string" },
+                "description": { "type": "string" }
+              }
+            },
+            "description": "Curated preset configurations for subsystem slices."
+          },
+          "seed": {
+            "type": "string",
+            "description": "Human note describing the localStorage demo data (actual seed lives in preview.tsx)."
+          }
+        }
+      }
     }
   }
 }
