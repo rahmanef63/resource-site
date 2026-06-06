@@ -4,8 +4,8 @@
   "version": "0.3.0",
   "category": "ui",
   "kind": "ui",
-  "title": "Theme Presets — unified switcher with bundled tweakcn registry",
-  "description": "Runtime color preset swap on top of next-themes. Ships ONE component — ThemePresetSwitcher (Popover with light/dark/system mode tabs + grouped color preset list + hover preview + Default reset). Provider context (ThemePresetProvider) wraps state so deeply-nested consumers read via useThemePreset(). Registry (~30 curated tweakcn presets after HIDDEN filter) ships inside the slice as registry-data.json — no consumer public/ setup required, loaded lazily via dynamic import so the ~240KB JSON code-splits into its own chunk.",
+  "title": "Theme Presets \u2014 unified switcher with bundled tweakcn registry",
+  "description": "Runtime color preset swap on top of next-themes. Ships ONE component \u2014 ThemePresetSwitcher (Popover with light/dark/system mode tabs + grouped color preset list + hover preview + Default reset). Provider context (ThemePresetProvider) wraps state so deeply-nested consumers read via useThemePreset(). Registry (~30 curated tweakcn presets after HIDDEN filter) ships inside the slice as registry-data.json \u2014 no consumer public/ setup required, loaded lazily via dynamic import so the ~240KB JSON code-splits into its own chunk.",
   "namespace": "@/features/theme-presets",
   "registers": [],
   "audit": [],
@@ -14,9 +14,32 @@
     "configExport": ""
   },
   "deps": {
-    "npm": ["next-themes@^0.4.6"],
-    "shadcn": ["button", "popover"],
+    "npm": [
+      "next-themes@^0.4.6"
+    ],
+    "shadcn": [
+      "button",
+      "popover"
+    ],
     "env": [],
     "peers": []
-  }
+  },
+  "previews": [
+    {
+      "component": "ThemePresetSwitcher",
+      "kind": "variants",
+      "axes": [
+        {
+          "prop": "size",
+          "values": [
+            "sm",
+            "mobile"
+          ],
+          "default": "sm",
+          "description": "Trigger sizing \u2014 compact header button vs larger mobile touch target."
+        }
+      ],
+      "seed": "Wrapped in next-themes ThemeProvider + ThemePresetProvider; click the Palette trigger to open the mode tabs + bundled tweakcn preset list."
+    }
+  ]
 }

@@ -1,5 +1,412 @@
 [
   {
+    "slug": "activity",
+    "title": "Activity — public productivity log",
+    "category": "data",
+    "previews": [
+      {
+        "component": "ActivityFeed",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "with-stats",
+            "title": "Feed + stats",
+            "description": "Stats panel over week-grouped entries"
+          },
+          {
+            "id": "feed-only",
+            "title": "Feed only",
+            "description": "Week-grouped entries, no stats panel"
+          },
+          {
+            "id": "empty",
+            "title": "Empty state",
+            "description": "No rows — empty-title/body fallback renders"
+          }
+        ],
+        "seed": "4 static ActivityRow entries across two ISO weeks (display-only); scenario toggles stats + emptiness"
+      }
+    ]
+  },
+  {
+    "slug": "admin",
+    "title": "Admin — Generic Shell",
+    "category": "infra",
+    "previews": [
+      {
+        "component": "AdminPage",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "default",
+            "title": "Default labels",
+            "description": "generic shell copy"
+          },
+          {
+            "id": "saas",
+            "title": "SaaS admin",
+            "description": "rebranded for a SaaS console"
+          },
+          {
+            "id": "blog",
+            "title": "Blog CMS",
+            "description": "rebranded for a content site"
+          }
+        ],
+        "seed": "AdminPage shell rendered with three SliceAdminLabels presets"
+      }
+    ]
+  },
+  {
+    "slug": "ai-chat",
+    "title": "AI Chat — Workbench / Sidebar / Search",
+    "category": "ai",
+    "previews": [
+      {
+        "component": "AiChatFab",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "with-mock-bot",
+            "title": "Wired assistant",
+            "description": "A `chat` prop is injected; sending a message returns a canned reply after a short delay."
+          },
+          {
+            "id": "unconfigured",
+            "title": "Not wired up",
+            "description": "No `chat` prop — the FAB still opens and answers with a wire-me-up notice."
+          }
+        ],
+        "seed": "mock chat resolves a canned reply ~500ms after send; FAB + panel anchored inside the preview card"
+      }
+    ]
+  },
+  {
+    "slug": "appshell",
+    "title": "AppShell — Desktop + Mobile OS Shell",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "AppFrame",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "sidebar-collapsed",
+            "title": "Sidebar collapsed",
+            "description": "AppFrame body with the rail hidden — content spans the full pane."
+          },
+          {
+            "id": "sidebar-expanded",
+            "title": "Sidebar expanded",
+            "description": "Two-column body: a 56-wide sidebar rail beside the content area."
+          },
+          {
+            "id": "with-topbar",
+            "title": "With toolbar",
+            "description": "AppFrame header + toolbar rows above the sidebar/content body."
+          }
+        ],
+        "seed": "Scaled-down shell chrome in a fixed-height card — AppFrame header/toolbar/body composed with a mock sidebar + content list (no window manager, no providers)."
+      }
+    ]
+  },
+  {
+    "slug": "blog-section",
+    "title": "Blog Section",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "BlogListSection",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "layout",
+            "values": [
+              "cards",
+              "list",
+              "featured-split"
+            ],
+            "default": "cards",
+            "description": "Grid of cards, divided list rows, or hero + side stack"
+          },
+          {
+            "prop": "columns",
+            "values": [
+              "1",
+              "2",
+              "3"
+            ],
+            "default": "2",
+            "description": "Card grid columns at lg (cards layout only)"
+          },
+          {
+            "prop": "align",
+            "values": [
+              "left",
+              "center"
+            ],
+            "default": "left",
+            "description": "Header alignment"
+          }
+        ],
+        "seed": "3 static demo posts; hrefFor returns in-page anchors"
+      }
+    ]
+  },
+  {
+    "slug": "changelog-feed",
+    "title": "Changelog Feed",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "ChangelogFeedSection",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "layout",
+            "values": [
+              "timeline",
+              "cards",
+              "list"
+            ],
+            "default": "timeline",
+            "description": "Date-rail timeline, cards, or divided list"
+          }
+        ],
+        "seed": "3 static entries spanning feature/improvement/breaking kinds"
+      }
+    ]
+  },
+  {
+    "slug": "command-menu",
+    "title": "Command Menu",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "CommandPalette",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "scope",
+            "values": [
+              "all",
+              "commands"
+            ],
+            "default": "all",
+            "description": "Which mock command groups the palette renders — full set (pages + commands) vs commands only."
+          }
+        ],
+        "seed": "Palette rendered inline (open, no ⌘K) over 4-5 mock command items; type to fuzzy-filter. onSelect handlers are no-ops."
+      }
+    ]
+  },
+  {
+    "slug": "comments",
+    "title": "Comments — Threaded",
+    "category": "content",
+    "previews": [
+      {
+        "component": "CommentsThread",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "density",
+            "values": [
+              "comfortable",
+              "compact"
+            ],
+            "default": "comfortable",
+            "description": "Row spacing of the thread skin — airy vs. dense"
+          },
+          {
+            "prop": "resolved",
+            "values": [
+              "show",
+              "hide"
+            ],
+            "default": "show",
+            "description": "Include resolved comments or hide them from the list"
+          }
+        ],
+        "seed": "seeded thread (2 roots + 1 reply) in rr-demo:comments; posting a reply persists via createDemoStore"
+      }
+    ]
+  },
+  {
+    "slug": "convex-auth",
+    "title": "Convex Auth — Multi-Provider Sign-in",
+    "category": "auth",
+    "previews": [
+      {
+        "component": "AuthCard",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "methods",
+            "values": [
+              "password-google",
+              "magic-link",
+              "all"
+            ],
+            "default": "password-google",
+            "description": "Which sign-in methods render (maps to the AuthCard `methods` prop set)."
+          },
+          {
+            "prop": "defaultPasswordMode",
+            "values": [
+              "signin",
+              "signup"
+            ],
+            "default": "signin",
+            "description": "Initial password-block tab (AuthCard `defaultPasswordMode`)."
+          }
+        ],
+        "seed": "props-only AuthCard; mock handlers resolve { ok: true }, nothing persists"
+      }
+    ]
+  },
+  {
+    "slug": "doku-payment",
+    "title": "DOKU — Indonesia Payment",
+    "category": "payment",
+    "previews": [
+      {
+        "component": "DokuPaymentInstructions",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "virtual-account",
+            "title": "Virtual Account",
+            "description": "BCA VA — big monospace number + copy button + how-to link."
+          },
+          {
+            "id": "qris",
+            "title": "QRIS",
+            "description": "QR string rendered with a scan hint (no remote image)."
+          },
+          {
+            "id": "ewallet",
+            "title": "e-Wallet",
+            "description": "GoPay — deep-link button + web fallback."
+          },
+          {
+            "id": "retail",
+            "title": "PayLater / link",
+            "description": "Kredivo — simple continue-to-payment link."
+          }
+        ],
+        "seed": "static demo instructions per channel; sandbox — no real charge, links are placeholders"
+      }
+    ]
+  },
+  {
+    "slug": "faq-section",
+    "title": "FAQ Section",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "FAQSection",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "layout",
+            "values": [
+              "single",
+              "two-column",
+              "grouped"
+            ],
+            "default": "single",
+            "description": "Single accordion, two columns, or grouped by category"
+          },
+          {
+            "prop": "align",
+            "values": [
+              "left",
+              "center"
+            ],
+            "default": "left",
+            "description": "Header alignment"
+          }
+        ],
+        "seed": "4 static Q&A items spanning 3 categories"
+      }
+    ]
+  },
+  {
+    "slug": "feature-grid",
+    "title": "Feature Grid",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "FeatureGridSection",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "layout",
+            "values": [
+              "cards",
+              "minimal",
+              "alternating",
+              "grouped"
+            ],
+            "default": "cards",
+            "description": "Card grid, borderless minimal, alternating media rows, or grouped"
+          },
+          {
+            "prop": "columns",
+            "values": [
+              "1",
+              "2",
+              "3",
+              "4"
+            ],
+            "default": "3",
+            "description": "Grid columns at lg"
+          },
+          {
+            "prop": "align",
+            "values": [
+              "left",
+              "center"
+            ],
+            "default": "left",
+            "description": "Card and header alignment"
+          }
+        ],
+        "seed": "3 static feature items with lucide icons"
+      }
+    ]
+  },
+  {
+    "slug": "file-explorer",
+    "title": "File Explorer — Tree + CRUD + Breadcrumb",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "FileExplorer",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "root",
+            "title": "Home root",
+            "description": "top-level folders + files"
+          },
+          {
+            "id": "documents",
+            "title": "Documents",
+            "description": "opens into /Documents"
+          },
+          {
+            "id": "projects",
+            "title": "Projects",
+            "description": "opens into /Projects"
+          }
+        ],
+        "seed": "in-memory mock adapter (seeded tree); rename / new-folder / move persist for the mount"
+      }
+    ]
+  },
+  {
     "slug": "full-width-toggle",
     "title": "Full Width Toggle",
     "category": "ui",
@@ -20,6 +427,144 @@
           }
         ],
         "seed": "uses the slice's own localStorage width-mode key; sample container reacts live"
+      }
+    ]
+  },
+  {
+    "slug": "icon-picker",
+    "title": "Icon Picker",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "IconPickerInline",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "style",
+            "values": [
+              "twemoji",
+              "native"
+            ],
+            "default": "twemoji",
+            "description": "Emoji render style — Twemoji SVG (Notion-consistent) vs the native OS emoji font. Drives setIconStyle; the picked icon previews in both modes."
+          }
+        ],
+        "seed": "Picked icon value persisted in the demo store; the chosen emoji renders above the picker via DynamicIcon."
+      }
+    ]
+  },
+  {
+    "slug": "image-editor",
+    "title": "Image Editor — layered raster editor",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "ImageEditor",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "square",
+            "title": "Square canvas",
+            "description": "640×360 blank document — full editor chrome (tool rail, layers, adjust)."
+          },
+          {
+            "id": "wide",
+            "title": "Wide canvas",
+            "description": "960×360 blank document for a banner-style layout."
+          }
+        ],
+        "seed": "blank Konva doc sized per scenario; client-only stage, autosaves to localStorage, no server/fs"
+      }
+    ]
+  },
+  {
+    "slug": "image-picker",
+    "title": "Image Picker — one-button image/wallpaper chooser (gallery · upload · link · Unsplash · reposition)",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "ImagePickerButton",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "variant",
+            "values": [
+              "outline",
+              "secondary",
+              "ghost"
+            ],
+            "default": "outline",
+            "description": "shadcn Button visual variant for the trigger."
+          },
+          {
+            "prop": "size",
+            "values": [
+              "sm",
+              "default"
+            ],
+            "default": "sm",
+            "description": "shadcn Button size for the trigger."
+          }
+        ],
+        "seed": "Zero-config picker — Gallery (colours/gradients/textures) + Link + Upload tabs work without a server; Unsplash live search is omitted (no API key in preview)."
+      }
+    ]
+  },
+  {
+    "slug": "landing-sections",
+    "title": "Landing Sections",
+    "category": "infra",
+    "previews": [
+      {
+        "component": "LandingSectionShell",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "hero-only",
+            "title": "Hero only",
+            "description": "Single hero band"
+          },
+          {
+            "id": "hero-features",
+            "title": "Hero + features",
+            "description": "Hero followed by a features grid"
+          },
+          {
+            "id": "full-page",
+            "title": "Full page",
+            "description": "Hero + features + CTA stacked, scaled to fit"
+          }
+        ],
+        "seed": "3 seed sections (hero/features/cta) rendered by local mini-blocks wrapped in LandingSectionShell, scaled in a fixed-height frame"
+      }
+    ]
+  },
+  {
+    "slug": "library",
+    "title": "Library — resource hub (prompts · visuals · snippets · links)",
+    "category": "data",
+    "previews": [
+      {
+        "component": "LibraryIndex",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "all-kinds",
+            "title": "Mixed catalog",
+            "description": "Cards across prompt / snippet / image kinds with tool filters"
+          },
+          {
+            "id": "prompts-only",
+            "title": "Single kind",
+            "description": "Only prompt entries — narrower grid, focused filter row"
+          },
+          {
+            "id": "empty",
+            "title": "Empty state",
+            "description": "No items — empty-text fallback renders"
+          }
+        ],
+        "seed": "5 static LibraryRow cards (display-only); scenario selects which subset feeds the grid"
       }
     ]
   },
@@ -56,6 +601,35 @@
     ]
   },
   {
+    "slug": "midtrans-payment",
+    "title": "Midtrans — Indonesia Payment",
+    "category": "payment",
+    "previews": [
+      {
+        "component": "MidtransCheckout",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "single-item",
+            "title": "Single item",
+            "description": "Rp 150.000 order — the default checkout card."
+          },
+          {
+            "id": "cart",
+            "title": "Larger cart",
+            "description": "Rp 1.250.000 multi-item total."
+          },
+          {
+            "id": "subscription",
+            "title": "Subscription",
+            "description": "Rp 49.000 monthly plan."
+          }
+        ],
+        "seed": "amount/orderId per scenario; Pay button is a sandbox stub — no real Snap, no charge"
+      }
+    ]
+  },
+  {
     "slug": "notion-database",
     "title": "Notion Database",
     "category": "ui",
@@ -84,6 +658,296 @@
           }
         ],
         "seed": "4-row sprint-tasks db in rr-demo:notion-database; cell edits persist"
+      }
+    ]
+  },
+  {
+    "slug": "notion-shell",
+    "title": "Notion Shell — page + block editor primitives (pure, no sidebar/database)",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "CalloutBlock",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "kind",
+            "values": [
+              "default",
+              "note",
+              "tip",
+              "warning",
+              "important",
+              "caution"
+            ],
+            "default": "tip",
+            "description": "Callout admonition kind — drives the icon + colour tint"
+          }
+        ],
+        "seed": "single seed block with editable text; the kind axis feeds block.calloutKind"
+      }
+    ]
+  },
+  {
+    "slug": "notion-sidebar",
+    "title": "Notion Sidebar — tree nav + page CRUD (rename · drag · icon picker)",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "NotionSidebar",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "nested-tree",
+            "title": "Nested workspace",
+            "description": "A small page tree with parents + children; expand/collapse, rename (double-click), and drag-reorder all work."
+          },
+          {
+            "id": "with-icons",
+            "title": "Icon per page",
+            "description": "Same tree rendered with per-page emoji icons via the renderIcon slot."
+          },
+          {
+            "id": "flat-list",
+            "title": "Flat list",
+            "description": "Three top-level pages, no nesting — the simplest shape."
+          }
+        ],
+        "seed": "in-memory page list held in a demo store; CRUD callbacks mutate it so edits persist while mounted"
+      }
+    ]
+  },
+  {
+    "slug": "portfolio-section",
+    "title": "Portfolio Section",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "PortfolioListSection",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "layout",
+            "values": [
+              "uniform",
+              "masonry",
+              "asymmetric"
+            ],
+            "default": "uniform",
+            "description": "Even grid, masonry columns, or hero + grid"
+          },
+          {
+            "prop": "columns",
+            "values": [
+              "1",
+              "2",
+              "3"
+            ],
+            "default": "2",
+            "description": "Columns at lg (uniform/masonry)"
+          },
+          {
+            "prop": "align",
+            "values": [
+              "left",
+              "center"
+            ],
+            "default": "left",
+            "description": "Header alignment"
+          }
+        ],
+        "seed": "3 static projects; covers are inline SVG data-URI swatches; hrefFor returns anchors"
+      }
+    ]
+  },
+  {
+    "slug": "pricing-page",
+    "title": "Pricing Page",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "PricingSection",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "columns",
+            "values": [
+              "2",
+              "3",
+              "4"
+            ],
+            "default": "3",
+            "description": "Tier grid columns at lg"
+          },
+          {
+            "prop": "featuredVariant",
+            "values": [
+              "ring",
+              "scale",
+              "tint"
+            ],
+            "default": "ring",
+            "description": "Highlight style for the featured tier"
+          }
+        ],
+        "seed": "3 static tiers, Pro featured with Popular badge; CTA hrefs are anchors"
+      }
+    ]
+  },
+  {
+    "slug": "rbac-roles",
+    "title": "RBAC — Roles & Permissions",
+    "category": "auth",
+    "previews": [
+      {
+        "component": "PermissionMatrix",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "role",
+            "values": [
+              "admin",
+              "manager",
+              "staff",
+              "guest"
+            ],
+            "default": "manager",
+            "description": "Seeds the matrix `value` from this role preset's permission set."
+          },
+          {
+            "prop": "readOnly",
+            "values": [
+              "false",
+              "true"
+            ],
+            "default": "false",
+            "description": "PermissionMatrix `readOnly` — locks the checkboxes for inspection."
+          }
+        ],
+        "seed": "PERMISSION_GROUPS catalog + the selected role preset's resolved permissions"
+      }
+    ]
+  },
+  {
+    "slug": "selection",
+    "title": "Selection — marquee multi-select + bulk actions",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "SelectionProvider",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "edges",
+            "values": [
+              "on",
+              "off"
+            ],
+            "default": "on",
+            "description": "SelectableBlock edge strips — thin top/bottom click-select bands (on) vs marquee-only canvas nodes (off)."
+          }
+        ],
+        "seed": "4 demo rows inside a SelectionProvider; drag on empty space to marquee-select (drag right = enclose, left = touch), or click an edge. Bulk delete is a no-op."
+      }
+    ]
+  },
+  {
+    "slug": "testimonials-grid",
+    "title": "Testimonials Grid",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "TestimonialsGridSection",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "layout",
+            "values": [
+              "cards",
+              "quote-stack",
+              "masonry"
+            ],
+            "default": "cards",
+            "description": "Even card grid, centered quote stack, or masonry columns"
+          },
+          {
+            "prop": "columns",
+            "values": [
+              "1",
+              "2",
+              "3"
+            ],
+            "default": "2",
+            "description": "Columns at lg (cards/masonry)"
+          },
+          {
+            "prop": "align",
+            "values": [
+              "left",
+              "center"
+            ],
+            "default": "left",
+            "description": "Card and header alignment"
+          }
+        ],
+        "seed": "3 static testimonials, first one featured"
+      }
+    ]
+  },
+  {
+    "slug": "theme-presets",
+    "title": "Theme Presets — unified switcher with bundled tweakcn registry",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "ThemePresetSwitcher",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "size",
+            "values": [
+              "sm",
+              "mobile"
+            ],
+            "default": "sm",
+            "description": "Trigger sizing — compact header button vs larger mobile touch target."
+          }
+        ],
+        "seed": "Wrapped in next-themes ThemeProvider + ThemePresetProvider; click the Palette trigger to open the mode tabs + bundled tweakcn preset list."
+      }
+    ]
+  },
+  {
+    "slug": "user-management",
+    "title": "User Management",
+    "category": "auth",
+    "previews": [
+      {
+        "component": "UserManagementPanel",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "members",
+            "title": "Members tab",
+            "description": "table + role dropdowns + invite"
+          },
+          {
+            "id": "roles",
+            "title": "Roles tab",
+            "description": "role list + permission editor"
+          },
+          {
+            "id": "teams",
+            "title": "Teams tab",
+            "description": "named user groups"
+          },
+          {
+            "id": "access",
+            "title": "Access matrix",
+            "description": "per-tenant grant grid"
+          }
+        ],
+        "seed": "4 demo members + 4 roles + 2 teams in rr-demo:user-management; role/grant edits persist"
       }
     ]
   }

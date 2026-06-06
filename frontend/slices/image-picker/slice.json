@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "category": "ui",
   "kind": "ui",
-  "title": "Image Picker — one-button image/wallpaper chooser (gallery · upload · link · Unsplash · reposition)",
-  "description": "Generic image/wallpaper picker. The headline API is ONE button (ImagePickerButton) that opens a dialog with 4 tabs: Gallery (12 colours + 8 gradients + Notion textures), Upload (drag/click, ≤8MB), Link (paste any https image URL), Unsplash (bundled curated landscapes + live search). On pick, onChange fires with an ImageValue ({ type, value, positionY?, metadata? }). ImageBanner is the optional reposition-able band (page cover / profile header / card hero) with hover Change / Reposition (drag the vertical focal point) / Remove. Not coupled to Notion — drop it anywhere you let a user set an image. The slice imports NO other slice and NO backend — the upload backend and Unsplash search are INJECTED as props (onUpload + searchUnsplash): wire onUpload to the `files` slice and searchUnsplash to a server route via unsplashSearchVia('/api/unsplash') that holds UNSPLASH_ACCESS_KEY server-side (never NEXT_PUBLIC). Ships a curated Unsplash + gallery fallback so it works with zero config. parseImage normalizes legacy raw-string values; imageStyle builds the focal-point CSS.",
+  "title": "Image Picker \u2014 one-button image/wallpaper chooser (gallery \u00b7 upload \u00b7 link \u00b7 Unsplash \u00b7 reposition)",
+  "description": "Generic image/wallpaper picker. The headline API is ONE button (ImagePickerButton) that opens a dialog with 4 tabs: Gallery (12 colours + 8 gradients + Notion textures), Upload (drag/click, \u22648MB), Link (paste any https image URL), Unsplash (bundled curated landscapes + live search). On pick, onChange fires with an ImageValue ({ type, value, positionY?, metadata? }). ImageBanner is the optional reposition-able band (page cover / profile header / card hero) with hover Change / Reposition (drag the vertical focal point) / Remove. Not coupled to Notion \u2014 drop it anywhere you let a user set an image. The slice imports NO other slice and NO backend \u2014 the upload backend and Unsplash search are INJECTED as props (onUpload + searchUnsplash): wire onUpload to the `files` slice and searchUnsplash to a server route via unsplashSearchVia('/api/unsplash') that holds UNSPLASH_ACCESS_KEY server-side (never NEXT_PUBLIC). Ships a curated Unsplash + gallery fallback so it works with zero config. parseImage normalizes legacy raw-string values; imageStyle builds the focal-point CSS.",
   "namespace": "@/features/image-picker",
   "registers": [],
   "audit": [],
@@ -25,9 +25,37 @@
         "name": "UNSPLASH_ACCESS_KEY",
         "scope": "server",
         "required": false,
-        "description": "Unsplash API key for live search via unsplashSearchVia('/api/unsplash'). Optional — bundled curated fallback works with zero config. Keep server-side, never NEXT_PUBLIC."
+        "description": "Unsplash API key for live search via unsplashSearchVia('/api/unsplash'). Optional \u2014 bundled curated fallback works with zero config. Keep server-side, never NEXT_PUBLIC."
       }
     ],
     "peers": []
-  }
+  },
+  "previews": [
+    {
+      "component": "ImagePickerButton",
+      "kind": "variants",
+      "axes": [
+        {
+          "prop": "variant",
+          "values": [
+            "outline",
+            "secondary",
+            "ghost"
+          ],
+          "default": "outline",
+          "description": "shadcn Button visual variant for the trigger."
+        },
+        {
+          "prop": "size",
+          "values": [
+            "sm",
+            "default"
+          ],
+          "default": "sm",
+          "description": "shadcn Button size for the trigger."
+        }
+      ],
+      "seed": "Zero-config picker \u2014 Gallery (colours/gradients/textures) + Link + Upload tabs work without a server; Unsplash live search is omitted (no API key in preview)."
+    }
+  ]
 }

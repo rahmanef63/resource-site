@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "category": "data",
   "kind": "full",
-  "title": "Activity — public productivity log",
+  "title": "Activity \u2014 public productivity log",
   "description": "Public-facing weekly activity log. Lists user-facing activities grouped by ISO week with schema.org-friendly markup, designed to maximise SEO so the question 'what is <person> working on this week?' lands here. Convex-backed (schema + queries + unauthenticated mutations); MCP-friendly so AI workflows (Claude / GPT / custom agents) can append entries directly. All user-facing copy + per-category labels + date/time locale are prop-driven (English defaults). Lifted 2026-05-27 from rahmanef.com; 225-LOC view split + Indonesian strings + custom primitives stripped + auth dropped (consumer wraps).",
   "namespace": "@/features/activity",
   "frontend": {
@@ -14,16 +14,58 @@
   "convex": {
     "tablesExport": "activityTables",
     "schemaPath": "convex/features/activity/_schema.ts",
-    "rootPaths": ["convex/features/activity"]
+    "rootPaths": [
+      "convex/features/activity"
+    ]
   },
   "deps": {
-    "npm": ["convex@^1.17", "lucide-react@^0.400.0", "next@^15", "react@^18"],
+    "npm": [
+      "convex@^1.17",
+      "lucide-react@^0.400.0",
+      "next@^15",
+      "react@^18"
+    ],
     "shadcn": [],
     "env": [],
     "peers": []
   },
   "registers": [],
-  "audit": ["bp:public-fn-validator"],
+  "audit": [
+    "bp:public-fn-validator"
+  ],
   "license": "MIT",
-  "tags": ["activity", "productivity", "log", "now-page", "feed", "mcp", "seo", "personal-brand"]
+  "tags": [
+    "activity",
+    "productivity",
+    "log",
+    "now-page",
+    "feed",
+    "mcp",
+    "seo",
+    "personal-brand"
+  ],
+  "previews": [
+    {
+      "component": "ActivityFeed",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "with-stats",
+          "title": "Feed + stats",
+          "description": "Stats panel over week-grouped entries"
+        },
+        {
+          "id": "feed-only",
+          "title": "Feed only",
+          "description": "Week-grouped entries, no stats panel"
+        },
+        {
+          "id": "empty",
+          "title": "Empty state",
+          "description": "No rows \u2014 empty-title/body fallback renders"
+        }
+      ],
+      "seed": "4 static ActivityRow entries across two ISO weeks (display-only); scenario toggles stats + emptiness"
+    }
+  ]
 }

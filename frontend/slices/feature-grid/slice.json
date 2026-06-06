@@ -17,13 +17,65 @@
     "rootPaths": []
   },
   "deps": {
-    "npm": ["lucide-react@^0.400.0", "next@^15"],
-    "shadcn": ["button", "card"],
+    "npm": [
+      "lucide-react@^0.400.0",
+      "next@^15"
+    ],
+    "shadcn": [
+      "button",
+      "card"
+    ],
     "env": [],
     "peers": []
   },
   "registers": [],
   "audit": [],
   "license": "MIT",
-  "tags": ["ui", "marketing", "features", "grid", "section"]
+  "tags": [
+    "ui",
+    "marketing",
+    "features",
+    "grid",
+    "section"
+  ],
+  "previews": [
+    {
+      "component": "FeatureGridSection",
+      "kind": "variants",
+      "axes": [
+        {
+          "prop": "layout",
+          "values": [
+            "cards",
+            "minimal",
+            "alternating",
+            "grouped"
+          ],
+          "default": "cards",
+          "description": "Card grid, borderless minimal, alternating media rows, or grouped"
+        },
+        {
+          "prop": "columns",
+          "values": [
+            "1",
+            "2",
+            "3",
+            "4"
+          ],
+          "default": "3",
+          "description": "Grid columns at lg"
+        },
+        {
+          "prop": "align",
+          "values": [
+            "left",
+            "center"
+          ],
+          "default": "left",
+          "description": "Card and header alignment"
+        }
+      ],
+      "seed": "3 static feature items with lucide icons"
+    }
+  ]
 }

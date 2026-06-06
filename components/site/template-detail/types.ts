@@ -21,6 +21,9 @@ export type TemplateDetailData = {
   tags: string[];
   previewPath?: string;
   adminPreviewPath?: string;
+  /** External live demo (template's own Vercel deployment). Overrides the
+   *  demo-subdomain link when present. */
+  demoUrl?: string;
   defaultSurface?: "public" | "admin";
   defaultView?: PreviewView;
   defaultZoom?: number;

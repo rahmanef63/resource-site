@@ -2,6 +2,73 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "VP6",
+    "version": "variant-previews@full-catalog",
+    "date": 1780790400000,
+    "kind": "feature",
+    "title": "Preview backfill — 31 slices in the variant-preview registry + coverage gate + Vercel demo links",
+    "body": "VP-6 closes the VP wave. 28 new preview.tsx files land across the catalog (31 total in the generated registry): every marketing section, UI utility, content/data surface and previewable subsystem now renders live in the Bundle Builder with auto-generated knobs. Headless / embed / no-seam slices (ai-router, audit-log, cal-com-booking, resend-newsletter, reel-editor, seo, vector-search) explicitly opt out with `\"previews\": []` — a new audit:slices rule warns when a component-bearing slice neither declares nor opts out, and gen-preview-registry errors on an opt-out that still ships a preview.tsx. layouts.ts gains demoUrl: all 8 OS templates now link their own Vercel deployments (the dev-lab repos, always ahead of rr's snapshot) from the detail page, overriding the demo-subdomain rewrite.",
+    "groups": [
+      {
+        "heading": "Marketing sections (variants)",
+        "bullets": [
+          { "text": "blog-section — layout cards/list/featured-split × columns × align", "slug": "blog-section" },
+          { "text": "faq-section — layout single/two-column/grouped × align", "slug": "faq-section" },
+          { "text": "feature-grid — layout cards/minimal/alternating/grouped × columns × align", "slug": "feature-grid" },
+          { "text": "testimonials-grid — layout cards/quote-stack/masonry × columns × align", "slug": "testimonials-grid" },
+          { "text": "portfolio-section — layout uniform/masonry/asymmetric × columns × align", "slug": "portfolio-section" },
+          { "text": "pricing-page — columns 2-4 × featuredVariant ring/scale/tint", "slug": "pricing-page" },
+          { "text": "changelog-feed — layout timeline/cards/list", "slug": "changelog-feed" }
+        ]
+      },
+      {
+        "heading": "UI utilities",
+        "bullets": [
+          { "text": "icon-picker — twemoji/native render style, picked icon previews live", "slug": "icon-picker" },
+          { "text": "image-picker — Button variant × size (gallery/link/upload zero-config)", "slug": "image-picker" },
+          { "text": "command-menu — palette rendered inline/open with live cmdk filtering", "slug": "command-menu" },
+          { "text": "theme-presets — ThemePresetSwitcher sm/mobile under real providers", "slug": "theme-presets" },
+          { "text": "selection — live marquee rubber-band select over demo rows", "slug": "selection" },
+          { "text": "appshell — AppFrame scenarios: collapsed/expanded/with-topbar", "slug": "appshell" }
+        ]
+      },
+      {
+        "heading": "Content + data",
+        "bullets": [
+          { "text": "comments — density × resolved axes, replies persist via demo store", "slug": "comments" },
+          { "text": "library — all-kinds/prompts-only/empty scenarios", "slug": "library" },
+          { "text": "activity — with-stats/feed-only/empty scenarios", "slug": "activity" },
+          { "text": "landing-sections — hero-only/hero-features/full-page scaled scenarios", "slug": "landing-sections" },
+          { "text": "markdown + notion-database + full-width-toggle — pilots from VP-3", "slug": "markdown" }
+        ]
+      },
+      {
+        "heading": "Auth + admin + subsystems",
+        "bullets": [
+          { "text": "convex-auth — AuthCard methods × defaultPasswordMode, mock handlers", "slug": "convex-auth" },
+          { "text": "rbac-roles — PermissionMatrix role seeds × readOnly", "slug": "rbac-roles" },
+          { "text": "user-management — members/roles/teams/access scenarios, edits persist", "slug": "user-management" },
+          { "text": "admin — AdminPage default/saas/blog presets", "slug": "admin" },
+          { "text": "file-explorer — root/documents/projects, in-memory adapter CRUD", "slug": "file-explorer" },
+          { "text": "notion-shell — CalloutBlock kind axis, editable seeded block", "slug": "notion-shell" },
+          { "text": "notion-sidebar — nested-tree/with-icons/flat-list, live page CRUD", "slug": "notion-sidebar" },
+          { "text": "ai-chat — with-mock-bot/unconfigured scenarios (canned reply)", "slug": "ai-chat" },
+          { "text": "doku-payment — VA/QRIS/e-wallet/retail sandbox instructions", "slug": "doku-payment" },
+          { "text": "midtrans-payment — single-item/cart/subscription checkout amounts", "slug": "midtrans-payment" },
+          { "text": "image-editor — square/wide blank Konva docs, client-only stage", "slug": "image-editor" }
+        ]
+      },
+      {
+        "heading": "Infra",
+        "bullets": [
+          { "text": "gen-preview-registry — `\"previews\": []` opt-out support + stray-preview.tsx error" },
+          { "text": "audit:slices — preview-coverage warning for component-bearing slices (advisory, flips to error at sustained 100%)" },
+          { "text": "layouts.ts demoUrl — 8 OS templates link their Vercel dev-lab deployments; template-detail prefers it over the demo subdomain" }
+        ]
+      }
+    ]
+  },
+  {
     "id": "SHELL-SYNC1",
     "version": "appshell@1.1.0 + file-explorer@1.1.0",
     "date": 1780617600000,

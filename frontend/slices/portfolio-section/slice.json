@@ -5,7 +5,7 @@
   "category": "ui",
   "kind": "ui",
   "title": "Portfolio Section",
-  "description": "Reusable, prop-driven portfolio surface covering both list (/portfolio) and detail (/portfolio/[slug]) views. List supports three layouts: uniform 16:9 grid (1-3 columns), CSS-columns masonry (variable aspect), and asymmetric (first item spans 2 cols, then rows of 3). Detail renders cover hero, ProjectMeta row (year/client/role/tags), body via consumer-supplied renderBody (defaults to paragraph split), optional gallery grid, external link, and 'More work' related grid. Pure server component, no client JS, no Convex tables — every template controls routing via hrefFor.",
+  "description": "Reusable, prop-driven portfolio surface covering both list (/portfolio) and detail (/portfolio/[slug]) views. List supports three layouts: uniform 16:9 grid (1-3 columns), CSS-columns masonry (variable aspect), and asymmetric (first item spans 2 cols, then rows of 3). Detail renders cover hero, ProjectMeta row (year/client/role/tags), body via consumer-supplied renderBody (defaults to paragraph split), optional gallery grid, external link, and 'More work' related grid. Pure server component, no client JS, no Convex tables \u2014 every template controls routing via hrefFor.",
   "namespace": "@/features/portfolio-section",
   "frontend": {
     "slicePath": "frontend/slices/portfolio-section",
@@ -17,13 +17,64 @@
     "rootPaths": []
   },
   "deps": {
-    "npm": ["next@^15"],
-    "shadcn": ["badge", "button", "card", "separator"],
+    "npm": [
+      "next@^15"
+    ],
+    "shadcn": [
+      "badge",
+      "button",
+      "card",
+      "separator"
+    ],
     "env": [],
     "peers": []
   },
   "registers": [],
   "audit": [],
   "license": "MIT",
-  "tags": ["ui", "marketing", "portfolio", "case-study", "section"]
+  "tags": [
+    "ui",
+    "marketing",
+    "portfolio",
+    "case-study",
+    "section"
+  ],
+  "previews": [
+    {
+      "component": "PortfolioListSection",
+      "kind": "variants",
+      "axes": [
+        {
+          "prop": "layout",
+          "values": [
+            "uniform",
+            "masonry",
+            "asymmetric"
+          ],
+          "default": "uniform",
+          "description": "Even grid, masonry columns, or hero + grid"
+        },
+        {
+          "prop": "columns",
+          "values": [
+            "1",
+            "2",
+            "3"
+          ],
+          "default": "2",
+          "description": "Columns at lg (uniform/masonry)"
+        },
+        {
+          "prop": "align",
+          "values": [
+            "left",
+            "center"
+          ],
+          "default": "left",
+          "description": "Header alignment"
+        }
+      ],
+      "seed": "3 static projects; covers are inline SVG data-URI swatches; hrefFor returns anchors"
+    }
+  ]
 }

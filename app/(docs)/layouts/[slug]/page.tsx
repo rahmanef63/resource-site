@@ -59,6 +59,7 @@ export default async function LayoutDetailPage({ params }: { params: Promise<{ s
         tags: l.tags,
         previewPath: l.previewPath,
         adminPreviewPath: l.adminPreviewPath,
+        demoUrl: l.demoUrl,
         defaultSurface: l.defaultSurface,
         defaultView: l.defaultView,
         defaultZoom: l.defaultZoom,

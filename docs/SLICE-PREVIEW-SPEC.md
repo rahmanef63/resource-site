@@ -36,6 +36,11 @@ hardcode.
 ]
 ```
 
+**Opt-out:** `"previews": []` declares "no preview by design" (headless slice,
+external embed, no public component seam). `audit:slices` warns when a slice
+has `components/` but no `previews` key at all — every slice must declare or
+opt out. An opt-out plus a stray `preview.tsx` is a generator error.
+
 Rules (gated by `gen-preview-registry.mjs` + slice-schema):
 
 - **Axes are enum-only, max 3 per component.** Values are opaque strings —

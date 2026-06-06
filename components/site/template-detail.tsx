@@ -33,7 +33,12 @@ type Props = {
 
 export function TemplateDetail({ kind, basePath, data, prev, next, prompt, siteUrl }: Props) {
   const tplConfig = React.useMemo(() => getTemplateConfig(data.slug), [data.slug]);
-  const demoUrl = React.useMemo(() => getDemoUrl(data.slug), [data.slug]);
+  // VP-6 — template's own Vercel deployment (dev-lab repo, always ahead of
+  // rr's snapshot) wins over the demo-subdomain rewrite when declared.
+  const demoUrl = React.useMemo(
+    () => data.demoUrl ?? getDemoUrl(data.slug),
+    [data.demoUrl, data.slug],
+  );
 
   const manifest = React.useMemo(() => {
     const inspectorRender = tplConfig

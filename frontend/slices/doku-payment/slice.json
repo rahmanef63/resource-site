@@ -3,13 +3,15 @@
   "slug": "doku-payment",
   "version": "0.1.1",
   "category": "payment",
-  "title": "DOKU — Indonesia Payment",
-  "description": "Pembayaran lokal Indonesia via DOKU — Checkout (hosted page) + Direct (VA / QRIS / e-Wallet / PayLater / Minimarket / CC). Sibling slice to midtrans-payment, sharing the same paymentOrders schema. HMAC-signed REST calls + signature-verified webhook + idempotent retry handling.",
+  "title": "DOKU \u2014 Indonesia Payment",
+  "description": "Pembayaran lokal Indonesia via DOKU \u2014 Checkout (hosted page) + Direct (VA / QRIS / e-Wallet / PayLater / Minimarket / CC). Sibling slice to midtrans-payment, sharing the same paymentOrders schema. HMAC-signed REST calls + signature-verified webhook + idempotent retry handling.",
   "namespace": "@/features/doku-payment",
   "convex": {
     "tablesExport": "paymentTables",
     "schemaPath": "convex/features/payment/_schema.ts",
-    "rootPaths": ["convex/features/payment"]
+    "rootPaths": [
+      "convex/features/payment"
+    ]
   },
   "frontend": {
     "slicePath": "frontend/slices/doku-payment",
@@ -17,20 +19,96 @@
   },
   "deps": {
     "npm": [],
-    "shadcn": ["card", "button", "dialog", "input", "label", "select", "badge", "skeleton"],
+    "shadcn": [
+      "card",
+      "button",
+      "dialog",
+      "input",
+      "label",
+      "select",
+      "badge",
+      "skeleton"
+    ],
     "env": [
-      { "name": "DOKU_CLIENT_ID", "scope": "convex", "required": true, "description": "Merchant Client-Id from DOKU dashboard." },
-      { "name": "DOKU_SECRET_KEY", "scope": "convex", "required": true, "description": "HMAC secret for outbound signing + inbound verification." },
-      { "name": "DOKU_IS_PRODUCTION", "scope": "convex", "required": false, "description": "true|false; defaults false (sandbox)." },
-      { "name": "DOKU_NOTIFY_PATH", "scope": "convex", "required": false, "description": "Path component DOKU calls; defaults /webhooks/doku." }
+      {
+        "name": "DOKU_CLIENT_ID",
+        "scope": "convex",
+        "required": true,
+        "description": "Merchant Client-Id from DOKU dashboard."
+      },
+      {
+        "name": "DOKU_SECRET_KEY",
+        "scope": "convex",
+        "required": true,
+        "description": "HMAC secret for outbound signing + inbound verification."
+      },
+      {
+        "name": "DOKU_IS_PRODUCTION",
+        "scope": "convex",
+        "required": false,
+        "description": "true|false; defaults false (sandbox)."
+      },
+      {
+        "name": "DOKU_NOTIFY_PATH",
+        "scope": "convex",
+        "required": false,
+        "description": "Path component DOKU calls; defaults /webhooks/doku."
+      }
     ],
     "peers": [
-      { "slug": "convex-auth", "range": "^0.1", "reason": "Order ownership requires authenticated user." }
+      {
+        "slug": "convex-auth",
+        "range": "^0.1",
+        "reason": "Order ownership requires authenticated user."
+      }
     ]
   },
-  "registers": ["registry"],
-  "audit": ["bp:public-fn-validator"],
+  "registers": [
+    "registry"
+  ],
+  "audit": [
+    "bp:public-fn-validator"
+  ],
   "license": "MIT",
-  "tags": ["payment", "doku", "indonesia", "qris", "virtual-account", "ewallet", "checkout"],
-  "providers": ["doku"]
+  "tags": [
+    "payment",
+    "doku",
+    "indonesia",
+    "qris",
+    "virtual-account",
+    "ewallet",
+    "checkout"
+  ],
+  "providers": [
+    "doku"
+  ],
+  "previews": [
+    {
+      "component": "DokuPaymentInstructions",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "virtual-account",
+          "title": "Virtual Account",
+          "description": "BCA VA \u2014 big monospace number + copy button + how-to link."
+        },
+        {
+          "id": "qris",
+          "title": "QRIS",
+          "description": "QR string rendered with a scan hint (no remote image)."
+        },
+        {
+          "id": "ewallet",
+          "title": "e-Wallet",
+          "description": "GoPay \u2014 deep-link button + web fallback."
+        },
+        {
+          "id": "retail",
+          "title": "PayLater / link",
+          "description": "Kredivo \u2014 simple continue-to-payment link."
+        }
+      ],
+      "seed": "static demo instructions per channel; sandbox \u2014 no real charge, links are placeholders"
+    }
+  ]
 }

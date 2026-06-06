@@ -11,6 +11,26 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-06 — preview backfill: full catalog coverage (VP-6)
+
+- **28 new previews** — every component-bearing slice in the catalog now
+  renders live in the Bundle Builder (31 slugs in the generated registry).
+  Marketing sections (blog/faq/feature-grid/testimonials-grid/portfolio/
+  pricing/changelog-feed) ship variant axes; utilities (icon-picker,
+  image-picker, command-menu, theme-presets, selection) demo real props;
+  subsystems (appshell, admin, user-management, file-explorer, notion-shell,
+  notion-sidebar, ai-chat, doku/midtrans-payment, image-editor, comments,
+  library, activity, landing-sections, convex-auth, rbac-roles) ship curated
+  scenarios with localStorage-persisted demo data.
+- **Explicit opt-out** — `"previews": []` declares no-preview-by-design
+  (ai-router, audit-log, cal-com-booking, resend-newsletter, reel-editor,
+  seo, vector-search). New `audit:slices` rule warns when a component-bearing
+  slice neither declares nor opts out; `gen-preview-registry` errors on an
+  opt-out that still ships a `preview.tsx`.
+- **Site** — `layouts.ts` gains `demoUrl`: all 8 OS templates link their own
+  Vercel deployments (dev-lab repos, always ahead of rr's snapshot) from the
+  template detail page, overriding the demo-subdomain link.
+
 ### 2026-06-05 — variant previews + AI builder (VP wave)
 
 - **Preview contract** — slice.json gains an optional `previews` block

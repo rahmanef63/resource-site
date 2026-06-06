@@ -5,18 +5,57 @@
   "category": "ui",
   "kind": "ui",
   "title": "Command Menu",
-  "description": "Renderless ⌘K command palette + generic search modal. Consumer-supplied groups + onSelect + label bag; slice owns dialog chrome, hotkey, and MRU history. Pulled UP from notion-page-clone's command-palette renderless surface (Wave N+3.7).",
+  "description": "Renderless \u2318K command palette + generic search modal. Consumer-supplied groups + onSelect + label bag; slice owns dialog chrome, hotkey, and MRU history. Pulled UP from notion-page-clone's command-palette renderless surface (Wave N+3.7).",
   "namespace": "@/features/command-menu",
-  "convex": { "tablesExport": "", "schemaPath": "", "rootPaths": [] },
-  "frontend": { "slicePath": "frontend/slices/command-menu", "configExport": "commandMenuConfig" },
+  "convex": {
+    "tablesExport": "",
+    "schemaPath": "",
+    "rootPaths": []
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/command-menu",
+    "configExport": "commandMenuConfig"
+  },
   "deps": {
-    "npm": ["cmdk@^1.0.0"],
-    "shadcn": ["command", "dialog"],
+    "npm": [
+      "cmdk@^1.0.0"
+    ],
+    "shadcn": [
+      "command",
+      "dialog"
+    ],
     "env": [],
     "peers": []
   },
-  "registers": ["registry"],
+  "registers": [
+    "registry"
+  ],
   "license": "MIT",
-  "tags": ["ui", "palette", "cmd-k", "navigation", "keyboard", "search"],
-  "providers": []
+  "tags": [
+    "ui",
+    "palette",
+    "cmd-k",
+    "navigation",
+    "keyboard",
+    "search"
+  ],
+  "providers": [],
+  "previews": [
+    {
+      "component": "CommandPalette",
+      "kind": "variants",
+      "axes": [
+        {
+          "prop": "scope",
+          "values": [
+            "all",
+            "commands"
+          ],
+          "default": "all",
+          "description": "Which mock command groups the palette renders \u2014 full set (pages + commands) vs commands only."
+        }
+      ],
+      "seed": "Palette rendered inline (open, no \u2318K) over 4-5 mock command items; type to fuzzy-filter. onSelect handlers are no-ops."
+    }
+  ]
 }

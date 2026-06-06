@@ -9,23 +9,47 @@
   "convex": {
     "tablesExport": "bookingsTables",
     "schemaPath": "convex/features/bookings/_schema.ts",
-    "rootPaths": ["convex/features/bookings"]
+    "rootPaths": [
+      "convex/features/bookings"
+    ]
   },
   "frontend": {
     "slicePath": "frontend/slices/cal-com-booking",
     "configExport": "calComBookingConfig"
   },
   "deps": {
-    "npm": ["@calcom/embed-react@^1.5.0"],
-    "shadcn": ["card"],
+    "npm": [
+      "@calcom/embed-react@^1.5.0"
+    ],
+    "shadcn": [
+      "card"
+    ],
     "env": [
-      { "name": "NEXT_PUBLIC_CALCOM_USERNAME", "scope": "next-public", "required": true },
-      { "name": "CALCOM_WEBHOOK_SECRET", "scope": "convex", "required": true }
+      {
+        "name": "NEXT_PUBLIC_CALCOM_USERNAME",
+        "scope": "next-public",
+        "required": true
+      },
+      {
+        "name": "CALCOM_WEBHOOK_SECRET",
+        "scope": "convex",
+        "required": true
+      }
     ],
     "peers": []
   },
-  "registers": ["registry"],
-  "audit": ["bp:public-fn-validator"],
+  "registers": [
+    "registry"
+  ],
+  "audit": [
+    "bp:public-fn-validator"
+  ],
   "license": "MIT",
-  "tags": ["data", "scheduling", "cal-com", "bookings"]
+  "tags": [
+    "data",
+    "scheduling",
+    "cal-com",
+    "bookings"
+  ],
+  "previews": []
 }

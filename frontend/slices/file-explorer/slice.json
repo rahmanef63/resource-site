@@ -4,7 +4,7 @@
   "version": "1.1.0",
   "category": "ui",
   "kind": "full",
-  "title": "File Explorer — Tree + CRUD + Breadcrumb",
+  "title": "File Explorer \u2014 Tree + CRUD + Breadcrumb",
   "description": "A complete, backend-agnostic file explorer: a directory tree sidebar, breadcrumb navigation with history, grid and list views, full CRUD (new folder, rename, move, copy, delete/Trash), drag-and-drop upload and move (files AND folders, structure preserved), a right-click context menu, multi-select (cmd/shift), and keyboard shortcuts. Storage is pluggable via an injectable FileExplorerAdapter (host fs / S3 / Convex / your own); the slice ships an in-memory mock so the whole UI is demoable with zero backend.",
   "namespace": "@/features/file-explorer",
   "frontend": {
@@ -12,13 +12,59 @@
     "configExport": "fileExplorerConfig"
   },
   "deps": {
-    "npm": ["lucide-react"],
-    "shadcn": ["button", "input", "scroll-area", "separator", "dropdown-menu", "sheet"],
+    "npm": [
+      "lucide-react"
+    ],
+    "shadcn": [
+      "button",
+      "input",
+      "scroll-area",
+      "separator",
+      "dropdown-menu",
+      "sheet"
+    ],
     "env": [],
     "peers": []
   },
   "registers": [],
-  "audit": ["bp:ui-consistency"],
+  "audit": [
+    "bp:ui-consistency"
+  ],
   "license": "MIT",
-  "tags": ["files", "file-manager", "explorer", "tree", "breadcrumb", "crud", "drag-drop", "upload", "adapter", "ui"]
+  "tags": [
+    "files",
+    "file-manager",
+    "explorer",
+    "tree",
+    "breadcrumb",
+    "crud",
+    "drag-drop",
+    "upload",
+    "adapter",
+    "ui"
+  ],
+  "previews": [
+    {
+      "component": "FileExplorer",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "root",
+          "title": "Home root",
+          "description": "top-level folders + files"
+        },
+        {
+          "id": "documents",
+          "title": "Documents",
+          "description": "opens into /Documents"
+        },
+        {
+          "id": "projects",
+          "title": "Projects",
+          "description": "opens into /Projects"
+        }
+      ],
+      "seed": "in-memory mock adapter (seeded tree); rename / new-folder / move persist for the mount"
+    }
+  ]
 }

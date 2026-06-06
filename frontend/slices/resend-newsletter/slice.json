@@ -3,7 +3,7 @@
   "slug": "resend-newsletter",
   "version": "0.1.3",
   "category": "email",
-  "title": "Resend — Transactional & Newsletter",
+  "title": "Resend \u2014 Transactional & Newsletter",
   "description": "Newsletter subscribe form + admin send-broadcast pipeline via Resend.",
   "namespace": "@/features/resend-newsletter",
   "convex": {
@@ -54,5 +54,6 @@
     "email",
     "newsletter",
     "resend"
-  ]
+  ],
+  "previews": []
 }

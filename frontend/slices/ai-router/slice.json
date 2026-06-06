@@ -3,28 +3,49 @@
   "slug": "ai-router",
   "version": "0.1.0",
   "category": "ai",
-  "title": "AI Router — Backend Provider Proxy",
-  "description": "Tier-routed LLM access via OpenRouter — nano (Haiku) for classification, mid (Sonnet) for chat, flagship (Opus) for deep reasoning. Per-call usage log.",
+  "title": "AI Router \u2014 Backend Provider Proxy",
+  "description": "Tier-routed LLM access via OpenRouter \u2014 nano (Haiku) for classification, mid (Sonnet) for chat, flagship (Opus) for deep reasoning. Per-call usage log.",
   "namespace": "@/features/ai-router",
   "convex": {
     "tablesExport": "aiTables",
     "schemaPath": "convex/features/ai/_schema.ts",
-    "rootPaths": ["convex/features/ai"]
+    "rootPaths": [
+      "convex/features/ai"
+    ]
   },
   "frontend": {
     "slicePath": "frontend/slices/ai-router",
     "configExport": "aiRouterConfig"
   },
   "deps": {
-    "npm": ["ai@^4.0.0", "@openrouter/ai-sdk-provider@^0.0.5"],
-    "shadcn": ["button"],
+    "npm": [
+      "ai@^4.0.0",
+      "@openrouter/ai-sdk-provider@^0.0.5"
+    ],
+    "shadcn": [
+      "button"
+    ],
     "env": [
-      { "name": "OPENROUTER_API_KEY", "scope": "convex", "required": true }
+      {
+        "name": "OPENROUTER_API_KEY",
+        "scope": "convex",
+        "required": true
+      }
     ],
     "peers": []
   },
-  "registers": ["registry"],
-  "audit": ["bp:public-fn-validator"],
+  "registers": [
+    "registry"
+  ],
+  "audit": [
+    "bp:public-fn-validator"
+  ],
   "license": "MIT",
-  "tags": ["ai", "llm", "openrouter", "tier-routing"]
+  "tags": [
+    "ai",
+    "llm",
+    "openrouter",
+    "tier-routing"
+  ],
+  "previews": []
 }

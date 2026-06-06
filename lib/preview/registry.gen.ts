@@ -3,9 +3,37 @@
 import type { SlicePreviewModule } from "@/shared/preview/types";
 
 export const PREVIEW_REGISTRY: Record<string, () => Promise<{ default: SlicePreviewModule }>> = {
+  "activity": () => import("@/features/activity/preview"),
+  "admin": () => import("@/features/admin/preview"),
+  "ai-chat": () => import("@/features/ai-chat/preview"),
+  "appshell": () => import("@/features/appshell/preview"),
+  "blog-section": () => import("@/features/blog-section/preview"),
+  "changelog-feed": () => import("@/features/changelog-feed/preview"),
+  "command-menu": () => import("@/features/command-menu/preview"),
+  "comments": () => import("@/features/comments/preview"),
+  "convex-auth": () => import("@/features/convex-auth/preview"),
+  "doku-payment": () => import("@/features/doku-payment/preview"),
+  "faq-section": () => import("@/features/faq-section/preview"),
+  "feature-grid": () => import("@/features/feature-grid/preview"),
+  "file-explorer": () => import("@/features/file-explorer/preview"),
   "full-width-toggle": () => import("@/features/full-width-toggle/preview"),
+  "icon-picker": () => import("@/features/icon-picker/preview"),
+  "image-editor": () => import("@/features/image-editor/preview"),
+  "image-picker": () => import("@/features/image-picker/preview"),
+  "landing-sections": () => import("@/features/landing-sections/preview"),
+  "library": () => import("@/features/library/preview"),
   "markdown": () => import("@/features/markdown/preview"),
+  "midtrans-payment": () => import("@/features/midtrans-payment/preview"),
   "notion-database": () => import("@/features/notion-database/preview"),
+  "notion-shell": () => import("@/features/notion-shell/preview"),
+  "notion-sidebar": () => import("@/features/notion-sidebar/preview"),
+  "portfolio-section": () => import("@/features/portfolio-section/preview"),
+  "pricing-page": () => import("@/features/pricing-page/preview"),
+  "rbac-roles": () => import("@/features/rbac-roles/preview"),
+  "selection": () => import("@/features/selection/preview"),
+  "testimonials-grid": () => import("@/features/testimonials-grid/preview"),
+  "theme-presets": () => import("@/features/theme-presets/preview"),
+  "user-management": () => import("@/features/user-management/preview"),
 };
 
 export type PreviewSlug = keyof typeof PREVIEW_REGISTRY;

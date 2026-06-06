@@ -3,14 +3,16 @@
   "slug": "comments",
   "version": "0.2.1",
   "category": "content",
-  "title": "Comments — Threaded",
-  "description": "Polymorphic-target threaded comments. Consumer picks `TargetRef = { kind, id, subId? }` (e.g. page+block, blog+slug, task+id). Renderless <CommentsThread> + <CommentsAnchor> wrappers; useComments(bindings, opts) hook returns items + openCount + CRUD + forbiddenWords guard. Adapter pattern — see contract-negotiations-2026-05-15 §1.",
+  "title": "Comments \u2014 Threaded",
+  "description": "Polymorphic-target threaded comments. Consumer picks `TargetRef = { kind, id, subId? }` (e.g. page+block, blog+slug, task+id). Renderless <CommentsThread> + <CommentsAnchor> wrappers; useComments(bindings, opts) hook returns items + openCount + CRUD + forbiddenWords guard. Adapter pattern \u2014 see contract-negotiations-2026-05-15 \u00a71.",
   "namespace": "@/features/comments",
   "kind": "full",
   "convex": {
     "tablesExport": "commentsTables",
     "schemaPath": "convex/features/comments/_schema.ts",
-    "rootPaths": ["convex/features/comments"]
+    "rootPaths": [
+      "convex/features/comments"
+    ]
   },
   "frontend": {
     "slicePath": "frontend/slices/comments",
@@ -18,14 +20,59 @@
   },
   "deps": {
     "npm": [],
-    "shadcn": ["button", "textarea", "avatar"],
+    "shadcn": [
+      "button",
+      "textarea",
+      "avatar"
+    ],
     "env": [],
     "peers": [
-      { "slug": "convex-auth", "range": "^0.1", "reason": "Comment author identity from convex-auth." }
+      {
+        "slug": "convex-auth",
+        "range": "^0.1",
+        "reason": "Comment author identity from convex-auth."
+      }
     ]
   },
-  "registers": ["registry"],
-  "audit": ["bp:public-fn-validator"],
+  "registers": [
+    "registry"
+  ],
+  "audit": [
+    "bp:public-fn-validator"
+  ],
   "license": "MIT",
-  "tags": ["content", "social", "comments", "threaded", "annotations"]
+  "tags": [
+    "content",
+    "social",
+    "comments",
+    "threaded",
+    "annotations"
+  ],
+  "previews": [
+    {
+      "component": "CommentsThread",
+      "kind": "variants",
+      "axes": [
+        {
+          "prop": "density",
+          "values": [
+            "comfortable",
+            "compact"
+          ],
+          "default": "comfortable",
+          "description": "Row spacing of the thread skin \u2014 airy vs. dense"
+        },
+        {
+          "prop": "resolved",
+          "values": [
+            "show",
+            "hide"
+          ],
+          "default": "show",
+          "description": "Include resolved comments or hide them from the list"
+        }
+      ],
+      "seed": "seeded thread (2 roots + 1 reply) in rr-demo:comments; posting a reply persists via createDemoStore"
+    }
+  ]
 }

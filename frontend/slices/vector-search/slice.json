@@ -9,22 +9,44 @@
   "convex": {
     "tablesExport": "searchTables",
     "schemaPath": "convex/features/search/_schema.ts",
-    "rootPaths": ["convex/features/search"]
+    "rootPaths": [
+      "convex/features/search"
+    ]
   },
   "frontend": {
     "slicePath": "frontend/slices/vector-search",
     "configExport": "vectorSearchConfig"
   },
   "deps": {
-    "npm": ["@convex-dev/vector-search@^0.0.5"],
-    "shadcn": ["card", "input"],
+    "npm": [
+      "@convex-dev/vector-search@^0.0.5"
+    ],
+    "shadcn": [
+      "card",
+      "input"
+    ],
     "env": [
-      { "name": "OPENAI_API_KEY", "scope": "convex", "required": true, "description": "For text-embedding-3-small." }
+      {
+        "name": "OPENAI_API_KEY",
+        "scope": "convex",
+        "required": true,
+        "description": "For text-embedding-3-small."
+      }
     ],
     "peers": []
   },
-  "registers": ["registry"],
-  "audit": ["bp:public-fn-validator"],
+  "registers": [
+    "registry"
+  ],
+  "audit": [
+    "bp:public-fn-validator"
+  ],
   "license": "MIT",
-  "tags": ["search", "vector", "embeddings", "convex"]
+  "tags": [
+    "search",
+    "vector",
+    "embeddings",
+    "convex"
+  ],
+  "previews": []
 }

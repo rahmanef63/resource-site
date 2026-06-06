@@ -3,33 +3,96 @@
   "slug": "midtrans-payment",
   "version": "0.1.1",
   "category": "payment",
-  "title": "Midtrans — Indonesia Payment",
+  "title": "Midtrans \u2014 Indonesia Payment",
   "description": "Midtrans Snap checkout + webhook handler + transaction history. Provider-isolated under components/providers/midtrans + actions/midtrans so Doku/Stripe can land as siblings without API churn.",
   "namespace": "@/features/midtrans-payment",
   "convex": {
     "tablesExport": "paymentTables",
     "schemaPath": "convex/features/payment/_schema.ts",
-    "rootPaths": ["convex/features/payment"]
+    "rootPaths": [
+      "convex/features/payment"
+    ]
   },
   "frontend": {
     "slicePath": "frontend/slices/midtrans-payment",
     "configExport": "midtransPaymentConfig"
   },
   "deps": {
-    "npm": ["midtrans-client@^1.4.2"],
-    "shadcn": ["card", "button", "dialog", "input", "label"],
+    "npm": [
+      "midtrans-client@^1.4.2"
+    ],
+    "shadcn": [
+      "card",
+      "button",
+      "dialog",
+      "input",
+      "label"
+    ],
     "env": [
-      { "name": "MIDTRANS_SERVER_KEY", "scope": "convex", "required": true },
-      { "name": "MIDTRANS_CLIENT_KEY", "scope": "next-public", "required": true },
-      { "name": "MIDTRANS_IS_PRODUCTION", "scope": "convex", "required": false, "description": "true|false; defaults false (sandbox)." }
+      {
+        "name": "MIDTRANS_SERVER_KEY",
+        "scope": "convex",
+        "required": true
+      },
+      {
+        "name": "MIDTRANS_CLIENT_KEY",
+        "scope": "next-public",
+        "required": true
+      },
+      {
+        "name": "MIDTRANS_IS_PRODUCTION",
+        "scope": "convex",
+        "required": false,
+        "description": "true|false; defaults false (sandbox)."
+      }
     ],
     "peers": [
-      { "slug": "convex-auth", "range": "^0.1", "reason": "Order ownership requires authenticated user." }
+      {
+        "slug": "convex-auth",
+        "range": "^0.1",
+        "reason": "Order ownership requires authenticated user."
+      }
     ]
   },
-  "registers": ["registry"],
-  "audit": ["bp:public-fn-validator"],
+  "registers": [
+    "registry"
+  ],
+  "audit": [
+    "bp:public-fn-validator"
+  ],
   "license": "MIT",
-  "tags": ["payment", "midtrans", "indonesia", "qris", "snap"],
-  "providers": ["midtrans"]
+  "tags": [
+    "payment",
+    "midtrans",
+    "indonesia",
+    "qris",
+    "snap"
+  ],
+  "providers": [
+    "midtrans"
+  ],
+  "previews": [
+    {
+      "component": "MidtransCheckout",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "single-item",
+          "title": "Single item",
+          "description": "Rp 150.000 order \u2014 the default checkout card."
+        },
+        {
+          "id": "cart",
+          "title": "Larger cart",
+          "description": "Rp 1.250.000 multi-item total."
+        },
+        {
+          "id": "subscription",
+          "title": "Subscription",
+          "description": "Rp 49.000 monthly plan."
+        }
+      ],
+      "seed": "amount/orderId per scenario; Pay button is a sandbox stub \u2014 no real Snap, no charge"
+    }
+  ]
 }

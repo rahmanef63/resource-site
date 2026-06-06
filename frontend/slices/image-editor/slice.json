@@ -4,21 +4,71 @@
   "version": "2.0.0",
   "category": "ui",
   "kind": "ui",
-  "title": "Image Editor — layered raster editor",
-  "description": "Embeddable, layer-based raster image editor (Konva): layers with blend modes + layer styles (shadow/glow/stroke), transforms, crop/resize/aspect presets, paint brushes, adjustments, text layers with fonts, free in-browser background removal (@imgly), PNG/JPEG/WebP export, an AI function-calling command registry (every operation is a schema'd command) with in-editor chat, and a headless server barrel (server.ts) to run commands against documents without a DOM. The AI bridge is injectable via configureAgentStream — without wiring, everything except the AI chat works.",
+  "title": "Image Editor \u2014 layered raster editor",
+  "description": "Embeddable, layer-based raster image editor (Konva): layers with blend modes + layer styles (shadow/glow/stroke), transforms, crop/resize/aspect presets, paint brushes, adjustments, text layers with fonts, free in-browser background removal (@imgly), PNG/JPEG/WebP export, an AI function-calling command registry (every operation is a schema'd command) with in-editor chat, and a headless server barrel (server.ts) to run commands against documents without a DOM. The AI bridge is injectable via configureAgentStream \u2014 without wiring, everything except the AI chat works.",
   "namespace": "@/features/image-editor",
   "frontend": {
     "slicePath": "frontend/slices/image-editor",
     "configExport": "imageEditorConfig"
   },
   "deps": {
-    "npm": ["lucide-react", "konva", "react-konva", "@imgly/background-removal", "class-variance-authority", "radix-ui"],
-    "shadcn": ["button", "input", "label", "separator", "select", "scroll-area", "switch", "dropdown-menu", "tooltip", "resizable", "popover"],
+    "npm": [
+      "lucide-react",
+      "konva",
+      "react-konva",
+      "@imgly/background-removal",
+      "class-variance-authority",
+      "radix-ui"
+    ],
+    "shadcn": [
+      "button",
+      "input",
+      "label",
+      "separator",
+      "select",
+      "scroll-area",
+      "switch",
+      "dropdown-menu",
+      "tooltip",
+      "resizable",
+      "popover"
+    ],
     "env": [],
     "peers": []
   },
-  "registers": ["registry"],
-  "audit": ["bp:ui-consistency"],
+  "registers": [
+    "registry"
+  ],
+  "audit": [
+    "bp:ui-consistency"
+  ],
   "license": "MIT",
-  "tags": ["image", "raster", "layers", "konva", "editor", "ai", "ui"]
+  "tags": [
+    "image",
+    "raster",
+    "layers",
+    "konva",
+    "editor",
+    "ai",
+    "ui"
+  ],
+  "previews": [
+    {
+      "component": "ImageEditor",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "square",
+          "title": "Square canvas",
+          "description": "640\u00d7360 blank document \u2014 full editor chrome (tool rail, layers, adjust)."
+        },
+        {
+          "id": "wide",
+          "title": "Wide canvas",
+          "description": "960\u00d7360 blank document for a banner-style layout."
+        }
+      ],
+      "seed": "blank Konva doc sized per scenario; client-only stage, autosaves to localStorage, no server/fs"
+    }
+  ]
 }

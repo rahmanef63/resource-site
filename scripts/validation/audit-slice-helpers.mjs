@@ -53,6 +53,7 @@ export function discoverSlices(slicesRoot) {
       titleFromJson: meta.title,
       categoryFromJson: meta.category,
       configExport: meta.frontend?.configExport,
+      previews: meta.previews,
       tablesExport: meta.convex?.tablesExport,
       convexSchemaPath: meta.convex?.schemaPath,
       convexRootPaths: meta.convex?.rootPaths ?? [],

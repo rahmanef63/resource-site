@@ -17,13 +17,52 @@
     "rootPaths": []
   },
   "deps": {
-    "npm": ["next@^15"],
-    "shadcn": ["accordion", "button"],
+    "npm": [
+      "next@^15"
+    ],
+    "shadcn": [
+      "accordion",
+      "button"
+    ],
     "env": [],
     "peers": []
   },
   "registers": [],
   "audit": [],
   "license": "MIT",
-  "tags": ["ui", "marketing", "faq", "accordion", "section"]
+  "tags": [
+    "ui",
+    "marketing",
+    "faq",
+    "accordion",
+    "section"
+  ],
+  "previews": [
+    {
+      "component": "FAQSection",
+      "kind": "variants",
+      "axes": [
+        {
+          "prop": "layout",
+          "values": [
+            "single",
+            "two-column",
+            "grouped"
+          ],
+          "default": "single",
+          "description": "Single accordion, two columns, or grouped by category"
+        },
+        {
+          "prop": "align",
+          "values": [
+            "left",
+            "center"
+          ],
+          "default": "left",
+          "description": "Header alignment"
+        }
+      ],
+      "seed": "4 static Q&A items spanning 3 categories"
+    }
+  ]
 }

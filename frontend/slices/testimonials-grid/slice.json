@@ -17,13 +17,65 @@
     "rootPaths": []
   },
   "deps": {
-    "npm": ["lucide-react@^0.400.0", "next@^15"],
-    "shadcn": ["avatar", "button", "card"],
+    "npm": [
+      "lucide-react@^0.400.0",
+      "next@^15"
+    ],
+    "shadcn": [
+      "avatar",
+      "button",
+      "card"
+    ],
     "env": [],
     "peers": []
   },
   "registers": [],
   "audit": [],
   "license": "MIT",
-  "tags": ["ui", "marketing", "testimonials", "social-proof", "grid", "section"]
+  "tags": [
+    "ui",
+    "marketing",
+    "testimonials",
+    "social-proof",
+    "grid",
+    "section"
+  ],
+  "previews": [
+    {
+      "component": "TestimonialsGridSection",
+      "kind": "variants",
+      "axes": [
+        {
+          "prop": "layout",
+          "values": [
+            "cards",
+            "quote-stack",
+            "masonry"
+          ],
+          "default": "cards",
+          "description": "Even card grid, centered quote stack, or masonry columns"
+        },
+        {
+          "prop": "columns",
+          "values": [
+            "1",
+            "2",
+            "3"
+          ],
+          "default": "2",
+          "description": "Columns at lg (cards/masonry)"
+        },
+        {
+          "prop": "align",
+          "values": [
+            "left",
+            "center"
+          ],
+          "default": "left",
+          "description": "Card and header alignment"
+        }
+      ],
+      "seed": "3 static testimonials, first one featured"
+    }
+  ]
 }

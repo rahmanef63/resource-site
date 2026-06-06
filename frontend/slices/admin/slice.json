@@ -3,14 +3,16 @@
   "slug": "admin",
   "version": "0.2.1",
   "category": "infra",
-  "title": "Admin — Generic Shell",
-  "description": "Per-instance admin landing scaffold + portable nav-from-registry factory. Consumer supplies a SliceRegistryAdapter (each slice declares its own admin.activity[]) and a queryTable reader; the slice's buildAdminStats(opts) emits the { counts, unreadMessages, activity } shape Convex's admin.stats query returns. Pure UI/factory — no Convex tables owned. Gated by requireAdmin on Convex side; superadmin email gate via SUPER_ADMIN_EMAIL env.",
+  "title": "Admin \u2014 Generic Shell",
+  "description": "Per-instance admin landing scaffold + portable nav-from-registry factory. Consumer supplies a SliceRegistryAdapter (each slice declares its own admin.activity[]) and a queryTable reader; the slice's buildAdminStats(opts) emits the { counts, unreadMessages, activity } shape Convex's admin.stats query returns. Pure UI/factory \u2014 no Convex tables owned. Gated by requireAdmin on Convex side; superadmin email gate via SUPER_ADMIN_EMAIL env.",
   "namespace": "@/features/admin",
   "kind": "full",
   "convex": {
     "tablesExport": "",
     "schemaPath": "convex/features/admin/_schema.ts",
-    "rootPaths": ["convex/features/admin"]
+    "rootPaths": [
+      "convex/features/admin"
+    ]
   },
   "frontend": {
     "slicePath": "frontend/slices/admin",
@@ -18,16 +20,62 @@
   },
   "deps": {
     "npm": [],
-    "shadcn": ["card", "button"],
+    "shadcn": [
+      "card",
+      "button"
+    ],
     "env": [
-      { "name": "SUPER_ADMIN_EMAIL", "scope": "convex", "required": false, "description": "Single-person super-admin email gate." }
+      {
+        "name": "SUPER_ADMIN_EMAIL",
+        "scope": "convex",
+        "required": false,
+        "description": "Single-person super-admin email gate."
+      }
     ],
     "peers": [
-      { "slug": "convex-auth", "range": "^0.1", "reason": "requireAdmin gate uses convex-auth user identity." }
+      {
+        "slug": "convex-auth",
+        "range": "^0.1",
+        "reason": "requireAdmin gate uses convex-auth user identity."
+      }
     ]
   },
-  "registers": ["registry"],
-  "audit": ["bp:public-fn-validator"],
+  "registers": [
+    "registry"
+  ],
+  "audit": [
+    "bp:public-fn-validator"
+  ],
   "license": "MIT",
-  "tags": ["infra", "admin", "shell", "crud", "nav-from-registry"]
+  "tags": [
+    "infra",
+    "admin",
+    "shell",
+    "crud",
+    "nav-from-registry"
+  ],
+  "previews": [
+    {
+      "component": "AdminPage",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "default",
+          "title": "Default labels",
+          "description": "generic shell copy"
+        },
+        {
+          "id": "saas",
+          "title": "SaaS admin",
+          "description": "rebranded for a SaaS console"
+        },
+        {
+          "id": "blog",
+          "title": "Blog CMS",
+          "description": "rebranded for a content site"
+        }
+      ],
+      "seed": "AdminPage shell rendered with three SliceAdminLabels presets"
+    }
+  ]
 }

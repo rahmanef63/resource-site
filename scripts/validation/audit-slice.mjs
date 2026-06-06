@@ -108,7 +108,21 @@ for (const slice of slices) {
     if (slice.convexSchemaPath) schemasSeen.add(slice.convexSchemaPath);
   }
 
-  // 4. config.ts agreement
+  // 4. preview coverage (VP wave) — component-bearing slices must declare a
+  // previews block or explicitly opt out with `"previews": []`. Advisory for
+  // now; flips to error once the catalog stays at 100% coverage.
+  const componentsDir = path.join(slice.dir, "components");
+  if (
+    slice.previews === undefined &&
+    existsSync(componentsDir) &&
+    findTsFiles(componentsDir).length > 0
+  ) {
+    warnings.push(
+      `[${slice.folder}] has components/ but no previews in slice.json — add a preview or opt out with "previews": []`,
+    );
+  }
+
+  // 5. config.ts agreement
   const cfg = readSliceConfig(slice);
   if (cfg) {
     if (cfg.slug && cfg.slug !== slice.slugFromJson) {

@@ -5,7 +5,7 @@
   "category": "ui",
   "kind": "ui",
   "title": "Icon Picker",
-  "description": "Emoji + lucide + phosphor icon picker with search, 10-color Notion palette, Twemoji/native toggle, recents tracking, smart positioning. Two-tab layout (Emoji|Icon) with sub-variant pills (Native|Twemoji / Lucide|Phosphor fill). One string stores emoji OR `lucide:Name` OR `phosphor:Name` OR with `?c=hex` tint — backwards-compat with raw-emoji fields. Popover auto-flips on collision and falls back to a centered Dialog when neither side fits. Two variants: Popover (compact trigger) and Inline (full sheet/dialog use).",
+  "description": "Emoji + lucide + phosphor icon picker with search, 10-color Notion palette, Twemoji/native toggle, recents tracking, smart positioning. Two-tab layout (Emoji|Icon) with sub-variant pills (Native|Twemoji / Lucide|Phosphor fill). One string stores emoji OR `lucide:Name` OR `phosphor:Name` OR with `?c=hex` tint \u2014 backwards-compat with raw-emoji fields. Popover auto-flips on collision and falls back to a centered Dialog when neither side fits. Two variants: Popover (compact trigger) and Inline (full sheet/dialog use).",
   "namespace": "@/features/icon-picker",
   "convex": {
     "tablesExport": "",
@@ -17,13 +17,51 @@
     "configExport": ""
   },
   "deps": {
-    "npm": ["lucide-react@^0.400.0", "@phosphor-icons/react@^2.1.10"],
-    "shadcn": ["popover", "dialog", "button", "input", "scroll-area", "tabs"],
+    "npm": [
+      "lucide-react@^0.400.0",
+      "@phosphor-icons/react@^2.1.10"
+    ],
+    "shadcn": [
+      "popover",
+      "dialog",
+      "button",
+      "input",
+      "scroll-area",
+      "tabs"
+    ],
     "env": [],
     "peers": []
   },
   "registers": [],
   "audit": [],
   "license": "MIT",
-  "tags": ["ui", "icon", "emoji", "lucide", "phosphor", "picker", "twemoji", "notion", "responsive"]
+  "tags": [
+    "ui",
+    "icon",
+    "emoji",
+    "lucide",
+    "phosphor",
+    "picker",
+    "twemoji",
+    "notion",
+    "responsive"
+  ],
+  "previews": [
+    {
+      "component": "IconPickerInline",
+      "kind": "variants",
+      "axes": [
+        {
+          "prop": "style",
+          "values": [
+            "twemoji",
+            "native"
+          ],
+          "default": "twemoji",
+          "description": "Emoji render style \u2014 Twemoji SVG (Notion-consistent) vs the native OS emoji font. Drives setIconStyle; the picked icon previews in both modes."
+        }
+      ],
+      "seed": "Picked icon value persisted in the demo store; the chosen emoji renders above the picker via DynamicIcon."
+    }
+  ]
 }

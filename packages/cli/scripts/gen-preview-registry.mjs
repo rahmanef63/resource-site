@@ -47,7 +47,12 @@ for (const slug of readdirSync(SLICES_DIR).sort()) {
     continue;
   }
   const previews = sliceJson.previews;
-  if (!previews && !hasPreviewTsx) continue;
+  const optedOut = Array.isArray(previews) && previews.length === 0; // `"previews": []` = explicit no-preview
+  if ((!previews || optedOut) && !hasPreviewTsx) continue;
+  if (optedOut && hasPreviewTsx) {
+    errors.push(`[${slug}] preview.tsx exists but previews is [] (opt-out) — remove one`);
+    continue;
+  }
   if (previews && !hasPreviewTsx) {
     errors.push(`[${slug}] slice.json declares previews but preview.tsx is missing`);
     continue;

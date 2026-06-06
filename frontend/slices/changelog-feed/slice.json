@@ -5,7 +5,7 @@
   "category": "ui",
   "kind": "ui",
   "title": "Changelog Feed",
-  "description": "Reusable, prop-driven changelog/whats-new section. Composes a header (eyebrow / title / subtitle) with a list of versioned entries grouped by kind (feature, fix, improvement, chore, breaking). Three visual layouts: timeline (vertical rail with date markers), cards (large shadcn Card per entry), list (minimal markdown-style with version/date headings). Pure server component — no client JS.",
+  "description": "Reusable, prop-driven changelog/whats-new section. Composes a header (eyebrow / title / subtitle) with a list of versioned entries grouped by kind (feature, fix, improvement, chore, breaking). Three visual layouts: timeline (vertical rail with date markers), cards (large shadcn Card per entry), list (minimal markdown-style with version/date headings). Pure server component \u2014 no client JS.",
   "namespace": "@/features/changelog-feed",
   "frontend": {
     "slicePath": "frontend/slices/changelog-feed",
@@ -18,12 +18,42 @@
   },
   "deps": {
     "npm": [],
-    "shadcn": ["badge", "card", "separator"],
+    "shadcn": [
+      "badge",
+      "card",
+      "separator"
+    ],
     "env": [],
     "peers": []
   },
   "registers": [],
   "audit": [],
   "license": "MIT",
-  "tags": ["ui", "marketing", "changelog", "whats-new", "release-notes", "section"]
+  "tags": [
+    "ui",
+    "marketing",
+    "changelog",
+    "whats-new",
+    "release-notes",
+    "section"
+  ],
+  "previews": [
+    {
+      "component": "ChangelogFeedSection",
+      "kind": "variants",
+      "axes": [
+        {
+          "prop": "layout",
+          "values": [
+            "timeline",
+            "cards",
+            "list"
+          ],
+          "default": "timeline",
+          "description": "Date-rail timeline, cards, or divided list"
+        }
+      ],
+      "seed": "3 static entries spanning feature/improvement/breaking kinds"
+    }
+  ]
 }

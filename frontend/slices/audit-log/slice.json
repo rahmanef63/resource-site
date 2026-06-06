@@ -3,14 +3,16 @@
   "slug": "audit-log",
   "version": "0.2.0",
   "category": "infra",
-  "title": "Audit Log — Workspace Events",
+  "title": "Audit Log \u2014 Workspace Events",
   "description": "Workspace-scoped audit event recorder. Canonical logAuditEvent helper for mutations + actions; supports entity tracking, before/after diff, IP/user-agent capture.",
   "namespace": "@/features/audit-log",
   "kind": "backend",
   "convex": {
     "tablesExport": "auditLogTables",
     "schemaPath": "convex/features/audit-log/_schema.ts",
-    "rootPaths": ["convex/features/audit-log"]
+    "rootPaths": [
+      "convex/features/audit-log"
+    ]
   },
   "frontend": {
     "slicePath": "frontend/slices/audit-log",
@@ -21,11 +23,25 @@
     "shadcn": [],
     "env": [],
     "peers": [
-      { "slug": "convex-auth", "range": "^0.1", "reason": "Event actor resolved via authenticated user." }
+      {
+        "slug": "convex-auth",
+        "range": "^0.1",
+        "reason": "Event actor resolved via authenticated user."
+      }
     ]
   },
-  "registers": ["registry"],
-  "audit": ["bp:public-fn-validator"],
+  "registers": [
+    "registry"
+  ],
+  "audit": [
+    "bp:public-fn-validator"
+  ],
   "license": "MIT",
-  "tags": ["infra", "audit", "compliance", "logging"]
+  "tags": [
+    "infra",
+    "audit",
+    "compliance",
+    "logging"
+  ],
+  "previews": []
 }

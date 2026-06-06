@@ -3,14 +3,16 @@
   "slug": "seo",
   "version": "0.2.1",
   "category": "content",
-  "title": "SEO — AI Metadata Generator",
-  "description": "Service slice for SEO metadata generation — Anthropic-backed action with per-user 24h cost guard + portable persona prop. No public route. Backend exposes generate + generateAndApply mutations gated by requireAdmin; consumers inject brand voice via the personaContext arg (or buildSeoSystemPrompt factory).",
+  "title": "SEO \u2014 AI Metadata Generator",
+  "description": "Service slice for SEO metadata generation \u2014 Anthropic-backed action with per-user 24h cost guard + portable persona prop. No public route. Backend exposes generate + generateAndApply mutations gated by requireAdmin; consumers inject brand voice via the personaContext arg (or buildSeoSystemPrompt factory).",
   "namespace": "@/features/seo",
   "kind": "full",
   "convex": {
     "tablesExport": "seoTables",
     "schemaPath": "convex/features/seo/_schema.ts",
-    "rootPaths": ["convex/features/seo"]
+    "rootPaths": [
+      "convex/features/seo"
+    ]
   },
   "frontend": {
     "slicePath": "frontend/slices/seo",
@@ -20,14 +22,34 @@
     "npm": [],
     "shadcn": [],
     "env": [
-      { "name": "ANTHROPIC_API_KEY", "scope": "server", "required": true, "description": "Anthropic API key for Claude metadata generation." }
+      {
+        "name": "ANTHROPIC_API_KEY",
+        "scope": "server",
+        "required": true,
+        "description": "Anthropic API key for Claude metadata generation."
+      }
     ],
     "peers": [
-      { "slug": "convex-auth", "range": "^0.1", "reason": "Cost guard + requireAdmin gates use convex-auth user identity." }
+      {
+        "slug": "convex-auth",
+        "range": "^0.1",
+        "reason": "Cost guard + requireAdmin gates use convex-auth user identity."
+      }
     ]
   },
-  "registers": ["registry"],
-  "audit": ["bp:public-fn-validator"],
+  "registers": [
+    "registry"
+  ],
+  "audit": [
+    "bp:public-fn-validator"
+  ],
   "license": "MIT",
-  "tags": ["content", "seo", "ai", "anthropic", "metadata-generator"]
+  "tags": [
+    "content",
+    "seo",
+    "ai",
+    "anthropic",
+    "metadata-generator"
+  ],
+  "previews": []
 }

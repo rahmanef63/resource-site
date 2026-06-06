@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "category": "ui",
   "kind": "ui",
-  "title": "Notion Sidebar — tree nav + page CRUD (rename · drag · icon picker)",
-  "description": "Standalone Notion-style tree-nav sidebar, lifted out of notion-shell so it is reusable on its own. Props-driven + fully decoupled (owns its own lightweight NotionSidebarPage type — id/title/icon/parentId). Click a row to open; DOUBLE-CLICK a title to rename inline; drag the grip to reorder AND reparent (@dnd-kit sortable tree with horizontal-offset projection); collapse/expand subtrees; hover a row for +subpage / delete. Optional per-row icon PICKER — wire renderIconPicker + onIconChange (e.g. @/features/icon-picker's IconPickerPopover) so clicking a row icon opens the picker. The host owns the data and dispatches onSelect/onCreate/onRename/onDelete/onMove/onIconChange. Pair with notion-shell (page editor) + notion-database (embedded DBs) for the full Notion-clone OS.",
+  "title": "Notion Sidebar \u2014 tree nav + page CRUD (rename \u00b7 drag \u00b7 icon picker)",
+  "description": "Standalone Notion-style tree-nav sidebar, lifted out of notion-shell so it is reusable on its own. Props-driven + fully decoupled (owns its own lightweight NotionSidebarPage type \u2014 id/title/icon/parentId). Click a row to open; DOUBLE-CLICK a title to rename inline; drag the grip to reorder AND reparent (@dnd-kit sortable tree with horizontal-offset projection); collapse/expand subtrees; hover a row for +subpage / delete. Optional per-row icon PICKER \u2014 wire renderIconPicker + onIconChange (e.g. @/features/icon-picker's IconPickerPopover) so clicking a row icon opens the picker. The host owns the data and dispatches onSelect/onCreate/onRename/onDelete/onMove/onIconChange. Pair with notion-shell (page editor) + notion-database (embedded DBs) for the full Notion-clone OS.",
   "namespace": "@/features/notion-sidebar",
   "registers": [],
   "audit": [],
@@ -14,9 +14,40 @@
     "configExport": ""
   },
   "deps": {
-    "npm": ["@dnd-kit/core", "@dnd-kit/sortable", "@dnd-kit/utilities"],
-    "shadcn": ["button", "input"],
+    "npm": [
+      "@dnd-kit/core",
+      "@dnd-kit/sortable",
+      "@dnd-kit/utilities"
+    ],
+    "shadcn": [
+      "button",
+      "input"
+    ],
     "env": [],
     "peers": []
-  }
+  },
+  "previews": [
+    {
+      "component": "NotionSidebar",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "nested-tree",
+          "title": "Nested workspace",
+          "description": "A small page tree with parents + children; expand/collapse, rename (double-click), and drag-reorder all work."
+        },
+        {
+          "id": "with-icons",
+          "title": "Icon per page",
+          "description": "Same tree rendered with per-page emoji icons via the renderIcon slot."
+        },
+        {
+          "id": "flat-list",
+          "title": "Flat list",
+          "description": "Three top-level pages, no nesting \u2014 the simplest shape."
+        }
+      ],
+      "seed": "in-memory page list held in a demo store; CRUD callbacks mutate it so edits persist while mounted"
+    }
+  ]
 }

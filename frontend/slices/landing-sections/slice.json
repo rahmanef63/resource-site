@@ -44,5 +44,29 @@
     "cms",
     "sections",
     "crud"
+  ],
+  "previews": [
+    {
+      "component": "LandingSectionShell",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "hero-only",
+          "title": "Hero only",
+          "description": "Single hero band"
+        },
+        {
+          "id": "hero-features",
+          "title": "Hero + features",
+          "description": "Hero followed by a features grid"
+        },
+        {
+          "id": "full-page",
+          "title": "Full page",
+          "description": "Hero + features + CTA stacked, scaled to fit"
+        }
+      ],
+      "seed": "3 seed sections (hero/features/cta) rendered by local mini-blocks wrapped in LandingSectionShell, scaled in a fixed-height frame"
+    }
   ]
 }
