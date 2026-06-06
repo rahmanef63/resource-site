@@ -2,6 +2,30 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "NOTION-1",
+    "version": "notion@1.0.0",
+    "date": 1780790400000,
+    "kind": "feature",
+    "title": "notion 1.0.0 — the block editor port is COMPLETE and in the catalog",
+    "body": "M2c+M3+M4 land in one wave, closing the port that started 2026-06-03. M2c composes the working editor: BlockEditor + PageEditor orchestrators (dnd-kit drag with column layouts, slash menu, markdown triggers, per-block undo, paste-markdown import via a synthesized insertBlocksAfter over the seam's block CRUD), PageActionsMenu (font/width/lock/copy/duplicate/move/trash + md/html/txt export through the vendored export libs), SelectionToolbar (inline formatting), MentionTypeahead (async adapter search), DatabasePicker (delegates to adapter.database.pickDatabase), TocBlock, PageRefBlock, the page-editor chrome (title, breadcrumbs, actions, subpages, cover strip, skeleton/not-found) and a props-driven RowPropertiesPanel. M3 ports the pure convex block helpers (_blocks/_blockOps, 31 unit tests) into convex/features/notion. M4 flips the slice off WIP: version 1.0.0, public catalog entry (npx rr add notion), and a live variant preview — the full PageEditor running on a localStorage-backed in-memory EditorDataAdapter (two scenarios, every edit persists). Mount with adapter `{}` for a plain markdown block editor; wire data/selection/comments/ai/database/mention/page adapters to light up host capabilities. Source app peers that don't cross the seam (sharing, snapshots, wiki, analytics, notifications, presence) stay host-side by design.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          { "text": "notion — M2c compose (28 new files) + M3 convex helpers + M4 catalog entry, preview, 1.0.0", "slug": "notion" },
+          { "text": "markdown — unchanged, but the bridge note now points both ways: same grammar, blocksToMarkdown/markdownToBlocks", "slug": "markdown" }
+        ]
+      },
+      {
+        "heading": "Infra",
+        "bullets": [
+          { "text": "vitest now scans convex/features/**/*.test.ts — 322 tests total (was 291)" },
+          { "text": "@notion/shared vendors: database/property types, exportContext, html, databaseTable, csvCells (page → md/html export with embedded-database tables)" }
+        ]
+      }
+    ]
+  },
+  {
     "id": "QA-MANIFEST",
     "version": "manifests@schema-a",
     "date": 1780790400000,

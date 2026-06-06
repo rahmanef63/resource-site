@@ -2181,6 +2181,27 @@
       ]
     },
     {
+      "slug": "notion",
+      "title": "Notion — Block Editor",
+      "category": "content",
+      "description": "Nested vertical slice (slice-of-slices) housing the full notion-page-clone block editor. Mount <PageEditor pageId/> inside <EditorAdapterProvider adapter/> — with `{}` it is a working plain-text/markdown block editor (slash menu, markdown triggers `# - > [] etc.`, dnd-kit drag with column layouts, per-block toolbar with turn-into/color/duplicate, per-block undo, paste-markdown import); host capabilities light up per optional adapter: data (block+page CRUD), selection (multi-select), comments (per-block popover), ai (Ask-AI panel), database (render + picker), mention (@-typeahead), page (nav/uploads/covers). Cluster-private shared layer under @notion/* — vendored block/page/database model, uid, inline markdown, page→md/html export. Pure convex block helpers (_blocks/_blockOps, unit-tested) ship in convex/features/notion. Same markdown grammar as the standalone `markdown` slice (blocksToMarkdown/markdownToBlocks bridge).",
+      "source": "notion-page-clone",
+      "install": "npx rahman-resources add notion",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add notion`. Wire the `@notion/*` path alias to `./slices/notion/*` in tsconfig. Minimal mount: `<EditorAdapterProvider adapter={{ data }}><PageEditor pageId={id}/></EditorAdapterProvider>` where `data` implements EditorDataAdapter (block+page CRUD over your store — see lib/dataAdapter.ts; a localStorage reference impl lives in the rr preview). Add capabilities incrementally: `selection` for multi-select, `comments` for per-block threads, `database.renderDatabase` to mount your database renderer inside database blocks, `mention.search` for @-typeahead, `page.navigateToPage`/`uploadFile` for nav + media. Convex hosts: copy convex/features/notion (_blocks/_blockOps are pure, unit-tested array ops) and keep handlers thin.",
+      "tags": [
+        "content",
+        "notion",
+        "editor",
+        "block-editor",
+        "rich-text",
+        "slash-menu",
+        "drag-drop",
+        "adapter-seam"
+      ]
+    },
+    {
       "slug": "landing-sections",
       "title": "Landing Sections",
       "category": "infra",
@@ -4141,6 +4162,50 @@
         "notion-sync"
       ],
       "agentRecipe": "Run `npx rr add markdown`. Read-only: `<MarkdownReader content={md}/>`. Full surface: `<MarkdownPage content={md} tabs={['read','write','review']} onContentChange={save} comments={list} onAddComment={add} onResolveComment={resolve}/>` (omit callbacks for internal-state demo mode). Diagrams: fence ```mermaid; charts: fence ```chart with { type: bar|line|area|pie, data: [...] }. To bridge from the notion editor call `blocksToMarkdown(page.blocks)` from `@notion/shared/lib/markdown`; reverse with `markdownToBlocks(md)`."
+    },
+    {
+      "slug": "notion",
+      "title": "Notion — Block Editor",
+      "category": "content",
+      "kind": "full",
+      "version": "1.0.0",
+      "description": "Nested vertical slice (slice-of-slices) housing the full notion-page-clone block editor. Mount <PageEditor pageId/> inside <EditorAdapterProvider adapter/> — with `{}` it is a working plain-text/markdown block editor (slash menu, markdown triggers `# - > [] etc.`, dnd-kit drag with column layouts, per-block toolbar with turn-into/color/duplicate, per-block undo, paste-markdown import); host capabilities light up per optional adapter: data (block+page CRUD), selection (multi-select), comments (per-block popover), ai (Ask-AI panel), database (render + picker), mention (@-typeahead), page (nav/uploads/covers). Cluster-private shared layer under @notion/* — vendored block/page/database model, uid, inline markdown, page→md/html export. Pure convex block helpers (_blocks/_blockOps, unit-tested) ship in convex/features/notion. Same markdown grammar as the standalone `markdown` slice (blocksToMarkdown/markdownToBlocks bridge).",
+      "source": "notion-page-clone",
+      "slicePath": "frontend/slices/notion",
+      "convexPaths": [
+        "convex/features/notion"
+      ],
+      "npm": [
+        "sonner@^2",
+        "@dnd-kit/core@^6",
+        "@dnd-kit/sortable@^10",
+        "@dnd-kit/utilities@^3",
+        "katex@^0.16"
+      ],
+      "shadcn": [
+        "button",
+        "dropdown-menu",
+        "popover",
+        "separator",
+        "checkbox",
+        "input",
+        "switch",
+        "skeleton"
+      ],
+      "env": [],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "content",
+        "notion",
+        "editor",
+        "block-editor",
+        "rich-text",
+        "slash-menu",
+        "drag-drop",
+        "adapter-seam"
+      ],
+      "agentRecipe": "Run `npx rr add notion`. Wire the `@notion/*` path alias to `./slices/notion/*` in tsconfig. Minimal mount: `<EditorAdapterProvider adapter={{ data }}><PageEditor pageId={id}/></EditorAdapterProvider>` where `data` implements EditorDataAdapter (block+page CRUD over your store — see lib/dataAdapter.ts; a localStorage reference impl lives in the rr preview). Add capabilities incrementally: `selection` for multi-select, `comments` for per-block threads, `database.renderDatabase` to mount your database renderer inside database blocks, `mention.search` for @-typeahead, `page.navigateToPage`/`uploadFile` for nav + media. Convex hosts: copy convex/features/notion (_blocks/_blockOps are pure, unit-tested array ops) and keep handlers thin."
     },
     {
       "slug": "landing-sections",

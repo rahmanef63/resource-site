@@ -12,6 +12,7 @@ export default defineConfig({
       "lib/**/*.test.{ts,tsx}",
       "packages/cli/lib/**/*.test.{mjs,ts}",
       "frontend/slices/**/*.test.{ts,tsx}",
+      "convex/features/**/*.test.{ts,tsx}",
     ],
     setupFiles: [],
   },

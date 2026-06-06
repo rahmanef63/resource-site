@@ -683,6 +683,30 @@
     ]
   },
   {
+    "slug": "notion",
+    "title": "Notion — Block Editor",
+    "category": "content",
+    "previews": [
+      {
+        "component": "PageEditor",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "starter",
+            "title": "Starter page",
+            "description": "Notes page — slash menu, markdown triggers, todo, drag"
+          },
+          {
+            "id": "rich",
+            "title": "Rich blocks",
+            "description": "Callout, numbered list, toggle, code, divider, inline KaTeX"
+          }
+        ],
+        "seed": "two pages in rr-demo:notion via an in-memory EditorDataAdapter; all edits persist"
+      }
+    ]
+  },
+  {
     "slug": "notion-database",
     "title": "Notion Database",
     "category": "ui",

@@ -1,7 +1,24 @@
-// notion-editor inner slice — public surface (milestone 1: pure core).
+// notion-editor inner slice — public surface.
 //
-// Components (BlockEditor, SlashMenu, blocks/*) land in later milestones and
-// will be exported here once ported behind the EditorAdapter seam.
+// M2c: the composed editor. Mount <PageEditor pageId> inside an
+// <EditorAdapterProvider adapter={...}> — with `{}` it's a read-only
+// plain-text/markdown editor; capabilities light up per adapter.
+
+// Composed surfaces
+export { PageEditor, type PageEditorProps } from "./PageEditor";
+export { BlockEditor } from "./BlockEditor";
+export { PageActionsMenu } from "./PageActionsMenu";
+export { RowPropertiesPanel } from "./RowPropertiesPanel";
+export { SelectionToolbar } from "./components/SelectionToolbar";
+export { MentionTypeahead } from "./components/MentionTypeahead";
+export { DatabasePicker } from "./blocks/DatabasePicker";
+export { TocBlock } from "./blocks/TocBlock";
+export { CoverStrip } from "./page-editor/CoverStrip";
+export { PageEditorSkeleton } from "./page-editor/PageEditorSkeleton";
+export { usePageActions } from "./page-actions/usePageActions";
+export { useBlockHistory } from "./hooks/useBlockHistory";
+export { insertBlocksAfter } from "./lib/insertBlocksAfter";
+export { handlePageDragEnd, getSelectedTopLevelIds } from "./lib/pageDragEnd";
 
 // Block model + slash specs
 export { BLOCK_SPECS, type BlockSpec } from "./blockSpecs";

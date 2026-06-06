@@ -99,7 +99,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...notionConfig,
     importPath: "@/features/notion/config",
-    version: "0.1.0",
+    version: "1.0.0",
   },
   {
     ...platformAdminConfig,

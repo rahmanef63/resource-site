@@ -26,6 +26,7 @@ export const PREVIEW_REGISTRY: Record<string, () => Promise<{ default: SlicePrev
   "markdown": () => import("@/features/markdown/preview"),
   "media-viewer": () => import("@/features/media-viewer/preview"),
   "midtrans-payment": () => import("@/features/midtrans-payment/preview"),
+  "notion": () => import("@/features/notion/preview"),
   "notion-database": () => import("@/features/notion-database/preview"),
   "notion-shell": () => import("@/features/notion-shell/preview"),
   "notion-sidebar": () => import("@/features/notion-sidebar/preview"),

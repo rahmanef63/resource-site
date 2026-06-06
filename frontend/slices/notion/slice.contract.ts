@@ -1,10 +1,10 @@
 /**
- * Slice contract for `notion` — nested cluster (slice-of-slices), v0.1.0.
+ * Slice contract for `notion` — nested cluster (slice-of-slices), v1.0.0.
  *
- * WIP port of the notion-page-clone block editor. Milestone 1 = decoupled
- * pure core only (block specs + tree/turn-into/markdown/inline-decorator/
- * synced/layout utils). The cross-slice integrations (comments anchor,
- * database picker, mentions, cover, …) invert through the EditorAdapter seam
+ * The notion-page-clone block editor, fully composed (M2c): PageEditor +
+ * BlockEditor + block chrome + page actions over the pure core. The
+ * cross-slice integrations (comments anchor, database picker, mentions,
+ * cover, …) invert through the EditorAdapter seam
  * (slices/editor/lib/adapter.ts) instead of importing peer slices — that is
  * what keeps this a self-contained rr slice.
  */
@@ -12,7 +12,7 @@ import { defineSliceContract } from "../../../packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "notion",
-  version: "0.1.0",
+  version: "1.0.0",
   requires: {
     deps: [
       "sonner",

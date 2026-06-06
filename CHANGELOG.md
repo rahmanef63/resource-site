@@ -11,6 +11,19 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-06 — notion 1.0.0: block editor port complete (M2c+M3+M4)
+
+- **M2c compose** — BlockEditor + PageEditor orchestrators, PageActionsMenu
+  (md/html/txt export), SelectionToolbar, MentionTypeahead, DatabasePicker,
+  TocBlock, PageRefBlock, page-editor chrome, props-driven RowPropertiesPanel.
+  28 new files behind the frozen EditorAdapter seam; peer-slice integrations
+  (sharing/snapshots/wiki/analytics/notifications/presence) stay host-side.
+- **M3 convex** — pure `_blocks`/`_blockOps` helpers + 31 unit tests into
+  `convex/features/notion`; vitest now scans convex/features (322 total).
+- **M4 catalog** — `npx rr add notion` public entry, version 1.0.0 (off WIP),
+  live variant preview: full PageEditor on a localStorage in-memory
+  EditorDataAdapter, two scenarios, edits persist.
+
 ### 2026-06-06 — manifest debt zeroed + editor previews
 
 - **Schema A conversion** — 7 legacy-shape `slice.manifest.json` (image-picker,
