@@ -2,6 +2,26 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "OS-APPS-WAVE",
+    "version": "os-apps@wave-1",
+    "date": 1780704000000,
+    "kind": "feature",
+    "title": "Five more os-vps apps land: system-monitor, os-terminal, assistant, browser, app-store",
+    "body": "The big lift wave — every remaining os-vps app that could stand alone now does. Each follows the established host-seam recipe: lib/host.ts is the ONLY coupling point, with an injectable adapter and an honest offline default, so all five render alive with zero backend. system-monitor runs on a wavy telemetry mock until configureSysmon points at a real host; os-terminal's 17 built-ins run on its in-memory FsModel, with configureTerminal flipping ls/cat live and passing unknown commands to one-shot exec; assistant answers with a typing demo stream until configureAssistantStream brings any async text-delta generator; browser fakes its viewport with a canvas demo renderer until configureBrowser drives a real headless Chromium; app-store (with the Create-App flow bundled in — rr forbids cross-slice imports) manages a localStorage app registry whose useInstalledApps() feeds any appshell-style launcher. Skipped on purpose: os-settings (host-specific devices/server panels). The catalog now carries 9 of the 10 os-vps user apps.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          { "text": "system-monitor — NEW 1.0.0: gauges + sparklines + process table; SysMonAdapter seam", "slug": "system-monitor" },
+          { "text": "os-terminal — NEW 1.0.0: shell emulator, in-memory FsModel, live fs/exec passthrough", "slug": "os-terminal" },
+          { "text": "assistant — NEW 1.0.0: streaming chat + agents/skills/automations library; bring-your-own LLM stream", "slug": "assistant" },
+          { "text": "browser — NEW 1.0.0: remote-browser chrome; BrowserAdapter seam + offline canvas demo renderer", "slug": "browser" },
+          { "text": "app-store — NEW 1.0.0: storefront + Create-App over one localStorage registry; useInstalledApps() descriptors", "slug": "app-store" },
+        ],
+      },
+    ],
+  },
+  {
     "id": "VP-SMOKE",
     "version": "variant-previews@smoke-gate",
     "date": 1780790400000,

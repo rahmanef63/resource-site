@@ -1,0 +1,24 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "os-terminal",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add os-terminal",
+    "consumerPath": "slices/os-terminal"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "README.md",
+    "app.tsx",
+    "config.ts",
+    "index.ts",
+    "lib/agent-bridge.ts",
+    "lib/commands.ts",
+    "lib/fs-model.ts",
+    "lib/host.ts",
+    "slice.contract.ts",
+    "slice.json"
+  ]
+}

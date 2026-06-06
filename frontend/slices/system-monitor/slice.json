@@ -1,0 +1,25 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "system-monitor",
+  "version": "1.0.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "System Monitor — host telemetry dashboard",
+  "description": "An Activity-Monitor-style dashboard: circular CPU/RAM/disk/GPU gauges, rolling CPU + network sparklines on glass panels, and a live process table — polling every 1.5s with a ~40-point history. Telemetry is INJECTED via a small SysMonAdapter (stats/processes): point configureSysmon at a real host API (/proc, an agent, a cloud endpoint) or use the bundled wavy in-browser mock so it renders alive with zero backend. Self-contained: shell inspector hooks are inert seams in lib/host.ts; the only chrome dependency is a slice-local @container frame.",
+  "namespace": "@/features/system-monitor",
+  "frontend": {
+    "slicePath": "frontend/slices/system-monitor",
+    "configExport": "systemMonitorConfig"
+  },
+  "deps": {
+    "npm": ["lucide-react"],
+    "shadcn": ["scroll-area"],
+    "env": [],
+    "peers": []
+  },
+  "registers": ["registry"],
+  "audit": ["bp:ui-consistency"],
+  "license": "MIT",
+  "tags": ["monitoring", "telemetry", "dashboard", "gauges", "sparkline", "processes", "ui"],
+  "previews": []
+}

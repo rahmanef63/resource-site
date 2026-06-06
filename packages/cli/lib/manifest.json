@@ -1445,6 +1445,104 @@
       ]
     },
     {
+      "slug": "system-monitor",
+      "title": "System Monitor — host telemetry dashboard",
+      "category": "ui",
+      "description": "An Activity-Monitor-style dashboard: circular CPU/RAM/disk/GPU gauges, rolling CPU + network sparklines on glass panels, and a live process table — polling every 1.5s with a ~40-point history. Telemetry is INJECTED via a small SysMonAdapter (stats/processes): point configureSysmon at a real host API (/proc, an agent, a cloud endpoint) or keep the bundled wavy in-browser mock so the dashboard renders alive with zero backend. Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
+      "source": "rahmanef63/os-vps",
+      "install": "npx rahman-resources add system-monitor",
+      "npmPackages": [],
+      "exampleCode": "\"use client\";\nimport { SystemMonitor } from \"@/features/system-monitor\";\n\nexport default function MonitorDemo() {\n  // Unwired -> wavy mock telemetry; configureSysmon for a real host.\n  return <div className=\"h-dvh w-full\"><SystemMonitor /></div>;\n}",
+      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Host telemetry dashboard. Fully client-side; no backend required.\n\nSTEP 1 — Install. `npx rr add system-monitor`. Ensure `@/features/system-monitor` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: `npx shadcn@latest add scroll-area`.\n\nSTEP 3 — Mount. `<SystemMonitor />` in a height-bearing box — unwired it runs a wavy in-browser telemetry mock. Or register `systemMonitorApp` in an appshell manifest.\n\nSTEP 4 — Real telemetry. `configureSysmon({ mode:\"live\", stats, processes })` — stats returns { cpu:{pct,cores}, mem:{used,total}, disk:{used,total}, net?:{rx,tx}, uptime }; processes returns [{ pid, name, status, cpu, mem }].",
+      "tags": [
+        "monitoring",
+        "telemetry",
+        "dashboard",
+        "gauges",
+        "sparkline",
+        "processes",
+        "ui"
+      ]
+    },
+    {
+      "slug": "os-terminal",
+      "title": "Terminal — shell emulator with live passthrough",
+      "category": "ui",
+      "description": "A React-DOM terminal: monospace glass aesthetic, colored prompt, arrow-key history, red stderr. Built-ins (ls·cd·pwd·cat·mkdir·touch·rm·mv·cp·echo·whoami·date·uname·df·ps·neofetch·help·clear) run against an in-memory FsModel, so it works with ZERO backend. Wire configureTerminal({ mode:\"live\", fs, exec }) and ls/cat read through your real filesystem, file mutations mirror to it, and any unknown command passes through exec.run as a one-shot shell call (stdout/stderr/exit rendered). Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
+      "source": "rahmanef63/os-vps",
+      "install": "npx rahman-resources add os-terminal",
+      "npmPackages": [],
+      "exampleCode": "\"use client\";\nimport { Terminal } from \"@/features/os-terminal\";\n\nexport default function TerminalDemo() {\n  // Mock mode: 17 built-ins over an in-memory fs. configureTerminal to go live.\n  return <div className=\"h-96 w-full\"><Terminal /></div>;\n}",
+      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Shell emulator with optional live passthrough. Fully client-side by default.\n\nSTEP 1 — Install. `npx rr add os-terminal`. Ensure `@/features/os-terminal` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. No shadcn components required.\n\nSTEP 3 — Mount. `<Terminal />` in a height-bearing box — mock mode runs entirely on the in-memory FsModel. Or register `osTerminalApp` in an appshell manifest.\n\nSTEP 4 — Go live. `configureTerminal({ mode:\"live\", fs:{list,read,write,mkdir,remove,move,copy}, exec:{run} })`. In live mode ls/cat read through your fs, mutations mirror, and unknown commands hit exec.run (one-shot; treat the endpoint like SSH).",
+      "tags": [
+        "terminal",
+        "shell",
+        "cli",
+        "emulator",
+        "exec",
+        "ui"
+      ]
+    },
+    {
+      "slug": "assistant",
+      "title": "Assistant — agent workspace with streaming chat",
+      "category": "ai",
+      "description": "A full agent workspace: streaming chat with typing deltas and graceful error notes, plus a library where users CREATE and manage agents (persona, avatar gradient, system prompt), skills, and automations (trigger + schedule forms) — all persisted in localStorage, no backend. Preset agents/skills ship as starting points. The model is INJECTED: configureAssistantStream takes any (messages) => AsyncIterable<string> — your SSE endpoint, the AI SDK, an agent loop — and until wired a typing demo stream keeps the whole UI working offline. Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
+      "source": "rahmanef63/os-vps",
+      "install": "npx rahman-resources add assistant",
+      "npmPackages": [],
+      "exampleCode": "\"use client\";\nimport { Assistant } from \"@/features/assistant\";\n\nexport default function AssistantDemo() {\n  // Unwired -> typing demo stream. configureAssistantStream for a real LLM.\n  return <div className=\"h-dvh w-full\"><Assistant /></div>;\n}",
+      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Agent workspace with streaming chat. Fully client-side; model injected.\n\nSTEP 1 — Install. `npx rr add assistant`. Ensure `@/features/assistant` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: `npx shadcn@latest add button input textarea tabs badge scroll-area dropdown-menu dialog select switch`.\n\nSTEP 3 — Mount. `<Assistant />` in a height-bearing box. Unwired, a typing demo stream answers so the UI works offline; agents/skills/automations persist in localStorage.\n\nSTEP 4 — Wire a model. `configureAssistantStream(async function* (messages) { ...yield text deltas... })` — SSE endpoint, AI SDK, or an agent loop. Throw Error(\"no_api_key\") / Error(\"unauthorized\") for the chat's friendly error notes.",
+      "tags": [
+        "ai",
+        "assistant",
+        "chat",
+        "agents",
+        "streaming",
+        "automations",
+        "ui"
+      ]
+    },
+    {
+      "slug": "browser",
+      "title": "Browser — remote headless-browser chrome",
+      "category": "ui",
+      "description": "Full browser chrome for a REMOTE headless browser: omnibar with search-or-URL detection, bookmark bar, history view (localStorage-persisted), favicons with globe fallback, busy states, and a screenshot viewport that forwards clicks/typing/keys/scroll into the remote page. The backend is INJECTED via a small BrowserAdapter (state/screenshot/act): point configureBrowser at a real headless-Chromium service (e.g. Playwright behind an authed route — any site renders, no X-Frame-Options problem) or keep the bundled offline canvas demo renderer that fakes the viewport so the whole chrome works with zero backend. Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
+      "source": "rahmanef63/os-vps",
+      "install": "npx rahman-resources add browser",
+      "npmPackages": [],
+      "exampleCode": "\"use client\";\nimport { Browser } from \"@/features/browser\";\n\nexport default function BrowserDemo() {\n  // Unwired -> offline canvas demo renderer. configureBrowser for Playwright.\n  return <div className=\"h-dvh w-full\"><Browser /></div>;\n}",
+      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Remote headless-browser chrome. Demo renderer by default; real backend injected.\n\nSTEP 1 — Install. `npx rr add browser`. Ensure `@/features/browser` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: `npx shadcn@latest add button input badge dropdown-menu tooltip scroll-area`.\n\nSTEP 3 — Mount. `<Browser />` in a height-bearing box — unwired, an offline canvas demo renderer fakes the viewport (omnibar/bookmarks/history all work). Or register `browserApp` in an appshell manifest.\n\nSTEP 4 — Real headless browser. `configureBrowser({ state, screenshot, act })` against a Playwright service: state → { url, title }; screenshot → PNG Blob; act(path, body) handles navigate|click|type|key|scroll|back|forward|reload. AUTH those routes — a remote browser holds logged-in sessions.",
+      "tags": [
+        "browser",
+        "headless",
+        "playwright",
+        "remote",
+        "omnibar",
+        "bookmarks",
+        "ui"
+      ]
+    },
+    {
+      "slug": "app-store",
+      "title": "App Store — install, create + toggle apps",
+      "category": "ui",
+      "description": "The dynamic half of an app registry, in two surfaces. AppStore: a storefront with featured hero, category sidebar, install/uninstall cards for a curated catalog, and toggles that disable built-in apps/shell features (the DISABLED set is persisted so new apps always ship enabled). CreateApp: build a custom app — name, glyph, accent gradient, runtime (html/node/python/shell), entry — with live manifest preview. Both write one localStorage registry; useInstalledApps() turns it into appshell-style descriptors (html apps mount in a sandboxed iframe, command apps in a terminal-style console). The console's shell is INJECTED via configureAppStoreExec (demo echo by default). Self-contained: inspector hooks are inert seams in lib/host.ts; the Create-App flow is bundled in (no cross-slice imports).",
+      "source": "rahmanef63/os-vps",
+      "install": "npx rahman-resources add app-store",
+      "npmPackages": [],
+      "exampleCode": "\"use client\";\nimport { AppStore } from \"@/features/app-store\";\n\nexport default function StoreDemo() {\n  // Install/uninstall + Create-App write one localStorage registry.\n  return <div className=\"h-dvh w-full\"><AppStore /></div>;\n}",
+      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Storefront + Create-App over a localStorage app registry. Fully client-side.\n\nSTEP 1 — Install. `npx rr add app-store`. Ensure `@/features/app-store` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: `npx shadcn@latest add button input badge separator scroll-area switch tooltip`.\n\nSTEP 3 — Mount. `<AppStore />` (storefront) and/or `<CreateApp />` (custom-app builder) — or register `appStoreApp` / `createAppApp` in an appshell manifest.\n\nSTEP 4 — Feed your launcher. `useInstalledApps()` returns AppDescriptor[] for everything installed/created (html → sandboxed iframe, command → console); `useDisabledIds()` filters your built-in manifest.\n\nSTEP 5 — Console exec (optional). `configureAppStoreExec({ mode:\"live\", exec:{run} })` so command/script apps run on a real one-shot shell (auth it like SSH).",
+      "tags": [
+        "app-store",
+        "registry",
+        "installer",
+        "dynamic-apps",
+        "launcher",
+        "ui"
+      ]
+    },
+    {
       "slug": "file-explorer",
       "title": "File Explorer — Tree + CRUD + Breadcrumb",
       "category": "ui",
@@ -2646,6 +2744,172 @@
         "ui"
       ],
       "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A lightweight overlay-highlighting code editor with a lazy explorer tree. Fully client-side; no backend required.\n\nSTEP 1 — Install. `npx rr add code-editor`. Ensure `@/features/code-editor` resolves in tsconfig paths and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: `npx shadcn@latest add button badge input scroll-area sheet dialog`.\n\nSTEP 3 — Mount. `<CodeEditor />` opens the seeded sample tree (writable in-memory mock). Open a specific file with a payload:\n```tsx\n\"use client\";\nimport { CodeEditor } from \"@/features/code-editor\";\nexport default function Page() {\n  return <div className=\"h-dvh\"><CodeEditor payload={{ path: \"/Projects/hello.ts\" }} /></div>;\n}\n```\nOr register the `codeEditorApp` descriptor in an appshell manifest for windowed hosts.\n\nSTEP 4 — Real filesystem (optional). `configureCodeFs({ list, read, write, mkdir })` — list returns { path, entries: [{ name, kind }] } for ONE directory (the tree fetches per expand), read returns the file body, write/mkdir mutate. Writes are best-effort: on failure the editor keeps the local buffer and flags the status bar.\n\nSTEP 5 — Cross-app open. From a file manager (e.g. the file-explorer slice), wire onOpenFile to re-render CodeEditor with payload={{ path }} — the editor adds a tab and hydrates the buffer."
+    },
+    {
+      "slug": "system-monitor",
+      "title": "System Monitor — host telemetry dashboard",
+      "category": "ui",
+      "kind": "ui",
+      "version": "1.0.0",
+      "description": "An Activity-Monitor-style dashboard: circular CPU/RAM/disk/GPU gauges, rolling CPU + network sparklines on glass panels, and a live process table — polling every 1.5s with a ~40-point history. Telemetry is INJECTED via a small SysMonAdapter (stats/processes): point configureSysmon at a real host API (/proc, an agent, a cloud endpoint) or keep the bundled wavy in-browser mock so the dashboard renders alive with zero backend. Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
+      "source": "rahmanef63/os-vps",
+      "slicePath": "frontend/slices/system-monitor",
+      "convexPaths": [],
+      "npm": [
+        "lucide-react"
+      ],
+      "shadcn": [
+        "scroll-area"
+      ],
+      "env": [],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "monitoring",
+        "telemetry",
+        "dashboard",
+        "gauges",
+        "sparkline",
+        "processes",
+        "ui"
+      ],
+      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Host telemetry dashboard. Fully client-side; no backend required.\n\nSTEP 1 — Install. `npx rr add system-monitor`. Ensure `@/features/system-monitor` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: `npx shadcn@latest add scroll-area`.\n\nSTEP 3 — Mount. `<SystemMonitor />` in a height-bearing box — unwired it runs a wavy in-browser telemetry mock. Or register `systemMonitorApp` in an appshell manifest.\n\nSTEP 4 — Real telemetry. `configureSysmon({ mode:\"live\", stats, processes })` — stats returns { cpu:{pct,cores}, mem:{used,total}, disk:{used,total}, net?:{rx,tx}, uptime }; processes returns [{ pid, name, status, cpu, mem }]."
+    },
+    {
+      "slug": "os-terminal",
+      "title": "Terminal — shell emulator with live passthrough",
+      "category": "ui",
+      "kind": "ui",
+      "version": "1.0.0",
+      "description": "A React-DOM terminal: monospace glass aesthetic, colored prompt, arrow-key history, red stderr. Built-ins (ls·cd·pwd·cat·mkdir·touch·rm·mv·cp·echo·whoami·date·uname·df·ps·neofetch·help·clear) run against an in-memory FsModel, so it works with ZERO backend. Wire configureTerminal({ mode:\"live\", fs, exec }) and ls/cat read through your real filesystem, file mutations mirror to it, and any unknown command passes through exec.run as a one-shot shell call (stdout/stderr/exit rendered). Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
+      "source": "rahmanef63/os-vps",
+      "slicePath": "frontend/slices/os-terminal",
+      "convexPaths": [],
+      "npm": [
+        "lucide-react"
+      ],
+      "shadcn": [],
+      "env": [],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "terminal",
+        "shell",
+        "cli",
+        "emulator",
+        "exec",
+        "ui"
+      ],
+      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Shell emulator with optional live passthrough. Fully client-side by default.\n\nSTEP 1 — Install. `npx rr add os-terminal`. Ensure `@/features/os-terminal` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. No shadcn components required.\n\nSTEP 3 — Mount. `<Terminal />` in a height-bearing box — mock mode runs entirely on the in-memory FsModel. Or register `osTerminalApp` in an appshell manifest.\n\nSTEP 4 — Go live. `configureTerminal({ mode:\"live\", fs:{list,read,write,mkdir,remove,move,copy}, exec:{run} })`. In live mode ls/cat read through your fs, mutations mirror, and unknown commands hit exec.run (one-shot; treat the endpoint like SSH)."
+    },
+    {
+      "slug": "assistant",
+      "title": "Assistant — agent workspace with streaming chat",
+      "category": "ai",
+      "kind": "ui",
+      "version": "1.0.0",
+      "description": "A full agent workspace: streaming chat with typing deltas and graceful error notes, plus a library where users CREATE and manage agents (persona, avatar gradient, system prompt), skills, and automations (trigger + schedule forms) — all persisted in localStorage, no backend. Preset agents/skills ship as starting points. The model is INJECTED: configureAssistantStream takes any (messages) => AsyncIterable<string> — your SSE endpoint, the AI SDK, an agent loop — and until wired a typing demo stream keeps the whole UI working offline. Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
+      "source": "rahmanef63/os-vps",
+      "slicePath": "frontend/slices/assistant",
+      "convexPaths": [],
+      "npm": [
+        "lucide-react"
+      ],
+      "shadcn": [
+        "button",
+        "input",
+        "textarea",
+        "tabs",
+        "badge",
+        "scroll-area",
+        "dropdown-menu",
+        "dialog",
+        "select",
+        "switch"
+      ],
+      "env": [],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "ai",
+        "assistant",
+        "chat",
+        "agents",
+        "streaming",
+        "automations",
+        "ui"
+      ],
+      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Agent workspace with streaming chat. Fully client-side; model injected.\n\nSTEP 1 — Install. `npx rr add assistant`. Ensure `@/features/assistant` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: `npx shadcn@latest add button input textarea tabs badge scroll-area dropdown-menu dialog select switch`.\n\nSTEP 3 — Mount. `<Assistant />` in a height-bearing box. Unwired, a typing demo stream answers so the UI works offline; agents/skills/automations persist in localStorage.\n\nSTEP 4 — Wire a model. `configureAssistantStream(async function* (messages) { ...yield text deltas... })` — SSE endpoint, AI SDK, or an agent loop. Throw Error(\"no_api_key\") / Error(\"unauthorized\") for the chat's friendly error notes."
+    },
+    {
+      "slug": "browser",
+      "title": "Browser — remote headless-browser chrome",
+      "category": "ui",
+      "kind": "ui",
+      "version": "1.0.0",
+      "description": "Full browser chrome for a REMOTE headless browser: omnibar with search-or-URL detection, bookmark bar, history view (localStorage-persisted), favicons with globe fallback, busy states, and a screenshot viewport that forwards clicks/typing/keys/scroll into the remote page. The backend is INJECTED via a small BrowserAdapter (state/screenshot/act): point configureBrowser at a real headless-Chromium service (e.g. Playwright behind an authed route — any site renders, no X-Frame-Options problem) or keep the bundled offline canvas demo renderer that fakes the viewport so the whole chrome works with zero backend. Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
+      "source": "rahmanef63/os-vps",
+      "slicePath": "frontend/slices/browser",
+      "convexPaths": [],
+      "npm": [
+        "lucide-react"
+      ],
+      "shadcn": [
+        "button",
+        "input",
+        "badge",
+        "dropdown-menu",
+        "tooltip",
+        "scroll-area"
+      ],
+      "env": [],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "browser",
+        "headless",
+        "playwright",
+        "remote",
+        "omnibar",
+        "bookmarks",
+        "ui"
+      ],
+      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Remote headless-browser chrome. Demo renderer by default; real backend injected.\n\nSTEP 1 — Install. `npx rr add browser`. Ensure `@/features/browser` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: `npx shadcn@latest add button input badge dropdown-menu tooltip scroll-area`.\n\nSTEP 3 — Mount. `<Browser />` in a height-bearing box — unwired, an offline canvas demo renderer fakes the viewport (omnibar/bookmarks/history all work). Or register `browserApp` in an appshell manifest.\n\nSTEP 4 — Real headless browser. `configureBrowser({ state, screenshot, act })` against a Playwright service: state → { url, title }; screenshot → PNG Blob; act(path, body) handles navigate|click|type|key|scroll|back|forward|reload. AUTH those routes — a remote browser holds logged-in sessions."
+    },
+    {
+      "slug": "app-store",
+      "title": "App Store — install, create + toggle apps",
+      "category": "ui",
+      "kind": "ui",
+      "version": "1.0.0",
+      "description": "The dynamic half of an app registry, in two surfaces. AppStore: a storefront with featured hero, category sidebar, install/uninstall cards for a curated catalog, and toggles that disable built-in apps/shell features (the DISABLED set is persisted so new apps always ship enabled). CreateApp: build a custom app — name, glyph, accent gradient, runtime (html/node/python/shell), entry — with live manifest preview. Both write one localStorage registry; useInstalledApps() turns it into appshell-style descriptors (html apps mount in a sandboxed iframe, command apps in a terminal-style console). The console's shell is INJECTED via configureAppStoreExec (demo echo by default). Self-contained: inspector hooks are inert seams in lib/host.ts; the Create-App flow is bundled in (no cross-slice imports).",
+      "source": "rahmanef63/os-vps",
+      "slicePath": "frontend/slices/app-store",
+      "convexPaths": [],
+      "npm": [
+        "lucide-react"
+      ],
+      "shadcn": [
+        "button",
+        "input",
+        "badge",
+        "separator",
+        "scroll-area",
+        "switch",
+        "tooltip"
+      ],
+      "env": [],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "app-store",
+        "registry",
+        "installer",
+        "dynamic-apps",
+        "launcher",
+        "ui"
+      ],
+      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Storefront + Create-App over a localStorage app registry. Fully client-side.\n\nSTEP 1 — Install. `npx rr add app-store`. Ensure `@/features/app-store` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: `npx shadcn@latest add button input badge separator scroll-area switch tooltip`.\n\nSTEP 3 — Mount. `<AppStore />` (storefront) and/or `<CreateApp />` (custom-app builder) — or register `appStoreApp` / `createAppApp` in an appshell manifest.\n\nSTEP 4 — Feed your launcher. `useInstalledApps()` returns AppDescriptor[] for everything installed/created (html → sandboxed iframe, command → console); `useDisabledIds()` filters your built-in manifest.\n\nSTEP 5 — Console exec (optional). `configureAppStoreExec({ mode:\"live\", exec:{run} })` so command/script apps run on a real one-shot shell (auth it like SSH)."
     },
     {
       "slug": "file-explorer",

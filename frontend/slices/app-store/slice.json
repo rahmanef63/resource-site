@@ -1,0 +1,25 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "app-store",
+  "version": "1.0.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "App Store — install, create + toggle apps",
+  "description": "The dynamic half of an app registry, in two surfaces. AppStore: a storefront with featured hero, category sidebar, install/uninstall cards for a curated catalog, and toggles that disable built-in apps/shell features (the DISABLED set is persisted so new apps always ship enabled). CreateApp: build a custom app — name, glyph, accent gradient, runtime (html/node/python/shell), entry — with live manifest preview. Both write one localStorage registry; useInstalledApps() turns it into appshell-style descriptors (html apps mount in a sandboxed iframe, command apps in a terminal-style console). The console's shell is INJECTED via configureAppStoreExec (demo echo by default). Self-contained: inspector hooks are inert seams in lib/host.ts.",
+  "namespace": "@/features/app-store",
+  "frontend": {
+    "slicePath": "frontend/slices/app-store",
+    "configExport": "appStoreConfig"
+  },
+  "deps": {
+    "npm": ["lucide-react"],
+    "shadcn": ["button", "input", "badge", "separator", "scroll-area", "switch", "tooltip"],
+    "env": [],
+    "peers": []
+  },
+  "registers": ["registry"],
+  "audit": ["bp:ui-consistency"],
+  "license": "MIT",
+  "tags": ["app-store", "registry", "installer", "dynamic-apps", "launcher", "ui"],
+  "previews": []
+}

@@ -6,9 +6,12 @@ import type { RegisteredSlice } from "./registry";
 
 import { adminConfig } from "@/features/admin/config";
 import { aiRouterConfig } from "@/features/ai-router/config";
+import { appStoreConfig } from "@/features/app-store/config";
 import { appshellConfig } from "@/features/appshell/config";
+import { assistantConfig } from "@/features/assistant/config";
 import { auditLogConfig } from "@/features/audit-log/config";
 import { broadcastChannelSyncConfig } from "@/features/broadcast-channel-sync/config";
+import { browserConfig } from "@/features/browser/config";
 import { calComBookingConfig } from "@/features/cal-com-booking/config";
 import { codeEditorConfig } from "@/features/code-editor/config";
 import { commandMenuConfig } from "@/features/command-menu/config";
@@ -19,10 +22,12 @@ import { imageEditorConfig } from "@/features/image-editor/config";
 import { mediaViewerConfig } from "@/features/media-viewer/config";
 import { midtransPaymentConfig } from "@/features/midtrans-payment/config";
 import { notionConfig } from "@/features/notion/config";
+import { osTerminalConfig } from "@/features/os-terminal/config";
 import { platformAdminConfig } from "@/features/platform-admin/config";
 import { reelEditorConfig } from "@/features/reel-editor/config";
 import { resendNewsletterConfig } from "@/features/resend-newsletter/config";
 import { seoConfig } from "@/features/seo/config";
+import { systemMonitorConfig } from "@/features/system-monitor/config";
 import { vectorSearchConfig } from "@/features/vector-search/config";
 
 export const REGISTERED_SLICES: RegisteredSlice[] = [
@@ -37,9 +42,19 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     version: "0.1.0",
   },
   {
+    ...appStoreConfig,
+    importPath: "@/features/app-store/config",
+    version: "1.0.0",
+  },
+  {
     ...appshellConfig,
     importPath: "@/features/appshell/config",
     version: "1.1.0",
+  },
+  {
+    ...assistantConfig,
+    importPath: "@/features/assistant/config",
+    version: "1.0.0",
   },
   {
     ...auditLogConfig,
@@ -50,6 +65,11 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     ...broadcastChannelSyncConfig,
     importPath: "@/features/broadcast-channel-sync/config",
     version: "0.1.0",
+  },
+  {
+    ...browserConfig,
+    importPath: "@/features/browser/config",
+    version: "1.0.0",
   },
   {
     ...calComBookingConfig,
@@ -102,6 +122,11 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     version: "1.0.0",
   },
   {
+    ...osTerminalConfig,
+    importPath: "@/features/os-terminal/config",
+    version: "1.0.0",
+  },
+  {
     ...platformAdminConfig,
     importPath: "@/features/platform-admin/config",
     version: "0.1.0",
@@ -120,6 +145,11 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     ...seoConfig,
     importPath: "@/features/seo/config",
     version: "0.2.1",
+  },
+  {
+    ...systemMonitorConfig,
+    importPath: "@/features/system-monitor/config",
+    version: "1.0.0",
   },
   {
     ...vectorSearchConfig,

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "assistant",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add assistant",
+    "consumerPath": "slices/assistant"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "README.md",
+    "app.tsx",
+    "components/agent-avatar.tsx",
+    "components/agent-form.tsx",
+    "components/agent-switcher.tsx",
+    "components/automation-form.tsx",
+    "components/automation-view.tsx",
+    "components/chat-composer.tsx",
+    "components/chat-panel.tsx",
+    "components/empty-state.tsx",
+    "components/form-shell.tsx",
+    "components/icon-map.tsx",
+    "components/library-grid.tsx",
+    "components/message-bubble.tsx",
+    "components/pickers.tsx",
+    "components/skill-form.tsx",
+    "components/tool-picker.tsx",
+    "config.ts",
+    "index.ts",
+    "lib/host.ts",
+    "lib/presets.ts",
+    "lib/store.ts",
+    "lib/stream.ts",
+    "lib/tools.ts",
+    "lib/types.ts",
+    "slice.contract.ts",
+    "slice.json"
+  ]
+}
