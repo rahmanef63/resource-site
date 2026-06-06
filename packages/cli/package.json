@@ -1,7 +1,7 @@
 {
   "name": "rahman-resources",
-  "version": "1.11.0",
-  "description": "Rahman Resources (rr) — shadcn-style installer for vertical slices. `npx resources add <slug>` copies slice into your project's `slices/<slug>/`. You own the files.",
+  "version": "1.12.0",
+  "description": "Rahman Resources (rr) \u2014 shadcn-style installer for vertical slices. `npx resources add <slug>` copies slice into your project's `slices/<slug>/`. You own the files.",
   "type": "module",
   "license": "MIT",
   "author": "Rahman <casadezian@gmail.com>",

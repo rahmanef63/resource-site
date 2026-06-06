@@ -1,0 +1,34 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "data-table",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add data-table",
+    "consumerPath": "slices/data-table"
+  },
+  "files": [
+    "README.md",
+    "components/DataTable.tsx",
+    "components/data-table-column-header.tsx",
+    "components/data-table-pagination.tsx",
+    "components/data-table-toolbar.tsx",
+    "config.ts",
+    "index.ts",
+    "lib/columns-helpers.ts"
+  ],
+  "imports": {
+    "shared": [],
+    "external": [
+      "@tanstack/react-table",
+      "lucide-react",
+      "@/components/ui/table",
+      "@/components/ui/button",
+      "@/components/ui/input",
+      "@/components/ui/checkbox",
+      "@/components/ui/dropdown-menu",
+      "@/lib/utils"
+    ]
+  }
+}

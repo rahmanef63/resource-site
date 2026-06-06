@@ -11,6 +11,17 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-06 — five basic slices (UX wave U6) — CLI 1.12.0
+
+- **NEW slices**: `data-table` (TanStack v8 + shadcn Table — sorting,
+  search, pagination, row selection, column visibility), `empty-states`
+  (404/500/403/no-results/empty-list/first-use + ErrorPage drop-ins),
+  `marketing-chrome` (MarketingHeader 3 layouts + MarketingFooter 2
+  layouts), `settings-page` (adapter-driven 4-section shell),
+  `notifications-center` (bell + inbox, adapter-driven).
+- All pure-UI, variant previews registered (37 → 42), smoke-covered.
+- **CLI 1.12.0**: 62-slice manifest + U2 category enum + U3 aliases.
+
 ### 2026-06-06 — shell hierarchy contract (UX wave U5)
 
 - `/architecture` gains "Shell hierarchy — who composes whom": appshell (OS

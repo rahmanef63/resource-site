@@ -2,6 +2,32 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "UX-U6",
+    "version": "rahman-resources@1.12.0",
+    "date": 1780790400000,
+    "kind": "feature",
+    "title": "Five basics every app needs — data-table, empty-states, marketing-chrome, settings-page, notifications-center",
+    "body": "UX wave U6. The catalog had editors, payments and an OS shell — but no data table, no 404 page, no footer. Five foundational slices land, all pure-UI, adapter-driven where state is involved, each with variant previews + smoke coverage (registry 37 → 42): data-table (generic DataTable<TData> on TanStack Table v8 + shadcn Table — sorting, search, pagination, row selection, column visibility; density/selectable axes), empty-states (six presets 404/500/403/no-results/empty-list/first-use on the shadcn Empty primitive + ErrorPage drop-in for app/not-found.tsx + error.tsx), marketing-chrome (config-driven MarketingHeader split/centered/minimal + mobile sheet menu, MarketingFooter columns/slim — the chrome every template hand-rolled), settings-page (Profile/Preferences/Notifications/Danger-zone shell over a two-method SettingsAdapter with optimistic save), notifications-center (bell + unread badge + popover/sheet inbox over a NotificationsAdapter; enhances appshell + dashboard-shell). CLI 1.12.0 carries them plus the U2 category enum + U3 alias resolution.",
+    "groups": [
+      {
+        "heading": "Slices (NEW)",
+        "bullets": [
+          { "text": "data-table — TanStack v8 + shadcn Table; sorting / search / pagination / selection / column visibility", "slug": "data-table", "kind": "slice" },
+          { "text": "empty-states — 404/500/403/no-results/empty-list/first-use presets + ErrorPage drop-in", "slug": "empty-states", "kind": "slice" },
+          { "text": "marketing-chrome — MarketingHeader (3 layouts, sheet menu) + MarketingFooter (2 layouts)", "slug": "marketing-chrome", "kind": "slice" },
+          { "text": "settings-page — adapter-driven settings shell, 4 sections, optimistic save", "slug": "settings-page", "kind": "slice" },
+          { "text": "notifications-center — bell + inbox, adapter-driven, enhances appshell/dashboard-shell", "slug": "notifications-center", "kind": "slice" }
+        ]
+      },
+      {
+        "heading": "CLI",
+        "bullets": [
+          "1.12.0 — 62 slices in manifest, integrations/data category enum, alias resolution, @tanstack/react-table dep guidance"
+        ]
+      }
+    ]
+  },
+  {
     "id": "UX-U5",
     "version": "site@shell-hierarchy",
     "date": 1780790400000,

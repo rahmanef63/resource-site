@@ -1,0 +1,68 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "empty-states",
+  "version": "0.1.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "Empty States",
+  "description": "One configurable EmptyState component with per-kind presets (404, 500, 403, no-results, empty-list, first-use) composed on top of the shadcn Empty primitive. Each kind ships a sensible default icon, title, and description; every slot is overridable via props. Optional primary/secondary actions render as shadcn Buttons (asChild anchor when given an href, otherwise onClick). Ships an ErrorPage full-page wrapper as a drop-in for app/not-found.tsx and app/error.tsx.",
+  "namespace": "@/features/empty-states",
+  "frontend": {
+    "slicePath": "frontend/slices/empty-states",
+    "configExport": "emptyStatesFeature"
+  },
+  "convex": {
+    "tablesExport": "",
+    "schemaPath": "",
+    "rootPaths": []
+  },
+  "deps": {
+    "npm": ["lucide-react@^0.400.0"],
+    "shadcn": ["empty", "button"],
+    "env": [],
+    "peers": []
+  },
+  "registers": [],
+  "audit": [],
+  "license": "MIT",
+  "tags": ["ui", "empty-state", "error-page", "404", "placeholder", "fallback"],
+  "previews": [
+    {
+      "component": "EmptyState",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "404",
+          "title": "404 — Not found",
+          "description": "missing page fallback"
+        },
+        {
+          "id": "500",
+          "title": "500 — Server error",
+          "description": "unexpected error fallback"
+        },
+        {
+          "id": "403",
+          "title": "403 — Access denied",
+          "description": "permission-gated resource"
+        },
+        {
+          "id": "no-results",
+          "title": "No results",
+          "description": "empty search / filter result"
+        },
+        {
+          "id": "empty-list",
+          "title": "Empty list",
+          "description": "collection with no items yet"
+        },
+        {
+          "id": "first-use",
+          "title": "First use",
+          "description": "onboarding / get-started state"
+        }
+      ],
+      "seed": "EmptyState rendered once per kind preset with default icon/title/description"
+    }
+  ]
+}

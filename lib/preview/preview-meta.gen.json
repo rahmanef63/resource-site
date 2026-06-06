@@ -342,9 +342,41 @@
     ]
   },
   {
+    "slug": "data-table",
+    "title": "Data Table",
+    "category": "data",
+    "previews": [
+      {
+        "component": "DataTable",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "density",
+            "values": [
+              "compact",
+              "comfortable"
+            ],
+            "default": "comfortable",
+            "description": "Row padding density"
+          },
+          {
+            "prop": "selectable",
+            "values": [
+              "on",
+              "off"
+            ],
+            "default": "on",
+            "description": "Checkbox row-selection column"
+          }
+        ],
+        "seed": "12 static invoice rows (id, customer, status, amount, date)"
+      }
+    ]
+  },
+  {
     "slug": "doku-payment",
     "title": "DOKU — Indonesia Payment",
-    "category": "payment",
+    "category": "integrations",
     "previews": [
       {
         "component": "DokuPaymentInstructions",
@@ -372,6 +404,50 @@
           }
         ],
         "seed": "static demo instructions per channel; sandbox — no real charge, links are placeholders"
+      }
+    ]
+  },
+  {
+    "slug": "empty-states",
+    "title": "Empty States",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "EmptyState",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "404",
+            "title": "404 — Not found",
+            "description": "missing page fallback"
+          },
+          {
+            "id": "500",
+            "title": "500 — Server error",
+            "description": "unexpected error fallback"
+          },
+          {
+            "id": "403",
+            "title": "403 — Access denied",
+            "description": "permission-gated resource"
+          },
+          {
+            "id": "no-results",
+            "title": "No results",
+            "description": "empty search / filter result"
+          },
+          {
+            "id": "empty-list",
+            "title": "Empty list",
+            "description": "collection with no items yet"
+          },
+          {
+            "id": "first-use",
+            "title": "First use",
+            "description": "onboarding / get-started state"
+          }
+        ],
+        "seed": "EmptyState rendered once per kind preset with default icon/title/description"
       }
     ]
   },
@@ -589,7 +665,7 @@
   {
     "slug": "landing-sections",
     "title": "Landing Sections",
-    "category": "infra",
+    "category": "content",
     "previews": [
       {
         "component": "LandingSectionShell",
@@ -677,6 +753,46 @@
     ]
   },
   {
+    "slug": "marketing-chrome",
+    "title": "Marketing Chrome",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "MarketingHeader",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "layout",
+            "values": [
+              "split",
+              "centered",
+              "minimal"
+            ],
+            "default": "split",
+            "description": "split = brand/nav/cta; centered = stacked brand over nav; minimal = brand + cta only"
+          }
+        ],
+        "seed": "static brand + 4 nav links + primary/secondary CTA"
+      },
+      {
+        "component": "MarketingFooter",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "layout",
+            "values": [
+              "columns",
+              "slim"
+            ],
+            "default": "columns",
+            "description": "columns = multi-column link grid + legal bar; slim = single brand/links/social row"
+          }
+        ],
+        "seed": "static brand + 3 link columns + social + legal"
+      }
+    ]
+  },
+  {
     "slug": "media-viewer",
     "title": "Preview — media quick-look",
     "category": "os",
@@ -703,7 +819,7 @@
   {
     "slug": "midtrans-payment",
     "title": "Midtrans — Indonesia Payment",
-    "category": "payment",
+    "category": "integrations",
     "previews": [
       {
         "component": "MidtransCheckout",
@@ -726,6 +842,51 @@
           }
         ],
         "seed": "amount/orderId per scenario; Pay button is a sandbox stub — no real Snap, no charge"
+      }
+    ]
+  },
+  {
+    "slug": "notifications-center",
+    "title": "Notifications Center",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "NotificationBell",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "surface",
+            "values": [
+              "popover",
+              "sheet"
+            ],
+            "default": "popover",
+            "description": "Panel surface — floating popover (desktop) or side sheet (mobile)"
+          }
+        ],
+        "seed": "8 static mixed-kind notifications with static ISO timestamps"
+      },
+      {
+        "component": "NotificationList",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "mixed",
+            "title": "Mixed feed",
+            "description": "8 notifications, some unread, with actors + bodies"
+          },
+          {
+            "id": "all-read",
+            "title": "All read",
+            "description": "Same feed, every row already read — unread tab empty"
+          },
+          {
+            "id": "empty",
+            "title": "Empty state",
+            "description": "No notifications — caught-up fallback renders"
+          }
+        ],
+        "seed": "Same 8 static notifications; scenario toggles read-state + emptiness"
       }
     ]
   },
@@ -995,6 +1156,40 @@
           }
         ],
         "seed": "4 demo rows inside a SelectionProvider; drag on empty space to marquee-select (drag right = enclose, left = touch), or click an edge. Bulk delete is a no-op."
+      }
+    ]
+  },
+  {
+    "slug": "settings-page",
+    "title": "Settings Page",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "SettingsShell",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "profile",
+            "title": "Profile",
+            "description": "avatar + name/email/bio fields with Save"
+          },
+          {
+            "id": "preferences",
+            "title": "Preferences",
+            "description": "theme + language Select + density toggle"
+          },
+          {
+            "id": "notifications",
+            "title": "Notifications",
+            "description": "four switch rows with label + description"
+          },
+          {
+            "id": "danger-zone",
+            "title": "Danger zone",
+            "description": "destructive Delete account wrapped in AlertDialog"
+          }
+        ],
+        "seed": "SettingsShell over a localStorage demo adapter seeded with a demo user"
       }
     ]
   },

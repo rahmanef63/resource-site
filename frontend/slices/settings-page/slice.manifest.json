@@ -1,0 +1,41 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "settings-page",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add settings-page",
+    "consumerPath": "slices/settings-page"
+  },
+  "files": [
+    "README.md",
+    "config.ts",
+    "index.ts",
+    "components/SettingsShell.tsx",
+    "components/sections/ProfileSection.tsx",
+    "components/sections/PreferencesSection.tsx",
+    "components/sections/NotificationsSection.tsx",
+    "components/sections/DangerZone.tsx",
+    "hooks/useSettings.ts",
+    "lib/adapter.ts"
+  ],
+  "imports": {
+    "shared": [],
+    "external": [
+      "lucide-react",
+      "@/components/ui/alert-dialog",
+      "@/components/ui/avatar",
+      "@/components/ui/button",
+      "@/components/ui/card",
+      "@/components/ui/input",
+      "@/components/ui/label",
+      "@/components/ui/select",
+      "@/components/ui/separator",
+      "@/components/ui/skeleton",
+      "@/components/ui/switch",
+      "@/components/ui/textarea",
+      "@/lib/utils"
+    ]
+  }
+}
