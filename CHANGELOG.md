@@ -11,6 +11,13 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-06 — screenshot pipeline for /layouts
+
+- `npm run shots:capture` — VPS headless Chromium captures every layout
+  previewPath on the deployed site → 800×500 webp (~18KB each) +
+  `shots.gen.json` manifest. /layouts cards render the shot first (was: 36
+  scaled live iframes), iframe fallback for uncaptured slugs, mock last.
+
 ### 2026-06-06 — "OS Apps" category (taxonomy)
 
 - New `os` category: 11 os-vps app slices (appshell, file-explorer, the three

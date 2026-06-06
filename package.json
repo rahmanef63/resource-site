@@ -38,7 +38,8 @@
     "manifest:sync": "node packages/cli/scripts/gen-manifest.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
-    "prepare": "git config core.hooksPath .githooks 2>/dev/null || true"
+    "prepare": "git config core.hooksPath .githooks 2>/dev/null || true",
+    "shots:capture": "node scripts/capture-shots.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.100.1",

@@ -7,6 +7,7 @@ import { CatalogHero } from "@/components/site/catalog/catalog-hero";
 import { CatalogTabs } from "@/components/site/catalog/catalog-tabs";
 import { IframeThumbnail } from "@/components/site/catalog/iframe-thumbnail";
 import { MockThumbnail } from "@/components/site/catalog/mock-thumbnail";
+import { ShotThumbnail, layoutShot } from "@/components/site/catalog/shot-thumbnail";
 import { UseWideLayout } from "@/components/site/use-wide-layout";
 
 const CATEGORY_LABEL: Record<string, string> = {
@@ -41,7 +42,11 @@ export default function LayoutsPage() {
         tags={l.tags}
         meta={<span className="font-mono">{l.source}</span>}
         thumbnail={
-          l.previewPath ? (
+          // Static captured shot first (one ~40KB webp); live iframe only for
+          // slugs without a capture; procedural mock as the last resort.
+          layoutShot(l.slug) ? (
+            <ShotThumbnail slug={l.slug} title={l.title} />
+          ) : l.previewPath ? (
             <IframeThumbnail
               src={l.previewPath}
               liveTitle={l.title}

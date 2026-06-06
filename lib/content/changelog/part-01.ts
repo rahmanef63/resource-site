@@ -2,6 +2,24 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SHOTS",
+    "version": "shots@layouts",
+    "date": 1780790400000,
+    "kind": "improvement",
+    "title": "Screenshot pipeline — /layouts cards go from 36 live iframes to 36 static webps",
+    "body": "Last VP-wave leftover. scripts/capture-shots.mjs drives the VPS headless Chromium (the os-browser service) over the deployed site, captures every layout previewPath at 1280×800, downscales to 800×500 webp via PIL (~18KB each, 656KB total) and writes public/shots/layouts/* plus the lib/preview/shots.gen.json manifest. /layouts catalog cards now render the captured shot first (one <Image>, accurate, instant), keep the live-iframe path only for slugs without a capture, and the procedural mock as last resort — previously every card booted a full Next page in a scaled iframe. Operator-run via npm run shots:capture (all / single slug / SHOTS_BASE override) — screenshots drift slowly, so it's not a CI gate. /templates keeps its existing poster system.",
+    "groups": [
+      {
+        "heading": "Infra",
+        "bullets": [
+          { "text": "scripts/capture-shots.mjs + npm run shots:capture — capture → PIL webp → manifest, per-slug filter + failure exit" },
+          { "text": "components/site/catalog/shot-thumbnail.tsx — static <Image> thumbnail + layoutShot() lookup" },
+          { "text": "app/(docs)/layouts/page.tsx — shot → iframe → mock fallback chain" }
+        ]
+      }
+    ]
+  },
+  {
     "id": "OS-CATEGORY",
     "version": "taxonomy@os-category",
     "date": 1780790400000,
