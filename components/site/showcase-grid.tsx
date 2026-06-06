@@ -6,11 +6,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 
 /** M5-BP — "recipes" surface retired. Homepage now showcases
- *  Tier-3 slices ("Modules") instead. URL slug stays /slices for
+ *  Tier-3 slices instead. URL slug stays /slices for
  *  back-compat with bookmarks. */
 export function ShowcaseGrid({ kind }: { kind: "layouts" | "slices" }) {
   const items = kind === "layouts" ? layouts : slices;
-  const heading = kind === "layouts" ? "Cookbook layouts" : "Modules";
+  const heading = kind === "layouts" ? "Cookbook layouts" : "Slices";
   const sub =
     kind === "layouts"
       ? "Production-grade layouts. Marketing, dashboard, and CMS shapes."

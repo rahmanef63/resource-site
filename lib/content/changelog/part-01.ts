@@ -2,6 +2,24 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "UX-U1",
+    "version": "site@terminology",
+    "date": 1780790400000,
+    "kind": "improvement",
+    "title": "One name for one thing — \"Slices\" everywhere, \"kitab\" retired from copy",
+    "body": "UX wave U1. The catalog had two names for the same artifact: nav said Slices while the homepage hero, /docs intro, breadcrumbs, command palette and detail titles said Modules — and the live site description still said \"kitab\" (pre-2026-05-16 internal codename). All user-facing copy now says Slices; kitab → catalog/resources in site.ts, /build, /mcp and /directory copy. Dead code out: the orphaned /recipes/[slug] route (parent already redirects to /slices) and the never-used \"template\" layout category (union + LAYOUT_CATEGORY_TITLE entry).",
+    "groups": [
+      {
+        "heading": "Site (changed)",
+        "bullets": [
+          "Modules → Slices: hero, /docs intro + card, showcase heading, command palette, slice detail breadcrumb + meta title, /agents copy",
+          "kitab → catalog: site description, /build subtitle, /mcp pages, /directory footer",
+          "Removed orphan app/(docs)/recipes/[slug] + dead \"template\" layout category"
+        ]
+      }
+    ]
+  },
+  {
     "id": "MULTISHELL",
     "version": "appshell@1.2.0",
     "date": 1780704000000,

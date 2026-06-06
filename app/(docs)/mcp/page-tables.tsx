@@ -36,7 +36,7 @@ export function ResourcesTable() {
       <h2 className="text-2xl font-semibold tracking-tight">Resources (rr:// URIs)</h2>
       <p className="text-muted-foreground">
         MCP <em>resources</em> are read-only documents the agent can fetch by URI.
-        Each kitab entry is one resource; clients can pin them as context.
+        Each catalog entry is one resource; clients can pin them as context.
       </p>
       <div className="overflow-x-auto rounded-md border">
         <table className="w-full text-left text-sm">
@@ -108,7 +108,7 @@ export function WorkflowsSection() {
       <h2 className="text-2xl font-semibold tracking-tight">Workflows (CRUD)</h2>
       <p className="text-muted-foreground">
         The MCP also ships <em>workflow docs</em> — markdown that teaches an agent
-        how to <strong>Create / Read / Update / Delete</strong> each kitab item kind,
+        how to <strong>Create / Read / Update / Delete</strong> each catalog item kind,
         including the npm publish step. Wire them via{" "}
         <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">rr_get_workflow</code>{" "}
         (or read the resources directly).

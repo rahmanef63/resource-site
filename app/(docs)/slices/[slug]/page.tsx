@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const slice = getSlice(slug);
   if (!slice) return { title: "Slice not found" };
   return {
-    title: `${slice.title} — Module`,
+    title: `${slice.title} — Slice`,
     description: slice.description,
   };
 }

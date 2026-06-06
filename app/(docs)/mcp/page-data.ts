@@ -23,7 +23,7 @@ export const TOOLS: Tool[] = [
   },
   {
     name: "rr_list_skills",
-    purpose: "List Claude Skills inventory (anthropics + rahman skills shipped via the kitab)",
+    purpose: "List Claude Skills inventory (anthropics + rahman skills shipped via the catalog)",
     args: "{ scope?: 'anthropics' | 'rahman' | 'all' }",
   },
   {
@@ -43,22 +43,22 @@ export const TOOLS: Tool[] = [
   },
   {
     name: "rr_compose_add_commands",
-    purpose: "Emit `add` / `add-skill` commands for an existing rr.json project. Use this when extending an installed kitab.",
+    purpose: "Emit `add` / `add-skill` commands for an existing rr.json project. Use this when extending an installed project.",
     args: "{ features?, skills?, template? }",
   },
   {
     name: "rr_list_workflows",
-    purpose: "List the CRUD workflow kinds the kitab documents (templates, features, recipes, skills). Returns slugs the agent can pass to rr_get_workflow.",
+    purpose: "List the CRUD workflow kinds the catalog documents (templates, features, recipes, skills). Returns slugs the agent can pass to rr_get_workflow.",
   },
   {
     name: "rr_get_workflow",
-    purpose: "Get the full Create / Read / Update / Delete workflow doc for one kind. Includes the npm publish step. Use when the user asks how to add/edit/remove a kitab item.",
+    purpose: "Get the full Create / Read / Update / Delete workflow doc for one kind. Includes the npm publish step. Use when the user asks how to add/edit/remove a catalog item.",
     args: "{ kind: 'templates'|'features'|'recipes'|'skills' }",
   },
 ];
 
 export const RESOURCES: { uri: string; purpose: string }[] = [
-  { uri: "rr://manifest", purpose: "Full kitab manifest — every layout, feature, recipe, skill, in one JSON tree." },
+  { uri: "rr://manifest", purpose: "Full catalog manifest — every layout, feature, recipe, skill, in one JSON tree." },
   { uri: "rr://templates/{slug}", purpose: "One template entry (e.g. `rr://templates/kreator-studio-os`)." },
   { uri: "rr://features/{slug}", purpose: "One feature entry." },
   { uri: "rr://recipes/{slug}", purpose: "One recipe entry." },

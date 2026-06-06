@@ -40,7 +40,7 @@ export function SliceDetailHeader({
             href="/slices"
             className="inline-flex items-center gap-1 text-[10px] text-muted-foreground hover:text-foreground"
           >
-            <ArrowLeft className="size-3" /> All modules
+            <ArrowLeft className="size-3" /> All slices
           </Link>
           <Badge variant="secondary" className="rounded-full text-[10px]">
             v{slice.version}

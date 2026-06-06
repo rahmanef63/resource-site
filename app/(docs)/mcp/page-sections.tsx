@@ -11,7 +11,7 @@ export function WhySection() {
       <ul className="list-disc space-y-2 pl-6 text-sm">
         <li>
           <strong>Discovery without scrolling docs.</strong> Ask Claude
-          <em> &quot;what kitab templates ship a public + admin combo?&quot;</em> — agent calls{" "}
+          <em> &quot;what templates ship a public + admin combo?&quot;</em> — agent calls{" "}
           <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">rr_list_templates</code>{" "}
           and answers from live data.
         </li>
@@ -60,7 +60,7 @@ export function ExampleSection() {
       </p>
       <CodeBlock
         code={`You:    "Scaffold a consultancy site with Midtrans + Resend.
-        Use the kitab."
+        Use the catalog."
 
 Agent → calls rr_list_templates({ tag: "consultant" })
       → finds "konsultan-os"

@@ -65,7 +65,7 @@ export default function DirectoryPage() {
       </DocCard>
 
       <p className="text-xs text-muted-foreground">
-        Don't see a source? File an issue on the kitab repo.
+        Don't see a source? File an issue on the resources repo.
       </p>
     </div>
   );

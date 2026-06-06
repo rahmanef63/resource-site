@@ -20,7 +20,7 @@ export default function AgentsPage() {
         title="Install with Agent"
         description={
           <>
-            Hand any layout or module to your AI coding agent. Copy the prompt, paste it into
+            Hand any layout or slice to your AI coding agent. Copy the prompt, paste it into
             Claude / Codex / Cursor — the agent reads <code className="font-mono text-xs">{site.url}/api/knowledge</code>{" "}
             and <code className="font-mono text-xs">{site.url}/llms.txt</code> to learn the rules.
           </>
@@ -63,7 +63,7 @@ export default function AgentsPage() {
               <Link href="/api/knowledge" className="font-mono text-xs text-foreground/80 hover:text-foreground">
                 /api/knowledge
               </Link>{" "}
-              — JSON catalog of every layout + module + resource + rule
+              — JSON catalog of every layout + slice + resource + rule
             </li>
             <li>
               <Link href="/llms.txt" className="font-mono text-xs text-foreground/80 hover:text-foreground">
@@ -80,7 +80,7 @@ export default function AgentsPage() {
             <h3 className="font-semibold">Source repo</h3>
           </div>
           <p className="mt-2 text-sm text-muted-foreground">
-            All layouts and modules live under one monorepo.
+            All layouts and slices live under one monorepo.
           </p>
           <Button asChild variant="outline" size="sm" className="mt-4 w-fit gap-1.5">
             <Link href={site.repo} target="_blank" rel="noopener noreferrer">
@@ -94,7 +94,7 @@ export default function AgentsPage() {
       <DocCard className="flex items-center gap-3 border-dashed bg-card/40 p-4">
         <Bot className="size-5 shrink-0 text-muted-foreground" />
         <p className="text-sm text-muted-foreground">
-          Modules work standalone. Layouts assume Next 16 + React 19 + Tailwind 4 + Convex
+          Slices work standalone. Layouts assume Next 16 + React 19 + Tailwind 4 + Convex
           self-hosted + <code className="font-mono text-xs">@convex-dev/auth</code>.
         </p>
       </DocCard>

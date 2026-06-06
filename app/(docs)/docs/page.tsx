@@ -25,7 +25,7 @@ export default function DocsIntroPage() {
             full app shells, dashboards, marketing sites you can copy and adapt.
           </li>
           <li>
-            <span className="text-foreground font-medium">{slices.length} modules</span> —
+            <span className="text-foreground font-medium">{slices.length} slices</span> —
             Tier-3 vertical slices (auth, editor, payments, AI router…) ported and audited.
           </li>
           <li>
@@ -40,7 +40,7 @@ export default function DocsIntroPage() {
         {[
           { title: "Installation", href: "/installation", desc: "Clone + install + first build." },
           { title: "Layouts", href: "/layouts", desc: `${layouts.length} ready-to-copy shells.` },
-          { title: "Modules", href: "/slices", desc: `${slices.length} vertical slices.` },
+          { title: "Slices", href: "/slices", desc: `${slices.length} vertical slices.` },
         ].map((c) => (
           <Link
             key={c.href}

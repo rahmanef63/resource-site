@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-06 — terminology: "Slices" everywhere, "kitab" retired (UX wave U1)
+
+- All user-facing copy now says **Slices** (was a Modules/Slices mix across
+  hero, /docs intro, breadcrumbs, command palette, detail meta titles).
+- "kitab" → catalog/resources in site description, /build, /mcp, /directory.
+- Removed orphan `app/(docs)/recipes/[slug]` route + dead `"template"`
+  layout category (union + label entry).
+
 ### 2026-06-06 — screenshot pipeline for /layouts
 
 - `npm run shots:capture` — VPS headless Chromium captures every layout

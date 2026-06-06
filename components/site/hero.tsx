@@ -25,7 +25,7 @@ export function Hero() {
           <br className="hidden sm:inline" /> next Next app.
         </h1>
         <p className="mt-6 max-w-2xl text-balance text-lg text-muted-foreground">
-          {layouts.length} layouts, {slices.length} modules — copy-first, production-grade,
+          {layouts.length} layouts, {slices.length} slices — copy-first, production-grade,
           handed to you with shadcn primitives, Convex self-hosted, Tailwind 4 and TypeScript
           strict. {site.description.split(".")[0]}.
         </p>

@@ -14,7 +14,7 @@ import {
 export const metadata = {
   title: "MCP — rahman-resources-mcp",
   description:
-    "Model Context Protocol server for the Rahman Resources kitab. Exposes templates, features, recipes, Claude Skills, and CRUD workflows as MCP tools/resources to Claude Code, Cursor, and Cline.",
+    "Model Context Protocol server for the Rahman Resources catalog. Exposes templates, features, recipes, Claude Skills, and CRUD workflows as MCP tools/resources to Claude Code, Cursor, and Cline.",
 };
 
 const NPM_PACKAGE = "rahman-resources-mcp";
@@ -30,10 +30,10 @@ export default function McpDocsPage() {
         description={
           <>
             <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">{NPM_PACKAGE}</code>{" "}
-            is a Model Context Protocol server that exposes the entire Rahman kitab —
+            is a Model Context Protocol server that exposes the entire Rahman Resources catalog —
             every template, feature, recipe, and Claude Skill — to MCP-aware clients
             (Claude Code, Cursor, Cline). Once wired, your agent can <em>discover</em>{" "}
-            and <em>compose</em> kitab artifacts without you copy-pasting slugs.
+            and <em>compose</em> catalog artifacts without you copy-pasting slugs.
           </>
         }
       />

@@ -15,7 +15,7 @@ export default function BuildPage() {
             <Layers className="size-4" /> Bundle Builder
           </h1>
           <p className="text-[11px] text-muted-foreground">
-            Compose a kitab bundle → emit{" "}
+            Compose a slice bundle → emit{" "}
             <code className="rounded bg-muted px-1">npx rahman-resources</code> command.
           </p>
         </div>

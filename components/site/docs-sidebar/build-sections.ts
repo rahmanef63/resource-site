@@ -6,7 +6,6 @@ const LAYOUT_CATEGORY_TITLE: Record<Exclude<LayoutEntry["category"], "website-te
   marketing: "Marketing",
   dashboard: "Dashboard",
   cms: "CMS",
-  template: "Templates",
 };
 
 function groupByCategory<T, K extends string>(items: T[], key: (t: T) => K): Record<K, T[]> {

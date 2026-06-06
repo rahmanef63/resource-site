@@ -12,7 +12,7 @@ export type LayoutStatus =
 export type LayoutEntry = {
   slug: string;
   title: string;
-  category: "marketing" | "dashboard" | "cms" | "template" | "website-template";
+  category: "marketing" | "dashboard" | "cms" | "website-template";
   /** Build-readiness signal. Defaults to "stable" when omitted. */
   status?: LayoutStatus;
   description: string;

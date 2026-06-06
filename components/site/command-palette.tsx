@@ -70,7 +70,7 @@ export function CommandPalette() {
               <Layout /> Layouts
             </CommandItem>
             <CommandItem onSelect={() => go("/slices")}>
-              <Boxes /> Modules
+              <Boxes /> Slices
             </CommandItem>
             <CommandItem onSelect={() => go("/agents")}>
               <Bot /> Install with Agent
@@ -89,7 +89,7 @@ export function CommandPalette() {
             ))}
           </CommandGroup>
           <CommandSeparator />
-          <CommandGroup heading="Modules">
+          <CommandGroup heading="Slices">
             {slices.map((s) => (
               <CommandItem key={s.slug} onSelect={() => go(`/slices/${s.slug}`)}>
                 <Boxes /> {s.title}
