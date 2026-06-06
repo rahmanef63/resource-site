@@ -58,6 +58,29 @@
     ]
   },
   {
+    "slug": "admin-panel",
+    "title": "Admin Panel — Unified Product Admin",
+    "category": "infra",
+    "previews": [
+      {
+        "component": "AdminPanelOverview",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "density",
+            "values": [
+              "comfortable",
+              "compact"
+            ],
+            "default": "comfortable",
+            "description": "Card grid breathing room inside the builder frame"
+          }
+        ],
+        "seed": "static — the real _shared admin-panel overview grid (17 operational blocks)"
+      }
+    ]
+  },
+  {
     "slug": "ai-chat",
     "title": "AI Chat — Workbench / Sidebar / Search",
     "category": "ai",
@@ -291,6 +314,30 @@
           }
         ],
         "seed": "props-only AuthCard; mock handlers resolve { ok: true }, nothing persists"
+      }
+    ]
+  },
+  {
+    "slug": "dashboard-shell",
+    "title": "Dashboard Shell — Responsive",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "DashboardShell",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "flat-nav",
+            "title": "Flat nav",
+            "description": "Single Workspace group — simple CMS-archetype admin"
+          },
+          {
+            "id": "grouped-nav",
+            "title": "Grouped nav",
+            "description": "Labeled SidebarGroups (Pages / Settings) via primaryNavGroups"
+          }
+        ],
+        "seed": "static demo brand/nav/user — renders the real _shared DashboardShell all 8 OS templates mount"
       }
     ]
   },

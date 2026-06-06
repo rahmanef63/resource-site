@@ -20,7 +20,25 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(__dirname, "../../..");
-const SLICES_DIR = path.join(REPO, "frontend", "slices");
+// Two scan roots: canonical slices (preview.tsx colocated) + template-base
+// copy-templates. template-base has its OWN node_modules (second react —
+// hooks crash) and is tsc-excluded, so its render files live SITE-SIDE at
+// components/templates/_shared/previews/<slug>.preview.tsx and must import
+// only site-compiled code; the `previews` declaration stays in the slice's
+// slice.json. Nothing preview-related ships to consumers for these slices.
+const ROOTS = [
+  {
+    dir: path.join(REPO, "frontend", "slices"),
+    previewTsx: (dir) => path.join(dir, "preview.tsx"),
+    importPath: (slug) => `@/features/${slug}/preview`,
+  },
+  {
+    dir: path.join(REPO, "template-base", "frontend", "slices"),
+    previewTsx: (_dir, slug) =>
+      path.join(REPO, "components", "templates", "_shared", "previews", `${slug}.preview.tsx`),
+    importPath: (slug) => `@/components/templates/_shared/previews/${slug}.preview`,
+  },
+];
 const OUT_DIR = path.join(REPO, "lib", "preview");
 const OUT_TS = path.join(OUT_DIR, "registry.gen.ts");
 const OUT_JSON = path.join(OUT_DIR, "preview-meta.gen.json");
@@ -29,11 +47,13 @@ const check = process.argv.includes("--check");
 const errors = [];
 const entries = [];
 
-for (const slug of readdirSync(SLICES_DIR).sort()) {
-  const dir = path.join(SLICES_DIR, slug);
+const seenSlugs = new Map(); // slug → root dir (collision guard)
+for (const root of ROOTS) {
+for (const slug of readdirSync(root.dir).sort()) {
+  const dir = path.join(root.dir, slug);
   if (!statSync(dir).isDirectory() || slug.startsWith("_")) continue;
   const sliceJsonPath = path.join(dir, "slice.json");
-  const previewPath = path.join(dir, "preview.tsx");
+  const previewPath = root.previewTsx(dir, slug);
   const hasPreviewTsx = existsSync(previewPath);
   if (!existsSync(sliceJsonPath)) {
     if (hasPreviewTsx) errors.push(`[${slug}] preview.tsx without slice.json`);
@@ -77,13 +97,21 @@ for (const slug of readdirSync(SLICES_DIR).sort()) {
       }
     }
   }
+  if (seenSlugs.has(slug)) {
+    errors.push(`[${slug}] preview declared in both ${seenSlugs.get(slug)} and ${root.dir}`);
+    continue;
+  }
+  seenSlugs.set(slug, root.dir);
   entries.push({
     slug,
     title: sliceJson.title ?? slug,
     category: sliceJson.category ?? "ui",
+    importPath: root.importPath(slug),
     previews,
   });
 }
+}
+entries.sort((a, b) => a.slug.localeCompare(b.slug));
 
 if (errors.length > 0) {
   console.error(`✖ gen-preview-registry: ${errors.length} error(s)`);
@@ -98,7 +126,7 @@ const ts = [
   "",
   "export const PREVIEW_REGISTRY: Record<string, () => Promise<{ default: SlicePreviewModule }>> = {",
   ...entries.map(
-    (e) => `  "${e.slug}": () => import("@/features/${e.slug}/preview"),`,
+    (e) => `  "${e.slug}": () => import("${e.importPath}"),`,
   ),
   "};",
   "",
@@ -106,7 +134,9 @@ const ts = [
   "",
 ].join("\n");
 
-const json = JSON.stringify(entries, null, 2) + "\n";
+// importPath is registry-internal — keep the server-safe meta JSON shape stable.
+const json =
+  JSON.stringify(entries.map(({ importPath, ...rest }) => rest), null, 2) + "\n";
 
 if (check) {
   const tsOnDisk = existsSync(OUT_TS) ? readFileSync(OUT_TS, "utf8") : "";

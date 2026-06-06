@@ -4,19 +4,63 @@
   "version": "0.1.0",
   "category": "ui",
   "kind": "ui",
-  "title": "Dashboard Shell — Responsive",
+  "title": "Dashboard Shell \u2014 Responsive",
   "description": "Facade slice over shared/ui/layout/dashboard/. Desktop sidebar+topbar, mobile dock+sheet sidebar, breakpoint-aware. Pair with full-width-toggle for runtime container resize.",
   "namespace": "@/features/dashboard-shell",
-  "convex": { "tablesExport": "", "schemaPath": "", "rootPaths": [] },
-  "frontend": { "slicePath": "frontend/slices/dashboard-shell", "configExport": "" },
+  "convex": {
+    "tablesExport": "",
+    "schemaPath": "",
+    "rootPaths": []
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/dashboard-shell",
+    "configExport": ""
+  },
   "deps": {
     "npm": [],
-    "shadcn": ["sheet", "scroll-area", "separator", "tooltip"],
+    "shadcn": [
+      "sheet",
+      "scroll-area",
+      "separator",
+      "tooltip"
+    ],
     "env": [],
-    "peers": [{ "slug": "full-width-toggle", "range": "^0.1", "reason": "Recommended in topbar for runtime width swap." }]
+    "peers": [
+      {
+        "slug": "full-width-toggle",
+        "range": "^0.1",
+        "reason": "Recommended in topbar for runtime width swap."
+      }
+    ]
   },
   "registers": [],
   "license": "MIT",
-  "tags": ["ui", "layout", "dashboard", "sidebar", "topbar", "responsive"],
-  "providers": []
+  "tags": [
+    "ui",
+    "layout",
+    "dashboard",
+    "sidebar",
+    "topbar",
+    "responsive"
+  ],
+  "providers": [],
+  "previews": [
+    {
+      "component": "DashboardShell",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "flat-nav",
+          "title": "Flat nav",
+          "description": "Single Workspace group \u2014 simple CMS-archetype admin"
+        },
+        {
+          "id": "grouped-nav",
+          "title": "Grouped nav",
+          "description": "Labeled SidebarGroups (Pages / Settings) via primaryNavGroups"
+        }
+      ],
+      "seed": "static demo brand/nav/user \u2014 renders the real _shared DashboardShell all 8 OS templates mount"
+    }
+  ]
 }

@@ -41,6 +41,19 @@ external embed, no public component seam). `audit:slices` warns when a slice
 has `components/` but no `previews` key at all — every slice must declare or
 opt out. An opt-out plus a stray `preview.tsx` is a generator error.
 
+**template-base slices:** the generator also scans
+`template-base/frontend/slices/*/slice.json`, but the render file lives
+SITE-SIDE at `components/templates/_shared/previews/<slug>.preview.tsx` —
+template-base ships its own `node_modules` (a second react → hooks crash if a
+.tsx resolves from there) and is tsc-excluded. These previews may import only
+site-compiled code (`@/components/templates/_shared/*`, `@/components/ui/*`,
+`@/shared/preview/*`); slices whose real implementation only exists in
+consumer projects (facades over `@/frontend/shared/*`, e.g. motion-primitives)
+cannot be previewed honestly — leave them undeclared.
+
+**Smoke gate:** `lib/preview/preview-smoke.test.tsx` mounts every registered
+preview with its default variant in happy-dom on `npm test` (pre-push).
+
 Rules (gated by `gen-preview-registry.mjs` + slice-schema):
 
 - **Axes are enum-only, max 3 per component.** Values are opaque strings —

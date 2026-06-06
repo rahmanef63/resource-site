@@ -11,6 +11,16 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-06 — template-base previews (dashboard-shell + admin-panel)
+
+- Generator scans `template-base/frontend/slices` as a second root; render
+  files live site-side at `_shared/previews/<slug>.preview.tsx` (template-base
+  ships its own node_modules → second react → hooks crash if .tsx lives
+  there — caught by the smoke gate). Registry: 37 slugs.
+- Spec documents the honest boundary: motion-primitives / responsive-dialog /
+  three-column / workspace-shell are consumer-side facades — not previewable
+  in rr; contact-form-resend is convex-bound.
+
 ### 2026-06-06 — preview smoke gate + honest no-preview cards
 
 - **"Previews missing" investigated** — all 35 registered previews render

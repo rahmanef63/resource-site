@@ -5,6 +5,7 @@ import type { SlicePreviewModule } from "@/shared/preview/types";
 export const PREVIEW_REGISTRY: Record<string, () => Promise<{ default: SlicePreviewModule }>> = {
   "activity": () => import("@/features/activity/preview"),
   "admin": () => import("@/features/admin/preview"),
+  "admin-panel": () => import("@/components/templates/_shared/previews/admin-panel.preview"),
   "ai-chat": () => import("@/features/ai-chat/preview"),
   "appshell": () => import("@/features/appshell/preview"),
   "blog-section": () => import("@/features/blog-section/preview"),
@@ -13,6 +14,7 @@ export const PREVIEW_REGISTRY: Record<string, () => Promise<{ default: SlicePrev
   "command-menu": () => import("@/features/command-menu/preview"),
   "comments": () => import("@/features/comments/preview"),
   "convex-auth": () => import("@/features/convex-auth/preview"),
+  "dashboard-shell": () => import("@/components/templates/_shared/previews/dashboard-shell.preview"),
   "doku-payment": () => import("@/features/doku-payment/preview"),
   "faq-section": () => import("@/features/faq-section/preview"),
   "feature-grid": () => import("@/features/feature-grid/preview"),

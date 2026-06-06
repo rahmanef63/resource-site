@@ -2,6 +2,30 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "VP-TB",
+    "version": "variant-previews@template-base",
+    "date": 1780790400000,
+    "kind": "improvement",
+    "title": "dashboard-shell + admin-panel join the preview registry (template-base root)",
+    "body": "gen-preview-registry now scans template-base/frontend/slices too — with a twist the smoke gate caught before production: template-base ships its OWN node_modules (a second react), so any .tsx living there crashes hooks when bundled. Render files for template-base slices therefore live SITE-SIDE at components/templates/_shared/previews/<slug>.preview.tsx (importing only site-compiled code) while the previews declaration stays in the slice's slice.json. dashboard-shell previews the real _shared DashboardShell all 8 OS templates mount (flat-nav / grouped-nav scenarios); admin-panel previews the 17-block operational overview grid. Registry: 37 slugs. Honest boundary documented in the spec: motion-primitives, responsive-dialog, three-column and workspace-shell are facades over @/frontend/shared/* — their implementations exist only in consumer projects, so rr cannot preview them truthfully; contact-form-resend is convex-bound.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          { "text": "dashboard-shell — flat-nav / grouped-nav scenarios over the real _shared shell", "slug": "dashboard-shell" },
+          { "text": "admin-panel — operational-blocks overview, density axis", "slug": "admin-panel" }
+        ]
+      },
+      {
+        "heading": "Infra",
+        "bullets": [
+          { "text": "gen-preview-registry — second scan root + per-root render-file location + slug-collision guard" },
+          { "text": "docs/SLICE-PREVIEW-SPEC.md — template-base rules + smoke-gate + not-previewable boundary" }
+        ]
+      }
+    ]
+  },
+  {
     "id": "OS-APPS-WAVE",
     "version": "os-apps@wave-1",
     "date": 1780704000000,
