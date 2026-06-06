@@ -1,0 +1,35 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "code-editor",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add code-editor",
+    "consumerPath": "slices/code-editor"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "README.md",
+    "app.tsx",
+    "components/editor-surface.tsx",
+    "components/editor-toolbar.tsx",
+    "components/file-tree/dir.tsx",
+    "components/file-tree/index.tsx",
+    "components/host-drawer.tsx",
+    "components/host-sidebar.tsx",
+    "components/new-file-modal.tsx",
+    "components/status-bar.tsx",
+    "components/tab-strip.tsx",
+    "config.ts",
+    "index.ts",
+    "lib/highlight.ts",
+    "lib/host.ts",
+    "lib/mock-fs.ts",
+    "lib/seed.ts",
+    "lib/use-editor.ts",
+    "lib/util.ts",
+    "slice.contract.ts",
+    "slice.json"
+  ]
+}

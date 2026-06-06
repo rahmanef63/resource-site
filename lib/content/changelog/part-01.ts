@@ -2,6 +2,22 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "CODE-EDITOR",
+    "version": "code-editor@1.0.0",
+    "date": 1780704000000,
+    "kind": "feature",
+    "title": "code-editor 1.0.0 — overlay syntax editor lifted from os-vps",
+    "body": "Fourth os-vps app in the catalog. A lightweight editor — transparent textarea over a highlighted pre (regex tokenizer for JS/TS/JSON/CSS), tabs with dirty dots, Cmd/Ctrl+S, status bar — plus a lazy per-directory explorer tree with inline create affordances. The lift bundles the previously app-shared file-tree into the slice and ships slice-local AppSidebar (rail ⇄ Sheet) and FormDrawer (dialog ⇄ bottom drawer) shims, so the only coupling point is lib/host.ts: configureCodeFs injects a real filesystem (list/read/write/mkdir) over the bundled writable in-memory mock. Pairs with file-explorer (onOpenFile → payload) the same way os-vps wires Files → Code.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          { "text": "code-editor — NEW 1.0.0: overlay highlighting, tab strip, lazy explorer tree, injectable CodeFsAdapter + writable mock", "slug": "code-editor" },
+        ],
+      },
+    ],
+  },
+  {
     "id": "MEDIA-VIEWER",
     "version": "media-viewer@1.0.0",
     "date": 1780704000000,

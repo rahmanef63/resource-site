@@ -10,6 +10,7 @@ import { appshellConfig } from "@/features/appshell/config";
 import { auditLogConfig } from "@/features/audit-log/config";
 import { broadcastChannelSyncConfig } from "@/features/broadcast-channel-sync/config";
 import { calComBookingConfig } from "@/features/cal-com-booking/config";
+import { codeEditorConfig } from "@/features/code-editor/config";
 import { commandMenuConfig } from "@/features/command-menu/config";
 import { commentsConfig } from "@/features/comments/config";
 import { convexAuthConfig } from "@/features/convex-auth/config";
@@ -54,6 +55,11 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     ...calComBookingConfig,
     importPath: "@/features/cal-com-booking/config",
     version: "0.1.0",
+  },
+  {
+    ...codeEditorConfig,
+    importPath: "@/features/code-editor/config",
+    version: "1.0.0",
   },
   {
     ...commandMenuConfig,

@@ -319,6 +319,61 @@ export default function PreviewDemo() {
 }`,
   },
   {
+    slug: "code-editor",
+    title: "Code — overlay syntax editor",
+    category: "ui",
+    kind: "ui",
+    version: "1.0.0",
+    tagline: "Lightweight code editor: overlay highlighting, tabs with dirty dots, lazy explorer tree, injectable filesystem.",
+    description:
+      "A lightweight code editor in the VS-Code spirit without the weight: a transparent textarea layered over a highlighted pre (regex tokenizer for JS/TS/JSON/CSS) gives real editing with live syntax color and a line-number gutter; a tab strip tracks dirty buffers with Cmd/Ctrl+S save; a status bar shows path, Ln/Col, tab size, language and save state. The explorer is a lazy per-directory tree — each folder lists on expand, with inline new-file/new-folder affordances — rendered as a rail on desktop and a Sheet on mobile, and the new-file form is a responsive dialog ⇄ bottom drawer. The filesystem is INJECTED via a small CodeFsAdapter (list/read/write/mkdir): point configureCodeFs at a real API or use the bundled writable in-memory mock (seeded sample tree) so it works with zero backend. Writes are best-effort — a read-only host flags the save but keeps the local buffer. Pairs with file-explorer (onOpenFile → payload) and appshell.",
+    source: "rahmanef63/os-vps",
+    slicePath: "frontend/slices/code-editor",
+    convexPaths: [],
+    npm: ["lucide-react"],
+    shadcn: ["button", "badge", "input", "scroll-area", "sheet", "dialog"],
+    env: [],
+    peers: [],
+    tags: ["code", "editor", "syntax-highlight", "ide", "tabs", "file-tree", "ui"],
+    resourceType: "module",
+    maturity: "stable",
+    compat: { enhances: ["appshell", "file-explorer", "media-viewer"] },
+    previewPath: "/preview/slices/code-editor",
+    defaultView: "desktop",
+    agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A lightweight overlay-highlighting code editor with a lazy explorer tree. Fully client-side; no backend required.
+
+STEP 1 — Install. \`npx rr add code-editor\`. Ensure \`@/features/code-editor\` resolves in tsconfig paths and Tailwind scans the slice folder.
+
+STEP 2 — Deps. npm: \`lucide-react\`. shadcn: \`npx shadcn@latest add button badge input scroll-area sheet dialog\`.
+
+STEP 3 — Mount. \`<CodeEditor />\` opens the seeded sample tree (writable in-memory mock). Open a specific file with a payload:
+\`\`\`tsx
+"use client";
+import { CodeEditor } from "@/features/code-editor";
+export default function Page() {
+  return <div className="h-dvh"><CodeEditor payload={{ path: "/Projects/hello.ts" }} /></div>;
+}
+\`\`\`
+Or register the \`codeEditorApp\` descriptor in an appshell manifest for windowed hosts.
+
+STEP 4 — Real filesystem (optional). \`configureCodeFs({ list, read, write, mkdir })\` — list returns { path, entries: [{ name, kind }] } for ONE directory (the tree fetches per expand), read returns the file body, write/mkdir mutate. Writes are best-effort: on failure the editor keeps the local buffer and flags the status bar.
+
+STEP 5 — Cross-app open. From a file manager (e.g. the file-explorer slice), wire onOpenFile to re-render CodeEditor with payload={{ path }} — the editor adds a tab and hydrates the buffer.`,
+    exampleCode: `"use client";
+import { CodeEditor } from "@/features/code-editor";
+
+export default function CodeDemo() {
+  // No payload → seeded sample tree on the writable in-memory mock fs.
+  // Explorer lazy-lists each directory on expand; + buttons create
+  // files/folders; Cmd/Ctrl+S saves. Wire configureCodeFs for a real backend.
+  return (
+    <div className="h-dvh w-full">
+      <CodeEditor />
+    </div>
+  );
+}`,
+  },
+  {
     slug: "file-explorer",
     title: "File Explorer — Tree + CRUD + Breadcrumb",
     category: "ui",
