@@ -111,8 +111,12 @@ export function rawUrl(path: string): string {
   return fsAdapter.rawUrl(path);
 }
 
+// Stable identity — components keep `api` in effect deps, so a fresh object
+// per render would refetch in a loop. Delegates live to the current adapter.
+const api = { fs: { list: (p: string) => fsAdapter.list(p), mkdir: (p: string) => fsAdapter.mkdir(p) } };
+
 export function useOsApi(): { fs: { list: ReelFsAdapter["list"]; mkdir: ReelFsAdapter["mkdir"] } } {
-  return { fs: { list: (p) => fsAdapter.list(p), mkdir: (p) => fsAdapter.mkdir(p) } };
+  return api;
 }
 
 // ── Responsive (standalone matchMedia; no shell provider required) ─────────

@@ -59,15 +59,19 @@ export function configureCodeFs(adapter: CodeFsAdapter): void {
   fsAdapter = adapter;
 }
 
+// Stable identity — components keep `api` in effect deps, so a fresh object
+// per render would refetch in a loop. Delegates live to the current adapter.
+const api: { fs: CodeFsAdapter } = {
+  fs: {
+    list: (p) => fsAdapter.list(p),
+    read: (p) => fsAdapter.read(p),
+    write: (p, c) => fsAdapter.write(p, c),
+    mkdir: (p) => fsAdapter.mkdir(p),
+  },
+};
+
 export function useOsApi(): { fs: CodeFsAdapter } {
-  return {
-    fs: {
-      list: (p) => fsAdapter.list(p),
-      read: (p) => fsAdapter.read(p),
-      write: (p, c) => fsAdapter.write(p, c),
-      mkdir: (p) => fsAdapter.mkdir(p),
-    },
-  };
+  return api;
 }
 
 // ── Responsive (standalone matchMedia; no shell provider required) ─────────
