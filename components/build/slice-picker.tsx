@@ -7,12 +7,11 @@ import { cn } from "@/lib/utils";
 import { slices as allSlices, type SliceEntry } from "@/lib/content/slices";
 import { isHidden } from "@/lib/content/hidden-slugs";
 import { SLICE_COMPAT } from "@/lib/build/compat";
+import { SLICE_CATEGORY_LABEL, SLICE_CATEGORY_ORDER as CATEGORY_ORDER } from "@/lib/content/taxonomy";
 
 const slices = allSlices.filter((s) => !isHidden(s.slug));
 
-const CATEGORY_ORDER = [
-  "auth", "payment", "ai", "email", "data", "search", "realtime", "content", "storage", "ui", "infra",
-] as const;
+
 
 export function SlicePicker({
   selected,
@@ -53,7 +52,7 @@ export function SlicePicker({
         return (
           <div key={cat}>
             <h3 className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-              {cat} <span className="font-normal text-muted-foreground/60">({items.length})</span>
+              {SLICE_CATEGORY_LABEL[cat] ?? cat} <span className="font-normal text-muted-foreground/60">({items.length})</span>
             </h3>
             <div className="flex flex-col gap-1.5">
               {items.map((s) => {

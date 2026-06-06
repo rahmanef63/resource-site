@@ -7,11 +7,11 @@ import { defineFeature } from "@/lib/shared/features/defineFeature";
 export const dokuPaymentConfig = defineFeature({
   slug: "doku-payment",
   title: "DOKU — Indonesia Payment",
-  category: "payment",
+  category: "integrations",
   routes: [
     { path: "/checkout", view: () => import("./components/checkout-page"), requiresAuth: true },
   ],
-  nav: { label: "Checkout", group: "payment", order: 1 },
+  nav: { label: "Checkout", group: "integrations", order: 1 },
   peers: [{ slug: "convex-auth", range: "^0.1" }],
   providers: ["doku"],
 });

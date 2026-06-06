@@ -78,7 +78,7 @@ export default function LayoutsPage() {
         pill="Catalog"
         icon={LayoutGrid}
         title="Layouts"
-        subtitle={`${sources.length} cookbook layouts — marketing, dashboard, and CMS shapes. For full apps, see website templates.`}
+        subtitle={`${sources.length} cookbook layouts — single page shapes (marketing, dashboard, CMS) you copy into an app. For complete apps, see Templates.`}
         primaryCta={{ label: "Website templates", href: "/templates" }}
         secondaryCta={{ label: "Slices", href: "/slices" }}
       />

@@ -11,8 +11,8 @@
 import type { ComponentType, LazyExoticComponent } from "react";
 
 export type SliceCategory =
-  | "ai" | "auth" | "data" | "payment" | "email"
-  | "realtime" | "storage" | "search" | "content" | "ui" | "os" | "infra";
+  | "ai" | "auth" | "data" | "integrations"
+  | "content" | "ui" | "os" | "infra";
 
 export type SliceRoute = {
   /** App-router path the slice contributes (e.g., "/payments"). */
@@ -66,7 +66,7 @@ export type SliceConfig = {
  * export const midtransPaymentFeature = defineFeature({
  *   slug: "midtrans-payment",
  *   title: "Midtrans Payment",
- *   category: "payment",
+ *   category: "integrations",
  *   routes: [{ path: "/checkout", view: () => import("./page") }],
  *   nav: { label: "Checkout", group: "payment" },
  *   peers: [{ slug: "convex-auth", range: "^0.1" }],

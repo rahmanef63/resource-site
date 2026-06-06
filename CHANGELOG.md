@@ -11,6 +11,19 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-06 — taxonomy SSOT: 8 categories (UX wave U2)
+
+- New `lib/content/taxonomy.ts` — category order/label SSOT; replaces 4
+  drifted duplicates (sidebar "Ai"/"Ui", /build picker + /slices tabs both
+  missing `os`, empty "Storage" group).
+- Categories merged 12 → 8: payment+email → **integrations**,
+  search+realtime → **data**, storage dropped. Slice moves: doku-payment,
+  midtrans-payment, resend-newsletter, contact-form-resend → integrations;
+  vector-search, broadcast-channel-sync → data. Schema enum +
+  `SliceCategory` union updated.
+- "Website templates" → "Templates — full apps" in sidebars; both catalog
+  heroes now state the layouts-vs-templates distinction.
+
 ### 2026-06-06 — terminology: "Slices" everywhere, "kitab" retired (UX wave U1)
 
 - All user-facing copy now says **Slices** (was a Modules/Slices mix across

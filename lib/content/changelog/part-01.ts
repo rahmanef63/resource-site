@@ -2,6 +2,32 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "UX-U2",
+    "version": "site@taxonomy-ssot",
+    "date": 1780790400000,
+    "kind": "improvement",
+    "title": "Taxonomy SSOT — 8 categories, one label map, no more sidebar drift",
+    "body": "UX wave U2. Category order + labels were duplicated in four components and drifted: docs-sidebar showed \"Ai\"/\"Ui\" (naive capitalize), the /build picker was missing \"os\" entirely (OS slices invisible in the group list), the /slices tab row was missing OS too, and an empty \"Storage\" group sat in the sidebar. New lib/content/taxonomy.ts is the single source; all four consumers import it. Categories merged 12 → 8: payment+email → integrations, search+realtime → data, storage dropped (was empty). Moved: doku-payment, midtrans-payment, resend-newsletter, contact-form-resend → integrations; vector-search, broadcast-channel-sync → data. Sidebar label \"Website templates\" → \"Templates — full apps\" and both catalog heroes now state what they are NOT (layouts = single page shapes; templates = complete apps) — killing the layouts-vs-templates confusion.",
+    "groups": [
+      {
+        "heading": "Site (changed)",
+        "bullets": [
+          "lib/content/taxonomy.ts — SLICE/LAYOUT category order + label SSOT (4 duplicates deleted)",
+          "Categories 12 → 8: integrations (payment+email), data absorbs search+realtime, storage removed",
+          "Fixed: /build picker + /slices tabs missing the os group; \"Ai\"/\"Ui\" labels",
+          "Templates vs Layouts disambiguated in sidebar labels + catalog hero subtitles"
+        ]
+      },
+      {
+        "heading": "Slices (changed)",
+        "bullets": [
+          { "text": "doku-payment, midtrans-payment, resend-newsletter, contact-form-resend → integrations", "slug": "doku-payment", "kind": "slice" },
+          { "text": "vector-search, broadcast-channel-sync → data", "slug": "vector-search", "kind": "slice" }
+        ]
+      }
+    ]
+  },
+  {
     "id": "UX-U1",
     "version": "site@terminology",
     "date": 1780790400000,

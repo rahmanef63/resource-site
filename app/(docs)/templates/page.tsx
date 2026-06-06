@@ -52,7 +52,7 @@ export default function TemplatesPage() {
         pill="Catalog"
         icon={Globe}
         title="Website templates"
-        subtitle={`${sources.length} full-app templates with public + admin surface, live cross-iframe sync, and slice structure.`}
+        subtitle={`${sources.length} full-app templates — public + admin surface, routing, Convex schema. For single page shapes, see Layouts.`}
         primaryCta={{ label: "Bundle builder", href: "/build" }}
         secondaryCta={{ label: "Slices", href: "/slices" }}
       />

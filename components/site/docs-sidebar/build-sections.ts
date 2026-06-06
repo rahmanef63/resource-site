@@ -1,6 +1,7 @@
 import { layouts, type LayoutEntry } from "@/lib/content/layouts";
 import { slices, type SliceEntry } from "@/lib/content/slices";
 import type { NavBranch, NavLeaf, NavSection } from "./nav-types";
+import { SLICE_CATEGORY_LABEL, SLICE_CATEGORY_ORDER } from "@/lib/content/taxonomy";
 
 const LAYOUT_CATEGORY_TITLE: Record<Exclude<LayoutEntry["category"], "website-template">, string> = {
   marketing: "Marketing",
@@ -25,7 +26,7 @@ export function buildSections(): NavSection[] {
     (l) => l.category as Exclude<LayoutEntry["category"], "website-template">,
   );
   const slicesByCat = groupByCategory(slices, (s) => s.category as string);
-  const SLICE_CATEGORY_ORDER = ["auth", "payment", "ai", "email", "data", "search", "realtime", "content", "storage", "ui", "os", "infra"];
+
 
   // 5-cluster IA (2026-05-30): onboarding → the three catalogs → standards →
   // automation → releases. Replaces the 10-leaf "Get Started" dumping ground
@@ -48,7 +49,7 @@ export function buildSections(): NavSection[] {
         ...SLICE_CATEGORY_ORDER.filter((cat) => slicesByCat[cat]?.length).map(
           (cat): NavBranch => ({
             kind: "branch",
-            title: cat === "os" ? "OS Apps" : cat.charAt(0).toUpperCase() + cat.slice(1),
+            title: SLICE_CATEGORY_LABEL[cat] ?? cat,
             items: slicesByCat[cat].map(
               (s: SliceEntry): NavLeaf => ({
                 kind: "leaf",
@@ -74,9 +75,9 @@ export function buildSections(): NavSection[] {
       ],
     },
     {
-      label: "Website Templates",
+      label: "Templates — full apps",
       items: [
-        { kind: "leaf", title: "All website templates", href: "/templates" },
+        { kind: "leaf", title: "All templates", href: "/templates" },
         ...websiteTemplates.map(
           (l): NavLeaf => ({ kind: "leaf", title: l.title, href: `/layouts/${l.slug}` }),
         ),

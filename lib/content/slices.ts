@@ -866,7 +866,7 @@ export default convexAuthNextjsMiddleware();`,
   {
     slug: "doku-payment",
     title: "DOKU — Indonesia Payment",
-    category: "payment",
+    category: "integrations",
     kind: "full",
     version: "0.1.1",
     description: "Pembayaran lokal Indonesia via DOKU — Checkout (hosted) + Direct (VA / QRIS / e-Wallet / PayLater / Minimarket / Kartu). HMAC-signed REST + signature-verified webhook + idempotent retries. Sibling slice to midtrans-payment dengan paymentOrders schema yang dishare.",
@@ -915,7 +915,7 @@ http.route({ path: "/webhooks/doku", method: "POST", handler: dokuWebhook });`,
   {
     slug: "midtrans-payment",
     title: "Midtrans — Indonesia Payment",
-    category: "payment",
+    category: "integrations",
     kind: "full",
     version: "0.1.1",
     description: "Pembayaran lokal Indonesia via Midtrans Snap (BCA, Mandiri, BRI, e-wallet GoPay/OVO/Dana, QRIS). Webhook untuk konfirmasi. Provider-isolated under components/providers/midtrans + actions/midtrans so Doku/Stripe land as siblings.",
@@ -965,7 +965,7 @@ http.route({ path: "/webhooks/midtrans", method: "POST", handler: midtransWebhoo
   {
     slug: "resend-newsletter",
     title: "Resend — Transactional & Newsletter",
-    category: "email",
+    category: "integrations",
     kind: "backend",
     version: "0.1.3",
     description: "Transactional email + newsletter blast via Resend. Double opt-in flow + audience segmentation. Magic-link delivery for Convex Auth. Bundles the subscribers list backend (subscribe / confirm / unsubscribe / count) — formerly the standalone `subscribers` slice, merged here in v0.1.3.",
@@ -1231,7 +1231,7 @@ export const complete = action({
   {
     slug: "vector-search",
     title: "Convex Vector Search",
-    category: "search",
+    category: "data",
     kind: "full",
     version: "0.1.0",
     description: "Embeddings-based search via Convex's built-in vector index. Embed via OpenAI text-embedding-3-small (1536-dim), query via vectorIndex().",
@@ -1482,7 +1482,7 @@ import { FullWidthToggle } from "@/features/full-width-toggle";
   {
     slug: "broadcast-channel-sync",
     title: "BroadcastChannel — Cross-tab Sync",
-    category: "realtime",
+    category: "data",
     kind: "ui",
     version: "0.1.0",
     description: "Same-origin cross-tab + cross-iframe state sync via BroadcastChannel API. Tiny, no backend, no install.",
@@ -1743,7 +1743,7 @@ const [count, setCount] = useBroadcastSync("rr:counter", 0);
   {
     slug: "contact-form-resend",
     title: "Contact Form + Resend",
-    category: "email",
+    category: "integrations",
     kind: "full",
     version: "0.1.0",
     description: "Contact form posting to Resend email API. Server Action + Zod input validation. Convex mutation for storage + Resend send.",

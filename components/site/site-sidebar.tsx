@@ -34,34 +34,12 @@ import { slices as allSlices } from "@/lib/content/slices";
 import { site } from "@/lib/content/site";
 import { isHidden } from "@/lib/content/hidden-slugs";
 import { SidebarListGroup } from "@/components/site/site-sidebar/sidebar-list-group";
-
-const SLICE_CATEGORY_ORDER = [
-  "auth", "payment", "ai", "email", "data", "search",
-  "realtime", "content", "storage", "ui", "os",
-  "infra",
-] as const;
-
-const SLICE_CATEGORY_LABEL: Record<string, string> = {
-  auth: "Auth",
-  payment: "Payment",
-  ai: "AI",
-  email: "Email",
-  data: "Data",
-  search: "Search",
-  realtime: "Realtime",
-  content: "Content",
-  storage: "Storage",
-  ui: "UI",
-  os: "OS Apps",
-  infra: "Infra",
-};
-
-const LAYOUT_CATEGORY_ORDER = ["marketing", "dashboard", "cms"] as const;
-const LAYOUT_CATEGORY_LABEL: Record<string, string> = {
-  marketing: "Marketing",
-  dashboard: "Dashboard",
-  cms: "CMS",
-};
+import {
+  LAYOUT_CATEGORY_LABEL,
+  LAYOUT_CATEGORY_ORDER,
+  SLICE_CATEGORY_LABEL,
+  SLICE_CATEGORY_ORDER,
+} from "@/lib/content/taxonomy";
 
 const docsItems = [
   { title: "Introduction", href: "/", icon: Home },
@@ -126,9 +104,9 @@ export function SiteSidebar() {
         </SidebarGroup>
 
         <SidebarListGroup
-          label="Website templates"
+          label="Templates — full apps"
           icon={Globe}
-          allLabel="All website templates"
+          allLabel="All templates"
           allHref="/templates"
           pathname={pathname}
           items={websiteTemplates}

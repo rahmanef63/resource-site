@@ -1,19 +1,18 @@
 import Link from "next/link";
 import {
+  AppWindow,
   Bot,
   CalendarClock,
-  CreditCard,
-  Database,
   FileText,
   Layers,
-  Mail,
-  Radio,
-  Search as SearchIcon,
+  Plug,
+  Server,
   ShieldCheck,
   type LucideIcon,
 } from "lucide-react";
 import { slices as allSlices } from "@/lib/content/slices";
 import { isHidden } from "@/lib/content/hidden-slugs";
+import { SLICE_CATEGORY_LABEL, SLICE_CATEGORY_ORDER } from "@/lib/content/taxonomy";
 import { Badge } from "@/components/ui/badge";
 import { CatalogCard } from "@/components/site/catalog/catalog-card";
 import { RecentlyUpdatedBadge } from "@/components/site/recently-updated-badge";
@@ -30,34 +29,15 @@ export const metadata = {
   description: "Tier-3 portable vertical slices: lift one folder, drop it into any project.",
 };
 
-const CATEGORY_ORDER = [
-  "auth", "payment", "ai", "email", "data", "search", "realtime", "content", "storage", "ui", "infra",
-];
-
-const CATEGORY_LABEL: Record<string, string> = {
-  auth: "Auth",
-  payment: "Payment",
-  ai: "AI",
-  email: "Email",
-  data: "Data",
-  search: "Search",
-  realtime: "Realtime",
-  content: "Content",
-  storage: "Storage",
-  ui: "UI",
-  infra: "Infra",
-};
-
 const CATEGORY_ICON: Record<string, LucideIcon> = {
   auth: ShieldCheck,
-  payment: CreditCard,
+  integrations: Plug,
   ai: Bot,
-  email: Mail,
   data: CalendarClock,
-  search: SearchIcon,
-  realtime: Radio,
   content: FileText,
-  storage: Database,
+  ui: Layers,
+  os: AppWindow,
+  infra: Server,
 };
 
 function stripVersion(npmSpec: string): string {
@@ -151,8 +131,8 @@ export default function SlicesPage() {
         items={items}
         allTags={topTags}
         placeholder="Cari slice…"
-        groupOrder={CATEGORY_ORDER}
-        groupLabel={CATEGORY_LABEL}
+        groupOrder={[...SLICE_CATEGORY_ORDER]}
+        groupLabel={SLICE_CATEGORY_LABEL}
         familyLabel={FAMILY_LABEL}
       />
     </div>
