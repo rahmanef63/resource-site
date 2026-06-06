@@ -2,6 +2,22 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "MEDIA-VIEWER",
+    "version": "media-viewer@1.0.0",
+    "date": 1780704000000,
+    "kind": "feature",
+    "title": "media-viewer 1.0.0 — quick-look media viewer lifted from os-vps",
+    "body": "Third os-vps app to land in the catalog, and the lightest: a macOS-Preview-style quick-look surface for image/video/audio/pdf/text. The lift follows the editors' host-seam recipe — lib/host.ts is the ONLY coupling point, with two injectable seams: configureMediaSource maps fs paths to fetchable URLs (identity default, so public URLs need zero wiring) and configureMediaOpener routes the Open-in-editor handoff to whatever shell hosts it. Launched bare it runs a fully offline sample gallery. Pairs naturally with file-explorer (onOpenFile → payload) and the image/reel editors.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          { "text": "media-viewer — NEW 1.0.0: zoomable image stage, audio/video transport players, pdf embed, editor handoff + media source seams", "slug": "media-viewer" },
+        ],
+      },
+    ],
+  },
+  {
     "id": "VP6",
     "version": "variant-previews@full-catalog",
     "date": 1780790400000,

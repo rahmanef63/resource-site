@@ -264,6 +264,61 @@ export default function VideoEditorDemo() {
 }`,
   },
   {
+    slug: "media-viewer",
+    title: "Preview — media quick-look",
+    category: "ui",
+    kind: "ui",
+    version: "1.0.0",
+    tagline: "Quick-look viewer for image/video/audio/pdf: zoomable stage, transport players, editor handoff — backend optional.",
+    description:
+      "A quick-look media viewer in the macOS Preview spirit. Images render on a zoomable (40–300%) checkerboard stage so transparency reads; audio gets a card player with a CSS-bar waveform + transport; video gets play/pause + scrubber + volume; PDFs embed full-bleed and text gets a simple surface. The toolbar carries a type-indicator chip, zoom, Download, Open-in-editor, and prev/next. Two integration seams in lib/host.ts make it portable: configureMediaSource maps fs paths to fetchable URLs (identity by default, so public URLs work with zero wiring) and configureMediaOpener routes the Open-in-editor handoff (image → image-editor, video/audio → reel-editor) to your shell — both inert until set. Launched bare it shows a fully offline sample gallery (inline SVG gradients, simulated A/V playback). Pairs with file-explorer (onOpenFile → MediaViewer payload) and the editors.",
+    source: "rahmanef63/os-vps",
+    slicePath: "frontend/slices/media-viewer",
+    convexPaths: [],
+    npm: ["lucide-react"],
+    shadcn: ["button", "badge", "separator", "tooltip", "slider"],
+    env: [],
+    peers: [],
+    tags: ["media", "preview", "viewer", "quick-look", "image", "video", "audio", "pdf", "ui"],
+    resourceType: "module",
+    maturity: "stable",
+    compat: { enhances: ["appshell", "file-explorer", "image-editor", "reel-editor"] },
+    previewPath: "/preview/slices/media-viewer",
+    defaultView: "desktop",
+    agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A quick-look media viewer (image/video/audio/pdf/text). Fully client-side; no backend required.
+
+STEP 1 — Install. \`npx rr add media-viewer\`. Ensure \`@/features/media-viewer\` resolves in tsconfig paths and Tailwind scans the slice folder.
+
+STEP 2 — Deps. npm: \`lucide-react\`. shadcn: \`npx shadcn@latest add button badge separator tooltip slider\`.
+
+STEP 3 — Mount. \`<MediaViewer />\` with no payload shows the offline sample gallery. Pass a file to view it:
+\`\`\`tsx
+"use client";
+import { MediaViewer } from "@/features/media-viewer";
+export default function Page() {
+  return <div className="h-dvh"><MediaViewer payload={{ path: "/media/clip.mp4", name: "clip.mp4", kind: "video" }} /></div>;
+}
+\`\`\`
+Or register the \`mediaViewerApp\` descriptor in an appshell manifest for windowed hosts.
+
+STEP 4 — Remote files (optional). Paths resolve through \`configureMediaSource({ rawUrl })\` — identity by default, so public/absolute URLs already work. Point rawUrl at your fs endpoint for private files.
+
+STEP 5 — Editor handoff (optional). \`configureMediaOpener((appId, title, size, payload) => …)\` routes the "Open in Image/Video Editor" actions to your shell (no-op until set). Wire it to openWindow when running inside appshell with image-editor / reel-editor installed.`,
+    exampleCode: `"use client";
+import { MediaViewer } from "@/features/media-viewer";
+
+export default function PreviewDemo() {
+  // No payload → offline sample gallery (gradient images, simulated A/V).
+  // Pass { path, name, kind } to view a real file; wire configureMediaSource
+  // when paths need resolving against your own fs API.
+  return (
+    <div className="h-dvh w-full">
+      <MediaViewer />
+    </div>
+  );
+}`,
+  },
+  {
     slug: "file-explorer",
     title: "File Explorer — Tree + CRUD + Breadcrumb",
     category: "ui",

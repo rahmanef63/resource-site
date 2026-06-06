@@ -15,6 +15,7 @@ import { commentsConfig } from "@/features/comments/config";
 import { convexAuthConfig } from "@/features/convex-auth/config";
 import { dokuPaymentConfig } from "@/features/doku-payment/config";
 import { imageEditorConfig } from "@/features/image-editor/config";
+import { mediaViewerConfig } from "@/features/media-viewer/config";
 import { midtransPaymentConfig } from "@/features/midtrans-payment/config";
 import { notionConfig } from "@/features/notion/config";
 import { platformAdminConfig } from "@/features/platform-admin/config";
@@ -78,6 +79,11 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     ...imageEditorConfig,
     importPath: "@/features/image-editor/config",
     version: "2.0.0",
+  },
+  {
+    ...mediaViewerConfig,
+    importPath: "@/features/media-viewer/config",
+    version: "1.0.0",
   },
   {
     ...midtransPaymentConfig,
