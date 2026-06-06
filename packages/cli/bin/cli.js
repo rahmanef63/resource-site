@@ -211,6 +211,22 @@ function findRepoRoot(start) {
 // ─── catalog lookups ──────────────────────────────────────────────────────
 
 function findEntry(slug) {
+  const direct = lookupEntry(slug);
+  if (direct) return direct;
+  // Superseded slugs (e.g. the seven landing sections merged into
+  // landing-sections, UX wave U3) resolve through manifest.aliases.
+  const alias = manifest.aliases?.[slug];
+  if (alias) {
+    const found = lookupEntry(alias);
+    if (found) {
+      console.error(kleur.yellow(`"${slug}" is superseded by "${alias}" — using ${alias}.`));
+      return found;
+    }
+  }
+  return null;
+}
+
+function lookupEntry(slug) {
   for (const kind of KINDS) {
     const list = manifest[kind + "s"] ?? [];
     const e = list.find((x) => x.slug === slug);

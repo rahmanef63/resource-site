@@ -2,6 +2,29 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "UX-U3",
+    "version": "cli@aliases",
+    "date": 1780790400000,
+    "kind": "improvement",
+    "title": "Superseded slugs stay installable — CLI aliases + URL redirects for the merged landing sections",
+    "body": "UX wave U3. The seven landing-page section slices (blog-section, faq-section, portfolio-section, changelog-feed, feature-grid, testimonials-grid, pricing-page) were merged into landing-sections as kind-variants back in v0.2.0 — but their old slugs just errored in the CLI and 404'd on the site. Now: lib/content/slice-aliases.json is the SSOT; gen-manifest embeds it as manifest.aliases; the CLI's findEntry falls through to the alias with a \"superseded by\" warning, so npx rahman-resources add blog-section installs landing-sections; /slices/<old-slug> redirects to /slices/landing-sections; each old slice.json carries deprecated: \"landing-sections\" (new optional schema field). Also fixed: landing-sections was miscategorized as infra — it's content.",
+    "groups": [
+      {
+        "heading": "CLI (changed)",
+        "bullets": [
+          "manifest.aliases — superseded slug → successor; findEntry resolves through it with a warning",
+          "slice-schema.json: optional \"deprecated\" field (successor slug)"
+        ]
+      },
+      {
+        "heading": "Site (changed)",
+        "bullets": [
+          { "text": "/slices/<old-section-slug> → redirect to landing-sections; category fixed infra → content", "slug": "landing-sections", "kind": "slice" }
+        ]
+      }
+    ]
+  },
+  {
     "id": "UX-U2",
     "version": "site@taxonomy-ssot",
     "date": 1780790400000,

@@ -16,6 +16,7 @@ import {
   loadSlices,
   parseNpmPackages,
 } from "./parse-content.mjs";
+import { readFileSync } from "node:fs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.resolve(__dirname, "../lib/manifest.json");
@@ -23,6 +24,12 @@ const STRICT = process.argv.includes("--strict");
 
 const warnings = [];
 const errors = [];
+
+// Superseded slugs (merged into landing-sections, UX wave U3) leave the
+// manifest entries and resolve via the aliases map instead.
+const ALIASES = JSON.parse(
+  readFileSync(path.resolve(__dirname, "../../../lib/content/slice-aliases.json"), "utf8"),
+);
 
 function deriveLayoutPullPaths(l) {
   if (l.pullPaths && l.pullPaths.length > 0) return l.pullPaths;
@@ -75,7 +82,7 @@ const recipes = loadRecipes().map((r) => ({
   tags: r.tags ?? [],
 }));
 
-const features = loadFeatures().map((f) => {
+const features = loadFeatures().filter((f) => !ALIASES[f.slug]).map((f) => {
   const pkgs = parseNpmPackages(f.install);
   return {
     slug: f.slug,
@@ -92,7 +99,7 @@ const features = loadFeatures().map((f) => {
   };
 });
 
-const slices = loadSlices().map((s) => {
+const slices = loadSlices().filter((s) => !ALIASES[s.slug]).map((s) => {
   // Derive `kind` if not explicit. backend = has convex, no slicePath bits;
   // ui = slicePath present, convexPaths empty; full = both.
   const hasFrontend = !!s.slicePath;
@@ -142,6 +149,7 @@ const manifest = {
   version: 2,
   repo: "rahmanef63/resource-site",
   branch: "main",
+  aliases: ALIASES,
   layouts,
   recipes,
   features,

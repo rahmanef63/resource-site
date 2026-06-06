@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-06 — slug aliases for merged landing sections (UX wave U3)
+
+- `lib/content/slice-aliases.json` (SSOT) → `manifest.aliases`: the seven
+  pre-merge section slugs (blog-section, faq-section, …, pricing-page) now
+  resolve to `landing-sections` in the CLI (with a "superseded by" warning)
+  instead of erroring, and `/slices/<old-slug>` redirects.
+- `slice-schema.json`: optional `deprecated` field; set on the 7 old dirs.
+- Fix: `landing-sections` miscategorized as `infra` → `content`.
+
 ### 2026-06-06 — taxonomy SSOT: 8 categories (UX wave U2)
 
 - New `lib/content/taxonomy.ts` — category order/label SSOT; replaces 4

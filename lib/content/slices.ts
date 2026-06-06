@@ -1913,7 +1913,7 @@ const [count, setCount] = useBroadcastSync("rr:counter", 0);
   {
     slug: "landing-sections",
     title: "Landing Sections",
-    category: "infra",
+    category: "content",
     kind: "ui",
     version: "0.2.0",
     tagline: "CRUD admin for landing-page composition: reorderable sections + bg image + custom className.",

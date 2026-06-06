@@ -1,5 +1,6 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { slices, getSlice } from "@/lib/content/slices";
+import { resolveSlugAlias } from "@/lib/content/slice-aliases";
 import { readSliceFiles } from "@/lib/slice-files";
 import { site } from "@/lib/content/site";
 import { SliceDetailHeader } from "./slice-detail-header";
@@ -21,6 +22,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function SliceDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  // Superseded slugs (merged into landing-sections) keep working URLs.
+  const alias = resolveSlugAlias(slug);
+  if (alias) redirect(`/slices/${alias}`);
   const slice = getSlice(slug);
   if (!slice) notFound();
 

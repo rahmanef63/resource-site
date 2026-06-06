@@ -2,6 +2,15 @@
   "version": 2,
   "repo": "rahmanef63/resource-site",
   "branch": "main",
+  "aliases": {
+    "blog-section": "landing-sections",
+    "faq-section": "landing-sections",
+    "portfolio-section": "landing-sections",
+    "changelog-feed": "landing-sections",
+    "feature-grid": "landing-sections",
+    "testimonials-grid": "landing-sections",
+    "pricing-page": "landing-sections"
+  },
   "layouts": [
     {
       "slug": "personal-brand-os",
@@ -2302,7 +2311,7 @@
     {
       "slug": "landing-sections",
       "title": "Landing Sections",
-      "category": "infra",
+      "category": "content",
       "description": "Canonical landing-page composition slice — replaces the former standalone hero / cta / pricing-page / faq-section / feature-grid / testimonials-grid / blog-section / portfolio-section / changelog-feed slices (all merged here as `kind` variants in v0.2.0). Ships a pure reducer + LandingProvider store adapter + admin LandingView/LandingEditorView built on the shared CRUD primitives, plus a per-section LandingSectionShell that handles background image + custom Tailwind className overlay. Sections carry { kind, order, title, subtitle, enabled, imageUrl, imageRatio, bgImageUrl, className, config (JSON) } with up/down reorder arrows. Consumers map each `kind` (hero, features, pricing, blog, changelog, testimonials, portfolio, services, stats, newsletter, faq, cta, custom) to their own renderer wrapped in <LandingSectionShell>. Used by all 7 rr website templates.",
       "source": "rahman-resources",
       "install": "npx rahman-resources add landing-sections",
@@ -4496,7 +4505,7 @@
     {
       "slug": "landing-sections",
       "title": "Landing Sections",
-      "category": "infra",
+      "category": "content",
       "kind": "ui",
       "version": "0.2.0",
       "description": "Canonical landing-page composition slice — replaces the former standalone hero / cta / pricing-page / faq-section / feature-grid / testimonials-grid / blog-section / portfolio-section / changelog-feed slices (all merged here as `kind` variants in v0.2.0). Ships a pure reducer + LandingProvider store adapter + admin LandingView/LandingEditorView built on the shared CRUD primitives, plus a per-section LandingSectionShell that handles background image + custom Tailwind className overlay. Sections carry { kind, order, title, subtitle, enabled, imageUrl, imageRatio, bgImageUrl, className, config (JSON) } with up/down reorder arrows. Consumers map each `kind` (hero, features, pricing, blog, changelog, testimonials, portfolio, services, stats, newsletter, faq, cta, custom) to their own renderer wrapped in <LandingSectionShell>. Used by all 7 rr website templates.",

@@ -307,6 +307,10 @@
           }
         }
       }
+    },
+    "deprecated": {
+      "type": "string",
+      "description": "Successor slug. This slice was merged into the named slice as variants; install resolves there via manifest.aliases."
     }
   }
 }
