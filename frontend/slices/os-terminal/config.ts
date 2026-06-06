@@ -3,7 +3,7 @@ export type OsTerminalConfig = {
   /** Registry identity — MUST equal slice.json slug/title/category. */
   slug: string;
   title: string;
-  category: "ui";
+  category: "os";
   /** Prompt user@host label shown before the path. */
   promptLabel: string;
 };
@@ -11,7 +11,7 @@ export type OsTerminalConfig = {
 export const osTerminalConfig: OsTerminalConfig = {
   slug: "os-terminal",
   title: "Terminal — shell emulator with live passthrough",
-  category: "ui",
+  category: "os",
   promptLabel: "root@topside",
 };
 

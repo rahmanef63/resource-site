@@ -3,7 +3,7 @@ export type BrowserConfig = {
   /** Registry identity — MUST equal slice.json slug/title/category. */
   slug: string;
   title: string;
-  category: "ui";
+  category: "os";
   /** URL loaded by the Home action. */
   homeUrl: string;
 };
@@ -11,7 +11,7 @@ export type BrowserConfig = {
 export const browserConfig: BrowserConfig = {
   slug: "browser",
   title: "Browser — remote headless-browser chrome",
-  category: "ui",
+  category: "os",
   homeUrl: "https://en.wikipedia.org/wiki/Web_browser",
 };
 

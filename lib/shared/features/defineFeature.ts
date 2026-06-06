@@ -12,7 +12,7 @@ import type { ComponentType, LazyExoticComponent } from "react";
 
 export type SliceCategory =
   | "ai" | "auth" | "data" | "payment" | "email"
-  | "realtime" | "storage" | "search" | "content" | "ui" | "infra";
+  | "realtime" | "storage" | "search" | "content" | "ui" | "os" | "infra";
 
 export type SliceRoute = {
   /** App-router path the slice contributes (e.g., "/payments"). */

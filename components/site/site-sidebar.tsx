@@ -37,7 +37,8 @@ import { SidebarListGroup } from "@/components/site/site-sidebar/sidebar-list-gr
 
 const SLICE_CATEGORY_ORDER = [
   "auth", "payment", "ai", "email", "data", "search",
-  "realtime", "content", "storage", "ui", "infra",
+  "realtime", "content", "storage", "ui", "os",
+  "infra",
 ] as const;
 
 const SLICE_CATEGORY_LABEL: Record<string, string> = {
@@ -51,6 +52,7 @@ const SLICE_CATEGORY_LABEL: Record<string, string> = {
   content: "Content",
   storage: "Storage",
   ui: "UI",
+  os: "OS Apps",
   infra: "Infra",
 };
 

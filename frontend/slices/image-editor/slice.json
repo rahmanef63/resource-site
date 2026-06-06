@@ -2,10 +2,10 @@
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "image-editor",
   "version": "2.0.0",
-  "category": "ui",
+  "category": "os",
   "kind": "ui",
-  "title": "Image Editor \u2014 layered raster editor",
-  "description": "Embeddable, layer-based raster image editor (Konva): layers with blend modes + layer styles (shadow/glow/stroke), transforms, crop/resize/aspect presets, paint brushes, adjustments, text layers with fonts, free in-browser background removal (@imgly), PNG/JPEG/WebP export, an AI function-calling command registry (every operation is a schema'd command) with in-editor chat, and a headless server barrel (server.ts) to run commands against documents without a DOM. The AI bridge is injectable via configureAgentStream \u2014 without wiring, everything except the AI chat works.",
+  "title": "Image Editor — layered raster editor",
+  "description": "Embeddable, layer-based raster image editor (Konva): layers with blend modes + layer styles (shadow/glow/stroke), transforms, crop/resize/aspect presets, paint brushes, adjustments, text layers with fonts, free in-browser background removal (@imgly), PNG/JPEG/WebP export, an AI function-calling command registry (every operation is a schema'd command) with in-editor chat, and a headless server barrel (server.ts) to run commands against documents without a DOM. The AI bridge is injectable via configureAgentStream — without wiring, everything except the AI chat works.",
   "namespace": "@/features/image-editor",
   "frontend": {
     "slicePath": "frontend/slices/image-editor",
@@ -60,12 +60,12 @@
         {
           "id": "square",
           "title": "Square canvas",
-          "description": "640\u00d7360 blank document \u2014 full editor chrome (tool rail, layers, adjust)."
+          "description": "640×360 blank document — full editor chrome (tool rail, layers, adjust)."
         },
         {
           "id": "wide",
           "title": "Wide canvas",
-          "description": "960\u00d7360 blank document for a banner-style layout."
+          "description": "960×360 blank document for a banner-style layout."
         }
       ],
       "seed": "blank Konva doc sized per scenario; client-only stage, autosaves to localStorage, no server/fs"

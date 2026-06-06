@@ -16,7 +16,9 @@
     "deps"
   ],
   "properties": {
-    "$schema": { "type": "string" },
+    "$schema": {
+      "type": "string"
+    },
     "slug": {
       "type": "string",
       "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$",
@@ -40,16 +42,27 @@
         "search",
         "content",
         "ui",
+        "os",
         "infra"
       ]
     },
     "kind": {
       "type": "string",
-      "enum": ["ui", "backend", "full"],
-      "description": "Slice shape — ui (no convex), backend (no UI), full (both)."
+      "enum": [
+        "ui",
+        "backend",
+        "full"
+      ],
+      "description": "Slice shape \u2014 ui (no convex), backend (no UI), full (both)."
     },
-    "title": { "type": "string", "minLength": 3 },
-    "description": { "type": "string", "minLength": 10 },
+    "title": {
+      "type": "string",
+      "minLength": 3
+    },
+    "description": {
+      "type": "string",
+      "minLength": 10
+    },
     "namespace": {
       "type": "string",
       "pattern": "^@/features/[a-z0-9][a-z0-9-]*$",
@@ -70,7 +83,9 @@
         },
         "rootPaths": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "Convex folders the lift pulls into the consumer's convex/. Empty for ui-only slices."
         }
       }
@@ -78,12 +93,14 @@
     "frontend": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["slicePath"],
+      "required": [
+        "slicePath"
+      ],
       "properties": {
         "slicePath": {
           "type": "string",
           "pattern": "^(template-base/)?frontend/slices/[a-z0-9_/-]+$",
-          "description": "Portable home → frontend/slices/<slug>. Foundation home → template-base/frontend/slices/<slug>."
+          "description": "Portable home \u2192 frontend/slices/<slug>. Foundation home \u2192 template-base/frontend/slices/<slug>."
         },
         "configExport": {
           "type": "string",
@@ -98,12 +115,16 @@
       "properties": {
         "npm": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "Plain npm install lines."
         },
         "shadcn": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "shadcn primitives this slice imports."
         },
         "env": {
@@ -111,15 +132,30 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["name", "scope"],
+            "required": [
+              "name",
+              "scope"
+            ],
             "properties": {
-              "name": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+              "name": {
+                "type": "string",
+                "pattern": "^[A-Z][A-Z0-9_]*$"
+              },
               "scope": {
                 "type": "string",
-                "enum": ["convex", "next-public", "server"]
+                "enum": [
+                  "convex",
+                  "next-public",
+                  "server"
+                ]
               },
-              "required": { "type": "boolean", "default": true },
-              "description": { "type": "string" }
+              "required": {
+                "type": "boolean",
+                "default": true
+              },
+              "description": {
+                "type": "string"
+              }
             }
           }
         },
@@ -128,18 +164,29 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["slug", "range"],
+            "required": [
+              "slug",
+              "range"
+            ],
             "properties": {
-              "slug": { "type": "string" },
-              "range": { "type": "string" },
-              "reason": { "type": "string" }
+              "slug": {
+                "type": "string"
+              },
+              "range": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              }
             }
           }
         },
         "sharedFiles": {
           "type": "array",
-          "items": { "type": "string" },
-          "description": "Repo-root shared files (relative to project root) this slice imports — the CLI copies them alongside the slice on add."
+          "items": {
+            "type": "string"
+          },
+          "description": "Repo-root shared files (relative to project root) this slice imports \u2014 the CLI copies them alongside the slice on add."
         }
       }
     },
@@ -147,32 +194,49 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": ["registry", "preview-registry", "export-registry"]
+        "enum": [
+          "registry",
+          "preview-registry",
+          "export-registry"
+        ]
       },
       "description": "Which registry generators auto-discover this slice."
     },
     "audit": {
       "type": "array",
-      "items": { "type": "string", "pattern": "^bp:[a-z0-9-]+$" },
+      "items": {
+        "type": "string",
+        "pattern": "^bp:[a-z0-9-]+$"
+      },
       "description": "Audit-bp rule ids that apply to this slice."
     },
-    "license": { "type": "string", "default": "MIT" },
+    "license": {
+      "type": "string",
+      "default": "MIT"
+    },
     "tags": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "providers": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Optional sub-provider list when a slice routes between alternatives (e.g., payment slice with midtrans + doku siblings)."
     },
     "previews": {
       "type": "array",
-      "description": "Variant-preview declarations (VP wave). Each entry maps a public component to either enum variant axes (leaf slices) or scenario presets (subsystem slices). Rendered by frontend/slices/<slug>/preview.tsx — rr-internal, stripped on `rr add`. See docs/SLICE-PREVIEW-SPEC.md.",
+      "description": "Variant-preview declarations (VP wave). Each entry maps a public component to either enum variant axes (leaf slices) or scenario presets (subsystem slices). Rendered by frontend/slices/<slug>/preview.tsx \u2014 rr-internal, stripped on `rr add`. See docs/SLICE-PREVIEW-SPEC.md.",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["component", "kind"],
+        "required": [
+          "component",
+          "kind"
+        ],
         "properties": {
           "component": {
             "type": "string",
@@ -181,7 +245,10 @@
           },
           "kind": {
             "type": "string",
-            "enum": ["variants", "scenarios"],
+            "enum": [
+              "variants",
+              "scenarios"
+            ],
             "description": "variants = enum prop axes (leaf); scenarios = curated presets (subsystem)."
           },
           "axes": {
@@ -189,30 +256,51 @@
             "items": {
               "type": "object",
               "additionalProperties": false,
-              "required": ["prop", "values"],
+              "required": [
+                "prop",
+                "values"
+              ],
               "properties": {
-                "prop": { "type": "string", "pattern": "^[a-z][A-Za-z0-9]*$" },
+                "prop": {
+                  "type": "string",
+                  "pattern": "^[a-z][A-Za-z0-9]*$"
+                },
                 "values": {
                   "type": "array",
                   "minItems": 1,
-                  "items": { "type": "string" }
+                  "items": {
+                    "type": "string"
+                  }
                 },
-                "default": { "type": "string" },
-                "description": { "type": "string" }
+                "default": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
               }
             },
-            "description": "Enum-only variant axes (max 3 — enforced by gen-preview-registry). preview.tsx maps value strings to real props."
+            "description": "Enum-only variant axes (max 3 \u2014 enforced by gen-preview-registry). preview.tsx maps value strings to real props."
           },
           "scenarios": {
             "type": "array",
             "items": {
               "type": "object",
               "additionalProperties": false,
-              "required": ["id"],
+              "required": [
+                "id"
+              ],
               "properties": {
-                "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
-                "title": { "type": "string" },
-                "description": { "type": "string" }
+                "id": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9][a-z0-9-]*$"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
               }
             },
             "description": "Curated preset configurations for subsystem slices."

@@ -3,7 +3,7 @@ export type AppStoreConfig = {
   /** Registry identity — MUST equal slice.json slug/title/category. */
   slug: string;
   title: string;
-  category: "ui";
+  category: "os";
   /** localStorage keys for the app registry + disabled sets. */
   registryKey: string;
   disabledKey: string;
@@ -12,7 +12,7 @@ export type AppStoreConfig = {
 export const appStoreConfig: AppStoreConfig = {
   slug: "app-store",
   title: "App Store — install, create + toggle apps",
-  category: "ui",
+  category: "os",
   registryKey: "app-store:apps",
   disabledKey: "app-store:disabled",
 };

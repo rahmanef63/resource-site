@@ -2,6 +2,28 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "OS-CATEGORY",
+    "version": "taxonomy@os-category",
+    "date": 1780790400000,
+    "kind": "improvement",
+    "title": "New \"OS Apps\" category — 11 os-vps slices leave the UI junk drawer",
+    "body": "The UI cluster had ballooned to 24 slices, 11 of them the os-vps app family. New `os` category across the taxonomy (SliceCategory union, slice-schema enum, sidebar order + \"OS Apps\" label, /build picker groups automatically): appshell, file-explorer, image-editor, reel-editor, code-editor, media-viewer, system-monitor, os-terminal, assistant (moved from AI — it is the OS assistant app; ai tag stays), browser, app-store. Category is metadata-only — no version bumps, `npx rr add <slug>` unchanged. Sidebar now: UI 13, OS Apps 11.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          { "text": "appshell, file-explorer, image-editor, reel-editor, code-editor, media-viewer, system-monitor, os-terminal, assistant, browser, app-store — category ui/ai → os", "slug": "appshell" }
+        ]
+      },
+      {
+        "heading": "Infra",
+        "bullets": [
+          { "text": "defineFeature SliceCategory + slice-schema enum + site-sidebar ORDER/LABEL + build-sections — \"os\" wired end to end" }
+        ]
+      }
+    ]
+  },
+  {
     "id": "VP-DETAIL",
     "version": "variant-previews@detail-pages",
     "date": 1780790400000,

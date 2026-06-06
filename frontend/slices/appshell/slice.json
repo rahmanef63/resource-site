@@ -2,10 +2,10 @@
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "appshell",
   "version": "1.1.0",
-  "category": "ui",
+  "category": "os",
   "kind": "full",
-  "title": "AppShell \u2014 Desktop + Mobile OS Shell",
-  "description": "Generic, brand-free OS-style shell framework. One <AppShell manifest> wrapper provider gives a project a macOS-style window manager AND an iOS-style mobile surface, driven entirely by a manifest (brand, apps, features, surface regions, capabilities, persistence, keymap). Features (search, settings, widgets, control-center, inspector, notifications) plug in via extension points. Responsiveness is a single provider + shared primitives. Imports no apps or brand strings \u2014 the consumer injects everything.",
+  "title": "AppShell — Desktop + Mobile OS Shell",
+  "description": "Generic, brand-free OS-style shell framework. One <AppShell manifest> wrapper provider gives a project a macOS-style window manager AND an iOS-style mobile surface, driven entirely by a manifest (brand, apps, features, surface regions, capabilities, persistence, keymap). Features (search, settings, widgets, control-center, inspector, notifications) plug in via extension points. Responsiveness is a single provider + shared primitives. Imports no apps or brand strings — the consumer injects everything.",
   "namespace": "@/features/appshell",
   "frontend": {
     "slicePath": "frontend/slices/appshell",
@@ -56,7 +56,7 @@
         {
           "id": "sidebar-collapsed",
           "title": "Sidebar collapsed",
-          "description": "AppFrame body with the rail hidden \u2014 content spans the full pane."
+          "description": "AppFrame body with the rail hidden — content spans the full pane."
         },
         {
           "id": "sidebar-expanded",
@@ -69,7 +69,7 @@
           "description": "AppFrame header + toolbar rows above the sidebar/content body."
         }
       ],
-      "seed": "Scaled-down shell chrome in a fixed-height card \u2014 AppFrame header/toolbar/body composed with a mock sidebar + content list (no window manager, no providers)."
+      "seed": "Scaled-down shell chrome in a fixed-height card — AppFrame header/toolbar/body composed with a mock sidebar + content list (no window manager, no providers)."
     }
   ]
 }

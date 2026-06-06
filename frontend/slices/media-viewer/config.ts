@@ -3,7 +3,7 @@ export type MediaViewerConfig = {
   /** Registry identity — MUST equal slice.json slug/title/category. */
   slug: string;
   title: string;
-  category: "ui";
+  category: "os";
   /** Zoom bounds for the image stage. */
   zoomMin: number;
   zoomMax: number;
@@ -12,7 +12,7 @@ export type MediaViewerConfig = {
 export const mediaViewerConfig: MediaViewerConfig = {
   slug: "media-viewer",
   title: "Preview — media quick-look",
-  category: "ui",
+  category: "os",
   zoomMin: 0.4,
   zoomMax: 3,
 };

@@ -107,7 +107,7 @@
   {
     "slug": "appshell",
     "title": "AppShell — Desktop + Mobile OS Shell",
-    "category": "ui",
+    "category": "os",
     "previews": [
       {
         "component": "AppFrame",
@@ -203,7 +203,7 @@
   {
     "slug": "code-editor",
     "title": "Code — overlay syntax editor",
-    "category": "ui",
+    "category": "os",
     "previews": [
       {
         "component": "CodeEditor",
@@ -456,7 +456,7 @@
   {
     "slug": "file-explorer",
     "title": "File Explorer — Tree + CRUD + Breadcrumb",
-    "category": "ui",
+    "category": "os",
     "previews": [
       {
         "component": "FileExplorer",
@@ -532,7 +532,7 @@
   {
     "slug": "image-editor",
     "title": "Image Editor — layered raster editor",
-    "category": "ui",
+    "category": "os",
     "previews": [
       {
         "component": "ImageEditor",
@@ -679,7 +679,7 @@
   {
     "slug": "media-viewer",
     "title": "Preview — media quick-look",
-    "category": "ui",
+    "category": "os",
     "previews": [
       {
         "component": "MediaViewer",

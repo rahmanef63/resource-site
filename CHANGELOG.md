@@ -11,6 +11,13 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-06 — "OS Apps" category (taxonomy)
+
+- New `os` category: 11 os-vps app slices (appshell, file-explorer, the three
+  editors, media-viewer, system-monitor, os-terminal, assistant, browser,
+  app-store) move out of UI/AI. Sidebar gains an "OS Apps" cluster; /build
+  picker groups automatically. Metadata-only — no version bumps.
+
 ### 2026-06-06 — live previews on slice detail pages
 
 - Every `/slices/<slug>` with a registered variant preview gains a "Live"

@@ -151,7 +151,7 @@ export const slices: SliceEntry[] = [
   {
     slug: "image-editor",
     title: "Image Editor — layered raster editor",
-    category: "ui",
+    category: "os",
     kind: "ui",
     version: "2.0.0",
     tagline: "Layered raster editor: layers, transform, paint, filters, layer styles, 1-click background removal, AI command registry, export.",
@@ -211,7 +211,7 @@ export default function ImageEditorDemo() {
   {
     slug: "reel-editor",
     title: "Reel — video timeline editor",
-    category: "ui",
+    category: "os",
     kind: "ui",
     version: "1.0.0",
     tagline: "In-browser NLE: layered multi-track timeline, keyframes, transitions, color grading, realtime WebM export with mixed audio.",
@@ -266,7 +266,7 @@ export default function VideoEditorDemo() {
   {
     slug: "media-viewer",
     title: "Preview — media quick-look",
-    category: "ui",
+    category: "os",
     kind: "ui",
     version: "1.0.0",
     tagline: "Quick-look viewer for image/video/audio/pdf: zoomable stage, transport players, editor handoff — backend optional.",
@@ -321,7 +321,7 @@ export default function PreviewDemo() {
   {
     slug: "code-editor",
     title: "Code — overlay syntax editor",
-    category: "ui",
+    category: "os",
     kind: "ui",
     version: "1.0.0",
     tagline: "Lightweight code editor: overlay highlighting, tabs with dirty dots, lazy explorer tree, injectable filesystem.",
@@ -376,7 +376,7 @@ export default function CodeDemo() {
   {
     slug: "system-monitor",
     title: "System Monitor — host telemetry dashboard",
-    category: "ui",
+    category: "os",
     kind: "ui",
     version: "1.0.0",
     tagline: "Activity-Monitor-style dashboard: CPU/RAM/disk/GPU gauges, sparklines, live process table — telemetry injected.",
@@ -415,7 +415,7 @@ export default function MonitorDemo() {
   {
     slug: "os-terminal",
     title: "Terminal — shell emulator with live passthrough",
-    category: "ui",
+    category: "os",
     kind: "ui",
     version: "1.0.0",
     tagline: "React terminal: 17 built-ins on an in-memory fs, arrow-key history — wire exec for real one-shot shell passthrough.",
@@ -454,7 +454,7 @@ export default function TerminalDemo() {
   {
     slug: "assistant",
     title: "Assistant — agent workspace with streaming chat",
-    category: "ai",
+    category: "os",
     kind: "ui",
     version: "1.0.0",
     tagline: "Streaming chat + user-created agents, skills and automations (localStorage) — bring any LLM as an async generator.",
@@ -493,7 +493,7 @@ export default function AssistantDemo() {
   {
     slug: "browser",
     title: "Browser — remote headless-browser chrome",
-    category: "ui",
+    category: "os",
     kind: "ui",
     version: "1.0.0",
     tagline: "Omnibar, bookmarks, history + a screenshot viewport that forwards input — drive any headless Chromium via one adapter.",
@@ -532,7 +532,7 @@ export default function BrowserDemo() {
   {
     slug: "app-store",
     title: "App Store — install, create + toggle apps",
-    category: "ui",
+    category: "os",
     kind: "ui",
     version: "1.0.0",
     tagline: "Storefront + Create-App over one localStorage registry; useInstalledApps() feeds any appshell-style launcher.",
@@ -573,7 +573,7 @@ export default function StoreDemo() {
   {
     slug: "file-explorer",
     title: "File Explorer — Tree + CRUD + Breadcrumb",
-    category: "ui",
+    category: "os",
     kind: "full",
     version: "1.1.0",
     tagline: "Backend-agnostic file manager: directory tree sidebar, breadcrumb nav, grid/list views, full CRUD.",
@@ -637,7 +637,7 @@ export default function FileExplorerDemo() {
   {
     slug: "appshell",
     title: "AppShell — Desktop + Mobile OS Shell",
-    category: "ui",
+    category: "os",
     kind: "full",
     version: "1.1.0",
     tagline: "Manifest-driven macOS-style window manager + iOS-style mobile surface in one slice.",

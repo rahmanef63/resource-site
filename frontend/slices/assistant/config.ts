@@ -3,7 +3,7 @@ export type AssistantConfig = {
   /** Registry identity — MUST equal slice.json slug/title/category. */
   slug: string;
   title: string;
-  category: "ai";
+  category: "os";
   /** Display name of the built-in assistant persona. */
   assistantName: string;
 };
@@ -11,7 +11,7 @@ export type AssistantConfig = {
 export const assistantConfig: AssistantConfig = {
   slug: "assistant",
   title: "Assistant — agent workspace with streaming chat",
-  category: "ai",
+  category: "os",
   assistantName: "Alfa",
 };
 

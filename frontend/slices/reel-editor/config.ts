@@ -4,7 +4,7 @@ export type ReelEditorConfig = {
   /** Registry identity — MUST equal slice.json slug/title/category. */
   slug: string;
   title: string;
-  category: "ui";
+  category: "os";
   /** Default seconds an imported still image occupies on the timeline. */
   imageDurationSec: number;
   /** Auto-save the working draft to localStorage. */
@@ -16,7 +16,7 @@ export type ReelEditorConfig = {
 export const reelEditorConfig: ReelEditorConfig = {
   slug: "reel-editor",
   title: "Reel — video timeline editor",
-  category: "ui",
+  category: "os",
   imageDurationSec: 3,
   autosave: true,
   projectDir: "~/reel-projects/session",

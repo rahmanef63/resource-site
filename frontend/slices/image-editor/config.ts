@@ -4,7 +4,7 @@ export type ImageEditorConfig = {
   /** Registry identity — MUST equal slice.json slug/title/category. */
   slug: string;
   title: string;
-  category: "ui";
+  category: "os";
   /** Default blank-canvas size when no initialImage is given. */
   defaultWidth: number;
   defaultHeight: number;
@@ -15,7 +15,7 @@ export type ImageEditorConfig = {
 export const imageEditorConfig: ImageEditorConfig = {
   slug: "image-editor",
   title: "Image Editor — layered raster editor",
-  category: "ui",
+  category: "os",
   defaultWidth: 1080,
   defaultHeight: 1080,
   exportFormat: "png",
