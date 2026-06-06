@@ -11,6 +11,16 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-06 — manifest debt zeroed + editor previews
+
+- **Schema A conversion** — 7 legacy-shape `slice.manifest.json` (image-picker,
+  notion-database, notion-shell, notion-sidebar, selection, theme-presets,
+  files) converted to the modern slug/version/tier/distribution/files/imports
+  shape; user-management `stability` alpha → experimental. `validate:manifests`
+  now reports 0 errors (was 23, warn-only).
+- **Previews** — code-editor (3 mock-fs scenarios) + media-viewer (offline
+  gallery + data-URI remote payload) join the registry → 33 slugs.
+
 ### 2026-06-06 — preview backfill: full catalog coverage (VP-6)
 
 - **28 new previews** — every component-bearing slice in the catalog now

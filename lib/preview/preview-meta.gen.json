@@ -178,6 +178,35 @@
     ]
   },
   {
+    "slug": "code-editor",
+    "title": "Code — overlay syntax editor",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "CodeEditor",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "sample-tree",
+            "title": "Sample tree",
+            "description": "Seeded mock fs, default file open"
+          },
+          {
+            "id": "markdown-doc",
+            "title": "Markdown doc",
+            "description": "Opens /Documents/roadmap.md via payload"
+          },
+          {
+            "id": "python-script",
+            "title": "Python script",
+            "description": "Opens /apps/scraper.py via payload"
+          }
+        ],
+        "seed": "bundled writable in-memory mock fs (lib/seed.ts); edits live for the mount"
+      }
+    ]
+  },
+  {
     "slug": "command-menu",
     "title": "Command Menu",
     "category": "ui",
@@ -597,6 +626,30 @@
           }
         ],
         "seed": "two markdown docs in rr-demo:markdown; Write-tab edits persist per content axis"
+      }
+    ]
+  },
+  {
+    "slug": "media-viewer",
+    "title": "Preview — media quick-look",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "MediaViewer",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "sample-gallery",
+            "title": "Sample gallery",
+            "description": "Offline carousel: images, simulated video/audio transport, pdf, text"
+          },
+          {
+            "id": "remote-image",
+            "title": "Remote payload",
+            "description": "payload={path,name,kind} through the identity media source (data-URI, offline)"
+          }
+        ],
+        "seed": "fully offline — bundled SVG samples + data-URI remote payload"
       }
     ]
   },

@@ -1,13 +1,33 @@
 {
-  "name": "files",
-  "description": "Host-pluggable file upload + URL resolution. Hosts wire a FilesAdapter (Convex / S3 / localStorage / ...) via context; the slice ships no backend coupling. See adapter/types.ts.",
-  "deps": {
-    "shared": [
-      "lib/utils",
-      "ui/button"
-    ],
-    "slices": [],
-    "convex": []
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "files",
+  "version": "0.1.0",
+  "tier": 2,
+  "distribution": {
+    "method": "manual"
   },
-  "notes": "Adapter pattern (2026-05-21). convexAdapter.tsx is host-only (skip-listed in rr-sync.json); localStorageAdapter.ts is the rr-default. See docs/rr-sync/lift-status.md for the contract."
+  "files": [
+    "adapter/context.tsx",
+    "adapter/localStorageAdapter.ts",
+    "adapter/types.ts",
+    "components/FileChip.tsx",
+    "components/FileUploadButton.tsx",
+    "hooks/useFileUpload.ts",
+    "hooks/useFileUrl.ts",
+    "index.ts",
+    "lib/parse.ts",
+    "slice.contract.ts",
+    "types/index.ts"
+  ],
+  "imports": {
+    "shared": [
+      "@/shared/ui/FilePicker"
+    ],
+    "external": [
+      "@/components/ui/button",
+      "@/lib/utils",
+      "lucide-react",
+      "react"
+    ]
+  }
 }

@@ -1,10 +1,30 @@
 {
-  "name": "selection",
-  "description": "Framework-agnostic marquee multi-selection for vertical lists — SelectionProvider + SelectableBlock + SelectionMarquee + useSelection/useMarquee. AutoCAD-style rubber-band (drag-right encloses, drag-left crosses), edge-click select, Backspace bulk-delete, floating count toolbar.",
-  "deps": {
-    "shared": ["lib/utils"],
-    "slices": [],
-    "convex": []
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "selection",
+  "version": "0.2.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add selection",
+    "consumerPath": "slices/selection"
   },
-  "notes": "Pure client-side slice — no Convex, no npm deps beyond react-dom (createPortal). Host owns the data and runs onBulkDelete(ids); drop <SelectionMarquee containerRef> on a position:relative surface."
+  "files": [
+    "agent.md",
+    "components/SelectableBlock.tsx",
+    "components/SelectionMarquee.tsx",
+    "components/SelectionProvider.tsx",
+    "index.ts",
+    "lib/useMarquee.ts",
+    "slice.contract.ts",
+    "slice.json"
+  ],
+  "imports": {
+    "shared": [],
+    "external": [
+      "@/components/ui/button",
+      "@/lib/utils",
+      "react",
+      "react-dom"
+    ]
+  }
 }

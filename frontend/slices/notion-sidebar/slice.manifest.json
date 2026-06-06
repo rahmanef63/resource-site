@@ -1,10 +1,33 @@
 {
-  "name": "notion-sidebar",
-  "description": "Standalone Notion-style tree-nav sidebar with full page CRUD — double-click rename, @dnd-kit drag-reorder/reparent, collapse/expand, hover +subpage/delete, and an optional per-row icon picker. Props-driven + decoupled (owns its own NotionSidebarPage type).",
-  "deps": {
-    "shared": ["lib/utils"],
-    "slices": [],
-    "convex": []
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "notion-sidebar",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add notion-sidebar",
+    "consumerPath": "slices/notion-sidebar"
   },
-  "notes": "Pure client-side slice. npm: @dnd-kit/core + sortable + utilities (tree drag). Host owns the page list and dispatches onSelect/onCreate/onRename/onDelete/onMove/onIconChange. Wire renderIcon + renderIconPicker to @/features/icon-picker for rich icons. Pair with notion-shell (page editor) + notion-database (embedded DBs)."
+  "files": [
+    "agent.md",
+    "components/NotionSidebar.tsx",
+    "components/SidebarRow.tsx",
+    "index.ts",
+    "lib/tree.ts",
+    "slice.contract.ts",
+    "slice.json",
+    "types.ts"
+  ],
+  "imports": {
+    "shared": [],
+    "external": [
+      "@/components/ui/button",
+      "@/components/ui/input",
+      "@/lib/utils",
+      "@dnd-kit/sortable",
+      "@dnd-kit/utilities",
+      "lucide-react",
+      "react"
+    ]
+  }
 }

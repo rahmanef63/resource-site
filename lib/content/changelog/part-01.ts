@@ -2,6 +2,31 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "QA-MANIFEST",
+    "version": "manifests@schema-a",
+    "date": 1780790400000,
+    "kind": "improvement",
+    "title": "Manifest debt zeroed + previews for the freshly lifted editors",
+    "body": "validate:manifests had 23 long-standing (warn-only) errors: 7 slices still shipped the legacy {name, deps, notes} manifest shape and user-management used a stability value outside the enum. All 7 are converted to Schema A (slug/version/tier/distribution/files/imports — file lists from git, imports scanned from source; preview.tsx excluded), user-management moves alpha → experimental, and the validator now reports 0 errors. The two os-vps editors lifted this morning also join the variant-preview registry (33 slugs total): code-editor with three mock-fs scenarios and media-viewer with the offline sample gallery + a data-URI remote payload.",
+    "groups": [
+      {
+        "heading": "Manifests → Schema A",
+        "bullets": [
+          { "text": "image-picker, notion-database, notion-shell, notion-sidebar, selection, theme-presets — legacy shape converted; versions sourced from slice.json", "slug": "notion-database" },
+          { "text": "files — converted with distribution.method \"manual\" (no slice.json yet; consumed by the notion template + image-picker page)" },
+          { "text": "user-management — stability \"alpha\" → \"experimental\" (schema enum)", "slug": "user-management" }
+        ]
+      },
+      {
+        "heading": "New previews",
+        "bullets": [
+          { "text": "code-editor — sample-tree / markdown-doc / python-script scenarios over the writable mock fs", "slug": "code-editor" },
+          { "text": "media-viewer — sample-gallery / remote-image scenarios, fully offline", "slug": "media-viewer" }
+        ]
+      }
+    ]
+  },
+  {
     "id": "CODE-EDITOR",
     "version": "code-editor@1.0.0",
     "date": 1780704000000,

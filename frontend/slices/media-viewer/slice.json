@@ -4,22 +4,57 @@
   "version": "1.0.0",
   "category": "ui",
   "kind": "ui",
-  "title": "Preview — media quick-look",
-  "description": "Quick-look media viewer. Zoomable images with dimensions + checkerboard transparency, an audio player with CSS-bar waveform/transport, a video player with play/pause + scrubber + volume, and PDF/text surfaces. Type-indicator chip, Download, and Open-in-editor handoff via an injectable opener (image → image editor, video/audio → video editor). Remote files render through an injectable media source (identity by default — public URLs just work); the bundled sample gallery is fully offline.",
+  "title": "Preview \u2014 media quick-look",
+  "description": "Quick-look media viewer. Zoomable images with dimensions + checkerboard transparency, an audio player with CSS-bar waveform/transport, a video player with play/pause + scrubber + volume, and PDF/text surfaces. Type-indicator chip, Download, and Open-in-editor handoff via an injectable opener (image \u2192 image editor, video/audio \u2192 video editor). Remote files render through an injectable media source (identity by default \u2014 public URLs just work); the bundled sample gallery is fully offline.",
   "namespace": "@/features/media-viewer",
   "frontend": {
     "slicePath": "frontend/slices/media-viewer",
     "configExport": "mediaViewerConfig"
   },
   "deps": {
-    "npm": ["lucide-react"],
-    "shadcn": ["button", "badge", "separator", "tooltip", "slider"],
+    "npm": [
+      "lucide-react"
+    ],
+    "shadcn": [
+      "button",
+      "badge",
+      "separator",
+      "tooltip",
+      "slider"
+    ],
     "env": [],
     "peers": []
   },
-  "registers": ["registry"],
-  "audit": ["bp:ui-consistency"],
+  "registers": [
+    "registry"
+  ],
+  "audit": [
+    "bp:ui-consistency"
+  ],
   "license": "MIT",
-  "tags": ["media", "preview", "viewer", "ui"],
-  "previews": []
+  "tags": [
+    "media",
+    "preview",
+    "viewer",
+    "ui"
+  ],
+  "previews": [
+    {
+      "component": "MediaViewer",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "sample-gallery",
+          "title": "Sample gallery",
+          "description": "Offline carousel: images, simulated video/audio transport, pdf, text"
+        },
+        {
+          "id": "remote-image",
+          "title": "Remote payload",
+          "description": "payload={path,name,kind} through the identity media source (data-URI, offline)"
+        }
+      ],
+      "seed": "fully offline \u2014 bundled SVG samples + data-URI remote payload"
+    }
+  ]
 }
