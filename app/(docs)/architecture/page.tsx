@@ -122,6 +122,22 @@ notion-clone   ✅        ✅          ✅          ✅          ✅         ✅
       </section>
 
       <section className="mt-12 space-y-4">
+        <h2 className="text-2xl font-semibold tracking-tight">Shell hierarchy — who composes whom</h2>
+        <p className="text-sm text-muted-foreground">
+          Five shell-family slices, one composition rule: outer chrome is owned by exactly one
+          shell, everything else is an inner surface mounted inside it. Never nest two chromes.
+        </p>
+        <ul className="space-y-1.5 pl-6 text-sm list-disc text-muted-foreground">
+          <li><strong className="text-foreground">appshell</strong> — OS desktop/mobile chrome (windows, dock, menu bar). The outermost layer for OS-style apps; everything else runs in its windows.</li>
+          <li><strong className="text-foreground">dashboard-shell</strong> — app chrome SSOT for dashboards: sidebar + topbar (desktop), dock + sheet (mobile). The single outer chrome for admin/workspace surfaces.</li>
+          <li><strong className="text-foreground">workspace-shell</strong> — nav context primitive (workspace × menuSet pair + switcher). Feeds nav state INTO dashboard-shell; renders no chrome.</li>
+          <li><strong className="text-foreground">admin-panel</strong> — 17 RBAC-gated sections. Its AdminShell is the INNER section list; mount <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">&lt;AdminPage&gt;</code> inside dashboard-shell, never the reverse.</li>
+          <li><strong className="text-foreground">admin</strong> — headless admin scaffold (nav-from-registry + stats factory). No chrome of its own; pair with dashboard-shell.</li>
+          <li><strong className="text-foreground">platform-admin</strong> — multi-tenant control-plane panels (contract-only). Mounts inside dashboard-shell like any other admin surface.</li>
+        </ul>
+      </section>
+
+      <section className="mt-12 space-y-4">
         <h2 className="text-2xl font-semibold tracking-tight">Wave progression (recent)</h2>
         <ul className="space-y-1 pl-6 text-sm list-disc text-muted-foreground">
           <li><span className="font-mono text-foreground">BR</span> — wildcard subdomain routing (8 demo URLs, host-based rewriter, zero fork)</li>

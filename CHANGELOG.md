@@ -11,6 +11,16 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-06 — shell hierarchy contract (UX wave U5)
+
+- `/architecture` gains "Shell hierarchy — who composes whom": appshell (OS
+  chrome) / dashboard-shell (app chrome SSOT) / workspace-shell (nav
+  context, no chrome) / admin-panel + admin + platform-admin (inner
+  surfaces). One rule: exactly one outer chrome, never nest two.
+- admin-panel + platform-admin declare `dashboard-shell` peer with the
+  mount direction; `admin` description states it's headless; AdminShell
+  docblock spells out it's the inner section nav.
+
 ### 2026-06-06 — UI consistency pass (UX wave U4)
 
 - `PageHeader` gains a `compact` bar variant; `/build`, `/control-room`,

@@ -1579,7 +1579,10 @@ const [count, setCount] = useBroadcastSync("rr:counter", 0);
     npm: [],
     shadcn: ["card", "badge", "button"],
     env: [],
-    peers: [{ slug: "rbac-roles", range: "^0.1", reason: "Admin sections require RBAC perms — must seed roles first." }],
+    peers: [
+      { slug: "rbac-roles", range: "^0.1", reason: "Admin sections require RBAC perms — must seed roles first." },
+      { slug: "dashboard-shell", range: "^0.1", reason: "AdminShell is the INNER section nav — mount AdminPage inside the dashboard-shell app chrome." },
+    ],
     tags: ["admin", "owner", "platform", "rbac", "instrumentation", "panel"],
     usedBy: ["personal-brand-os"],
     agentRecipe: "Run `npx rr add admin-panel`. Wrap pages with <AdminPage workspaceId tier>. AccessGate hides UI for non-admins, AdminShell renders 2-col layout with sidebar filtered by tier+perms. ADMIN_SECTIONS in config.ts is SSOT (17 entries). Personal-brand-os = tier 'solo' = owner sees everything.",
@@ -1767,7 +1770,7 @@ const [count, setCount] = useBroadcastSync("rr:counter", 0);
     category: "infra",
     kind: "full",
     version: "0.2.1",
-    description: "Per-instance admin landing scaffold + portable nav-from-registry factory. Consumer supplies a SliceRegistryAdapter (each slice declares its own admin.activity[]) + queryTable reader; the slice's buildAdminStats(opts) emits the { counts, unreadMessages, activity } shape Convex's admin.stats query returns. Pulled UP from rahmanef.com (Wave N+3.1, commit b542389) — domain literals dropped at the kitab boundary. Gated by requireAdmin on Convex side; superadmin email gate via SUPER_ADMIN_EMAIL env.",
+    description: "HEADLESS admin scaffold — no chrome of its own; pair with dashboard-shell for app chrome. Per-instance admin landing scaffold + portable nav-from-registry factory. Consumer supplies a SliceRegistryAdapter (each slice declares its own admin.activity[]) + queryTable reader; the slice's buildAdminStats(opts) emits the { counts, unreadMessages, activity } shape Convex's admin.stats query returns. Pulled UP from rahmanef.com (Wave N+3.1, commit b542389) — domain literals dropped at the kitab boundary. Gated by requireAdmin on Convex side; superadmin email gate via SUPER_ADMIN_EMAIL env.",
     source: "rahmanef63/resource-site",
     slicePath: "frontend/slices/admin",
     convexPaths: ["convex/features/admin"],
@@ -1798,6 +1801,7 @@ const [count, setCount] = useBroadcastSync("rr:counter", 0);
     peers: [
       { slug: "convex-auth", range: "^0.1", reason: "Actor identity for audit + tier-set ops." },
       { slug: "audit-log", range: "^0.2", reason: "padmin_audit table feeds through audit-log TenantAdapter." },
+      { slug: "dashboard-shell", range: "^0.1", reason: "Control-plane panels mount inside the dashboard-shell app chrome — no chrome of its own." },
     ],
     tags: ["infra", "admin", "multi-tenant", "saas", "platform"],
     usedBy: [],

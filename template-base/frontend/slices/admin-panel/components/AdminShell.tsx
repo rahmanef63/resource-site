@@ -23,6 +23,11 @@ interface AdminShellProps {
  *
  * Routing is the caller's responsibility — AdminShell only decides what's
  * visible. Wire `renderItem` to Next's <Link> in your app.
+ *
+ * Composition rule (shell hierarchy): AdminShell is the INNER section
+ * nav. Mount <AdminPage> inside your app chrome (dashboard-shell peer) —
+ * it never renders its own topbar/sidebar chrome, and you should never
+ * nest a second chrome inside it.
  */
 export function AdminShell({
   workspaceId,

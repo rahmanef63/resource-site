@@ -2178,7 +2178,7 @@
       "slug": "admin",
       "title": "Admin — Generic Shell",
       "category": "infra",
-      "description": "Per-instance admin landing scaffold + portable nav-from-registry factory. Consumer supplies a SliceRegistryAdapter (each slice declares its own admin.activity[]) + queryTable reader; the slice's buildAdminStats(opts) emits the { counts, unreadMessages, activity } shape Convex's admin.stats query returns. Pulled UP from rahmanef.com (Wave N+3.1, commit b542389) — domain literals dropped at the kitab boundary. Gated by requireAdmin on Convex side; superadmin email gate via SUPER_ADMIN_EMAIL env.",
+      "description": "HEADLESS admin scaffold — no chrome of its own; pair with dashboard-shell for app chrome. Per-instance admin landing scaffold + portable nav-from-registry factory. Consumer supplies a SliceRegistryAdapter (each slice declares its own admin.activity[]) + queryTable reader; the slice's buildAdminStats(opts) emits the { counts, unreadMessages, activity } shape Convex's admin.stats query returns. Pulled UP from rahmanef.com (Wave N+3.1, commit b542389) — domain literals dropped at the kitab boundary. Gated by requireAdmin on Convex side; superadmin email gate via SUPER_ADMIN_EMAIL env.",
       "source": "rahmanef63/resource-site",
       "install": "npx rahman-resources add admin",
       "npmPackages": [],
@@ -3905,6 +3905,11 @@
           "slug": "rbac-roles",
           "range": "^0.1",
           "reason": "Admin sections require RBAC perms — must seed roles first."
+        },
+        {
+          "slug": "dashboard-shell",
+          "range": "^0.1",
+          "reason": "AdminShell is the INNER section nav — mount AdminPage inside the dashboard-shell app chrome."
         }
       ],
       "providers": [],
@@ -4237,7 +4242,7 @@
       "category": "infra",
       "kind": "full",
       "version": "0.2.1",
-      "description": "Per-instance admin landing scaffold + portable nav-from-registry factory. Consumer supplies a SliceRegistryAdapter (each slice declares its own admin.activity[]) + queryTable reader; the slice's buildAdminStats(opts) emits the { counts, unreadMessages, activity } shape Convex's admin.stats query returns. Pulled UP from rahmanef.com (Wave N+3.1, commit b542389) — domain literals dropped at the kitab boundary. Gated by requireAdmin on Convex side; superadmin email gate via SUPER_ADMIN_EMAIL env.",
+      "description": "HEADLESS admin scaffold — no chrome of its own; pair with dashboard-shell for app chrome. Per-instance admin landing scaffold + portable nav-from-registry factory. Consumer supplies a SliceRegistryAdapter (each slice declares its own admin.activity[]) + queryTable reader; the slice's buildAdminStats(opts) emits the { counts, unreadMessages, activity } shape Convex's admin.stats query returns. Pulled UP from rahmanef.com (Wave N+3.1, commit b542389) — domain literals dropped at the kitab boundary. Gated by requireAdmin on Convex side; superadmin email gate via SUPER_ADMIN_EMAIL env.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/admin",
       "convexPaths": [
@@ -4302,6 +4307,11 @@
           "slug": "audit-log",
           "range": "^0.2",
           "reason": "padmin_audit table feeds through audit-log TenantAdapter."
+        },
+        {
+          "slug": "dashboard-shell",
+          "range": "^0.1",
+          "reason": "Control-plane panels mount inside the dashboard-shell app chrome — no chrome of its own."
         }
       ],
       "providers": [],

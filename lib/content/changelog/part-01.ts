@@ -2,6 +2,29 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "UX-U5",
+    "version": "site@shell-hierarchy",
+    "date": 1780790400000,
+    "kind": "improvement",
+    "title": "Shell hierarchy made explicit — one chrome, inner surfaces mount inside it",
+    "body": "UX wave U5. Six shell-family slices (appshell, dashboard-shell, workspace-shell, admin-panel, admin, platform-admin) had no documented composition story — consumers couldn't tell which renders chrome and which mounts inside it. Now: /architecture gains a \"Shell hierarchy — who composes whom\" section (one rule: exactly one outer chrome, never nest two); admin-panel + platform-admin declare dashboard-shell as a peer with the mount direction in the reason; the admin slice's description states upfront that it is HEADLESS (nav-from-registry scaffold, no chrome); AdminShell's docblock spells out that it is the INNER section nav. Investigation note: AdminShell composing DashboardShell directly would nest two chromes — wrong by the hierarchy's own rule — so the DRY here is the contract, not a forced refactor.",
+    "groups": [
+      {
+        "heading": "Site (changed)",
+        "bullets": [
+          "/architecture: shell hierarchy section (appshell → dashboard-shell → inner surfaces)"
+        ]
+      },
+      {
+        "heading": "Slices (changed)",
+        "bullets": [
+          { "text": "admin-panel + platform-admin: dashboard-shell peer with mount-direction reason", "slug": "admin-panel", "kind": "slice" },
+          { "text": "admin: description repositioned as headless scaffold (pair with dashboard-shell)", "slug": "admin", "kind": "slice" }
+        ]
+      }
+    ]
+  },
+  {
     "id": "UX-U4",
     "version": "site@consistency",
     "date": 1780790400000,
