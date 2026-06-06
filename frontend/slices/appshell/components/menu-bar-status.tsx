@@ -4,13 +4,16 @@ import { useEffect, useState } from "react";
 import { Sun, Moon, Activity, Search, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useShellAppearance, useCpuPercent } from "../registry/capabilities";
-import { toggleSpotlight, toggleInspector } from "../lib/store";
+import { toggleSpotlight, toggleInspector, toggleNotificationCenter } from "../lib/store";
+import { useNotifications } from "../lib/toast";
+import { Slot } from "../registry/feature-registry";
 
 // Right cluster of the menu bar: cpu · spotlight · inspector · theme · clock.
 export function StatusCluster() {
   const { theme, setTheme } = useShellAppearance();
   const cpu = useCpuPercent();
   const clock = useClock();
+  const unread = useNotifications().some((n) => !n.read);
 
   return (
     <div className="ml-auto flex items-center gap-0.5 text-muted-foreground">
@@ -50,7 +53,19 @@ export function StatusCluster() {
       >
         {theme === "dark" ? <Moon className="size-4" /> : <Sun className="size-4" />}
       </Button>
-      <time className="px-1.5 font-semibold tabular-nums text-foreground">{clock}</time>
+      {/* Host-contributed trailing items (e.g. macOS Control Center). */}
+      <Slot region="menuBarStatus" />
+      {/* Clock → Notification Center; dot = unread. */}
+      <Button
+        type="button"
+        variant="ghost"
+        aria-label="Notification Center"
+        onClick={toggleNotificationCenter}
+        className="h-auto relative flex items-center rounded-md px-1.5 py-0.5 font-semibold tabular-nums text-foreground hover:bg-[var(--hover-strong)]"
+      >
+        {clock}
+        {unread && <span className="absolute right-0.5 top-0.5 size-1.5 rounded-full bg-primary" />}
+      </Button>
     </div>
   );
 }

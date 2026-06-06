@@ -3,12 +3,13 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useApps } from "../lib/registry";
-import { useWindowOrder, useFocused } from "../hooks/use-shell";
+import { useWindowOrder, useFocused, useWindow } from "../hooks/use-shell";
 import { shellStore, openWindow, minimizeWindow, restoreWindow, toggleSpotlight } from "../lib/store";
 import { AppIcon } from "./app-icon";
 import { WindowContent } from "./window-content";
 import { MobileSwitcher } from "./mobile-switcher";
 import { MobileHome } from "./mobile-home";
+import { MobileNotifications } from "./mobile-notifications";
 import { Slot } from "../registry/feature-registry";
 import { ShellUIProvider, type ShellUI } from "../registry/shell-ui";
 
@@ -23,6 +24,7 @@ export function MobileShell() {
   const [home, setHome] = useState(true);
   const [switcher, setSwitcher] = useState(false);
   const [cc, setCc] = useState(false);
+  const [nc, setNc] = useState(false); // notification center (pull down, left half)
 
   const dockApps = apps.filter((a) => DOCK_IDS.includes(a.id));
 
@@ -32,7 +34,7 @@ export function MobileShell() {
     focused && !shellStore.getWindow(focused)?.minimized
       ? focused
       : ([...order].reverse().find((id) => !shellStore.getWindow(id)?.minimized) ?? null);
-  const top = topId ? shellStore.getWindow(topId) : null;
+  const top = useWindow(topId ?? "__none__"); // reactive: re-renders on the active window's own payload/title changes
   const showApp = !home && top;
   const activeApp = top ? apps.find((a) => a.id === top.app) : null;
 
@@ -93,6 +95,7 @@ export function MobileShell() {
         onLaunch={launch}
         onSearch={toggleSpotlight}
         onControlCenter={() => setCc(true)}
+        onNotifications={() => setNc(true)}
         indicator={<Indicator />}
       />
 
@@ -122,6 +125,7 @@ export function MobileShell() {
       )}
 
       {switcher && <MobileSwitcher onPick={resume} onHome={goHome} />}
+      <MobileNotifications open={nc} onClose={() => setNc(false)} />
       <Slot region="controlCenter" />
       <Slot region="topPill" />
       </div>

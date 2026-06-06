@@ -1,154 +1,148 @@
 "use client";
 
-import Link from "next/link";
-import { LayoutGrid, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { useEffect, useRef } from "react";
+import { LayoutGrid, Grid3x3 } from "lucide-react";
 import { useApps } from "../lib/registry";
 import { useWindowOrder, useFocused } from "../hooks/use-shell";
-import { shellStore, openWindow, focusApp, restoreWindow, setLauncherOpen } from "../lib/store";
-import { AppIcon } from "./app-icon";
+import { shellStore, setLauncherOpen } from "../lib/store";
+import { BASE, DockIcon, PlainIcon } from "./dock-parts";
 import type { AppDescriptor, WindowState } from "../lib/types";
 
-// Glass dock, derived from the registry + open windows (rr: dynamic). macOS-like:
-// click a RUNNING app to focus its front window (never spawn); hover to see its
-// open windows and switch between them; `multi` apps get a "New Window" entry.
-export function Dock() {
+// ── macOS dock magnification ─────────────────────────────────────────────────
+// Icon size is driven by LAYOUT width so the glass bar actually grows + re-centres
+// as icons magnify. Crucially the magnification CONSERVES total width: a FIXED
+// pool of extra width (DOCK_EXTRA) is shared out among icons by a gaussian weight,
+// so the bar has just TWO widths — collapsed at rest, one stable expanded size on
+// hover — instead of fluctuating as the cursor moves. Icons are square, so the bar
+// grows in height too. Distance is measured against each slot's FIXED rest centre
+// (the centre-justified row's centre x is invariant under symmetric growth), so
+// there's no measure→grow feedback.
+const SEP_W = 13; // divider slot px
+const GAP = 8; // px between slots
+const MAG_SIGMA = 100; // bell-curve spread (≈3 icons each side ripple)
+const DOCK_EXTRA = 340; // pool px shared by gaussian weight (peak icon ≈ +DOCK_EXTRA/restNorm)
+
+type Slot =
+  | { kind: "app"; app: AppDescriptor; windows: WindowState[] }
+  | { kind: "sep" }
+  | { kind: "plain"; id: string; label: string; onClick: () => void; node: React.ReactNode };
+
+export function Dock({ onMissionControl }: { onMissionControl?: () => void }) {
   const apps = useApps().filter((a) => !a.noDock);
   const order = useWindowOrder();
   const focused = useFocused();
   const wins = order.map((id) => shellStore.getWindow(id)).filter(Boolean) as WindowState[];
+  const rowRef = useRef<HTMLDivElement>(null);
+
+  const slots: Slot[] = [
+    ...apps.map((app): Slot => ({ kind: "app", app, windows: wins.filter((w) => w.app === app.id) })),
+    { kind: "sep" },
+    {
+      kind: "plain", id: "launchpad", label: "Launchpad", onClick: () => setLauncherOpen(true),
+      node: (
+        <span className="grid size-full place-items-center rounded-[var(--radius-icon)] bg-gradient-to-b from-zinc-500 to-zinc-700 text-white">
+          <LayoutGrid className="size-[54%]" />
+        </span>
+      ),
+    },
+    ...(onMissionControl
+      ? [{
+          kind: "plain", id: "mission-control", label: "Mission Control", onClick: onMissionControl,
+          node: (
+            <span className="grid size-full place-items-center rounded-[var(--radius-icon)] bg-gradient-to-b from-slate-600 to-slate-800 text-white">
+              <Grid3x3 className="size-[54%]" />
+            </span>
+          ),
+        } as Slot]
+      : []),
+  ];
+
+  // Each slot's resting centre, as an offset from the row centre (fixed geometry).
+  const restW = (s: Slot) => (s.kind === "sep" ? SEP_W : BASE);
+  const totalRest = slots.reduce((a, s) => a + restW(s), 0) + GAP * (slots.length - 1);
+  let acc = 0;
+  const restOffset = slots.map((s) => {
+    const c = acc + restW(s) / 2 - totalRest / 2;
+    acc += restW(s) + GAP;
+    return c;
+  });
+  // Constant normaliser = the gaussian weight-sum when the cursor sits at the row
+  // centre (its MAX, since the layout is symmetric and every neighbour exists).
+  // Dividing the shared pool by THIS — not the live sum — keeps the icon under the
+  // cursor the same size everywhere: at an edge fewer neighbours exist, so the
+  // live sum shrinks and would otherwise let the edge icon hog the whole pool
+  // (the "edge icons balloon" bug). Bar just grows a touch less near the edges.
+  const restNorm =
+    restOffset.reduce(
+      (a, off, i) => (slots[i].kind === "sep" ? a : a + Math.exp(-(off * off) / (2 * MAG_SIGMA * MAG_SIGMA))),
+      0,
+    ) || 1;
+
+  // ── Magnification is driven OUTSIDE React (no re-render per pointermove). The
+  // hover x is kept in a ref; a single rAF reads the row centre ONCE then writes
+  // each slot's width + zone height directly to the DOM. CSS transitions animate
+  // the change. Σ widths is constant on hover (DOCK_EXTRA shared by gaussian
+  // weight), so the bar has just two widths.
+  const slotEls = useRef<(HTMLDivElement | null)[]>([]);
+  const zoneEls = useRef<(HTMLDivElement | null)[]>([]);
+  const mouseX = useRef<number | null>(null);
+  const raf = useRef(0);
+
+  const apply = () => {
+    raf.current = 0;
+    const row = rowRef.current;
+    if (!row) return;
+    const mx = mouseX.current;
+    const hovering = mx != null;
+    const rc = row.getBoundingClientRect(); // ONE read per frame (no per-slot reflow)
+    const rowCenter = rc.left + rc.width / 2;
+    const weights = slots.map((s, i) => {
+      if (!hovering || s.kind === "sep") return 0;
+      const d = mx! - (rowCenter + restOffset[i]);
+      return Math.exp(-(d * d) / (2 * MAG_SIGMA * MAG_SIGMA));
+    });
+    slots.forEach((s, i) => {
+      if (s.kind === "sep") return;
+      // Normalise by the constant restNorm (not Σ weights) → consistent icon size
+      // at every position; the bar's total growth eases off naturally at the edges.
+      const w = BASE + (hovering ? DOCK_EXTRA * (weights[i] / restNorm) : 0);
+      const slot = slotEls.current[i];
+      const zone = zoneEls.current[i];
+      if (slot) slot.style.width = `${w}px`;
+      if (zone) zone.style.height = `${w}px`;
+    });
+  };
+  const schedule = () => { if (!raf.current) raf.current = requestAnimationFrame(apply); };
+
+  // Re-apply after any structural re-render (focus / windows) so a mid-hover
+  // re-render doesn't snap icons back to rest. Also cancels the rAF on unmount.
+  useEffect(() => {
+    if (mouseX.current != null) schedule();
+    return () => { if (raf.current) cancelAnimationFrame(raf.current); };
+  });
 
   return (
     <div className="pointer-events-none absolute inset-x-0 bottom-2 z-[880] flex justify-center">
       <div
-        className="glass pointer-events-auto flex items-end gap-2 rounded-[22px] border border-white/40 px-2.5 py-2 shadow-[0_1px_0_rgba(255,255,255,0.4)_inset,0_18px_50px_-10px_rgba(0,0,0,0.5)] dark:border-white/10"
-        style={{ background: "var(--dock-bg)" }}
+        ref={rowRef}
+        onPointerMove={(e) => { mouseX.current = e.clientX; schedule(); }}
+        onPointerLeave={() => { mouseX.current = null; schedule(); }}
+        className="glass pointer-events-auto flex items-end rounded-[22px] border border-white/40 px-2.5 py-2 shadow-[0_1px_0_rgba(255,255,255,0.4)_inset,0_18px_50px_-10px_rgba(0,0,0,0.5)] dark:border-white/10"
+        style={{ background: "var(--dock-bg)", gap: GAP }}
       >
-        {apps.map((app) => (
-          <DockIcon
-            key={app.id}
-            app={app}
-            windows={wins.filter((w) => w.app === app.id)}
-            focused={focused}
-          />
-        ))}
-        <div className="mx-0.5 my-1 w-px self-stretch bg-border" />
-        <PlainIcon label="Launchpad" onClick={() => setLauncherOpen(true)}>
-          <span className="grid size-full place-items-center rounded-[var(--radius-icon)] bg-gradient-to-b from-zinc-500 to-zinc-700 text-white">
-            <LayoutGrid className="size-[54%]" />
-          </span>
-        </PlainIcon>
-      </div>
-    </div>
-  );
-}
-
-const ICON =
-  "relative block size-[52px] transition-transform duration-200 ease-out hover:-translate-y-2 hover:scale-110";
-
-// Floating hover panel above an icon (CSS-only; pb-3 bridges the gap so the
-// cursor can travel from icon to panel without it closing).
-function HoverPanel({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="pointer-events-none invisible absolute bottom-full left-1/2 z-[60] -translate-x-1/2 pb-3 opacity-0 transition-opacity duration-150 group-hover:visible group-hover:opacity-100 group-hover:pointer-events-auto">
-      <div className="glass min-w-[180px] rounded-xl border border-border p-1 shadow-[0_12px_40px_-8px_rgba(0,0,0,0.55)]">
-        {children}
-      </div>
-    </div>
-  );
-}
-
-function DockIcon({
-  app,
-  windows,
-  focused,
-}: {
-  app: AppDescriptor;
-  windows: WindowState[];
-  focused: string | null;
-}) {
-  const running = windows.length > 0;
-  const active = windows.some((w) => w.id === focused && !w.minimized);
-  const href = "/" + (app.slug ?? app.id);
-
-  // Click a running app → focus its front window; otherwise open one.
-  const activate = () => {
-    if (!focusApp(app.id)) openWindow(app.id, app.title, app.defaultSize, undefined, { multi: app.multi });
-  };
-
-  return (
-    <div className="group relative flex">
-      <HoverPanel>
-        <div className="px-2 py-1 text-[11px] font-semibold text-muted-foreground">{app.title}</div>
-        {windows.map((w, i) => (
-          <Button
-            key={w.id}
-            type="button"
-            variant="ghost"
-            onClick={() => restoreWindow(w.id)}
-            className={cn(
-              "h-auto flex w-full items-center gap-2 rounded-md px-2 py-1 text-left text-[12px]",
-              w.id === focused ? "bg-primary/15 text-foreground" : "text-foreground/80 hover:bg-[var(--hover-strong)]",
-            )}
-          >
-            <span className="truncate">{w.title}</span>
-            {windows.length > 1 && <span className="ml-auto text-[10px] text-muted-foreground">{i + 1}</span>}
-            {w.minimized && <span className="text-[10px] text-muted-foreground">hidden</span>}
-          </Button>
-        ))}
-        {app.multi && (
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={() => openWindow(app.id, app.title, app.defaultSize, undefined, { multi: true })}
-            className="h-auto flex w-full items-center gap-2 rounded-md px-2 py-1 text-left text-[12px] text-foreground/80 hover:bg-[var(--hover-strong)]"
-          >
-            <Plus className="size-3.5" /> New Window
-          </Button>
-        )}
-      </HoverPanel>
-
-      <Link
-        href={href}
-        prefetch={false}
-        onPointerEnter={() => void app.load?.().catch(() => {})}
-        onClick={(e) => {
-          // Plain left-click = focus/open in place; ⌘/middle-click = open in a
-          // new tab via the real <a href> (deep link).
-          if (e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey) {
-            e.preventDefault();
-            activate();
+        {slots.map((s, i) => {
+          if (s.kind === "sep") {
+            return <div key="sep" className="flex shrink-0 self-stretch items-center justify-center" style={{ width: SEP_W }}><span className="my-1 h-full w-px bg-border" /></div>;
           }
-        }}
-        className={cn(ICON, active && "-translate-y-0.5")}
-      >
-        <AppIcon app={app} />
-        {running && (
-          <span className="absolute -bottom-1 left-1/2 size-1 -translate-x-1/2 rounded-full bg-muted-foreground" />
-        )}
-      </Link>
-    </div>
-  );
-}
-
-function PlainIcon({
-  label,
-  onClick,
-  children,
-}: {
-  label: string;
-  onClick: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="group relative flex">
-      <HoverPanel>
-        <div className="px-2 py-1 text-[12px] font-medium text-foreground/80">{label}</div>
-      </HoverPanel>
-      <Button type="button" variant="ghost" size="icon" aria-label={label} onClick={onClick} className={cn("h-auto w-auto hover:bg-transparent", ICON)}>
-        {children}
-      </Button>
+          const slotRef = (el: HTMLDivElement | null) => { slotEls.current[i] = el; };
+          const zoneRef = (el: HTMLDivElement | null) => { zoneEls.current[i] = el; };
+          return s.kind === "app" ? (
+            <DockIcon key={s.app.id} app={s.app} windows={s.windows} focused={focused} slotRef={slotRef} zoneRef={zoneRef} />
+          ) : (
+            <PlainIcon key={s.id} label={s.label} onClick={s.onClick} slotRef={slotRef} zoneRef={zoneRef}>{s.node}</PlainIcon>
+          );
+        })}
+      </div>
     </div>
   );
 }

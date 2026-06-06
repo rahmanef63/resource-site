@@ -7,6 +7,7 @@ import type { AppDescriptor } from "../lib/types";
 import { AppIcon } from "./app-icon";
 import { Slot } from "../registry/feature-registry";
 import { MobileAppLibrary } from "./mobile-app-library";
+import { AppActionSheet, AppsGrid } from "./mobile-home-parts";
 
 // Paged iPhone home: [Today widgets] · [App grid] · [App Library]. The dock,
 // page dots, search pill and home-indicator persist across pages.
@@ -16,6 +17,7 @@ export function MobileHome({
   onLaunch,
   onSearch,
   onControlCenter,
+  onNotifications,
   indicator,
 }: {
   apps: AppDescriptor[];
@@ -23,10 +25,12 @@ export function MobileHome({
   onLaunch: (app: AppDescriptor) => void;
   onSearch: () => void;
   onControlCenter: () => void;
+  onNotifications?: () => void;
   indicator: React.ReactNode;
 }) {
   const pagerRef = useRef<HTMLDivElement>(null);
   const [page, setPage] = useState(1); // 0 widgets · 1 apps · 2 library
+  const [ctxApp, setCtxApp] = useState<AppDescriptor | null>(null); // long-press sheet
 
   // Open on the app grid (the middle page), like iPhone's default home.
   useLayoutEffect(() => {
@@ -39,9 +43,12 @@ export function MobileHome({
     if (el) setPage(Math.round(el.scrollLeft / el.clientWidth));
   };
 
-  // Swipe DOWN from the top safe-area opens Control Center (iPhone).
+  // Swipe DOWN from the top safe-area: LEFT half → Notification Center,
+  // RIGHT half → Control Center (iPhone's split gesture).
   const onTopPointerDown = (e: React.PointerEvent) => {
     const sy = e.clientY;
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const left = e.clientX - rect.left < rect.width / 2;
     let fired = false;
     const cleanup = () => {
       window.removeEventListener("pointermove", move);
@@ -51,7 +58,8 @@ export function MobileHome({
       if (!fired && ev.clientY - sy > 40) {
         fired = true;
         cleanup();
-        onControlCenter();
+        if (left && onNotifications) onNotifications();
+        else onControlCenter();
       }
     };
     window.addEventListener("pointermove", move);
@@ -60,7 +68,7 @@ export function MobileHome({
 
   return (
     <div className="absolute inset-0 flex flex-col">
-      {/* top safe area: Dynamic Island lives here; swipe down → Control Center */}
+      {/* top safe area: Dynamic Island lives here; swipe down → NC (left) / CC (right) */}
       <div className="h-9 shrink-0 [touch-action:none]" onPointerDown={onTopPointerDown} />
 
       <div
@@ -72,7 +80,7 @@ export function MobileHome({
           <Slot region="today" />
         </Page>
         <Page>
-          <AppsGrid apps={apps} onLaunch={onLaunch} onSearch={onSearch} />
+          <AppsGrid apps={apps} onLaunch={onLaunch} onSearch={onSearch} onContext={setCtxApp} />
         </Page>
         <Page>
           <MobileAppLibrary apps={apps} onOpen={onLaunch} />
@@ -99,60 +107,18 @@ export function MobileHome({
       )}
 
       {indicator}
+
+      {ctxApp && (
+        <AppActionSheet
+          app={ctxApp}
+          onOpen={() => { setCtxApp(null); onLaunch(ctxApp); }}
+          onClose={() => setCtxApp(null)}
+        />
+      )}
     </div>
   );
 }
 
 function Page({ children }: { children: React.ReactNode }) {
   return <section className="h-full w-full shrink-0 snap-center overflow-hidden">{children}</section>;
-}
-
-// App grid page. A clear upward swipe (not a horizontal page flick) opens search.
-function AppsGrid({
-  apps,
-  onLaunch,
-  onSearch,
-}: {
-  apps: AppDescriptor[];
-  onLaunch: (app: AppDescriptor) => void;
-  onSearch: () => void;
-}) {
-  const onPointerDown = (e: React.PointerEvent) => {
-    const sy = e.clientY;
-    const sx = e.clientX;
-    let fired = false;
-    const cleanup = () => {
-      window.removeEventListener("pointermove", move);
-      window.removeEventListener("pointerup", cleanup);
-    };
-    const move = (ev: PointerEvent) => {
-      const dy = ev.clientY - sy;
-      const dx = ev.clientX - sx;
-      if (!fired && dy < -70 && Math.abs(dx) < 50) {
-        fired = true;
-        cleanup();
-        onSearch();
-      }
-    };
-    window.addEventListener("pointermove", move);
-    window.addEventListener("pointerup", cleanup);
-  };
-
-  return (
-    <div
-      onPointerDown={onPointerDown}
-      className="grid h-full grid-cols-4 content-start gap-x-2.5 gap-y-5 px-[18px] py-3.5 [touch-action:pan-x]"
-    >
-      {apps.map((app) => (
-        <Button key={app.id} type="button" variant="ghost" onClick={() => onLaunch(app)} className="h-auto p-0 hover:bg-transparent flex flex-col items-center gap-1.5">
-          <span className="aspect-square w-full max-w-[62px]">
-            <AppIcon app={app} />
-          </span>
-          <span className="max-w-full truncate text-[11px] font-medium text-white [text-shadow:0_1px_3px_rgba(0,0,0,0.5)]">
-            {app.title}
-          </span>
-        </Button>
-      ))}
-    </div>
-  );
 }

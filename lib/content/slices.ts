@@ -639,7 +639,7 @@ export default function FileExplorerDemo() {
     title: "AppShell — Desktop + Mobile OS Shell",
     category: "os",
     kind: "full",
-    version: "1.1.0",
+    version: "1.2.0",
     tagline: "Manifest-driven macOS-style window manager + iOS-style mobile surface in one slice.",
     description:
       "Generic, brand-free OS-style shell framework. One <AppShell manifest> wrapper provider gives a project a macOS-style window manager (drag/snap/maximize, dock, menu bar, Spotlight) AND an iOS-style mobile surface (home pager, app library, control center, widgets), driven entirely by a manifest: brand, apps, features, surface regions, capabilities, persistence, keymap. Five shell features (search, inspector, notifications, control-center, widgets) are bundled as defineFeature() contributions inside the slice and mount via named <Slot>s. Responsiveness is a single ResponsiveProvider + 4 DRY primitives (AppFrame, MasterDetail, ResponsiveToolbar, TouchList). Imports nothing project-specific — the consumer injects data/auth/AI through manifest.capabilities. Lifted from os-vps (Topside).",

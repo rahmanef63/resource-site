@@ -1,11 +1,11 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "appshell",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "category": "os",
   "kind": "full",
   "title": "AppShell — Desktop + Mobile OS Shell",
-  "description": "Generic, brand-free OS-style shell framework. One <AppShell manifest> wrapper provider gives a project a macOS-style window manager AND an iOS-style mobile surface, driven entirely by a manifest (brand, apps, features, surface regions, capabilities, persistence, keymap). Features (search, settings, widgets, control-center, inspector, notifications) plug in via extension points. Responsiveness is a single provider + shared primitives. Imports no apps or brand strings — the consumer injects everything.",
+  "description": "Generic, brand-free OS-style shell framework. One <AppShell manifest> wrapper provider gives a project a SWITCHABLE multi-shell OS — macOS, Windows 11, Android (Material-You), iOS, plus consumer-registered shells (e.g. a single-pane Dashboard) — over ONE shared window store, driven entirely by a manifest (brand, apps, features, surface regions, capabilities, persistence, keymap). Features (search, settings, widgets, control-center, inspector, notifications) plug in via extension points. Responsiveness is a single provider + shared primitives. Imports no apps or brand strings — the consumer injects everything.",
   "namespace": "@/features/appshell",
   "frontend": {
     "slicePath": "frontend/slices/appshell",

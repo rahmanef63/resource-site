@@ -1,6 +1,7 @@
 import type { ComponentType, ReactNode } from "react";
 import type { AppDescriptor } from "../lib/types";
 import type { ShellCapabilities } from "./capabilities";
+import type { ShellId } from "./shells";
 
 // Named regions a feature can mount into. The surfaces render <Slot region> at a
 // fixed spot; which component fills it comes from the registered features. This
@@ -12,6 +13,7 @@ export type SlotRegion =
   | "notifications" // transient toast stack — desktop + mobile
   | "topPill" // mobile top-center status pill (e.g. dynamic island)
   | "controlCenter" // mobile pull-down control center
+  | "menuBarStatus" // desktop menu-bar trailing cluster (e.g. control center)
   | "today"; // mobile widgets / today page
 
 /**
@@ -25,6 +27,9 @@ export type FeatureDescriptor = {
   slots?: Partial<Record<SlotRegion, ComponentType>>;
   /** Optional context provider the feature needs wrapped around the shell. */
   provider?: ComponentType<{ children: ReactNode }>;
+  /** System default (search/inspector/notifications/control-center/widgets) vs
+   *  a custom feature added by the host. Documents provenance; default "system". */
+  kind?: "system" | "custom";
 };
 
 export type Brand = {
@@ -48,6 +53,9 @@ export type ShellManifest = {
   capabilities?: ShellCapabilities;
   /** Mirror focused app + deep path to the URL (catch-all route). Default on. */
   routing?: boolean;
+  /** Initial shell (macOS/Windows/Dashboard/…). Unset = responsive auto. The
+   *  user's live choice (Settings → Shell) overrides this and persists. */
+  shell?: ShellId;
 };
 
 /** Identity helper — gives a feature its type + a stable authoring shape. */

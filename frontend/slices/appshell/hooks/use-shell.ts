@@ -56,6 +56,14 @@ export function useInspectorOpen(): boolean {
   );
 }
 
+export function useNotificationCenterOpen(): boolean {
+  return useSyncExternalStore(
+    shellStore.subscribe,
+    shellStore.getNotificationCenterOpen,
+    shellStore.getNotificationCenterOpen,
+  );
+}
+
 // The app id of the focused window (or null) — what the Inspector inspects.
 export function useFocusedApp(): string | null {
   const focused = useFocused();

@@ -1,44 +1,16 @@
 "use client";
 
-import { Fragment } from "react";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useApps } from "../lib/registry";
 import { useBrand } from "../registry/brand";
 import { useFocused } from "../hooks/use-shell";
-import {
-  shellStore,
-  openWindow,
-  closeWindow,
-  setLauncherOpen,
-  toggleSpotlight,
-  toggleInspector,
-  toggleMaximize,
-} from "../lib/store";
+import { shellStore, openWindow, closeWindow, toggleMaximize } from "../lib/store";
 import { StatusCluster } from "./menu-bar-status";
-
-// execCommand is deprecated but the only zero-dep clipboard driver from a menu.
-function exec(cmd: string) {
-  try {
-    document.execCommand(cmd);
-  } catch {
-    /* no-op in read-only contexts; the ⌘ label is the real affordance */
-  }
-}
-
-// Edit menu rows — execCommand drives the focused selection; `sep` = divider.
-const EDIT_ITEMS: { cmd: string; label: string; key: string; sep?: boolean }[] = [
-  { cmd: "cut", label: "Cut", key: "⌘X" },
-  { cmd: "copy", label: "Copy", key: "⌘C" },
-  { cmd: "paste", label: "Paste", key: "⌘V" },
-  { cmd: "selectAll", label: "Select All", key: "⌘A", sep: true },
-];
+import { AppMenus, DefaultMenus, WindowMenu, HelpMenu, Menu } from "./menu-bar-menus";
 
 // macOS-style menu bar: logo · app menus · right status cluster (sys + clock).
 export function MenuBar() {
@@ -85,61 +57,17 @@ export function MenuBar() {
         </DropdownMenuItem>
       </Menu>
 
-      <Menu label="File">
-        <DropdownMenuItem onSelect={() => setLauncherOpen(true)}>
-          New Window… <DropdownMenuShortcut>⌘N</DropdownMenuShortcut>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem disabled={!focusedId} onSelect={closeFocused}>
-          Close Window <DropdownMenuShortcut>⌘W</DropdownMenuShortcut>
-        </DropdownMenuItem>
-      </Menu>
+      {focusedApp?.menus?.length ? (
+        <AppMenus menus={focusedApp.menus} />
+      ) : (
+        <DefaultMenus focusedId={focusedId} closeFocused={closeFocused} maximizeFocused={maximizeFocused} />
+      )}
 
-      <Menu label="Edit">
-        {EDIT_ITEMS.map((it) => (
-          <Fragment key={it.cmd}>
-            {it.sep && <DropdownMenuSeparator />}
-            <DropdownMenuItem onSelect={() => exec(it.cmd)}>
-              {it.label} <DropdownMenuShortcut>{it.key}</DropdownMenuShortcut>
-            </DropdownMenuItem>
-          </Fragment>
-        ))}
-      </Menu>
-
-      <Menu label="View">
-        <DropdownMenuItem disabled={!focusedId} onSelect={maximizeFocused}>
-          Enter Full Screen <DropdownMenuShortcut>⌃⌘F</DropdownMenuShortcut>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onSelect={() => setLauncherOpen(true)}>
-          Launchpad
-        </DropdownMenuItem>
-        <DropdownMenuItem onSelect={() => toggleSpotlight()}>
-          Spotlight <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
-        </DropdownMenuItem>
-        <DropdownMenuItem onSelect={() => toggleInspector()}>
-          AI Inspector <DropdownMenuShortcut>⌘I</DropdownMenuShortcut>
-        </DropdownMenuItem>
-      </Menu>
+      {/* Window + Help persist regardless of app menus (real macOS behaviour). */}
+      <WindowMenu focusedId={focusedId} />
+      <HelpMenu />
 
       <StatusCluster />
     </header>
   );
 }
-
-function Menu(props: { label: string; bold?: boolean; children: React.ReactNode }) {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        className={
-          "rounded-md px-2.5 py-0.5 outline-none hover:bg-[var(--hover-strong)] data-[state=open]:bg-[var(--hover-strong)] " +
-          (props.bold ? "font-bold" : "")
-        }
-      >
-        {props.label}
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="start">{props.children}</DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
-

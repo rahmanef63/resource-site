@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, type ReactNode } from "react";
+import { createContext, useContext, type CSSProperties, type ReactNode } from "react";
 import type { DeviceMode } from "../responsive/use-responsive";
 
 export type ThemeMode = "light" | "dark";
@@ -12,6 +12,10 @@ export type ShellAppearance = {
   setTheme: (t: ThemeMode) => void;
   device: DeviceMode;
   wallpaper?: string;
+  /** Custom wallpaper background (image/gradient/colour). When set it wins over
+   *  the named `wallpaper` preset. A plain CSS-properties bag so the shell never
+   *  imports the host's image-picker. */
+  wallpaperStyle?: CSSProperties;
 };
 
 // A ready-to-run search result (shell-search / Spotlight). The consumer builds

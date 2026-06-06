@@ -1,12 +1,12 @@
 /**
- * Slice contract for `appshell` — v1.1.0.
+ * Slice contract for `appshell` — v1.2.0.
  * Excluded from app tsc; validated by rr tooling on lift.
  */
 import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "appshell",
-  version: "1.1.0",
+  version: "1.2.0",
   category: "ui",
   kind: "full",
   requires: {

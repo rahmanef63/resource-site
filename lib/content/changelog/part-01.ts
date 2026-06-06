@@ -2,6 +2,36 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "MULTISHELL",
+    "version": "appshell@1.2.0",
+    "date": 1780704000000,
+    "kind": "feature",
+    "title": "appshell 1.2.0 — switchable multi-shell OS: macOS / Windows 11 / Android / iOS + consumer shells",
+    "body": "The shell framework grows a shell REGISTRY: chrome is now pluggable while the window store stays single. registry/shells.tsx holds ShellDescriptor (id/surface/group/windowed/wallpaper/render) + per-surface user prefs (a desktop shell AND a mobile shell, resolved by live form factor; sv:shell). Built-ins register on import: macOS (existing DesktopChrome), Windows 11 (centered taskbar + Start menu + Snap-Assist + caption-button windows via Window variant=windows), Android Material-You (status-bar shade w/ quick tiles, at-a-glance home, swipe-up App Drawer, gesture nav, Recents deck) and iOS (existing MobileShell, now with a left-half pull-down Notification Center + app long-press quick-actions). Consumers register their own (os-vps adds a single-pane Dashboard cockpit). Geometry became chrome-aware: WindowState.snapZone persists the snapped zone and applyChromeInsets() re-tiles snapped/maximized windows when a shell with different chrome mounts. Desktop fidelity pass rides along: dock magnification (gaussian, width-conserving) + dock right-click menus, macOS Notification Center backed by a persistent toast log (lib/toast), Cmd+Tab app switcher, Window Overview (Mission Control), desktop context menus, menu-bar Window/Help system menus, and wallpaper=auto resolving to the active shell's native backdrop (wp-win11/material/ios presets). Lifted from os-vps (Topside) after a two-way merge with app-rahmanef's fork — close guards + winId, dock Link deep-links and the shadcn Button sweep all kept. Every file under the 200-LOC gate (dock/menu-bar/mobile-home/store/android split into *-parts).",
+    "groups": [
+      {
+        "heading": "appshell (NEW)",
+        "bullets": [
+          { "text": "registry/shells.tsx — ShellDescriptor registry + per-surface prefs (setShell/useShellPrefs/resolveShell)", "slug": "appshell", "kind": "slice" },
+          { "text": "components/shells/windows/* — Windows 11 taskbar / Start menu / Snap-Assist / shell", "slug": "appshell", "kind": "slice" },
+          { "text": "components/shells/android/* — Material-You shell (shade / drawer / recents / gesture nav)", "slug": "appshell", "kind": "slice" },
+          { "text": "components/shells/{context-menu,window-overview}.tsx — shared chrome", "slug": "appshell", "kind": "slice" },
+          { "text": "components/{notification-center,app-switcher,mobile-notifications}.tsx — macOS NC, Cmd+Tab, iOS NC", "slug": "appshell", "kind": "slice" },
+          { "text": "lib/store-snap.ts — snapZone + applyChromeInsets/retileSnapped + Snap-Assist onSnap pulse", "slug": "appshell", "kind": "slice" }
+        ]
+      },
+      {
+        "heading": "appshell (changed)",
+        "bullets": [
+          { "text": "window.tsx variant=macos|windows; desktop.tsx resolveShell + PhoneFrame preview + Cmd+Arrow snap keys", "slug": "appshell", "kind": "slice" },
+          { "text": "menu-bar Window/Help menus; menu-bar-status clock -> Notification Center with unread dot", "slug": "appshell", "kind": "slice" },
+          { "text": "wallpaper auto -> ShellDescriptor.wallpaper; appshell.css wp-win11/material/ios/auto presets", "slug": "appshell", "kind": "slice" },
+          { "text": "lib/toast.ts persistent notification log (useNotifications/dismiss/clear/markRead)", "slug": "appshell", "kind": "slice" }
+        ]
+      }
+    ]
+  },
+  {
     "id": "SHOTS",
     "version": "shots@layouts",
     "date": 1780790400000,

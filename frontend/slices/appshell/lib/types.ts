@@ -18,6 +18,10 @@ export type WindowState = {
   maximized: boolean;
   /** Saved rect for restore from maximize/snap. */
   prevRect?: Rect;
+  /** The zone this window is snapped to. Kept so a shell switch (different
+   *  chrome insets) can re-tile snapped/maximized windows into the new work
+   *  area instead of leaving frozen geometry. Cleared on free move/resize. */
+  snapZone?: SnapZone;
   /** Optional context handed to the app component (e.g. a file path to open). */
   payload?: unknown;
 };
@@ -35,6 +39,7 @@ export type ShellState = {
   launcherOpen: boolean;
   spotlightOpen: boolean;
   inspectorOpen: boolean;
+  notificationCenterOpen: boolean;
 };
 
 /**
@@ -57,7 +62,27 @@ export type AppDescriptor = {
   noDock?: boolean;
   /** Allow several windows at once (e.g. Files); default = single instance. */
   multi?: boolean;
+
+  /** macOS menu-bar menus contributed by THIS app when it's focused. Each menu
+   *  is a top-bar dropdown (File / Edit / custom). When unset the shell shows the
+   *  generic File/Edit/View defaults — so apps opt in to a richer menu bar. The
+   *  same items power the iOS long-press quick-actions sheet. */
+  menus?: AppMenu[];
 };
+
+/** A single menu-bar dropdown (e.g. "File") with its rows. */
+export type AppMenu = { label: string; items: AppMenuItem[] };
+/** A row in an app menu; `{ sep: true }` draws a divider. */
+export type AppMenuItem =
+  | { sep: true }
+  | {
+      sep?: false;
+      label: string;
+      /** Keyboard hint shown right-aligned (display only, e.g. "⌘S"). */
+      shortcut?: string;
+      onSelect?: () => void;
+      disabled?: boolean;
+    };
 
 /** Serialisable slice of a window persisted to Convex (no z/focus churn). */
 export type PersistedWindow = Pick<

@@ -1,12 +1,11 @@
-import type { WindowState, WinId, PersistedWindow, SnapZone } from "./types";
-import { M, emit, patch, topZ, closeGuards } from "./store-state";
-import { GAP, workArea, snapRect, snapZoneAt } from "./store-geometry";
+import type { WindowState, WinId, PersistedWindow } from "./types";
+import { M, emit, patch, topZ } from "./store-state";
+import { GAP, workArea } from "./store-geometry";
+// Store barrel: state in store-state; geometry in store-geometry; snap in store-snap.
 
-// Public store barrel: window lifecycle + UI-panel actions. State + listeners
-// live in store-state (the `M` holder); pure geometry in store-geometry. These
-// re-exports keep `../lib/store` the single import site for every consumer.
-export { shellStore, setCloseGuard } from "./store-state";
+export { shellStore } from "./store-state";
 export { snapRect, snapZoneAt, GAP } from "./store-geometry";
+export { applyChromeInsets, retileSnapped, snapWindow, onSnap } from "./store-snap";
 
 export function openWindow(
   app: string,
@@ -53,6 +52,16 @@ export function openWindow(
   return id;
 }
 
+// Per-window close guards: an app (e.g. the editor with unsaved changes) can veto
+// a close. The guard returns false to BLOCK — it then drives its own confirm UI
+// and, once resolved, clears itself via setCloseGuard(id, null) and calls
+// closeWindow(id) again to actually close.
+const closeGuards = new Map<WinId, () => boolean>();
+export function setCloseGuard(id: WinId, guard: (() => boolean) | null) {
+  if (guard) closeGuards.set(id, guard);
+  else closeGuards.delete(id);
+}
+
 export function closeWindow(id: WinId) {
   if (!M.state.windows[id]) return;
   const guard = closeGuards.get(id);
@@ -93,10 +102,10 @@ export function focusApp(app: string): boolean {
 }
 
 export function moveWindow(id: WinId, x: number, y: number) {
-  patch(id, { x, y });
+  patch(id, { x, y, snapZone: undefined }); // free move leaves the snap grid
 }
 export function resizeWindow(id: WinId, w: number, h: number) {
-  patch(id, { w, h });
+  patch(id, { w, h, snapZone: undefined });
 }
 export function minimizeWindow(id: WinId) {
   patch(id, { minimized: true });
@@ -121,18 +130,10 @@ export function toggleMaximize(id: WinId) {
     w: vw - GAP * 2,
     h: bottom - top,
     maximized: true,
+    snapZone: undefined,
   });
 }
 
-export function snapWindow(id: WinId, zone: SnapZone) {
-  const win = M.state.windows[id];
-  if (!win) return;
-  patch(id, {
-    ...snapRect(zone),
-    maximized: false,
-    prevRect: { x: win.x, y: win.y, w: win.w, h: win.h },
-  });
-}
 export function setLauncherOpen(open: boolean) {
   M.state = { ...M.state, launcherOpen: open };
   emit();
@@ -150,6 +151,13 @@ export function setInspectorOpen(open: boolean) {
 }
 export function toggleInspector() {
   setInspectorOpen(!M.state.inspectorOpen);
+}
+export function setNotificationCenterOpen(open: boolean) {
+  M.state = { ...M.state, notificationCenterOpen: open };
+  emit();
+}
+export function toggleNotificationCenter() {
+  setNotificationCenterOpen(!M.state.notificationCenterOpen);
 }
 
 /** Bulk window ops surfaced as Spotlight commands. */
@@ -177,6 +185,7 @@ export function hydrate(persisted: PersistedWindow[]) {
     launcherOpen: false,
     spotlightOpen: false,
     inspectorOpen: M.state.inspectorOpen,
+    notificationCenterOpen: false,
   };
   emit();
 }
