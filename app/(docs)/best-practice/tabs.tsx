@@ -24,7 +24,7 @@ export function BestPracticeTabs({ sections, prompt }: Props) {
         {sections.map((section) => (
           <section key={section.id} className="space-y-4">
             <div>
-              <h2 className="text-xl font-bold tracking-tight">{section.title}</h2>
+              <h2 className="text-2xl font-semibold tracking-tight">{section.title}</h2>
               {section.intro && (
                 <p className="mt-1 text-sm text-muted-foreground max-w-3xl">
                   {section.intro}

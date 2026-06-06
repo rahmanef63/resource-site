@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "UX-U4",
+    "version": "site@consistency",
+    "date": 1780790400000,
+    "kind": "improvement",
+    "title": "UI consistency pass — one header family, one spacing rhythm, detail-page parity",
+    "body": "UX wave U4. Docs pages had three header patterns (PageHeader, inline text-3xl copies, a custom text-lg bar on /build) and four page-spacing values. Now: PageHeader gains a compact bar variant (used by /build); /control-room, /audit-chain and /agents/[slug] swap their hand-rolled headers for PageHeader; page root spacing standardized to space-y-8; section h2 standardized to text-2xl (audit-chain, best-practice); DocCard bakes in p-4 default padding (twMerge keeps explicit overrides working); ShotThumbnail's aspect-[8/5] normalized to the same aspect-[16/10] string everyone else uses (identical 1.6 ratio, one spelling). Slice detail pages gain the prev/next arrows the layout detail header already had — both detail chromes now match.",
+    "groups": [
+      {
+        "heading": "Site (changed)",
+        "bullets": [
+          "PageHeader compact variant; adopted on /build, /control-room, /audit-chain, /agents/[slug]",
+          "space-y-8 page rhythm + text-2xl section h2 everywhere",
+          "DocCard default p-4; ShotThumbnail aspect-[16/10]",
+          "Slice detail header: prev/next catalog navigation (parity with layouts)"
+        ]
+      }
+    ]
+  },
+  {
     "id": "UX-U3",
     "version": "cli@aliases",
     "date": 1780790400000,

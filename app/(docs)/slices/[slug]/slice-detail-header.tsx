@@ -7,7 +7,7 @@
 // docs-shell does NOT scroll-wrap `{children}` when `hasTabs`.
 
 import Link from "next/link";
-import { ArrowLeft, ExternalLink, Layers } from "lucide-react";
+import { ArrowLeft, ArrowRight, ExternalLink, Layers } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CopyPageButton } from "@/components/site/copy-page-button";
@@ -26,10 +26,14 @@ export function SliceDetailHeader({
   slice,
   siteUrl,
   installCommand,
+  prev,
+  next,
 }: {
   slice: SliceEntry;
   siteUrl: string;
   installCommand: string;
+  prev?: { slug: string; title: string } | null;
+  next?: { slug: string; title: string } | null;
 }) {
   const demoUrl = getDemoUrl(slice.slug);
   return (
@@ -80,6 +84,20 @@ export function SliceDetailHeader({
           url={`${siteUrl}/slices/${slice.slug}`}
           body={installCommand}
         />
+        {prev && (
+          <Button asChild variant="ghost" size="icon" className="size-8" aria-label={`Previous: ${prev.title}`}>
+            <Link href={`/slices/${prev.slug}`}>
+              <ArrowLeft className="size-4" />
+            </Link>
+          </Button>
+        )}
+        {next && (
+          <Button asChild variant="ghost" size="icon" className="size-8" aria-label={`Next: ${next.title}`}>
+            <Link href={`/slices/${next.slug}`}>
+              <ArrowRight className="size-4" />
+            </Link>
+          </Button>
+        )}
       </div>
     </header>
   );

@@ -15,6 +15,6 @@ export function DocCard({
   ...props
 }: React.ComponentProps<"div">) {
   return (
-    <div className={cn("rounded-lg border bg-card", className)} {...props} />
+    <div className={cn("rounded-lg border bg-card p-4", className)} {...props} />
   );
 }

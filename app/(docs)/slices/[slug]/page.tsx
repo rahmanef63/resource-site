@@ -1,5 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { slices, getSlice } from "@/lib/content/slices";
+import { isHidden } from "@/lib/content/hidden-slugs";
 import { resolveSlugAlias } from "@/lib/content/slice-aliases";
 import { readSliceFiles } from "@/lib/slice-files";
 import { site } from "@/lib/content/site";
@@ -28,6 +29,12 @@ export default async function SliceDetailPage({ params }: { params: Promise<{ sl
   const slice = getSlice(slug);
   if (!slice) notFound();
 
+  // Prev/next across the visible catalog — parity with /layouts/<slug>.
+  const visible = slices.filter((s) => !isHidden(s.slug));
+  const idx = visible.findIndex((s) => s.slug === slice.slug);
+  const prev = idx > 0 ? visible[idx - 1] : null;
+  const next = idx >= 0 && idx < visible.length - 1 ? visible[idx + 1] : null;
+
   const sourceHref = `https://github.com/rahmanef63/resource-site/tree/main/${slice.slicePath}`;
   const installCommand = slice.install ?? `npx rahman-resources add ${slice.slug}`;
 
@@ -37,7 +44,13 @@ export default async function SliceDetailPage({ params }: { params: Promise<{ sl
 
   return (
     <>
-      <SliceDetailHeader slice={slice} siteUrl={site.url} installCommand={installCommand} />
+      <SliceDetailHeader
+        slice={slice}
+        siteUrl={site.url}
+        installCommand={installCommand}
+        prev={prev ? { slug: prev.slug, title: prev.title } : null}
+        next={next ? { slug: next.slug, title: next.title } : null}
+      />
       <SliceDetailClient
         slice={slice}
         codeFiles={codeFiles}

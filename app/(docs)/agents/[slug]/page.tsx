@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { CodeBlock } from "@/components/site/code-block";
 import { InstallWithAgent } from "@/components/site/install-with-agent";
 import { DocCard } from "@/components/site/doc-primitives";
+import { PageHeader } from "@/components/site/page-header";
 import { slices, getSlice } from "@/lib/content/slices";
 import { layouts, getLayout } from "@/lib/content/layouts";
 import { site } from "@/lib/content/site";
@@ -47,14 +48,8 @@ export default async function AgentPromptPage({ params }: { params: Promise<{ sl
   const kind = slice ? "Slice" : "Template";
 
   return (
-    <div className="space-y-6">
-      <div>
-        <p className="text-sm font-medium text-muted-foreground">
-          {kind} · AI prompt
-        </p>
-        <h1 className="mt-2 text-3xl font-bold tracking-tight">{title}</h1>
-        <p className="mt-3 max-w-prose text-base text-muted-foreground">{subtitle}</p>
-      </div>
+    <div className="space-y-8">
+      <PageHeader eyebrow={`${kind} · AI prompt`} title={title} description={subtitle} />
 
       <div className="flex flex-wrap gap-2">
         <InstallWithAgent prompt={prompt} label="Open in dialog + copy" />

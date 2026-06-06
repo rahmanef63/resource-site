@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-06 — UI consistency pass (UX wave U4)
+
+- `PageHeader` gains a `compact` bar variant; `/build`, `/control-room`,
+  `/audit-chain`, `/agents/[slug]` drop their hand-rolled headers for it.
+- Page root spacing standardized to `space-y-8`; section h2 → `text-2xl`;
+  `DocCard` bakes in default `p-4`; thumbnail aspect string normalized.
+- Slice detail header gains prev/next arrows (parity with layout detail).
+
 ### 2026-06-06 — slug aliases for merged landing sections (UX wave U3)
 
 - `lib/content/slice-aliases.json` (SSOT) → `manifest.aliases`: the seven

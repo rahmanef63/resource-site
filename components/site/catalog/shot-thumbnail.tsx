@@ -28,7 +28,7 @@ export function ShotThumbnail({
   const src = layoutShot(slug);
   if (!src) return null;
   return (
-    <div className={cn("relative aspect-[8/5] w-full overflow-hidden bg-muted", className)}>
+    <div className={cn("relative aspect-[16/10] w-full overflow-hidden bg-muted", className)}>
       <Image
         src={src}
         alt={`${title} preview`}

@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/site/page-header";
 import { ExtLink, PathMatrix } from "./page-shared";
 import { Phase0, Phase1, Phase2 } from "./page-phases-prep";
 import { Phase3, Phase4 } from "./page-phases-net";
@@ -15,16 +16,16 @@ const NPM = "https://www.npmjs.com/package/rahman-cr";
 
 export default function ControlRoomPage() {
   return (
-    <article className="space-y-12">
+    <article className="space-y-8">
       <header>
-        <p className="text-sm font-medium text-muted-foreground">Install guide</p>
-        <h1 className="mt-2 text-3xl font-bold tracking-tight">VPS Control Room</h1>
-        <p className="mt-3 text-muted-foreground">
-          A mobile-first PWA dashboard for driving a single VPS through a web
+        <PageHeader
+          eyebrow="Install guide"
+          title="VPS Control Room"
+          description="A mobile-first PWA dashboard for driving a single VPS through a web
           browser. Multi-pane terminals (up to 24 concurrent ptys), AI-agent
           launchers, host telemetry, and shell-allowlist actions — all behind
-          one shared secret on a Tailscale-only domain.
-        </p>
+          one shared secret on a Tailscale-only domain."
+        />
         <div className="mt-4 flex flex-wrap gap-2 text-sm">
           <ExtLink href={REPO}>GitHub</ExtLink>
           <ExtLink href={NPM}>npm: rahman-cr</ExtLink>

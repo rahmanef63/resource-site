@@ -79,11 +79,11 @@ const GUARDS = [
 
 export default function AuditChainPage() {
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
       <header className="space-y-3">
         <p className="text-sm font-medium text-muted-foreground">Operator</p>
         <h1 className="text-3xl font-bold tracking-tight">Audit Chain</h1>
-        <p className="text-muted-foreground">
+        <p className="text-base text-muted-foreground">
           Four CI guards enforce rr conventions across the catalog. All run
           locally via{" "}
           <code className="rounded bg-muted px-1 font-mono text-xs">npm run slices:check</code>{" "}
@@ -95,7 +95,7 @@ export default function AuditChainPage() {
       </header>
 
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold tracking-tight">Run all</h2>
+        <h2 className="text-2xl font-semibold tracking-tight">Run all</h2>
         <CodeBlock
           code={`# Full chain locally
 npm run slices:check
@@ -120,7 +120,7 @@ npm run validate:contracts:check
       {GUARDS.map((g) => (
         <section key={g.name} className="space-y-3 border-t pt-8">
           <div className="flex items-baseline justify-between gap-3">
-            <h2 className="text-xl font-semibold tracking-tight">{g.name}</h2>
+            <h2 className="text-2xl font-semibold tracking-tight">{g.name}</h2>
             <span className="text-xs text-muted-foreground">{g.coverage}</span>
           </div>
           <p className="text-xs text-muted-foreground">
@@ -136,7 +136,7 @@ npm run validate:contracts:check
       ))}
 
       <section className="space-y-4 border-t pt-8">
-        <h2 className="text-xl font-semibold tracking-tight">Adding a new guard</h2>
+        <h2 className="text-2xl font-semibold tracking-tight">Adding a new guard</h2>
         <ol className="list-decimal space-y-2 pl-6 text-sm">
           <li>
             Write the scanner at{" "}
