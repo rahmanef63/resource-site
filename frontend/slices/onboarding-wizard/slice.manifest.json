@@ -1,0 +1,37 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "onboarding-wizard",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add onboarding-wizard",
+    "consumerPath": "slices/onboarding-wizard"
+  },
+  "files": [
+    "HOST-SETUP.md",
+    "agent.md",
+    "components/OnboardingWizard.tsx",
+    "components/step-branding.tsx",
+    "components/steps.tsx",
+    "components/theme-preset-field.tsx",
+    "index.ts",
+    "lib/types.ts",
+    "slice.contract.ts",
+    "slice.json"
+  ],
+  "imports": {
+    "shared": [],
+    "external": [
+      "@/components/ui/button",
+      "@/components/ui/card",
+      "@/components/ui/input",
+      "@/components/ui/label",
+      "@/components/ui/progress",
+      "@/components/ui/select",
+      "lucide-react",
+      "next/image",
+      "react"
+    ]
+  }
+}

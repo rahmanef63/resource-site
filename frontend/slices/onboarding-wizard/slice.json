@@ -1,0 +1,37 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "onboarding-wizard",
+  "version": "0.1.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "Onboarding Wizard — first-run site setup",
+  "description": "Post-claim onboarding wizard for clone-to-own templates. Multi-step card flow (Identitas / Branding / Konten / Selesai) that stores ALL site config in the host backend via a props-driven save callback — a non-coder configures their site with zero code. Branding step ships a readable shadcn Select theme-preset picker (color swatches per preset + grouped headers + live preview callback — replaces the white-on-white native select), brand color quick-chips, light/dark/system default mode, logo/favicon upload via injected ImageField, and optional Analytics ID. Skippable; seed-sample hook included; email format hint on the identity step.",
+  "namespace": "@/features/onboarding-wizard",
+  "registers": [],
+  "audit": [],
+  "frontend": {
+    "slicePath": "frontend/slices/onboarding-wizard",
+    "configExport": ""
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": ["button", "card", "input", "label", "progress", "select"],
+    "env": [],
+    "peers": []
+  },
+  "previews": [
+    {
+      "component": "OnboardingWizard",
+      "kind": "variants",
+      "axes": [
+        {
+          "prop": "presetPicker",
+          "values": ["on", "off"],
+          "default": "on",
+          "description": "Branding step with vs without the theme preset Select (host may omit presetOptions)."
+        }
+      ],
+      "seed": "Mock save/seed callbacks; step through Identitas → Branding (color chips, mode buttons, swatch Select) → Konten → Selesai."
+    }
+  ]
+}

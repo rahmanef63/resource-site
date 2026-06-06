@@ -795,6 +795,29 @@
     ]
   },
   {
+    "slug": "onboarding-wizard",
+    "title": "Onboarding Wizard — first-run site setup",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "OnboardingWizard",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "presetPicker",
+            "values": [
+              "on",
+              "off"
+            ],
+            "default": "on",
+            "description": "Branding step with vs without the theme preset Select (host may omit presetOptions)."
+          }
+        ],
+        "seed": "Mock save/seed callbacks; step through Identitas → Branding (color chips, mode buttons, swatch Select) → Konten → Selesai."
+      }
+    ]
+  },
+  {
     "slug": "portfolio-section",
     "title": "Portfolio Section",
     "category": "ui",

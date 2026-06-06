@@ -24,18 +24,34 @@ import { Knob, LazyWidget } from "./variant-preview-widget";
 const META = previewMeta as SlicePreviewMeta[];
 const META_BY_SLUG = new Map(META.map((m) => [m.slug, m]));
 
-/** All selected slices that ship a variant preview, as stacked cards. */
+/** All selected slices as stacked cards — live preview when the slice ships
+ *  one, an explicit "no live preview" note when it doesn't (headless/server
+ *  slices and template-base slices outside the preview registry). Without the
+ *  note, previewless selections just vanish and read as broken. */
 export function SlicePreviews({ selected }: { selected: string[] }) {
+  if (selected.length === 0) return null;
   const withPreviews = selected.filter((s) => META_BY_SLUG.has(s));
-  if (withPreviews.length === 0) return null;
+  const without = selected.filter((s) => !META_BY_SLUG.has(s));
   return (
     <div className="mt-4 space-y-4">
       <h3 className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-        Slice previews ({withPreviews.length})
+        Slice previews ({withPreviews.length}/{selected.length})
       </h3>
       {withPreviews.map((slug) => (
         <VariantPreview key={slug} slug={slug} />
       ))}
+      {without.length > 0 && (
+        <div className="rounded-lg border border-dashed border-border/60 px-3 py-2 text-[11px] text-muted-foreground">
+          No live preview:{" "}
+          {without.map((slug, i) => (
+            <React.Fragment key={slug}>
+              {i > 0 && ", "}
+              <Badge variant="outline" className="rounded-full text-[10px]">{slug}</Badge>
+            </React.Fragment>
+          ))}
+          <span className="ml-1">— headless / server-side, or preview not yet authored.</span>
+        </div>
+      )}
     </div>
   );
 }

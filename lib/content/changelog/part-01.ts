@@ -2,6 +2,24 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "VP-SMOKE",
+    "version": "variant-previews@smoke-gate",
+    "date": 1780790400000,
+    "kind": "improvement",
+    "title": "Preview smoke gate + honest no-preview cards in the builder",
+    "body": "Investigating a \"previews are missing\" report: every one of the 35 registered previews renders clean (verified live on production via headless Chromium + a new happy-dom smoke test). The real gap was silence — selected slices WITHOUT a preview (headless/server slices, opt-outs, template-base slices outside the registry) rendered nothing at all in /build, which reads as broken. The SlicePreviews panel now shows coverage (n/total) and an explicit \"No live preview — headless / server-side, or preview not yet authored\" card listing those slugs. New permanent gate: lib/preview/preview-smoke.test.tsx mounts EVERY registered preview with default variants in happy-dom on `npm test` (pre-push) — catches mount crashes and declared-component drift that tsc + the generator can't. vitest aliases now mirror tsconfig paths (@/features, @/shared dual-mapping) so tests can import through the registry.",
+    "groups": [
+      {
+        "heading": "Infra",
+        "bullets": [
+          { "text": "lib/preview/preview-smoke.test.tsx — 35 previews mount-tested in happy-dom (now 357 tests total)" },
+          { "text": "components/build/variant-preview.tsx — coverage header + dashed no-preview card for previewless selections" },
+          { "text": "vitest.config.mts — @/features + @/shared alias parity with tsconfig (custom dual-dir resolver)" }
+        ]
+      }
+    ]
+  },
+  {
     "id": "NOTION-1",
     "version": "notion@1.0.0",
     "date": 1780790400000,

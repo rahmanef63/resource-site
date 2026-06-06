@@ -11,6 +11,16 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-06 — preview smoke gate + honest no-preview cards
+
+- **"Previews missing" investigated** — all 35 registered previews render
+  clean (verified on production via headless Chromium + new smoke test). Gap
+  was silence: previewless selections showed nothing in /build. Now: coverage
+  header (n/total) + explicit "No live preview" card listing those slugs.
+- **Smoke gate** — `lib/preview/preview-smoke.test.tsx` mounts every
+  registered preview with default variants in happy-dom on `npm test`.
+- **vitest aliases** — @/features + @/shared now mirror tsconfig paths.
+
 ### 2026-06-06 — notion 1.0.0: block editor port complete (M2c+M3+M4)
 
 - **M2c compose** — BlockEditor + PageEditor orchestrators, PageActionsMenu

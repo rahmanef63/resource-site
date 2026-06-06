@@ -3,8 +3,6 @@
 // import here — the standalone repo wires its own Convex hooks into these
 // props (see README.md). rr previews can render them with mock props.
 
-import type * as React from "react";
-
 /** Result of the public `setup.status` query every template backend ships. */
 export interface SetupStatus {
   ownerClaimed: boolean;
@@ -38,25 +36,10 @@ export interface BackupSnapshot {
   [key: string]: unknown;
 }
 
-/** Site identity fields collected by the onboarding wizard. All optional —
- *  the backend `settings.upsert` patches only what is provided. */
-export interface OnboardingFields {
-  siteName: string;
-  tagline: string;
-  ownerName: string;
-  contactEmail: string;
-  brandColor: string;
-  themeDefault: string;
-  /** tweakcn preset name — the site-wide color preset ("" = template default). */
-  themePreset: string;
-  logoUrl: string;
-  faviconUrl: string;
-  analyticsId: string;
-}
-
-/** Image upload control injected into the wizard (Convex-coupled in the
- *  standalone repo — e.g. its `ImageField`). */
-export type ImageFieldComponent = React.ComponentType<{
-  label: string;
-  onUploaded: (url: string) => void;
-}>;
+/** Onboarding types graduated to the onboarding-wizard slice (2026-06-06);
+ *  re-exported here so existing headless-surface consumers keep working. */
+export type {
+  OnboardingFields,
+  ImageFieldComponent,
+  PresetOption,
+} from "@/features/onboarding-wizard";
