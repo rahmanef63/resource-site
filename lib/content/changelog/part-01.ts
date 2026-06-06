@@ -2,6 +2,22 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "VP-DETAIL",
+    "version": "variant-previews@detail-pages",
+    "date": 1780790400000,
+    "kind": "improvement",
+    "title": "Live variant previews on /slices detail pages",
+    "body": "Site-simplify follow-up: variant previews were only reachable inside the Bundle Builder, so the catalog detail pages still read as static docs. Every /slices/<slug> page whose slug is in the preview registry now gets a \"Live\" tab next to Preview/Code/Details — the same auto-knob VariantPreview widget the builder mounts, fed by the same rr-demo localStorage data. 37 slices become interactive where people actually evaluate them.",
+    "groups": [
+      {
+        "heading": "Infra",
+        "bullets": [
+          { "text": "app/(docs)/slices/[slug]/slice-detail-client.tsx — \"Live\" tab via PREVIEW_SLUGS registry membership; renders <VariantPreview slug> in the docs-shell tab chrome" }
+        ]
+      }
+    ]
+  },
+  {
     "id": "VP-TB",
     "version": "variant-previews@template-base",
     "date": 1780790400000,

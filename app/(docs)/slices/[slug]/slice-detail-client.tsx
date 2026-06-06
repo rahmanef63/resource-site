@@ -1,13 +1,15 @@
 "use client";
 
 import * as React from "react";
-import { ExternalLink, FileCode, Info, Package, SquareStack, Terminal } from "lucide-react";
+import { ExternalLink, FileCode, Info, Package, Play, SquareStack, Terminal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CodeBlock } from "@/components/site/code-block";
 import { ShowcaseCard } from "@/components/site/catalog/showcase-card";
 import { SliceCodeViewer } from "@/components/site/slice-code/code-viewer";
 import { useFeatureManifest } from "@/components/site/feature-context";
 import { buildPreviewManifest } from "@/components/site/preview";
+import { VariantPreview } from "@/components/build/variant-preview";
+import previewMeta from "@/lib/preview/preview-meta.gen.json";
 import { getDemoUrl } from "@/lib/content/template-subdomains";
 import type { SliceFile } from "@/lib/slice-files";
 import type { SliceEntry } from "@/lib/content/slices";
@@ -20,6 +22,11 @@ interface Props {
   sourceHref: string;
   installCommand: string;
 }
+
+/** Slugs with a variant preview in the generated registry (VP wave). */
+const PREVIEW_SLUGS = new Set(
+  (previewMeta as Array<{ slug: string }>).map((m) => m.slug),
+);
 
 /** Registers the docs-shell tabbed preview manifest. Mirrors
  *  `/layouts/[slug]` so both routes share the same chrome.
@@ -65,6 +72,22 @@ export function SliceDetailClient({
           )
         : undefined,
       extras: [
+        // VP wave — live variant preview (knobs + localStorage demo data),
+        // same widget the Bundle Builder mounts. Only for registry slugs.
+        ...(PREVIEW_SLUGS.has(slice.slug)
+          ? [
+              {
+                id: "live",
+                label: "Live",
+                icon: Play,
+                render: () => (
+                  <div className="h-full overflow-auto p-4">
+                    <VariantPreview slug={slice.slug} />
+                  </div>
+                ),
+              },
+            ]
+          : []),
         {
           id: "details",
           label: "Details",

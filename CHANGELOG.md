@@ -11,6 +11,12 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-06 — live previews on slice detail pages
+
+- Every `/slices/<slug>` with a registered variant preview gains a "Live"
+  tab — same auto-knob widget as the Bundle Builder, same localStorage demo
+  data. 37 slices interactive at the point of evaluation.
+
 ### 2026-06-06 — template-base previews (dashboard-shell + admin-panel)
 
 - Generator scans `template-base/frontend/slices` as a second root; render
