@@ -1,0 +1,17 @@
+{
+  "name": "rahman-browser-protocol",
+  "version": "0.1.0",
+  "description": "Shared types for the os-vps browser runtime, extension, and agent clients.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Rahman Fakhrul Aziz",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "files": ["src", "README.md"],
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}
