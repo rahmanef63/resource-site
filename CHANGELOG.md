@@ -11,6 +11,19 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-07 — hardening W2: nested-anchor fix + changelog integrity
+
+- `RecentlyUpdatedBadge` card variant no longer nests an `<a>` inside the
+  catalog card's `<Link>` (invalid HTML + hydration error; the inner anchor
+  was unreachable under `pointer-events-none` anyway).
+- Badge deep links are page-aware (`/changelog?page=N#id`) — `PAGE_SIZE`
+  moved to `changelog-helpers` as SSOT and `getLatestUpdate` reports the
+  entry's page; anchors on page 2+ actually land now.
+- Four future-dated changelog entries corrected (miscomputed UTC epoch
+  read as 2026-06-08).
+- New gate `validate:changelog` (unique ids, no future dates, epoch
+  sanity) added to `slices:check`.
+
 ### 2026-06-07 — security hardening W1 (rate-limit 0.2.0 + create-your-mcp + admin login)
 
 **Slices**

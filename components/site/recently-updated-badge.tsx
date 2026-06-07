@@ -5,7 +5,11 @@ import Link from "next/link";
 import { Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { formatRelative, getLatestUpdate } from "@/lib/content/changelog-helpers";
+import {
+  changelogHref,
+  formatRelative,
+  getLatestUpdate,
+} from "@/lib/content/changelog-helpers";
 
 interface Props {
   slug: string;
@@ -55,8 +59,14 @@ export function RecentlyUpdatedBadge({ slug, kind, variant = "badge", className 
     </Badge>
   );
 
+  // Card variant sits inside CatalogCard, whose whole body is already a
+  // <Link> — nesting another anchor is invalid HTML (hydration error)
+  // and the cornerBadge container is pointer-events-none anyway. Render
+  // the bare pill there; only the inline "badge" variant links out.
+  if (variant === "card") return inner;
+
   return (
-    <Link href={`/changelog#${ref.releaseId}`} className="inline-block hover:opacity-90">
+    <Link href={changelogHref(ref)} className="inline-block hover:opacity-90">
       {inner}
     </Link>
   );

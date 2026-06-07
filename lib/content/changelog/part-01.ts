@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "HARDEN-W2",
+    "version": "site@changelog-integrity",
+    "date": 1780790400000,
+    "kind": "fix",
+    "title": "Nested-anchor hydration fix + changelog data integrity (page-aware badge links, date validator)",
+    "body": "Hardening W2. Three site bugs: (1) RecentlyUpdatedBadge's card variant rendered a <Link> inside CatalogCard's own <Link> — invalid HTML, confirmed hydration error, and the inner anchor sat under pointer-events-none so it was unreachable anyway; the card variant now renders the bare pill. (2) Four changelog entries were future-dated (a miscomputed UTC-midnight epoch landed on Jun 8) which made badges read 'Updated today' for a day that hadn't happened — dates corrected. (3) Badge deep links pointed at /changelog#id, but the feed paginates 10/page and anchors on later pages never scroll — PAGE_SIZE moved to changelog-helpers as SSOT, getLatestUpdate now reports the entry's page, and links carry ?page=N. New gate: scripts/validation/validate-changelog.mjs (unique ids + no future dates + epoch sanity) wired into validate:changelog and slices:check so both data bugs stay fixed.",
+    "groups": [
+      {
+        "heading": "Site (fixed)",
+        "bullets": [
+          "RecentlyUpdatedBadge card variant: no more anchor-in-anchor (hydration error gone)",
+          "Badge deep links are page-aware: /changelog?page=N#id via changelogHref()",
+          "Four future-dated entries corrected to their real dates",
+          "validate-changelog gate: unique ids, no future dates, epoch sanity (123 entries checked)"
+        ]
+      }
+    ]
+  },
+  {
     "id": "HARDEN-W1",
     "version": "rate-limit@0.2.0",
     "date": 1780790400000,
@@ -36,7 +55,7 @@ export const entries: ChangelogEntry[] = [
   {
     "id": "OS-STATUS-TOKENS",
     "version": "os-apps@status-tokens",
-    "date": 1780876800000,
+    "date": 1780790400000,
     "kind": "improvement",
     "title": "Semantic status tokens + responsive guards — backported from os-vps across 5 slices",
     "body": "The os-vps de-gaudy sweep lands in the lifted slices: every raw Tailwind palette class used for STATUS meaning (bg-red-500, text-emerald-500, bg-amber-400, bg-sky-500, …) now reads the semantic tokens the site palette already defines — bg-success / bg-destructive / bg-warning / bg-info — so notification dots, toast icons, taskbar activity pips, error states, mute buttons and mask-edit banners all follow the active theme preset instead of fighting it. Intentionally colorful surfaces (app-icon gradients, file-type icon colors, avatar palettes) are untouched. Same wave adds responsive guards to the three fixed-width panels that could overflow small viewports: notification center (340px), inspector (300px) and the image-editor side panel (312px) now carry max-w clamps. Consumers on older copies: `npx rr update <slug>` — the slices assume --success/--warning/--info/--destructive tokens in globals.css (the rr init template ships them).",
@@ -76,7 +95,7 @@ export const entries: ChangelogEntry[] = [
   {
     "id": "LIFT-APPSHELL-130",
     "version": "appshell@1.3.0",
-    "date": 1780876800000,
+    "date": 1780790400000,
     "kind": "feature",
     "title": "appshell 1.3.0 — 20-feature window-manager wave: command registry, Spaces, window tabs, Quick Look, clipboard, share, lock screen + more",
     "body": "The F1–F20 productivity wave lands from app-shell (app.rahmanef.com), where every feature shipped behind its own e2e gate (21-check headless harness, 13 vitest suites ride along in the slice). The multiplier seam is a dynamic command registry — registerCommands(source, cmds) — that Spotlight merges at runtime; nearly every other feature self-registers its palette commands through it (shells too: switching surfaces is a command). Window manager grew: always-on-top pinning, tiling presets incl. ⅓/⅔ thirds snap zones, virtual desktops (Spaces 1–4 with per-window spaceId), window tabs (merge an app's windows into one tabbed frame), saved layouts, session profiles (windows + shell prefs as one unit), and a work-area-clamped spawn cascade (windows can no longer open off-screen). New bundled features (DEFAULT_FEATURES 5 → 10): Quick Look (Space-bar previewer registry), clipboard history (⌘⇧V overlay, pin survives clear, monotonic ids), share sheet (target registry + copy/download built-ins), shortcut cheat-sheet (⌘/, source-keyed hint registry), lock screen (privacy curtain, idle auto-lock, consumer unlock guard). Notifications gained inline actions + per-app icon badges (count pill / dot / progress ring on every shell's icons, auto-driven by unread appId toasts). Plus: cross-app drag & drop (typed payloads → per-app drop handlers), focus mode (toasts go log-only), recents, a11y-ready font/contrast seams, desktop wallpaper-layer widgets (new desktopWidgets slot region), and document.title sync (\"App — Brand\", manifest.titleSync opt-out). Framework stays brand-free — the one hardcoded brand string found in review (notification cards) now reads useBrand().",
@@ -116,7 +135,7 @@ export const entries: ChangelogEntry[] = [
   {
     "id": "UX-U8",
     "version": "loading-states@0.1.0",
-    "date": 1780876800000,
+    "date": 1780790400000,
     "kind": "feature",
     "title": "loading-states slice — skeleton + spinner SSOT, adopted across the site",
     "body": "UX wave U8. A repo-wide grep found loading UI hand-rolled everywhere: bespoke animate-pulse divs (notion hosts), raw Loader2 spans (preview-kit, admin-login), and a one-off docs body skeleton. New loading-states slice centralizes the pattern: LoadingSkeleton composes the shadcn Skeleton primitive with seven kind presets (text / card / list / table / form / page / block, count + columns overridable), and LoadingState composes the shadcn Spinner for in-flight work (inline / block / overlay). The page kind drops straight into a route loading.tsx. The site now eats its own dog food: DocsLoadingSkeleton keeps only the docs-shell chrome strips and delegates its body to kind=\"page\"; the notion database/notes hosts swap pulse divs for kind=\"block\"; preview-kit chat + composer and admin-login swap Loader2 for the Spinner primitive. Per-slice skeletons (icon-picker, notion editor) stay put — slice self-containment beats DRY across slice boundaries.",
@@ -145,7 +164,7 @@ export const entries: ChangelogEntry[] = [
   {
     "id": "UX-U7",
     "version": "site@sidebar-tree",
-    "date": 1780876800000,
+    "date": 1780790400000,
     "kind": "fix",
     "title": "Docs sidebar tree actually folds — dead chevrons fixed, sections collapsed by default",
     "body": "UX wave U7. Three compounding bugs killed the docs-sidebar tree: (1) category branches never toggled at all — SidebarMenuButton's tooltip prop wraps the button in a Tooltip root, and CollapsibleTrigger's asChild Slot merged its onClick onto that non-DOM wrapper, silently dropping the handler; (2) section chevrons never rotated — the group/section class sat on SidebarGroupLabel, which Radix never stamps data-state on, so the group-data-[state=open] selector could not match; (3) every section defaulted to open, rendering the whole catalog as one wall. Fixes: tooltip dropped from the trigger (sidebar is always full-width — it added nothing), group classes moved to the Collapsible roots that actually carry data-state, and only the section containing the active path starts open (navigation re-opens, manual toggles stick). Also: publish gate caught template-base/contact-form-resend still on the removed \"email\" category — moved to integrations.",

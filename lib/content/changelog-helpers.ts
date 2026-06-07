@@ -4,6 +4,10 @@ import type {
   ChangelogEntry,
 } from "@/features/changelog-feed";
 
+/** Entries per /changelog page — SSOT shared by the route's paginator
+ *  and every deep link that targets an entry anchor. */
+export const CHANGELOG_PAGE_SIZE = 10;
+
 export interface ChangelogRef {
   /** Release entry id (e.g. "1.7.0" or "AN"). */
   releaseId: string;
@@ -13,6 +17,15 @@ export interface ChangelogRef {
   date: number;
   /** Bullet text from the changelog (caller can show as hover tooltip). */
   bulletText: string;
+  /** 1-based /changelog page the entry renders on — anchors on other
+   *  pages never scroll, so deep links must carry ?page=N. */
+  page: number;
+}
+
+/** Deep link to a changelog entry that actually lands on it. */
+export function changelogHref(ref: Pick<ChangelogRef, "releaseId" | "page">): string {
+  const query = ref.page > 1 ? `?page=${ref.page}` : "";
+  return `/changelog${query}#${ref.releaseId}`;
 }
 
 function bulletMatches(
@@ -40,8 +53,10 @@ export function getLatestUpdate(
   slug: string,
   kind: "slice" | "template",
 ): ChangelogRef | null {
-  // releases are listed newest-first in lib/content/changelog.ts
-  for (const entry of releases) {
+  // releases are sorted newest-first by the barrel, so the first match
+  // is the latest reference — and its index gives the /changelog page.
+  for (let i = 0; i < releases.length; i++) {
+    const entry = releases[i];
     const bullets: ChangelogBullet[] = [
       ...(entry.bullets ?? []),
       ...((entry.groups ?? []).flatMap((g) => g.bullets)),
@@ -53,6 +68,7 @@ export function getLatestUpdate(
         version: entry.version,
         date: entry.date,
         bulletText: bulletText(match),
+        page: Math.floor(i / CHANGELOG_PAGE_SIZE) + 1,
       };
     }
   }

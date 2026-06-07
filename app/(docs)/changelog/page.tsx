@@ -4,14 +4,13 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { ChangelogFeedSection } from "@/features/changelog-feed";
 import { releases } from "@/lib/content/changelog";
 import { sanitizeEntries } from "@/lib/content/changelog/sanitize";
+import { CHANGELOG_PAGE_SIZE as PAGE_SIZE } from "@/lib/content/changelog-helpers";
 import { Button } from "@/components/ui/button";
 
 export const metadata = {
   title: "Changelog",
   description: "Release history for the Rahman Resources CLI + MCP + slices.",
 };
-
-const PAGE_SIZE = 10;
 
 /**
  * Dogfood — `/changelog` consumes the canonical `changelog-feed` slice.
