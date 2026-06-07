@@ -11,6 +11,26 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-07 — security hardening W1 (rate-limit 0.2.0 + create-your-mcp + admin login)
+
+**Slices**
+
+- `rate-limit` 0.2.0 — `consume` no longer accepts caller-supplied
+  `limit`/`windowMs` (forged-window bypass); limits live in an in-code
+  per-prefix `POLICY` map, unknown prefixes throw. Optional
+  `RATE_LIMIT_SERVER_KEY` env gates anonymous calls (constant-time compare).
+- `create-your-mcp` — `touchToken` takes the bearer token value (resolved
+  via `by_token`, no-op on miss) instead of an enumerable row id; route
+  template updated.
+
+**Site**
+
+- Admin login gate is Convex-backed when a deployment is configured
+  (replica-safe, fail-open), in-memory fallback otherwise; success no
+  longer resets the attempt counter.
+- `lib/admin-auth.ts` documents the signed-not-encrypted session payload
+  trade-off.
+
 ### 2026-06-07 — appshell 1.3.0: the F1–F20 window-manager wave
 
 **Slices**

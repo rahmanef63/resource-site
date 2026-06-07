@@ -2,6 +2,38 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "HARDEN-W1",
+    "version": "rate-limit@0.2.0",
+    "date": 1780790400000,
+    "kind": "fix",
+    "title": "Security hardening W1 — touchToken bearer-proof, rate-limit policy map, Convex-backed admin login gate",
+    "body": "Security audit follow-up. Two public Convex mutations were anonymously abusable: touchToken took a row id (anyone could enumerate token ids and tamper lastUsedAt) and rate-limit consume took caller-supplied limit/windowMs (anyone could forge a loose window and bypass the limit, or burn a victim key's budget). Neither can become internalMutation — ConvexHttpClient callers can't reach internal functions — so both are hardened in place: touchToken now takes the bearer token VALUE and resolves it via by_token (possession = authorization, no-op on miss); consume's limits moved to an in-code per-prefix POLICY map (unknown prefix rejected) plus an optional RATE_LIMIT_SERVER_KEY env gate compared constant-time. Admin login now uses the Convex-backed limiter when a deployment is configured (replica-safe, fail-open) with the in-memory bucket as dev fallback — and success no longer resets the counter, so a correct guess can't refund an attacker's budget. Session-token trade-off (signed-not-encrypted payload) documented in admin-auth.",
+    "groups": [
+      {
+        "heading": "Slices (hardened)",
+        "bullets": [
+          {
+            "text": "rate-limit 0.2.0 — consume({ key, serverKey? }) + in-code POLICY map; README documents the forged-window and budget-burn vectors",
+            "slug": "rate-limit",
+            "kind": "slice"
+          },
+          {
+            "text": "create-your-mcp — touchToken({ token }) by_token lookup replaces enumerable { id }; route template passes the bearer",
+            "slug": "create-your-mcp",
+            "kind": "slice"
+          }
+        ]
+      },
+      {
+        "heading": "Site",
+        "bullets": [
+          "admin login rate-limit: Convex consume when NEXT_PUBLIC_CONVEX_URL set (fail-open), memory bucket fallback; reset-on-success dropped",
+          "admin-auth: session payload signed-not-encrypted trade-off documented"
+        ]
+      }
+    ]
+  },
+  {
     "id": "OS-STATUS-TOKENS",
     "version": "os-apps@status-tokens",
     "date": 1780876800000,

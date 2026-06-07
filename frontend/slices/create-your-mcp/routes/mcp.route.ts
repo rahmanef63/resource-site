@@ -98,7 +98,7 @@ export async function POST(req: Request) {
       const responses = results.filter((r) => r !== null);
       if (auth.kind === "oauth") {
         void convexHttp
-          .mutation("features/create-your-mcp:touchToken", { id: auth.tokenId })
+          .mutation("features/create-your-mcp:touchToken", { token: bearer })
           .catch(() => undefined);
       }
       if (responses.length === 0) return new NextResponse(null, { status: 202 });
@@ -108,7 +108,7 @@ export async function POST(req: Request) {
     const result = await dispatchJsonRpc(body, TOOLS, auth.scope, opts);
     if (auth.kind === "oauth") {
       void convexHttp
-        .mutation("features/create-your-mcp:touchToken", { id: auth.tokenId })
+        .mutation("features/create-your-mcp:touchToken", { token: bearer })
         .catch(() => undefined);
     }
     if (result === null) return new NextResponse(null, { status: 202 });

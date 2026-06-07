@@ -1,12 +1,50 @@
 import { NextRequest, NextResponse } from "next/server";
+import { ConvexHttpClient } from "convex/browser";
+import { makeFunctionReference } from "convex/server";
 import { checkLogin, makeSession, SESSION_COOKIE } from "@/lib/admin-auth";
-import { extractIp, rateLimit, resetRateLimit } from "@/lib/rate-limit-memory";
+import { extractIp, rateLimit } from "@/lib/rate-limit-memory";
 
 const RL = { limit: 5, windowMs: 15 * 60 * 1000 }; // 5 attempts per 15 minutes
 
+const consumeRef = makeFunctionReference<"mutation">(
+  "features/rate-limit/mutation:consume",
+);
+
+/** Convex-backed limiter when a deployment is configured (replica-safe),
+ *  else the in-memory bucket (single-instance dev/preview). Convex path
+ *  fails OPEN — an outage must not lock admins out of login; note there
+ *  is deliberately no reset-on-success: a correct guess shouldn't refund
+ *  an attacker's budget, the row just expires at `resetAt`. */
+async function gateLogin(ip: string): Promise<{ ok: boolean; retryAfterSec: number }> {
+  const url = process.env.NEXT_PUBLIC_CONVEX_URL;
+  if (!url) {
+    const g = rateLimit(`admin-login:${ip}`, RL);
+    return g.ok
+      ? { ok: true, retryAfterSec: 0 }
+      : { ok: false, retryAfterSec: g.retryAfterSec };
+  }
+  try {
+    const client = new ConvexHttpClient(url);
+    const res = await client.mutation(consumeRef, {
+      key: `admin-login:${ip}`,
+      serverKey: process.env.RATE_LIMIT_SERVER_KEY,
+    });
+    return {
+      ok: res.ok,
+      retryAfterSec: Math.max(1, Math.ceil((res.resetAt - Date.now()) / 1000)),
+    };
+  } catch {
+    // Fail open on Convex flap; memory bucket still applies per instance.
+    const g = rateLimit(`admin-login:${ip}`, RL);
+    return g.ok
+      ? { ok: true, retryAfterSec: 0 }
+      : { ok: false, retryAfterSec: g.retryAfterSec };
+  }
+}
+
 export async function POST(req: NextRequest) {
   const ip = extractIp(req);
-  const gate = rateLimit(`admin-login:${ip}`, RL);
+  const gate = await gateLogin(ip);
   if (!gate.ok) {
     return NextResponse.json(
       { error: "Too many attempts. Try again later." },
@@ -38,7 +76,6 @@ export async function POST(req: NextRequest) {
   if (!ok) {
     return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
   }
-  resetRateLimit(`admin-login:${ip}`);
   const token = makeSession(email);
   const res = NextResponse.json({ ok: true });
   res.cookies.set(SESSION_COOKIE, token, {

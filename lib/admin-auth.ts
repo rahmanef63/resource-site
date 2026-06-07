@@ -25,6 +25,12 @@ export function checkLogin(email: string, password: string): boolean {
   return verifyPassword(password, env("ADMIN_PASSWORD_HASH"));
 }
 
+/** Session token = base64url(payload).hmacSha256(payload). The payload
+ *  (email + expiry) is SIGNED, not encrypted — anyone holding the token
+ *  can read it. Accepted trade-off: the payload carries nothing beyond
+ *  what the holder already knows, and forgery still requires
+ *  ADMIN_SESSION_SECRET. Switch to an opaque server-side session id if
+ *  the payload ever grows beyond {email, exp}. */
 export function makeSession(email: string): string {
   const payload = JSON.stringify({ e: email, exp: Date.now() + SESSION_TTL_MS });
   const b64 = Buffer.from(payload).toString("base64url");

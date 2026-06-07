@@ -140,13 +140,29 @@ export const revokeToken = mutation({
   },
 });
 
-// Internal — bump lastUsedAt on every successful MCP call. Called by
-// the /api/mcp route after validating the bearer. Fire-and-forget on
-// the route side so a Convex hiccup doesn't fail the JSON-RPC reply.
+// Bump lastUsedAt on every successful MCP call. Called by the /api/mcp
+// route after validating the bearer; fire-and-forget on the route side
+// so a Convex hiccup doesn't fail the JSON-RPC reply.
+//
+// Authorization = possession of the bearer itself: the caller hands us
+// the token VALUE (not a row id), we resolve it via by_token and patch
+// only on a hit. Taking an id here would let any anonymous caller
+// enumerate token ids and tamper with lastUsedAt — this stays a public
+// mutation (ConvexHttpClient can't reach internal functions), so the
+// arg has to carry the proof.
 export const touchToken = mutation({
-  args: { id: v.id("oauthAccessTokens") },
-  handler: async (ctx, { id }) => {
-    await ctx.db.patch(id, { lastUsedAt: Date.now() });
+  args: { token: v.string() },
+  handler: async (ctx, { token }) => {
+    // Mirror findToken's junk guard — real tokens are ≥32 chars.
+    if (!token || token.length < 32) return { success: false };
+    const row = await ctx.db
+      .query("oauthAccessTokens")
+      .withIndex("by_token", (q) => q.eq("token", token))
+      .first();
+    // No-op on miss (revoked/expired race, or env-fallback auth path) —
+    // never throw; the caller already discards failures.
+    if (!row) return { success: false };
+    await ctx.db.patch(row._id, { lastUsedAt: Date.now() });
     return { success: true };
   },
 });

@@ -1,24 +1,55 @@
 import { internalMutation, mutation } from "../../_generated/server";
 import { v } from "convex/values";
+import { constantTimeEqual } from "../../_shared/crypto";
+
+// Per-prefix rate-limit policy lives SERVER-SIDE, not in the args.
+// Letting the caller supply limit/windowMs let any anonymous caller
+// craft a loose window and bypass the limit entirely. The prefix is
+// everything before the first ":" in the key (`admin-login:<ip>`).
+// Unknown prefixes are rejected — add a row here before using a new one.
+const POLICY: Record<string, { limit: number; windowMs: number }> = {
+  "admin-login": { limit: 5, windowMs: 15 * 60_000 },
+  newsletter: { limit: 3, windowMs: 60 * 60_000 },
+  telemetry: { limit: 60, windowMs: 60 * 60_000 },
+  csp: { limit: 60, windowMs: 60_000 },
+  mcp: { limit: 120, windowMs: 60_000 },
+};
 
 // Atomic single-row check-and-increment for per-key rate limits.
-// Caller hands us a stable key (`csp:<ip>`, `mcp:<ip>`, etc.) and a
-// window (count threshold + ms). Returns whether the request fits in
-// the window and how many slots are left. Convex serialises mutations
-// against the same document, so the read-then-patch sequence below is
-// race-free even under concurrent Next replicas.
+// Caller hands us a stable key (`admin-login:<ip>`, `mcp:<ip>`, …);
+// the count threshold + window come from POLICY above. Returns whether
+// the request fits in the window and how many slots are left. Convex
+// serialises mutations against the same document, so the
+// read-then-patch sequence below is race-free even under concurrent
+// Next replicas.
+//
+// This stays a PUBLIC mutation (server routes call it over
+// ConvexHttpClient, which can't reach internal functions). Two layers
+// keep it abuse-resistant: the policy map closes the forged-window
+// bypass, and — when the RATE_LIMIT_SERVER_KEY env is set on the
+// deployment — a serverKey arg is required, which also closes the
+// burn-a-victim's-budget vector. Set the env in production.
 export const consume = mutation({
   args: {
     key: v.string(),
-    limit: v.number(),
-    windowMs: v.number(),
+    serverKey: v.optional(v.string()),
   },
   returns: v.object({
     ok: v.boolean(),
     remaining: v.number(),
     resetAt: v.number(),
   }),
-  handler: async (ctx, { key, limit, windowMs }) => {
+  handler: async (ctx, { key, serverKey }) => {
+    const gate = process.env.RATE_LIMIT_SERVER_KEY;
+    if (gate && !constantTimeEqual(serverKey ?? "", gate)) {
+      throw new Error("rate-limit: invalid server key");
+    }
+    const prefix = key.split(":")[0];
+    const policy = POLICY[prefix];
+    if (!policy) {
+      throw new Error(`rate-limit: unknown key prefix "${prefix}"`);
+    }
+    const { limit, windowMs } = policy;
     const now = Date.now();
     const existing = await ctx.db
       .query("rateLimits")
