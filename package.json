@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0 --port 3000",
+    "dev:alt": "next dev --port 3457",
     "build": "NODE_OPTIONS=--max-old-space-size=4096 next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "NODE_OPTIONS=--max-old-space-size=4096 tsc --noEmit",
     "lint": "eslint . --max-warnings 9999",
     "gen:slices": "node scripts/features/gen-slice-registries.mjs",
     "gen:slices:check": "node scripts/features/gen-slice-registries.mjs --check",

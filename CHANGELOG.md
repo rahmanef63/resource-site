@@ -11,6 +11,20 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-07 — hardening W4: gates wired + MCP↔CLI coupling
+
+- pre-commit now runs `gen:agent-md:check` + `validate:changelog`;
+  pre-push runs vitest before the build. (The checks existed; nothing
+  invoked them.)
+- `rahman-resources-mcp` 1.2.0 — dependency on `rahman-resources` bumped
+  `^1.9.1` → `^1.13.0`; new `check-peer.mjs` prepublish gate keeps the
+  range in lock-step with the sibling CLI.
+- `typecheck` script bakes the 4GB heap bump; `validate:all` uses it.
+- `allowedDevOrigins: ["127.0.0.1"]` (dev hydration trap) + `dev:alt`
+  script on port 3457.
+- Warn-only `report-ui-drift.mjs` at the `validate:all` tail (41 drifted
+  primitives, 13 site-only, 5 template-only).
+
 ### 2026-06-07 — hardening W3: debt sweep
 
 - Contract DSL: BSDL-era `bidir` block removed from 20 slice contracts;

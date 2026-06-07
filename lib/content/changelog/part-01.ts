@@ -2,6 +2,33 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "HARDEN-W4",
+    "version": "mcp@1.2.0",
+    "date": 1780790400000,
+    "kind": "improvement",
+    "title": "Gates actually gate — agent.md + changelog checks in pre-commit, vitest in pre-push, MCP↔CLI version coupling",
+    "body": "Hardening W4. The drift checks existed (gen:agent-md:check, slices:check) but were never wired to a hook — agent.md drifted across three waves before anyone noticed. pre-commit now runs gen:agent-md:check + validate:changelog (verified: a deliberately corrupted agent.md fails the commit); pre-push runs vitest before the build (the audits are structural — no audit ever caught a dead click). MCP's rahman-resources dependency had drifted to ^1.9.1 while the CLI sat at 1.12.x — published MCP installs silently served a stale catalog; bumped to ^1.13.0 and a new prepublishOnly check-peer gate fails any future publish whose range lags the sibling CLI. DX: typecheck script carries the 4GB heap bump (cold tsc OOMs default Node), allowedDevOrigins unblocks 127.0.0.1 dev browsing (the silent no-hydrate trap), dev:alt serves port 3457 for parallel sessions, and a warn-only ui-drift report (41 drifted primitives, 13 site-only, 5 template-only) runs at the tail of validate:all so the dual shadcn trees diverge by decision, not accident.",
+    "groups": [
+      {
+        "heading": "Gates",
+        "bullets": [
+          "pre-commit: + gen:agent-md:check + validate:changelog",
+          "pre-push: + vitest (~12s) before the production build",
+          "packages/mcp prepublishOnly: check-peer.mjs — dependency range must admit the sibling CLI version (was ^1.9.1 vs CLI 1.12.x)"
+        ]
+      },
+      {
+        "heading": "DX",
+        "bullets": [
+          "typecheck script bakes NODE_OPTIONS=--max-old-space-size=4096; validate:all uses it",
+          "next.config allowedDevOrigins: 127.0.0.1 dev pages hydrate again",
+          "dev:alt script (port 3457) for concurrent sessions",
+          "report-ui-drift.mjs — warn-only components/ui vs template-base diff at validate:all tail"
+        ]
+      }
+    ]
+  },
+  {
     "id": "HARDEN-W3",
     "version": "site@debt-sweep",
     "date": 1780790400000,

@@ -21,7 +21,9 @@ import { spawnSync } from "node:child_process";
 const QUICK = process.argv.includes("--quick");
 
 const steps = [
-  ["typecheck", ["npx", ["tsc", "--noEmit"]]],
+  // npm run typecheck (not bare npx tsc) — the script carries the heap
+  // bump; a cold tsc on this repo OOMs the default Node heap.
+  ["typecheck", ["npm", ["run", "typecheck", "--silent"]]],
   ["slices:check", ["npm", ["run", "slices:check", "--silent"]]],
   ["contracts:drift", ["npm", ["run", "contracts:drift", "--silent"]]],
   ["forbidden:terms", ["npm", ["run", "forbidden:terms", "--silent"]]],
@@ -49,4 +51,11 @@ if (failed) {
   console.log("\n✖ validation chain stopped");
   process.exit(1);
 }
+
+// Warn-only tail: ui-tree drift report (never fails the chain).
+const drift = spawnSync("node", ["scripts/validation/report-ui-drift.mjs"], {
+  stdio: ["ignore", "pipe", "pipe"],
+});
+process.stdout.write(drift.stdout.toString());
+
 console.log(`\n✓ all validation gates green${QUICK ? " (quick — skipped tests)" : ""}`);

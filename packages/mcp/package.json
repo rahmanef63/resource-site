@@ -24,9 +24,12 @@
   "engines": {
     "node": ">=18"
   },
+  "scripts": {
+    "prepublishOnly": "node scripts/check-peer.mjs"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
-    "rahman-resources": "^1.9.1"
+    "rahman-resources": "^1.13.0"
   },
   "keywords": [
     "rahman",

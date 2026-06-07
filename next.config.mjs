@@ -9,6 +9,10 @@ const BUILD_ID =
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   cacheComponents: true,
+  // Dev-only: without this, browsing the dev server via 127.0.0.1 (instead
+  // of localhost) silently blocks /_next/* assets — the page renders but
+  // never hydrates, so every click is dead. Cost us a real debugging hour.
+  allowedDevOrigins: ["127.0.0.1"],
   // rahman-shared ships raw .ts in dist/src; tell Turbopack to transpile.
   // Required since notifications + future lifts rewrite @/shared/lib/utils
   // imports to rahman-shared/lib/utils.

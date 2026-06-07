@@ -19,6 +19,13 @@ npm run audit:file-size --silent
 npm run audit:convex-features --silent
 npm run audit:docs-primitives --silent
 
+echo "→ pre-push: vitest (behavioral gate — audits alone never caught a dead click)"
+npm run test --silent || {
+  echo ""
+  echo "❌ pre-push: tests FAILED. Bypass (NOT recommended): git push --no-verify"
+  exit 1
+}
+
 echo "→ pre-push: npm run build (catches Next-only errors tsc misses — cacheComponents conflicts, Turbopack loader issues, etc)"
 npm run build --silent > /tmp/rr-prepush-build.log 2>&1 || {
   echo ""

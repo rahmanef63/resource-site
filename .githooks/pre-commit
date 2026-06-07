@@ -54,5 +54,19 @@ if ! npm run --silent audit:file-size; then
   exit 1
 fi
 
+# Drift gates that previously lived only in slices:check (never wired to a
+# hook) — agent.md drifted for days across U5-U7 before anyone noticed.
+if ! npm run --silent gen:agent-md:check; then
+  echo ""
+  echo "pre-commit: agent.md drift — run 'npm run gen:agent-md' and stage the result, or bypass with --no-verify" >&2
+  exit 1
+fi
+
+if ! npm run --silent validate:changelog; then
+  echo ""
+  echo "pre-commit: changelog data invalid (dup id / future date) — fix lib/content/changelog/part-*.ts" >&2
+  exit 1
+fi
+
 echo "pre-commit: ok"
 exit 0
