@@ -18,10 +18,10 @@ import {
 
 // ⌘⇧V clipboard history — pinned entries stick, click copies back to the
 // system clipboard. Capture (document copy/cut) starts with this feature.
+// The panel MOUNTS per open, so the search query starts fresh every time
+// without an effect-driven reset (react-hooks v6).
 export function ClipboardOverlay() {
   const open = useClipboardOpen();
-  const clips = useClips();
-  const [q, setQ] = useState("");
 
   useEffect(() => startClipboardCapture(), []);
   useEffect(() => {
@@ -36,11 +36,13 @@ export function ClipboardOverlay() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
-  useEffect(() => {
-    if (open) setQ("");
-  }, [open]);
 
-  if (!open) return null;
+  return open ? <ClipboardPanel /> : null;
+}
+
+function ClipboardPanel() {
+  const clips = useClips();
+  const [q, setQ] = useState("");
   const list = clips.filter((c) => c.text.toLowerCase().includes(q.toLowerCase()));
 
   return (

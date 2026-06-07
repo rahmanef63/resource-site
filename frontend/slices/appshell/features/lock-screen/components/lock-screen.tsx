@@ -6,16 +6,10 @@ import { autoLockMinutes, lock, requestUnlock, useLocked } from "../../../lib/lo
 
 // Fullscreen privacy curtain: blurred backdrop, big clock, click/key unlocks
 // (through the consumer guard when one is injected). Owns the idle timer.
+// The curtain MOUNTS per lock, so the clock seeds in a lazy initializer
+// instead of an effect-driven setState (react-hooks v6).
 export function LockScreen() {
   const locked = useLocked();
-  const [now, setNow] = useState<Date | null>(null);
-
-  useEffect(() => {
-    if (!locked) return;
-    setNow(new Date());
-    const t = setInterval(() => setNow(new Date()), 10_000);
-    return () => clearInterval(t);
-  }, [locked]);
 
   // idle auto-lock — any pointer/key activity resets the countdown
   useEffect(() => {
@@ -34,8 +28,18 @@ export function LockScreen() {
     };
   }, []);
 
+  return locked ? <LockCurtain /> : null;
+}
+
+function LockCurtain() {
+  const [now, setNow] = useState<Date>(() => new Date());
+
   useEffect(() => {
-    if (!locked) return;
+    const t = setInterval(() => setNow(new Date()), 10_000);
+    return () => clearInterval(t);
+  }, []);
+
+  useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       e.preventDefault();
       void requestUnlock();
@@ -51,9 +55,7 @@ export function LockScreen() {
       cancelAnimationFrame(raf);
       if (attached) window.removeEventListener("keydown", onKey);
     };
-  }, [locked]);
-
-  if (!locked) return null;
+  }, []);
 
   return (
     <div
@@ -61,10 +63,10 @@ export function LockScreen() {
       onClick={() => void requestUnlock()}
     >
       <div className="text-6xl font-light tracking-tight">
-        {now?.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) ?? ""}
+        {now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
       </div>
       <div className="text-sm text-muted-foreground">
-        {now?.toLocaleDateString([], { weekday: "long", day: "numeric", month: "long" }) ?? ""}
+        {now.toLocaleDateString([], { weekday: "long", day: "numeric", month: "long" })}
       </div>
       <div className="mt-8 flex items-center gap-2 text-xs text-muted-foreground">
         <Lock className="size-3.5" /> Click to unlock

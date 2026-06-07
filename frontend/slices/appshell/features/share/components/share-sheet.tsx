@@ -7,17 +7,18 @@ import { Button } from "@/components/ui/button";
 import { closeShare, targetsFor, useShareState, type ShareTarget } from "../../../lib/share";
 
 // Share sheet — bottom-center card (iOS-flavored, works on every shell).
+// The panel MOUNTS per open (and unmounts on close), so selection state starts
+// fresh every time without an effect-driven reset (react-hooks v6).
 export function ShareSheet() {
   const { open, payload } = useShareState();
+  return open ? <ShareSheetPanel payload={payload} /> : null;
+}
+
+function ShareSheetPanel({ payload }: { payload: unknown }) {
   const [sel, setSel] = useState(0);
-  const list = open ? targetsFor(payload) : [];
+  const list = targetsFor(payload);
 
   useEffect(() => {
-    if (open) setSel(0);
-  }, [open]);
-
-  useEffect(() => {
-    if (!open) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") closeShare();
       else if (e.key === "ArrowDown") {
@@ -43,9 +44,7 @@ export function ShareSheet() {
       cancelAnimationFrame(raf);
       if (attached) window.removeEventListener("keydown", onKey);
     };
-  }, [open, list, sel, payload]);
-
-  if (!open) return null;
+  }, [list, sel, payload]);
 
   return (
     <div className="absolute inset-0 z-[8600] flex items-end justify-center bg-black/25 pb-[12vh]" onClick={closeShare}>
