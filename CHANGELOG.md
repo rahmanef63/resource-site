@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-07 — backfill: library slice changelog entry (lift 2c3b745, 2026-05-30)
+
+- The `library` 0.1.0 lift registered the catalog entry + manifest but skipped
+  its ChangelogEntry, so `RecentlyUpdatedBadge` never fired for the slice.
+  Backfilled `LIFT-LIBRARY` (dated 2026-05-30): polymorphic 6-kind resource
+  hub — prompts / images / videos / links / downloads / snippets — Convex
+  schema + index-bounded queries, filterable grid, detail with copy +
+  opt-in upvote. No code change.
+
 ### 2026-06-07 — loading-states: skeleton + spinner SSOT (UX wave U8)
 
 **Slices**

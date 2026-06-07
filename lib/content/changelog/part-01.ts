@@ -2,6 +2,26 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "LIFT-LIBRARY",
+    "version": "library@0.1.0",
+    "date": 1780099200000,
+    "kind": "feature",
+    "title": "library slice — resource hub (prompts · visuals · snippets · links), lifted from rahmanef.com",
+    "body": "Backfilled entry for lift commit 2c3b745 (2026-05-30) — the slice landed in the catalog but skipped its changelog entry, so RecentlyUpdatedBadge never fired. One polymorphic libraryItems table holds six kinds (prompt, image, video, link, download, snippet) with per-kind payload fields switched on kind — no joins. Attribution-first (source/license/tools on every item), collections, Convex-backed with index-bounded queries (no bare .collect()). Public surface: filterable card grid + per-item detail with copy-to-clipboard for prompts/snippets and an opt-in upvote control (consumer-owned backend). Brought to project bar before landing: six raw <button> converted to shadcn <Button>, className branches cn-merged, 200-LOC cap splits on mutations + detail view. Peers the seo slice for override fields.",
+    "groups": [
+      {
+        "heading": "Slices (new)",
+        "bullets": [
+          {
+            "text": "library 0.1.0 — polymorphic 6-kind resource hub: Convex schema + queries/mutations, filterable grid, detail + copy + upvote",
+            "slug": "library",
+            "kind": "slice"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "UX-U8",
     "version": "loading-states@0.1.0",
     "date": 1780876800000,
