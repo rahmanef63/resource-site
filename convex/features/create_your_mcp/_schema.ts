@@ -2,7 +2,7 @@
 //
 // Compose into the consumer's root convex/_schema.ts:
 //
-//   import { createYourMcpTables } from "./features/create-your-mcp/_schema";
+//   import { createYourMcpTables } from "./features/create_your_mcp/_schema";
 //   export default defineSchema({ ...createYourMcpTables, ...others });
 //
 // OAuth 2.1 + PKCE state for AI-client custom-app flows

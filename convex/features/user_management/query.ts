@@ -2,7 +2,7 @@
 
 import { v } from "convex/values";
 import { query } from "../../_generated/server";
-import { getActorPermissions } from "../rbac-roles/lib/permissions";
+import { getActorPermissions } from "../rbac_roles/lib/permissions";
 
 /** List a tenant's members, enriched with profile fields from `users`.
  *  Soft-denies to [] without members.view. Inactive members hidden unless

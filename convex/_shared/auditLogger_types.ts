@@ -2,7 +2,7 @@
  * Audit logging types + action constants.
  *
  * @see ./auditLogger.ts for the writer
- * @see ./auditLogger-queries.ts for read helpers
+ * @see ./auditLogger_queries.ts for read helpers
  */
 
 import { Id } from "../_generated/dataModel";

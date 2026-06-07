@@ -6,7 +6,7 @@
 import { v } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { mutation } from "../../_generated/server";
-import { requirePermission } from "../rbac-roles/lib/permissions";
+import { requirePermission } from "../rbac_roles/lib/permissions";
 
 const tenantArg = v.union(v.string(), v.null());
 const INVITE_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days

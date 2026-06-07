@@ -16,8 +16,8 @@
  * });
  * ```
  *
- * Types + action constants live in ./auditLogger-types.ts.
- * Read helpers live in ./auditLogger-queries.ts (re-exported below).
+ * Types + action constants live in ./auditLogger_types.ts.
+ * Read helpers live in ./auditLogger_queries.ts (re-exported below).
  *
  * @see docs/AUDIT_LOGGING_GUIDE.md for action naming conventions
  * @see .claude/CLAUDE.md for project guardrails
@@ -25,17 +25,17 @@
 
 import { MutationCtx } from "../_generated/server";
 import { Id } from "../_generated/dataModel";
-import type { AuditLogEntry } from "./auditLogger-types";
+import type { AuditLogEntry } from "./auditLogger_types";
 
 // Re-export types + constants so existing imports of `from "auditLogger"` keep working.
-export type { AuditLogEntry } from "./auditLogger-types";
-export { AUDIT_ACTIONS, createActionString } from "./auditLogger-types";
+export type { AuditLogEntry } from "./auditLogger_types";
+export { AUDIT_ACTIONS, createActionString } from "./auditLogger_types";
 export {
   getAuditHistory,
   getWorkspaceAuditLogs,
   getUserAuditLogs,
   getAuditLogsByAction,
-} from "./auditLogger-queries";
+} from "./auditLogger_queries";
 
 /**
  * Log an audit event.

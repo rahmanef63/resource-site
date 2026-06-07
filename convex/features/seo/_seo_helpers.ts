@@ -1,7 +1,7 @@
 // Pure helpers for SEO action: clamping, dedup, JSON parsing.
 // Split out of `actions.ts` (LOC cap).
 
-import type { GenOut } from "./_seo-types";
+import type { GenOut } from "./_seo_types";
 
 export const clamp = (s: string, max: number): string =>
   s.length <= max ? s : s.slice(0, max - 1).trimEnd() + "…";

@@ -3,7 +3,7 @@
 import { McpAdminView, type McpTokenRow } from "@/features/create-your-mcp";
 
 // Mock token rows — production consumers fetch this via
-// `useQuery(api.features["create-your-mcp"].queries.adminList)`. Preview
+// `useQuery(api.features.create_your_mcp.queries.adminList)`. Preview
 // uses plausible synthetic data so the table + status badges render
 // without any backend wiring.
 const now = Date.now();
@@ -74,7 +74,7 @@ export default function McpPreviewPage() {
           rows={mockRows}
           onRevoke={async (id, label) => {
             // Preview-only — no Convex wiring. Real consumer wires this
-            // to `api.features["create-your-mcp"].mutations.revokeToken`.
+            // to `api.features.create_your_mcp.mutations.revokeToken`.
              
             console.log(`[preview] revoke ${id} (${label})`);
           }}

@@ -70,7 +70,7 @@ export async function POST(req: Request) {
 
   try {
     const result = (await convexHttp.mutation(
-      "features/create-your-mcp:exchangeCode",
+      "features/create_your_mcp:exchangeCode",
       {
         code: body.code,
         codeVerifier: body.code_verifier,

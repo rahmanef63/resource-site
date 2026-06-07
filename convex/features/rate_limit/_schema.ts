@@ -2,7 +2,7 @@
 //
 // Compose into the consumer's root convex/_schema.ts:
 //
-//   import { rateLimitTables } from "./features/rate-limit/_schema";
+//   import { rateLimitTables } from "./features/rate_limit/_schema";
 //   export default defineSchema({ ...rateLimitTables, ...others });
 //
 // Per-key request counter. Keys are caller-defined namespaces like

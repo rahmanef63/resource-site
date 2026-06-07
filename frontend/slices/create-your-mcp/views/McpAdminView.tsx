@@ -12,7 +12,7 @@ import { McpTokenTable } from "./McpTokenTable";
 export type { McpTokenRow, SetupField, SetupFieldKind };
 
 export type McpAdminViewProps = {
-  /** Token rows from `api.features["create-your-mcp"].queries.adminList`. */
+  /** Token rows from `api.features.create_your_mcp.queries.adminList`. */
   rows: McpTokenRow[] | undefined;
   /** Site origin — used to render the setup fields. e.g. "https://app.example.com". */
   siteUrl: string;

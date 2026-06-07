@@ -1,7 +1,7 @@
 // Schema fragment for the rbac-roles slice. Compose into the consumer's
 // root schema:
 //
-//   import { rbacRolesTables } from "./features/rbac-roles/_schema";
+//   import { rbacRolesTables } from "./features/rbac_roles/_schema";
 //   export default defineSchema({ ...rbacRolesTables, ...others });
 //
 // `tenantId` is a generic string (your workspace/org/team id) or null for

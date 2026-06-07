@@ -67,7 +67,7 @@ export async function POST(req: Request) {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "";
 
   const auth = await checkAuth(req.headers, async (token) => {
-    return (await convexHttp.query("features/create-your-mcp:findToken", {
+    return (await convexHttp.query("features/create_your_mcp:findToken", {
       token,
     })) as { _id: string; scope: string | null } | null;
   });
@@ -98,7 +98,7 @@ export async function POST(req: Request) {
       const responses = results.filter((r) => r !== null);
       if (auth.kind === "oauth") {
         void convexHttp
-          .mutation("features/create-your-mcp:touchToken", { token: bearer })
+          .mutation("features/create_your_mcp:touchToken", { token: bearer })
           .catch(() => undefined);
       }
       if (responses.length === 0) return new NextResponse(null, { status: 202 });
@@ -108,7 +108,7 @@ export async function POST(req: Request) {
     const result = await dispatchJsonRpc(body, TOOLS, auth.scope, opts);
     if (auth.kind === "oauth") {
       void convexHttp
-        .mutation("features/create-your-mcp:touchToken", { token: bearer })
+        .mutation("features/create_your_mcp:touchToken", { token: bearer })
         .catch(() => undefined);
     }
     if (result === null) return new NextResponse(null, { status: 202 });

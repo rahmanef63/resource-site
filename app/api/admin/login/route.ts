@@ -7,7 +7,7 @@ import { extractIp, rateLimit } from "@/lib/rate-limit-memory";
 const RL = { limit: 5, windowMs: 15 * 60 * 1000 }; // 5 attempts per 15 minutes
 
 const consumeRef = makeFunctionReference<"mutation">(
-  "features/rate-limit/mutation:consume",
+  "features/rate_limit/mutation:consume",
 );
 
 /** Convex-backed limiter when a deployment is configured (replica-safe),

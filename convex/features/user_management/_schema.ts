@@ -1,6 +1,6 @@
 // Schema fragment for the user-management slice. Compose into the root:
 //
-//   import { userManagementTables } from "./features/user-management/_schema";
+//   import { userManagementTables } from "./features/user_management/_schema";
 //   export default defineSchema({ ...userManagementTables, ...others });
 //
 // `um_members` maps a user → tenant → role. `roleSlug` references a row in

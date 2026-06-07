@@ -5,7 +5,7 @@
 import { v } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { mutation } from "../../../_generated/server";
-import { requirePermission } from "../../rbac-roles/lib/permissions";
+import { requirePermission } from "../../rbac_roles/lib/permissions";
 import { collectDescendants } from "./query";
 
 const tenantArg = v.union(v.string(), v.null());

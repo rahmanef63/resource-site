@@ -3,9 +3,9 @@
 import { action } from "../../_generated/server";
 import { api, internal } from "../../_generated/api";
 import { v } from "convex/values";
-import { buildSystemPrompt } from "./_seo-prompt";
-import { safeParse } from "./_seo-helpers";
-import type { AnthropicResponse, GenOut } from "./_seo-types";
+import { buildSystemPrompt } from "./_seo_prompt";
+import { safeParse } from "./_seo_helpers";
+import type { AnthropicResponse, GenOut } from "./_seo_types";
 
 const ANTHROPIC_URL = "https://api.anthropic.com/v1/messages";
 const MODEL = "claude-haiku-4-5-20251001";

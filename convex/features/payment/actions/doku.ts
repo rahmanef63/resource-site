@@ -38,7 +38,7 @@ import {
   extractInstructions,
   itemsArg,
   routeForChannel,
-} from "./doku-helpers";
+} from "./doku_helpers";
 
 // ─── Checkout (hosted) ───────────────────────────────────────────────────
 

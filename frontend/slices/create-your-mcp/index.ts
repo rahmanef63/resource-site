@@ -3,7 +3,7 @@
 // clients can authenticate to via OAuth 2.1 + PKCE.
 //
 // Architecture:
-//   - Convex backend (convex/features/create-your-mcp/) holds the
+//   - Convex backend (convex/features/create_your_mcp/) holds the
 //     oauthCodes + oauthAccessTokens tables + PKCE helpers + mutations
 //     (createCode/exchangeCode/revokeToken/touchToken) + queries
 //     (adminList, findToken).

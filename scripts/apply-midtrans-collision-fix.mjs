@@ -77,8 +77,8 @@ function syntheticV09(toContract) {
 }
 
 const SLICES = [
-  { slug: "doku-payment", outFile: "M-doku-namespace-2026-05.ts" },
-  { slug: "midtrans-payment", outFile: "M-midtrans-namespace-2026-05.ts" },
+  { slug: "doku-payment", outFile: "M_doku_namespace_2026_05.ts" },
+  { slug: "midtrans-payment", outFile: "M_midtrans_namespace_2026_05.ts" },
 ];
 
 const writeDir = path.join(repoRoot, "convex", "migrations");
