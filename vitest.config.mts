@@ -29,9 +29,11 @@ export default defineConfig({
     include: [
       "shared/**/*.test.{ts,tsx}",
       "lib/**/*.test.{ts,tsx}",
-      "packages/cli/lib/**/*.test.{mjs,ts}",
+      "components/**/*.test.{ts,tsx}",
+      "packages/cli/**/*.test.{mjs,ts}",
       "frontend/slices/**/*.test.{ts,tsx}",
       "convex/features/**/*.test.{ts,tsx}",
+      "scripts/**/*.test.{mjs,ts}",
     ],
     setupFiles: [],
   },

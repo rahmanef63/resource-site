@@ -6,15 +6,18 @@
 //      "Updated today" for a day that hadn't happened),
 //   2. duplicate entry ids (anchors + badge deep links silently collide).
 //
-// Run: node scripts/validation/validate-changelog.mjs
+// Run: node scripts/validation/validate-changelog.mjs [dir]
 // Exit 1 on any error. Wired into `validate:changelog` + pre-commit.
+// Optional [dir] points at an alternate part-*.ts directory (tests).
 
 import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DIR = path.resolve(__dirname, "../../lib/content/changelog");
+const DIR = process.argv[2]
+  ? path.resolve(process.argv[2])
+  : path.resolve(__dirname, "../../lib/content/changelog");
 
 // Entries are JSON-ish ("id": …) or plain TS (id: …) literals — match both.
 const TOKEN = /^\s*"?(id|date)"?\s*:\s*("([^"]+)"|(\d{10,}))\s*,?\s*$/;

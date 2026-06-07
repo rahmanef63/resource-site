@@ -40,6 +40,7 @@
     "manifest:sync": "node packages/cli/scripts/gen-manifest.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "prepare": "git config core.hooksPath .githooks 2>/dev/null || true",
     "shots:capture": "node scripts/capture-shots.mjs"
   },
@@ -115,6 +116,7 @@
     "@types/react-dom": "^19.0.0",
     "@types/sanitize-html": "^2.16.1",
     "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/coverage-v8": "^4.1.8",
     "autoprefixer": "^10.5.0",
     "eslint": "^9",
     "eslint-config-next": "^16.0.0",

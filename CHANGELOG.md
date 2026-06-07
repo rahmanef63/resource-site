@@ -11,6 +11,19 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-07 — hardening W5: behavioral tests + coverage baseline
+
+- `nav-parts.test.tsx` — 7 interaction tests for the docs sidebar
+  (U7 dead-toggle + chevron data-state regressions).
+- `recently-updated-badge.test.tsx` — card variant renders no anchor
+  (W2 regression); deep links page-aware.
+- `validate-changelog.test.mjs` — fixture-driven (future date, dup id,
+  wrong epoch); script gained an optional dir arg for tests.
+- `alias-resolution.test.mjs` — offline CLI e2e pinning the U3 alias
+  fall-through.
+- `test:coverage` (@vitest/coverage-v8) — baseline 35.1% stmts /
+  38.5% lines. 425 tests across 46 files.
+
 ### 2026-06-07 — hardening W4: gates wired + MCP↔CLI coupling
 
 - pre-commit now runs `gen:agent-md:check` + `validate:changelog`;

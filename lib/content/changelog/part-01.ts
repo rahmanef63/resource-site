@@ -2,6 +2,26 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "HARDEN-W5",
+    "version": "site@behavioral-tests",
+    "date": 1780790400000,
+    "kind": "improvement",
+    "title": "Behavioral tests land — sidebar interactions, badge anchors, changelog gate, CLI aliases + coverage baseline",
+    "body": "Hardening W5, closing the report's core critique: structural gates were strong but nothing verified behavior — the U7 dead-toggle shipped without a single failing test. New targeted suites (+22 tests, 425 total): nav-parts interaction tests click the actual Collapsible triggers (toggle works, collapsed-by-default, and the group/* class sits on the data-state carrier — the exact U7 chevron regression); recently-updated-badge asserts the card variant renders NO anchor (the W2 nested-<a> regression) and that deep links are page-aware; validate-changelog gets fixture-driven unit tests (future date, dup id, wrong epoch unit) via a new optional dir arg; and an offline CLI e2e spawns `rr info blog-section` to pin the U3 alias fall-through ('superseded by landing-sections'). Coverage measurement exists for the first time: vitest --coverage via @vitest/coverage-v8, baseline 35% statements / 38% lines — a number to move, not a gate (yet).",
+    "groups": [
+      {
+        "heading": "Tests (new)",
+        "bullets": [
+          "docs-sidebar nav-parts: 7 interaction tests (toggle, default-collapsed, data-state carrier)",
+          "recently-updated-badge: card renders no anchor; badge href page-aware; changelogHref + page math",
+          "validate-changelog: 5 fixture tests (clean, future, dup, epoch, real data)",
+          "CLI alias e2e: rr info <old-slug> resolves with superseded warning, offline",
+          "test:coverage script — baseline 35.1% stmts / 38.5% lines"
+        ]
+      }
+    ]
+  },
+  {
     "id": "HARDEN-W4",
     "version": "mcp@1.2.0",
     "date": 1780790400000,
