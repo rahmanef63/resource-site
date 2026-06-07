@@ -1987,7 +1987,7 @@
       "install": "npx rahman-resources add user-management",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add user-management` (pulls rbac-roles + convex-auth). Frontend: <MembersPanel members={useQuery(api[\"features/user-management/query\"].listMembers,{tenantId})} roles={ROLE_PRESETS.map(r=>({slug:r.slug,name:r.name,color:r.color}))} currentPerms={actorPerms} onUpdateRole={useMutation(...updateMemberRole)} onRemove={useMutation(...removeMember)} onInvite={openInvite} />. Wire roles + currentPerms from rbac-roles at the app level — the slice itself imports no other slice. Convex: spread userManagementTables; listMembers/mutations gate via rbac-roles requirePermission.",
+      "agentRecipe": "Run `npx rr add user-management` (pulls rbac-roles + convex-auth). Frontend: <MembersPanel members={useQuery(api[\"features/user_management/query\"].listMembers,{tenantId})} roles={ROLE_PRESETS.map(r=>({slug:r.slug,name:r.name,color:r.color}))} currentPerms={actorPerms} onUpdateRole={useMutation(...updateMemberRole)} onRemove={useMutation(...removeMember)} onInvite={openInvite} />. Wire roles + currentPerms from rbac-roles at the app level — the slice itself imports no other slice. Convex: spread userManagementTables; listMembers/mutations gate via rbac-roles requirePermission.",
       "tags": [
         "user-management",
         "members",
@@ -3915,7 +3915,7 @@
       "source": "superspace",
       "slicePath": "frontend/slices/rbac-roles",
       "convexPaths": [
-        "convex/features/rbac-roles"
+        "convex/features/rbac_roles"
       ],
       "npm": [],
       "shadcn": [
@@ -3959,7 +3959,7 @@
       "source": "superspace",
       "slicePath": "frontend/slices/user-management",
       "convexPaths": [
-        "convex/features/user-management"
+        "convex/features/user_management"
       ],
       "npm": [],
       "shadcn": [
@@ -4001,7 +4001,7 @@
         "convex",
         "no-clerk"
       ],
-      "agentRecipe": "Run `npx rr add user-management` (pulls rbac-roles + convex-auth). Frontend: <MembersPanel members={useQuery(api[\"features/user-management/query\"].listMembers,{tenantId})} roles={ROLE_PRESETS.map(r=>({slug:r.slug,name:r.name,color:r.color}))} currentPerms={actorPerms} onUpdateRole={useMutation(...updateMemberRole)} onRemove={useMutation(...removeMember)} onInvite={openInvite} />. Wire roles + currentPerms from rbac-roles at the app level — the slice itself imports no other slice. Convex: spread userManagementTables; listMembers/mutations gate via rbac-roles requirePermission."
+      "agentRecipe": "Run `npx rr add user-management` (pulls rbac-roles + convex-auth). Frontend: <MembersPanel members={useQuery(api[\"features/user_management/query\"].listMembers,{tenantId})} roles={ROLE_PRESETS.map(r=>({slug:r.slug,name:r.name,color:r.color}))} currentPerms={actorPerms} onUpdateRole={useMutation(...updateMemberRole)} onRemove={useMutation(...removeMember)} onInvite={openInvite} />. Wire roles + currentPerms from rbac-roles at the app level — the slice itself imports no other slice. Convex: spread userManagementTables; listMembers/mutations gate via rbac-roles requirePermission."
     },
     {
       "slug": "admin-panel",
@@ -4160,7 +4160,7 @@
       "source": "rahmanef.com",
       "slicePath": "frontend/slices/rate-limit",
       "convexPaths": [
-        "convex/features/rate-limit"
+        "convex/features/rate_limit"
       ],
       "npm": [],
       "shadcn": [],
@@ -4263,7 +4263,7 @@
       "source": "rahmanef.com",
       "slicePath": "frontend/slices/create-your-mcp",
       "convexPaths": [
-        "convex/features/create-your-mcp"
+        "convex/features/create_your_mcp"
       ],
       "npm": [],
       "shadcn": [],
