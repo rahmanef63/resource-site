@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "category": "ui",
   "kind": "ui",
-  "title": "Notifications Center",
+  "title": "Notifications Center — bell + inbox",
   "description": "Standalone notification inbox — a bell trigger with an unread badge that opens a panel (popover on desktop, sheet on mobile) listing notifications with All/Unread tabs, per-row mark-read + dismiss, and bulk mark-all-read + clear. Adapter-driven: the host supplies the feed via a NotificationsAdapter (Convex, websocket, or the bundled in-memory store). Pure UI, no backend coupling, theme-token styling.",
   "namespace": "@/features/notifications-center",
   "frontend": {
@@ -51,7 +51,10 @@
       "axes": [
         {
           "prop": "surface",
-          "values": ["popover", "sheet"],
+          "values": [
+            "popover",
+            "sheet"
+          ],
           "default": "popover",
           "description": "Panel surface — floating popover (desktop) or side sheet (mobile)"
         }

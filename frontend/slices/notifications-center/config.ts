@@ -2,7 +2,7 @@ import { defineFeature } from "@/lib/shared/features/defineFeature";
 
 export const notificationsCenterFeature = defineFeature({
   slug: "notifications-center",
-  title: "Notifications Center",
+  title: "Notifications Center — bell + inbox",
   category: "ui",
   routes: [],
   nav: { label: "Notifications Center", group: "ui", order: 82 },

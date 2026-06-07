@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "category": "data",
   "kind": "ui",
-  "title": "Data Table",
+  "title": "Data Table — TanStack + shadcn",
   "description": "Generic, reusable data table built on TanStack Table v8 + shadcn Table. Pass typed columns and rows; get sorting (clickable headers with indicator), a column-bound toolbar search, Previous/Next pagination with page readout, optional checkbox row selection, and a column-visibility dropdown. Density toggle (compact/comfortable) controls row padding.",
   "namespace": "@/features/data-table",
   "frontend": {
@@ -49,13 +49,19 @@
       "axes": [
         {
           "prop": "density",
-          "values": ["compact", "comfortable"],
+          "values": [
+            "compact",
+            "comfortable"
+          ],
           "default": "comfortable",
           "description": "Row padding density"
         },
         {
           "prop": "selectable",
-          "values": ["on", "off"],
+          "values": [
+            "on",
+            "off"
+          ],
           "default": "on",
           "description": "Checkbox row-selection column"
         }

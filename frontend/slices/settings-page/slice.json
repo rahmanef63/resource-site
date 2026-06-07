@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "category": "ui",
   "kind": "ui",
-  "title": "Settings Page",
+  "title": "Settings Page — adapter-driven shell",
   "description": "Adapter-driven account settings shell. Two-column layout: left section nav (Profile / Preferences / Notifications / Danger zone) + right content panel, collapsing to a Select on mobile. The consumer owns persistence by implementing a SettingsAdapter (load + save); a createMemoryAdapter is shipped for demos. Sections: profile (avatar + name/email/bio), preferences (theme + language + density), notifications (four switch rows), and a destructive danger zone with AlertDialog-confirmed account deletion.",
   "namespace": "@/features/settings-page",
   "frontend": {
