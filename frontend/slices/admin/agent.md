@@ -3,7 +3,7 @@
 
 # Install `admin` — Admin — Generic Shell
 
-> Per-instance admin landing scaffold + portable nav-from-registry factory.
+> HEADLESS admin scaffold — no chrome of its own; pair with dashboard-shell for app chrome.
 
 📚 Knowledge base : https://resource.rahmanef.com/llms.txt
 📦 Slice detail   : https://resource.rahmanef.com/slices/admin

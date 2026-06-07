@@ -2635,6 +2635,26 @@
       ]
     },
     {
+      "slug": "loading-states",
+      "title": "Loading States — skeletons + spinners SSOT",
+      "category": "ui",
+      "description": "Configurable LoadingSkeleton composing the shadcn Skeleton primitive: kind presets text / card / list / table / form / page / block with overridable count + columns. Spinner-based LoadingState (inline / block / overlay) covers in-flight work where a skeleton would be wrong. The page kind drops straight into a route loading.tsx (recipe in README).",
+      "source": "rr original",
+      "install": "npx rahman-resources add loading-states",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add loading-states`. Pick the LoadingSkeleton kind that mirrors the streamed content (<LoadingSkeleton kind=\"table\" count={8} />); use kind=\"page\" inside route loading.tsx. For in-flight work (submits, refetches) use <LoadingState variant=\"inline|block|overlay\" /> instead of a skeleton.",
+      "tags": [
+        "loading",
+        "skeleton",
+        "spinner",
+        "suspense",
+        "fallback",
+        "placeholder",
+        "basics"
+      ]
+    },
+    {
       "slug": "marketing-chrome",
       "title": "Marketing Chrome — Header + Footer",
       "category": "ui",
@@ -5134,6 +5154,35 @@
         "basics"
       ],
       "agentRecipe": "Run `npx rr add empty-states`. Drop <EmptyState kind=\"no-results\" /> into zero-data spots; wrap with <ErrorPage kind=\"404\" /> in app/not-found.tsx and kind=\"500\" in app/error.tsx. Every preset's icon/title/description/action overridable per use."
+    },
+    {
+      "slug": "loading-states",
+      "title": "Loading States — skeletons + spinners SSOT",
+      "category": "ui",
+      "kind": "ui",
+      "version": "0.1.0",
+      "description": "Configurable LoadingSkeleton composing the shadcn Skeleton primitive: kind presets text / card / list / table / form / page / block with overridable count + columns. Spinner-based LoadingState (inline / block / overlay) covers in-flight work where a skeleton would be wrong. The page kind drops straight into a route loading.tsx (recipe in README).",
+      "source": "rr original",
+      "slicePath": "frontend/slices/loading-states",
+      "convexPaths": [],
+      "npm": [],
+      "shadcn": [
+        "skeleton",
+        "spinner"
+      ],
+      "env": [],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "loading",
+        "skeleton",
+        "spinner",
+        "suspense",
+        "fallback",
+        "placeholder",
+        "basics"
+      ],
+      "agentRecipe": "Run `npx rr add loading-states`. Pick the LoadingSkeleton kind that mirrors the streamed content (<LoadingSkeleton kind=\"table\" count={8} />); use kind=\"page\" inside route loading.tsx. For in-flight work (submits, refetches) use <LoadingState variant=\"inline|block|overlay\" /> instead of a skeleton."
     },
     {
       "slug": "marketing-chrome",

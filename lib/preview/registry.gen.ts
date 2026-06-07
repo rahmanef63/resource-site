@@ -27,6 +27,7 @@ export const PREVIEW_REGISTRY: Record<string, () => Promise<{ default: SlicePrev
   "image-picker": () => import("@/features/image-picker/preview"),
   "landing-sections": () => import("@/features/landing-sections/preview"),
   "library": () => import("@/features/library/preview"),
+  "loading-states": () => import("@/features/loading-states/preview"),
   "markdown": () => import("@/features/markdown/preview"),
   "marketing-chrome": () => import("@/features/marketing-chrome/preview"),
   "media-viewer": () => import("@/features/media-viewer/preview"),

@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { Paperclip, Send, X, Mic, Sparkles, FileText, ImageIcon, Loader2 } from "lucide-react";
+import { Paperclip, Send, X, Mic, Sparkles, FileText, ImageIcon } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
@@ -131,7 +132,7 @@ export function Composer({
           disabled={busy || !value.trim()}
           className="h-7 gap-1.5"
         >
-          {busy ? <Loader2 className="size-3 animate-spin" /> : <Send className="size-3" />}
+          {busy ? <Spinner className="size-3" /> : <Send className="size-3" />}
           Send
         </Button>
       </div>

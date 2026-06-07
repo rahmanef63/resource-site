@@ -5,6 +5,7 @@
  *  whole `{ db, rows }` doc, debounce-saved by useNotionDoc). */
 
 import { NotionDatabase, DatabaseIOActions } from "@/features/notion-database";
+import { LoadingSkeleton } from "@/features/loading-states";
 import { useNotionDoc } from "./use-notion-doc";
 import { useDatabaseCallbacks } from "./use-database-callbacks";
 import { INITIAL_DATABASE, userLookup, type DatabaseDoc } from "./defaults";
@@ -18,7 +19,7 @@ export function NotionDatabaseHost({ slug = "database-main" }: { slug?: string }
   const callbacks = useDatabaseCallbacks(setDoc);
 
   if (!loaded) {
-    return <div className="h-64 animate-pulse rounded-lg border border-border/60 bg-muted/30" />;
+    return <LoadingSkeleton kind="block" className="h-64" />;
   }
   return (
     <div className="space-y-3">

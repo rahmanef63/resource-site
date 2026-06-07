@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Bot, User, Wrench, Quote, CircleAlert, Loader2 } from "lucide-react";
+import { Bot, User, Wrench, Quote, CircleAlert } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -75,7 +76,7 @@ export function ChatMessage({
           <span className="font-medium capitalize text-foreground">{role}</span>
           {status === "streaming" && (
             <span className="inline-flex items-center gap-1 text-info">
-              <Loader2 className="size-3 animate-spin" /> streaming
+              <Spinner className="size-3" /> streaming
             </span>
           )}
           {status === "error" && <span className="text-danger">error</span>}
@@ -93,7 +94,7 @@ export function ChatMessage({
                   <Wrench className="size-3 text-info" />
                   <span className="font-semibold">{t.name}</span>
                   {t.status === "running" && (
-                    <Loader2 className="size-3 animate-spin text-muted-foreground" />
+                    <Spinner className="size-3 text-muted-foreground" />
                   )}
                   {t.status === "done" && (
                     <Badge variant="secondary" className="h-4 px-1.5 text-[9px]">

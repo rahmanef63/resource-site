@@ -1,4 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import { LoadingSkeleton } from "@/features/loading-states";
 
 interface Props {
   /** Show the docs-shell tab strip placeholder. Off for simple text
@@ -52,16 +53,10 @@ export function DocsLoadingSkeleton({ tabs = false, preview = false }: Props = {
             <Skeleton className="h-full w-full max-w-5xl rounded-lg" />
           </div>
         ) : (
-          <div className="mx-auto w-full max-w-3xl space-y-4 p-6 sm:p-8">
-            <Skeleton className="h-8 w-72" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-11/12" />
-            <Skeleton className="h-4 w-9/12" />
-            <div className="grid gap-3 sm:grid-cols-2">
-              <Skeleton className="h-24 rounded-lg" />
-              <Skeleton className="h-24 rounded-lg" />
-            </div>
-            <Skeleton className="h-48 rounded-lg" />
+          <div className="mx-auto w-full max-w-3xl p-6 sm:p-8">
+            {/* Body shape comes from the loading-states slice (SSOT) —
+                this file only keeps the docs-shell chrome strips. */}
+            <LoadingSkeleton kind="page" />
           </div>
         )}
       </div>

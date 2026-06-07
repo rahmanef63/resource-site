@@ -2,6 +2,35 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "UX-U8",
+    "version": "loading-states@0.1.0",
+    "date": 1780876800000,
+    "kind": "feature",
+    "title": "loading-states slice — skeleton + spinner SSOT, adopted across the site",
+    "body": "UX wave U8. A repo-wide grep found loading UI hand-rolled everywhere: bespoke animate-pulse divs (notion hosts), raw Loader2 spans (preview-kit, admin-login), and a one-off docs body skeleton. New loading-states slice centralizes the pattern: LoadingSkeleton composes the shadcn Skeleton primitive with seven kind presets (text / card / list / table / form / page / block, count + columns overridable), and LoadingState composes the shadcn Spinner for in-flight work (inline / block / overlay). The page kind drops straight into a route loading.tsx. The site now eats its own dog food: DocsLoadingSkeleton keeps only the docs-shell chrome strips and delegates its body to kind=\"page\"; the notion database/notes hosts swap pulse divs for kind=\"block\"; preview-kit chat + composer and admin-login swap Loader2 for the Spinner primitive. Per-slice skeletons (icon-picker, notion editor) stay put — slice self-containment beats DRY across slice boundaries.",
+    "groups": [
+      {
+        "heading": "Slices (new)",
+        "bullets": [
+          {
+            "text": "loading-states 0.1.0 — LoadingSkeleton (7 kinds) + LoadingState (3 variants) on shadcn Skeleton/Spinner; previews for every kind",
+            "slug": "loading-states",
+            "kind": "slice"
+          }
+        ]
+      },
+      {
+        "heading": "Site (adopted)",
+        "bullets": [
+          "DocsLoadingSkeleton body now renders LoadingSkeleton kind=\"page\" — chrome strips stay bespoke",
+          "Notion database/notes hosts: ad-hoc animate-pulse divs → LoadingSkeleton kind=\"block\"",
+          "preview-kit chat/composer + admin-login: raw Loader2 → shadcn Spinner primitive",
+          "agent.md regen catch-up for admin + the five U6 slices (titles/taglines drifted since U5–U7)"
+        ]
+      }
+    ]
+  },
+  {
     "id": "UX-U7",
     "version": "site@sidebar-tree",
     "date": 1780876800000,

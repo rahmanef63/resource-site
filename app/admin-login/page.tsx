@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Loader2, LogIn } from "lucide-react";
+import { LogIn } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -70,7 +71,7 @@ function LoginForm() {
         </p>
       )}
       <Button type="submit" className="w-full gap-2" disabled={pending}>
-        {pending ? <Loader2 className="size-4 animate-spin" /> : <LogIn className="size-4" />}
+        {pending ? <Spinner className="size-4" /> : <LogIn className="size-4" />}
         Sign in
       </Button>
     </form>

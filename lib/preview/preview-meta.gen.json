@@ -343,7 +343,7 @@
   },
   {
     "slug": "data-table",
-    "title": "Data Table",
+    "title": "Data Table — TanStack + shadcn",
     "category": "data",
     "previews": [
       {
@@ -409,7 +409,7 @@
   },
   {
     "slug": "empty-states",
-    "title": "Empty States",
+    "title": "Empty States — 404/500/403 + zero-data",
     "category": "ui",
     "previews": [
       {
@@ -721,6 +721,72 @@
     ]
   },
   {
+    "slug": "loading-states",
+    "title": "Loading States — skeletons + spinners SSOT",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "LoadingSkeleton",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "text",
+            "title": "Text lines",
+            "description": "paragraph placeholder, last line shorter"
+          },
+          {
+            "id": "card",
+            "title": "Card",
+            "description": "avatar header + body lines in a card frame"
+          },
+          {
+            "id": "list",
+            "title": "List rows",
+            "description": "avatar + two-line rows"
+          },
+          {
+            "id": "table",
+            "title": "Table",
+            "description": "header row + data rows"
+          },
+          {
+            "id": "form",
+            "title": "Form",
+            "description": "label + field pairs + submit button"
+          },
+          {
+            "id": "page",
+            "title": "Page",
+            "description": "route loading.tsx drop-in — title + prose + grid"
+          }
+        ],
+        "seed": "LoadingSkeleton rendered once per kind preset with default counts"
+      },
+      {
+        "component": "LoadingState",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "inline",
+            "title": "Inline",
+            "description": "spinner + label in flowing text"
+          },
+          {
+            "id": "block",
+            "title": "Block",
+            "description": "centered column for panel bodies"
+          },
+          {
+            "id": "overlay",
+            "title": "Overlay",
+            "description": "blur veil over a relative parent"
+          }
+        ],
+        "seed": "LoadingState rendered per variant over demo content"
+      }
+    ]
+  },
+  {
     "slug": "markdown",
     "title": "Markdown — page container with CRUD tabs + diagrams",
     "category": "content",
@@ -754,7 +820,7 @@
   },
   {
     "slug": "marketing-chrome",
-    "title": "Marketing Chrome",
+    "title": "Marketing Chrome — Header + Footer",
     "category": "ui",
     "previews": [
       {
@@ -847,7 +913,7 @@
   },
   {
     "slug": "notifications-center",
-    "title": "Notifications Center",
+    "title": "Notifications Center — bell + inbox",
     "category": "ui",
     "previews": [
       {
@@ -1161,7 +1227,7 @@
   },
   {
     "slug": "settings-page",
-    "title": "Settings Page",
+    "title": "Settings Page — adapter-driven shell",
     "category": "ui",
     "previews": [
       {

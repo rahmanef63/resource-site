@@ -15,6 +15,7 @@ import {
   collectHeadings,
 } from "@/features/notion-shell";
 import { SelectionProvider, SelectableBlock, SelectionMarquee } from "@/features/selection";
+import { LoadingSkeleton } from "@/features/loading-states";
 import { useNotionDoc } from "./use-notion-doc";
 import { useBlockOps } from "./use-block-ops";
 import { NOTES_BLOCK_RENDERERS, TocHeadingsContext } from "./block-renderers";
@@ -33,7 +34,7 @@ export function NotionNotesHost({ slug = "notes" }: { slug?: string }) {
   const patch = (p: Partial<NotesDoc>) => setDoc((d) => ({ ...d, ...p }));
 
   if (!loaded) {
-    return <div className="h-64 animate-pulse rounded-lg border border-border/60 bg-muted/30" />;
+    return <LoadingSkeleton kind="block" className="h-64" />;
   }
   return (
     <TocHeadingsContext.Provider value={headings}>

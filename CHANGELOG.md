@@ -11,6 +11,30 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-07 — loading-states: skeleton + spinner SSOT (UX wave U8)
+
+**Slices**
+
+- New `loading-states` 0.1.0 — `LoadingSkeleton` with seven kind presets
+  (text / card / list / table / form / page / block) on the shadcn
+  `Skeleton` primitive, plus `LoadingState` (inline / block / overlay)
+  on the shadcn `Spinner` for in-flight work. `kind="page"` is a route
+  `loading.tsx` drop-in.
+
+**Site**
+
+- `DocsLoadingSkeleton` keeps only the docs-shell chrome strips; its body
+  delegates to `LoadingSkeleton kind="page"`.
+- Notion database/notes hosts: bespoke `animate-pulse` divs →
+  `LoadingSkeleton kind="block"`.
+- preview-kit chat/composer + admin-login: raw `Loader2` → shadcn
+  `Spinner` primitive.
+- agent.md regen catch-up (admin + five U6 slices).
+
+**CLI**
+
+- 1.12.1 — manifest picks up `loading-states` (63 slices).
+
 ### 2026-06-07 — docs sidebar tree fixed (UX wave U7)
 
 - Branch toggle was dead: `tooltip` on `SidebarMenuButton` wraps it in a

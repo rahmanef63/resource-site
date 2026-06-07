@@ -1,0 +1,101 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "loading-states",
+  "version": "0.1.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "Loading States — skeletons + spinners SSOT",
+  "description": "One configurable LoadingSkeleton component with per-kind presets (text, card, list, table, form, page, block) composed on top of the shadcn Skeleton primitive, plus a spinner-based LoadingState (inline / block / overlay) for in-flight work where a skeleton would be wrong. Drop the page kind straight into a route loading.tsx; count and columns are overridable per use. The SSOT that replaces ad-hoc animate-pulse divs and hand-rolled Loader2 spans.",
+  "namespace": "@/features/loading-states",
+  "frontend": {
+    "slicePath": "frontend/slices/loading-states",
+    "configExport": "loadingStatesFeature"
+  },
+  "convex": {
+    "tablesExport": "",
+    "schemaPath": "",
+    "rootPaths": []
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [
+      "skeleton",
+      "spinner"
+    ],
+    "env": [],
+    "peers": []
+  },
+  "registers": [],
+  "audit": [],
+  "license": "MIT",
+  "tags": [
+    "ui",
+    "loading",
+    "skeleton",
+    "spinner",
+    "suspense",
+    "fallback",
+    "placeholder"
+  ],
+  "previews": [
+    {
+      "component": "LoadingSkeleton",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "text",
+          "title": "Text lines",
+          "description": "paragraph placeholder, last line shorter"
+        },
+        {
+          "id": "card",
+          "title": "Card",
+          "description": "avatar header + body lines in a card frame"
+        },
+        {
+          "id": "list",
+          "title": "List rows",
+          "description": "avatar + two-line rows"
+        },
+        {
+          "id": "table",
+          "title": "Table",
+          "description": "header row + data rows"
+        },
+        {
+          "id": "form",
+          "title": "Form",
+          "description": "label + field pairs + submit button"
+        },
+        {
+          "id": "page",
+          "title": "Page",
+          "description": "route loading.tsx drop-in — title + prose + grid"
+        }
+      ],
+      "seed": "LoadingSkeleton rendered once per kind preset with default counts"
+    },
+    {
+      "component": "LoadingState",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "inline",
+          "title": "Inline",
+          "description": "spinner + label in flowing text"
+        },
+        {
+          "id": "block",
+          "title": "Block",
+          "description": "centered column for panel bodies"
+        },
+        {
+          "id": "overlay",
+          "title": "Overlay",
+          "description": "blur veil over a relative parent"
+        }
+      ],
+      "seed": "LoadingState rendered per variant over demo content"
+    }
+  ]
+}
