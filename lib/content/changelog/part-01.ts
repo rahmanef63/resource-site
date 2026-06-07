@@ -2,6 +2,26 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "OS-HOOKS-V6-SYNC",
+    "version": "os-apps@hooks-v6",
+    "date": 1780790400000,
+    "kind": "improvement",
+    "title": "react-hooks v6 compliance sweep backported from os-vps + macOS-style app icons",
+    "body": "The os-vps lint sweep (55 compiler-era react-hooks warnings → 0, rules promoted to error) lands in every lifted slice so both repos are line-identical outside seams again. Pattern conversions, no blanket disables: latest-ref mirrors move into effects, effect-driven resets become request/prop-keyed derived state (window-content, file-tree, use-konva-image, favicon, omnibar, remote-view, NumBox, waveform, spotlight), dynamic icon lookups render via createElement (useMemo does NOT satisfy static-components — probed), inline components hoist to module scope, the image-editor co-locates selection+mask in one state so the mask-exit invariant is atomic, history snapshots canUndo/canRedo at mutation time, and the inspector AI thread resets via key= remount. Bonus: the appshell AppIcon drops the hard iOS-glass sheen for a macOS Ventura treatment — soft full-height luminance ramp, hairline edge ring, layered drop shadow, shadowed glyph — mirrored in the app-store icon preview + card tiles.",
+    "groups": [
+      {
+        "heading": "Slices (changed)",
+        "bullets": [
+          { "text": "appshell 1.2.1 — hooks-v6 clean (window-content keyed loader, url-sync/app-switcher ref mirrors, spotlight mounts per open, inspector key= remount) + Ventura AppIcon", "slug": "appshell", "kind": "slice" },
+          { "text": "image-editor 2.0.1 — atomic selection+mask state, mutation-time history flags, paintBox memo, derived dirty, un-curried overlay drags", "slug": "image-editor", "kind": "slice" },
+          { "text": "reel-editor 1.0.1 — frameRef mirror, keyed NumBox draft, .then-form imports browser, lazy layout init, map-derived waveform", "slug": "reel-editor", "kind": "slice" },
+          { "text": "browser 1.0.1 — keyed favicon error, keyed omnibar draft, lazy usePersistent", "slug": "browser", "kind": "slice" },
+          { "text": "app-store 1.0.1 — createElement glyph tiles + ramp sheen; assistant 1.0.1, media-viewer 1.0.1, code-editor 1.0.1 (file-tree keyed listing), os-terminal 1.0.1 ref mirrors", "slug": "app-store", "kind": "slice" }
+        ]
+      }
+    ]
+  },
+  {
     "id": "UX-U6",
     "version": "rahman-resources@1.12.0",
     "date": 1780790400000,

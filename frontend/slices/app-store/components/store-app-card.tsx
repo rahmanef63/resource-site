@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { createElement, useState } from "react";
 import { Check, Download, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -22,7 +22,6 @@ export function StoreAppCard({
   busy: boolean;
   onToggle: (app: CatalogApp) => void;
 }) {
-  const Icon = glyphIcon(app.glyph);
   const [hover, setHover] = useState(false);
 
   return (
@@ -35,8 +34,9 @@ export function StoreAppCard({
         className="relative grid size-12 shrink-0 place-items-center rounded-xl text-white shadow-sm"
         style={{ background: app.gradient }}
       >
-        <span className="pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-white/20" />
-        <Icon className="relative size-6" />
+        <span className="pointer-events-none absolute inset-0 rounded-[inherit] bg-[linear-gradient(180deg,rgba(255,255,255,0.30),rgba(255,255,255,0.06)_45%,rgba(0,0,0,0.06))]" />
+        {/* createElement: dynamic stateless lookup, not a render-created component */}
+        {createElement(glyphIcon(app.glyph), { className: "relative size-6" })}
       </div>
 
       <div className="flex min-w-0 flex-1 flex-col gap-1.5">
