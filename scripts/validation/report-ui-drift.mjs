@@ -3,8 +3,8 @@
 // components/ui/ (site, modern "radix-ui" barrel) and
 // template-base/components/ui/ (distributed with templates) are maintained
 // by hand in parallel — this surfaces what diverged so syncs are a decision,
-// not an accident. Never exits non-zero; full consolidation is a separate
-// (deferred) project.
+// not an accident. Never exits non-zero. Consolidated 2026-06-07 (content
+// drift 0; both trees on the "radix-ui" barrel) — this report keeps it so.
 //
 // Run: node scripts/validation/report-ui-drift.mjs
 
@@ -42,4 +42,4 @@ if (drifted.length) {
 } else {
   console.log("  content drift: none");
 }
-console.log("  (warn-only — known cause: site uses the unified \"radix-ui\" barrel, template-base uses scoped @radix-ui/* packages)");
+console.log("  (warn-only — trees consolidated 2026-06-07 on the unified \"radix-ui\" barrel; presence diffs are intentional: site-only = newer shadcn additions, template-only = template's toast/Marquee set)");
