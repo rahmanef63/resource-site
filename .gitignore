@@ -20,3 +20,7 @@ dist/
 # Slice-DNA lineage — committed shards are *.dna.json, *.local.json is per-user
 .kitab/lineage/*.local.json
 coverage/
+
+# playwright e2e
+/test-results/
+/playwright-report/

@@ -40,6 +40,9 @@
     "manifest:sync": "node packages/cli/scripts/gen-manifest.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
+    "e2e": "npm run build && playwright test",
+    "e2e:only": "playwright test",
+    "e2e:staging": "E2E_BASE_URL=https://staging-resource.rahmanef.com playwright test",
     "test:coverage": "vitest run --coverage",
     "prepare": "git config core.hooksPath .githooks 2>/dev/null || true",
     "shots:capture": "node scripts/capture-shots.mjs"
@@ -113,6 +116,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",
     "@next/eslint-plugin-next": "^16.2.6",
+    "@playwright/test": "^1.60.0",
     "@tailwindcss/postcss": "^4.0.0",
     "@testing-library/react": "^16.3.2",
     "@types/katex": "^0.16.8",
