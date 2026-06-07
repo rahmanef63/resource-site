@@ -138,6 +138,14 @@ Path alias `@notion/*` → `./frontend/slices/notion/*`. Convex code dari notion
 - `/use-audit-bp` sebelum deploy atau after major slice copy
 - `/use-si-coder` untuk first dokploy deploy + DNS setup
 
+## Staging + E2E (docs/staging-e2e.md)
+
+- `npm run e2e` = Playwright smoke (7 flows) vs local prod build :3137;
+  `npm run e2e:staging` = vs https://staging-resource.rahmanef.com.
+- Staging = Dokploy app `resource-site-staging`, auto-deploy branch `staging`
+  (`git push origin main:staging`). Main tetap canonical; staging buat
+  perubahan berisiko sebelum push main.
+
 ## CLI / MCP / Builder (3 surface, harus sinkron)
 
 ### `packages/cli` — `rahman-resources`
