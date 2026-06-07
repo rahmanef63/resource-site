@@ -8,9 +8,10 @@
   "files": ["src", "manifest.json", "README.md"],
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "build": "tsc && cp manifest.json dist/"
+    "build": "esbuild src/content-script.ts --bundle --format=iife --outfile=dist/content-script.js && esbuild src/background.ts --bundle --format=esm --outfile=dist/background.js && cp manifest.json dist/"
   },
   "devDependencies": {
+    "esbuild": "^0.24.0",
     "typescript": "^5.7.0"
   }
 }

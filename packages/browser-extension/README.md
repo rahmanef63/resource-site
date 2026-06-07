@@ -29,9 +29,16 @@ not load it.
 ```bash
 cd packages/browser-extension
 npm i
-npm run build      # tsc → dist/ + copies manifest.json
+npm run build      # esbuild bundles src → flat dist/ (content-script.js IIFE +
+                   # background.js ESM) + copies manifest.json
+npm run typecheck  # tsc --noEmit (type-only protocol imports erase at build)
 # then: load dist/ as an unpacked extension, or point OS_BROWSER_EXTENSION_DIR at it
 ```
+
+Content scripts can't be ES modules, so `content-script.js` is bundled as an IIFE
+(the scanner is inlined); `background.js` is ESM (the manifest's service worker is
+`type: module`). Verified loading into a headed Chromium under Xvfb via the os-vps
+runtime — see os-vps `docs/browser-agent-plan.md` "Extension flip runbook".
 
 ## Conventions
 
