@@ -153,7 +153,7 @@ export const slices: SliceEntry[] = [
     title: "Image Editor — layered raster editor",
     category: "os",
     kind: "ui",
-    version: "2.0.1",
+    version: "2.0.2",
     tagline: "Layered raster editor: layers, transform, paint, filters, layer styles, 1-click background removal, AI command registry, export.",
     description:
       "A Photoshop-style raster image editor built on Konva. Layers panel (reorder, opacity, visibility, lock, 16 blend modes), free transform (move/scale/rotate/flip via a Transformer), image + text + shape + paint layers, brush & eraser with size/opacity/hardness, non-destructive adjustments + filters, canvas resize/aspect presets, and LAYER STYLES: stroke, drop shadow, outer glow, clipping mask. One-click BACKGROUND REMOVAL runs fully in-browser via @imgly/background-removal (free, no API key — downloads a small ONNX model on first use). Undo/redo, zoom/pan, shortcuts, PNG/JPG/WebP export. v2 adds an AI FUNCTION-CALLING layer: every editor operation is a named, schema'd command (EDITOR_COMMANDS registry + useEditorCommands binding) driven by an in-editor chat; the streaming bridge is injectable via configureAgentStream(fn) and everything except the chat works without it. A headless server barrel (server.ts) runs commands against documents with no DOM. Image I/O via props (initialImage / onSave).",
@@ -213,7 +213,7 @@ export default function ImageEditorDemo() {
     title: "Reel — video timeline editor",
     category: "os",
     kind: "ui",
-    version: "1.0.1",
+    version: "1.0.2",
     tagline: "In-browser NLE: layered multi-track timeline, keyframes, transitions, color grading, realtime WebM export with mixed audio.",
     description:
       "A complete in-browser video editor. Real media clips (image/video/audio) on a layered multi-track timeline — the top row renders frontmost, with ▲▼ reorder and per-track lock/hide/mute. ONE Canvas-2D draw path is shared by the live preview and the realtime MediaRecorder exporter, so what you see is exactly what renders (WebM with real mixed audio: per-clip volume/fades/auto-duck through a streaming audio graph). Per-clip trim/speed (0.25–4×)/reverse, dissolve/wipe/slide transitions via clip overlap, keyframes (opacity/scale/x/y/rotation) with easing + one-click In/Out animation presets, text styling with preset grid, color grading + vignette, filmstrip thumbnails + real waveforms, snapping, split/duplicate. The workspace is config-driven: 6 resizable layout presets (react-resizable-panels v4) incl. quick-import files-pane layouts, plus custom composition size. Drafts auto-save to localStorage. Self-contained: toasts via sonner, the files pane runs on an injectable fs adapter (configureReelFs; in-memory mock by default), and shell hooks (inspector/activity) are inert seams in lib/host.ts.",
@@ -323,7 +323,7 @@ export default function PreviewDemo() {
     title: "Code — overlay syntax editor",
     category: "os",
     kind: "ui",
-    version: "1.0.1",
+    version: "1.0.2",
     tagline: "Lightweight code editor: overlay highlighting, tabs with dirty dots, lazy explorer tree, injectable filesystem.",
     description:
       "A lightweight code editor in the VS-Code spirit without the weight: a transparent textarea layered over a highlighted pre (regex tokenizer for JS/TS/JSON/CSS) gives real editing with live syntax color and a line-number gutter; a tab strip tracks dirty buffers with Cmd/Ctrl+S save; a status bar shows path, Ln/Col, tab size, language and save state. The explorer is a lazy per-directory tree — each folder lists on expand, with inline new-file/new-folder affordances — rendered as a rail on desktop and a Sheet on mobile, and the new-file form is a responsive dialog ⇄ bottom drawer. The filesystem is INJECTED via a small CodeFsAdapter (list/read/write/mkdir): point configureCodeFs at a real API or use the bundled writable in-memory mock (seeded sample tree) so it works with zero backend. Writes are best-effort — a read-only host flags the save but keeps the local buffer. Pairs with file-explorer (onOpenFile → payload) and appshell.",
@@ -495,7 +495,7 @@ export default function AssistantDemo() {
     title: "Browser — remote headless-browser chrome",
     category: "os",
     kind: "ui",
-    version: "1.0.1",
+    version: "1.0.2",
     tagline: "Omnibar, bookmarks, history + a screenshot viewport that forwards input — drive any headless Chromium via one adapter.",
     description:
       "Full browser chrome for a REMOTE headless browser: omnibar with search-or-URL detection, bookmark bar, history view (localStorage-persisted), favicons with globe fallback, busy states, and a screenshot viewport that forwards clicks/typing/keys/scroll into the remote page. The backend is INJECTED via a small BrowserAdapter (state/screenshot/act): point configureBrowser at a real headless-Chromium service (e.g. Playwright behind an authed route — any site renders, no X-Frame-Options problem) or keep the bundled offline canvas demo renderer that fakes the viewport so the whole chrome works with zero backend. Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
@@ -639,7 +639,7 @@ export default function FileExplorerDemo() {
     title: "AppShell — Desktop + Mobile OS Shell",
     category: "os",
     kind: "full",
-    version: "1.2.1",
+    version: "1.3.1",
     tagline: "Manifest-driven macOS-style window manager + iOS-style mobile surface in one slice.",
     description:
       "Generic, brand-free OS-style shell framework. One <AppShell manifest> wrapper provider gives a project a macOS-style window manager (drag/snap/maximize, dock, menu bar, Spotlight) AND an iOS-style mobile surface (home pager, app library, control center, widgets), driven entirely by a manifest: brand, apps, features, surface regions, capabilities, persistence, keymap. Five shell features (search, inspector, notifications, control-center, widgets) are bundled as defineFeature() contributions inside the slice and mount via named <Slot>s. Responsiveness is a single ResponsiveProvider + 4 DRY primitives (AppFrame, MasterDetail, ResponsiveToolbar, TouchList). Imports nothing project-specific — the consumer injects data/auth/AI through manifest.capabilities. Lifted from os-vps (Topside).",

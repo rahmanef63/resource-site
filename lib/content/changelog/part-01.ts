@@ -2,6 +2,46 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "OS-STATUS-TOKENS",
+    "version": "os-apps@status-tokens",
+    "date": 1780876800000,
+    "kind": "improvement",
+    "title": "Semantic status tokens + responsive guards — backported from os-vps across 5 slices",
+    "body": "The os-vps de-gaudy sweep lands in the lifted slices: every raw Tailwind palette class used for STATUS meaning (bg-red-500, text-emerald-500, bg-amber-400, bg-sky-500, …) now reads the semantic tokens the site palette already defines — bg-success / bg-destructive / bg-warning / bg-info — so notification dots, toast icons, taskbar activity pips, error states, mute buttons and mask-edit banners all follow the active theme preset instead of fighting it. Intentionally colorful surfaces (app-icon gradients, file-type icon colors, avatar palettes) are untouched. Same wave adds responsive guards to the three fixed-width panels that could overflow small viewports: notification center (340px), inspector (300px) and the image-editor side panel (312px) now carry max-w clamps. Consumers on older copies: `npx rr update <slug>` — the slices assume --success/--warning/--info/--destructive tokens in globals.css (the rr init template ships them).",
+    "groups": [
+      {
+        "heading": "Slices (updated)",
+        "bullets": [
+          {
+            "text": "appshell 1.3.1 — app-badge, mobile-notification dots, notification-center (+max-w guard), window close-confirm, Windows-taskbar pips, toast-host, dynamic-island, inspector max-w guard → status tokens",
+            "slug": "appshell",
+            "kind": "slice"
+          },
+          {
+            "text": "image-editor 2.0.2 — brush warning chip + mask-edit banner → warning token; side panel max-w clamp",
+            "slug": "image-editor",
+            "kind": "slice"
+          },
+          {
+            "text": "reel-editor 1.0.2 — mute toggle, delete action, error states, out-of-clip indicator → status tokens",
+            "slug": "reel-editor",
+            "kind": "slice"
+          },
+          {
+            "text": "browser 1.0.2 — omnibar secure-lock indicator → success token",
+            "slug": "browser",
+            "kind": "slice"
+          },
+          {
+            "text": "code-editor 1.0.2 — status-bar save-error indicator → warning token",
+            "slug": "code-editor",
+            "kind": "slice"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "LIFT-APPSHELL-130",
     "version": "appshell@1.3.0",
     "date": 1780876800000,
