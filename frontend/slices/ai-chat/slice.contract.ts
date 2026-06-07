@@ -34,12 +34,9 @@ export const contract = defineSliceContract({
     ],
   },
   conflicts: [],
-  bidir: {
-    syncPolicy: "manual",
-    generalization: {
-      level: "portable",
-      forbiddenTerms: ["rahmanef", "rahmanef.com"],
-      requiredProps: [],
-    },
+  generalization: {
+    level: "portable",
+    forbiddenTerms: ["rahmanef", "rahmanef.com"],
+    requiredProps: [],
   },
 });

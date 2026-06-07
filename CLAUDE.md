@@ -202,7 +202,7 @@ Wave N+3 Bidirectional Sync Detection Layer was deleted in Sesi 2
 - `.kitab.json` per slice in consumer repos (cleanup Phase E)
 
 **Kept:**
-- `slice.contract.ts` DSL (typed declaration) — the `bidir` block is now vestigial; ignore it
+- `slice.contract.ts` DSL (typed declaration) — the `bidir` block was REMOVED 2026-06-07; its `generalization` payload (still feeds `check-forbidden-terms.mjs`) was promoted to a top-level contract field
 - `slice.manifest.json` (CLI distribution metadata)
 - Audit-bp validators
 - `.kitab/lineage/*.dna.json` (historical archive, read-only by `/admin/lineage`)

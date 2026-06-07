@@ -38,18 +38,15 @@ export const contract = defineSliceContract({
     components: ["buildSeoSystemPrompt"],
   },
   conflicts: [],
-  bidir: {
-    syncPolicy: "manual",
-    generalization: {
-      level: "portable",
-      // Forbid any rahmanef-domain literal from leaking into the slice copy.
-      // The action persona was hoisted as a `personaContext` prop in v0.2.0;
-      // baked-in rahmanef brand text would defeat the generalisation gate.
-      forbiddenTerms: ["rahmanef", "rahmanef.com"],
-      // Consumer-supplied props (all optional, defaulted via
-      // DEFAULT_PERSONA_CONTEXT). Listed so `rr-prep` can audit consumer
-      // wirings against the portable surface.
-      requiredProps: ["personaContext"],
-    },
+  generalization: {
+    level: "portable",
+    // Forbid any rahmanef-domain literal from leaking into the slice copy.
+    // The action persona was hoisted as a `personaContext` prop in v0.2.0;
+    // baked-in rahmanef brand text would defeat the generalisation gate.
+    forbiddenTerms: ["rahmanef", "rahmanef.com"],
+    // Consumer-supplied props (all optional, defaulted via
+    // DEFAULT_PERSONA_CONTEXT). Listed so `rr-prep` can audit consumer
+    // wirings against the portable surface.
+    requiredProps: ["personaContext"],
   },
 });

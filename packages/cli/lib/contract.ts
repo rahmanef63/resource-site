@@ -13,7 +13,7 @@ import {
   validateHeader,
   validateRbac,
   validateConvex,
-  validateBidir,
+  validateGeneralization,
   validateConflicts,
 } from "./contract-validate";
 
@@ -24,10 +24,8 @@ export type {
   ConvexNamespace,
   SliceContractRequires,
   SliceContractProvides,
-  SliceSyncPolicy,
   GeneralizationLevel,
   SliceGeneralization,
-  SliceBidirContract,
   SliceContract,
 } from "./contract-types";
 
@@ -62,7 +60,7 @@ export function defineSliceContract(c: SliceContract): SliceContract {
   validateHeader(c);
   validateRbac(c);
   validateConvex(c);
-  validateBidir(c);
+  validateGeneralization(c);
   validateConflicts(c);
   return c;
 }

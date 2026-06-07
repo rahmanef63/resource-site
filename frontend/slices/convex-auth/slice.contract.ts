@@ -38,10 +38,7 @@ export const contract = defineSliceContract({
     hooks: ["useAuthFlow"],
     helpers: ["extractAuthError", "validatePassword", "looksLikeAutofillBug"],
   },
-  bidir: {
-    syncPolicy: "manual",
-    generalization: {
-      level: "portable",
-    },
+  generalization: {
+    level: "portable",
   },
 });

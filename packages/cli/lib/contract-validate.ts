@@ -86,54 +86,45 @@ export function validateConvex(c: SliceContract): void {
   }
 }
 
-export function validateBidir(c: SliceContract): void {
-  if (c.bidir === undefined) return;
-  if (!c.bidir || typeof c.bidir !== "object") {
-    throw new Error(`defineSliceContract(${c.id}): bidir must be an object`);
-  }
-  const policies = ["auto-pr", "notify", "manual", "frozen"];
-  if (!policies.includes(c.bidir.syncPolicy)) {
+export function validateGeneralization(c: SliceContract): void {
+  if (c.generalization === undefined) return;
+  if (!c.generalization || typeof c.generalization !== "object") {
     throw new Error(
-      `defineSliceContract(${c.id}): bidir.syncPolicy "${String(c.bidir.syncPolicy)}" must be one of ${policies.join("|")}`,
-    );
-  }
-  if (!c.bidir.generalization || typeof c.bidir.generalization !== "object") {
-    throw new Error(
-      `defineSliceContract(${c.id}): bidir.generalization must be an object`,
+      `defineSliceContract(${c.id}): generalization must be an object`,
     );
   }
   const levels = ["portable", "needs-adapter", "consumer-locked"];
-  if (!levels.includes(c.bidir.generalization.level)) {
+  if (!levels.includes(c.generalization.level)) {
     throw new Error(
-      `defineSliceContract(${c.id}): bidir.generalization.level "${String(c.bidir.generalization.level)}" must be one of ${levels.join("|")}`,
+      `defineSliceContract(${c.id}): generalization.level "${String(c.generalization.level)}" must be one of ${levels.join("|")}`,
     );
   }
-  const ft = c.bidir.generalization.forbiddenTerms;
+  const ft = c.generalization.forbiddenTerms;
   if (ft !== undefined) {
     if (!Array.isArray(ft)) {
       throw new Error(
-        `defineSliceContract(${c.id}): bidir.generalization.forbiddenTerms must be an array`,
+        `defineSliceContract(${c.id}): generalization.forbiddenTerms must be an array`,
       );
     }
     for (const t of ft) {
       if (typeof t !== "string" || t.length === 0) {
         throw new Error(
-          `defineSliceContract(${c.id}): bidir.generalization.forbiddenTerms entries must be non-empty strings`,
+          `defineSliceContract(${c.id}): generalization.forbiddenTerms entries must be non-empty strings`,
         );
       }
     }
   }
-  const rp = c.bidir.generalization.requiredProps;
+  const rp = c.generalization.requiredProps;
   if (rp !== undefined) {
     if (!Array.isArray(rp)) {
       throw new Error(
-        `defineSliceContract(${c.id}): bidir.generalization.requiredProps must be an array`,
+        `defineSliceContract(${c.id}): generalization.requiredProps must be an array`,
       );
     }
     for (const p of rp) {
       if (typeof p !== "string" || p.length === 0) {
         throw new Error(
-          `defineSliceContract(${c.id}): bidir.generalization.requiredProps entries must be non-empty strings`,
+          `defineSliceContract(${c.id}): generalization.requiredProps entries must be non-empty strings`,
         );
       }
     }

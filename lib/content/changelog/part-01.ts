@@ -2,6 +2,34 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "HARDEN-W3",
+    "version": "site@debt-sweep",
+    "date": 1780790400000,
+    "kind": "improvement",
+    "title": "Debt sweep — bidir block removed (generalization promoted), files joins the metadata system, 3.3MB orphan assets purged",
+    "body": "Hardening W3. The BSDL-era bidir block survived in 20 slice contracts as pure noise — syncPolicy died with BSDL, but its nested generalization payload (level / forbiddenTerms / requiredProps) still feeds check-forbidden-terms.mjs, so it was promoted to a top-level contract field instead of deleted: all 20 contracts rewritten, SliceSyncPolicy + SliceBidirContract types and validateBidir dropped from the contract DSL, validateGeneralization replaces it. The files slice was the only catalog entry without a slice.json (the parity gate silently skipped it) — authored from its contract + catalog entry, versions aligned at 0.2.1, parity now checks 63/63 with zero skips. public/brand-assets/ carried PNG+WebP twins of every banner with no code references — 10 orphans deleted (4.4MB → 1.1MB), keeping the og:image PNG, icons, and the SVGs the footer actually uses.",
+    "groups": [
+      {
+        "heading": "Slices",
+        "bullets": [
+          {
+            "text": "files 0.2.1 — slice.json authored; parity gate now covers all 63 slices (0 skipped)",
+            "slug": "files",
+            "kind": "slice"
+          }
+        ]
+      },
+      {
+        "heading": "Site + CLI lib",
+        "bullets": [
+          "contract DSL: bidir removed; generalization is a top-level field (forbidden-terms audit keeps its data)",
+          "20 slice.contract.ts rewritten — zero bidir blocks remain",
+          "brand-assets: 10 orphaned banner/wordmark files deleted (-3.3MB static weight)"
+        ]
+      }
+    ]
+  },
+  {
     "id": "HARDEN-W2",
     "version": "site@changelog-integrity",
     "date": 1780790400000,

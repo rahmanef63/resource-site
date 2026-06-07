@@ -49,11 +49,8 @@ export const contract = defineSliceContract({
     components: ["PlatformAdminShell", "TenantHealthCard", "TierSetGate"],
   },
   conflicts: [],
-  bidir: {
-    syncPolicy: "manual",
-    generalization: {
-      level: "needs-adapter",
-      requiredProps: ["tenantTablesAdapter", "tierPresets", "kpiSources"],
-    },
+  generalization: {
+    level: "needs-adapter",
+    requiredProps: ["tenantTablesAdapter", "tierPresets", "kpiSources"],
   },
 });

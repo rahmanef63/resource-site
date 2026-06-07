@@ -27,10 +27,7 @@ export const contract = defineSliceContract({
     tables: ["cal_com_booking_bookings"],
     events: ["booking.created", "booking.rescheduled", "booking.cancelled"],
   },
-  bidir: {
-    syncPolicy: "manual",
-    generalization: {
-      level: "portable",
-    },
+  generalization: {
+    level: "portable",
   },
 });

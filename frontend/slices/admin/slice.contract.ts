@@ -39,17 +39,14 @@ export const contract = defineSliceContract({
     ],
   },
   conflicts: [],
-  bidir: {
-    syncPolicy: "manual",
-    generalization: {
-      level: "portable",
-      // Forbid any rahmanef-domain literal from leaking into the kitab copy.
-      // Per-instance admin must NOT bake in a consumer brand identity.
-      forbiddenTerms: ["rahmanef", "rahmanef.com"],
-      // Consumer-supplied props (registry adapter + UI labels + the count-
-      // table reader seam). Listed so `rr-prep` can audit consumer wirings
-      // against the portable surface.
-      requiredProps: ["sliceRegistry", "queryTable", "labels"],
-    },
+  generalization: {
+    level: "portable",
+    // Forbid any rahmanef-domain literal from leaking into the kitab copy.
+    // Per-instance admin must NOT bake in a consumer brand identity.
+    forbiddenTerms: ["rahmanef", "rahmanef.com"],
+    // Consumer-supplied props (registry adapter + UI labels + the count-
+    // table reader seam). Listed so `rr-prep` can audit consumer wirings
+    // against the portable surface.
+    requiredProps: ["sliceRegistry", "queryTable", "labels"],
   },
 });

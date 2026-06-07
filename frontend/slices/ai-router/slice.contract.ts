@@ -27,10 +27,7 @@ export const contract = defineSliceContract({
     tables: ["ai_router_usage", "ai_router_calls"],
     events: ["ai.invoked", "ai.usage.logged"],
   },
-  bidir: {
-    syncPolicy: "manual",
-    generalization: {
-      level: "needs-adapter",
-    },
+  generalization: {
+    level: "needs-adapter",
   },
 });

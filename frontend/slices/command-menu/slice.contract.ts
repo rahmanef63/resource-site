@@ -20,12 +20,9 @@ export const contract = defineSliceContract({
   provides: {
     components: ["CommandPalette", "SearchModal", "CommandGroupList"],
   },
-  bidir: {
-    syncPolicy: "manual",
-    generalization: {
-      level: "portable",
-      forbiddenTerms: ["nosion", "Nosion"],
-      requiredProps: ["groups", "onNavigate", "labels"],
-    },
+  generalization: {
+    level: "portable",
+    forbiddenTerms: ["nosion", "Nosion"],
+    requiredProps: ["groups", "onNavigate", "labels"],
   },
 });

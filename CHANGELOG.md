@@ -11,6 +11,17 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-07 — hardening W3: debt sweep
+
+- Contract DSL: BSDL-era `bidir` block removed from 20 slice contracts;
+  its `generalization` payload (still consumed by the forbidden-terms
+  audit) promoted to a top-level field. `validateBidir` →
+  `validateGeneralization`.
+- `files` 0.2.1 — slice.json authored (was the only catalog entry without
+  one); slice parity gate now covers 63/63 slices, zero skips.
+- `public/brand-assets/`: 10 orphaned PNG/WebP banner + wordmark files
+  deleted (4.4MB → 1.1MB); og:image PNG, icons, and footer SVGs kept.
+
 ### 2026-06-07 — hardening W2: nested-anchor fix + changelog integrity
 
 - `RecentlyUpdatedBadge` card variant no longer nests an `<a>` inside the

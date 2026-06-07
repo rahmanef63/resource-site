@@ -59,21 +59,18 @@ export const contract = defineSliceContract({
     // Consumers with their own menu primitive should declare these as conflicts:
     // "menu-system:tables.menuSets",
   ] as string[],
-  bidir: {
-    syncPolicy: "auto-pr" as const,
-    generalization: {
-      level: "portable" as const,
-      forbiddenTerms: [
-        "rahmanef",
-        "rahmanef.com",
-        "superspace",
-        "/dashboard/",
-      ] as string[],
-      requiredProps: [
-        "basePath",
-        "permissionScheme",
-        "labels",
-      ] as string[],
-    },
+  generalization: {
+    level: "portable" as const,
+    forbiddenTerms: [
+      "rahmanef",
+      "rahmanef.com",
+      "superspace",
+      "/dashboard/",
+    ] as string[],
+    requiredProps: [
+      "basePath",
+      "permissionScheme",
+      "labels",
+    ] as string[],
   },
 });

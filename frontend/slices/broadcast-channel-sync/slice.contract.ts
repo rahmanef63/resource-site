@@ -16,10 +16,7 @@ export const contract = defineSliceContract({
   provides: {
     hooks: ["useBroadcastSync"],
   },
-  bidir: {
-    syncPolicy: "manual",
-    generalization: {
-      level: "portable",
-    },
+  generalization: {
+    level: "portable",
   },
 });

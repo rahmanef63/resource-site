@@ -31,12 +31,9 @@ export const contract = defineSliceContract({
   migrationFrom: {
     "0.1.0": "comments-v0.1.0-to-v0.2.0-polymorphic-target",
   },
-  bidir: {
-    syncPolicy: "manual",
-    generalization: {
-      level: "needs-adapter",
-      forbiddenTerms: ["pageId", "blockId", "targetType"],
-      requiredProps: ["target", "bindings", "forbiddenWords", "pathMap"],
-    },
+  generalization: {
+    level: "needs-adapter",
+    forbiddenTerms: ["pageId", "blockId", "targetType"],
+    requiredProps: ["target", "bindings", "forbiddenWords", "pathMap"],
   },
 });

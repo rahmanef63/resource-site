@@ -29,10 +29,7 @@ export const contract = defineSliceContract({
     components: ["SearchPage"],
   },
   conflicts: [],
-  bidir: {
-    syncPolicy: "manual",
-    generalization: {
-      level: "portable",
-    },
+  generalization: {
+    level: "portable",
   },
 });

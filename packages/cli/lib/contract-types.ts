@@ -91,31 +91,20 @@ export interface SliceContractProvides {
 }
 
 // ---------------------------------------------------------------------------
-// `bidir` block — Wave N+3 (Bidirectional Sync Detection Layer)
+// Generalisation gate
 // ---------------------------------------------------------------------------
+// (Formerly nested inside the Wave N+3 `bidir` block. BSDL was removed in
+// Sesi 2; the sync policy died with it, but the generalisation contract is
+// still consumed by scripts/validation/check-forbidden-terms.mjs — so it
+// lives on as a top-level field.)
 
 /**
- * How the kitab treats sync between this slice and consumer copies.
+ * Portability level of the slice source.
  *
- * - `auto-pr`: when `rr scan-consumers` sees an `up-needed` verdict on a
- *   consumer's `.kitab.json`, the operator workflow auto-opens a PR against
- *   the kitab. Reserved for slices with strict generalisation gates.
- * - `notify`: surface in the scan report; no auto-action.
- * - `manual`: default — operator picks up via `/rr-prep` + `/rr-send`.
- * - `frozen`: kitab refuses both UP and DOWN sync. Lock for retired slices.
- */
-export type SliceSyncPolicy = "auto-pr" | "notify" | "manual" | "frozen";
-
-/**
- * Generalisation level a consumer-side `.kitab.json` MUST claim before
- * `rr-send` accepts the push back into the kitab.
- *
- * - `portable`: no consumer-specific business terms baked in. UP-sync allowed.
- * - `needs-adapter`: requires a thin adapter wired by the consumer; UP-sync
- *   blocked until blockers are addressed (or the contract drops the slice
- *   to `consumer-locked`).
+ * - `portable`: no consumer-specific business terms baked in.
+ * - `needs-adapter`: requires a thin adapter wired by the consumer.
  * - `consumer-locked`: contains business-specific logic that cannot be
- *   generalised. Only DOWN-sync allowed.
+ *   generalised.
  */
 export type GeneralizationLevel =
   | "portable"
@@ -123,14 +112,15 @@ export type GeneralizationLevel =
   | "consumer-locked";
 
 /**
- * Generalisation contract — what the audit-bp `forbiddenTerms` rule scans
- * for, and which props the consumer MUST inject.
+ * Generalisation contract — what the forbidden-terms audit scans for, and
+ * which props the consumer MUST inject.
  */
 export interface SliceGeneralization {
   level: GeneralizationLevel;
   /**
    * Identifiers / business terms that MUST NOT appear in the slice source
-   * tree. Audit-bp scans .ts/.tsx files. Empty when the slice is generic.
+   * tree. check-forbidden-terms.mjs scans .ts/.tsx files. Empty when the
+   * slice is generic.
    */
   forbiddenTerms?: string[];
   /**
@@ -138,16 +128,6 @@ export interface SliceGeneralization {
    * e.g. `["basePath", "labels", "permission"]`.
    */
   requiredProps?: string[];
-}
-
-/**
- * Bidirectional sync block. Optional, additive — slices without it default to
- * `{ syncPolicy: "manual", generalization: { level: "portable" } }` for
- * legacy compatibility with Wave N+1 contracts.
- */
-export interface SliceBidirContract {
-  syncPolicy: SliceSyncPolicy;
-  generalization: SliceGeneralization;
 }
 
 // ---------------------------------------------------------------------------
@@ -179,6 +159,6 @@ export interface SliceContract {
   conflicts?: string[];
   /** Map of previous-version → migration script id. */
   migrationFrom?: Record<string, string>;
-  /** Wave N+3 — bidirectional sync policy + generalisation gate. */
-  bidir?: SliceBidirContract;
+  /** Portability gate — feeds the forbidden-terms audit. */
+  generalization?: SliceGeneralization;
 }

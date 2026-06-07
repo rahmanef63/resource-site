@@ -34,10 +34,7 @@ export const contract = defineSliceContract({
     components: ["SubscribeForm"],
   },
   conflicts: [],
-  bidir: {
-    syncPolicy: "manual",
-    generalization: {
-      level: "portable",
-    },
+  generalization: {
+    level: "portable",
   },
 });

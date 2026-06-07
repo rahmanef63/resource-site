@@ -33,12 +33,9 @@ export const contract = defineSliceContract({
   migrationFrom: {
     "0.1.0": "audit-log-v0.1.0-to-v0.2.0-tenant-adapter",
   },
-  bidir: {
-    syncPolicy: "manual",
-    generalization: {
-      level: "needs-adapter",
-      forbiddenTerms: ["workspaceId", "auditLogs"],
-      requiredProps: ["tenantAdapter", "bindings"],
-    },
+  generalization: {
+    level: "needs-adapter",
+    forbiddenTerms: ["workspaceId", "auditLogs"],
+    requiredProps: ["tenantAdapter", "bindings"],
   },
 });
