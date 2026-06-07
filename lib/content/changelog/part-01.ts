@@ -2,6 +2,34 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "UX-U7",
+    "version": "site@sidebar-tree",
+    "date": 1780876800000,
+    "kind": "fix",
+    "title": "Docs sidebar tree actually folds — dead chevrons fixed, sections collapsed by default",
+    "body": "UX wave U7. Three compounding bugs killed the docs-sidebar tree: (1) category branches never toggled at all — SidebarMenuButton's tooltip prop wraps the button in a Tooltip root, and CollapsibleTrigger's asChild Slot merged its onClick onto that non-DOM wrapper, silently dropping the handler; (2) section chevrons never rotated — the group/section class sat on SidebarGroupLabel, which Radix never stamps data-state on, so the group-data-[state=open] selector could not match; (3) every section defaulted to open, rendering the whole catalog as one wall. Fixes: tooltip dropped from the trigger (sidebar is always full-width — it added nothing), group classes moved to the Collapsible roots that actually carry data-state, and only the section containing the active path starts open (navigation re-opens, manual toggles stick). Also: publish gate caught template-base/contact-form-resend still on the removed \"email\" category — moved to integrations.",
+    "groups": [
+      {
+        "heading": "Site (fixed)",
+        "bullets": [
+          "Branch toggle: tooltip-in-CollapsibleTrigger swallowed clicks — removed",
+          "Chevron rotation: group/* classes now live on the data-state-carrying Collapsible roots",
+          "Sections collapsed by default except the one holding the active path"
+        ]
+      },
+      {
+        "heading": "Slices (fixed)",
+        "bullets": [
+          {
+            "text": "contact-form-resend (template-base copy): category email → integrations (unblocks CLI publish gate)",
+            "slug": "contact-form-resend",
+            "kind": "slice"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "OS-HOOKS-V6-SYNC",
     "version": "os-apps@hooks-v6",
     "date": 1780790400000,

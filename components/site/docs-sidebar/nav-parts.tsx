@@ -42,20 +42,26 @@ export function SectionGroup({
   pathname: string;
 }) {
   const containsActive = sectionContainsActive(section, pathname);
-  const [open, setOpen] = React.useState(true);
+  // Only the section holding the active path starts open — every section
+  // defaulting to open made the tree a wall. Navigating into a section
+  // re-opens it (effect below); manual toggles stick for the visit.
+  const [open, setOpen] = React.useState(containsActive);
   React.useEffect(() => {
     if (containsActive) setOpen(true);
   }, [containsActive]);
 
   return (
-    <Collapsible open={open} onOpenChange={setOpen}>
+    // `group/section` lives on the Collapsible ROOT — Radix stamps
+    // data-state here, so the chevron's group-data variant actually fires
+    // (it was on SidebarGroupLabel before, which has no data-state).
+    <Collapsible open={open} onOpenChange={setOpen} className="group/section">
       <SidebarGroup>
         <CollapsibleTrigger className="w-full">
           <SidebarGroupLabel
-            className="group/section flex w-full cursor-pointer items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider"
+            className="flex w-full cursor-pointer items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider"
             data-active={containsActive ? "" : undefined}
           >
-            <ChevronRight className="size-3.5 shrink-0 transition-transform group-data-[state=open]/section:rotate-90 data-[state=open]:rotate-90" />
+            <ChevronRight className="size-3.5 shrink-0 transition-transform group-data-[state=open]/section:rotate-90" />
             <span className="flex-1 text-left">{section.label}</span>
           </SidebarGroupLabel>
         </CollapsibleTrigger>
@@ -95,15 +101,18 @@ export function BranchItem({
   }, [containsActive]);
 
   return (
-    <Collapsible asChild open={open} onOpenChange={setOpen}>
+    // asChild → group class + Radix data-state both land on the <li>,
+    // so the chevron rotates off the real open state (the manual
+    // data-state prop on the icon was a dead end).
+    <Collapsible asChild open={open} onOpenChange={setOpen} className="group/branch">
       <SidebarMenuItem>
         <CollapsibleTrigger asChild>
-          <SidebarMenuButton
-            isActive={containsActive}
-            tooltip={branch.title}
-            className="font-semibold"
-          >
-            <ChevronRight className="size-4 shrink-0 transition-transform data-[state=open]:rotate-90" data-state={open ? "open" : "closed"} />
+          {/* No `tooltip` prop here: it wraps the button in a Tooltip root,
+              and CollapsibleTrigger's Slot then merges onClick onto that
+              non-DOM wrapper — the toggle silently dies. This sidebar is
+              always full-width, so the tooltip added nothing anyway. */}
+          <SidebarMenuButton isActive={containsActive} className="font-semibold">
+            <ChevronRight className="size-4 shrink-0 transition-transform group-data-[state=open]/branch:rotate-90" />
             <span className="flex-1 truncate text-left">{branch.title}</span>
           </SidebarMenuButton>
         </CollapsibleTrigger>

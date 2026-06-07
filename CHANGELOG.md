@@ -11,6 +11,17 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-07 — docs sidebar tree fixed (UX wave U7)
+
+- Branch toggle was dead: `tooltip` on `SidebarMenuButton` wraps it in a
+  Tooltip root; `CollapsibleTrigger asChild` merged onClick onto that
+  non-DOM wrapper. Tooltip removed from the trigger.
+- Chevrons now rotate: `group/*` classes moved onto the Collapsible roots
+  that actually carry Radix `data-state`.
+- Sections collapse by default except the one containing the active path.
+- Publish-gate fix: template-base `contact-form-resend` still on removed
+  `email` category → `integrations`.
+
 ### 2026-06-06 — five basic slices (UX wave U6) — CLI 1.12.0
 
 - **NEW slices**: `data-table` (TanStack v8 + shadcn Table — sorting,
