@@ -1,12 +1,12 @@
 /**
- * Slice contract for `appshell` — v1.2.0.
+ * Slice contract for `appshell` — v1.3.0.
  * Excluded from app tsc; validated by rr tooling on lift.
  */
 import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "appshell",
-  version: "1.2.0",
+  version: "1.3.0",
   category: "ui",
   kind: "full",
   requires: {
@@ -18,6 +18,18 @@ export const contract = defineSliceContract({
   provides: {
     routes: [] as string[],
     hooks: [
+      "useCommands",
+      "useBadges",
+      "useRecents",
+      "useLayouts",
+      "useActiveSpace",
+      "useClips",
+      "useShareState",
+      "useQuickLook",
+      "useShortcuts",
+      "useFocusMode",
+      "useLocked",
+      "useProfiles",
       "useResponsive",
       "useContainer",
       "useApps",

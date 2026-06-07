@@ -11,6 +11,22 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-07 — appshell 1.3.0: the F1–F20 window-manager wave
+
+**Slices**
+
+- `appshell` 1.2.1 → **1.3.0** — ported the 20-feature productivity wave from
+  app-shell (each feature shipped upstream behind an e2e gate; 13 vitest
+  suites now live in-slice). Headlines: dynamic command registry (the seam
+  everything else registers into), app-icon badges, saved layouts, recents,
+  notification actions, always-on-top + tiling thirds, Spaces (virtual
+  desktops), window tabs, Quick Look, clipboard history (⌘⇧V), share sheet,
+  cross-app drag & drop, focus mode, ⌘/ shortcut cheat-sheet, session
+  profiles, lock screen, desktop wallpaper-layer widgets (new
+  `desktopWidgets` slot), `document.title` sync, and a work-area-clamped
+  spawn cascade. DEFAULT_FEATURES grew 5 → 10. De-branded the notification
+  card (`useBrand()`), barrel split under the 200-LOC gate (`defaults.ts`).
+
 ### 2026-06-07 — backfill: library slice changelog entry (lift 2c3b745, 2026-05-30)
 
 - The `library` 0.1.0 lift registered the catalog entry + manifest but skipped

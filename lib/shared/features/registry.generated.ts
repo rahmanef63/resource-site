@@ -44,17 +44,17 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...appStoreConfig,
     importPath: "@/features/app-store/config",
-    version: "1.0.0",
+    version: "1.0.1",
   },
   {
     ...appshellConfig,
     importPath: "@/features/appshell/config",
-    version: "1.2.0",
+    version: "1.3.0",
   },
   {
     ...assistantConfig,
     importPath: "@/features/assistant/config",
-    version: "1.0.0",
+    version: "1.0.1",
   },
   {
     ...auditLogConfig,
@@ -69,7 +69,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...browserConfig,
     importPath: "@/features/browser/config",
-    version: "1.0.0",
+    version: "1.0.1",
   },
   {
     ...calComBookingConfig,
@@ -79,7 +79,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...codeEditorConfig,
     importPath: "@/features/code-editor/config",
-    version: "1.0.0",
+    version: "1.0.1",
   },
   {
     ...commandMenuConfig,
@@ -104,12 +104,12 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...imageEditorConfig,
     importPath: "@/features/image-editor/config",
-    version: "2.0.0",
+    version: "2.0.1",
   },
   {
     ...mediaViewerConfig,
     importPath: "@/features/media-viewer/config",
-    version: "1.0.0",
+    version: "1.0.1",
   },
   {
     ...midtransPaymentConfig,
@@ -124,7 +124,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...osTerminalConfig,
     importPath: "@/features/os-terminal/config",
-    version: "1.0.0",
+    version: "1.0.1",
   },
   {
     ...platformAdminConfig,
@@ -134,7 +134,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...reelEditorConfig,
     importPath: "@/features/reel-editor/config",
-    version: "1.0.0",
+    version: "1.0.1",
   },
   {
     ...resendNewsletterConfig,

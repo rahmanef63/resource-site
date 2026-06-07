@@ -2,6 +2,26 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "LIFT-APPSHELL-130",
+    "version": "appshell@1.3.0",
+    "date": 1780876800000,
+    "kind": "feature",
+    "title": "appshell 1.3.0 — 20-feature window-manager wave: command registry, Spaces, window tabs, Quick Look, clipboard, share, lock screen + more",
+    "body": "The F1–F20 productivity wave lands from app-shell (app.rahmanef.com), where every feature shipped behind its own e2e gate (21-check headless harness, 13 vitest suites ride along in the slice). The multiplier seam is a dynamic command registry — registerCommands(source, cmds) — that Spotlight merges at runtime; nearly every other feature self-registers its palette commands through it (shells too: switching surfaces is a command). Window manager grew: always-on-top pinning, tiling presets incl. ⅓/⅔ thirds snap zones, virtual desktops (Spaces 1–4 with per-window spaceId), window tabs (merge an app's windows into one tabbed frame), saved layouts, session profiles (windows + shell prefs as one unit), and a work-area-clamped spawn cascade (windows can no longer open off-screen). New bundled features (DEFAULT_FEATURES 5 → 10): Quick Look (Space-bar previewer registry), clipboard history (⌘⇧V overlay, pin survives clear, monotonic ids), share sheet (target registry + copy/download built-ins), shortcut cheat-sheet (⌘/, source-keyed hint registry), lock screen (privacy curtain, idle auto-lock, consumer unlock guard). Notifications gained inline actions + per-app icon badges (count pill / dot / progress ring on every shell's icons, auto-driven by unread appId toasts). Plus: cross-app drag & drop (typed payloads → per-app drop handlers), focus mode (toasts go log-only), recents, a11y-ready font/contrast seams, desktop wallpaper-layer widgets (new desktopWidgets slot region), and document.title sync (\"App — Brand\", manifest.titleSync opt-out). Framework stays brand-free — the one hardcoded brand string found in review (notification cards) now reads useBrand().",
+    "groups": [
+      {
+        "heading": "Slices (updated)",
+        "bullets": [
+          {
+            "text": "appshell 1.3.0 — dynamic command registry, badges, layouts, recents, notification actions, pin/tiling-thirds, Spaces, window tabs, Quick Look, clipboard, share, DnD, focus mode, ⌘/ help, profiles, lock screen, desktop widgets, title sync, cascade clamp; 13 vitest suites in-slice",
+            "slug": "appshell",
+            "kind": "slice"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "LIFT-LIBRARY",
     "version": "library@0.1.0",
     "date": 1780099200000,

@@ -27,6 +27,7 @@ export {
   snapWindow,
   minimizeAll,
   closeAll,
+  serialize,
 } from "./lib/store";
 export {
   useWindow,
@@ -53,6 +54,25 @@ export {
 export type { NotificationItem } from "./lib/toast";
 export { setActivity, clearActivity, useActivities } from "./lib/activity";
 export type { Activity } from "./lib/activity";
+// F1–F20 window-manager + productivity libs (each module exports its own
+// public surface — commands/badges/layouts/recents/window-commands/window-title/
+// spaces/window-tabs/clipboard/share/lock/profiles/shortcuts/focus-mode/dnd/quick-look).
+export * from "./lib/commands";
+export * from "./lib/badges";
+export * from "./lib/layouts";
+export * from "./lib/recents";
+export * from "./lib/window-commands";
+export * from "./lib/window-title";
+export * from "./lib/spaces";
+export * from "./lib/window-tabs";
+export * from "./lib/clipboard";
+export * from "./lib/share";
+export * from "./lib/lock";
+export * from "./lib/profiles";
+export * from "./lib/shortcuts";
+export * from "./lib/focus-mode";
+export * from "./lib/dnd";
+export * from "./lib/quick-look";
 export {
   usePublishInspector,
   publishInspector,
@@ -143,33 +163,7 @@ export type {
   ServerToggle,
 } from "./registry/capabilities";
 
-// ── Bundled shell features ───────────────────────────────────────────────────
-// Each is a defineFeature() contribution mounted via `manifest.features`. They
-// live inside this slice (appshell/features/*) so the whole shell installs as
-// one unit. Re-exported LAST so the core bindings they read are already live.
-import { searchFeature } from "./features/search";
-import { inspectorFeature } from "./features/inspector";
-import { notificationsFeature } from "./features/notifications";
-import { controlCenterFeature } from "./features/control-center";
-import { widgetsFeature } from "./features/widgets";
-
-export { searchFeature } from "./features/search";
-export { inspectorFeature } from "./features/inspector";
-export { notificationsFeature } from "./features/notifications";
-export { controlCenterFeature } from "./features/control-center";
-export { widgetsFeature } from "./features/widgets";
-
-// The default system-feature set — generic, brand-free, app-agnostic. Drop all
-// five into any consumer's manifest in one line (`features: DEFAULT_FEATURES`).
-// Spread + override/trim per project; each entry is independently removable since
-// the surfaces are slot-driven (a feature absent from the array just doesn't mount).
-export const DEFAULT_FEATURES = [
-  searchFeature,
-  inspectorFeature,
-  notificationsFeature,
-  controlCenterFeature,
-  widgetsFeature,
-];
+export * from "./defaults";
 
 // Mock capabilities pack — inject as `manifest.capabilities` to drive all five
 // features with realistic data and NO backend (search/stats/chat/server toggle).
