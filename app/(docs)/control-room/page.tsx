@@ -1,5 +1,5 @@
 import { PageHeader } from "@/components/site/page-header";
-import { ExtLink, PathMatrix } from "./page-shared";
+import { ExtLink, PathMatrix, LocalInstall } from "./page-shared";
 import { Phase0, Phase1, Phase2 } from "./page-phases-prep";
 import { Phase3, Phase4 } from "./page-phases-net";
 import { Phase5, Phase6 } from "./page-phases-install";
@@ -8,7 +8,7 @@ import { ApiReference, Operations, ScAllAnchor, Troubleshoot } from "./page-refe
 export const metadata = {
   title: "VPS Control Room — install guide",
   description:
-    "End-to-end install guide for VPS Control Room v2.0 — mobile-first PWA dashboard for driving a single VPS. Three paths: AI-assisted, one-line, manual.",
+    "Install guide for VPS Control Room v2.0 — mobile-first PWA dashboard for driving a single VPS. Run it locally on any OS in one command, or deploy to a VPS (AI-assisted, one-line, manual).",
 };
 
 const REPO = "https://github.com/rahmanef63/control-room";
@@ -29,10 +29,13 @@ export default function ControlRoomPage() {
         <div className="mt-4 flex flex-wrap gap-2 text-sm">
           <ExtLink href={REPO}>GitHub</ExtLink>
           <ExtLink href={NPM}>npm: rahman-cr</ExtLink>
+          <ExtLink href={`${REPO}/blob/main/docs/INSTALL-LOCAL.md`}>Local install</ExtLink>
           <ExtLink href={`${REPO}/blob/main/docs/INSTALL.md`}>Full roadmap</ExtLink>
           <ExtLink href={`${REPO}/blob/main/docs/INSTALL.id.md`}>🇮🇩 Bahasa Indonesia</ExtLink>
         </div>
       </header>
+
+      <LocalInstall />
 
       <PathMatrix />
 
