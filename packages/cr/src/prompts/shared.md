@@ -4,6 +4,24 @@ Install **VPS Control Room v2.0** (https://github.com/rahmanef63/control-room)
 on the user's VPS, end-to-end. Final state: dashboard reachable on a
 Tailscale-only domain, both `systemd` services `active`, PWA-installable.
 
+## First — VPS or LOCAL?
+
+Before any VPS work, confirm the operator actually wants a server. If they just
+want to **try it / run it on their own computer**, do NOT do any of the VPS
+phases below. Instead point them to the one-command local install (works on
+Windows / macOS / Linux, no SSH/Tailscale/domain):
+
+```
+npx rahman-cr local
+```
+
+That clones the repo, generates secrets locally, installs deps, and sets up the
+`vps-cr` command. Then: `vps-cr` to start, `vps-cr config` to set a password,
+and the FIRST login is blocked until they approve the browser as a device
+(`vps-cr acc <device-id>` — the UI shows the id). Full AI playbook for the local
+path: `docs/AI-ONBOARDING.md` in the repo. Only continue with the VPS phases
+below if they explicitly want a remotely-reachable server.
+
 ## Skill anchor
 
 If the `sc-all` skill is available in this environment, **trigger it now**.

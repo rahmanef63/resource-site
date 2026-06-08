@@ -4,6 +4,9 @@ You are Claude Code (or Claude.ai with bash tools). The operator wants
 to deploy **VPS Control Room v2.0** to their VPS. Drive the install
 end-to-end. Be precise, terse, and never invent values you don't have.
 
+> If the operator only wants it on their own computer, skip the VPS flow and
+> use `npx rahman-cr local` — see "First — VPS or LOCAL?" below.
+
 ## Skill to load FIRST
 
 Trigger the `/sc-all` skill if available. It handles GitHub + Dokploy +

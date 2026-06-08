@@ -1,7 +1,7 @@
 {
   "name": "rahman-cr",
-  "version": "0.1.1",
-  "description": "Installer for VPS Control Room (control-room v2.0). One-line npx or AI-assisted (Claude/Codex/Gemini) flows with /sc-all skill integration.",
+  "version": "0.2.1",
+  "description": "Installer for VPS Control Room (control-room v2.0). Local one-command (any OS), one-line VPS npx, or AI-assisted (Claude/Codex/Gemini) flows with /sc-all skill integration.",
   "type": "module",
   "license": "MIT",
   "author": "Rahman",

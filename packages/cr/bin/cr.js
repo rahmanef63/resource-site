@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // rahman-cr — VPS Control Room installer
 // Usage:
+//   npx rahman-cr local                  install + run on THIS machine (no VPS)
 //   npx rahman-cr init                   interactive wizard
 //   npx rahman-cr ai <claude|codex|gemini>
 //   npx rahman-cr install --vps user@ip --domain <d> [--tailscale-key tskey-...]
@@ -11,6 +12,7 @@ import kleur from "kleur";
 import { runInit } from "../src/commands/init.mjs";
 import { runAi } from "../src/commands/ai.mjs";
 import { runInstall } from "../src/commands/install.mjs";
+import { runLocal } from "../src/commands/local.mjs";
 import { runDoctor } from "../src/commands/doctor.mjs";
 import { printHelp, printVersion } from "../src/lib/help.mjs";
 
@@ -33,6 +35,9 @@ async function main() {
     case "install":
     case "deploy":
       return runInstall(rest);
+    case "local":
+    case "localhost":
+      return runLocal(rest);
     case "doctor":
     case "check":
       return runDoctor(rest);

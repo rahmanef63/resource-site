@@ -7,6 +7,10 @@
 ## Quick use
 
 ```bash
+# Option 0 — LOCAL: run the whole thing on your own machine (Windows/macOS/Linux)
+npx rahman-cr local
+# no VPS, SSH, Tailscale, or domain — clones the repo, writes config, installs deps
+
 # Option A — AI-assisted (Claude / Codex / Gemini)
 npx rahman-cr ai claude
 # prints a structured prompt + copies it to clipboard → paste into your AI
@@ -21,6 +25,28 @@ npx rahman-cr init
 # Verify local prereqs first
 npx rahman-cr doctor
 ```
+
+## What the local path does
+
+`local` runs the entire dashboard on the machine you're sitting at — no server,
+no SSH, no domain. It:
+
+1. Checks Node 18+ and git.
+2. Clones the repo to `~/vps-control-room` (override with `--dir`).
+3. Generates fresh secrets with `node:crypto` (no `openssl`) and writes
+   `.env.local` via the repo's cross-platform `scripts/local/control.mjs`.
+4. `npm install` for frontend + agent (skip with `--no-install`).
+5. Prints how to start it and approve your first device (`--start` launches it).
+
+After that, drive it with the in-repo `vps-cr` command (or
+`node scripts/local/control.mjs <cmd>`): `vps-cr` to start, `vps-cr doctor`,
+`vps-cr config` to set a password. First login is blocked until you approve the
+browser as a device — see the LOCAL guide and AI playbook:
+[INSTALL-LOCAL.md](https://github.com/rahmanef63/control-room/blob/main/docs/INSTALL-LOCAL.md)
+·
+[AI-ONBOARDING.md](https://github.com/rahmanef63/control-room/blob/main/docs/AI-ONBOARDING.md).
+
+Flags: `--dir <path>`, `--branch <name>`, `--no-install`, `--start`, `--dry-run`.
 
 ## What the AI path does
 

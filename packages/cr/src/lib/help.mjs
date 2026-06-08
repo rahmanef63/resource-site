@@ -19,6 +19,7 @@ ${kleur.bold("Usage")}
   ${kleur.cyan("npx rahman-cr")} <command> [options]
 
 ${kleur.bold("Commands")}
+  ${kleur.green("local")} [flags]           Install + run on THIS machine — no VPS, SSH, or domain
   ${kleur.green("init")}                    Interactive wizard — pick AI or one-line, walk through env
   ${kleur.green("ai")} <provider>           Print AI-assisted install prompt (claude | codex | gemini)
   ${kleur.green("install")} [flags]         Non-interactive one-line install on a target VPS
@@ -26,7 +27,7 @@ ${kleur.bold("Commands")}
   ${kleur.green("help")}                    Show this message
   ${kleur.green("version")}                 Print version
 
-${kleur.bold("Install flags")}
+${kleur.bold("Install flags")} ${kleur.gray("(install — VPS)")}
   --vps <user@host>             SSH target (REQUIRED)
   --domain <fqdn>               Tailnet domain for the dashboard (REQUIRED)
   --tailscale-key <key>         tskey-… for tailscale up (OPTIONAL — skip if VPS already on tailnet)
@@ -34,7 +35,17 @@ ${kleur.bold("Install flags")}
   --repo <url>                  Git repo url (default: github.com/rahmanef63/control-room)
   --dry-run                     Print plan, don't execute
 
+${kleur.bold("Local flags")} ${kleur.gray("(local — this machine)")}
+  --dir <path>                  Where to clone (default: ~/vps-control-room)
+  --no-install                  Skip npm install
+  --start                       Start + open the browser after install
+  --branch <name>               Repo branch (default: main)
+  --dry-run                     Print plan, don't execute
+
 ${kleur.bold("Examples")}
+  ${kleur.gray("# Run the whole thing on your own laptop (Windows / macOS / Linux)")}
+  npx rahman-cr local
+
   ${kleur.gray("# AI walks you through every step (paste prompt into Claude/Codex/Gemini)")}
   npx rahman-cr ai claude
 
