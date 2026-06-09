@@ -31,9 +31,9 @@ export function BestPracticeTabs({ sections, prompt }: Props) {
                 </p>
               )}
             </div>
-            <div className="grid gap-3">
+            <div className="grid grid-cols-1 gap-3">
               {section.rules.map((r) => (
-                <DocCard key={r.title} className="p-4 space-y-2">
+                <DocCard key={r.title} className="min-w-0 p-4 space-y-2">
                   <h3 className="text-sm font-semibold">{r.title}</h3>
                   <p className="text-sm text-muted-foreground">{r.rule}</p>
                   {r.why && (
@@ -43,7 +43,7 @@ export function BestPracticeTabs({ sections, prompt }: Props) {
                     </p>
                   )}
                   {r.example && (
-                    <pre className="mt-2 overflow-x-auto rounded-md bg-muted p-3 text-xs font-mono">
+                    <pre className="mt-2 max-w-full overflow-x-auto rounded-md bg-muted p-3 text-xs font-mono">
                       {r.example}
                     </pre>
                   )}
@@ -57,7 +57,7 @@ export function BestPracticeTabs({ sections, prompt }: Props) {
       <TabsContent value="ai-prompt" className="mt-6 space-y-4">
         <DocCard className="p-4 space-y-3">
           <div className="flex items-center justify-between gap-2">
-            <div>
+            <div className="min-w-0">
               <h2 className="text-base font-semibold">One-paste agent prompt</h2>
               <p className="text-xs text-muted-foreground">
                 Paste at the start of your AI session (Claude, ChatGPT, Cursor,
