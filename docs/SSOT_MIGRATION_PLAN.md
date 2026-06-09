@@ -1,7 +1,7 @@
 # SSOT Migration Plan — `resources/` as Kitab
 
 > Date: 2026-05-12  
-> Goal: All Rahman projects (superspace, notion-page-clone, rahmanef.com, content-rahmanef-com, CareerPack, future) consume features + shared primitives from `/home/rahman/projects/resources/` as single source of truth.
+> Goal: All Rahman projects (superspace, notion-page-clone, rahmanef.com, content-rahmanef-com, CareerPack, future) consume features + shared primitives from `~/projects/resources/` as single source of truth.
 
 ---
 

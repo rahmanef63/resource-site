@@ -1,7 +1,7 @@
 # Recipe — Page Tree Sidebar
 
 > **Portability tier:** M
-> **Origin source:** notion-page-clone (`/home/rahman/projects/notion-page-clone/src/slices/workspace-sidebar/`)
+> **Origin source:** notion-page-clone (`~/projects/notion-page-clone/src/slices/workspace-sidebar/`)
 
 ## Tujuan
 

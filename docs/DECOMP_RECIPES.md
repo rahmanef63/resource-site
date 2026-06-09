@@ -4,7 +4,7 @@ Five Phase 3 slices exceed the autonomous-loop 500-LOC-per-iter budget and
 must be harvested by an operator across multiple PRs. This document records
 the recommended split for each.
 
-Source paths assume `/home/rahman/projects/` as the parent.
+Source paths assume `~/projects/` as the parent.
 
 ---
 

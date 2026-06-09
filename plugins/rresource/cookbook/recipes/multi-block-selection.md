@@ -1,7 +1,7 @@
 # Recipe — Multi-Block Selection
 
 > **Portability tier:** M
-> **Origin source:** notion-page-clone (`/home/rahman/projects/notion-page-clone/src/slices/block-selection/`)
+> **Origin source:** notion-page-clone (`~/projects/notion-page-clone/src/slices/block-selection/`)
 
 ## Tujuan
 

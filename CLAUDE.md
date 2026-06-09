@@ -84,25 +84,25 @@ CLI baca `rr.json` (consumer project manifest) — schema di `packages/cli/lib/r
 
 | Want | Source path |
 |---|---|
-| Vertical slice arch | `/home/rahman/projects/superspace/frontend/slices/_templates/` + `frontend/slices/example/` |
-| Feature registry | `/home/rahman/projects/superspace/frontend/shared/lib/features/` |
-| Three-column layout | `/home/rahman/projects/superspace/frontend/shared/ui/layout/container/three-column/` |
-| Dashboard shell | `/home/rahman/projects/superspace/frontend/shared/ui/layout/dashboard/` |
-| Sidebar (AppSidebar) | `/home/rahman/projects/superspace/frontend/shared/ui/layout/sidebar/primary/AppSidebar.tsx` |
-| Validators | `/home/rahman/projects/superspace/scripts/validation/` |
-| Slice CLI | `/home/rahman/projects/superspace/scripts/features/` |
-| Motion primitives (marquee, kinetic-heading, magnetic, cursor-spotlight, stat-counter, reading-progress, grain, lightbox) | `/home/rahman/projects/rahmanef.com/frontend/shared/ui/` |
-| OKLch theme presets | `/home/rahman/projects/rahmanef.com/frontend/shared/lib/{theme-presets,preset-fonts,preset-groups}.ts` + `app/globals.css` |
-| Asymmetric masonry | `/home/rahman/projects/rahmanef.com/frontend/slices/portfolio/components/PortfolioGrid.tsx` |
-| Hero carousel | `/home/rahman/projects/cescadesigns/components/cummon/hero-section.tsx` |
-| ContactForm + Resend | `/home/rahman/projects/cescadesigns/app/contact/` |
-| Block editor + slash menu | `/home/rahman/projects/notion-page-clone/frontend/slices/editor/` |
-| Page tree dnd sidebar | `/home/rahman/projects/notion-page-clone/frontend/slices/workspace-sidebar/` |
-| Multi-block selection | `/home/rahman/projects/notion-page-clone/frontend/slices/block-selection/` |
-| Database views (11) | `/home/rahman/projects/notion-page-clone/frontend/slices/databases/` |
-| Command palette | `/home/rahman/projects/notion-page-clone/frontend/slices/command-palette/` |
-| Comments threaded | `/home/rahman/projects/notion-page-clone/frontend/slices/comments/` |
-| RBAC roles (6 system roles + tier presets) | `/home/rahman/projects/superspace/convex/workspace/{permissions,roles.config}.ts` + `convex/lib/platformAdmin.ts` |
+| Vertical slice arch | `~/projects/superspace/frontend/slices/_templates/` + `frontend/slices/example/` |
+| Feature registry | `~/projects/superspace/frontend/shared/lib/features/` |
+| Three-column layout | `~/projects/superspace/frontend/shared/ui/layout/container/three-column/` |
+| Dashboard shell | `~/projects/superspace/frontend/shared/ui/layout/dashboard/` |
+| Sidebar (AppSidebar) | `~/projects/superspace/frontend/shared/ui/layout/sidebar/primary/AppSidebar.tsx` |
+| Validators | `~/projects/superspace/scripts/validation/` |
+| Slice CLI | `~/projects/superspace/scripts/features/` |
+| Motion primitives (marquee, kinetic-heading, magnetic, cursor-spotlight, stat-counter, reading-progress, grain, lightbox) | `~/projects/rahmanef.com/frontend/shared/ui/` |
+| OKLch theme presets | `~/projects/rahmanef.com/frontend/shared/lib/{theme-presets,preset-fonts,preset-groups}.ts` + `app/globals.css` |
+| Asymmetric masonry | `~/projects/rahmanef.com/frontend/slices/portfolio/components/PortfolioGrid.tsx` |
+| Hero carousel | `~/projects/cescadesigns/components/cummon/hero-section.tsx` |
+| ContactForm + Resend | `~/projects/cescadesigns/app/contact/` |
+| Block editor + slash menu | `~/projects/notion-page-clone/frontend/slices/editor/` |
+| Page tree dnd sidebar | `~/projects/notion-page-clone/frontend/slices/workspace-sidebar/` |
+| Multi-block selection | `~/projects/notion-page-clone/frontend/slices/block-selection/` |
+| Database views (11) | `~/projects/notion-page-clone/frontend/slices/databases/` |
+| Command palette | `~/projects/notion-page-clone/frontend/slices/command-palette/` |
+| Comments threaded | `~/projects/notion-page-clone/frontend/slices/comments/` |
+| RBAC roles (6 system roles + tier presets) | `~/projects/superspace/convex/workspace/{permissions,roles.config}.ts` + `convex/lib/platformAdmin.ts` |
 | Admin panel (17-section shell + access gate) | `template-base/frontend/slices/admin-panel/` + `superspace/frontend/slices/platform-admin/` |
 | Event tracking SDK (P0 instrumentation) | `template-base/frontend/slices/admin-panel/slices/events/` |
 | DOKU payment (Checkout + Direct + webhook) | `frontend/slices/doku-payment/` + `convex/features/payment/{doku,actions/doku.ts,http.ts}` |

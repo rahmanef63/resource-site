@@ -1,7 +1,7 @@
 # Recipe — Contact Form + Resend
 
 > **Portability tier:** S
-> **Origin source:** cescadesigns (`/home/rahman/projects/cescadesigns/app/contact/`)
+> **Origin source:** cescadesigns (`~/projects/cescadesigns/app/contact/`)
 
 ## Tujuan
 

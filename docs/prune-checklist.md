@@ -3,8 +3,8 @@
 When you copy `template-base/` into a new project:
 
 ```bash
-cp -r /home/rahman/projects/resources/template-base /home/rahman/projects/<new-app>
-cd /home/rahman/projects/<new-app>
+cp -r ~/projects/resources/template-base ~/projects/<new-app>
+cd ~/projects/<new-app>
 git init && git add . && git commit -m "chore: scaffold from kitab"
 ```
 

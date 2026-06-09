@@ -7,7 +7,7 @@
 
 **Contract-only scaffold** as of 2026-05-15. No implementation files yet.
 Canonical reference is superspace's local `platform-admin` slice
-(`/home/rahman/projects/superspace/frontend/slices/platform-admin/` +
+(`~/projects/superspace/frontend/slices/platform-admin/` +
 `convex/features/platform-admin/`).
 
 Implementation lands in kitab when superspace promotes the structural
@@ -82,7 +82,7 @@ superspace's current local `platform-admin` slice declares
 `kitabSlug: "admin"` — that's incorrect post-Wave-N+3.2. Operator todo:
 
 ```bash
-# in /home/rahman/projects/superspace
+# in ~/projects/superspace
 # 1. Edit frontend/slices/platform-admin/.kitab.json → kitabSlug: "platform-admin"
 # 2. Refactor the 6 blockers per the platform-admin adapter shape above
 # 3. /rr-prep platform-admin --fix && /rr-send platform-admin

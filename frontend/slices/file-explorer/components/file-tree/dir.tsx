@@ -35,7 +35,7 @@ export function DirChildren({
 }) {
   const api = useFsAdapter();
   const [entries, setEntries] = useState<FsEntry[] | null>(null);
-  // Canonical base the host resolved (e.g. "/" → "/home/rahman"). Child paths
+  // Canonical base the host resolved (e.g. "/" → "/home/user"). Child paths
   // MUST be built from this, not the requested `path`, or descending fails on a
   // live host (requested "/" + "projects" → "/projects" → outside roots).
   const [base, setBase] = useState(path);

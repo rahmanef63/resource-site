@@ -15,12 +15,13 @@
 
 import { execSync } from "node:child_process";
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
+import { homedir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const BASE = process.env.SHOTS_BASE ?? "https://resource.rahmanef.com";
-const ENVF = process.env.OS_BROWSER_ENV ?? "/home/rahman/projects/os-vps/os-browser/.env";
+const ENVF = process.env.OS_BROWSER_ENV ?? path.join(homedir(), "projects/os-vps/os-browser/.env");
 const OUT_DIR = path.join(REPO, "public", "shots", "layouts");
 const MANIFEST = path.join(REPO, "lib", "preview", "shots.gen.json");
 const SETTLE_MS = Number(process.env.SHOTS_SETTLE_MS ?? 4500);

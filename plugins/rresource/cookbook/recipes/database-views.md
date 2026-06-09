@@ -1,7 +1,7 @@
 # Recipe — Database Views (11 types)
 
 > **Portability tier:** L
-> **Origin source:** notion-page-clone (`/home/rahman/projects/notion-page-clone/src/slices/databases/`)
+> **Origin source:** notion-page-clone (`~/projects/notion-page-clone/src/slices/databases/`)
 
 ## Tujuan
 

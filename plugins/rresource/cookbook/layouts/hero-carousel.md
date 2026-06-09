@@ -1,7 +1,7 @@
 # Layout — Landing — Hero Carousel
 
 > **Portability tier:** S
-> **Origin source:** cescadesigns (`/home/rahman/projects/cescadesigns/components/cummon/hero-section.tsx`); Convex-stripped fork vendored at `components/previews/hero-carousel/`
+> **Origin source:** cescadesigns (`~/projects/cescadesigns/components/cummon/hero-section.tsx`); Convex-stripped fork vendored at `components/previews/hero-carousel/`
 
 ## Tujuan
 

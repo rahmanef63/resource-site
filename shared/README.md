@@ -7,7 +7,7 @@
 
 **Phase 1 scaffold** — directories created, primitives not yet harvested.
 
-Harvest plan: `/home/rahman/projects/resources/docs/SSOT_MIGRATION_PLAN.md` Phase 2.
+Harvest plan: `~/projects/resources/docs/SSOT_MIGRATION_PLAN.md` Phase 2.
 
 ## Directory layout
 

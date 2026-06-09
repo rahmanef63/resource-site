@@ -1,7 +1,7 @@
 # Recipe — Threaded Comments
 
 > **Portability tier:** L
-> **Origin source:** notion-page-clone (`/home/rahman/projects/notion-page-clone/src/slices/comments/`)
+> **Origin source:** notion-page-clone (`~/projects/notion-page-clone/src/slices/comments/`)
 
 ## Tujuan
 

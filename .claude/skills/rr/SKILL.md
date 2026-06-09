@@ -5,7 +5,7 @@ description: Rahman Resources (rr) operator — context-aware skill for managing
 
 # /rr — Rahman Resources operator skill
 
-Global skill. Works from `/home/rahman/projects/resources/` (rr repo) AND from any consumer project. Detects context from cwd, then routes to the right action.
+Global skill. Works from `~/projects/resources/` (rr repo) AND from any consumer project. Detects context from cwd, then routes to the right action.
 
 ## When user invokes
 

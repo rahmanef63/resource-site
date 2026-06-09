@@ -183,5 +183,5 @@ Defer — requires BSDL submodule schema work first. Re-propose after BSDL v2.
 
 - `frontend/slices/comments/slice.contract.ts` — current v0.2.0 contract
 - `docs/contract-negotiations-2026-05-15.md` §1 — original polymorphic-target decision
-- `/home/rahman/projects/rahmanef.com/frontend/slices/comments/.kitab.json` — divergence manifest with 7 blockers (commit `430c35b`)
-- `/home/rahman/projects/notion-page-clone/frontend/slices/comments/` — clean v0.2.0 adoption (commit `d9413e4`)
+- `~/projects/rahmanef.com/frontend/slices/comments/.kitab.json` — divergence manifest with 7 blockers (commit `430c35b`)
+- `~/projects/notion-page-clone/frontend/slices/comments/` — clean v0.2.0 adoption (commit `d9413e4`)

@@ -1,7 +1,7 @@
 # Recipe — Notion-Style Block Editor
 
 > **Portability tier:** L
-> **Origin source:** notion-page-clone (`/home/rahman/projects/notion-page-clone/src/slices/editor/`)
+> **Origin source:** notion-page-clone (`~/projects/notion-page-clone/src/slices/editor/`)
 
 ## Tujuan
 

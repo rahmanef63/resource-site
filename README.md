@@ -66,15 +66,6 @@ Visual picker at `site/app/(docs)/build` — pick template + features + skills, 
 - Dokploy deploy via `/use-si-coder`
 - Best-practice gate via `/use-audit-bp`
 
-## Source References (read-only)
-
-| Source | Purpose |
-|---|---|
-| `/home/rahman/projects/superspace/` | foundation: vertical slice arch, layouts, registry, validators, **studio** (UI builder + workflow automation, archived in source) |
-| `/home/rahman/projects/rahmanef.com/` | motion primitives, OKLch theme presets, asymmetric masonry, route groups |
-| `/home/rahman/projects/cescadesigns/` | hero carousel, ContactForm + Resend |
-| `/home/rahman/projects/notion-page-clone/` | block editor, slash menu, db views (Vite — port to Next.js App Router) |
-
 ## Build Phases
 
 | # | Phase | Status |
