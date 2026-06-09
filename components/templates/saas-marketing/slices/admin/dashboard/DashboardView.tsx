@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, CreditCard, Inbox, Users, Megaphone } from "lucide-react";
+import { ArrowRight, CreditCard, Inbox, Users, Megaphone, type LucideIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { fmtDate, useStore } from "../../../shared/store";
@@ -70,7 +70,7 @@ export function DashboardView() {
   );
 }
 
-function Stat({ icon: Icon, label, v, href }: { icon: any; label: string; v: string; href: string }) {
+function Stat({ icon: Icon, label, v, href }: { icon: LucideIcon; label: string; v: string; href: string }) {
   return (
     <Link href={href} className="group rounded-lg border border-border/60 bg-card p-4 transition hover:bg-accent/40">
       <div className="flex items-center gap-2 text-xs text-muted-foreground"><Icon className="size-3.5" /> {label}</div>

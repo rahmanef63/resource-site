@@ -18,7 +18,6 @@ type Tier = "nano" | "mid" | "flagship";
 type Message = { id: string; role: "user" | "assistant"; content: string };
 
 export function ChatFab({
-  feature = "general-chat",
   tier = "mid",
   greeting = "Hi — how can I help you?",
   title = "Chat",

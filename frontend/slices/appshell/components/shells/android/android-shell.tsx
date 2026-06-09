@@ -1,4 +1,5 @@
 "use client";
+// audit-allow-hex: #dbeafe is the CSS-var fallback for --brand-soft (Material-You wallpaper tint), not themable chrome.
 /* Android (Material-You) mobile shell — same store + apps as every other shell,
    one fullscreen app at a time (mirrors MobileShell). Chrome: status bar →
    pull-down notification shade with quick-settings tiles, at-a-glance home +

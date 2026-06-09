@@ -5,6 +5,7 @@
  *  result + error, and the cover picker falls back to its curated set. */
 
 import type { NextRequest } from "next/server";
+import { extractIp, rateLimit } from "@/lib/rate-limit-memory";
 
 // (Node.js is the default runtime; an explicit `runtime` export is incompatible
 // with next.config cacheComponents and broke the build, so it's omitted.)
@@ -20,6 +21,16 @@ interface RawPhoto {
 }
 
 export async function GET(req: NextRequest) {
+  // Upstream Unsplash demo quota is 50 req/h — don't let one anonymous
+  // visitor burn it.
+  const gate = rateLimit(`unsplash:${extractIp(req)}`, { limit: 30, windowMs: 60 * 60_000 });
+  if (!gate.ok) {
+    return Response.json(
+      { photos: [], total: 0, error: "rate limited" },
+      { status: 429, headers: { "Retry-After": String(gate.retryAfterSec) } },
+    );
+  }
+
   const { searchParams } = new URL(req.url);
   const query = (searchParams.get("query") ?? "").trim();
   const perPage = Math.max(1, Math.min(30, Number(searchParams.get("per_page")) || 24));

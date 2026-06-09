@@ -18,10 +18,7 @@ import { TURN_INTO_SPECS } from "./block-controls/searchRows";
 import { buildSmartTurnIntoPatch } from "../lib/turnInto";
 import { BlockColorMenu } from "./BlockColorMenu";
 import { GripButton } from "./block-controls/QuickButtons";
-import {
-  useEditorData as useEditorAdapter,
-  useComments,
-} from "@notion/slices/editor/lib/adapterContext";
+import { useComments } from "@notion/slices/editor/lib/adapterContext";
 
 interface Props {
   block: Block;
@@ -44,7 +41,6 @@ interface Props {
 export function NestedBlockControls({ block, pageId, listeners, onUpdate, onAddAfter, onDelete }: Props) {
   const [open, setOpen] = useState(false);
   const closeMenu = () => setOpen(false);
-  const { user } = useEditorAdapter();
   const { useBlockComments } = useComments();
   const { openCount, create } = useBlockComments(block.id);
 
@@ -95,7 +91,7 @@ export function NestedBlockControls({ block, pageId, listeners, onUpdate, onAddA
                     e.preventDefault();
                     const patch = buildSmartTurnIntoPatch(block.type, s.type);
                     if (typeof window !== "undefined" && window.location.search.includes("debug=blocks")) {
-                      // eslint-disable-next-line no-console
+
                       console.log("[turnInto:nested]", { blockId: block.id, from: block.type, to: s.type, patch });
                     }
                     onUpdate(patch);

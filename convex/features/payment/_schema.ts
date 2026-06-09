@@ -14,6 +14,9 @@ export const paymentTables = {
     provider: v.union(v.literal("midtrans"), v.literal("doku"), v.literal("stripe")),
     status: v.union(
       v.literal("pending"),
+      // Buyer returned from hosted checkout and *claims* payment — NOT
+      // verified. Only the signature-checked webhook may set "paid".
+      v.literal("client_claimed"),
       v.literal("paid"),
       v.literal("failed"),
       v.literal("expired"),

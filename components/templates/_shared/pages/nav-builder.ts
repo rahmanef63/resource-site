@@ -1,5 +1,5 @@
 import { FileText } from "lucide-react";
-import type { AdminNavItem } from "../types/common";
+import type { AdminNavItem, IconComponent } from "../types/common";
 import type { PageEntry } from "./types";
 
 /**
@@ -18,7 +18,7 @@ export function buildCustomPageNavItems(
   pages: PageEntry[],
   baseHref: string,
   opts?: {
-    icon?: any;
+    icon?: IconComponent;
     status?: "all" | "published";
     sort?: "alpha" | "updated" | "created";
   },

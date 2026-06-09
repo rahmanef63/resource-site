@@ -22,7 +22,7 @@ export function useFileSelection(entries: FsEntry[] | null) {
       if (e.metaKey || e.ctrlKey) {
         setSelected((prev) => {
           const next = new Set(prev);
-          next.has(entry.name) ? next.delete(entry.name) : next.add(entry.name);
+          if (next.has(entry.name)) next.delete(entry.name); else next.add(entry.name);
           return next;
         });
         lastIndex.current = index;

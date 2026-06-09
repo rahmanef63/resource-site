@@ -5,6 +5,7 @@ import {
   Settings2,
   Users,
   Webhook,
+  type LucideIcon,
 } from "lucide-react";
 import type { AdminNavItem } from "../types/common";
 
@@ -25,7 +26,7 @@ export type FeatureBlock = {
   segment: string;
   label: string;
   description: string;
-  icon: any;
+  icon: LucideIcon;
   /** Future: which rr slice powers this block (for /rr lift) */
   poweredBy?: string;
 };

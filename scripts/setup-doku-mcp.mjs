@@ -30,9 +30,8 @@ function readDotenv() {
   for (const line of text.split("\n")) {
     const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/);
     if (!m) continue;
-    let [, k, v] = m;
-    v = v.replace(/^['"]|['"]$/g, "");
-    map[k] = v;
+    const [, k, v] = m;
+    map[k] = v.replace(/^['"]|['"]$/g, "");
   }
   return map;
 }

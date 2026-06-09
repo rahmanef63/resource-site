@@ -5,13 +5,14 @@ import {
   Quote, Code, Minus, Lightbulb, FileText, Database, Columns2, Columns3, Columns4,
   ChevronRight, Image, Sigma, Table, Tv2, MousePointer, RefreshCw,
   ListTree, Mic, Video,
+  type LucideIcon,
 } from "lucide-react";
 
 export interface BlockSpec {
   type: BlockType;
   label: string;
   hint: string;
-  icon: any;
+  icon: LucideIcon;
   keywords: string[];
 }
 

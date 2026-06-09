@@ -7,7 +7,7 @@ import { parseFormula } from "./parser";
 import { evalCall } from "./functions";
 import { higherOrderFns } from "./functions/higherOrder";
 import { formulaEqual, formulaCompare } from "./evaluator-compare";
-import type { EvalContext, EngineHost } from "./host";
+import type { EvalContext } from "./host";
 
 export type { EvalContext, EngineHost } from "./host";
 

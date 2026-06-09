@@ -49,7 +49,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...appshellConfig,
     importPath: "@/features/appshell/config",
-    version: "1.3.0",
+    version: "1.3.1",
   },
   {
     ...assistantConfig,
@@ -69,7 +69,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...browserConfig,
     importPath: "@/features/browser/config",
-    version: "1.0.1",
+    version: "1.0.2",
   },
   {
     ...calComBookingConfig,
@@ -79,7 +79,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...codeEditorConfig,
     importPath: "@/features/code-editor/config",
-    version: "1.0.1",
+    version: "1.0.2",
   },
   {
     ...commandMenuConfig,
@@ -104,7 +104,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...imageEditorConfig,
     importPath: "@/features/image-editor/config",
-    version: "2.0.1",
+    version: "2.0.2",
   },
   {
     ...mediaViewerConfig,
@@ -134,7 +134,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...reelEditorConfig,
     importPath: "@/features/reel-editor/config",
-    version: "1.0.1",
+    version: "1.0.2",
   },
   {
     ...resendNewsletterConfig,

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Search, Sparkles, ExternalLink, ArrowUp } from "lucide-react";
+import { Search, Sparkles, ArrowUp } from "lucide-react";
 import { PreviewPage, PreviewContainer, BlogThumb, hueFromString } from "@/components/site/preview-kit";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

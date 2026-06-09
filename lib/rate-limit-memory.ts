@@ -42,7 +42,16 @@ export function resetRateLimit(key: string): void {
 }
 
 export function extractIp(req: Request): string {
+  // Traefik sets X-Real-IP and APPENDS the connecting peer to X-Forwarded-For.
+  // The leftmost XFF entry is client-supplied and forgeable (rotate it per
+  // request → lockout never trips), so trust X-Real-IP first, else the
+  // RIGHTMOST XFF hop — the one our proxy wrote.
+  const realIp = req.headers.get("x-real-ip");
+  if (realIp) return realIp.trim();
   const xff = req.headers.get("x-forwarded-for");
-  if (xff) return xff.split(",")[0]?.trim() ?? "unknown";
-  return req.headers.get("x-real-ip") ?? "unknown";
+  if (xff) {
+    const parts = xff.split(",");
+    return parts[parts.length - 1]?.trim() || "unknown";
+  }
+  return "unknown";
 }

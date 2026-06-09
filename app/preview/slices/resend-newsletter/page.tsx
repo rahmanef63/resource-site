@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Mail, Users, Send } from "lucide-react";
+import { Users, Send } from "lucide-react";
 import { SlicePreviewLayout, PreviewSection, FlowDiagram } from "@/components/slice-previews/preview-layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

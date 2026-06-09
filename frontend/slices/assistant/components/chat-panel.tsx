@@ -98,7 +98,7 @@ export const ChatPanel = forwardRef<
         `Running automation “${auto.name}” as ${(runAgent ?? agentRef.current).name}:\n` +
         (lines.join("\n") || "  (no steps)") +
         "\n\n(Steps logged — no real execution in this build.)";
-      // eslint-disable-next-line no-console
+
       console.info("[alfa] run automation", auto.name, auto.steps);
       setMessages((prev) => [...prev, { id: nextId(), role: "assistant", text: body }]);
     },

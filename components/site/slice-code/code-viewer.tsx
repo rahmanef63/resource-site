@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { Download, FileCode } from "lucide-react";
-import JSZip from "jszip";
 import { Button } from "@/components/ui/button";
 import { ShowcaseCard } from "@/components/site/catalog/showcase-card";
 import type { SliceFile } from "@/lib/slice-files";
@@ -35,6 +34,8 @@ export function SliceCodeViewer({ slug, rootPath, files }: Props) {
   const totalBytes = files.reduce((acc, f) => acc + f.size, 0);
 
   const onDownload = async () => {
+    // lazy: jszip (~100 kB) only loads when someone actually downloads
+    const { default: JSZip } = await import("jszip");
     const zip = new JSZip();
     const folder = zip.folder(slug);
     if (!folder) return;

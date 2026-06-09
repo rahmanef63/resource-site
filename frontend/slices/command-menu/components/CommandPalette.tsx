@@ -89,6 +89,9 @@ export function CommandPalette({
   }, [open, disableHotkey]);
 
   const [historyTick, setHistoryTick] = useState(0);
+  // historyTick/open are deliberate cache-busters: re-read persisted history
+  // whenever the palette opens or an entry is saved.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const history = useMemo(() => loadHistory(), [historyTick, open]);
   const run = (fn: () => void | Promise<void>, track?: HistoryEntry) => () => {
     setOpen(false);

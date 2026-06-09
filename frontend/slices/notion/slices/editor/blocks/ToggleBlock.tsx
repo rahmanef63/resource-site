@@ -27,7 +27,7 @@ export function ToggleContent({
   pageId?: string;
 }) {
   const collapsed = block.collapsed !== false;
-  const children: Block[] = block.children ?? [];
+  const children: Block[] = useMemo(() => block.children ?? [], [block.children]);
   const ordinals = useMemo(() => computeOrdinals(children), [children]);
   const { setNodeRef: setDropRef, isOver: dropIsOver } = useDroppable({ id: `toggle:${block.id}` });
   const headRef = useRef<HTMLDivElement | null>(null);

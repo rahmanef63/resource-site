@@ -39,10 +39,13 @@ export const generate = action({
     }
     const userEmail = (me.email ?? "unknown").toLowerCase();
 
-    const callsToday = (await ctx.runQuery(
-      (internal as any).slices.seo.callsInWindow,
-      { userEmail, windowMs: WINDOW_MS },
-    )) as number;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- internal fn refs under slices.seo only exist after consumer-side convex codegen; the in-repo _generated stub can't type them
+    const seoInternal = (internal as any).slices.seo;
+
+    const callsToday = (await ctx.runQuery(seoInternal.callsInWindow, {
+      userEmail,
+      windowMs: WINDOW_MS,
+    })) as number;
     if (callsToday >= MAX_PER_WINDOW) {
       throw new Error(
         `SEO generator cap tercapai (${MAX_PER_WINDOW}/24 jam). Coba lagi besok.`,
@@ -108,7 +111,7 @@ export const generate = action({
       outputTokens = body.usage?.output_tokens;
       success = true;
 
-      await ctx.runMutation((internal as any).slices.seo._logGeneratorCall, {
+      await ctx.runMutation(seoInternal._logGeneratorCall, {
         userEmail,
         table: args.table,
         rowId: args.rowId,
@@ -122,7 +125,7 @@ export const generate = action({
       return parsed;
     } catch (e: unknown) {
       errorMessage = e instanceof Error ? e.message : String(e);
-      await ctx.runMutation((internal as any).slices.seo._logGeneratorCall, {
+      await ctx.runMutation(seoInternal._logGeneratorCall, {
         userEmail,
         table: args.table,
         rowId: args.rowId,

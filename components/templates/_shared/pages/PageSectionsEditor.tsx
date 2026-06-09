@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import type {
   ColumnDef,
   CrudController,
-  EntityMeta,
 } from "@/components/templates/_shared/crud/types";
 import { LANDING_FIELDS } from "../landing/landing-fields";
 import { blankSection } from "../landing/LandingEditorView";

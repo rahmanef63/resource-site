@@ -1,7 +1,7 @@
 {
   "name": "rahman-shared",
-  "version": "0.3.0",
-  "description": "Shared UI utils, hooks, helpers, and a portable Notion-style formula engine for the rahman/resources kitab. Pure utilities (cn, formatDate, sanitizeHtml, useDebounce) + ./formulaEngine subpath (host-adapted, ~50 fns, lambdas, member access). UI components are distributed via the rahman-resources CLI scaffolder.",
+  "version": "0.3.1",
+  "description": "Shared UI utils, hooks, helpers, and a portable Notion-style formula engine for the Rahman Resources registry. Pure utilities (cn, formatDate, sanitizeHtml, useDebounce) + ./formulaEngine subpath (host-adapted, ~50 fns, lambdas, member access). UI components are distributed via the rahman-resources CLI scaffolder.",
   "license": "MIT",
   "author": "Rahman Fakhrul Aziz",
   "repository": {

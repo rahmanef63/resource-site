@@ -2,7 +2,7 @@ import { createHmac, scryptSync, timingSafeEqual } from "crypto";
 
 const SESSION_TTL_MS = 24 * 60 * 60 * 1000;
 
-export const SESSION_COOKIE = "kitab_admin";
+export const SESSION_COOKIE = "rr_admin";
 
 function env(name: string): string {
   const v = process.env[name];

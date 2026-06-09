@@ -4,7 +4,6 @@ import * as React from "react";
 import { CalendarDays, Clock, ChevronLeft, ChevronRight } from "lucide-react";
 import { SlicePreviewLayout, PreviewSection, FlowDiagram } from "@/components/slice-previews/preview-layout";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 

@@ -5,15 +5,13 @@ import { ArrowUpRight, Briefcase } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { SectionHead } from "@/components/templates/_shared/ui/section-head";
-import { fmtDate, slugify, useClients, useProjects, useProposals } from "../../shared/store";
+import { fmtDate, slugify, useClients, useProjects } from "../../shared/store";
 import { PUBLIC_BASE } from "../../shared/nav-config";
 
 export function CaseStudiesPage() {
   const projects = useProjects();
   const clients = useClients();
-  const proposals = useProposals();
   const clientMap = new Map(clients.map((c) => [c.id, c]));
-  const proposalMap = new Map(proposals.map((p) => [p.id, p]));
 
   return (
     <section className="mx-auto max-w-6xl px-6 py-16">

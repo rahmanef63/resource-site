@@ -28,6 +28,21 @@ import { v } from "convex/values";
 
 const BATCH = 200;
 
+/** v0.1.0 `comments` row — legacy source shape (see header comment). */
+type LegacyCommentRow = {
+  _creationTime?: number;
+  workspaceId?: string | { toString?: () => string };
+  userId?: string | { toString?: () => string };
+  pageId?: string | { toString?: () => string };
+  blockId?: string;
+  body?: string;
+  text?: string;
+  resolvedAt?: number;
+  deletedAt?: number;
+  createdAt?: number;
+  updatedAt?: number;
+};
+
 export const migrate = internalMutation({
   args: {
     cursor: v.optional(v.union(v.string(), v.null())),
@@ -40,11 +55,12 @@ export const migrate = internalMutation({
   handler: async (ctx, { cursor, defaultKind }) => {
     const kind = defaultKind ?? "page";
     const result = await ctx.db
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- legacy v0.1.0 table no longer exists in the live schema, so the typed TableNames union can't name it
       .query("comments" as any)
       .paginate({ cursor: cursor ?? null, numItems: BATCH });
 
     let copied = 0;
-    for (const row of result.page as any[]) {
+    for (const row of result.page as LegacyCommentRow[]) {
       const tenantId =
         typeof row.workspaceId === "string"
           ? row.workspaceId
@@ -59,6 +75,7 @@ export const migrate = internalMutation({
           : row.pageId?.toString?.() ?? "";
       const now = row._creationTime ?? Date.now();
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- destination v0.2.0 table is consumer-defined; this repo's schema can't name it
       await ctx.db.insert("comment_threads" as any, {
         tenantId,
         actorId,

@@ -34,17 +34,33 @@ import { v } from "convex/values";
 
 const BATCH = 200;
 
+/** v0.1.0 `auditLogs` row — legacy source shape (see header comment). */
+type LegacyAuditLogRow = {
+  _creationTime?: number;
+  workspaceId?: string | { toString?: () => string };
+  userId?: string | { toString?: () => string };
+  timestamp?: number;
+  action?: string;
+  entityType?: string;
+  entityId?: string;
+  changes?: unknown;
+  metadata?: unknown;
+  ipAddress?: string;
+  userAgent?: string;
+};
+
 export const migrate = internalMutation({
   args: {
     cursor: v.optional(v.union(v.string(), v.null())),
   },
   handler: async (ctx, { cursor }) => {
     const result = await ctx.db
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- legacy v0.1.0 table no longer exists in the live schema, so the typed TableNames union can't name it
       .query("auditLogs" as any)
       .paginate({ cursor: cursor ?? null, numItems: BATCH });
 
     let copied = 0;
-    for (const row of result.page as any[]) {
+    for (const row of result.page as LegacyAuditLogRow[]) {
       const tenantId =
         typeof row.workspaceId === "string"
           ? row.workspaceId
@@ -59,6 +75,7 @@ export const migrate = internalMutation({
           ? row.changes
           : undefined;
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- destination v0.2.0 table is consumer-defined; this repo's schema can't name it
       await ctx.db.insert("audit_events" as any, {
         tenantId,
         actorId,

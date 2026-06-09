@@ -17,10 +17,17 @@ import * as React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
-export type DokuStatus = "pending" | "paid" | "failed" | "expired" | "refunded";
+export type DokuStatus =
+  | "pending"
+  | "client_claimed"
+  | "paid"
+  | "failed"
+  | "expired"
+  | "refunded";
 
 const VARIANT: Record<DokuStatus, "default" | "secondary" | "destructive" | "outline"> = {
   pending: "secondary",
+  client_claimed: "secondary",
   paid: "default",
   failed: "destructive",
   expired: "outline",
@@ -29,6 +36,7 @@ const VARIANT: Record<DokuStatus, "default" | "secondary" | "destructive" | "out
 
 const LABEL: Record<DokuStatus, string> = {
   pending: "Menunggu pembayaran",
+  client_claimed: "Menunggu konfirmasi",
   paid: "Lunas",
   failed: "Gagal",
   expired: "Kedaluwarsa",

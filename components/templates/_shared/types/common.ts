@@ -1,5 +1,11 @@
 // Shared types consumed by all website-templates (T1, T2, T3+).
-// Keep this file framework-agnostic — no React imports.
+// Keep this file framework-agnostic — no runtime React imports
+// (type-only imports are erased at compile time and stay allowed).
+
+import type { ComponentType } from "react";
+
+/** Minimal icon-component contract — lucide/tabler icons satisfy this. */
+export type IconComponent = ComponentType<{ className?: string }>;
 
 export type Brand = {
   brandLetter: string;
@@ -21,7 +27,7 @@ export type NavItem = {
 export type AdminNavItem = NavItem & {
   id: string;
   /** lucide icon component — passed as React.ComponentType to admin shell */
-  icon?: any;
+  icon?: IconComponent;
   /** small badge count next to nav label */
   count?: number | null;
   /** Nested sub-items. When present, the entry renders as a
@@ -85,7 +91,7 @@ export type SecondaryNavItem = {
   id: string;
   label: string;
   href: string;
-  icon?: any;
+  icon?: IconComponent;
   /** Optional small descriptor under the label. */
   meta?: string;
 };

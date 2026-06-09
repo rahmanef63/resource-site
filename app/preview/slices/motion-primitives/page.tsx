@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { SlicePreviewLayout, PreviewSection } from "@/components/slice-previews/preview-layout";
+import { SlicePreviewLayout } from "@/components/slice-previews/preview-layout";
 import { Card } from "@/components/ui/card";
 import { MarqueeMock, KineticMock, MagneticMock, SpotlightMock } from "./mocks-text";
 import { CounterMock, ReadingMock, GrainMock, LightboxMock } from "./mocks-visual";

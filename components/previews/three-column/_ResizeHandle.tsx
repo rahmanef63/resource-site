@@ -46,23 +46,6 @@ export function ResizeHandle({
   const [isDragging, setIsDragging] = React.useState(false)
   const startPosRef = React.useRef(0)
 
-  // Mouse down handler - start drag
-  const handleMouseDown = React.useCallback((e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    
-    const startPos = direction === "vertical" ? e.clientX : e.clientY
-    startPosRef.current = startPos
-    setIsDragging(true)
-    onResizeStart(index, startPos)
-    
-    // Add global listeners
-    document.addEventListener("mousemove", handleMouseMove)
-    document.addEventListener("mouseup", handleMouseUp)
-    document.body.style.cursor = direction === "vertical" ? "col-resize" : "row-resize"
-    document.body.style.userSelect = "none"
-  }, [direction, index, onResizeStart])
-
   // Mouse move handler - during drag
   const handleMouseMove = React.useCallback((e: MouseEvent) => {
     const currentPos = direction === "vertical" ? e.clientX : e.clientY
@@ -74,13 +57,30 @@ export function ResizeHandle({
   const handleMouseUp = React.useCallback(() => {
     setIsDragging(false)
     onResizeEnd()
-    
+
     // Remove global listeners
     document.removeEventListener("mousemove", handleMouseMove)
     document.removeEventListener("mouseup", handleMouseUp)
     document.body.style.cursor = ""
     document.body.style.userSelect = ""
   }, [handleMouseMove, onResizeEnd])
+
+  // Mouse down handler - start drag
+  const handleMouseDown = React.useCallback((e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    const startPos = direction === "vertical" ? e.clientX : e.clientY
+    startPosRef.current = startPos
+    setIsDragging(true)
+    onResizeStart(index, startPos)
+
+    // Add global listeners
+    document.addEventListener("mousemove", handleMouseMove)
+    document.addEventListener("mouseup", handleMouseUp)
+    document.body.style.cursor = direction === "vertical" ? "col-resize" : "row-resize"
+    document.body.style.userSelect = "none"
+  }, [direction, index, onResizeStart, handleMouseMove, handleMouseUp])
 
   // Cleanup on unmount
   React.useEffect(() => {

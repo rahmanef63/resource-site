@@ -25,27 +25,27 @@ const required = [
   "scripts/setup-auth.mjs",
   "lib/headless-core/version.ts",
 ];
-for (const f of required) (existsSync(f) ? ok(f) : bad(`missing ${f}`));
+for (const f of required) { if (existsSync(f)) ok(f); else bad(`missing ${f}`); }
 
 console.log("\n● Manifest + scripts");
 try {
   const v = JSON.parse(readFileSync("version.json", "utf8"));
-  v.version && v.core ? ok(`version.json (v${v.version})`) : bad("version.json missing version/core");
+  if (v.version && v.core) ok(`version.json (v${v.version})`); else bad("version.json missing version/core");
 } catch { bad("version.json invalid JSON"); }
 try {
   const pkg = JSON.parse(readFileSync("package.json", "utf8"));
-  pkg.scripts?.["build:auto"] ? ok("package.json build:auto present") : bad("package.json missing build:auto");
+  if (pkg.scripts?.["build:auto"]) ok("package.json build:auto present"); else bad("package.json missing build:auto");
 } catch { bad("package.json invalid"); }
 try {
   const vc = JSON.parse(readFileSync("vercel.json", "utf8"));
-  /build:auto/.test(vc.buildCommand ?? "") ? ok("vercel.json buildCommand -> build:auto") : bad("vercel.json buildCommand wrong");
+  if (/build:auto/.test(vc.buildCommand ?? "")) ok("vercel.json buildCommand -> build:auto"); else bad("vercel.json buildCommand wrong");
 } catch { bad("vercel.json invalid"); }
 
 console.log("\n● Env documentation");
 try {
   const env = readFileSync(".env.example", "utf8");
   for (const k of ["NEXT_PUBLIC_CONVEX_URL", "CONVEX_DEPLOY_KEY"])
-    (env.includes(k) ? ok(`.env.example documents ${k}`) : bad(`.env.example missing ${k}`));
+    { if (env.includes(k)) ok(`.env.example documents ${k}`); else bad(`.env.example missing ${k}`); }
 } catch { bad(".env.example unreadable"); }
 
 function run(label, cmd) {

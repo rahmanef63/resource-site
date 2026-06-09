@@ -36,7 +36,10 @@ function useDemoAdapter(seed: Notification[], persist: boolean) {
   const initial = persist && ready ? stored : seed;
   const adapter = React.useMemo(
     () => createMemoryNotificationsAdapter(initial),
-    // re-seed once on hydration; scenario seeds are stable refs
+    // re-seed once on hydration; scenario seeds are stable refs. `initial`
+    // (derived from live `stored`) is deliberately excluded so post-hydration
+    // store edits don't rebuild the adapter.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [persist, ready, seed],
   );
   const api = useNotifications(adapter);

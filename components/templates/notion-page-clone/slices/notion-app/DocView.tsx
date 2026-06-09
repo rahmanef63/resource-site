@@ -59,6 +59,8 @@ export function DocView({ docId }: { docId: string }) {
   const { dispatch } = useStore();
   const [coverPickerOpen, setCoverPickerOpen] = React.useState(false);
   const doc = docs.find((d) => d.id === docId);
+  const surfaceRef = React.useRef<HTMLDivElement | null>(null);
+  const headings = React.useMemo(() => collectHeadings(doc?.blocks ?? []), [doc?.blocks]);
 
   if (!doc) {
     return (
@@ -112,10 +114,8 @@ export function DocView({ docId }: { docId: string }) {
   const handleBulkDuplicate = (ids: string[]) =>
     ids.forEach((blockId) => dispatch({ type: "doc.block.duplicate", docId: doc.id, blockId }));
 
-  const surfaceRef = React.useRef<HTMLDivElement | null>(null);
   const blockIds = doc.blocks.map((b) => b.id);
   const blockById = new Map(doc.blocks.map((b) => [b.id, b] as const));
-  const headings = React.useMemo(() => collectHeadings(doc.blocks), [doc.blocks]);
   const mentionables = docs
     .filter((d) => !d.trashed && d.id !== doc.id)
     .slice(0, 50)

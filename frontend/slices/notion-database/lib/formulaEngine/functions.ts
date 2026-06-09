@@ -2,7 +2,7 @@
  *  Pure — `now()` / `today()` read clock at call site. */
 
 import {
-  bool, date, list, num, str, NULL_VALUE,
+  bool, date, num, str, NULL_VALUE,
   type ExprNode, type FormulaError, type FormulaValue,
 } from "./types";
 import { isEmpty, toBoolean, toDate, toNumber, toString } from "./coerce";

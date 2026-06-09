@@ -91,6 +91,14 @@ export function NotionDatabase({
   readOnly, className,
 }: NotionDatabaseProps) {
   const activeView = db.views.find((v) => v.id === db.activeViewId) ?? db.views[0];
+  const visibleRows = useMemo(
+    () => (activeView ? applyView(rows, db, activeView) : []),
+    [rows, db, activeView],
+  );
+  const registry = useMemo(
+    () => ({ ...VIEW_REGISTRY, ...(viewRegistry ?? {}) }),
+    [viewRegistry],
+  );
   if (!activeView) {
     return (
       <div className={cn("rounded-lg border border-border bg-card p-4 text-xs text-muted-foreground", className)}>
@@ -98,15 +106,6 @@ export function NotionDatabase({
       </div>
     );
   }
-
-  const visibleRows = useMemo(
-    () => applyView(rows, db, activeView),
-    [rows, db, activeView],
-  );
-  const registry = useMemo(
-    () => ({ ...VIEW_REGISTRY, ...(viewRegistry ?? {}) }),
-    [viewRegistry],
-  );
   const View = registry[activeView.type] ?? registry.table!;
 
   const renderCell = (prop: Property, row: Page) =>

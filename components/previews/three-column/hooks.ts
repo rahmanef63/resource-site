@@ -61,7 +61,7 @@ export function usePersistedState<T>(
 export function useResponsiveCollapse(collapseAt: number | undefined) {
   // Start with false for SSR, will update immediately on client
   const [shouldCollapse, setShouldCollapse] = React.useState(false)
-  const [hasMounted, setHasMounted] = React.useState(false)
+  const [, setHasMounted] = React.useState(false)
 
   // Use useEffect for hydration-safe initialization
   React.useEffect(() => {

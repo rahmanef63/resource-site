@@ -15,7 +15,7 @@
 //
 // Run: node scripts/apply-midtrans-collision-fix.mjs
 
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
@@ -114,7 +114,7 @@ for (const { slug, outFile } of SLICES) {
   // emits one `export default` per body — to coexist in one file we rewrite
   // each body's import + default export into a named export keyed off the
   // source/target table pair, and emit a single shared import at the top.
-  const renamedBodies = renames.map((step, idx) => {
+  const renamedBodies = renames.map((step) => {
     const raw = step.artifacts.convexMigration ?? "";
     const exportName = camelCase(step.id.replace(/^M\d+-/, ""));
     // Strip the per-block import (we hoist a single shared one) and rewrite

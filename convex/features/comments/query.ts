@@ -23,7 +23,9 @@
  *   });
  */
 
-import { internalQuery } from "../../_generated/server";
+import { internalQuery, query } from "../../_generated/server";
+import { internal } from "../../_generated/api";
+import type { Doc } from "../../_generated/dataModel";
 import { v } from "convex/values";
 
 const targetValidator = v.object({
@@ -50,5 +52,39 @@ export const _listForTarget = internalQuery({
         q.eq("targetKind", kind).eq("targetId", id)
       )
       .take(500);
+  },
+});
+
+/**
+ * Public read wrapper for the rr site itself: journal + portfolio detail
+ * pages are publicly readable, so this thin public query proxies
+ * `_listForTarget` and maps raw `comment_threads` docs into the slice's
+ * `Comment` DTO shape consumed by <CommentsThread> / useComments.
+ */
+export const listForTarget = query({
+  args: { target: targetValidator },
+  handler: async (ctx, { target }) => {
+    const rows: Doc<"comment_threads">[] = await ctx.runQuery(
+      internal.features.comments.query._listForTarget,
+      { target },
+    );
+    return rows
+      .filter((r) => !r.deletedAt)
+      .map((r) => ({
+        id: r._id as string,
+        target: {
+          kind: r.targetKind,
+          id: r.targetId,
+          subId: r.targetSubId,
+        },
+        text: r.body,
+        authorName: "Member",
+        authorIcon: "",
+        resolved: Boolean(r.resolvedAt),
+        createdAt: r.createdAt,
+        updatedAt: r.updatedAt,
+        parentId: r.parentId as string | undefined,
+        authorId: r.actorId,
+      }));
   },
 });

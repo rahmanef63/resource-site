@@ -101,9 +101,10 @@ export function MdNodeView({ node }: { node: MdNode }): React.ReactNode {
     case "divider":
       return <hr className="my-5 border-border" />;
     case "image":
-      // eslint-disable-next-line @next/next/no-img-element
       return (
         <figure className="my-4">
+          {/* arbitrary user-authored markdown URL — next/image cannot allowlist unknown hosts */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={node.url} alt={node.caption ?? ""} className="mx-auto max-w-full rounded-md" />
           {node.caption && <figcaption className="mt-1 text-center text-xs text-muted-foreground">{node.caption}</figcaption>}
         </figure>

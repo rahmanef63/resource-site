@@ -17,12 +17,30 @@ const COUNT_TABLES = [
 
 type CountTable = (typeof COUNT_TABLES)[number];
 
+/**
+ * Loose row shape for the cross-table activity scan. Tables are picked at
+ * runtime so no single Doc<> type applies — only the fields the spec reads
+ * are declared here.
+ */
+type ActivityRow = {
+  _id: string;
+  _creationTime: number;
+  createdAt?: number;
+  name?: string;
+  email?: string;
+  title?: string;
+  author?: string;
+  label?: string;
+  href?: string;
+  isRead?: boolean;
+};
+
 const ACTIVITY_SPEC: {
   table: CountTable;
   kind: string;
   label: string;
   href: string;
-  title: (row: any) => string;
+  title: (row: ActivityRow) => string;
 }[] = [
   {
     table: "contactSubmissions",
@@ -124,7 +142,7 @@ export const stats = query({
     let unreadMessages: number | string = 0;
     try {
       const msgs = await ctx.db.query("contactSubmissions").take(STATS_TABLE_CAP + 1);
-      const unread = msgs.filter((m: any) => !m.isRead).length;
+      const unread = msgs.filter((m: ActivityRow) => !m.isRead).length;
       unreadMessages = msgs.length > STATS_TABLE_CAP ? `${unread}+` : unread;
     } catch {
       unreadMessages = 0;
@@ -141,7 +159,7 @@ export const stats = query({
 
     for (const spec of ACTIVITY_SPEC) {
       const rows = await ctx.db.query(spec.table).take(ACTIVITY_TABLE_CAP);
-      for (const row of rows as any[]) {
+      for (const row of rows as ActivityRow[]) {
         merged.push({
           id: row._id,
           kind: spec.kind,

@@ -12,6 +12,7 @@
  */
 
 import Anthropic from "@anthropic-ai/sdk";
+import { extractIp, rateLimit } from "@/lib/rate-limit-memory";
 import {
   buildBuilderTools,
   executeBuilderTool,
@@ -23,6 +24,10 @@ import {
 
 const MODEL = process.env.RR_BUILDER_MODEL ?? "claude-opus-4-8";
 const MAX_LOOPS = 6;
+// Each request can fan out to MAX_LOOPS upstream model calls — without a
+// per-IP gate this is anonymous unbounded Anthropic spend.
+const RATE = { limit: 10, windowMs: 10 * 60_000 };
+const MAX_MESSAGE_CHARS = 4_000;
 
 const SYSTEM = `You are the Rahman Resources bundle-builder assistant. Help the
 user discover slices, preview them, and compose an install bundle.
@@ -48,6 +53,14 @@ export async function POST(req: Request) {
     });
   }
 
+  const gate = rateLimit(`build-chat:${extractIp(req)}`, RATE);
+  if (!gate.ok) {
+    return Response.json(
+      { error: "rate limited" },
+      { status: 429, headers: { "Retry-After": String(gate.retryAfterSec) } },
+    );
+  }
+
   let body: { messages?: ChatMessage[] };
   try {
     body = await req.json();
@@ -55,8 +68,15 @@ export async function POST(req: Request) {
     return Response.json({ error: "invalid JSON body" }, { status: 400 });
   }
   const history = (body.messages ?? [])
-    .filter((m) => m.role === "user" || m.role === "assistant")
+    .filter(
+      (m) =>
+        (m.role === "user" || m.role === "assistant") &&
+        typeof m.content === "string",
+    )
     .slice(-20);
+  if (history.some((m) => m.content.length > MAX_MESSAGE_CHARS)) {
+    return Response.json({ error: "message too long" }, { status: 413 });
+  }
   if (history.length === 0 || history[history.length - 1].role !== "user") {
     return Response.json({ error: "last message must be from the user" }, { status: 400 });
   }

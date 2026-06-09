@@ -17,8 +17,9 @@ export interface AuditLogEntry {
   // Entity type (table name, e.g., "databases", "documents")
   entityType: string;
 
-  // Entity ID that was affected
-  entityId: Id<any>;
+  // Entity ID that was affected. Convex Ids of ANY table are accepted —
+  // they're branded strings, so `string` is the honest cross-table type.
+  entityId: string;
 
   // Workspace context
   workspaceId: Id<"workspaces">;
@@ -27,7 +28,7 @@ export interface AuditLogEntry {
   userId: string;
 
   // Additional metadata about the action
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 
   // Optional: IP address or client info
   clientInfo?: {

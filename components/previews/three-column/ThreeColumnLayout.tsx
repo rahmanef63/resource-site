@@ -15,7 +15,7 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { ChevronLeft, ChevronRight, Info } from "lucide-react"
+import { ChevronLeft, Info } from "lucide-react"
 import { ResizeHandle } from "./_ResizeHandle"
 import { ThreeColumnContext } from "./context"
 import { usePersistedState, useResponsiveCollapse, useStackedLayout } from "./hooks"
@@ -127,7 +127,7 @@ export function ThreeColumnLayoutAdvanced(rawProps: ThreeColumnLayoutAdvancedPro
   // Keep mobile view valid if panels become hidden
   React.useEffect(() => {
     if (hideLeft && mobileView === "left") setMobileView("center")
-  }, [hideLeft, mobileView])
+  }, [hideLeft, mobileView, setMobileView])
 
   // On mobile: sync inspector drawer with controlled rightCollapsed prop.
   // When parent calls setRightPanelCollapsed(false) (item selected), open the drawer.

@@ -23,9 +23,13 @@ function write<T>(key: string, value: T) {
 export function useAdminState<T>(key: string, defaults: T): [T, (next: T | ((p: T) => T)) => void, () => void] {
   const [state, setState] = React.useState<T>(defaults);
   const [hydrated, setHydrated] = React.useState(false);
+  // ref, not dep: callers pass inline literals — a new identity every render
+  // would re-read storage in a loop.
+  const defaultsRef = React.useRef(defaults);
+  defaultsRef.current = defaults;
 
   React.useEffect(() => {
-    setState(read(key, defaults));
+    setState(read(key, defaultsRef.current));
     setHydrated(true);
   }, [key]);
 

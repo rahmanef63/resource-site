@@ -4,6 +4,11 @@ import { v } from "convex/values";
 const MAX_PAYLOAD_BYTES = 1024;
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour
 const RATE_LIMIT_MAX_EVENTS = 60;
+// sha256 hex = 64 chars; slug slugs are short. Caps stop storage-bloat DoS
+// via giant strings (the per-hash rate limit alone doesn't bound row size,
+// and a rotating hash sidesteps it entirely).
+const MAX_HASH_CHARS = 64;
+const MAX_SLUG_CHARS = 100;
 
 /**
  * Record a single telemetry event.
@@ -30,6 +35,9 @@ export const recordEvent = mutation({
   handler: async (ctx, { slug, event_type, consumer_hash, payload }) => {
     if (payload && payload.length > MAX_PAYLOAD_BYTES) {
       throw new Error("payload_too_large");
+    }
+    if (consumer_hash.length > MAX_HASH_CHARS || slug.length > MAX_SLUG_CHARS) {
+      throw new Error("field_too_large");
     }
 
     const now = Date.now();

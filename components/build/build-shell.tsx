@@ -15,7 +15,7 @@ import {
 import { collectWarnings } from "@/lib/build/compat";
 import { useFeatureContext, useFeatureManifest } from "@/components/site/feature-context";
 import { ThreeColumnLayoutAdvanced } from "@/components/previews/three-column/ThreeColumnLayout";
-import { TemplatePicker, type TemplateOption } from "./template-picker";
+import { type TemplateOption } from "./template-picker";
 import { type FeatureOption } from "./feature-picker";
 import { LivePreview } from "./live-preview";
 import { SlicePreviews } from "./variant-preview";

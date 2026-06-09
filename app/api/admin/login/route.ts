@@ -33,8 +33,11 @@ async function gateLogin(ip: string): Promise<{ ok: boolean; retryAfterSec: numb
       ok: res.ok,
       retryAfterSec: Math.max(1, Math.ceil((res.resetAt - Date.now()) / 1000)),
     };
-  } catch {
-    // Fail open on Convex flap; memory bucket still applies per instance.
+  } catch (e) {
+    // Fall back to the per-instance memory bucket on Convex flap — but log
+    // it: a permanently broken deployment would otherwise silently degrade
+    // to per-replica limits forever.
+    console.error("admin-login rate-limit: Convex consume failed, using memory fallback:", e);
     const g = rateLimit(`admin-login:${ip}`, RL);
     return g.ok
       ? { ok: true, retryAfterSec: 0 }

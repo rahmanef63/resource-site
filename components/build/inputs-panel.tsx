@@ -28,12 +28,10 @@ import { SkillsInspector } from "./skills-inspector";
  */
 export function InputsPanel({
   templates,
-  featureOptions,
   sel,
   setSel,
   rr,
   setRr,
-  toggleFeature,
   toggleSlice,
   toggleSkill,
 }: {

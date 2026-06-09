@@ -24,8 +24,9 @@ export function Favicon({
     return <Globe className={cn("size-3.5 text-muted-foreground", className)} />;
   }
   return (
-    // eslint-disable-next-line @next/next/no-img-element -- external favicon
-    // host; next/image would demand a remotePatterns entry in every consumer.
+    // external favicon host; next/image would demand a remotePatterns entry
+    // in every consumer.
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       src={src}
       alt=""

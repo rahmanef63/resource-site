@@ -51,7 +51,7 @@ export function NotionSidebar({
   const ids = visible.map((i) => i.id);
 
   const toggle = (id: string) =>
-    setCollapsed((c) => { const n = new Set(c); n.has(id) ? n.delete(id) : n.add(id); return n; });
+    setCollapsed((c) => { const n = new Set(c); if (n.has(id)) n.delete(id); else n.add(id); return n; });
 
   const onDragStart = (e: DragStartEvent) => setDragId(String(e.active.id));
   const onDragEnd = (e: DragEndEvent) => {

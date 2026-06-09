@@ -85,7 +85,7 @@ const compose = <A, B, C>(f: Pipe<A, B>, g: Pipe<B, C>): Pipe<A, C> =>
     lang: "bash",
     body: `pnpm sync:rr notion-blocks --dry-run
 pnpm sync:rr notion-blocks
-cd ~/projects/resources && git add . && git commit && git push`,
+cd <your-project> && git add . && git commit && git push`,
     order: 4,
     published: true,
   },

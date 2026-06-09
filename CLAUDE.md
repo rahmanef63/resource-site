@@ -38,9 +38,9 @@ Root project (consumer) **tidak disentuh** RR:
 
 | Package | Version | Purpose |
 |---|---|---|
-| `rahman-resources` | 1.7.0 | CLI installer (`npx rahman-resources …` / alias `resources …`) |
-| `rahman-resources-mcp` | 1.1.0 | MCP server (14 tools + ~70 resources) |
-| `rahman-shared` | 0.2.0 | Pure utils + hooks (cn, formatDate, sanitizeHtml, useDebounce, useClickOutside, useResponsive) |
+| `rahman-resources` | 1.13.1 | CLI installer (`npx rahman-resources …` / alias `resources …`) |
+| `rahman-resources-mcp` | 1.2.1 | MCP server (14 tools + ~70 resources) |
+| `rahman-shared` | 0.3.0 | Pure utils + hooks (cn, formatDate, sanitizeHtml, useDebounce, useClickOutside, useResponsive) + ./formulaEngine |
 
 **Distribusi rule:**
 - **`rahman-shared`** (npm install) — pure functions saja. Consumer import dari node_modules, no local copy.
@@ -161,9 +161,9 @@ Wire ke Claude Code:
 { "mcpServers": { "rahman-resources": { "command": "npx", "args": ["rahman-resources-mcp"] } } }
 ```
 
-### `site/app/(docs)/build` — Bundle Builder UI
+### `app/(docs)/build` — Bundle Builder UI
 
-Visual picker template + features + skills + project form → emit `npx` commands. Compatibility matrix di `site/lib/build/compat.ts`.
+Visual picker template + features + skills + project form → emit `npx` commands. Compatibility matrix di `lib/build/compat.ts`.
 
 ### Publishing (npm)
 
@@ -184,7 +184,7 @@ User run OTP step. JANGAN run `npm publish` sendiri.
 
 ### Skills sync (CLI ↔ site)
 
-SSOT di `site/lib/content/claude-skills.ts`. After edit:
+SSOT di `lib/content/claude-skills.ts`. After edit:
 
 ```bash
 node packages/cli/scripts/sync-skills.mjs          # write JSON

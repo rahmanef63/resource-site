@@ -21,7 +21,7 @@ export function useShortcuts(a: {
       const k = e.key.toLowerCase();
       if (mod && k === "z") {
         e.preventDefault();
-        e.shiftKey ? a.onRedo() : a.onUndo();
+        if (e.shiftKey) a.onRedo(); else a.onUndo();
       } else if (mod && k === "y") {
         e.preventDefault();
         a.onRedo();

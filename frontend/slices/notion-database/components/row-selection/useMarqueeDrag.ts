@@ -182,7 +182,7 @@ export function useMarqueeDrag(props: MarqueeProps): DragRect | null {
       document.body.style.userSelect = "";
       document.body.style.cursor = "";
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [containerRef]);
 
   return rect;

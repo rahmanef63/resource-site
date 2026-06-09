@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest"
 import { createAuditLogger, NULL_TENANT_ADAPTER } from "./index"
-import type { TenantAdapter, AuditLogBindings } from "../types"
+import type { AuditEvent, TenantAdapter, AuditLogBindings } from "../types"
 
 describe("createAuditLogger", () => {
   const tenantAdapter: TenantAdapter = {
@@ -9,7 +9,7 @@ describe("createAuditLogger", () => {
   }
 
   it("invokes the bound mutation with tenant + actor injected", async () => {
-    const logEventMutation = vi.fn<(ctx: unknown, event: any) => Promise<string>>(async () => "evt_1")
+    const logEventMutation = vi.fn<(ctx: unknown, event: AuditEvent) => Promise<string>>(async () => "evt_1")
     const bindings: AuditLogBindings = { logEventMutation, listEventsQuery: undefined }
     const log = createAuditLogger(tenantAdapter, bindings)
 
@@ -24,7 +24,7 @@ describe("createAuditLogger", () => {
   })
 
   it("passes optional diff + metadata + ip + ua through verbatim", async () => {
-    const logEventMutation = vi.fn<(ctx: unknown, event: any) => Promise<void>>(async () => undefined)
+    const logEventMutation = vi.fn<(ctx: unknown, event: AuditEvent) => Promise<void>>(async () => undefined)
     const log = createAuditLogger(tenantAdapter, { logEventMutation, listEventsQuery: undefined })
 
     await log(null, {
@@ -45,7 +45,7 @@ describe("createAuditLogger", () => {
   })
 
   it("respects caller-supplied `at` timestamp when present", async () => {
-    const logEventMutation = vi.fn<(ctx: unknown, event: any) => Promise<void>>(async () => undefined)
+    const logEventMutation = vi.fn<(ctx: unknown, event: AuditEvent) => Promise<void>>(async () => undefined)
     const log = createAuditLogger(tenantAdapter, { logEventMutation, listEventsQuery: undefined })
     await log({}, { action: "z.x", entityType: "z", entityId: "z1", at: 12345 })
     const [, event] = logEventMutation.mock.calls[0]
@@ -73,7 +73,7 @@ describe("NULL_TENANT_ADAPTER", () => {
   })
 
   it("composes with createAuditLogger producing tenantId=null events", async () => {
-    const logEventMutation = vi.fn<(ctx: unknown, event: any) => Promise<void>>(async () => undefined)
+    const logEventMutation = vi.fn<(ctx: unknown, event: AuditEvent) => Promise<void>>(async () => undefined)
     const log = createAuditLogger(NULL_TENANT_ADAPTER, {
       logEventMutation,
       listEventsQuery: undefined,

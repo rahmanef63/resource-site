@@ -8,7 +8,6 @@ import {
   Users,
   Settings,
   Moon,
-  Sun,
   Plus,
   LogOut,
   Sparkles,

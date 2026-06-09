@@ -1,0 +1,18 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "event-tracking",
+  "version": "0.0.1",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add event-tracking",
+    "consumerPath": "slices/event-tracking"
+  },
+  "files": [
+    "config.ts"
+  ],
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

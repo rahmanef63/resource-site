@@ -31,7 +31,7 @@ export function SiteFooter({
   columns: FooterColumn[];
   copyrightHolder?: string;
   tagline?: string;
-  socials?: Array<{ Icon: any; href?: string }>;
+  socials?: Array<{ Icon: React.ComponentType<{ className?: string }>; href?: string }>;
   belowBrand?: React.ReactNode;
 }) {
   return (

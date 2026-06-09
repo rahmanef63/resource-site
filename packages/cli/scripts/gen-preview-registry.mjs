@@ -136,7 +136,7 @@ const ts = [
 
 // importPath is registry-internal — keep the server-safe meta JSON shape stable.
 const json =
-  JSON.stringify(entries.map(({ importPath, ...rest }) => rest), null, 2) + "\n";
+  JSON.stringify(entries.map(({ importPath: _importPath, ...rest }) => rest), null, 2) + "\n";
 
 if (check) {
   const tsOnDisk = existsSync(OUT_TS) ? readFileSync(OUT_TS, "utf8") : "";

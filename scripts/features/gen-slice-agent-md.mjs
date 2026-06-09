@@ -18,7 +18,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(__dirname, "../..");
 const MANIFEST_PATH = path.join(REPO, "packages", "cli", "lib", "manifest.json");
 const SITE_URL = "https://resource.rahmanef.com";
-const REPO_URL = "https://github.com/rahmanef63/resource-site";
 
 const checkMode = process.argv.includes("--check");
 

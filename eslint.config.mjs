@@ -38,9 +38,9 @@ const eslintConfig = [
         "warn",
         {
           paths: [
-            { name: "@clerk/nextjs", message: "Clerk forbidden in resources kitab. Use @convex-dev/auth + PBKDF2." },
-            { name: "@clerk/clerk-react", message: "Clerk forbidden in resources kitab." },
-            { name: "@clerk/clerk-sdk-node", message: "Clerk forbidden in resources kitab." },
+            { name: "@clerk/nextjs", message: "Clerk forbidden in rr. Use @convex-dev/auth + PBKDF2." },
+            { name: "@clerk/clerk-react", message: "Clerk forbidden in rr." },
+            { name: "@clerk/clerk-sdk-node", message: "Clerk forbidden in rr." },
           ],
           patterns: [
             { group: ["@/slices/*/*"], message: "Slice barrel imports only: @/slices/<name>." },
@@ -58,6 +58,23 @@ const eslintConfig = [
   {
     files: ["frontend/slices/*/index.ts", "shared/ui/**/*.tsx"],
     rules: { "no-restricted-imports": "off" },
+  },
+  {
+    // npm packages use the standard bin/ + src/ Node layout — the app-side
+    // "no src/ imports" pattern does not apply there. Clerk stays banned.
+    files: ["packages/**"],
+    rules: {
+      "no-restricted-imports": [
+        "warn",
+        {
+          paths: [
+            { name: "@clerk/nextjs", message: "Clerk forbidden. Use @convex-dev/auth + PBKDF2." },
+            { name: "@clerk/clerk-react", message: "Clerk forbidden." },
+            { name: "@clerk/clerk-sdk-node", message: "Clerk forbidden." },
+          ],
+        },
+      ],
+    },
   },
   {
     files: ["convex/**/*.ts"],

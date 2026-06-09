@@ -19,7 +19,7 @@ export function getErrorMessage(err: unknown, fallback = "Something went wrong")
 
 export function reportError(context: string, err: unknown): SanitizedError {
   if (process.env.NODE_ENV !== "production") {
-    // eslint-disable-next-line no-console
+
     console.error(`[${context}]`, err);
   }
   return { message: getErrorMessage(err) };

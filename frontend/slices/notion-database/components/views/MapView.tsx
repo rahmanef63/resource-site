@@ -6,7 +6,7 @@
  *  pin hue. Mutations flow through onViewConfigChange / onRowAdd /
  *  onOpenRow. No leaflet — pure SVG, runs anywhere. */
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { ChevronDown, MapPin, MoreHorizontal, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {

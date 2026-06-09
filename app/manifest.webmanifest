@@ -1,7 +1,7 @@
 {
   "name": "Rahman Resources",
   "short_name": "Resources",
-  "description": "Copy-first kitab — layouts, recipes, primitives, features. Drop-folder-and-go.",
+  "description": "Copy-first resource library — layouts, recipes, primitives, features. Drop-folder-and-go.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0a0a",

@@ -39,7 +39,7 @@ function roleOf(slug: string, roles: RoleOption[]): RoleOption {
 }
 
 export function MembersTable({
-  rows, roles, canManage, sortKey, sortDir, onSort, onUpdateRole, onRemove, labels,
+  rows, roles, canManage, sortKey, onSort, onUpdateRole, onRemove, labels,
 }: Props) {
   const SortBtn = ({ k, children }: { k: SortKey; children: ReactNode }) => (
     <Button

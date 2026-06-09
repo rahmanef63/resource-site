@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { GripVertical, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { SelectableBlock, useSelection } from "@/features/selection";
 
 export interface CanvasNodeData { id: string; x: number; y: number; text: string }
@@ -46,9 +47,9 @@ export function CanvasNode({ node, orderedIds, onDragStart, onDragMove, onEdit, 
       <div className="w-44 rounded-md border border-border bg-card shadow-sm">
         <div data-no-marquee onPointerDown={startDrag} className="flex cursor-grab items-center justify-between rounded-t-md border-b border-border bg-muted/50 px-2 py-1 active:cursor-grabbing">
           <GripVertical className="h-3.5 w-3.5 text-muted-foreground" />
-          <button data-no-marquee type="button" onClick={() => onDelete(node.id)} aria-label="Delete node" className="text-muted-foreground hover:text-destructive">
+          <Button data-no-marquee type="button" variant="ghost" size="icon" onClick={() => onDelete(node.id)} aria-label="Delete node" className="h-auto w-auto p-0 text-muted-foreground hover:bg-transparent hover:text-destructive">
             <X className="h-3.5 w-3.5" />
-          </button>
+          </Button>
         </div>
         <input
           data-no-marquee

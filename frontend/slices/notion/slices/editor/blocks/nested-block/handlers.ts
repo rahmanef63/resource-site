@@ -61,14 +61,14 @@ export function runNestedSlashSelect(
     ];
   }
   if (DEBUG()) {
-    // eslint-disable-next-line no-console
+
     console.log("[turnInto:slash]", { blockId: block.id, from: block.type, to: type, patch });
   }
   onUpdate(patch);
   setTimeout(() => {
     const el = document.querySelector<HTMLElement>(`[data-block-id="${block.id}"]`);
     if (DEBUG()) {
-      // eslint-disable-next-line no-console
+
       console.log("[turnInto:focus]", { blockId: block.id, foundEl: !!el, activeBefore: document.activeElement?.tagName });
     }
     el?.focus();

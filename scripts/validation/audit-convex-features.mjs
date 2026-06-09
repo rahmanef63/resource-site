@@ -97,7 +97,7 @@ function main() {
     const schemaPath = path.join(dir, "_schema.ts");
     if (fs.existsSync(schemaPath) && slug !== "auth") {
       const src = fs.readFileSync(schemaPath, "utf8");
-      const slugCamel = slug.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+      const slugCamel = slug.replace(/[-_]([a-z])/g, (_, c) => c.toUpperCase());
       const expectedExport = new RegExp(`export\\s+const\\s+${slugCamel}Tables\\b`);
       if (!expectedExport.test(src)) {
         warnings.push(

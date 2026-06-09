@@ -83,7 +83,6 @@
     "date-fns": "^4.1.0",
     "embla-carousel-react": "^8.6.0",
     "geist": "^1.7.0",
-    "happy-dom": "^20.9.0",
     "highlight.js": "^11.11.1",
     "input-otp": "^1.4.2",
     "jszip": "^3.10.1",
@@ -110,7 +109,6 @@
     "tailwind-merge": "^3.5.0",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.1.2",
-    "vitest": "^4.1.6",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -130,9 +128,11 @@
     "eslint": "^9",
     "eslint-config-next": "^16.0.0",
     "eslint-plugin-react-hooks": "^7.1.1",
+    "happy-dom": "^20.9.0",
     "postcss": "^8.5.13",
     "tailwindcss": "^4.0.0",
     "typescript": "^5.6.0",
-    "typescript-eslint": "^8.59.3"
+    "typescript-eslint": "^8.59.3",
+    "vitest": "^4.1.6"
   }
 }

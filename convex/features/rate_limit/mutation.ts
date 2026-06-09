@@ -44,6 +44,13 @@ export const consume = mutation({
     if (gate && !constantTimeEqual(serverKey ?? "", gate)) {
       throw new Error("rate-limit: invalid server key");
     }
+    if (!gate) {
+      // Unkeyed = anyone can consume() a victim's bucket (e.g. lock an IP
+      // out of admin login). Loud so it shows in deployment logs.
+      console.warn(
+        "rate-limit: RATE_LIMIT_SERVER_KEY is not set — consume() is callable by any client. Set it in production.",
+      );
+    }
     const prefix = key.split(":")[0];
     const policy = POLICY[prefix];
     if (!policy) {

@@ -24,7 +24,7 @@ function columnsCount(type: BlockType): number {
 }
 
 export async function runSlashSelect(type: BlockType, deps: Deps) {
-  const { pageId, block, createPage, createDatabase, setBlockType, updateBlock, addBlock, updatePage, getPage } = deps;
+  const { pageId, block, createPage, createDatabase, setBlockType, updateBlock, updatePage, getPage } = deps;
   if (type === "page") {
     const child = await createPage(pageId, { title: "New page" });
     updateBlock(pageId, block.id, { type: "page", text: "New page", pageId: child.id });

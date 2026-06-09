@@ -132,7 +132,9 @@ export const markWebhookProcessed = internalMutation({
 
 // Client-callable "I just came back from the provider's hosted checkout, my
 // order should be paid now" optimistic update. Webhook (markPaidByWebhook) is
-// still the source of truth — this one runs first so the UI doesn't lag.
+// the ONLY path that may set "paid" — this records an unverified
+// "client_claimed" instead, so a buyer can't flip their own order to paid
+// from devtools with a fabricated transaction id.
 //
 // Gate: requireUser. Anonymous guest-checkout flows should not use this path
 // (use the webhook to flip status server-side). If your app needs guest
@@ -147,11 +149,10 @@ export const markPaid = mutation({
       .unique();
     if (!order) throw new Error(`Order not found: ${orderId}`);
     if (order.userId !== userId) throw new Error("Forbidden");
-    if (order.status === "paid") return; // idempotent
+    if (order.status !== "pending") return; // idempotent; never downgrade
     await ctx.db.patch(order._id, {
-      status: "paid",
+      status: "client_claimed",
       providerTransactionId,
-      paidAt: Date.now(),
     });
   },
 });

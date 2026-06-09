@@ -90,7 +90,7 @@ export function TemplateDetail({ kind, basePath, data, prev, next, prompt, siteU
         : undefined,
       composePreviewSrc: tplConfig?.composePreviewSrc,
     });
-  }, [data, prompt, kind, tplConfig]);
+  }, [data, prompt, kind, tplConfig, demoUrl]);
 
   useFeatureManifest(manifest);
 

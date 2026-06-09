@@ -278,8 +278,8 @@ export interface AIActionConfig {
   enabled: boolean
   /** Feature ID for AI context */
   featureId?: string
-  /** Context data for AI */
-  context?: any
+  /** Context data for AI — consumer-defined payload, narrow before use */
+  context?: unknown
 }
 
 /** Settings action configuration */

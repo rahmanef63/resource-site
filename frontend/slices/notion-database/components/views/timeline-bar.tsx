@@ -13,7 +13,7 @@ import type { Page, Property } from "../../types";
 export interface TimelineItem { startMs: number; endMs: number }
 
 export function TimelineBar({
-  row, item, bar, cellW, colorProp, onOpenRow, onShift,
+  row, bar, cellW, colorProp, onOpenRow, onShift,
 }: {
   row: Page;
   item: TimelineItem;

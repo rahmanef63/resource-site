@@ -11,14 +11,7 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
-import { DEFAULT_RR, writeRr, buildRr } from "./rr.mjs";
-
-const RR_ALIASES_TO_TSCONFIG = {
-  // alias -> tsconfig key target relative-path
-  "@/components/templates/_shared": "components/templates/_shared",
-  "@/components/templates": "components/templates",
-  "@/features": "features",
-};
+import { writeRr, buildRr } from "./rr.mjs";
 
 export function runPostInit(targetDir, opts = {}) {
   const out = { changed: [], skipped: [] };

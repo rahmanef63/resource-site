@@ -7,6 +7,7 @@
  *  [label](url) · bare http(s) urls. Greedy left-to-right, one nesting level. */
 
 import * as React from "react";
+import Link from "next/link";
 import katex from "katex";
 
 const BOLD = /\*\*([^*\n]+)\*\*/;
@@ -69,13 +70,21 @@ export function renderInline(input: string): React.ReactNode {
       }
       case "link": {
         const internal = t.href.startsWith("/");
+        const cls = "text-primary underline-offset-2 hover:underline";
+        if (internal) {
+          return (
+            <Link key={i} href={t.href} className={cls}>
+              {t.label}
+            </Link>
+          );
+        }
         return (
           <a
             key={i}
             href={t.href}
-            target={internal ? undefined : "_blank"}
-            rel={internal ? undefined : "noopener noreferrer nofollow"}
-            className="text-primary underline-offset-2 hover:underline"
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+            className={cls}
           >
             {t.label}
           </a>

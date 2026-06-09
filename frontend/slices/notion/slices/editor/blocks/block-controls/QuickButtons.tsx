@@ -12,7 +12,7 @@ interface Props {
   addBlock: (pageId: string, after: number) => Promise<string | undefined>;
 }
 
-export function QuickButtons({ pageId, blockId, index, openCount, listeners, addBlock }: Props) {
+export function QuickButtons({ pageId, blockId, index, openCount, addBlock }: Props) {
   const { BlockCommentsPopover } = useComments();
   return (
     <>
