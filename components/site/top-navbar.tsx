@@ -89,7 +89,9 @@ export function TopNavbar() {
             className={cn(
               // Subtle horizontal mask so far-right items fade — gives
               // the "you are deep in a template" feel on detail pages.
-              "hidden items-center gap-5 text-sm font-medium md:flex",
+              // Nav + 256px search can't co-fit below ~1066px, so the link row
+              // only appears at lg; md/tablet uses the hamburger sheet.
+              "hidden items-center gap-5 text-sm font-medium lg:flex",
               dim &&
                 "[mask-image:linear-gradient(to_right,transparent_0,black_24px,black_calc(100%-24px),transparent_100%)]",
             )}
@@ -140,7 +142,7 @@ export function TopNavbar() {
           </Button>
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden" aria-label="Menu">
+              <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Menu">
                 <Menu className="size-4" />
               </Button>
             </SheetTrigger>

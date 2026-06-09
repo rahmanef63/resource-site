@@ -47,11 +47,11 @@ export function CommandPalette() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex h-9 w-full items-center gap-2 rounded-md border border-input bg-background/40 px-3 text-sm text-muted-foreground transition-colors hover:bg-accent/40 hover:text-foreground sm:w-64"
+        className="inline-flex h-9 w-full items-center gap-2 rounded-md border border-input bg-background/40 px-3 text-sm text-muted-foreground transition-colors hover:bg-accent/40 hover:text-foreground sm:w-64 lg:w-44 xl:w-64"
         aria-label="Search documentation"
       >
-        <span className="flex-1 text-left">Search documentation...</span>
-        <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100">
+        <span className="min-w-0 flex-1 truncate text-left">Search documentation...</span>
+        <kbd className="pointer-events-none inline-flex h-5 shrink-0 select-none items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100">
           <span className="text-xs">⌘</span>K
         </kbd>
       </button>
