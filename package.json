@@ -45,7 +45,8 @@
     "e2e:staging": "E2E_BASE_URL=https://staging-resource.rahmanef.com playwright test",
     "test:coverage": "vitest run --coverage",
     "prepare": "git config core.hooksPath .githooks 2>/dev/null || true",
-    "shots:capture": "node scripts/capture-shots.mjs"
+    "shots:capture": "node scripts/capture-shots.mjs",
+    "deploy:convex": "node scripts/deploy-convex-functions.mjs"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.81",

@@ -2,6 +2,31 @@
 
 Zero-human-involvement deploy. Self-hosted Convex + Next.js in single docker-compose.
 
+## rr's own Convex backend (api-resource.rahmanef.com)
+
+The rr site's backend deploys **from this repo** — reproducible from
+`git clone`, no hand-assembly:
+
+- `convex/schema.ts` — root composer spreading every
+  `convex/features/<slug>/_schema.ts` `<slugCamel>Tables` export
+  (+ `authTables` / `authTablesExt`).
+- `convex/crons.ts` — prune crons: `rateLimits` every 5 min,
+  `newsletterSubscribeAttempts` + `subscriberAttempts` daily.
+
+```bash
+# .env.local (gitignored):
+#   CONVEX_SELF_HOSTED_URL="https://api-resource.rahmanef.com"
+#   CONVEX_SELF_HOSTED_ADMIN_KEY="..."  # docker exec <backend> ./generate_admin_key.sh
+npm run deploy:convex            # stage-copy → codegen → deploy → cleanup
+npm run deploy:convex -- --dry-run   # codegen sanity only
+```
+
+The script stages `convex/` into `.convex-deploy/` so the CLI's codegen
+never touches the in-repo `convex/_generated` ambient stub (hard rule:
+never codegen in-repo). Backend deployment env (`RATE_LIMIT_SERVER_KEY`)
+lives on the deployment itself — `npx convex env list` with the same
+`.env.local` sourced.
+
 ## Pre-flight
 
 1. **Shell env** (`~/.bashrc`):

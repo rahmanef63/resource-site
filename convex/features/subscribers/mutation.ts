@@ -1,4 +1,4 @@
-import { mutation } from "../../_generated/server";
+import { internalMutation, mutation } from "../../_generated/server";
 import { v } from "convex/values";
 import { requireAdmin } from "../../_shared/auth";
 
@@ -104,5 +104,22 @@ export const remove = mutation({
     await requireAdmin(ctx);
     await ctx.db.delete(id);
     return { success: true };
+  },
+});
+
+// Cron-driven cleanup (convex/crons.ts, daily). Attempts only matter inside
+// SUBSCRIBE_WINDOW_MS; older rows are dead weight that would otherwise
+// accumulate forever.
+export const _pruneAttempts = internalMutation({
+  args: {},
+  returns: v.object({ deleted: v.number() }),
+  handler: async (ctx) => {
+    const cutoff = Date.now() - 24 * 60 * 60 * 1000;
+    const old = await ctx.db
+      .query("subscriberAttempts")
+      .withIndex("by_attemptedAt", (q) => q.lt("attemptedAt", cutoff))
+      .take(1000);
+    for (const row of old) await ctx.db.delete(row._id);
+    return { deleted: old.length };
   },
 });

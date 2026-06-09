@@ -80,3 +80,20 @@ export const markSent = internalMutation({
     });
   },
 });
+
+// Cron-driven cleanup (convex/crons.ts, daily). Attempts only matter inside
+// the subscribe rate-limit window; anything older than a day is dead weight
+// that would otherwise accumulate forever (random-email floods included).
+export const _pruneAttempts = internalMutation({
+  args: {},
+  returns: v.object({ deleted: v.number() }),
+  handler: async (ctx) => {
+    const cutoff = Date.now() - 24 * 60 * 60 * 1000;
+    const old = await ctx.db
+      .query("newsletterSubscribeAttempts")
+      .withIndex("by_attemptedAt", (q) => q.lt("attemptedAt", cutoff))
+      .take(1000);
+    for (const row of old) await ctx.db.delete(row._id);
+    return { deleted: old.length };
+  },
+});

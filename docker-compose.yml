@@ -1,4 +1,4 @@
-# si-coder canonical compose for resources kitab.
+# si-coder canonical compose for Rahman Resources (rr).
 # Stack: Next.js frontend + self-hosted Convex backend.
 # Deploy via Dokploy → `node ~/.agents/skills/si-coder/scripts/deploy.js`.
 #

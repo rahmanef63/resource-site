@@ -27,3 +27,6 @@ coverage/
 
 # claude session artifacts
 .claude/projects/
+
+# convex deploy staging dir (scripts/deploy-convex-functions.mjs)
+.convex-deploy/

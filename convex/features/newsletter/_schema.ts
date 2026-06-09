@@ -27,5 +27,8 @@ export const newsletterTables = {
   newsletterSubscribeAttempts: defineTable({
     email: v.string(),
     attemptedAt: v.number(),
-  }).index("by_email_time", ["email", "attemptedAt"]),
+  })
+    .index("by_email_time", ["email", "attemptedAt"])
+    // time-only index so the prune cron can walk old rows without a scan
+    .index("by_attemptedAt", ["attemptedAt"]),
 };
