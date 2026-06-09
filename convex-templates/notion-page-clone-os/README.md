@@ -1,7 +1,7 @@
-# agency-studio-os — Convex backend reference
+# notion-page-clone-os — Convex backend reference
 
 Snapshot of the standalone template's content schema + entity CRUD modules
 (machinery auth/settings/setup/users/update excluded — synced via apply-core).
-Reference only, not compiled here. Source of truth: github.com/rahmanef63/template-agency-studio-os
+Reference only, not compiled here. Source of truth: github.com/rahmanef63/template-notion-page-clone-os
 
 Synced: 2026-06-09

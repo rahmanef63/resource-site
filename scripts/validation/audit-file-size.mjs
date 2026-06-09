@@ -53,6 +53,7 @@ const EXEMPT_PATTERNS = [
   /\/shared\/seed\.ts$/,               // per-template seed data
   /\/data\/.+\.ts$/,                   // /data/ subfolder = data literals
   /\/_generated\//,                    // Convex codegen
+  /^convex-templates\//,               // reference snapshots mirroring template-<slug> repos — split at the SOURCE repo, never here (mirror must stay byte-identical)
 ];
 
 // Pre-existing files over the cap. Goal: this list SHRINKS, never GROWS.

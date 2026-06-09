@@ -1,35 +1,35 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
-const STATUS = v.union(v.literal("active"), v.literal("prospect"), v.literal("alumni"));
-
 export const list = query({
   args: {},
-  handler: async (ctx) => ctx.db.query("agencyClients").take(200),
+  handler: async (ctx) => ctx.db.query("wirausahaProducts").take(500),
 });
+export const listAll = list;
 
 export const upsert = mutation({
   args: {
-    id: v.optional(v.id("agencyClients")),
+    id: v.optional(v.id("wirausahaProducts")),
+    businessId: v.string(),
     name: v.string(),
-    industry: v.string(),
-    contact: v.string(),
-    email: v.string(),
-    status: STATUS,
-    startedAt: v.number(),
-    notes: v.string(),
+    sku: v.string(),
+    priceLabel: v.string(),
+    stock: v.number(),
+    unit: v.string(),
+    icon: v.optional(v.string()),
+    image: v.optional(v.string()),
   },
   handler: async (ctx, { id, ...data }) => {
     if (id) {
       await ctx.db.patch(id, data);
       return id;
     }
-    return ctx.db.insert("agencyClients", data);
+    return ctx.db.insert("wirausahaProducts", data);
   },
 });
 
 export const remove = mutation({
-  args: { id: v.id("agencyClients") },
+  args: { id: v.id("wirausahaProducts") },
   handler: async (ctx, { id }) => {
     await ctx.db.delete(id);
   },

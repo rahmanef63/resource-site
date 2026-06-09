@@ -3,37 +3,37 @@ import { mutation, query } from "./_generated/server";
 
 export const list = query({
   args: {},
-  handler: async (ctx) => ctx.db.query("agencyServices").take(100),
+  handler: async (ctx) => ctx.db.query("saasPricing").take(50),
 });
 
-export const bySlug = query({
-  args: { slug: v.string() },
-  handler: async (ctx, { slug }) =>
-    ctx.db.query("agencyServices").withIndex("by_slug", (q) => q.eq("slug", slug)).first(),
+export const listAll = query({
+  args: {},
+  handler: async (ctx) => ctx.db.query("saasPricing").take(50),
 });
 
 export const upsert = mutation({
   args: {
-    id: v.optional(v.id("agencyServices")),
-    slug: v.string(),
+    id: v.optional(v.id("saasPricing")),
     name: v.string(),
+    price: v.string(),
+    period: v.string(),
     blurb: v.string(),
-    priceLabel: v.string(),
-    duration: v.string(),
     bullets: v.array(v.string()),
+    cta: v.object({ label: v.string(), href: v.string() }),
     featured: v.boolean(),
+    icon: v.optional(v.string()),
   },
   handler: async (ctx, { id, ...data }) => {
     if (id) {
       await ctx.db.patch(id, data);
       return id;
     }
-    return ctx.db.insert("agencyServices", data);
+    return ctx.db.insert("saasPricing", data);
   },
 });
 
 export const remove = mutation({
-  args: { id: v.id("agencyServices") },
+  args: { id: v.id("saasPricing") },
   handler: async (ctx, { id }) => {
     await ctx.db.delete(id);
   },
