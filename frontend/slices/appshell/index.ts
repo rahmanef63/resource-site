@@ -1,6 +1,9 @@
 // Public barrel — other slices/app layer import ONLY from here.
 export { OsDesktop } from "./components/desktop";
+// Bundled single-pane cockpit shell (also self-registers as ShellId "dashboard").
+export { DashboardShell } from "./components/shells/dashboard/dashboard-shell";
 export { AppIcon } from "./components/app-icon";
+export { QuicklinkIcon } from "./components/quicklink-icon";
 // Generic app mounter (lazy-loads an app by id + payload). Used by windows AND
 // single-pane shells (e.g. the Dashboard shell) so apps mount identically.
 export { WindowContent as AppHost } from "./components/window-content";
@@ -8,6 +11,7 @@ export { AppRegistryProvider, useApp, useApps } from "./lib/registry";
 // Window lifecycle + the shell-UI actions feature slices drive (search,
 // inspector, control-center read these instead of reaching into the store).
 export {
+  shellStore,
   openWindow,
   closeWindow,
   setCloseGuard,
@@ -152,6 +156,7 @@ export {
   useSystemStats,
   useShellChat,
   useServerToggle,
+  useQuickLinks,
 } from "./registry/capabilities";
 export type {
   ShellCapabilities,
@@ -161,6 +166,8 @@ export type {
   SystemStats,
   ChatMessage,
   ServerToggle,
+  QuickLink,
+  QuickLinks,
 } from "./registry/capabilities";
 
 export * from "./defaults";
@@ -169,3 +176,8 @@ export * from "./defaults";
 // features with realistic data and NO backend (search/stats/chat/server toggle).
 // The single switch: swap this object for your real capabilities to go live.
 export { mockCapabilities } from "./lib/mock-capabilities";
+
+// Agentic tool collection — the slice is not an agent; register this
+// with a host agent (one agent, many slices) via @/shared/agentic.
+export { appshellTools } from "./lib/tools";
+export type { AppshellCtx } from "./lib/tools";

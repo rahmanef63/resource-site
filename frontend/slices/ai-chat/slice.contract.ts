@@ -14,7 +14,7 @@ import { defineSliceContract } from "../../../packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "ai-chat",
-  version: "0.1.0",
+  version: "0.3.0",
   requires: {
     auth: "convex",
     rbac: ["chat.read", "chat.write"],
@@ -26,6 +26,7 @@ export const contract = defineSliceContract({
     deps: ["convex-auth", "ai-router", "ai-admin", "vector-search"],
   },
   provides: {
+    utils: ["createAgenticChatSend"] as string[],
     components: [
       "ChatWorkbench",
       "ChatThreadSidebar",

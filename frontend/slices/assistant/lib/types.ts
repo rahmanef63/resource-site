@@ -1,6 +1,9 @@
 // Shared types for the Alfa assistant slice. Agents own skills; an agent's
 // effective tools are the union of its skills' tools (or every tool when it is
 // a generalist). Automations are ordered tool steps run as one click.
+//
+// ToolGroup names the built-in demo groups; the live catalog groups by each
+// registered collection's namespace (= slice id), so Tool.group is open.
 export type ToolGroup =
   | "files"
   | "rendering"
@@ -15,7 +18,7 @@ export type ToolGroup =
 
 export type Tool = {
   id: string;
-  group: ToolGroup;
+  group: string;
   name: string;
   desc: string;
   params: string[];

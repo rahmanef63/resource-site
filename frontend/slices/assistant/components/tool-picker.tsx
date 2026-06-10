@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { GROUP_META, GROUP_ORDER, OS_TOOLS } from "../lib/tools";
+import { assistantCatalog, catalogGroups } from "../lib/tools";
 import { glyphIcon } from "./icon-map";
 
 // Grouped, toggleable tool list reused by the Agent / Skill / Automation editors.
@@ -21,16 +21,16 @@ export function ToolPicker({
     onChange([...n]);
   };
 
+  const catalog = assistantCatalog();
   return (
     <div className="flex flex-col gap-3">
-      {GROUP_ORDER.map((g) => {
-        const tools = OS_TOOLS.filter((t) => t.group === g);
+      {catalogGroups(catalog).map((meta) => {
+        const tools = catalog.filter((t) => t.group === meta.id);
         if (!tools.length) return null;
-        const meta = GROUP_META[g];
         const Icon = glyphIcon(meta.icon);
         const all = tools.every((t) => set.has(t.id));
         return (
-          <div key={g}>
+          <div key={meta.id}>
             <div className="mb-1.5 flex items-center gap-2">
               <Icon className="size-3.5 text-muted-foreground" />
               <span className="text-xs font-semibold">{meta.label}</span>

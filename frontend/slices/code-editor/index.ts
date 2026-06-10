@@ -26,3 +26,8 @@ export { createMockFs } from "./lib/mock-fs";
 
 export { codeEditorConfig } from "./config";
 export type { CodeEditorConfig } from "./config";
+
+// Agentic tool collection — the slice is not an agent; register this
+// with a host agent (one agent, many slices) via @/shared/agentic.
+export { codeEditorTools } from "./lib/tools";
+export type { CodeEditorCtx } from "./lib/tools";

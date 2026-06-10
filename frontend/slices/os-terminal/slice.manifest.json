@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "os-terminal",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -11,14 +11,32 @@
   "files": [
     "CHANGELOG.md",
     "README.md",
+    "agent.md",
     "app.tsx",
+    "components/exec-terminal.tsx",
+    "components/key-bar.tsx",
+    "components/pty-terminal.tsx",
     "config.ts",
     "index.ts",
     "lib/agent-bridge.ts",
+    "lib/commands-fs.ts",
     "lib/commands.ts",
     "lib/fs-model.ts",
+    "lib/host-mock.ts",
     "lib/host.ts",
+    "lib/tools.ts",
+    "lib/use-pty.ts",
     "slice.contract.ts",
     "slice.json"
-  ]
+  ],
+  "imports": {
+    "shared": [
+      "@/components/ui/button",
+      "@/lib/utils"
+    ],
+    "external": [
+      "react",
+      "lucide-react"
+    ]
+  }
 }

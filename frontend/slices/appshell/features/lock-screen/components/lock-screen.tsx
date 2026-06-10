@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Lock } from "lucide-react";
-import { autoLockMinutes, lock, requestUnlock, useLocked } from "../../../lib/lock";
+import { autoLockMinutes, lock, requestUnlock, useLocked } from "@/features/appshell";
 
 // Fullscreen privacy curtain: blurred backdrop, big clock, click/key unlocks
 // (through the consumer guard when one is injected). Owns the idle timer.

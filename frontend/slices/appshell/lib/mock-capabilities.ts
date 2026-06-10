@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import type {
   ChatMessage,
+  QuickLinks,
   SearchHit,
   ShellCapabilities,
   SystemStats,
@@ -73,6 +74,22 @@ const mockChat = () => mockChatStream;
 // a setState-in-effect loop in consumers that read them as effect deps.
 const APPEARANCE = { theme: "light" as const, setTheme: () => {}, device: "auto" as const, wallpaper: "aurora" };
 const SERVER_TOGGLE = { live: false, label: "Mock server", locked: false, toggle: () => {} };
+// Website shortcuts for the dock / Launchpad / mobile grid (QuicklinkIcon).
+// `open` is a real new-tab open so the demo links work; favicons via Google s2.
+const QUICK_LINKS: QuickLinks = {
+  items: [
+    { id: "ql-gh", title: "GitHub", url: "https://github.com" },
+    { id: "ql-mdn", title: "MDN", url: "https://developer.mozilla.org" },
+  ],
+  open: (link) => window.open(link.url, "_blank", "noopener"),
+  faviconUrl: (url) => {
+    try {
+      return `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=64`;
+    } catch {
+      return null;
+    }
+  },
+};
 
 // The full pack. Drop into a manifest: `capabilities: mockCapabilities`.
 export const mockCapabilities: ShellCapabilities = {
@@ -82,4 +99,5 @@ export const mockCapabilities: ShellCapabilities = {
   useSystemStats: useMockSystemStats,
   useChat: mockChat,
   useServerToggle: () => SERVER_TOGGLE,
+  useQuickLinks: () => QUICK_LINKS,
 };

@@ -24,3 +24,8 @@ export type { ReelFsAdapter, FsEntry, FsList, AppDescriptor } from "./lib/host";
 
 export { reelEditorConfig } from "./config";
 export type { ReelEditorConfig } from "./config";
+
+// Agentic tool collection — the slice is not an agent; register this
+// with a host agent (one agent, many slices) via @/shared/agentic.
+export { reelEditorTools } from "./lib/tools";
+export type { ReelCtx } from "./lib/tools";

@@ -11,7 +11,10 @@
  */
 
 :root {
+  --sai-top: env(safe-area-inset-top, 0px);
+  --sai-right: env(safe-area-inset-right, 0px);
   --sai-bottom: env(safe-area-inset-bottom, 0px);
+  --sai-left: env(safe-area-inset-left, 0px);
   --blur: 30px;
   --accent: #2f7bf6;
 
@@ -69,6 +72,11 @@
 }
 .wp-noir {
   background: linear-gradient(160deg, #121316 0%, #0a0a0c 100%);
+}
+.wp-graphite {
+  background:
+    radial-gradient(120% 120% at 30% 20%, #3a3f4b 0%, rgba(58, 63, 75, 0) 55%),
+    linear-gradient(160deg, #23262e 0%, #16181d 70%, #0e0f13 100%);
 }
 
 /* Per-OS flavours — the "auto" wallpaper resolves to the active shell's pick

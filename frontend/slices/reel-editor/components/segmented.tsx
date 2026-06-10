@@ -34,7 +34,7 @@ function Segmented<T extends string>({
           variant="ghost"
           onClick={() => onChange(o.value)}
           className={cn(
-            "h-auto flex-1 rounded-md px-2.5 py-1 text-xs font-semibold transition-colors hover:bg-transparent",
+            "h-auto min-h-9 flex-1 rounded-md px-2.5 py-1 text-xs font-semibold transition-colors hover:bg-transparent sm:min-h-8",
             value === o.value
               ? "bg-primary text-primary-foreground shadow-sm hover:bg-primary"
               : "text-muted-foreground hover:text-foreground",

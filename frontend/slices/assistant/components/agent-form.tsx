@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { AGENT_COLORS, SKILL_ICONS } from "../lib/presets";
 import type { AIStore } from "../lib/store";
-import { OS_TOOLS } from "../lib/tools";
+import { assistantCatalog } from "../lib/tools";
 import type { Agent } from "../lib/types";
 import { Field, FormShell } from "./form-shell";
 import { GlyphTile } from "./agent-avatar";
@@ -35,7 +35,7 @@ export function AgentForm({
     setSkills((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
 
   const toolCount = allTools
-    ? OS_TOOLS.length
+    ? assistantCatalog().length
     : new Set(
         skills.flatMap((id) => store.skills.find((x) => x.id === id)?.tools ?? []),
       ).size;

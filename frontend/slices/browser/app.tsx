@@ -1,8 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useBrowserMode } from "./lib/host";
 import { useBrowserInspector } from "./lib/use-inspector";
+import { MockPane } from "./components/mock-pane";
 import { Omnibar } from "./components/omnibar";
+import { TabBar } from "./components/tab-bar";
+import { AiPanel } from "./components/ai-panel";
 import { BookmarkBar } from "./components/bookmark-bar";
 import { HistoryView } from "./components/history-view";
 import { RemoteView } from "./components/remote-view";
@@ -17,9 +21,24 @@ const DEFAULT_BOOKMARKS: Bookmark[] = [
   { url: "https://news.ycombinator.com", title: "Hacker News" },
 ];
 
-// Single shared remote-browser view. The backend (headless Chromium) owns ONE
-// page, so there are no tabs — we render its screenshot and forward input.
+// Mode gate: the live view (and ALL its polling/screencast hooks) only mounts
+// when useBrowserMode says live. Unwired that is always true — the offline
+// demo adapter drives the chrome; a host's configureBrowserMode can park the
+// app on a mock notice instead of hammering endpoints that don't exist.
 export default function Browser() {
+  const { live, demo } = useBrowserMode();
+  if (!live)
+    return (
+      <div className="@container h-full min-h-0 overflow-hidden bg-background">
+        <MockPane demo={demo} />
+      </div>
+    );
+  return <LiveBrowser />;
+}
+
+// Multitab remote-browser view: each UI tab drives its own remote page via
+// the adapter; we render its frames and forward input.
+function LiveBrowser() {
   const rb = useRemoteBrowser();
   const [bookmarks, setBookmarks] = usePersistent<Bookmark[]>(
     "os-vps:browser.bookmarks",
@@ -30,6 +49,9 @@ export default function Browser() {
     [],
   );
   const [showHistory, setShowHistory] = useState(false);
+  const [aiOpen, setAiOpen] = useState(false);
+  const [savingShot, setSavingShot] = useState(false);
+  const [savedShotPath, setSavedShotPath] = useState<string | null>(null);
 
   const url = rb.state.url;
   const blank = !url;
@@ -60,6 +82,19 @@ export default function Browser() {
   const copyLink = () => {
     if (!blank) void navigator.clipboard?.writeText(url).catch(() => {});
   };
+  const saveScreenshot = async () => {
+    setSavingShot(true);
+    setSavedShotPath(null);
+    try {
+      const data = await rb.saveShot();
+      if (!data.path) throw new Error(data.error || "save failed");
+      setSavedShotPath(data.path);
+    } catch (e) {
+      setSavedShotPath(String(e));
+    } finally {
+      setSavingShot(false);
+    }
+  };
 
   useBrowserInspector({
     url,
@@ -72,37 +107,54 @@ export default function Browser() {
   });
 
   return (
-    <div className="flex h-full flex-col bg-card">
-      <style>{`@keyframes browser-load{0%{left:-40%}50%{left:30%}100%{left:100%}}`}</style>
-      <Omnibar
-        url={url}
-        isNewTab={blank}
-        loading={rb.busy}
-        canBack
-        canForward
-        bookmarked={bookmarked}
-        onBack={() => void rb.back()}
-        onForward={() => void rb.forward()}
-        onReload={() => void rb.reload()}
-        onStop={() => void rb.refresh()}
-        onHome={home}
-        onSubmit={navigate}
-        onToggleBookmark={toggleBookmark}
-        onNewTab={home}
-        onHistory={() => setShowHistory(true)}
-        onCopyLink={copyLink}
-        onClearHistory={() => setHistory([])}
-      />
-      <BookmarkBar bookmarks={bookmarks} onOpen={navigate} />
-
-      <div className="relative min-h-0 flex-1 bg-background">
+    <div className="@container flex h-full min-h-0 flex-col bg-card">
+      <div className="flex-none border-b border-border">
+        <TabBar
+          tabs={rb.tabs}
+          activeId={rb.activeId}
+          aiOpen={aiOpen}
+          onSwitch={rb.switchTab}
+          onClose={rb.closeTab}
+          onNew={rb.newTab}
+          onToggleAi={() => setAiOpen((o) => !o)}
+        />
+      </div>
+      <div className="flex-none border-b border-border">
+        <Omnibar
+          url={url}
+          isNewTab={blank}
+          loading={rb.busy}
+          canBack
+          canForward
+          bookmarked={bookmarked}
+          onBack={() => void rb.back()}
+          onForward={() => void rb.forward()}
+          onReload={() => void rb.reload()}
+          onStop={() => void rb.refresh()}
+          onHome={home}
+          onSubmit={navigate}
+          onToggleBookmark={toggleBookmark}
+          onNewTab={rb.newTab}
+          onHistory={() => setShowHistory(true)}
+          onCopyLink={copyLink}
+          onClearHistory={() => setHistory([])}
+        />
+        <BookmarkBar bookmarks={bookmarks} onOpen={navigate} />
+      </div>
+      <div className="relative min-h-0 flex-1 overflow-hidden bg-background">
+        <style>{`@keyframes browser-load{0%{left:-40%}50%{left:30%}100%{left:100%}}`}</style>
+        <AiPanel open={aiOpen} onOpenChange={setAiOpen} fetchLog={rb.agentLog} />
         <RemoteView
           shot={rb.shot}
           busy={rb.busy}
+          live={rb.live}
           onClick={(x, y) => void rb.click(x, y)}
           onType={(t) => void rb.type(t)}
           onKey={(k) => void rb.key(k)}
           onScroll={(dy) => void rb.scroll(dy)}
+          onSaveScreenshot={() => void saveScreenshot()}
+          savingScreenshot={savingShot}
+          savedScreenshotPath={savedShotPath}
         />
         {showHistory && (
           <HistoryView

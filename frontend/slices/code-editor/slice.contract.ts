@@ -1,5 +1,5 @@
 /**
- * Slice contract for `code-editor` — v1.0.0.
+ * Slice contract for `code-editor` — v1.1.0.
  *
  * Overlay syntax editor with a lazy explorer tree. Self-contained: the fs
  * runs on an injectable CodeFsAdapter (writable in-memory mock by default),
@@ -9,7 +9,7 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "code-editor",
-  version: "1.0.0",
+  version: "1.2.0",
   category: "ui",
   kind: "ui",
   requires: {
@@ -20,10 +20,21 @@ export const contract = defineSliceContract({
       { npm: "react", range: "^19" },
       { npm: "lucide-react", range: "^0.400.0" },
     ],
-    shadcn: ["button", "badge", "input", "scroll-area", "sheet", "dialog"],
+    shadcn: ["button", "badge", "input", "textarea", "scroll-area", "sheet", "dialog"],
     peers: [],
   },
   provides: {
+    tools: [
+      "code-editor.inspect",
+      "code-editor.file.open",
+      "code-editor.file.create",
+      "code-editor.file.read",
+      "code-editor.edit.set",
+      "code-editor.edit.replace",
+      "code-editor.file.save",
+      "code-editor.tab.switch",
+      "code-editor.tab.close"
+    ] as string[],
     routes: [] as string[],
     components: ["CodeEditor"] as string[],
     hooks: [] as string[],

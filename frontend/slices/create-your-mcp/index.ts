@@ -39,3 +39,6 @@ export type {
   JsonRpcRequest,
   JsonRpcResponse,
 } from "./lib/types";
+
+// Bridge: serve any ToolHost (slice tool collections) over MCP JSON-RPC.
+export { toolDefsFromHost } from "./lib/from-host";

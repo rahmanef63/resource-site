@@ -1,5 +1,26 @@
 # Changelog — reel-editor
 
+## 1.2.0 — 2026-06-10
+
+- Agentic tool collection (`lib/tools.ts`): `reelEditorTools` exports 11
+  function-calling tools for the shared agent kit (`@/shared/agentic`).
+  The slice is NOT an agent — register the collection with a host agent
+  (e.g. assistant's `registerAssistantTools(reelEditorTools, () => ctx)`);
+  one agent drives many slices. Contract now declares `provides.tools`.
+
+## 1.1.0 — 2026-06-10
+
+- Container-first compact mode (port from os-vps): the editor reflows off its
+  OWN pane width (`useContainer` in the host seam + `@container` on the app
+  root), not the viewport — narrow desktop windows get the compact layout too.
+- New `CompactPanes`: on a narrow pane the side-by-side desktop panes become
+  tabs under the always-visible preview (Timeline / Edit / AI / Files), all
+  reachable at ~390px. Replaces the old properties sheet
+  (`lib/host-inspector.tsx` removed; shadcn `sheet` dep dropped, `tabs` added).
+- Touch ergonomics: ≥36px coarse-pointer tap targets on menu triggers, ratio
+  buttons and the segmented mode toggle; brand label + saved-time stamp yield
+  first on narrow panes (`@md` container variants).
+
 ## 1.0.0 — 2026-06-05
 
 - First rr catalog release (lifted from os-vps).

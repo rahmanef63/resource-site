@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "reel-editor",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -23,6 +23,7 @@
     "components/clip-tab-text.tsx",
     "components/clip-ui.tsx",
     "components/comp-props.tsx",
+    "components/compact-panes.tsx",
     "components/file-browser.tsx",
     "components/files-pane.tsx",
     "components/keyframe-lane.tsx",
@@ -50,7 +51,6 @@
     "lib/draw-text.ts",
     "lib/draw.ts",
     "lib/history.ts",
-    "lib/host-inspector.tsx",
     "lib/host.ts",
     "lib/keyframes.ts",
     "lib/layout.ts",
@@ -62,6 +62,7 @@
     "lib/render.ts",
     "lib/settings.ts",
     "lib/thumbs.ts",
+    "lib/tools.ts",
     "lib/use-clip-drag.ts",
     "lib/use-export.ts",
     "lib/use-import.ts",

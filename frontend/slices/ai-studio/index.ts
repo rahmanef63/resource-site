@@ -15,3 +15,7 @@ export type {
   Generation, GenerationVariant, OutputKind,
   GenerationStatus, GeneratorBindings,
 } from "./types";
+
+// Agentic tool collection: let a shared agent drive generations.
+export { aiStudioTools } from "./tools";
+export type { AiStudioCtx } from "./tools";

@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "file-explorer",
-  "version": "1.1.0",
+  "version": "1.4.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -17,6 +17,7 @@
     "adapter/mock.ts",
     "adapter/types.ts",
     "agent.md",
+    "components/drop-overlay.tsx",
     "components/explorer-view.tsx",
     "components/file-context-menu.tsx",
     "components/file-crumbs.tsx",
@@ -33,6 +34,7 @@
     "file-explorer.tsx",
     "hooks/use-dnd.ts",
     "hooks/use-file-commands.ts",
+    "hooks/use-file-ops.ts",
     "hooks/use-file-selection.ts",
     "hooks/use-files.ts",
     "hooks/use-fs-history.ts",
@@ -44,6 +46,7 @@
     "lib/format.ts",
     "lib/icons.ts",
     "lib/read-drop.ts",
+    "lib/tools.ts",
     "lib/types.ts"
   ],
   "imports": {
@@ -54,6 +57,7 @@
       "@/components/ui/separator",
       "@/components/ui/dropdown-menu",
       "@/components/ui/sheet",
+      "@/shared/ui/FilePicker",
       "@/lib/utils"
     ],
     "external": [

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Share2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { closeShare, targetsFor, useShareState, type ShareTarget } from "../../../lib/share";
+import { closeShare, targetsFor, useShareState, type ShareTarget } from "@/features/appshell";
 
 // Share sheet — bottom-center card (iOS-flavored, works on every shell).
 // The panel MOUNTS per open (and unmounts on close), so selection state starts

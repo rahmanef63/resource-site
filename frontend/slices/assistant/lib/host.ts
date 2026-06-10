@@ -34,6 +34,15 @@ export type AppDescriptor = {
 };
 
 // ── LLM stream adapter ──────────────────────────────────────────────────────
+// The model seam is the SHARED one (@/shared/agentic). Wire it once with
+// configureAgentStream and the chat runs the real function-calling loop over
+// every registered slice tool collection. streamReply stays as the offline
+// demo used only while the seam is unconfigured.
+import { configureAgentStream } from "@/shared/agentic";
+
+export { configureAgentStream, isAgentStreamConfigured } from "@/shared/agentic";
+export type { AgentStreamFn } from "@/shared/agentic";
+
 export type WireMsg = { role: "user" | "assistant"; text: string };
 export type AssistantStreamFn = (messages: WireMsg[]) => AsyncIterable<string>;
 
@@ -42,21 +51,35 @@ async function* demoStream(messages: WireMsg[]): AsyncIterable<string> {
   const last = messages[messages.length - 1]?.text ?? "";
   const reply =
     `Demo mode — no model is wired yet. You said: “${last.slice(0, 120)}”. ` +
-    "Connect a real LLM with configureAssistantStream(fn): point it at your " +
-    "SSE endpoint or any async generator that yields text deltas.";
+    "Connect a real LLM with configureAgentStream(fn) from @/shared/agentic " +
+    "(function calling) or configureAssistantStream(fn) (text-only).";
   for (const word of reply.split(/(?<= )/)) {
     await new Promise((r) => setTimeout(r, 24));
     yield word;
   }
 }
 
-let impl: AssistantStreamFn = demoStream;
-
-/** Host wiring: stream real model replies (SSE endpoint, AI SDK, agent…). */
+/**
+ * @deprecated Text-only adapter kept for back-compat. It funnels into the
+ * shared seam (no tool use). Prefer configureAgentStream from @/shared/agentic.
+ */
 export function configureAssistantStream(fn: AssistantStreamFn): void {
-  impl = fn;
+  configureAgentStream(async (messages, _tools, onDelta) => {
+    const wire: WireMsg[] = [];
+    for (const m of messages) {
+      if (m.role === "user") wire.push({ role: "user", text: m.text });
+      else if (m.role === "assistant" && m.text)
+        wire.push({ role: "assistant", text: m.text });
+    }
+    let text = "";
+    for await (const delta of fn(wire)) {
+      text += delta;
+      onDelta(delta);
+    }
+    return { text, toolUses: [], stopReason: "end_turn" };
+  });
 }
 
 export function streamReply(messages: WireMsg[]): AsyncIterable<string> {
-  return impl(messages);
+  return demoStream(messages);
 }

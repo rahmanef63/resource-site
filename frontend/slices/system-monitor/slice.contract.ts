@@ -1,5 +1,5 @@
 /**
- * Slice contract for `system-monitor` — v1.0.0.
+ * Slice contract for `system-monitor` — v1.1.0.
  *
  * Host telemetry dashboard (gauges + sparklines + process table).
  * Self-contained: telemetry runs on an injectable SysMonAdapter (wavy
@@ -9,7 +9,7 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "system-monitor",
-  version: "1.0.0",
+  version: "1.2.0",
   category: "ui",
   kind: "ui",
   requires: {
@@ -24,6 +24,10 @@ export const contract = defineSliceContract({
     peers: [],
   },
   provides: {
+    tools: [
+      "system-monitor.stats",
+      "system-monitor.processes"
+    ] as string[],
     routes: [] as string[],
     components: ["SystemMonitor"] as string[],
     hooks: [] as string[],

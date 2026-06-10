@@ -2,7 +2,9 @@
 
 Activity-Monitor-style dashboard: circular CPU / RAM / disk / GPU gauges,
 rolling CPU + network sparklines (glass panels), live process table.
-Polls every 1.5s with a ~40-point history.
+Polls every 1.5s with a ~40-point history. The process list reflows by pane
+width: wide panes get the grid table, compact panes (≤440px container) get
+two-line touch cards with ≥44px rows on coarse pointers.
 
 ## Mount
 

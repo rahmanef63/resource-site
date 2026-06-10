@@ -26,3 +26,11 @@ export function fmtMBs(n: number): string {
 export function clampPct(n: number): number {
   return Math.max(0, Math.min(100, n));
 }
+
+/** SysStats.uptime is milliseconds — render as "Nd Nh" (or "Nh"). */
+export function fmtUptime(ms: number): string {
+  const sec = Math.floor(ms / 1000);
+  const d = Math.floor(sec / 86400);
+  const h = Math.floor((sec % 86400) / 3600);
+  return d > 0 ? `${d}d ${h}h` : `${h}h`;
+}

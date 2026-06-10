@@ -1,10 +1,12 @@
 "use client";
 
-// The remote-browser surface: a screenshot <img> the user clicks/types/scrolls
-// over. Mouse offsets map into the 1280x800 remote viewport; keys forward to
-// /type (printable) or /key (Enter/Backspace/Tab/Arrow*). Wheel is throttled.
+// The remote-browser surface: a frame <img> the user clicks/types/scrolls over.
+// Frames come from the live screencast stream (or the poll fallback) via the
+// hook — this component just renders `shot` and maps input into the 1280x800
+// remote viewport. A small badge shows whether the live stream is connected.
 import { useRef } from "react";
-import { Loader2 } from "lucide-react";
+import { Camera, CheckCircle2, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { VIEW_W, VIEW_H } from "../lib/use-remote-browser";
 
 const KEYS = new Set(["Enter", "Backspace", "Tab", "Delete", "Escape"]);
@@ -12,13 +14,28 @@ const KEYS = new Set(["Enter", "Backspace", "Tab", "Delete", "Escape"]);
 type RemoteViewProps = {
   shot: string | null;
   busy: boolean;
+  live: boolean;
   onClick: (x: number, y: number) => void;
   onType: (text: string) => void;
   onKey: (key: string) => void;
   onScroll: (dy: number) => void;
+  onSaveScreenshot: () => void;
+  savingScreenshot: boolean;
+  savedScreenshotPath: string | null;
 };
 
-export function RemoteView({ shot, busy, onClick, onType, onKey, onScroll }: RemoteViewProps) {
+export function RemoteView({
+  shot,
+  busy,
+  live,
+  onClick,
+  onType,
+  onKey,
+  onScroll,
+  onSaveScreenshot,
+  savingScreenshot,
+  savedScreenshotPath,
+}: RemoteViewProps) {
   const imgRef = useRef<HTMLImageElement>(null);
   const wheelAt = useRef(0);
 
@@ -52,7 +69,7 @@ export function RemoteView({ shot, busy, onClick, onType, onKey, onScroll }: Rem
       tabIndex={0}
       onKeyDown={handleKey}
       onWheel={handleWheel}
-      className="absolute inset-0 overflow-hidden bg-background outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+      className="relative size-full overflow-hidden bg-background outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
     >
       {shot ? (
         // eslint-disable-next-line @next/next/no-img-element
@@ -69,12 +86,36 @@ export function RemoteView({ shot, busy, onClick, onType, onKey, onScroll }: Rem
           Loading remote browser…
         </div>
       )}
+      <div className="absolute top-2 left-2 flex items-center gap-1.5 rounded-full bg-card/90 px-2.5 py-1 text-[11px] font-medium shadow-sm backdrop-blur">
+        <span className={live ? "size-2 rounded-full bg-success" : "size-2 rounded-full bg-amber-500"} />
+        <span className="text-muted-foreground">{live ? "live" : "polling"}</span>
+      </div>
       {busy && (
         <div className="absolute top-2 right-2 flex items-center gap-1.5 rounded-full bg-card/90 px-2.5 py-1 text-[11px] font-medium text-muted-foreground shadow-sm backdrop-blur">
           <Loader2 className="size-3 animate-spin text-primary" />
           loading…
         </div>
       )}
+      <div className="absolute right-2 bottom-2 flex max-w-[min(24rem,calc(100%-1rem))] items-center gap-2">
+        {savedScreenshotPath && (
+          <div className="hidden items-center gap-1.5 truncate rounded-full bg-card/90 px-2.5 py-1 text-[11px] font-medium text-muted-foreground shadow-sm backdrop-blur @sm:flex">
+            <CheckCircle2 className="size-3 shrink-0 text-success" />
+            <span className="truncate">Saved {savedScreenshotPath}</span>
+          </div>
+        )}
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={onSaveScreenshot}
+          disabled={!shot || savingScreenshot}
+          title="Save screenshot on the host"
+          className="h-auto gap-1.5 rounded-full bg-card/90 px-2.5 py-1 text-[11px] font-medium text-foreground shadow-sm backdrop-blur"
+        >
+          {savingScreenshot ? <Loader2 className="size-3 animate-spin text-primary" /> : <Camera className="size-3" />}
+          <span>{savingScreenshot ? "saving…" : "save shot"}</span>
+        </Button>
+      </div>
     </div>
   );
 }

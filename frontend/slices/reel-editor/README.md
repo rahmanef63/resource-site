@@ -25,20 +25,27 @@ realtime `MediaRecorder` exporter, so what you see is what renders.
   a project-files quick-import pane (default folder
   `~/reel-projects/session`, configurable), menu bar, settings dialog,
   draft auto-save to localStorage.
+- **Container-first compact mode**: the editor reflows off its OWN pane
+  width (not the viewport) — a narrow pane (mobile, or a slim desktop
+  window) stacks the preview over a tabbed lower region
+  (Timeline / Edit / AI / Files, `components/compact-panes.tsx`), with
+  ≥36px coarse-pointer tap targets in the chrome.
 
 ## Integration seam
 
 The slice is **self-contained**. All host coupling goes through
 **`lib/host.ts`**: toasts → sonner (mount `<Toaster />` once), shell
-services (inspector / activity) are inert no-ops, and the quick-import
-files pane runs on an injectable fs adapter (in-memory mock by default —
-wire a real backend with `configureReelFs({ list, mkdir, rawUrl })`).
-The hidden-input file picker comes from `@/shared/ui/FilePicker`
-(re-exported through host.ts — slice source never hand-rolls a raw file
-input). Mounting inside the `appshell` slice: re-point host.ts exports at
-the shell's own toast/AppInspector/inspector/activity and register
-`reelEditorApp` in the shell manifest. UI primitives come from
-`@/components/ui/*` (shadcn) and `@/lib/utils` (`cn`).
+services (inspector / activity) are inert no-ops, responsive comes from
+standalone `useIsMobile` (matchMedia) + `useContainer` (ResizeObserver →
+"xs"|"sm"|"md"|"lg" pane bucket), and the quick-import files pane runs on
+an injectable fs adapter (in-memory mock by default — wire a real backend
+with `configureReelFs({ list, mkdir, rawUrl })`). The hidden-input file
+picker comes from `@/shared/ui/FilePicker` (re-exported through host.ts —
+slice source never hand-rolls a raw file input). Mounting inside the
+`appshell` slice: re-point host.ts exports at the shell's own
+toast/inspector/activity/`useContainer` and register `reelEditorApp` in
+the shell manifest. UI primitives come from `@/components/ui/*` (shadcn)
+and `@/lib/utils` (`cn`).
 
 ## Files
 

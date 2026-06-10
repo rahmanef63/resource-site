@@ -1,11 +1,11 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "system-monitor",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "category": "os",
   "kind": "ui",
   "title": "System Monitor — host telemetry dashboard",
-  "description": "An Activity-Monitor-style dashboard: circular CPU/RAM/disk/GPU gauges, rolling CPU + network sparklines on glass panels, and a live process table — polling every 1.5s with a ~40-point history. Telemetry is INJECTED via a small SysMonAdapter (stats/processes): point configureSysmon at a real host API (/proc, an agent, a cloud endpoint) or use the bundled wavy in-browser mock so it renders alive with zero backend. Self-contained: shell inspector hooks are inert seams in lib/host.ts; the only chrome dependency is a slice-local @container frame.",
+  "description": "An Activity-Monitor-style dashboard: circular CPU/RAM/disk/GPU gauges, rolling CPU + network sparklines on glass panels, and a live process table — polling every 1.5s with a ~40-point history. The process list reflows by pane width: wide panes get a grid table, compact panes (≤440px container) get two-line touch cards. Telemetry is INJECTED via a small SysMonAdapter (stats/processes): point configureSysmon at a real host API (/proc, an agent, a cloud endpoint) or use the bundled wavy in-browser mock so it renders alive with zero backend. Self-contained: shell inspector hooks are inert seams in lib/host.ts; the only chrome dependencies are slice-local @container frame + touch-list shims.",
   "namespace": "@/features/system-monitor",
   "frontend": {
     "slicePath": "frontend/slices/system-monitor",

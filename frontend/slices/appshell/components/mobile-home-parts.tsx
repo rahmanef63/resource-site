@@ -5,7 +5,9 @@
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import type { AppDescriptor } from "../lib/types";
+import { useQuickLinks } from "../registry/capabilities";
 import { AppIcon } from "./app-icon";
+import { QuicklinkIcon } from "./quicklink-icon";
 
 // Long-press quick-actions sheet (iPhone's haptic-touch menu): Open + whatever
 // menu items the app declares for the macOS menu bar — one declaration, both OSes.
@@ -63,6 +65,7 @@ export function AppsGrid({
   onSearch: () => void;
   onContext: (app: AppDescriptor) => void;
 }) {
+  const { items: links, open: openLink } = useQuickLinks();
   // Long-press bookkeeping: a fired hold must swallow the click that follows.
   const holdTimer = useRef<number | null>(null);
   const held = useRef(false);
@@ -91,6 +94,10 @@ export function AppsGrid({
   const onPointerDown = (e: React.PointerEvent) => {
     const sy = e.clientY;
     const sx = e.clientX;
+    // Only let an upward swipe mean "search" when the grid is already scrolled
+    // to the top — otherwise it fights the vertical scroll that reveals
+    // overflow apps + quicklinks.
+    const atTop = (e.currentTarget as HTMLElement).scrollTop <= 0;
     let fired = false;
     const cleanup = () => {
       window.removeEventListener("pointermove", move);
@@ -99,7 +106,7 @@ export function AppsGrid({
     const move = (ev: PointerEvent) => {
       const dy = ev.clientY - sy;
       const dx = ev.clientX - sx;
-      if (!fired && dy < -70 && Math.abs(dx) < 50) {
+      if (!fired && atTop && dy < -70 && Math.abs(dx) < 50) {
         fired = true;
         cleanup();
         onSearch();
@@ -110,9 +117,12 @@ export function AppsGrid({
   };
 
   return (
+    // Scrolls vertically so every app + quicklink is reachable (the grid used to
+    // be clipped by the page's overflow-hidden, hiding the trailing quicklinks).
+    // touch-action:pan-y keeps horizontal swipes free for the home pager.
     <div
       onPointerDown={onPointerDown}
-      className="grid h-full grid-cols-4 content-start gap-x-2.5 gap-y-5 px-[18px] py-3.5 [touch-action:pan-x]"
+      className="grid h-full grid-cols-4 content-start gap-x-2.5 gap-y-5 overflow-y-auto px-[18px] pt-3.5 pb-5 [touch-action:pan-y] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
     >
       {apps.map((app) => (
         <Button
@@ -129,6 +139,22 @@ export function AppsGrid({
           </span>
           <span className="max-w-full truncate text-[11px] font-medium text-white [text-shadow:0_1px_3px_rgba(0,0,0,0.5)]">
             {app.title}
+          </span>
+        </Button>
+      ))}
+      {links.map((link) => (
+        <Button
+          key={link.id}
+          type="button"
+          variant="ghost"
+          onClick={() => openLink(link)}
+          className="h-auto p-0 hover:bg-transparent flex flex-col items-center gap-1.5"
+        >
+          <span className="aspect-square w-full max-w-[62px]">
+            <QuicklinkIcon link={link} />
+          </span>
+          <span className="max-w-full truncate text-[11px] font-medium text-white [text-shadow:0_1px_3px_rgba(0,0,0,0.5)]">
+            {link.title}
           </span>
         </Button>
       ))}

@@ -14,7 +14,7 @@ import {
   togglePinClip,
   useClipboardOpen,
   useClips,
-} from "../../../lib/clipboard";
+} from "@/features/appshell";
 
 // ⌘⇧V clipboard history — pinned entries stick, click copies back to the
 // system clipboard. Capture (document copy/cut) starts with this feature.

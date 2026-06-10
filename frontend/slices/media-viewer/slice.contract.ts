@@ -1,5 +1,5 @@
 /**
- * Slice contract for `media-viewer` — v1.0.0.
+ * Slice contract for `media-viewer` — v1.1.0.
  *
  * Quick-look viewer for image/video/audio/pdf/text. Self-contained: sample
  * gallery works offline, remote files resolve through an injectable media
@@ -9,7 +9,7 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "media-viewer",
-  version: "1.0.0",
+  version: "1.2.0",
   category: "ui",
   kind: "ui",
   requires: {
@@ -24,6 +24,12 @@ export const contract = defineSliceContract({
     peers: [],
   },
   provides: {
+    tools: [
+      "media-viewer.info",
+      "media-viewer.next",
+      "media-viewer.prev",
+      "media-viewer.zoom.set"
+    ] as string[],
     routes: [] as string[],
     components: ["MediaViewer"] as string[],
     hooks: [] as string[],

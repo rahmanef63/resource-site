@@ -1,5 +1,5 @@
 /**
- * Slice contract for `image-editor` — v2.0.0.
+ * Slice contract for `image-editor` — v2.1.0.
  *
  * A layered raster image editor (Konva engine) with an AI function-calling
  * command registry and a headless server barrel. Self-contained: image I/O is
@@ -11,7 +11,7 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "image-editor",
-  version: "2.0.0",
+  version: "2.1.0",
   category: "ui",
   kind: "ui",
   requires: {

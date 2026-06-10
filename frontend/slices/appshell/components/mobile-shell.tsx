@@ -1,42 +1,20 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useApps } from "../lib/registry";
 import { useWindowOrder, useFocused, useWindow } from "../hooks/use-shell";
-import { shellStore, openWindow, minimizeWindow, restoreWindow, toggleSpotlight } from "../lib/store";
+import { shellStore, openWindow, focusApp, minimizeWindow, restoreWindow, toggleSpotlight } from "../lib/store";
 import { AppIcon } from "./app-icon";
+import { HomeIndicator } from "./home-indicator";
 import { WindowContent } from "./window-content";
 import { MobileSwitcher } from "./mobile-switcher";
 import { MobileHome } from "./mobile-home";
 import { MobileNotifications } from "./mobile-notifications";
 import { Slot } from "../registry/feature-registry";
+import { useShellConfig } from "../registry/shell-config";
 import { ShellUIProvider, type ShellUI } from "../registry/shell-ui";
-
-const DOCK_IDS = ["files-manager", "os-terminal", "system-monitor", "os-settings"];
-
-// Home-indicator is a plain TAP button (not a drag) so it never fights the
-// real iPhone bottom-edge gesture. Tap → app switcher; "Done" covers home.
-// Hoisted to module scope (react-hooks/static-components); the switcher
-// opener arrives via onTap.
-function Indicator({ light = true, onTap }: { light?: boolean; onTap: () => void }) {
-  return (
-    <div className="flex justify-center pb-[7px] pt-[5px]">
-      <Button
-        type="button"
-        variant="ghost"
-        aria-label="App switcher"
-        onClick={onTap}
-        className="h-auto hover:bg-transparent flex items-center justify-center px-12 py-1.5 [touch-action:manipulation]"
-      >
-        <span
-          className="h-[5px] w-[134px] rounded-full"
-          style={{ background: light ? "rgba(255,255,255,.75)" : "rgba(0,0,0,.3)" }}
-        />
-      </Button>
-    </div>
-  );
-}
 
 // Phones: no floating windows — a paged home + one fullscreen app at a time.
 // Reuses the same store (open/minimize/focus) so state matches the desktop.
@@ -44,12 +22,31 @@ export function MobileShell() {
   const apps = useApps();
   const order = useWindowOrder();
   const focused = useFocused();
-  const [home, setHome] = useState(true);
   const [switcher, setSwitcher] = useState(false);
   const [cc, setCc] = useState(false);
   const [nc, setNc] = useState(false); // notification center (pull down, left half)
 
-  const dockApps = apps.filter((a) => DOCK_IDS.includes(a.id));
+  // Dock = manifest-pinned apps (AppDescriptor.pinned — the generic shell never
+  // hardcodes project app ids); falls back to the first 4 dockable apps.
+  const pinned = apps.filter((a) => a.pinned);
+  const dockApps = (pinned.length ? pinned : apps.filter((a) => !a.noDock)).slice(0, 4);
+
+  // URL → surface: a pathname naming an app slug shows the app pane (UrlSync
+  // opens/focuses its window in the shared store; we only flip off the grid),
+  // anything else shows the grid — covers initial deep links AND back/forward.
+  // User gestures (launch/Done) override, keyed to the pathname they were made
+  // at, so the derivation wins again when the URL actually changes — no
+  // effect-driven setState (react-hooks/set-state-in-effect). Gated like
+  // UrlSync (manifest.routing): opted out, the URL never names an app, so the
+  // grid-first default + gesture overrides behave exactly as before.
+  const { routing } = useShellConfig();
+  const pathname = usePathname();
+  const urlSlug = pathname.split("/").filter(Boolean)[0];
+  const urlIsApp =
+    routing !== false && !!urlSlug && apps.some((a) => (a.slug ?? a.id) === urlSlug);
+  const [homeChoice, setHomeChoice] = useState<{ key: string; home: boolean } | null>(null);
+  const home = homeChoice?.key === pathname ? homeChoice.home : !urlIsApp;
+  const setHome = (h: boolean) => setHomeChoice({ key: pathname, home: h });
 
   // The visible app is the FOCUSED window (front-most) — fall back to the newest
   // non-minimized one. `order` is append-only and doesn't track focus.
@@ -62,8 +59,11 @@ export function MobileShell() {
   const activeApp = top ? apps.find((a) => a.id === top.app) : null;
 
   // SSOT navigation: open / resume bring a window to the front; home minimises.
+  // Resume-don't-duplicate (real-iOS): a home tap brings the existing window
+  // forward; only a missing one spawns — multi apps get extra windows from
+  // explicit affordances (dock hover "New Window" on desktop), not home taps.
   const launch = (app: (typeof apps)[number]) => {
-    openWindow(app.id, app.title, app.defaultSize, undefined, { multi: app.multi });
+    if (!focusApp(app.id)) openWindow(app.id, app.title, app.defaultSize, undefined, { multi: app.multi });
     setSwitcher(false);
     setHome(false);
   };
@@ -84,6 +84,15 @@ export function MobileShell() {
 
   const openSwitcher = () => setSwitcher(true);
 
+  // Horizontal home-bar swipe → cycle the open (non-minimized) apps, iOS-style.
+  const switchApp = (dir: -1 | 1) => {
+    const live = order.filter((id) => !shellStore.getWindow(id)?.minimized);
+    if (live.length < 2 || !topId) return;
+    const next = live[(live.indexOf(topId) + dir + live.length) % live.length];
+    restoreWindow(next);
+    setHome(false);
+  };
+
   const shellUI: ShellUI = {
     controlCenterOpen: cc,
     setControlCenterOpen: setCc,
@@ -95,14 +104,18 @@ export function MobileShell() {
   return (
     <ShellUIProvider value={shellUI}>
       <div className="absolute inset-0 z-[10] flex flex-col">
+      {/* Home is inert while an app covers it (a11y: its grid, pager pages and
+          home-indicator otherwise stay in tab/AT order under the opaque app
+          layer). It stays visually mounted for the appOpen zoom. */}
       <MobileHome
         apps={apps}
         dockApps={dockApps}
+        inactive={!!(showApp && activeApp)}
         onLaunch={launch}
         onSearch={toggleSpotlight}
         onControlCenter={() => setCc(true)}
         onNotifications={() => setNc(true)}
-        indicator={<Indicator onTap={openSwitcher} />}
+        indicator={<HomeIndicator onHome={goHome} onSwitcher={openSwitcher} onSwitchApp={switchApp} />}
       />
 
       {/* APP fullscreen */}
@@ -112,21 +125,31 @@ export function MobileShell() {
           style={{ background: "var(--surface)" }}
         >
           <header
-            className="flex h-12 shrink-0 items-center gap-2.5 border-b border-border px-3.5"
-            style={{ background: "var(--glass-bar)" }}
+            className="flex shrink-0 items-center gap-2.5 border-b border-border px-3.5"
+            style={{ background: "var(--glass-bar)", height: "calc(3rem + var(--sai-top))", paddingTop: "var(--sai-top)" }}
           >
             <span className="size-[30px] shrink-0">
               <AppIcon app={activeApp} />
             </span>
             <strong className="flex-1 truncate text-base">{activeApp.title}</strong>
-            <Button type="button" variant="ghost" onClick={goHome} className="h-auto rounded-md px-3 py-1 text-sm font-medium text-primary">
+            {/* primary exit control — keep the pill visually compact but give it a ≥36px hit area */}
+            <Button type="button" variant="ghost" onClick={goHome} className="h-9 min-w-9 rounded-md px-3 text-sm font-medium text-primary">
               Done
             </Button>
           </header>
-          <main className="relative min-h-0 flex-1 overflow-auto [container-type:inline-size]">
+          {/* The home-indicator overlays the content edge-to-edge (real-iOS), so
+              raise --sai-bottom INSIDE the app pane to include its 34px zone —
+              every app already pads with var(--sai-bottom), so bumping the var
+              clears the pill centrally without double-padding anyone. */}
+          <main
+            className="relative min-h-0 flex-1 overflow-auto [container-type:inline-size]"
+            style={{ "--sai-bottom": "calc(env(safe-area-inset-bottom, 0px) + 34px)" } as React.CSSProperties}
+          >
             <WindowContent app={top.app} payload={top.payload} />
           </main>
-          <Indicator light={false} onTap={openSwitcher} />
+          <div className="absolute inset-x-0 bottom-0 z-[5]">
+            <HomeIndicator light={false} onHome={goHome} onSwitcher={openSwitcher} onSwitchApp={switchApp} />
+          </div>
         </div>
       )}
 

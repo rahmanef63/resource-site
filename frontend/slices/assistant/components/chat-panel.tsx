@@ -9,6 +9,12 @@ import {
   useState,
 } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  isAgentStreamConfigured,
+  runAgentLoop,
+  type AgentMsg,
+} from "@/shared/agentic";
+import { getAssistantRegistry } from "../lib/agentic-host";
 import { streamReply, type WireMsg } from "../lib/stream";
 import { toolById } from "../lib/tools";
 import type { Agent, Automation } from "../lib/types";
@@ -31,8 +37,10 @@ const nextId = () => `m${Date.now()}-${seq++}`;
 
 export type ChatHandle = { runSteps: (auto: Automation, agent?: Agent) => void };
 
-// The REAL streaming chat. Keeps streamReply + useAuthToken exactly as before;
-// the only addition is prepending the active agent's persona as a leading
+// The REAL streaming chat. With the shared model seam configured it runs the
+// shared function-calling loop against the assistant registry (every slice
+// collection registered via registerAssistantTools); unwired it falls back to
+// the typing demo. The active agent's persona is prepended as a leading
 // system-style turn so replies adopt the selected agent's voice.
 export const ChatPanel = forwardRef<
   ChatHandle,
@@ -69,11 +77,21 @@ export const ChatPanel = forwardRef<
         { id: replyId, role: "assistant", text: "" },
       ]);
       setStreaming(true);
+      const append = (chunk: string) =>
+        setMessages((prev) =>
+          prev.map((m) => (m.id === replyId ? { ...m, text: m.text + chunk } : m)),
+        );
       try {
-        for await (const token of streamReply(wire)) {
-          setMessages((prev) =>
-            prev.map((m) => (m.id === replyId ? { ...m, text: m.text + token } : m)),
-          );
+        if (isAgentStreamConfigured()) {
+          // Real function-calling loop over every registered slice collection.
+          const history: AgentMsg[] = wire.map((w) => ({ role: w.role, text: w.text }));
+          await runAgentLoop(history, getAssistantRegistry(), {
+            onDelta: append,
+            onTool: (name, _input, outcome) =>
+              append(`\n\n⚙ ${name} ${outcome.ok ? "✓" : "✗"} ${outcome.result.slice(0, 200)}\n\n`),
+          });
+        } else {
+          for await (const token of streamReply(wire)) append(token);
         }
       } catch (err) {
         const note = errText(err);
@@ -87,30 +105,36 @@ export const ChatPanel = forwardRef<
     [streaming, messages],
   );
 
-  // Automations narrate (no real execution) into the same thread.
+  // Automations: with the model seam configured the steps become a real
+  // function-calling task; unwired they narrate into the thread as before.
   useImperativeHandle(ref, () => ({
     runSteps(auto, runAgent) {
       const lines = auto.steps.map((s, i) => {
         const t = toolById(s.tool);
         return `  ${i + 1}. ${t?.name ?? s.tool}${s.argText ? ` — ${s.argText}` : ""}`;
       });
+      if (isAgentStreamConfigured()) {
+        void send(
+          `Run the automation “${auto.name}” by calling these tools in order, ` +
+            `one at a time:\n${lines.join("\n") || "  (no steps)"}`,
+        );
+        return;
+      }
       const body =
         `Running automation “${auto.name}” as ${(runAgent ?? agentRef.current).name}:\n` +
         (lines.join("\n") || "  (no steps)") +
         "\n\n(Steps logged — no real execution in this build.)";
-
-      console.info("[alfa] run automation", auto.name, auto.steps);
       setMessages((prev) => [...prev, { id: nextId(), role: "assistant", text: body }]);
     },
   }));
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex items-center gap-2 border-b border-border bg-card/40 px-3 py-2">
+      <div className="flex items-center gap-2 overflow-x-auto border-b border-border bg-card/40 px-3 py-2 [scrollbar-width:none]">
         {switcher}
       </div>
       {messages.length === 0 ? (
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 overflow-y-auto">
           <EmptyState prompts={SUGGESTED} onPick={send} />
         </div>
       ) : (

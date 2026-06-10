@@ -1,5 +1,18 @@
 # Changelog — image-editor
 
+## 2.1.0 — 2026-06-10
+
+- New `compact` prop on `<ImageEditor>`: container-first layout override so a
+  host can force the compact (bottom-sheet) layout from its PANE width verdict;
+  omitted → falls back to the viewport-based `useIsMobile()`.
+- Compact bottom sheet resizes container-relative (25–80% of the pane height,
+  was viewport `vh`) — correct inside narrow desktop windows.
+- Top bar scrolls horizontally at very narrow widths (`overflow-x-auto` +
+  `shrink-0` buttons) instead of squeezing icons below tap-target size.
+- Layers footer respects an optional `--sai-bottom` safe-area inset var
+  (iOS home-pill zone in compact host shells; 0 without a host).
+- a11y: explicit `aria-label`s on all color-swatch icon buttons.
+
 ## 2.0.0 — 2026-06-05
 
 - BREAKING: replaces the v1 catalog slice with the rebuilt editor — new

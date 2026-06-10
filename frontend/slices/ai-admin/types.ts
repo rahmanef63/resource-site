@@ -35,7 +35,7 @@ export type AITool = {
   name: string;
   description?: string;
   jsonSchema: Record<string, unknown>;
-  impl: "http" | "convex" | "shell";
+  impl: "http" | "convex" | "shell" | "local";
   endpoint?: string;
   sandboxed: boolean;
 };

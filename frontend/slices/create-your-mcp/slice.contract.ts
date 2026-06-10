@@ -14,7 +14,7 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "create-your-mcp",
-  version: "0.1.0",
+  version: "0.2.0",
   category: "ai",
   kind: "full",
   provides: {
@@ -25,8 +25,7 @@ export const contract = defineSliceContract({
       "extractBearer",
       "scopeAllows",
       "runWithMcpContext",
-      "getMcpContext",
-    ],
+      "getMcpContext", "toolDefsFromHost"],
     hooks: [],
     convex: {
       tables: ["oauthCodes", "oauthAccessTokens"],

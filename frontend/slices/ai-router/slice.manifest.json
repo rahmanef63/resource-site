@@ -1,14 +1,16 @@
 {
   "$schema": "../../../docs/slice.manifest.schema.json",
   "name": "ai-router",
-  "version": "0.1.0",
-  "description": "Tier-routed LLM access via OpenRouter — nano (Haiku) for classification, mid (Sonnet) for chat, flagship (Opus) for deep reasoning. Per-call usage log.",
+  "version": "0.3.0",
+  "description": "Tier-routed LLM access via OpenRouter \u2014 nano (Haiku) for classification, mid (Sonnet) for chat, flagship (Opus) for deep reasoning. Per-call usage log.",
   "category": "ai",
   "stability": "beta",
   "deps": {
     "shared": [],
     "slices": [],
-    "convexFeatures": ["ai"],
+    "convexFeatures": [
+      "ai"
+    ],
     "npm": {
       "ai": "^4.0.0",
       "@openrouter/ai-sdk-provider": "^0.0.5"
@@ -23,12 +25,22 @@
     ]
   },
   "files": {
-    "include": ["**/*"],
-    "exclude": ["*.test.ts", "*.test.tsx", "*.spec.ts"]
+    "include": [
+      "**/*"
+    ],
+    "exclude": [
+      "*.test.ts",
+      "*.test.tsx",
+      "*.spec.ts"
+    ]
   },
   "convexFiles": {
-    "include": ["**/*.ts"],
-    "exclude": ["*.test.ts"]
+    "include": [
+      "**/*.ts"
+    ],
+    "exclude": [
+      "*.test.ts"
+    ]
   },
   "permissions": [
     "ai.invoke",
@@ -38,12 +50,18 @@
     {
       "name": "ai_router_usage",
       "namespaced": true,
-      "indexes": ["by_workspace", "by_workspace_createdAt"]
+      "indexes": [
+        "by_workspace",
+        "by_workspace_createdAt"
+      ]
     },
     {
       "name": "ai_router_calls",
       "namespaced": true,
-      "indexes": ["by_workspace", "by_workspace_status"]
+      "indexes": [
+        "by_workspace",
+        "by_workspace_status"
+      ]
     }
   ],
   "compatibility": {
@@ -53,6 +71,11 @@
     "tailwind": "4",
     "auth": "any"
   },
-  "tags": ["ai", "llm", "openrouter", "tier-routing"],
+  "tags": [
+    "ai",
+    "llm",
+    "openrouter",
+    "tier-routing"
+  ],
   "notes": "Migrate consumer Convex schema to use ai_router_* table names. Existing 'ai' feature name kept for backward compat in convexFeatures field."
 }

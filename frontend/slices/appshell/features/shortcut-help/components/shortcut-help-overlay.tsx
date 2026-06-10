@@ -8,7 +8,7 @@ import {
   useShortcutHelpOpen,
   useShortcuts,
   type ShortcutHint,
-} from "../../../lib/shortcuts";
+} from "@/features/appshell";
 
 // ⌘/ cheat sheet — every registered shortcut hint, grouped.
 export function ShortcutHelpOverlay() {

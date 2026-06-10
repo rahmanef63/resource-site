@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, type CSSProperties, type ReactNode } from "react";
+import { createContext, useContext, useMemo, type CSSProperties, type ReactNode } from "react";
 import type { DeviceMode } from "../responsive/use-responsive";
 
 export type ThemeMode = "light" | "dark";
@@ -44,6 +44,16 @@ export type ServerToggle = {
   toggle: () => void;
 };
 
+// A user website shortcut surfaced in the dock / Launchpad / mobile grid / Today
+// widget. The consumer owns the data + how it opens (the shell never knows URLs).
+export type QuickLink = { id: string; title: string; url: string };
+export type QuickLinks = {
+  items: QuickLink[];
+  open: (link: QuickLink) => void;
+  /** Favicon URL for a link, or null when none can be derived. */
+  faviconUrl: (url: string) => string | null;
+};
+
 // Capabilities the consumer injects via the manifest, so the generic shell + its
 // feature slices have NO hard dependency on a project's appearance store, host
 // API or AI backend. Each is a hook (called by the shell at a stable position)
@@ -62,6 +72,8 @@ export type ShellCapabilities = {
   useChat?: () => (messages: ChatMessage[]) => AsyncGenerator<string>;
   /** shell-control-center: optional server-mode tile (null hides it). */
   useServerToggle?: () => ServerToggle | null;
+  /** Website shortcuts for the dock / Launchpad / mobile grid / Today widget. */
+  useQuickLinks?: () => QuickLinks;
 };
 
 // Stable identities for the default hooks. These MUST be referentially stable
@@ -73,6 +85,7 @@ const NOOP = () => {};
 const DEFAULT_APPEARANCE: ShellAppearance = { theme: "light", setTheme: NOOP, device: "auto" };
 const EMPTY_SEARCH = async (): Promise<SearchHit[]> => [];
 const EMPTY_CHAT = async function* (): AsyncGenerator<string> {};
+const EMPTY_QUICKLINKS: QuickLinks = { items: [], open: NOOP, faviconUrl: () => null };
 
 // Standalone defaults so the shell renders with zero capabilities injected
 // (light theme, auto device, no wallpaper/CPU/search/stats/chat/server tile).
@@ -85,6 +98,7 @@ const DEFAULT_CAPABILITIES: Required<ShellCapabilities> = {
   useSystemStats: () => null,
   useChat: () => EMPTY_CHAT,
   useServerToggle: () => null,
+  useQuickLinks: () => EMPTY_QUICKLINKS,
 };
 
 const CapabilitiesContext = createContext<Required<ShellCapabilities>>(DEFAULT_CAPABILITIES);
@@ -97,9 +111,16 @@ export function CapabilitiesProvider({
   children: ReactNode;
 }) {
   // Merge over the defaults so every capability key is a callable hook — keeps
-  // the accessor hooks unconditional (the merged object is stable for the app's
-  // lifetime, so the hook order never changes between renders).
-  const merged: Required<ShellCapabilities> = { ...DEFAULT_CAPABILITIES, ...value };
+  // the accessor hooks unconditional. Memoized on `value` so consumers don't
+  // re-render on every provider render, and explicitly-undefined keys are
+  // stripped first (otherwise `{ useSearch: undefined }` would override the
+  // default and crash the unconditional accessor).
+  const merged = useMemo<Required<ShellCapabilities>>(() => {
+    const defined = Object.fromEntries(
+      Object.entries(value ?? {}).filter(([, v]) => v !== undefined),
+    ) as ShellCapabilities;
+    return { ...DEFAULT_CAPABILITIES, ...defined };
+  }, [value]);
   return (
     <CapabilitiesContext.Provider value={merged}>{children}</CapabilitiesContext.Provider>
   );
@@ -129,4 +150,8 @@ export function useShellChat(): (messages: ChatMessage[]) => AsyncGenerator<stri
 
 export function useServerToggle(): ServerToggle | null {
   return useContext(CapabilitiesContext).useServerToggle();
+}
+
+export function useQuickLinks(): QuickLinks {
+  return useContext(CapabilitiesContext).useQuickLinks();
 }

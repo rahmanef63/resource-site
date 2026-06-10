@@ -1,12 +1,12 @@
 /**
- * Slice contract for `appshell` — v1.3.0.
+ * Slice contract for `appshell` — v1.4.0.
  * Excluded from app tsc; validated by rr tooling on lift.
  */
 import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "appshell",
-  version: "1.3.0",
+  version: "1.5.0",
   category: "ui",
   kind: "full",
   requires: {
@@ -16,6 +16,20 @@ export const contract = defineSliceContract({
     deps: [] as const,
   },
   provides: {
+    tools: [
+      "appshell.window.list",
+      "appshell.app.launch",
+      "appshell.app.focus",
+      "appshell.window.close",
+      "appshell.window.focus",
+      "appshell.window.minimize",
+      "appshell.window.restore",
+      "appshell.window.toggle_maximize",
+      "appshell.space.set",
+      "appshell.profile.save",
+      "appshell.profile.apply",
+      "appshell.notify"
+    ] as string[],
     routes: [] as string[],
     hooks: [
       "useCommands",
@@ -39,6 +53,7 @@ export const contract = defineSliceContract({
       "useBrand",
       "useShellUI",
       "useShellConfig",
+      "useQuickLinks",
     ] as string[],
     components: [
       "AppShell",
@@ -47,6 +62,8 @@ export const contract = defineSliceContract({
       "MasterDetail",
       "ResponsiveToolbar",
       "TouchList",
+      "QuicklinkIcon",
+      "DashboardShell",
     ] as string[],
     tables: [] as string[],
   },

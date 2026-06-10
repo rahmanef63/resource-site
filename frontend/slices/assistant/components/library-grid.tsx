@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import type { AIStore } from "../lib/store";
-import { OS_TOOLS } from "../lib/tools";
+import { assistantCatalog } from "../lib/tools";
 import type { Agent, Skill } from "../lib/types";
 import { GlyphTile } from "./agent-avatar";
 
@@ -28,7 +28,7 @@ export function LibraryGrid({
   const toolCount = (it: Agent | Skill) =>
     isAgent
       ? (it as Agent).allTools
-        ? OS_TOOLS.length
+        ? assistantCatalog().length
         : new Set(
             (it as Agent).skills.flatMap(
               (id) => store.skills.find((x) => x.id === id)?.tools ?? [],
@@ -38,7 +38,8 @@ export function LibraryGrid({
 
   return (
     <ScrollArea className="flex-1">
-      <div className="p-5">
+      {/* --sai-bottom = host safe-area inset; 0px fallback keeps rr standalone. */}
+      <div className="p-5 [padding-bottom:calc(1.25rem+var(--sai-bottom,0px))]">
         <div className="mb-3.5 flex items-center">
           <div>
             <div className="text-base font-bold tracking-tight">{isAgent ? "Agents" : "Skills"}</div>

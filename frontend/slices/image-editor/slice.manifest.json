@@ -1,12 +1,41 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "image-editor",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
     "command": "npx rr add image-editor",
     "consumerPath": "slices/image-editor"
+  },
+  "imports": {
+    "shared": [
+      "@/components/ui/button",
+      "@/components/ui/dropdown-menu",
+      "@/components/ui/input",
+      "@/components/ui/label",
+      "@/components/ui/popover",
+      "@/components/ui/resizable",
+      "@/components/ui/scroll-area",
+      "@/components/ui/select",
+      "@/components/ui/separator",
+      "@/components/ui/switch",
+      "@/components/ui/tooltip",
+      "@/lib/utils",
+      "@/shared/agentic",
+      "@/shared/preview/types",
+      "@/shared/ui/FilePicker"
+    ],
+    "external": [
+      "@imgly/background-removal",
+      "class-variance-authority",
+      "konva",
+      "lucide-react",
+      "next",
+      "radix-ui",
+      "react",
+      "react-konva"
+    ]
   },
   "files": [
     "ARCHITECTURE.md",
@@ -85,6 +114,7 @@
     "lib/store-types.ts",
     "lib/store.tsx",
     "lib/types.ts",
+    "preview.tsx",
     "server.ts",
     "slice.contract.ts",
     "slice.json",

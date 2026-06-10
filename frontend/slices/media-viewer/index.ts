@@ -1,3 +1,5 @@
+// audit-allow-hex: the descriptor `gradient` is app-icon brand data consumed
+// by the host launcher, not themable chrome.
 import { Eye } from "lucide-react";
 import type { AppDescriptor } from "./lib/host";
 
@@ -27,3 +29,8 @@ export type { RemoteFile, MediaKind } from "./components/remote-view";
 
 export { mediaViewerConfig } from "./config";
 export type { MediaViewerConfig } from "./config";
+
+// Agentic tool collection — the slice is not an agent; register this
+// with a host agent (one agent, many slices) via @/shared/agentic.
+export { mediaViewerTools } from "./lib/tools";
+export type { MediaViewerCtx } from "./lib/tools";

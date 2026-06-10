@@ -12,7 +12,7 @@ import { defineSliceContract } from "../../../packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "ai-admin",
-  version: "0.2.0",
+  version: "0.3.0",
   requires: {
     auth: "convex",
     rbac: ["admin.read", "admin.write"],
@@ -20,6 +20,7 @@ export const contract = defineSliceContract({
     deps: ["convex-auth", "rbac-roles", "admin-panel", "audit-log"],
   },
   provides: {
+    utils: ["toolRegistryRows"] as string[],
     components: [
       "AdminSection",
       "ProvidersTable",

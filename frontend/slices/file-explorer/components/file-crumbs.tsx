@@ -59,7 +59,8 @@ export function FileCrumbs({
         {crumbs.map((c, i) => (
           <span key={c.path} className="flex items-center gap-0.5">
             {i > 0 && <ChevronRight className="size-3 opacity-50" />}
-            <span className="px-1.5 py-0.5">{c.name}</span>
+            {/* Mirrors the live crumb's coarse min-w so the fold check stays true. */}
+            <span className="px-1.5 py-0.5 [@media(pointer:coarse)]:min-w-9">{c.name}</span>
           </span>
         ))}
       </div>
@@ -67,7 +68,7 @@ export function FileCrumbs({
       {collapsed ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" aria-label="Path breadcrumb" className="h-7 min-w-0 max-w-full gap-1 px-1.5 text-xs">
+            <Button variant="ghost" size="sm" aria-label="Path breadcrumb" className="h-7 min-w-0 max-w-full gap-1 px-1.5 text-xs [@media(pointer:coarse)]:h-9">
               <FolderOpen className="size-3.5 shrink-0" />
               <span className="truncate font-medium text-foreground">{last?.name}</span>
               <ChevronDown className="size-3 shrink-0 opacity-50" />
@@ -101,7 +102,8 @@ export function FileCrumbs({
                 onDragLeave={() => onDragLeave(c.path)}
                 onDrop={(e) => onDrop(e, c.path)}
                 className={cn(
-                  "h-auto truncate rounded px-1.5 py-0.5 hover:bg-accent",
+                  // Coarse pointers: ≈36px hit area (taller + min-w, mirrored in the probe).
+                  "h-auto truncate rounded px-1.5 py-0.5 hover:bg-accent [@media(pointer:coarse)]:min-w-9 [@media(pointer:coarse)]:py-2.5",
                   i === crumbs.length - 1 ? "font-medium text-foreground" : "",
                   dropTarget === c.path && "ring-2 ring-primary ring-inset",
                 )}

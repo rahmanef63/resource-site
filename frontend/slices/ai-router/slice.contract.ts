@@ -12,7 +12,7 @@ import { defineSliceContract } from "../../../packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "ai-router",
-  version: "0.1.0",
+  version: "0.3.0",
   requires: {
     auth: "convex",
     rbac: ["ai.invoke", "ai.view-usage"],
@@ -24,6 +24,9 @@ export const contract = defineSliceContract({
     deps: ["convex-auth"],
   },
   provides: {
+    tools: [
+      "ai-router.route"
+    ] as string[],
     tables: ["ai_router_usage", "ai_router_calls"],
     events: ["ai.invoked", "ai.usage.logged"],
   },

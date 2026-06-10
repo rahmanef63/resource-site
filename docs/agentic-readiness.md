@@ -162,9 +162,9 @@ defineToolCollection<FooCtx>({ namespace:"foo", tools:[…] })`, declare names i
 | C2 | image-editor redefined `JsonSchema`/`AnthropicTool` locally | ✅ fixed — `commands/types.ts` re-exports shared; `EditorCommand = Tool<EditorCtx>` |
 | C3 | No `<slice>.<action>` naming convention (image-editor used bare `layer.add`) | ✅ fixed — registry namespaces on register; contract `validateTools` enforces `<id>.` prefix |
 | C4 | Contract DSL had no `tools` → agentic surface undeclared/ungated | ✅ fixed — `provides.tools` (G1) + `validateTools` + image-editor declares 34 |
-| C5 | **assistant** uses a different tool model: `OS_TOOLS` with `params: string[]`, "narrate only", **no JSON-schema, no invoke**, own `configureAssistantStream` seam + demo streamer | ⏳ pending — convert OS_TOOLS to real collections + make assistant THE central host (`createToolRegistry` + `runAgentLoop`); drop its private seam |
-| C6 | **ai-agents** has its own `RunStep`/`RunnerBindings = unknown` (third agent model, no execution) | ⏳ pending — back its runner with the shared registry + loop |
-| C7 | ai-router / ai-studio / ai-chat / ai-admin / create-your-mcp don't consume the registry | ⏳ pending — Tier-B wiring |
+| C5 | **assistant** uses a different tool model: `OS_TOOLS` with `params: string[]`, "narrate only", **no JSON-schema, no invoke**, own `configureAssistantStream` seam + demo streamer | ✅ fixed (1.1.0) — `lib/agentic-host.ts`: `registerAssistantTools(collection, getCtx)` over a `createToolRegistry()` singleton; chat runs `runAgentLoop` across ALL registered slices when `configureAgentStream` is wired; catalog/pickers list live registry tools (`assistantCatalog()`, OS_TOOLS = unwired demo fallback); automations execute via the loop; `configureAssistantStream` deprecated → adapter into the shared seam |
+| C6 | **ai-agents** has its own `RunStep`/`RunnerBindings = unknown` (third agent model, no execution) | ✅ fixed (0.2.0) — `runner.ts createAgentRunner(host)` drives the shared loop against any ToolHost, records every tool_use as a `RunStep` trace; `RunnerBindings` now typed |
+| C7 | ai-router / ai-studio / ai-chat / ai-admin / create-your-mcp don't consume the registry | ✅ fixed — ai-chat `createAgenticChatSend(host)` (FAB gets real function calling); ai-router `aiRouterTools` (`route` tool over injectable transport); ai-studio `aiStudioTools` (`generate`); ai-admin `toolRegistryRows(host)` → ToolsTable rows (impl `"local"`); create-your-mcp `toolDefsFromHost(host)` → serve any registry over MCP JSON-RPC |
 
 ### Proof
 
@@ -172,12 +172,35 @@ defineToolCollection<FooCtx>({ namespace:"foo", tools:[…] })`, declare names i
 export an `add` tool; one registry namespaces them apart, `runAgentLoop` drives
 both against their separate live ctx in one conversation. 7 tests green.
 
+### Wave 2 (2026-06-10) — collections shipped
+
+Tier-A os apps now export tool collections (register with any host via
+`registerAssistantTools(<x>Tools, () => ctx)`):
+
+| Slice | Export | Tools |
+|---|---|---|
+| image-editor | `imageEditorTools` | 34 (reference) |
+| reel-editor | `reelEditorTools` | 11 — ratio/title/split/speed/crossfade/undo… (Ctx = `HistoryApi`) |
+| code-editor | `codeEditorTools` | 9 — open/create/read/edit.set/replace/save/tabs (Ctx = `useEditor`) |
+| file-explorer | `fileExplorerTools` | 8 — list/navigate/mkdir/rename/move/trash… (Ctx = `UseFiles`) |
+| os-terminal | `osTerminalTools` | 3 — run/cwd/clear via the same dispatcher as the UI (Ctx = `RunCtx`) |
+| browser | `browserTools` | 11 — open/tabs/nav/scroll/click/type/key (Ctx = `useRemoteBrowser`) |
+| media-viewer | `mediaViewerTools` | 4 — info/next/prev/zoom (Ctx = small contract; state is component-local) |
+| system-monitor | `systemMonitorTools` | 2 — stats/processes (read-only) |
+| app-store | `appStoreTools` | 4 — list/search/install/uninstall |
+| appshell | `appshellTools` | 12 — window.*/app.launch/space/profile/notify (module store, empty ctx) |
+
+**Scorecard now:** 10 slices with real collections + assistant as central host
++ ai-agents/ai-chat/ai-router/ai-studio/ai-admin/create-your-mcp wired to the
+registry. Demo pages still need to call `registerAssistantTools` per mounted
+app (host wiring, not slice work).
+
 ### Next (in order)
 
-1. **C5 — assistant = central host.** Convert each referenced OS op to a real
-   slice collection; assistant registers them all → one drivable agent. Biggest
-   unlock (turns the catalog into reality).
-2. **Tier-A os apps** (reel/code/file-explorer/terminal/browser/media-viewer)
-   each ship a `*.tools.ts` collection.
-3. **C6 — ai-agents** runner on the shared loop.
-4. Tier-A* admin (gated), Tier-A data/ui, Tier-C `configure` tools.
+1. Host wiring in the os demo/preview pages: mount-time
+   `registerAssistantTools(<x>Tools, () => ctx)` per app so the assistant
+   drives them live (media-viewer needs its small ctx adapter built from
+   component state).
+2. Tier-A* admin (gated via `requirePermission`), Tier-A data/ui slices.
+3. Tier-C `configure` tools as needed; `agent.md` generator could emit a
+   `## Tools` section from `provides.tools` (G5).

@@ -23,7 +23,8 @@ export function AutomationView({
 }) {
   return (
     <ScrollArea className="flex-1">
-      <div className="p-5">
+      {/* --sai-bottom = host safe-area inset; 0px fallback keeps rr standalone. */}
+      <div className="p-5 [padding-bottom:calc(1.25rem+var(--sai-bottom,0px))]">
         <div className="mb-3.5 flex items-center">
           <div>
             <div className="text-base font-bold tracking-tight">Automations</div>

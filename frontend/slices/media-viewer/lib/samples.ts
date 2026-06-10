@@ -1,3 +1,5 @@
+// audit-allow-hex: hex lives inside inline SVG sample CONTENT (data URIs),
+// not themable chrome.
 // Mock files for the quick-look viewer. Images are inline data-URI gradient
 // SVGs so previews render fully offline (no external network). Video/audio use
 // simulated playback (no real bytes in the mock fs).

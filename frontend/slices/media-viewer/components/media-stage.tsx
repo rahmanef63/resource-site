@@ -1,5 +1,8 @@
 "use client";
 
+// audit-allow-hex: flat cinema-black stage behind timed media is intrinsic
+// content backdrop, not themable chrome.
+
 import { FileText, FileQuestion } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Sample } from "../lib/samples";
@@ -17,7 +20,7 @@ export function MediaStage({ file, zoom }: { file: Sample; zoom: number }) {
   return (
     <div
       className={cn(
-        "flex min-h-0 flex-1 items-center justify-center overflow-auto p-6",
+        "flex min-h-0 flex-1 items-center justify-center overflow-auto p-3 @md:p-6",
         checker ? CHECKER : "bg-[#0c0d10]",
       )}
     >

@@ -1,5 +1,7 @@
 "use client";
 
+// audit-allow-hex: hex lives inside the inline SVG demo payload (data URI),
+// not themable chrome.
 /** Variant preview (VP wave) — rr-internal, stripped on `rr add`. */
 
 import type { SlicePreviewModule } from "@/shared/preview/types";

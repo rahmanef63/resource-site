@@ -19,12 +19,9 @@ import { type AiMessage } from "./components/ai-panel";
 import { RenderOverlay } from "./components/render-overlay";
 import { useExport } from "./lib/use-export";
 import { useReelInspector } from "./lib/use-reel-inspector";
-import { useIsMobile } from "./lib/host";
+import { useContainer, useIsMobile } from "./lib/host";
 
-const HELLO: AiMessage = {
-  role: "ai",
-  text: "Tell me what to change. Try “make it vertical”, “fade in”, “split here”, “punch in”, or “add title Sale”.",
-};
+const HELLO: AiMessage = { role: "ai", text: "Tell me what to change. Try “make it vertical”, “fade in”, “split here”, “punch in”, or “add title Sale”." };
 
 // Reel editor orchestrator: holds playhead/selection/render state, wires the
 // history, drag, keyboard, and AI subsystems to the panels.
@@ -37,7 +34,11 @@ export default function ReelEditor() {
   const [mode, setMode] = useState<PanelMode>("editor");
   const [showPanel, setShowPanel] = useState(true);
   const [panelSheet, setPanelSheet] = useState(false);
+  // Container-first: compact when the PANE is narrow (mobile shell OR a narrow
+  // desktop window), measured off the app root — not the viewport.
   const isMobile = useIsMobile();
+  const [paneRef, pane] = useContainer<HTMLDivElement>();
+  const compact = isMobile || pane === "xs" || pane === "sm";
   const [aiLog, setAiLog] = useState<AiMessage[]>([HELLO]);
   const [cache] = useState(() => new MediaCache());
   const [monitor, setMonitor] = useState(true);
@@ -105,11 +106,14 @@ export default function ReelEditor() {
   return (
     <TooltipProvider delayDuration={300}>
       <div
-        ref={rootRef}
+        ref={(el) => {
+          rootRef.current = el;
+          paneRef.current = el;
+        }}
         tabIndex={0}
         onKeyDown={onKey}
         onMouseDown={() => rootRef.current?.focus({ preventScroll: true })}
-        className="relative flex h-full flex-col bg-background text-foreground outline-none"
+        className="@container relative flex h-full flex-col bg-background text-foreground outline-none"
       >
         <ReelChrome
           comp={comp}
@@ -120,7 +124,7 @@ export default function ReelEditor() {
           canRedo={canRedo}
           layout={layout}
           savedAt={savedAt}
-          isMobile={isMobile}
+          compact={compact}
           addMedia={addMedia}
           ratio={ratio}
           undo={undo}
@@ -129,7 +133,7 @@ export default function ReelEditor() {
           dup={dup}
           del={del}
           setZoom={setZoom}
-          togglePanel={() => (isMobile ? setPanelSheet(true) : setShowPanel((s) => !s))}
+          togglePanel={() => (compact ? setPanelSheet(true) : setShowPanel((s) => !s))}
           setMode={setMode}
           setPanelSheet={setPanelSheet}
           setShowPanel={setShowPanel}
@@ -155,7 +159,7 @@ export default function ReelEditor() {
           dropTrack={dropTrack}
           layout={layout}
           showPanel={showPanel}
-          isMobile={isMobile}
+          compact={compact}
           panelSheet={panelSheet}
           setFrame={setFrame}
           setPlaying={setPlaying}

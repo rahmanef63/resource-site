@@ -1,3 +1,5 @@
+// audit-allow-hex: the dock-icon gradient is the app's brand mark (appshell
+// AppDescriptor contract), not themable chrome.
 import { Activity } from "lucide-react";
 import type { AppDescriptor } from "./lib/host";
 
@@ -25,3 +27,8 @@ export type { SysMonAdapter, SysStats, Process, AppDescriptor } from "./lib/host
 
 export { systemMonitorConfig } from "./config";
 export type { SystemMonitorConfig } from "./config";
+
+// Agentic tool collection — the slice is not an agent; register this
+// with a host agent (one agent, many slices) via @/shared/agentic.
+export { systemMonitorTools } from "./lib/tools";
+export type { SysMonCtx } from "./lib/tools";

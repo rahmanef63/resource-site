@@ -1,10 +1,13 @@
+import type { AnthropicTool } from "@/shared/agentic";
+import { getAssistantRegistry } from "./agentic-host";
 import type { Agent, Skill, Tool, ToolGroup } from "./types";
 
-// Grouped tool catalog reused by the Agents / Skills / Automations editors.
-// Mirrors the mock OS surface; these are declarative descriptors only — nothing
-// here executes anything (automations just narrate).
+// Tool catalog reused by the Agents / Skills / Automations editors and the
+// chat. Two sources: the LIVE registry (slice ToolCollections registered via
+// registerAssistantTools — really invokable) or, when nothing is registered,
+// the static OS_TOOLS demo catalog (descriptors only; automations narrate).
 export const GROUP_META: Record<
-  ToolGroup,
+  string,
   { label: string; icon: string }
 > = {
   files: { label: "File system", icon: "folder" },
@@ -92,17 +95,56 @@ export const OS_TOOLS: Tool[] = [
   T("video.render", "video", "Render", "Render the reel."),
 ];
 
-const BY_ID = new Map(OS_TOOLS.map((t) => [t.id, t]));
-export const toolById = (id: string): Tool | undefined => BY_ID.get(id);
+// ── Live catalog (registry-backed) ──────────────────────────────────────────
+
+function fromAnthropic(t: AnthropicTool): Tool {
+  const dot = t.name.indexOf(".");
+  return {
+    id: t.name,
+    group: dot > 0 ? t.name.slice(0, dot) : "apps",
+    name: dot > 0 ? t.name.slice(dot + 1) : t.name,
+    desc: t.description,
+    params: Object.keys(t.input_schema.properties ?? {}),
+  };
+}
+
+/** Registered slice tools when any exist, else the static demo catalog. */
+export function assistantCatalog(): Tool[] {
+  const reg = getAssistantRegistry();
+  if (reg.size() === 0) return OS_TOOLS;
+  return reg.anthropicTools().map(fromAnthropic);
+}
+
+export function groupMeta(g: string): { label: string; icon: string } {
+  return GROUP_META[g] ?? { label: g, icon: "grid" };
+}
+
+/** Groups present in a catalog, demo groups first, then slice namespaces. */
+export function catalogGroups(
+  catalog: Tool[],
+): { id: string; label: string; icon: string }[] {
+  const ids: string[] = [];
+  for (const t of catalog) if (!ids.includes(t.group)) ids.push(t.group);
+  const orderOf = (g: string) => {
+    const i = GROUP_ORDER.indexOf(g as ToolGroup);
+    return i === -1 ? GROUP_ORDER.length : i;
+  };
+  ids.sort((a, b) => orderOf(a) - orderOf(b));
+  return ids.map((id) => ({ id, ...groupMeta(id) }));
+}
+
+export const toolById = (id: string): Tool | undefined =>
+  assistantCatalog().find((t) => t.id === id);
 
 // Generalist agents get every tool; otherwise the union of their skills' tools.
 export function toolsForAgent(agent: Agent | undefined, skills: Skill[]): Tool[] {
+  const catalog = assistantCatalog();
   if (!agent) return [];
-  if (agent.allTools) return OS_TOOLS.slice();
+  if (agent.allTools) return catalog.slice();
   const ids = new Set<string>();
   for (const sid of agent.skills) {
     const s = skills.find((x) => x.id === sid);
     s?.tools.forEach((tid) => ids.add(tid));
   }
-  return OS_TOOLS.filter((t) => ids.has(t.id));
+  return catalog.filter((t) => ids.has(t.id));
 }

@@ -10,7 +10,7 @@ export type OsTerminalConfig = {
 
 export const osTerminalConfig: OsTerminalConfig = {
   slug: "os-terminal",
-  title: "Terminal — shell emulator with live passthrough",
+  title: "Terminal — shell emulator with live passthrough + PTY seam",
   category: "os",
   promptLabel: "root@topside",
 };

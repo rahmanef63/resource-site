@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "ai-agents",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -12,6 +12,7 @@
     "README.md",
     "config.ts",
     "index.ts",
+    "runner.ts",
     "types.ts"
   ],
   "convex": {

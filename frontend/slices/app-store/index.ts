@@ -43,3 +43,8 @@ export type { AppStoreExec, ExecResult, AppDescriptor, AppProps } from "./lib/ho
 
 export { appStoreConfig } from "./config";
 export type { AppStoreConfig } from "./config";
+
+// Agentic tool collection — the slice is not an agent; register this
+// with a host agent (one agent, many slices) via @/shared/agentic.
+export { appStoreTools } from "./lib/tools";
+export type { AppStoreCtx } from "./lib/tools";

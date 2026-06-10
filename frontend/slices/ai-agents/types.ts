@@ -40,9 +40,11 @@ export type RetryPolicy = {
   backoffMs: number;
 };
 
+// Typed runner surface — implemented for real by createAgentRunner (runner.ts)
+// on the shared agentic kit; a Convex-backed host can satisfy the same shape.
 export type RunnerBindings = {
-  listRuns: unknown;
-  getRun: unknown;
-  startRun: unknown;
-  cancelRun: unknown;
+  listRuns: () => AgentRun[];
+  getRun: (id: string) => AgentRun | undefined;
+  startRun: (input: string, opts?: { agentSlug?: string }) => Promise<AgentRun>;
+  cancelRun?: (id: string) => void;
 };

@@ -1,16 +1,30 @@
 // In-memory filesystem model for the os-terminal shell. Path → entries map,
 // plus the cwd-relative path helpers. Kept separate so commands.ts stays small.
-import type { FsEntry } from "./host";
+import type { FsEntry, TerminalOsApi } from "./host";
 
 export type LineKind = "sys" | "cmd" | "out" | "err" | "fetch";
-export type Line = { t: LineKind; v: string; cwd?: string };
+/** `rows` carries live neofetch stats; absent → renderer uses the mock NEOFETCH. */
+export type Line = { t: LineKind; v: string; cwd?: string; rows?: [string, string][] };
 
 export type FsModel = Record<string, FsEntry[]>;
 
+/** Dispatcher context shared by commands.ts and commands-fs.ts. */
+export type RunCtx = {
+  fs: FsModel;
+  cwd: string;
+  setCwd: (p: string) => void;
+  api: TerminalOsApi;
+  clear: () => void;
+};
+
 // Seeds a plausible VPS layout — the mock fallback and the canonical model for
 // mkdir/touch/rm/mv/cp when live data is unavailable.
+// rr: SINGLETON — the exec emulator's ctx.fs and the default mock OsApi
+// adapter (./host-mock) must mutate ONE tree, so `mkdir` in the terminal
+// shows up in api.fs.list and vice versa.
+let shared: FsModel | null = null;
 export function seedFs(): FsModel {
-  return {
+  return (shared ??= {
     "/": [
       { name: "Media", kind: "dir", size: 0 },
       { name: "Projects", kind: "dir", size: 0 },
@@ -24,7 +38,7 @@ export function seedFs(): FsModel {
     "/apps": [],
     "/Media": [],
     "/Downloads": [],
-  };
+  });
 }
 
 export const base = (cwd: string) => (cwd === "/" ? "/" : cwd + "/");
@@ -66,5 +80,6 @@ export const NEOFETCH = {
     ["memory", "6.4G / 16G"],
     ["disk", "289G / 460G"],
     ["uptime", "14d 6h"],
+    ["data", "demo (not live)"],
   ] as [string, string][],
 };

@@ -1,11 +1,12 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { Upload } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import type { FsEntry } from "../adapter";
+import { DropOverlay } from "./drop-overlay";
 import { FilesSidebar } from "./files-sidebar";
 import { FilesToolbar } from "./files-toolbar";
 import { FileView } from "./file-view";
@@ -85,14 +86,7 @@ export function ExplorerView({
       onDragLeave={win.onDragLeave}
       onDrop={win.onDrop}
     >
-      {win.dragActive && (
-        <div className="pointer-events-none absolute inset-0 z-[60] m-2 grid place-items-center rounded-xl border-2 border-dashed border-primary bg-primary/10 backdrop-blur-[2px]">
-          <div className="flex flex-col items-center gap-2 text-primary">
-            <Upload className="size-7" />
-            <span className="text-sm font-semibold">Drop files &amp; folders to upload</span>
-          </div>
-        </div>
-      )}
+      {win.dragActive && <DropOverlay />}
       {/* Inline rail on wide screens; left Sheet drawer on narrow/mobile. */}
       <aside className="hidden w-60 shrink-0 border-r border-border md:flex">{sidebar}</aside>
       <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
@@ -139,8 +133,8 @@ export function ExplorerView({
           onContextMenu={(e) => cmd.onContext(e, null)}
         >
           {ordered === null ? (
-            <div className="flex h-full items-center justify-center p-8 text-xs text-muted-foreground">
-              Loading…
+            <div className="flex h-full items-center justify-center gap-2 p-8 text-xs text-muted-foreground">
+              <Loader2 className="size-4 animate-spin" /> Loading…
             </div>
           ) : (
             <FileView

@@ -5,16 +5,14 @@
 // services (inspector / activity) are no-ops you can rewire, and the fs
 // browser runs on an injectable adapter (in-memory mock by default).
 // Lifting into a shell (e.g. the `appshell` slice): replace these exports
-// with the shell's own `toast` / `AppInspector` / `usePublishInspector` /
-// `setActivity` / fs api — every other file in the slice imports ONLY this
+// with the shell's own `toast` / `usePublishInspector` / `setActivity` /
+// `useContainer` / fs api — every other file in the slice imports ONLY this
 // seam (`./host` from lib, `../lib/host` from components).
 
 import * as React from "react";
 import { toast as sonner } from "sonner";
 import type { ComponentType } from "react";
 import type { LucideIcon } from "lucide-react";
-
-export { AppInspector } from "./host-inspector";
 
 // ── Toast (sonner-backed shim, same call shape as the appshell toast) ──────
 export type ToastTone = "default" | "success" | "error";
@@ -132,6 +130,40 @@ export function useIsMobile(): boolean {
     return () => mql.removeEventListener("change", onChange);
   }, []);
   return mobile;
+}
+
+// ── Container-width bucket (standalone ResizeObserver; appshell-compatible) ─
+// For the cases where a pane must reflow off its OWN width (not the viewport)
+// and pure-CSS Tailwind `@container` variants aren't enough (JS branching).
+export type Pane = "xs" | "sm" | "md" | "lg";
+
+function bucket(w: number): Pane {
+  if (w < 360) return "xs";
+  if (w < 600) return "sm";
+  if (w < 900) return "md";
+  return "lg";
+}
+
+/** Observe an element's width → size bucket: `const [ref, pane] = useContainer()`. */
+export function useContainer<T extends HTMLElement = HTMLElement>(): [
+  React.RefObject<T | null>,
+  Pane,
+] {
+  const ref = React.useRef<T>(null);
+  const [pane, setPane] = React.useState<Pane>("lg");
+
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver((entries) => {
+      const w = entries[0]?.contentRect.width ?? el.clientWidth;
+      setPane(bucket(w));
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  return [ref, pane];
 }
 
 // Hidden-input file picker primitive (audit:templates forbids raw

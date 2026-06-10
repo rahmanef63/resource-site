@@ -12,7 +12,7 @@ import { defineSliceContract } from "../../../packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "ai-studio",
-  version: "0.1.0",
+  version: "0.2.0",
   requires: {
     auth: "convex",
     rbac: ["studio.read", "studio.write"],
@@ -20,6 +20,9 @@ export const contract = defineSliceContract({
     deps: ["convex-auth", "ai-router", "ai-admin"],
   },
   provides: {
+    tools: [
+      "ai-studio.generate"
+    ] as string[],
     components: [
       "StudioCanvas",
       "StudioPromptBar",

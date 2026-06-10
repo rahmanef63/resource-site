@@ -1,11 +1,11 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "media-viewer",
-  "version": "1.0.1",
+  "version": "1.2.0",
   "category": "os",
   "kind": "ui",
   "title": "Preview — media quick-look",
-  "description": "Quick-look media viewer. Zoomable images with dimensions + checkerboard transparency, an audio player with CSS-bar waveform/transport, a video player with play/pause + scrubber + volume, and PDF/text surfaces. Type-indicator chip, Download, and Open-in-editor handoff via an injectable opener (image → image editor, video/audio → video editor). Remote files render through an injectable media source (identity by default — public URLs just work); the bundled sample gallery is fully offline.",
+  "description": "Quick-look media viewer. Zoomable images with dimensions + checkerboard transparency, an audio player with CSS-bar waveform/transport, a video player with play/pause + scrubber + volume, and PDF/text surfaces. Type-indicator chip, Download, and Open-in-editor handoff via an injectable opener (image → image editor, video/audio → video editor). Remote files render through an injectable media source (identity by default — public URLs just work); the bundled sample gallery is fully offline. Container-query responsive: the toolbar wraps with bigger touch targets and the stage tightens its padding in compact panes.",
   "namespace": "@/features/media-viewer",
   "frontend": {
     "slicePath": "frontend/slices/media-viewer",

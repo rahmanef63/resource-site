@@ -8,7 +8,7 @@ import {
   previewerFor,
   toggleQuickLook,
   useQuickLook,
-} from "../../../lib/quick-look";
+} from "@/features/appshell";
 
 function inEditable(): boolean {
   const el = document.activeElement as HTMLElement | null;

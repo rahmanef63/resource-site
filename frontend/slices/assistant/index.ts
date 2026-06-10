@@ -19,7 +19,14 @@ export const assistantApp: AppDescriptor = {
   defaultSize: { w: 520, h: 620 },
 };
 
-// Host wiring seam (real LLM replies as an async text-delta stream).
+// Central agent host: register each installed slice's ToolCollection once
+// (registerAssistantTools) and wire the ONE shared model seam
+// (configureAgentStream) — the chat then function-calls across every slice.
+export { registerAssistantTools, getAssistantRegistry } from "./lib/agentic-host";
+export { configureAgentStream, isAgentStreamConfigured } from "./lib/host";
+export type { AgentStreamFn } from "./lib/host";
+
+// Deprecated text-only seam (kept for back-compat; funnels into the shared one).
 export { configureAssistantStream } from "./lib/host";
 export type { AssistantStreamFn, WireMsg, AppDescriptor } from "./lib/host";
 

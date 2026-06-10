@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "code-editor",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -11,6 +11,7 @@
   "files": [
     "CHANGELOG.md",
     "README.md",
+    "agent.md",
     "app.tsx",
     "components/editor-surface.tsx",
     "components/editor-toolbar.tsx",
@@ -27,9 +28,27 @@
     "lib/host.ts",
     "lib/mock-fs.ts",
     "lib/seed.ts",
+    "lib/tools.ts",
     "lib/use-editor.ts",
     "lib/util.ts",
+    "preview.tsx",
     "slice.contract.ts",
     "slice.json"
-  ]
+  ],
+  "imports": {
+    "shared": [
+      "@/components/ui/badge",
+      "@/components/ui/button",
+      "@/components/ui/dialog",
+      "@/components/ui/input",
+      "@/components/ui/scroll-area",
+      "@/components/ui/sheet",
+      "@/components/ui/textarea",
+      "@/lib/utils"
+    ],
+    "external": [
+      "lucide-react",
+      "react"
+    ]
+  }
 }

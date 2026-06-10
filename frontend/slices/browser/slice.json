@@ -1,11 +1,11 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "browser",
-  "version": "1.0.2",
+  "version": "1.2.0",
   "category": "os",
   "kind": "ui",
   "title": "Browser — remote headless-browser chrome",
-  "description": "Full browser chrome for a REMOTE headless browser: omnibar with search-or-URL detection, bookmark bar, history view (localStorage-persisted), favicons with globe fallback, busy states, and a screenshot viewport that forwards clicks/typing/keys/scroll into the remote page. The backend is INJECTED via a small BrowserAdapter (state/screenshot/act): point configureBrowser at a real headless-Chromium service (e.g. Playwright behind an authed route — any site renders, no X-Frame-Options problem) or keep the bundled offline canvas demo renderer that fakes the viewport so the whole chrome works with zero backend. Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
+  "description": "Full browser chrome for a REMOTE headless browser: Chrome-style multitab strip (each tab its own remote page), omnibar with search-or-URL detection, bookmark bar, history view (localStorage-persisted), favicons with globe fallback, busy/live badges, an AI agent-activity side panel, save-screenshot action, and a frame viewport that forwards clicks/typing/keys/scroll into the remote page. The backend is INJECTED via a small per-tab BrowserAdapter (state/screenshot/act/close/agentLog/saveShot): point configureBrowser at a real headless-Chromium service (e.g. Playwright behind an authed route — any site renders, no X-Frame-Options problem), wire a live MJPEG screencast with configureScreencast (poll fallback otherwise), or keep the bundled offline canvas demo renderer that fakes per-tab viewports + an action log so the whole chrome works with zero backend. Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
   "namespace": "@/features/browser",
   "frontend": {
     "slicePath": "frontend/slices/browser",
@@ -21,7 +21,8 @@
       "badge",
       "dropdown-menu",
       "tooltip",
-      "scroll-area"
+      "scroll-area",
+      "sheet"
     ],
     "env": [],
     "peers": []
@@ -39,6 +40,8 @@
     "playwright",
     "remote",
     "omnibar",
+    "tabs",
+    "screencast",
     "bookmarks",
     "ui"
   ],

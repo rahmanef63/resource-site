@@ -28,3 +28,8 @@ export type { Tree } from "./adapter/mock-tree";
 
 export { fileExplorerConfig } from "./config";
 export type { FileExplorerConfig } from "./config";
+
+// Agentic tool collection — the slice is not an agent; register this
+// with a host agent (one agent, many slices) via @/shared/agentic.
+export { fileExplorerTools } from "./lib/tools";
+export type { FileExplorerCtx } from "./lib/tools";

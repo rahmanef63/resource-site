@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { SKILL_COLORS, SKILL_ICONS } from "../lib/presets";
 import type { AIStore } from "../lib/store";
-import { GROUP_META, GROUP_ORDER, OS_TOOLS, toolById } from "../lib/tools";
+import { assistantCatalog, catalogGroups, toolById } from "../lib/tools";
 import type { Automation, AutomationStep } from "../lib/types";
 import { Field, FormShell } from "./form-shell";
 import { GlyphTile } from "./agent-avatar";
@@ -147,14 +147,14 @@ export function AutomationForm({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="max-h-72 overflow-auto">
-              {GROUP_ORDER.map((g, gi) => {
-                const tools = OS_TOOLS.filter((t) => t.group === g);
+              {catalogGroups(assistantCatalog()).map((meta, gi) => {
+                const tools = assistantCatalog().filter((t) => t.group === meta.id);
                 if (!tools.length) return null;
                 return (
-                  <div key={g}>
+                  <div key={meta.id}>
                     {gi > 0 ? <DropdownMenuSeparator /> : null}
                     <div className="px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-                      {GROUP_META[g].label}
+                      {meta.label}
                     </div>
                     {tools.map((t) => (
                       <DropdownMenuItem key={t.id} onSelect={() => addStep(t.id)}>

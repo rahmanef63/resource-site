@@ -1,11 +1,11 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "os-terminal",
-  "version": "1.0.1",
+  "version": "1.2.0",
   "category": "os",
   "kind": "ui",
-  "title": "Terminal — shell emulator with live passthrough",
-  "description": "A React-DOM terminal: monospace glass aesthetic, colored prompt, arrow-key history, red stderr. A built-in command set (ls·cd·pwd·cat·mkdir·touch·rm·mv·cp·echo·whoami·date·uname·df·ps·neofetch·help·clear) runs against an in-memory FsModel, so it works with ZERO backend. Wire configureTerminal({ mode:\"live\", fs, exec }) and ls/cat read through your real filesystem, file mutations mirror to it, and any unknown command passes through exec.run as a one-shot shell call (stdout/stderr/exit rendered). Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
+  "title": "Terminal — shell emulator with live passthrough + PTY seam",
+  "description": "A React-DOM terminal: monospace glass aesthetic, colored prompt, arrow-key history, red stderr, mode banner. A built-in command set (ls·cd·pwd·cat·mkdir·touch·rm·mv·cp·echo·whoami·date·uname·df·ps·neofetch·help·clear) runs against an in-memory FsModel, so it works with ZERO backend. Wire configureTerminal({ mode:\"live\", fs, exec, sys }) and ls/cat read through your real filesystem, file mutations mirror to it, host-truth commands (df/ps/whoami/uname/date) and any unknown command pass through exec.run as a one-shot shell call (stdout/stderr/exit rendered), and neofetch shows real sys.stats. For a REAL interactive shell (vim/top/tab-completion) wire configurePty({ transport, screen }) — transport streams PTY bytes (createSsePtyTransport ships the os-vps SSE wire shape) and screen injects your VT renderer (e.g. xterm.js); a touch key bar (Esc/Tab/sticky Ctrl·Alt/arrows/chords/paste) covers soft keyboards. Self-contained: shell inspector hooks are inert seams and the default OsApi is a mock adapter in lib/host-mock.ts.",
   "namespace": "@/features/os-terminal",
   "frontend": {
     "slicePath": "frontend/slices/os-terminal",
@@ -15,7 +15,9 @@
     "npm": [
       "lucide-react"
     ],
-    "shadcn": [],
+    "shadcn": [
+      "button"
+    ],
     "env": [],
     "peers": []
   },
@@ -32,6 +34,7 @@
     "cli",
     "emulator",
     "exec",
+    "pty",
     "ui"
   ],
   "previews": []
