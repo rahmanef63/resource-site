@@ -1,5 +1,9 @@
 # Changelog — image-editor
 
+## 2.1.1 — 2026-06-10
+
+- Host wiring: the editor Shell now self-registers `imageEditorTools` on the shared global host via `useAgentTools` (mount-time, live ctx) — any agent UI (assistant) can drive the editor with zero page wiring.
+
 ## 2.1.0 — 2026-06-10
 
 - New `compact` prop on `<ImageEditor>`: container-first layout override so a

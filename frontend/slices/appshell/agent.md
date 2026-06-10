@@ -43,6 +43,23 @@ STEP 5 — Build the ShellManifest:
 
 Extending: add an app = one manifest entry; add a shell feature = a new defineFeature({id, slots}) listed in features[]. No surface edits ever (open/closed). exampleCode ships BOTH variants: Variant A = routing:false mount in app/page.tsx (simplest); Variant B = catch-all app/[[...slug]]/page.tsx with routing on + app slugs for addressable, deep-linkable URLs (the catch-all MUST notFound() "_next").
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `appshell.window.list`
+- `appshell.app.launch`
+- `appshell.app.focus`
+- `appshell.window.close`
+- `appshell.window.focus`
+- `appshell.window.minimize`
+- `appshell.window.restore`
+- `appshell.window.toggle_maximize`
+- `appshell.space.set`
+- `appshell.profile.save`
+- `appshell.profile.apply`
+- `appshell.notify`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

@@ -2,7 +2,9 @@
 
 import { Activity, Loader2 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useAgentTools } from "@/shared/agentic";
 import { usePublishInspector, useOsApi } from "./lib/host";
+import { systemMonitorTools } from "./lib/tools";
 import { AppFrame } from "./components/host-frame";
 import { GaugeGrid } from "./components/gauge-grid";
 import { GlassPanel } from "./components/glass-panel";
@@ -15,6 +17,7 @@ import { fmtGiBPair, fmtMBs, fmtPct } from "./lib/format";
 // Default export so os-shell can lazy-load it as a window app.
 export default function SystemMonitor() {
   const api = useOsApi();
+  useAgentTools(systemMonitorTools, api);
   const { stats, procs, cpuSeries, netSeries, gpu, refresh } = useStatsHistory();
 
   usePublishInspector(

@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { useAgentTools } from "@/shared/agentic";
+import { reelEditorTools } from "./lib/tools";
 import { useHistory } from "./lib/history";
 import { useClipDrag } from "./lib/use-clip-drag";
 import { useShortcuts } from "./lib/use-shortcuts";
@@ -15,18 +17,18 @@ import { type PanelMode } from "./components/toolbar";
 import { ReelChrome } from "./components/reel-chrome";
 import { ReelPanes } from "./components/reel-panes";
 import { useLayout } from "./lib/use-layout";
-import { type AiMessage } from "./components/ai-panel";
+import { HELLO, type AiMessage } from "./components/ai-panel";
 import { RenderOverlay } from "./components/render-overlay";
 import { useExport } from "./lib/use-export";
 import { useReelInspector } from "./lib/use-reel-inspector";
 import { useContainer, useIsMobile } from "./lib/host";
 
-const HELLO: AiMessage = { role: "ai", text: "Tell me what to change. Try “make it vertical”, “fade in”, “split here”, “punch in”, or “add title Sale”." };
-
 // Reel editor orchestrator: holds playhead/selection/render state, wires the
 // history, drag, keyboard, and AI subsystems to the panels.
 export default function ReelEditor() {
-  const { comp, apply, undo, redo, canUndo, canRedo } = useHistory();
+  const history = useHistory(); // + agentic host wiring bound to live history
+  useAgentTools(reelEditorTools, history);
+  const { comp, apply, undo, redo, canUndo, canRedo } = history;
   const [frame, setFrame] = useState(30);
   const [playing, setPlaying] = useState(false);
   const [sel, setSel] = useState<string | null>("c-intro");

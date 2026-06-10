@@ -35,6 +35,15 @@ STEP 4 — Feed your launcher. `useInstalledApps()` returns AppDescriptor[] for 
 
 STEP 5 — Console exec (optional). `configureAppStoreExec({ mode:"live", exec:{run} })` so command/script apps run on a real one-shot shell (auth it like SSH).
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `app-store.list`
+- `app-store.search`
+- `app-store.install`
+- `app-store.uninstall`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

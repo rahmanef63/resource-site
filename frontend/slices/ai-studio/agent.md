@@ -25,6 +25,12 @@ npx rahman-resources add ai-studio
 
 Run `npx rr add ai-studio`. Mount `<GeneratorCanvas />` at /. Use case: prompt → output IS the entire product. Wire your output renderer (text/image/code/audio) via the OutputSlot adapter. Templates loaded from ai-admin.studio.templates.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `ai-studio.generate`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

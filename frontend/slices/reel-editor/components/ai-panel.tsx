@@ -9,6 +9,9 @@ import { AI_SUGGESTIONS } from "../lib/ai-edit";
 
 export type AiMessage = { role: "user" | "ai"; text: string };
 
+// First message in a fresh AI log (the app orchestrator's seed).
+export const HELLO: AiMessage = { role: "ai", text: "Tell me what to change. Try “make it vertical”, “fade in”, “split here”, “punch in”, or “add title Sale”." };
+
 // AI edit panel: chat-style log + suggestion chips + one-line command input.
 export function AiPanel({
   log,

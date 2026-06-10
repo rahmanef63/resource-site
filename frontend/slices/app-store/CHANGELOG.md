@@ -1,5 +1,9 @@
 # app-store changelog
 
+## 1.2.1 — 2026-06-10
+
+- Host wiring: app self-registers `appStoreTools` with the live `useApps()` rows via `useAgentTools`.
+
 ## 1.2.0 — 2026-06-10
 
 - Agentic tool collection (`lib/tools.ts`): `appStoreTools` exports 4

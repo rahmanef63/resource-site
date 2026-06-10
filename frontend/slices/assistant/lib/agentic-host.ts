@@ -7,29 +7,29 @@
 // a collection of function-calling tools bound to its own live state.
 
 import {
-  createToolRegistry,
+  globalToolRegistry,
+  registerGlobalTools,
   type ToolCollection,
   type ToolRegistry,
 } from "@/shared/agentic";
 
-const registry: ToolRegistry = createToolRegistry();
-const registered = new Set<string>();
-
-/** The assistant-wide registry (a ToolHost) the chat loop runs against. */
+/**
+ * The assistant-wide registry (a ToolHost) the chat loop runs against.
+ * This IS the shared global host — apps that self-register at mount via
+ * `useAgentTools` (any slice may import `@/shared/agentic`) land here too.
+ */
 export function getAssistantRegistry(): ToolRegistry {
-  return registry;
+  return globalToolRegistry();
 }
 
 /**
  * Host wiring: register a slice's tool collection (e.g. `imageEditorTools`)
- * with a thunk returning its live ctx. Idempotent per namespace, so calling
- * from a React effect (strict-mode double mount) is safe.
+ * with a thunk returning its live ctx. Safe in React effects (strict-mode
+ * double mount); re-registering a namespace rebinds its ctx getter.
  */
 export function registerAssistantTools<Ctx>(
   collection: ToolCollection<Ctx>,
   getCtx: () => Ctx,
 ): void {
-  if (registered.has(collection.namespace)) return;
-  registered.add(collection.namespace);
-  registry.register(collection, getCtx);
+  registerGlobalTools(collection, getCtx);
 }

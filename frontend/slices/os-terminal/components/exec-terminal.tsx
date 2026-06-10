@@ -2,8 +2,10 @@
 // audit-allow-hex: terminal glass chrome palette is the slice's design, not themable tokens.
 
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
+import { useAgentTools } from "@/shared/agentic";
 import { useOsApi, usePublishInspector } from "../lib/host";
 import { run, seedFs, NEOFETCH, type Line } from "../lib/commands";
+import { osTerminalTools } from "../lib/tools";
 
 // React-DOM shell emulator (re-authored toward mock-os parity). Maintains a cwd
 // + in-memory FS; `ls`/`cat` read live OsApi data and fall back to the model.
@@ -42,6 +44,7 @@ export default function ExecTerminal() {
       },
     ]);
   }, [api.mode]);
+  useAgentTools(osTerminalTools, { fs, cwd, setCwd, api, clear: () => setLines([]) });
   const [input, setInput] = useState("");
   const [hist, setHist] = useState<string[]>([]);
   const [hp, setHp] = useState(-1);

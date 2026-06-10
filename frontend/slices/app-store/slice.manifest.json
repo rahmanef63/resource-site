@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "app-store",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",

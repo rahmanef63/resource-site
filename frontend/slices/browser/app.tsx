@@ -10,6 +10,8 @@ import { AiPanel } from "./components/ai-panel";
 import { BookmarkBar } from "./components/bookmark-bar";
 import { HistoryView } from "./components/history-view";
 import { RemoteView } from "./components/remote-view";
+import { useAgentTools } from "@/shared/agentic";
+import { browserTools } from "./lib/tools";
 import { useRemoteBrowser } from "./lib/use-remote-browser";
 import { usePersistent, type Bookmark, type HistoryEntry } from "./lib/storage";
 import { hostOf, toTarget } from "./lib/url";
@@ -40,6 +42,7 @@ export default function Browser() {
 // the adapter; we render its frames and forward input.
 function LiveBrowser() {
   const rb = useRemoteBrowser();
+  useAgentTools(browserTools, rb);
   const [bookmarks, setBookmarks] = usePersistent<Bookmark[]>(
     "os-vps:browser.bookmarks",
     DEFAULT_BOOKMARKS,

@@ -1,5 +1,9 @@
 # browser changelog
 
+## 1.2.1 — 2026-06-10
+
+- Host wiring: `LiveBrowser` self-registers `browserTools` bound to the live `useRemoteBrowser()` state via `useAgentTools`.
+
 ## 1.2.0 — 2026-06-10
 
 - Agentic tool collection (`lib/tools.ts`): `browserTools` exports 11

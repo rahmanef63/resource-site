@@ -47,6 +47,45 @@ STEP 4 — Background removal. The "Remove BG" button calls removeImageBackgroun
 
 STEP 5 — Export. PNG/JPG/WebP at 1×/2×/3× via the Export tab, or call `exportStage(stage, {...})` / `stageToDataURL(stage, {...})`. The container owns the box — render inside h-dvh / h-full.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `image-editor.doc.inspect`
+- `image-editor.doc.resize`
+- `image-editor.doc.aspect`
+- `image-editor.doc.crop`
+- `image-editor.layer.add`
+- `image-editor.layer.remove`
+- `image-editor.layer.duplicate`
+- `image-editor.layer.rename`
+- `image-editor.layer.select`
+- `image-editor.layer.order`
+- `image-editor.layer.visibility`
+- `image-editor.layer.lock`
+- `image-editor.layer.opacity`
+- `image-editor.transform.set`
+- `image-editor.transform.flip`
+- `image-editor.tool.select`
+- `image-editor.brush.set`
+- `image-editor.color.set`
+- `image-editor.color.swap`
+- `image-editor.adjust.set`
+- `image-editor.adjust.addLayer`
+- `image-editor.adjust.reset`
+- `image-editor.style.stroke`
+- `image-editor.style.shadow`
+- `image-editor.style.glow`
+- `image-editor.style.blend`
+- `image-editor.text.edit`
+- `image-editor.shape.edit`
+- `image-editor.mask.add`
+- `image-editor.mask.remove`
+- `image-editor.edit.undo`
+- `image-editor.edit.redo`
+- `image-editor.export.image`
+- `image-editor.image.removeBackground`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

@@ -1,11 +1,11 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "code-editor",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "category": "os",
   "kind": "ui",
-  "title": "Code — overlay syntax editor",
-  "description": "A lightweight code editor: line-number gutter, transparent-textarea-over-highlighted-pre overlay (regex tokenizer for JS/TS/JSON/CSS), tab strip with dirty dots, Cmd/Ctrl+S save, a lazy per-directory explorer tree with inline new-file/new-folder, a responsive new-file form (dialog ⇄ bottom drawer), and a status bar (path, Ln/Col, language, save state). The filesystem is INJECTED via a small CodeFsAdapter (list/read/write/mkdir) — point it at a real API or use the bundled writable in-memory mock (seeded sample tree) so it works with zero backend. Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
+  "title": "Code \u2014 overlay syntax editor",
+  "description": "A lightweight code editor: line-number gutter, transparent-textarea-over-highlighted-pre overlay (regex tokenizer for JS/TS/JSON/CSS), tab strip with dirty dots, Cmd/Ctrl+S save, a lazy per-directory explorer tree with inline new-file/new-folder, a responsive new-file form (dialog \u21c4 bottom drawer), and a status bar (path, Ln/Col, language, save state). The filesystem is INJECTED via a small CodeFsAdapter (list/read/write/mkdir) \u2014 point it at a real API or use the bundled writable in-memory mock (seeded sample tree) so it works with zero backend. Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
   "namespace": "@/features/code-editor",
   "frontend": {
     "slicePath": "frontend/slices/code-editor",

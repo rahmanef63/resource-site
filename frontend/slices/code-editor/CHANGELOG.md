@@ -1,5 +1,9 @@
 # code-editor changelog
 
+## 1.2.1 — 2026-06-10
+
+- Host wiring: app self-registers `codeEditorTools` bound to the live `useEditor()` state via `useAgentTools` (mount-time, strict-mode safe).
+
 ## 1.2.0 — 2026-06-10
 
 - Agentic tool collection (`lib/tools.ts`): `codeEditorTools` exports 9

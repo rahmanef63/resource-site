@@ -33,6 +33,22 @@ STEP 3 — Mount. `<Browser />` in a height-bearing box — unwired, an offline 
 
 STEP 4 — Real headless browser. `configureBrowser({ state, screenshot, act })` against a Playwright service: state → { url, title }; screenshot → PNG Blob; act(path, body) handles navigate|click|type|key|scroll|back|forward|reload. AUTH those routes — a remote browser holds logged-in sessions.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `browser.read_state`
+- `browser.open`
+- `browser.new_tab`
+- `browser.close_tab`
+- `browser.back`
+- `browser.forward`
+- `browser.reload`
+- `browser.scroll`
+- `browser.click`
+- `browser.type`
+- `browser.key`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

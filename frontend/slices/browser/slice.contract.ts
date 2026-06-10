@@ -12,7 +12,7 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "browser",
-  version: "1.2.0",
+  version: "1.2.1",
   category: "ui",
   kind: "ui",
   requires: {

@@ -11,7 +11,7 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "image-editor",
-  version: "2.1.0",
+  version: "2.1.1",
   category: "ui",
   kind: "ui",
   requires: {

@@ -11,7 +11,7 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "file-explorer",
-  version: "1.4.0",
+  version: "1.4.1",
   category: "ui",
   kind: "full",
   requires: {

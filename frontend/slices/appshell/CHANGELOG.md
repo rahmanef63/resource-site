@@ -1,5 +1,9 @@
 # Changelog — appshell
 
+## 1.5.1 — 2026-06-10
+
+- Host wiring: `AppShell` self-registers `appshellTools` (module-store ctx) via `useAgentTools` — the whole desktop becomes agent-drivable on mount.
+
 ## 1.5.0 — 2026-06-10
 
 - Agentic tool collection (`lib/tools.ts`): `appshellTools` exports 12

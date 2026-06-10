@@ -33,6 +33,13 @@ STEP 3 — Mount. `<SystemMonitor />` in a height-bearing box — unwired it run
 
 STEP 4 — Real telemetry. `configureSysmon({ mode:"live", stats, processes })` — stats returns { cpu:{pct,cores}, mem:{used,total}, disk:{used,total}, net?:{rx,tx}, uptime }; processes returns [{ pid, name, status, cpu, mem }].
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `system-monitor.stats`
+- `system-monitor.processes`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

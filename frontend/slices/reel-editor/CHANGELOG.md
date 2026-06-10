@@ -1,5 +1,9 @@
 # Changelog — reel-editor
 
+## 1.2.1 — 2026-06-10
+
+- Host wiring: the orchestrator self-registers `reelEditorTools` bound to the live `useHistory()` api via `useAgentTools`. `HELLO` seed moved next to `AiMessage` in `components/ai-panel.tsx`.
+
 ## 1.2.0 — 2026-06-10
 
 - Agentic tool collection (`lib/tools.ts`): `reelEditorTools` exports 11

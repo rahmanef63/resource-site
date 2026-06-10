@@ -43,6 +43,22 @@ STEP 4 — Files pane backend (optional). The quick-import pane ships with an in
 
 STEP 5 — Export. The Render button records the live canvas + mixed audio to WebM via MediaRecorder in realtime (duration = composition length). Users can also import local media via the file picker — object URLs, no upload needed.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `reel-editor.project.inspect`
+- `reel-editor.ratio.set`
+- `reel-editor.title.add`
+- `reel-editor.clip.split`
+- `reel-editor.clip.remove`
+- `reel-editor.clip.duplicate`
+- `reel-editor.clip.speed`
+- `reel-editor.clip.crossfade`
+- `reel-editor.clip.move_track`
+- `reel-editor.history.undo`
+- `reel-editor.history.redo`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

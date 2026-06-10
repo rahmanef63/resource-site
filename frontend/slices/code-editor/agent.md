@@ -43,6 +43,20 @@ STEP 4 — Real filesystem (optional). `configureCodeFs({ list, read, write, mkd
 
 STEP 5 — Cross-app open. From a file manager (e.g. the file-explorer slice), wire onOpenFile to re-render CodeEditor with payload={{ path }} — the editor adds a tab and hydrates the buffer.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `code-editor.inspect`
+- `code-editor.file.open`
+- `code-editor.file.create`
+- `code-editor.file.read`
+- `code-editor.edit.set`
+- `code-editor.edit.replace`
+- `code-editor.file.save`
+- `code-editor.tab.switch`
+- `code-editor.tab.close`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

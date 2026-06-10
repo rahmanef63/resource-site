@@ -4,7 +4,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { useAgentTools } from "@/shared/agentic";
 import { EditorProvider, useEditor } from "./lib/store";
+import { imageEditorTools } from "./commands/registry";
 import { blankDoc, createLayer } from "./lib/model";
 import { loadAutosave, saveAutosave, type Project } from "./lib/project";
 import { stageToDataURL } from "./lib/export";
@@ -148,7 +150,9 @@ function Shell({ onSave, onSaveAs, onClose, onDirty, onReady, autoRestore, saveD
   useAutosave(autoRestore, saveDoc, ready);
   const autoMobile = useIsMobile();
   const mobile = compact ?? autoMobile;
-  const { version, canUndo, stageRef } = useEditor();
+  const ed = useEditor();
+  useAgentTools(imageEditorTools, ed);
+  const { version, canUndo, stageRef } = ed;
   // Dirty = history moved past the last save. Derived (no effect-driven
   // setState): loadProject/autosave don't push history so opening a file never
   // trips it; api.markSaved() pins savedVersion to the current version.

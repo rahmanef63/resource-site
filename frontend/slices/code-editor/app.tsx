@@ -13,6 +13,8 @@ import { EditorSurface } from "./components/editor-surface";
 import { TabStrip } from "./components/tab-strip";
 import { StatusBar } from "./components/status-bar";
 import { NewFileModal } from "./components/new-file-modal";
+import { useAgentTools } from "@/shared/agentic";
+import { codeEditorTools } from "./lib/tools";
 import { useEditor } from "./lib/use-editor";
 import { baseName, langOf } from "./lib/util";
 
@@ -30,6 +32,7 @@ function payloadPath(payload: unknown): string | null {
 // Default export so os-shell can lazy-load it as a window app.
 export default function CodeEditor({ payload }: AppProps) {
   const ed = useEditor();
+  useAgentTools(codeEditorTools, ed);
   const [explorerOpen, setExplorerOpen] = useState(false);
   const [newOpen, setNewOpen] = useState(false);
   const [pos, setPos] = useState({ ln: 1, col: 1 });

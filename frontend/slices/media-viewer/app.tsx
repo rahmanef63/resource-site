@@ -2,6 +2,8 @@
 
 import { useCallback, useState } from "react";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { useAgentTools } from "@/shared/agentic";
+import { mediaViewerTools } from "./lib/tools";
 import type { AppProps } from "./lib/host";
 import { openWindow, usePublishInspector } from "./lib/host";
 import { SAMPLES } from "./lib/samples";
@@ -30,6 +32,16 @@ function SampleGallery() {
     setIndex((i) => (i + delta + SAMPLES.length) % SAMPLES.length);
     setZoom(1);
   };
+
+  // The ctx adapter the tool collection drives — built from this component's
+  // local state (the contract MediaViewerCtx documents).
+  useAgentTools(mediaViewerTools, {
+    current: () => ({ name: file.name, kind: file.kind, meta: file.meta }),
+    count: () => SAMPLES.length,
+    go,
+    zoom: () => zoom,
+    setZoom: (z: number) => setZoom(Math.min(3, Math.max(0.4, z))),
+  });
 
   // Trigger a browser download from the inline data-URI when one exists.
   const onDownload = useCallback(() => {

@@ -48,6 +48,19 @@ STEP 5 — Custom adapter. Implement FileExplorerAdapter: { mode: "live"|"mock"|
 
 The container owns the box — render <FileExplorer> inside something with a height (h-dvh / h-full). It self-provides its adapter context; no extra provider needed.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `file-explorer.list`
+- `file-explorer.navigate`
+- `file-explorer.mkdir`
+- `file-explorer.rename`
+- `file-explorer.move`
+- `file-explorer.trash`
+- `file-explorer.remove`
+- `file-explorer.empty_trash`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

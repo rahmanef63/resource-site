@@ -33,6 +33,14 @@ STEP 3 — Mount. `<Terminal />` in a height-bearing box — mock mode runs enti
 
 STEP 4 — Go live. `configureTerminal({ mode:"live", fs:{list,read,write,mkdir,remove,move,copy}, exec:{run} })`. In live mode ls/cat read through your fs, mutations mirror, and unknown commands hit exec.run (one-shot; treat the endpoint like SSH).
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `os-terminal.run`
+- `os-terminal.cwd`
+- `os-terminal.clear`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

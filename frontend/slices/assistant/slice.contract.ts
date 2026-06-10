@@ -13,7 +13,7 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "assistant",
-  version: "1.1.0",
+  version: "1.1.1",
   category: "ai",
   kind: "ui",
   requires: {

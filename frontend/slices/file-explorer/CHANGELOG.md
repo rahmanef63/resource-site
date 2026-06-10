@@ -1,5 +1,9 @@
 # Changelog — file-explorer
 
+## 1.4.1 — 2026-06-10
+
+- Host wiring: `ExplorerView` self-registers `fileExplorerTools` bound to the live `useFiles()` state via `useAgentTools`.
+
 ## 1.4.0 — 2026-06-10
 
 - Agentic tool collection (`lib/tools.ts`): `fileExplorerTools` exports 8

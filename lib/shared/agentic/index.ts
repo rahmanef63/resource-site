@@ -42,3 +42,5 @@ export {
   type AgentStreamFn,
 } from "./host";
 export { runAgentLoop, type AgentEvents } from "./agent-loop";
+export { globalToolRegistry, registerGlobalTools } from "./global-host";
+export { useAgentTools } from "./use-agent-tools";

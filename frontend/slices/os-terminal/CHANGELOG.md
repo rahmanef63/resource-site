@@ -1,5 +1,9 @@
 # os-terminal changelog
 
+## 1.2.1 — 2026-06-10
+
+- Host wiring: `ExecTerminal` self-registers `osTerminalTools` with a live `RunCtx` (fs/cwd/api/clear) via `useAgentTools`.
+
 ## 1.2.0 — 2026-06-10
 
 - Agentic tool collection (`lib/tools.ts`): `osTerminalTools` exports 3

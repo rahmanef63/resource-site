@@ -15,6 +15,8 @@ import { FileDetails } from "./file-details";
 import { FileStatusBar } from "./file-status-bar";
 import { UploadInput } from "./upload-input";
 import type { FilePickerHandle } from "@/shared/ui/FilePicker";
+import { useAgentTools } from "@/shared/agentic";
+import { fileExplorerTools } from "../lib/tools";
 import { useFiles } from "../hooks/use-files";
 import { useFileSelection } from "../hooks/use-file-selection";
 import { useFileCommands } from "../hooks/use-file-commands";
@@ -36,6 +38,7 @@ export function ExplorerView({
   className?: string;
 }) {
   const fs = useFiles(initialPath);
+  useAgentTools(fileExplorerTools, fs);
   const sel = useFileSelection(fs.entries);
   const cmd = useFileCommands(fs, sel, onOpenFile);
   const dnd = useDnd(sel.selected, sel.selectOne, fs.move, fs.upload);

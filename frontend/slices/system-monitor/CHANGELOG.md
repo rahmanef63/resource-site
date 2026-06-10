@@ -1,5 +1,9 @@
 # system-monitor changelog
 
+## 1.2.1 — 2026-06-10
+
+- Host wiring: app self-registers `systemMonitorTools` bound to the live `useOsApi()` telemetry via `useAgentTools`.
+
 ## 1.2.0 — 2026-06-10
 
 - Agentic tool collection (`lib/tools.ts`): `systemMonitorTools` exports 2

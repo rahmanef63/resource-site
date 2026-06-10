@@ -47,17 +47,17 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...appStoreConfig,
     importPath: "@/features/app-store/config",
-    version: "1.2.0",
+    version: "1.2.1",
   },
   {
     ...appshellConfig,
     importPath: "@/features/appshell/config",
-    version: "1.5.0",
+    version: "1.5.1",
   },
   {
     ...assistantConfig,
     importPath: "@/features/assistant/config",
-    version: "1.1.0",
+    version: "1.1.1",
   },
   {
     ...auditLogConfig,
@@ -72,7 +72,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...browserConfig,
     importPath: "@/features/browser/config",
-    version: "1.2.0",
+    version: "1.2.1",
   },
   {
     ...calComBookingConfig,
@@ -82,7 +82,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...codeEditorConfig,
     importPath: "@/features/code-editor/config",
-    version: "1.2.0",
+    version: "1.2.1",
   },
   {
     ...commandMenuConfig,
@@ -107,7 +107,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...imageEditorConfig,
     importPath: "@/features/image-editor/config",
-    version: "2.1.0",
+    version: "2.1.1",
   },
   {
     ...mediaStudioConfig,
@@ -117,7 +117,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...mediaViewerConfig,
     importPath: "@/features/media-viewer/config",
-    version: "1.2.0",
+    version: "1.2.1",
   },
   {
     ...midtransPaymentConfig,
@@ -132,7 +132,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...osTerminalConfig,
     importPath: "@/features/os-terminal/config",
-    version: "1.2.0",
+    version: "1.2.1",
   },
   {
     ...platformAdminConfig,
@@ -147,7 +147,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...reelEditorConfig,
     importPath: "@/features/reel-editor/config",
-    version: "1.2.0",
+    version: "1.2.1",
   },
   {
     ...resendNewsletterConfig,
@@ -167,7 +167,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...systemMonitorConfig,
     importPath: "@/features/system-monitor/config",
-    version: "1.2.0",
+    version: "1.2.1",
   },
   {
     ...vectorSearchConfig,

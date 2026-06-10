@@ -25,6 +25,12 @@ npx rahman-resources add ai-router
 
 Run `npx rr add ai-router`. Wrap every AI call through ai-router. Tiers: nano = quick classification (spam-flag, headline-suggest), mid = chat / draft, flagship = methodology-review / deep-think. Token usage logs to ai_usage table for the cost dashboard.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `ai-router.route`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

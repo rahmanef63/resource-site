@@ -43,6 +43,15 @@ STEP 4 — Remote files (optional). Paths resolve through `configureMediaSource(
 
 STEP 5 — Editor handoff (optional). `configureMediaOpener((appId, title, size, payload) => …)` routes the "Open in Image/Video Editor" actions to your shell (no-op until set). Wire it to openWindow when running inside appshell with image-editor / reel-editor installed.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `media-viewer.info`
+- `media-viewer.next`
+- `media-viewer.prev`
+- `media-viewer.zoom.set`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

@@ -192,15 +192,36 @@ Tier-A os apps now export tool collections (register with any host via
 
 **Scorecard now:** 10 slices with real collections + assistant as central host
 + ai-agents/ai-chat/ai-router/ai-studio/ai-admin/create-your-mcp wired to the
-registry. Demo pages still need to call `registerAssistantTools` per mounted
-app (host wiring, not slice work).
+registry.
+
+### Wave 3a (2026-06-10) — host wiring shipped
+
+The registry singleton moved INTO the shared kit so wiring needs no
+cross-slice import and no page plumbing:
+
+- `lib/shared/agentic/global-host.ts` — `globalToolRegistry()` +
+  `registerGlobalTools(collection, getCtx)`. Re-registering a namespace
+  REBINDS its ctx getter (remount-safe) through a forwarding thunk; tools
+  register once.
+- `lib/shared/agentic/use-agent-tools.ts` — `useAgentTools(collection, ctx)`:
+  one-line mount-time wiring; ctx read through a per-render ref so tools
+  always see live state.
+- assistant 1.1.1 — `getAssistantRegistry()`/`registerAssistantTools` now
+  delegate to the global host (API unchanged), so self-registered apps show
+  up in the assistant chat + catalog automatically.
+- All 10 os apps self-register on mount: image-editor (editor store),
+  reel-editor (`useHistory()`), code-editor (`useEditor()`), file-explorer
+  (`useFiles()`), os-terminal (live `RunCtx`), browser (`useRemoteBrowser()`),
+  media-viewer (ctx adapter from gallery state), system-monitor
+  (`useOsApi()`), app-store (`useApps()` rows), appshell (module store).
+
+Open any of these apps + the assistant (with `configureAgentStream` wired)
+and the agent drives them — no per-page registration code.
+
+**G5 shipped:** `gen:agent-md` now emits a `## Tools (agentic surface)`
+section read straight from each contract's `provides.tools`.
 
 ### Next (in order)
 
-1. Host wiring in the os demo/preview pages: mount-time
-   `registerAssistantTools(<x>Tools, () => ctx)` per app so the assistant
-   drives them live (media-viewer needs its small ctx adapter built from
-   component state).
-2. Tier-A* admin (gated via `requirePermission`), Tier-A data/ui slices.
-3. Tier-C `configure` tools as needed; `agent.md` generator could emit a
-   `## Tools` section from `provides.tools` (G5).
+1. Tier-A* admin (gated via `requirePermission`), Tier-A data/ui slices.
+2. Tier-C `configure` tools as needed.

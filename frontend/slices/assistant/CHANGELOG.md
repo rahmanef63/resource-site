@@ -1,5 +1,9 @@
 # assistant changelog
 
+## 1.1.1 — 2026-06-10
+
+- Central host now IS the shared global host: `getAssistantRegistry()`/`registerAssistantTools` delegate to `@/shared/agentic` `globalToolRegistry`/`registerGlobalTools`, so apps that self-register via `useAgentTools` show up in the assistant chat/catalog automatically. Re-registering a namespace rebinds its ctx (remount-safe).
+
 ## 1.1.0 — 2026-06-10
 
 - Central agent host: `registerAssistantTools(collection, getCtx)` registers

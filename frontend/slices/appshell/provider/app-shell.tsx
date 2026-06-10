@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, type ComponentType, type ReactNode } from "react";
+import { useAgentTools } from "@/shared/agentic";
 import { OsDesktop } from "../components/desktop";
+import { appshellTools } from "../lib/tools";
 import { configureWindowTitle, startWindowTitleSync } from "../lib/window-title";
 import { AppRegistryProvider } from "../lib/registry";
 import { ResponsiveProvider } from "../responsive/responsive-provider";
@@ -34,6 +36,7 @@ function withProviders(
  */
 export function AppShell({ manifest }: { manifest: ShellManifest }) {
   const features = manifest.features ?? [];
+  useAgentTools(appshellTools, {});
 
   // Tab title follows the focused window ("Files — Brand"); audit found it
   // frozen on the SSR metadata. Opt out via manifest.titleSync: false.

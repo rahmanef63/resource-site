@@ -1,5 +1,9 @@
 # media-viewer changelog
 
+## 1.2.1 — 2026-06-10
+
+- Host wiring: the sample gallery builds its `MediaViewerCtx` adapter from component state and self-registers `mediaViewerTools` via `useAgentTools`.
+
 ## 1.2.0 — 2026-06-10
 
 - Agentic tool collection (`lib/tools.ts`): `mediaViewerTools` exports 4

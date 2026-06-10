@@ -21,7 +21,9 @@ import {
   type CatalogApp,
 } from "./lib/store-catalog";
 import { SYSTEM_CATALOG, type SystemEntry } from "./lib/system-catalog";
+import { useAgentTools } from "@/shared/agentic";
 import { setInstalled, useApps } from "./lib/apps-store";
+import { appStoreTools } from "./lib/tools";
 import { setEnabled, useDisabledIds } from "./lib/enabled-store";
 
 // Default export so a windowed host can lazy-load it. Installing an app flips
@@ -38,6 +40,7 @@ export default function AppStore() {
   const compact = pane === "xs" || pane === "sm";
 
   const rows = useApps();
+  useAgentTools(appStoreTools, { apps: rows });
   const disabled = useDisabledIds();
   const off = useMemo(() => new Set(disabled), [disabled]);
   const isSystem = filter === "Apps" || filter === "Features";
