@@ -4,28 +4,35 @@ Zero-human-involvement deploy. Self-hosted Convex + Next.js in single docker-com
 
 ## rr's own Convex backend (api-resource.rahmanef.com)
 
-The rr site's backend deploys **from this repo** — reproducible from
-`git clone`, no hand-assembly:
+rr is a feature LIBRARY: slice demos run on client-side localStorage, NOT
+Convex. The only thing rr-the-site runs on Convex is the **admin-login
+rate limiter**. So rr deploys an admin-only subset — `rate_limit` — and
+nothing else. Every other `convex/features/<slug>/` is copy-source that
+ships to consumers via `npx rr add <slug>` and is composed into THEIR
+backend, never rr's.
 
-- `convex/schema.ts` — root composer spreading every
-  `convex/features/<slug>/_schema.ts` `<slugCamel>Tables` export
-  (+ `authTables` / `authTablesExt`).
-- `convex/crons.ts` — prune crons: `rateLimits` every 5 min,
-  `newsletterSubscribeAttempts` + `subscriberAttempts` daily.
+- `convex/schema.ts` — composes ONLY `rateLimitTables` (+ doc-comment
+  showing the consumer composition pattern).
+- `convex/crons.ts` — one job: prune expired `rateLimits` every 5 min.
+- `scripts/deploy-convex-functions.mjs` — an `ADMIN_CONVEX` allowlist
+  (`schema.ts`, `crons.ts`, `features/rate_limit`, `_shared/crypto.ts`)
+  is staged + deployed; the ~129 consumer-only functions never land on
+  rr's backend.
 
 ```bash
 # .env.local (gitignored):
 #   CONVEX_SELF_HOSTED_URL="https://api-resource.rahmanef.com"
 #   CONVEX_SELF_HOSTED_ADMIN_KEY="..."  # docker exec <backend> ./generate_admin_key.sh
-npm run deploy:convex            # stage-copy → codegen → deploy → cleanup
+npm run deploy:convex            # stage allowlist → codegen → deploy → cleanup
 npm run deploy:convex -- --dry-run   # codegen sanity only
 ```
 
-The script stages `convex/` into `.convex-deploy/` so the CLI's codegen
-never touches the in-repo `convex/_generated` ambient stub (hard rule:
-never codegen in-repo). Backend deployment env (`RATE_LIMIT_SERVER_KEY`)
-lives on the deployment itself — `npx convex env list` with the same
-`.env.local` sourced.
+The script stages into `.convex-deploy/` so the CLI's codegen never
+touches the in-repo `convex/_generated` ambient stub (hard rule: never
+codegen in-repo). To add an admin-runtime feature later: add its dir +
+`_shared` deps to `ADMIN_CONVEX` and its tables to `convex/schema.ts`.
+Backend env (`RATE_LIMIT_SERVER_KEY`) lives on the deployment —
+`npx convex env list` with `.env.local` sourced.
 
 ## Pre-flight
 

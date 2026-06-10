@@ -1,61 +1,30 @@
 /**
- * Root schema composer — makes the rr Convex deployment reproducible from
- * `git clone` (before this file, the live backend was schemaless: every
- * `withIndex` call failed at runtime and callers silently fell back).
+ * rr's OWN backend schema (api-resource.rahmanef.com).
  *
- * Composition rule (CLAUDE.md hard rule 5): every feature ships its tables
- * as `convex/features/<slug>/_schema.ts` exporting `<slugCamel>Tables`;
- * this file spreads them all. `authTablesExt` extends @convex-dev/auth's
- * library-owned `authTables`, so it spreads AFTER them.
+ * The rr site is a feature LIBRARY: slice demos run on client-side
+ * localStorage adapters, NOT Convex. The only thing rr-the-site runs on
+ * Convex is the admin-login rate limiter. So this deployed schema composes
+ * exactly ONE feature — `rate_limit`. Nothing else.
  *
- * Deploy with scripts/deploy-convex-functions.mjs — never `convex codegen`
- * in-repo (convex/_generated stays a hand-written stub for site typecheck).
+ * Every other `convex/features/<slug>/_schema.ts` is COPY-SOURCE: shipped
+ * verbatim by `npx rr add <slug>` and composed into the CONSUMER's root
+ * schema, never into rr's. That's the modular contract — rr deploys what
+ * rr uses; consumers deploy what they download.
+ *
+ * Consumer composition pattern (in their own convex/schema.ts):
+ *
+ *   import { defineSchema } from "convex/server";
+ *   import { authTables } from "@convex-dev/auth/server";
+ *   import { paymentTables } from "./features/payment/_schema";
+ *   import { commentsTables } from "./features/comments/_schema";
+ *   export default defineSchema({ ...authTables, ...paymentTables, ...commentsTables });
+ *
+ * Deploy rr's backend with `npm run deploy:convex` (admin-only allowlist).
  */
 
 import { defineSchema } from "convex/server";
-import { authTables } from "@convex-dev/auth/server";
-
-import { activityTables } from "./features/activity/_schema";
-import { adminTables } from "./features/admin/_schema";
-import { aiTables } from "./features/ai/_schema";
-import { aiChatTables } from "./features/aiChat/_schema";
-import { authTablesExt } from "./features/auth/_schema";
-import { bookingsTables } from "./features/bookings/_schema";
-import { commentsTables } from "./features/comments/_schema";
-import { createYourMcpTables } from "./features/create_your_mcp/_schema";
-import { libraryTables } from "./features/library/_schema";
-import { newsletterTables } from "./features/newsletter/_schema";
-import { notionTables } from "./features/notion/_schema";
-import { paymentTables } from "./features/payment/_schema";
 import { rateLimitTables } from "./features/rate_limit/_schema";
-import { rbacRolesTables } from "./features/rbac_roles/_schema";
-import { seoTables } from "./features/seo/_schema";
-import { servicesTables } from "./features/services/_schema";
-import { subscribersTables } from "./features/subscribers/_schema";
-import { telemetryTables } from "./features/telemetry/_schema";
-import { testimonialsTables } from "./features/testimonials/_schema";
-import { userManagementTables } from "./features/user_management/_schema";
 
 export default defineSchema({
-  ...authTables,
-  ...authTablesExt,
-  ...activityTables,
-  ...adminTables,
-  ...aiTables,
-  ...aiChatTables,
-  ...bookingsTables,
-  ...commentsTables,
-  ...createYourMcpTables,
-  ...libraryTables,
-  ...newsletterTables,
-  ...notionTables,
-  ...paymentTables,
   ...rateLimitTables,
-  ...rbacRolesTables,
-  ...seoTables,
-  ...servicesTables,
-  ...subscribersTables,
-  ...telemetryTables,
-  ...testimonialsTables,
-  ...userManagementTables,
 });

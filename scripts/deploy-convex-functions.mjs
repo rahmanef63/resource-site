@@ -42,12 +42,32 @@ if (!dryRun && (!CONVEX_SELF_HOSTED_URL || !CONVEX_SELF_HOSTED_ADMIN_KEY)) {
   process.exit(1);
 }
 
+// ── admin-runtime allowlist ───────────────────────────────────────────────
+// rr's site runs ONLY the admin-login rate limiter on Convex; everything
+// else in convex/features/ is copy-source for consumers. Deploy a CURATED
+// subset so the 129 consumer-only functions + their tables never land on
+// rr's backend. To add an admin-runtime feature later, add its dir + any
+// _shared deps + the table to convex/schema.ts.
+const ADMIN_CONVEX = [
+  "schema.ts",
+  "crons.ts",
+  "features/rate_limit",
+  "_shared/crypto.ts",
+];
+
 // ── stage ─────────────────────────────────────────────────────────────────
 rmSync(STAGE, { recursive: true, force: true });
-mkdirSync(STAGE, { recursive: true });
-cpSync(path.join(ROOT, "convex"), path.join(STAGE, "convex"), { recursive: true });
-// drop the ambient stub — the CLI writes real codegen output here
-rmSync(path.join(STAGE, "convex", "_generated"), { recursive: true, force: true });
+mkdirSync(path.join(STAGE, "convex"), { recursive: true });
+for (const rel of ADMIN_CONVEX) {
+  const src = path.join(ROOT, "convex", rel);
+  if (!existsSync(src)) {
+    console.error(`allowlist entry missing: convex/${rel}`);
+    process.exit(1);
+  }
+  const dest = path.join(STAGE, "convex", rel);
+  mkdirSync(path.dirname(dest), { recursive: true });
+  cpSync(src, dest, { recursive: true });
+}
 // project marker so the CLI roots itself in the stage dir. The CLI refuses
 // to codegen unless `convex` is declared as a dependency; actual modules
 // still resolve from the repo's node_modules by walking up.
@@ -61,7 +81,6 @@ writeFileSync(
       type: "module",
       dependencies: {
         convex: rootPkg.dependencies.convex,
-        "@convex-dev/auth": rootPkg.dependencies["@convex-dev/auth"],
       },
     },
     null,

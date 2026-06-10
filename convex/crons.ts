@@ -1,10 +1,10 @@
 /**
- * Cron registry for the rr live backend. Before this file existed, no
- * cleanup ran at all: rateLimits rows accumulated forever and the
- * subscribe-attempt throttle tables grew unbounded.
+ * Cron registry for rr's OWN backend. rr deploys only the admin rate
+ * limiter (see schema.ts), so the only scheduled job is its prune.
  *
- * Each prune walks at most 1000 rows per run to bound per-invocation cost;
- * the cadence guarantees steady-state drain even under flood.
+ * Copy-source slices that ship their own prune mutations (newsletter,
+ * subscribers — `_pruneAttempts` + `by_attemptedAt` index) are wired into
+ * the CONSUMER's crons.ts when they download those slices, not here.
  */
 
 import { cronJobs } from "convex/server";
@@ -16,20 +16,6 @@ crons.interval(
   "rate-limit: prune expired",
   { minutes: 5 },
   internal.features.rate_limit.mutation._pruneExpired,
-  {},
-);
-
-crons.interval(
-  "newsletter: prune subscribe attempts",
-  { hours: 24 },
-  internal.features.newsletter.mutation._pruneAttempts,
-  {},
-);
-
-crons.interval(
-  "subscribers: prune subscribe attempts",
-  { hours: 24 },
-  internal.features.subscribers.mutation._pruneAttempts,
   {},
 );
 

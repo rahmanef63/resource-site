@@ -69,6 +69,7 @@ CLI baca `rr.json` (consumer project manifest) — schema di `packages/cli/lib/r
 3. **Copy-first flow.** Jangan greenfield. `cp -r` dari source → adjust import alias → strip business-specific bits.
 4. **Stack:** Next 16 + React 19 + Tailwind 4 + Convex self-hosted + TS strict.
 5. **Slice contract.** Setiap vertical feature = tier-3 slice di rr `frontend/slices/<slug>/` (dgn `slice.json` + `slice.contract.ts`) + `convex/features/<slug>/` (dgn `<slug>Tables` schema export). Imports di dalam slice WAJIB resolve via `@/components/ui/*`, `@/shared/*`, `@/features/<own-slug>/*`, `@convex/*`, atau relative-within-slice. No `../../` reaching out. Audit-bp gates ini di CI (`npm run audit:slices`).
+6. **rr backend = admin-only.** Slice demo di site jalan pakai client localStorage adapter, BUKAN Convex. `convex/features/*` = **copy-source** — consumer compose ke backend mereka sendiri pas `npx rr add <slug>`. rr's OWN backend (`api-resource.rahmanef.com`) cuma deploy `rate_limit` (admin-login limiter) via `npm run deploy:convex` (allowlist `ADMIN_CONVEX` di `scripts/deploy-convex-functions.mjs`). JANGAN compose semua feature ke `convex/schema.ts` — itu bikin library jadi monolit.
 
 ## Forbidden
 
