@@ -304,37 +304,63 @@ data/ui) + assistant host + 6 ai-infra consumers. Tier A / A* fully covered.
   to `stubReply` (ships inert into consumer templates). Fixed a latent bug: the
   leading cosmetic greeting (assistant) is stripped so the Anthropic call starts
   with a `user` message.
-- **Live-bridge audit** (wave-3b `229c338c`, can't run without a key):
-  `app/api/agent-stream/route.ts` + `sse-client.ts` + `components/agent-bridge.tsx`
-  read end-to-end. `toAnthropic` translation is correct (user / assistant+tool_use
-  / tool_result→user, `is_error` mapped, empty-assistant skipped). Key-guard,
-  per-IP rate limit, 60-msg + 200k-char caps present. assistant `chat-panel`
-  starts from `[]` with a persona user-line, so it is NOT exposed to the
-  greeting-first bug. **Remaining risk:** a real round-trip has still never run.
+- **Live-bridge audit** (wave-3b `229c338c`): `app/api/agent-stream/route.ts` +
+  `sse-client.ts` + `components/agent-bridge.tsx` read end-to-end. `toAnthropic`
+  translation is correct (user / assistant+tool_use / tool_result→user,
+  `is_error` mapped, empty-assistant skipped). assistant `chat-panel` starts
+  from `[]` with a persona user-line, so it is NOT exposed to the greeting-first
+  bug. **This route is rr's OWN preview demo, NOT a consumer requirement** — see
+  the BYOK contract below.
+- **BYOK prompt surface** (`lib/shared/agentic/prompt.ts`): the missing second
+  artifact. rr now exports `BASE_AGENT_SYSTEM` (canonical custom instruction,
+  incl. the destructive-confirm rule), `buildAgentSystem(collections, opts)`,
+  `ToolCollection.instructions?`, and `registry.systemPrompt(opts?)`. The demo
+  route single-sources `BASE_AGENT_SYSTEM`. `appshell` + `image-editor` carry
+  example `instructions`.
 
-### Live acceptance — RUN THIS (needs a real key) ⚠ BLOCKED on `ANTHROPIC_API_KEY`
+### The rr agentic contract is BYOK — rr never holds a model key
 
-Cannot be run by the agent (no key in env). Owner closeout:
+rr is a **features library**, not a deployed agent. It does NOT set
+`ANTHROPIC_API_KEY` anywhere and is NOT "blocked" on one. For every slice rr
+ships exactly two things; the consumer supplies the key + model transport in
+their own project:
 
-```bash
-ANTHROPIC_API_KEY=sk-ant-… npm run build && PORT=3137 npm start   # or `npm run dev`
-# then in the browser:
-#   /preview/slices/appshell    → chat: "open the app store, then list windows"
-#       expect two ⚙ lines: appshell.app.launch ✓, appshell.window.list ✓
-#   /preview/slices/image-editor → chat: "add a text layer saying hello"
-#       expect a hello text layer to appear on the canvas
-# Unset key → both pages fall back to the typing-stream demo (no 401 poison).
+| rr provides | from |
+|---|---|
+| **1. custom instruction** (system prompt) | `registry.systemPrompt()` / `BASE_AGENT_SYSTEM` |
+| **2. function list to call** | `registry.anthropicTools()` |
+
+```ts
+import { createToolRegistry } from "@/shared/agentic";
+import { appshellTools } from "@/features/appshell/lib/tools";
+
+const reg = createToolRegistry();
+reg.register(appshellTools, () => appShellStore);
+
+// In YOUR project, with YOUR key (Anthropic SDK shown; any provider works):
+const res = await anthropic.messages.create({
+  model: "claude-sonnet-4-6",
+  system: reg.systemPrompt(),     // (1) custom instruction
+  tools: reg.anthropicTools(),    // (2) function list
+  messages,
+});
+// dispatch res tool_use blocks via reg.invoke(name, input) — or use runAgentLoop
+// with your own configureAgentStream() that calls the model with your key.
 ```
 
-Record pass/fail here once run. The `toAnthropic` translation has unit tests
-only; this is the last unverified link.
+rr's `/api/agent-stream` route + `<AgentBridge>` are an OPTIONAL convenience so
+the preview site can demo live tool-calling **if** rr's own deployment happens
+to have a key; with no key they return a friendly fallback. Nothing a consumer
+copies depends on them. A real end-to-end round-trip therefore belongs to the
+consumer's app, not to this repo.
 
 ### Next (in order)
 
-1. **Live acceptance run** (above) — highest remaining risk, owner-gated on key.
-2. Tier-C `configure` tools as needed (optional by design).
-3. Surface `dangerous` in `agent.md` (generator currently reads contract names
-   only; would need to correlate `tools.ts` flags) — nice-to-have.
-4. Host wiring examples for the adapter-ctx slices (each needs its consumer
-   binding before the agent can mutate anything); demonstrate `requirePerm` +
-   the `confirm` gate in one end-to-end example.
+1. Tier-C `configure` tools as needed (optional by design).
+2. Per-collection `instructions` on the remaining slices (only `appshell` +
+   `image-editor` carry examples today; tool descriptions already cover most —
+   add where multi-tool ordering needs guidance).
+3. Surface `dangerous` in `agent.md` (generator reads contract names only) —
+   nice-to-have.
+4. Consumer-binding example for an adapter-ctx slice demonstrating `requirePerm`
+   + the `confirm` gate end-to-end (in a consumer project, not rr).

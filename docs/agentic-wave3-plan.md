@@ -37,11 +37,17 @@ Waves landed on `main` — do not redo any of this:
    binding. Plus a new safety seam not in the original plan: `Tool.dangerous` +
    `runAgentLoop` `confirm` gate + `host.isDangerous`, with 18 destructive tools
    flagged.
-4. ⏳ **Live acceptance (§2.4) — STILL NOT RUN (no key in agent env).** Bridge
-   audited end-to-end instead: `toAnthropic` translation verified correct,
-   guards present, chat-panel not exposed to greeting-first. The exact run
-   command is in `agentic-readiness.md` → "Live acceptance — RUN THIS". This is
-   the only open item; owner must run it with a real `ANTHROPIC_API_KEY`.
+4. ✅ **Live acceptance (§2.4) — RESOLVED as out-of-scope (BYOK).** Owner
+   clarified: rr is a features library; it never sets `ANTHROPIC_API_KEY`
+   anywhere. rr ships only (1) the custom instruction and (2) the function list;
+   the consumer brings the key + model transport in THEIR project, so a real
+   round-trip is the consumer's test, not this repo's. The §2.4 "set a key and
+   smoke-test" step was a wrong framing. What rr owed was the prompt artifact —
+   now shipped: `lib/shared/agentic/prompt.ts` (`BASE_AGENT_SYSTEM`,
+   `buildAgentSystem`, `ToolCollection.instructions`, `registry.systemPrompt()`).
+   The `/api/agent-stream` route + `AgentBridge` are an optional preview demo,
+   not a requirement. See `agentic-readiness.md` → "The rr agentic contract is
+   BYOK". **Wave 3 backlog is now empty.**
 
 **Plan corrections (lines below are stale):**
 

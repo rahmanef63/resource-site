@@ -9,6 +9,8 @@ import {
   runAgentLoop,
   configureAgentStream,
   requirePerm,
+  BASE_AGENT_SYSTEM,
+  buildAgentSystem,
   type AgentMsg,
   type ToolUse,
 } from "./index";
@@ -286,5 +288,48 @@ describe("requirePerm — defense-in-depth RBAC wrapper", () => {
     );
     expect(await reg.invoke("um.remove", { id: "u2" })).toEqual({ ok: true, result: "removed u2" });
     expect(ctx.hits).toEqual(["u2"]);
+  });
+});
+
+describe("BYOK contract — custom instruction (prompt) + function list", () => {
+  const withInstr = defineToolCollection<CounterCtx>({
+    namespace: "counter",
+    instructions: "Increment-only. Never reset below zero.",
+    tools: counterTools.tools,
+  });
+
+  it("buildAgentSystem returns the base alone when no collection has instructions", () => {
+    expect(buildAgentSystem([{ namespace: "notes" }])).toBe(BASE_AGENT_SYSTEM);
+  });
+
+  it("buildAgentSystem appends per-collection instruction blocks + extra", () => {
+    const out = buildAgentSystem(
+      [
+        { namespace: "counter", instructions: "Increment-only." },
+        { namespace: "notes" }, // no instructions → skipped
+      ],
+      { extra: "Be terse." },
+    );
+    expect(out.startsWith(BASE_AGENT_SYSTEM)).toBe(true);
+    expect(out).toContain("## counter\nIncrement-only.");
+    expect(out).not.toContain("## notes");
+    expect(out.endsWith("Be terse.")).toBe(true);
+  });
+
+  it("registry.systemPrompt composes from registered collections; anthropicTools is the function list", () => {
+    const reg = createToolRegistry();
+    reg.register(withInstr, () => ({ value: 0 }));
+    reg.register(noteTools, () => ({ notes: [] }));
+    const system = reg.systemPrompt();
+    expect(system).toContain(BASE_AGENT_SYSTEM);
+    expect(system).toContain("## counter\nIncrement-only. Never reset below zero.");
+    // the other half a BYOK consumer feeds their own model call:
+    expect(reg.anthropicTools().map((t) => t.name).sort()).toEqual(["counter.add", "notes.add"]);
+  });
+
+  it("custom base overrides the shipped instruction", () => {
+    const reg = createToolRegistry();
+    reg.register(noteTools, () => ({ notes: [] }));
+    expect(reg.systemPrompt({ base: "Custom." })).toBe("Custom.");
   });
 });

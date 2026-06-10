@@ -43,6 +43,7 @@ export {
 } from "./host";
 export { runAgentLoop, type AgentEvents } from "./agent-loop";
 export { requirePerm, type CanCtx } from "./gated";
+export { BASE_AGENT_SYSTEM, buildAgentSystem, type PromptCollection } from "./prompt";
 export { globalToolRegistry, registerGlobalTools } from "./global-host";
 export { useAgentTools } from "./use-agent-tools";
 export { createSseAgentStream } from "./sse-client";

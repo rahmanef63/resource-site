@@ -21,6 +21,7 @@ import type {
   ToolHost,
   ToolOutcome,
 } from "./types";
+import { buildAgentSystem, type PromptCollection } from "./prompt";
 
 type Entry = { tool: Tool<unknown>; getCtx: () => unknown; namespace: string };
 
@@ -29,6 +30,12 @@ export interface ToolRegistry extends ToolHost {
   register<Ctx>(collection: ToolCollection<Ctx>, getCtx: () => Ctx): void;
   /** Whether a fully-qualified tool is flagged `dangerous`. */
   isDangerous(name: string): boolean;
+  /**
+   * The composed custom instruction (system prompt) — `BASE_AGENT_SYSTEM` plus
+   * every registered collection's `instructions`. Pair with `anthropicTools()`
+   * for a BYOK model call: `{ system: systemPrompt(), tools: anthropicTools() }`.
+   */
+  systemPrompt(opts?: { base?: string; extra?: string }): string;
   /** Fully-qualified names of every registered tool. */
   names(): string[];
   /** Number of registered tools. */
@@ -44,6 +51,7 @@ function qualify(namespace: string, name: string): string {
 export function createToolRegistry(): ToolRegistry {
   const entries = new Map<string, Entry>();
   const describers: Array<() => string> = [];
+  const promptParts: PromptCollection[] = [];
 
   return {
     register(collection, getCtx) {
@@ -63,6 +71,11 @@ export function createToolRegistry(): ToolRegistry {
         const d = collection.describe;
         describers.push(() => d(getCtx() as never));
       }
+      promptParts.push({ namespace: ns, instructions: collection.instructions });
+    },
+
+    systemPrompt(opts) {
+      return buildAgentSystem(promptParts, opts);
     },
 
     anthropicTools(): AnthropicTool[] {

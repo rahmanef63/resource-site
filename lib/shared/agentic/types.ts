@@ -48,6 +48,13 @@ export type ToolCollection<Ctx = unknown> = {
   namespace: string;
   tools: Tool<Ctx>[];
   describe?: (ctx: Ctx) => string;
+  /**
+   * Static usage guidance for THIS collection's tools — the slice's slice of
+   * the agent's custom instruction. Composed into the system prompt by
+   * `buildAgentSystem` / `registry.systemPrompt()`. Distinct from `describe`,
+   * which is dynamic per-call state read-back.
+   */
+  instructions?: string;
 };
 
 /** Anthropic `tools[]` wire shape (derived from a {@link Tool}). */

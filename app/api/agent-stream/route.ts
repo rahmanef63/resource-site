@@ -18,19 +18,17 @@
 
 import Anthropic from "@anthropic-ai/sdk";
 import { extractIp, rateLimit } from "@/lib/rate-limit-memory";
-import type { AgentMsg, AnthropicTool, ToolUse } from "@/shared/agentic";
+import { BASE_AGENT_SYSTEM, type AgentMsg, type AnthropicTool, type ToolUse } from "@/shared/agentic";
 
 const MODEL = process.env.RR_AGENT_MODEL ?? "claude-sonnet-4-6";
 const MAX_TURN_MESSAGES = 60;
 const MAX_BODY_CHARS = 200_000;
 const RATE = { limit: 20, windowMs: 10 * 60_000 };
 
-const SYSTEM = `You are the assistant inside Rahman OS, a web desktop. You drive
-the open apps by calling the provided tools, each named "<app>.<action>".
-Prefer calling a tool over describing what to do. Work one logical step at a
-time and read each tool_result before the next call. When a request needs no
-tool, reply briefly in plain text. Never invent tool names or arguments that
-are not in a tool's schema.`;
+// rr's own preview desktop demo. The base rules are the shared, copy-safe
+// custom instruction (lib/shared/agentic/prompt.ts); a real BYOK consumer
+// sends its own `system` (e.g. registry.systemPrompt()) in the request body.
+const SYSTEM = `${BASE_AGENT_SYSTEM}\n\nContext: you are inside Rahman OS, a web desktop; the open apps expose the tools.`;
 
 type Body = { messages?: AgentMsg[]; tools?: AnthropicTool[]; system?: string };
 

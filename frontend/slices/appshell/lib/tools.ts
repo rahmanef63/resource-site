@@ -38,6 +38,9 @@ const listWindows = (): string =>
 export const appshellTools = defineToolCollection<AppshellCtx>({
   namespace: "appshell",
   describe: () => listWindows(),
+  instructions:
+    "Drives the desktop shell: launch apps by slug, then arrange/focus/close their windows. " +
+    "Launch an app before acting on its window; check window.list for live window ids.",
   tools: [
     {
       name: "window.list",

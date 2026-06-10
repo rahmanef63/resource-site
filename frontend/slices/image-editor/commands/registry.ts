@@ -43,4 +43,8 @@ export const imageEditorTools: ToolCollection<EditorCtx> = defineToolCollection<
   namespace: "image-editor",
   tools: EDITOR_COMMANDS,
   describe: (ctx) => describeDoc(ctx),
+  instructions:
+    "Edits a layered raster document. Add/select a layer before painting, transforming, or " +
+    "styling it; read the document read-back for layer ids and the active selection. Prefer " +
+    "non-destructive ops (layer styles, transforms) over flatten/export until the user asks.",
 });
