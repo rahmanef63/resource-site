@@ -2,6 +2,14 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "AG-bridge",
+    "version": "agentic-wave-3b",
+    "date": 1781049600000,
+    "kind": "feature",
+    "title": "Assistant goes live — real function-calling over every slice",
+    "body": "configureAgentStream is now wired to a real Anthropic backend. New /api/agent-stream SSE proxy runs one model turn per call; the client-side runAgentLoop dispatches each tool_use against the live tool registry (tools bind to real React state, so they execute in the browser). createSseAgentStream + an AgentBridge mounted across /preview flip the assistant from the typing-demo to driving the 10 registered OS-app tool collections for real. Key-guarded (ANTHROPIC_API_KEY) + per-IP rate limited; falls back to the demo when unconfigured."
+  },
+  {
     "id": "AO",
     "version": "AO-wave",
     "date": 1779148800000,
