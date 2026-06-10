@@ -32,6 +32,7 @@ export const contract = defineSliceContract({
     },
   },
   provides: {
+    tools: ["convex-auth.configure"],
     routes: ["/sign-in"],
     tables: ["auth_users", "auth_accounts", "auth_sessions", "auth_verifiers"],
     components: ["SignInPage"],

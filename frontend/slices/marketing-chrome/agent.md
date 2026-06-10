@@ -25,6 +25,16 @@ npx rahman-resources add marketing-chrome
 
 Run `npx rr add marketing-chrome`. Feed MarketingHeader { brand, nav[], cta, layout } and MarketingFooter { brand, columns[], social[], legal[], layout }. Header layout split is the default marketing pattern; footer columns for full sites, slim for single-pagers.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+**Agent guidance:** configure merge-patches the rendered MarketingHeader's props - send only the keys you change. Brand, nav links and CTAs stay host-managed.
+
+- `marketing-chrome.configure`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

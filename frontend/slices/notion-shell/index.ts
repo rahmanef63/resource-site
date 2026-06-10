@@ -90,3 +90,4 @@ export {
   PROPERTY_TYPES_USER_ADDABLE,
   PROPERTY_TYPES_CSV_IMPORTABLE,
 } from "./property-type-meta";
+export { notionShellTools, type NotionShellConfigureCtx } from "./lib/tools";

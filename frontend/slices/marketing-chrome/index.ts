@@ -13,3 +13,4 @@ export type {
   MarketingHeaderProps,
   MarketingFooterProps,
 } from "./lib/types";
+export { marketingChromeTools, type MarketingChromeConfigureCtx } from "./lib/tools";

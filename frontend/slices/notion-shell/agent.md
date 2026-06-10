@@ -25,6 +25,16 @@ npx rahman-resources add notion-shell
 
 Run `npx rr add notion-shell` for the portable PAGE EDITOR wrappers ONLY (no backend; the tree-nav sidebar is the separate `notion-sidebar` slice). NPM deps: @dnd-kit/core, @dnd-kit/sortable, @dnd-kit/utilities. Import: `import { NotionPage, NotionBlock, SortableBlockList, PageActionsMenu, InsertBlockButton, InlineFormatToolbar, ImageRenderer, EmbedRenderer } from "@/features/notion-shell"`. NotionBlock ships slash menu + decorator + actions menu + dragHandle slot. **`createDefaultBlockRenderers()` returns the block-renderer registry — pass it to `<NotionBlock blockRenderers={…}>` so callout (icon+kind picker), table (editable grid), divider, image, embed, code (highlight.js) + equation (KaTeX) all render. code + equation are now BUILT-IN to notion-shell (npm: katex + highlight.js) — no adapter needed. Only `database` + `toc` are injected at the app level (they depend on host data + the sibling notion-database slice).** NotionPage ships optional cover prop. SortableBlockList wraps a render-prop callback `(id, dragProps) => <NotionBlock dragHandle={...} />`. NotionDatabase ships 6 views via VIEW_REGISTRY. Property cells: text/number/checkbox/select/multi-select/status/date/url/email/phone all built in. For rich icon UX wire `renderIcon` + `renderIconPicker` to `@/features/icon-picker`. **v0.17 — Notion-canonical editing keys (`blockKeyHandler.ts`): Enter splits at the caret into a new block (lists continue their type; an empty list item exits to paragraph); Backspace on an empty non-paragraph downgrades it to a plain paragraph (re-triggerable with `/`); a second Backspace on an empty paragraph merges into the previous block; Arrow up/down at a line edge hops blocks. Wire the host callbacks on `<NotionBlock>`: `onInsertAfter(type, init) => newId`, `onMergeBack()`, `onFocusSibling(dir)` — plus `focusBlock(id, offset?)` exported to move the caret after a host state change. The preview `page-demo.tsx` and the notion-clone template `DocView` show full array- and reducer-based wirings.** PRODUCT POINTER: the full Convex-backed Notion-clone OS (multi-workspace + auth + sharing + comments + snapshots + MCP) lives at https://github.com/rahmanef63/open-silong — clone that repo for the production stack; use this slice when you only need to embed the Notion-style UI in another project.**
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+**Agent guidance:** configure sets page-level display settings on the rendered Notion page (font, width, text size, lock, title). Blocks/content stay host-managed.
+
+- `notion-shell.configure`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

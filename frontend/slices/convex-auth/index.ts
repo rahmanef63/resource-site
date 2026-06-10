@@ -17,3 +17,4 @@ export type {
   SignInLabels,
   SignInPageProps,
 } from "./types";
+export { convexAuthTools, type ConvexAuthConfigureCtx } from "./lib/tools";

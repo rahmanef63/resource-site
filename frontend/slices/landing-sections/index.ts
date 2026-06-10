@@ -16,3 +16,4 @@ export { LandingEditorView, blankSection } from "./views/LandingEditorView";
 export { LANDING_FIELDS } from "./landing-fields";
 export { LandingSectionShell } from "./components/LandingSectionShell";
 export type { LandingSection, LandingSectionKind, LandingAction, LandingSlice } from "./types";
+export { landingSectionsTools, type LandingToolsCtx } from "./lib/tools";

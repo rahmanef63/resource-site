@@ -110,11 +110,23 @@ Legend — **State:** ✅ done · ◑ partial · ✗ none. **Tier:** A=must be a
 
 ### Tier C — presentational (tools optional; thin `configure`/`insert` only)
 
-`blog-section, changelog-feed, faq-section, feature-grid, full-width-toggle,
-landing-sections, loading-states, empty-states, marketing-chrome, pricing-page,
-portfolio-section, selection, testimonials, testimonials-grid, services,
-notion-shell, notion-sidebar, admin, convex-auth` — no agentic requirement;
-optionally one `configure(props)` tool so a page-builder agent can place them.
+**DONE 2026-06-10** — the original list above was stale: the standalone
+marketing sections (`blog-section, changelog-feed, faq-section, feature-grid,
+pricing-page, portfolio-section, testimonials-grid` + `full-width-toggle`) were
+merged into **landing-sections** as `kind` variants (v0.2.0) and dropped from
+the CLI catalog, so they get NO tool surface (their dirs remain only as
+template internals). What shipped instead:
+
+- **landing-sections 0.3.0** — the real page-builder collection over its own
+  `LandingStore` adapter: `list` / `add` / `update` / `remove` (remove is
+  `dangerous`). This is the canonical "agent composes the landing page" seam.
+- Thin `configure` (merge-patch onto host-applied props, ctx `{ apply }`):
+  **loading-states 0.2.0, empty-states 0.2.0, marketing-chrome 0.2.0,
+  notion-shell 0.24.0, convex-auth 0.4.0**.
+- Skipped with reasons: `testimonials`, `services` (backend-only — no UI to
+  configure; Convex CRUD already admin-gated), `admin` (headless factory —
+  copy comes from consumer config), `selection`, `notion-sidebar`
+  (callback/data-driven — nothing an agent can sensibly set).
 
 ---
 
@@ -365,8 +377,11 @@ instruction + a function list; one shared host/loop; safety seam (`dangerous` +
 `confirm`); `requirePerm`; `systemPrompt()`. Remaining items are by-design
 optional or belong to the consumer's app, not rr:
 
-1. Tier-C `configure` tools — optional by design; add only when a presentational
-   slice actually needs an agent-settable knob.
+1. ~~Tier-C `configure` tools~~ **DONE 2026-06-10**: landing-sections got the
+   full page-builder collection (list/add/update/remove); five live
+   presentational slices got thin `configure`; deprecated/cataloged-out
+   sections and backend-only/headless slices skipped with reasons (see Tier C
+   above). 47 collections total.
 2. ~~Surface the `dangerous` flag in `agent.md`~~ **DONE 2026-06-10**: the
    wave-3e convention (flag written directly under the `name:` line) makes an
    adjacency regex reliable without a contract-level declaration —

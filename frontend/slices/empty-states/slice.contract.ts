@@ -13,6 +13,7 @@ export const contract = defineSliceContract({
   category: "ui",
   kind: "ui",
   provides: {
+    tools: ["empty-states.configure"],
     components: ["EmptyState", "ErrorPage"],
     utils: ["EMPTY_STATE_PRESETS"],
     hooks: [],

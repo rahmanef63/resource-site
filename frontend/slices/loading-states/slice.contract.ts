@@ -14,6 +14,7 @@ export const contract = defineSliceContract({
   category: "ui",
   kind: "ui",
   provides: {
+    tools: ["loading-states.configure"],
     components: ["LoadingSkeleton", "LoadingState"],
     utils: ["LOADING_PRESETS", "LOADING_KINDS"],
     hooks: [],

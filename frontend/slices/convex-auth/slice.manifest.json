@@ -1,7 +1,7 @@
 {
   "$schema": "../../../docs/slice.manifest.schema.json",
   "name": "convex-auth",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "@convex-dev/auth multi-provider sign-in: Password (PBKDF2-SHA256 100k, self-hosted-friendly), Anonymous (guest), Google OAuth, Resend magic-link. Ships a production <SignInPage> with i18n + prop-driven provider list. No Clerk.",
   "category": "auth",
   "stability": "beta",

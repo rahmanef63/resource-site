@@ -13,3 +13,4 @@ export {
   type LoadingKind,
   type LoadingPreset,
 } from "./components/presets";
+export { loadingStatesTools, type LoadingStatesConfigureCtx } from "./lib/tools";

@@ -10,3 +10,4 @@ export {
   type EmptyStateKind,
   type EmptyStatePreset,
 } from "./components/presets";
+export { emptyStatesTools, type EmptyStatesConfigureCtx } from "./lib/tools";

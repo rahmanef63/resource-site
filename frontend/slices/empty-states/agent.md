@@ -25,6 +25,16 @@ npx rahman-resources add empty-states
 
 Run `npx rr add empty-states`. Drop <EmptyState kind="no-results" /> into zero-data spots; wrap with <ErrorPage kind="404" /> in app/not-found.tsx and kind="500" in app/error.tsx. Every preset's icon/title/description/action overridable per use.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+**Agent guidance:** configure merge-patches the rendered EmptyState's props - send only the keys you change. Actions/icons stay host-managed.
+
+- `empty-states.configure`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

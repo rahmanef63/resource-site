@@ -13,6 +13,7 @@ export const contract = defineSliceContract({
   category: "ui",
   kind: "ui",
   provides: {
+    tools: ["marketing-chrome.configure"],
     components: ["MarketingHeader", "MarketingFooter"],
     utils: [],
     hooks: [],

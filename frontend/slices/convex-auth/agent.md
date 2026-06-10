@@ -25,6 +25,16 @@ npx rahman-resources add convex-auth
 
 Run `rr add convex-auth`. Then create convex/auth.ts using the kitab pattern (Resend provider). Set env via `npx convex env set` for self-hosted.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+**Agent guidance:** configure merge-patches the rendered AuthCard's props (copy, default tab, visible methods) - send only the keys you change. Flow handlers/keys stay host-managed.
+
+- `convex-auth.configure`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

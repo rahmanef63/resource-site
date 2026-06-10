@@ -25,6 +25,21 @@ npx rahman-resources add landing-sections
 
 Run `npx rr add landing-sections`. Fold `landingReducer` into your root reducer (cases LANDING_UPSERT + LANDING_DELETE), seed State.landingSections with `defaultLandingSections()`, wrap your StoreProvider with `<LandingProvider value={adapter}/>` where adapter maps {items, publicBase, adminBase, create, update, remove} from your dispatch. Mount `<LandingView/>` at `/admin/landing` and `<LandingEditorView id={params.id}/>` at `/admin/landing/[id]`. In HomePage iterate `state.landingSections.filter(s => s.enabled).sort((a,b) => a.order - b.order)` and render each through `<LandingSectionShell section={s}>` wrapping your own per-`kind` renderer.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+**Agent guidance:** Page-builder for the landing page: list shows current sections, add/update compose it, remove deletes (destructive — confirm first). Prefer enabled:false over remove when the user might want a section back.
+
+- `landing-sections.list`
+- `landing-sections.add`
+- `landing-sections.update`
+- `landing-sections.remove` ⚠ destructive
+
+⚠ destructive tools are flagged `dangerous: true` — wire the agent loop's `confirm` event so they need user approval before running.
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

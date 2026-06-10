@@ -25,6 +25,16 @@ npx rahman-resources add loading-states
 
 Run `npx rr add loading-states`. Pick the LoadingSkeleton kind that mirrors the streamed content (<LoadingSkeleton kind="table" count={8} />); use kind="page" inside route loading.tsx. For in-flight work (submits, refetches) use <LoadingState variant="inline|block|overlay" /> instead of a skeleton.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+**Agent guidance:** configure merge-patches the rendered LoadingSkeleton's props - send only the keys you change.
+
+- `loading-states.configure`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

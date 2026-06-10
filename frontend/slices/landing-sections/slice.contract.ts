@@ -19,6 +19,10 @@ export const contract = defineSliceContract({
   category: "infra",
   kind: "ui",
   provides: {
+    tools: [
+      "landing-sections.list", "landing-sections.add",
+      "landing-sections.update", "landing-sections.remove",
+    ],
     components: ["LandingView", "LandingEditorView", "LandingSectionShell"],
     utils: ["blankSection", "defaultLandingSections", "landingReducer"],
     hooks: ["useLandingStore"],

@@ -13,6 +13,7 @@ export const contract = defineSliceContract({
   category: "ui",
   kind: "ui",
   provides: {
+    tools: ["notion-shell.configure"],
     components: [
       "NotionPage", "NotionHeader",
       "NotionBlock", "NotionDatabase", "NotionProperty",
