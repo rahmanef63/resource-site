@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "library",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "category": "data",
   "kind": "full",
   "title": "Library \u2014 resource hub (prompts \u00b7 visuals \u00b7 snippets \u00b7 links)",

@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "icon-picker",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -37,6 +37,7 @@
     "lib/recents.ts",
     "lib/search-haystacks.ts",
     "lib/style-pref.ts",
+    "lib/tools.ts",
     "lib/twemoji.ts"
   ],
   "imports": {

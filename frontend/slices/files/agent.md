@@ -25,6 +25,13 @@ npx rahman-resources add files
 
 Run `npx rr add files`. Wrap your tree with `<FilesAdapterProvider adapter={...}>` — pass `useLocalStorageFilesAdapter()` for a quick demo or implement `FilesAdapter` (upload + remove + useUrl) against your backend. Then drop `<FileUploadButton onUploaded={...}>` anywhere; pair with `<FileChip fileRef={...}>` for rendered chips. Hooks: `useFileUpload()` returns `{upload, uploading, progress, removeFromStorage}`; `useFileUrl(storageId)` resolves to a fetchable URL (Convex adapter uses useQuery for live invalidation; demo reads localStorage synchronously). To wire S3: implement the FilesAdapter interface with presigned URLs + DELETE; the slice doesn't care which backend you pick.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `files.parse_ref`
+- `files.remove`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

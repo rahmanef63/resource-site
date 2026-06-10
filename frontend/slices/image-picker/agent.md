@@ -25,6 +25,13 @@ npx rahman-resources add image-picker
 
 Run `npx rr add image-picker`. The headline component is `<ImagePickerButton label="Change image" onChange={(img)=>save(img)} onUpload={…} searchUnsplash={…} />` — ONE button that opens the 4-tab dialog (gallery / upload / link / Unsplash). For a reposition-able cover/hero band use `<ImageBanner image={value} onChange={save} resolvedUrl={…} onUpload={…} searchUnsplash={…} />` (also passable to notion-shell's `<NotionPage coverSlot={…} />`). Inject the backend: `onUpload` = the `files` slice's useFileUpload().upload (returns a FileRef); resolve upload images for display with `resolvedUrl` = files useFileUrl(parseFileRef(imageRef(parseImage(value))).storageId). `searchUnsplash` = `unsplashSearchVia('/api/unsplash')` — add a server route that proxies api.unsplash.com with UNSPLASH_ACCESS_KEY (never expose the key client-side). Ships a curated Unsplash + gallery fallback so it works with zero wiring. ImageValue = { type, value, positionY?, metadata? }; parseImage handles legacy string values.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `image-picker.search`
+- `image-picker.pick`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

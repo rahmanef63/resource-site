@@ -9,3 +9,4 @@ export type {
 
 // Inner slices.
 export * as editor from "./slices/editor";
+export { notionTools, type NotionToolsCtx } from "./lib/tools";

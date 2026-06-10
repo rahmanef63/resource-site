@@ -67,7 +67,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...broadcastChannelSyncConfig,
     importPath: "@/features/broadcast-channel-sync/config",
-    version: "0.1.0",
+    version: "0.2.0",
   },
   {
     ...browserConfig,
@@ -77,7 +77,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...calComBookingConfig,
     importPath: "@/features/cal-com-booking/config",
-    version: "0.1.0",
+    version: "0.2.0",
   },
   {
     ...codeEditorConfig,
@@ -87,12 +87,12 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...commandMenuConfig,
     importPath: "@/features/command-menu/config",
-    version: "0.2.0",
+    version: "0.3.0",
   },
   {
     ...commentsConfig,
     importPath: "@/features/comments/config",
-    version: "0.2.1",
+    version: "0.3.0",
   },
   {
     ...convexAuthConfig,
@@ -127,7 +127,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...notionConfig,
     importPath: "@/features/notion/config",
-    version: "1.0.0",
+    version: "1.1.0",
   },
   {
     ...osTerminalConfig,
@@ -157,7 +157,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...seoConfig,
     importPath: "@/features/seo/config",
-    version: "0.2.1",
+    version: "0.3.0",
   },
   {
     ...shellSettingsConfig,
@@ -172,7 +172,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...vectorSearchConfig,
     importPath: "@/features/vector-search/config",
-    version: "0.1.0",
+    version: "0.2.0",
   },
 ];
 

@@ -13,11 +13,12 @@ import { defineSliceContract } from "../../../packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "command-menu",
-  version: "0.2.0",
+  version: "0.3.0",
   requires: {
     deps: [],
   },
   provides: {
+    tools: ["command-menu.list_commands", "command-menu.search", "command-menu.run_command"],
     components: ["CommandPalette", "SearchModal", "CommandGroupList"],
   },
   generalization: {

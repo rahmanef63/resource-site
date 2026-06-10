@@ -25,6 +25,14 @@ npx rahman-resources add vector-search
 
 Run `npx rr add vector-search`. Add embedding field + vectorIndex per searchable table. Re-embed on upsert via Convex action. Cache embeddings — don't re-call OpenAI on every read.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `vector-search.query`
+- `vector-search.index`
+- `vector-search.reindex`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

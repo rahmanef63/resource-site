@@ -1,11 +1,11 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "markdown",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "category": "content",
   "kind": "ui",
-  "title": "Markdown — page container with CRUD tabs + diagrams",
-  "description": "Markdown (.md) page container with optional CRUD surfaces — Read (rich text), Write (source editor + live preview), Review (block-anchored comments). Renders mermaid diagrams + recharts charts from fenced blocks. Same markdown grammar as the notion block editor (blocksToMarkdown bridge), so notion-exported content renders identically. Self-contained parser + inline renderer.",
+  "title": "Markdown \u2014 page container with CRUD tabs + diagrams",
+  "description": "Markdown (.md) page container with optional CRUD surfaces \u2014 Read (rich text), Write (source editor + live preview), Review (block-anchored comments). Renders mermaid diagrams + recharts charts from fenced blocks. Same markdown grammar as the notion block editor (blocksToMarkdown bridge), so notion-exported content renders identically. Self-contained parser + inline renderer.",
   "namespace": "@/features/markdown",
   "frontend": {
     "slicePath": "frontend/slices/markdown",

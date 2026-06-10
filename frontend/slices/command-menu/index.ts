@@ -24,3 +24,4 @@ export {
   HISTORY_MAX,
   type HistoryEntry,
 } from "./lib/cmdkHistory";
+export { commandMenuTools, type CommandMenuCtx } from "./lib/tools";

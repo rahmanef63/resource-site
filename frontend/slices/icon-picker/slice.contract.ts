@@ -10,10 +10,11 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "icon-picker",
-  version: "0.2.0",
+  version: "0.5.0",
   category: "ui",
   kind: "ui",
   provides: {
+    tools: ["icon-picker.search", "icon-picker.pick"],
     components: [
       "IconPicker",
       "IconPickerInline",

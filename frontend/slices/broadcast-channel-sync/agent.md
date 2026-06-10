@@ -25,6 +25,13 @@ npx rahman-resources add broadcast-channel-sync
 
 Run `npx rr add broadcast-channel-sync`. Use BroadcastChannel only for demo / cross-iframe state mirroring. Production data still goes through Convex realtime. Use the useBroadcastSync(channelName, initial) hook from @/features/broadcast-channel-sync.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `broadcast-channel-sync.read`
+- `broadcast-channel-sync.publish`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

@@ -183,3 +183,4 @@ export {
   useRowOpenMode,
   type RowOpenMode,
 } from "./components/row-detail";
+export { notionDatabaseTools, type NotionDatabaseCtx } from "./lib/tools";

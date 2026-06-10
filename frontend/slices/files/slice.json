@@ -1,11 +1,11 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "files",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "category": "data",
   "kind": "ui",
-  "title": "Files — pluggable upload + URL resolver with storage-adapter contract",
-  "description": "Host-pluggable file upload + URL resolution. Ships <FileUploadButton>, <FileChip>, useFileUpload(), useFileUrl() — all reading from a FilesAdapter the host wires via <FilesAdapterProvider>. Bundled localStorage demo adapter stores blobs as data URLs (small files only). Drop in your own adapter for Convex / S3 / GCS / R2. Zero backend coupling — the storage-adapter pattern reference for the blocked-pending-adapter wave.",
+  "title": "Files \u2014 pluggable upload + URL resolver with storage-adapter contract",
+  "description": "Host-pluggable file upload + URL resolution. Ships <FileUploadButton>, <FileChip>, useFileUpload(), useFileUrl() \u2014 all reading from a FilesAdapter the host wires via <FilesAdapterProvider>. Bundled localStorage demo adapter stores blobs as data URLs (small files only). Drop in your own adapter for Convex / S3 / GCS / R2. Zero backend coupling \u2014 the storage-adapter pattern reference for the blocked-pending-adapter wave.",
   "namespace": "@/features/files",
   "frontend": {
     "slicePath": "frontend/slices/files",

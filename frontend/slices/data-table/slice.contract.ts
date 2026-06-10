@@ -9,10 +9,11 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "data-table",
-  version: "0.1.0",
+  version: "0.2.0",
   category: "data",
   kind: "ui",
   provides: {
+    tools: ["data-table.state", "data-table.filter.set", "data-table.sort.set", "data-table.page.set", "data-table.selection.clear"],
     components: [
       "DataTable",
       "DataTableToolbar",

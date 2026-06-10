@@ -14,7 +14,7 @@ import { defineSliceContract } from "../../../packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "comments",
-  version: "0.2.0",
+  version: "0.3.0",
   requires: {
     auth: "convex",
     rbac: ["comment.create", "comment.read"],
@@ -22,6 +22,7 @@ export const contract = defineSliceContract({
     deps: ["convex-auth"],
   },
   provides: {
+    tools: ["comments.list", "comments.add", "comments.resolve", "comments.remove"],
     tables: ["comment_threads"],
     hooks: ["useComments"],
     utils: ["buildThread"],

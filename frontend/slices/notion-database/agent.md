@@ -53,6 +53,18 @@ Omit any callback and that affordance goes read-only; pass `readOnly` to freeze 
 
 **Just one view?** Import it directly — `import { TableView } from '@/features/notion-database'` — and feed it `rows` + `renderCell` + `renderColumnHeader`.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `notion-database.rows`
+- `notion-database.row.add`
+- `notion-database.row.update`
+- `notion-database.row.delete`
+- `notion-database.view.switch`
+- `notion-database.filter`
+- `notion-database.sort`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

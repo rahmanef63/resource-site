@@ -5,3 +5,4 @@ export {
   buildSeoSystemPrompt,
 } from "./lib/persona"
 export type { BuildSeoSystemPromptOpts } from "./lib/persona"
+export { seoTools, type SeoToolsCtx } from "./lib/tools";

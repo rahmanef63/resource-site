@@ -18,10 +18,11 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "notion-database",
-  version: "0.1.0",
+  version: "0.18.0",
   category: "ui",
   kind: "ui",
   provides: {
+    tools: ["notion-database.rows", "notion-database.row.add", "notion-database.row.update", "notion-database.row.delete", "notion-database.view.switch", "notion-database.filter", "notion-database.sort"],
     components: [
       "NotionDatabase", "NotionProperty",
       "ViewTabs", "ViewOptions", "ColumnHeaderMenu",

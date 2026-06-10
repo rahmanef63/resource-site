@@ -12,10 +12,11 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "activity",
-  version: "0.1.0",
+  version: "0.2.0",
   category: "data",
   kind: "full",
   provides: {
+    tools: ["activity.list", "activity.stats"],
     components: ["ActivityFeed", "StatsPanel", "ActivityItem"],
     utils: ["groupByWeek", "isoWeek", "fmtDate", "fmtTime", "DEFAULT_COPY"],
     hooks: [],

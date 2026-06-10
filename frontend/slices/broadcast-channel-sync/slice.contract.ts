@@ -9,11 +9,12 @@ import { defineSliceContract } from "../../../packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "broadcast-channel-sync",
-  version: "0.1.0",
+  version: "0.2.0",
   requires: {
     auth: "none",
   },
   provides: {
+    tools: ["broadcast-channel-sync.read", "broadcast-channel-sync.publish"],
     hooks: ["useBroadcastSync"],
   },
   generalization: {

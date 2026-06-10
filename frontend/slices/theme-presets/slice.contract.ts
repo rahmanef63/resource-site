@@ -15,10 +15,11 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "theme-presets",
-  version: "0.2.0",
+  version: "0.4.0",
   category: "ui",
   kind: "ui",
   provides: {
+    tools: ["theme-presets.list_presets", "theme-presets.current", "theme-presets.set_preset", "theme-presets.clear"],
     components: ["ThemePresetSwitcher", "ThemePresetProvider", "ThemeColorSync"],
     utils: [
       "applyTweakcnPreset", "bootTweakcnPreset", "clearTweakcnPreset",

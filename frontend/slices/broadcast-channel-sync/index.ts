@@ -1,2 +1,3 @@
 // Slice public barrel — re-exports only.
-export {}
+export { broadcastChannelSyncTools, type BroadcastChannelSyncCtx } from "./lib/tools";
+

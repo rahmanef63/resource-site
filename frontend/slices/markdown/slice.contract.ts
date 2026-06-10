@@ -12,10 +12,11 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "markdown",
-  version: "0.2.0",
+  version: "0.3.0",
   category: "ui",
   kind: "ui",
   provides: {
+    tools: ["markdown.parse", "markdown.toc"],
     components: [
       "MarkdownPage", "MarkdownReader", "MdNodeView", "renderNodes",
       "MermaidBlock", "ChartBlock",

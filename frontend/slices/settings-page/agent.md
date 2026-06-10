@@ -25,6 +25,13 @@ npx rahman-resources add settings-page
 
 Run `npx rr add settings-page`. Implement SettingsAdapter { load, save } over your backend (Convex query + mutation), pass to <SettingsShell adapter>. save receives per-section partial patches — shallow-merge server-side. onDeleteAccount callback wires the danger zone.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `settings-page.get`
+- `settings-page.set`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

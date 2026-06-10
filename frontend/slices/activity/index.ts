@@ -13,3 +13,4 @@ export type {
   ActivityFeedProps,
   CategoryLabelMap,
 } from "./lib/types";
+export { activityTools, type ActivityToolsCtx } from "./lib/tools";

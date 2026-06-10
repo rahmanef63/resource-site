@@ -1,8 +1,8 @@
 {
   "$schema": "../../../docs/slice.manifest.schema.json",
   "name": "command-menu",
-  "version": "0.2.0",
-  "description": "Renderless ⌘K command palette + generic search modal pulled UP from notion-page-clone's command-palette portable surface. Consumer supplies groups + onSelect + bindings; slice owns dialog chrome, ⌘K hotkey, MRU history.",
+  "version": "0.3.0",
+  "description": "Renderless \u2318K command palette + generic search modal pulled UP from notion-page-clone's command-palette portable surface. Consumer supplies groups + onSelect + bindings; slice owns dialog chrome, \u2318K hotkey, MRU history.",
   "category": "ui",
   "stability": "beta",
   "deps": {
@@ -15,8 +15,14 @@
     "env": []
   },
   "files": {
-    "include": ["**/*"],
-    "exclude": ["*.test.ts", "*.test.tsx", "*.spec.ts"]
+    "include": [
+      "**/*"
+    ],
+    "exclude": [
+      "*.test.ts",
+      "*.test.tsx",
+      "*.spec.ts"
+    ]
   },
   "permissions": [],
   "schemaTables": [],
@@ -27,6 +33,13 @@
     "tailwind": "4",
     "auth": "any"
   },
-  "tags": ["ui", "palette", "cmd-k", "navigation", "keyboard", "search"],
-  "notes": "Renderless API. CommandPalette accepts `groups: CommandGroup[]` + `onHistorySelect` + `labels`. SearchModal accepts `bindings: SearchModalBindings` + `labels`. Nosion-specific adapters from upstream notion-page-clone were dropped — see README for adapter patterns."
+  "tags": [
+    "ui",
+    "palette",
+    "cmd-k",
+    "navigation",
+    "keyboard",
+    "search"
+  ],
+  "notes": "Renderless API. CommandPalette accepts `groups: CommandGroup[]` + `onHistorySelect` + `labels`. SearchModal accepts `bindings: SearchModalBindings` + `labels`. Nosion-specific adapters from upstream notion-page-clone were dropped \u2014 see README for adapter patterns."
 }

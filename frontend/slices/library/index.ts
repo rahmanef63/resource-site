@@ -15,3 +15,4 @@ export type {
   LibraryIndexProps,
   LibraryDetailProps,
 } from "./lib/types";
+export { libraryTools, type LibraryToolsCtx } from "./lib/tools";

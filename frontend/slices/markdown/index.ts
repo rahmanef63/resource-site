@@ -7,3 +7,4 @@ export { ChartBlock } from "./components/ChartBlock";
 export { parseMarkdown, type MdNode, type Align } from "./lib/parse";
 export { renderInline, tokenizeInline } from "./lib/inline";
 export { type MdComment, newCommentId, commentsFor, openCount } from "./lib/comments";
+export { markdownTools, type MarkdownToolsCtx } from "./lib/tools";

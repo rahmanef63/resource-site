@@ -11,10 +11,11 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "files",
-  version: "0.2.1",
+  version: "0.3.0",
   category: "ui",
   kind: "ui",
   provides: {
+    tools: ["files.parse_ref", "files.remove"],
     components: ["FileChip", "FileUploadButton", "FilesAdapterProvider"],
     utils: ["parseFileRef", "makeStorageRef"],
     hooks: [

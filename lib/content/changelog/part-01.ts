@@ -2,6 +2,15 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "MOTION-W1",
+    "version": "slices@motion-kit-0.1.0",
+    "date": 1781049600000,
+    "kind": "feature",
+    "title": "Motion Kit slice — scroll reveals + carousel + accordion lifted from the fleet",
+    "body": "New motion-kit slice (0.1.0): zero-dependency scroll-motion layer (IntersectionObserver + CSS) plus embla Carousel and radix Accordion. Ships Reveal (fade-up/fade/fade-left/fade-right/zoom), Stagger (incremental per-child reveal for grids), CountUp (rAF count-to-value, locale-aware), Marquee (infinite logo strip, hover-pause), useInView hook, Carousel*, Accordion*. All reveal/keyframe motion gated behind prefers-reduced-motion. Consumers append globals-motion.css to app/globals.css. Lifted from the _templates fleet where 8 standalone website templates already ship a byte-identical copy (motion pass 2026-06-10); this rr slice is now the SSOT for future scaffolds. carousel.tsx split into carousel.tsx + carousel-context.tsx to stay under the 200-LOC gate. Pairs with landing-sections (its kind renderers consume these primitives).",
+    "groups": []
+  },
+  {
     "id": "ECOM-W1",
     "version": "slices@storefront-checkout-0.1.0",
     "date": 1781049600000,

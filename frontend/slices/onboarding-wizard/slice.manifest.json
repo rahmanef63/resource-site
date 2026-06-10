@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "onboarding-wizard",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -16,6 +16,7 @@
     "components/steps.tsx",
     "components/theme-preset-field.tsx",
     "index.ts",
+    "lib/tools.ts",
     "lib/types.ts",
     "slice.contract.ts",
     "slice.json"

@@ -26,3 +26,4 @@ export {
   type ThemePref,
   type DensityPref,
 } from "./lib/adapter";
+export { settingsPageTools, type SettingsPageCtx } from "./lib/tools";

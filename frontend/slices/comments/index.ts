@@ -12,3 +12,4 @@ export type {
 export { buildThread } from "./lib/buildThread";
 export type { CommentNode } from "./lib/buildThread";
 export type { Comment, TargetRef } from "./types";
+export { commentsTools, type CommentsToolsCtx } from "./lib/tools";

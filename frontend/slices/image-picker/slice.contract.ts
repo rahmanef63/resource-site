@@ -10,10 +10,11 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "image-picker",
-  version: "0.2.0",
+  version: "0.3.0",
   category: "ui",
   kind: "ui",
   provides: {
+    tools: ["image-picker.search", "image-picker.pick"],
     components: ["ImagePickerButton", "ImagePickerDialog", "ImageBanner"],
     utils: ["parseImage", "isCssImage", "isUrlImage", "imageRef", "imageStyle", "GALLERY_SECTIONS", "CURATED_UNSPLASH", "unsplashSearchVia"],
     hooks: [],

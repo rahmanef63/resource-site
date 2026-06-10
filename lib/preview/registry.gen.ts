@@ -33,6 +33,7 @@ export const PREVIEW_REGISTRY: Record<string, () => Promise<{ default: SlicePrev
   "media-studio": () => import("@/features/media-studio/preview"),
   "media-viewer": () => import("@/features/media-viewer/preview"),
   "midtrans-payment": () => import("@/features/midtrans-payment/preview"),
+  "motion-kit": () => import("@/features/motion-kit/preview"),
   "notifications-center": () => import("@/features/notifications-center/preview"),
   "notion": () => import("@/features/notion/preview"),
   "notion-database": () => import("@/features/notion-database/preview"),

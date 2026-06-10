@@ -16,3 +16,4 @@ export type {
   NotificationKind,
   NotificationActor,
 } from "./lib/types";
+export { notificationsCenterTools, type NotificationsCenterCtx } from "./lib/tools";

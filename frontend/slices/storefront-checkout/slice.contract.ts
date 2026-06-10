@@ -15,10 +15,11 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "storefront-checkout",
-  version: "0.1.0",
+  version: "0.2.0",
   category: "content",
   kind: "ui",
   provides: {
+    tools: ["storefront-checkout.cart", "storefront-checkout.add", "storefront-checkout.set_qty", "storefront-checkout.remove", "storefront-checkout.clear"],
     components: ["CartProvider", "CartWidget", "CheckoutSummary"],
     utils: ["formatIDR"],
     hooks: ["useCart"],

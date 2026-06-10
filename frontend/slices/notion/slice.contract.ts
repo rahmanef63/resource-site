@@ -12,7 +12,7 @@ import { defineSliceContract } from "../../../packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "notion",
-  version: "1.0.0",
+  version: "1.1.0",
   requires: {
     deps: [
       "sonner",
@@ -25,6 +25,7 @@ export const contract = defineSliceContract({
     env: [],
   },
   provides: {
+    tools: ["notion.page.create", "notion.page.get", "notion.page.update", "notion.search"],
     utils: [
       "blockTree",
       "turnInto",

@@ -25,6 +25,13 @@ npx rahman-resources add icon-picker
 
 Run `npx rr add icon-picker` then `pnpm add @phosphor-icons/react`. parseIconValue() decodes; lucideValue() / phosphorValue() / withColor() build. Storage forms: `lucide:Name?c=hex` (outline) or `phosphor:Name?c=hex` (fill) or raw emoji. Add 'icon: v.string()' to Convex table — no migration needed for existing emoji + lucide fields. <IconPickerPopover> wraps any trigger (auto-flips, falls back to centered Dialog on tight viewports); <IconPickerInline> for sheets/dialogs. <DynamicIcon> renders from parsed value.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `icon-picker.search`
+- `icon-picker.pick`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

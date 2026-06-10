@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "storefront-checkout",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -16,6 +16,7 @@
     "components/CheckoutSummary.tsx",
     "index.ts",
     "lib/cart.tsx",
+    "lib/tools.ts",
     "slice.contract.ts",
     "slice.json"
   ],

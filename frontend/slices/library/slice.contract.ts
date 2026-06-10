@@ -12,10 +12,11 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "library",
-  version: "0.1.0",
+  version: "0.2.0",
   category: "data",
   kind: "full",
   provides: {
+    tools: ["library.search", "library.get", "library.upvote"],
     components: ["LibraryIndex", "LibraryDetail", "PayloadRender", "CopyButton", "UpvotePanel"],
     utils: ["DEFAULT_COPY", "DEFAULT_KIND_LABELS", "ALL_KINDS"],
     hooks: [],

@@ -12,7 +12,7 @@ import { defineSliceContract } from "../../../packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "cal-com-booking",
-  version: "0.1.0",
+  version: "0.2.0",
   requires: {
     auth: "convex",
     rbac: ["bookings.view", "bookings.cancel", "bookings.reschedule"],
@@ -24,6 +24,7 @@ export const contract = defineSliceContract({
     deps: ["convex-auth"],
   },
   provides: {
+    tools: ["cal-com-booking.list", "cal-com-booking.cancel", "cal-com-booking.reschedule"],
     tables: ["cal_com_booking_bookings"],
     events: ["booking.created", "booking.rescheduled", "booking.cancelled"],
   },

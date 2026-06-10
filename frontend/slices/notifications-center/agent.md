@@ -25,6 +25,16 @@ npx rahman-resources add notifications-center
 
 Run `npx rr add notifications-center`. Mount <NotificationBell adapter> in your topbar. Implement NotificationsAdapter over your feed (Convex query + mutations) or start with createMemoryNotificationsAdapter(seed). surface="sheet" for mobile-heavy apps.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `notifications-center.list`
+- `notifications-center.mark_read`
+- `notifications-center.mark_all_read`
+- `notifications-center.dismiss`
+- `notifications-center.clear`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

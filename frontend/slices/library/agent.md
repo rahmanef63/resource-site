@@ -25,6 +25,14 @@ npx rahman-resources add library
 
 Run `npx rr add seo` (peer) then `npx rr add library`. Spread `seoTables` + `libraryTables` into your root Convex schema. Wrap the unauthenticated CRUD `internalMutation`s with your auth model (see README Install). Render `<LibraryIndex items={await fetchQuery(api.library.listPublic)} />` and `<LibraryDetail item={await fetchQuery(api.library.getBySlug, { slug })} />`. Pass `onUpvote` to enable voting (consumer-owned backend); override `copy` + `kindLabels` per consumer.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `library.search`
+- `library.get`
+- `library.upvote`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

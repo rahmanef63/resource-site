@@ -34,3 +34,4 @@ export type {
   TweakcnPresetMeta,
   TweakcnRegistry,
 } from "./lib/tweakcn";
+export { themePresetsTools, type ThemePresetsCtx } from "./lib/tools";

@@ -25,6 +25,15 @@ npx rahman-resources add notion
 
 Run `npx rr add notion`. Wire the `@notion/*` path alias to `./slices/notion/*` in tsconfig. Minimal mount: `<EditorAdapterProvider adapter={{ data }}><PageEditor pageId={id}/></EditorAdapterProvider>` where `data` implements EditorDataAdapter (block+page CRUD over your store — see lib/dataAdapter.ts; a localStorage reference impl lives in the rr preview). Add capabilities incrementally: `selection` for multi-select, `comments` for per-block threads, `database.renderDatabase` to mount your database renderer inside database blocks, `mention.search` for @-typeahead, `page.navigateToPage`/`uploadFile` for nav + media. Convex hosts: copy convex/features/notion (_blocks/_blockOps are pure, unit-tested array ops) and keep handlers thin.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `notion.page.create`
+- `notion.page.get`
+- `notion.page.update`
+- `notion.search`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

@@ -25,6 +25,13 @@ npx rahman-resources add markdown
 
 Run `npx rr add markdown`. Read-only: `<MarkdownReader content={md}/>`. Full surface: `<MarkdownPage content={md} tabs={['read','write','review']} onContentChange={save} comments={list} onAddComment={add} onResolveComment={resolve}/>` (omit callbacks for internal-state demo mode). Diagrams: fence ```mermaid; charts: fence ```chart with { type: bar|line|area|pie, data: [...] }. To bridge from the notion editor call `blocksToMarkdown(page.blocks)` from `@notion/shared/lib/markdown`; reverse with `markdownToBlocks(md)`.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `markdown.parse`
+- `markdown.toc`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

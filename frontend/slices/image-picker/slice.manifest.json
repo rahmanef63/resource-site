@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "image-picker",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -21,6 +21,7 @@
     "lib/galleryPresets.ts",
     "lib/imageStyle.ts",
     "lib/parseImage.ts",
+    "lib/tools.ts",
     "lib/unsplashCurated.ts",
     "lib/unsplashSearch.ts",
     "slice.contract.ts",

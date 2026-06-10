@@ -936,6 +936,29 @@
     ]
   },
   {
+    "slug": "motion-kit",
+    "title": "Motion Kit — scroll reveals, carousel, accordion, micro-interactions",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "Reveal",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "variant",
+            "values": [
+              "fade-up",
+              "zoom"
+            ],
+            "default": "fade-up",
+            "description": "Scroll-reveal entrance — element animates in on first intersection (respects prefers-reduced-motion)."
+          }
+        ],
+        "seed": "Scroll the preview frame; wrapped content fades/zooms in once it enters the viewport. Append globals-motion.css for the transitions to take effect."
+      }
+    ]
+  },
+  {
     "slug": "notifications-center",
     "title": "Notifications Center — bell + inbox",
     "category": "ui",

@@ -1,14 +1,16 @@
 {
   "$schema": "../../../docs/slice.manifest.schema.json",
   "name": "cal-com-booking",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Embedded Cal.com booking widget (React embed) + Convex HTTP webhook receiver that mirrors bookings into a workspace-scoped table for downstream automations.",
   "category": "data",
   "stability": "beta",
   "deps": {
     "shared": [],
     "slices": [],
-    "convexFeatures": ["bookings"],
+    "convexFeatures": [
+      "bookings"
+    ],
     "npm": {
       "@calcom/embed-react": "^1.5.0"
     },
@@ -28,12 +30,22 @@
     ]
   },
   "files": {
-    "include": ["**/*"],
-    "exclude": ["*.test.ts", "*.test.tsx", "*.spec.ts"]
+    "include": [
+      "**/*"
+    ],
+    "exclude": [
+      "*.test.ts",
+      "*.test.tsx",
+      "*.spec.ts"
+    ]
   },
   "convexFiles": {
-    "include": ["**/*.ts"],
-    "exclude": ["*.test.ts"]
+    "include": [
+      "**/*.ts"
+    ],
+    "exclude": [
+      "*.test.ts"
+    ]
   },
   "permissions": [
     "bookings.view",
@@ -44,7 +56,12 @@
     {
       "name": "cal_com_booking_bookings",
       "namespaced": true,
-      "indexes": ["by_workspace", "by_workspace_calBookingId", "by_workspace_startsAt", "by_workspace_status"]
+      "indexes": [
+        "by_workspace",
+        "by_workspace_calBookingId",
+        "by_workspace_startsAt",
+        "by_workspace_status"
+      ]
     }
   ],
   "compatibility": {
@@ -54,6 +71,12 @@
     "tailwind": "4",
     "auth": "any"
   },
-  "tags": ["data", "scheduling", "cal-com", "bookings", "webhook"],
+  "tags": [
+    "data",
+    "scheduling",
+    "cal-com",
+    "bookings",
+    "webhook"
+  ],
   "notes": "Webhook handler lives at convex/features/bookings/http.ts and must verify HMAC via CALCOM_WEBHOOK_SECRET before insert. Existing table name 'bookings' should be migrated to namespaced 'cal_com_booking_bookings' on consumer adoption."
 }

@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "theme-presets",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -18,6 +18,7 @@
     "components/ThemeProviders.tsx",
     "components/mode-tabs.tsx",
     "index.ts",
+    "lib/tools.ts",
     "lib/tweakcn.ts",
     "lib/tweakcn/apply.ts",
     "lib/tweakcn/cssBuilder.ts",

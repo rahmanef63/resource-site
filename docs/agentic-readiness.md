@@ -221,7 +221,65 @@ and the agent drives them — no per-page registration code.
 **G5 shipped:** `gen:agent-md` now emits a `## Tools (agentic surface)`
 section read straight from each contract's `provides.tools`.
 
+### Wave 3c (2026-06-10) — Tier-A* admin collections shipped
+
+9 admin slices export server-gated collections. Pattern: mutating ctx
+methods are injectable contracts the consumer binds to RBAC-enforced
+implementations — `requirePermission` lives in the binding, NEVER in the
+tool layer; secrets (DOKU/Midtrans/Resend/OpenAI keys) stay server-side.
+
+| Slice | Tools |
+|---|---|
+| user-management 0.7.0 | list, invite, set_role, disable, remove |
+| rbac-roles 0.3.0 | list_roles, list_permissions, check (pure) + grant, revoke |
+| platform-admin 0.2.0 | metrics, feature_flag.set, tier.set |
+| audit-log 0.3.0 | query, export (READ-ONLY; writes stay with createAuditLogger) |
+| event-tracking 0.1.0 | track, query, funnel (+ new index.ts) |
+| doku-payment 0.3.0 | channels (pure), create_invoice, status, refund |
+| midtrans-payment 0.2.0 | create_invoice, status, refund |
+| resend-newsletter 0.2.0 | subscribe, unsubscribe, list, send_campaign |
+| rate-limit 0.3.0 | check, reset (rr's LIVE limiter — admin-gated) |
+
+### Wave 3d (2026-06-10) — Tier-A data/ui collections shipped
+
+20 slices. Ctx choice follows each slice's state pattern: live hook return
+(storefront-checkout `useCart`, settings-page `useSettings`,
+notifications-center `useNotifications`, theme-presets provider surface,
+data-table TanStack `Table` instance), the slice's OWN adapter seam
+(comments `CommentsBindings`), injectable bindings for Convex/consumer-wired
+backends (library, vector-search, activity, cal-com-booking, seo, files),
+small host contracts for parent-driven UI (notion, notion-database,
+command-menu, onboarding-wizard, icon-picker, image-picker,
+broadcast-channel-sync), and pure tools (markdown).
+
+| Slice | Tools |
+|---|---|
+| data-table 0.2.0 | state, filter.set, sort.set, page.set, selection.clear |
+| files 0.3.0 | parse_ref, remove |
+| library 0.2.0 | search, get, upvote |
+| vector-search 0.2.0 | query, index, reindex |
+| activity 0.2.0 | list, stats (read-only) |
+| cal-com-booking 0.2.0 | list, cancel, reschedule |
+| notion 1.1.0 | page.create, page.get, page.update, search |
+| notion-database 0.18.0 | rows, row.add/update/delete, view.switch, filter, sort |
+| comments 0.3.0 | list, add, resolve, remove |
+| storefront-checkout 0.2.0 | cart, add, set_qty, remove, clear |
+| command-menu 0.3.0 | list_commands, search, run_command |
+| settings-page 0.2.0 | get, set |
+| theme-presets 0.4.0 | list_presets, current, set_preset, clear |
+| onboarding-wizard 0.2.0 | status, goto_step, set_field, complete |
+| notifications-center 0.2.0 | list, mark_read, mark_all_read, dismiss, clear |
+| icon-picker 0.5.0 | search, pick |
+| image-picker 0.3.0 | search, pick |
+| markdown 0.3.0 | parse, toc (pure) |
+| seo 0.3.0 | generate, generate_and_apply |
+| broadcast-channel-sync 0.2.0 | read, publish |
+
+**Scorecard now:** 39 slices with tool collections (10 os + 9 admin + 20
+data/ui) + assistant host + 6 ai-infra consumers. Tier A / A* fully covered.
+
 ### Next (in order)
 
-1. Tier-A* admin (gated via `requirePermission`), Tier-A data/ui slices.
-2. Tier-C `configure` tools as needed.
+1. Tier-C `configure` tools as needed (optional by design).
+2. Host wiring examples for the adapter-ctx slices (each needs its consumer
+   binding before the agent can mutate anything).

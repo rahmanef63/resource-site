@@ -55,3 +55,4 @@ export {
   DEFAULT_DATABASE_ICON,
   DEFAULT_ROW_ICON,
 } from "./lib/defaults";
+export { iconPickerTools, type IconPickerCtx } from "./lib/tools";

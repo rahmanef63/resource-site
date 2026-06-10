@@ -25,6 +25,15 @@ npx rahman-resources add theme-presets
 
 Run `npx rr add theme-presets` (registry-data.json ships inside the slice — no separate public/ copy step). Wrap your tree once with `<ThemePresetProvider>` (inside next-themes' ThemeProvider). Mount `<ThemePresetSwitcher />` anywhere in your header / sidebar / settings — one component handles light/dark/system + preset palette. Wrap dashboard with `<ThemeColorSync>` if you need live tweakcn variable preview on inner routes. Deeply-nested consumers read state via `useThemePreset()` (returns `{ presetName, registry, setPreset, preview, restore, isReady }`). For lower-level access: `applyTweakcnPreset(name)`, `previewTweakcnPreset(name)`, `restoreTweakcnPreset()`, `groupTweakcnPresets(items)`, `tweakcnSwatches(preset)` all exported from `@/features/theme-presets`. To rename localStorage key, fork `STORAGE_KEY` in `lib/tweakcn/types.ts`.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `theme-presets.list_presets`
+- `theme-presets.current`
+- `theme-presets.set_preset`
+- `theme-presets.clear`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

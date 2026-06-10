@@ -25,6 +25,14 @@ npx rahman-resources add cal-com-booking
 
 Run `npx rr add cal-com-booking`. Embed Cal.com via @calcom/embed-react di halaman services. Configure webhook di Cal.com dashboard → POST ke /api/cal-webhook → upsert booking di Convex.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `cal-com-booking.list`
+- `cal-com-booking.cancel`
+- `cal-com-booking.reschedule`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

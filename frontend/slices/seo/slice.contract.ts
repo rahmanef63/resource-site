@@ -24,7 +24,7 @@ import { defineSliceContract } from "../../../packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "seo",
-  version: "0.2.0",
+  version: "0.3.0",
   requires: {
     auth: "convex",
     rbac: ["seo.write"],
@@ -32,6 +32,7 @@ export const contract = defineSliceContract({
     deps: ["convex-auth"],
   },
   provides: {
+    tools: ["seo.generate", "seo.generate_and_apply"],
     // TODO(contract): tables need namespace rename migration — see Phase E planner
     tables: ["seoGeneratorCalls"],
     // v0.2.0 portable surface — pure helpers exported from frontend/slices/seo/lib.

@@ -25,6 +25,16 @@ npx rahman-resources add data-table
 
 Run `npx rr add data-table`. Build ColumnDef<TData>[] (use sortable headers via DataTableColumnHeader), pass data + columns to <DataTable>. searchKey binds the toolbar input to one column; selectable prepends the checkbox column; density tightens row padding.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `data-table.state`
+- `data-table.filter.set`
+- `data-table.sort.set`
+- `data-table.page.set`
+- `data-table.selection.clear`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

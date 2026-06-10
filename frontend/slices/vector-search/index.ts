@@ -1,2 +1,3 @@
 // Slice public barrel — re-exports only.
-export {}
+export { vectorSearchTools, type VectorSearchCtx } from "./lib/tools";
+

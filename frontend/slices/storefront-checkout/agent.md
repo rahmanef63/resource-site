@@ -25,6 +25,16 @@ npx rahman-resources add storefront-checkout
 
 Run `npx rr add storefront-checkout`. Wrap your public layout once with `<CartProvider storageKey="my-shop-cart">` and mount `<CartWidget checkoutHref="/checkout" />` in the header extras. On product surfaces call `useCart().add({ slug, name, price, priceLabel, emoji })` with a host-resolved NUMERIC price. Build a /checkout route composing `<CheckoutSummary />` + a payment form (doku-payment's DokuDirectForm): its onSubmit calls YOUR Convex place-order action which re-prices each {slug, qty} from your catalog table server-side, generates an unguessable orderId, calls api.features.payment.actions.doku.createDirectPayment, records your domain order row, and returns { ok, orderId, instructions, expiresAt } ({ ok:false, notice } when DOKU creds are unset — surface it in the form and offer a contact fallback). After success render DokuPaymentInstructions + reactive status via api.features.payment.query.getOrderByOrderId. Reference: template-wirausaha-os convex/checkout.ts + slices/checkout/CheckoutPage.tsx.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `storefront-checkout.cart`
+- `storefront-checkout.add`
+- `storefront-checkout.set_qty`
+- `storefront-checkout.remove`
+- `storefront-checkout.clear`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

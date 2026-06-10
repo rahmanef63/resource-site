@@ -25,6 +25,15 @@ npx rahman-resources add onboarding-wizard
 
 Run `npx rr add onboarding-wizard`. Show from your admin gate when `setup.status().onboarded === false`: `<OnboardingWizard onDone={...} save={(f) => settingsUpsert(f)} seedSample={() => seedSample({})} seeded={status?.seeded} ImageField={ImageField} presetOptions={presets} onPresetPreview={(n) => preview(n)} />`. `save` receives Partial<OnboardingFields> + `markOnboarded: true` — back it with a `settings.upsert` mutation that patches only provided fields. Theme bridge (optional): with the theme-presets slice installed build `presetOptions` from `groupTweakcnPresets(registry.items)` + `tweakcnSwatches(p)` and pass `useThemePreset().preview` as `onPresetPreview` — the picker then live-previews while the user browses and `Lewati setup` reverts via `onPresetPreview(null)`. Omit `presetOptions` to hide the picker entirely; omit `ImageField` to hide logo/favicon upload. Full wiring recipe in the slice's HOST-SETUP.md.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `onboarding-wizard.status`
+- `onboarding-wizard.goto_step`
+- `onboarding-wizard.set_field`
+- `onboarding-wizard.complete`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

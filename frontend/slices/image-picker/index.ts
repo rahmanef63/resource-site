@@ -22,3 +22,4 @@ export type {
   UnsplashPhoto, UnsplashSearchResult,
   UploadFn, UnsplashSearchFn, ImageSourceProps,
 } from "./types";
+export { imagePickerTools, type ImagePickerCtx } from "./lib/tools";

@@ -1,11 +1,11 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "notifications-center",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "category": "ui",
   "kind": "ui",
-  "title": "Notifications Center — bell + inbox",
-  "description": "Standalone notification inbox — a bell trigger with an unread badge that opens a panel (popover on desktop, sheet on mobile) listing notifications with All/Unread tabs, per-row mark-read + dismiss, and bulk mark-all-read + clear. Adapter-driven: the host supplies the feed via a NotificationsAdapter (Convex, websocket, or the bundled in-memory store). Pure UI, no backend coupling, theme-token styling.",
+  "title": "Notifications Center \u2014 bell + inbox",
+  "description": "Standalone notification inbox \u2014 a bell trigger with an unread badge that opens a panel (popover on desktop, sheet on mobile) listing notifications with All/Unread tabs, per-row mark-read + dismiss, and bulk mark-all-read + clear. Adapter-driven: the host supplies the feed via a NotificationsAdapter (Convex, websocket, or the bundled in-memory store). Pure UI, no backend coupling, theme-token styling.",
   "namespace": "@/features/notifications-center",
   "frontend": {
     "slicePath": "frontend/slices/notifications-center",
@@ -56,7 +56,7 @@
             "sheet"
           ],
           "default": "popover",
-          "description": "Panel surface — floating popover (desktop) or side sheet (mobile)"
+          "description": "Panel surface \u2014 floating popover (desktop) or side sheet (mobile)"
         }
       ],
       "seed": "8 static mixed-kind notifications with static ISO timestamps"
@@ -73,12 +73,12 @@
         {
           "id": "all-read",
           "title": "All read",
-          "description": "Same feed, every row already read — unread tab empty"
+          "description": "Same feed, every row already read \u2014 unread tab empty"
         },
         {
           "id": "empty",
           "title": "Empty state",
-          "description": "No notifications — caught-up fallback renders"
+          "description": "No notifications \u2014 caught-up fallback renders"
         }
       ],
       "seed": "Same 8 static notifications; scenario toggles read-state + emptiness"

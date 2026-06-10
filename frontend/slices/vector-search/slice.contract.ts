@@ -12,7 +12,7 @@ import { defineSliceContract } from "../../../packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "vector-search",
-  version: "0.1.0",
+  version: "0.2.0",
   requires: {
     auth: "convex",
     rbac: ["search.query", "search.index", "search.reindex"],
@@ -24,6 +24,7 @@ export const contract = defineSliceContract({
     deps: ["convex-auth"],
   },
   provides: {
+    tools: ["vector-search.query", "vector-search.index", "vector-search.reindex"],
     tables: ["vector_search_documents"],
     routes: ["/search"],
     components: ["SearchPage"],

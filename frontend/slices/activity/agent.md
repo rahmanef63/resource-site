@@ -25,6 +25,13 @@ npx rahman-resources add activity
 
 Run `npx rr add activity`. Spread `activityTables` into your root Convex schema. Wrap the unauthenticated `create`/`update`/`remove` `internalMutation`s with your auth model (see README Install section). Render `<ActivityFeed rows={await fetchQuery(api.activity.listPublic)} stats={await fetchQuery(api.activity.statsThisWeek)} />`. Override `copy`, `categoryLabels`, `locale` per consumer. MCP integration: map `activity_create` tool → your wrapped `create` mutation.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `activity.list`
+- `activity.stats`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.
