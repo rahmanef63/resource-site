@@ -12,6 +12,7 @@ export type RateLimitCtx = {
 
 export const rateLimitTools = defineToolCollection<RateLimitCtx>({
   namespace: "rate-limit",
+  instructions: "Rate limiter. check is a read; reset clears a key's counter on the LIVE limiter (admin-gated), confirm first.",
   tools: [
     {
       name: "check",

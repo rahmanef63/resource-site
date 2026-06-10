@@ -14,6 +14,7 @@ export type VectorSearchCtx = {
 
 export const vectorSearchTools = defineToolCollection<VectorSearchCtx>({
   namespace: "vector-search",
+  instructions: "Vector search. query reads; index adds one document; reindex rebuilds the whole index (expensive, destructive), confirm first.",
   tools: [
     {
       name: "query",

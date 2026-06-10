@@ -29,8 +29,12 @@ Run `rr add audit-log`. Import logAuditEvent from convex/_shared/auditLogger.ts 
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** READ-ONLY audit trail. Query with filters and a limit; export produces a file. Never assume write access.
+
 - `audit-log.query`
 - `audit-log.export`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

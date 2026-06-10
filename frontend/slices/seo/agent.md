@@ -29,8 +29,12 @@ Run `rr add seo`. Call seo.generate from server actions or admin mutations with 
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** SEO metadata. generate previews the result; generate_and_apply writes it live, confirm before applying.
+
 - `seo.generate`
 - `seo.generate_and_apply`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

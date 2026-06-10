@@ -13,6 +13,7 @@ export type SeoToolsCtx = {
 
 export const seoTools = defineToolCollection<SeoToolsCtx>({
   namespace: "seo",
+  instructions: "SEO metadata. generate previews the result; generate_and_apply writes it live, confirm before applying.",
   tools: [
     {
       name: "generate",

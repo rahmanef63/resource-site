@@ -29,10 +29,14 @@ Run `npx rr add doku-payment`. DOKU dual-mode: Checkout (hosted, all channels) a
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** DOKU payments. channels lists options; create_invoice charges the customer and refund reverses it. Both move money, confirm with the user first.
+
 - `doku-payment.channels`
 - `doku-payment.create_invoice`
 - `doku-payment.status`
 - `doku-payment.refund`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

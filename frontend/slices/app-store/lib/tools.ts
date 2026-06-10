@@ -14,6 +14,7 @@ const catalogEntry = (appId: string) => CATALOG.find((c) => c.appId === appId);
 
 export const appStoreTools = defineToolCollection<AppStoreCtx>({
   namespace: "app-store",
+  instructions: "Browse and manage installable apps. Search or list before install/uninstall; uninstall removes an app from the workspace.",
   describe: (ctx) => `${ctx.apps.filter((a) => a.installed).length} apps installed`,
   tools: [
     {

@@ -37,8 +37,12 @@ STEP 4 — Real telemetry. `configureSysmon({ mode:"live", stats, processes })` 
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** Read-only system telemetry. stats for resource usage, processes for the live list; poll sparingly.
+
 - `system-monitor.stats`
 - `system-monitor.processes`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

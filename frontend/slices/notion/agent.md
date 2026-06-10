@@ -29,10 +29,14 @@ Run `npx rr add notion`. Wire the `@notion/*` path alias to `./slices/notion/*` 
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** Notion workspace pages. search or page.get to find a page id before page.update; page.create makes a new page.
+
 - `notion.page.create`
 - `notion.page.get`
 - `notion.page.update`
 - `notion.search`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

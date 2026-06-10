@@ -19,6 +19,7 @@ const summary = (ctx: FileExplorerCtx): string => {
 
 export const fileExplorerTools = defineToolCollection<FileExplorerCtx>({
   namespace: "file-explorer",
+  instructions: "File manager. navigate/list to locate a path before mutating; trash is recoverable, remove and empty_trash are permanent, confirm first.",
   describe: summary,
   tools: [
     {

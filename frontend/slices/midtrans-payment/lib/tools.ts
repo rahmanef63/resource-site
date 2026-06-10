@@ -13,6 +13,7 @@ export type MidtransPaymentCtx = {
 
 export const midtransPaymentTools = defineToolCollection<MidtransPaymentCtx>({
   namespace: "midtrans-payment",
+  instructions: "Midtrans payments. create_invoice charges and refund reverses. Both move money, confirm with the user first.",
   tools: [
     {
       name: "create_invoice",

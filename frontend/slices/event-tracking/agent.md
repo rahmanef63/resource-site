@@ -29,9 +29,13 @@ Run `npx rr add event-tracking`. Writes to analyticsEvents table (no new schema)
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** Analytics events. track emits one event; query/funnel are server-gated reads. Bound queries and treat the data as sensitive.
+
 - `event-tracking.track`
 - `event-tracking.query`
 - `event-tracking.funnel`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

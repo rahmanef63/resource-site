@@ -47,6 +47,8 @@ STEP 5 — Export. The Render button records the live canvas + mixed audio to We
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** Video timeline editor. project.inspect for clip and track ids before editing; clip.remove is destructive; use history.undo/redo to recover.
+
 - `reel-editor.project.inspect`
 - `reel-editor.ratio.set`
 - `reel-editor.title.add`
@@ -58,6 +60,8 @@ Function-calling tools this slice provides. Register the exported collection on 
 - `reel-editor.clip.move_track`
 - `reel-editor.history.undo`
 - `reel-editor.history.redo`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

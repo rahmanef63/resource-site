@@ -24,6 +24,7 @@ const summary = (ctx: UserManagementCtx): string => {
 
 export const userManagementTools = defineToolCollection<UserManagementCtx>({
   namespace: "user-management",
+  instructions: "Member admin. list before acting; invite/set_role/disable/remove are privileged server-gated ops; remove is irreversible, prefer disable and confirm first.",
   describe: summary,
   tools: [
     {

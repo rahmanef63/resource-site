@@ -29,7 +29,11 @@ Run `npx rr add ai-studio`. Mount `<GeneratorCanvas />` at /. Use case: prompt â
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** One-shot content generation. Give a clear prompt; treat the output as a draft for the user to review.
+
 - `ai-studio.generate`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

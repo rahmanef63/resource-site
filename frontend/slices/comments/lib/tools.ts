@@ -9,6 +9,7 @@ export type CommentsToolsCtx = CommentsBindings;
 
 export const commentsTools = defineToolCollection<CommentsToolsCtx>({
   namespace: "comments",
+  instructions: "Comment threads. list before resolve/remove; remove is irreversible, confirm first.",
   tools: [
     {
       name: "list",

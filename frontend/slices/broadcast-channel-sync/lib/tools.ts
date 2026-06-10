@@ -14,6 +14,7 @@ export type BroadcastChannelSyncCtx = {
 
 export const broadcastChannelSyncTools = defineToolCollection<BroadcastChannelSyncCtx>({
   namespace: "broadcast-channel-sync",
+  instructions: "Cross-tab state channel. read the current value before publish; publish notifies every open tab, so avoid noisy loops.",
   describe: (ctx) => `channel "${ctx.channel}" = ${ctx.get()}`,
   tools: [
     {

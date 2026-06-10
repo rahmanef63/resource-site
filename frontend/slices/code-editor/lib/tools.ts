@@ -13,6 +13,7 @@ const summary = (ctx: CodeEditorCtx): string =>
 
 export const codeEditorTools = defineToolCollection<CodeEditorCtx>({
   namespace: "code-editor",
+  instructions: "Edits code in the workspace. inspect or file.open before editing; edit.set/replace change the buffer, file.save persists. Read a file before replacing in it.",
   describe: summary,
   tools: [
     {

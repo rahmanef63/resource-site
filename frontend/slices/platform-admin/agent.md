@@ -29,9 +29,13 @@ Run `npx rr add platform-admin`. Contract-only scaffold. Wait for superspace /rr
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** Platform admin. metrics is a read; feature_flag.set and tier.set are privileged server-gated mutations, confirm before flipping.
+
 - `platform-admin.metrics`
 - `platform-admin.feature_flag.set`
 - `platform-admin.tier.set`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

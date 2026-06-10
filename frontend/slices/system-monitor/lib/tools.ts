@@ -13,6 +13,7 @@ const gb = (n: number) => `${(n / GiB).toFixed(1)}GiB`;
 
 export const systemMonitorTools = defineToolCollection<SysMonCtx>({
   namespace: "system-monitor",
+  instructions: "Read-only system telemetry. stats for resource usage, processes for the live list; poll sparingly.",
   describe: (ctx) => `telemetry in ${ctx.mode} mode`,
   tools: [
     {

@@ -29,11 +29,15 @@ Run `npx rr add user-management` (pulls rbac-roles + convex-auth). Frontend: <Me
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** Member admin. list before acting; invite/set_role/disable/remove are privileged server-gated ops; remove is irreversible, prefer disable and confirm first.
+
 - `user-management.list`
 - `user-management.invite`
 - `user-management.set_role`
 - `user-management.disable`
 - `user-management.remove`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

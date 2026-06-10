@@ -29,10 +29,14 @@ Run `rr add comments`. Wire Convex bindings ({ list, create, update, resolve, re
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** Comment threads. list before resolve/remove; remove is irreversible, confirm first.
+
 - `comments.list`
 - `comments.add`
 - `comments.resolve`
 - `comments.remove`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

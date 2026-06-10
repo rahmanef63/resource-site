@@ -29,11 +29,15 @@ Run `npx rr add data-table`. Build ColumnDef<TData>[] (use sortable headers via 
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** Drives a data-table view. Read state first; filter/sort/page change the view only, not the data; selection.clear deselects rows.
+
 - `data-table.state`
 - `data-table.filter.set`
 - `data-table.sort.set`
 - `data-table.page.set`
 - `data-table.selection.clear`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

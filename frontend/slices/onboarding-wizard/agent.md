@@ -29,10 +29,14 @@ Run `npx rr add onboarding-wizard`. Show from your admin gate when `setup.status
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** Onboarding flow. Read status first; set_field before goto_step/complete; complete finalizes the flow and cannot be replayed.
+
 - `onboarding-wizard.status`
 - `onboarding-wizard.goto_step`
 - `onboarding-wizard.set_field`
 - `onboarding-wizard.complete`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

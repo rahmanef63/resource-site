@@ -315,8 +315,12 @@ data/ui) + assistant host + 6 ai-infra consumers. Tier A / A* fully covered.
   artifact. rr now exports `BASE_AGENT_SYSTEM` (canonical custom instruction,
   incl. the destructive-confirm rule), `buildAgentSystem(collections, opts)`,
   `ToolCollection.instructions?`, and `registry.systemPrompt(opts?)`. The demo
-  route single-sources `BASE_AGENT_SYSTEM`. `appshell` + `image-editor` carry
-  example `instructions`.
+  route single-sources `BASE_AGENT_SYSTEM`.
+- **`instructions` on ALL 41 collections** (completed sweep): every tool
+  collection now carries its own usage/ordering/safety guidance, so
+  `registry.systemPrompt()` composes a complete custom instruction for whatever
+  set of slices a consumer registers. `agent.md` surfaces it as **Agent
+  guidance** plus a BYOK note (generator reads the `instructions:` literal).
 
 ### The rr agentic contract is BYOK — rr never holds a model key
 
@@ -354,13 +358,17 @@ to have a key; with no key they return a friendly fallback. Nothing a consumer
 copies depends on them. A real end-to-end round-trip therefore belongs to the
 consumer's app, not to this repo.
 
-### Next (in order)
+### Next — all optional; the BYOK library contract is COMPLETE
 
-1. Tier-C `configure` tools as needed (optional by design).
-2. Per-collection `instructions` on the remaining slices (only `appshell` +
-   `image-editor` carry examples today; tool descriptions already cover most —
-   add where multi-tool ordering needs guidance).
-3. Surface `dangerous` in `agent.md` (generator reads contract names only) —
-   nice-to-have.
-4. Consumer-binding example for an adapter-ctx slice demonstrating `requirePerm`
-   + the `confirm` gate end-to-end (in a consumer project, not rr).
+The agentic kit is done as a library: 41 collections, each shipping a custom
+instruction + a function list; one shared host/loop; safety seam (`dangerous` +
+`confirm`); `requirePerm`; `systemPrompt()`. Remaining items are by-design
+optional or belong to the consumer's app, not rr:
+
+1. Tier-C `configure` tools — optional by design; add only when a presentational
+   slice actually needs an agent-settable knob.
+2. Surface the `dangerous` flag in `agent.md` too (guidance + names ship now;
+   marking which names are destructive needs a contract-level declaration to be
+   regex-robust) — cosmetic.
+3. Consumer-binding example demonstrating `requirePerm` + the `confirm` gate
+   end-to-end — belongs in a consumer project (rr ships no key/transport).

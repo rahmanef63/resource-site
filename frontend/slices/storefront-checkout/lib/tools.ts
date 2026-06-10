@@ -21,6 +21,7 @@ const summary = (ctx: StorefrontCheckoutCtx): string =>
 
 export const storefrontCheckoutTools = defineToolCollection<StorefrontCheckoutCtx>({
   namespace: "storefront-checkout",
+  instructions: "Shopping cart. Read cart before mutating; the server re-prices on checkout, so client totals are display-only; clear empties the cart.",
   describe: summary,
   tools: [
     {

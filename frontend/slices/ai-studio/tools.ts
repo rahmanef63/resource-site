@@ -13,6 +13,7 @@ export type AiStudioCtx = {
 
 export const aiStudioTools = defineToolCollection<AiStudioCtx>({
   namespace: "ai-studio",
+  instructions: "One-shot content generation. Give a clear prompt; treat the output as a draft for the user to review.",
   tools: [
     {
       name: "generate",

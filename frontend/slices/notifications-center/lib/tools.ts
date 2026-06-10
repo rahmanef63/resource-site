@@ -8,6 +8,7 @@ export type NotificationsCenterCtx = UseNotifications;
 
 export const notificationsCenterTools = defineToolCollection<NotificationsCenterCtx>({
   namespace: "notifications-center",
+  instructions: "Notification inbox. list before acting; mark_read/dismiss are per-item; mark_all_read and clear are bulk, and clear is irreversible.",
   describe: (ctx) => `${ctx.notifications.length} notification(s), ${ctx.unreadCount} unread`,
   tools: [
     {

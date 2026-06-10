@@ -16,6 +16,7 @@ export type ResendNewsletterCtx = {
 
 export const resendNewsletterTools = defineToolCollection<ResendNewsletterCtx>({
   namespace: "resend-newsletter",
+  instructions: "Newsletter. subscribe/unsubscribe are standard; list is server-gated; send_campaign broadcasts to all subscribers (outward-facing, irreversible), confirm first.",
   tools: [
     {
       name: "subscribe",

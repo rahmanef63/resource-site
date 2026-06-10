@@ -47,10 +47,14 @@ STEP 5 — Editor handoff (optional). `configureMediaOpener((appId, title, size,
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** Quick-look media viewer. info reads the current item; next/prev navigate; zoom.set is clamped, so read info to know position.
+
 - `media-viewer.info`
 - `media-viewer.next`
 - `media-viewer.prev`
 - `media-viewer.zoom.set`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

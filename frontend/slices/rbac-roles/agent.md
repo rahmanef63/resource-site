@@ -29,11 +29,15 @@ Run `npx rr add rbac-roles`. Frontend: import { PermissionGate, usePermissions, 
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** RBAC. list_roles/list_permissions/check are pure reads; grant/revoke change a role's permissions (privileged, server-gated), confirm first.
+
 - `rbac-roles.list_roles`
 - `rbac-roles.list_permissions`
 - `rbac-roles.check`
 - `rbac-roles.grant`
 - `rbac-roles.revoke`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

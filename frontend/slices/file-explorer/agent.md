@@ -52,6 +52,8 @@ The container owns the box — render <FileExplorer> inside something with a hei
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** File manager. navigate/list to locate a path before mutating; trash is recoverable, remove and empty_trash are permanent, confirm first.
+
 - `file-explorer.list`
 - `file-explorer.navigate`
 - `file-explorer.mkdir`
@@ -60,6 +62,8 @@ Function-calling tools this slice provides. Register the exported collection on 
 - `file-explorer.trash`
 - `file-explorer.remove`
 - `file-explorer.empty_trash`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

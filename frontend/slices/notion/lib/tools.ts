@@ -15,6 +15,7 @@ export type NotionToolsCtx = {
 
 export const notionTools = defineToolCollection<NotionToolsCtx>({
   namespace: "notion",
+  instructions: "Notion workspace pages. search or page.get to find a page id before page.update; page.create makes a new page.",
   tools: [
     {
       name: "page.create",

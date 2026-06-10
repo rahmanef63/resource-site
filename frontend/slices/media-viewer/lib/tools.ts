@@ -26,6 +26,7 @@ const info = (ctx: MediaViewerCtx): string => {
 
 export const mediaViewerTools = defineToolCollection<MediaViewerCtx>({
   namespace: "media-viewer",
+  instructions: "Quick-look media viewer. info reads the current item; next/prev navigate; zoom.set is clamped, so read info to know position.",
   describe: info,
   tools: [
     {

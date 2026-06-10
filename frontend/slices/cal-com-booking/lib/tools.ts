@@ -15,6 +15,7 @@ export type CalComBookingCtx = {
 
 export const calComBookingTools = defineToolCollection<CalComBookingCtx>({
   namespace: "cal-com-booking",
+  instructions: "Manages Cal.com bookings. list to find a booking id before cancel/reschedule; cancel notifies the attendee.",
   tools: [
     {
       name: "list",

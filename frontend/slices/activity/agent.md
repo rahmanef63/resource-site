@@ -29,8 +29,12 @@ Run `npx rr add activity`. Spread `activityTables` into your root Convex schema.
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** Read-only activity feed. Use list for recent events (paginate with a limit), stats for aggregate counts.
+
 - `activity.list`
 - `activity.stats`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

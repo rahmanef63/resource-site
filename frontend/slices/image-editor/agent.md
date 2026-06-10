@@ -51,6 +51,8 @@ STEP 5 — Export. PNG/JPG/WebP at 1×/2×/3× via the Export tab, or call `expo
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** Edits a layered raster document. Add/select a layer before painting, transforming, or styling it; read the document read-back for layer ids and the active selection. Prefer non-destructive ops (layer styles, transforms) over flatten/export until the user asks.
+
 - `image-editor.doc.inspect`
 - `image-editor.doc.resize`
 - `image-editor.doc.aspect`
@@ -85,6 +87,8 @@ Function-calling tools this slice provides. Register the exported collection on 
 - `image-editor.edit.redo`
 - `image-editor.export.image`
 - `image-editor.image.removeBackground`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

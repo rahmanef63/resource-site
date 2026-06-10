@@ -57,6 +57,8 @@ Omit any callback and that affordance goes read-only; pass `readOnly` to freeze 
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** Notion-style database. rows to read the current view; row.delete is irreversible; view.switch/filter/sort change presentation only.
+
 - `notion-database.rows`
 - `notion-database.row.add`
 - `notion-database.row.update`
@@ -64,6 +66,8 @@ Function-calling tools this slice provides. Register the exported collection on 
 - `notion-database.view.switch`
 - `notion-database.filter`
 - `notion-database.sort`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

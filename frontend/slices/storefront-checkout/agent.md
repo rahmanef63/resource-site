@@ -29,11 +29,15 @@ Run `npx rr add storefront-checkout`. Wrap your public layout once with `<CartPr
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** Shopping cart. Read cart before mutating; the server re-prices on checkout, so client totals are display-only; clear empties the cart.
+
 - `storefront-checkout.cart`
 - `storefront-checkout.add`
 - `storefront-checkout.set_qty`
 - `storefront-checkout.remove`
 - `storefront-checkout.clear`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

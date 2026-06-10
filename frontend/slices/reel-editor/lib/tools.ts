@@ -40,6 +40,7 @@ const need = (ctx: ReelCtx, id: string) => {
 
 export const reelEditorTools = defineToolCollection<ReelCtx>({
   namespace: "reel-editor",
+  instructions: "Video timeline editor. project.inspect for clip and track ids before editing; clip.remove is destructive; use history.undo/redo to recover.",
   describe: summary,
   tools: [
     {

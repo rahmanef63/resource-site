@@ -14,6 +14,7 @@ export type AiRouterCtx = {
 
 export const aiRouterTools = defineToolCollection<AiRouterCtx>({
   namespace: "ai-router",
+  instructions: "Routes a prompt to a tiered model. Pick the cheapest tier that fits; each route is a model call, so avoid redundant ones.",
   tools: [
     {
       name: "route",

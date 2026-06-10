@@ -47,6 +47,8 @@ Extending: add an app = one manifest entry; add a shell feature = a new defineFe
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** Drives the desktop shell: launch apps by slug, then arrange/focus/close their windows. Launch an app before acting on its window; check window.list for live window ids.
+
 - `appshell.window.list`
 - `appshell.app.launch`
 - `appshell.app.focus`
@@ -59,6 +61,8 @@ Function-calling tools this slice provides. Register the exported collection on 
 - `appshell.profile.save`
 - `appshell.profile.apply`
 - `appshell.notify`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

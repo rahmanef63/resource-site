@@ -29,9 +29,13 @@ Run `npx rr add vector-search`. Add embedding field + vectorIndex per searchable
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** Vector search. query reads; index adds one document; reindex rebuilds the whole index (expensive, destructive), confirm first.
+
 - `vector-search.query`
 - `vector-search.index`
 - `vector-search.reindex`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

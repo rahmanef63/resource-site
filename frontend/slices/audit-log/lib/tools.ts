@@ -16,6 +16,7 @@ const render = (e: AuditEvent): string =>
 
 export const auditLogTools = defineToolCollection<AuditLogCtx>({
   namespace: "audit-log",
+  instructions: "READ-ONLY audit trail. Query with filters and a limit; export produces a file. Never assume write access.",
   tools: [
     {
       name: "query",

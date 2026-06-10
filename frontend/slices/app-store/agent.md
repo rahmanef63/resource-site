@@ -39,10 +39,14 @@ STEP 5 — Console exec (optional). `configureAppStoreExec({ mode:"live", exec:{
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** Browse and manage installable apps. Search or list before install/uninstall; uninstall removes an app from the workspace.
+
 - `app-store.list`
 - `app-store.search`
 - `app-store.install`
 - `app-store.uninstall`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

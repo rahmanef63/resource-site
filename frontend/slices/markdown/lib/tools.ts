@@ -9,6 +9,7 @@ export type MarkdownToolsCtx = Record<string, never>;
 
 export const markdownTools = defineToolCollection<MarkdownToolsCtx>({
   namespace: "markdown",
+  instructions: "Pure markdown helpers. parse renders structure, toc extracts headings; no side effects, safe to call freely.",
   tools: [
     {
       name: "parse",

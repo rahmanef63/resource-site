@@ -12,6 +12,7 @@ export type ThemePresetsCtx = {
 
 export const themePresetsTools = defineToolCollection<ThemePresetsCtx>({
   namespace: "theme-presets",
+  instructions: "Theme presets. list_presets/current to read; set_preset applies a theme and clear reverts to default. Visual only.",
   describe: (ctx) => `theme preset: ${ctx.presetName ?? "site default"}`,
   tools: [
     {

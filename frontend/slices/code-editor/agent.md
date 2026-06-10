@@ -47,6 +47,8 @@ STEP 5 — Cross-app open. From a file manager (e.g. the file-explorer slice), w
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** Edits code in the workspace. inspect or file.open before editing; edit.set/replace change the buffer, file.save persists. Read a file before replacing in it.
+
 - `code-editor.inspect`
 - `code-editor.file.open`
 - `code-editor.file.create`
@@ -56,6 +58,8 @@ Function-calling tools this slice provides. Register the exported collection on 
 - `code-editor.file.save`
 - `code-editor.tab.switch`
 - `code-editor.tab.close`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

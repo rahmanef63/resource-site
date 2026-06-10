@@ -14,6 +14,7 @@ const state = (t: DataTableCtx): string => {
 
 export const dataTableTools = defineToolCollection<DataTableCtx>({
   namespace: "data-table",
+  instructions: "Drives a data-table view. Read state first; filter/sort/page change the view only, not the data; selection.clear deselects rows.",
   describe: state,
   tools: [
     {

@@ -13,6 +13,7 @@ const summary = (ctx: BrowserCtx): string =>
 
 export const browserTools = defineToolCollection<BrowserCtx>({
   namespace: "browser",
+  instructions: "Drives a remote browser tab. read_state first to see the page, then open/navigate; click/type/key act on the live DOM, so re-check state between steps.",
   describe: summary,
   tools: [
     {

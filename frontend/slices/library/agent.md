@@ -29,9 +29,13 @@ Run `npx rr add seo` (peer) then `npx rr add library`. Spread `seoTables` + `lib
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** Content library. search or get before upvote; upvote mutates a shared count.
+
 - `library.search`
 - `library.get`
 - `library.upvote`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

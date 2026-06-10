@@ -37,9 +37,13 @@ STEP 4 — Go live. `configureTerminal({ mode:"live", fs:{list,read,write,mkdir,
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** A shell terminal. Check cwd first; run executes a real command, so avoid destructive shell commands without explicit user intent.
+
 - `os-terminal.run`
 - `os-terminal.cwd`
 - `os-terminal.clear`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

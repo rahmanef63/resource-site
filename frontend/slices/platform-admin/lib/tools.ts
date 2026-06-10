@@ -17,6 +17,7 @@ export type PlatformAdminCtx = {
 
 export const platformAdminTools = defineToolCollection<PlatformAdminCtx>({
   namespace: "platform-admin",
+  instructions: "Platform admin. metrics is a read; feature_flag.set and tier.set are privileged server-gated mutations, confirm before flipping.",
   tools: [
     {
       name: "metrics",

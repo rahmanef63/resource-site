@@ -12,6 +12,7 @@ export type ImagePickerCtx = {
 
 export const imagePickerTools = defineToolCollection<ImagePickerCtx>({
   namespace: "image-picker",
+  instructions: "Image chooser. search a provider, then pick a result; pick selects an image, it does not upload.",
   tools: [
     {
       name: "search",

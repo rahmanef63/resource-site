@@ -29,8 +29,12 @@ Run `npx rr add broadcast-channel-sync`. Use BroadcastChannel only for demo / cr
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** Cross-tab state channel. read the current value before publish; publish notifies every open tab, so avoid noisy loops.
+
 - `broadcast-channel-sync.read`
 - `broadcast-channel-sync.publish`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

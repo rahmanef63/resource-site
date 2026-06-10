@@ -11,6 +11,7 @@ export type ActivityToolsCtx = {
 
 export const activityTools = defineToolCollection<ActivityToolsCtx>({
   namespace: "activity",
+  instructions: "Read-only activity feed. Use list for recent events (paginate with a limit), stats for aggregate counts.",
   tools: [
     {
       name: "list",

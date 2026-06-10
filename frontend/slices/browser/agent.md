@@ -37,6 +37,8 @@ STEP 4 — Real headless browser. `configureBrowser({ state, screenshot, act })`
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** Drives a remote browser tab. read_state first to see the page, then open/navigate; click/type/key act on the live DOM, so re-check state between steps.
+
 - `browser.read_state`
 - `browser.open`
 - `browser.new_tab`
@@ -48,6 +50,8 @@ Function-calling tools this slice provides. Register the exported collection on 
 - `browser.click`
 - `browser.type`
 - `browser.key`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

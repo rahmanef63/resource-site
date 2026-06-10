@@ -29,9 +29,13 @@ Run `npx rr add midtrans-payment`. Midtrans Snap untuk pembayaran instant. Webho
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** Midtrans payments. create_invoice charges and refund reverses. Both move money, confirm with the user first.
+
 - `midtrans-payment.create_invoice`
 - `midtrans-payment.status`
 - `midtrans-payment.refund`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

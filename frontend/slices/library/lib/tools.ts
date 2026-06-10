@@ -12,6 +12,7 @@ export type LibraryToolsCtx = {
 
 export const libraryTools = defineToolCollection<LibraryToolsCtx>({
   namespace: "library",
+  instructions: "Content library. search or get before upvote; upvote mutates a shared count.",
   tools: [
     {
       name: "search",

@@ -14,6 +14,7 @@ export type OnboardingWizardCtx = {
 
 export const onboardingWizardTools = defineToolCollection<OnboardingWizardCtx>({
   namespace: "onboarding-wizard",
+  instructions: "Onboarding flow. Read status first; set_field before goto_step/complete; complete finalizes the flow and cannot be replayed.",
   describe: (ctx) => ctx.status(),
   tools: [
     {

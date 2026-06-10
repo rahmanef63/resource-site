@@ -29,10 +29,14 @@ Run `npx rr add theme-presets` (registry-data.json ships inside the slice — no
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** Theme presets. list_presets/current to read; set_preset applies a theme and clear reverts to default. Visual only.
+
 - `theme-presets.list_presets`
 - `theme-presets.current`
 - `theme-presets.set_preset`
 - `theme-presets.clear`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

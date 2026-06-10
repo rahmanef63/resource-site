@@ -12,6 +12,7 @@ export type FilesToolsCtx = {
 
 export const filesTools = defineToolCollection<FilesToolsCtx>({
   namespace: "files",
+  instructions: "Lightweight file ops. parse_ref resolves a reference before remove; remove is permanent.",
   tools: [
     {
       name: "parse_ref",

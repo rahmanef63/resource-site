@@ -16,6 +16,7 @@ export type RbacRolesCtx = {
 
 export const rbacRolesTools = defineToolCollection<RbacRolesCtx>({
   namespace: "rbac-roles",
+  instructions: "RBAC. list_roles/list_permissions/check are pure reads; grant/revoke change a role's permissions (privileged, server-gated), confirm first.",
   tools: [
     {
       name: "list_roles",

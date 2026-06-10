@@ -11,6 +11,7 @@ export type SettingsPageCtx = {
 
 export const settingsPageTools = defineToolCollection<SettingsPageCtx>({
   namespace: "settings-page",
+  instructions: "App settings. get before set; set persists immediately.",
   describe: (ctx) => (ctx.values ? `settings loaded: ${JSON.stringify(ctx.values)}` : "settings loading"),
   tools: [
     {

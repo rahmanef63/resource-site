@@ -18,6 +18,7 @@ export type NotionDatabaseCtx = {
 
 export const notionDatabaseTools = defineToolCollection<NotionDatabaseCtx>({
   namespace: "notion-database",
+  instructions: "Notion-style database. rows to read the current view; row.delete is irreversible; view.switch/filter/sort change presentation only.",
   tools: [
     {
       name: "rows",

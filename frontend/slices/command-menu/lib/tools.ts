@@ -15,6 +15,7 @@ const render = (rows: Array<{ id: string; label: string; group: string }>): stri
 
 export const commandMenuTools = defineToolCollection<CommandMenuCtx>({
   namespace: "command-menu",
+  instructions: "The app command palette. list_commands or search to find a command id, then run_command; never invent command ids.",
   tools: [
     {
       name: "list_commands",

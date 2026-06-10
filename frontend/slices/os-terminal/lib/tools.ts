@@ -15,6 +15,7 @@ const render = (lines: Line[]): string =>
 
 export const osTerminalTools = defineToolCollection<TerminalCtx>({
   namespace: "os-terminal",
+  instructions: "A shell terminal. Check cwd first; run executes a real command, so avoid destructive shell commands without explicit user intent.",
   describe: (ctx) => `terminal at ${ctx.cwd} (${ctx.api.mode} mode)`,
   tools: [
     {

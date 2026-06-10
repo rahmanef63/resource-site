@@ -29,8 +29,12 @@ Run `npx rr add icon-picker` then `pnpm add @phosphor-icons/react`. parseIconVal
 
 Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
 
+**Agent guidance:** Icon chooser. search by keyword across the icon sets, then pick the exact returned value; do not guess icon names.
+
 - `icon-picker.search`
 - `icon-picker.pick`
+
+rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
 ## Rules of engagement
 

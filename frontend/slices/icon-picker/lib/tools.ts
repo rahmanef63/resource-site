@@ -16,6 +16,7 @@ const SETS = { lucide: ALL_LUCIDE, phosphor: ALL_PHOSPHOR, emoji: ALL_EMOJIS } a
 
 export const iconPickerTools = defineToolCollection<IconPickerCtx>({
   namespace: "icon-picker",
+  instructions: "Icon chooser. search by keyword across the icon sets, then pick the exact returned value; do not guess icon names.",
   tools: [
     {
       name: "search",

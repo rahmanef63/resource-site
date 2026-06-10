@@ -16,6 +16,7 @@ export type EventTrackingCtx = {
 
 export const eventTrackingTools = defineToolCollection<EventTrackingCtx>({
   namespace: "event-tracking",
+  instructions: "Analytics events. track emits one event; query/funnel are server-gated reads. Bound queries and treat the data as sensitive.",
   tools: [
     {
       name: "track",

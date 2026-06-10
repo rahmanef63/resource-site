@@ -16,6 +16,7 @@ export type DokuPaymentCtx = {
 
 export const dokuPaymentTools = defineToolCollection<DokuPaymentCtx>({
   namespace: "doku-payment",
+  instructions: "DOKU payments. channels lists options; create_invoice charges the customer and refund reverses it. Both move money, confirm with the user first.",
   tools: [
     {
       name: "channels",
