@@ -2733,6 +2733,62 @@
         "toast",
         "basics"
       ]
+    },
+    {
+      "slug": "media-studio",
+      "title": "Media Studio — layered canvas editor",
+      "category": "os",
+      "description": "A layered canvas studio: image/text/shape layers with filters, masks, transforms, safe-area guides and aspect presets (1:1/4:5/9:16/16:9), plus an export modal (download / copy / import JSON). Runs fully offline on bundled gradient-SVG samples. Host wiring is one call: configureMediaStudio({ saveDoc, imageSources }) lights up Save-to-host and feeds real image sources. Self-contained: inspector hooks are inert seams in lib/host.ts.",
+      "source": "rahmanef63/os-vps",
+      "install": "npx rahman-resources add media-studio",
+      "npmPackages": [],
+      "exampleCode": "\"use client\";\nimport { MediaStudio } from \"@/features/media-studio\";\n\nexport default function StudioDemo() {\n  return <div className=\"h-dvh w-full\"><MediaStudio /></div>;\n}",
+      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Layered canvas editor. Fully client-side; no backend required.\n\nSTEP 1 — Install. `npx rr add media-studio`. Ensure `@/features/media-studio` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: button, dialog, badge, tooltip, scroll-area.\n\nSTEP 3 — Mount. `<MediaStudio />` in a height-bearing box — unwired it edits bundled sample layers. Or register `mediaStudioApp` in an appshell manifest.\n\nSTEP 4 — Host wiring. `configureMediaStudio({ saveDoc, imageSources })` — saveDoc persists the serialized document (enables Save-to-host in the export modal); imageSources supplies image URLs for new layers.",
+      "tags": [
+        "canvas",
+        "editor",
+        "layers",
+        "filters",
+        "export",
+        "design",
+        "ui"
+      ]
+    },
+    {
+      "slug": "quicklinks",
+      "title": "Quicklinks — website shortcut grid",
+      "category": "os",
+      "description": "A website-shortcut grid: add/remove links with auto favicons (Google s2) and new-tab open. State lives behind an injectable QuicklinksStore — createLocalStore persists to localStorage (SSR-safe hydrate), createMemoryStore suits previews/tests, configureQuicklinks swaps in a host store. Pairs with appshell: the useQuickLinks capability + QuicklinkIcon surface the same links in the dock/Launchpad/mobile grid.",
+      "source": "rahmanef63/os-vps",
+      "install": "npx rahman-resources add quicklinks",
+      "npmPackages": [],
+      "exampleCode": "\"use client\";\nimport { Quicklinks } from \"@/features/quicklinks\";\n\nexport default function LinksDemo() {\n  return <div className=\"h-dvh w-full\"><Quicklinks /></div>;\n}",
+      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Website shortcut grid. Fully client-side; no backend required.\n\nSTEP 1 — Install. `npx rr add quicklinks`. Ensure `@/features/quicklinks` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: button.\n\nSTEP 3 — Mount. `<Quicklinks />` — unwired it persists to localStorage (\"rr:quicklinks\") with 4 demo seeds. Or register `quicklinksApp` in an appshell manifest.\n\nSTEP 4 — Host store. `configureQuicklinks(store)` with { get, subscribe, add, remove, hydrate? } — or feed appshell's useQuickLinks capability from the same store so dock shortcuts stay in sync.",
+      "tags": [
+        "shortcuts",
+        "bookmarks",
+        "favicons",
+        "launcher",
+        "ui"
+      ]
+    },
+    {
+      "slug": "shell-settings",
+      "title": "Shell Settings — settings-app UI primitives",
+      "category": "os",
+      "description": "The settings-app building blocks: SettingsSection, Row, AccentSwatches, a slice-local Segmented control, and a ready AppearancePanel (style/mode/accent/wallpaper/device/transparency groups — every group optional). Pure presentation: the injected AppearanceAdapter IS the contract, so it binds to any appearance store (appshell capabilities, zustand, plain useState) with zero slice edits.",
+      "source": "rahmanef63/os-vps",
+      "install": "npx rahman-resources add shell-settings",
+      "npmPackages": [],
+      "exampleCode": "\"use client\";\nimport { useState } from \"react\";\nimport { AppearancePanel } from \"@/features/shell-settings\";\n\nexport default function SettingsDemo() {\n  const [mode, setMode] = useState<\"light\" | \"dark\">(\"light\");\n  return <AppearancePanel adapter={{ mode: { value: mode, set: setMode } }} />;\n}",
+      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Settings UI primitives. Pure presentation; state injected.\n\nSTEP 1 — Install. `npx rr add shell-settings`. Ensure `@/features/shell-settings` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: button, switch, toggle-group, separator.\n\nSTEP 3 — Mount. `<AppearancePanel adapter={adapter} />` with an AppearanceAdapter (all groups optional — omit a group to hide it), or compose SettingsSection/Row/AccentSwatches/Segmented directly for custom panels.\n\nSTEP 4 — Bind. Wire the adapter to your appearance store (theme mode, accent, wallpaper, device, transparency) — the panel re-renders from the values you pass; no internal state.",
+      "tags": [
+        "settings",
+        "preferences",
+        "appearance",
+        "primitives",
+        "ui"
+      ]
     }
   ],
   "slices": [
@@ -5345,6 +5401,99 @@
         "basics"
       ],
       "agentRecipe": "Run `npx rr add notifications-center`. Mount <NotificationBell adapter> in your topbar. Implement NotificationsAdapter over your feed (Convex query + mutations) or start with createMemoryNotificationsAdapter(seed). surface=\"sheet\" for mobile-heavy apps."
+    },
+    {
+      "slug": "media-studio",
+      "title": "Media Studio — layered canvas editor",
+      "category": "os",
+      "kind": "ui",
+      "version": "1.0.0",
+      "description": "A layered canvas studio: image/text/shape layers with filters, masks, transforms, safe-area guides and aspect presets (1:1/4:5/9:16/16:9), plus an export modal (download / copy / import JSON). Runs fully offline on bundled gradient-SVG samples. Host wiring is one call: configureMediaStudio({ saveDoc, imageSources }) lights up Save-to-host and feeds real image sources. Self-contained: inspector hooks are inert seams in lib/host.ts.",
+      "source": "rahmanef63/os-vps",
+      "slicePath": "frontend/slices/media-studio",
+      "convexPaths": [],
+      "npm": [
+        "lucide-react"
+      ],
+      "shadcn": [
+        "button",
+        "dialog",
+        "badge",
+        "tooltip",
+        "scroll-area"
+      ],
+      "env": [],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "canvas",
+        "editor",
+        "layers",
+        "filters",
+        "export",
+        "design",
+        "ui"
+      ],
+      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Layered canvas editor. Fully client-side; no backend required.\n\nSTEP 1 — Install. `npx rr add media-studio`. Ensure `@/features/media-studio` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: button, dialog, badge, tooltip, scroll-area.\n\nSTEP 3 — Mount. `<MediaStudio />` in a height-bearing box — unwired it edits bundled sample layers. Or register `mediaStudioApp` in an appshell manifest.\n\nSTEP 4 — Host wiring. `configureMediaStudio({ saveDoc, imageSources })` — saveDoc persists the serialized document (enables Save-to-host in the export modal); imageSources supplies image URLs for new layers."
+    },
+    {
+      "slug": "quicklinks",
+      "title": "Quicklinks — website shortcut grid",
+      "category": "os",
+      "kind": "ui",
+      "version": "1.0.0",
+      "description": "A website-shortcut grid: add/remove links with auto favicons (Google s2) and new-tab open. State lives behind an injectable QuicklinksStore — createLocalStore persists to localStorage (SSR-safe hydrate), createMemoryStore suits previews/tests, configureQuicklinks swaps in a host store. Pairs with appshell: the useQuickLinks capability + QuicklinkIcon surface the same links in the dock/Launchpad/mobile grid.",
+      "source": "rahmanef63/os-vps",
+      "slicePath": "frontend/slices/quicklinks",
+      "convexPaths": [],
+      "npm": [
+        "lucide-react"
+      ],
+      "shadcn": [
+        "button"
+      ],
+      "env": [],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "shortcuts",
+        "bookmarks",
+        "favicons",
+        "launcher",
+        "ui"
+      ],
+      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Website shortcut grid. Fully client-side; no backend required.\n\nSTEP 1 — Install. `npx rr add quicklinks`. Ensure `@/features/quicklinks` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: button.\n\nSTEP 3 — Mount. `<Quicklinks />` — unwired it persists to localStorage (\"rr:quicklinks\") with 4 demo seeds. Or register `quicklinksApp` in an appshell manifest.\n\nSTEP 4 — Host store. `configureQuicklinks(store)` with { get, subscribe, add, remove, hydrate? } — or feed appshell's useQuickLinks capability from the same store so dock shortcuts stay in sync."
+    },
+    {
+      "slug": "shell-settings",
+      "title": "Shell Settings — settings-app UI primitives",
+      "category": "os",
+      "kind": "ui",
+      "version": "1.0.0",
+      "description": "The settings-app building blocks: SettingsSection, Row, AccentSwatches, a slice-local Segmented control, and a ready AppearancePanel (style/mode/accent/wallpaper/device/transparency groups — every group optional). Pure presentation: the injected AppearanceAdapter IS the contract, so it binds to any appearance store (appshell capabilities, zustand, plain useState) with zero slice edits.",
+      "source": "rahmanef63/os-vps",
+      "slicePath": "frontend/slices/shell-settings",
+      "convexPaths": [],
+      "npm": [
+        "lucide-react"
+      ],
+      "shadcn": [
+        "button",
+        "switch",
+        "toggle-group",
+        "separator"
+      ],
+      "env": [],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "settings",
+        "preferences",
+        "appearance",
+        "primitives",
+        "ui"
+      ],
+      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Settings UI primitives. Pure presentation; state injected.\n\nSTEP 1 — Install. `npx rr add shell-settings`. Ensure `@/features/shell-settings` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: button, switch, toggle-group, separator.\n\nSTEP 3 — Mount. `<AppearancePanel adapter={adapter} />` with an AppearanceAdapter (all groups optional — omit a group to hide it), or compose SettingsSection/Row/AccentSwatches/Segmented directly for custom panels.\n\nSTEP 4 — Bind. Wire the adapter to your appearance store (theme mode, accent, wallpaper, device, transparency) — the panel re-renders from the values you pass; no internal state."
     }
   ]
 }

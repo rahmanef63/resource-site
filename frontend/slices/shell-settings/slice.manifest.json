@@ -1,0 +1,38 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "shell-settings",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add shell-settings",
+    "consumerPath": "slices/shell-settings"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "README.md",
+    "components/accent-swatches.tsx",
+    "components/appearance-panel.tsx",
+    "components/row.tsx",
+    "components/section.tsx",
+    "components/segmented.tsx",
+    "config.ts",
+    "index.ts",
+    "lib/types.ts",
+    "slice.contract.ts",
+    "slice.json"
+  ],
+  "imports": {
+    "shared": [
+      "@/components/ui/button",
+      "@/components/ui/separator",
+      "@/components/ui/switch",
+      "@/components/ui/toggle-group",
+      "@/lib/utils"
+    ],
+    "external": [
+      "react",
+      "lucide-react"
+    ]
+  }
+}

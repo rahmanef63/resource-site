@@ -1,0 +1,63 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "media-studio",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add media-studio",
+    "consumerPath": "slices/media-studio"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "README.md",
+    "app.tsx",
+    "components/canvas-stage.tsx",
+    "components/export-modal.tsx",
+    "components/layer-view.tsx",
+    "components/panel/adjust-panel.tsx",
+    "components/panel/layer-extras.tsx",
+    "components/panel/layers-panel.tsx",
+    "components/panel/section.tsx",
+    "components/panel/transform-panel.tsx",
+    "components/safe-area.tsx",
+    "components/segmented.tsx",
+    "components/side-panel.tsx",
+    "components/slider.tsx",
+    "components/studio-chrome.tsx",
+    "components/tool-rail.tsx",
+    "config.ts",
+    "index.ts",
+    "lib/filters.ts",
+    "lib/host.ts",
+    "lib/masks.ts",
+    "lib/model.ts",
+    "lib/samples.ts",
+    "lib/serialize.ts",
+    "lib/use-export.ts",
+    "lib/use-inspector.ts",
+    "lib/use-keyboard.ts",
+    "lib/use-scene.ts",
+    "lib/use-studio.ts",
+    "slice.contract.ts",
+    "slice.json"
+  ],
+  "imports": {
+    "shared": [
+      "@/shared/ui/FilePicker"
+    ],
+    "external": [
+      "@/components/ui/badge",
+      "@/components/ui/button",
+      "@/components/ui/dialog",
+      "@/components/ui/input",
+      "@/components/ui/scroll-area",
+      "@/components/ui/switch",
+      "@/components/ui/textarea",
+      "@/components/ui/tooltip",
+      "@/lib/utils",
+      "lucide-react",
+      "react"
+    ]
+  }
+}

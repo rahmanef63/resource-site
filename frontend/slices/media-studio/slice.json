@@ -1,0 +1,65 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "media-studio",
+  "version": "1.0.0",
+  "category": "os",
+  "kind": "ui",
+  "title": "Media Studio — photo / social design canvas",
+  "description": "Lightweight photo/social studio. Tool rail (move/text/rect/ellipse/sticker with shortcuts), checkerboard canvas with live CSS-filter adjustments + 8 named presets, per-layer clip masks and custom CSS, text/shape/sticker/image/HTML-embed layers, social aspect presets with platform safe-area guides (TikTok/Reels/IG/YouTube), debounced undo+redo, and JSON/HTML export + import (os-rr/layers@1). Fully offline: new image layers pull from bundled SVG data-URI samples; host fs persistence and a real media library inject via configureMediaStudio (lib/host.ts).",
+  "namespace": "@/features/media-studio",
+  "frontend": {
+    "slicePath": "frontend/slices/media-studio",
+    "configExport": "mediaStudioConfig"
+  },
+  "deps": {
+    "npm": [
+      "lucide-react"
+    ],
+    "shadcn": [
+      "button",
+      "badge",
+      "dialog",
+      "input",
+      "scroll-area",
+      "switch",
+      "textarea",
+      "tooltip"
+    ],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": [
+    "bp:ui-consistency"
+  ],
+  "license": "MIT",
+  "tags": [
+    "media",
+    "image",
+    "editor",
+    "design",
+    "social",
+    "ui"
+  ],
+  "previews": [
+    {
+      "component": "MediaStudio",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "blank-canvas",
+          "title": "Blank canvas",
+          "description": "Default headline + gradient background; place layers with the tools"
+        },
+        {
+          "id": "social-story",
+          "title": "Social story",
+          "description": "9:16 doc loaded via payload — sticker, masked image, safe-area aspect"
+        }
+      ],
+      "seed": "fully offline — gradient tints + bundled SVG data-URI sample images"
+    }
+  ]
+}

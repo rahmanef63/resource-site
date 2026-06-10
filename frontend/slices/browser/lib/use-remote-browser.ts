@@ -31,7 +31,7 @@ export function useRemoteBrowser() {
 
   const consumer = `ui-${activeId}`;
   const consumerRef = useRef(consumer);
-  // eslint-disable-next-line react-hooks/refs -- latest-value ref: async stream/poll callbacks compare against the CURRENT consumer synchronously; an effect-based sync would lag a commit
+   
   consumerRef.current = consumer;
 
   const setFrame = useCallback((blob: Blob) => {

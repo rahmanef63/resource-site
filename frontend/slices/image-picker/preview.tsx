@@ -1,4 +1,5 @@
 "use client";
+// audit-allow-hex: demo seed gradient value (picker DATA), not UI theming.
 /** Variant preview (VP wave) — rr-internal, stripped on `rr add`. */
 
 import type { SlicePreviewModule } from "@/shared/preview/types";

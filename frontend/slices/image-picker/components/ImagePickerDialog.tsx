@@ -1,10 +1,11 @@
 "use client";
 
 /** ImagePickerDialog — the 4-tab image chooser (Gallery · Upload · Link ·
- *  Unsplash). Upload tab appears only when `onUpload` is wired; Unsplash
- *  live-search only when `searchUnsplash` is wired (else it browses the curated
- *  set). Usually you don't render this directly — use ImagePickerButton, which
- *  owns the trigger + open state. */
+ *  Unsplash). Upload tab appears only when `onUpload` is wired; the Unsplash
+ *  tab live-searches (debounced) via the injected `searchUnsplash` and falls
+ *  back to the curated set. `defaultQuery` pre-fills + auto-runs the search and
+ *  opens on that tab. Usually you don't render this directly — use
+ *  ImagePickerButton, which owns the trigger + open state. */
 
 import * as React from "react";
 import { Button } from "@/components/ui/button";
@@ -23,10 +24,12 @@ interface Props extends ImageSourceProps {
   onOpenChange: (o: boolean) => void;
   onSelect: (c: ImageValue) => void;
   title?: string;
+  /** Pre-fill + auto-run the Unsplash search (opens on that tab). */
+  defaultQuery?: string;
 }
 
-export function ImagePickerDialog({ open, onOpenChange, onSelect, onUpload, searchUnsplash, title = "Choose image" }: Props) {
-  const [tab, setTab] = React.useState<Tab>("gallery");
+export function ImagePickerDialog({ open, onOpenChange, onSelect, onUpload, searchUnsplash, title = "Choose image", defaultQuery }: Props) {
+  const [tab, setTab] = React.useState<Tab>(defaultQuery ? "unsplash" : "gallery");
   const tabs: { id: Tab; label: string }[] = [
     { id: "gallery", label: "Gallery" },
     ...(onUpload ? [{ id: "upload" as const, label: "Upload" }] : []),
@@ -58,7 +61,7 @@ export function ImagePickerDialog({ open, onOpenChange, onSelect, onUpload, sear
           {tab === "gallery" && <GalleryTab onSelect={handle} />}
           {tab === "upload" && onUpload && <UploadTab onSelect={handle} onUpload={onUpload} />}
           {tab === "link" && <LinkTab onSelect={handle} />}
-          {tab === "unsplash" && <UnsplashTab onSelect={handle} searchUnsplash={searchUnsplash} />}
+          {tab === "unsplash" && <UnsplashTab onSelect={handle} searchUnsplash={searchUnsplash} defaultQuery={defaultQuery} />}
         </div>
       </DialogContent>
     </Dialog>

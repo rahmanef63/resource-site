@@ -11,6 +11,60 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-10 — os-vps upstream sync wave: shell framework + 12 OS app slices + 3 new lifts
+
+**Slices (upgraded from os-vps upstream, all self-contained):**
+- appshell 1.4.0 — Android (Material-You) shell rebuilt: wallpaper clock+date,
+  pull-down Control Center (`usePullDown`), Spotlight search pill, pathname-derived
+  home, safe-area app header. Bundled **Dashboard shell** (single-pane cockpit,
+  ShellId "dashboard", brand via `useBrand`, stats via capability). New
+  `useQuickLinks` capability + `QuicklinkIcon` (mock pack ships demo links). New
+  shared `Clock`, `HomeIndicator`, `usePullDown`/`useSwipeClose`/`useOverviewKey`
+  hooks, `store-persist` split (+tests). Phantom "mobile" ShellId removed (never
+  registered; saved prefs normalize). `--sai-*` quad + `.wp-graphite` in
+  appshell.css. macOS dock behaviour, window store, snap geometry, UrlSync
+  History-API sync all synced to upstream. Raw `<button>`s in ported mobile
+  chrome converted to shadcn Button.
+- browser 1.1.0 — Chrome-style multitab strip, screencast hook (poll fallback),
+  AI agent-activity panel, save-shot; per-tab `BrowserAdapter` +
+  `configureScreencast`/`configureBrowserMode`; demo adapter fakes per-tab pages
+  + a canned agent log offline.
+- os-terminal (merge logged as 1.1.0) — exec emulator with LIVE/MOCK banner +
+  runtime mode flip, touch key-bar, PTY surface behind injectable
+  `configurePty({transport, screen})` (xterm stays consumer-side;
+  `createSsePtyTransport` shipped), self-contained mock OsApi.
+- file-explorer 1.2.0 — stale-listing fix (loadKey), `use-file-ops` mutation
+  split, drop-overlay extraction, coarse-pointer tap targets.
+- assistant 1.1.0 — scrollable tab rows, safe-area padding, compact form-shell,
+  ≥36px touch targets.
+- reel-editor 1.1.0 — container-first compact mode: `CompactPanes` tabs under the
+  preview, pane-bucket `useContainer`, coarse-pointer menus/toolbar.
+- image-editor 2.1.0 — `compact` prop, container-relative bottom sheet,
+  scrollable top bar, a11y labels.
+- app-store 1.1.0 — responsive sidebar↔chips swap, AppFrame scaffold, touch rows.
+- media-viewer 1.1.0 — AppFrame adoption, container-query toolbar, stage padding.
+- system-monitor 1.1.0 — process cards at narrow panes, `fmtUptime`, spinner.
+- image-picker 0.2.0 — debounced Unsplash search + `defaultQuery`, hi-res curated
+  set, CSS-escaped `url()` values (security).
+- code-editor 1.1.0 — coarse-pointer targets, NUL-byte file fix, de-personalized
+  seed.
+
+**New slices (lifted from os-vps):**
+- media-studio 1.0.0 — standalone canvas studio (layers/filters/masks/transform,
+  export modal) on a `configureMediaStudio({saveDoc, imageSources})` seam; fully
+  offline demo.
+- quicklinks 1.0.0 — website-shortcut grid; injectable `QuicklinksStore`
+  (localStorage default, memory for previews); pairs with appshell
+  `useQuickLinks`.
+- shell-settings 1.0.0 — settings-app UI primitives (Section/Row/AccentSwatches/
+  Segmented) over an injectable `AppearanceAdapter`.
+
+Deliberately NOT lifted: os-vps `os-settings` (Topside-specific server/device/AI
+panels; rr covers the generic parts via settings-page/theme-presets/
+shell-settings) and `create-app` (already bundled inside rr app-store).
+
+Gates: tsc green · eslint 0 · vitest 448 · slices:check green (68 slices).
+
 ### 2026-06-07 — hardening W5: behavioral tests + coverage baseline
 
 - `nav-parts.test.tsx` — 7 interaction tests for the docs sidebar

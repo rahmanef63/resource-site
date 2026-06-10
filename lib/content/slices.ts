@@ -2330,6 +2330,122 @@ const [count, setCount] = useBroadcastSync("rr:counter", 0);
       enhances: ["appshell", "dashboard-shell"],
     },
   },
+  {
+    slug: "media-studio",
+    title: "Media Studio — layered canvas editor",
+    category: "os",
+    kind: "ui",
+    version: "1.0.0",
+    tagline: "Standalone canvas studio: layers, filters, masks, transforms, aspect presets, export modal — fully offline demo.",
+    description:
+      "A layered canvas studio: image/text/shape layers with filters, masks, transforms, safe-area guides and aspect presets (1:1/4:5/9:16/16:9), plus an export modal (download / copy / import JSON). Runs fully offline on bundled gradient-SVG samples. Host wiring is one call: configureMediaStudio({ saveDoc, imageSources }) lights up Save-to-host and feeds real image sources. Self-contained: inspector hooks are inert seams in lib/host.ts.",
+    source: "rahmanef63/os-vps",
+    slicePath: "frontend/slices/media-studio",
+    convexPaths: [],
+    npm: ["lucide-react"],
+    shadcn: ["button", "dialog", "badge", "tooltip", "scroll-area"],
+    env: [],
+    peers: [],
+    tags: ["canvas", "editor", "layers", "filters", "export", "design", "ui"],
+    resourceType: "module",
+    maturity: "beta",
+    compat: { enhances: ["appshell"] },
+    previewPath: "/preview/slices/media-studio",
+    defaultView: "desktop",
+    agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Layered canvas editor. Fully client-side; no backend required.
+
+STEP 1 — Install. \`npx rr add media-studio\`. Ensure \`@/features/media-studio\` resolves and Tailwind scans the slice folder.
+
+STEP 2 — Deps. npm: \`lucide-react\`. shadcn: button, dialog, badge, tooltip, scroll-area.
+
+STEP 3 — Mount. \`<MediaStudio />\` in a height-bearing box — unwired it edits bundled sample layers. Or register \`mediaStudioApp\` in an appshell manifest.
+
+STEP 4 — Host wiring. \`configureMediaStudio({ saveDoc, imageSources })\` — saveDoc persists the serialized document (enables Save-to-host in the export modal); imageSources supplies image URLs for new layers.`,
+    exampleCode: `"use client";
+import { MediaStudio } from "@/features/media-studio";
+
+export default function StudioDemo() {
+  return <div className="h-dvh w-full"><MediaStudio /></div>;
+}`,
+  },
+  {
+    slug: "quicklinks",
+    title: "Quicklinks — website shortcut grid",
+    category: "os",
+    kind: "ui",
+    version: "1.0.0",
+    tagline: "Add/remove website shortcuts with favicons; localStorage by default, injectable store for any host.",
+    description:
+      "A website-shortcut grid: add/remove links with auto favicons (Google s2) and new-tab open. State lives behind an injectable QuicklinksStore — createLocalStore persists to localStorage (SSR-safe hydrate), createMemoryStore suits previews/tests, configureQuicklinks swaps in a host store. Pairs with appshell: the useQuickLinks capability + QuicklinkIcon surface the same links in the dock/Launchpad/mobile grid.",
+    source: "rahmanef63/os-vps",
+    slicePath: "frontend/slices/quicklinks",
+    convexPaths: [],
+    npm: ["lucide-react"],
+    shadcn: ["button"],
+    env: [],
+    peers: [],
+    tags: ["shortcuts", "bookmarks", "favicons", "launcher", "ui"],
+    resourceType: "module",
+    maturity: "stable",
+    compat: { enhances: ["appshell"] },
+    previewPath: "/preview/slices/quicklinks",
+    defaultView: "desktop",
+    agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Website shortcut grid. Fully client-side; no backend required.
+
+STEP 1 — Install. \`npx rr add quicklinks\`. Ensure \`@/features/quicklinks\` resolves and Tailwind scans the slice folder.
+
+STEP 2 — Deps. npm: \`lucide-react\`. shadcn: button.
+
+STEP 3 — Mount. \`<Quicklinks />\` — unwired it persists to localStorage ("rr:quicklinks") with 4 demo seeds. Or register \`quicklinksApp\` in an appshell manifest.
+
+STEP 4 — Host store. \`configureQuicklinks(store)\` with { get, subscribe, add, remove, hydrate? } — or feed appshell's useQuickLinks capability from the same store so dock shortcuts stay in sync.`,
+    exampleCode: `"use client";
+import { Quicklinks } from "@/features/quicklinks";
+
+export default function LinksDemo() {
+  return <div className="h-dvh w-full"><Quicklinks /></div>;
+}`,
+  },
+  {
+    slug: "shell-settings",
+    title: "Shell Settings — settings-app UI primitives",
+    category: "os",
+    kind: "ui",
+    version: "1.0.0",
+    tagline: "Section/Row/AccentSwatches/Segmented primitives + an appearance panel over an injectable adapter.",
+    description:
+      "The settings-app building blocks: SettingsSection, Row, AccentSwatches, a slice-local Segmented control, and a ready AppearancePanel (style/mode/accent/wallpaper/device/transparency groups — every group optional). Pure presentation: the injected AppearanceAdapter IS the contract, so it binds to any appearance store (appshell capabilities, zustand, plain useState) with zero slice edits.",
+    source: "rahmanef63/os-vps",
+    slicePath: "frontend/slices/shell-settings",
+    convexPaths: [],
+    npm: ["lucide-react"],
+    shadcn: ["button", "switch", "toggle-group", "separator"],
+    env: [],
+    peers: [],
+    tags: ["settings", "preferences", "appearance", "primitives", "ui"],
+    resourceType: "module",
+    maturity: "stable",
+    compat: { enhances: ["appshell", "settings-page"] },
+    previewPath: "/preview/slices/shell-settings",
+    defaultView: "desktop",
+    agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Settings UI primitives. Pure presentation; state injected.
+
+STEP 1 — Install. \`npx rr add shell-settings\`. Ensure \`@/features/shell-settings\` resolves and Tailwind scans the slice folder.
+
+STEP 2 — Deps. npm: \`lucide-react\`. shadcn: button, switch, toggle-group, separator.
+
+STEP 3 — Mount. \`<AppearancePanel adapter={adapter} />\` with an AppearanceAdapter (all groups optional — omit a group to hide it), or compose SettingsSection/Row/AccentSwatches/Segmented directly for custom panels.
+
+STEP 4 — Bind. Wire the adapter to your appearance store (theme mode, accent, wallpaper, device, transparency) — the panel re-renders from the values you pass; no internal state.`,
+    exampleCode: `"use client";
+import { useState } from "react";
+import { AppearancePanel } from "@/features/shell-settings";
+
+export default function SettingsDemo() {
+  const [mode, setMode] = useState<"light" | "dark">("light");
+  return <AppearancePanel adapter={{ mode: { value: mode, set: setMode } }} />;
+}`,
+  },
 ];
 
 export function getSlice(slug: string): SliceEntry | null {

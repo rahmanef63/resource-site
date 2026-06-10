@@ -859,6 +859,30 @@
     ]
   },
   {
+    "slug": "media-studio",
+    "title": "Media Studio — photo / social design canvas",
+    "category": "os",
+    "previews": [
+      {
+        "component": "MediaStudio",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "blank-canvas",
+            "title": "Blank canvas",
+            "description": "Default headline + gradient background; place layers with the tools"
+          },
+          {
+            "id": "social-story",
+            "title": "Social story",
+            "description": "9:16 doc loaded via payload — sticker, masked image, safe-area aspect"
+          }
+        ],
+        "seed": "fully offline — gradient tints + bundled SVG data-URI sample images"
+      }
+    ]
+  },
+  {
     "slug": "media-viewer",
     "title": "Preview — media quick-look",
     "category": "os",
@@ -1169,6 +1193,30 @@
     ]
   },
   {
+    "slug": "quicklinks",
+    "title": "Quicklinks — website shortcuts with favicons",
+    "category": "os",
+    "previews": [
+      {
+        "component": "QuicklinksApp",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "seeded-grid",
+            "title": "Seeded grid",
+            "description": "Demo links on an injected in-memory store — click opens the site in a new tab"
+          },
+          {
+            "id": "empty",
+            "title": "Empty state",
+            "description": "No quicklinks yet — the add-via-store hint"
+          }
+        ],
+        "seed": "in-memory stores only — the preview never touches localStorage; favicons load from the Google s2 host"
+      }
+    ]
+  },
+  {
     "slug": "rbac-roles",
     "title": "RBAC — Roles & Permissions",
     "category": "auth",
@@ -1256,6 +1304,30 @@
           }
         ],
         "seed": "SettingsShell over a localStorage demo adapter seeded with a demo user"
+      }
+    ]
+  },
+  {
+    "slug": "shell-settings",
+    "title": "Shell Settings — settings-app UI primitives",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "AppearancePanel",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "full-adapter",
+            "title": "Full adapter",
+            "description": "Style/Mode/Accent/Wallpaper + reduce-transparency + Display device override, all live"
+          },
+          {
+            "id": "minimal",
+            "title": "Minimal adapter",
+            "description": "Only style + theme provided — the other groups simply don't render"
+          }
+        ],
+        "seed": "fully offline — an in-preview useState adapter; the consumer injects its real appearance store"
       }
     ]
   },

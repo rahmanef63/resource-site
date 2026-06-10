@@ -5,7 +5,8 @@
  *  a URL, or grab an Unsplash photo — `onChange` fires with the chosen
  *  ImageValue. Use it anywhere you let a user set an image: page cover, profile
  *  header, card hero, wallpaper, banner. Pass `trigger` to swap the button for
- *  any node, or `label` / `variant` / `size` to restyle the default. Backend is
+ *  any node, or `label` / `variant` / `size` to restyle the default, or
+ *  `defaultQuery` to open straight onto a pre-run Unsplash search. Backend is
  *  injected (onUpload + searchUnsplash) so the slice stays portable. */
 
 import * as React from "react";
@@ -25,11 +26,13 @@ interface Props extends ImageSourceProps {
   className?: string;
   variant?: React.ComponentProps<typeof Button>["variant"];
   size?: React.ComponentProps<typeof Button>["size"];
+  /** Pre-fill + auto-run the Unsplash search (opens on that tab). */
+  defaultQuery?: string;
 }
 
 export function ImagePickerButton({
   onChange, label = "Choose image", title, trigger, className,
-  variant = "outline", size = "sm", onUpload, searchUnsplash,
+  variant = "outline", size = "sm", onUpload, searchUnsplash, defaultQuery,
 }: Props) {
   const [open, setOpen] = React.useState(false);
   return (
@@ -48,6 +51,7 @@ export function ImagePickerButton({
         onUpload={onUpload}
         searchUnsplash={searchUnsplash}
         title={title}
+        defaultQuery={defaultQuery}
       />
     </>
   );

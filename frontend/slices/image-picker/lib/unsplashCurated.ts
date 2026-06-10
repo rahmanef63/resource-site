@@ -16,13 +16,15 @@ const IDS = [
 const cdn = (id: string, w: number, q: number) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=${q}`;
 
+// High-res by default — these double as desktop wallpapers, so `regular` (the
+// value a pick stores) is full-screen sized, not a 1080 thumbnail.
 export const CURATED_UNSPLASH: UnsplashPhoto[] = IDS.map((id) => ({
   id,
-  regular: cdn(id, 1080, 70),
-  thumb: cdn(id, 240, 60),
-  full: cdn(id, 2400, 80),
-  width: 1280,
-  height: 768,
+  regular: cdn(id, 2560, 82),
+  thumb: cdn(id, 400, 60),
+  full: cdn(id, 3840, 85),
+  width: 2560,
+  height: 1600,
   alt: "Landscape",
   photographer: "Unsplash",
   photographerUrl: "https://unsplash.com",

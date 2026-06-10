@@ -1,3 +1,4 @@
+// audit-allow-hex: preset swatch DATA (user-pickable colours/gradients), not UI theming.
 /** Curated gallery presets — solid colours, gradients, and Notion's public
  *  texture covers. Zero-config picks shown on the Gallery tab. */
 

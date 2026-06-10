@@ -1,0 +1,57 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "quicklinks",
+  "version": "1.0.0",
+  "category": "os",
+  "kind": "ui",
+  "title": "Quicklinks — website shortcuts with favicons",
+  "description": "A grid of user-curated website shortcuts: each quicklink is a URL + label, the favicon tile is derived from the URL (Google s2), and clicking one opens a new native browser tab. SELF-CONTAINED: data lives in an injectable QuicklinksStore — the bundled default persists to localStorage and ships seeded with demo links, or point configureQuicklinks() at a host store (e.g. a shell's settings-managed list). Pairs with the appshell slice's useQuickLinks capability, which renders the same list as dock/launchpad favicon shortcuts.",
+  "namespace": "@/features/quicklinks",
+  "frontend": {
+    "slicePath": "frontend/slices/quicklinks",
+    "configExport": "quicklinksConfig"
+  },
+  "deps": {
+    "npm": [
+      "lucide-react"
+    ],
+    "shadcn": [
+      "button"
+    ],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": [
+    "bp:ui-consistency"
+  ],
+  "license": "MIT",
+  "tags": [
+    "shortcuts",
+    "links",
+    "favicons",
+    "launcher",
+    "ui"
+  ],
+  "previews": [
+    {
+      "component": "QuicklinksApp",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "seeded-grid",
+          "title": "Seeded grid",
+          "description": "Demo links on an injected in-memory store — click opens the site in a new tab"
+        },
+        {
+          "id": "empty",
+          "title": "Empty state",
+          "description": "No quicklinks yet — the add-via-store hint"
+        }
+      ],
+      "seed": "in-memory stores only — the preview never touches localStorage; favicons load from the Google s2 host"
+    }
+  ]
+}

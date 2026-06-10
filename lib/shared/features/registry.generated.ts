@@ -19,14 +19,17 @@ import { commentsConfig } from "@/features/comments/config";
 import { convexAuthConfig } from "@/features/convex-auth/config";
 import { dokuPaymentConfig } from "@/features/doku-payment/config";
 import { imageEditorConfig } from "@/features/image-editor/config";
+import { mediaStudioConfig } from "@/features/media-studio/config";
 import { mediaViewerConfig } from "@/features/media-viewer/config";
 import { midtransPaymentConfig } from "@/features/midtrans-payment/config";
 import { notionConfig } from "@/features/notion/config";
 import { osTerminalConfig } from "@/features/os-terminal/config";
 import { platformAdminConfig } from "@/features/platform-admin/config";
+import { quicklinksConfig } from "@/features/quicklinks/config";
 import { reelEditorConfig } from "@/features/reel-editor/config";
 import { resendNewsletterConfig } from "@/features/resend-newsletter/config";
 import { seoConfig } from "@/features/seo/config";
+import { shellSettingsConfig } from "@/features/shell-settings/config";
 import { systemMonitorConfig } from "@/features/system-monitor/config";
 import { vectorSearchConfig } from "@/features/vector-search/config";
 
@@ -107,6 +110,11 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     version: "2.1.0",
   },
   {
+    ...mediaStudioConfig,
+    importPath: "@/features/media-studio/config",
+    version: "1.0.0",
+  },
+  {
     ...mediaViewerConfig,
     importPath: "@/features/media-viewer/config",
     version: "1.2.0",
@@ -132,6 +140,11 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     version: "0.1.0",
   },
   {
+    ...quicklinksConfig,
+    importPath: "@/features/quicklinks/config",
+    version: "1.0.0",
+  },
+  {
     ...reelEditorConfig,
     importPath: "@/features/reel-editor/config",
     version: "1.2.0",
@@ -145,6 +158,11 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     ...seoConfig,
     importPath: "@/features/seo/config",
     version: "0.2.1",
+  },
+  {
+    ...shellSettingsConfig,
+    importPath: "@/features/shell-settings/config",
+    version: "1.0.0",
   },
   {
     ...systemMonitorConfig,

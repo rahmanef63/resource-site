@@ -1,0 +1,32 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "quicklinks",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add quicklinks",
+    "consumerPath": "slices/quicklinks"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "README.md",
+    "app.tsx",
+    "components/app-frame.tsx",
+    "config.ts",
+    "index.ts",
+    "lib/host.ts",
+    "slice.contract.ts",
+    "slice.json"
+  ],
+  "imports": {
+    "shared": [
+      "@/components/ui/button",
+      "@/lib/utils"
+    ],
+    "external": [
+      "react",
+      "lucide-react"
+    ]
+  }
+}
