@@ -32,9 +32,11 @@ Function-calling tools this slice provides. Register the exported collection on 
 **Agent guidance:** DOKU payments. channels lists options; create_invoice charges the customer and refund reverses it. Both move money, confirm with the user first.
 
 - `doku-payment.channels`
-- `doku-payment.create_invoice`
+- `doku-payment.create_invoice` ⚠ destructive
 - `doku-payment.status`
-- `doku-payment.refund`
+- `doku-payment.refund` ⚠ destructive
+
+⚠ destructive tools are flagged `dangerous: true` — wire the agent loop's `confirm` event so they need user approval before running.
 
 rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 

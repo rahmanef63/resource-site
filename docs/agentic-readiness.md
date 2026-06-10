@@ -367,8 +367,15 @@ optional or belong to the consumer's app, not rr:
 
 1. Tier-C `configure` tools — optional by design; add only when a presentational
    slice actually needs an agent-settable knob.
-2. Surface the `dangerous` flag in `agent.md` too (guidance + names ship now;
-   marking which names are destructive needs a contract-level declaration to be
-   regex-robust) — cosmetic.
-3. Consumer-binding example demonstrating `requirePerm` + the `confirm` gate
-   end-to-end — belongs in a consumer project (rr ships no key/transport).
+2. ~~Surface the `dangerous` flag in `agent.md`~~ **DONE 2026-06-10**: the
+   wave-3e convention (flag written directly under the `name:` line) makes an
+   adjacency regex reliable without a contract-level declaration —
+   `dangerousToolNames()` in `scripts/features/agent-md-tools.mjs`; flagged
+   tools render as `⚠ destructive` with a confirm-wiring note (18 tools across
+   11 slices).
+3. ~~Consumer-binding example~~ **DOCUMENTED 2026-06-10**: rr still ships no
+   key/transport, but `docs/agentic-byok-binding.md` is the complete copy-paste
+   binding (route + bridge + registration + loop with `confirm`/`requirePerm`).
+   `createSseAgentStream` now takes an optional `system` source so the client
+   can actually send `registry.systemPrompt()` — previously the route accepted
+   `body.system` but the shipped client never sent it.

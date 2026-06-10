@@ -13,7 +13,7 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { contractTools, collectionInstructions } from "./agent-md-tools.mjs";
+import { contractTools, collectionInstructions, dangerousToolNames } from "./agent-md-tools.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(__dirname, "../..");
@@ -139,8 +139,20 @@ function buildAgentMd(s, sliceDir) {
       lines.push(`**Agent guidance:** ${guidance}`);
       lines.push("");
     }
-    for (const t of tools) lines.push(`- \`${t}\``);
+    const dangerous = dangerousToolNames(sliceDir);
+    for (const t of tools) {
+      // Contract names are `<ns>.<name>`; the dangerous set holds bare names.
+      const bare = t.split(".").slice(1).join(".");
+      lines.push(dangerous.has(bare) ? `- \`${t}\` ⚠ destructive` : `- \`${t}\``);
+    }
     lines.push("");
+    if (dangerous.size > 0) {
+      lines.push(
+        "⚠ destructive tools are flagged `dangerous: true` — wire the agent " +
+          "loop's `confirm` event so they need user approval before running.",
+      );
+      lines.push("");
+    }
     lines.push(
       "rr ships the function list above plus a custom instruction " +
         "(`registry.systemPrompt()`); bring your own model + key to call them (BYOK).",

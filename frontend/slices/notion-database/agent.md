@@ -62,10 +62,12 @@ Function-calling tools this slice provides. Register the exported collection on 
 - `notion-database.rows`
 - `notion-database.row.add`
 - `notion-database.row.update`
-- `notion-database.row.delete`
+- `notion-database.row.delete` ⚠ destructive
 - `notion-database.view.switch`
 - `notion-database.filter`
 - `notion-database.sort`
+
+⚠ destructive tools are flagged `dangerous: true` — wire the agent loop's `confirm` event so they need user approval before running.
 
 rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 

@@ -52,4 +52,29 @@ describe("createSseAgentStream", () => {
       createSseAgentStream("/x")([{ role: "user", text: "hi" }], [], () => {}),
     ).rejects.toThrow("rate_limited");
   });
+
+  it("sends the BYOK system prompt, evaluated lazily per call", async () => {
+    const spy = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      sseResponse([
+        `data: ${JSON.stringify({ type: "turn", turn: { text: "ok", toolUses: [], stopReason: "end_turn" } })}\n\n`,
+      ]),
+    );
+    let prompt = "v1";
+    const stream = createSseAgentStream("/x", () => prompt);
+    prompt = "v2"; // registrations after creation must still be reflected
+    await stream([{ role: "user", text: "hi" }], [], () => {});
+
+    const body = JSON.parse(spy.mock.calls[0]![1]!.body as string);
+    expect(body.system).toBe("v2");
+  });
+
+  it("omits system from the body when not configured", async () => {
+    const spy = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      sseResponse([
+        `data: ${JSON.stringify({ type: "turn", turn: { text: "ok", toolUses: [], stopReason: "end_turn" } })}\n\n`,
+      ]),
+    );
+    await createSseAgentStream("/x")([{ role: "user", text: "hi" }], [], () => {});
+    expect(JSON.parse(spy.mock.calls[0]![1]!.body as string)).not.toHaveProperty("system");
+  });
 });

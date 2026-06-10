@@ -34,7 +34,9 @@ Function-calling tools this slice provides. Register the exported collection on 
 - `comments.list`
 - `comments.add`
 - `comments.resolve`
-- `comments.remove`
+- `comments.remove` ⚠ destructive
+
+⚠ destructive tools are flagged `dangerous: true` — wire the agent loop's `confirm` event so they need user approval before running.
 
 rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 

@@ -13,12 +13,22 @@
 import type { AgentStreamFn } from "./host";
 import type { AgentTurn } from "./types";
 
-export function createSseAgentStream(url = "/api/agent-stream"): AgentStreamFn {
+export function createSseAgentStream(
+  url = "/api/agent-stream",
+  /**
+   * BYOK custom instruction sent as `system` in the request body — pass
+   * `() => globalToolRegistry().systemPrompt()` so the prompt reflects
+   * whatever collections are registered at call time. Omitted → the route's
+   * own default system prompt applies.
+   */
+  system?: string | (() => string),
+): AgentStreamFn {
   return async (messages, tools, onDelta) => {
+    const sys = typeof system === "function" ? system() : system;
     const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages, tools }),
+      body: JSON.stringify(sys ? { messages, tools, system: sys } : { messages, tools }),
     });
     if (res.status === 429) throw new Error("rate_limited");
     if (!res.ok || !res.body) throw new Error(`agent stream HTTP ${res.status}`);

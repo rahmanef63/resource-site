@@ -32,10 +32,12 @@ Function-calling tools this slice provides. Register the exported collection on 
 **Agent guidance:** Member admin. list before acting; invite/set_role/disable/remove are privileged server-gated ops; remove is irreversible, prefer disable and confirm first.
 
 - `user-management.list`
-- `user-management.invite`
-- `user-management.set_role`
-- `user-management.disable`
-- `user-management.remove`
+- `user-management.invite` ⚠ destructive
+- `user-management.set_role` ⚠ destructive
+- `user-management.disable` ⚠ destructive
+- `user-management.remove` ⚠ destructive
+
+⚠ destructive tools are flagged `dangerous: true` — wire the agent loop's `confirm` event so they need user approval before running.
 
 rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 

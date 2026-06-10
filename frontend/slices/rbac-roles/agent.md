@@ -34,8 +34,10 @@ Function-calling tools this slice provides. Register the exported collection on 
 - `rbac-roles.list_roles`
 - `rbac-roles.list_permissions`
 - `rbac-roles.check`
-- `rbac-roles.grant`
-- `rbac-roles.revoke`
+- `rbac-roles.grant` ⚠ destructive
+- `rbac-roles.revoke` ⚠ destructive
+
+⚠ destructive tools are flagged `dangerous: true` — wire the agent loop's `confirm` event so they need user approval before running.
 
 rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 

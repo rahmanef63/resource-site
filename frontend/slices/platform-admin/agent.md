@@ -32,8 +32,10 @@ Function-calling tools this slice provides. Register the exported collection on 
 **Agent guidance:** Platform admin. metrics is a read; feature_flag.set and tier.set are privileged server-gated mutations, confirm before flipping.
 
 - `platform-admin.metrics`
-- `platform-admin.feature_flag.set`
-- `platform-admin.tier.set`
+- `platform-admin.feature_flag.set` ⚠ destructive
+- `platform-admin.tier.set` ⚠ destructive
+
+⚠ destructive tools are flagged `dangerous: true` — wire the agent loop's `confirm` event so they need user approval before running.
 
 rr ships the function list above plus a custom instruction (`registry.systemPrompt()`); bring your own model + key to call them (BYOK).
 
