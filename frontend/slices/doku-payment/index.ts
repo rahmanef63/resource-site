@@ -6,3 +6,4 @@ export { default as CheckoutPage } from "./components/checkout-page";
 export { dokuPaymentConfig } from "./config";
 export { DOKU_CHANNELS, CHANNEL_BY_ID, GROUP_LABELS, type PaymentChannel, type ChannelGroup } from "./lib/channels";
 export { formatIDR, groupVa, timeLeft } from "./lib/format";
+export { dokuPaymentTools, type DokuPaymentCtx } from "./lib/tools";

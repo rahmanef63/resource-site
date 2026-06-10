@@ -10,10 +10,11 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "user-management",
-  version: "0.6.0",
+  version: "0.7.0",
   category: "auth",
   kind: "full",
   provides: {
+    tools: ["user-management.list", "user-management.invite", "user-management.set_role", "user-management.disable", "user-management.remove"],
     components: ["UserManagementPanel", "MembersPanel", "MembersTable", "MembersToolbar", "MemberRowActions", "RoleChip", "InviteDialog", "PendingInvites", "RolesPanel", "RoleEditor", "RolePermissionGrid", "TeamsPanel", "TeamDetail", "AccessMatrix"],
     hooks: ["useMembersView"],
     utils: ["can", "matchPermission"],

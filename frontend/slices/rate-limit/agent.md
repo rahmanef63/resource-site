@@ -25,6 +25,13 @@ npx rahman-resources add rate-limit
 
 Run `npx rr add rate-limit`. Compose `rateLimitTables` into root convex/schema.ts. Wire `internal.features.rate_limit.mutations._pruneExpired` into convex/crons.ts every 5 min. Add your namespace to the in-code POLICY map, then call `api.features.rate_limit.mutations.consume({ key, serverKey })` from server-side handlers — keep a fail-open wrapper so a Convex outage doesn't 503 the route. Set RATE_LIMIT_SERVER_KEY on the deployment to block anonymous consume calls.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `rate-limit.check`
+- `rate-limit.reset`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

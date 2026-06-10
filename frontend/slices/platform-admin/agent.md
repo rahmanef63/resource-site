@@ -25,6 +25,14 @@ npx rahman-resources add platform-admin
 
 Run `npx rr add platform-admin`. Contract-only scaffold. Wait for superspace /rr-send platform-admin before adopting. Distinct from per-instance `admin` slug.
 
+## Tools (agentic surface)
+
+Function-calling tools this slice provides. Register the exported collection on any `@/shared/agentic` host (e.g. `useAgentTools(<x>Tools, ctx)`) and ONE agent can drive this slice alongside others.
+
+- `platform-admin.metrics`
+- `platform-admin.feature_flag.set`
+- `platform-admin.tier.set`
+
 ## Rules of engagement
 
 - shadcn-only UI primitives. No raw `<button>` / `<dialog>` / native date or file inputs.

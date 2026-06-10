@@ -17,7 +17,7 @@ import { defineSliceContract } from "../../../packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "audit-log",
-  version: "0.2.0",
+  version: "0.3.0",
   requires: {
     auth: "convex",
     rbac: ["audit.read", "audit.write"],
@@ -25,6 +25,7 @@ export const contract = defineSliceContract({
     deps: ["convex-auth"],
   },
   provides: {
+    tools: ["audit-log.query", "audit-log.export"],
     tables: ["audit_events"],
     hooks: ["createAuditLogger"],
     components: [],

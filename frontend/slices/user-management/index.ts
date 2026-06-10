@@ -29,3 +29,4 @@ export {
   type ManagedRole, type PermissionGroupDef, type PermissionDefLite, type RolesLabels,
   type Team, type TeamsLabels,
 } from "./types";
+export { userManagementTools, type UserManagementCtx } from "./lib/tools";

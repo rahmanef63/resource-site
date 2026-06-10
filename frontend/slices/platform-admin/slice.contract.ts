@@ -26,7 +26,7 @@ import { defineSliceContract } from "../../../packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "platform-admin",
-  version: "0.1.0",
+  version: "0.2.0",
   requires: {
     auth: "convex",
     rbac: [
@@ -43,6 +43,7 @@ export const contract = defineSliceContract({
     deps: ["convex-auth", "audit-log"],
   },
   provides: {
+    tools: ["platform-admin.metrics", "platform-admin.feature_flag.set", "platform-admin.tier.set"],
     routes: ["/platform-admin"],
     hooks: ["usePlatformAdmin", "useTenantHealth"],
     tables: ["padmin_audit", "padmin_kpi_snapshot"],

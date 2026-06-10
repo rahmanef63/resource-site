@@ -1,14 +1,16 @@
 {
   "$schema": "../../../docs/slice.manifest.schema.json",
   "name": "rbac-roles",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "RBAC engine ported from superspace: 6 system role presets (owner/admin/manager/staff/client/guest), dot-namespaced permissions with `*` / `feature.*` matching, pure check helpers, and props-driven UI primitives (PermissionGate, usePermissions, RoleBadge, PermissionMatrix). Convex template ships a tenant-scoped rbac_roles table + checkPermission / requirePermission + seedSystemRoles.",
   "category": "auth",
   "stability": "beta",
   "deps": {
     "shared": [],
     "slices": [],
-    "convexFeatures": ["rbac-roles"],
+    "convexFeatures": [
+      "rbac-roles"
+    ],
     "npm": {},
     "env": [
       {
@@ -20,19 +22,34 @@
     ]
   },
   "files": {
-    "include": ["**/*"],
-    "exclude": ["*.test.ts", "*.test.tsx"]
+    "include": [
+      "**/*"
+    ],
+    "exclude": [
+      "*.test.ts",
+      "*.test.tsx"
+    ]
   },
   "convexFiles": {
-    "include": ["**/*.ts"],
-    "exclude": ["*.test.ts"]
+    "include": [
+      "**/*.ts"
+    ],
+    "exclude": [
+      "*.test.ts"
+    ]
   },
-  "permissions": ["roles.view", "roles.manage"],
+  "permissions": [
+    "roles.view",
+    "roles.manage"
+  ],
   "schemaTables": [
     {
       "name": "rbac_roles",
       "namespaced": true,
-      "indexes": ["by_tenant", "by_tenant_slug"]
+      "indexes": [
+        "by_tenant",
+        "by_tenant_slug"
+      ]
     }
   ],
   "compatibility": {
@@ -42,6 +59,14 @@
     "tailwind": "4",
     "auth": "convex-auth"
   },
-  "tags": ["rbac", "auth", "permissions", "roles", "authorization", "no-clerk", "convex"],
-  "notes": "0.2.0 (2026-05-31): real engine landed (was a config-only stub). Split design — this is the engine; the members/invites/roles-admin UI lives in the user-management slice (peers this). Ported from superspace convex/workspace/{permissions,roles.config} + convex/lib/rbac. Generic tenantId (not workspace-locked). Pure + props-driven."
+  "tags": [
+    "rbac",
+    "auth",
+    "permissions",
+    "roles",
+    "authorization",
+    "no-clerk",
+    "convex"
+  ],
+  "notes": "0.2.0 (2026-05-31): real engine landed (was a config-only stub). Split design \u2014 this is the engine; the members/invites/roles-admin UI lives in the user-management slice (peers this). Ported from superspace convex/workspace/{permissions,roles.config} + convex/lib/rbac. Generic tenantId (not workspace-locked). Pure + props-driven."
 }

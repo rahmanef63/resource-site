@@ -11,10 +11,11 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "event-tracking",
-  version: "0.0.1",
+  version: "0.1.0",
   category: "data",
   kind: "ui",
   provides: {
+    tools: ["event-tracking.track", "event-tracking.query", "event-tracking.funnel"],
     components: [],
     utils: [],
     hooks: [],

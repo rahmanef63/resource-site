@@ -17,7 +17,7 @@ import { defineSliceContract } from "../../../packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "midtrans-payment",
-  version: "0.1.0",
+  version: "0.2.0",
   requires: {
     auth: "convex",
     rbac: ["payment.create", "payment.refund"],
@@ -29,6 +29,7 @@ export const contract = defineSliceContract({
     deps: ["convex-auth"],
   },
   provides: {
+    tools: ["midtrans-payment.create_invoice", "midtrans-payment.status", "midtrans-payment.refund"],
     tables: ["midtrans_orders", "midtrans_webhook_events"],
     routes: ["/checkout/midtrans", "/midtrans/callback"],
     hooks: ["useMidtransPayment"],

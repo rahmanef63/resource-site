@@ -1,2 +1,3 @@
 // Slice public barrel — re-exports only.
-export {}
+export { resendNewsletterTools, type ResendNewsletterCtx } from "./lib/tools";
+

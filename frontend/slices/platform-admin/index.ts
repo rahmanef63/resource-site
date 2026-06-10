@@ -7,3 +7,4 @@
 // breaks the prod build (it imports from packages/cli/lib/contract.ts which
 // lives outside the Next compile root).
 export { platformAdminConfig } from "./config";
+export { platformAdminTools, type PlatformAdminCtx } from "./lib/tools";

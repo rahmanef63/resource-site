@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "user-management",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "category": "auth",
   "title": "User Management",
   "description": "Full members + invites + roles-admin surface ported from superspace, props-driven + RBAC-agnostic. <UserManagementPanel> tabs Members + Roles: member table (search / filter / sort, inline role dropdown, soft-remove), InviteDialog + PendingInvites (resend / cancel), and a RolesPanel to create / edit / delete custom roles via a permission matrix (system roles read-only). All permission-gated. You pass `roles` + `currentPerms` + the permission catalog (resolved from rbac-roles) + CRUD/invite/role callbacks; the slice imports no other slice's frontend. Plus a TeamsPanel (named user groups) and tenant-hierarchy support: a generic um_tenant_links edge tree + propagating invites (InviteDialog gains a 'propagate to sub-workspaces' toggle with same / step-down role strategy). Convex ships um_members + um_invites + um_teams + um_team_members + um_tenant_links + member / invite / team / hierarchy endpoints (gated via rbac-roles' requirePermission); roles CRUD reuses rbac-roles'. rr never owns the tenant entities \u2014 only the tree edges. Plus an AccessMatrix (users \u00d7 tenants grid, inline role assign) backed by getAccessMatrix. P0\u2013P4c: the full superspace-parity user-management epic, complete.",

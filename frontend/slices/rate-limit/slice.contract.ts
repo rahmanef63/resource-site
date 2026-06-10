@@ -10,10 +10,11 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "rate-limit",
-  version: "0.2.0",
+  version: "0.3.0",
   category: "infra",
   kind: "backend",
   provides: {
+    tools: ["rate-limit.check", "rate-limit.reset"],
     components: [],
     utils: [],
     hooks: [],

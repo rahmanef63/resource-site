@@ -1,14 +1,16 @@
 {
   "$schema": "../../../docs/slice.manifest.schema.json",
   "name": "resend-newsletter",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Newsletter subscribe form + admin send-broadcast pipeline via Resend transactional email.",
   "category": "content",
   "stability": "beta",
   "deps": {
     "shared": [],
     "slices": [],
-    "convexFeatures": ["newsletter"],
+    "convexFeatures": [
+      "newsletter"
+    ],
     "npm": {
       "resend": "^4.0.0"
     },
@@ -29,12 +31,21 @@
     ]
   },
   "files": {
-    "include": ["**/*"],
-    "exclude": ["*.test.ts", "*.test.tsx"]
+    "include": [
+      "**/*"
+    ],
+    "exclude": [
+      "*.test.ts",
+      "*.test.tsx"
+    ]
   },
   "convexFiles": {
-    "include": ["**/*.ts"],
-    "exclude": ["*.test.ts"]
+    "include": [
+      "**/*.ts"
+    ],
+    "exclude": [
+      "*.test.ts"
+    ]
   },
   "permissions": [
     "newsletter.subscribe",
@@ -46,12 +57,19 @@
     {
       "name": "newsletter_subscribers",
       "namespaced": true,
-      "indexes": ["by_email", "by_status", "by_workspace"]
+      "indexes": [
+        "by_email",
+        "by_status",
+        "by_workspace"
+      ]
     },
     {
       "name": "newsletter_broadcasts",
       "namespaced": true,
-      "indexes": ["by_workspace", "by_workspace_sentAt"]
+      "indexes": [
+        "by_workspace",
+        "by_workspace_sentAt"
+      ]
     }
   ],
   "compatibility": {
@@ -67,6 +85,12 @@
       "echo 'Optional: set up webhook for bounce/complaint handling.'"
     ]
   },
-  "tags": ["email", "newsletter", "resend", "broadcast", "transactional"],
-  "notes": "Subscribe form public, send-broadcast admin-only. Schema uses workspace isolation. Double opt-in flow recommended — add token verification mutation to harden production use."
+  "tags": [
+    "email",
+    "newsletter",
+    "resend",
+    "broadcast",
+    "transactional"
+  ],
+  "notes": "Subscribe form public, send-broadcast admin-only. Schema uses workspace isolation. Double opt-in flow recommended \u2014 add token verification mutation to harden production use."
 }

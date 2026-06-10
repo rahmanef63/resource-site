@@ -11,7 +11,7 @@ import { defineSliceContract } from "../../../packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "doku-payment",
-  version: "0.2.0",
+  version: "0.3.0",
   // 0.2.0 (2026-06-10): guest checkout — paymentOrders.userId optional +
   // buyer contact; create actions key-guarded ({ok:false,notice} when DOKU
   // creds unset); status query guest-readable via unguessable orderId;
@@ -34,6 +34,7 @@ export const contract = defineSliceContract({
     deps: ["convex-auth"],
   },
   provides: {
+    tools: ["doku-payment.channels", "doku-payment.create_invoice", "doku-payment.status", "doku-payment.refund"],
     tables: ["doku_orders", "doku_webhook_events"],
     routes: ["/checkout/doku"],
     hooks: ["useDokuCheckout"],

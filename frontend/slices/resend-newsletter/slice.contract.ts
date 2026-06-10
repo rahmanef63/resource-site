@@ -12,7 +12,7 @@ import { defineSliceContract } from "../../../packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "resend-newsletter",
-  version: "0.1.0",
+  version: "0.2.0",
   requires: {
     auth: "convex",
     rbac: [
@@ -29,6 +29,7 @@ export const contract = defineSliceContract({
     deps: ["convex-auth"],
   },
   provides: {
+    tools: ["resend-newsletter.subscribe", "resend-newsletter.unsubscribe", "resend-newsletter.list", "resend-newsletter.send_campaign"],
     tables: ["newsletter_subscribers", "newsletter_broadcasts"],
     routes: ["/newsletter"],
     components: ["SubscribeForm"],

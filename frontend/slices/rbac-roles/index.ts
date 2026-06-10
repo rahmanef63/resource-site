@@ -18,3 +18,4 @@ export { PermissionGate } from "./components/PermissionGate";
 export { RoleBadge } from "./components/RoleBadge";
 export { PermissionMatrix } from "./components/PermissionMatrix";
 export type { MemberStatus } from "./types";
+export { rbacRolesTools, type RbacRolesCtx } from "./lib/tools";
