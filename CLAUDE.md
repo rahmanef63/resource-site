@@ -80,6 +80,7 @@ CLI baca `rr.json` (consumer project manifest) — schema di `packages/cli/lib/r
 - Server Action tanpa authn+authz (audit-bp P0)
 - `NEXT_PUBLIC_*` untuk sensitive values (leak ke client bundle)
 - `middleware.ts` di Next 16 (pakai `proxy.ts`)
+- runtime `fs.readdir`/`readFile` ke dir repo TANPA nambahin dir itu ke `outputFileTracingIncludes` di `next.config.mjs` — lokal jalan, di image docker standalone diam-diam kosong (lihat docs/deploy.md)
 
 ## Source Map (kalau copy dari project lain)
 

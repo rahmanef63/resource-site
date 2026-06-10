@@ -11,6 +11,72 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-10 — deferred-audit hardening sweep: standalone image, CSP, super-admin verified-email, lazy KaTeX, DateField
+
+Closes every item deferred as "riskier / design-level" from the 2026-06-09
+audit-bp hardening sweep (commit `1024a3d`).
+
+**Site / deploy:**
+- Dockerfile is now a multi-stage **standalone** build (~733MB image vs full
+  node_modules). `output: "standalone"` is gated behind `NEXT_OUTPUT_STANDALONE=1`
+  (set by the Dockerfile) so local `next start` / e2e keep working.
+  `outputFileTracingIncludes` covers runtime fs walks (slice Code tabs, layout
+  pullPaths, /admin registry + lineage). The `NEXT_PUBLIC_CONVEX_URL` build ARG
+  referenced by docker-compose now actually exists; compose passes it.
+- Site-wide CSP: `frame-ancestors 'self'; object-src 'none'; base-uri 'self'`
+  (`/admin` + `/api/admin`: `frame-ancestors 'none'`). `script-src` deliberately
+  omitted (GA4 inline snippets, no nonce infra) — rationale lives in next.config.
+
+**Security (copy-source):**
+- Super-admin gate (`convex/_shared/auth.ts`) now requires a **verified** email
+  (`emailVerificationTime`) on top of `SUPER_ADMIN_EMAIL` equality — an
+  unverified Password sign-up of the admin address no longer owns the
+  deployment. Escape hatch: `SUPER_ADMIN_ALLOW_UNVERIFIED=1`. Newsletter
+  `isAdminUser` reuses the shared rule.
+- `Anonymous` provider removed from the default auth copy-source and from
+  SignInPage `DEFAULT_PROVIDERS` (it made every `requireUser` gate satisfiable
+  with one click). Opt back in per project — re-enable notes in both files.
+  convex-auth 0.3.1.
+
+**Slices:**
+- markdown 0.3.1, notion 1.1.1, notion-shell 0.23.1 — KaTeX (~280kB) lazy-loads
+  at all four former static-import sites (`katex-lazy.tsx` `MathSpan`, module-level
+  cache, raw-TeX fallback that upgrades in place; EquationBlock keeps its CSS
+  import static).
+
+**Primitives:**
+- `components/ui/date-field.tsx` — the `DateField` (Popover + Calendar + Button)
+  that the hard rules referenced finally exists; CrudFieldInput `date` kind
+  migrated off `<Input type="date">`.
+
+**template-base hygiene:** 4× `catch (error: any)` → `instanceof` narrowing;
+`studio/executor.ts` `@ts-ignore` pair → typed `retryConfig` access.
+
+### 2026-06-10 — agentic kit: every slice is a BYOK tool collection (waves 3a–3e)
+
+A slice is NOT an agent — it exports a **collection of function-calling tools**;
+ONE shared agent (`@/shared/agentic`) aggregates collections across slices. rr
+holds **no model key anywhere**: per slice it ships exactly (1) a custom
+instruction — `registry.systemPrompt()` composes `BASE_AGENT_SYSTEM` + each
+collection's `instructions` — and (2) the function list — `registry.anthropicTools()`.
+Consumers bring their own key + transport (BYOK).
+
+**Shared kit (`lib/shared/agentic/`):**
+- `global-host.ts` — `globalToolRegistry()` / `registerGlobalTools` (remount-safe
+  rebinding) + `useAgentTools(collection, ctx)` so slices self-register at mount.
+- `prompt.ts` — `BASE_AGENT_SYSTEM` + `buildAgentSystem`; `ToolCollection.instructions`.
+- Safety seam: `Tool.dangerous` + `runAgentLoop` `confirm(name, input)` event —
+  a declined confirm returns a "denied" tool_result to the model, never executes.
+  18 destructive tools flagged (payments refund, role grants, broadcasts, deletes…).
+- `gated.ts` — optional `requirePerm(perm, tool)` RBAC wrapper (defense-in-depth;
+  the primary gate stays in the consumer binding).
+- Audit gate: a slice using `defineToolCollection` with empty contract
+  `provides.tools` now fails `audit:slices`.
+
+**Coverage:** 41 collections — 10 OS apps, 9 admin (Tier A*), 20 data/ui (Tier A),
+plus ai-router ChatFab driving the global registry live. Every slice agent.md now
+emits **Agent guidance** + a BYOK note (`scripts/features/agent-md-tools.mjs`).
+
 ### 2026-06-10 — os-vps upstream sync wave: shell framework + 12 OS app slices + 3 new lifts
 
 **Slices (upgraded from os-vps upstream, all self-contained):**

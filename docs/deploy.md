@@ -34,6 +34,35 @@ codegen in-repo). To add an admin-runtime feature later: add its dir +
 Backend env (`RATE_LIMIT_SERVER_KEY`) lives on the deployment —
 `npx convex env list` with `.env.local` sourced.
 
+## rr's own site image (Dockerfile, 2026-06-10)
+
+The site builds as a multi-stage **standalone** image (~733MB, no full
+node_modules in the runner). Three things to know before touching it:
+
+1. `output: "standalone"` is gated behind `NEXT_OUTPUT_STANDALONE=1` (the
+   Dockerfile sets it). Never enable it for local work — `next start` (and
+   the e2e :3137 flow) does not work with standalone output.
+2. **Runtime fs reads need tracing.** Standalone only ships files Next's
+   tracer can see. Anything read with `fs.readdir`/`readFile` at request time
+   (slice Code tabs via `lib/slice-files.ts`, layout `pullPaths`, `/admin`
+   registry + lineage) must be listed in `outputFileTracingIncludes` in
+   `next.config.mjs` — a missing entry works locally and silently renders
+   empty in prod. `.dockerignore` deliberately excludes cookbook/
+   template-base/packages from the image; those readers degrade gracefully.
+3. `NEXT_PUBLIC_*` values are inlined at **build** time — pass them as
+   docker build args (compose forwards `NEXT_PUBLIC_CONVEX_URL`), not
+   runtime env.
+
+Verify changes with a full local build before pushing main (Dokploy builds
+from this same Dockerfile on push):
+
+```bash
+docker build -t rr-test --build-arg NEXT_PUBLIC_CONVEX_URL=... .
+docker run -d --rm --name rr-test -p 127.0.0.1:3209:3000 rr-test
+curl -s http://127.0.0.1:3209/slices/markdown | grep -c inline.tsx  # Code tab traced?
+docker stop rr-test && docker rmi rr-test
+```
+
 ## Pre-flight
 
 1. **Shell env** (`~/.bashrc`):
