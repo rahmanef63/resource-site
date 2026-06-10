@@ -97,7 +97,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...convexAuthConfig,
     importPath: "@/features/convex-auth/config",
-    version: "0.3.0",
+    version: "0.3.1",
   },
   {
     ...dokuPaymentConfig,
@@ -127,7 +127,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...notionConfig,
     importPath: "@/features/notion/config",
-    version: "1.1.0",
+    version: "1.1.1",
   },
   {
     ...osTerminalConfig,

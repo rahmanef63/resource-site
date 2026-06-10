@@ -16,7 +16,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import katex from "katex";
+import { MathSpan } from "./katex-lazy";
 
 /** Strip inline-markdown markers from a plain-text source. Inverse of
  *  the wrap-with-marker behavior in `SelectionToolbar`. Used by the
@@ -102,10 +102,8 @@ export function renderInline(input: string): React.ReactNode {
         return <del key={i}>{t.inner}</del>;
       case "code":
         return <code key={i} className="rounded bg-muted/70 px-1 py-0.5 font-mono text-[0.9em]">{t.inner}</code>;
-      case "math": {
-        const html = katex.renderToString(t.inner, { throwOnError: false, displayMode: false });
-        return <span key={i} dangerouslySetInnerHTML={{ __html: html }} />;
-      }
+      case "math":
+        return <MathSpan key={i} tex={t.inner} />;
       case "link": {
         const internal = t.href.startsWith("/");
         const cls = "text-brand underline-offset-2 hover:underline";

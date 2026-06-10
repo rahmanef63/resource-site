@@ -119,11 +119,11 @@ export const generateWorkflow = action({
         explanation: "Generated workflow based on your request.",
       };
 
-    } catch (error: any) {
+    } catch (error) {
       console.error("AI generation failed:", error);
       return {
         success: false,
-        error: error.message
+        error: error instanceof Error ? error.message : String(error)
       };
     }
   },

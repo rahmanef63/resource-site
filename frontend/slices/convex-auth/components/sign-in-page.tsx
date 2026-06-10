@@ -50,10 +50,13 @@ import type {
   SignInPageProps,
 } from "../types";
 
+// "anonymous" is intentionally NOT a default — the backend copy-source no
+// longer enables the Anonymous provider out of the box (it devalues every
+// `requireUser` gate). Pass providers={[..., "anonymous"]} after opting in
+// on the Convex side.
 const DEFAULT_PROVIDERS: ReadonlyArray<AuthProvider> = [
   "password",
   "google",
-  "anonymous",
 ];
 
 export default function SignInPage({

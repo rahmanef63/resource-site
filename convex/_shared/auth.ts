@@ -57,6 +57,25 @@ function superAdminConfigured(): boolean {
   return SUPER_ADMIN_EMAIL.length > 0;
 }
 
+/**
+ * Email equality alone is NOT enough: with the Password provider and no
+ * verification flow, anyone could register the SUPER_ADMIN_EMAIL address
+ * and instantly own the deployment. So the gate also requires the account's
+ * email to be VERIFIED (`emailVerificationTime` — OAuth providers set it on
+ * sign-in; Password only after a verify flow). Deployments that genuinely
+ * run without email verification can opt out via
+ * `SUPER_ADMIN_ALLOW_UNVERIFIED=1` — only do that if sign-up is otherwise
+ * restricted (closed beta, allowlist, etc).
+ */
+export function isSuperAdminUser(user: Doc<"users"> | null): boolean {
+  if (!user || !superAdminConfigured()) return false;
+  if (user.email !== SUPER_ADMIN_EMAIL) return false;
+  if (process.env.SUPER_ADMIN_ALLOW_UNVERIFIED === "1") return true;
+  const verifiedAt = (user as { emailVerificationTime?: number })
+    .emailVerificationTime;
+  return verifiedAt !== undefined;
+}
+
 export async function requireAdmin(
   ctx: QueryCtx | MutationCtx,
 ): Promise<Id<"users">> {
@@ -65,7 +84,7 @@ export async function requireAdmin(
   // deployment, no need to self-promote via updateUserRole first.
   if (superAdminConfigured()) {
     const user = await ctx.db.get(userId);
-    if (user?.email === SUPER_ADMIN_EMAIL) return userId;
+    if (isSuperAdminUser(user)) return userId;
   }
   const profile = await ctx.db
     .query("userProfiles")
@@ -86,7 +105,7 @@ export async function requireSuperAdmin(
   const userId = await requireUser(ctx);
   if (!superAdminConfigured()) throw new Error("Tidak berwenang");
   const user = await ctx.db.get(userId);
-  if (!user || user.email !== SUPER_ADMIN_EMAIL) {
+  if (!isSuperAdminUser(user)) {
     throw new Error("Tidak berwenang");
   }
   return userId;
@@ -100,5 +119,5 @@ export async function isSuperAdminCaller(
   const userId = await getAuthUserId(ctx);
   if (!userId) return false;
   const user = await ctx.db.get(userId);
-  return user?.email === SUPER_ADMIN_EMAIL;
+  return isSuperAdminUser(user);
 }

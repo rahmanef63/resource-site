@@ -9,6 +9,25 @@ const BUILD_ID =
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   cacheComponents: true,
+  // Docker-only: emit .next/standalone (server.js + traced files) so the
+  // runtime image ships without the full node_modules tree. Gated behind an
+  // env flag because `next start` (local prod run, e2e :3137) does not work
+  // with output:"standalone".
+  output: process.env.NEXT_OUTPUT_STANDALONE === "1" ? "standalone" : undefined,
+  // Runtime fs reads that static tracing can't see (directory walks):
+  // slice Code tabs (lib/slice-files.ts), layout pullPaths, /admin registry +
+  // lineage. Paths absent from the docker context (.dockerignore) are no-ops.
+  outputFileTracingIncludes: {
+    "/**": [
+      "frontend/slices/**",
+      "app/preview/**",
+      "components/templates/**",
+      ".kitab/lineage/**",
+      "packages/cli/lib/**",
+      "packages/cli/package.json",
+      "packages/mcp/package.json",
+    ],
+  },
   // Dev-only: without this, browsing the dev server via 127.0.0.1 (instead
   // of localhost) silently blocks /_next/* assets — the page renders but
   // never hydrates, so every click is dead. Cost us a real debugging hour.
@@ -55,6 +74,14 @@ const nextConfig = {
         key: "Permissions-Policy",
         value: "camera=(), microphone=(), geolocation=()",
       },
+      // Deliberately the enforceable-without-breakage subset: script-src is
+      // omitted because GA4 ships inline snippets and there is no nonce
+      // infrastructure; frame-ancestors 'self' still allows the site's own
+      // self-iframed slice/layout previews while blocking clickjacking.
+      {
+        key: "Content-Security-Policy",
+        value: "frame-ancestors 'self'; object-src 'none'; base-uri 'self'",
+      },
     ];
     return [
       { source: "/(.*)", headers: base },
@@ -63,6 +90,10 @@ const nextConfig = {
         headers: [
           { key: "X-Frame-Options", value: "DENY" },
           { key: "X-Robots-Tag", value: "noindex, nofollow" },
+          {
+            key: "Content-Security-Policy",
+            value: "frame-ancestors 'none'; object-src 'none'; base-uri 'self'",
+          },
         ],
       },
       {
@@ -70,6 +101,10 @@ const nextConfig = {
         headers: [
           { key: "X-Frame-Options", value: "DENY" },
           { key: "X-Robots-Tag", value: "noindex, nofollow" },
+          {
+            key: "Content-Security-Policy",
+            value: "frame-ancestors 'none'; object-src 'none'; base-uri 'self'",
+          },
         ],
       },
     ];

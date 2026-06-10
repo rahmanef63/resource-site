@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Input } from "@/components/ui/input";
+import { DateField } from "@/components/ui/date-field";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
@@ -91,12 +92,10 @@ export function CrudFieldInput<T>({
       return <Switch checked={Boolean(value)} onCheckedChange={(v) => onChange(v)} />;
     case "date": {
       const ms = typeof value === "number" ? value : Date.now();
-      const iso = new Date(ms).toISOString().slice(0, 10);
       return (
-        <Input
-          type="date"
-          value={iso}
-          onChange={(e) => onChange(new Date(e.target.value).getTime())}
+        <DateField
+          value={new Date(ms)}
+          onChange={(d) => onChange((d ?? new Date(ms)).getTime())}
         />
       );
     }

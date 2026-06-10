@@ -4,11 +4,11 @@
  *  `renderInline`. */
 
 import * as React from "react";
-import katex from "katex";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { MdNode, Align } from "../lib/parse";
 import { renderInline } from "../lib/inline";
+import { MathSpan } from "../lib/katex-lazy";
 import { MermaidBlock } from "./MermaidBlock";
 import { ChartBlock } from "./ChartBlock";
 
@@ -97,7 +97,7 @@ export function MdNodeView({ node }: { node: MdNode }): React.ReactNode {
     case "chart":
       return <ChartBlock text={node.text} />;
     case "equation":
-      return <BlockMath text={node.text} />;
+      return <MathSpan tex={node.text} display />;
     case "divider":
       return <hr className="my-5 border-border" />;
     case "image":
@@ -140,9 +140,4 @@ function MdTable({ rows, align }: { rows: string[][]; align: Align[] }) {
       </table>
     </div>
   );
-}
-
-function BlockMath({ text }: { text: string }) {
-  const html = katex.renderToString(text, { throwOnError: false, displayMode: true });
-  return <div className="my-3 overflow-x-auto" dangerouslySetInnerHTML={{ __html: html }} />;
 }

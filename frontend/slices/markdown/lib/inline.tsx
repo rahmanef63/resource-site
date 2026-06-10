@@ -8,7 +8,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import katex from "katex";
+import { MathSpan } from "./katex-lazy";
 
 const BOLD = /\*\*([^*\n]+)\*\*/;
 const STRIKE = /~~([^~\n]+)~~/;
@@ -64,10 +64,8 @@ export function renderInline(input: string): React.ReactNode {
       case "strike": return <del key={i}>{t.inner}</del>;
       case "code":
         return <code key={i} className="rounded bg-muted/70 px-1 py-0.5 font-mono text-[0.9em]">{t.inner}</code>;
-      case "math": {
-        const html = katex.renderToString(t.inner, { throwOnError: false, displayMode: false });
-        return <span key={i} dangerouslySetInnerHTML={{ __html: html }} />;
-      }
+      case "math":
+        return <MathSpan key={i} tex={t.inner} />;
       case "link": {
         const internal = t.href.startsWith("/");
         const cls = "text-primary underline-offset-2 hover:underline";

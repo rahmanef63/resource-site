@@ -109,7 +109,8 @@ export interface SignInPageProps {
   /**
    * Provider list, in render order. `password` shows the Login/Register
    * tabs; `magic-link`, `google`, `anonymous` render their own buttons.
-   * Default: `["password", "google", "anonymous"]`.
+   * Default: `["password", "google"]` — `anonymous` is opt-in (enable the
+   * Anonymous provider on the Convex side first).
    */
   providers?: ReadonlyArray<AuthProvider>;
 

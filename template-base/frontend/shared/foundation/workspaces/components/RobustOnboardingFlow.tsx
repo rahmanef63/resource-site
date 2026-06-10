@@ -188,7 +188,7 @@ export function RobustOnboardingFlow({
             referrer: typeof document !== "undefined" ? document.referrer : undefined,
             path: pathname ?? undefined,
           },
-        }).catch((err: any) => {
+        }).catch((err: unknown) => {
           if (process.env.NODE_ENV !== "production") {
             console.warn("[Onboarding] analytics trackEvent failed", err)
           }
@@ -197,8 +197,8 @@ export function RobustOnboardingFlow({
         onComplete(workspaceId, data.enabledFeatures)
         setIsSubmitting(false)
         return
-      } catch (error: any) {
-        const msg = String(error?.message || error)
+      } catch (error) {
+        const msg = error instanceof Error ? error.message : String(error)
         const duplicate = msg.includes("slug already exists") || (msg.includes("slug") && msg.includes("exists"))
         const unauthenticated = msg.toLowerCase().includes("not authenticated")
 

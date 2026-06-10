@@ -358,13 +358,15 @@ export const processExecution = internalAction({
           }
         );
 
-        // Execute the step with retry logic
+        // Execute the step with retry logic. retryConfig is an optional
+        // per-step extension not present on the base step validator.
         let stepResult;
         let attempts = 0;
-        // @ts-ignore
-        const maxAttempts = step.retryConfig?.maxAttempts || 1;
-        // @ts-ignore
-        const backoffMs = step.retryConfig?.backoffMs || 1000;
+        const retry = (step as {
+          retryConfig?: { maxAttempts?: number; backoffMs?: number };
+        }).retryConfig;
+        const maxAttempts = retry?.maxAttempts || 1;
+        const backoffMs = retry?.backoffMs || 1000;
 
         while (attempts < maxAttempts) {
           attempts++;

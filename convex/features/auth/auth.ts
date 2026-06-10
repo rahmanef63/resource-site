@@ -1,6 +1,5 @@
 import { convexAuth, getAuthUserId } from "@convex-dev/auth/server";
 import { Password } from "@convex-dev/auth/providers/Password";
-import { Anonymous } from "@convex-dev/auth/providers/Anonymous";
 import Google from "@auth/core/providers/google";
 import { query } from "../../_generated/server";
 import type { DataModel } from "../../_generated/dataModel";
@@ -82,7 +81,10 @@ export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
         },
       },
     }),
-    Anonymous,
+    // Anonymous is intentionally NOT enabled by default — it makes every
+    // `requireUser` gate satisfiable with a single anonymous click. Opt in
+    // per-project: import { Anonymous } from "@convex-dev/auth/providers/Anonymous"
+    // and add it here (then add "anonymous" to your SignInPage providers).
     Google,
   ],
 });

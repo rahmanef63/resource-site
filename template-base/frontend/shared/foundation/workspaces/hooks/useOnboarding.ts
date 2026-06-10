@@ -50,8 +50,8 @@ export function useOnboarding() {
           isPublic: false,
         });
         return workspaceId;
-      } catch (error: any) {
-        const msg = String(error?.message || error);
+      } catch (error) {
+        const msg = error instanceof Error ? error.message : String(error);
         const duplicate = msg.includes("slug already exists") || (msg.includes("slug") && msg.includes("exists"));
         if (!duplicate) {
           console.error(error);

@@ -5,17 +5,28 @@
  *  notion page block ships block math out of the box. Pure BlockRendererProps
  *  — writes `{ text }` through onUpdate. */
 
-import { useMemo, useState } from "react";
-import katex from "katex";
+import { useEffect, useMemo, useState } from "react";
 import "katex/dist/katex.min.css";
 import { Sigma, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getErrorMessage } from "@/shared/error";
 import type { BlockRendererProps } from "../../types";
 
-function render(src: string): string {
+// KaTeX JS is ~280kB — load it lazily on the first equation block and cache
+// at module level (CSS above stays static; it's small and font-on-demand).
+type Katex = typeof import("katex").default;
+let katexMod: Katex | null = null;
+let katexReady: Promise<Katex> | null = null;
+function loadKatex(): Promise<Katex> {
+  if (!katexReady) {
+    katexReady = import("katex").then((m) => (katexMod = m.default));
+  }
+  return katexReady;
+}
+
+function render(lib: Katex, src: string): string {
   try {
-    return katex.renderToString(src, { throwOnError: false, displayMode: true });
+    return lib.renderToString(src, { throwOnError: false, displayMode: true });
   } catch (e: unknown) {
     return `<span class="text-destructive text-xs">${getErrorMessage(e, "LaTeX error")}</span>`;
   }
@@ -25,7 +36,16 @@ export function EquationBlock({ block, onUpdate, registerRef }: BlockRendererPro
   const text = block.text;
   const [editing, setEditing] = useState(!text);
   const [draft, setDraft] = useState(text);
-  const rendered = useMemo(() => (text ? render(text) : ""), [text]);
+  const [lib, setLib] = useState<Katex | null>(katexMod);
+  useEffect(() => {
+    let alive = true;
+    if (!lib) void loadKatex().then((k) => { if (alive) setLib(k); });
+    return () => { alive = false; };
+  }, [lib]);
+  const rendered = useMemo(
+    () => (text && lib ? render(lib, text) : ""),
+    [text, lib],
+  );
   const commit = () => { onUpdate({ text: draft }); setEditing(false); };
 
   if (editing) {
@@ -52,9 +72,9 @@ export function EquationBlock({ block, onUpdate, registerRef }: BlockRendererPro
           <span>⌘+Enter to render • Esc to cancel</span>
           <Button onClick={commit} className="h-auto rounded bg-foreground px-2 py-0.5 text-[11px] text-background hover:bg-foreground/90">Render</Button>
         </div>
-        {draft && (
+        {draft && lib && (
           <div className="overflow-x-auto rounded border border-border bg-card px-3 py-2">
-            <div dangerouslySetInnerHTML={{ __html: render(draft) }} />
+            <div dangerouslySetInnerHTML={{ __html: render(lib, draft) }} />
           </div>
         )}
       </div>
@@ -70,7 +90,11 @@ export function EquationBlock({ block, onUpdate, registerRef }: BlockRendererPro
       onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); setDraft(text); setEditing(true); } }}
     >
       {text ? (
-        <div className="overflow-x-auto" dangerouslySetInnerHTML={{ __html: rendered }} />
+        rendered ? (
+          <div className="overflow-x-auto" dangerouslySetInnerHTML={{ __html: rendered }} />
+        ) : (
+          <code className="font-mono text-sm text-muted-foreground">{text}</code>
+        )
       ) : (
         <span className="text-sm italic text-muted-foreground/60">Empty equation — click to edit</span>
       )}
