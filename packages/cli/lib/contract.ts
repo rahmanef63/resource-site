@@ -15,6 +15,7 @@ import {
   validateConvex,
   validateGeneralization,
   validateConflicts,
+  validateTools,
 } from "./contract-validate";
 
 // Re-export the full type surface so existing imports keep working.
@@ -62,5 +63,6 @@ export function defineSliceContract(c: SliceContract): SliceContract {
   validateConvex(c);
   validateGeneralization(c);
   validateConflicts(c);
+  validateTools(c);
   return c;
 }

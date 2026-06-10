@@ -34,7 +34,7 @@ export type { ImageEditorConfig } from "./config";
 
 // AI function-calling: the command registry + the live-store binding hook. Every
 // editor operation is exposed as a named, schema'd command an AI can call.
-export { EDITOR_COMMANDS, EDITOR_TOOLS, findCommand } from "./commands/registry";
+export { EDITOR_COMMANDS, EDITOR_TOOLS, findCommand, imageEditorTools } from "./commands/registry";
 export { useEditorCommands } from "./commands/use-editor-commands";
 export type { EditorCommand, AnthropicTool } from "./commands/types";
 export type { ToolInvocation, ToolOutcome } from "./commands/use-editor-commands";

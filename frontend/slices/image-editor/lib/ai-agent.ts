@@ -1,4 +1,4 @@
-import { streamAgentTurn, type AgentMsg, type AiTool } from "./host";
+import { runAgentLoop, type AgentMsg, type AnthropicTool, type ToolHost } from "@/shared/agentic";
 import type { ToolInvocation, ToolOutcome } from "../commands/use-editor-commands";
 
 export type AgentEvents = {
@@ -8,31 +8,20 @@ export type AgentEvents = {
   onTool: (name: string, input: Record<string, unknown>, outcome: ToolOutcome) => void;
 };
 
-// Drives a function-calling conversation that operates the editor: stream a
-// turn → run any tool_use locally against the live store → feed the results
-// back → repeat until the model stops calling tools (or the turn cap is hit).
-// Returns the extended history so the caller can keep the thread going.
-export async function runEditorAgent(
+// Back-compat wrapper over the SHARED agent loop. The editor's in-editor chat
+// is just one consumer of the one loop: it adapts its store-bound
+// {tools, invoke} (from useEditorCommands) into a ToolHost and delegates. The
+// editor no longer owns a private function-calling loop.
+export function runEditorAgent(
   history: AgentMsg[],
-  tools: AiTool[],
+  tools: AnthropicTool[],
   invoke: (call: ToolInvocation) => Promise<ToolOutcome>,
   ev: AgentEvents,
   maxTurns = 8,
 ): Promise<{ history: AgentMsg[]; text: string }> {
-  const msgs = [...history];
-  let lastText = "";
-  for (let i = 0; i < maxTurns; i++) {
-    const { text, toolUses } = await streamAgentTurn(msgs, tools, ev.onDelta);
-    msgs.push({ role: "assistant", text, toolUses });
-    if (text) lastText = text;
-    if (toolUses.length === 0) break;
-    const results = [];
-    for (const tu of toolUses) {
-      const outcome = await invoke({ name: tu.name, input: tu.input });
-      ev.onTool(tu.name, tu.input, outcome);
-      results.push({ id: tu.id, content: outcome.result, isError: !outcome.ok });
-    }
-    msgs.push({ role: "tool", results });
-  }
-  return { history: msgs, text: lastText };
+  const host: ToolHost = {
+    anthropicTools: () => tools,
+    invoke: (name, input) => invoke({ name, input }),
+  };
+  return runAgentLoop(history, host, { onDelta: ev.onDelta, onTool: ev.onTool }, maxTurns);
 }

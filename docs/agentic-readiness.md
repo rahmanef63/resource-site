@@ -129,3 +129,55 @@ optionally one `configure(props)` tool so a page-builder agent can place them.
 
 **Scorecard:** 1/66 agentic-ready (image-editor). 6 partial (assistant, ai-agents,
 ai-admin, create-your-mcp, library + ai-chat infra). 59 with zero tool surface.
+
+---
+
+## Architecture decision (2026-06-10)
+
+> A slice is **NOT an agent**. A slice exports a **collection of function-calling
+> tools**. ONE agent aggregates collections from many slices and drives them —
+> the agent already speaks function calling; each slice only declares WHAT it
+> can do + HOW to run it (bound to its own live state).
+
+### Shared kit — `lib/shared/agentic/` (import `@/shared/agentic`)
+
+| File | Export | Role |
+|---|---|---|
+| `types.ts` | `Tool`, `ToolCollection`, `ToolHost`, `AgentMsg`… | one vocabulary for every slice |
+| `schema.ts` | `str/num/bool/arr/obj/noArgs` | JSON-schema builders |
+| `define.ts` | `defineTool`, `defineToolCollection` | authoring factories (Ctx inference) |
+| `registry.ts` | `createToolRegistry()` | **aggregates collections → 1 agent**: namespaces names, unifies `anthropicTools()`, dispatches `invoke()` to each tool's bound ctx |
+| `host.ts` | `configureAgentStream`, `streamAgentTurn` | **the ONE model seam** (was per-slice) |
+| `agent-loop.ts` | `runAgentLoop(history, host, ev)` | **the ONE agent loop** (was per-slice) |
+
+Make a slice agentic = write `*.tools.ts` → `export const fooTools =
+defineToolCollection<FooCtx>({ namespace:"foo", tools:[…] })`, declare names in
+`provides.tools`, done. No agent, no model wiring, no loop inside the slice.
+
+### Consistency findings (the "tidak konsisten" audit)
+
+| # | Inconsistency | Status |
+|---|---|---|
+| C1 | **image-editor owned a private agent loop** (`lib/ai-agent.ts`) + model seam (`lib/host.ts`) = per-slice agent | ✅ fixed — lifted to `@/shared/agentic`; slice re-exports + delegates |
+| C2 | image-editor redefined `JsonSchema`/`AnthropicTool` locally | ✅ fixed — `commands/types.ts` re-exports shared; `EditorCommand = Tool<EditorCtx>` |
+| C3 | No `<slice>.<action>` naming convention (image-editor used bare `layer.add`) | ✅ fixed — registry namespaces on register; contract `validateTools` enforces `<id>.` prefix |
+| C4 | Contract DSL had no `tools` → agentic surface undeclared/ungated | ✅ fixed — `provides.tools` (G1) + `validateTools` + image-editor declares 34 |
+| C5 | **assistant** uses a different tool model: `OS_TOOLS` with `params: string[]`, "narrate only", **no JSON-schema, no invoke**, own `configureAssistantStream` seam + demo streamer | ⏳ pending — convert OS_TOOLS to real collections + make assistant THE central host (`createToolRegistry` + `runAgentLoop`); drop its private seam |
+| C6 | **ai-agents** has its own `RunStep`/`RunnerBindings = unknown` (third agent model, no execution) | ⏳ pending — back its runner with the shared registry + loop |
+| C7 | ai-router / ai-studio / ai-chat / ai-admin / create-your-mcp don't consume the registry | ⏳ pending — Tier-B wiring |
+
+### Proof
+
+`lib/shared/agentic/agentic.test.ts` — two slices (`counter`, `notes`) both
+export an `add` tool; one registry namespaces them apart, `runAgentLoop` drives
+both against their separate live ctx in one conversation. 7 tests green.
+
+### Next (in order)
+
+1. **C5 — assistant = central host.** Convert each referenced OS op to a real
+   slice collection; assistant registers them all → one drivable agent. Biggest
+   unlock (turns the catalog into reality).
+2. **Tier-A os apps** (reel/code/file-explorer/terminal/browser/media-viewer)
+   each ship a `*.tools.ts` collection.
+3. **C6 — ai-agents** runner on the shared loop.
+4. Tier-A* admin (gated), Tier-A data/ui, Tier-C `configure` tools.

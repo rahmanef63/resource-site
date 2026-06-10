@@ -18,7 +18,7 @@ const KEBAB_CASE = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/;
 const SEMVER =
   /^\d+\.\d+\.\d+(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
 const PREFIX = /^[a-z][a-z0-9_]*_$/;
-const CONFLICT = /^[a-z][a-z0-9-]*:(routes|hooks|tables|events|components)\.[A-Za-z0-9_\-\/]+$/;
+const CONFLICT = /^[a-z][a-z0-9-]*:(routes|hooks|tables|events|components|tools)\.[A-Za-z0-9_\-\/.]+$/;
 const PERMISSION = /^[^.]+\.[^.]+$/;
 
 // ---------------------------------------------------------------------------
@@ -127,6 +127,28 @@ export function validateGeneralization(c: SliceContract): void {
           `defineSliceContract(${c.id}): generalization.requiredProps entries must be non-empty strings`,
         );
       }
+    }
+  }
+}
+
+export function validateTools(c: SliceContract): void {
+  const tools = c.provides.tools;
+  if (tools === undefined) return;
+  if (!Array.isArray(tools)) {
+    throw new Error(`defineSliceContract(${c.id}): provides.tools must be an array`);
+  }
+  for (const t of tools) {
+    if (typeof t !== "string" || t.length === 0) {
+      throw new Error(
+        `defineSliceContract(${c.id}): provides.tools entries must be non-empty strings`,
+      );
+    }
+    // Every tool name MUST be namespaced to the slice id so one agent can
+    // aggregate collections from many slices without collision.
+    if (!t.startsWith(`${c.id}.`)) {
+      throw new Error(
+        `defineSliceContract(${c.id}): provides.tools entry "${t}" must be prefixed with "${c.id}."`,
+      );
     }
   }
 }

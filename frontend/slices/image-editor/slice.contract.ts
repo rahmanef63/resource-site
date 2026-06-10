@@ -36,6 +36,22 @@ export const contract = defineSliceContract({
     hooks: ["useEditor", "useEditorCommands"] as string[],
     utils: ["blankDoc", "createLayer", "removeImageBackground", "runEditorAgent", "configureAgentStream", "EDITOR_COMMANDS"] as string[],
     tables: [] as string[],
+    // Agentic tool collection (`imageEditorTools`) — a central host registers
+    // this so one agent can drive the editor alongside other slices' tools.
+    tools: [
+      "image-editor.doc.inspect", "image-editor.doc.resize", "image-editor.doc.aspect",
+      "image-editor.doc.crop", "image-editor.layer.add", "image-editor.layer.remove",
+      "image-editor.layer.duplicate", "image-editor.layer.rename", "image-editor.layer.select",
+      "image-editor.layer.order", "image-editor.layer.visibility", "image-editor.layer.lock",
+      "image-editor.layer.opacity", "image-editor.transform.set", "image-editor.transform.flip",
+      "image-editor.tool.select", "image-editor.brush.set", "image-editor.color.set",
+      "image-editor.color.swap", "image-editor.adjust.set", "image-editor.adjust.addLayer",
+      "image-editor.adjust.reset", "image-editor.style.stroke", "image-editor.style.shadow",
+      "image-editor.style.glow", "image-editor.style.blend", "image-editor.text.edit",
+      "image-editor.shape.edit", "image-editor.mask.add", "image-editor.mask.remove",
+      "image-editor.edit.undo", "image-editor.edit.redo", "image-editor.export.image",
+      "image-editor.image.removeBackground",
+    ] as string[],
   },
   conflicts: [],
 });

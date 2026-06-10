@@ -171,6 +171,10 @@
               "range": {
                 "type": "string"
               },
+              "optional": {
+                "type": "boolean",
+                "description": "Peer is optional — slice degrades gracefully without it (e.g. a swappable payment provider)."
+              },
               "reason": {
                 "type": "string"
               }

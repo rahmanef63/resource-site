@@ -88,6 +88,14 @@ export interface SliceContractProvides {
   events?: string[];
   /** Public component exports — e.g. `["DokuCheckoutButton"]`. */
   components?: string[];
+  /**
+   * Fully-qualified AI tool names the slice exposes as a `ToolCollection`
+   * (`@/shared/agentic`) — e.g. `["image-editor.layer.add"]`. Every entry
+   * MUST be prefixed with the slice id so one agent can aggregate tools from
+   * many slices without collision. A slice is "agentic-ready" iff this is
+   * non-empty.
+   */
+  tools?: string[];
 }
 
 // ---------------------------------------------------------------------------

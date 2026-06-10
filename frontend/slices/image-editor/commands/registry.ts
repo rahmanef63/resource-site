@@ -1,4 +1,6 @@
-import type { AnthropicTool, EditorCommand } from "./types";
+import { defineToolCollection, type ToolCollection } from "@/shared/agentic";
+import type { AnthropicTool, EditorCommand, EditorCtx } from "./types";
+import { describeDoc } from "./schema";
 import { layerCommands } from "./layer.commands";
 import { adjustCommands } from "./adjust.commands";
 import { styleCommands } from "./style.commands";
@@ -32,3 +34,13 @@ export const EDITOR_TOOLS: AnthropicTool[] = EDITOR_COMMANDS.map((c) => ({
   description: c.description,
   input_schema: c.parameters,
 }));
+
+// The slice's agent-agnostic tool collection. A central host registers this
+// alongside other slices' collections so ONE agent can drive them all:
+//   registry.register(imageEditorTools, () => editorStore)
+// Tool names are namespaced to "image-editor.<name>" on register.
+export const imageEditorTools: ToolCollection<EditorCtx> = defineToolCollection<EditorCtx>({
+  namespace: "image-editor",
+  tools: EDITOR_COMMANDS,
+  describe: (ctx) => describeDoc(ctx),
+});
