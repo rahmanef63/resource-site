@@ -11,6 +11,45 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-10 — variant previews: shadcn Tabs knobs + remount-on-change (convex-auth knob fix)
+
+**Site:**
+- The variant selector (`Knob`) on every slice's **Live** tab and in the Bundle
+  Builder is now a compact shadcn `Tabs` strip instead of a hand-rolled button
+  group — one consistent control across all 48 preview slices, with radix
+  keyboard navigation for free.
+- Fixed: switching a variant axis that only feeds **initial state** did nothing
+  (first seen on convex-auth's `defaultPasswordMode` — `PasswordBlock` keeps the
+  mode in `useState`, so a re-render ignored the knob). `LazyWidget` now keys
+  the widget on the variant selection, remounting on every change so every axis
+  takes effect for every slice.
+
+### 2026-06-10 — agentic follow-up: Tier-C closure, BYOK binding doc, ⚠ in agent.md
+
+Finishes the agentic kit's open ends (commits `1cb4ed86`, `8d52a5e1`); the
+readiness doc's "Next" list is now empty — **47 collections** total.
+
+**Slices:**
+- landing-sections 0.3.0 — THE page-builder collection: `list` / `add` /
+  `update` / `remove` over the slice's own `LandingStore` adapter (13 section
+  kinds, ordering, images, per-kind config). `remove` is flagged dangerous;
+  guidance steers agents to `enabled:false` first.
+- Thin `configure` collections on the live presentational slices:
+  loading-states 0.2.0, empty-states 0.2.0, marketing-chrome 0.2.0,
+  notion-shell 0.24.0 (font / fullWidth / smallText / locked), convex-auth
+  0.4.0 (title / methods / defaultPasswordMode).
+- NOT given tools (recorded in `docs/agentic-readiness.md`): the 8 marketing
+  sections merged into landing-sections v0.2.0 (template internals, out of the
+  CLI manifest), headless factories, and callback-only UI slices.
+
+**Site / docs:**
+- `docs/agentic-byok-binding.md` — the complete consumer binding: key-holding
+  route, `AgentBridge`, `useAgentTools`, `runAgentLoop` with `confirm`.
+- agent.md generator marks dangerous tools with **⚠ destructive** + a
+  confirm-wiring note (18 tools across 11 slices).
+- `createSseAgentStream(url, system?)` gained the BYOK system param — the demo
+  route accepted `body.system` but the client never sent it (+2 tests, 466).
+
 ### 2026-06-10 — deferred-audit hardening sweep: standalone image, CSP, super-admin verified-email, lazy KaTeX, DateField
 
 Closes every item deferred as "riskier / design-level" from the 2026-06-09

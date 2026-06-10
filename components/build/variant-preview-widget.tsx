@@ -4,11 +4,13 @@
  *  split from variant-preview.tsx to keep both under the 200-LOC gate. */
 
 import * as React from "react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PREVIEW_REGISTRY } from "@/lib/preview/registry.gen";
 import type { SlicePreviewModule, VariantSelection } from "@/shared/preview/types";
 
+/** One variant axis as a compact shadcn Tabs strip — the same control on every
+ *  slice's Live tab and in the Bundle Builder, so variant switching reads
+ *  identically across the catalog. */
 export function Knob({
   label, values, titles, value, onChange,
 }: {
@@ -23,23 +25,15 @@ export function Knob({
       <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
         {label}
       </span>
-      <div className="inline-flex rounded-md border border-input p-0.5">
-        {values.map((v, i) => (
-          <Button
-            key={v}
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={() => onChange(v)}
-            className={cn(
-              "h-auto rounded px-2 py-0.5 text-[11px]",
-              value === v ? "bg-accent font-medium" : "text-muted-foreground hover:bg-accent/50",
-            )}
-          >
-            {titles?.[i] ?? v}
-          </Button>
-        ))}
-      </div>
+      <Tabs value={value ?? values[0]} onValueChange={onChange} className="w-fit">
+        <TabsList className="p-0.5 group-data-[orientation=horizontal]/tabs:h-7">
+          {values.map((v, i) => (
+            <TabsTrigger key={v} value={v} className="px-2 py-0.5 text-[11px]">
+              {titles?.[i] ?? v}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
     </div>
   );
 }
@@ -79,5 +73,8 @@ export function LazyWidget({
       </div>
     );
   }
-  return <Widget variant={variant} />;
+  // Remount on every variant change: axes often feed initial state only
+  // (e.g. convex-auth `defaultPasswordMode` → useState), so a re-render
+  // without a remount silently ignores the knob.
+  return <Widget key={JSON.stringify(variant)} variant={variant} />;
 }

@@ -2,6 +2,52 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "VP-TABS",
+    "version": "site@variant-previews",
+    "date": 1781049600000,
+    "kind": "fix",
+    "title": "Variant previews — consistent shadcn Tabs knobs + remount-on-change",
+    "body": "The variant selector on every slice's Live tab (and in the Bundle Builder) is now a compact shadcn Tabs strip instead of a hand-rolled button group — one identical control across all 48 preview slices, with keyboard navigation from radix for free. Also fixes a real knob bug: axes that only feed a widget's INITIAL state did nothing on change, because the widget re-rendered without remounting. First seen on convex-auth — its defaultPasswordMode knob flips the password block's starting tab, but PasswordBlock keeps the mode in useState, so toggling signin/signup was a no-op. LazyWidget now keys the widget on the variant selection: every knob change remounts, so every declared axis takes effect on every slice.",
+    "groups": []
+  },
+  {
+    "id": "AGENTIC-BYOK",
+    "version": "site@agentic-kit",
+    "date": 1781049600000,
+    "kind": "feature",
+    "title": "Agentic kit — every slice ships a BYOK tool collection (47 collections)",
+    "body": "A slice is NOT an agent — it exports a COLLECTION of function-calling tools, and ONE shared agent aggregates collections across slices. The shared kit (@/shared/agentic) ships the registry (namespaced tool aggregation + anthropicTools()), the single agent loop (runAgentLoop), a global host with mount-time self-registration (useAgentTools — remount-safe ctx rebinding), schema builders, and composable custom instructions (registry.systemPrompt() = BASE_AGENT_SYSTEM + each collection's guidance). rr holds NO model key anywhere: per slice it ships exactly (1) a custom instruction and (2) a function list; consumers bring their own key + transport — docs/agentic-byok-binding.md is the complete copy-paste binding. Safety seam: tools flag dangerous:true, runAgentLoop's confirm event runs BEFORE execution (decline = the model gets a denied tool_result), agent.md marks each one ⚠ destructive, and requirePerm() offers RBAC defense-in-depth. Coverage: 10 OS apps, 9 admin collections, 20 data/ui collections, landing-sections as the page-builder (list/add/update/remove over its LandingStore), and thin configure tools on the presentational slices — 47 total, each documented under \"Tools (agentic surface)\" + \"Agent guidance\" in its agent.md.",
+    "groups": [
+      {
+        "heading": "Highlights",
+        "bullets": [
+          "landing-sections 0.3.0 — page-builder collection: compose the landing page by tool calls (13 section kinds; remove is dangerous-gated)",
+          "assistant 1.1.x — central chat host runs the loop across every registered collection",
+          "createSseAgentStream(url, system?) — BYOK system prompt now actually reaches the model route",
+          "audit gate: a slice exporting a collection with empty contract provides.tools fails audit:slices"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "HARDEN-W6",
+    "version": "site@deferred-audit-sweep",
+    "date": 1781049600000,
+    "kind": "improvement",
+    "title": "Hardening W6 — standalone Docker image, CSP, super-admin verified-email, lazy KaTeX, DateField",
+    "body": "Closes every item deferred as riskier/design-level from the 2026-06-09 audit sweep. The site's Dockerfile is now a multi-stage standalone build (output gated behind NEXT_OUTPUT_STANDALONE=1 so local next start keeps working; outputFileTracingIncludes covers every runtime fs walk — without it the standalone image silently serves empty slice Code tabs). Site-wide CSP lands (frame-ancestors 'self'; object-src 'none'; base-uri 'self'; admin surfaces get frame-ancestors 'none'). The super-admin gate now requires a VERIFIED email on top of address equality — an unverified password sign-up of the admin address no longer owns the deployment (escape hatch env for dev). The Anonymous auth provider left the default copy-source (it made every requireUser gate satisfiable in one click). KaTeX (~280kB) lazy-loads at all four former static-import sites with a raw-TeX fallback that upgrades in place (markdown 0.3.1, notion 1.1.1, notion-shell 0.23.x). And the DateField primitive the hard rules referenced finally exists (Popover + Calendar), replacing the last input type=date.",
+    "groups": []
+  },
+  {
+    "id": "OS-UPSTREAM-SYNC",
+    "version": "os-apps@upstream-sync",
+    "date": 1781049600000,
+    "kind": "improvement",
+    "title": "os-vps upstream sync wave — shell framework + 12 OS app upgrades + 3 new slices",
+    "body": "Backfilled entry for the big upstream sync (landed 2026-06-10 alongside the agentic waves). appshell 1.4.0 rebuilds the Android (Material-You) shell — wallpaper clock, pull-down Control Center, Spotlight pill — and bundles a single-pane Dashboard shell; browser 1.1.0 gains a Chrome-style multitab strip + screencast hook; os-terminal puts a PTY surface behind an injectable configurePty seam with a LIVE/MOCK banner; file-explorer 1.2.0, assistant 1.1.0, reel-editor 1.1.0 (container-first compact mode), image-editor 2.1.0, app-store 1.1.0, media-viewer 1.1.0, system-monitor 1.1.0, image-picker 0.2.0 (debounced Unsplash search + CSS-escaped url() values), code-editor 1.1.0 all sync responsive/touch upgrades from upstream. New lifts: media-studio 1.0.0 (standalone canvas studio on a configureMediaStudio seam), quicklinks 1.0.0 (injectable QuicklinksStore), shell-settings 1.0.0 (settings-app UI primitives over an AppearanceAdapter).",
+    "groups": []
+  },
+  {
     "id": "MOTION-W1",
     "version": "slices@motion-kit-0.1.0",
     "date": 1781049600000,
