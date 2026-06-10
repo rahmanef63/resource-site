@@ -8,6 +8,7 @@ import {
   num,
   runAgentLoop,
   configureAgentStream,
+  requirePerm,
   type AgentMsg,
   type ToolUse,
 } from "./index";
@@ -157,5 +158,133 @@ describe("runAgentLoop — drives the union via the shared loop", () => {
     expect(counter.value).toBe(3);
     expect(notes.notes).toEqual(["done"]);
     expect(text).toBe("all set");
+  });
+});
+
+// A collection with one destructive tool — proves the dangerous flag + the
+// loop's confirm gate.
+const wipeTools = defineToolCollection<CounterCtx>({
+  namespace: "wipe",
+  tools: [
+    defineTool({
+      name: "reset",
+      description: "Zero the counter (irreversible).",
+      parameters: obj({}),
+      dangerous: true,
+      run: (ctx) => {
+        ctx.value = 0;
+        return "reset";
+      },
+    }),
+  ],
+});
+
+describe("dangerous tools — confirm gate", () => {
+  it("registry.isDangerous reflects the flag", () => {
+    const reg = createToolRegistry();
+    reg.register(wipeTools, () => ({ value: 5 }));
+    reg.register(counterTools, () => ({ value: 0 }));
+    expect(reg.isDangerous("wipe.reset")).toBe(true);
+    expect(reg.isDangerous("counter.add")).toBe(false);
+    expect(reg.isDangerous("nope.gone")).toBe(false);
+  });
+
+  it("declined confirm blocks the dangerous tool but feeds back an error; others still run", async () => {
+    let turn = 0;
+    configureAgentStream(async () => {
+      turn += 1;
+      if (turn === 1) {
+        return {
+          text: "",
+          toolUses: [
+            { id: "t1", name: "wipe.reset", input: {} },
+            { id: "t2", name: "counter.add", input: { n: 2 } },
+          ] as ToolUse[],
+          stopReason: "tool_use",
+        };
+      }
+      return { text: "ok", toolUses: [], stopReason: "end_turn" };
+    });
+
+    const reg = createToolRegistry();
+    const wipe: CounterCtx = { value: 5 };
+    const counter: CounterCtx = { value: 0 };
+    reg.register(wipeTools, () => wipe);
+    reg.register(counterTools, () => counter);
+
+    const outcomes: Record<string, boolean> = {};
+    await runAgentLoop([{ role: "user", text: "go" }], reg, {
+      confirm: (name) => name !== "wipe.reset", // decline only the wipe
+      onTool: (name, _i, o) => {
+        outcomes[name] = o.ok;
+      },
+    });
+
+    expect(wipe.value).toBe(5); // NOT reset — gate declined
+    expect(counter.value).toBe(2); // non-dangerous ran
+    expect(outcomes["wipe.reset"]).toBe(false);
+    expect(outcomes["counter.add"]).toBe(true);
+  });
+
+  it("no confirm provided runs dangerous tools unguarded (back-compat)", async () => {
+    let turn = 0;
+    configureAgentStream(async () => {
+      turn += 1;
+      if (turn === 1) {
+        return { text: "", toolUses: [{ id: "t1", name: "wipe.reset", input: {} }] as ToolUse[], stopReason: "tool_use" };
+      }
+      return { text: "done", toolUses: [], stopReason: "end_turn" };
+    });
+    const reg = createToolRegistry();
+    const wipe: CounterCtx = { value: 9 };
+    reg.register(wipeTools, () => wipe);
+    await runAgentLoop([{ role: "user", text: "go" }], reg, {});
+    expect(wipe.value).toBe(0);
+  });
+});
+
+describe("requirePerm — defense-in-depth RBAC wrapper", () => {
+  type AdminCtx = { can: (p: string) => boolean; hits: string[] };
+  const base = defineTool<AdminCtx>({
+    name: "remove",
+    description: "Delete a member.",
+    parameters: obj({ "id!": str("member id") }),
+    dangerous: true,
+    run: (ctx, a) => {
+      ctx.hits.push(a.id as string);
+      return `removed ${a.id}`;
+    },
+  });
+
+  it("preserves name, parameters and the dangerous flag", () => {
+    const wrapped = requirePerm("members.manage", base);
+    expect(wrapped.name).toBe("remove");
+    expect(wrapped.dangerous).toBe(true);
+    expect(wrapped.parameters).toBe(base.parameters);
+  });
+
+  it("throws permission denied when can() is false (registry → ok:false)", async () => {
+    const reg = createToolRegistry();
+    const ctx: AdminCtx = { can: () => false, hits: [] };
+    reg.register(
+      defineToolCollection<AdminCtx>({ namespace: "um", tools: [requirePerm("members.manage", base)] }),
+      () => ctx,
+    );
+    expect(await reg.invoke("um.remove", { id: "u1" })).toEqual({
+      ok: false,
+      result: "permission denied: members.manage",
+    });
+    expect(ctx.hits).toEqual([]); // never ran
+  });
+
+  it("runs the underlying tool when can() is true", async () => {
+    const reg = createToolRegistry();
+    const ctx: AdminCtx = { can: (p) => p === "members.manage", hits: [] };
+    reg.register(
+      defineToolCollection<AdminCtx>({ namespace: "um", tools: [requirePerm("members.manage", base)] }),
+      () => ctx,
+    );
+    expect(await reg.invoke("um.remove", { id: "u2" })).toEqual({ ok: true, result: "removed u2" });
+    expect(ctx.hits).toEqual(["u2"]);
   });
 });

@@ -33,6 +33,17 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(__dirname, "../..");
 const SLICES_ROOT = path.join(REPO, "frontend", "slices");
 
+// Namespaced tool names declared in a slice's contract `provides.tools`. The
+// DSL keeps them as a flat array of string literals, so a light regex suffices
+// (same extraction the agent.md generator uses).
+function contractToolNames(sliceDir) {
+  const p = path.join(sliceDir, "slice.contract.ts");
+  if (!existsSync(p)) return [];
+  const m = readFileSync(p, "utf8").match(/\btools:\s*\[([^\]]*)\]/s);
+  if (!m) return [];
+  return [...m[1].matchAll(/["']([^"']+)["']/g)].map((x) => x[1]);
+}
+
 const slices = discoverSlices(SLICES_ROOT);
 const tableNames = new Map(); // name → owning slug
 const schemasSeen = new Set(); // schemaPath → first slice that audited it
@@ -87,6 +98,19 @@ for (const slice of slices) {
     for (const w of lintStyleAntipatterns(path.relative(REPO, file), body)) {
       warnings.push(`[${slice.folder}] ${w}`);
     }
+  }
+
+  // 2c. agentic surface — a slice that exports a defineToolCollection MUST
+  // declare the matching names in its contract `provides.tools` (the SSOT the
+  // agent.md generator + registry namespacing read). Catches "shipped a
+  // collection but forgot to declare/gate it".
+  const hasCollection = tsFiles.some(
+    (f) => path.basename(f) !== "slice.contract.ts" && /defineToolCollection\s*[<(]/.test(readFileSync(f, "utf8")),
+  );
+  if (hasCollection && contractToolNames(slice.dir).length === 0) {
+    errors.push(
+      `[${slice.folder}] exports a defineToolCollection but contract provides.tools is empty — declare the namespaced tool names`,
+    );
   }
 
   // 3. schema clash — co-located provider slices share one schema file; skip

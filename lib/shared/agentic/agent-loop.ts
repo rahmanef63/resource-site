@@ -22,6 +22,13 @@ export type AgentEvents = {
   onDelta?: (chunk: string) => void;
   /** A tool the model called, with the local execution outcome. */
   onTool?: (name: string, input: Record<string, unknown>, outcome: ToolOutcome) => void;
+  /**
+   * Confirmation gate for `dangerous` tools. Called BEFORE a tool the host
+   * flags dangerous runs; return false to decline — the model gets a
+   * `denied`-error tool_result and the action never executes. Omit to run
+   * dangerous tools unguarded (back-compat default).
+   */
+  confirm?: (name: string, input: Record<string, unknown>) => boolean | Promise<boolean>;
 };
 
 export async function runAgentLoop(
@@ -46,6 +53,15 @@ export async function runAgentLoop(
 
     const results = [];
     for (const tu of toolUses) {
+      if (ev.confirm && host.isDangerous?.(tu.name)) {
+        const ok = await ev.confirm(tu.name, tu.input);
+        if (!ok) {
+          const outcome: ToolOutcome = { ok: false, result: `denied: "${tu.name}" requires confirmation and was declined` };
+          ev.onTool?.(tu.name, tu.input, outcome);
+          results.push({ id: tu.id, content: outcome.result, isError: true });
+          continue;
+        }
+      }
       const outcome = await host.invoke(tu.name, tu.input);
       ev.onTool?.(tu.name, tu.input, outcome);
       results.push({ id: tu.id, content: outcome.result, isError: !outcome.ok });

@@ -26,12 +26,14 @@ export const platformAdminTools = defineToolCollection<PlatformAdminCtx>({
     },
     {
       name: "feature_flag.set",
+      dangerous: true,
       description: "Enable or disable a platform feature flag (server-gated).",
       parameters: obj({ "key!": str("flag key"), "value!": bool("enabled") }),
       run: (ctx, a) => ctx.setFeatureFlag(a.key as string, a.value as boolean),
     },
     {
       name: "tier.set",
+      dangerous: true,
       description: "Set a tenant's tier preset (server-gated: platform.tier.set).",
       parameters: obj({ "tenantId!": str("tenant id"), "tier!": str("tier preset slug") }),
       run: (ctx, a) => ctx.setTier(a.tenantId as string, a.tier as string),

@@ -278,8 +278,63 @@ broadcast-channel-sync), and pure tools (markdown).
 **Scorecard now:** 39 slices with tool collections (10 os + 9 admin + 20
 data/ui) + assistant host + 6 ai-infra consumers. Tier A / A* fully covered.
 
+### Wave 3e (2026-06-10) — safety seam + bridge audit + leftovers closed
+
+- **Audit gate** (`scripts/validation/audit-slice.mjs`): a slice that exports a
+  `defineToolCollection` (detected by usage regex across its ts files, NOT by
+  `lib/tools.ts` existence) MUST declare matching names in contract
+  `provides.tools`, else `audit:slices` fails. Catches "shipped a collection but
+  forgot to declare/gate it".
+- **`dangerous` flag + confirm gate** (shared kit): `Tool.dangerous?: boolean`
+  marks mutating/irreversible/privileged actions; `runAgentLoop`'s optional
+  `confirm(name,input)` event runs BEFORE a dangerous tool and can decline (the
+  model gets a `denied` error tool_result, the action never executes). Opt-in —
+  no confirm = unguarded, back-compat. Host exposes `isDangerous(name)`. 18
+  flagged tools across admin + destructive data slices (remove/refund/reset/
+  grant/revoke/tier.set/feature_flag.set/send_campaign/row.delete/reindex/…).
+- **`requirePerm(perm, tool)`** (`lib/shared/agentic/gated.ts`): closes the §3.1
+  question. Decision — RBAC is NOT enforced inside the slice tools (their ctx
+  methods forward to consumer server-gated bindings; that is the primary fence).
+  `requirePerm` is an OPTIONAL consumer-side wrapper for defense-in-depth: wrap a
+  tool with a `can(perm)`-bearing ctx and it throws `permission denied` before
+  `run` (registry → `ok:false`). Preserves `dangerous`. Tested. No `gated.ts`
+  coupling forced on slices.
+- **chat-fab dewire** (ai-router 0.4.0): `ChatFab` now drives the GLOBAL
+  registry via `runAgentLoop` when `isAgentStreamConfigured()`, else falls back
+  to `stubReply` (ships inert into consumer templates). Fixed a latent bug: the
+  leading cosmetic greeting (assistant) is stripped so the Anthropic call starts
+  with a `user` message.
+- **Live-bridge audit** (wave-3b `229c338c`, can't run without a key):
+  `app/api/agent-stream/route.ts` + `sse-client.ts` + `components/agent-bridge.tsx`
+  read end-to-end. `toAnthropic` translation is correct (user / assistant+tool_use
+  / tool_result→user, `is_error` mapped, empty-assistant skipped). Key-guard,
+  per-IP rate limit, 60-msg + 200k-char caps present. assistant `chat-panel`
+  starts from `[]` with a persona user-line, so it is NOT exposed to the
+  greeting-first bug. **Remaining risk:** a real round-trip has still never run.
+
+### Live acceptance — RUN THIS (needs a real key) ⚠ BLOCKED on `ANTHROPIC_API_KEY`
+
+Cannot be run by the agent (no key in env). Owner closeout:
+
+```bash
+ANTHROPIC_API_KEY=sk-ant-… npm run build && PORT=3137 npm start   # or `npm run dev`
+# then in the browser:
+#   /preview/slices/appshell    → chat: "open the app store, then list windows"
+#       expect two ⚙ lines: appshell.app.launch ✓, appshell.window.list ✓
+#   /preview/slices/image-editor → chat: "add a text layer saying hello"
+#       expect a hello text layer to appear on the canvas
+# Unset key → both pages fall back to the typing-stream demo (no 401 poison).
+```
+
+Record pass/fail here once run. The `toAnthropic` translation has unit tests
+only; this is the last unverified link.
+
 ### Next (in order)
 
-1. Tier-C `configure` tools as needed (optional by design).
-2. Host wiring examples for the adapter-ctx slices (each needs its consumer
-   binding before the agent can mutate anything).
+1. **Live acceptance run** (above) — highest remaining risk, owner-gated on key.
+2. Tier-C `configure` tools as needed (optional by design).
+3. Surface `dangerous` in `agent.md` (generator currently reads contract names
+   only; would need to correlate `tools.ts` flags) — nice-to-have.
+4. Host wiring examples for the adapter-ctx slices (each needs its consumer
+   binding before the agent can mutate anything); demonstrate `requirePerm` +
+   the `confirm` gate in one end-to-end example.

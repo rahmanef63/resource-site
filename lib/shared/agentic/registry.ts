@@ -27,6 +27,8 @@ type Entry = { tool: Tool<unknown>; getCtx: () => unknown; namespace: string };
 export interface ToolRegistry extends ToolHost {
   /** Register a slice's collection + a thunk that resolves its live context. */
   register<Ctx>(collection: ToolCollection<Ctx>, getCtx: () => Ctx): void;
+  /** Whether a fully-qualified tool is flagged `dangerous`. */
+  isDangerous(name: string): boolean;
   /** Fully-qualified names of every registered tool. */
   names(): string[];
   /** Number of registered tools. */
@@ -80,6 +82,10 @@ export function createToolRegistry(): ToolRegistry {
       } catch (e) {
         return { ok: false, result: e instanceof Error ? e.message : "tool failed" };
       }
+    },
+
+    isDangerous(name) {
+      return entries.get(name)?.tool.dangerous === true;
     },
 
     names() {

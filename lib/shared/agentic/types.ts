@@ -29,6 +29,13 @@ export type Tool<Ctx = unknown> = {
   name: string;
   description: string;
   parameters: JsonSchema;
+  /**
+   * Marks a mutating / irreversible action (delete, refund, reset, role change).
+   * Hosts MAY require a confirmation gate before invoking — see the optional
+   * `confirm` event on {@link runAgentLoop}. Not a trust boundary on its own:
+   * RBAC + secrets still live in the consumer-supplied ctx binding.
+   */
+  dangerous?: boolean;
   run: (ctx: Ctx, args: Record<string, unknown>) => string | Promise<string>;
 };
 
@@ -72,4 +79,6 @@ export interface ToolHost {
   anthropicTools(): AnthropicTool[];
   /** Run a (fully-qualified) tool by name against its bound context. */
   invoke(name: string, input: Record<string, unknown>): Promise<ToolOutcome>;
+  /** Whether a (fully-qualified) tool is flagged `dangerous`. Drives the loop's confirm gate. */
+  isDangerous?(name: string): boolean;
 }

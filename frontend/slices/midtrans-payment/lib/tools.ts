@@ -16,6 +16,7 @@ export const midtransPaymentTools = defineToolCollection<MidtransPaymentCtx>({
   tools: [
     {
       name: "create_invoice",
+      dangerous: true,
       description: "Create a Midtrans payment order (server-gated: payment.create). Amount in IDR.",
       parameters: obj({
         "amount!": num("amount in IDR"),
@@ -33,6 +34,7 @@ export const midtransPaymentTools = defineToolCollection<MidtransPaymentCtx>({
     },
     {
       name: "refund",
+      dangerous: true,
       description: "Refund an order (server-gated: payment.refund). Irreversible — confirm with the user first.",
       parameters: obj({ "orderId!": str("order id") }),
       run: (ctx, a) => ctx.refund(a.orderId as string),

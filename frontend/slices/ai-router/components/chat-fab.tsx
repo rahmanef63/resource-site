@@ -1,7 +1,14 @@
 "use client";
 
 // Floating chat button + popover panel.
-// Wires to api.features.ai.actions.callModel({ feature, prompt, tier }).
+//
+// Two backends, auto-selected at runtime:
+//   • When the shared agentic model seam is wired (`configureAgentStream`),
+//     the FAB drives the GLOBAL tool registry — every slice that called
+//     `useAgentTools` is callable through this one chat (one agent, many
+//     slices). No props needed.
+//   • Otherwise it answers with `stubReply` so the widget ships inert into
+//     consumer templates and never needs a key at build/prerender time.
 //
 // Usage in your app/layout.tsx:
 //   import { ChatFab } from "@/features/ai-router/components/chat-fab";
@@ -9,6 +16,12 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Bot, Send, X } from "lucide-react";
+import {
+  isAgentStreamConfigured,
+  runAgentLoop,
+  globalToolRegistry,
+  type AgentMsg,
+} from "@/shared/agentic";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -55,9 +68,21 @@ export function ChatFab({
     setPending(true);
 
     try {
-      // Replace with: const text = await convex.action(api.features.ai.actions.callModel, { feature, prompt, tier });
-      // Stub response below — wire your action when ready.
-      const text = await stubReply(prompt);
+      let text: string;
+      if (isAgentStreamConfigured()) {
+        // Anthropic requires the first message to be `user`; drop the leading
+        // cosmetic greeting (and any assistant msg before the first user turn).
+        const msgs: AgentMsg[] = [];
+        for (const m of messages) {
+          if (msgs.length === 0 && m.role !== "user") continue;
+          msgs.push({ role: m.role, text: m.content });
+        }
+        msgs.push({ role: "user", text: prompt });
+        const res = await runAgentLoop(msgs, globalToolRegistry(), {}, 6);
+        text = res.text || "(no response)";
+      } else {
+        text = await stubReply(prompt);
+      }
       setMessages((m) => [...m, { id: `a-${Date.now()}`, role: "assistant", content: text }]);
     } catch (err) {
       setMessages((m) => [

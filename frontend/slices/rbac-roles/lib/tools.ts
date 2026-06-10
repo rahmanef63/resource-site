@@ -40,12 +40,14 @@ export const rbacRolesTools = defineToolCollection<RbacRolesCtx>({
     },
     {
       name: "grant",
+      dangerous: true,
       description: "Grant a permission to a role (server-gated: roles.manage).",
       parameters: obj({ "roleSlug!": str("role slug"), "permission!": str("permission key") }),
       run: (ctx, a) => ctx.grant(a.roleSlug as string, a.permission as string),
     },
     {
       name: "revoke",
+      dangerous: true,
       description: "Revoke a permission from a role (server-gated: roles.manage).",
       parameters: obj({ "roleSlug!": str("role slug"), "permission!": str("permission key") }),
       run: (ctx, a) => ctx.revoke(a.roleSlug as string, a.permission as string),

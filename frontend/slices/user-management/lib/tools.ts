@@ -35,24 +35,28 @@ export const userManagementTools = defineToolCollection<UserManagementCtx>({
     },
     {
       name: "invite",
+      dangerous: true,
       description: "Invite a new member by email with a role (server-gated: members.invite).",
       parameters: obj({ "email!": str("invitee email"), "roleSlug!": str("role slug, e.g. admin/staff") }),
       run: (ctx, a) => ctx.invite({ email: a.email as string, roleSlug: a.roleSlug as string }),
     },
     {
       name: "set_role",
+      dangerous: true,
       description: "Change a member's role (server-gated: members.manage).",
       parameters: obj({ "userId!": str("member userId"), "roleSlug!": str("new role slug") }),
       run: (ctx, a) => ctx.setRole(a.userId as string, a.roleSlug as string),
     },
     {
       name: "disable",
+      dangerous: true,
       description: "Deactivate a member (status → inactive; server-gated: members.manage).",
       parameters: obj({ "userId!": str("member userId") }),
       run: (ctx, a) => ctx.setStatus(a.userId as string, "inactive"),
     },
     {
       name: "remove",
+      dangerous: true,
       description: "Remove a member entirely (server-gated: members.manage). Prefer disable unless removal is explicit.",
       parameters: obj({ "userId!": str("member userId") }),
       run: (ctx, a) => ctx.remove(a.userId as string),

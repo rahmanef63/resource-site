@@ -18,26 +18,30 @@ Waves landed on `main` — do not redo any of this:
 | `21ac35c0` wave-3c | 9 Tier-A* admin collections | Phase 2 ✅ (exceeded plan — see corrections) |
 | `4d3dd668` wave-3d | 20 Tier-A data/ui collections + motion-kit | Phase 3 ✅ |
 
-**Remaining = wave-3e only:**
+**Wave-3e LANDED (2026-06-10, commit see git log) — items 1-3 done, item 4 still owner-gated:**
 
-1. **Audit gate (§5 item 2)** — a ready, verified patch is parked OUTSIDE the tree at
-   `/home/rahman/projects/_agentic-audit-gate.patch` (`git apply` from repo root; tested
-   green against all collections on 2026-06-10). Clarification vs the §5 text: detect
-   collections via a `defineToolCollection` usage regex across the slice's ts files, NOT
-   by `lib/tools.ts` existence — some slices define collections elsewhere. The patch
-   already does this; prefer applying it over rewriting.
-2. **chat-fab dewire (§5 item 3)** — clarified: keep `stubReply` as the fallback when
-   `!isAgentStreamConfigured()`. The FAB ships into consumer templates and must stay
-   inert without the bridge. Route through `createAgenticChatSend(globalToolRegistry())`
-   only when the stream is configured.
-3. **`requirePerm` (§3.1)** — now optional defense-in-depth: wave-3c collections forward
-   to consumer-supplied server-gated ctx bindings instead of gating in the tool layer.
-   Either build `gated.ts` + tests as specced, or close the item in
-   `docs/agentic-readiness.md` with that rationale. Do not leave it ambiguous.
-4. **Live acceptance (§2.4) never ran against a real key.** Closeout step: set
-   `ANTHROPIC_API_KEY` locally, run the appshell + image-editor smoke prompts, record the
-   result in the readiness doc. The `toAnthropic` translation has unit tests only — a
-   live round-trip is the remaining risk.
+1. ✅ **Audit gate (§5 item 2)** — parked patch applied verbatim
+   (`scripts/validation/audit-slice.mjs`); a slice exporting a
+   `defineToolCollection` (usage regex) with empty contract `provides.tools`
+   now fails `audit:slices`. Patch file consumed; can be deleted.
+2. ✅ **chat-fab dewire (§5 item 3)** — ai-router `ChatFab` 0.4.0 routes the
+   GLOBAL registry through `runAgentLoop` when `isAgentStreamConfigured()`, else
+   `stubReply`. (Used the global registry directly, not `createAgenticChatSend`
+   from ai-chat — slice→slice import is forbidden; same `runAgentLoop` underneath.)
+   Fixed a latent greeting-first bug (strip leading assistant msg → Anthropic
+   needs first=user).
+3. ✅ **`requirePerm` (§3.1)** — RESOLVED both ways: shipped
+   `lib/shared/agentic/gated.ts` `requirePerm(perm, tool)` as an OPTIONAL
+   consumer-side defense-in-depth wrapper (preserves `dangerous`, tested) AND
+   documented in `agentic-readiness.md` that the primary gate stays in the
+   binding. Plus a new safety seam not in the original plan: `Tool.dangerous` +
+   `runAgentLoop` `confirm` gate + `host.isDangerous`, with 18 destructive tools
+   flagged.
+4. ⏳ **Live acceptance (§2.4) — STILL NOT RUN (no key in agent env).** Bridge
+   audited end-to-end instead: `toAnthropic` translation verified correct,
+   guards present, chat-panel not exposed to greeting-first. The exact run
+   command is in `agentic-readiness.md` → "Live acceptance — RUN THIS". This is
+   the only open item; owner must run it with a real `ANTHROPIC_API_KEY`.
 
 **Plan corrections (lines below are stale):**
 

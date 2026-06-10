@@ -37,6 +37,7 @@ export const resendNewsletterTools = defineToolCollection<ResendNewsletterCtx>({
     },
     {
       name: "send_campaign",
+      dangerous: true,
       description: "Send a broadcast to all subscribers (server-gated: newsletter.send-broadcast). Outward-facing — confirm with the user first.",
       parameters: obj({ "subject!": str("email subject"), "body!": str("email body (markdown or html)") }),
       run: (ctx, a) => ctx.sendBroadcast(a.subject as string, a.body as string),

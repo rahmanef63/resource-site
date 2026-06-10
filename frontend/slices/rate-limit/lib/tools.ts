@@ -24,6 +24,7 @@ export const rateLimitTools = defineToolCollection<RateLimitCtx>({
     },
     {
       name: "reset",
+      dangerous: true,
       description: "Reset the limiter for a key (admin-gated; affects the live limiter).",
       parameters: obj({ "key!": str("rate-limit key") }),
       run: (ctx, a) => ctx.reset(a.key as string),

@@ -49,6 +49,7 @@ export const commentsTools = defineToolCollection<CommentsToolsCtx>({
     },
     {
       name: "remove",
+      dangerous: true,
       description: "Delete a comment.",
       parameters: obj({ "commentId!": str("comment id") }),
       run: async (ctx, a) => {

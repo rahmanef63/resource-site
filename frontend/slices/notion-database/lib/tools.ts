@@ -39,6 +39,7 @@ export const notionDatabaseTools = defineToolCollection<NotionDatabaseCtx>({
     },
     {
       name: "row.delete",
+      dangerous: true,
       description: "Delete a row.",
       parameters: obj({ "rowId!": str("row id") }),
       run: (ctx, a) => ctx.deleteRow(a.rowId as string),

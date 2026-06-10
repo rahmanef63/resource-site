@@ -21,6 +21,7 @@ export const filesTools = defineToolCollection<FilesToolsCtx>({
     },
     {
       name: "remove",
+      dangerous: true,
       description: "Delete a stored file by ref (server-checked). Irreversible — confirm with the user first.",
       parameters: obj({ "ref!": str("file ref string") }),
       run: (ctx, a) => ctx.remove(a.ref as string),

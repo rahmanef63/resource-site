@@ -29,6 +29,7 @@ export const vectorSearchTools = defineToolCollection<VectorSearchCtx>({
     },
     {
       name: "reindex",
+      dangerous: true,
       description: "Rebuild the whole index (server-gated: search.reindex; expensive).",
       parameters: noArgs,
       run: (ctx) => ctx.reindex(),
