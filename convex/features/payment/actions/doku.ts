@@ -1,28 +1,22 @@
 "use node";
 
 /**
- * DOKU payment actions — three entry points matching the official MCP tools:
+ * DOKU payment actions — createCheckoutPayment (hosted page),
+ * createDirectPayment (single channel, returns instructions),
+ * getPaymentStatus (poll; webhook is the authoritative path).
  *
- *   createCheckoutPayment — hosted page (all enabled channels)
- *   createDirectPayment   — single-channel call, returns instructions
- *   getPaymentStatus      — poll for status (webhook is primary path)
- *
- * Each call:
- *   1. Requires an authenticated user (anonymous payments not supported).
- *   2. Validates amount > 0.
- *   3. Inserts a paymentOrders row (status="pending") before hitting DOKU.
- *   4. On error, marks the order failed; on success, patches the row with
- *      the channel-specific payload.
- *
- * Webhook is the authoritative status update path; getPaymentStatus is a
- * convenience for UI polling / order detail pages.
+ * Create actions work for users AND guests (userId optional; guest
+ * contact stored as `buyer`), are KEY-GUARDED (return {ok:false,notice}
+ * when DOKU creds are unset — demo/fresh clones never crash), insert a
+ * pending paymentOrders row before the DOKU call, and mark it failed
+ * on API errors.
  */
 
 import { action } from "../../../_generated/server";
 import { internal } from "../../../_generated/api";
 import { v } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
-import { dokuFetch, DokuApiError } from "../doku/client";
+import { CREDS_NOTICE, credsMissing, dokuFetch, DokuApiError } from "../doku/client";
 import type {
   DokuChannel,
   DokuCheckoutRequest,
@@ -40,6 +34,7 @@ import {
   routeForChannel,
 } from "./doku_helpers";
 
+
 // ─── Checkout (hosted) ───────────────────────────────────────────────────
 
 export const createCheckoutPayment = action({
@@ -55,12 +50,13 @@ export const createCheckoutPayment = action({
     items: itemsArg,
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) throw new Error("Not authenticated");
+    if (credsMissing()) return { ok: false as const, notice: CREDS_NOTICE };
     if (args.amount <= 0) throw new Error("Amount must be > 0");
+    const userId = (await getAuthUserId(ctx)) ?? undefined;
 
-    await ctx.runMutation(internal.features.payment.mutations.recordDokuPending, {
+    await ctx.runMutation(internal.features.payment.mutation.recordDokuPending, {
       userId,
+      buyer: userId ? undefined : args.customer,
       orderId: args.orderId,
       amount: args.amount,
     });
@@ -88,20 +84,21 @@ export const createCheckoutPayment = action({
         ? Date.parse(res.payment.expired_date)
         : undefined;
 
-      await ctx.runMutation(internal.features.payment.mutations.attachDokuCheckout, {
+      await ctx.runMutation(internal.features.payment.mutation.attachDokuCheckout, {
         orderId: args.orderId,
         checkoutUrl: res.payment.url,
         expiresAt,
       });
 
       return {
+        ok: true as const,
         checkoutUrl: res.payment.url,
         token: res.payment.token,
         expiresAt,
       };
     } catch (err) {
       await ctx.runMutation(
-        internal.features.payment.mutations.markFailedByWebhook,
+        internal.features.payment.mutation.markFailedByWebhook,
         { orderId: args.orderId, status: "failed" },
       );
       if (err instanceof DokuApiError) {
@@ -124,12 +121,13 @@ export const createDirectPayment = action({
     expiryMinutes: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) throw new Error("Not authenticated");
+    if (credsMissing()) return { ok: false as const, notice: CREDS_NOTICE };
     if (args.amount <= 0) throw new Error("Amount must be > 0");
+    const userId = (await getAuthUserId(ctx)) ?? undefined;
 
-    await ctx.runMutation(internal.features.payment.mutations.recordDokuPending, {
+    await ctx.runMutation(internal.features.payment.mutation.recordDokuPending, {
       userId,
+      buyer: userId ? undefined : args.customer,
       orderId: args.orderId,
       amount: args.amount,
       paymentChannel: args.channel,
@@ -156,16 +154,16 @@ export const createDirectPayment = action({
       const instructions = extractInstructions(res);
       const expiresAt = res.expired_date ? Date.parse(res.expired_date) : undefined;
 
-      await ctx.runMutation(internal.features.payment.mutations.attachDokuDirect, {
+      await ctx.runMutation(internal.features.payment.mutation.attachDokuDirect, {
         orderId: args.orderId,
         paymentInstructions: instructions,
         expiresAt,
       });
 
-      return { instructions, expiresAt };
+      return { ok: true as const, instructions, expiresAt };
     } catch (err) {
       await ctx.runMutation(
-        internal.features.payment.mutations.markFailedByWebhook,
+        internal.features.payment.mutation.markFailedByWebhook,
         { orderId: args.orderId, status: "failed" },
       );
       if (err instanceof DokuApiError) {

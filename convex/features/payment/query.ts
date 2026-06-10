@@ -29,18 +29,22 @@ export const get = query({
   },
 });
 
-/** Public reactive accessor consumed by `<DokuStatusBadge>`. Owner-only —
- *  anon callers get null. */
+/** Public reactive accessor consumed by `<DokuStatusBadge>` / checkout
+ *  status pages. Owned orders stay owner-only; GUEST orders (no userId)
+ *  are readable by anyone holding the orderId — the random, unguessable
+ *  orderId acts as the capability token. */
 export const getOrderByOrderId = query({
   args: { orderId: v.string() },
   handler: async (ctx, { orderId }) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) return null;
     const order = await ctx.db
       .query("paymentOrders")
       .withIndex("by_orderId", (q) => q.eq("orderId", orderId))
       .unique();
-    if (!order || order.userId !== userId) return null;
+    if (!order) return null;
+    if (order.userId) {
+      const userId = await getAuthUserId(ctx);
+      if (order.userId !== userId) return null;
+    }
     return {
       orderId: order.orderId,
       status: order.status,

@@ -43,6 +43,7 @@ export const PREVIEW_REGISTRY: Record<string, () => Promise<{ default: SlicePrev
   "rbac-roles": () => import("@/features/rbac-roles/preview"),
   "selection": () => import("@/features/selection/preview"),
   "settings-page": () => import("@/features/settings-page/preview"),
+  "storefront-checkout": () => import("@/features/storefront-checkout/preview"),
   "testimonials-grid": () => import("@/features/testimonials-grid/preview"),
   "theme-presets": () => import("@/features/theme-presets/preview"),
   "user-management": () => import("@/features/user-management/preview"),

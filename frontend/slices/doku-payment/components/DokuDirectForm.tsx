@@ -4,7 +4,12 @@
  * Channel picker + minimal form for DOKU Direct.
  *
  * Convex-agnostic: caller passes `onSubmit` (typically wired to
- * `useAction(api.features.payment.actions.doku.createDirectPayment)`).
+ * `useAction(api.features.payment.actions.doku.createDirectPayment)` or a
+ * server-side place-order action that creates the orderId itself).
+ *
+ * `orderId` is OPTIONAL — server-generated-orderId flows (guest checkout)
+ * omit it; the submit handler then returns the generated id via
+ * `DokuDirectResult.orderId`.
  */
 
 import * as React from "react";
@@ -12,30 +17,46 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { DOKU_CHANNELS, GROUP_LABELS, type ChannelGroup } from "../lib/channels";
 import { formatIDR } from "../lib/format";
 import type { PaymentInstructions } from "./DokuPaymentInstructions";
 
 export interface DokuDirectInput {
-  orderId: string;
+  orderId?: string;
   amount: number;
   channel: string;
   customer: { name: string; email: string; phone?: string };
 }
 
 export interface DokuDirectResult {
+  /** Present when the submit handler generated the order id server-side. */
+  orderId?: string;
   instructions: PaymentInstructions;
   expiresAt?: number;
 }
 
 interface DokuDirectFormProps {
   amount: number;
-  orderId: string;
+  orderId?: string;
   defaultCustomer?: { name?: string; email?: string; phone?: string };
   allowedChannels?: string[];
   /** Pass `useAction(api.features.payment.actions.doku.createDirectPayment)`. */
   onSubmit?: (input: DokuDirectInput) => Promise<DokuDirectResult>;
-  onSuccess?: (result: { channel: string; instructions: PaymentInstructions; expiresAt?: number }) => void;
+  onSuccess?: (result: {
+    orderId?: string;
+    channel: string;
+    instructions: PaymentInstructions;
+    expiresAt?: number;
+  }) => void;
 }
 
 export function DokuDirectForm({
@@ -84,7 +105,12 @@ export function DokuDirectForm({
         channel,
         customer: { name, email, phone: phone || undefined },
       });
-      onSuccess?.({ channel, instructions: res.instructions, expiresAt: res.expiresAt });
+      onSuccess?.({
+        orderId: res.orderId ?? orderId,
+        channel,
+        instructions: res.instructions,
+        expiresAt: res.expiresAt,
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Gagal membuat pembayaran");
     } finally {
@@ -96,7 +122,7 @@ export function DokuDirectForm({
     <Card className="flex flex-col gap-4 p-4">
       <header className="flex items-baseline justify-between">
         <div>
-          <div className="text-sm text-muted-foreground">Order {orderId}</div>
+          {orderId && <div className="text-sm text-muted-foreground">Order {orderId}</div>}
           <div className="text-2xl font-semibold">{formatIDR(amount)}</div>
         </div>
       </header>
@@ -119,24 +145,25 @@ export function DokuDirectForm({
 
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="doku-channel">Metode pembayaran</Label>
-          <select
-            id="doku-channel"
-            value={channel}
-            onChange={(e) => setChannel(e.target.value)}
-            className="rounded-md border border-input bg-background px-3 py-2 text-sm"
-          >
-            {(Object.keys(channels) as ChannelGroup[]).map((g) =>
-              channels[g].length > 0 ? (
-                <optgroup key={g} label={GROUP_LABELS[g]}>
-                  {channels[g].map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.label}
-                    </option>
-                  ))}
-                </optgroup>
-              ) : null,
-            )}
-          </select>
+          <Select value={channel} onValueChange={setChannel}>
+            <SelectTrigger id="doku-channel" className="w-full">
+              <SelectValue placeholder="Pilih metode" />
+            </SelectTrigger>
+            <SelectContent>
+              {(Object.keys(channels) as ChannelGroup[]).map((g) =>
+                channels[g].length > 0 ? (
+                  <SelectGroup key={g}>
+                    <SelectLabel>{GROUP_LABELS[g]}</SelectLabel>
+                    {channels[g].map((c) => (
+                      <SelectItem key={c.id} value={c.id}>
+                        {c.label}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                ) : null,
+              )}
+            </SelectContent>
+          </Select>
         </div>
 
         <Button type="submit" disabled={loading}>

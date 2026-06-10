@@ -22,6 +22,16 @@ export interface DokuCredentials {
   isProduction: boolean;
 }
 
+/** Consumer-facing notice returned by key-guarded actions when creds are unset. */
+export const CREDS_NOTICE =
+  "Pembayaran online belum aktif di situs ini (kredensial DOKU belum " +
+  "dipasang). Set DOKU_CLIENT_ID + DOKU_SECRET_KEY via `npx convex env set`.";
+
+/** True when DOKU env creds are absent — actions return {ok:false} instead of throwing. */
+export function credsMissing(): boolean {
+  return !process.env.DOKU_CLIENT_ID || !process.env.DOKU_SECRET_KEY;
+}
+
 export function readCredentials(): DokuCredentials {
   const clientId = process.env.DOKU_CLIENT_ID;
   const secretKey = process.env.DOKU_SECRET_KEY;

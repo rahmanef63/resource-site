@@ -1260,6 +1260,29 @@
     ]
   },
   {
+    "slug": "storefront-checkout",
+    "title": "Storefront Checkout — guest cart + checkout composition",
+    "category": "content",
+    "previews": [
+      {
+        "component": "CartWidget",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "seeded",
+            "values": [
+              "empty",
+              "filled"
+            ],
+            "default": "filled",
+            "description": "Cart contents — empty state vs two seeded demo items."
+          }
+        ],
+        "seed": "Wrapped in CartProvider (isolated storageKey). Click the cart trigger to open the sheet — qty steppers, remove, subtotal, checkout CTA."
+      }
+    ]
+  },
+  {
     "slug": "testimonials-grid",
     "title": "Testimonials Grid",
     "category": "ui",

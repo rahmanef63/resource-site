@@ -5,7 +5,7 @@
  * type-checking level. Consumer feeds `status` from a Convex reactive
  * query, and optionally `onResync` from an action.
  *
- *   const order = useQuery(api.features.payment.queries.getOrderByOrderId, { orderId });
+ *   const order = useQuery(api.features.payment.query.getOrderByOrderId, { orderId });
  *   const sync = useAction(api.features.payment.actions.doku.getPaymentStatus);
  *   <DokuStatusBadge
  *     status={order?.status ?? "pending"}

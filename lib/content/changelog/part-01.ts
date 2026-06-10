@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "ECOM-W1",
+    "version": "slices@storefront-checkout-0.1.0",
+    "date": 1781049600000,
+    "kind": "feature",
+    "title": "E-commerce wave 1 — storefront-checkout slice + doku-payment 0.2.0 guest checkout, proven on wirausaha-os",
+    "body": "First REAL consumption of the payment base — and it found real bugs. New storefront-checkout slice (0.1.0): guest cart (CartProvider + localStorage), CartWidget header sheet with qty steppers, CheckoutSummary — props-driven R3, host re-prices server-side (client subtotal is display-only). doku-payment 0.2.0: paymentOrders.userId now optional with guest buyer contact, create actions key-guarded ({ok:false,notice} when DOKU creds unset — fresh clones never crash), status query guest-readable via unguessable orderId, DokuDirectForm's raw <select> replaced with themed shadcn Select (same white-dropdown class bug onboarding-wizard fixed) and supports server-generated orderIds. Fixed broken _generated paths that proved the base was never consumed: internal.features.payment.mutations.* → .mutation.* (file is mutation.ts) in doku/midtrans actions + webhook handlers, api.features.payment.queries.* → .query.*. Payment feature README rewritten to match the ACTUAL shared-table schema (the namespace-split tables it described were never applied). End-to-end host wiring (catalog → cart → server-priced placeOrder → DOKU Direct instructions → webhook) shipped live on wirausaha-os as the reference implementation.",
+    "groups": [
+      {
+        "heading": "Consumption-found fixes",
+        "bullets": [
+          "internal.features.payment.mutations.* → .mutation.* (6 webhook refs + 2 actions) — base never compiled in a consumer before",
+          "doku config.ts category 'integrations' invalid in fleet defineFeature unions — consumers adjust (wirausaha used 'payment')",
+          "midtrans-client npm missing in doku-only consumers breaks convex bundling — delete actions/midtrans.ts or install it",
+          "payment README claimed namespace-split tables (doku_orders/midtrans_orders) that were never in _schema.ts"
+        ]
+      }
+    ]
+  },
+  {
     "id": "HARDEN-W5",
     "version": "site@behavioral-tests",
     "date": 1780790400000,

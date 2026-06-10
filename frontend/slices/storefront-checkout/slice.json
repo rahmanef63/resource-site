@@ -1,0 +1,44 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "storefront-checkout",
+  "version": "0.1.0",
+  "category": "content",
+  "kind": "ui",
+  "title": "Storefront Checkout — guest cart + checkout composition",
+  "description": "Guest-friendly shopping cart for catalog storefronts: CartProvider context with localStorage persistence (survives reload, no login needed), CartWidget header button with count badge + slide-over sheet (qty steppers, subtotal, checkout CTA), and CheckoutSummary order panel. Props-driven R3 — zero Convex imports; the host resolves numeric prices from its own catalog before add() and MUST re-price server-side at checkout (client subtotal is display-only). Pairs with doku-payment or midtrans-payment for the actual payment step; see HOST-SETUP.md for the full catalog → cart → place-order → instructions flow proven on wirausaha-os.",
+  "namespace": "@/features/storefront-checkout",
+  "registers": [],
+  "audit": [],
+  "frontend": {
+    "slicePath": "frontend/slices/storefront-checkout",
+    "configExport": ""
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": ["badge", "button", "card", "separator", "sheet"],
+    "env": [],
+    "peers": [
+      {
+        "slug": "doku-payment",
+        "range": "^0.2",
+        "optional": true,
+        "reason": "Payment step — checkout page composes DokuDirectForm + DokuPaymentInstructions (or swap midtrans-payment)."
+      }
+    ]
+  },
+  "previews": [
+    {
+      "component": "CartWidget",
+      "kind": "variants",
+      "axes": [
+        {
+          "prop": "seeded",
+          "values": ["empty", "filled"],
+          "default": "filled",
+          "description": "Cart contents — empty state vs two seeded demo items."
+        }
+      ],
+      "seed": "Wrapped in CartProvider (isolated storageKey). Click the cart trigger to open the sheet — qty steppers, remove, subtotal, checkout CTA."
+    }
+  ]
+}

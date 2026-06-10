@@ -70,7 +70,7 @@ export const midtransWebhook = httpAction(async (ctx, req) => {
   };
   const status = statusMap[body.transaction_status] ?? "pending";
 
-  await ctx.runMutation(internal.features.payment.mutations.recordWebhookEvent, {
+  await ctx.runMutation(internal.features.payment.mutation.recordWebhookEvent, {
     provider: "midtrans",
     eventType: body.transaction_status,
     requestId: body.transaction_id,
@@ -78,12 +78,12 @@ export const midtransWebhook = httpAction(async (ctx, req) => {
   });
 
   if (status === "paid") {
-    await ctx.runMutation(internal.features.payment.mutations.markPaidByWebhook, {
+    await ctx.runMutation(internal.features.payment.mutation.markPaidByWebhook, {
       orderId: body.order_id,
       providerTransactionId: body.transaction_id,
     });
   } else if (status === "failed" || status === "expired") {
-    await ctx.runMutation(internal.features.payment.mutations.markFailedByWebhook, {
+    await ctx.runMutation(internal.features.payment.mutation.markFailedByWebhook, {
       orderId: body.order_id,
       status,
     });
@@ -142,7 +142,7 @@ export const dokuWebhook = httpAction(async (ctx, req) => {
   }
 
   // Insert (or short-circuit if duplicate request_id).
-  await ctx.runMutation(internal.features.payment.mutations.recordWebhookEvent, {
+  await ctx.runMutation(internal.features.payment.mutation.recordWebhookEvent, {
     provider: "doku",
     eventType: body.transaction?.status ?? "UNKNOWN",
     requestId: requestId || body.request_id,
@@ -161,12 +161,12 @@ export const dokuWebhook = httpAction(async (ctx, req) => {
   if (!orderId) return new Response("Missing order.invoice_number", { status: 400 });
 
   if (next === "paid") {
-    await ctx.runMutation(internal.features.payment.mutations.markPaidByWebhook, {
+    await ctx.runMutation(internal.features.payment.mutation.markPaidByWebhook, {
       orderId,
       providerTransactionId: body.transaction?.original_request_id ?? requestId,
     });
   } else if (next === "failed" || next === "expired") {
-    await ctx.runMutation(internal.features.payment.mutations.markFailedByWebhook, {
+    await ctx.runMutation(internal.features.payment.mutation.markFailedByWebhook, {
       orderId,
       status: next,
     });

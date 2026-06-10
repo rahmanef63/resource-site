@@ -35,6 +35,24 @@ convex/features/payment/                         (shared with midtrans)
     └── types.ts                    ★ DOKU request/response shapes
 ```
 
+## 0.2.0 — guest checkout + key-guard (2026-06-10)
+
+- **Guest checkout**: `paymentOrders.userId` is optional; signed-out buyers'
+  contact is stored as `buyer`. `getOrderByOrderId` reads guest orders by
+  the unguessable orderId (capability token); owned orders stay owner-only.
+- **Key-guarded actions**: without `DOKU_CLIENT_ID`/`DOKU_SECRET_KEY` the
+  create actions return `{ ok: false, notice }` instead of throwing — demo
+  sites and fresh clones never crash. Success returns `{ ok: true, … }`.
+- **DokuDirectForm**: themed shadcn `Select` channel picker (raw `<select>`
+  inherited unreadable option colors on some platforms); `orderId` prop is
+  now optional for server-generated-orderId flows — the submit handler can
+  return the generated id via `DokuDirectResult.orderId`.
+- **DOKU-only consumers**: delete `convex/features/payment/actions/midtrans.ts`
+  after copying (it imports the `midtrans-client` npm package — Convex
+  bundling fails without it) or install `midtrans-client`.
+- Pair with the `storefront-checkout` slice for the cart + checkout-page
+  composition (reference host: template-wirausaha-os).
+
 ## Convex wiring (slice is props-driven)
 
 The slice components don't import `convex/react` so the slice type-checks
@@ -56,7 +74,7 @@ export default function Page() {
   const checkout = useAction(api.features.payment.actions.doku.createCheckoutPayment);
   const direct = useAction(api.features.payment.actions.doku.createDirectPayment);
   const sync = useAction(api.features.payment.actions.doku.getPaymentStatus);
-  const order = useQuery(api.features.payment.queries.getOrderByOrderId, { orderId });
+  const order = useQuery(api.features.payment.query.getOrderByOrderId, { orderId });
 
   return (
     <DokuCheckout amount={amount} orderId={orderId} customer={c} onCheckout={checkout} />
@@ -144,7 +162,7 @@ yakin? Bayar via halaman DOKU" fallback that calls Checkout.
 
 Three layers, pick what fits:
 
-1. **Reactive query** — `useQuery(api.features.payment.queries.getOrderByOrderId, { orderId })` returns live status; rerenders when webhook fires.
+1. **Reactive query** — `useQuery(api.features.payment.query.getOrderByOrderId, { orderId })` returns live status; rerenders when webhook fires.
 2. **Manual sync** — `useAction(api.features.payment.actions.doku.getPaymentStatus)` polls DOKU directly. Use as a "Cek ulang" button when the webhook is delayed.
 3. **Backend events** — read `paymentWebhookEvents` to debug or build an audit page.
 

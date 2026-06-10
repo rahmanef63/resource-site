@@ -38,7 +38,7 @@ export const createTransaction = action({
       customer_details: customer,
     });
 
-    await ctx.runMutation(internal.features.payment.mutations.recordPending, {
+    await ctx.runMutation(internal.features.payment.mutation.recordPending, {
       userId,
       orderId,
       amount,

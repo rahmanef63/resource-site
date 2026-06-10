@@ -7,7 +7,17 @@ import { v } from "convex/values";
 
 export const paymentTables = {
   paymentOrders: defineTable({
-    userId: v.id("users"),
+    // Optional → guest checkout supported. Guest orders are readable by
+    // anyone holding the (unguessable) orderId; owned orders stay owner-only.
+    userId: v.optional(v.id("users")),
+    // Guest buyer contact for orders without a userId.
+    buyer: v.optional(
+      v.object({
+        name: v.string(),
+        email: v.string(),
+        phone: v.optional(v.string()),
+      }),
+    ),
     orderId: v.string(),
     amount: v.number(),
     currency: v.string(),

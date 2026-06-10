@@ -54,7 +54,15 @@ export const recordWebhookEvent = internalMutation({
 
 export const recordDokuPending = internalMutation({
   args: {
-    userId: v.id("users"),
+    // Optional — guest checkout has no auth user; buyer carries the contact.
+    userId: v.optional(v.id("users")),
+    buyer: v.optional(
+      v.object({
+        name: v.string(),
+        email: v.string(),
+        phone: v.optional(v.string()),
+      }),
+    ),
     orderId: v.string(),
     amount: v.number(),
     paymentChannel: v.optional(v.string()),
@@ -74,6 +82,7 @@ export const recordDokuPending = internalMutation({
     }
     return ctx.db.insert("paymentOrders", {
       userId: args.userId,
+      buyer: args.buyer,
       orderId: args.orderId,
       amount: args.amount,
       currency: "IDR",
