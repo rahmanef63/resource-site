@@ -7,6 +7,55 @@ central host), `a4ec99a` (os-vps sync wave) **plus** uncommitted wave-3a WIP in 
 
 ---
 
+## ADDENDUM 2026-06-10 (evening) — status + handoff. READ THIS FIRST.
+
+Waves landed on `main` — do not redo any of this:
+
+| Commit | Scope | Plan phase |
+|---|---|---|
+| `14551cd7` wave-3a | global host + `useAgentTools` wiring + G5 agent.md `## Tools (agentic surface)` generator | P0 + Phase 4 item 1 ✅ |
+| `229c338c` wave-3b | live model bridge: `/api/agent-stream` + `sse-client` + `AgentBridge` in `app/preview/layout.tsx` + tests | Phase 1 ✅ |
+| `21ac35c0` wave-3c | 9 Tier-A* admin collections | Phase 2 ✅ (exceeded plan — see corrections) |
+| `4d3dd668` wave-3d | 20 Tier-A data/ui collections + motion-kit | Phase 3 ✅ |
+
+**Remaining = wave-3e only:**
+
+1. **Audit gate (§5 item 2)** — a ready, verified patch is parked OUTSIDE the tree at
+   `/home/rahman/projects/_agentic-audit-gate.patch` (`git apply` from repo root; tested
+   green against all collections on 2026-06-10). Clarification vs the §5 text: detect
+   collections via a `defineToolCollection` usage regex across the slice's ts files, NOT
+   by `lib/tools.ts` existence — some slices define collections elsewhere. The patch
+   already does this; prefer applying it over rewriting.
+2. **chat-fab dewire (§5 item 3)** — clarified: keep `stubReply` as the fallback when
+   `!isAgentStreamConfigured()`. The FAB ships into consumer templates and must stay
+   inert without the bridge. Route through `createAgenticChatSend(globalToolRegistry())`
+   only when the stream is configured.
+3. **`requirePerm` (§3.1)** — now optional defense-in-depth: wave-3c collections forward
+   to consumer-supplied server-gated ctx bindings instead of gating in the tool layer.
+   Either build `gated.ts` + tests as specced, or close the item in
+   `docs/agentic-readiness.md` with that rationale. Do not leave it ambiguous.
+4. **Live acceptance (§2.4) never ran against a real key.** Closeout step: set
+   `ANTHROPIC_API_KEY` locally, run the appshell + image-editor smoke prompts, record the
+   result in the readiness doc. The `toAnthropic` translation has unit tests only — a
+   live round-trip is the remaining risk.
+
+**Plan corrections (lines below are stale):**
+
+- §0 scorecard "10/66 slices have collections" → 39/68 after 3c+3d.
+- §3.2 "skip doku/midtrans/platform-admin/event-tracking" → superseded: wave-3c shipped
+  them safely (tools only forward to server-gated bindings; payment secrets never reach
+  the tool layer; catalog previews use mocks). Keep that posture for any new tool.
+
+**Operational notes:**
+
+- Push can print "Connection to github.com closed by remote host" with exit 0 while the
+  commit did NOT land. After every push: `git fetch && git rev-parse origin/main` and
+  compare. Retry with `--no-verify` only when gates already passed for that exact commit.
+- Single writer from now on: the rahmanef.com session withdrew from this tree
+  (2026-06-10). This repo is yours; coordinate via this doc + `agentic-readiness.md`.
+
+---
+
 ## 0. State snapshot (what is DONE — do not redo)
 
 | Layer | Status |
