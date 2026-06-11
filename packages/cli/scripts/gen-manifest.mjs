@@ -99,6 +99,23 @@ const features = loadFeatures().filter((f) => !ALIASES[f.slug]).map((f) => {
   };
 });
 
+// Version SSOT = frontend/slices/<slug>/slice.json (audit:slices gates the
+// trio to it). The catalog (slices.ts) version is display-only and lags —
+// prefer the slice.json value so the distributed manifest never ships stale.
+function sliceJsonVersion(slug) {
+  for (const base of ["frontend/slices", "template-base/frontend/slices"]) {
+    const p = path.resolve(__dirname, `../../../${base}/${slug}/slice.json`);
+    if (existsSync(p)) {
+      try {
+        return JSON.parse(readFileSync(p, "utf8")).version ?? null;
+      } catch {
+        return null;
+      }
+    }
+  }
+  return null;
+}
+
 const slices = loadSlices().filter((s) => !ALIASES[s.slug]).map((s) => {
   // Derive `kind` if not explicit. backend = has convex, no slicePath bits;
   // ui = slicePath present, convexPaths empty; full = both.
@@ -110,7 +127,7 @@ const slices = loadSlices().filter((s) => !ALIASES[s.slug]).map((s) => {
     title: s.title,
     category: s.category,
     kind: s.kind ?? inferred,
-    version: s.version,
+    version: sliceJsonVersion(s.slug) ?? s.version,
     description: s.description,
     source: s.source ?? "",
     slicePath: s.slicePath,

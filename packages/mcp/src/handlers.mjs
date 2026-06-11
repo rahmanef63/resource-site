@@ -4,9 +4,27 @@ import { findEntry, getManifest, getSkills, searchAll, getWorkflow, WORKFLOW_KIN
 import { listLineageResources, readLineageResource, LINEAGE_URI_PREFIX } from "./resources/lineage.mjs";
 import { TOOLS } from "./tools-definitions.mjs";
 import {
-  ok, text, errorResp, resourceJson, resourceMarkdown, resourceError,
+  ok, text, errorResp, notFound, resourceJson, resourceMarkdown, resourceError,
   composeInit, composeAdd, composeApp, auditSlices,
 } from "./response-builders.mjs";
+
+// Cheap "did you mean" — substring/prefix overlap against every known slug.
+// Not levenshtein; good enough to catch the typo'd-or-renamed-slug case.
+function nearestSlugs(slug, candidates, cap = 3) {
+  const q = String(slug ?? "").toLowerCase();
+  if (q.length < 3) return [];
+  return candidates
+    .filter((c) => c.includes(q) || q.includes(c) || c.slice(0, 4) === q.slice(0, 4))
+    .slice(0, cap);
+}
+
+function allSlugs() {
+  const m = getManifest();
+  return [
+    ...(m.layouts ?? []), ...(m.features ?? []), ...(m.recipes ?? []), ...(m.slices ?? []),
+    ...(getSkills().skills ?? []),
+  ].map((e) => e.slug);
+}
 
 function listTemplates({ tag } = {}) {
   const m = getManifest();
@@ -54,33 +72,49 @@ function listSkills({ category } = {}) {
     .map(({ slug, title, category: c, description, source, path }) => ({ slug, title, category: c, description, source, path }));
 }
 
-function getOne(slug) {
-  const found = findEntry(slug);
-  if (!found) return { error: `Not found: ${slug}` };
-  return found;
-}
 
 export const handleListTools = async () => ({ tools: TOOLS });
 
 export const handleCallTool = async (req) => {
   const { name, arguments: args = {} } = req.params;
-  switch (name) {
-    case "rr_list_templates": return ok(listTemplates(args));
-    case "rr_list_features":  return ok(listFeatures(args));
-    case "rr_list_recipes":   return ok(listRecipes());
-    case "rr_list_skills":    return ok(listSkills(args));
-    case "rr_search":         return ok(searchAll(args.query));
-    case "rr_get":            return ok(getOne(args.slug));
-    case "rr_compose_init_command": return text(composeInit(args));
-    case "rr_compose_add_commands": return text(composeAdd(args));
-    case "rr_list_slices":          return ok(listSlices(args));
-    case "rr_get_slice":            return ok(getSlice(args.slug));
-    case "rr_compose_app":          return text(composeApp({ getManifest }, args));
-    case "rr_audit_slice":          return ok(auditSlices({ getManifest }, args));
-    case "rr_list_workflows":       return ok(WORKFLOW_KINDS.map((k) => ({ kind: k, uri: `rr://workflow/${k}` })));
-    case "rr_get_workflow":         return text(getWorkflow(args.kind));
-    default:
-      return errorResp(`Unknown tool: ${name}`);
+  // A throwing handler (bad enum, unreadable workflow file) must surface as a
+  // tool error the LLM can react to — not an unhandled rejection that kills
+  // the stdio server.
+  try {
+    switch (name) {
+      case "rr_list_templates": return ok(listTemplates(args));
+      case "rr_list_features":  return ok(listFeatures(args));
+      case "rr_list_recipes":   return ok(listRecipes());
+      case "rr_list_skills":    return ok(listSkills(args));
+      case "rr_search":         return ok(searchAll(args.query));
+      case "rr_get": {
+        const found = findEntry(args.slug);
+        if (found) return ok(found);
+        return notFound(`No template, feature, recipe, or skill with slug "${args.slug}".`, {
+          didYouMean: nearestSlugs(args.slug, allSlugs()),
+          tryTools: ["rr_search", "rr_get_slice"],
+        });
+      }
+      case "rr_compose_init_command": return text(composeInit(args));
+      case "rr_compose_add_commands": return text(composeAdd(args));
+      case "rr_list_slices":          return ok(listSlices(args));
+      case "rr_get_slice": {
+        const slice = getSlice(args.slug);
+        if (slice) return ok(slice);
+        return notFound(`No slice with slug "${args.slug}".`, {
+          didYouMean: nearestSlugs(args.slug, (getManifest().slices ?? []).map((s) => s.slug)),
+          tryTools: ["rr_list_slices", "rr_search"],
+        });
+      }
+      case "rr_compose_app":          return text(composeApp({ getManifest }, args));
+      case "rr_audit_slice":          return ok(auditSlices({ getManifest }, args));
+      case "rr_list_workflows":       return ok(WORKFLOW_KINDS.map((k) => ({ kind: k, uri: `rr://workflow/${k}` })));
+      case "rr_get_workflow":         return text(getWorkflow(args.kind));
+      default:
+        return errorResp(`Unknown tool: ${name}`);
+    }
+  } catch (e) {
+    return errorResp(e?.message ?? String(e));
   }
 };
 
@@ -88,7 +122,7 @@ export const handleListResources = async () => {
   const m = getManifest();
   const skills = getSkills().skills ?? [];
   const resources = [
-    { uri: "rr://manifest", name: "Rahman Resources manifest", description: "Full kitab manifest (templates + features + recipes).", mimeType: "application/json" },
+    { uri: "rr://manifest", name: "Rahman Resources manifest", description: "Full rr manifest (templates + features + recipes + slices).", mimeType: "application/json" },
   ];
   for (const t of m.layouts ?? []) {
     resources.push({ uri: `rr://templates/${t.slug}`, name: t.title, description: t.description, mimeType: "application/json" });
@@ -109,7 +143,7 @@ export const handleListResources = async () => {
     resources.push({
       uri: `rr://workflow/${k}`,
       name: `Workflow — ${k}`,
-      description: `CRUD workflow for kitab ${k} (Create / Read / Update / Delete + publish step).`,
+      description: `CRUD workflow for rr ${k} (Create / Read / Update / Delete + publish step).`,
       mimeType: "text/markdown",
     });
   }

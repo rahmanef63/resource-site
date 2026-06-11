@@ -11,6 +11,33 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-11 — CLI network errors, MCP structured errors + stale-loader fix (mcp 1.2.3)
+
+Track C continued.
+
+**CLI (1.13.3, unpublished):**
+- All `tiged` clones go through `cloneWithRetry` — one silent retry on transient
+  network errors, then actionable messages (connectivity / bad-slug / private-repo)
+  instead of raw git stack traces.
+
+**MCP (1.2.3):**
+- `rr_get` / `rr_get_slice` return structured `not_found` payloads
+  (`{ error, message, didYouMean, try }`) an LLM can branch on.
+- Tool dispatcher try/catch-wrapped — a throwing handler becomes a tool error,
+  not a dead stdio server.
+- Descriptions rewritten with use-when guidance (3 composers disambiguated,
+  `rr_get` vs `rr_get_slice`); "kitab" terminology dropped.
+- **Bug:** data-loader preferred an installed `rahman-resources` over the sibling
+  monorepo CLI — a stale 0.9.2 snapshot (8 slices) silently shadowed the 68-slice
+  source of truth in local dev. Now sibling-first.
+
+**Tooling:**
+- **Bug:** `gen-manifest` shipped catalog (`slices.ts`) versions — stale vs
+  `slice.json`. Now reads each `slice.json` (version SSOT) directly; distributed
+  manifest can no longer lag.
+- `report-slices-drift` entry-window pairing (lazy regex misattributed versions);
+  true catalog drift: 50/68 entries.
+
 ### 2026-06-11 — version SSOT: slice.json authoritative, contract + manifest gated
 
 Track C of the full-surface audit (`docs/audit-2026-06-11.md`).

@@ -10,14 +10,17 @@ import { fileURLToPath } from "node:url";
 const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Prefer the published `rahman-resources` package (the runtime dep). Falls back
-// to the sibling-monorepo path for local dev when deps haven't been linked.
+// Prefer the sibling-monorepo CLI (source of truth) when it exists — an
+// installed `rahman-resources` under node_modules can be an old snapshot and
+// silently serves stale manifests in local dev (seen: 0.9.2 with 8 slices vs
+// sibling's 68). Consumers never have the sibling path, so they resolve the
+// published runtime dep as before.
 function resolveCliFile(file) {
+  const local = path.resolve(__dirname, `../../cli/lib/${file}`);
+  if (existsSync(local)) return local;
   try {
     return require.resolve(`rahman-resources/lib/${file}`);
   } catch {
-    const local = path.resolve(__dirname, `../../cli/lib/${file}`);
-    if (existsSync(local)) return local;
     throw new Error(
       `rahman-resources-mcp: cannot locate lib/${file} — install rahman-resources as a dep or run from the resources monorepo.`,
     );

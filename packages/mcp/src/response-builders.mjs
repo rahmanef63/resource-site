@@ -9,6 +9,18 @@ export function text(value) {
 export function errorResp(message) {
   return { content: [{ type: "text", text: `Error: ${message}` }], isError: true };
 }
+// Structured not-found: a JSON payload the calling LLM can branch on
+// (input error, not infra error) with concrete recovery paths, instead of
+// a bare "Not found: x" string it can only echo.
+export function notFound(message, { didYouMean = [], tryTools = [] } = {}) {
+  const payload = { error: "not_found", message };
+  if (didYouMean.length) payload.didYouMean = didYouMean;
+  if (tryTools.length) payload.try = tryTools;
+  return {
+    content: [{ type: "text", text: JSON.stringify(payload, null, 2) }],
+    isError: true,
+  };
+}
 export function resourceJson(uri, value) {
   return { contents: [{ uri, mimeType: "application/json", text: JSON.stringify(value, null, 2) }] };
 }
@@ -107,7 +119,7 @@ export function auditSlices({ getManifest }, { slices = [] }) {
   for (const slug of slices) {
     const s = sliceMap.get(slug);
     if (!s) {
-      warnings.push(`unknown slice: ${slug} (not in kitab manifest)`);
+      warnings.push(`unknown slice: ${slug} (not in the rr manifest)`);
       continue;
     }
     for (const p of s.peers ?? []) {

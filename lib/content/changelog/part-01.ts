@@ -2,6 +2,15 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "CLI-MCP-DX",
+    "version": "mcp@1.2.3",
+    "date": 1781136000000,
+    "kind": "improvement",
+    "title": "CLI network errors + MCP structured errors, stale-loader fix, manifest version SSOT",
+    "body": "Track C continued (docs/audit-2026-06-11.md). CLI: every tiged clone now goes through cloneWithRetry — one silent retry on transient network errors, then an actionable message (ENOTFOUND → check connectivity; 404/ENOENT → verify slug + repo is public) instead of a raw git stack trace. MCP 1.2.3: rr_get / rr_get_slice return structured not_found payloads ({ error, message, didYouMean, try }) so a calling LLM can branch and recover instead of echoing a string; the whole tool dispatcher is try/catch-wrapped (a throwing handler — e.g. bad workflow kind — becomes a tool error, not a dead stdio server); tool descriptions rewritten with explicit use-when guidance disambiguating the three composers (init vs add vs compose_app) and rr_get vs rr_get_slice; stray kitab terminology dropped. Two real bugs found while smoking it: the data-loader preferred an installed rahman-resources over the sibling monorepo CLI — a stale 0.9.2 snapshot (8 slices) silently shadowed the 68-slice source of truth in local dev (now sibling-first); and gen-manifest took versions from the hand-curated catalog, shipping stale versions in the distributed manifest — it now reads each slice.json (the version SSOT) directly. report-slices-drift pairing fixed (entry-window matching): true catalog drift is 50/68, previously misattributed.",
+    "groups": []
+  },
+  {
     "id": "VERSION-SSOT-GATE",
     "version": "site@version-ssot",
     "date": 1781136000000,

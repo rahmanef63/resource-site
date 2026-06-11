@@ -23,12 +23,22 @@ const aliases = JSON.parse(
   readFileSync(path.join(ROOT, "lib/content/slice-aliases.json"), "utf8"),
 );
 
-// Lazy slug→nearest-version within the same entry object. Same shape the
-// existing regex-fallback validators rely on.
-const re = /slug:\s*"([^"]+)"[\s\S]*?version:\s*"([0-9]+\.[0-9]+\.[0-9]+)"/g;
-const pairs = new Map();
+// Entry-window pairing: each slug owns the text up to the NEXT slug
+// occurrence; a version is only attributed if it falls inside that window.
+// (A lazy `slug…version` regex steals the next entry's version when an entry
+// has none — misattributing the drift.) Peer objects ({slug, range}) carry no
+// version, so their windows never match.
+const slugRe = /slug:\s*"([^"]+)"/g;
+const positions = [];
 let m;
-while ((m = re.exec(src))) if (!pairs.has(m[1])) pairs.set(m[1], m[2]);
+while ((m = slugRe.exec(src))) positions.push({ slug: m[1], start: m.index });
+const pairs = new Map();
+for (let i = 0; i < positions.length; i++) {
+  const end = i + 1 < positions.length ? positions[i + 1].start : src.length;
+  const win = src.slice(positions[i].start, end);
+  const v = win.match(/version:\s*"([0-9]+\.[0-9]+\.[0-9]+)"/);
+  if (v && !pairs.has(positions[i].slug)) pairs.set(positions[i].slug, v[1]);
+}
 
 const sliceJsonVersion = (slug) => {
   for (const base of ["frontend/slices", "template-base/frontend/slices"]) {

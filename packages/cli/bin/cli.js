@@ -869,8 +869,12 @@ async function installSkill(slug, target) {
   const dest = path.join(target, ".claude", "skills", slug);
   process.stdout.write(`  ${kleur.cyan(slug.padEnd(20))} ${kleur.dim(`→ .claude/skills/${slug}/`)} ... `);
   if (skill.source === "anthropics") {
-    const emitter = tiged(`${SKILLS_REPO}/${skill.path}`, { cache: false, force: true, verbose: false });
-    await emitter.clone(dest);
+    const source = `${SKILLS_REPO}/${skill.path}`;
+    await cloneWithRetry(
+      () => tiged(source, { cache: false, force: true, verbose: false }),
+      dest,
+      source,
+    );
   } else if (skill.source === "rahman") {
     // Future: ship rahman-authored skills inside this repo. For now, scaffold a stub.
     mkdirSync(dest, { recursive: true });
@@ -1372,14 +1376,49 @@ async function checkGhInstalled() {
 
 // ─── helpers ──────────────────────────────────────────────────────────────
 
+// tiged surfaces raw git/network errors with no recovery hint. Translate the
+// common failure modes into actionable messages, and retry once on transient
+// network errors before giving up.
+async function cloneWithRetry(makeEmitter, dest, source) {
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      await makeEmitter().clone(dest);
+      return;
+    } catch (err) {
+      const msg = String(err?.message ?? err);
+      const transient = /ETIMEDOUT|ECONNRESET|EAI_AGAIN|socket hang up|50[234]/i.test(msg);
+      if (transient && attempt === 1) continue; // one silent retry
+      if (/ENOTFOUND|EAI_AGAIN|ECONNREFUSED|ETIMEDOUT|ECONNRESET/i.test(msg)) {
+        throw new Error(
+          `Network error fetching ${source}: ${msg}\n  → check your internet connection and retry.`,
+        );
+      }
+      if (/could not find|not found|ENOENT|404/i.test(msg)) {
+        throw new Error(
+          `Could not fetch ${source}: ${msg}\n  → verify the slug exists (run 'list') and the repo/branch is public.`,
+        );
+      }
+      throw new Error(`Failed to fetch ${source}: ${msg}`);
+    }
+  }
+}
+
 async function pull(repoPath, dest) {
-  const emitter = tiged(`${REPO}/${repoPath}#${BRANCH}`, { cache: false, force: true, verbose: false });
-  await emitter.clone(dest);
+  const source = `${REPO}/${repoPath}#${BRANCH}`;
+  await cloneWithRetry(
+    () => tiged(source, { cache: false, force: true, verbose: false }),
+    dest,
+    source,
+  );
 }
 
 async function pullFromRepo(repo, subPath, branch, dest) {
-  const emitter = tiged(`${repo}/${subPath}#${branch}`, { cache: false, force: true, verbose: false });
-  await emitter.clone(dest);
+  const source = `${repo}/${subPath}#${branch}`;
+  await cloneWithRetry(
+    () => tiged(source, { cache: false, force: true, verbose: false }),
+    dest,
+    source,
+  );
 }
 
 function detectPM(target) {
