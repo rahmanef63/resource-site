@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "testimonials",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",

@@ -12,7 +12,7 @@ import { defineSliceContract } from "../../../packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "notion",
-  version: "1.1.0",
+  version: "1.1.1",
   requires: {
     deps: [
       "sonner",

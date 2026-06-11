@@ -9,7 +9,7 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "notion-shell",
-  version: "0.5.0",
+  version: "0.24.0",
   category: "ui",
   kind: "ui",
   provides: {

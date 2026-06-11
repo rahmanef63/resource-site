@@ -2,6 +2,15 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "VERSION-SSOT-GATE",
+    "version": "site@version-ssot",
+    "date": 1781136000000,
+    "kind": "improvement",
+    "title": "Version SSOT — slice.json authoritative; contract + manifest now gated in lockstep",
+    "body": "Second audit-followup batch (docs/audit-2026-06-11.md, Track C). slice.json.version is now the declared version SSOT: audit:slices errors if slice.contract.ts or slice.manifest.json disagree. Reconciled the existing drift — 12 contracts (notion-shell was 19 minors stale at 0.5.0 vs 0.24.0; all migrations-empty so the bump is safe) and 4 manifests — so the snapshot/migration system (which prefers contract.version) and the install tag stop mislabelling. The hand-curated catalog (lib/content/slices.ts) carries a display-only version that nobody bumps; rather than wedge commits behind ~34 hand-edits, a warn-only report-slices-drift.mjs now surfaces it at validate:all tail (34 entries drifted, 1 catalog-only). Durable fix is to generate the catalog version from slice.json — tracked, not yet done.",
+    "groups": []
+  },
+  {
     "id": "POLISH-A11Y-DX",
     "version": "site@audit-followups",
     "date": 1781136000000,

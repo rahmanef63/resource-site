@@ -11,6 +11,19 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-11 — version SSOT: slice.json authoritative, contract + manifest gated
+
+Track C of the full-surface audit (`docs/audit-2026-06-11.md`).
+
+**Tooling:**
+- `slice.json.version` is the declared version SSOT. `audit:slices` now errors when
+  `slice.contract.ts` (feeds snapshot/migration) or `slice.manifest.json` disagree.
+- Reconciled existing drift: **12 contracts** (incl. `notion-shell` 0.5.0 → 0.24.0;
+  all migration-maps empty so safe) + **4 manifests** synced to `slice.json`.
+- New warn-only `report-slices-drift.mjs` (validate:all tail) surfaces the hand-curated
+  `lib/content/slices.ts` catalog-version drift (34 entries) without blocking commits.
+  Durable fix — generate the catalog version from `slice.json` — tracked, not yet done.
+
 ### 2026-06-11 — audit follow-ups: SSE streaming fix, copy a11y, search/⌘K polish, CONTRIBUTING
 
 First fix batch from the full-surface audit (`docs/audit-2026-06-11.md`).

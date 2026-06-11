@@ -8,7 +8,7 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "testimonials",
-  version: "0.1.0",
+  version: "0.1.1",
   category: "content",
   kind: "backend",
   provides: {

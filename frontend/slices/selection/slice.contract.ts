@@ -11,7 +11,7 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "selection",
-  version: "0.1.0",
+  version: "0.2.0",
   category: "ui",
   kind: "ui",
   provides: {

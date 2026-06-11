@@ -52,10 +52,12 @@ if (failed) {
   process.exit(1);
 }
 
-// Warn-only tail: ui-tree drift report (never fails the chain).
-const drift = spawnSync("node", ["scripts/validation/report-ui-drift.mjs"], {
-  stdio: ["ignore", "pipe", "pipe"],
-});
-process.stdout.write(drift.stdout.toString());
+// Warn-only tail: drift reports (never fail the chain).
+for (const report of ["report-ui-drift.mjs", "report-slices-drift.mjs"]) {
+  const drift = spawnSync("node", [`scripts/validation/${report}`], {
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+  process.stdout.write(drift.stdout.toString());
+}
 
 console.log(`\n✓ all validation gates green${QUICK ? " (quick — skipped tests)" : ""}`);

@@ -27,6 +27,7 @@ import {
   isRelativeWithinSlice,
   lintStyleAntipatterns,
   readSliceConfig,
+  versionTrio,
 } from "./audit-slice-helpers.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -58,6 +59,20 @@ for (const slice of slices) {
   }
   if (!existsSync(path.join(slice.dir, "slice.manifest.json"))) {
     errors.push(`[${slice.folder}] missing slice.manifest.json (metadata trio)`);
+  }
+
+  // 0b. version parity — slice.json is the version SSOT; contract + manifest
+  // must agree (else snapshots/installs mislabel the slice version).
+  const ver = versionTrio(slice.dir);
+  if (ver.json && ver.contract && ver.contract !== ver.json) {
+    errors.push(
+      `[${slice.folder}] slice.contract.ts version "${ver.contract}" != slice.json "${ver.json}" — bump the trio in lockstep`,
+    );
+  }
+  if (ver.json && ver.manifest && ver.manifest !== ver.json) {
+    errors.push(
+      `[${slice.folder}] slice.manifest.json version "${ver.manifest}" != slice.json "${ver.json}"`,
+    );
   }
 
   // 1. naming

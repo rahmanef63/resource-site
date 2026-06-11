@@ -10,7 +10,7 @@ import { defineSliceContract } from "../../../packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "full-width-toggle",
-  version: "0.1.0",
+  version: "0.1.1",
   requires: {
     auth: "none",
   },
