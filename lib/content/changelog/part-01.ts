@@ -2,6 +2,15 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "BUILDER-UX-B",
+    "version": "site@builder-ux",
+    "date": 1781136000000,
+    "kind": "improvement",
+    "title": "Bundle Builder — compat notes get a path forward; project form validates inline",
+    "body": "Track B of the 2026-06-11 audit. Compatibility notes in the command panel now tell the user what to DO: every warning carries an action line (incompatible → drop the slice or re-pick the template; warn → wire manually after scaffolding) plus a View-slice link to the docs page. An incompatible pair escalates the whole box to blocker-red — it was rendering as a soft amber note while the emitted command was broken. Project form: the emitted command always uses a sanitized app name, so typing 'My App!' silently scaffolded 'my-app-' — the form now shows the actual folder name when it differs, and flags malformed owner emails (aria-invalid + inline error) before they land in a scaffold. Pre-push vitest gate also retries once now: a known environmental flake exits 1 with all 468 tests green (~1/4 of hook runs); a real failure stays red on both runs.",
+    "groups": []
+  },
+  {
     "id": "CLI-MCP-DX",
     "version": "mcp@1.2.3",
     "date": 1781136000000,

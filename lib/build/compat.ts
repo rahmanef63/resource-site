@@ -64,6 +64,13 @@ export type CompatWarning = {
   templateTitle: string;
   status: CompatStatus;
   note?: string;
+  /** What the user should DO about it — warnings without a path forward just stall the builder. */
+  action: string;
+};
+
+const ACTION_BY_STATUS: Partial<Record<CompatStatus, string>> = {
+  incompatible: "Drop this slice or pick a different template — the pair won't work together.",
+  warn: "Still emitted — wire it manually after scaffolding (see the slice page for steps).",
 };
 
 /** Collect actionable warnings for current selection — incompatible + warn only. */
@@ -85,6 +92,7 @@ export function collectWarnings(templateSlug: string | null, selectedSlices: str
       templateTitle: tpl.title,
       status: c.status,
       note: c.note,
+      action: ACTION_BY_STATUS[c.status] ?? "",
     });
   }
   return out;

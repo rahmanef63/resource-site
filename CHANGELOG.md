@@ -11,6 +11,22 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-11 — Bundle Builder UX: actionable compat notes + inline form validation
+
+Track B of the audit.
+
+**Site:**
+- Compat notes now carry an action line (incompatible → drop/re-pick; warn → wire
+  manually) + a View-slice link; any incompatible pair escalates the box to
+  blocker-red instead of soft amber.
+- Project form shows the sanitized folder name when it differs from what was typed
+  (`My App!` → `my-app-`) and flags malformed owner emails inline (aria-invalid).
+- Tests: 7 new behavioral tests (project-form validation, compat-note rendering).
+
+**Tooling:**
+- pre-push vitest gate retries once — known environmental flake exits 1 with all
+  tests green (~1/4 hook runs); real failures stay red both runs.
+
 ### 2026-06-11 — CLI network errors, MCP structured errors + stale-loader fix (mcp 1.2.3)
 
 Track C continued.

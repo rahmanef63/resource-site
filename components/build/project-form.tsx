@@ -6,6 +6,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { ProjectForm as ProjectFormShape } from "@/lib/build/types";
 
+// Mirror of command-builder's sanitize() — the emitted command always uses
+// this form, so show the user the actual folder name instead of silently
+// scaffolding something different from what they typed.
+function sanitizeAppName(s: string) {
+  return s.trim().replace(/[^a-z0-9-_]/gi, "-").toLowerCase();
+}
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export function ProjectForm({
   value,
   onChange,
@@ -16,6 +25,9 @@ export function ProjectForm({
   function patch(p: Partial<ProjectFormShape>) {
     onChange({ ...value, ...p });
   }
+  const sanitized = sanitizeAppName(value.appName);
+  const appNameDiffers = value.appName.trim() !== "" && sanitized !== value.appName;
+  const emailInvalid = value.ownerEmail.trim() !== "" && !EMAIL_RE.test(value.ownerEmail.trim());
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2">
@@ -29,7 +41,13 @@ export function ProjectForm({
             onChange={(e) => patch({ appName: e.target.value })}
             placeholder="my-app"
             className="h-8"
+            aria-describedby={appNameDiffers ? "app-name-note" : undefined}
           />
+          {appNameDiffers && (
+            <p id="app-name-note" className="text-[10px] text-amber-700 dark:text-amber-300">
+              will be scaffolded as <code className="font-mono">{sanitized || "my-app"}</code>
+            </p>
+          )}
         </Field>
         <Field label="Brand name" hint="shown in nav, footer, og-image">
           <Input
@@ -46,7 +64,14 @@ export function ProjectForm({
             onChange={(e) => patch({ ownerEmail: e.target.value })}
             placeholder="halo@example.com"
             className="h-8"
+            aria-invalid={emailInvalid || undefined}
+            aria-describedby={emailInvalid ? "owner-email-error" : undefined}
           />
+          {emailInvalid && (
+            <p id="owner-email-error" className="text-[10px] text-red-600 dark:text-red-400">
+              doesn&apos;t look like a valid email
+            </p>
+          )}
         </Field>
       </div>
     </div>
