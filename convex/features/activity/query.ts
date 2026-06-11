@@ -5,12 +5,16 @@
 // `convex/_generated` barrel. Adjust the relative import if the
 // consumer puts `_generated` elsewhere.
 
-import { query } from "../../_generated/server";
+import { internalQuery, query } from "../../_generated/server";
 import { v } from "convex/values";
 
 const LIST_CAP = 2000;
 
-export const listAll = query({
+// Returns EVERY row including private/internal visibility — as a public
+// query this leaked non-public activity to anonymous callers. Internal now,
+// same pattern as this slice's mutations: the consumer wraps it in their own
+// auth-gated query (e.g. requireAdmin) for admin views.
+export const listAll = internalQuery({
   args: {},
   handler: async (ctx) =>
     ctx.db

@@ -11,6 +11,26 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-11 — Track A: copy-source security hardening + catalog version sync
+
+Final track of the audit. Copy-source functions (consumers inherit via `npx rr add`;
+never on rr's own backend).
+
+**Slices:**
+- `ai-router` 0.5.0 — `callModel` key-guarded like `aiChat` (`{ok:false,notice}` when
+  `OPENROUTER_API_KEY` unset; success `{ok:true,text}`); rate-limit wiring documented
+  (`ai:` prefix) without a hard peer coupling.
+- `doku-payment` 0.4.0 — `getPaymentStatus` no longer an open DOKU status proxy for any
+  orderId: order must exist locally (owned → owner-only; guest → unguessable orderId
+  capability, same rule as `getOrderByOrderId`); unknown/unauthorized/unconfigured → `null`.
+- `activity` 0.3.0 — `listAll` (returns private rows) is now an `internalQuery` the
+  consumer wraps — same pattern as the slice's mutations.
+- `notion-shell` — KaTeX parse-error span HTML-escaped before `dangerouslySetInnerHTML`.
+
+**Tooling:**
+- Catalog version sync: all 50 drifted `lib/content/slices.ts` versions synced to
+  `slice.json`; `report-slices-drift` reads **zero**.
+
 ### 2026-06-11 — Bundle Builder UX: actionable compat notes + inline form validation
 
 Track B of the audit.

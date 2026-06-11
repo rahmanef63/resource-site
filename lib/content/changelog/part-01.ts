@@ -2,6 +2,15 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "COPY-SOURCE-HARDEN-A",
+    "version": "slices@copy-source-hardening",
+    "date": 1781136000000,
+    "kind": "fix",
+    "title": "Track A — copy-source security: callModel key-guard, payment status proxy closed, listAll internal; catalog versions synced",
+    "body": "Final track of the 2026-06-11 audit. These functions are copy-source (never on rr's own backend — deploy allowlist keeps them off), but every consumer inherits them via npx rr add. ai-router 0.5.0: callModel was the one paid-AI action with a non-null-asserted OPENROUTER_API_KEY and no guard — now key-guarded like its sibling aiChat ({ ok:false, notice } when unset; success is { ok:true, text }), with documented rate-limit wiring (ai: prefix consume) left to composition to avoid a hard peer coupling. doku-payment 0.4.0: getPaymentStatus proxied DOKU's status API for ANY orderId — cross-tenant order probing plus upstream creds burn. It now requires the order to exist locally first (owned orders → caller must be the owner; guest orders → the unguessable orderId stays the capability, same rule as getOrderByOrderId); unknown/unauthorized/unconfigured all return null. activity 0.3.0: listAll returned private-visibility rows as a public query — now an internalQuery the consumer wraps in their own auth-gated query, the same pattern as the slice's mutations. notion-shell: KaTeX parse errors echo the user's TeX source — the error span is now HTML-escaped before dangerouslySetInnerHTML (self-XSS hygiene). Plus the durable catalog fix: all 50 drifted lib/content/slices.ts versions synced to slice.json (report-slices-drift now reads zero), with gen-manifest already sourcing versions from slice.json directly.",
+    "groups": []
+  },
+  {
     "id": "BUILDER-UX-B",
     "version": "site@builder-ux",
     "date": 1781136000000,

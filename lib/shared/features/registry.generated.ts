@@ -42,7 +42,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...aiRouterConfig,
     importPath: "@/features/ai-router/config",
-    version: "0.4.0",
+    version: "0.5.0",
   },
   {
     ...appStoreConfig,
@@ -102,7 +102,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...dokuPaymentConfig,
     importPath: "@/features/doku-payment/config",
-    version: "0.3.0",
+    version: "0.4.0",
   },
   {
     ...imageEditorConfig,

@@ -1,7 +1,7 @@
 {
   "$schema": "../../../docs/slice.manifest.schema.json",
   "name": "doku-payment",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "DOKU Indonesia payment \u2014 hosted Checkout + Direct (VA/QRIS/eWallet/PayLater/Minimarket/CC). HMAC-signed REST + signature-verified webhook + idempotent retry. Sibling provider to midtrans-payment.",
   "category": "commerce",
   "stability": "beta",

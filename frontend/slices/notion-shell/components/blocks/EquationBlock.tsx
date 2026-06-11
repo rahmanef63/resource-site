@@ -24,11 +24,19 @@ function loadKatex(): Promise<Katex> {
   return katexReady;
 }
 
+// KaTeX ParseError messages echo a slice of the user's TeX source — escape
+// before interpolating into the dangerouslySetInnerHTML error span.
+function escapeHtml(s: string): string {
+  return s.replace(/[&<>"']/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] as string,
+  );
+}
+
 function render(lib: Katex, src: string): string {
   try {
     return lib.renderToString(src, { throwOnError: false, displayMode: true });
   } catch (e: unknown) {
-    return `<span class="text-destructive text-xs">${getErrorMessage(e, "LaTeX error")}</span>`;
+    return `<span class="text-destructive text-xs">${escapeHtml(getErrorMessage(e, "LaTeX error"))}</span>`;
   }
 }
 

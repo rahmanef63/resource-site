@@ -163,7 +163,7 @@ yakin? Bayar via halaman DOKU" fallback that calls Checkout.
 Three layers, pick what fits:
 
 1. **Reactive query** — `useQuery(api.features.payment.query.getOrderByOrderId, { orderId })` returns live status; rerenders when webhook fires.
-2. **Manual sync** — `useAction(api.features.payment.actions.doku.getPaymentStatus)` polls DOKU directly. Use as a "Cek ulang" button when the webhook is delayed.
+2. **Manual sync** — `useAction(api.features.payment.actions.doku.getPaymentStatus)` polls DOKU directly. Use as a "Cek ulang" button when the webhook is delayed. Returns `null` for unknown orderIds, orders owned by someone else, or when DOKU creds are unset — the order must exist locally first (guests rely on the unguessable orderId, same rule as `getOrderByOrderId`).
 3. **Backend events** — read `paymentWebhookEvents` to debug or build an audit page.
 
 ## Security checklist

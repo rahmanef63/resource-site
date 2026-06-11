@@ -178,7 +178,13 @@ export const createDirectPayment = action({
 
 export const getPaymentStatus = action({
   args: { orderId: v.string() },
-  handler: async (_ctx, args) => {
+  handler: async (ctx, args) => {
+    // Order must exist HERE first (owned → owner-only; guest → unguessable orderId is the capability,
+    // same rule as getOrderByOrderId) — else this is an open DOKU status proxy. Unknown/unauthorized/unconfigured → null.
+    if (credsMissing()) return null;
+    const order = await ctx.runQuery(internal.features.payment.query.getByOrderIdInternal, { orderId: args.orderId });
+    if (!order) return null;
+    if (order.userId && order.userId !== (await getAuthUserId(ctx))) return null;
     const res = await dokuFetch<DokuStatusResponse>({
       method: "GET",
       path: `/orders/v1/status/${encodeURIComponent(args.orderId)}`,

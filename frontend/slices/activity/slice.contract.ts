@@ -12,7 +12,7 @@ import { defineSliceContract } from "@/packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "activity",
-  version: "0.2.0",
+  version: "0.3.0",
   category: "data",
   kind: "full",
   provides: {

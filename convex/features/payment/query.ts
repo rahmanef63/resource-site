@@ -1,6 +1,16 @@
-import { query } from "../../_generated/server";
+import { internalQuery, query } from "../../_generated/server";
 import { v } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
+
+/** Raw row fetch for actions — ownership checks live in the caller. */
+export const getByOrderIdInternal = internalQuery({
+  args: { orderId: v.string() },
+  handler: (ctx, { orderId }) =>
+    ctx.db
+      .query("paymentOrders")
+      .withIndex("by_orderId", (q) => q.eq("orderId", orderId))
+      .unique(),
+});
 
 export const listMine = query({
   args: { limit: v.optional(v.number()) },

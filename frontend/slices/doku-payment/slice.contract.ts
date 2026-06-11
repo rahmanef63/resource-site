@@ -11,7 +11,7 @@ import { defineSliceContract } from "../../../packages/cli/lib/contract";
 
 export const contract = defineSliceContract({
   id: "doku-payment",
-  version: "0.3.0",
+  version: "0.4.0",
   // 0.2.0 (2026-06-10): guest checkout — paymentOrders.userId optional +
   // buyer contact; create actions key-guarded ({ok:false,notice} when DOKU
   // creds unset); status query guest-readable via unguessable orderId;

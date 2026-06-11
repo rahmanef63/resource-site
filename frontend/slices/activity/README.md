@@ -6,7 +6,7 @@ Public productivity log — lists user-facing activities grouped by ISO week. De
 
 - **Public view component** — `<ActivityFeed rows stats copy categoryLabels locale />`
 - **Convex schema extension** — `activityTables` from `convex/features/activity/_schema.ts`
-- **Convex queries** — `listAll`, `listPublic`, `get`, `statsThisWeek`
+- **Convex queries** — `listPublic`, `get`, `statsThisWeek` (public) + `listAll` (internalQuery — returns private rows too, so the consumer wraps it in an auth-gated query, same pattern as the mutations)
 - **Convex mutations** — `create`, `update`, `remove`, `seed` (all unauthenticated — consumer wraps)
 - **MCP tools** — your consumer's MCP server can map: `activity_list`, `activity_create`, `activity_update`, `activity_remove`
 
