@@ -19,11 +19,11 @@ npx rahman-resources add landing-sections
 
 ## 2. What it ships
 
-- tags: `admin`, `landing`, `cms`, `sections`, `crud`
+- tags: `admin`, `landing`, `cms`, `sections`, `crud`, `renderer`
 
 ## 3. Wire it up
 
-Run `npx rr add landing-sections`. Fold `landingReducer` into your root reducer (cases LANDING_UPSERT + LANDING_DELETE), seed State.landingSections with `defaultLandingSections()`, wrap your StoreProvider with `<LandingProvider value={adapter}/>` where adapter maps {items, publicBase, adminBase, create, update, remove} from your dispatch. Mount `<LandingView/>` at `/admin/landing` and `<LandingEditorView id={params.id}/>` at `/admin/landing/[id]`. In HomePage iterate `state.landingSections.filter(s => s.enabled).sort((a,b) => a.order - b.order)` and render each through `<LandingSectionShell section={s}>` wrapping your own per-`kind` renderer.
+Run `npx rr add landing-sections`. Fold `landingReducer` into your root reducer (cases LANDING_UPSERT + LANDING_DELETE), seed State.landingSections with `defaultLandingSections()`, wrap your StoreProvider with `<LandingProvider value={adapter}/>` where adapter maps {items, publicBase, adminBase, create, update, remove} from your dispatch. Mount `<LandingView/>` at `/admin/landing` and `<LandingEditorView id={params.id}/>` at `/admin/landing/[id]`. In HomePage iterate `state.landingSections.filter(s => s.enabled).sort((a,b) => a.order - b.order)` and render each inside `<LandingSectionShell section={s}>`; for stats/testimonials/pricing/faq/newsletter/custom kinds drop in the shipped `<StatsSection/>` etc. (they read `section.config` JSON over your template defaults), or map the remaining kinds (hero/features/blog/etc.) to your own renderer. Use `parseConfigBadge(section.config)` for a section badge. Requires the template-base shared surface that ships in every rr website template: `@/components/templates/_shared/motion` (Reveal/Stagger/CountUp/Marquee/useInView — the motion-kit primitives), `@/components/templates/_shared/ui/section-head`, and `@/components/templates/_shared/crud/*`. Sections also use shadcn accordion/card/carousel + embla-carousel-autoplay.
 
 ## Tools (agentic surface)
 

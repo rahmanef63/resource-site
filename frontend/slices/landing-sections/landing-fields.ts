@@ -35,12 +35,10 @@ export const LANDING_FIELDS: FieldDef<LandingSection>[] = [
     hint: "Decides which renderer the template picks for this section.",
   },
   {
-    kind: "number",
+    kind: "position",
     key: "order",
     label: "Order",
-    min: 1,
-    step: 1,
-    hint: "1 = top of the page; 2, 3, 4… render below. Auto-assigned on create — the list has up/down arrows for re-ordering.",
+    hint: "1 = top of the page. Dropdown lists all valid positions for this template; picking one auto-shifts the others to keep ordering consistent. Up/down arrows in the list also re-order.",
   },
   {
     kind: "switch",
@@ -116,7 +114,13 @@ export const LANDING_FIELDS: FieldDef<LandingSection>[] = [
       'Optional JSON for renderer-specific extras. Common keys: ' +
       '`{"badge":"…"}` overrides the hero eyebrow badge; ' +
       '`{"columns":3}` lets feature/portfolio grids override their column count; ' +
-      '`{"limit":4}` caps how many items a blog/changelog section shows. ' +
-      "Leave empty if you don't need these.",
+      '`{"limit":4}` caps how many items a blog/changelog/testimonials section shows. ' +
+      'Content overrides: stats `{"stats":[{"value":120,"suffix":"+","label":"Klien"}],"clients":["Acme"]}`; ' +
+      'testimonials `{"items":[{"quote":"…","author":"…","role":"…","rating":5}]}`; ' +
+      'faq `{"items":[{"q":"…","a":"…"}],"ctaLabel":"…","ctaHref":"/contact","ctaPrefix":"Masih ada pertanyaan?"}`; ' +
+      'pricing `{"eyebrow":"Harga","tiers":[{"name":"…","price":"Rp 99rb","period":"/bln","features":["…"],"featured":true,"ctaHref":"…"}]}`; ' +
+      'newsletter `{"placeholder":"…","buttonLabel":"…","successText":"…"}`; ' +
+      'custom `{"body":["paragraf…"],"ctaLabel":"…","ctaHref":"…"}`. ' +
+      "Leave empty to use the template's defaults.",
   },
 ];
