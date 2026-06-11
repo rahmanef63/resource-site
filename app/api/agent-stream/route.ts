@@ -82,6 +82,10 @@ const SSE_HEADERS = {
   "Content-Type": "text/event-stream; charset=utf-8",
   "Cache-Control": "no-cache, no-transform",
   Connection: "keep-alive",
+  // Disable proxy buffering (nginx / Traefik / Dokploy) — without this the
+  // per-delta stream is buffered into a single end-of-turn flush and the live
+  // assistant appears to hang until the whole reply is ready.
+  "X-Accel-Buffering": "no",
 };
 
 export async function POST(req: Request) {

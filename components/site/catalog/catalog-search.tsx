@@ -26,7 +26,7 @@ export type CatalogSearchItem = {
 export function CatalogSearch({
   items,
   allTags,
-  placeholder = "Cari…",
+  placeholder = "Search…",
   groupOrder,
   groupLabel,
   gridClassName = "grid gap-5 sm:grid-cols-2 lg:grid-cols-3",

@@ -2,6 +2,15 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "POLISH-A11Y-DX",
+    "version": "site@audit-followups",
+    "date": 1781136000000,
+    "kind": "improvement",
+    "title": "Audit follow-ups — SSE streaming fix, copy-button a11y, search/⌘K polish, CONTRIBUTING + skills gate",
+    "body": "First batch of fixes from the 2026-06-11 full-surface audit (docs/audit-2026-06-11.md). The live assistant SSE route now sends X-Accel-Buffering: no, so per-delta streaming no longer collapses into a single end-of-turn flush behind the Dokploy/Traefik proxy. CopyButton gained aria-pressed + a state-aware aria-label and now surfaces a toast on clipboard failure instead of swallowing it silently. The catalog search placeholder is English (\"Search…\" not \"Cari…\"), and the ⌘K hint is hidden on mobile where it can't fire. A new CONTRIBUTING.md documents the three-surface sync, slice-authoring flow, validation tiers, and git hooks. pre-commit now gates skills SSOT drift (sync-skills --check) so the site can't advertise a skill the CLI doesn't ship.",
+    "groups": []
+  },
+  {
     "id": "VP-TABS",
     "version": "site@variant-previews",
     "date": 1781049600000,

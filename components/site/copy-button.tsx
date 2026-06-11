@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Check, Copy } from "lucide-react";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -22,7 +23,9 @@ export function CopyButton({
       setCopied(true);
       setTimeout(() => setCopied(false), 1800);
     } catch {
-      /* ignore */
+      // Clipboard API is unavailable in insecure contexts / on permission
+      // denial — surface it instead of failing silently.
+      toast.error("Copy failed — clipboard unavailable in this context.");
     }
   }
 
@@ -31,7 +34,8 @@ export function CopyButton({
       variant="ghost"
       size={size}
       onClick={copy}
-      aria-label="Copy"
+      aria-label={copied ? "Copied to clipboard" : "Copy to clipboard"}
+      aria-pressed={copied}
       className={cn("h-8 w-8 text-muted-foreground hover:text-foreground", className)}
     >
       {copied ? <Check className="size-4" /> : <Copy className="size-4" />}

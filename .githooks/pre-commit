@@ -68,5 +68,14 @@ if ! npm run --silent validate:changelog; then
   exit 1
 fi
 
+# Skills SSOT (lib/content/claude-skills.ts) → packages/cli/lib/skills.json.
+# Sync was publish-time only, so the site could advertise a skill the CLI
+# didn't know for weeks. Gate it here too.
+if ! node packages/cli/scripts/sync-skills.mjs --check; then
+  echo ""
+  echo "pre-commit: skills drift — run 'node packages/cli/scripts/sync-skills.mjs' and stage packages/cli/lib/skills.json, or bypass with --no-verify" >&2
+  exit 1
+fi
+
 echo "pre-commit: ok"
 exit 0

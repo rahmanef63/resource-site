@@ -11,6 +11,24 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-06-11 — audit follow-ups: SSE streaming fix, copy a11y, search/⌘K polish, CONTRIBUTING
+
+First fix batch from the full-surface audit (`docs/audit-2026-06-11.md`).
+
+**Site:**
+- Live assistant SSE route (`app/api/agent-stream/route.ts`) now sends
+  `X-Accel-Buffering: no` — per-delta streaming no longer collapses into a single
+  end-of-turn flush behind the Dokploy/Traefik proxy (silent prod-only regression).
+- `CopyButton` gained `aria-pressed` + a state-aware `aria-label`, and surfaces a
+  `toast.error` on clipboard failure instead of swallowing it.
+- Catalog search placeholder is English (`Search…`, was `Cari…`); the `⌘K` hint is
+  hidden on mobile where it can't fire.
+
+**DX:**
+- New `CONTRIBUTING.md` — three-surface sync, slice authoring, validation tiers, hooks.
+- `pre-commit` now gates skills SSOT drift (`sync-skills --check`) so the site can't
+  advertise a skill the CLI doesn't ship.
+
 ### 2026-06-10 — variant previews: shadcn Tabs knobs + remount-on-change (convex-auth knob fix)
 
 **Site:**

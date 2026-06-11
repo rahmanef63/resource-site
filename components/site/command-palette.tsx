@@ -51,7 +51,7 @@ export function CommandPalette() {
         aria-label="Search documentation"
       >
         <span className="min-w-0 flex-1 truncate text-left">Search documentation...</span>
-        <kbd className="pointer-events-none inline-flex h-5 shrink-0 select-none items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100">
+        <kbd className="pointer-events-none hidden h-5 shrink-0 select-none items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:inline-flex">
           <span className="text-xs">⌘</span>K
         </kbd>
       </button>

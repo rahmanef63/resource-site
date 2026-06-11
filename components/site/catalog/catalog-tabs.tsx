@@ -25,7 +25,7 @@ export function CatalogTabs({
   groupOrder,
   groupLabel,
   familyLabel,
-  placeholder = "Cari…",
+  placeholder = "Search…",
   gridClassName = "grid gap-5 sm:grid-cols-2 lg:grid-cols-3",
 }: {
   items: CatalogSearchItem[];
