@@ -56,6 +56,15 @@ export type ShellManifest = {
   routing?: boolean;
   /** Sync document.title to the focused window ("App — Brand"). Default on. */
   titleSync?: boolean;
+  /**
+   * OPTIONAL agentic seam. A consumer that wires an agent (e.g. rr) passes a
+   * tiny mount component here that self-registers the shell's ToolCollection
+   * (via @/shared/agentic `useAgentTools`). appshell CORE never imports the
+   * agentic kit — a consumer WITHOUT a @/shared/agentic module simply omits
+   * this and the shell stays agent-free. The component renders null; it exists
+   * only to host the registration hook at a stable position.
+   */
+  agentMount?: ComponentType;
   /** Initial shell (macOS/Windows/Dashboard/…). Unset = responsive auto. The
    *  user's live choice (Settings → Shell) overrides this and persists. */
   shell?: ShellId;

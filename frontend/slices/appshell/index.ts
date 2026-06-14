@@ -177,7 +177,9 @@ export * from "./defaults";
 // The single switch: swap this object for your real capabilities to go live.
 export { mockCapabilities } from "./lib/mock-capabilities";
 
-// Agentic tool collection — the slice is not an agent; register this
-// with a host agent (one agent, many slices) via @/shared/agentic.
-export { appshellTools } from "./lib/tools";
-export type { AppshellCtx } from "./lib/tools";
+// Agentic surface lives in the OPTIONAL sibling entry `./agentic` — NOT this
+// core barrel — so importing @/features/appshell never transitively resolves
+// @/shared/agentic. A consumer that runs an agent imports appshellTools +
+// AppshellAgentMount from "@/features/appshell/agentic"; a non-agent consumer
+// (no @/shared/agentic module) imports only this barrel and compiles clean.
+// The AppshellCtx type is re-exported there too.

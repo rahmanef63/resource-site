@@ -13,6 +13,7 @@ import {
   widgetsFeature,
   type ShellManifest,
 } from "@/features/appshell";
+import { AppshellAgentMount } from "@/features/appshell/agentic";
 import "@/features/appshell/appshell.css";
 
 // Live preview: the appshell mounted with a tiny demo manifest — 3 stub apps +
@@ -100,6 +101,10 @@ const demoManifest: ShellManifest = {
     widgetsFeature,
   ],
   routing: false,
+  // Self-register the shell's agent tools on the global host (the assistant
+  // drives the union). Preserves the old inline `useAgentTools(appshellTools)`
+  // behaviour now that the call is lifted out of appshell core into ./agentic.
+  agentMount: AppshellAgentMount,
   // The mock pack drives every feature with data (search hits, ticking CPU/mem
   // widgets, server toggle, echoing AI inspector) — zero backend. Swap this one
   // object for real capabilities to go live.
