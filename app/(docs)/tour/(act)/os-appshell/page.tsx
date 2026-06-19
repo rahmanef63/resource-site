@@ -82,7 +82,7 @@ function toShowcase(slug: string, liveMount: boolean): ShowcaseSlice {
   return {
     slug,
     title: slice?.title ?? slug,
-    recipe: slice?.install ?? `npx rahman-resources add ${slug}`,
+    recipe: `npx rahman-resources add ${slug}`,
     previewPath: slice?.previewPath,
     liveMount,
   };
@@ -118,7 +118,7 @@ export default function OsAppShellActPage() {
   ];
 
   const appshell = getSlice(FEATURED);
-  const appshellRecipe = appshell?.install ?? `npx rahman-resources add ${FEATURED}`;
+  const appshellRecipe = `npx rahman-resources add ${FEATURED}`;
 
   return (
     <>

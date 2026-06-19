@@ -57,7 +57,7 @@ function toShowcase(slug: string, liveMount: boolean): ShowcaseSlice {
   return {
     slug,
     title: slice?.title ?? slug,
-    recipe: slice?.install ?? `npx rahman-resources add ${slug}`,
+    recipe: `npx rahman-resources add ${slug}`,
     previewPath: slice?.previewPath,
     liveMount,
   };

@@ -120,16 +120,16 @@ previews — the tour's source), `/slices` catalog, `components/templates/_share
   chunk-per-slice verified in build output.
 
 ### P3 — Acts 3–6: Media, AI, Content, Platform/Auth/Commerce
-- [ ] `media/page.tsx` (image-editor, reel-editor, media-studio, media-viewer,
+- [x] `media/page.tsx` (image-editor, reel-editor, media-studio, media-viewer,
       code-editor, system-monitor, os-terminal, browser, image-picker, icon-picker, markdown).
-- [ ] `ai/page.tsx` (ai-chat, ai-studio, ai-agents, assistant, ai-admin LIVE;
+- [x] `ai/page.tsx` (ai-chat, ai-studio, ai-agents, assistant, ai-admin LIVE;
       create-your-mcp, seo, vector-search as capability cards).
-- [ ] `content/page.tsx` (notion, notion-shell, notion-database, notion-sidebar,
+- [x] `content/page.tsx` (notion, notion-shell, notion-database, notion-sidebar,
       comments, library, services, testimonials).
-- [ ] `platform/page.tsx` (admin-panel, platform-admin, convex-auth, rbac-roles,
+- [x] `platform/page.tsx` (admin-panel, platform-admin, convex-auth, rbac-roles,
       user-management, event-tracking, audit-log, activity, storefront-checkout LIVE;
       doku/midtrans/resend/cal-com/contact-form as capability cards w/ "needs: KEY/Convex").
-- [ ] All `ssr:false` dynamic-imported; capability cards = static preview + add-recipe.
+- [x] All lazy/`ssr:false` code-split; capability cards = env-free iframe + "needs <KEY>" badge + add-recipe (`components/site/tour/capability-card.tsx`); `rate-limit` (backend-only) gets a static info-card fallback.
 - **Risk:** heavy media slices (Konva/ONNX, reactflow, blocknote) — strict per-Act
   `next/dynamic`, lazy-on-scroll for media. Key-gated slices must NOT render dead buttons.
 - **Gates:** `typecheck`, `gen:previews:check`, `audit:templates`.
@@ -223,3 +223,4 @@ _(loop appends one line per passed phase: `Pn PASS <score> — <recap>`)_
 - P0 PASS 96 — `tour.ts` derives 6 Acts from `slices.ts` by `category` (68/68 covered, partition total+non-overlapping, 9 key-gated→capability-card); `/tour` renders hero + Act rail via inherited DocsShell; typecheck green; zero edits to layouts.ts/app/preview/manifest. Note for P1–P3: Act composition is **curated** (`ACT_SLUGS` explicit placement + `CATEGORY_FALLBACK` for future slugs + `tests/tour-coverage.test.ts` guarding total+disjoint) — see P1 below. `category` alone is a distribution taxonomy, not a showcase one.
 - P1 PASS 93 — recomposed Acts from naive category-partition to a **curated** 6-Act showcase map (`ACT_SLUGS` + `CATEGORY_FALLBACK` + `tests/tour-coverage.test.ts`, wired as `audit:tour` in `slices:check`); 68/68 placed exactly once. Act I Marketing built (`landing-sections` umbrella + presentation slices), lazy code-split mount + rr-add recipes; verify confirmed coversOldDemos. typecheck + gen:previews + audit:tour green. **Decision:** the old `/layouts` marketing/cms/dashboard cookbook demos are now REDUNDANT (kinds shown by tour slices) → P5 retires them outright, no separate cookbook-iframe coverage needed.
 - P2 PASS — Act II OS & App Shell built (`/tour/os-appshell`, 19 slugs). `appshell` featured as a live full-bleed OS via iframe of its window-manager route (provider-isolated, no double-mount); shells/primitives/desktop-apps in 3 lazy sections, heavy apps (monaco/xterm/browser/monitor) deferred. Reuses P1 infra verbatim. Caught+fixed: route folder was `os/` (→`/tour/os`) but act.id is `os-appshell` → rail/nav 404; renamed folder to match. typecheck + gen:previews + audit:tour green; build gate confirms route.
+- P3 PASS — Acts III–VI built (Media 6 · AI 8 · Content 10 · Platform 15 = 39 slugs) via 4 parallel builders reusing P1/P2 infra. New shared `components/site/tour/capability-card.tsx` (env-free iframe + "needs &lt;KEY&gt;" badge) routes the 7 key-gated slugs (ai-router/vector-search/create-your-mcp, resend/cal-com/doku/midtrans) as honest cards, not dead buttons; `rate-limit` backend-only → static info-card. notion + image-editor featured. **Fixed (verify 88→pass):** all 6 Act pages used `slice.install ?? rr-add`, so slices with an npm `install` line showed `npm i …` instead of the rr-add recipe — stripped the fallback (also retroactively fixed P1 marketing + P2 os-appshell). typecheck + gen:previews + audit:tour green. **5/8 complete — `/tour` is the full live capability showcase; P3 done-criteria met → P5/P6 decommission now unblocked.**
