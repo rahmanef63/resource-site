@@ -43,6 +43,7 @@ export default defineConfig({
       "shared/**/*.test.{ts,tsx}",
       "lib/**/*.test.{ts,tsx}",
       "components/**/*.test.{ts,tsx}",
+      "tests/**/*.test.{ts,tsx}",
       "packages/cli/**/*.test.{mjs,ts}",
       "frontend/slices/**/*.test.{ts,tsx}",
       "convex/features/**/*.test.{ts,tsx}",

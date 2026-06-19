@@ -93,11 +93,15 @@ previews — the tour's source), `/slices` catalog, `components/templates/_share
   `layouts.ts`/`app/preview`/manifest.
 
 ### P1 — Act 1: Marketing & Conversion (covers the 30 section demos, live)
-- [ ] `app/(docs)/tour/(act)/marketing/page.tsx` mounts hero/feature-grid/pricing/
-      faq/testimonials/portfolio/blog/changelog/onboarding previews via PREVIEW_REGISTRY.
-- [ ] Each section shows its `npx rr add <slug>` recipe.
-- **Slices:** landing-sections, feature-grid, pricing-page, faq-section,
-  testimonials-grid, portfolio-section, blog-section, changelog-feed, onboarding-wizard.
+- [x] `app/(docs)/tour/(act)/marketing/page.tsx` mounts marketing slices via lazy
+      code-split (next/dynamic ssr:false + IntersectionObserver, reusing
+      `VariantPreview`/`PREVIEW_REGISTRY`; iframe-only slugs via `previewPath`).
+- [x] Each section shows its `npx rahman-resources add <slug>` recipe (`CopyButton`/`CodeBlock`).
+- [x] Shared `app/(docs)/tour/(act)/layout.tsx` + `components/site/tour/{act-header,lazy-slice-mount,slice-showcase}.tsx` (reused by P2/P3).
+- **Slices:** `landing-sections` (umbrella — hero/feature/pricing/faq/blog/testimonials/
+  portfolio/changelog were merged into it as `kind` variants in v0.2.0), testimonials,
+  services, marketing-chrome, motion-kit, motion-primitives, theme-presets,
+  onboarding-wizard, contact-form-resend, seo.
 - **Gates:** `typecheck`, `gen:previews:check`. **Done:** all section kinds render
   live + add-recipes; **confirms layouts.ts removal in P5 loses nothing user-facing.**
 
@@ -212,4 +216,5 @@ previews — the tour's source), `/slices` catalog, `components/templates/_share
 
 _(loop appends one line per passed phase: `Pn PASS <score> — <recap>`)_
 
-- P0 PASS 96 — `tour.ts` derives 6 Acts from `slices.ts` by `category` (68/68 covered, partition total+non-overlapping, 9 key-gated→capability-card); `/tour` renders hero + Act rail via inherited DocsShell; typecheck green; zero edits to layouts.ts/app/preview/manifest. Note for P1–P3: Act composition is `category`-driven (auto-derives) — if a slice feels misplaced (e.g. image-editor under Media vs OS), fix its `category` in slices.ts, not tour.ts.
+- P0 PASS 96 — `tour.ts` derives 6 Acts from `slices.ts` by `category` (68/68 covered, partition total+non-overlapping, 9 key-gated→capability-card); `/tour` renders hero + Act rail via inherited DocsShell; typecheck green; zero edits to layouts.ts/app/preview/manifest. Note for P1–P3: Act composition is **curated** (`ACT_SLUGS` explicit placement + `CATEGORY_FALLBACK` for future slugs + `tests/tour-coverage.test.ts` guarding total+disjoint) — see P1 below. `category` alone is a distribution taxonomy, not a showcase one.
+- P1 PASS 93 — recomposed Acts from naive category-partition to a **curated** 6-Act showcase map (`ACT_SLUGS` + `CATEGORY_FALLBACK` + `tests/tour-coverage.test.ts`, wired as `audit:tour` in `slices:check`); 68/68 placed exactly once. Act I Marketing built (`landing-sections` umbrella + presentation slices), lazy code-split mount + rr-add recipes; verify confirmed coversOldDemos. typecheck + gen:previews + audit:tour green. **Decision:** the old `/layouts` marketing/cms/dashboard cookbook demos are now REDUNDANT (kinds shown by tour slices) → P5 retires them outright, no separate cookbook-iframe coverage needed.
