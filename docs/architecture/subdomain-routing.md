@@ -46,7 +46,13 @@ Next.js proxy.ts inspects Host header
 |---|---|
 | `lib/content/template-subdomains.ts` | `SUBDOMAIN_TO_SLUG` map. Add a row here to publish a new demo URL. |
 | `proxy.ts` | Host-based rewriter (root of repo, Next 16 convention). Reads the SSOT map. |
-| `components/site/template-detail.tsx` | Renders "Live demo" link on `/layouts/<slug>` detail pages. Uses `getDemoUrl(slug)` helper. |
+
+> **2026-06-19 (P7):** The `/layouts/<slug>` template-detail pages that used to
+> surface the "Live demo" link are retired (the catalog is decommissioned; those
+> routes 308-redirect to `/tour`). The `demo-*.rahmanef.com` subdomain rewriting
+> in `proxy.ts` is UNCHANGED and still live — the demos are reached directly by
+> their subdomain URL (and from `template-subdomains.ts` / `getDemoUrl(slug)`),
+> not via an in-site detail page.
 
 ## Routing rules
 

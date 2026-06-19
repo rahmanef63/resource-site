@@ -2,6 +2,26 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "P7-tour-finisher",
+    "version": "tour@finisher",
+    "date": 1781827200000,
+    "kind": "feature",
+    "title": "Grand Tour ships — rr is now a slice picker + ONE /tour showcase; the OS-template catalog is retired",
+    "body": "The Grand Tour (P0–P7) lands and replaces the old multi-taxonomy catalog. rr is now a pure slice picker (\"printilan\") plus ONE curated showcase: /tour walks every slice in context across six Acts — I Marketing, II OS & App Shell, III Media, IV AI, V Content, VI Platform/Auth & Commerce — driven by lib/content/tour.ts, with a per-Act rail on the index and a deep-linkable page at /tour/<id>. The content slice (Act V) gains pages-cms, the generalized CMS extracted from the retired OS-template admin surfaces. The /layouts + /templates catalog is decommissioned: lib/content/layouts.ts data is emptied, /layouts + /templates (plus the old /preview/<os-template> full-app and per-section demos) 308-redirect to /tour, and ~871 demo files under app/preview/** + components/templates/** were deleted. The 8 OS demos stay live EXTERNALLY at demo-*.rahmanef.com, served from their own Vercel dev-lab repos via the untouched proxy.ts host rewriter. Finisher pass adds a /tour smoke test to the Playwright e2e suite, rewrites the prose docs that still described /layouts + the T1–T5 OS templates as live (README, STRUCTURE, PROGRESS, eject-spec, subdomain-routing), and deletes the per-template playbook set under docs/templates/ in favour of one docs/tour.md pointer. validate:all stays green.",
+    "groups": [
+      {
+        "heading": "Highlights",
+        "bullets": [
+          "/tour — 6 Acts: Marketing, OS & App Shell, Media, AI, Content, Platform/Auth & Commerce (each Act deep-linkable at /tour/<id>)",
+          { "text": "pages-cms — generalized CMS slice (Act V), extracted from the retired OS-template admin surfaces", "slug": "pages-cms" },
+          "/layouts + /templates decommissioned: layouts.ts emptied, routes 308→/tour, ~871 demo files deleted",
+          "8 OS demos stay live externally at demo-*.rahmanef.com (proxy.ts untouched)",
+          "docs reflow: stale /layouts + T1–T5 prose rewritten; docs/templates/ playbooks deleted → docs/tour.md; /tour e2e smoke test added"
+        ]
+      }
+    ]
+  },
+  {
     "id": "COPY-SOURCE-HARDEN-A",
     "version": "slices@copy-source-hardening",
     "date": 1781136000000,

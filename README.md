@@ -3,16 +3,21 @@
 Public showcase for the [Rahman Resources](https://github.com/rahmanef63/resources) monorepo (`rr`).
 
 - shadcn-style sidebar layout
-- Per-layout & per-recipe pages with Preview / Code / Install tabs
+- `/slices` — the slice catalog (per-slice pages with Preview / Code / Install tabs)
+- `/tour` — the Grand Tour: one curated 6-Act showcase that walks every slice in context
 - `/llms.txt` + `/api/knowledge` for AI agents
 - "Install with Agent" prompt builder (copy → paste into Claude Code / Cursor)
 
+> rr is a **slice picker** ("printilan") + ONE `/tour` showcase. The old
+> per-layout / per-template OS catalog (`/layouts`, `/templates`) is retired —
+> those routes 308-redirect to `/tour`. The 8 OS demos still live externally at
+> `demo-*.rahmanef.com` (served from their own Vercel dev-lab repos via `proxy.ts`).
+
 ```
 resources/
-├── template-base/   # canonical copy-from template (lean)
-├── cookbook/        # opinionated layout variants (landing, dashboard)
-├── recipes/         # feature drop-ins (block-editor, command-palette, ...)
-├── site/            # Next 16 site — rr browser + Bundle Builder (/build)
+├── frontend/slices/ # the slices themselves (the picker catalog source)
+├── template-base/   # canonical copy-from starter app (lean)
+├── app/ + components/site/  # Next 16 site — /slices catalog, /tour, Bundle Builder (/build)
 ├── packages/
 │   ├── cli/         # `rahman-resources` (alias `resources`) — npx scaffolder + add + lift
 │   └── mcp/         # `rahman-resources-mcp` — stdio MCP for Claude Code / agents
@@ -30,8 +35,8 @@ npx rahman-resources@latest init my-app
 # With every shadcn primitive pre-baked:
 npx rahman-resources@latest init my-app --with-shadcn-all
 
-# With a full-app template (public + admin route trees):
-npx rahman-resources@latest init my-app --template personal-brand-os
+# Then add slices as you need them:
+npx rahman-resources@latest add appshell
 ```
 
 Cross-platform — macOS / Linux / Windows PowerShell + WSL.

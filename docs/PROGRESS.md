@@ -2,6 +2,35 @@
 
 Chronological session log. Each entry is dated and lists what landed + outstanding work.
 
+## 2026-06-19 (P0–P7) — Grand Tour finisher + catalog decommission
+
+rr pivoted from a multi-taxonomy catalog (templates / layouts / slices) to a
+**pure slice picker** ("printilan") plus ONE curated showcase, the **Grand Tour**
+at `/tour`.
+
+- **/tour — 6 Acts** (`lib/content/tour.ts`): Act I Marketing, Act II OS & App
+  Shell, Act III Media, Act IV AI, Act V Content, Act VI Platform/Auth/Commerce.
+  Each Act walks the relevant slices in context. Index renders a per-Act rail;
+  every Act has its own deep-linkable page (`/tour/<id>`).
+- **pages-cms slice** (`frontend/slices/pages-cms`, 0.1.0) — the generalized CMS
+  slice extracted from the retired OS-template admin surfaces.
+- **/layouts + /templates DECOMMISSIONED.** `lib/content/layouts.ts` data is
+  emptied (`export const layouts = []`), the `/layouts` + `/templates` routes (and
+  the old `/preview/<os-template>` + per-section demo routes) 308-redirect to
+  `/tour`, and ~871 demo files under `app/preview/**` + `components/templates/**`
+  were deleted. The 8 OS demos (personal-brand-os, konsultan-os, kreator-studio-os,
+  wirausaha-os, riset-kit, agency-studio-os, saas-marketing-os,
+  notion-page-clone-os) stay live EXTERNALLY at `demo-*.rahmanef.com`, served from
+  their own Vercel dev-lab repos via `proxy.ts` (untouched).
+- **Docs reflow (P7).** Stale prose describing the retired catalog rewritten;
+  the per-template playbook set under `docs/templates/` (T1–T5 + shared docs)
+  deleted; a `/tour` e2e smoke test added to `tests/e2e/site.spec.ts`.
+
+> NOTE: every PROGRESS entry dated **before 2026-06-19** that describes the OS
+> website-templates, the `/layouts` / `/templates` routes, or
+> `lib/content/layouts.ts` entries as live is now **historical** — see this entry
+> for the current state.
+
 ## 2026-05-12 (structure docs) — ideal structure + refactor plan
 
 User flagged spaghetti structure. Landed two design docs:
@@ -163,6 +192,13 @@ Highest-impact gaps to close before next consumer build:
 See postmortem doc for full list, fixes applied, recommended init-flow rewrite, and a verification checklist for new builds.
 
 ## 2026-05-07 (evening) — 4 templates promoted from coming-soon → shipped
+
+> **HISTORICAL (superseded 2026-06-19, P5–P7).** This section describes the OS
+> website-templates as freshly shipped into `lib/content/layouts.ts` with ~134
+> preview files. That whole catalog has since been DECOMMISSIONED: `layouts.ts`
+> data is emptied, `/layouts` + `/templates` redirect to `/tour`, and the demo
+> files were deleted. The OS demos now live externally at `demo-*.rahmanef.com`.
+> Read the rest of this entry as a record of what once shipped, not the live state.
 
 The four website-templates that had been registered as `status: "coming-soon"` in `lib/content/layouts.ts` (Kreator Studio OS, Konsultan OS, Wirausaha OS, Riset Kit) now ship full UI/UX scaffolds — public site + admin panel for each. Pattern adheres to the personal-brand-os gold reference.
 

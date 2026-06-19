@@ -24,6 +24,40 @@ test("slices catalog lists slices and links to detail", async ({ page }) => {
   await expect(page.getByText(/Desktop \+ Mobile OS Shell/i).first()).toBeVisible();
 });
 
+test("tour index renders hero + the six-Act rail", async ({ page }) => {
+  await page.goto("/tour");
+  // Hero h1 (CatalogHero) — stable copy, not styling.
+  await expect(
+    page.getByRole("heading", { level: 1, name: /^Grand Tour$/i }),
+  ).toBeVisible();
+  // The Act rail: each Act is a card with an h2 + an "Enter act" link to
+  // /tour/<id>. Anchor on Act I and Act VI so the rail must be whole.
+  await expect(
+    page.getByRole("heading", { level: 2, name: /Act I — Marketing/i }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { level: 2, name: /Act VI —/i }),
+  ).toBeVisible();
+  const enterAct = page.locator('a[href="/tour/marketing"]').first();
+  await expect(enterAct).toBeVisible();
+  await enterAct.click();
+  await expect(page).toHaveURL(/\/tour\/marketing$/);
+  await expect(
+    page.getByRole("heading", { level: 1, name: /Act I — Marketing/i }),
+  ).toBeVisible();
+});
+
+test("tour Act page deep-link renders its header + back-link", async ({
+  page,
+}) => {
+  await page.goto("/tour/os-appshell");
+  await expect(
+    page.getByRole("heading", { level: 1, name: /Act II — OS & App Shell/i }),
+  ).toBeVisible();
+  // The "All acts" link returns to the rail (ActHeader chrome).
+  await expect(page.locator('a[href="/tour"]').first()).toBeVisible();
+});
+
 test("slice detail deep-link renders metadata", async ({ page }) => {
   await page.goto("/slices/rate-limit");
   await expect(page.getByText(/rate.?limit/i).first()).toBeVisible();

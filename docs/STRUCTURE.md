@@ -1,11 +1,19 @@
 # Ideal Structure — Rahman Resources Kitab
 
-> Status: Draft v1 — 2026-05-12
+> Status: Draft v1 — 2026-05-12 · taxonomy section updated 2026-06-19 (P7)
 > Owner: kitab maintainers
 > Replaces piecemeal layout from `docs/architecture.md` + `docs/slice-architecture.md`.
 > See `docs/REFACTOR-PLAN.md` for migration path from current state.
 
 This doc = **target** structure, not current state. Current state diverges; tracker in REFACTOR-PLAN.
+
+> **2026-06-19 (P7) — catalog decommissioned.** The `templates` and `layouts`
+> taxonomies are RETIRED. rr is now a slice picker (one taxonomy: `slices`) plus
+> ONE curated `/tour` showcase (6 Acts). `lib/content/layouts.ts` data is emptied,
+> the `/layouts` + `/templates` routes 308-redirect to `/tour`, and the 8 OS demos
+> live externally at `demo-*.rahmanef.com`. References to `templates`/`layouts`
+> below are kept only where they document the historical target; the live taxonomy
+> table (R2) has been corrected.
 
 ## North star
 
@@ -119,8 +127,7 @@ resources/
 │   ├── authoring-slices.md              # how to write a slice
 │   ├── source-map.md                    # provenance (where things came from)
 │   ├── deploy.md
-│   ├── theme-system.md
-│   └── templates/                       # per-template playbook
+│   └── theme-system.md
 │
 ├── CLAUDE.md                            # AI session onboarding
 ├── README.md                            # human onboarding
@@ -154,15 +161,22 @@ Other concerns:
 
 Rationale: dual-home for a single slug = path resolution roulette. Portable vs foundation split = honest reflection of dependency reality.
 
-### R2 — Three taxonomies max
+### R2 — One taxonomy (slices) + one showcase (/tour)
 
 | Taxonomy | What | When to add |
 |---|---|---|
-| `templates` | Tier-2 full app variant (personal-brand-os, konsultan-os) | New end-to-end scaffold |
-| `layouts` | Tier-2 layout shell (dashboard-three-column, landing-bento) | New visual chrome variant |
 | `slices` | Tier-3 portable code unit, `kind: ui \| backend \| full` | New atomic capability |
 
-**Deprecated**: `recipes` — collapse into `slices` with `kind: ui` + tiny scope. Keep `lib/content/recipes.ts` only for legacy entries until migrated; no new recipes.
+The `/tour` Grand Tour is a curated 6-Act showcase (`lib/content/tour.ts`) that
+arranges existing slices in context — it is NOT a taxonomy and adds no new
+catalog entry; each Act just references slice slugs.
+
+**Retired (2026-06-19, P7)**: `templates` + `layouts` taxonomies. The OS website-
+templates (personal-brand-os, konsultan-os, …) are no longer catalog entries —
+`lib/content/layouts.ts` is emptied, `/layouts` + `/templates` 308-redirect to
+`/tour`, and the live OS demos run externally at `demo-*.rahmanef.com`.
+
+**Deprecated earlier**: `recipes` — folded into `slices`. No new recipes.
 
 **No duplicate slugs** across taxonomies. `gen-manifest.mjs` enforces strict uniqueness (remove feature↔slice exemption once recipes migrated).
 
@@ -232,7 +246,6 @@ Slice source code uses `@/*` aliases that resolve in consumer context (template-
 
 - Slice usage docs → `frontend/slices/<slug>/README.md`
 - Site-wide architecture → `docs/`
-- Per-template playbook → `docs/templates/T<N>-<slug>.md`
 - API surface → JSDoc in the source
 
 `docs/` does NOT explain individual slices. It explains the system.
@@ -364,7 +377,7 @@ Run `cd packages/cli && npm run validate:all` to gate everything in one shot. Wi
 
 | Script | Purpose | Rule(s) |
 |---|---|---|
-| `validate.mjs` | gen-manifest with `--strict` — every path in slices/layouts/recipes resolves on disk | layout/recipe path existence |
+| `validate.mjs` | gen-manifest with `--strict` — every path in slices (+ legacy recipes) resolves on disk | slice/recipe path existence |
 | `validate-slice.mjs --check` | JSON-Schema validate every `slice.json` (root + template-base) | shape contract |
 | `validate-slice-parity.mjs` | TS `SliceEntry` ↔ disk `slice.json` shared fields must agree | no metadata drift |
 | `validate-structure.mjs` | anti-spaghetti rules | R1 dual-home, R2 path-exists, R3 props-driven, R4 slug-uniqueness, R5 recipes-empty |

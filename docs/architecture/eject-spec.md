@@ -6,6 +6,16 @@
 > subdomain — the implementation is unambiguous and matches the
 > architectural decisions already made.
 
+> **2026-06-19 (P7) — slug source is stale.** This spec predates the catalog
+> decommission. It assumes `<slug>` resolves to a `lib/content/layouts.ts` entry
+> with `category: "website-template"` and that `components/templates/<slug>/`
+> exists on disk — both are now GONE (`layouts.ts` data emptied, the OS template
+> demos deleted from this repo; they live externally at `demo-*.rahmanef.com`).
+> When this command is actually built, the eject SOURCE must point at the external
+> dev-lab repo for the chosen OS template (or whatever store replaces `layouts.ts`),
+> not the in-repo paths the examples below reference. The eject *mechanics*
+> (selective copy, scaffold generation, Convex skeleton) remain valid.
+
 ## Why this exists
 
 `npx rr add <slug>` already exists for copy-first slice/template

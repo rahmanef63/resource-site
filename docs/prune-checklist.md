@@ -10,14 +10,20 @@ git init && git add . && git commit -m "chore: scaffold from kitab"
 
 Then prune what you don't need.
 
-## 1. Decide cookbook layout
+## 1. Pick slices from the Grand Tour
 
-Pick one (or compose):
-- Marketing-only landing? → `cookbook/layouts/landing-hero-carousel/` or `landing-asymmetric-masonry/` or `landing-bento/` or `landing-kinetic-text/`
-- Auth dashboard app? → `cookbook/layouts/dashboard-three-column/` or `dashboard-ide/` or `dashboard-mobile-dock/`
-- E-commerce / CMS public? → `cookbook/layouts/cms-public-storefront/`
+> The `cookbook/layouts/*` demos were **retired (2026-06-19)** — `/layouts` is
+> decommissioned and the same capabilities now live as composable **slices**.
+> Browse them at the live showcase **[/tour](https://resource.rahmanef.com/tour)**
+> (every slice is mounted live with its `add` command), then pull what you need:
 
-Copy chosen layout's example into `app/(marketing)/page.tsx` (or appropriate route group).
+```bash
+npx rahman-resources add landing-sections .   # marketing sections (hero/pricing/faq/blog…)
+npx rahman-resources add appshell .           # dashboard / windowed web-OS shell
+npx rahman-resources add pages-cms .          # multi-page CMS (Pages CRUD)
+```
+
+Each `add` copies files into `slices/<slug>/`, which you own and edit.
 
 ## 2. Decide recipes (feature drop-ins)
 
