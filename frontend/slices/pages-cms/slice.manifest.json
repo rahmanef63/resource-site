@@ -1,0 +1,52 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "pages-cms",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add pages-cms",
+    "consumerPath": "slices/pages-cms"
+  },
+  "files": [
+    "README.md",
+    "CHANGELOG.md",
+    "config.ts",
+    "index.ts",
+    "types.ts",
+    "components/PagesView.tsx",
+    "components/PageEditorView.tsx",
+    "components/PageEditorBlocks.tsx",
+    "components/block-editor.tsx",
+    "components/block-forms-simple.tsx",
+    "components/block-forms-rich.tsx",
+    "components/block-forms-list.tsx",
+    "components/block-renderer.tsx",
+    "components/page-create-dialog.tsx",
+    "components/page-editor-helpers.tsx",
+    "components/pages-context.tsx",
+    "components/local-store.tsx",
+    "lib/reducer.ts",
+    "lib/duplicate.ts",
+    "lib/nav-builder.ts",
+    "lib/default-pages.ts"
+  ],
+  "imports": {
+    "shared": [],
+    "external": [
+      "lucide-react",
+      "next/link",
+      "next/image",
+      "@/components/ui/badge",
+      "@/components/ui/button",
+      "@/components/ui/table",
+      "@/components/ui/input",
+      "@/components/ui/textarea",
+      "@/components/ui/label",
+      "@/components/ui/select",
+      "@/components/ui/switch",
+      "@/components/ui/card",
+      "@/components/ui/dialog"
+    ]
+  }
+}

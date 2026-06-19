@@ -161,6 +161,7 @@ export const ACT_SLUGS: Record<ActId, string[]> = {
     "markdown",
     "library",
     "data-table",
+    "pages-cms",
     "icon-picker",
     "activity",
   ],
