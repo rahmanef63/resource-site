@@ -106,10 +106,14 @@ previews — the tour's source), `/slices` catalog, `components/templates/_share
   live + add-recipes; **confirms layouts.ts removal in P5 loses nothing user-facing.**
 
 ### P2 — Act 2: App Shell / OS anchor (the "assembled product" wow)
-- [ ] `app/(docs)/tour/(act)/os/page.tsx` mounts `appshell` preview + file-explorer,
-      app-store, quicklinks, shell-settings, dashboard-shell, three-column,
-      workspace-shell, command-menu, notifications-center, data-table, settings-page, selection.
-- [ ] `next/dynamic ssr:false` wrappers for heavy slices (keep code-split).
+- [x] `app/(docs)/tour/(act)/os-appshell/page.tsx` (folder = act.id) iterates
+      `getAct("os-appshell").sliceSlugs` (19). `appshell` FEATURED full-bleed via
+      iframe of `/preview/slices/appshell` (the LIVE window-manager route — the
+      registry entry is only a 360px static mockup; iframe also isolates the
+      window-store provider). 18 others in 3 sections (App shells / UI primitives
+      & states / Desktop apps), heavy apps (monaco/xterm/browser/monitor) last + lazy.
+- [x] Code-split confirmed: `LazySliceMount` (next/dynamic ssr:false + IO) for
+      registry slugs, `IframeThumbnail` (lazy IO) for iframe-only; no eager heavy imports.
 - **Risk:** mount appshell's existing `preview.tsx`, do NOT re-instantiate its
   provider (double-mount/window-store bugs).
 - **Gates:** `typecheck`, `gen:previews:check`. **Done:** live OS window surface;
@@ -218,3 +222,4 @@ _(loop appends one line per passed phase: `Pn PASS <score> — <recap>`)_
 
 - P0 PASS 96 — `tour.ts` derives 6 Acts from `slices.ts` by `category` (68/68 covered, partition total+non-overlapping, 9 key-gated→capability-card); `/tour` renders hero + Act rail via inherited DocsShell; typecheck green; zero edits to layouts.ts/app/preview/manifest. Note for P1–P3: Act composition is **curated** (`ACT_SLUGS` explicit placement + `CATEGORY_FALLBACK` for future slugs + `tests/tour-coverage.test.ts` guarding total+disjoint) — see P1 below. `category` alone is a distribution taxonomy, not a showcase one.
 - P1 PASS 93 — recomposed Acts from naive category-partition to a **curated** 6-Act showcase map (`ACT_SLUGS` + `CATEGORY_FALLBACK` + `tests/tour-coverage.test.ts`, wired as `audit:tour` in `slices:check`); 68/68 placed exactly once. Act I Marketing built (`landing-sections` umbrella + presentation slices), lazy code-split mount + rr-add recipes; verify confirmed coversOldDemos. typecheck + gen:previews + audit:tour green. **Decision:** the old `/layouts` marketing/cms/dashboard cookbook demos are now REDUNDANT (kinds shown by tour slices) → P5 retires them outright, no separate cookbook-iframe coverage needed.
+- P2 PASS — Act II OS & App Shell built (`/tour/os-appshell`, 19 slugs). `appshell` featured as a live full-bleed OS via iframe of its window-manager route (provider-isolated, no double-mount); shells/primitives/desktop-apps in 3 lazy sections, heavy apps (monaco/xterm/browser/monitor) deferred. Reuses P1 infra verbatim. Caught+fixed: route folder was `os/` (→`/tour/os`) but act.id is `os-appshell` → rail/nav 404; renamed folder to match. typecheck + gen:previews + audit:tour green; build gate confirms route.
