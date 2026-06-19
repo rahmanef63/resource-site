@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import {
   Layers,
   BookOpen,
+  Compass,
   Rocket,
   Layout,
   Sparkles,
@@ -43,6 +44,7 @@ import {
 
 const docsItems = [
   { title: "Introduction", href: "/", icon: Home },
+  { title: "Grand Tour", href: "/tour", icon: Compass },
   { title: "Installation", href: "/installation", icon: Rocket },
   { title: "Architecture", href: "/architecture", icon: Layers },
   { title: "Stack", href: "/stack", icon: GitBranch },

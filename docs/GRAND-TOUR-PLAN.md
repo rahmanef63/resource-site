@@ -81,14 +81,14 @@ previews — the tour's source), `/slices` catalog, `components/templates/_share
 > (the new `/tour` is proven the complete live demo).
 
 ### P0 — Decisions + tour IA scaffold (no deletions)
-- [ ] Decisions recorded above (DONE — see Locked decisions).
-- [ ] `lib/content/tour.ts` — domain→slug Act map **derived programmatically from
+- [x] Decisions recorded above (DONE — see Locked decisions).
+- [x] `lib/content/tour.ts` — domain→slug Act map **derived programmatically from
       `lib/content/slices.ts`** (so new slices auto-appear). Acts: Marketing,
       OS/AppShell, Media, AI, Content, Platform/Auth/Commerce. Flag each slug
       live-mount vs capability-card (key-gated).
-- [ ] `app/(docs)/tour/layout.tsx` + `app/(docs)/tour/page.tsx` (Act 0 hero/index) —
-      chrome only (marketing-chrome + theme-presets + command-menu), no Acts wired.
-- [ ] Optional `/tour` link in `components/site/site-sidebar.tsx`.
+- [x] `app/(docs)/tour/layout.tsx` (pass-through; inherits DocsShell) + `app/(docs)/tour/page.tsx` (Act 0 hero/index) —
+      chrome inherited from (docs) shell + global theme-presets/command-menu, no Acts wired.
+- [x] `/tour` link added in `components/site/site-sidebar.tsx`.
 - **Gates:** `typecheck`. **Done:** `/tour` renders hero + Act rail; zero changes to
   `layouts.ts`/`app/preview`/manifest.
 
@@ -211,3 +211,5 @@ previews — the tour's source), `/slices` catalog, `components/templates/_share
 ## Progress log
 
 _(loop appends one line per passed phase: `Pn PASS <score> — <recap>`)_
+
+- P0 PASS 96 — `tour.ts` derives 6 Acts from `slices.ts` by `category` (68/68 covered, partition total+non-overlapping, 9 key-gated→capability-card); `/tour` renders hero + Act rail via inherited DocsShell; typecheck green; zero edits to layouts.ts/app/preview/manifest. Note for P1–P3: Act composition is `category`-driven (auto-derives) — if a slice feels misplaced (e.g. image-editor under Media vs OS), fix its `category` in slices.ts, not tour.ts.
