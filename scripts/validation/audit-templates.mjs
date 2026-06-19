@@ -48,13 +48,14 @@ const REWRITER_FILE_NAMES = new Set([
 const errors = [];
 const warnings = [];
 
+// lib/content/layouts.ts is the layout-catalog SSOT. As of P5 (2026-06-19)
+// the catalog was intentionally retired (all ~38 entries removed; /layouts +
+// /templates now 308-redirect to /tour). An empty array is therefore a VALID
+// state — not a parse failure — so we no longer hard-exit on zero slugs. The
+// slug-INDEPENDENT roots below (components/templates, cookbook/layouts,
+// app/preview/slices, frontend/slices) still get scanned for shadcn-rule +
+// leak violations until the dirs are deleted in P6.
 const slugs = extractLayoutSlugs(LAYOUTS_FILE);
-if (slugs.length === 0) {
-  console.error(
-    "✖ audit-templates: no layout slugs found in lib/content/layouts.ts",
-  );
-  process.exit(1);
-}
 
 const TEMPLATE_ROOTS = [
   ...slugs.map((s) => path.join(REPO, "app", "preview", s)),

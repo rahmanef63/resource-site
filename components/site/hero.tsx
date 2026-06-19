@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { layouts } from "@/lib/content/layouts";
 import { slices } from "@/lib/content/slices";
 import { site } from "@/lib/content/site";
 
@@ -25,13 +24,13 @@ export function Hero() {
           <br className="hidden sm:inline" /> next Next app.
         </h1>
         <p className="mt-6 max-w-2xl text-balance text-lg text-muted-foreground">
-          {layouts.length} layouts, {slices.length} slices — copy-first, production-grade,
+          {slices.length} production-grade slices — copy-first,
           handed to you with shadcn primitives, Convex self-hosted, Tailwind 4 and TypeScript
           strict. {site.description.split(".")[0]}.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Button asChild size="lg">
-            <Link href="/layouts">Browse layouts</Link>
+            <Link href="/tour">Take the tour</Link>
           </Button>
           <Button asChild variant="ghost" size="lg" className="gap-2">
             <Link href="/docs">

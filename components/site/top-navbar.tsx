@@ -19,9 +19,8 @@ import { cn } from "@/lib/utils";
 // the Get Started sidebar cluster; the navbar keeps the curated quick-links.
 const NAV = [
   { label: "Docs", href: "/docs" },
+  { label: "Tour", href: "/tour" },
   { label: "Slices", href: "/slices" },
-  { label: "Layouts", href: "/layouts" },
-  { label: "Templates", href: "/templates" },
   { label: "Best Practice", href: "/best-practice" },
   { label: "Agents", href: "/agents" },
   { label: "Install", href: "/installation" },

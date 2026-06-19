@@ -45,7 +45,7 @@ npm run dev                       # http://localhost:3000`}
         />
         <p className="text-sm text-muted-foreground">
           Browse the catalog at{" "}
-          <Link href="/templates" className="underline">/templates</Link>{" "}
+          <Link href="/tour" className="underline">/tour</Link>{" "}
           or use the visual{" "}
           <Link href="/build" className="underline">Bundle Builder</Link>{" "}
           to compose template + slices + skills.

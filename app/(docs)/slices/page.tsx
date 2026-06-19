@@ -120,7 +120,7 @@ export default function SlicesPage() {
           </>
         }
         primaryCta={{ label: "Bundle builder", href: "/build" }}
-        secondaryCta={{ label: "Templates", href: "/templates" }}
+        secondaryCta={{ label: "Grand Tour", href: "/tour" }}
         commands={[
           "npx rahman-resources add <slug>",
           "npx rahman-resources lift rahman:<slug>",

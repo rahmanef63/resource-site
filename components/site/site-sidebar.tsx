@@ -8,10 +8,8 @@ import {
   BookOpen,
   Compass,
   Rocket,
-  Layout,
   Sparkles,
   GitBranch,
-  Globe,
   Home,
   Wand2,
   Newspaper,
@@ -30,14 +28,11 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { layouts as allLayouts } from "@/lib/content/layouts";
 import { slices as allSlices } from "@/lib/content/slices";
 import { site } from "@/lib/content/site";
 import { isHidden } from "@/lib/content/hidden-slugs";
 import { SidebarListGroup } from "@/components/site/site-sidebar/sidebar-list-group";
 import {
-  LAYOUT_CATEGORY_LABEL,
-  LAYOUT_CATEGORY_ORDER,
   SLICE_CATEGORY_LABEL,
   SLICE_CATEGORY_ORDER,
 } from "@/lib/content/taxonomy";
@@ -56,10 +51,7 @@ export function SiteSidebar() {
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
-  const layouts = allLayouts.filter((l) => !isHidden(l.slug));
   const slices = allSlices.filter((s) => !isHidden(s.slug));
-  const websiteTemplates = layouts.filter((l) => l.category === "website-template");
-  const otherLayouts = layouts.filter((l) => l.category !== "website-template");
 
   return (
     <Sidebar collapsible="icon">
@@ -105,30 +97,8 @@ export function SiteSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <SidebarListGroup
-          label="Templates — full apps"
-          icon={Globe}
-          allLabel="All templates"
-          allHref="/templates"
-          pathname={pathname}
-          items={websiteTemplates}
-          itemHrefPrefix="/layouts"
-        />
-
-        <SidebarListGroup
-          label="Layouts"
-          icon={Layout}
-          allLabel="All layouts"
-          allHref="/layouts"
-          pathname={pathname}
-          items={otherLayouts}
-          itemHrefPrefix="/layouts"
-          groupBy={(l) => (l as { category?: string }).category ?? "other"}
-          categoryOrder={LAYOUT_CATEGORY_ORDER}
-          categoryLabel={LAYOUT_CATEGORY_LABEL}
-        />
-
-        {/* Recipes group removed 2026-05-12 — migrated to slices (Phase 3 of REFACTOR-PLAN.md). */}
+        {/* Layouts + Templates groups removed 2026-06-19 (P5) — catalogs retired,
+            redirected to /tour. Recipes group removed 2026-05-12 (migrated to slices). */}
 
         <SidebarListGroup
           label="Slices"

@@ -9,7 +9,6 @@ export default function HomePage() {
     <>
       <Hero />
       <FeaturesGrid />
-      <ShowcaseGrid kind="layouts" />
       <ShowcaseGrid kind="slices" />
       <StackStrip />
       <GetStarted />

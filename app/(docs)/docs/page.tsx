@@ -3,7 +3,6 @@ import { ArrowRight } from "lucide-react";
 import { PageHeader } from "@/components/site/page-header";
 import { DocCard } from "@/components/site/doc-primitives";
 import { site } from "@/lib/content/site";
-import { layouts } from "@/lib/content/layouts";
 import { slices } from "@/lib/content/slices";
 
 export const metadata = { title: "Introduction" };
@@ -21,10 +20,6 @@ export default function DocsIntroPage() {
         <h2 className="text-lg font-semibold">What's in the box</h2>
         <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
           <li>
-            <span className="text-foreground font-medium">{layouts.length} layouts</span> —
-            full app shells, dashboards, marketing sites you can copy and adapt.
-          </li>
-          <li>
             <span className="text-foreground font-medium">{slices.length} slices</span> —
             Tier-3 vertical slices (auth, editor, payments, AI router…) ported and audited.
           </li>
@@ -39,7 +34,7 @@ export default function DocsIntroPage() {
       <div className="grid gap-4 sm:grid-cols-3">
         {[
           { title: "Installation", href: "/installation", desc: "Clone + install + first build." },
-          { title: "Layouts", href: "/layouts", desc: `${layouts.length} ready-to-copy shells.` },
+          { title: "Grand Tour", href: "/tour", desc: "Walk every act of the stack." },
           { title: "Slices", href: "/slices", desc: `${slices.length} vertical slices.` },
         ].map((c) => (
           <Link

@@ -144,6 +144,62 @@ const nextConfig = {
       // Permanent so any external link (docs, PR, shared URL) keeps working.
       { source: "/preview/:tpl/admin", destination: "/preview/:tpl/dashboard/admin", permanent: true },
       { source: "/preview/:tpl/admin/:path*", destination: "/preview/:tpl/dashboard/admin/:path*", permanent: true },
+
+      // P5 (2026-06-19): retire /layouts + /templates catalogs and the old
+      // /preview/<layout-slug> section/OS demos. lib/content/layouts.ts is now
+      // empty; everything redirects into the Grand Tour. (Routes/dirs stay on
+      // disk until P6 — these 308s intercept at the edge so the empty-array
+      // renders are never reached.) DO NOT touch proxy.ts subdomain rewrites.
+      // NOTE: the two /preview/:tpl/admin* rules above MUST stay listed BEFORE
+      // the OS-prefix /preview/<os-slug>/:path* entries (first-match-wins).
+      { source: "/layouts", destination: "/tour", permanent: true },
+      { source: "/layouts/:slug*", destination: "/tour", permanent: true },
+      { source: "/templates", destination: "/tour", permanent: true },
+      { source: "/templates/:slug*", destination: "/tour", permanent: true },
+
+      // OS website-templates (full-app demos) → Grand Tour
+      { source: "/preview/personal-brand-os/:path*", destination: "/tour", permanent: true },
+      { source: "/preview/agency-studio-os/:path*", destination: "/tour", permanent: true },
+      { source: "/preview/notion-page-clone-os/:path*", destination: "/tour", permanent: true },
+      { source: "/preview/saas-marketing-os/:path*", destination: "/tour", permanent: true },
+      { source: "/preview/kreator-studio-os/:path*", destination: "/tour", permanent: true },
+      { source: "/preview/konsultan-os/:path*", destination: "/tour", permanent: true },
+      { source: "/preview/wirausaha-os/:path*", destination: "/tour", permanent: true },
+      { source: "/preview/riset-kit/:path*", destination: "/tour", permanent: true },
+
+      // Marketing section demos (hero / pricing / accordion / landing) → marketing act
+      { source: "/preview/hero-centered", destination: "/tour/marketing", permanent: true },
+      { source: "/preview/hero-split", destination: "/tour/marketing", permanent: true },
+      { source: "/preview/hero-bento-bg", destination: "/tour/marketing", permanent: true },
+      { source: "/preview/hero-video-loop", destination: "/tour/marketing", permanent: true },
+      { source: "/preview/hero-animated-text", destination: "/tour/marketing", permanent: true },
+      { source: "/preview/pricing-three", destination: "/tour/marketing", permanent: true },
+      { source: "/preview/pricing-four", destination: "/tour/marketing", permanent: true },
+      { source: "/preview/pricing-toggle", destination: "/tour/marketing", permanent: true },
+      { source: "/preview/pricing-compare", destination: "/tour/marketing", permanent: true },
+      { source: "/preview/pricing-slider", destination: "/tour/marketing", permanent: true },
+      { source: "/preview/accordion-faq", destination: "/tour/marketing", permanent: true },
+      { source: "/preview/accordion-grouped", destination: "/tour/marketing", permanent: true },
+      { source: "/preview/accordion-sidebar", destination: "/tour/marketing", permanent: true },
+      { source: "/preview/accordion-animated", destination: "/tour/marketing", permanent: true },
+      { source: "/preview/accordion-multi", destination: "/tour/marketing", permanent: true },
+      { source: "/preview/landing-hero-carousel", destination: "/tour/marketing", permanent: true },
+      { source: "/preview/landing-asymmetric-masonry", destination: "/tour/marketing", permanent: true },
+      { source: "/preview/landing-bento", destination: "/tour/marketing", permanent: true },
+      { source: "/preview/landing-kinetic-text", destination: "/tour/marketing", permanent: true },
+
+      // CMS blog demos → content act
+      { source: "/preview/blog-grid", destination: "/tour/content", permanent: true },
+      { source: "/preview/blog-list", destination: "/tour/content", permanent: true },
+      { source: "/preview/blog-magazine", destination: "/tour/content", permanent: true },
+      { source: "/preview/blog-masonry", destination: "/tour/content", permanent: true },
+      { source: "/preview/blog-featured", destination: "/tour/content", permanent: true },
+
+      // Dashboard + CMS-storefront demos → platform act
+      { source: "/preview/dashboard-three-column", destination: "/tour/platform", permanent: true },
+      { source: "/preview/dashboard-ide", destination: "/tour/platform", permanent: true },
+      { source: "/preview/dashboard-mobile-dock", destination: "/tour/platform", permanent: true },
+      { source: "/preview/cms-public-storefront", destination: "/tour/platform", permanent: true },
     ];
   },
 };

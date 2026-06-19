@@ -1,13 +1,6 @@
-import { layouts, type LayoutEntry } from "@/lib/content/layouts";
 import { slices, type SliceEntry } from "@/lib/content/slices";
 import type { NavBranch, NavLeaf, NavSection } from "./nav-types";
 import { SLICE_CATEGORY_LABEL, SLICE_CATEGORY_ORDER } from "@/lib/content/taxonomy";
-
-const LAYOUT_CATEGORY_TITLE: Record<Exclude<LayoutEntry["category"], "website-template">, string> = {
-  marketing: "Marketing",
-  dashboard: "Dashboard",
-  cms: "CMS",
-};
 
 function groupByCategory<T, K extends string>(items: T[], key: (t: T) => K): Record<K, T[]> {
   const out = {} as Record<K, T[]>;
@@ -19,12 +12,6 @@ function groupByCategory<T, K extends string>(items: T[], key: (t: T) => K): Rec
 }
 
 export function buildSections(): NavSection[] {
-  const websiteTemplates = layouts.filter((l) => l.category === "website-template");
-  const otherLayouts = layouts.filter((l) => l.category !== "website-template");
-  const layoutsByCat = groupByCategory(
-    otherLayouts,
-    (l) => l.category as Exclude<LayoutEntry["category"], "website-template">,
-  );
   const slicesByCat = groupByCategory(slices, (s) => s.category as string);
 
 
@@ -58,28 +45,6 @@ export function buildSections(): NavSection[] {
               }),
             ),
           }),
-        ),
-      ],
-    },
-    {
-      label: "Layouts",
-      items: [
-        { kind: "leaf", title: "All layouts", href: "/layouts" },
-        ...Object.entries(layoutsByCat)
-          .filter(([, list]) => list.length > 0)
-          .map(([cat, list]): NavBranch => ({
-            kind: "branch",
-            title: LAYOUT_CATEGORY_TITLE[cat as keyof typeof LAYOUT_CATEGORY_TITLE] ?? cat,
-            items: list.map((l) => ({ kind: "leaf", title: l.title, href: `/layouts/${l.slug}` })),
-          })),
-      ],
-    },
-    {
-      label: "Templates — full apps",
-      items: [
-        { kind: "leaf", title: "All templates", href: "/templates" },
-        ...websiteTemplates.map(
-          (l): NavLeaf => ({ kind: "leaf", title: l.title, href: `/layouts/${l.slug}` }),
         ),
       ],
     },

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { BookOpen, Layout, Boxes, Bot, Download, Sun, Moon } from "lucide-react";
+import { BookOpen, Compass, Boxes, Bot, Download, Sun, Moon } from "lucide-react";
 import { IconBrandGithub as Github } from "@tabler/icons-react";
 import { useTheme } from "next-themes";
 import {
@@ -14,7 +14,6 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
-import { layouts } from "@/lib/content/layouts";
 import { slices } from "@/lib/content/slices";
 import { site } from "@/lib/content/site";
 
@@ -66,8 +65,8 @@ export function CommandPalette() {
             <CommandItem onSelect={() => go("/docs")}>
               <BookOpen /> Docs
             </CommandItem>
-            <CommandItem onSelect={() => go("/layouts")}>
-              <Layout /> Layouts
+            <CommandItem onSelect={() => go("/tour")}>
+              <Compass /> Grand Tour
             </CommandItem>
             <CommandItem onSelect={() => go("/slices")}>
               <Boxes /> Slices
@@ -78,15 +77,6 @@ export function CommandPalette() {
             <CommandItem onSelect={() => go("/installation")}>
               <Download /> Installation
             </CommandItem>
-          </CommandGroup>
-          <CommandSeparator />
-          <CommandGroup heading="Layouts">
-            {layouts.map((l) => (
-              <CommandItem key={l.slug} onSelect={() => go(`/layouts/${l.slug}`)}>
-                <Layout /> {l.title}
-                <span className="ml-auto text-xs text-muted-foreground">{l.category}</span>
-              </CommandItem>
-            ))}
           </CommandGroup>
           <CommandSeparator />
           <CommandGroup heading="Slices">
