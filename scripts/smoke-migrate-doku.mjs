@@ -9,28 +9,19 @@
 
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { spawnSync } from "node:child_process";
 
 import { diffContracts, planMigration } from "../packages/cli/lib/migration-plan.mjs";
+import { loadSliceContract } from "../packages/cli/lib/load-contract.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, "..");
 
-// Load the current contract via tsx (mirrors compose-solver's strategy).
-const code = [
-  `import("./frontend/slices/doku-payment/slice.contract.ts")`,
-  `  .then(m => { const c = m.contract || (m.default && m.default.contract); if (!c) { process.exit(2); } process.stdout.write(JSON.stringify(c)); })`,
-  `  .catch(e => { process.stderr.write(String(e.stack||e)); process.exit(3); });`,
-].join("\n");
-const res = spawnSync("npx", ["--no-install", "tsx", "-e", code], {
-  cwd: repoRoot,
-  encoding: "utf8",
-});
-if (res.status !== 0 || !res.stdout) {
-  process.stderr.write(`Failed to load doku contract: ${res.stderr ?? ""}\n`);
+// Load the current contract from the folded slice.json (Phase-2 SSOT).
+const toContract = loadSliceContract(path.join(repoRoot, "frontend", "slices", "doku-payment"));
+if (!toContract) {
+  process.stderr.write("Failed to load doku contract from slice.json\n");
   process.exit(1);
 }
-const toContract = JSON.parse(res.stdout);
 
 const fromContract = {
   id: "doku-payment",

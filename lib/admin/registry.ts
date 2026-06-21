@@ -37,13 +37,8 @@ export async function loadSliceRegistry(): Promise<SliceManifest[]> {
     }
     if (!manifest) continue;
 
-    let hasContract = false;
-    try {
-      await readFile(join(slicePath, "slice.contract.ts"), "utf8");
-      hasContract = true;
-    } catch {
-      // skip
-    }
+    // The composition contract is folded into slice.json since Phase 2.
+    const hasContract = manifest.contract != null;
 
     let hasManifest = false;
     try {

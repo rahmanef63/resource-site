@@ -1,13 +1,12 @@
 // snapshot.mjs — build a SliceSnapshot from a slice directory.
 //
 // Walks the directory recursively, keeps only typical slice file extensions,
-// reads `slice.contract.ts` when present and parses it (via `tsx` if
-// available, regex fallback otherwise). Skips node_modules, .kitab, and
-// dotfiles to keep snapshots stable across machines.
+// and reads the folded composition contract from slice.json (`contract` block,
+// id/version reattached from the slice.json scalars). Skips node_modules,
+// .kitab, and dotfiles to keep snapshots stable across machines.
 
 import { readdir, readFile, stat } from "node:fs/promises";
 import { existsSync } from "node:fs";
-import { spawnSync } from "node:child_process";
 import path from "node:path";
 
 const INCLUDED_EXT = new Set([".ts", ".tsx", ".mjs", ".js", ".jsx", ".json", ".md", ".css"]);
@@ -33,18 +32,18 @@ export async function snapshotFromDir(slug, dir) {
   const files = {};
   await walk(dir, dir, files);
 
+  // The composition contract is folded into slice.json (`contract` block) since
+  // Phase 2; reattach id/version from the slice.json scalars to keep the same
+  // SliceContract shape the old slice.contract.ts exported.
   let contract;
-  const contractPath = path.join(dir, "slice.contract.ts");
-  if (existsSync(contractPath)) {
-    contract = loadContract(contractPath) ?? regexLoadContract(await readFile(contractPath, "utf8"));
-  }
-
-  // Version preference: contract.version → slice.json.version → "0.0.0".
-  let version = contract?.version ?? "0.0.0";
-  if (!contract?.version && files["slice.json"]) {
+  let version = "0.0.0";
+  if (files["slice.json"]) {
     try {
       const meta = JSON.parse(files["slice.json"]);
       if (typeof meta.version === "string") version = meta.version;
+      if (meta.contract && typeof meta.contract === "object") {
+        contract = { id: meta.slug, version: meta.version, ...meta.contract };
+      }
     } catch {
       /* ignore */
     }
@@ -77,50 +76,5 @@ async function walk(root, dir, out) {
       continue;
     }
     out[rel] = await readFile(full, "utf8");
-  }
-}
-
-/**
- * Mirror of validate-contract.mjs's tsx loader. Returns the parsed contract
- * or undefined on failure.
- */
-function loadContract(filePath) {
-  const code = [
-    `import(${JSON.stringify(filePath)})`,
-    `  .then(m => { const c = m.contract || (m.default && m.default.contract); if (!c) { process.exit(2); } process.stdout.write(JSON.stringify(c)); })`,
-    `  .catch(e => { process.stderr.write(String(e && e.message || e)); process.exit(3); });`,
-  ].join("\n");
-  try {
-    const res = spawnSync("npx", ["--no-install", "tsx", "-e", code], {
-      encoding: "utf8",
-    });
-    if (res.status === 0 && res.stdout) {
-      return JSON.parse(res.stdout);
-    }
-  } catch {
-    /* tsx missing or failed */
-  }
-  return undefined;
-}
-
-/**
- * Best-effort regex fallback: extract the literal-ish object passed to
- * `defineSliceContract({ ... })`. We can't fully parse TS, but for the kitab's
- * contracts (small static literals) a JSON5-ish coerce works for the basic
- * shape we need here.
- */
-function regexLoadContract(src) {
-  const m = src.match(/defineSliceContract\s*\(\s*(\{[\s\S]*?\})\s*\)\s*;?\s*$/m);
-  if (!m) return undefined;
-  // Replace single quotes, strip trailing commas, quote keys.
-  const body = m[1]
-    .replace(/'([^'\\]*)'/g, '"$1"')
-    .replace(/,(\s*[}\]])/g, "$1")
-    .replace(/([{,]\s*)([A-Za-z_$][A-Za-z0-9_$]*)\s*:/g, '$1"$2":')
-    .replace(/\/\/.*$/gm, "");
-  try {
-    return JSON.parse(body);
-  } catch {
-    return undefined;
   }
 }

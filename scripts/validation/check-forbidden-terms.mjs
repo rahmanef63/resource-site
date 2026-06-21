@@ -32,7 +32,6 @@ const ROOT = resolve(__dirname, "..", "..");
 const SLICES_DIR = join(ROOT, "frontend", "slices");
 const JSON_MODE = process.argv.includes("--json");
 
-const FORBIDDEN_RE = /\bforbiddenTerms\s*:\s*\[([^\]]*)\]/;
 const SCAN_EXT = /\.(tsx?|jsx?|mjs)$/;
 const SKIP_DIR = new Set(["node_modules", ".next", "dist", "coverage", ".turbo"]);
 
@@ -40,14 +39,6 @@ function color(c, str) {
   if (JSON_MODE || !process.stdout.isTTY) return str;
   const codes = { red: 31, green: 32, yellow: 33, cyan: 36, dim: 2 };
   return `\x1b[${codes[c] ?? 0}m${str}\x1b[0m`;
-}
-
-function extractForbiddenTerms(src) {
-  const m = src.match(FORBIDDEN_RE);
-  if (!m) return [];
-  const inner = m[1];
-  const terms = [...inner.matchAll(/["']([^"']+)["']/g)].map((x) => x[1]);
-  return terms;
 }
 
 async function walk(dir, out) {
@@ -73,7 +64,8 @@ async function scanSlice(sliceDir, slug, terms) {
   await walk(sliceDir, files);
   const hits = [];
   for (const f of files) {
-    if (f.endsWith("slice.contract.ts")) continue;
+    if (f.endsWith("slice.json")) continue; // legally names the denied terms
+    if (f.endsWith("slice.contract.ts")) continue; // pre-cutover: same (deleted at STEP 13)
     if (f.endsWith(".kitab.json")) continue;
     let src;
     try {
@@ -131,11 +123,16 @@ async function main() {
     if (!entry.isDirectory() || entry.name.startsWith("_")) continue;
     const slug = entry.name;
     const sliceDir = join(SLICES_DIR, slug);
-    const contractPath = join(sliceDir, "slice.contract.ts");
-    if (!existsSync(contractPath)) continue;
+    const jsonPath = join(sliceDir, "slice.json");
+    if (!existsSync(jsonPath)) continue;
     scannedSlices++;
-    const src = await readFile(contractPath, "utf8");
-    const terms = extractForbiddenTerms(src);
+    let terms = [];
+    try {
+      const meta = JSON.parse(await readFile(jsonPath, "utf8"));
+      terms = meta.contract?.generalization?.forbiddenTerms ?? [];
+    } catch {
+      continue;
+    }
     if (terms.length === 0) continue;
     slicesWithForbidden++;
     const hits = await scanSlice(sliceDir, slug, terms);

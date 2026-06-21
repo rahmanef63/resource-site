@@ -18,9 +18,9 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { spawnSync } from "node:child_process";
 
 import { diffContracts, planMigration } from "../packages/cli/lib/migration-plan.mjs";
+import { loadSliceContract } from "../packages/cli/lib/load-contract.mjs";
 import { appendLineage } from "../packages/cli/lib/dna.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -33,21 +33,12 @@ function camelCase(s) {
 }
 
 function loadCurrentContract(slug) {
-  const rel = `./frontend/slices/${slug}/slice.contract.ts`;
-  const code = [
-    `import(${JSON.stringify(rel)})`,
-    `  .then(m => { const c = m.contract || (m.default && m.default.contract); if (!c) { process.exit(2); } process.stdout.write(JSON.stringify(c)); })`,
-    `  .catch(e => { process.stderr.write(String(e.stack || e)); process.exit(3); });`,
-  ].join("\n");
-  const res = spawnSync("npx", ["--no-install", "tsx", "-e", code], {
-    cwd: repoRoot,
-    encoding: "utf8",
-  });
-  if (res.status !== 0 || !res.stdout) {
-    process.stderr.write(`Failed to load ${slug} contract: ${res.stderr ?? ""}\n`);
+  const c = loadSliceContract(path.join(repoRoot, "frontend", "slices", slug));
+  if (!c) {
+    process.stderr.write(`Failed to load ${slug} contract from slice.json\n`);
     process.exit(1);
   }
-  return JSON.parse(res.stdout);
+  return c;
 }
 
 /**

@@ -71,11 +71,18 @@ carries undeclared `utils`/`convex` sub-fields. A clean mechanical reconcile of
   validator-violating contracts like platform-admin) — surgical text-append of a
   `contract` block to each slice.json (no reformat). Applied 70/70, **lossless
   verified 70 match / 0 mismatch**. contract.ts RETAINED (additive, reversible). ✅
-- [ ] 2c. Repoint read-paths contract→slice.json.contract: `snapshot.mjs`
-  (loadContract → read slice.json.contract + reattach id/version),
-  `migrate*.mjs`, `migration-plan.mjs`, `compose-solver*`, `validate-contract.mjs`,
-  `check-contract-drift.mjs`, `check-forbidden-terms.mjs` (+skip slice.json),
-  `audit-slice.mjs` (contractToolNames + version-trio→pair).
+- [x] 2c. Readers repointed to slice.json.contract via shared adapter
+  `packages/cli/lib/load-contract.mjs` (`loadSliceContract(dir)` → `{id:slug,
+  version, ...contract}`): compose-solver-loader (dir-discovery, no tsx),
+  snapshot.mjs, migrate-load.mjs (CURRENT via adapter; HISTORIC keeps git-show
+  of old .ts, relPath gated on slice.json), migrate.mjs (msg), audit-slice +
+  helpers (contractToolNames from json; **version-trio→pair**), check-forbidden-
+  terms (terms from json.contract.generalization; skip both json + .ts till
+  deletion), lib/admin/registry.ts, smoke-migrate-doku, apply-midtrans. **.ts
+  RETAINED** (both sources agree). Verified: compose loadAllContracts 70 (was 69
+  — platform-admin's validator-violating contract now loads, a latent bug-fix),
+  compose-solver vitest 20/20, smoke OK, migrate --from 0.1.0 historic OK,
+  forbidden-terms withTerms 11 / hits 0 (not dark), audit:slices 0, tsc 0. ✅
 - [ ] 2d. `validate-slice.mjs` (or validate-contract): validate the folded block
   + custom JS for the 2 cross-field invariants (constraint #4); tolerate the
   known platform-admin 2-dot rbac (regex-fallback today).

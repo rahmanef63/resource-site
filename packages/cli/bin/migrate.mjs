@@ -80,7 +80,7 @@ export async function runMigrate(rest) {
     process.stderr.write(
       kleur.red(
         `migrate: cannot load current contract for "${slug}". ` +
-          `Expected frontend/slices/${slug}/slice.contract.ts or template-base/frontend/slices/${slug}/slice.contract.ts.\n`,
+          `Expected a contract block in frontend/slices/${slug}/slice.json (or template-base/frontend/slices/${slug}/slice.json).\n`,
       ),
     );
     process.exit(1);

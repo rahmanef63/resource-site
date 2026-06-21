@@ -34,15 +34,17 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(__dirname, "../..");
 const SLICES_ROOT = path.join(REPO, "frontend", "slices");
 
-// Namespaced tool names declared in a slice's contract `provides.tools`. The
-// DSL keeps them as a flat array of string literals, so a light regex suffices
-// (same extraction the agent.md generator uses).
+// Namespaced tool names declared in a slice's folded contract
+// `contract.provides.tools` (slice.json since the Phase-2 fold).
 function contractToolNames(sliceDir) {
-  const p = path.join(sliceDir, "slice.contract.ts");
+  const p = path.join(sliceDir, "slice.json");
   if (!existsSync(p)) return [];
-  const m = readFileSync(p, "utf8").match(/\btools:\s*\[([^\]]*)\]/s);
-  if (!m) return [];
-  return [...m[1].matchAll(/["']([^"']+)["']/g)].map((x) => x[1]);
+  try {
+    const j = JSON.parse(readFileSync(p, "utf8"));
+    return j.contract?.provides?.tools ?? [];
+  } catch {
+    return [];
+  }
 }
 
 const slices = discoverSlices(SLICES_ROOT);
@@ -53,22 +55,14 @@ const errors = [];
 const warnings = [];
 
 for (const slice of slices) {
-  // 0. metadata trio enforcement
-  if (!existsSync(path.join(slice.dir, "slice.contract.ts"))) {
-    errors.push(`[${slice.folder}] missing slice.contract.ts (metadata trio)`);
-  }
+  // 0. metadata pair enforcement (the contract folded into slice.json, Phase 2)
   if (!existsSync(path.join(slice.dir, "slice.manifest.json"))) {
-    errors.push(`[${slice.folder}] missing slice.manifest.json (metadata trio)`);
+    errors.push(`[${slice.folder}] missing slice.manifest.json (metadata pair)`);
   }
 
-  // 0b. version parity — slice.json is the version SSOT; contract + manifest
-  // must agree (else snapshots/installs mislabel the slice version).
+  // 0b. version parity — slice.json is the version SSOT; manifest must agree
+  // (else installs mislabel the slice version).
   const ver = versionTrio(slice.dir);
-  if (ver.json && ver.contract && ver.contract !== ver.json) {
-    errors.push(
-      `[${slice.folder}] slice.contract.ts version "${ver.contract}" != slice.json "${ver.json}" — bump the trio in lockstep`,
-    );
-  }
   if (ver.json && ver.manifest && ver.manifest !== ver.json) {
     errors.push(
       `[${slice.folder}] slice.manifest.json version "${ver.manifest}" != slice.json "${ver.json}"`,

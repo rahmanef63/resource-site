@@ -171,26 +171,21 @@ export function lintStyleAntipatterns(relPath, body) {
   return out;
 }
 
-// Version SSOT parity. slice.json is authoritative (CLI distribution).
-// contract.version feeds the snapshot/migration system (snapshot.mjs prefers
-// it; migrate-load keys migrations off it), and manifest.version is the
-// distribution tag — both must track slice.json or installs/snapshots mislabel.
+// Version SSOT parity (a PAIR since the Phase-2 contract fold). slice.json is
+// authoritative (CLI distribution + the folded contract's version); manifest
+// .version is the distribution tag and must track it or installs mislabel.
 export function versionTrio(sliceDir) {
-  const read = (rel, isJson) => {
+  const read = (rel) => {
     const p = path.join(sliceDir, rel);
     if (!existsSync(p)) return null;
     try {
-      const body = readFileSync(p, "utf8");
-      if (isJson) return JSON.parse(body).version ?? null;
-      const m = body.match(/^\s*version:\s*["']([^"']+)["']/m);
-      return m ? m[1] : null;
+      return JSON.parse(readFileSync(p, "utf8")).version ?? null;
     } catch {
       return null;
     }
   };
   return {
-    json: read("slice.json", true),
-    contract: read("slice.contract.ts", false),
-    manifest: read("slice.manifest.json", true),
+    json: read("slice.json"),
+    manifest: read("slice.manifest.json"),
   };
 }

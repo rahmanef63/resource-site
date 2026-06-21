@@ -8,6 +8,7 @@
 import { existsSync, mkdirSync, unlinkSync, writeFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import path from "node:path";
+import { loadSliceContract } from "../lib/load-contract.mjs";
 
 export function parseFlags(rest) {
   const positional = [];
@@ -51,26 +52,32 @@ const SLICE_ROOTS = [
   ["template-base", "frontend", "slices"],
 ];
 
-function resolveContractPath(repoRoot, slug) {
+// The CURRENT contract is folded into slice.json — locate the slice dir by its
+// slice.json (the .ts no longer exists in the working tree post-cutover).
+function resolveSliceDir(repoRoot, slug) {
   for (const segs of SLICE_ROOTS) {
-    const p = path.join(repoRoot, ...segs, slug, "slice.contract.ts");
-    if (existsSync(p)) return p;
+    const dir = path.join(repoRoot, ...segs, slug);
+    if (existsSync(path.join(dir, "slice.json"))) return dir;
   }
   return null;
 }
 
+// HISTORIC leg still pulls the OLD slice.contract.ts from git history, so the
+// rel path is the .ts path — but gate on the slice's slice.json existing today
+// (NOT the working-tree .ts, which is gone post-cutover).
 function resolveContractRelPath(repoRoot, slug) {
   for (const segs of SLICE_ROOTS) {
-    const rel = [...segs, slug, "slice.contract.ts"].join("/");
-    if (existsSync(path.join(repoRoot, rel))) return rel;
+    if (existsSync(path.join(repoRoot, ...segs, slug, "slice.json"))) {
+      return [...segs, slug, "slice.contract.ts"].join("/");
+    }
   }
   return null;
 }
 
 export function loadCurrentContract(repoRoot, slug) {
-  const p = resolveContractPath(repoRoot, slug);
-  if (!p) return null;
-  return evalContract(repoRoot, p, null);
+  const dir = resolveSliceDir(repoRoot, slug);
+  if (!dir) return null;
+  return loadSliceContract(dir);
 }
 
 /**

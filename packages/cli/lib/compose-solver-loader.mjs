@@ -1,13 +1,14 @@
-// compose-solver-loader.mjs — contract discovery + tsx-eval loader.
+// compose-solver-loader.mjs — contract discovery loader.
 //
 // Split out from compose-solver.mjs to keep the pure solver < 200 LOC.
-// I/O entry point only — discovers `slice.contract.ts` under known slice
-// roots and shells out to `npx tsx` to JSON-serialize each export.
+// I/O entry point only — discovers slices under known roots and reads each
+// folded contract from slice.json (`contract` block) via the shared adapter.
+// No tsx subprocess: the contract lives in slice.json since the Phase-2 fold.
 
 import { readdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
-import { spawnSync } from "node:child_process";
 import path from "node:path";
+import { loadSliceContract } from "./load-contract.mjs";
 
 const SLICE_ROOT_GLOBS = [
   ["frontend", "slices"],
@@ -15,11 +16,10 @@ const SLICE_ROOT_GLOBS = [
 ];
 
 /**
- * Discover every `slice.contract.ts` under the kitab's known slice roots and
- * load them via `npx tsx`. Returns a Map<slug, SliceContract>. Contracts that
- * fail to load are silently skipped so a single broken file doesn't take
- * down the whole solver — `npm run validate:contracts` is the place to surface
- * those errors.
+ * Discover every slice with a folded contract under the kitab's known slice
+ * roots. Returns a Map<slug, SliceContract>. Slices without a slice.json
+ * contract block are silently skipped so a single uncontracted slice doesn't
+ * take down the solver — `npm run audit:slices` surfaces shape errors.
  *
  * @param {string} repoRoot Absolute path to the kitab repo root.
  * @returns {Promise<Map<string, import("./contract").SliceContract>>}
@@ -27,9 +27,8 @@ const SLICE_ROOT_GLOBS = [
 export async function loadAllContracts(repoRoot) {
   /** @type {Map<string, import("./contract").SliceContract>} */
   const out = new Map();
-  const sliceFiles = await discoverContractFiles(repoRoot);
-  for (const filePath of sliceFiles) {
-    const contract = loadContractFile(repoRoot, filePath);
+  for (const dir of await discoverSliceDirs(repoRoot)) {
+    const contract = loadSliceContract(dir);
     if (contract && typeof contract.id === "string") {
       out.set(contract.id, contract);
     }
@@ -37,7 +36,7 @@ export async function loadAllContracts(repoRoot) {
   return out;
 }
 
-async function discoverContractFiles(repoRoot) {
+async function discoverSliceDirs(repoRoot) {
   const found = [];
   for (const segs of SLICE_ROOT_GLOBS) {
     const root = path.join(repoRoot, ...segs);
@@ -46,34 +45,9 @@ async function discoverContractFiles(repoRoot) {
     for (const entry of entries) {
       if (!entry.isDirectory()) continue;
       if (entry.name.startsWith("_")) continue;
-      const filePath = path.join(root, entry.name, "slice.contract.ts");
-      if (existsSync(filePath)) found.push(filePath);
+      const dir = path.join(root, entry.name);
+      if (existsSync(path.join(dir, "slice.json"))) found.push(dir);
     }
   }
   return found;
-}
-
-/**
- * Dynamic-import a .ts contract file via `npx tsx -e` and JSON.parse the
- * stringified `contract` export. Returns null on any failure.
- */
-function loadContractFile(repoRoot, filePath) {
-  const rel = "./" + path.relative(repoRoot, filePath);
-  const code = [
-    `import(${JSON.stringify(rel)})`,
-    `  .then(m => { const c = m.contract || (m.default && m.default.contract); if (!c) { process.exit(2); } process.stdout.write(JSON.stringify(c)); })`,
-    `  .catch(() => process.exit(3));`,
-  ].join("\n");
-  const res = spawnSync("npx", ["--no-install", "tsx", "-e", code], {
-    cwd: repoRoot,
-    encoding: "utf8",
-  });
-  if (res.status === 0 && res.stdout) {
-    try {
-      return JSON.parse(res.stdout);
-    } catch {
-      return null;
-    }
-  }
-  return null;
 }
