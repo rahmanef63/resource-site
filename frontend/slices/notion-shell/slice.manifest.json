@@ -9,7 +9,6 @@
     "consumerPath": "slices/notion-shell"
   },
   "files": [
-    "agent.md",
     "block-types.ts",
     "calc-types.ts",
     "components/BlockActionsHandle.tsx",

@@ -10,7 +10,6 @@
   },
   "files": [
     "HOST-SETUP.md",
-    "agent.md",
     "components/OnboardingWizard.tsx",
     "components/step-branding.tsx",
     "components/steps.tsx",

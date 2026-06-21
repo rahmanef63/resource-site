@@ -54,14 +54,6 @@ if ! npm run --silent audit:file-size; then
   exit 1
 fi
 
-# Drift gates that previously lived only in slices:check (never wired to a
-# hook) — agent.md drifted for days across U5-U7 before anyone noticed.
-if ! npm run --silent gen:agent-md:check; then
-  echo ""
-  echo "pre-commit: agent.md drift — run 'npm run gen:agent-md' and stage the result, or bypass with --no-verify" >&2
-  exit 1
-fi
-
 # Catalog scalars (lib/content/slices.ts title/category/version/kind) are
 # GENERATED from each slice.json (the SSOT). Replaces validate-slice-parity —
 # drift is now auto-fixable, not just flagged.

@@ -9,7 +9,6 @@
     "consumerPath": "slices/image-picker"
   },
   "files": [
-    "agent.md",
     "components/ImageBanner.tsx",
     "components/ImagePickerButton.tsx",
     "components/ImagePickerDialog.tsx",

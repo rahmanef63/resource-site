@@ -112,6 +112,7 @@ function walk(root, dir, out) {
     if (rel === "slice.json") continue;
     if (rel === "slice.contract.ts") continue;
     if (rel === "slice.manifest.json") continue;
+    if (rel === "agent.md") continue; // generated LLM card — retired off-git 2026-06-21
     if (/\.test\.(ts|tsx|mjs|js)$/.test(name)) continue;
     if (!/\.(ts|tsx|md|css|mjs)$/.test(name)) continue;
     out.push(rel);

@@ -9,7 +9,6 @@
     "consumerPath": "slices/selection"
   },
   "files": [
-    "agent.md",
     "components/SelectableBlock.tsx",
     "components/SelectionMarquee.tsx",
     "components/SelectionProvider.tsx",

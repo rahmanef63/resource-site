@@ -9,7 +9,6 @@
     "consumerPath": "slices/notion-sidebar"
   },
   "files": [
-    "agent.md",
     "components/NotionSidebar.tsx",
     "components/SidebarRow.tsx",
     "index.ts",

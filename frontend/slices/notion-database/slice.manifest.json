@@ -9,7 +9,6 @@
     "consumerPath": "slices/notion-database"
   },
   "files": [
-    "agent.md",
     "components/ColumnHeaderMenu.tsx",
     "components/FilterBuilder-ops.ts",
     "components/FilterBuilder-value.tsx",

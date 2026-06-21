@@ -41,7 +41,6 @@
     "ARCHITECTURE.md",
     "CHANGELOG.md",
     "README.md",
-    "agent.md",
     "commands/adjust.commands.ts",
     "commands/document.commands.ts",
     "commands/export.commands.ts",

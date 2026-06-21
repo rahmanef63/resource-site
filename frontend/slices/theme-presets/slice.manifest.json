@@ -10,7 +10,6 @@
   },
   "files": [
     "HOST-SETUP.md",
-    "agent.md",
     "components/SaveSiteDefaultButton.tsx",
     "components/ThemeColorSync.tsx",
     "components/ThemePresetProvider.tsx",

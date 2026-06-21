@@ -16,7 +16,6 @@
     "adapter/mock-tree.ts",
     "adapter/mock.ts",
     "adapter/types.ts",
-    "agent.md",
     "components/drop-overlay.tsx",
     "components/explorer-view.tsx",
     "components/file-context-menu.tsx",

@@ -37,8 +37,13 @@
 ## Phases
 
 ### Phase 1 — agent.md off-git + catalog scalar-gen + kill 2 validators
-- [ ] 1a. `git rm --cached` 70 `agent.md` + `.gitignore` them; keep `gen:agent-md`
-  for local/MCP; drop the agent.md presence/drift gate (audit-slice + CI --check).
+- [x] 1a. `git rm` 70 `agent.md` + the generator (`gen-slice-agent-md.mjs` +
+  `agent-md-tools.mjs`); removed `gen:agent-md`/`:check` from package.json +
+  pre-commit + `slices:check`; surgically dropped `agent.md` from the 16
+  manifests that listed it (JSON round-trip, byte-clean); added `agent.md` skip
+  to `sync-slice-manifests`. Nothing reads agent.md at build/runtime (MCP reads
+  manifest.json). Broader manifest files[] drift left untouched (out of scope —
+  sync-manifest also has a preview.tsx-listing gap; separate task). ✅
 - [x] 1b. `scripts/features/gen-slice-catalog.mjs`: resolve each catalog entry's
   slice.json via its **slicePath** (mirrors parity — NOT slug; event-tracking
   points at template-base) → regenerate single-line scalars in place (version,

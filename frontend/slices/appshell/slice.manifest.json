@@ -9,7 +9,6 @@
     "consumerPath": "slices/appshell"
   },
   "files": [
-    "agent.md",
     "appshell.css",
     "components/app-badge.tsx",
     "components/app-icon.tsx",
