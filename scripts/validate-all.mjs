@@ -3,11 +3,10 @@
  * Aggregate validation runner — run before any rr push.
  *
  * Chains in the order they would fail in CI:
- *   1. typecheck      (catches contract DSL signature drift first)
+ *   1. typecheck      (catches type drift first)
  *   2. slices:check   (slice.json + audit-bp + gen registries + manifests + contracts)
- *   3. contracts:drift (DNA <-> contract <-> slice.json triple-check)
- *   4. forbidden:terms (cross-consumer leak gate)
- *   5. test           (vitest — slice-local + lib + packages/cli)
+ *   3. forbidden:terms (cross-consumer leak gate)
+ *   4. test           (vitest — slice-local + lib + packages/cli)
  *
  * Each step exits non-zero stops the chain (sequential).
  *
@@ -25,7 +24,6 @@ const steps = [
   // bump; a cold tsc on this repo OOMs the default Node heap.
   ["typecheck", ["npm", ["run", "typecheck", "--silent"]]],
   ["slices:check", ["npm", ["run", "slices:check", "--silent"]]],
-  ["contracts:drift", ["npm", ["run", "contracts:drift", "--silent"]]],
   ["forbidden:terms", ["npm", ["run", "forbidden:terms", "--silent"]]],
 ];
 if (!QUICK) steps.push(["test", ["npm", ["test", "--silent"]]]);

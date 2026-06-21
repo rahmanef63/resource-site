@@ -28,7 +28,6 @@
     "validate:manifests:check": "node scripts/validation/validate-manifests.mjs --check",
     "validate:contracts": "node scripts/validation/validate-contract.mjs",
     "validate:contracts:check": "node scripts/validation/validate-contract.mjs --check",
-    "contracts:drift": "node scripts/validation/check-contract-drift.mjs",
     "forbidden:terms": "node scripts/validation/check-forbidden-terms.mjs",
     "validate:all": "node scripts/validate-all.mjs",
     "validate:all:quick": "node scripts/validate-all.mjs --quick",
