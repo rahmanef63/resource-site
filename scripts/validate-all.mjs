@@ -53,7 +53,7 @@ if (failed) {
 }
 
 // Warn-only tail: drift reports (never fail the chain).
-for (const report of ["report-ui-drift.mjs", "report-slices-drift.mjs"]) {
+for (const report of ["report-ui-drift.mjs"]) {
   const drift = spawnSync("node", [`scripts/validation/${report}`], {
     stdio: ["ignore", "pipe", "pipe"],
   });

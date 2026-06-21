@@ -62,6 +62,15 @@ if ! npm run --silent gen:agent-md:check; then
   exit 1
 fi
 
+# Catalog scalars (lib/content/slices.ts title/category/version/kind) are
+# GENERATED from each slice.json (the SSOT). Replaces validate-slice-parity —
+# drift is now auto-fixable, not just flagged.
+if ! npm run --silent gen:catalog:check; then
+  echo ""
+  echo "pre-commit: catalog scalar drift — run 'npm run gen:catalog' and stage lib/content/slices.ts, or bypass with --no-verify" >&2
+  exit 1
+fi
+
 if ! npm run --silent validate:changelog; then
   echo ""
   echo "pre-commit: changelog data invalid (dup id / future date) — fix lib/content/changelog/part-*.ts" >&2

@@ -29,12 +29,12 @@
     "gen": "node scripts/gen-manifest.mjs",
     "validate": "node scripts/validate.mjs",
     "validate:slices": "node scripts/validate-slice.mjs",
-    "validate:parity": "node scripts/validate-slice-parity.mjs",
+    "validate:parity": "node ../../scripts/features/gen-slice-catalog.mjs --check",
     "validate:structure": "node scripts/validate-structure.mjs",
-    "validate:all": "node scripts/validate.mjs && node scripts/validate-slice.mjs --check && node scripts/validate-slice-parity.mjs && node scripts/validate-structure.mjs",
+    "validate:all": "node scripts/validate.mjs && node scripts/validate-slice.mjs --check && node ../../scripts/features/gen-slice-catalog.mjs --check && node scripts/validate-structure.mjs",
     "sync:skills": "node scripts/sync-skills.mjs",
     "sync:skills:check": "node scripts/sync-skills.mjs --check",
-    "prepublishOnly": "node scripts/sync-skills.mjs --check && node scripts/validate.mjs && node scripts/validate-slice.mjs --check && node scripts/validate-slice-parity.mjs && node scripts/validate-structure.mjs"
+    "prepublishOnly": "node scripts/sync-skills.mjs --check && node scripts/validate.mjs && node scripts/validate-slice.mjs --check && node ../../scripts/features/gen-slice-catalog.mjs --check && node scripts/validate-structure.mjs"
   },
   "dependencies": {
     "kleur": "^4.1.5",
