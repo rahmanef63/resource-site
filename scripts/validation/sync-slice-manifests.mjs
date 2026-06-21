@@ -15,7 +15,7 @@
 //
 // File inclusion rules:
 //   IN  : .ts / .tsx / .md / .css under the slice dir (recursive)
-//   OUT : slice.json / slice.contract.ts / slice.manifest.json / *.test.* / node_modules
+//   OUT : slice.json / slice.manifest.json / *.test.* / node_modules
 
 import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
@@ -108,9 +108,8 @@ function walk(root, dir, out) {
     const rel = path.relative(root, full).replaceAll(path.sep, "/");
     const s = statSync(full);
     if (s.isDirectory()) { walk(root, full, out); continue; }
-    // Skip the trio metadata itself + test files
+    // Skip the metadata files themselves + test files
     if (rel === "slice.json") continue;
-    if (rel === "slice.contract.ts") continue;
     if (rel === "slice.manifest.json") continue;
     if (rel === "agent.md") continue; // generated LLM card — retired off-git 2026-06-21
     if (/\.test\.(ts|tsx|mjs|js)$/.test(name)) continue;

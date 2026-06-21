@@ -80,7 +80,7 @@ export function RegistryRowDialog({
                 </DetailRow>
               )}
               <DetailRow label="Contract">
-                {slice.hasContract ? "✓ slice.contract.ts" : "— missing"}
+                {slice.hasContract ? "✓ contract (slice.json)" : "— missing"}
               </DetailRow>
               <DetailRow label="Manifest">
                 {slice.hasManifest ? "✓ slice.manifest.json" : "— missing"}

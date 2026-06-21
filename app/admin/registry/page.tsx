@@ -19,7 +19,7 @@ export default async function AdminRegistryPage() {
       <PageHeader
         eyebrow="Inspect"
         title="Slice registry"
-        description="Live read of frontend/slices/*/slice.json. Contract column = slice.contract.ts present (typed DSL). Manifest column = slice.manifest.json present (CLI-distributable via npx rr add). Hide marks a slug for removal from public catalogs — export lib/content/hidden-slugs.ts and wire isHidden(slug) into consumers."
+        description="Live read of frontend/slices/*/slice.json. Contract column = contract block in slice.json present. Manifest column = slice.manifest.json present (CLI-distributable via npx rr add). Hide marks a slug for removal from public catalogs — export lib/content/hidden-slugs.ts and wire isHidden(slug) into consumers."
       />
 
       <section className="grid grid-cols-2 gap-3 lg:grid-cols-4">
@@ -27,7 +27,7 @@ export default async function AdminRegistryPage() {
         <StatCard
           label="With contract"
           value={withContract}
-          hint="typed slice.contract.ts"
+          hint="contract block in slice.json"
           tone={withContract === slices.length ? "ok" : "warn"}
         />
         <StatCard

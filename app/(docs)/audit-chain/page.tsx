@@ -8,7 +8,7 @@ const GUARDS = [
     script: "scripts/validation/audit-slice.mjs",
     coverage: "30/30 slices",
     rules: [
-      "Metadata trio: slice.json + slice.contract.ts + slice.manifest.json all exist",
+      "Metadata pair: slice.json (with an embedded contract block) + slice.manifest.json both exist",
       "Naming: folder name === slice.json slug === config.ts slug",
       "Imports: slice files only resolve via @/components/ui/*, @/shared/*, @/features/<own-slug>/*, @convex/*, or relative-within-slice",
       "Schema clash: no two slices declare the same Convex table name",
@@ -57,7 +57,7 @@ const GUARDS = [
     script: "scripts/validation/audit-convex-features.mjs",
     coverage: "19/19 convex/features/* folders",
     rules: [
-      "Canon files (top-level only): _schema.ts (REQUIRED), query.ts, mutation.ts, action.ts, http.ts, index.ts, README.md (warned), slice trio",
+      "Canon files (top-level only): _schema.ts (REQUIRED), query.ts, mutation.ts, action.ts, http.ts, index.ts, README.md (warned), slice metadata (slice.json + slice.manifest.json)",
       "BANNED: schema.ts (no underscore), mutations.ts/queries.ts/actions.ts (plural)",
       "Private helpers/types: underscore-prefix (e.g. _helpers.ts, _types.ts)",
       "_schema.ts should export `<slug>Tables` for root-schema composition (warning)",

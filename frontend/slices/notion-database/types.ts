@@ -10,7 +10,7 @@
  *  + consumers can import from "../types" / "@/features/notion-database"
  *  without having to know the types physically reside in notion-shell.
  *
- *  Slice peer: notion-shell (declared in slice.contract.ts).
+ *  Slice peer: notion-shell (declared in slice.json (contract.requires.deps)).
  */
 
 export type {

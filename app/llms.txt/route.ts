@@ -40,7 +40,7 @@ async function buildBody() {
   lines.push("## Slices");
   lines.push("");
   lines.push(
-    "Drop-in vertical features. Each ships the metadata trio (`slice.json` + `slice.contract.ts` + `slice.manifest.json`). Install with `npx rr add <slug>` — CLI auto-augments env, installs deps, and copies into `frontend/slices/<slug>/` (+ optional `convex/features/<slug>/`).",
+    "Drop-in vertical features. Each ships the metadata pair (`slice.json`, with an embedded `contract` block, + `slice.manifest.json`). Install with `npx rr add <slug>` — CLI auto-augments env, installs deps, and copies into `frontend/slices/<slug>/` (+ optional `convex/features/<slug>/`).",
   );
   lines.push("");
   for (const s of visibleSlices) {
@@ -85,7 +85,7 @@ async function buildBody() {
   lines.push("- RBAC + audit log on every mutation.");
   lines.push("- `NEXT_PUBLIC_*` only for non-sensitive values.");
   lines.push("- **File modularity: 200-line hard cap per source file** (excl. catalog/seed/_generated). Compose, don't accumulate. Gate: `npm run audit:file-size`.");
-  lines.push("- Slice contract: `slice.json` + `slice.contract.ts` + `slice.manifest.json` mandatory per slice. Imports resolve via `@/components/ui/*`, `@/shared/*`, `@/features/<own-slug>/*`, `@convex/*`, or relative-within-slice.");
+  lines.push("- Slice contract: `slice.json` (with an embedded `contract` block) + `slice.manifest.json` mandatory per slice. Imports resolve via `@/components/ui/*`, `@/shared/*`, `@/features/<own-slug>/*`, `@convex/*`, or relative-within-slice.");
   lines.push("- Solo-dev: push direct to main (no PR); Dokploy auto-deploys on push.");
   lines.push("");
   lines.push("## How to install");

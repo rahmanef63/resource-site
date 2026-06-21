@@ -32,7 +32,7 @@ export function buildInitialCandidates({
           {
             type: "uncontracted",
             slug,
-            detail: `Slice "${slug}" has no registered slice.contract.ts — accepted under allowUnknownSlices, but conflict checks are skipped for it.`,
+            detail: `Slice "${slug}" has no registered contract — accepted under allowUnknownSlices, but conflict checks are skipped for it.`,
             severity: "warning",
           },
           slug,
@@ -41,13 +41,13 @@ export function buildInitialCandidates({
         candidateSet.add(slug);
         candidateOrder.push(slug);
         notes.set(slug, "uncontracted");
-        proof.push(`! ${slug}: accepted as uncontracted (no slice.contract.ts; skipping conflict checks)`);
+        proof.push(`! ${slug}: accepted as uncontracted (no contract (slice.json); skipping conflict checks)`);
       } else {
         record(
           {
             type: "missing-dep",
             slug,
-            detail: `Contract not found for "${slug}" — no slice.contract.ts registered (strict mode).`,
+            detail: `Contract not found for "${slug}" — no registered contract (strict mode).`,
             severity: "blocker",
           },
           slug,

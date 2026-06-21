@@ -38,8 +38,8 @@ Root project (consumer) **tidak disentuh** RR:
 
 | Package | Version | Purpose |
 |---|---|---|
-| `rahman-resources` | 1.13.1 | CLI installer (`npx rahman-resources …` / alias `resources …`) |
-| `rahman-resources-mcp` | 1.2.1 | MCP server (14 tools + ~70 resources) |
+| `rahman-resources` | 1.14.0 | CLI installer (`npx rahman-resources …` / alias `resources …`) |
+| `rahman-resources-mcp` | 1.2.3 | MCP server (14 tools + ~70 resources) |
 | `rahman-shared` | 0.3.0 | Pure utils + hooks (cn, formatDate, sanitizeHtml, useDebounce, useClickOutside, useResponsive) + ./formulaEngine |
 
 **Distribusi rule:**
@@ -68,7 +68,7 @@ CLI baca `rr.json` (consumer project manifest) — schema di `packages/cli/lib/r
 2. **All UI = shadcn primitives** atau composed dari shadcn. Forbid raw `<button>`, `<dialog>`, `<input type=date|file>`. Pakai `ResponsiveDialog`, `DateField`, `FileUpload`.
 3. **Copy-first flow.** Jangan greenfield. `cp -r` dari source → adjust import alias → strip business-specific bits.
 4. **Stack:** Next 16 + React 19 + Tailwind 4 + Convex self-hosted + TS strict.
-5. **Slice contract.** Setiap vertical feature = tier-3 slice di rr `frontend/slices/<slug>/` (dgn `slice.json` + `slice.contract.ts`) + `convex/features/<slug>/` (dgn `<slug>Tables` schema export). Imports di dalam slice WAJIB resolve via `@/components/ui/*`, `@/shared/*`, `@/features/<own-slug>/*`, `@convex/*`, atau relative-within-slice. No `../../` reaching out. Audit-bp gates ini di CI (`npm run audit:slices`). **Version SSOT = `slice.json.version`** — `slice.contract.ts` (feeds snapshot/migration) + `slice.manifest.json` versions WAJIB match-nya, di-gate `audit:slices`. `lib/content/slices.ts` punya version display-only (catalog); drift-nya warn-only via `report-slices-drift.mjs` (durable fix: generate dari slice.json).
+5. **Slice contract.** Setiap vertical feature = tier-3 slice di rr `frontend/slices/<slug>/` (dgn `slice.json` — composition contract sekarang di-fold ke dalam `slice.json` di bawah block `contract`, id/version derived dari scalar slice.json) + `convex/features/<slug>/` (dgn `<slug>Tables` schema export). Imports di dalam slice WAJIB resolve via `@/components/ui/*`, `@/shared/*`, `@/features/<own-slug>/*`, `@convex/*`, atau relative-within-slice. No `../../` reaching out. Audit-bp gates ini di CI (`npm run audit:slices`). **Version SSOT = PAIR: `slice.json.version` === `slice.manifest.json.version`**, di-gate `audit:slices` (bukan trio lagi — `slice.contract.ts` di-fold ke `slice.json.contract` 2026-06-21). `lib/content/slices.ts` scalar (version/title/category/kind) di-**generate** dari slice.json via `gen-slice-catalog.mjs` (gated `gen:catalog:check` di pre-commit + `slices:check`) — drift udah gak mungkin, prose catalog tetap hand-authored.
 6. **rr backend = admin-only.** Slice demo di site jalan pakai client localStorage adapter, BUKAN Convex. `convex/features/*` = **copy-source** — consumer compose ke backend mereka sendiri pas `npx rr add <slug>`. rr's OWN backend (`api-resource.rahmanef.com`) cuma deploy `rate_limit` (admin-login limiter) via `npm run deploy:convex` (allowlist `ADMIN_CONVEX` di `scripts/deploy-convex-functions.mjs`). JANGAN compose semua feature ke `convex/schema.ts` — itu bikin library jadi monolit.
 
 ## Forbidden

@@ -41,7 +41,6 @@ const ALLOWED_TOPLEVEL = new Set([
   "README.md",
   "index.ts",
   "slice.json",
-  "slice.contract.ts",
   "slice.manifest.json",
   "auth.config.ts", // Convex auth config — special, framework-required name
   "auth.ts", // @convex-dev/auth entry — convexAuth() handlers live here by convention
