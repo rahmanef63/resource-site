@@ -63,5 +63,42 @@
       ],
       "seed": "Picked icon value persisted in the demo store; the chosen emoji renders above the picker via DynamicIcon."
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "icon-picker.search",
+        "icon-picker.pick"
+      ],
+      "components": [
+        "IconPicker",
+        "IconPickerInline",
+        "DynamicIcon",
+        "PickerSkeleton"
+      ],
+      "utils": [
+        "parseIconValue",
+        "lucideValue",
+        "withColor",
+        "isLucideValue",
+        "LUCIDE_PREFIX"
+      ],
+      "hooks": [
+        "useRecentIcons",
+        "useIconStyle"
+      ],
+      "convex": {
+        "tables": [],
+        "rbac": []
+      }
+    }
+  }
 }

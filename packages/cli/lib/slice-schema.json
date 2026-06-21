@@ -315,6 +315,10 @@
     "deprecated": {
       "type": "string",
       "description": "Successor slug. This slice was merged into the named slice as variants; install resolves there via manifest.aliases."
+    },
+    "contract": {
+      "type": "object",
+      "description": "Folded Phase-A composition contract (Phase 2 hybrid fold, 2026-06-21): requires/provides/conflicts/migrationFrom/generalization moved from slice.contract.ts. id+version omitted (== slug/version). requires.deps is verbatim pending per-slice normalization, so this is intentionally loose; strict invariants move to validate-slice when the .ts is retired."
     }
   }
 }

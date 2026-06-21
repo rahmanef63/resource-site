@@ -49,5 +49,19 @@
       ],
       "seed": "in-memory page list held in a demo store; CRUD callbacks mutate it so edits persist while mounted"
     }
-  ]
+  ],
+  "contract": {
+    "provides": {
+      "components": [
+        "NotionSidebar"
+      ],
+      "utils": [],
+      "hooks": [],
+      "types": [
+        "NotionSidebarPage",
+        "NotionSidebarProps",
+        "FlatPage"
+      ]
+    }
+  }
 }

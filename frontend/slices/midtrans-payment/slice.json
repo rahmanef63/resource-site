@@ -94,5 +94,65 @@
       ],
       "seed": "amount/orderId per scenario; Pay button is a sandbox stub \u2014 no real Snap, no charge"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "auth": "convex",
+      "rbac": [
+        "payment.create",
+        "payment.refund"
+      ],
+      "env": [
+        "MIDTRANS_CLIENT_KEY",
+        "MIDTRANS_SERVER_KEY",
+        "MIDTRANS_ENV"
+      ],
+      "convex": {
+        "prefix": "midtrans_",
+        "tables": [
+          "midtrans_orders",
+          "midtrans_webhook_events"
+        ]
+      },
+      "deps": [
+        "convex-auth"
+      ]
+    },
+    "provides": {
+      "tools": [
+        "midtrans-payment.create_invoice",
+        "midtrans-payment.status",
+        "midtrans-payment.refund"
+      ],
+      "tables": [
+        "midtrans_orders",
+        "midtrans_webhook_events"
+      ],
+      "routes": [
+        "/checkout/midtrans",
+        "/midtrans/callback"
+      ],
+      "hooks": [
+        "useMidtransPayment"
+      ],
+      "components": [
+        "MidtransSnap",
+        "MidtransStatusBadge"
+      ],
+      "events": [
+        "midtrans.payment.created",
+        "midtrans.payment.captured",
+        "midtrans.webhook.received"
+      ]
+    },
+    "migrationFrom": {
+      "0.9.0": "namespace-rename-2026-05"
+    },
+    "generalization": {
+      "level": "portable",
+      "forbiddenTerms": [
+        "doku"
+      ]
+    }
+  }
 }

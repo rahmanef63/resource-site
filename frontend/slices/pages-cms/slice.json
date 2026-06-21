@@ -47,5 +47,44 @@
     "builder",
     "basics"
   ],
-  "previews": []
+  "previews": [],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [],
+      "components": [
+        "PagesView",
+        "PageEditorView",
+        "PageEditorBlocks",
+        "BlockEditor",
+        "BlockRenderer",
+        "PageCreateDialog",
+        "PagesProvider",
+        "LocalPagesProvider"
+      ],
+      "utils": [
+        "pagesReducer",
+        "duplicatePage",
+        "blankPage",
+        "buildPageNavItems",
+        "defaultPages",
+        "emptyBlock"
+      ],
+      "hooks": [
+        "usePagesStore",
+        "usePage"
+      ],
+      "convex": {
+        "tables": [],
+        "rbac": []
+      }
+    }
+  }
 }

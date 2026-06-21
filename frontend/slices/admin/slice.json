@@ -77,5 +77,39 @@
       ],
       "seed": "AdminPage shell rendered with three SliceAdminLabels presets"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "auth": "convex",
+      "rbac": [
+        "admin.read"
+      ],
+      "env": [
+        "SUPER_ADMIN_EMAIL"
+      ],
+      "deps": [
+        "convex-auth"
+      ]
+    },
+    "provides": {
+      "components": [
+        "AdminPage",
+        "buildAdminStats",
+        "DEFAULT_ADMIN_LABELS",
+        "resolveAdminLabels"
+      ]
+    },
+    "generalization": {
+      "level": "portable",
+      "forbiddenTerms": [
+        "rahmanef",
+        "rahmanef.com"
+      ],
+      "requiredProps": [
+        "sliceRegistry",
+        "queryTable",
+        "labels"
+      ]
+    }
+  }
 }

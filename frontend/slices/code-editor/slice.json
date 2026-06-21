@@ -64,5 +64,44 @@
       ],
       "seed": "bundled writable in-memory mock fs (lib/seed.ts); edits live for the mount"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "auth": "none",
+      "deps": [
+        {
+          "npm": "react",
+          "range": "^19"
+        },
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "code-editor.inspect",
+        "code-editor.file.open",
+        "code-editor.file.create",
+        "code-editor.file.read",
+        "code-editor.edit.set",
+        "code-editor.edit.replace",
+        "code-editor.file.save",
+        "code-editor.tab.switch",
+        "code-editor.tab.close"
+      ],
+      "routes": [],
+      "components": [
+        "CodeEditor"
+      ],
+      "hooks": [],
+      "utils": [
+        "configureCodeFs",
+        "createMockFs",
+        "codeEditorApp"
+      ],
+      "tables": []
+    }
+  }
 }

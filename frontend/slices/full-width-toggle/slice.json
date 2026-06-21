@@ -52,5 +52,22 @@
       ],
       "seed": "uses the slice's own localStorage width-mode key; sample container reacts live"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "auth": "none"
+    },
+    "provides": {
+      "hooks": [
+        "useFullWidth"
+      ],
+      "components": [
+        "FullWidthToggle",
+        "WidthContainer"
+      ]
+    },
+    "generalization": {
+      "level": "portable"
+    }
+  }
 }

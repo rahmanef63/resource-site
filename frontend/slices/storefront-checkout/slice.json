@@ -49,5 +49,30 @@
       ],
       "seed": "Wrapped in CartProvider (isolated storageKey). Click the cart trigger to open the sheet \u2014 qty steppers, remove, subtotal, checkout CTA."
     }
-  ]
+  ],
+  "contract": {
+    "provides": {
+      "tools": [
+        "storefront-checkout.cart",
+        "storefront-checkout.add",
+        "storefront-checkout.set_qty",
+        "storefront-checkout.remove",
+        "storefront-checkout.clear"
+      ],
+      "components": [
+        "CartProvider",
+        "CartWidget",
+        "CheckoutSummary"
+      ],
+      "utils": [
+        "formatIDR"
+      ],
+      "hooks": [
+        "useCart"
+      ],
+      "types": [
+        "CartItem"
+      ]
+    }
+  }
 }

@@ -29,5 +29,38 @@
   "registers": [],
   "audit": [],
   "license": "MIT",
-  "tags": ["ai", "ai:studio", "generation", "streaming", "history", "branching", "image-gen"]
+  "tags": ["ai", "ai:studio", "generation", "streaming", "history", "branching", "image-gen"],
+  "contract": {
+    "requires": {
+      "auth": "convex",
+      "rbac": [
+        "studio.read",
+        "studio.write"
+      ],
+      "deps": [
+        "convex-auth",
+        "ai-router",
+        "ai-admin"
+      ]
+    },
+    "provides": {
+      "tools": [
+        "ai-studio.generate"
+      ],
+      "components": [
+        "StudioCanvas",
+        "StudioPromptBar",
+        "StudioVersionTree",
+        "StudioVariationGrid"
+      ]
+    },
+    "generalization": {
+      "level": "portable",
+      "forbiddenTerms": [
+        "rahmanef",
+        "rahmanef.com"
+      ],
+      "requiredProps": []
+    }
+  }
 }

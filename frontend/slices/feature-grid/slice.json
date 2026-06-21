@@ -78,5 +78,31 @@
       ],
       "seed": "3 static feature items with lucide icons"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        },
+        {
+          "npm": "next",
+          "range": "^15"
+        }
+      ]
+    },
+    "provides": {
+      "components": [
+        "FeatureGridSection",
+        "FeatureCard"
+      ],
+      "utils": [],
+      "hooks": [],
+      "convex": {
+        "tables": [],
+        "rbac": []
+      }
+    }
+  }
 }

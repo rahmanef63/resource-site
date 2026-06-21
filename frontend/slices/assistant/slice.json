@@ -43,5 +43,35 @@
     "automations",
     "ui"
   ],
-  "previews": []
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "none",
+      "deps": [
+        {
+          "npm": "react",
+          "range": "^19"
+        },
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
+      ]
+    },
+    "provides": {
+      "routes": [],
+      "components": [
+        "Assistant"
+      ],
+      "hooks": [],
+      "utils": [
+        "registerAssistantTools",
+        "getAssistantRegistry",
+        "configureAgentStream",
+        "configureAssistantStream",
+        "assistantApp"
+      ],
+      "tables": []
+    }
+  }
 }

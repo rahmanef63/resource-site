@@ -51,5 +51,41 @@
     "anthropic",
     "metadata-generator"
   ],
-  "previews": []
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "convex",
+      "rbac": [
+        "seo.write"
+      ],
+      "env": [
+        "ANTHROPIC_API_KEY"
+      ],
+      "deps": [
+        "convex-auth"
+      ]
+    },
+    "provides": {
+      "tools": [
+        "seo.generate",
+        "seo.generate_and_apply"
+      ],
+      "tables": [
+        "seoGeneratorCalls"
+      ],
+      "components": [
+        "buildSeoSystemPrompt"
+      ]
+    },
+    "generalization": {
+      "level": "portable",
+      "forbiddenTerms": [
+        "rahmanef",
+        "rahmanef.com"
+      ],
+      "requiredProps": [
+        "personaContext"
+      ]
+    }
+  }
 }

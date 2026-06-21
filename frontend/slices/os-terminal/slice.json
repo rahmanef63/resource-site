@@ -37,5 +37,39 @@
     "pty",
     "ui"
   ],
-  "previews": []
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "none",
+      "deps": [
+        {
+          "npm": "react",
+          "range": "^19"
+        },
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "os-terminal.run",
+        "os-terminal.cwd",
+        "os-terminal.clear"
+      ],
+      "routes": [],
+      "components": [
+        "Terminal"
+      ],
+      "hooks": [],
+      "utils": [
+        "configureTerminal",
+        "configurePty",
+        "createSsePtyTransport",
+        "osTerminalApp"
+      ],
+      "tables": []
+    }
+  }
 }

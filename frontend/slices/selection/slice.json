@@ -53,5 +53,26 @@
       ],
       "seed": "4 demo rows inside a SelectionProvider; drag on empty space to marquee-select (drag right = enclose, left = touch), or click an edge. Bulk delete is a no-op."
     }
-  ]
+  ],
+  "contract": {
+    "provides": {
+      "components": [
+        "SelectionProvider",
+        "SelectableBlock",
+        "SelectionMarquee"
+      ],
+      "utils": [
+        "useMarquee"
+      ],
+      "hooks": [
+        "useSelection"
+      ],
+      "types": [
+        "SelectionCtx",
+        "SelectableBlockProps",
+        "MarqueeRect",
+        "MarqueeMode"
+      ]
+    }
+  }
 }

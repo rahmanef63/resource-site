@@ -32,5 +32,39 @@
   "registers": [],
   "audit": [],
   "license": "MIT",
-  "tags": ["ai", "mcp", "oauth", "pkce", "chatgpt", "claude", "cursor", "convex", "backend", "integration"]
+  "tags": ["ai", "mcp", "oauth", "pkce", "chatgpt", "claude", "cursor", "convex", "backend", "integration"],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "convex",
+          "range": "^1.16.0"
+        }
+      ]
+    },
+    "provides": {
+      "components": [
+        "McpAdminView"
+      ],
+      "utils": [
+        "dispatchJsonRpc",
+        "checkAuth",
+        "extractBearer",
+        "scopeAllows",
+        "runWithMcpContext",
+        "getMcpContext",
+        "toolDefsFromHost"
+      ],
+      "hooks": [],
+      "convex": {
+        "tables": [
+          "oauthCodes",
+          "oauthAccessTokens"
+        ],
+        "rbac": [
+          "admin"
+        ]
+      }
+    }
+  }
 }

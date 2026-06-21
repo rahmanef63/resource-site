@@ -56,5 +56,88 @@
       ],
       "seed": "single seed block with editable text; the kind axis feeds block.calloutKind"
     }
-  ]
+  ],
+  "contract": {
+    "provides": {
+      "tools": [
+        "notion-shell.configure"
+      ],
+      "components": [
+        "NotionPage",
+        "NotionHeader",
+        "NotionBlock",
+        "NotionDatabase",
+        "NotionProperty",
+        "SlashMenu",
+        "BlockActionsMenu",
+        "InsertBlockButton",
+        "ViewTabs",
+        "ViewOptions",
+        "ColumnHeaderMenu",
+        "TableView",
+        "BoardView",
+        "ListView",
+        "GalleryView",
+        "CalendarView",
+        "FeedView",
+        "SortableBlockList",
+        "PageActionsMenu",
+        "ImageRenderer",
+        "EmbedRenderer"
+      ],
+      "utils": [
+        "TOP_LEVEL_PLACEHOLDERS",
+        "BLOCK_SPECS",
+        "specFor",
+        "tokenizeInline",
+        "stripMd",
+        "decorateInPlace",
+        "decorateLineToFragment",
+        "getCaretOffset",
+        "setCaretAtOffset",
+        "visibleLength",
+        "applyView",
+        "groupBy",
+        "bucketByDate",
+        "renderPropertyCell",
+        "VIEW_REGISTRY"
+      ],
+      "hooks": [],
+      "types": [
+        "NotionPageProps",
+        "NotionHeaderProps",
+        "NotionBlockProps",
+        "NotionDatabaseProps",
+        "NotionPropertyProps",
+        "SlashMenuProps",
+        "BlockActionsMenuProps",
+        "InsertBlockButtonProps",
+        "ViewTabsProps",
+        "ViewOptionsProps",
+        "ColumnHeaderMenuProps",
+        "ViewRegistry",
+        "ViewProps",
+        "SortableBlockListProps",
+        "SortableBlockDragProps",
+        "PageActionsMenuProps",
+        "BlockSpec",
+        "Token",
+        "Block",
+        "BlockType",
+        "BlockRenderers",
+        "BlockRendererProps",
+        "Page",
+        "Property",
+        "PropertyValue",
+        "PropertyType",
+        "SelectOption",
+        "NumberFormat",
+        "Database",
+        "DatabaseViewConfig",
+        "DatabaseFilter",
+        "DatabaseSort",
+        "DbView"
+      ]
+    }
+  }
 }

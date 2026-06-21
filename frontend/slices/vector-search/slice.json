@@ -48,5 +48,46 @@
     "embeddings",
     "convex"
   ],
-  "previews": []
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "convex",
+      "rbac": [
+        "search.query",
+        "search.index",
+        "search.reindex"
+      ],
+      "env": [
+        "OPENAI_API_KEY"
+      ],
+      "convex": {
+        "prefix": "vector_",
+        "tables": [
+          "vector_search_documents"
+        ]
+      },
+      "deps": [
+        "convex-auth"
+      ]
+    },
+    "provides": {
+      "tools": [
+        "vector-search.query",
+        "vector-search.index",
+        "vector-search.reindex"
+      ],
+      "tables": [
+        "vector_search_documents"
+      ],
+      "routes": [
+        "/search"
+      ],
+      "components": [
+        "SearchPage"
+      ]
+    },
+    "generalization": {
+      "level": "portable"
+    }
+  }
 }

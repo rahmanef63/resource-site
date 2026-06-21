@@ -62,5 +62,61 @@
     "multi-tenant",
     "saas",
     "platform"
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "auth": "convex",
+      "rbac": [
+        "platform.workspace.list",
+        "platform.workspace.delete",
+        "platform.user.delete",
+        "platform.tier.set"
+      ],
+      "env": [
+        "PLATFORM_ADMIN_EMAILS"
+      ],
+      "convex": {
+        "prefix": "padmin_",
+        "tables": [
+          "padmin_audit",
+          "padmin_kpi_snapshot"
+        ]
+      },
+      "deps": [
+        "convex-auth",
+        "audit-log"
+      ]
+    },
+    "provides": {
+      "tools": [
+        "platform-admin.metrics",
+        "platform-admin.feature_flag.set",
+        "platform-admin.tier.set"
+      ],
+      "routes": [
+        "/platform-admin"
+      ],
+      "hooks": [
+        "usePlatformAdmin",
+        "useTenantHealth"
+      ],
+      "tables": [
+        "padmin_audit",
+        "padmin_kpi_snapshot"
+      ],
+      "components": [
+        "PlatformAdminShell",
+        "TenantHealthCard",
+        "TierSetGate"
+      ]
+    },
+    "generalization": {
+      "level": "needs-adapter",
+      "requiredProps": [
+        "tenantTablesAdapter",
+        "tierPresets",
+        "kpiSources"
+      ]
+    }
+  }
 }

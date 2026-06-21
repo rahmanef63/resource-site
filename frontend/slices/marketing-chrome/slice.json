@@ -72,5 +72,30 @@
       ],
       "seed": "static brand + 3 link columns + social + legal"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "marketing-chrome.configure"
+      ],
+      "components": [
+        "MarketingHeader",
+        "MarketingFooter"
+      ],
+      "utils": [],
+      "hooks": [],
+      "convex": {
+        "tables": [],
+        "rbac": []
+      }
+    }
+  }
 }

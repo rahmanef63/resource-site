@@ -71,5 +71,62 @@
       ],
       "seed": "Scaled-down shell chrome in a fixed-height card \u2014 AppFrame header/toolbar/body composed with a mock sidebar + content list (no window manager, no providers)."
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "auth": "none"
+    },
+    "provides": {
+      "tools": [
+        "appshell.window.list",
+        "appshell.app.launch",
+        "appshell.app.focus",
+        "appshell.window.close",
+        "appshell.window.focus",
+        "appshell.window.minimize",
+        "appshell.window.restore",
+        "appshell.window.toggle_maximize",
+        "appshell.space.set",
+        "appshell.profile.save",
+        "appshell.profile.apply",
+        "appshell.notify"
+      ],
+      "routes": [],
+      "hooks": [
+        "useCommands",
+        "useBadges",
+        "useRecents",
+        "useLayouts",
+        "useActiveSpace",
+        "useClips",
+        "useShareState",
+        "useQuickLook",
+        "useShortcuts",
+        "useFocusMode",
+        "useLocked",
+        "useProfiles",
+        "useResponsive",
+        "useContainer",
+        "useApps",
+        "useWindow",
+        "useFocused",
+        "useFeatures",
+        "useBrand",
+        "useShellUI",
+        "useShellConfig",
+        "useQuickLinks"
+      ],
+      "components": [
+        "AppShell",
+        "Slot",
+        "AppFrame",
+        "MasterDetail",
+        "ResponsiveToolbar",
+        "TouchList",
+        "QuicklinkIcon",
+        "DashboardShell"
+      ],
+      "tables": []
+    }
+  }
 }

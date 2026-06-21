@@ -65,5 +65,27 @@
       ],
       "seed": "4 static Q&A items spanning 3 categories"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "next",
+          "range": "^15"
+        }
+      ]
+    },
+    "provides": {
+      "components": [
+        "FAQSection",
+        "FAQItemRow"
+      ],
+      "utils": [],
+      "hooks": [],
+      "convex": {
+        "tables": [],
+        "rbac": []
+      }
+    }
+  }
 }

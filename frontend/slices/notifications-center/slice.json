@@ -83,5 +83,40 @@
       ],
       "seed": "Same 8 static notifications; scenario toggles read-state + emptiness"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "notifications-center.list",
+        "notifications-center.mark_read",
+        "notifications-center.mark_all_read",
+        "notifications-center.dismiss",
+        "notifications-center.clear"
+      ],
+      "components": [
+        "NotificationBell",
+        "NotificationList",
+        "NotificationItem"
+      ],
+      "utils": [
+        "createMemoryNotificationsAdapter",
+        "relativeTime"
+      ],
+      "hooks": [
+        "useNotifications"
+      ],
+      "convex": {
+        "tables": [],
+        "rbac": []
+      }
+    }
+  }
 }

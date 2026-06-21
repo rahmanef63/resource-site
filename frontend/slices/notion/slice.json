@@ -61,5 +61,36 @@
       ],
       "seed": "two pages in rr-demo:notion via an in-memory EditorDataAdapter; all edits persist"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        "sonner",
+        "@dnd-kit/core",
+        "@dnd-kit/sortable",
+        "@dnd-kit/utilities",
+        "katex"
+      ]
+    },
+    "provides": {
+      "tools": [
+        "notion.page.create",
+        "notion.page.get",
+        "notion.page.update",
+        "notion.search"
+      ],
+      "utils": [
+        "blockTree",
+        "turnInto",
+        "markdownTriggers",
+        "inlineDecorator",
+        "syncedBlocks",
+        "layoutAdapter",
+        "listOrdinals",
+        "blockSpecs"
+      ],
+      "hooks": [],
+      "components": []
+    }
+  }
 }

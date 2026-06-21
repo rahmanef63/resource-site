@@ -47,5 +47,43 @@
     "openrouter",
     "tier-routing"
   ],
-  "previews": []
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "convex",
+      "rbac": [
+        "ai.invoke",
+        "ai.view-usage"
+      ],
+      "env": [
+        "OPENROUTER_API_KEY"
+      ],
+      "convex": {
+        "prefix": "ai_router_",
+        "tables": [
+          "ai_router_usage",
+          "ai_router_calls"
+        ]
+      },
+      "deps": [
+        "convex-auth"
+      ]
+    },
+    "provides": {
+      "tools": [
+        "ai-router.route"
+      ],
+      "tables": [
+        "ai_router_usage",
+        "ai_router_calls"
+      ],
+      "events": [
+        "ai.invoked",
+        "ai.usage.logged"
+      ]
+    },
+    "generalization": {
+      "level": "needs-adapter"
+    }
+  }
 }

@@ -56,5 +56,19 @@
       ],
       "seed": "3 static entries spanning feature/improvement/breaking kinds"
     }
-  ]
+  ],
+  "contract": {
+    "provides": {
+      "components": [
+        "ChangelogFeedSection",
+        "ChangelogEntryCard"
+      ],
+      "utils": [],
+      "hooks": [],
+      "convex": {
+        "tables": [],
+        "rbac": []
+      }
+    }
+  }
 }

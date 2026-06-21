@@ -32,5 +32,46 @@
   "registers": [],
   "audit": [],
   "license": "MIT",
-  "tags": ["ai", "ai:admin", "config", "providers", "models", "skills", "tools", "agents", "budgets"]
+  "tags": ["ai", "ai:admin", "config", "providers", "models", "skills", "tools", "agents", "budgets"],
+  "contract": {
+    "requires": {
+      "auth": "convex",
+      "rbac": [
+        "admin.read",
+        "admin.write"
+      ],
+      "env": [
+        "AI_ADMIN_ENCRYPTION_KEY"
+      ],
+      "deps": [
+        "convex-auth",
+        "rbac-roles",
+        "admin-panel",
+        "audit-log"
+      ]
+    },
+    "provides": {
+      "utils": [
+        "toolRegistryRows"
+      ],
+      "components": [
+        "AdminSection",
+        "ProvidersTable",
+        "ModelsGrid",
+        "SkillsGrid",
+        "ToolsTable",
+        "AgentsTable",
+        "BudgetsCard",
+        "AuditTable"
+      ]
+    },
+    "generalization": {
+      "level": "portable",
+      "forbiddenTerms": [
+        "rahmanef",
+        "rahmanef.com"
+      ],
+      "requiredProps": []
+    }
+  }
 }

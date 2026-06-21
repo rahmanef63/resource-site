@@ -45,5 +45,32 @@
       ],
       "seed": "Scroll the preview frame; wrapped content fades/zooms in once it enters the viewport. Append globals-motion.css for the transitions to take effect."
     }
-  ]
+  ],
+  "contract": {
+    "provides": {
+      "components": [
+        "Reveal",
+        "Stagger",
+        "CountUp",
+        "Marquee",
+        "Carousel",
+        "CarouselContent",
+        "CarouselItem",
+        "CarouselPrevious",
+        "CarouselNext",
+        "Accordion",
+        "AccordionItem",
+        "AccordionTrigger",
+        "AccordionContent"
+      ],
+      "utils": [],
+      "hooks": [
+        "useInView"
+      ],
+      "types": [
+        "RevealVariant",
+        "CarouselApi"
+      ]
+    }
+  }
 }

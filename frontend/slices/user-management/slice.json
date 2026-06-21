@@ -91,5 +91,67 @@
       ],
       "seed": "4 demo members + 4 roles + 2 teams in rr-demo:user-management; role/grant edits persist"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "next",
+          "range": "^15"
+        },
+        {
+          "npm": "react",
+          "range": "^18"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "user-management.list",
+        "user-management.invite",
+        "user-management.set_role",
+        "user-management.disable",
+        "user-management.remove"
+      ],
+      "components": [
+        "UserManagementPanel",
+        "MembersPanel",
+        "MembersTable",
+        "MembersToolbar",
+        "MemberRowActions",
+        "RoleChip",
+        "InviteDialog",
+        "PendingInvites",
+        "RolesPanel",
+        "RoleEditor",
+        "RolePermissionGrid",
+        "TeamsPanel",
+        "TeamDetail",
+        "AccessMatrix"
+      ],
+      "hooks": [
+        "useMembersView"
+      ],
+      "utils": [
+        "can",
+        "matchPermission"
+      ],
+      "convex": {
+        "tables": [
+          "um_members",
+          "um_invites",
+          "um_teams",
+          "um_team_members",
+          "um_tenant_links"
+        ],
+        "rbac": [
+          "members.view",
+          "members.manage",
+          "members.invite",
+          "roles.view",
+          "roles.manage"
+        ]
+      }
+    }
+  }
 }

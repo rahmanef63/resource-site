@@ -38,5 +38,48 @@
     "adapter",
     "portable",
     "notion-like"
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "next",
+          "range": "^15"
+        },
+        {
+          "npm": "react",
+          "range": "^18"
+        },
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "files.parse_ref",
+        "files.remove"
+      ],
+      "components": [
+        "FileChip",
+        "FileUploadButton",
+        "FilesAdapterProvider"
+      ],
+      "utils": [
+        "parseFileRef",
+        "makeStorageRef"
+      ],
+      "hooks": [
+        "useFileUpload",
+        "useFileUrl",
+        "useFilesAdapter",
+        "useLocalStorageFilesAdapter"
+      ],
+      "convex": {
+        "tables": [],
+        "rbac": []
+      }
+    }
+  }
 }

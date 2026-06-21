@@ -55,21 +55,35 @@
   into pre-commit + `slices:check`. ✅
 - [ ] 1d. Gate: typecheck + audit:slices + validate:manifests + e2e smoke. Ship.
 
-### Phase 2 — fold contract → slice.json, delete 70 .ts + 3 validators
-- [ ] 2a. Extend `slice-schema.json`: add `provides{}`, `requires{}`,
-  `conflicts[]`, `generalization{}`, `migrationFrom`. Port invariants.
-- [ ] 2b. `scripts/migrate/contract-to-json.mjs` (reuse `loadContract`): merge
-  contract payloads (incl **migrationFrom**) into each slice.json. One-shot.
-- [ ] 2c. Repoint read-paths contract→slice.json: `compose-solver*`, `snapshot.mjs`,
-  `migrate*.mjs`, `migration-plan.mjs`, `check-forbidden-terms.mjs` (+skip list),
-  admin viewers. SliceContract type → derived from slice.json shape.
-- [ ] 2d. `validate-slice.mjs`: add JSON-schema validation of new blocks + custom
-  JS for the 2 cross-field invariants (constraint #4).
+### Phase 2 — fold contract → slice.json (HYBRID, decided 2026-06-21)
+
+Analysis (`scripts/migrate/analyze-contract-overlap.mjs`) found the contracts
+are internally inconsistent: `requires.deps` is typed `string[]` but holds
+**objects + npm names** (not just slice slugs) in ~40 slices, and `provides`
+carries undeclared `utils`/`convex` sub-fields. A clean mechanical reconcile of
+`requires.deps` is unsafe → **HYBRID**: fold VERBATIM except `id`/`version`
+(the only 100% dup with slice.json scalars; dropping them collapses trio→pair).
+`requires.deps`/`env` stay verbatim with a normalization TODO.
+
+- [x] 2a. `slice-schema.json` gains a **loose** `contract` object (shape is
+  messy; strict invariants move to validate-slice at 2d when the .ts is retired). ✅
+- [x] 2b. `scripts/migrate/fold-contracts.mjs` (tsx import; stub fallback for the
+  validator-violating contracts like platform-admin) — surgical text-append of a
+  `contract` block to each slice.json (no reformat). Applied 70/70, **lossless
+  verified 70 match / 0 mismatch**. contract.ts RETAINED (additive, reversible). ✅
+- [ ] 2c. Repoint read-paths contract→slice.json.contract: `snapshot.mjs`
+  (loadContract → read slice.json.contract + reattach id/version),
+  `migrate*.mjs`, `migration-plan.mjs`, `compose-solver*`, `validate-contract.mjs`,
+  `check-contract-drift.mjs`, `check-forbidden-terms.mjs` (+skip slice.json),
+  `audit-slice.mjs` (contractToolNames + version-trio→pair).
+- [ ] 2d. `validate-slice.mjs` (or validate-contract): validate the folded block
+  + custom JS for the 2 cross-field invariants (constraint #4); tolerate the
+  known platform-admin 2-dot rbac (regex-fallback today).
 - [ ] 2e. Delete 70 `slice.contract.ts` + `validate-contract.mjs` +
   `validate-contract-shape.mjs` + `check-contract-drift.mjs`. audit-slice:
-  version-trio → version-pair (json==manifest); drop contract presence.
-- [ ] 2f. Make `sync-slice-manifests.mjs` regenerate ALL manifest fields from
-  slice.json (not just files[]).
+  drop contract presence; version-pair (json==manifest).
+- [ ] 2f. `sync-slice-manifests.mjs`: also exclude slice.contract.ts is moot once
+  deleted; regenerate manifest from slice.json where applicable.
 - [ ] 2g. Gate: typecheck + audit:slices + validate:manifests + `rr migrate`
   historic-version test (constraint #7) + e2e. Ship. Re-publish CLI (user OTP).
 

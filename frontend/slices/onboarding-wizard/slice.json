@@ -43,5 +43,33 @@
       ],
       "seed": "Mock save/seed callbacks; step through Identitas \u2192 Branding (color chips, mode buttons, swatch Select) \u2192 Konten \u2192 Selesai."
     }
-  ]
+  ],
+  "contract": {
+    "provides": {
+      "tools": [
+        "onboarding-wizard.status",
+        "onboarding-wizard.goto_step",
+        "onboarding-wizard.set_field",
+        "onboarding-wizard.complete"
+      ],
+      "components": [
+        "OnboardingWizard",
+        "StepIdentity",
+        "StepBranding",
+        "StepContent",
+        "StepDone",
+        "ThemePresetField",
+        "Field"
+      ],
+      "utils": [
+        "normalizePresetOptions"
+      ],
+      "hooks": [],
+      "types": [
+        "OnboardingFields",
+        "ImageFieldComponent",
+        "PresetOption"
+      ]
+    }
+  }
 }

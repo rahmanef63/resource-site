@@ -67,5 +67,32 @@
       ],
       "seed": "3 static tiers, Pro featured with Popular badge; CTA hrefs are anchors"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        },
+        {
+          "npm": "next",
+          "range": "^15"
+        }
+      ]
+    },
+    "provides": {
+      "components": [
+        "PricingSection",
+        "PricingTier",
+        "PricingFAQ"
+      ],
+      "utils": [],
+      "hooks": [],
+      "convex": {
+        "tables": [],
+        "rbac": []
+      }
+    }
+  }
 }

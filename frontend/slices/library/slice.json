@@ -73,5 +73,50 @@
       ],
       "seed": "5 static LibraryRow cards (display-only); scenario selects which subset feeds the grid"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "convex",
+          "range": "^1.17"
+        },
+        {
+          "npm": "next",
+          "range": "^15"
+        },
+        {
+          "npm": "react",
+          "range": "^18"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "library.search",
+        "library.get",
+        "library.upvote"
+      ],
+      "components": [
+        "LibraryIndex",
+        "LibraryDetail",
+        "PayloadRender",
+        "CopyButton",
+        "UpvotePanel"
+      ],
+      "utils": [
+        "DEFAULT_COPY",
+        "DEFAULT_KIND_LABELS",
+        "ALL_KINDS"
+      ],
+      "hooks": [],
+      "convex": {
+        "tables": [
+          "libraryItems",
+          "libraryCollections"
+        ],
+        "rbac": []
+      }
+    }
+  }
 }

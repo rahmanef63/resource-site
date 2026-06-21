@@ -27,5 +27,33 @@
     "attribution",
     "utm",
     "p0"
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "next",
+          "range": "^15"
+        },
+        {
+          "npm": "react",
+          "range": "^18"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "event-tracking.track",
+        "event-tracking.query",
+        "event-tracking.funnel"
+      ],
+      "components": [],
+      "utils": [],
+      "hooks": [],
+      "convex": {
+        "tables": [],
+        "rbac": []
+      }
+    }
+  }
 }

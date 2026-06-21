@@ -103,5 +103,44 @@
       ],
       "seed": "mock chat resolves a canned reply ~500ms after send; FAB + panel anchored inside the preview card"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "auth": "convex",
+      "rbac": [
+        "chat.read",
+        "chat.write"
+      ],
+      "env": [
+        "ANTHROPIC_API_KEY",
+        "OPENAI_API_KEY",
+        "GOOGLE_GENERATIVE_AI_API_KEY"
+      ],
+      "deps": [
+        "convex-auth",
+        "ai-router",
+        "ai-admin",
+        "vector-search"
+      ]
+    },
+    "provides": {
+      "utils": [
+        "createAgenticChatSend"
+      ],
+      "components": [
+        "ChatWorkbench",
+        "ChatThreadSidebar",
+        "ChatModelPicker",
+        "ChatMessageList"
+      ]
+    },
+    "generalization": {
+      "level": "portable",
+      "forbiddenTerms": [
+        "rahmanef",
+        "rahmanef.com"
+      ],
+      "requiredProps": []
+    }
+  }
 }

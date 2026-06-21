@@ -77,5 +77,29 @@
       ],
       "seed": "3 static demo posts; hrefFor returns in-page anchors"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "next",
+          "range": "^15"
+        }
+      ]
+    },
+    "provides": {
+      "components": [
+        "BlogListSection",
+        "BlogPostView",
+        "BlogCard",
+        "PostMeta"
+      ],
+      "utils": [],
+      "hooks": [],
+      "convex": {
+        "tables": [],
+        "rbac": []
+      }
+    }
+  }
 }

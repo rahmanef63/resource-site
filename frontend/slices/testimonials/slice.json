@@ -25,5 +25,28 @@
   "registers": [],
   "audit": [],
   "license": "MIT",
-  "tags": ["content", "testimonials", "convex", "backend", "marketing"]
+  "tags": ["content", "testimonials", "convex", "backend", "marketing"],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "convex",
+          "range": "^1.16.0"
+        }
+      ]
+    },
+    "provides": {
+      "components": [],
+      "utils": [],
+      "hooks": [],
+      "convex": {
+        "tables": [
+          "testimonials"
+        ],
+        "rbac": [
+          "admin"
+        ]
+      }
+    }
+  }
 }

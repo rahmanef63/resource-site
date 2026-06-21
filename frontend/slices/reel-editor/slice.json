@@ -44,5 +44,53 @@
     "nle",
     "ui"
   ],
-  "previews": []
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "none",
+      "deps": [
+        {
+          "npm": "react",
+          "range": "^19"
+        },
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        },
+        {
+          "npm": "react-resizable-panels",
+          "range": "^4"
+        },
+        {
+          "npm": "sonner",
+          "range": "^1"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "reel-editor.project.inspect",
+        "reel-editor.ratio.set",
+        "reel-editor.title.add",
+        "reel-editor.clip.split",
+        "reel-editor.clip.remove",
+        "reel-editor.clip.duplicate",
+        "reel-editor.clip.speed",
+        "reel-editor.clip.crossfade",
+        "reel-editor.clip.move_track",
+        "reel-editor.history.undo",
+        "reel-editor.history.redo"
+      ],
+      "routes": [],
+      "components": [
+        "ReelEditor"
+      ],
+      "hooks": [],
+      "utils": [
+        "configureReelFs",
+        "reelEditorApp"
+      ],
+      "tables": []
+    }
+  }
 }

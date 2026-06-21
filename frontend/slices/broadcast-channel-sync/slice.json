@@ -25,5 +25,22 @@
     "realtime",
     "cross-tab",
     "broadcast-channel"
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "auth": "none"
+    },
+    "provides": {
+      "tools": [
+        "broadcast-channel-sync.read",
+        "broadcast-channel-sync.publish"
+      ],
+      "hooks": [
+        "useBroadcastSync"
+      ]
+    },
+    "generalization": {
+      "level": "portable"
+    }
+  }
 }

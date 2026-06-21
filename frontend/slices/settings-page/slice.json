@@ -75,5 +75,38 @@
       ],
       "seed": "SettingsShell over a localStorage demo adapter seeded with a demo user"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "settings-page.get",
+        "settings-page.set"
+      ],
+      "components": [
+        "SettingsShell",
+        "ProfileSection",
+        "PreferencesSection",
+        "NotificationsSection",
+        "DangerZone"
+      ],
+      "utils": [
+        "createMemoryAdapter"
+      ],
+      "hooks": [
+        "useSettings"
+      ],
+      "convex": {
+        "tables": [],
+        "rbac": []
+      }
+    }
+  }
 }

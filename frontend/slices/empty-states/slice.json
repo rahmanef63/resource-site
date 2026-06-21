@@ -76,5 +76,32 @@
       ],
       "seed": "EmptyState rendered once per kind preset with default icon/title/description"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "empty-states.configure"
+      ],
+      "components": [
+        "EmptyState",
+        "ErrorPage"
+      ],
+      "utils": [
+        "EMPTY_STATE_PRESETS"
+      ],
+      "hooks": [],
+      "convex": {
+        "tables": [],
+        "rbac": []
+      }
+    }
+  }
 }

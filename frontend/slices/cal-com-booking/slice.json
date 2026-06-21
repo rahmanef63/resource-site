@@ -51,5 +51,46 @@
     "cal-com",
     "bookings"
   ],
-  "previews": []
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "convex",
+      "rbac": [
+        "bookings.view",
+        "bookings.cancel",
+        "bookings.reschedule"
+      ],
+      "env": [
+        "NEXT_PUBLIC_CALCOM_USERNAME",
+        "CALCOM_WEBHOOK_SECRET"
+      ],
+      "convex": {
+        "prefix": "cal_com_booking_",
+        "tables": [
+          "cal_com_booking_bookings"
+        ]
+      },
+      "deps": [
+        "convex-auth"
+      ]
+    },
+    "provides": {
+      "tools": [
+        "cal-com-booking.list",
+        "cal-com-booking.cancel",
+        "cal-com-booking.reschedule"
+      ],
+      "tables": [
+        "cal_com_booking_bookings"
+      ],
+      "events": [
+        "booking.created",
+        "booking.rescheduled",
+        "booking.cancelled"
+      ]
+    },
+    "generalization": {
+      "level": "portable"
+    }
+  }
 }

@@ -30,5 +30,38 @@
   "registers": [],
   "audit": [],
   "license": "MIT",
-  "tags": ["ai", "ai:agent", "agent-mode", "tool-calls", "async", "queue", "traces"]
+  "tags": ["ai", "ai:agent", "agent-mode", "tool-calls", "async", "queue", "traces"],
+  "contract": {
+    "requires": {
+      "auth": "convex",
+      "rbac": [
+        "agents.read",
+        "agents.write"
+      ],
+      "deps": [
+        "convex-auth",
+        "ai-router",
+        "ai-admin",
+        "audit-log"
+      ]
+    },
+    "provides": {
+      "utils": [
+        "createAgentRunner"
+      ],
+      "components": [
+        "AgentsView",
+        "AgentRunTrace",
+        "AgentQueue"
+      ]
+    },
+    "generalization": {
+      "level": "portable",
+      "forbiddenTerms": [
+        "rahmanef",
+        "rahmanef.com"
+      ],
+      "requiredProps": []
+    }
+  }
 }

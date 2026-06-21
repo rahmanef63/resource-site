@@ -55,5 +55,51 @@
     "newsletter",
     "resend"
   ],
-  "previews": []
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "convex",
+      "rbac": [
+        "newsletter.subscribe",
+        "newsletter.unsubscribe",
+        "newsletter.send-broadcast",
+        "newsletter.list-subscribers"
+      ],
+      "env": [
+        "RESEND_API_KEY",
+        "RESEND_FROM"
+      ],
+      "convex": {
+        "prefix": "newsletter_",
+        "tables": [
+          "newsletter_subscribers",
+          "newsletter_broadcasts"
+        ]
+      },
+      "deps": [
+        "convex-auth"
+      ]
+    },
+    "provides": {
+      "tools": [
+        "resend-newsletter.subscribe",
+        "resend-newsletter.unsubscribe",
+        "resend-newsletter.list",
+        "resend-newsletter.send_campaign"
+      ],
+      "tables": [
+        "newsletter_subscribers",
+        "newsletter_broadcasts"
+      ],
+      "routes": [
+        "/newsletter"
+      ],
+      "components": [
+        "SubscribeForm"
+      ]
+    },
+    "generalization": {
+      "level": "portable"
+    }
+  }
 }

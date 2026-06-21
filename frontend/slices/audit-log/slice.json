@@ -43,5 +43,50 @@
     "compliance",
     "logging"
   ],
-  "previews": []
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "convex",
+      "rbac": [
+        "audit.read",
+        "audit.write"
+      ],
+      "convex": {
+        "prefix": "audit_",
+        "tables": [
+          "audit_events"
+        ]
+      },
+      "deps": [
+        "convex-auth"
+      ]
+    },
+    "provides": {
+      "tools": [
+        "audit-log.query",
+        "audit-log.export"
+      ],
+      "tables": [
+        "audit_events"
+      ],
+      "hooks": [
+        "createAuditLogger"
+      ],
+      "components": []
+    },
+    "migrationFrom": {
+      "0.1.0": "audit-log-v0.1.0-to-v0.2.0-tenant-adapter"
+    },
+    "generalization": {
+      "level": "needs-adapter",
+      "forbiddenTerms": [
+        "workspaceId",
+        "auditLogs"
+      ],
+      "requiredProps": [
+        "tenantAdapter",
+        "bindings"
+      ]
+    }
+  }
 }

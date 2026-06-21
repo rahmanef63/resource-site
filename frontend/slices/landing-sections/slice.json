@@ -73,5 +73,57 @@
       ],
       "seed": "3 seed sections (hero/features/cta) rendered by local mini-blocks wrapped in LandingSectionShell, scaled in a fixed-height frame"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        },
+        {
+          "npm": "embla-carousel-autoplay",
+          "range": "^8.6.0"
+        },
+        {
+          "npm": "next",
+          "range": "^15"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "landing-sections.list",
+        "landing-sections.add",
+        "landing-sections.update",
+        "landing-sections.remove"
+      ],
+      "components": [
+        "LandingView",
+        "LandingEditorView",
+        "LandingSectionShell",
+        "StatsSection",
+        "TestimonialsSection",
+        "FaqSection",
+        "PricingSection",
+        "NewsletterSection",
+        "CustomSection"
+      ],
+      "utils": [
+        "blankSection",
+        "defaultLandingSections",
+        "landingReducer",
+        "parseConfigBadge",
+        "parseConfigField",
+        "parseConfigObject"
+      ],
+      "hooks": [
+        "useLandingStore"
+      ],
+      "convex": {
+        "tables": [],
+        "rbac": []
+      }
+    }
+  }
 }

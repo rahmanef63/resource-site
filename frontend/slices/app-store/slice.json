@@ -41,5 +41,46 @@
     "launcher",
     "ui"
   ],
-  "previews": []
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "none",
+      "deps": [
+        {
+          "npm": "react",
+          "range": "^19"
+        },
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "app-store.list",
+        "app-store.search",
+        "app-store.install",
+        "app-store.uninstall"
+      ],
+      "routes": [],
+      "components": [
+        "AppStore",
+        "CreateApp"
+      ],
+      "hooks": [
+        "useInstalledApps",
+        "useApps",
+        "useDisabledIds"
+      ],
+      "utils": [
+        "createApp",
+        "setInstalled",
+        "configureAppStoreExec",
+        "appStoreApp",
+        "createAppApp"
+      ],
+      "tables": []
+    }
+  }
 }

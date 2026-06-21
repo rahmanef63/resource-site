@@ -81,5 +81,57 @@
       ],
       "seed": "PERMISSION_GROUPS catalog + the selected role preset's resolved permissions"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "next",
+          "range": "^15"
+        },
+        {
+          "npm": "react",
+          "range": "^18"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "rbac-roles.list_roles",
+        "rbac-roles.list_permissions",
+        "rbac-roles.check",
+        "rbac-roles.grant",
+        "rbac-roles.revoke"
+      ],
+      "components": [
+        "PermissionGate",
+        "RoleBadge",
+        "PermissionMatrix"
+      ],
+      "hooks": [
+        "usePermissions"
+      ],
+      "utils": [
+        "PERMS",
+        "matchPermission",
+        "ROLE_PRESETS",
+        "ROLE_MAP",
+        "resolvePermissions",
+        "hasPermission",
+        "roleHasPermission",
+        "roleLevel",
+        "isAtLeast",
+        "PERMISSION_GROUPS"
+      ],
+      "convex": {
+        "tables": [
+          "rbac_roles"
+        ],
+        "rbac": [
+          "roles.view",
+          "roles.manage"
+        ]
+      }
+    }
+  }
 }

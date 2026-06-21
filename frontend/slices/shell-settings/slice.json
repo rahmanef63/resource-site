@@ -56,5 +56,35 @@
       ],
       "seed": "fully offline — an in-preview useState adapter; the consumer injects its real appearance store"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "auth": "none",
+      "deps": [
+        {
+          "npm": "react",
+          "range": "^19"
+        },
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
+      ]
+    },
+    "provides": {
+      "routes": [],
+      "components": [
+        "AppearancePanel",
+        "SettingsSection",
+        "SettingsRow",
+        "Segmented",
+        "AccentSwatches"
+      ],
+      "hooks": [],
+      "utils": [
+        "shellSettingsConfig"
+      ],
+      "tables": []
+    }
+  }
 }

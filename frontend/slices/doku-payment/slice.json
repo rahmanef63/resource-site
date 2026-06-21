@@ -111,5 +111,73 @@
       ],
       "seed": "static demo instructions per channel; sandbox \u2014 no real charge, links are placeholders"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "auth": "convex",
+      "rbac": [
+        "payment.create-order",
+        "payment.view-order",
+        "payment.cancel-order",
+        "payment.refund",
+        "payment.webhook-process"
+      ],
+      "env": [
+        "DOKU_CLIENT_ID",
+        "DOKU_SECRET_KEY",
+        "DOKU_IS_PRODUCTION",
+        "DOKU_NOTIFY_PATH"
+      ],
+      "convex": {
+        "prefix": "doku_",
+        "tables": [
+          "doku_orders",
+          "doku_webhook_events"
+        ]
+      },
+      "deps": [
+        "convex-auth"
+      ]
+    },
+    "provides": {
+      "tools": [
+        "doku-payment.channels",
+        "doku-payment.create_invoice",
+        "doku-payment.status",
+        "doku-payment.refund"
+      ],
+      "tables": [
+        "doku_orders",
+        "doku_webhook_events"
+      ],
+      "routes": [
+        "/checkout/doku"
+      ],
+      "hooks": [
+        "useDokuCheckout"
+      ],
+      "events": [
+        "payment.captured",
+        "payment.failed",
+        "payment.refunded"
+      ],
+      "components": [
+        "DokuCheckoutButton",
+        "DokuWebhookProbe"
+      ]
+    },
+    "conflicts": [
+      "midtrans-payment:tables.paymentOrders",
+      "midtrans-payment:tables.paymentWebhookEvents"
+    ],
+    "migrationFrom": {
+      "0.9.0": "namespace-rename-2026-05"
+    },
+    "generalization": {
+      "level": "portable",
+      "forbiddenTerms": [
+        "midtrans"
+      ]
+    }
+  }
 }

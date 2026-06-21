@@ -53,5 +53,38 @@
       ],
       "seed": "in-memory stores only — the preview never touches localStorage; favicons load from the Google s2 host"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "auth": "none",
+      "deps": [
+        {
+          "npm": "react",
+          "range": "^19"
+        },
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
+      ]
+    },
+    "provides": {
+      "routes": [],
+      "components": [
+        "QuicklinksApp"
+      ],
+      "hooks": [
+        "useQuicklinks"
+      ],
+      "utils": [
+        "configureQuicklinks",
+        "createLocalStore",
+        "createMemoryStore",
+        "faviconUrl",
+        "openQuicklink",
+        "quicklinksApp"
+      ],
+      "tables": []
+    }
+  }
 }

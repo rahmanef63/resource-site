@@ -71,5 +71,59 @@
       ],
       "seed": "4-row sprint-tasks db in rr-demo:notion-database; cell edits persist"
     }
-  ]
+  ],
+  "contract": {
+    "provides": {
+      "tools": [
+        "notion-database.rows",
+        "notion-database.row.add",
+        "notion-database.row.update",
+        "notion-database.row.delete",
+        "notion-database.view.switch",
+        "notion-database.filter",
+        "notion-database.sort"
+      ],
+      "components": [
+        "NotionDatabase",
+        "NotionProperty",
+        "ViewTabs",
+        "ViewOptions",
+        "ColumnHeaderMenu",
+        "TableView",
+        "BoardView",
+        "ListView",
+        "GalleryView",
+        "CalendarView",
+        "FeedView"
+      ],
+      "utils": [
+        "applyView",
+        "groupBy",
+        "bucketByDate",
+        "renderPropertyCell",
+        "VIEW_REGISTRY"
+      ],
+      "hooks": [],
+      "types": [
+        "NotionDatabaseProps",
+        "NotionPropertyProps",
+        "ViewTabsProps",
+        "ViewOptionsProps",
+        "ColumnHeaderMenuProps",
+        "ViewRegistry",
+        "ViewProps",
+        "Database",
+        "DatabaseViewConfig",
+        "DatabaseFilter",
+        "DatabaseSort",
+        "DbView",
+        "Property",
+        "PropertyValue",
+        "PropertyType",
+        "SelectOption",
+        "NumberFormat",
+        "Page"
+      ]
+    }
+  }
 }

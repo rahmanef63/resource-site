@@ -35,5 +35,30 @@
     "convex",
     "backend",
     "throttle"
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "convex",
+          "range": "^1.16.0"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "rate-limit.check",
+        "rate-limit.reset"
+      ],
+      "components": [],
+      "utils": [],
+      "hooks": [],
+      "convex": {
+        "tables": [
+          "rateLimits"
+        ],
+        "rbac": []
+      }
+    }
+  }
 }

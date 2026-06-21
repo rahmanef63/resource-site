@@ -61,5 +61,33 @@
       ],
       "seed": "fully offline — gradient tints + bundled SVG data-URI sample images"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "auth": "none",
+      "deps": [
+        {
+          "npm": "react",
+          "range": "^19"
+        },
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
+      ]
+    },
+    "provides": {
+      "routes": [],
+      "components": [
+        "MediaStudio"
+      ],
+      "hooks": [],
+      "utils": [
+        "configureMediaStudio",
+        "parseDoc",
+        "mediaStudioApp"
+      ],
+      "tables": []
+    }
+  }
 }

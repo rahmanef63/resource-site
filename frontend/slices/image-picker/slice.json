@@ -57,5 +57,44 @@
       ],
       "seed": "Zero-config picker \u2014 Gallery (colours/gradients/textures) + Link + Upload tabs work without a server; Unsplash live search is omitted (no API key in preview)."
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "env": [
+        "UNSPLASH_ACCESS_KEY"
+      ]
+    },
+    "provides": {
+      "tools": [
+        "image-picker.search",
+        "image-picker.pick"
+      ],
+      "components": [
+        "ImagePickerButton",
+        "ImagePickerDialog",
+        "ImageBanner"
+      ],
+      "utils": [
+        "parseImage",
+        "isCssImage",
+        "isUrlImage",
+        "imageRef",
+        "imageStyle",
+        "GALLERY_SECTIONS",
+        "CURATED_UNSPLASH",
+        "unsplashSearchVia"
+      ],
+      "hooks": [],
+      "types": [
+        "ImageValue",
+        "ImageField",
+        "ImageSource",
+        "UnsplashPhoto",
+        "UnsplashSearchResult",
+        "UploadFn",
+        "UnsplashSearchFn",
+        "ImageSourceProps"
+      ]
+    }
+  }
 }

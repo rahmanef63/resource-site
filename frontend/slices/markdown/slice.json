@@ -73,5 +73,54 @@
       ],
       "seed": "two markdown docs in rr-demo:markdown; Write-tab edits persist per content axis"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "katex",
+          "range": "^0.16"
+        },
+        {
+          "npm": "mermaid",
+          "range": "^11"
+        },
+        {
+          "npm": "recharts",
+          "range": "^3"
+        },
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "markdown.parse",
+        "markdown.toc"
+      ],
+      "components": [
+        "MarkdownPage",
+        "MarkdownReader",
+        "MdNodeView",
+        "renderNodes",
+        "MermaidBlock",
+        "ChartBlock"
+      ],
+      "utils": [
+        "parseMarkdown",
+        "renderInline",
+        "tokenizeInline",
+        "newCommentId",
+        "commentsFor",
+        "openCount"
+      ],
+      "hooks": [],
+      "convex": {
+        "tables": [],
+        "rbac": []
+      }
+    }
+  }
 }

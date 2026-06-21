@@ -37,5 +37,36 @@
     "processes",
     "ui"
   ],
-  "previews": []
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "none",
+      "deps": [
+        {
+          "npm": "react",
+          "range": "^19"
+        },
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "system-monitor.stats",
+        "system-monitor.processes"
+      ],
+      "routes": [],
+      "components": [
+        "SystemMonitor"
+      ],
+      "hooks": [],
+      "utils": [
+        "configureSysmon",
+        "systemMonitorApp"
+      ],
+      "tables": []
+    }
+  }
 }

@@ -56,5 +56,39 @@
       ],
       "seed": "fully offline \u2014 bundled SVG samples + data-URI remote payload"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "auth": "none",
+      "deps": [
+        {
+          "npm": "react",
+          "range": "^19"
+        },
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "media-viewer.info",
+        "media-viewer.next",
+        "media-viewer.prev",
+        "media-viewer.zoom.set"
+      ],
+      "routes": [],
+      "components": [
+        "MediaViewer"
+      ],
+      "hooks": [],
+      "utils": [
+        "configureMediaOpener",
+        "configureMediaSource",
+        "mediaViewerApp"
+      ],
+      "tables": []
+    }
+  }
 }

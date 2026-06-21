@@ -97,5 +97,25 @@
       ],
       "seed": "LoadingState rendered per variant over demo content"
     }
-  ]
+  ],
+  "contract": {
+    "provides": {
+      "tools": [
+        "loading-states.configure"
+      ],
+      "components": [
+        "LoadingSkeleton",
+        "LoadingState"
+      ],
+      "utils": [
+        "LOADING_PRESETS",
+        "LOADING_KINDS"
+      ],
+      "hooks": [],
+      "convex": {
+        "tables": [],
+        "rbac": []
+      }
+    }
+  }
 }

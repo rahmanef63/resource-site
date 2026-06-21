@@ -74,5 +74,61 @@
       ],
       "seed": "seeded thread (2 roots + 1 reply) in rr-demo:comments; posting a reply persists via createDemoStore"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "auth": "convex",
+      "rbac": [
+        "comment.create",
+        "comment.read"
+      ],
+      "convex": {
+        "prefix": "comment_",
+        "tables": [
+          "comment_threads"
+        ]
+      },
+      "deps": [
+        "convex-auth"
+      ]
+    },
+    "provides": {
+      "tools": [
+        "comments.list",
+        "comments.add",
+        "comments.resolve",
+        "comments.remove"
+      ],
+      "tables": [
+        "comment_threads"
+      ],
+      "hooks": [
+        "useComments"
+      ],
+      "utils": [
+        "buildThread"
+      ],
+      "components": [
+        "CommentsThread",
+        "CommentsAnchor"
+      ]
+    },
+    "migrationFrom": {
+      "0.1.0": "comments-v0.1.0-to-v0.2.0-polymorphic-target"
+    },
+    "generalization": {
+      "level": "needs-adapter",
+      "forbiddenTerms": [
+        "pageId",
+        "blockId",
+        "targetType"
+      ],
+      "requiredProps": [
+        "target",
+        "bindings",
+        "forbiddenWords",
+        "pathMap"
+      ]
+    }
+  }
 }

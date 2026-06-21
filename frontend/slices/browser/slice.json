@@ -45,5 +45,47 @@
     "bookmarks",
     "ui"
   ],
-  "previews": []
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "none",
+      "deps": [
+        {
+          "npm": "react",
+          "range": "^19"
+        },
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "browser.read_state",
+        "browser.open",
+        "browser.new_tab",
+        "browser.close_tab",
+        "browser.back",
+        "browser.forward",
+        "browser.reload",
+        "browser.scroll",
+        "browser.click",
+        "browser.type",
+        "browser.key"
+      ],
+      "routes": [],
+      "components": [
+        "Browser"
+      ],
+      "hooks": [],
+      "utils": [
+        "configureBrowser",
+        "configureBrowserMode",
+        "configureScreencast",
+        "browserApp"
+      ],
+      "tables": []
+    }
+  }
 }

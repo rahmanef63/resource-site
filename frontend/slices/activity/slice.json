@@ -67,5 +67,52 @@
       ],
       "seed": "4 static ActivityRow entries across two ISO weeks (display-only); scenario toggles stats + emptiness"
     }
-  ]
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "convex",
+          "range": "^1.17"
+        },
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        },
+        {
+          "npm": "next",
+          "range": "^15"
+        },
+        {
+          "npm": "react",
+          "range": "^18"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "activity.list",
+        "activity.stats"
+      ],
+      "components": [
+        "ActivityFeed",
+        "StatsPanel",
+        "ActivityItem"
+      ],
+      "utils": [
+        "groupByWeek",
+        "isoWeek",
+        "fmtDate",
+        "fmtTime",
+        "DEFAULT_COPY"
+      ],
+      "hooks": [],
+      "convex": {
+        "tables": [
+          "activities"
+        ],
+        "rbac": []
+      }
+    }
+  }
 }
