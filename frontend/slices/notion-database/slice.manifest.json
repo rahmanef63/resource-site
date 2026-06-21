@@ -127,7 +127,6 @@
     "lib/viewData-filters.ts",
     "lib/viewData.ts",
     "lib/visibility.ts",
-    "slice.contract.ts",
     "slice.json",
     "types.ts"
   ],

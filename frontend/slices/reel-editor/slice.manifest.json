@@ -70,7 +70,6 @@
     "lib/use-reel-inspector.ts",
     "lib/use-shortcuts.ts",
     "lib/waveform.ts",
-    "slice.contract.ts",
     "slice.json"
   ]
 }

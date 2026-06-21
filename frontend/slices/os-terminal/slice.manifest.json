@@ -25,7 +25,6 @@
     "lib/host.ts",
     "lib/tools.ts",
     "lib/use-pty.ts",
-    "slice.contract.ts",
     "slice.json"
   ],
   "imports": {

@@ -32,7 +32,6 @@
     "shared/types/index.ts",
     "shared/types/property.ts",
     "shared/ui/PageIcon.tsx",
-    "slice.contract.ts",
     "slice.json",
     "slices/editor/BlockEditor.tsx",
     "slices/editor/ColumnBlockEditor.tsx",

@@ -28,7 +28,6 @@
     "lib/samples.ts",
     "lib/tools.ts",
     "lib/use-playback.ts",
-    "slice.contract.ts",
     "slice.json"
   ],
   "imports": {

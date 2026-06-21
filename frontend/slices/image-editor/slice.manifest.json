@@ -115,7 +115,6 @@
     "lib/types.ts",
     "preview.tsx",
     "server.ts",
-    "slice.contract.ts",
     "slice.json",
     "ui/slider.tsx",
     "ui/tabs.tsx"

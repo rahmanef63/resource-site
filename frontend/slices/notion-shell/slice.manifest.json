@@ -61,7 +61,6 @@
     "lib/markdownTriggers.ts",
     "lib/selectionFormat.ts",
     "property-type-meta.ts",
-    "slice.contract.ts",
     "slice.json",
     "types.ts",
     "view-config-types.ts"

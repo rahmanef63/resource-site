@@ -26,7 +26,6 @@
     "lib/tweakcn/registry.ts",
     "lib/tweakcn/tokens.ts",
     "lib/tweakcn/types.ts",
-    "slice.contract.ts",
     "slice.json"
   ],
   "imports": {

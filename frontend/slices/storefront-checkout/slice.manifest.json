@@ -16,7 +16,6 @@
     "index.ts",
     "lib/cart.tsx",
     "lib/tools.ts",
-    "slice.contract.ts",
     "slice.json"
   ],
   "imports": {

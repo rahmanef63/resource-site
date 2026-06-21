@@ -31,7 +31,6 @@
     "lib/use-editor.ts",
     "lib/util.ts",
     "preview.tsx",
-    "slice.contract.ts",
     "slice.json"
   ],
   "imports": {

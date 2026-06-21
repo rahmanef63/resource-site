@@ -19,7 +19,6 @@
     "motion/reveal.tsx",
     "motion/stagger.tsx",
     "motion/use-in-view.ts",
-    "slice.contract.ts",
     "slice.json",
     "ui/accordion.tsx",
     "ui/carousel-context.tsx",

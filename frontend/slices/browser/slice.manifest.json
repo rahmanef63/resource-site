@@ -31,7 +31,6 @@
     "lib/use-inspector.ts",
     "lib/use-remote-browser.ts",
     "lib/use-screencast.ts",
-    "slice.contract.ts",
     "slice.json"
   ],
   "imports": {

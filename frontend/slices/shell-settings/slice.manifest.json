@@ -19,7 +19,6 @@
     "config.ts",
     "index.ts",
     "lib/types.ts",
-    "slice.contract.ts",
     "slice.json"
   ],
   "imports": {

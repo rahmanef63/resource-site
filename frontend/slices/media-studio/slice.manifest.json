@@ -39,7 +39,6 @@
     "lib/use-keyboard.ts",
     "lib/use-scene.ts",
     "lib/use-studio.ts",
-    "slice.contract.ts",
     "slice.json"
   ],
   "imports": {

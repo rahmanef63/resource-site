@@ -17,7 +17,6 @@
     "index.ts",
     "lib/parse.ts",
     "lib/tools.ts",
-    "slice.contract.ts",
     "types/index.ts"
   ],
   "imports": {

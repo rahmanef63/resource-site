@@ -34,7 +34,6 @@
     "lib/tools.ts",
     "lib/use-container.ts",
     "lib/use-installed-apps.ts",
-    "slice.contract.ts",
     "slice.json"
   ]
 }

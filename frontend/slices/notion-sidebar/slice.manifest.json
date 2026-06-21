@@ -13,7 +13,6 @@
     "components/SidebarRow.tsx",
     "index.ts",
     "lib/tree.ts",
-    "slice.contract.ts",
     "slice.json",
     "types.ts"
   ],

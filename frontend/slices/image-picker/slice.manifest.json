@@ -23,7 +23,6 @@
     "lib/tools.ts",
     "lib/unsplashCurated.ts",
     "lib/unsplashSearch.ts",
-    "slice.contract.ts",
     "slice.json",
     "types.ts"
   ],

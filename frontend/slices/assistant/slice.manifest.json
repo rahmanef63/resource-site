@@ -37,7 +37,6 @@
     "lib/stream.ts",
     "lib/tools.ts",
     "lib/types.ts",
-    "slice.contract.ts",
     "slice.json"
   ],
   "imports": {

@@ -142,8 +142,7 @@
     "responsive/use-container.ts",
     "responsive/use-is-mobile.ts",
     "responsive/use-responsive.ts",
-    "runtime/use-url-sync.tsx",
-    "slice.contract.ts"
+    "runtime/use-url-sync.tsx"
   ],
   "imports": {
     "shared": [

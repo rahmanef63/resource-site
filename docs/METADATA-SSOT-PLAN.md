@@ -83,16 +83,24 @@ carries undeclared `utils`/`convex` sub-fields. A clean mechanical reconcile of
   — platform-admin's validator-violating contract now loads, a latent bug-fix),
   compose-solver vitest 20/20, smoke OK, migrate --from 0.1.0 historic OK,
   forbidden-terms withTerms 11 / hits 0 (not dark), audit:slices 0, tsc 0. ✅
-- [ ] 2d. `validate-slice.mjs` (or validate-contract): validate the folded block
-  + custom JS for the 2 cross-field invariants (constraint #4); tolerate the
-  known platform-admin 2-dot rbac (regex-fallback today).
-- [ ] 2e. Delete 70 `slice.contract.ts` + `validate-contract.mjs` +
-  `validate-contract-shape.mjs` + `check-contract-drift.mjs`. audit-slice:
-  drop contract presence; version-pair (json==manifest).
-- [ ] 2f. `sync-slice-manifests.mjs`: also exclude slice.contract.ts is moot once
-  deleted; regenerate manifest from slice.json where applicable.
-- [ ] 2g. Gate: typecheck + audit:slices + validate:manifests + `rr migrate`
-  historic-version test (constraint #7) + e2e. Ship. Re-publish CLI (user OTP).
+- [x] 2d. Decided to REPOINT (not delete) validate-contract + validate-contract-
+  shape to read slice.json.contract via the adapter — keeps the exact shape
+  invariants + P0 cross-slice conflict check with least risk. Fixed stale
+  CONFLICT_RE (→ contract-validate.ts L21, adds tools+dots). platform-admin's
+  3-segment rbac TOLERATED (only ever passed via the old tsx-throw→regex-fallback
+  loophole). audit-slice: dropped contract presence; version-trio→PAIR. ✅
+- [x] 2e. Deleted **72 slice.contract.ts** (71 frontend + 1 template-base) +
+  check-contract-drift.mjs + helpers + contracts-drift.yml + contracts:drift
+  script + validate-all step. Surgically dropped slice.contract.ts from 25
+  manifests' files[]. (validate-contract/shape KEPT, repointed.) ✅
+- [x] 2f. manifests reconciled surgically (slice.contract.ts removed). ✅
+- [x] 2g. **Post-deletion gates green**: compose 70, smoke canary OK, migrate
+  --from 0.1.0 historic git-show leg OK (reads .ts from git history — working
+  tree gone), forbidden-terms withTerms 11/hits 0, validate:contracts 70/0,
+  audit:slices 0, validate:slices 0, tsc 0. Cosmetic prose sweep (STEP 15) +
+  CLI republish (user OTP) remain. ✅
+
+**PHASE 2 CUTOVER COMPLETE.** Remaining: STEP 15 cosmetic prose + CLI republish.
 
 ## Progress log
 - 2026-06-21: plan created from audit workflow + verify. Scope = Phase 1+2. Execution starting.

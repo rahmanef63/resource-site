@@ -25,7 +25,6 @@
     "lib/palette.ts",
     "lib/tools.ts",
     "lib/use-stats-history.ts",
-    "slice.contract.ts",
     "slice.json"
   ],
   "imports": {
