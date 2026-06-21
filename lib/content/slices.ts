@@ -414,7 +414,7 @@ export default function MonitorDemo() {
   },
   {
     slug: "os-terminal",
-    title: "Terminal — shell emulator with live passthrough",
+    title: "Terminal — shell emulator with live passthrough + PTY seam",
     category: "os",
     kind: "ui",
     version: "1.2.1",
@@ -2375,7 +2375,7 @@ const [count, setCount] = useBroadcastSync("rr:counter", 0);
   },
   {
     slug: "media-studio",
-    title: "Media Studio — layered canvas editor",
+    title: "Media Studio — photo / social design canvas",
     category: "os",
     kind: "ui",
     version: "1.0.0",
@@ -2413,7 +2413,7 @@ export default function StudioDemo() {
   },
   {
     slug: "quicklinks",
-    title: "Quicklinks — website shortcut grid",
+    title: "Quicklinks — website shortcuts with favicons",
     category: "os",
     kind: "ui",
     version: "1.0.0",
@@ -2452,7 +2452,7 @@ export default function LinksDemo() {
   {
     slug: "shell-settings",
     title: "Shell Settings — settings-app UI primitives",
-    category: "os",
+    category: "ui",
     kind: "ui",
     version: "1.0.0",
     tagline: "Section/Row/AccentSwatches/Segmented primitives + an appearance panel over an injectable adapter.",

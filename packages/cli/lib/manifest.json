@@ -123,7 +123,7 @@
     },
     {
       "slug": "os-terminal",
-      "title": "Terminal — shell emulator with live passthrough",
+      "title": "Terminal — shell emulator with live passthrough + PTY seam",
       "category": "os",
       "description": "A React-DOM terminal: monospace glass aesthetic, colored prompt, arrow-key history, red stderr. Built-ins (ls·cd·pwd·cat·mkdir·touch·rm·mv·cp·echo·whoami·date·uname·df·ps·neofetch·help·clear) run against an in-memory FsModel, so it works with ZERO backend. Wire configureTerminal({ mode:\"live\", fs, exec }) and ls/cat read through your real filesystem, file mutations mirror to it, and any unknown command passes through exec.run as a one-shot shell call (stdout/stderr/exit rendered). Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
       "source": "rahmanef63/os-vps",
@@ -1428,7 +1428,7 @@
     },
     {
       "slug": "media-studio",
-      "title": "Media Studio — layered canvas editor",
+      "title": "Media Studio — photo / social design canvas",
       "category": "os",
       "description": "A layered canvas studio: image/text/shape layers with filters, masks, transforms, safe-area guides and aspect presets (1:1/4:5/9:16/16:9), plus an export modal (download / copy / import JSON). Runs fully offline on bundled gradient-SVG samples. Host wiring is one call: configureMediaStudio({ saveDoc, imageSources }) lights up Save-to-host and feeds real image sources. Self-contained: inspector hooks are inert seams in lib/host.ts.",
       "source": "rahmanef63/os-vps",
@@ -1448,7 +1448,7 @@
     },
     {
       "slug": "quicklinks",
-      "title": "Quicklinks — website shortcut grid",
+      "title": "Quicklinks — website shortcuts with favicons",
       "category": "os",
       "description": "A website-shortcut grid: add/remove links with auto favicons (Google s2) and new-tab open. State lives behind an injectable QuicklinksStore — createLocalStore persists to localStorage (SSR-safe hydrate), createMemoryStore suits previews/tests, configureQuicklinks swaps in a host store. Pairs with appshell: the useQuickLinks capability + QuicklinkIcon surface the same links in the dock/Launchpad/mobile grid.",
       "source": "rahmanef63/os-vps",
@@ -1467,7 +1467,7 @@
     {
       "slug": "shell-settings",
       "title": "Shell Settings — settings-app UI primitives",
-      "category": "os",
+      "category": "ui",
       "description": "The settings-app building blocks: SettingsSection, Row, AccentSwatches, a slice-local Segmented control, and a ready AppearancePanel (style/mode/accent/wallpaper/device/transparency groups — every group optional). Pure presentation: the injected AppearanceAdapter IS the contract, so it binds to any appearance store (appshell capabilities, zustand, plain useState) with zero slice edits.",
       "source": "rahmanef63/os-vps",
       "install": "npx rahman-resources add shell-settings",
@@ -1677,7 +1677,7 @@
     },
     {
       "slug": "os-terminal",
-      "title": "Terminal — shell emulator with live passthrough",
+      "title": "Terminal — shell emulator with live passthrough + PTY seam",
       "category": "os",
       "kind": "ui",
       "version": "1.2.1",
@@ -4177,7 +4177,7 @@
     },
     {
       "slug": "media-studio",
-      "title": "Media Studio — layered canvas editor",
+      "title": "Media Studio — photo / social design canvas",
       "category": "os",
       "kind": "ui",
       "version": "1.0.0",
@@ -4211,7 +4211,7 @@
     },
     {
       "slug": "quicklinks",
-      "title": "Quicklinks — website shortcut grid",
+      "title": "Quicklinks — website shortcuts with favicons",
       "category": "os",
       "kind": "ui",
       "version": "1.0.0",
@@ -4240,7 +4240,7 @@
     {
       "slug": "shell-settings",
       "title": "Shell Settings — settings-app UI primitives",
-      "category": "os",
+      "category": "ui",
       "kind": "ui",
       "version": "1.0.0",
       "description": "The settings-app building blocks: SettingsSection, Row, AccentSwatches, a slice-local Segmented control, and a ready AppearancePanel (style/mode/accent/wallpaper/device/transparency groups — every group optional). Pure presentation: the injected AppearanceAdapter IS the contract, so it binds to any appearance store (appshell capabilities, zustand, plain useState) with zero slice edits.",
