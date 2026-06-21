@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { acts, getAct } from "@/lib/content/tour";
 import { getSlice } from "@/lib/content/slices";
 import { ActHeader } from "@/components/site/tour/act-header";
+import { DocCard } from "@/components/site/doc-primitives";
 import {
   SliceShowcase,
   type ShowcaseSlice,
@@ -149,7 +150,7 @@ export default function OsAppShellActPage() {
             </code>
             <CopyButton value={appshellRecipe} size="icon" className="h-7 w-7 shrink-0" />
           </div>
-          <div className="relative h-[70svh] min-h-[560px] w-full overflow-hidden rounded-lg border bg-card">
+          <DocCard className="relative h-[70svh] min-h-[560px] w-full overflow-hidden p-0">
             <IframeThumbnail
               src={appshell.previewPath}
               liveTitle={appshell.title}
@@ -157,7 +158,7 @@ export default function OsAppShellActPage() {
               aspect="auto"
               className="absolute inset-0 h-full"
             />
-          </div>
+          </DocCard>
         </section>
       )}
 

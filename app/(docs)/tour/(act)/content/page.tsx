@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { acts, getAct } from "@/lib/content/tour";
 import { getSlice } from "@/lib/content/slices";
 import { ActHeader } from "@/components/site/tour/act-header";
+import { DocCard } from "@/components/site/doc-primitives";
 import {
   SliceShowcase,
   type ShowcaseSlice,
@@ -140,9 +141,9 @@ export default function ContentActPage() {
             </code>
             <CopyButton value={notionRecipe} size="icon" className="h-7 w-7 shrink-0" />
           </div>
-          <div className="overflow-hidden rounded-lg border bg-card">
+          <DocCard className="overflow-hidden p-0">
             <LazySliceMount slug={FEATURED} />
-          </div>
+          </DocCard>
         </section>
       ) : (
         <SliceShowcase {...toShowcase(FEATURED, notionLive)} />
