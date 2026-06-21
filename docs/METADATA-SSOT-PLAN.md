@@ -104,3 +104,4 @@ carries undeclared `utils`/`convex` sub-fields. A clean mechanical reconcile of
 
 ## Progress log
 - 2026-06-21: plan created from audit workflow + verify. Scope = Phase 1+2. Execution starting.
+- 2026-06-21: **COMPLETE.** Phase 1 (`c9b0643a` catalog scalar-gen + retire parity/drift, `c619036d` agent.md off-git). Phase 2 additive (`51dcbef7` fold contract→slice.json, lossless 70/70). Phase 2 cutover (`69a1cdb8` repoint readers, `bbda7673` repoint validator + drop drift gate, `af76f91b` delete 72 .ts, `d3c19f79` prose sweep + CLI 1.14.0). All pushed, build + 482 tests green. **9→7 files/slice; ~150 files + 4 validators removed; version-trio→pair; slice.json is the sole hand-authored SSOT.** Remaining: CLI 1.14.0 republish (user OTP). Tracked debt: requires.deps normalization (npm names + objects mixed with slugs), platform-admin 3-segment rbac (tolerated).
