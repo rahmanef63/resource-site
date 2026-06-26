@@ -13,7 +13,6 @@
 
 import * as React from "react";
 import { Maximize2, Minimize2, ArrowLeftRight } from "lucide-react";
-import { cva } from "class-variance-authority";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useFullWidth, type WidthMode } from "../lib/use-full-width";
@@ -25,19 +24,12 @@ export interface FullWidthToggleCopy {
   title: Record<WidthMode, string>;
 }
 
-/** Segment-item variants (active vs idle) — exported for consumer restyle. */
-export const segmentItemVariants = cva(
-  "h-auto gap-1.5 rounded px-2.5 py-1 text-xs",
-  {
-    variants: {
-      active: {
-        true: "bg-accent font-medium",
-        false: "hover:bg-accent/50 text-muted-foreground",
-      },
-    },
-    defaultVariants: { active: false },
-  },
-);
+/** Segment-item class (active vs idle). */
+const segmentItemClass = (active: boolean) =>
+  cn(
+    "h-auto gap-1.5 rounded px-2.5 py-1 text-xs",
+    active ? "bg-accent font-medium" : "hover:bg-accent/50 text-muted-foreground",
+  );
 
 interface FullWidthToggleProps
   extends Omit<React.ComponentProps<typeof Button>, "variant"> {
@@ -88,7 +80,7 @@ export function FullWidthToggle({
               variant="ghost"
               size="sm"
               onClick={() => setMode(m)}
-              className={segmentItemVariants({ active: mode === m })}
+              className={segmentItemClass(mode === m)}
               title={TITLE[m]}
             >
               <Icon className="h-3.5 w-3.5" />

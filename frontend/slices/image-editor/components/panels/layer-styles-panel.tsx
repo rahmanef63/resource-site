@@ -2,7 +2,7 @@
 
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
-import { Slider } from "@/features/image-editor/ui/slider";
+import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";

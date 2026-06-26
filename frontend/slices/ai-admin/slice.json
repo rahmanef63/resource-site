@@ -51,9 +51,7 @@
       ]
     },
     "provides": {
-      "utils": [
-        "toolRegistryRows"
-      ],
+      "utils": [],
       "components": [
         "AdminSection",
         "ProvidersTable",

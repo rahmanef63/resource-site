@@ -50,10 +50,8 @@
         "dispatchJsonRpc",
         "checkAuth",
         "extractBearer",
-        "scopeAllows",
         "runWithMcpContext",
-        "getMcpContext",
-        "toolDefsFromHost"
+        "getMcpContext"
       ],
       "hooks": [],
       "convex": {

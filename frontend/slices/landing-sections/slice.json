@@ -92,12 +92,7 @@
       ]
     },
     "provides": {
-      "tools": [
-        "landing-sections.list",
-        "landing-sections.add",
-        "landing-sections.update",
-        "landing-sections.remove"
-      ],
+      "tools": [],
       "components": [
         "LandingView",
         "LandingEditorView",

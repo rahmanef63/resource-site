@@ -1,6 +1,6 @@
 "use client";
 
-import { Slider } from "@/features/image-editor/ui/slider";
+import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { useEditor } from "../../lib/store";

@@ -24,7 +24,6 @@
 
 export { AiChatFab } from "./components/AiChatFab";
 export type { AiChatSend, AiChatSendResult } from "./components/AiChatFab";
-export type { ChatMessage, ChatThread, ChatModel, ChatTool, ChatSkill } from "./types";
 
 // Bridge: real function calling for the FAB over any ToolHost
 // (one agent, many slices — @/shared/agentic).

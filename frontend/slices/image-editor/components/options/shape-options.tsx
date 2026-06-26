@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Slider } from "@/features/image-editor/ui/slider";
+import { Slider } from "@/components/ui/slider";
 import { useEditor } from "../../lib/store";
 import type { Layer } from "../../lib/types";
 

@@ -96,10 +96,7 @@
       ]
     },
     "provides": {
-      "tools": [
-        "markdown.parse",
-        "markdown.toc"
-      ],
+      "tools": [],
       "components": [
         "MarkdownPage",
         "MarkdownReader",

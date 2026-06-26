@@ -60,11 +60,6 @@
   ],
   "contract": {
     "provides": {
-      "tools": [
-        "command-menu.list_commands",
-        "command-menu.search",
-        "command-menu.run_command"
-      ],
       "components": [
         "CommandPalette",
         "SearchModal",

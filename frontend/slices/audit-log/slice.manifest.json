@@ -10,14 +10,11 @@
   },
   "files": [
     "README.md",
-    "components/index.ts",
     "config.ts",
-    "hooks/index.ts",
     "index.ts",
     "lib/index.ts",
     "lib/tools.ts",
-    "types/index.ts",
-    "utils/index.ts"
+    "types/index.ts"
   ],
   "convex": {
     "schemaPath": "convex/features/audit-log/_schema.ts",

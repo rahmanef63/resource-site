@@ -16,8 +16,7 @@
     "components/data-table-toolbar.tsx",
     "config.ts",
     "index.ts",
-    "lib/columns-helpers.ts",
-    "lib/tools.ts"
+    "lib/columns-helpers.ts"
   ],
   "imports": {
     "shared": [],

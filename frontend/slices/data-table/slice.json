@@ -83,13 +83,7 @@
       ]
     },
     "provides": {
-      "tools": [
-        "data-table.state",
-        "data-table.filter.set",
-        "data-table.sort.set",
-        "data-table.page.set",
-        "data-table.selection.clear"
-      ],
+      "tools": [],
       "components": [
         "DataTable",
         "DataTableToolbar",

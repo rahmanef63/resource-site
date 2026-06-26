@@ -16,7 +16,6 @@ export { LandingEditorView, blankSection } from "./views/LandingEditorView";
 export { LANDING_FIELDS } from "./landing-fields";
 export { LandingSectionShell } from "./components/LandingSectionShell";
 export type { LandingSection, LandingSectionKind, LandingAction, LandingSlice } from "./types";
-export { landingSectionsTools, type LandingToolsCtx } from "./lib/tools";
 
 // Public section renderers (config-driven) + config helpers — lifted from the
 // fleet `_shared/landing` system (2026-06-11). Consumers map each `kind` to a
@@ -25,4 +24,3 @@ export { landingSectionsTools, type LandingToolsCtx } from "./lib/tools";
 // Soft peers: `_shared/motion` + `_shared/ui/section-head` (ship in every rr
 // website template).
 export * from "./sections";
-export { parseConfigBadge, parseConfigField } from "./parse-config";

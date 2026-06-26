@@ -22,7 +22,6 @@
     "lib/inline.tsx",
     "lib/parse.test.ts",
     "lib/parse.ts",
-    "lib/tools.ts",
     "slice.json"
   ],
   "imports": {

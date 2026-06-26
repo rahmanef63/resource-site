@@ -13,8 +13,7 @@
     "agentic-send.ts",
     "components/AiChatFab.tsx",
     "config.ts",
-    "index.ts",
-    "types.ts"
+    "index.ts"
   ],
   "convex": {
     "schemaPath": "convex/features/aiChat/_schema.ts",

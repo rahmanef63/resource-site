@@ -83,14 +83,3 @@ export const checkAuth = async (
 
   return { ok: false };
 };
-
-// Scope is a space-separated list (RFC 6749 §3.3). `null` = no scope
-// claim → treated as full access for env-bypass and legacy tokens.
-export const scopeAllows = (
-  tokenScope: string | null,
-  requiredScope: string | undefined,
-): boolean => {
-  if (!requiredScope) return true;
-  if (tokenScope === null) return true;
-  return tokenScope.split(/\s+/).includes(requiredScope);
-};

@@ -12,7 +12,6 @@
     "README.md",
     "config.ts",
     "index.ts",
-    "registry-rows.ts",
     "types.ts"
   ],
   "convex": {

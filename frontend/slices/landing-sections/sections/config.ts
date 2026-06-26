@@ -97,3 +97,28 @@ export const isPricingTier = (v: unknown): v is PricingTier =>
   v.features.every((f) => typeof f === "string");
 
 export const isString = (v: unknown): v is string => typeof v === "string";
+
+/** Generic single-field extractor with a runtime guard. Returns the
+ *  value when present and matching the guard, undefined otherwise.
+ *  Use this when a renderer wants to pull `{"variant": "…"}` or
+ *  `{"orientation": "…"}` etc. from the config field. */
+export function parseConfigField<T>(
+  config: string | undefined,
+  key: string,
+  guard: (v: unknown) => v is T,
+): T | undefined {
+  if (!config) return undefined;
+  try {
+    const parsed = JSON.parse(config) as Record<string, unknown>;
+    return guard(parsed[key]) ? parsed[key] : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+/** Extract `{"badge": "…"}` from a section's optional config JSON.
+ *  Returns undefined when config is empty, invalid JSON, or badge
+ *  field is not a string. Never throws — used inline in JSX. */
+export function parseConfigBadge(config?: string): string | undefined {
+  return parseConfigField<string>(config, "badge", (v): v is string => typeof v === "string");
+}

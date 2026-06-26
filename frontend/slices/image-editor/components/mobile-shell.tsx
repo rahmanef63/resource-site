@@ -2,7 +2,7 @@
 
 import { useRef, useState, type ReactNode } from "react";
 import { Bot, Layers, Sparkles, SlidersHorizontal, Settings2, Download } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/features/image-editor/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TopBar } from "./top-bar";
 import { ToolRail } from "./tool-rail";

@@ -23,6 +23,3 @@ export {
   AI_ADMIN_SECTION_ID, AI_ADMIN_TABS, CAPABILITY_ICON, TAB_PERMISSION,
   type AiAdminTabId,
 } from "./config";
-
-// Live tool registry rows for the ToolsTable (source of truth = ToolHost).
-export { toolRegistryRows } from "./registry-rows";

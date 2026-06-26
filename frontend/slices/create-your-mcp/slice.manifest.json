@@ -14,7 +14,6 @@
     "index.ts",
     "lib/auth.ts",
     "lib/context.ts",
-    "lib/from-host.ts",
     "lib/server.ts",
     "lib/tools/example.ts",
     "lib/types.ts",

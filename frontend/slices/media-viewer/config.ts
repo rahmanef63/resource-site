@@ -4,17 +4,12 @@ export type MediaViewerConfig = {
   slug: string;
   title: string;
   category: "os";
-  /** Zoom bounds for the image stage. */
-  zoomMin: number;
-  zoomMax: number;
 };
 
 export const mediaViewerConfig: MediaViewerConfig = {
   slug: "media-viewer",
   title: "Preview — media quick-look",
   category: "os",
-  zoomMin: 0.4,
-  zoomMax: 3,
 };
 
 export default mediaViewerConfig;

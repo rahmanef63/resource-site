@@ -6,6 +6,8 @@ export { NewsletterSection } from "./NewsletterSection";
 export { CustomSection } from "./CustomSection";
 export {
   parseConfigObject,
+  parseConfigBadge,
+  parseConfigField,
   cfgArray,
   cfgNumber,
   cfgString,

@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Slider } from "@/features/image-editor/ui/slider";
+import { Slider } from "@/components/ui/slider";
 import { useEditor } from "../../lib/store";
 
 // Brush / eraser controls (color · size · opacity · hardness) for the options bar.

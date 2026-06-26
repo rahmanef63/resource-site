@@ -10,15 +10,10 @@
   },
   "files": [
     "README.md",
-    "components/index.ts",
     "config.ts",
-    "hooks/index.ts",
     "index.ts",
-    "lib/index.ts",
     "lib/persona.ts",
-    "lib/tools.ts",
-    "types/index.ts",
-    "utils/index.ts"
+    "lib/tools.ts"
   ],
   "convex": {
     "schemaPath": "convex/features/seo/_schema.ts",

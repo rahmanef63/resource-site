@@ -13,4 +13,3 @@ export {
   type DataTableColumnHeaderProps,
 } from "./components/data-table-column-header";
 export { selectionColumn } from "./lib/columns-helpers";
-export { dataTableTools, type DataTableCtx } from "./lib/tools";
