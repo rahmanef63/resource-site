@@ -17,7 +17,6 @@
     "components/pty-terminal.tsx",
     "config.ts",
     "index.ts",
-    "lib/agent-bridge.ts",
     "lib/commands-fs.ts",
     "lib/commands.ts",
     "lib/fs-model.ts",

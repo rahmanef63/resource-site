@@ -10,17 +10,3 @@ export function getVisibleProps(
   const hidden = new Set(view?.hiddenPropIds ?? []);
   return db.properties.filter((p) => !hidden.has(p.id));
 }
-
-export function isHiddenInView(
-  view: DatabaseViewConfig | undefined,
-  propId: string,
-): boolean {
-  return !!view?.hiddenPropIds?.includes(propId);
-}
-
-export function isVisibleInView(
-  view: DatabaseViewConfig | undefined,
-  prop: Property,
-): boolean {
-  return !isHiddenInView(view, prop.id);
-}

@@ -1,14 +1,6 @@
 // Telemetry formatters — theme-agnostic display helpers (rr: no hex, no I/O).
 const GiB = 1024 ** 3;
 
-export function fmtGiB(bytes: number): string {
-  return (bytes / GiB).toFixed(1) + " GB";
-}
-
-export function toGiB(bytes: number): number {
-  return bytes / GiB;
-}
-
 export function fmtGiBPair(used: number, total: number): string {
   return `${(used / GiB).toFixed(1)} / ${(total / GiB).toFixed(0)} GB`;
 }
@@ -25,12 +17,4 @@ export function fmtMBs(n: number): string {
 // Keep a value inside a visible 0..100 band so gauges never collapse/overflow.
 export function clampPct(n: number): number {
   return Math.max(0, Math.min(100, n));
-}
-
-/** SysStats.uptime is milliseconds — render as "Nd Nh" (or "Nh"). */
-export function fmtUptime(ms: number): string {
-  const sec = Math.floor(ms / 1000);
-  const d = Math.floor(sec / 86400);
-  const h = Math.floor((sec % 86400) / 3600);
-  return d > 0 ? `${d}d ${h}h` : `${h}h`;
 }

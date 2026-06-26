@@ -1,9 +1,7 @@
 import { cn } from "@/lib/utils";
 import { EmptyState, type EmptyStateProps } from "./EmptyState";
 
-export interface ErrorPageProps extends EmptyStateProps {
-  className?: string;
-}
+export type ErrorPageProps = EmptyStateProps;
 
 /**
  * Full-page wrapper around {@link EmptyState} for route-level drop-ins

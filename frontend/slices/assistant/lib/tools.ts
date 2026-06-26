@@ -22,18 +22,7 @@ export const GROUP_META: Record<
   video: { label: "Video", icon: "film" },
 };
 
-export const GROUP_ORDER: ToolGroup[] = [
-  "files",
-  "rendering",
-  "apps",
-  "media",
-  "system",
-  "editor",
-  "terminal",
-  "browser",
-  "settings",
-  "video",
-];
+export const GROUP_ORDER = Object.keys(GROUP_META) as ToolGroup[];
 
 const T = (
   id: string,

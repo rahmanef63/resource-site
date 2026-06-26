@@ -12,7 +12,7 @@
 //
 // Usage in your app/layout.tsx:
 //   import { ChatFab } from "@/features/ai-router/components/chat-fab";
-//   <ChatFab feature="support" tier="mid" />
+//   <ChatFab tier="mid" />
 
 import { useState, useRef, useEffect } from "react";
 import { Bot, Send, X } from "lucide-react";
@@ -36,7 +36,6 @@ export function ChatFab({
   title = "Chat",
   placeholder = "Type a message…",
 }: {
-  feature?: string;
   tier?: Tier;
   /** First assistant message (English default — override for i18n). */
   greeting?: string;

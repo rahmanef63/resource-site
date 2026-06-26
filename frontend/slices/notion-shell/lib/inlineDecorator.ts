@@ -28,7 +28,3 @@ export function decorateInPlace(host: HTMLElement, source: string, opts?: { hide
   }
   if (caret >= 0) setCaretAtOffset(host, caret);
 }
-
-export function visibleLength(source: string): number {
-  return source.length;
-}

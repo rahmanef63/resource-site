@@ -12,11 +12,11 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import type {
-  Brand,
   MarketingFooterProps,
   SocialKind,
   SocialLink,
 } from "../lib/types";
+import { BrandMark } from "./BrandMark";
 
 // NOTE: lucide dropped dedicated brand glyphs; these are the closest neutral
 // stand-ins. Swap for your brand-icon set (e.g. simple-icons) post-copy.
@@ -27,22 +27,6 @@ const SOCIAL_ICON: Record<SocialKind, LucideIcon> = {
   youtube: PlayCircle,
   instagram: Camera,
 };
-
-function BrandMark({ brand }: { brand: Brand }) {
-  const inner = (
-    <span className="flex items-center gap-2 font-semibold tracking-tight">
-      {brand.logo}
-      <span>{brand.name}</span>
-    </span>
-  );
-  return brand.href ? (
-    <a href={brand.href} className="transition-opacity hover:opacity-80">
-      {inner}
-    </a>
-  ) : (
-    inner
-  );
-}
 
 function Social({ social }: { social: SocialLink[] }) {
   if (social.length === 0) return null;

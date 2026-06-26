@@ -1,10 +1,9 @@
 /**
  * ai-agents slice — public barrel.
  *
- * Async autonomous worker dashboard. Mount `<RunnerDashboard />` at
- * /agents. Trigger runs via `runAgent({agentSlug, input, scheduleAt?})`.
+ * Async autonomous worker runner. Trigger runs via createAgentRunner(host).
  *
- *   import { RunnerDashboard, useAgentRuns } from "@/features/ai-agents";
+ *   import { createAgentRunner } from "@/features/ai-agents";
  *
  * Status: 0.2.0 — the runner EXECUTES for real: createAgentRunner(host)
  * drives the shared function-calling loop (@/shared/agentic) against any

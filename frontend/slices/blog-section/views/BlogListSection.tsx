@@ -1,4 +1,3 @@
-import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
 import { BlogCard } from "../components/BlogCard";
@@ -108,7 +107,6 @@ function ListLayout({
           <BlogCard post={p} href={hrefFor(p)} variant="list" />
         </div>
       ))}
-      <Separator className="opacity-0" />
     </div>
   );
 }

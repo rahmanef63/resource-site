@@ -23,7 +23,7 @@ export interface CartItem {
   image?: string;
 }
 
-interface CartContextValue {
+export interface CartContextValue {
   items: CartItem[];
   /** Total item count (Σ qty). */
   count: number;

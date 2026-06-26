@@ -3,24 +3,9 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import type { Brand, Cta, MarketingHeaderProps } from "../lib/types";
+import type { Cta, MarketingHeaderProps } from "../lib/types";
 import { DesktopNav, MobileNav } from "./header-nav";
-
-function BrandMark({ brand }: { brand: Brand }) {
-  const inner = (
-    <span className="flex items-center gap-2 font-semibold tracking-tight">
-      {brand.logo}
-      <span>{brand.name}</span>
-    </span>
-  );
-  return brand.href ? (
-    <a href={brand.href} className="transition-opacity hover:opacity-80">
-      {inner}
-    </a>
-  ) : (
-    inner
-  );
-}
+import { BrandMark } from "./BrandMark";
 
 function CtaButtons({ cta, secondaryCta }: { cta?: Cta; secondaryCta?: Cta }) {
   return (

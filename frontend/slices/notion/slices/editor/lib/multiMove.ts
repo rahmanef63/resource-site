@@ -6,10 +6,8 @@
 
 import type { Block } from "@notion/shared/types";
 
-const idsToSet = (ids: string[]) => new Set(ids);
-
 export function topLevelIdsInOrder(blocks: Block[], ids: string[]): string[] {
-  const s = idsToSet(ids);
+  const s = new Set(ids);
   return blocks.filter((b) => s.has(b.id)).map((b) => b.id);
 }
 
@@ -20,7 +18,7 @@ export function placeTopLevelGroupAtBlock(
   ids: string[],
   overBlockId: string,
 ): Block[] {
-  const set = idsToSet(ids);
+  const set = new Set(ids);
   if (set.has(overBlockId)) return blocks; // dropped on self
   const moving = blocks.filter((b) => set.has(b.id));
   if (moving.length === 0) return blocks;
@@ -40,7 +38,7 @@ export function appendTopLevelGroupToContainer(
   columnIndex?: number,
 ): Block[] {
   if (ids.includes(containerId)) return blocks; // can't drop into self
-  const set = idsToSet(ids);
+  const set = new Set(ids);
   const moving = blocks.filter((b) => set.has(b.id));
   if (moving.length === 0) return blocks;
   const remaining = blocks.filter((b) => !set.has(b.id));

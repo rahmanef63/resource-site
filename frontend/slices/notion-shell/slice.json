@@ -95,7 +95,6 @@
         "decorateLineToFragment",
         "getCaretOffset",
         "setCaretAtOffset",
-        "visibleLength",
         "applyView",
         "groupBy",
         "bucketByDate",

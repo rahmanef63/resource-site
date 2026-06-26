@@ -37,11 +37,7 @@ const colClass: Record<2 | 3 | 4, string> = {
   4: "md:grid-cols-2 lg:grid-cols-4",
 };
 
-function clampCols(n: number): 2 | 3 | 4 {
-  if (n <= 2) return 2;
-  if (n === 3) return 3;
-  return 4;
-}
+const clampCols = (n: number) => Math.min(4, Math.max(2, n)) as 2 | 3 | 4;
 
 export function PricingSection({
   eyebrow,

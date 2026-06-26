@@ -15,7 +15,7 @@ import {
   type AgentMsg,
 } from "@/shared/agentic";
 import { getAssistantRegistry } from "../lib/agentic-host";
-import { streamReply, type WireMsg } from "../lib/stream";
+import { streamReply, type WireMsg } from "../lib/host";
 import { toolById } from "../lib/tools";
 import type { Agent, Automation } from "../lib/types";
 import { MessageBubble, type ChatMessage } from "./message-bubble";

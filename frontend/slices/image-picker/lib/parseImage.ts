@@ -11,8 +11,7 @@ function looksLikeGradient(s: string): boolean {
 function looksLikeColor(s: string): boolean {
   const v = s.trim();
   return /^#[0-9a-f]{3,8}$/i.test(v)
-    || /^(rgb|rgba|hsl|hsla)\(/i.test(v)
-    || /^(red|blue|green|black|white|gray|grey|yellow|orange|purple|pink|brown)$/i.test(v);
+    || /^(rgb|rgba|hsl|hsla)\(/i.test(v);
 }
 
 function looksLikeUrl(s: string): boolean {

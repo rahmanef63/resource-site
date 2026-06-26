@@ -12,7 +12,7 @@ export function duplicatePage(source: PageEntry, opts?: { slug?: string; title?:
     slug,
     title,
     description: source.description,
-    blocks: JSON.parse(JSON.stringify(source.blocks)),
+    blocks: structuredClone(source.blocks),
     status: "draft",
     createdAt: now,
     updatedAt: now,

@@ -72,7 +72,6 @@ export {
   decorateLineToFragment,
   getCaretOffset,
   setCaretAtOffset,
-  visibleLength,
 } from "./lib/inlineDecorator";
 
 export type {

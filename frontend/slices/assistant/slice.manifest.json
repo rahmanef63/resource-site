@@ -34,7 +34,6 @@
     "lib/host.ts",
     "lib/presets.ts",
     "lib/store.ts",
-    "lib/stream.ts",
     "lib/tools.ts",
     "lib/types.ts",
     "slice.json"
