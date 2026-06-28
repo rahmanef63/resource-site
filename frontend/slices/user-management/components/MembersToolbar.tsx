@@ -30,6 +30,7 @@ export function MembersToolbar({
           value={query}
           onChange={(e) => onQuery(e.target.value)}
           placeholder={labels.searchPlaceholder}
+          aria-label={labels.searchPlaceholder}
           className="pl-8"
         />
       </div>

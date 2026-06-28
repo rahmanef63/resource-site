@@ -120,7 +120,7 @@ export default function CreateApp() {
         <Separator />
 
         <Field label="Name">
-          <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="My App" autoFocus />
+          <Input aria-label="Name" value={name} onChange={(e) => setName(e.target.value)} placeholder="My App" autoFocus />
         </Field>
 
         <Field label="Runtime">
@@ -128,7 +128,7 @@ export default function CreateApp() {
         </Field>
 
         <Field label="Entry point">
-          <Input value={entry} onChange={(e) => setEntry(e.target.value)} className="font-mono text-xs" />
+          <Input aria-label="Entry point" value={entry} onChange={(e) => setEntry(e.target.value)} className="font-mono text-xs" />
         </Field>
 
         <Field label="Glyph">

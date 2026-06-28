@@ -69,7 +69,7 @@ const preview: SlicePreviewModule = {
               <div className="text-xs text-muted-foreground">{openCount} open</div>
               {tree.map((n) => <Node key={n.id} node={n} density={density} />)}
               <div className="flex gap-2 pt-2">
-                <Textarea value={draft} onChange={(e) => setDraft(e.target.value)} placeholder="Add a reply…" className="min-h-9 text-sm" />
+                <Textarea aria-label="Reply" value={draft} onChange={(e) => setDraft(e.target.value)} placeholder="Add a reply…" className="min-h-9 text-sm" />
                 <Button size="sm" disabled={!draft.trim()} onClick={() => { create({ target: TARGET, text: draft.trim() }); setDraft(""); }}>Post</Button>
               </div>
             </div>

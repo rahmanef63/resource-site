@@ -77,6 +77,7 @@ export function AiPanel({
 
       <div className="flex gap-1.5">
         <Input
+          aria-label="Describe an edit"
           value={value}
           placeholder="Describe an edit…"
           onChange={(e) => setValue(e.target.value)}

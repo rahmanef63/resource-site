@@ -63,7 +63,18 @@ export function LayersPanel({
       {layers.map((layer, i) => (
         <div
           key={layer.id}
+          role="button"
+          tabIndex={0}
           onClick={() => onSelect(layer.id)}
+          onKeyDown={(e) => {
+            if (
+              e.currentTarget === e.target &&
+              (e.key === "Enter" || e.key === " ")
+            ) {
+              e.preventDefault();
+              onSelect(layer.id);
+            }
+          }}
           className={cn(
             "rounded-lg border p-2.5 transition-colors",
             selected === layer.id

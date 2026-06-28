@@ -36,6 +36,7 @@ export function ChatComposer({
   return (
     <div className="flex items-end gap-2 border-t bg-background/60 p-3 [padding-bottom:calc(0.75rem+var(--sai-bottom,0px))]">
       <Textarea
+        aria-label="Message"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         onKeyDown={onKeyDown}

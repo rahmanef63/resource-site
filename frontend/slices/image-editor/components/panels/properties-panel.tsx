@@ -86,13 +86,13 @@ function TransformBlock({ selected, update }: { selected: Layer; update: (id: st
     <section className="flex flex-col gap-3">
       <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Transform</Label>
       <div className="grid grid-cols-2 gap-2">
-        <Field label="X"><Input type="number" value={Math.round(t.x)} onChange={(e) => set({ x: num(e.target.value) })} /></Field>
-        <Field label="Y"><Input type="number" value={Math.round(t.y)} onChange={(e) => set({ y: num(e.target.value) })} /></Field>
+        <Field label="X"><Input aria-label="X" type="number" value={Math.round(t.x)} onChange={(e) => set({ x: num(e.target.value) })} /></Field>
+        <Field label="Y"><Input aria-label="Y" type="number" value={Math.round(t.y)} onChange={(e) => set({ y: num(e.target.value) })} /></Field>
       </div>
-      <Field label={`Rotation ${Math.round(t.rotation)}°`}><Slider min={0} max={360} value={[t.rotation]} onValueChange={([v]) => set({ rotation: v })} /></Field>
+      <Field label={`Rotation ${Math.round(t.rotation)}°`}><Slider aria-label={`Rotation ${Math.round(t.rotation)}°`} min={0} max={360} value={[t.rotation]} onValueChange={([v]) => set({ rotation: v })} /></Field>
       <div className="grid grid-cols-2 gap-2">
-        <Field label="Scale X %"><Input type="number" value={Math.round(t.scaleX * 100)} onChange={(e) => set({ scaleX: num(e.target.value) / 100 })} /></Field>
-        <Field label="Scale Y %"><Input type="number" value={Math.round(t.scaleY * 100)} onChange={(e) => set({ scaleY: num(e.target.value) / 100 })} /></Field>
+        <Field label="Scale X %"><Input aria-label="Scale X %" type="number" value={Math.round(t.scaleX * 100)} onChange={(e) => set({ scaleX: num(e.target.value) / 100 })} /></Field>
+        <Field label="Scale Y %"><Input aria-label="Scale Y %" type="number" value={Math.round(t.scaleY * 100)} onChange={(e) => set({ scaleY: num(e.target.value) / 100 })} /></Field>
       </div>
       <div className="grid grid-cols-2 gap-2">
         <Button variant="outline" size="sm" onClick={() => set({ scaleX: -t.scaleX })}><FlipHorizontal className="size-4" /> Flip H</Button>
@@ -116,8 +116,8 @@ function StrokeBlock({ selected }: { selected: Layer }) {
       </div>
       {s.enabled && (
         <div className="grid grid-cols-2 gap-2">
-          <Field label="Color"><Input type="color" value={s.color} onChange={(e) => patchStroke(selected.id, { color: e.target.value })} /></Field>
-          <Field label={`Width ${s.width}`}><Slider min={0} max={40} value={[s.width]} onValueChange={([v]) => patchStroke(selected.id, { width: v })} /></Field>
+          <Field label="Color"><Input aria-label="Color" type="color" value={s.color} onChange={(e) => patchStroke(selected.id, { color: e.target.value })} /></Field>
+          <Field label={`Width ${s.width}`}><Slider aria-label={`Width ${s.width}`} min={0} max={40} value={[s.width]} onValueChange={([v]) => patchStroke(selected.id, { width: v })} /></Field>
         </div>
       )}
     </>
@@ -130,11 +130,11 @@ function BrushBlock() {
     <section className="flex flex-col gap-3">
       <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Brush</Label>
       <div className="grid grid-cols-2 gap-2">
-        <Field label="Color"><Input type="color" value={fg} onChange={(e) => setFg(e.target.value)} /></Field>
-        <Field label={`Size ${brush.size}`}><Slider min={1} max={200} value={[brush.size]} onValueChange={([v]) => setBrush({ size: v })} /></Field>
+        <Field label="Color"><Input aria-label="Color" type="color" value={fg} onChange={(e) => setFg(e.target.value)} /></Field>
+        <Field label={`Size ${brush.size}`}><Slider aria-label={`Size ${brush.size}`} min={1} max={200} value={[brush.size]} onValueChange={([v]) => setBrush({ size: v })} /></Field>
       </div>
-      <Field label={`Opacity ${Math.round(brush.opacity * 100)}%`}><Slider min={5} max={100} value={[Math.round(brush.opacity * 100)]} onValueChange={([v]) => setBrush({ opacity: v / 100 })} /></Field>
-      <Field label={`Hardness ${Math.round(brush.hardness * 100)}%`}><Slider min={0} max={100} value={[Math.round(brush.hardness * 100)]} onValueChange={([v]) => setBrush({ hardness: v / 100 })} /></Field>
+      <Field label={`Opacity ${Math.round(brush.opacity * 100)}%`}><Slider aria-label={`Opacity ${Math.round(brush.opacity * 100)}%`} min={5} max={100} value={[Math.round(brush.opacity * 100)]} onValueChange={([v]) => setBrush({ opacity: v / 100 })} /></Field>
+      <Field label={`Hardness ${Math.round(brush.hardness * 100)}%`}><Slider aria-label={`Hardness ${Math.round(brush.hardness * 100)}%`} min={0} max={100} value={[Math.round(brush.hardness * 100)]} onValueChange={([v]) => setBrush({ hardness: v / 100 })} /></Field>
       <p className="text-[11px] text-muted-foreground">Pick the Brush tool, then paint on this layer.</p>
     </section>
   );

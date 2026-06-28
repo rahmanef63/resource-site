@@ -60,7 +60,7 @@ export function SkillForm({
       }
     >
       <Field label="Name">
-        <Input value={name} onChange={(e) => setName(e.target.value)} />
+        <Input aria-label="Name" value={name} onChange={(e) => setName(e.target.value)} />
       </Field>
       <Field label="Icon">
         <GlyphPick value={glyph} onChange={setGlyph} options={SKILL_ICONS} />
@@ -70,6 +70,7 @@ export function SkillForm({
       </Field>
       <Field label="Instructions" hint="How the agent should use this skill — added to its system prompt.">
         <Textarea
+          aria-label="Instructions"
           value={instructions}
           onChange={(e) => setInstructions(e.target.value)}
           placeholder="e.g. Organize the filesystem; keep names tidy…"
@@ -81,6 +82,7 @@ export function SkillForm({
       </Field>
       <Field label="Starter prompts" hint="One per line — shown as quick chips.">
         <Textarea
+          aria-label="Starter prompts"
           value={starters}
           onChange={(e) => setStarters(e.target.value)}
           className="min-h-14 text-xs"

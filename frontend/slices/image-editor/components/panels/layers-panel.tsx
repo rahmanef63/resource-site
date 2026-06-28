@@ -60,7 +60,10 @@ export function LayersPanel() {
                 onDragOver={(e) => { e.preventDefault(); if (overIdx !== di) setOverIdx(di); }}
                 onDrop={(e) => { e.preventDefault(); onDrop(di); }}
                 onDragEnd={resetDrag}
+                role="button"
+                tabIndex={0}
                 onClick={() => ed.select(l.id)}
+                onKeyDown={(e) => { if (e.currentTarget === e.target && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); ed.select(l.id); } }}
                 onContextMenu={(e) => { e.preventDefault(); ed.select(l.id); setMenuOpen(l.id); }}
                 className={cn(
                   "flex cursor-pointer items-center gap-2 border-b border-border px-1.5 py-1 hover:bg-accent/50",

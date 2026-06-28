@@ -73,7 +73,7 @@ export function AutomationForm({
       }
     >
       <Field label="Name">
-        <Input value={name} onChange={(e) => setName(e.target.value)} />
+        <Input aria-label="Name" value={name} onChange={(e) => setName(e.target.value)} />
       </Field>
       <Field label="Icon">
         <GlyphPick value={glyph} onChange={setGlyph} options={SKILL_ICONS} />
@@ -120,6 +120,7 @@ export function AutomationForm({
                     <span className="font-mono text-[10px] text-muted-foreground">{s.tool}</span>
                   </div>
                   <Input
+                    aria-label="Steps"
                     value={s.argText}
                     onChange={(e) => setArg(i, e.target.value)}
                     placeholder={t?.params.length ? `e.g. ${t.params[0]} value` : "no arguments"}

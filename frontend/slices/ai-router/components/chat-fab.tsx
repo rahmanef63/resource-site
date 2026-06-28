@@ -158,6 +158,7 @@ export function ChatFab({
           placeholder={placeholder}
           className="flex-1 text-sm"
           disabled={pending}
+          aria-label="Message"
         />
         <Button size="sm" onClick={send} disabled={pending || !input.trim()} aria-label="Send">
           <Send className="size-4" />

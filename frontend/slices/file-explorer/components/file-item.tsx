@@ -24,6 +24,7 @@ function RenameInput({
   return (
     <Input
       autoFocus
+      aria-label={`Rename ${initial}`}
       defaultValue={initial}
       // Pre-select so typing replaces the name immediately (Finder-style).
       onFocus={(e) => e.currentTarget.select()}
@@ -151,7 +152,9 @@ export function FileItem({
   }
 
   return (
-    <div
+    <Button
+      type="button"
+      variant="ghost"
       draggable
       onDragStart={onDragStart}
       {...dropProps}
@@ -159,7 +162,7 @@ export function FileItem({
       onDoubleClick={onOpen}
       onContextMenu={onContext}
       className={cn(
-        "grid cursor-default grid-cols-[1fr_92px_96px] items-center gap-2 px-3 py-1.5 text-xs transition-colors @max-[430px]:grid-cols-[1fr_72px]",
+        "grid h-auto w-full cursor-default grid-cols-[1fr_92px_96px] items-center gap-2 rounded-none px-3 py-1.5 text-left text-xs transition-colors @max-[430px]:grid-cols-[1fr_72px]",
         selected ? "bg-primary text-primary-foreground" : "hover:bg-accent",
         cut && "opacity-50",
         dropActive && "ring-2 ring-primary ring-inset",
@@ -177,6 +180,6 @@ export function FileItem({
       <span className="truncate opacity-70 @max-[430px]:hidden">
         {entry.kind === "dir" ? "Folder" : (entry.ext ?? "").toUpperCase() || "File"}
       </span>
-    </div>
+    </Button>
   );
 }

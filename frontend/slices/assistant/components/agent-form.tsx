@@ -64,7 +64,7 @@ export function AgentForm({
       }
     >
       <Field label="Name">
-        <Input value={name} onChange={(e) => setName(e.target.value)} />
+        <Input aria-label="Name" value={name} onChange={(e) => setName(e.target.value)} />
       </Field>
       <Field label="Icon">
         <GlyphPick value={glyph} onChange={setGlyph} options={SKILL_ICONS} />
@@ -74,6 +74,7 @@ export function AgentForm({
       </Field>
       <Field label="Persona" hint="Voice & behaviour — prepended to the chat as context.">
         <Textarea
+          aria-label="Persona"
           value={persona}
           onChange={(e) => setPersona(e.target.value)}
           placeholder="e.g. Friendly editor that prefers vertical video…"

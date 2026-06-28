@@ -35,7 +35,16 @@ export function TabStrip({
         return (
           <div
             key={p}
+            role="tab"
+            tabIndex={0}
+            aria-selected={on}
             onClick={() => onSelect(p)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onSelect(p);
+              }
+            }}
             title={p}
             className={cn(
               "flex max-w-[200px] shrink-0 items-center gap-2 border-r border-[#2a2a30] px-3 text-xs",

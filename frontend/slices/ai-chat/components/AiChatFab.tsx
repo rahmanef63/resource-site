@@ -165,6 +165,7 @@ export function AiChatFab({ brand = "kami", chat }: { brand?: string; chat?: AiC
             <Input
               value={text}
               onChange={(e) => setText(e.target.value)}
+              aria-label="Tulis pesan"
               placeholder="Tulis pesan…"
               className="h-9"
               disabled={pending}

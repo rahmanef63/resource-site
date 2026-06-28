@@ -41,6 +41,7 @@ export function DataTableToolbar<TData>({
           value={(searchColumn.getFilterValue() as string) ?? ""}
           onChange={(e) => searchColumn.setFilterValue(e.target.value)}
           placeholder={searchPlaceholder}
+          aria-label={searchPlaceholder}
           className="h-8 max-w-xs"
         />
       ) : (

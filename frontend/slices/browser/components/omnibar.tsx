@@ -104,6 +104,7 @@ export function Omnibar(props: OmnibarProps) {
             )}
           />
           <Input
+            aria-label="Address and search bar"
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             onKeyDown={(e) => {

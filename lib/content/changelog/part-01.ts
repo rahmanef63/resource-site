@@ -2,6 +2,31 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "A11Y-DEPTH-2",
+    "version": "slices@a11y-depth-2",
+    "date": 1782604800000,
+    "kind": "fix",
+    "title": "a11y depth pass 2 — 22 fixes: form controls labelled + click-only tabs/rows made keyboard-accessible",
+    "body": "Second deep a11y sweep (form controls without labels + click handlers on non-interactive elements), each finding adversarially verified, 0 rejected. FORM LABELS: 15 inputs/textareas that exposed only a placeholder (not an accessible name) got aria-labels — landing-sections newsletter, vector-search, data-table filter, comments reply, assistant composer + the agent/skill/automation Field forms, browser omnibar, ai-chat + ai-router chat fabs, user-management members search, reel-editor + image-editor AI panels, image-editor properties panel (11 transform/stroke/brush fields whose visible <Label> had no htmlFor), app-store create form, file-explorer rename. KEYBOARD ACCESS: controls that were click-only (no role/tabIndex/onKeyDown) and thus unusable by keyboard or screen-reader users got proper key handling — code-editor + browser tab strips (role=tab + Enter/Space → select), media-studio + image-editor layer rows (role=button + guarded Enter/Space → select), and file-explorer's list-view row was converted from a bare <div> to a <Button> mirroring its own grid branch (native keyboard access, layout unchanged). One control skipped: skill-form's \"Allowed tools\" wraps a custom ToolPicker (not a labelable input). slices:check 70 ok + tsc green.",
+    "groups": [
+      {
+        "heading": "Keyboard access (was mouse-only)",
+        "bullets": [
+          { "text": "code-editor + browser — file/browser tab switching now keyboard-operable (role=tab, Enter/Space)", "slug": "code-editor" },
+          { "text": "file-explorer — list-view row converted to a Button (keyboard select/open) + rename field labelled", "slug": "file-explorer" },
+          { "text": "media-studio + image-editor — layer rows selectable via keyboard (guarded so nested inputs still work)", "slug": "image-editor" }
+        ]
+      },
+      {
+        "heading": "Form labels (placeholder-only → aria-label)",
+        "bullets": [
+          { "text": "landing-sections, vector-search, data-table, comments, browser, ai-chat, ai-router, user-management, reel-editor, app-store — input/textarea accessible names added", "slug": "landing-sections" },
+          { "text": "assistant — agent/skill/automation Field forms + image-editor properties panel (11 fields) labelled", "slug": "assistant" }
+        ]
+      }
+    ]
+  },
+  {
     "id": "DEFECT-HUNT-R3",
     "version": "slices@defect-hunt-r3",
     "date": 1782604800000,

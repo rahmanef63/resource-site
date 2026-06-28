@@ -28,7 +28,16 @@ export function TabBar({ tabs, activeId, aiOpen, onSwitch, onClose, onNew, onTog
           return (
             <div
               key={t.id}
+              role="tab"
+              tabIndex={0}
+              aria-selected={on}
               onClick={() => onSwitch(t.id)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  onSwitch(t.id);
+                }
+              }}
               className={cn(
                 "group flex min-w-[110px] max-w-[190px] shrink-0 cursor-default items-center gap-1.5 rounded-t-md px-2.5 py-1.5 text-xs @max-[480px]:min-w-[96px] @max-[480px]:max-w-[150px]",
                 on ? "bg-background font-medium" : "text-muted-foreground hover:bg-accent/60",
