@@ -10,6 +10,9 @@ import { spawnSync } from "node:child_process";
 import path from "node:path";
 import { loadSliceContract } from "../lib/load-contract.mjs";
 
+// Flags that take a value; anything else is boolean (mirrors cli.js parseFlags).
+const VALUE_FLAGS = new Set(["from", "to", "repo-root"]);
+
 export function parseFlags(rest) {
   const positional = [];
   const flags = {};
@@ -18,7 +21,7 @@ export function parseFlags(rest) {
     if (a.startsWith("--")) {
       const key = a.slice(2);
       const next = rest[i + 1];
-      if (next && !next.startsWith("--")) {
+      if (VALUE_FLAGS.has(key) && next && !next.startsWith("--")) {
         flags[key] = next;
         i++;
       } else {

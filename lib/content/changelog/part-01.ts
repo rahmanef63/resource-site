@@ -2,6 +2,23 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "PKG-DEFECT-HUNT",
+    "version": "cli@1.14.1 · mcp@1.2.4",
+    "date": 1782604800000,
+    "kind": "fix",
+    "title": "CLI + MCP defect hunt — reflected XSS in the MCP OAuth consent page closed; CLI boolean-flag parsing fixed",
+    "body": "First defect sweep of the published packages (packages/cli + packages/mcp — bugs here ship to every npx rr / MCP user). 10 module groups audited, every finding adversarially verified; 8 candidates surfaced, 6 correctly rejected as unreachable/dev-only (dead removeSkill, conflict-gated compose accepted-set, curated-archive dna, quote-free sync-skills regex, gen-manifest write-ordering, self-inflicted init path). 2 real bugs fixed: (1) SECURITY — the MCP OAuth 2.1 consent page rendered the attacker-influenced redirect_uri inside an onclick JS-string sink (window.location='…'); its esc() HTML-encodes the apostrophe to &#39;, which the HTML parser decodes back to a literal ' before the JS runs, so a redirect_uri like https://localhost/'-alert(document.domain)-' (valid https URL, passes the protocol check) breaks out and executes arbitrary JS on the MCP origin when the victim clicks Deny — reflected XSS. The Deny button is now an <a href> (navigation context where HTML-escaping is correct), styled to match. (2) CLI — parseFlags consumed the next token as a value for EVERY --flag (no boolean notion), so `rr add my-slice --force ./apps/web` swallowed ./apps/web as the value of --force and silently installed into the cwd instead. Replaced with a value-flag allowlist (target/template/category/at/skills/features for cli.js; from/to/repo-root for the duplicate parser in migrate-load.mjs) so boolean flags before a positional no longer eat it. Verified: XSS render check + parseFlags behavioral check + CLI vitest 57 pass. CLI 1.14.0→1.14.1, MCP 1.2.3→1.2.4 (publish pending OTP).",
+    "groups": [
+      {
+        "heading": "Fixes",
+        "bullets": [
+          "MCP — reflected XSS in the OAuth consent page Deny control closed (onclick JS-string sink → <a href>)",
+          "CLI — boolean flag before a positional no longer swallows it (value-flag allowlist in both parseFlags copies)"
+        ]
+      }
+    ]
+  },
+  {
     "id": "A11Y-DEPTH-2",
     "version": "slices@a11y-depth-2",
     "date": 1782604800000,

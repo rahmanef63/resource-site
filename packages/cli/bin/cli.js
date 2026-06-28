@@ -167,6 +167,10 @@ ${kleur.dim("Consumer's components/ui/ + lib/utils.ts (shadcn) are never touched
 
 // ─── flag parsing ─────────────────────────────────────────────────────────
 
+// Flags that take a value (`--flag x`). Anything else is boolean, so a boolean
+// flag placed before a positional no longer swallows that positional.
+const VALUE_FLAGS = new Set(["target", "template", "category", "at", "skills", "features"]);
+
 function parseFlags(rest) {
   const positional = [];
   const flags = {};
@@ -175,7 +179,7 @@ function parseFlags(rest) {
     if (a.startsWith("--")) {
       const key = a.slice(2);
       const next = rest[i + 1];
-      if (next && !next.startsWith("--")) { flags[key] = next; i++; }
+      if (VALUE_FLAGS.has(key) && next && !next.startsWith("--")) { flags[key] = next; i++; }
       else flags[key] = true;
     } else {
       positional.push(a);

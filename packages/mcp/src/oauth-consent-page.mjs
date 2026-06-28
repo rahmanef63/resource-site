@@ -17,9 +17,9 @@ export function renderConsentPage({ clientId, redirectUri, state, scope, resourc
   p{margin:8px 0;color:#d4d4d4}.client{font-family:ui-monospace,monospace;background:#262626;padding:2px 6px;border-radius:4px;font-size:12px}
   ul{margin:8px 0;padding-left:20px;color:#d4d4d4;font-size:13px}
   .actions{margin-top:24px;display:flex;gap:12px}
-  button{flex:1;padding:10px 16px;border-radius:6px;border:1px solid #404040;background:#262626;color:#fafafa;font:inherit;cursor:pointer}
+  button,.actions a{flex:1;padding:10px 16px;border-radius:6px;border:1px solid #404040;background:#262626;color:#fafafa;font:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none}
   button[type=submit]{background:#10b981;border-color:#10b981;color:#0a0a0a;font-weight:600}
-  button:hover{filter:brightness(1.1)}
+  button:hover,.actions a:hover{filter:brightness(1.1)}
   .meta{margin-top:16px;font-size:11px;color:#737373;font-family:ui-monospace,monospace;word-break:break-all}
 </style></head><body>
 <form method="POST" class="card">
@@ -33,7 +33,7 @@ export function renderConsentPage({ clientId, redirectUri, state, scope, resourc
   </ul>
   ${inputs}
   <div class="actions">
-    <button type="button" onclick="window.location='${esc(denyHref)}'">Deny</button>
+    <a href="${esc(denyHref)}">Deny</a>
     <button type="submit">Authorize</button>
   </div>
   <div class="meta">redirect: ${esc(redirectUri)}<br>resource: ${esc(resource)}<br>scope: ${esc(scope)}</div>

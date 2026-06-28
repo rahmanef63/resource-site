@@ -1,6 +1,6 @@
 {
   "name": "rahman-resources-mcp",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Model Context Protocol server for the Rahman Resources registry — stdio + HTTP transports. Exposes templates, slices, features, recipes, Claude skills, and CRUD workflows as MCP tools/resources.",
   "type": "module",
   "license": "MIT",
