@@ -85,7 +85,10 @@ export function FileView({
       <div
         {...bgDrop}
         className={cn(
-          "@container grid min-h-full grid-cols-3 content-start gap-2 p-3 sm:grid-cols-4 @max-[430px]:grid-cols-2",
+          // auto-fill: as many natural-width (~7rem) columns as fit, packed
+          // left→right and stretched to fill the row — no giant cells / dead
+          // space on wide screens, and inherently responsive (no breakpoints).
+          "grid min-h-full content-start gap-2 p-3 grid-cols-[repeat(auto-fill,minmax(7rem,1fr))]",
           bgRing,
         )}
       >
