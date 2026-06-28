@@ -132,7 +132,8 @@ export function listAllDNA() {
   const out = [];
   for (const f of files) {
     const slug = f.replace(/\.dna\.json$/, "");
-    const dna = readDNA(slug);
+    let dna = null;
+    try { dna = readDNA(slug); } catch { /* skip corrupt/oddly-named lineage file, don't crash the listing */ }
     if (dna) out.push(dna);
   }
   // Stable ordering — alphabetical by slug.

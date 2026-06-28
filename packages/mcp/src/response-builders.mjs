@@ -41,17 +41,17 @@ export function sanitizeShellArg(s) {
 export function composeInit({ appName, template, features = [], skills = [] }) {
   const safe = String(appName ?? "my-app").replace(/[^a-z0-9-_]/gi, "-").toLowerCase() || "my-app";
   const parts = [`npx rahman-resources@latest init ${safe}`];
-  if (template) parts.push(`--template ${template}`);
-  if (features.length) parts.push(`--features ${features.join(",")}`);
-  if (skills.length) parts.push(`--skills ${skills.join(",")}`);
+  if (template) parts.push(`--template ${sanitizeShellArg(template)}`);
+  if (features.length) parts.push(`--features ${features.map(sanitizeShellArg).join(",")}`);
+  if (skills.length) parts.push(`--skills ${skills.map(sanitizeShellArg).join(",")}`);
   return parts.join(" \\\n  ");
 }
 
 export function composeAdd({ template, features = [], skills = [] }) {
   const lines = ["# Run from the root of an existing rr.json project."];
-  if (template) lines.push(`npx rahman-resources@latest add ${template}`);
-  for (const f of features) lines.push(`npx rahman-resources@latest add ${f}`);
-  for (const s of skills) lines.push(`npx rahman-resources@latest add-skill ${s}`);
+  if (template) lines.push(`npx rahman-resources@latest add ${sanitizeShellArg(template)}`);
+  for (const f of features) lines.push(`npx rahman-resources@latest add ${sanitizeShellArg(f)}`);
+  for (const s of skills) lines.push(`npx rahman-resources@latest add-skill ${sanitizeShellArg(s)}`);
   if (lines.length === 1) lines.push("# (no items selected)");
   return lines.join("\n");
 }

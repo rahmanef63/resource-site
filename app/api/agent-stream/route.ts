@@ -44,7 +44,7 @@ function toAnthropic(messages: AgentMsg[]): Anthropic.MessageParam[] {
       for (const tu of m.toolUses ?? [])
         content.push({ type: "tool_use", id: tu.id, name: tu.name, input: tu.input });
       if (content.length) out.push({ role: "assistant", content });
-    } else {
+    } else if (Array.isArray(m.results)) {
       out.push({
         role: "user",
         content: m.results.map((r) => ({

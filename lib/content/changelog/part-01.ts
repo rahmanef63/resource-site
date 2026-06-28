@@ -2,6 +2,33 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "NONSLICE-DEFECT-SWEEP",
+    "version": "site@nonslice-defect-sweep",
+    "date": 1782604800000,
+    "kind": "fix",
+    "title": "Defect sweep of the non-slice surfaces — packages/mcp, packages/cli, app server (convex copy-source came back clean)",
+    "body": "30-unit multi-agent sweep (21 convex copy-source dirs + 5 cli units + 3 mcp units + the app server) — each unit found-then-adversarially-verified (default reject, fix must be minimal + gate-respecting). All 21 convex/features dirs came back CLEAN: last session's IDOR/null-throw fixes plus the new audit-convex-api-paths gate already locked that gate-invisible surface down. 7 real defects fixed elsewhere (6 verified-as-proposed + 1 whose proposed fix was wrong and got reworked from the verifier's corrected patch): (P1) MCP POST /api/oauth/token with a JSON body of literal `null` passed the SyntaxError-only try/catch then destructured null → unhandled TypeError that rejects before the per-request try in http-transport → unauth one-request server crash; fixed with `parsed || {}`. (P1) MCP /oauth/authorize redirect_uri with percent-encoded CR/LF passed validation because the WHATWG URL parser silently strips control chars, but the raw string kept its \\r\\n and blew up res.setHeader('Location', …) with ERR_INVALID_CHAR on the POST branch → unauth DoS; fixed by rejecting control chars (/[\\x00-\\x1f\\x7f]/) before new URL(). (P2 ×2) MCP composeInit/composeAdd emitted request-controlled template/features/skills verbatim into the npx command strings the operator copy-pastes into a terminal — shell injection; now routed through the same sanitizeShellArg the sibling composeApp already used. (P2) CLI readStateFromRr lacked the Array.isArray guard its three sibling fields have, so a hand-edited rr.json with a non-array slices/features crashed `rr add` preflight + `rr compose` instead of the documented empty-state fallback. (P2) CLI listAllDNA had no try/catch around readDNA, so one corrupt or non-kebab-named .dna.json crashed all of `rr graph` / buildLineageGraph / the MCP lineage resources instead of being skipped. (P2) app/api/agent-stream returned a raw 500 on a malformed tool-role message (m.results undefined → .map throw); now guarded with Array.isArray. Each fix has a runnable behavioral check; tsc + slices:check green. CLI 1.14.2 + MCP 1.2.5.",
+    "groups": [
+      {
+        "heading": "Security",
+        "bullets": [
+          "mcp/oauth-routes — `null` JSON token body no longer crashes the server (unauth DoS closed)",
+          "mcp/oauth-routes — CR/LF in redirect_uri rejected before new URL(), closing a setHeader ERR_INVALID_CHAR DoS",
+          "mcp/response-builders — composeInit + composeAdd now sanitize template/features/skills (no shell injection into copy-paste commands)"
+        ]
+      },
+      {
+        "heading": "Fixes",
+        "bullets": [
+          "cli/compose-state — malformed rr.json (non-array slices/features) no longer crashes `rr add` preflight",
+          "cli/dna — one corrupt/oddly-named .dna.json no longer crashes `rr graph` + lineage",
+          "app/agent-stream — malformed tool message returns cleanly instead of a raw 500",
+          "convex copy-source — all 21 feature dirs audited clean (no new fixes needed)"
+        ]
+      }
+    ]
+  },
+  {
     "id": "PONYTAIL-SLICE-SWEEP",
     "version": "slices@ponytail-sweep",
     "date": 1782604800000,

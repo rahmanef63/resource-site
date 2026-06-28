@@ -50,9 +50,11 @@ export function readStateFromRr(rrPath) {
   };
   const auth = provider ? authMap[provider] ?? undefined : undefined;
 
+  const slicesArr = Array.isArray(raw?.slices) ? raw.slices : [];
+  const featuresArr = Array.isArray(raw?.features) ? raw.features : [];
   const slicesInstalled = [
-    ...(raw?.slices ?? []).map((s) => s.slug).filter(Boolean),
-    ...(raw?.features ?? []).map((f) => f.slug).filter(Boolean),
+    ...slicesArr.map((s) => s?.slug).filter(Boolean),
+    ...featuresArr.map((f) => f?.slug).filter(Boolean),
   ];
 
   return {

@@ -58,6 +58,11 @@ export function handleOAuthAuthorize(req, res, { reqOrigin }) {
   if (!clientId) errs.push("client_id required");
   if (!redirectUri) errs.push("redirect_uri required");
   try {
+    // Reject control chars (CR/LF/tab) BEFORE new URL() — WHATWG URL silently
+    // strips them, so a redirect_uri like ".../%0D%0AInjected" would parse as
+    // valid here yet keep its \r\n in the raw string and blow up res.setHeader
+    // ("Location", …) with ERR_INVALID_CHAR on the POST branch (unauth DoS).
+    if (/[\x00-\x1f\x7f]/.test(redirectUri)) throw new Error("control char in redirect_uri");
     const u = new URL(redirectUri);
     if (u.protocol !== "https:" && u.hostname !== "localhost" && u.hostname !== "127.0.0.1") {
       errs.push("redirect_uri must be HTTPS (or localhost)");
@@ -132,7 +137,7 @@ export async function handleOAuthToken(req, res, { oauthKey }) {
     res.end(JSON.stringify({ error: "invalid_request", error_description: "malformed body" }));
     return true;
   }
-  const { grant_type, code, code_verifier, redirect_uri, client_id } = parsed;
+  const { grant_type, code, code_verifier, redirect_uri, client_id } = parsed || {};
   const failJson = (status, err, desc) => {
     res.statusCode = status;
     res.setHeader("Content-Type", "application/json");
