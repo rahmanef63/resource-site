@@ -2,6 +2,23 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "ASYNC-ERROR-HUNT",
+    "version": "slices@async-error-hunt",
+    "date": 1782604800000,
+    "kind": "fix",
+    "title": "Async error handling — 6 unhandled rejections / silent failures + blob leaks fixed (image-editor, notion-shell)",
+    "body": "Swept slice components for unhandled errors on user-triggered async paths + floating promises, each adversarially verified (0 rejected). 6 real bugs fixed, all P3 but reachable: image-editor menu-bar + top-bar openImage/openFile awaited loadImage() with no try/catch — an undecodable picked image (corrupt, truncated, HEIC) rejected with an unhandled promise, no layer added, no feedback, AND the createObjectURL blob leaked; now wrapped with a catch that revokes the blob. image-editor removeBg() (both bars) called removeImageBackground() — which dynamically downloads an ONNX model + WASM on first run — with try/finally but NO catch, so an offline/unsupported first use escaped as an unhandled rejection (busy reset, but the error was lost with zero feedback); added the catch. notion-shell CodeBlock copy + NotionBlock copy-link awaited navigator.clipboard.writeText with no guard — rejects in an insecure context / when the document isn't focused / on denied permission, leaving an unhandled rejection and (for CodeBlock) the copied state never set; both guarded. These slices have no error-surface channel, so the fixes prevent the unhandled rejection / stuck state / blob leak (gate-permitted swallow). slices:check 70 ok + tsc green.",
+    "groups": [
+      {
+        "heading": "Fixes",
+        "bullets": [
+          { "text": "image-editor — open-image (loadImage) and remove-background now catch rejections + revoke leaked blob URLs", "slug": "image-editor" },
+          { "text": "notion-shell — code-block copy + block copy-link clipboard writes guarded against unhandled rejection", "slug": "notion-shell" }
+        ]
+      }
+    ]
+  },
+  {
     "id": "PKG-DEFECT-HUNT",
     "version": "cli@1.14.1 · mcp@1.2.4",
     "date": 1782604800000,

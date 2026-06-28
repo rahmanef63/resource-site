@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
-    "rahman-resources": "^1.13.0"
+    "rahman-resources": "^1.14.0"
   },
   "keywords": [
     "rahman",

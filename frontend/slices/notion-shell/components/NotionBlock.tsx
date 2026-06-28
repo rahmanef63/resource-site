@@ -94,7 +94,7 @@ export function NotionBlock({
   const setColor = (color?: string, bgColor?: string) => onUpdate?.({ color, bgColor });
   const copyLink = () => navigator.clipboard?.writeText(
     `${typeof location !== "undefined" ? location.href.split("#")[0] : ""}#block-${block.id}`,
-  );
+  )?.catch(() => {}); // no copied/error UI on this path — just prevent the unhandled rejection
   const actionsHandle = !readOnly && onTurnInto ? (
     <BlockActionsHandle
       currentType={block.type} onTurnInto={onTurnInto}

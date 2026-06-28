@@ -50,16 +50,21 @@ export function MenuBar({
 
   async function openImage(file: File) {
     const url = URL.createObjectURL(file);
-    const img = await loadImage(url);
-    const k = Math.min(1, (Math.min(doc.width, doc.height) * 0.9) / Math.max(img.width, img.height));
-    const w = Math.round(img.width * k), h = Math.round(img.height * k);
-    addLayer(createLayer("image", { name: file.name, src: url, t: { x: Math.round((doc.width - w) / 2), y: Math.round((doc.height - h) / 2), width: w, height: h, rotation: 0, scaleX: 1, scaleY: 1 } }));
+    try {
+      const img = await loadImage(url);
+      const k = Math.min(1, (Math.min(doc.width, doc.height) * 0.9) / Math.max(img.width, img.height));
+      const w = Math.round(img.width * k), h = Math.round(img.height * k);
+      addLayer(createLayer("image", { name: file.name, src: url, t: { x: Math.round((doc.width - w) / 2), y: Math.round((doc.height - h) / 2), width: w, height: h, rotation: 0, scaleX: 1, scaleY: 1 } }));
+    } catch {
+      URL.revokeObjectURL(url); // undecodable image: drop the leaked blob, no error UI in this slice
+    }
   }
   async function openProject(file: File) { const p = parseProject(await file.text()); if (p) loadProject(p); }
   async function removeBg() {
     if (!selected || selected.kind !== "image" || !selected.src) return;
     setBusy(true);
     try { update(selected.id, { src: await removeImageBackground(selected.src), name: `${selected.name} (cutout)` }); }
+    catch { /* model load / cutout failed — slice has no err channel; leave layer unchanged */ }
     finally { setBusy(false); }
   }
 

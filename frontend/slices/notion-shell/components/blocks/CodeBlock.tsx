@@ -45,9 +45,13 @@ export function CodeBlock({ block, onUpdate, registerRef }: BlockRendererProps) 
   }, [focused, text]);
 
   const onCopy = async () => {
-    await navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      /* clipboard blocked (insecure context / not focused / denied) — no-op */
+    }
   };
 
   return (

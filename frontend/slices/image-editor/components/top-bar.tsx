@@ -47,12 +47,16 @@ export function TopBar({ onSave, onSaveAs }: { onSave?: (dataUrl: string) => voi
 
   async function openFile(file: File) {
     const url = URL.createObjectURL(file);
-    const img = await loadImage(url);
-    const max = Math.min(doc.width, doc.height) * 0.9;
-    const k = Math.min(1, max / Math.max(img.width, img.height));
-    const w = Math.round(img.width * k);
-    const h = Math.round(img.height * k);
-    addLayer(createLayer("image", { name: file.name, src: url, t: { x: Math.round((doc.width - w) / 2), y: Math.round((doc.height - h) / 2), width: w, height: h, rotation: 0, scaleX: 1, scaleY: 1 } }));
+    try {
+      const img = await loadImage(url);
+      const max = Math.min(doc.width, doc.height) * 0.9;
+      const k = Math.min(1, max / Math.max(img.width, img.height));
+      const w = Math.round(img.width * k);
+      const h = Math.round(img.height * k);
+      addLayer(createLayer("image", { name: file.name, src: url, t: { x: Math.round((doc.width - w) / 2), y: Math.round((doc.height - h) / 2), width: w, height: h, rotation: 0, scaleX: 1, scaleY: 1 } }));
+    } catch {
+      URL.revokeObjectURL(url); // undecodable image: drop the leaked blob, no error UI in this slice
+    }
   }
 
   async function removeBg() {
@@ -61,6 +65,8 @@ export function TopBar({ onSave, onSaveAs }: { onSave?: (dataUrl: string) => voi
     try {
       const out = await removeImageBackground(selected.src);
       update(selected.id, { src: out, name: `${selected.name} (cutout)` });
+    } catch {
+      /* cutout failed (model fetch/WASM/decode) — leave layer unchanged */
     } finally {
       setBusy(false);
     }
