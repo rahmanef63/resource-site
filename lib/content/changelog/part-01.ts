@@ -2,6 +2,22 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "CONVEX-API-PATH-GATE",
+    "version": "site@convex-api-path-gate",
+    "date": 1782604800000,
+    "kind": "improvement",
+    "title": "New CI gate — convex internal/api references must resolve (locks in the runtime-null-throw class)",
+    "body": "Regression gate for the gate-invisible bug class found this session. convex/** is excluded from the root tsc, and audit-convex-features bans the plural FILE name (mutations.ts) but not a plural REFERENCE — so `internal.features.ai.mutations.logUsage` (plural) against the singular mutation.ts file resolved to undefined in the generated api object and threw 'Cannot read properties of undefined' at runtime, invisible to every gate. That shipped 3× (ai, bookings, newsletter) before being fixed. New audit-convex-api-paths.mjs walks convex/ and asserts every `internal.features.<path>.<fn>` / `api.features.<path>.<fn>` reference resolves to an existing convex/features/<path>.ts that exports <fn> — catching plural-vs-singular, wrong module/dir names, and renamed/removed exports. It skips the consumer-side `.slices.*` namespace (resolves only after consumer codegen, per Hard Rule 6). Wired into slices:check (so it runs in pre-commit + pre-push). Verified: passes clean on the current tree, and fails with the exact diagnostic when the historical `ai.mutations.logUsage` ref is injected.",
+    "groups": [
+      {
+        "heading": "Tooling",
+        "bullets": [
+          "audit-convex-api-paths — fails CI on any convex internal./api.features.* ref that doesn't resolve to a real export (the plural-path runtime null-throw class)"
+        ]
+      }
+    ]
+  },
+  {
     "id": "APP-SERVER-HUNT",
     "version": "site@app-server-hunt",
     "date": 1782604800000,
