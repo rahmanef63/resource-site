@@ -157,14 +157,6 @@ export function setCrossfade(c: Composition, clipId: string, frames: number): Co
   return patchClip(c, clipId, { xfade: f, start: prev.start + prev.len - f });
 }
 
-/** Does a later same-track clip cross-dissolve in over `clip`'s tail? Such a
- *  clip must stay opaque under the incoming dissolve (no fade-to-black). */
-export function isXfadeSource(c: Composition, clip: Clip): boolean {
-  return c.clips.some(
-    (n) => (n.xfade ?? 0) > 0 && n.track === clip.track && n.id !== clip.id && clip.start <= n.start && n.start < clip.start + clip.len,
-  );
-}
-
 /** Move a clip onto a different track of the same kind. */
 export function moveToTrack(c: Composition, clipId: string, toTrack: string): Composition {
   return patchClip(c, clipId, { track: toTrack });
@@ -189,6 +181,3 @@ export const setKeyframe = (c: Composition, id: string, k: KfProp, t: number, v:
   const clip = c.clips.find((cl) => cl.id === id);
   return setKeyTrack(c, id, k, upsertKey(clip?.kf?.[k], t, v));
 };
-
-export const tracksByKind = (c: Composition, kind: TrackKind) =>
-  c.tracks.filter((t) => t.kind === kind);

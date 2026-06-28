@@ -2,6 +2,26 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "PONYTAIL-SLICE-SWEEP",
+    "version": "slices@ponytail-sweep",
+    "date": 1782604800000,
+    "kind": "improvement",
+    "title": "Ponytail dead-code sweep — the 37 slices the earlier dedup batches hadn't touched",
+    "body": "Closed the gap left by the two prior dedup passes (batch-1 −636 across 20 slices, dead-code −217 across 14): 8 parallel scanners audited the remaining 37 slices for genuine within-slice over-engineering — dead internal symbols, unused exports not on the public entry, redundant wrappers, one-impl abstractions, speculative scaffolding. Copy-first discipline held: NO cross-slice dedup, and any export re-exported from a slice's public index/config (the product a consumer copies) was kept even when unused in-repo. Result: 32 slices already minimal (incl. notion's 10k-LOC tree, app-store, all 17 small slices), 5 had real cuts. Every cut grep-verified before applying — one finding was REJECTED on verification: browser's isUrlLike/normalizeUrl were flagged dead but toTarget() calls both (the agent misread 'called by' as 'replaced by'), so browser stayed untouched. Cuts: appshell chromeInsets() dead getter (setChromeInsets stays); reel-editor isXfadeSource() + tracksByKind() unused composition helpers; file-explorer mediaKind()+MediaKind type — a speculative media-viewer ext-mapper with zero callers (the VIDEO/AUDIO sets it used stay, they back the icon/color/route fns); admin 4 dead barrels (a types/index.ts re-export duplicating the public index, plus 3 empty `export {}` scaffolds) deleted, now-empty dirs removed. ~31 LOC + 4 files. tsc + slices:check (70 ok) green.",
+    "groups": [
+      {
+        "heading": "Cleanup",
+        "bullets": [
+          "appshell — removed dead chromeInsets() getter",
+          "reel-editor — removed unused isXfadeSource() + tracksByKind() composition helpers",
+          "file-explorer — removed speculative mediaKind()/MediaKind (no callers)",
+          "admin — deleted 4 dead barrel files (redundant types re-export + 3 empty export{} scaffolds)",
+          "32 of 37 audited slices were already minimal — no change; browser flagged-then-cleared on verification"
+        ]
+      }
+    ]
+  },
+  {
     "id": "CONVEX-API-PATH-GATE",
     "version": "site@convex-api-path-gate",
     "date": 1782604800000,

@@ -56,13 +56,3 @@ export function appForFile(entry: FsEntry): "media-viewer" | "code-editor" | nul
 export function isImage(entry: FsEntry): boolean {
   return entry.kind === "file" && IMAGE.has(entry.ext?.toLowerCase() ?? "");
 }
-
-// Media kind for the media-viewer payload (by ext family).
-export type MediaKind = "image" | "video" | "audio" | "pdf";
-export function mediaKind(entry: FsEntry): MediaKind {
-  const ext = entry.ext?.toLowerCase() ?? "";
-  if (VIDEO.has(ext)) return "video";
-  if (AUDIO.has(ext)) return "audio";
-  if (ext === "pdf") return "pdf";
-  return "image";
-}
