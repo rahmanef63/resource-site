@@ -76,6 +76,7 @@ export function NotionProperty({
           <Button
             variant="ghost"
             size="icon"
+            aria-label="Rename property"
             onClick={() => setEditingName(true)}
             className="h-4 w-4 text-muted-foreground/60 hover:text-foreground"
           >
@@ -86,6 +87,7 @@ export function NotionProperty({
           <Button
             variant="ghost"
             size="icon"
+            aria-label="Delete property"
             onClick={onSchemaRemove}
             className="h-4 w-4 text-muted-foreground/60 hover:text-destructive"
           >

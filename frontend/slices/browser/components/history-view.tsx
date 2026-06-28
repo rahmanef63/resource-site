@@ -30,6 +30,7 @@ export function HistoryView({ history, onOpen, onClose }: HistoryViewProps) {
             variant="ghost"
             size="icon"
             className="size-5"
+            aria-label="Close"
             onClick={onClose}
           >
             <X className="size-3.5" />

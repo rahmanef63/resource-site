@@ -63,7 +63,7 @@ export const resolve = mutation({
     const actor = await getAuthUserId(ctx);
     if (!actor) throw new Error("Not authenticated");
     const c = await ctx.db.get(args.id as Id<"comment_threads">);
-    if (!c) throw new Error("Not found");
+    if (!c || c.actorId !== actor.toString()) throw new Error("Not found");
     await ctx.db.patch(c._id, {
       resolvedAt: args.resolved ? Date.now() : undefined,
       updatedAt: Date.now(),

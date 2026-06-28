@@ -95,8 +95,9 @@ export const cancelInvite = mutation({
   args: { tenantId: tenantArg, inviteId: v.id("um_invites") },
   handler: async (ctx, args) => {
     await requirePermission(ctx, args.tenantId, "members.invite");
-    if (!(await ctx.db.get(args.inviteId))) return { ok: false };
-    await ctx.db.delete(args.inviteId);
+    const inv = await ctx.db.get(args.inviteId);
+    if (!inv || inv.tenantId !== args.tenantId) return { ok: false };
+    await ctx.db.delete(inv._id);
     return { ok: true };
   },
 });
@@ -105,9 +106,10 @@ export const resendInvite = mutation({
   args: { tenantId: tenantArg, inviteId: v.id("um_invites") },
   handler: async (ctx, args) => {
     await requirePermission(ctx, args.tenantId, "members.invite");
-    if (!(await ctx.db.get(args.inviteId))) throw new Error("Invite not found");
+    const inv = await ctx.db.get(args.inviteId);
+    if (!inv || inv.tenantId !== args.tenantId) throw new Error("Invite not found");
     const token = newToken();
-    await ctx.db.patch(args.inviteId, { token, status: "pending", expiresAt: Date.now() + INVITE_TTL_MS });
+    await ctx.db.patch(inv._id, { token, status: "pending", expiresAt: Date.now() + INVITE_TTL_MS });
     return { token };
   },
 });
@@ -159,6 +161,8 @@ export const removeTeam = mutation({
   args: { tenantId: tenantArg, teamId: v.id("um_teams") },
   handler: async (ctx, args) => {
     await requirePermission(ctx, args.tenantId, "members.manage");
+    const team = await ctx.db.get(args.teamId);
+    if (!team || team.tenantId !== args.tenantId) return { ok: false };
     const tm = await ctx.db.query("um_team_members").withIndex("by_team", (q) => q.eq("teamId", args.teamId)).take(1000);
     for (const m of tm) await ctx.db.delete(m._id);
     await ctx.db.delete(args.teamId);
@@ -170,6 +174,8 @@ export const addTeamMember = mutation({
   args: { tenantId: tenantArg, teamId: v.id("um_teams"), userId: v.string() },
   handler: async (ctx, args) => {
     await requirePermission(ctx, args.tenantId, "members.manage");
+    const team = await ctx.db.get(args.teamId);
+    if (!team || team.tenantId !== args.tenantId) throw new Error("Team not found");
     const existing = await ctx.db.query("um_team_members")
       .withIndex("by_team_user", (q) => q.eq("teamId", args.teamId).eq("userId", args.userId)).first();
     if (existing) return existing._id;
@@ -181,6 +187,8 @@ export const removeTeamMember = mutation({
   args: { tenantId: tenantArg, teamId: v.id("um_teams"), userId: v.string() },
   handler: async (ctx, args) => {
     await requirePermission(ctx, args.tenantId, "members.manage");
+    const team = await ctx.db.get(args.teamId);
+    if (!team || team.tenantId !== args.tenantId) throw new Error("Team not found");
     const m = await ctx.db.query("um_team_members")
       .withIndex("by_team_user", (q) => q.eq("teamId", args.teamId).eq("userId", args.userId)).first();
     if (m) await ctx.db.delete(m._id);

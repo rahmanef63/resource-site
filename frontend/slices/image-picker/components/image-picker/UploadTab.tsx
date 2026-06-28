@@ -14,6 +14,9 @@ export function UploadTab({ onSelect, onUpload }: { onSelect: (c: ImageValue) =>
   const [busy, setBusy] = React.useState(false);
   const [err, setErr] = React.useState<string | null>(null);
 
+  // Revoke the prior blob URL on re-pick and on unmount (no leak).
+  React.useEffect(() => () => { if (preview) URL.revokeObjectURL(preview); }, [preview]);
+
   const pick = (f: File | undefined) => {
     if (!f) return;
     if (!f.type.startsWith("image/")) { setErr("Images only"); return; }

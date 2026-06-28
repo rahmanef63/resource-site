@@ -59,10 +59,10 @@ export function TextProps({
         </SelectContent>
       </Select>
       <div className="flex gap-2">
-        <Button variant={bold ? "default" : "outline"} size="sm" className="flex-1" onClick={() => update(id, { fontStyle: compose(!bold, italic) })}>
+        <Button variant={bold ? "default" : "outline"} size="sm" className="flex-1" aria-label="Bold" aria-pressed={bold} onClick={() => update(id, { fontStyle: compose(!bold, italic) })}>
           <Bold className="size-4" />
         </Button>
-        <Button variant={italic ? "default" : "outline"} size="sm" className="flex-1" onClick={() => update(id, { fontStyle: compose(bold, !italic) })}>
+        <Button variant={italic ? "default" : "outline"} size="sm" className="flex-1" aria-label="Italic" aria-pressed={italic} onClick={() => update(id, { fontStyle: compose(bold, !italic) })}>
           <Italic className="size-4" />
         </Button>
       </div>

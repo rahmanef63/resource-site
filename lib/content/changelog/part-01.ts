@@ -2,6 +2,34 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "DEFECT-HUNT-R1",
+    "version": "slices@defect-hunt-r1",
+    "date": 1782604800000,
+    "kind": "fix",
+    "title": "Defect sweep R1 — 4 cross-tenant IDOR holes closed in copy-source mutations, comment-resolve authz, 8 a11y/leak fixes",
+    "body": "Multi-agent defect hunt (a11y / resource-leak / effect-correctness / null-safety / convex-correctness), each finding adversarially verified before fix. SECURITY (copy-source convex, inherited by every consumer via npx rr add): user-management mutations cancelInvite / resendInvite / removeTeam / addTeamMember / removeTeamMember all gated requirePermission on args.tenantId but then operated on a raw inviteId/teamId with no ownership match — a tenant-A admin could delete/rotate/mutate tenant-B invites, teams, and team memberships (cross-tenant IDOR). Each now loads the doc and verifies doc.tenantId === args.tenantId before touching it. comments.resolve only checked authentication, not ownership (unlike update/remove) — any signed-in user could toggle resolvedAt on any thread; now mirrors the c.actorId guard. A11Y: icon-only buttons with no accessible name got aria-labels — browser history close, assistant step reorder/delete, image-editor bold/italic + AI send, notion-database calendar prev/next-month + property rename/delete, media-viewer toolbar (IconBtn now forwards its tooltip label to aria-label). LEAK: image-picker UploadTab created a blob URL per pick and never revoked it — added a cleanup effect keyed on the preview URL. effect-correctness + null-safety dimensions came back clean. slices:check 70 ok + tsc green.",
+    "groups": [
+      {
+        "heading": "Security (copy-source)",
+        "bullets": [
+          { "text": "user-management — 4 cross-tenant IDOR holes closed: cancel/resend invite + removeTeam + add/removeTeamMember now verify doc.tenantId === args.tenantId", "slug": "user-management" },
+          { "text": "comments — resolve now checks thread ownership (c.actorId), matching update/remove", "slug": "comments" }
+        ]
+      },
+      {
+        "heading": "Accessibility + leak",
+        "bullets": [
+          { "text": "browser — history close button labelled", "slug": "browser" },
+          { "text": "assistant — step up/down/delete buttons labelled", "slug": "assistant" },
+          { "text": "image-editor — bold/italic (+aria-pressed) + AI send button labelled", "slug": "image-editor" },
+          { "text": "notion-database — calendar month nav + property rename/delete labelled", "slug": "notion-database" },
+          { "text": "media-viewer — IconBtn forwards tooltip label to aria-label (whole toolbar)", "slug": "media-viewer" },
+          { "text": "image-picker — UploadTab revokes blob URLs on re-pick/unmount (no leak)", "slug": "image-picker" }
+        ]
+      }
+    ]
+  },
+  {
     "id": "P7-tour-finisher",
     "version": "tour@finisher",
     "date": 1781827200000,
