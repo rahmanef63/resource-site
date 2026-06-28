@@ -28,7 +28,7 @@ export const broadcast = internalAction({
     if (!apiKey) throw new Error("RESEND_API_KEY not configured");
     if (!fromAddr) throw new Error("RESEND_FROM not configured");
 
-    const issue = await ctx.runQuery(internal.features.newsletter.queries.getIssue, {
+    const issue = await ctx.runQuery(internal.features.newsletter.query.getIssue, {
       issueId,
     });
     if (!issue) throw new Error(`Issue not found: ${issueId}`);
@@ -36,7 +36,7 @@ export const broadcast = internalAction({
       return { skipped: true, reason: "already-sent" };
     }
 
-    const recipients = await ctx.runQuery(internal.features.newsletter.queries.activeSubscribers, {});
+    const recipients = await ctx.runQuery(internal.features.newsletter.query.activeSubscribers, {});
     if (recipients.length === 0) {
       return { skipped: true, reason: "no-subscribers" };
     }
@@ -44,7 +44,7 @@ export const broadcast = internalAction({
     const { Resend } = await import("resend");
     const resend = new Resend(apiKey);
 
-    await ctx.runMutation(internal.features.newsletter.mutations.markSending, { issueId });
+    await ctx.runMutation(internal.features.newsletter.mutation.markSending, { issueId });
 
     // Resend free tier = 10 req/s. Batch 8/sec to leave headroom.
     const BATCH_SIZE = 8;
@@ -73,7 +73,7 @@ export const broadcast = internalAction({
       }
     }
 
-    await ctx.runMutation(internal.features.newsletter.mutations.markSent, {
+    await ctx.runMutation(internal.features.newsletter.mutation.markSent, {
       issueId,
       sentCount: sent,
     });

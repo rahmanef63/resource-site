@@ -40,7 +40,10 @@ export const listPublic = query({
 
 export const get = query({
   args: { id: v.id("activities") },
-  handler: async (ctx, { id }) => ctx.db.get(id),
+  handler: async (ctx, { id }) => {
+    const doc = await ctx.db.get(id);
+    return doc && doc.visibility === "public" ? doc : null;
+  },
 });
 
 export const statsThisWeek = query({

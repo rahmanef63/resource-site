@@ -2,6 +2,32 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "DEFECT-HUNT-R2",
+    "version": "slices@defect-hunt-r2",
+    "date": 1782604800000,
+    "kind": "fix",
+    "title": "Convex security sweep R2 — 3 runtime null-throws (wrong internal API path), tenant priv-esc + owner-write IDOR, private-row leak",
+    "body": "Per-feature-dir security sweep across all 20 convex/features handlers, each finding adversarially verified. CORRECTNESS (these crashed at runtime and shipped broken to every consumer — convex/** is excluded from root tsc so neither typecheck nor the import-gate caught them): ai callModel, bookings calWebhook, and the whole newsletter broadcast fanout referenced internal.features.<x>.MUTATIONS/QUERIES.fn (plural) but every module file is mutation.ts / query.ts (singular), so the generated API node was undefined and each ctx.runMutation/runQuery threw 'Cannot read properties of undefined' — for ai, AFTER the paid generateText() spend; for bookings, on every Cal.com webhook; for newsletter, before a single email sent. Fixed plural→singular (7 refs) + the same typo in a testimonials operator doc-comment. SECURITY: user-management hierarchy linkTenant gated members.manage only on the parent tenant while childTenantId was an arbitrary string — a tenant admin could attach ANY victim tenant as a child and then read its members (getAccessMatrix) or inject a privileged invite (sendHierarchyInvite); now requires members.manage on BOTH ends. payment recordDokuPending patched an existing order's amount + let the caller hijack its checkoutUrl with no owner check; now blocks cross-owner patch (guest + owner re-creates still pass). activity get was a public query returning private rows by id, bypassing the slice's own public-only contract (listAll is internal, listPublic filters) — now returns null for non-public rows. Deliberately SKIPPED: pages-cms listAll draft-visibility (non-tenant/actor data on a documented copy-source public read where the consumer owns the auth model — same call left as-is for the library twin).",
+    "groups": [
+      {
+        "heading": "Runtime null-throws (shipped broken)",
+        "bullets": [
+          { "text": "ai-router — callModel logged usage via a plural internal API path → threw after paid spend; fixed to singular", "slug": "ai-router" },
+          { "text": "cal-com-booking — calWebhook crashed on every delivery (plural mutations path); fixed to singular", "slug": "cal-com-booking" },
+          { "text": "resend-newsletter — broadcast fanout threw before sending (4 plural query/mutation paths); fixed to singular", "slug": "resend-newsletter" }
+        ]
+      },
+      {
+        "heading": "Security (copy-source)",
+        "bullets": [
+          { "text": "user-management — linkTenant now requires members.manage on the child tenant too (closes cross-tenant disclosure + invite priv-esc)", "slug": "user-management" },
+          { "text": "doku-payment — recordDokuPending blocks cross-owner amount patch + checkout-URL hijack", "slug": "doku-payment" },
+          { "text": "activity — public get no longer returns private rows by id", "slug": "activity" }
+        ]
+      }
+    ]
+  },
+  {
     "id": "DEFECT-HUNT-R1",
     "version": "slices@defect-hunt-r1",
     "date": 1782604800000,

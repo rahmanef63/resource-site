@@ -56,13 +56,7 @@ export const recordDokuPending = internalMutation({
   args: {
     // Optional — guest checkout has no auth user; buyer carries the contact.
     userId: v.optional(v.id("users")),
-    buyer: v.optional(
-      v.object({
-        name: v.string(),
-        email: v.string(),
-        phone: v.optional(v.string()),
-      }),
-    ),
+    buyer: v.optional(v.object({ name: v.string(), email: v.string(), phone: v.optional(v.string()) })),
     orderId: v.string(),
     amount: v.number(),
     paymentChannel: v.optional(v.string()),
@@ -74,6 +68,11 @@ export const recordDokuPending = internalMutation({
       .withIndex("by_orderId", (q) => q.eq("orderId", args.orderId))
       .unique();
     if (existing) {
+      // Owned orders are owner-only (mirrors markPaid); guest orders stay
+      // capability-gated by the unguessable orderId. Block cross-owner patch.
+      if (existing.userId && existing.userId !== args.userId) {
+        throw new Error(`Order not found: ${args.orderId}`);
+      }
       await ctx.db.patch(existing._id, {
         amount: args.amount,
         paymentChannel: args.paymentChannel,

@@ -45,7 +45,7 @@ export const callModel = action({
       prompt,
     });
 
-    await ctx.runMutation(internal.features.ai.mutations.logUsage, {
+    await ctx.runMutation(internal.features.ai.mutation.logUsage, {
       feature,
       tier,
       inputTokens: usage?.promptTokens ?? 0,

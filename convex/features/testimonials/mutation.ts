@@ -44,7 +44,7 @@ export const remove = mutation({
 });
 
 // One-shot seeder. Internal-only — call via `npx convex run`
-// internal.features.testimonials.mutations.seed '{"items":[...]}'.
+// internal.features.testimonials.mutation.seed '{"items":[...]}'.
 export const seed = internalMutation({
   args: { items: v.array(v.object(shape)) },
   handler: async (ctx, { items }) => {

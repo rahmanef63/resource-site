@@ -60,7 +60,7 @@ export const calWebhook = httpAction(async (ctx, req) => {
   const status = eventToStatus[event.triggerEvent] ?? "confirmed";
   const attendee = event.payload.attendees?.[0];
 
-  await ctx.runMutation(internal.features.bookings.mutations.upsertFromWebhook, {
+  await ctx.runMutation(internal.features.bookings.mutation.upsertFromWebhook, {
     calBookingId: event.payload.uid,
     title: event.payload.title,
     startsAt: new Date(event.payload.startTime).getTime(),

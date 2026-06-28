@@ -20,6 +20,9 @@ export const linkTenant = mutation({
   args: { parentTenantId: tenantArg, childTenantId: v.string() },
   handler: async (ctx, args) => {
     await requirePermission(ctx, args.parentTenantId, "members.manage");
+    // Caller must control BOTH ends — else they could attach any victim
+    // tenant as a child and read/escalate into it via the hierarchy queries.
+    await requirePermission(ctx, args.childTenantId, "members.manage");
     const existing = await ctx.db
       .query("um_tenant_links")
       .withIndex("by_parent", (q) => q.eq("parentTenantId", args.parentTenantId))
