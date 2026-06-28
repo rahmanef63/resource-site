@@ -69,12 +69,8 @@ export async function getAuditLogsByAction(
 ) {
   const logs = await ctx.db
     .query("activityEvents")
-    .filter((q) =>
-      q.and(
-        q.eq(q.field("workspaceId"), workspaceId),
-        q.eq(q.field("action"), action)
-      )
-    )
+    .withIndex("by_workspace", (q) => q.eq("workspaceId", workspaceId))
+    .filter((q) => q.eq(q.field("action"), action))
     .order("desc")
     .take(limit);
 

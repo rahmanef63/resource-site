@@ -2,6 +2,29 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "PERF-OPT-SWEEP",
+    "version": "site@perf-opt-sweep",
+    "date": 1782604800000,
+    "kind": "improvement",
+    "title": "Performance pass — lazy-load highlight.js in notion, index the audit-log-by-action query (rest already optimal)",
+    "body": "Targeted perf sweep with the verifier inverted to REJECT premature/speculative optimization (no speculative memo, no 'could be faster' rewrites). The scout already showed the codebase follows its own rules — 0 bare .collect() in convex, 0 internal raw <a>, KaTeX already lazy — so only 2 concrete, structural wins survived verification; the other categories came back clean and were intentionally left alone. (1) notion-shell CodeBlock.tsx statically imported `highlight.js/lib/common` (~35 languages, ~100kB) at module top, so the highlighter JS shipped in the notion editor's initial bundle for EVERY page — including the majority with no code block. Now it loads lazily via dynamic import on the first code block, cached at module scope; until it resolves the block renders the same HTML-escaped plaintext it already used as the fallback, so SSR/first-paint output is unchanged (no hydration mismatch) and highlighting fills in client-side. The small CSS stays static. (2) convex/_shared/auditLogger_queries.ts getAuditLogsByAction did `.filter(workspaceId AND action)` over the UNBOUNDED activityEvents audit table — a full-table scan that grows with every event ever logged. Switched to `.withIndex(\"by_workspace\", …)` (the same index the sibling getAuditLogsByWorkspace already uses one function up) and kept action as a post-index .filter — same most-recent-first result, but the scan is now scoped to the workspace partition. No schema migration (index already exists), no new dependency. Deliberately NOT changed (verified already-optimal, not worth touching): react-konva is core to the image-editor and only mounts when the editor is open; the ~5 raw <img> are all blob/object-URL/runtime sources where next/image does not apply; KaTeX is already lazy; no hot-render recompute worth memoizing. tsc + slices:check (70 ok) green.",
+    "groups": [
+      {
+        "heading": "Performance",
+        "bullets": [
+          "notion-shell/CodeBlock — highlight.js (~100kB) now lazy-loads on the first code block instead of shipping in every notion page's bundle",
+          "convex/auditLogger — getAuditLogsByAction scoped to the by_workspace index instead of full-scanning the unbounded activityEvents table"
+        ]
+      },
+      {
+        "heading": "Audited clean (left as-is)",
+        "bullets": [
+          "image-editor konva (core, mounts only when editor opens), raw <img> (all blob/runtime sources), KaTeX (already lazy), hot-render recompute (none worth memoizing)"
+        ]
+      }
+    ]
+  },
+  {
     "id": "NONSLICE-DEFECT-SWEEP",
     "version": "site@nonslice-defect-sweep",
     "date": 1782604800000,

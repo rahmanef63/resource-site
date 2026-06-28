@@ -6,7 +6,6 @@
  *  BlockRendererProps — writes `{ text }` / `{ lang }` through onUpdate. */
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import hljs from "highlight.js/lib/common";
 import "highlight.js/styles/github-dark.css";
 import { Check, Copy, ChevronDown } from "lucide-react";
 import {
@@ -15,6 +14,17 @@ import {
 import { Button } from "@/components/ui/button";
 import { CODE_LANGUAGES, normalizeLang } from "../../lib/codeLanguages";
 import type { BlockRendererProps } from "../../types";
+
+// highlight.js/lib/common bundles ~35 languages (~100kB gz). Load it lazily on
+// the first code block and cache at module scope — notion pages with no code
+// block never pull the highlighter JS. (CSS above is small; keep it static.)
+type Hljs = typeof import("highlight.js/lib/common").default;
+let hljsMod: Hljs | null = null;
+let hljsReady: Promise<Hljs> | null = null;
+function loadHljs(): Promise<Hljs> {
+  if (!hljsReady) hljsReady = import("highlight.js/lib/common").then((m) => (hljsMod = m.default));
+  return hljsReady;
+}
 
 function escapeHtml(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
@@ -25,19 +35,27 @@ export function CodeBlock({ block, onUpdate, registerRef }: BlockRendererProps) 
   const text = block.text;
   const [focused, setFocused] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [hljs, setHljs] = useState<Hljs | null>(hljsMod);
   const editRef = useRef<HTMLPreElement | null>(null);
   const language = normalizeLang(block.lang);
   const langLabel = CODE_LANGUAGES.find((l) => l.value === language)?.label ?? block.lang ?? "Plain text";
 
+  useEffect(() => {
+    let alive = true;
+    if (!hljs) void loadHljs().then((h) => { if (alive) setHljs(h); });
+    return () => { alive = false; };
+  }, [hljs]);
+
   const highlighted = useMemo(() => {
     if (!text) return "";
+    if (!hljs) return escapeHtml(text);
     try {
       if (language === "plaintext" || !hljs.getLanguage(language)) return escapeHtml(text);
       return hljs.highlight(text, { language, ignoreIllegals: true }).value;
     } catch {
       return escapeHtml(text);
     }
-  }, [text, language]);
+  }, [text, language, hljs]);
 
   useEffect(() => {
     const el = editRef.current;
