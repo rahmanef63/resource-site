@@ -135,7 +135,9 @@ function Node({ entry, parent, depth, ctx }: { entry: FsEntry; parent: string; d
         onClick={() => ctx.onOpenFile?.(path)}
         style={pad}
         className={cn(
-          "flex h-auto w-full items-center gap-1.5 py-1 pr-2 text-left text-xs",
+          // justify-start: override shadcn Button's default justify-center so
+          // the [icon] name sits flush-left like the sidebar favorites (Home).
+          "flex h-auto w-full items-center justify-start gap-1.5 py-1 pr-2 text-left text-xs",
           on ? "bg-secondary text-foreground" : "text-muted-foreground hover:bg-secondary/60",
         )}
       >
@@ -155,7 +157,7 @@ function Node({ entry, parent, depth, ctx }: { entry: FsEntry; parent: string; d
           ctx.onSelectDir?.(path);
         }}
         style={pad}
-        className="flex h-auto w-full items-center gap-1 py-1 pr-2 text-left text-xs font-medium text-foreground hover:bg-secondary/60"
+        className="flex h-auto w-full items-center justify-start gap-1 py-1 pr-2 text-left text-xs font-medium text-foreground hover:bg-secondary/60"
       >
         {open ? <ChevronDown className="size-3.5 shrink-0" /> : <ChevronRight className="size-3.5 shrink-0" />}
         <span className="truncate">{entry.name}</span>

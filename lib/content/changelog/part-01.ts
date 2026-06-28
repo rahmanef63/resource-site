@@ -2,17 +2,17 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
-    "id": "FILE-EXPLORER-GRID-FILL",
-    "version": "slices@file-explorer-grid-fill",
+    "id": "FILE-EXPLORER-TREE-ALIGN",
+    "version": "slices@file-explorer-tree-align",
     "date": 1782604800000,
     "kind": "fix",
-    "title": "file-explorer icon grid — left-aligned rows that pack left and fill the width",
-    "body": "The icon (grid) view used a fixed `grid-cols-3 sm:grid-cols-4` of centered icon-over-label cells, so on a wide screen it stretched just 3–4 columns of 1fr each — every item floated centered in a huge cell with large empty gaps. Two changes: (1) grid is now `grid-cols-[repeat(auto-fill,minmax(9rem,1fr))]` — as many ~9rem columns as fit, packed left→right and stretched to fill the row, no dead space, inherently responsive (the sm:/container breakpoints are gone). (2) each item is now a left-aligned `[icon] name` row mirroring the sidebar favorites (justify-start, gap-2, truncate) instead of a centered icon-above-label tile — content sits flush-left like the 'Home' entries, never centered. Removed the now-unused `centered` rename-input prop. tsc + slices:check + build green.",
+    "title": "file-explorer sidebar tree — left-align the folder/file rows (were centered)",
+    "body": "The sidebar file-tree rows (Desktop, Documents, … and the files under them) rendered centered instead of flush-left like the Favorites 'Home' entry just above. Cause: the tree Node buttons (file-tree/dir.tsx) set `flex w-full items-center text-left` but never overrode shadcn Button's base `justify-center`, so the `[icon] name` group sat in the middle of the full-width row (`text-left` only aligns text inside the label, not the flex group). Added `justify-start` to both the file and folder Node buttons so they sit flush-left, matching the Favorites buttons that already had it. The main content/grid view was left untouched.",
     "groups": [
       {
         "heading": "Fixes",
         "bullets": [
-          "file-explorer grid view — left-aligned [icon] name rows (sidebar-style) in an auto-fill grid: items pack left, fill the width, no centered floating / dead space"
+          "file-explorer sidebar tree — folder/file rows now left-aligned (justify-start) instead of centered, matching the Favorites items"
         ]
       }
     ]
