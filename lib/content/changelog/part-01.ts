@@ -2,6 +2,23 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "APP-SERVER-HUNT",
+    "version": "site@app-server-hunt",
+    "date": 1782604800000,
+    "kind": "fix",
+    "title": "Live-site server surface — open redirect in proxy.ts closed; build-chat 500 on malformed input fixed",
+    "body": "Security + correctness sweep of the deployed app's server surface (admin auth, the two LLM endpoints, external proxies, proxy.ts host rewriting, server actions), each finding adversarially verified — a speculative unsplash length-cap was correctly rejected (already rate-limited, hardcoded upstream host, percent-encoded query). 2 real bugs fixed: (1) SECURITY — proxy.ts built the external-demo redirect via new URL(request.nextUrl.pathname + search, external), putting the attacker-controlled path as the URL INPUT rather than mutating the trusted base. Empirically verified against the repo's Next 16.2.6: a request to a valid demo subdomain with path //evil.com/x yields nextUrl.pathname === '//evil.com/x' (Next does not normalize the leading //), and new URL('//evil.com/x', vercelOrigin) resolves to https://evil.com — a 307 OPEN REDIRECT off the allowlisted origin to any host (phishing / OAuth-token-leak). Now the dest is built from the trusted base first, then pathname/search assigned, so '//evil.com' collapses onto the allowlisted origin (verified: crafted // and backslash paths all stay on the Vercel host; normal paths preserved). (2) build-chat route did (body.messages ?? []).filter(...) before its try/catch — a non-array messages ({\"messages\":\"x\"}) passes the ?? guard but throws TypeError on .filter, returning a raw 500 instead of the clean 400 the surrounding validation produces; replaced with Array.isArray(...), matching the sibling agent-stream route. tsc + slices:check green.",
+    "groups": [
+      {
+        "heading": "Fixes",
+        "bullets": [
+          "proxy.ts — open redirect closed: external-demo dest built from the trusted base, so a crafted //host path can't escape the allowlisted Vercel origin",
+          "build-chat — malformed messages (non-array) returns a clean 400 instead of an unhandled 500"
+        ]
+      }
+    ]
+  },
+  {
     "id": "ASYNC-ERROR-HUNT",
     "version": "slices@async-error-hunt",
     "date": 1782604800000,

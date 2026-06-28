@@ -47,7 +47,12 @@ export default function proxy(request: NextRequest) {
   // rr no longer renders this template's /preview for the demo subdomain.
   const external = getExternalDemoUrl(slug);
   if (external) {
-    const dest = new URL(request.nextUrl.pathname + request.nextUrl.search, external);
+    // Build from the trusted base first, THEN assign the request path — so a
+    // crafted path like "//evil.com/x" collapses onto the allowlisted origin
+    // instead of being parsed as a scheme-relative URL (open-redirect guard).
+    const dest = new URL(external);
+    dest.pathname = request.nextUrl.pathname;
+    dest.search = request.nextUrl.search;
     return NextResponse.redirect(dest, 307);
   }
 

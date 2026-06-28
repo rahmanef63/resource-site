@@ -67,7 +67,7 @@ export async function POST(req: Request) {
   } catch {
     return Response.json({ error: "invalid JSON body" }, { status: 400 });
   }
-  const history = (body.messages ?? [])
+  const history = (Array.isArray(body.messages) ? body.messages : [])
     .filter(
       (m) =>
         (m.role === "user" || m.role === "assistant") &&
