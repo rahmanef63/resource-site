@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { DynamicIcon } from "./DynamicIcon";
 import { PickerSkeleton } from "./PickerSkeleton";
@@ -158,6 +158,7 @@ export function IconPickerPopover({
         <PopoverTrigger asChild>{trigger}</PopoverTrigger>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogContent className="flex h-[min(560px,88dvh)] w-[min(400px,92vw)] flex-col gap-0 p-3">
+            <DialogTitle className="sr-only">Choose an icon</DialogTitle>
             {body}
           </DialogContent>
         </Dialog>

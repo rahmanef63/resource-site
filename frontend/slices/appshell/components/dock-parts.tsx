@@ -107,6 +107,7 @@ export function DockIcon({
         <Link
           href={href}
           prefetch={false}
+          aria-label={app.title}
           onPointerEnter={() => void app.load?.().catch(() => {})}
           onContextMenu={ctx.open}
           onClick={(e) => {

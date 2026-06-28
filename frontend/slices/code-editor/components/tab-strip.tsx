@@ -49,6 +49,7 @@ export function TabStrip({
               type="button"
               variant="ghost"
               size="icon"
+              aria-label={`Close ${baseName(p)}${dirty ? " (unsaved changes)" : ""}`}
               onClick={(e) => closeTab(p, e)}
               // Coarse pointers: 36px hit area (glyph stays 12px); the min-h-9 tab
               // row grows ~3px to wrap it — taller touch tabs, no clipping.

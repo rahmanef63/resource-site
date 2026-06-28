@@ -8,12 +8,11 @@
  * it returns `{ ok: false, notice }` so the chat UI degrades gracefully and
  * the build / prerender never depends on the key being present.
  *
- * System prompt is pulled from the agency's existing `agencyAiConfig`
- * singleton so the public assistant speaks in the studio's voice.
+ * System prompt is a built-in default — swap the `system` string below for
+ * your own voice, or wire it to a config table in your app.
  */
 
 import { action } from "../../_generated/server";
-import { api } from "../../_generated/api";
 import { v } from "convex/values";
 
 const MODEL = "claude-3-5-haiku-latest";
@@ -43,9 +42,7 @@ export const chat = action({
       };
     }
 
-    const cfg = await ctx.runQuery(api.aiConfig.get, {});
     const system =
-      (cfg && "systemPrompt" in cfg ? (cfg.systemPrompt as string) : "") ||
       "You are a helpful assistant for a creative studio website.";
 
     try {

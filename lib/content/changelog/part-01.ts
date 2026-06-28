@@ -2,6 +2,32 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "DEFECT-HUNT-R3",
+    "version": "slices@defect-hunt-r3",
+    "date": 1782604800000,
+    "kind": "fix",
+    "title": "Call-graph + a11y depth — aiChat dead nonexistent-module ref removed, 6 more icon-button/dialog-title a11y misses",
+    "body": "Two more verified passes. CALL-GRAPH (convex/** excluded from root tsc, so gate-invisible): swept every ctx.run*/scheduler call against its target validator. ai-chat chat action called api.aiConfig.get — a module that exists NOWHERE in the tree (a leftover from the source project's agencyAiConfig singleton, referenced only in that one file); on the ANTHROPIC_API_KEY-set path (the real use case, outside the try) it threw 'Could not find public function'. Removed the dead runQuery + now-unused api import, inlined the existing default system prompt. (Noted but deliberately NOT changed: seo slice's generate action references api.slices.auth.me / api.slices.seo.* — the whole action targets the consumer-side `slices.*` codegen namespace, not rr's `features.*`, so it's a consumer-composition contract, not an rr-repo bug.) A11Y depth (round 1 only scratched this, capped at 10): 5 more icon-only controls with no accessible name got aria-labels — code-editor tab close (dynamic label w/ unsaved state), assistant glyph picker (matching its sibling ColorPick), appshell window-overview reveal + dock app links, notion editor toggle block; and icon-picker's dialog-fallback DialogContent had no DialogTitle (Radix a11y violation + runtime warning) — added an sr-only title. slices:check 70 ok + tsc green.",
+    "groups": [
+      {
+        "heading": "Runtime correctness",
+        "bullets": [
+          { "text": "ai-chat — chat action no longer calls a nonexistent api.aiConfig.get module (threw on every keyed request); default prompt inlined", "slug": "ai-chat" }
+        ]
+      },
+      {
+        "heading": "Accessibility depth",
+        "bullets": [
+          { "text": "code-editor — tab close button labelled (with unsaved-changes state)", "slug": "code-editor" },
+          { "text": "assistant — glyph picker buttons labelled", "slug": "assistant" },
+          { "text": "appshell — window-overview reveal + dock app links labelled", "slug": "appshell" },
+          { "text": "notion — editor toggle-block collapse/expand labelled", "slug": "notion" },
+          { "text": "icon-picker — dialog-fallback gets a required (sr-only) DialogTitle", "slug": "icon-picker" }
+        ]
+      }
+    ]
+  },
+  {
     "id": "DEFECT-HUNT-R2",
     "version": "slices@defect-hunt-r2",
     "date": 1782604800000,

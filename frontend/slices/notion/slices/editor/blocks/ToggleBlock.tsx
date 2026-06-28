@@ -66,6 +66,7 @@ export function ToggleContent({
       <div className="flex items-start gap-1">
         <Button
           variant="ghost"
+          aria-label={collapsed ? "Expand" : "Collapse"}
           onClick={() => onUpdate({ collapsed: !collapsed })}
           className="mt-1.5 h-auto shrink-0 p-0 text-muted-foreground transition hover:bg-transparent hover:text-foreground [&_svg]:size-4"
         >
