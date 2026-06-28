@@ -14,12 +14,10 @@ function RenameInput({
   initial,
   onCommit,
   onCancel,
-  centered,
 }: {
   initial: string;
   onCommit: (v: string) => void;
   onCancel: () => void;
-  centered?: boolean;
 }) {
   return (
     <Input
@@ -36,7 +34,7 @@ function RenameInput({
         if (e.key === "Enter") e.currentTarget.blur();
         if (e.key === "Escape") onCancel();
       }}
-      className={cn("h-6 px-1 py-0 text-xs", centered && "text-center")}
+      className="h-6 px-1 py-0 text-xs"
     />
   );
 }
@@ -113,7 +111,10 @@ export function FileItem({
         onDoubleClick={onOpen}
         onContextMenu={onContext}
         className={cn(
-          "flex h-auto w-full flex-col items-center gap-1.5 rounded-lg p-3 text-center transition-colors",
+          // Left-aligned [icon] name row, mirroring the sidebar favorites
+          // (files-sidebar.tsx: justify-start gap-2). Auto-fill grid lays these
+          // out in multiple columns; content sits flush-left, never centered.
+          "flex h-auto w-full items-center justify-start gap-2 rounded-md px-2 py-1.5 text-left transition-colors",
           selected ? "bg-primary text-primary-foreground" : "hover:bg-accent",
           cut && "opacity-50",
           dropActive && "ring-2 ring-primary ring-inset",
@@ -127,23 +128,23 @@ export function FileItem({
             loading="lazy"
             onError={() => setThumbFail(true)}
             className={cn(
-              "size-9 shrink-0 rounded object-cover transition-transform",
+              "size-5 shrink-0 rounded object-cover transition-transform",
               dropActive && "scale-110",
             )}
           />
         ) : (
           <Icon
             className={cn(
-              "size-9 shrink-0 transition-transform",
+              "size-5 shrink-0 transition-transform",
               selected ? "" : color,
               dropActive && "scale-110",
             )}
           />
         )}
         {renaming ? (
-          <RenameInput initial={entry.name} onCommit={commit} onCancel={onRenameCancel} centered />
+          <RenameInput initial={entry.name} onCommit={commit} onCancel={onRenameCancel} />
         ) : (
-          <span className="line-clamp-2 w-full text-[11px] font-medium leading-tight break-words whitespace-normal">
+          <span className="min-w-0 truncate text-xs font-medium">
             {entry.name}
           </span>
         )}

@@ -6,13 +6,13 @@ export const entries: ChangelogEntry[] = [
     "version": "slices@file-explorer-grid-fill",
     "date": 1782604800000,
     "kind": "fix",
-    "title": "file-explorer icon grid — pack files left and fill the width instead of 3–4 stretched columns",
-    "body": "The icon (grid) view used a fixed `grid-cols-3 sm:grid-cols-4`, so on a wide screen it stretched just 3–4 columns of 1fr each — every file icon floated centered in a huge cell with large empty gaps between items, and the grid didn't fill naturally. Switched to `grid-cols-[repeat(auto-fill,minmax(7rem,1fr))]`: as many ~7rem columns as fit, packed left→right and stretched to fill the row, so items are a natural size, sit flush from the left, and there's no dead space on wide viewports. It's also inherently responsive (drops to fewer columns on narrow containers) so the explicit sm:/container breakpoints are gone. Item content (icon above label) stays centered per cell, Finder-style. tsc + slices:check + build green.",
+    "title": "file-explorer icon grid — left-aligned rows that pack left and fill the width",
+    "body": "The icon (grid) view used a fixed `grid-cols-3 sm:grid-cols-4` of centered icon-over-label cells, so on a wide screen it stretched just 3–4 columns of 1fr each — every item floated centered in a huge cell with large empty gaps. Two changes: (1) grid is now `grid-cols-[repeat(auto-fill,minmax(9rem,1fr))]` — as many ~9rem columns as fit, packed left→right and stretched to fill the row, no dead space, inherently responsive (the sm:/container breakpoints are gone). (2) each item is now a left-aligned `[icon] name` row mirroring the sidebar favorites (justify-start, gap-2, truncate) instead of a centered icon-above-label tile — content sits flush-left like the 'Home' entries, never centered. Removed the now-unused `centered` rename-input prop. tsc + slices:check + build green.",
     "groups": [
       {
         "heading": "Fixes",
         "bullets": [
-          "file-explorer grid view — auto-fill columns: files pack left and fill the width, no more giant cells / dead space on wide screens"
+          "file-explorer grid view — left-aligned [icon] name rows (sidebar-style) in an auto-fill grid: items pack left, fill the width, no centered floating / dead space"
         ]
       }
     ]
