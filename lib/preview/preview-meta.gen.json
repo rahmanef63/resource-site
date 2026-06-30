@@ -1239,6 +1239,29 @@
     ]
   },
   {
+    "slug": "publisher-clean-html",
+    "title": "Publisher — clean HTML",
+    "category": "content",
+    "previews": [
+      {
+        "component": "PublishPreview",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "cssEmission",
+            "values": [
+              "inline",
+              "external"
+            ],
+            "default": "inline",
+            "description": "Embed CSS in a <style> block, or link an external bundle (re-inlined for this iframe preview)"
+          }
+        ],
+        "seed": "4-node demo tree (body > section > heading + 3 paragraphs), one of which carries an inert <script> string to show schema-typed escaping"
+      }
+    ]
+  },
+  {
     "slug": "quicklinks",
     "title": "Quicklinks — website shortcuts with favicons",
     "category": "os",

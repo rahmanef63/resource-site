@@ -10,6 +10,7 @@ import { appStoreConfig } from "@/features/app-store/config";
 import { appshellConfig } from "@/features/appshell/config";
 import { assistantConfig } from "@/features/assistant/config";
 import { auditLogConfig } from "@/features/audit-log/config";
+import { bookingConfig } from "@/features/booking/config";
 import { broadcastChannelSyncConfig } from "@/features/broadcast-channel-sync/config";
 import { browserConfig } from "@/features/browser/config";
 import { calComBookingConfig } from "@/features/cal-com-booking/config";
@@ -63,6 +64,11 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     ...auditLogConfig,
     importPath: "@/features/audit-log/config",
     version: "0.3.0",
+  },
+  {
+    ...bookingConfig,
+    importPath: "@/features/booking/config",
+    version: "1.0.0",
   },
   {
     ...broadcastChannelSyncConfig,

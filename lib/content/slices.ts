@@ -413,6 +413,45 @@ export default function MonitorDemo() {
 }`,
   },
   {
+    slug: "booking",
+    title: "Booking — session request form + owner inbox",
+    category: "os",
+    kind: "ui",
+    version: "1.0.0",
+    tagline: "Public 'book a session' form + the owner's triage inbox in one app — backend injected.",
+    description:
+      "One app that is BOTH a public 'book a session' request form AND the owner's triage inbox — it flips to show the inbox when the viewer can manage. Visitors submit name/email/topic (+ optional preferred time / note); the owner sees pending requests with Confirm / Decline. The backend is INJECTED via a small BookingAdapter (submit/list/setStatus/canManage): point configureBooking at your store, or keep the bundled in-memory mock so it renders fully interactive — form + inbox — with zero backend.",
+    source: "rahmanef63/os-vps",
+    slicePath: "frontend/slices/booking",
+    convexPaths: [],
+    npm: ["lucide-react"],
+    shadcn: ["button", "input", "textarea", "scroll-area"],
+    env: [],
+    peers: [],
+    tags: ["booking", "contact", "form", "inbox", "lead", "scheduling", "ui"],
+    resourceType: "module",
+    maturity: "stable",
+    compat: { enhances: ["appshell"] },
+    previewPath: "/preview/slices/booking",
+    defaultView: "desktop",
+    agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A booking request form + owner inbox. Fully client-side; backend optional.
+
+STEP 1 — Install. \`npx rr add booking\`. Ensure \`@/features/booking\` resolves and Tailwind scans the slice folder.
+
+STEP 2 — Deps. npm: \`lucide-react\`. shadcn: \`npx shadcn@latest add button input textarea scroll-area\`.
+
+STEP 3 — Mount. \`<Booking />\` in a height-bearing box — unwired it runs on an in-memory mock store (form + inbox both live). Or register \`bookingApp\` in an appshell manifest.
+
+STEP 4 — Real backend. \`configureBooking({ mode:"live", submit, list, setStatus, canManage })\` — submit takes { name, email, topic, preferredTime?, note? }; list returns rows with { id, status, createdAt }; omit list/canManage for a write-only public form.`,
+    exampleCode: `"use client";
+import { Booking } from "@/features/booking";
+
+export default function BookingDemo() {
+  // Unwired -> in-memory mock; configureBooking for a real backend.
+  return <div className="h-dvh w-full"><Booking /></div>;
+}`,
+  },
+  {
     slug: "os-terminal",
     title: "Terminal — shell emulator with live passthrough + PTY seam",
     category: "os",
@@ -1872,6 +1911,28 @@ const [count, setCount] = useBroadcastSync("rr:counter", 0);
     previewPath: "/preview/slices/seo",
     defaultView: "tablet",
     defaultZoom: 0.8,
+  },
+  {
+    slug: "publisher-clean-html",
+    title: "Publisher — clean HTML",
+    category: "content",
+    kind: "ui",
+    version: "0.1.0",
+    tagline: "Render a node tree to standalone, framework-runtime-free HTML with one deduped CSS bundle + layered sanitization (HTML/CSS/CSP + injectable DOMPurify). Zero deps, no Convex.",
+    description: "A pure render-to-clean-HTML engine harvested from the Instatic CMS publisher, decoupled from its host caching / loops / visual-components / Layer-C islands. publishPage(tree, registry, options) walks a generic node tree bottom-up: render children, escape every prop by its schema-declared control type (url -> safe-URL, richtext -> DOMPurify, svg -> SVG profile, else HTML-escape), dedup CSS by moduleId (~60-80% shrink), splice author classes + inline styles onto each rendered root, then assemble <!DOCTYPE> + reset + framework + module CSS + a deterministic (sorted) CSP plan. Bring your own ModuleRegistry (each module is a pure render(props, children) -> { html, css? }). Security spine: HTML escape + safe-URL, CSS-value guard (expression()/{}/</), </style RAWTEXT neutraliser, and an injectable DOMPurify seam (configureRichtextSanitizer) that fails closed — without a runtime, richtext strips all tags and SVG returns empty. Stateless, env-free, ZERO npm deps, no Convex. Ships a PublishPreview iframe-srcdoc pane. A Wave-1 leaf of the feature-harvest ULTRAPLAN; a dependency of the planned visual-page-canvas.",
+    source: "rahman-resources",
+    slicePath: "frontend/slices/publisher-clean-html",
+    convexPaths: [],
+    npm: [],
+    shadcn: [],
+    env: [],
+    peers: [],
+    tags: ["content", "publisher", "html", "static-export", "sanitization", "csp", "css-dedup", "render"],
+    usedBy: [],
+    agentRecipe: "Run `npx rr add publisher-clean-html`. Build a registry: createModuleRegistry([{ id: 'base.body', render: (_p, kids) => ({ html: kids.join('') }) }, { id: 'demo.h', schema: { text: { type: 'text' } }, render: (p) => ({ html: `<h1>${p.text}</h1>`, css: 'h1{font-size:1.5rem}' }) }]). Tree = { rootNodeId, nodes: { [id]: { id, moduleId, props?, children?, classIds?, inlineStyles?, hidden? } } }. const { html } = publishPage(tree, registry, { title, cssEmission: 'inline' }). Preview: <PublishPreview html={html} />. Enable rich HTML/SVG by calling configureRichtextSanitizer(DOMPurify) once — without it, richtext/svg props fail closed (strip/empty). Props escape by schema control type, not key name.",
+    previewPath: "/preview/slices/publisher-clean-html",
+    defaultView: "desktop",
+    defaultZoom: 1,
   },
   {
     slug: "content-loops",

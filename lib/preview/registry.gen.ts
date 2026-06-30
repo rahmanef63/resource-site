@@ -43,6 +43,7 @@ export const PREVIEW_REGISTRY: Record<string, () => Promise<{ default: SlicePrev
   "onboarding-wizard": () => import("@/features/onboarding-wizard/preview"),
   "portfolio-section": () => import("@/features/portfolio-section/preview"),
   "pricing-page": () => import("@/features/pricing-page/preview"),
+  "publisher-clean-html": () => import("@/features/publisher-clean-html/preview"),
   "quicklinks": () => import("@/features/quicklinks/preview"),
   "rbac-roles": () => import("@/features/rbac-roles/preview"),
   "selection": () => import("@/features/selection/preview"),

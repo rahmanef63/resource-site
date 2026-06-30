@@ -2,6 +2,22 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "BOOKING-SLICE-PORT",
+    "version": "slices@booking",
+    "date": 1782777600000,
+    "kind": "feature",
+    "title": "booking — new os slice: session request form + owner inbox (backend-injected)",
+    "body": "Ported from the rahmanef-com web-OS as a brand-free, self-contained slice. One app that is both a public 'book a session' request form and the owner's triage inbox (flips on canManage). The backend is injected via a BookingAdapter (submit/list/setStatus/canManage); unwired it runs on an in-memory mock so the form + inbox are interactive with zero backend.",
+    "groups": [
+      {
+        "heading": "New slices",
+        "bullets": [
+          { "text": "booking — public request form + owner inbox, BookingAdapter host seam, in-memory mock", "slug": "booking", "kind": "slice" }
+        ]
+      }
+    ]
+  },
+  {
     "id": "FILE-EXPLORER-TREE-ALIGN",
     "version": "slices@file-explorer-tree-align",
     "date": 1782604800000,

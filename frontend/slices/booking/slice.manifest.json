@@ -1,0 +1,29 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "booking",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add booking",
+    "consumerPath": "slices/booking"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "README.md",
+    "app.tsx",
+    "config.ts",
+    "index.ts",
+    "lib/host.ts",
+    "slice.json"
+  ],
+  "imports": {
+    "shared": [
+      "@/components/ui/button",
+      "@/components/ui/input",
+      "@/components/ui/textarea",
+      "@/components/ui/scroll-area"
+    ],
+    "external": ["react", "lucide-react"]
+  }
+}
