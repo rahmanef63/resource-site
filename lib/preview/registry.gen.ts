@@ -13,6 +13,7 @@ export const PREVIEW_REGISTRY: Record<string, () => Promise<{ default: SlicePrev
   "code-editor": () => import("@/features/code-editor/preview"),
   "command-menu": () => import("@/features/command-menu/preview"),
   "comments": () => import("@/features/comments/preview"),
+  "content-loops": () => import("@/features/content-loops/preview"),
   "convex-auth": () => import("@/features/convex-auth/preview"),
   "dashboard-shell": () => import("@/components/templates/_shared/previews/dashboard-shell.preview"),
   "data-table": () => import("@/features/data-table/preview"),

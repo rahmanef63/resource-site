@@ -285,6 +285,29 @@
     ]
   },
   {
+    "slug": "content-loops",
+    "title": "Content Loops",
+    "category": "content",
+    "previews": [
+      {
+        "component": "ContentLoop",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "pagination",
+            "values": [
+              "none",
+              "infinite"
+            ],
+            "default": "none",
+            "description": "Single page, or accumulate pages behind a Load more button"
+          }
+        ],
+        "seed": "mock source: 9 synthetic posts (title, excerpt, author); two variants (card + featured)"
+      }
+    ]
+  },
+  {
     "slug": "convex-auth",
     "title": "Convex Auth — Multi-Provider Sign-in",
     "category": "auth",
