@@ -1,0 +1,29 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "about-profile",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add about-profile",
+    "consumerPath": "slices/about-profile"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "README.md",
+    "app.tsx",
+    "components/faq-list.tsx",
+    "config.ts",
+    "index.ts",
+    "lib/host.ts",
+    "slice.json"
+  ],
+  "imports": {
+    "shared": [
+      "@/components/ui/button",
+      "@/components/ui/scroll-area",
+      "@/components/ui/avatar"
+    ],
+    "external": ["react", "lucide-react"]
+  }
+}

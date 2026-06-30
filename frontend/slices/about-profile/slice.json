@@ -1,0 +1,46 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "about-profile",
+  "version": "1.0.0",
+  "category": "os",
+  "kind": "ui",
+  "title": "About — identity / profile card",
+  "description": "A macOS 'About This Mac'-style identity card as an OS app: avatar (or monogram fallback), name, roles, location, a short description, a list of outbound links and an accordion FAQ. The whole card is driven by ONE injected AboutProfile (name / roles[] / location / description / links[{label,href}] / faq[{q,a}] / avatarUrl?): call configureAbout(yourProfile) to wire your own identity, or keep the bundled generic mock person so the card renders fully populated with zero backend.",
+  "namespace": "@/features/about-profile",
+  "frontend": {
+    "slicePath": "frontend/slices/about-profile",
+    "configExport": "aboutProfileConfig"
+  },
+  "deps": {
+    "npm": ["lucide-react"],
+    "shadcn": ["button", "scroll-area", "avatar"],
+    "env": [],
+    "peers": []
+  },
+  "registers": ["registry"],
+  "audit": ["bp:ui-consistency"],
+  "license": "MIT",
+  "tags": ["about", "profile", "identity", "bio", "card", "links", "faq", "ui"],
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "none",
+      "deps": [
+        { "npm": "react", "range": "^19" },
+        { "npm": "lucide-react", "range": "^0.400.0" }
+      ]
+    },
+    "provides": {
+      "tools": [],
+      "routes": [],
+      "components": ["AboutProfile"],
+      "hooks": ["useAboutProfile"],
+      "utils": ["configureAbout", "aboutProfileApp"],
+      "tables": []
+    },
+    "generalization": {
+      "level": "portable",
+      "forbiddenTerms": ["rahman", "rahmanef"]
+    }
+  }
+}

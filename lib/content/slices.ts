@@ -452,6 +452,201 @@ export default function BookingDemo() {
 }`,
   },
   {
+    slug: "html-studio",
+    title: "HTML Studio — sandboxed HTML/CSS/JS editor with live preview",
+    category: "os",
+    kind: "ui",
+    version: "1.0.0",
+    tagline: "Write HTML/CSS/JS, see it render live in a sandboxed iframe (opaque origin), Save to a shareable link — backend injected.",
+    description:
+      "A tiny web-page studio: write HTML / CSS / JS and see it render LIVE in a sandboxed iframe (srcdoc + sandbox=allow-scripts WITHOUT allow-same-origin, so user code runs in an opaque origin and cannot read the host) — then Save to a shareable /p/<slug>. Code / Split / Preview view toggle, a device-width preview (responsive / tablet / phone), a saved-pages rail, and public/private visibility. The backend is INJECTED via a small HtmlStudioAdapter (save/load/list/remove): point configureHtmlStudio at your store, or keep the bundled in-memory mock so the editor + live preview + saved list are fully interactive with zero backend.",
+    source: "rahmanef63/os-vps",
+    slicePath: "frontend/slices/html-studio",
+    convexPaths: [],
+    npm: ["lucide-react"],
+    shadcn: ["button", "input", "textarea", "scroll-area"],
+    env: [],
+    peers: [],
+    tags: ["html", "editor", "sandbox", "iframe", "preview", "playground", "code", "ui"],
+    resourceType: "module",
+    maturity: "stable",
+    compat: { enhances: ["appshell"] },
+    previewPath: "/preview/slices/html-studio",
+    defaultView: "desktop",
+    agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A sandboxed HTML/CSS/JS studio: editor + live iframe preview + saved pages. Fully client-side; backend optional.
+
+STEP 1 — Install. \`npx rr add html-studio\`. Ensure \`@/features/html-studio\` resolves and Tailwind scans the slice folder.
+
+STEP 2 — Deps. npm: \`lucide-react\`. shadcn: \`npx shadcn@latest add button input textarea scroll-area\`.
+
+STEP 3 — Mount. \`<HtmlStudio />\` in a height-bearing box — unwired it runs on an in-memory mock (editor + live sandboxed preview + saved list all live). Pass \`payload={{ slug }}\` to open a page, or register \`htmlStudioApp\` in an appshell manifest.
+
+STEP 4 — Real backend. \`configureHtmlStudio({ mode:"live", save, load, list, remove })\` — save takes { slug?, title, html, visibility } and returns { slug }; load(slug) -> SavedPage | null; omit save for a read-only sandbox or list to hide the saved rail. KEEP the iframe sandbox without allow-same-origin — it is the security boundary.`,
+    exampleCode: `"use client";
+import { HtmlStudio } from "@/features/html-studio";
+
+export default function HtmlStudioDemo() {
+  // Unwired -> in-memory mock; configureHtmlStudio for a real backend.
+  return <div className="h-dvh w-full"><HtmlStudio /></div>;
+}`,
+  },
+  {
+    slug: "resources-launcher-admin",
+    title: "Resources Admin — curated icon-launcher CRUD",
+    category: "os",
+    kind: "ui",
+    version: "1.0.0",
+    tagline: "Owner-gated CRUD for a curated icon-launcher — add/edit/remove/reorder links that open in a new tab, backend injected.",
+    description:
+      "An owner-gated admin app for a curated icon-launcher: add / edit / remove / reorder links (label, lucide icon NAME, url, group, order) that open in a new tab. The backend is INJECTED via a small ResourcesAdapter (list/upsert/remove/canManage): point configureResources at your store, or keep the bundled in-memory mock so the whole CRUD — including reorder — is interactive with zero backend. Icons are stored as lucide NAME strings and resolved client-side, so the same data drives a public launcher surface.",
+    source: "rahmanef63/os-vps",
+    slicePath: "frontend/slices/resources-launcher-admin",
+    convexPaths: [],
+    npm: ["lucide-react"],
+    shadcn: ["button", "input", "label", "scroll-area", "native-select"],
+    env: [],
+    peers: [],
+    tags: ["launcher", "links", "bookmarks", "admin", "crud", "icons", "ui"],
+    resourceType: "module",
+    maturity: "stable",
+    compat: { enhances: ["appshell"] },
+    previewPath: "/preview/slices/resources-launcher-admin",
+    defaultView: "desktop",
+    agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A curated icon-launcher admin (CRUD + reorder). Fully client-side; backend optional.
+
+STEP 1 — Install. \`npx rr add resources-launcher-admin\`. Ensure \`@/features/resources-launcher-admin\` resolves and Tailwind scans the slice folder.
+
+STEP 2 — Deps. npm: \`lucide-react\`. shadcn: \`npx shadcn@latest add button input label scroll-area native-select\`.
+
+STEP 3 — Mount. \`<ResourcesAdmin />\` in a height-bearing box — unwired it runs on an in-memory mock store (add / edit / remove / reorder all live). Or register \`resourcesAdminApp\` in an appshell manifest.
+
+STEP 4 — Real backend. \`configureResources({ mode:"live", list, upsert, remove, canManage })\` — list returns rows { id, label, icon, url, group, order }; upsert takes the same minus id to insert (pass id to patch); canManage gates the editor + reorder. Icons are lucide NAME strings resolved via resolveIcon.`,
+    exampleCode: `"use client";
+import { ResourcesAdmin } from "@/features/resources-launcher-admin";
+
+export default function ResourcesAdminDemo() {
+  // Unwired -> in-memory mock; configureResources for a real backend.
+  return <div className="h-dvh w-full"><ResourcesAdmin /></div>;
+}`,
+  },
+  {
+    slug: "resume",
+    title: "Resume — one-column CV renderer",
+    category: "os",
+    kind: "ui",
+    version: "1.0.0",
+    tagline: "A clean one-column résumé app — name, roles, skills, experience, projects — rendered from an injected ResumeProfile.",
+    description:
+      "A clean one-column résumé / CV app: name, roles, location, contact row, summary, skills, experience (role · org · period + bullet points) and projects. The data is INJECTED via a single ResumeProfile seam — call configureResume(myProfile) at boot to render your own person (Convex query, CMS, a JSON file), or keep the bundled generic placeholder profile so it renders fully populated with zero backend. A 'Print / PDF' button calls window.print() against a print-friendly layout.",
+    source: "rahmanef63/os-vps",
+    slicePath: "frontend/slices/resume",
+    convexPaths: [],
+    npm: ["lucide-react"],
+    shadcn: ["button", "scroll-area"],
+    env: [],
+    peers: [],
+    tags: ["resume", "cv", "profile", "portfolio", "about", "print", "ui"],
+    resourceType: "module",
+    maturity: "stable",
+    compat: { enhances: ["appshell"] },
+    previewPath: "/preview/slices/resume",
+    defaultView: "desktop",
+    agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A one-column résumé / CV renderer driven by injected data. Fully client-side; no backend required.
+
+STEP 1 — Install. \`npx rr add resume\`. Ensure \`@/features/resume\` resolves and Tailwind scans the slice folder.
+
+STEP 2 — Deps. npm: \`lucide-react\`. shadcn: \`npx shadcn@latest add button scroll-area\`.
+
+STEP 3 — Mount. \`<Resume />\` in a height-bearing box — unwired it renders a generic placeholder profile (Alex Rivera). Or register \`resumeApp\` in an appshell manifest.
+
+STEP 4 — Real data. \`configureResume(profile)\` once at boot with a ResumeProfile { name, roles[], location, summary, contacts[{label,href}], skills[], experience[{role,org,period,points[]}], projects[{name,desc,url?}] } sourced from Convex / a CMS / a JSON file. The "Print / PDF" button calls window.print() against a print-friendly layout.`,
+    exampleCode: `"use client";
+import { Resume } from "@/features/resume";
+
+export default function ResumeDemo() {
+  // Unwired -> generic placeholder profile; configureResume(profile) for real data.
+  return <div className="h-dvh w-full"><Resume /></div>;
+}`,
+  },
+  {
+    slug: "start-here",
+    title: "Start Here — guided OS onboarding tour",
+    category: "os",
+    kind: "ui",
+    version: "1.0.0",
+    tagline: "Lays the OS out as a guided path of stages — reads the LIVE app catalog (drift-proof), every tile opens the real app.",
+    description:
+      "A guided 'Start Here' tour that lays the OS out as a path of stages, each stage opening real apps from the LIVE registry — drift-proof, it reads the injected app catalog instead of a hardcoded list, so adding an app surfaces it automatically (in a stage if listed, else a final 'Everything else' bucket). The catalog, the open(id) callback, and the stage journey are INJECTED via a small StartHereAdapter (apps / open / stages): point configureStartHere at your live app registry + window opener, or keep the bundled in-memory mock (a few generic apps + 3 stages) so the welcome tour renders fully alive with zero host.",
+    source: "rahmanef63/os-vps",
+    slicePath: "frontend/slices/start-here",
+    convexPaths: [],
+    npm: ["lucide-react"],
+    shadcn: ["button", "scroll-area"],
+    env: [],
+    peers: [],
+    tags: ["onboarding", "tour", "welcome", "launcher", "guide", "os", "ui"],
+    resourceType: "module",
+    maturity: "stable",
+    compat: { enhances: ["appshell"] },
+    previewPath: "/preview/slices/start-here",
+    defaultView: "desktop",
+    agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A guided onboarding tour that renders your live app catalog as a path of stages. Fully client-side; the catalog is injected.
+
+STEP 1 — Install. \`npx rr add start-here\`. Ensure \`@/features/start-here\` resolves and Tailwind scans the slice folder.
+
+STEP 2 — Deps. npm: \`lucide-react\`. shadcn: \`npx shadcn@latest add button scroll-area\`.
+
+STEP 3 — Mount. \`<StartHere />\` in a height-bearing box — unwired it reads an in-memory mock catalog (generic apps + 3 stages) so the tour is fully alive. Or register \`startHereApp\` in an appshell manifest.
+
+STEP 4 — Real catalog. \`configureStartHere({ mode:"live", apps, open, stages })\` — apps is your live registry as [{ id, title, icon, description? }]; open(id) launches the real app/window; stages is [{ title, blurb, appIds }] (apps not placed fall into a final "Everything else" stage). Drift-proof: read the registry, never hardcode the list.`,
+    exampleCode: `"use client";
+import { StartHere } from "@/features/start-here";
+
+export default function StartHereDemo() {
+  // Unwired -> in-memory mock catalog; configureStartHere for the live registry.
+  return <div className="h-dvh w-full"><StartHere /></div>;
+}`,
+  },
+  {
+    slug: "about-profile",
+    title: "About — identity / profile card",
+    category: "os",
+    kind: "ui",
+    version: "1.0.0",
+    tagline: "macOS 'About'-style identity card — avatar/monogram, roles, links + accordion FAQ, profile injected.",
+    description:
+      "A macOS 'About This Mac'-style identity card as an OS app: avatar (or monogram fallback), name, roles, location, a short description, a list of outbound links and an accordion FAQ. The whole card is driven by ONE injected AboutProfile (name / roles[] / location / description / links[{label,href}] / faq[{q,a}] / avatarUrl?): call configureAbout(yourProfile) to wire your own identity, or keep the bundled generic mock person so the card renders fully populated with zero backend.",
+    source: "rahmanef63/os-vps",
+    slicePath: "frontend/slices/about-profile",
+    convexPaths: [],
+    npm: ["lucide-react"],
+    shadcn: ["button", "scroll-area", "avatar"],
+    env: [],
+    peers: [],
+    tags: ["about", "profile", "identity", "bio", "card", "links", "faq", "ui"],
+    resourceType: "module",
+    maturity: "stable",
+    compat: { enhances: ["appshell"] },
+    previewPath: "/preview/slices/about-profile",
+    defaultView: "desktop",
+    agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. An "About / identity" card OS app. Fully client-side; data injected.
+
+STEP 1 — Install. \`npx rr add about-profile\`. Ensure \`@/features/about-profile\` resolves and Tailwind scans the slice folder.
+
+STEP 2 — Deps. npm: \`lucide-react\`. shadcn: \`npx shadcn@latest add button scroll-area avatar\`.
+
+STEP 3 — Mount. \`<AboutProfile />\` in a height-bearing box — unwired it renders a generic mock person (avatar/monogram, name, roles, location, links, accordion FAQ). Or register \`aboutProfileApp\` in an appshell manifest.
+
+STEP 4 — Real identity. \`configureAbout({ name, roles, location?, description, links:[{label,href}], faq:[{q,a}], avatarUrl? })\` — avatarUrl is optional (monogram fallback); location / links / faq collapse gracefully when empty.`,
+    exampleCode: `"use client";
+import { AboutProfile } from "@/features/about-profile";
+
+export default function AboutDemo() {
+  // Unwired -> generic mock person; configureAbout for your real identity.
+  return <div className="h-dvh w-full"><AboutProfile /></div>;
+}`,
+  },
+  {
     slug: "os-terminal",
     title: "Terminal — shell emulator with live passthrough + PTY seam",
     category: "os",

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "resume",
+  "version": "1.0.0",
+  "category": "os",
+  "kind": "ui",
+  "title": "Resume — one-column CV renderer",
+  "description": "A clean one-column résumé / CV app: name, roles, location, contact row, summary, skills, experience (role · org · period + bullet points) and projects. The data is INJECTED via a single ResumeProfile seam — call configureResume(myProfile) at boot to render your own person (Convex query, CMS, a JSON file), or keep the bundled generic placeholder profile so it renders fully populated with zero backend. A 'Print / PDF' button calls window.print() against a print-friendly layout.",
+  "namespace": "@/features/resume",
+  "frontend": {
+    "slicePath": "frontend/slices/resume",
+    "configExport": "resumeConfig"
+  },
+  "deps": {
+    "npm": ["lucide-react"],
+    "shadcn": ["button", "scroll-area"],
+    "env": [],
+    "peers": []
+  },
+  "registers": ["registry"],
+  "audit": ["bp:ui-consistency"],
+  "license": "MIT",
+  "tags": ["resume", "cv", "profile", "portfolio", "about", "print", "ui"],
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "none",
+      "deps": [
+        { "npm": "react", "range": "^19" },
+        { "npm": "lucide-react", "range": "^0.400.0" }
+      ]
+    },
+    "provides": {
+      "tools": [],
+      "routes": [],
+      "components": ["Resume"],
+      "hooks": ["useResumeProfile"],
+      "utils": ["configureResume", "resumeApp"],
+      "tables": []
+    },
+    "generalization": {
+      "level": "portable",
+      "forbiddenTerms": ["rahman", "rahmanef"],
+      "requiredProps": []
+    }
+  }
+}

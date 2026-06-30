@@ -1,0 +1,46 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "start-here",
+  "version": "1.0.0",
+  "category": "os",
+  "kind": "ui",
+  "title": "Start Here — guided OS onboarding tour",
+  "description": "A guided 'Start Here' tour that lays the OS out as a path of stages, each stage opening real apps from the LIVE registry — drift-proof, it reads the injected app catalog instead of a hardcoded list, so adding an app surfaces it automatically (in a stage if listed, else a final 'Everything else' bucket). The catalog, the open(id) callback, and the stage journey are INJECTED via a small StartHereAdapter (apps / open / stages): point configureStartHere at your live app registry + window opener, or keep the bundled in-memory mock (a few generic apps + 3 stages) so the welcome tour renders fully alive with zero host.",
+  "namespace": "@/features/start-here",
+  "frontend": {
+    "slicePath": "frontend/slices/start-here",
+    "configExport": "startHereConfig"
+  },
+  "deps": {
+    "npm": ["lucide-react"],
+    "shadcn": ["button", "scroll-area"],
+    "env": [],
+    "peers": []
+  },
+  "registers": ["registry"],
+  "audit": ["bp:ui-consistency"],
+  "license": "MIT",
+  "tags": ["onboarding", "tour", "welcome", "launcher", "guide", "os", "ui"],
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "none",
+      "deps": [
+        { "npm": "react", "range": "^19" },
+        { "npm": "lucide-react", "range": "^0.400.0" }
+      ]
+    },
+    "provides": {
+      "tools": [],
+      "routes": [],
+      "components": ["StartHere"],
+      "hooks": [],
+      "utils": ["configureStartHere", "startHereApp"],
+      "tables": []
+    },
+    "generalization": {
+      "level": "portable",
+      "forbiddenTerms": ["rahman", "rahmanef"]
+    }
+  }
+}

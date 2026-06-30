@@ -2,6 +2,86 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "HTML-STUDIO-SLICE-PORT",
+    "version": "slices@html-studio",
+    "date": 1782777600000,
+    "kind": "feature",
+    "title": "html-studio — new os slice: sandboxed HTML/CSS/JS editor with live preview (backend-injected)",
+    "body": "Ported from the rahmanef-com web-OS as a brand-free, self-contained slice. A tiny web-page studio: type HTML / CSS / JS and watch it render live in a sandboxed iframe (srcdoc + sandbox=allow-scripts WITHOUT allow-same-origin → opaque origin, the security boundary), then Save to a shareable /p/<slug>. Keeps the Code / Split / Preview view toggle, device-width preview (responsive / tablet / phone), a saved-pages rail, and public/private visibility. The Convex page store + auth/write-key/session bits were dropped in favour of an injected HtmlStudioAdapter (save/load/list/remove); unwired it runs on an in-memory mock so the editor + live preview + saved list are interactive with zero backend.",
+    "groups": [
+      {
+        "heading": "New slices",
+        "bullets": [
+          { "text": "html-studio — sandboxed HTML/CSS/JS editor + live iframe preview, HtmlStudioAdapter host seam, in-memory mock", "slug": "html-studio", "kind": "slice" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "RESOURCES-LAUNCHER-ADMIN-SLICE-PORT",
+    "version": "slices@resources-launcher-admin",
+    "date": 1782777600000,
+    "kind": "feature",
+    "title": "resources-launcher-admin — new os slice: curated icon-launcher CRUD (backend-injected)",
+    "body": "Ported from the rahmanef-com web-OS as a brand-free, self-contained slice. An owner-gated admin for a curated icon-launcher: add / edit / remove / reorder links (label, lucide icon NAME, url, group, order) that open in a new tab. The backend is injected via a ResourcesAdapter (list/upsert/remove/canManage); unwired it runs on an in-memory mock so the whole CRUD — including reorder — is interactive with zero backend. The Convex resources.* mutations and the auth/sign-in gating were replaced by the adapter plus a simple canManage flag, and the launcher icon map was brand-stripped to generic lucide NAMEs.",
+    "groups": [
+      {
+        "heading": "New slices",
+        "bullets": [
+          { "text": "resources-launcher-admin — curated icon-launcher CRUD (add/edit/remove/reorder), ResourcesAdapter host seam, in-memory mock", "slug": "resources-launcher-admin", "kind": "slice" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "RESUME-SLICE-PORT",
+    "version": "slices@resume",
+    "date": 1782777600000,
+    "kind": "feature",
+    "title": "resume — new os slice: one-column CV renderer (profile injected)",
+    "body": "Ported from the rahmanef-com web-OS as a brand-free, self-contained slice. A clean one-column résumé / CV: name, roles, location, contacts, summary, skills, experience and projects. The profile is injected via a single ResumeProfile seam (configureResume / useResumeProfile); unwired it renders a generic placeholder person so the catalog preview is fully populated with zero backend. Includes a 'Print / PDF' button (window.print()) with a print-friendly layout.",
+    "groups": [
+      {
+        "heading": "New slices",
+        "bullets": [
+          { "text": "resume — one-column CV renderer, ResumeProfile host seam, generic placeholder profile, Print/PDF", "slug": "resume", "kind": "slice" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "START-HERE-SLICE-PORT",
+    "version": "slices@start-here",
+    "date": 1782777600000,
+    "kind": "feature",
+    "title": "start-here — new os slice: guided onboarding tour (live-registry, drift-proof)",
+    "body": "Ported from the rahmanef-com web-OS as a brand-free, self-contained slice. A guided 'Start Here' tour that lays the OS out as a path of stages, each stage opening real apps from the live registry — it reads the injected app catalog instead of a hardcoded list, so adding an app surfaces it automatically (in a stage if listed, else a final 'Everything else' bucket). The catalog, the open(id) callback, and the journey are injected via a StartHereAdapter (apps/open/stages); unwired it runs on an in-memory mock (a few generic apps + 3 stages) so the welcome tour renders fully alive with zero host.",
+    "groups": [
+      {
+        "heading": "New slices",
+        "bullets": [
+          { "text": "start-here — guided OS onboarding tour, drift-proof live-registry path, StartHereAdapter host seam, in-memory mock", "slug": "start-here", "kind": "slice" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ABOUT-PROFILE-SLICE-PORT",
+    "version": "slices@about-profile",
+    "date": 1782777600000,
+    "kind": "feature",
+    "title": "about-profile — new os slice: macOS-style identity card (profile-injected)",
+    "body": "Ported from the rahmanef-com web-OS as a brand-free, self-contained slice. A macOS 'About This Mac'-style identity card: avatar (or monogram fallback), name, roles, location, description, outbound links and an accordion FAQ. The whole card is driven by ONE injected AboutProfile via configureAbout; unwired it renders a generic mock person so it is fully populated with zero backend.",
+    "groups": [
+      {
+        "heading": "New slices",
+        "bullets": [
+          { "text": "about-profile — identity card (avatar/monogram, roles, links, accordion FAQ), AboutProfile host seam via configureAbout, generic mock person", "slug": "about-profile", "kind": "slice" }
+        ]
+      }
+    ]
+  },
+  {
     "id": "BOOKING-SLICE-PORT",
     "version": "slices@booking",
     "date": 1782777600000,

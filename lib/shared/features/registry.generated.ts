@@ -4,6 +4,7 @@
 import { registerFeatures } from "./registerFeature";
 import type { RegisteredSlice } from "./registry";
 
+import { aboutProfileConfig } from "@/features/about-profile/config";
 import { adminConfig } from "@/features/admin/config";
 import { aiRouterConfig } from "@/features/ai-router/config";
 import { appStoreConfig } from "@/features/app-store/config";
@@ -19,6 +20,7 @@ import { commandMenuConfig } from "@/features/command-menu/config";
 import { commentsConfig } from "@/features/comments/config";
 import { convexAuthConfig } from "@/features/convex-auth/config";
 import { dokuPaymentConfig } from "@/features/doku-payment/config";
+import { htmlStudioConfig } from "@/features/html-studio/config";
 import { imageEditorConfig } from "@/features/image-editor/config";
 import { mediaStudioConfig } from "@/features/media-studio/config";
 import { mediaViewerConfig } from "@/features/media-viewer/config";
@@ -29,12 +31,20 @@ import { platformAdminConfig } from "@/features/platform-admin/config";
 import { quicklinksConfig } from "@/features/quicklinks/config";
 import { reelEditorConfig } from "@/features/reel-editor/config";
 import { resendNewsletterConfig } from "@/features/resend-newsletter/config";
+import { resourcesLauncherAdminConfig } from "@/features/resources-launcher-admin/config";
+import { resumeConfig } from "@/features/resume/config";
 import { seoConfig } from "@/features/seo/config";
 import { shellSettingsConfig } from "@/features/shell-settings/config";
+import { startHereConfig } from "@/features/start-here/config";
 import { systemMonitorConfig } from "@/features/system-monitor/config";
 import { vectorSearchConfig } from "@/features/vector-search/config";
 
 export const REGISTERED_SLICES: RegisteredSlice[] = [
+  {
+    ...aboutProfileConfig,
+    importPath: "@/features/about-profile/config",
+    version: "1.0.0",
+  },
   {
     ...adminConfig,
     importPath: "@/features/admin/config",
@@ -111,6 +121,11 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     version: "0.4.0",
   },
   {
+    ...htmlStudioConfig,
+    importPath: "@/features/html-studio/config",
+    version: "1.0.0",
+  },
+  {
     ...imageEditorConfig,
     importPath: "@/features/image-editor/config",
     version: "2.1.1",
@@ -161,6 +176,16 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     version: "0.2.0",
   },
   {
+    ...resourcesLauncherAdminConfig,
+    importPath: "@/features/resources-launcher-admin/config",
+    version: "1.0.0",
+  },
+  {
+    ...resumeConfig,
+    importPath: "@/features/resume/config",
+    version: "1.0.0",
+  },
+  {
     ...seoConfig,
     importPath: "@/features/seo/config",
     version: "0.3.0",
@@ -168,6 +193,11 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...shellSettingsConfig,
     importPath: "@/features/shell-settings/config",
+    version: "1.0.0",
+  },
+  {
+    ...startHereConfig,
+    importPath: "@/features/start-here/config",
     version: "1.0.0",
   },
   {

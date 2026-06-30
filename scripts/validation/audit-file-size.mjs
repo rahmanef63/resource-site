@@ -53,6 +53,7 @@ const EXEMPT_PATTERNS = [
   /\/shared\/seed\.ts$/,               // per-template seed data
   /\/data\/.+\.ts$/,                   // /data/ subfolder = data literals
   /\/_generated\//,                    // Convex codegen
+  /^lib\/shared\/features\/.+\.generated\.ts$/, // slice-registry codegen (DO NOT EDIT header; grows one import per slice — split at the gen script, never by hand)
   /^convex-templates\//,               // reference snapshots mirroring template-<slug> repos — split at the SOURCE repo, never here (mirror must stay byte-identical)
 ];
 

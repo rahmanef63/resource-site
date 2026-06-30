@@ -1,0 +1,46 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "html-studio",
+  "version": "1.0.0",
+  "category": "os",
+  "kind": "ui",
+  "title": "HTML Studio — sandboxed HTML/CSS/JS editor with live preview",
+  "description": "A tiny web-page studio: write HTML / CSS / JS and see it render LIVE in a SANDBOXED iframe (srcdoc + sandbox=\"allow-scripts\" WITHOUT allow-same-origin, so user code runs in an opaque origin and cannot read the host) — then Save to a shareable /p/<slug>. Code / Split / Preview view toggle, a device-width preview (responsive / tablet / phone), a saved-pages rail, and public/private visibility. The backend is INJECTED via a small HtmlStudioAdapter (save/load/list/remove): point configureHtmlStudio at your store, or keep the bundled in-memory mock so the editor + live preview + saved list are fully interactive with zero backend.",
+  "namespace": "@/features/html-studio",
+  "frontend": {
+    "slicePath": "frontend/slices/html-studio",
+    "configExport": "htmlStudioConfig"
+  },
+  "deps": {
+    "npm": ["lucide-react"],
+    "shadcn": ["button", "input", "textarea", "scroll-area"],
+    "env": [],
+    "peers": []
+  },
+  "registers": ["registry"],
+  "audit": ["bp:ui-consistency"],
+  "license": "MIT",
+  "tags": ["html", "editor", "sandbox", "iframe", "preview", "playground", "code", "ui"],
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "none",
+      "deps": [
+        { "npm": "react", "range": "^19" },
+        { "npm": "lucide-react", "range": "^0.400.0" }
+      ]
+    },
+    "provides": {
+      "tools": [],
+      "routes": [],
+      "components": ["HtmlStudio"],
+      "hooks": [],
+      "utils": ["configureHtmlStudio", "htmlStudioApp"],
+      "tables": []
+    },
+    "generalization": {
+      "level": "portable",
+      "forbiddenTerms": ["rahmanef"]
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "html-studio",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add html-studio",
+    "consumerPath": "slices/html-studio"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "README.md",
+    "app.tsx",
+    "components/panes.tsx",
+    "components/saved-list.tsx",
+    "components/toolbar.tsx",
+    "config.ts",
+    "index.ts",
+    "lib/host.ts",
+    "lib/util.ts",
+    "slice.json"
+  ],
+  "imports": {
+    "shared": [
+      "@/components/ui/button",
+      "@/components/ui/input",
+      "@/components/ui/textarea",
+      "@/components/ui/scroll-area"
+    ],
+    "external": ["react", "lucide-react"]
+  }
+}
