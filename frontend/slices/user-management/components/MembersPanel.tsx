@@ -24,8 +24,12 @@ export interface MembersPanelProps {
   currentPerms: readonly string[];
   onUpdateRole?: (m: { userId: string; roleSlug: string }) => void | Promise<void>;
   onRemove?: (m: { userId: string }) => void | Promise<void>;
-  /** Send handler — when set + members.invite, shows the invite button + dialog. */
-  onInvite?: (i: InviteInput) => void | Promise<void>;
+  /** Activate / deactivate a member (members.manage). When set, the row menu
+   *  shows a Deactivate (active) / Activate (inactive) item. */
+  onSetStatus?: (m: { userId: string; status: "active" | "inactive" }) => void | Promise<void>;
+  /** Send handler — when set + members.invite, shows the invite button + dialog.
+   *  May resolve a join-link URL string, which the dialog displays + copies. */
+  onInvite?: (i: InviteInput) => void | Promise<void | string>;
   /** Pending invitations (e.g. your `listInvites` query). */
   invites?: Invite[];
   onCancelInvite?: (i: { inviteId: string }) => void | Promise<void>;
@@ -37,7 +41,7 @@ export interface MembersPanelProps {
 }
 
 export function MembersPanel({
-  members, roles, currentPerms, onUpdateRole, onRemove,
+  members, roles, currentPerms, onUpdateRole, onRemove, onSetStatus,
   onInvite, invites, onCancelInvite, onResendInvite, allowPropagate, labels: over, className,
 }: MembersPanelProps) {
   const labels: MembersLabels = { ...DEFAULT_MEMBERS_LABELS, ...over };
@@ -72,7 +76,7 @@ export function MembersPanel({
           <MembersTable
             rows={view.rows} roles={roles} canManage={canManage}
             sortKey={view.sortKey} sortDir={view.sortDir} onSort={view.toggleSort}
-            onUpdateRole={onUpdateRole} onRemove={onRemove} labels={labels}
+            onUpdateRole={onUpdateRole} onRemove={onRemove} onSetStatus={onSetStatus} labels={labels}
           />
         )}
       </div>

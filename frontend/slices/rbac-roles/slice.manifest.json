@@ -1,7 +1,7 @@
 {
   "$schema": "../../../docs/slice.manifest.schema.json",
   "name": "rbac-roles",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "RBAC engine ported from superspace: 6 system role presets (owner/admin/manager/staff/client/guest), dot-namespaced permissions with `*` / `feature.*` matching, pure check helpers, and props-driven UI primitives (PermissionGate, usePermissions, RoleBadge, PermissionMatrix). Convex template ships a tenant-scoped rbac_roles table + checkPermission / requirePermission + seedSystemRoles.",
   "category": "auth",
   "stability": "beta",

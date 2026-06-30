@@ -27,7 +27,8 @@ export function PermissionMatrix({
 
   const toggle = (key: string, on: boolean) => {
     if (locked) return;
-    onChange?.(on ? [...new Set([...value, key])] : value.filter((p) => p !== key));
+    // drop the exact key AND any covering wildcard so the uncheck actually sticks
+    onChange?.(on ? [...new Set([...value, key])] : value.filter((p) => p !== key && !(p.endsWith(".*") && key.startsWith(p.slice(0, -1)))));
   };
 
   return (

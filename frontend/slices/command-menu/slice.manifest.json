@@ -1,7 +1,7 @@
 {
   "$schema": "../../../docs/slice.manifest.schema.json",
   "name": "command-menu",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Renderless \u2318K command palette + generic search modal pulled UP from notion-page-clone's command-palette portable surface. Consumer supplies groups + onSelect + bindings; slice owns dialog chrome, \u2318K hotkey, MRU history.",
   "category": "ui",
   "stability": "beta",

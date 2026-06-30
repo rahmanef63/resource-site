@@ -103,7 +103,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...commandMenuConfig,
     importPath: "@/features/command-menu/config",
-    version: "0.3.0",
+    version: "0.4.0",
   },
   {
     ...commentsConfig,
@@ -163,7 +163,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...quicklinksConfig,
     importPath: "@/features/quicklinks/config",
-    version: "1.0.0",
+    version: "1.1.0",
   },
   {
     ...reelEditorConfig,

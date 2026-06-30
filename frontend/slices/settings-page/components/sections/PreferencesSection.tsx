@@ -35,6 +35,13 @@ const LANGUAGES = [
 
 const DENSITIES: DensityPref[] = ["comfortable", "compact"];
 
+const AUTOLOCK: { label: string; value: number | null }[] = [
+  { label: "Off", value: null },
+  { label: "1 min", value: 1 },
+  { label: "5 min", value: 5 },
+  { label: "15 min", value: 15 },
+];
+
 export interface PreferencesSectionProps {
   value: SettingsPreferences;
   saving?: boolean;
@@ -103,6 +110,28 @@ export function PreferencesSection({ value, saving, onSave }: PreferencesSection
                 )}
               >
                 {d}
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-1.5">
+          <Label>Auto-lock</Label>
+          <div className="inline-flex rounded-md border border-input p-0.5">
+            {AUTOLOCK.map((o) => (
+              <Button
+                key={o.label}
+                type="button"
+                variant="ghost"
+                onClick={() => set({ autoLockMinutes: o.value })}
+                className={cn(
+                  "h-auto rounded px-3 py-1 text-xs",
+                  (draft.autoLockMinutes ?? null) === o.value
+                    ? "bg-accent font-medium"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                {o.label}
               </Button>
             ))}
           </div>

@@ -2,6 +2,106 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SETTINGS-PAGE-AUTOLOCK",
+    "version": "slices@settings-page",
+    "date": 1782777600000,
+    "kind": "improvement",
+    "title": "Auto-lock preference",
+    "body": "The Preferences section gains an auto-lock selector (Off, 1, 5, or 15 minutes) writing a new autoLockMinutes preference, ported from the rahmanef-com web-OS settings panel. It persists through the slice existing adapter save seam; the host owns the idle timer, the slice only stores the choice. Accent colour was intentionally not added here because the shell-settings slice already owns accent via its AppearanceAdapter, so duplicating it would split the seam. The source theme-preset engine, wallpaper picker, device and shell pickers, account auth, and bring-your-own-key panel were likewise skipped as host or backend locked, already covered, or better as their own future slice.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          {
+            "text": "settings-page Preferences gains an auto-lock selector (Off/1/5/15 min) persisted via the existing adapter save() seam.",
+            "slug": "settings-page",
+            "kind": "slice"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "MEMBER-STATUS-TOGGLE-INVITE-LINK-BADGE",
+    "version": "slices@user-management",
+    "date": 1782777600000,
+    "kind": "improvement",
+    "title": "Member status toggle, invite join-link copy, and per-row status badges",
+    "body": "The members surface gains three callback-injected features. A new optional onSetStatus prop threads from MembersPanel through MembersTable to MemberRowActions, rendering a Deactivate (active) or Activate (inactive) menu item gated on the members.manage capability. InviteDialog onSubmit (and the MembersPanel onInvite prop) widen to resolve an optional join-link URL string; when the seam returns one, the dialog shows a read-only link row with a copy button, while link generation stays entirely in the consumer callback. Each member row now shows a small status pill (active, pending, or inactive) built from theme-token Badge variants (secondary, outline, destructive) rather than hardcoded color classes, replacing the prior dim-only treatment. The expanded members label set moved to a sibling members-labels.ts re-exported from types.ts to keep every file under the size cap.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          {
+            "text": "Add member activate/deactivate toggle, invite join-link copy row, and theme-token status badges (all props-injected)",
+            "slug": "user-management",
+            "kind": "slice"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "COMPUTE-HELPERS-AND-SEARCHMODAL-KEYBOARD-NAV",
+    "version": "slices@command-menu",
+    "date": 1782777600000,
+    "kind": "improvement",
+    "title": "Calc/convert compute helpers plus SearchModal keyboard navigation",
+    "body": "The slice now ships its own reusable compute capability instead of leaving consumers to reach across a slice boundary for it. Two pure, dependency-free modules were added: lib/calc.ts exports evaluate, a safe shunting-yard arithmetic parser that never uses eval and returns null for non-arithmetic input, and lib/convert.ts exports convert, a small length/mass/temperature unit converter that returns null for cross-dimension or unknown units. A new helper, buildComputedGroup(query) in lib/computedGroup.tsx, builds a Result CommandGroup that prepends a calculator row (for example = 42) or a conversion row (for example = 6.21 mi) when the query is computable, and returns null otherwise so plain search text stays a normal search. evaluate, convert, and buildComputedGroup are all exported from the slice barrel. Separately, SearchModal gained keyboard navigation: Arrow Up and Arrow Down move a selection index with wraparound across the recent, page, and database rows, Enter activates the highlighted row, and Escape closes the dialog. The active row carries aria-selected and a visible bg-accent highlight, and the selection resets on query change and on close. The modal stays under the 200 line limit and the change does not alter any existing prop or export.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          {
+            "text": "Add pure calc/convert helpers and a buildComputedGroup Result-row builder to the barrel, plus full keyboard navigation (arrow wraparound, Enter, Escape, aria-selected highlight) for SearchModal.",
+            "slug": "command-menu",
+            "kind": "slice"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "QUICKLINKS-INLINE-ADD-REMOVE-A11Y",
+    "version": "slices@quicklinks",
+    "date": 1782777600000,
+    "kind": "improvement",
+    "title": "Inline add/remove controls and tile a11y labels",
+    "body": "The quicklinks launcher could only display items the host pre-seeded — the UI never wired the store add()/remove() actions, so it was unusable on its own. app.tsx now consumes add and remove from useQuicklinks and renders an inline URL input field plus an Add button (shown in the empty state too) and a hover or focus reveal X control on each tile to remove it. All editing stays inside the existing injectable store, with no admin app, permission gates, or backend coupling introduced. Each tile button also gains a title and an aria-label of the form Open <title> for accessibility, while the favicon image keeps its empty alt. The new input primitive was added to the shadcn and shared-import lists.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          {
+            "text": "Quicklinks launcher gains an inline add field and per-tile remove control (plus tile a11y labels), making it usable standalone.",
+            "slug": "quicklinks",
+            "kind": "slice"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "PERMISSIONMATRIX-WILDCARD-UNCHECK",
+    "version": "slices@rbac-roles",
+    "date": 1782777600000,
+    "kind": "fix",
+    "title": "PermissionMatrix wildcard-aware uncheck",
+    "body": "PermissionMatrix uncheck now also drops any covering wildcard such as members.* rather than only the literal permission key. Because the checked state treats a box as checked whenever a covering wildcard is present, unchecking a wildcard-covered permission was previously a no-op for every preset that holds wildcards. The filter now removes both the exact key and any wildcard that covers it, so the uncheck actually sticks.",
+    "groups": [
+      {
+        "heading": "Fixes",
+        "bullets": [
+          {
+            "text": "Fix: PermissionMatrix uncheck drops the covering wildcard, not just the literal key, so wildcard-covered boxes actually uncheck.",
+            "slug": "rbac-roles",
+            "kind": "slice"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "HTML-STUDIO-SLICE-PORT",
     "version": "slices@html-studio",
     "date": 1782777600000,

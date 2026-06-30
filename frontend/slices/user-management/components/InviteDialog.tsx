@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Copy } from "lucide-react";
 import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
@@ -19,7 +20,9 @@ interface Props {
   onOpenChange: (o: boolean) => void;
   roles: RoleOption[];
   defaultRoleSlug?: string;
-  onSubmit: (i: InviteInput) => void | Promise<void>;
+  /** May resolve a join-link URL string; when it does, the dialog shows a
+   *  read-only link row with a copy button (link generation stays in the seam). */
+  onSubmit: (i: InviteInput) => void | Promise<void | string>;
   labels: MembersLabels;
   /** When set, show hierarchy-propagation controls (P4b). */
   allowPropagate?: boolean;
@@ -37,23 +40,30 @@ export function InviteDialog({
   const [strategy, setStrategy] = useState<InviteStrategy>("same");
   const [maxDepth, setMaxDepth] = useState(defaultMaxDepth);
   const [pending, setPending] = useState(false);
+  const [joinLink, setJoinLink] = useState<string | null>(null);
+
+  const handleOpenChange = (o: boolean) => {
+    if (!o) setJoinLink(null);
+    onOpenChange(o);
+  };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) return;
     setPending(true);
     try {
-      await onSubmit({
+      const result = await onSubmit({
         email: email.trim(), roleSlug, message: message.trim() || undefined,
         ...(allowPropagate && propagate ? { propagate: true, strategy, maxDepth } : {}),
       });
       setEmail(""); setMessage(""); setRoleSlug(fallbackRole); setPropagate(false);
-      onOpenChange(false);
+      if (typeof result === "string" && result) setJoinLink(result);
+      else handleOpenChange(false);
     } finally { setPending(false); }
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>{labels.inviteTitle}</DialogTitle>
@@ -109,8 +119,21 @@ export function InviteDialog({
             </div>
           ) : null}
 
+          {joinLink ? (
+            <div className="space-y-1.5">
+              <div className="flex items-center gap-2 rounded-md border border-dashed bg-muted/40 p-2">
+                <code className="flex-1 truncate text-xs">{joinLink}</code>
+                <Button type="button" size="sm" variant="ghost" className="h-7 shrink-0 gap-1"
+                  onClick={() => { void navigator.clipboard?.writeText(joinLink); }}>
+                  <Copy className="h-3.5 w-3.5" /> {labels.copyLink}
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground">{labels.joinLinkHint}</p>
+            </div>
+          ) : null}
+
           <DialogFooter>
-            <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>{labels.cancel}</Button>
+            <Button type="button" variant="ghost" onClick={() => handleOpenChange(false)}>{labels.cancel}</Button>
             <Button type="submit" disabled={pending || !email.trim()}>
               {pending ? labels.inviteSending : labels.inviteSubmit}
             </Button>

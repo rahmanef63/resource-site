@@ -24,3 +24,9 @@ export {
   HISTORY_MAX,
   type HistoryEntry,
 } from "./lib/cmdkHistory";
+
+// Pure, dependency-free compute helpers + the "Result" group builder that
+// prepends a calc / unit-conversion row when the query parses as math.
+export { evaluate } from "./lib/calc";
+export { convert } from "./lib/convert";
+export { buildComputedGroup } from "./lib/computedGroup";

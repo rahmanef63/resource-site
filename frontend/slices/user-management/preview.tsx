@@ -96,6 +96,20 @@ const preview: SlicePreviewModule = {
                   m.userId === userId ? { ...m, roleSlug } : m,
                 ),
               })),
+            onSetStatus: ({ userId, status }) =>
+              setState((s) => ({
+                ...s,
+                members: s.members.map((m) =>
+                  m.userId === userId ? { ...m, status } : m,
+                ),
+              })),
+            onInvite: async ({ email, roleSlug }) => {
+              setState((s) => ({
+                ...s,
+                members: [...s.members, { userId: `inv-${Date.now()}`, email, roleSlug, status: "pending" }],
+              }));
+              return `https://example.com/join/${Math.random().toString(36).slice(2, 10)}`;
+            },
           }}
           roles={{
             roles: MANAGED,

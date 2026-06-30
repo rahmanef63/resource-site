@@ -1,7 +1,7 @@
 {
   "$schema": "../../../docs/slice.manifest.schema.json",
   "name": "user-management",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Full superspace-parity user management (P0\u2013P4c): UserManagementPanel tabs Members + Roles + Teams + Access. Member table, invites (with hierarchy propagation), roles admin (permission matrix), teams, generic tenant-hierarchy tree, and a cross-tenant AccessMatrix (users \u00d7 tenants). All permission-gated. Props-driven + RBAC-agnostic; pair with rbac-roles + convex-auth.",
   "category": "auth",
   "stability": "experimental",

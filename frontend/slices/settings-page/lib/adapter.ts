@@ -21,6 +21,8 @@ export interface SettingsPreferences {
   theme: ThemePref;
   language: string;
   density: DensityPref;
+  /** Idle minutes before auto-lock; null = never. The host owns the idle timer; the slice only stores the choice. */
+  autoLockMinutes?: number | null;
 }
 
 export interface SettingsNotifications {
@@ -44,7 +46,12 @@ export interface SettingsAdapter {
 /** Sensible empty defaults — used as the memory adapter seed fallback. */
 export const DEFAULT_SETTINGS: SettingsValues = {
   profile: { name: "", email: "", avatarUrl: undefined, bio: "" },
-  preferences: { theme: "system", language: "en", density: "comfortable" },
+  preferences: {
+    theme: "system",
+    language: "en",
+    density: "comfortable",
+    autoLockMinutes: null,
+  },
   notifications: {
     emailDigest: true,
     productUpdates: true,

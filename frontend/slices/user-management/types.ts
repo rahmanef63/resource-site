@@ -133,66 +133,7 @@ export const DEFAULT_ROLES_LABELS: RolesLabels = {
   emptyEditor: "Select a role to view its permissions, or create a new one.",
 };
 
-export interface MembersLabels {
-  searchPlaceholder: string;
-  allRoles: string;
-  invite: string;
-  empty: string;
-  loading: string;
-  columnsMember: string;
-  columnsRole: string;
-  columnsJoined: string;
-  remove: string;
-  pending: string;
-  inactive: string;
-  // Invite flow
-  inviteTitle: string;
-  inviteDescription: string;
-  inviteEmail: string;
-  inviteRole: string;
-  inviteMessage: string;
-  inviteMessagePlaceholder: string;
-  inviteSubmit: string;
-  inviteSending: string;
-  cancel: string;
-  pendingTitle: string;
-  resend: string;
-  cancelInvite: string;
-  // Hierarchy propagation (P4b)
-  propagate: string;
-  propagateHint: string;
-  strategySame: string;
-  strategyStep: string;
-  maxDepth: string;
-}
-
-export const DEFAULT_MEMBERS_LABELS: MembersLabels = {
-  searchPlaceholder: "Search name or email…",
-  allRoles: "All roles",
-  invite: "Invite",
-  empty: "No members match.",
-  loading: "Loading members…",
-  columnsMember: "Member",
-  columnsRole: "Role",
-  columnsJoined: "Joined",
-  remove: "Remove from workspace",
-  pending: "Pending",
-  inactive: "Inactive",
-  inviteTitle: "Invite a member",
-  inviteDescription: "Send an email invite. They'll join with the role you pick.",
-  inviteEmail: "Email",
-  inviteRole: "Role",
-  inviteMessage: "Message (optional)",
-  inviteMessagePlaceholder: "Add a short note to the invite…",
-  inviteSubmit: "Send invite",
-  inviteSending: "Sending…",
-  cancel: "Cancel",
-  pendingTitle: "Pending invitations",
-  resend: "Resend invite",
-  cancelInvite: "Cancel invite",
-  propagate: "Also invite to sub-workspaces",
-  propagateHint: "Send the invite down the workspace hierarchy.",
-  strategySame: "Same role everywhere",
-  strategyStep: "Step role down per level",
-  maxDepth: "Max depth",
-};
+// Members surface copy lives in ./members-labels (split for the file-size
+// cap); re-exported here so the public import path stays ./types.
+export { DEFAULT_MEMBERS_LABELS } from "./members-labels";
+export type { MembersLabels } from "./members-labels";

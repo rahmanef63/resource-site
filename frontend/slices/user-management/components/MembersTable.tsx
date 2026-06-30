@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { ArrowUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
@@ -13,7 +14,7 @@ import {
 } from "@/components/ui/select";
 import { RoleChip } from "./RoleChip";
 import { MemberRowActions } from "./MemberRowActions";
-import type { Member, RoleOption, MembersLabels } from "../types";
+import type { Member, MemberStatus, RoleOption, MembersLabels } from "../types";
 import type { SortKey } from "../hooks/useMembersView";
 
 interface Props {
@@ -25,6 +26,7 @@ interface Props {
   onSort: (k: SortKey) => void;
   onUpdateRole?: (m: { userId: string; roleSlug: string }) => void;
   onRemove?: (m: { userId: string }) => void;
+  onSetStatus?: (m: { userId: string; status: "active" | "inactive" }) => void;
   labels: MembersLabels;
 }
 
@@ -37,9 +39,19 @@ function fmtDate(ts?: number) {
 function roleOf(slug: string, roles: RoleOption[]): RoleOption {
   return roles.find((r) => r.slug === slug) ?? { slug, name: slug };
 }
+function statusVariant(status: MemberStatus): "secondary" | "outline" | "destructive" {
+  if (status === "inactive") return "destructive";
+  if (status === "pending") return "outline";
+  return "secondary";
+}
+function statusLabel(status: MemberStatus, labels: MembersLabels): string {
+  if (status === "inactive") return labels.inactive;
+  if (status === "pending") return labels.pending;
+  return labels.active;
+}
 
 export function MembersTable({
-  rows, roles, canManage, sortKey, onSort, onUpdateRole, onRemove, labels,
+  rows, roles, canManage, sortKey, onSort, onUpdateRole, onRemove, onSetStatus, labels,
 }: Props) {
   const SortBtn = ({ k, children }: { k: SortKey; children: ReactNode }) => (
     <Button
@@ -71,7 +83,12 @@ export function MembersTable({
                   <AvatarFallback className="text-[10px]">{initials(m)}</AvatarFallback>
                 </Avatar>
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-medium">{m.name ?? m.email ?? "Unknown"}</p>
+                  <div className="flex items-center gap-1.5">
+                    <p className="truncate text-sm font-medium">{m.name ?? m.email ?? "Unknown"}</p>
+                    <Badge variant={statusVariant(m.status)} className="h-4 shrink-0 px-1.5 text-[10px] font-normal">
+                      {statusLabel(m.status, labels)}
+                    </Badge>
+                  </div>
                   {m.name && m.email ? <p className="truncate text-xs text-muted-foreground">{m.email}</p> : null}
                 </div>
               </div>
@@ -94,7 +111,9 @@ export function MembersTable({
             <TableCell>
               <MemberRowActions
                 canManage={canManage}
+                status={m.status}
                 onRemove={onRemove ? () => onRemove({ userId: m.userId }) : undefined}
+                onSetStatus={onSetStatus ? (status) => onSetStatus({ userId: m.userId, status }) : undefined}
                 labels={labels}
               />
             </TableCell>

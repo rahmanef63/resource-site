@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "rbac-roles",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "category": "auth",
   "title": "RBAC \u2014 Roles & Permissions",
   "description": "RBAC engine ported from superspace: 6 system role presets (owner/admin/manager/staff/client/guest with levels), dot-namespaced permissions with `*` / `feature.*` wildcard matching, pure check helpers (resolvePermissions / hasPermission / roleHasPermission), and props-driven UI primitives \u2014 <PermissionGate>, usePermissions, <RoleBadge>, <PermissionMatrix>. Convex template ships a tenant-scoped rbac_roles table + checkPermission / requirePermission helpers + seedSystemRoles. No Clerk. Pair with `user-management` for the members/invites UI.",

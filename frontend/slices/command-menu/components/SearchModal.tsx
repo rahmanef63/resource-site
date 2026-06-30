@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Search, FileText, Clock, Database as DatabaseIcon, Loader2 } from "lucide-react";
 import { DEFAULT_SEARCH_LABELS, type SearchModalLabels } from "../lib/types";
@@ -47,23 +48,46 @@ interface Props {
 }
 
 /** Renderless search modal. Owns dialog chrome, query input, section
- *  layout, and empty/loading states. ALL data + navigation flow comes
- *  from the `bindings` prop so the slice is portable. */
+ *  layout, empty/loading states, and keyboard navigation (Arrow keys wrap,
+ *  Enter activates, Escape closes). ALL data + navigation flow comes from
+ *  the `bindings` prop so the slice is portable. */
 export function SearchModal({ open, onOpenChange, labels, bindings }: Props) {
   const t = { ...DEFAULT_SEARCH_LABELS, ...labels };
   const [q, setQ] = useState("");
+  const [sel, setSel] = useState(0);
   const totalHits = bindings.pages.length + bindings.databases.length;
   const recent = !q ? bindings.recents.slice(0, 5) : [];
 
-  useEffect(() => { if (!open) setQ(""); }, [open]);
+  useEffect(() => { if (!open) { setQ(""); setSel(0); } }, [open]);
 
   const handleQ = (v: string) => {
     setQ(v);
+    setSel(0);
     bindings.onQueryChange(v);
   };
 
   const goPage = (hit: SearchHit) => { bindings.onSelectPage(hit); onOpenChange(false); };
   const goDb = (hit: SearchHit) => { bindings.onSelectDatabase(hit); onOpenChange(false); };
+
+  // Flat keyboard-navigable order: recent (query-empty) → pages → databases.
+  const pageOffset = recent.length;
+  const dbOffset = recent.length + bindings.pages.length;
+  const flatLen = dbOffset + bindings.databases.length;
+  const selIdx = Math.min(sel, Math.max(0, flatLen - 1));
+
+  const activate = (i: number) => {
+    if (i < pageOffset) goPage(recent[i]);
+    else if (i < dbOffset) goPage(bindings.pages[i - pageOffset]);
+    else if (i < flatLen) goDb(bindings.databases[i - dbOffset]);
+  };
+
+  const onKey = (e: React.KeyboardEvent) => {
+    if (e.key === "Escape") { onOpenChange(false); return; }
+    if (flatLen === 0) return;
+    if (e.key === "ArrowDown") { e.preventDefault(); setSel((s) => (Math.min(s, flatLen - 1) + 1) % flatLen); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); setSel((s) => (Math.min(s, flatLen - 1) - 1 + flatLen) % flatLen); }
+    else if (e.key === "Enter") { e.preventDefault(); activate(selIdx); }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -78,38 +102,41 @@ export function SearchModal({ open, onOpenChange, labels, bindings }: Props) {
             autoFocus
             value={q}
             onChange={e => handleQ(e.target.value)}
+            onKeyDown={onKey}
             placeholder={t.searchPlaceholder}
             className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
           />
           {bindings.isLoading && <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground" />}
           <kbd className="text-[10px] text-muted-foreground border border-border rounded px-1.5 py-0.5">{t.escapeHint}</kbd>
         </div>
-        <div className="max-h-[420px] overflow-y-auto p-2">
+        <div role="listbox" aria-label={t.searchTitle} className="max-h-[420px] overflow-y-auto p-2">
           {q && !bindings.isLoading && totalHits === 0 && (
             <div className="px-3 py-8 text-center text-sm text-muted-foreground">{t.noResults(q)}</div>
           )}
           {!q && recent.length > 0 && (
             <>
               <SectionHeader icon={<Clock className="h-3 w-3" />}>{t.recentHeading}</SectionHeader>
-              {recent.map(p => (
-                <Row key={p.id} hit={p} onClick={() => goPage(p)} kind="page" />
+              {recent.map((p, i) => (
+                <Row key={p.id} hit={p} selected={selIdx === i} onHover={() => setSel(i)} onClick={() => activate(i)} kind="page" />
               ))}
             </>
           )}
           {bindings.pages.length > 0 && (
             <>
               <SectionHeader icon={<FileText className="h-3 w-3" />}>{t.pagesHeading}</SectionHeader>
-              {bindings.pages.map(p => (
-                <Row key={p.id} hit={p} onClick={() => goPage(p)} kind="page" />
-              ))}
+              {bindings.pages.map((p, i) => {
+                const gi = pageOffset + i;
+                return <Row key={p.id} hit={p} selected={selIdx === gi} onHover={() => setSel(gi)} onClick={() => activate(gi)} kind="page" />;
+              })}
             </>
           )}
           {bindings.databases.length > 0 && (
             <>
               <SectionHeader icon={<DatabaseIcon className="h-3 w-3" />}>{t.databasesHeading}</SectionHeader>
-              {bindings.databases.map(d => (
-                <Row key={d.id} hit={d} onClick={() => goDb(d)} kind="db" />
-              ))}
+              {bindings.databases.map((d, i) => {
+                const gi = dbOffset + i;
+                return <Row key={d.id} hit={d} selected={selIdx === gi} onHover={() => setSel(gi)} onClick={() => activate(gi)} kind="db" />;
+              })}
             </>
           )}
           {!q && recent.length === 0 && (
@@ -132,10 +159,14 @@ function SectionHeader({ icon, children }: { icon: ReactNode; children: ReactNod
 function Row({
   hit,
   onClick,
+  onHover,
+  selected,
   kind,
 }: {
   hit: SearchHit;
   onClick: () => void;
+  onHover: () => void;
+  selected: boolean;
   kind: "page" | "db";
 }) {
   const TrailIcon = kind === "db" ? DatabaseIcon : FileText;
@@ -143,8 +174,14 @@ function Row({
   return (
     <Button
       variant="ghost"
+      role="option"
+      aria-selected={selected}
       onClick={onClick}
-      className="flex h-auto w-full items-center justify-start gap-3 rounded-md px-3 py-2 text-left font-normal hover:bg-accent"
+      onMouseMove={onHover}
+      className={cn(
+        "flex h-auto w-full items-center justify-start gap-3 rounded-md px-3 py-2 text-left font-normal",
+        selected ? "bg-accent" : "hover:bg-accent",
+      )}
     >
       {hit.icon ?? <TrailIcon className="h-4 w-4 text-muted-foreground" />}
       <div className="min-w-0 flex-1">
