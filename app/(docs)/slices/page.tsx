@@ -48,9 +48,6 @@ function stripVersion(npmSpec: string): string {
 
 export default function SlicesPage() {
   const slices = allSlices.filter((s) => !isHidden(s.slug));
-  const tagFreq = new Map<string, number>();
-  for (const s of slices) for (const t of s.tags ?? []) tagFreq.set(t, (tagFreq.get(t) ?? 0) + 1);
-  const topTags = [...tagFreq.entries()].sort((a, b) => b[1] - a[1]).slice(0, 14).map(([t]) => t);
 
   const items: CatalogSearchItem[] = slices.map((s) => {
     const Icon = CATEGORY_ICON[s.category] ?? Layers;
@@ -134,7 +131,7 @@ export default function SlicesPage() {
 
       <CatalogTabs
         items={items}
-        allTags={topTags}
+        allTags={null}
         placeholder="Cari slice…"
         groupOrder={[...SLICE_CATEGORY_ORDER]}
         groupLabel={SLICE_CATEGORY_LABEL}

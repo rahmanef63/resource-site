@@ -14,7 +14,7 @@ export type SortMode = "featured" | "updated" | "name";
 
 export const SORT_OPTIONS: { value: SortMode; label: string }[] = [
   { value: "featured", label: "Featured" },
-  { value: "updated", label: "Recently updated" },
+  { value: "updated", label: "Newest" },
   { value: "name", label: "Name (A–Z)" },
 ];
 
