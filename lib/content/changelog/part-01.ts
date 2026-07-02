@@ -2,6 +2,22 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "ADMIN-CONSOLE-SLICE-AND-CATALOG-SORT",
+    "version": "slices@admin-console",
+    "date": 1782950400000,
+    "kind": "feature",
+    "title": "admin-console — composed admin panel; /slices gains sort + clearer filter; CLI 1.15.0",
+    "body": "The ideal admin panel lands as a portable composition slice (admin-console): a gated two-column shell over a 26-section registry harvested from ~15 project admin panels, mounting existing rr slices by id via a consumer components map (no slice→slice imports), plus 5 net-new gap sections nothing else covered — Analytics, Audit-log viewer, Navigation config, Leads/CRM inbox, SEO health — each adapter-driven with in-memory mocks so the whole console runs backend-free. Access is injected; gate logic is pure + unit-tested. Convex copy-source ships ac_leads + ac_nav_items with requireAdmin-gated CRUD. Alongside it, the /slices catalog gains a clearer toolbar — a Sort dropdown (Featured / Recently updated / Name A–Z / Version) and a labelled tag-filter row — and rahman-resources publishes 1.15.0 so `npx rr add admin-console` resolves.",
+    "groups": [
+      {
+        "heading": "New slices",
+        "bullets": [
+          { "text": "admin-console — composed admin panel: 26-section registry + gated shell + 5 gap sections (analytics, audit-log viewer, nav config, leads/CRM, SEO health), adapter-driven, backend-free demo", "slug": "admin-console", "kind": "slice" }
+        ]
+      }
+    ]
+  },
+  {
     "id": "HTML-STUDIO-SLICE-PORT",
     "version": "slices@html-studio",
     "date": 1782777600000,
