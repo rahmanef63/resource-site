@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "hr",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add hr",
+    "consumerPath": "slices/hr"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/hr/schema.ts",
+    "rootPaths": [
+      "convex/features/hr"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

@@ -8,6 +8,7 @@ const eslintConfig = [
       ".next/**",
       "next-env.d.ts",
       "node_modules/**",
+      "migration/**",
       "convex/_generated/**",
       "template-base/**",
       "convex-templates/**",

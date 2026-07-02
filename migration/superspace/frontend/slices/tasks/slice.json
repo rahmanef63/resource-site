@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "tasks",
+  "version": "1.0.0",
+  "category": "productivity",
+  "title": "Tasks",
+  "description": "Task management and tracking",
+  "namespace": "@/frontend/slices/tasks",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/tasks/schema.ts",
+    "rootPaths": [
+      "convex/features/tasks"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/tasks",
+    "configExport": "tasksConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

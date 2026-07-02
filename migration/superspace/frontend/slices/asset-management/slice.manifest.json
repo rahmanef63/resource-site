@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "asset-management",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add asset-management",
+    "consumerPath": "slices/asset-management"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/assetManagement/schema.ts",
+    "rootPaths": [
+      "convex/features/assetManagement"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

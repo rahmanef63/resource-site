@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "guest-booking",
+  "version": "0.1.0",
+  "category": "productivity",
+  "title": "Guest Booking",
+  "description": "Hotel guest self-service lifecycle with Syariah-compliance verification",
+  "namespace": "@/frontend/slices/guest-booking",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/guestBooking/schema.ts",
+    "rootPaths": [
+      "convex/features/guestBooking"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/guest-booking",
+    "configExport": "guestBookingConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

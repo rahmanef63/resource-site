@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "audit-log",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add audit-log",
+    "consumerPath": "slices/audit-log"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/auditLog/schema.ts",
+    "rootPaths": [
+      "convex/features/auditLog"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

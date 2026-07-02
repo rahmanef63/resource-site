@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "rate-limit",
+  "version": "0.1.0",
+  "category": "administration",
+  "title": "Rate Limit",
+  "description": "Convex-backed per-key request counter. Atomic check-and-increment; expired rows pruned by 5-min cron. Backend-only — no UI.",
+  "namespace": "@/frontend/slices/rate-limit",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/rateLimit/schema.ts",
+    "rootPaths": [
+      "convex/features/rateLimit"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/rate-limit",
+    "configExport": "rateLimitConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

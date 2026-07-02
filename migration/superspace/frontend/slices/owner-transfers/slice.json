@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "owner-transfers",
+  "version": "1.0.0",
+  "category": "administration",
+  "title": "Owner Transfers",
+  "description": "Track owner capital movements: withdrawals, injections, loans, and repayments.",
+  "namespace": "@/frontend/slices/owner-transfers",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/ownerTransfers/schema.ts",
+    "rootPaths": [
+      "convex/features/ownerTransfers"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/owner-transfers",
+    "configExport": "ownerTransfersConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

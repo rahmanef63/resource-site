@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "sales",
+  "version": "1.0.0",
+  "category": "productivity",
+  "title": "Sales",
+  "description": "Sales management and pipeline tracking",
+  "namespace": "@/frontend/slices/sales",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/sales/schema.ts",
+    "rootPaths": [
+      "convex/features/sales"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/sales",
+    "configExport": "salesConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

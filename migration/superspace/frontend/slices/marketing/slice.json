@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "marketing",
+  "version": "1.0.0",
+  "category": "content",
+  "title": "Marketing",
+  "description": "Marketing automation and campaign management",
+  "namespace": "@/frontend/slices/marketing",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/marketing/schema.ts",
+    "rootPaths": [
+      "convex/features/marketing"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/marketing",
+    "configExport": "marketingConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

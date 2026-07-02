@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "import-export",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add import-export",
+    "consumerPath": "slices/import-export"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/importExport/schema.ts",
+    "rootPaths": [
+      "convex/features/importExport"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

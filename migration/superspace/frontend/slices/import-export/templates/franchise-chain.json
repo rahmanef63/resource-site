@@ -1,0 +1,221 @@
+{
+  "version": "2.0",
+  "createdAt": 0,
+  "meta": {
+    "name": "Franchise Chain",
+    "description": "Franchisor (master) + 3 franchisee sub-businesses. Franchisee workspaces are independently managed but linked to master.",
+    "author": "SuperSpace",
+    "tags": ["franchise", "chain", "f&b", "retail", "multi-brand"]
+  },
+  "workspaces": [
+    {
+      "localId": "franchisor",
+      "workspace": {
+        "name": "Franchisor Master",
+        "slug": "franchisor",
+        "type": "organization",
+        "description": "Central franchisor — manages templates, compliance, and royalties",
+        "timezone": "Asia/Jakarta",
+        "language": "id",
+        "themePreset": "corporate"
+      },
+      "enabledFeatures": [
+        "accounting",
+        "analytics",
+        "bi",
+        "crm",
+        "forms",
+        "hr",
+        "inventory",
+        "marketing",
+        "projects",
+        "reports"
+      ],
+      "roles": [
+        {
+          "name": "Owner",
+          "slug": "owner",
+          "permissions": ["*"],
+          "level": 0,
+          "isSystemRole": true
+        },
+        {
+          "name": "Franchise Director",
+          "slug": "franchise-director",
+          "description": "Oversees all franchisee operations and compliance",
+          "permissions": ["*"],
+          "level": 10,
+          "color": "#6366F1"
+        },
+        {
+          "name": "Brand Manager",
+          "slug": "brand-manager",
+          "description": "Manages brand standards and marketing",
+          "permissions": [
+            "marketing.*",
+            "crm.*",
+            "forms.*",
+            "reports.view",
+            "analytics.view"
+          ],
+          "level": 30,
+          "color": "#EC4899"
+        },
+        {
+          "name": "Operations Manager",
+          "slug": "operations-manager",
+          "permissions": [
+            "inventory.*",
+            "hr.*",
+            "projects.*",
+            "reports.*"
+          ],
+          "level": 30,
+          "color": "#F59E0B"
+        },
+        {
+          "name": "Auditor",
+          "slug": "auditor",
+          "description": "Read-only compliance auditing",
+          "permissions": [
+            "*.view",
+            "audit-log.view",
+            "reports.view",
+            "accounting.view"
+          ],
+          "level": 40,
+          "color": "#64748B"
+        }
+      ]
+    },
+    {
+      "localId": "franchisee-1",
+      "parentLocalId": "franchisor",
+      "workspace": {
+        "name": "Franchisee 1 — Jakarta",
+        "slug": "franchisee-jakarta",
+        "type": "group",
+        "description": "Jakarta franchisee location",
+        "timezone": "Asia/Jakarta",
+        "language": "id"
+      },
+      "enabledFeatures": ["pos", "inventory", "crm", "hr", "accounting", "tasks"],
+      "roles": [
+        {
+          "name": "Franchisee Owner",
+          "slug": "franchisee-owner",
+          "permissions": ["*"],
+          "level": 0,
+          "color": "#6366F1"
+        },
+        {
+          "name": "Store Manager",
+          "slug": "store-manager",
+          "permissions": [
+            "pos.*",
+            "inventory.*",
+            "crm.*",
+            "hr.view",
+            "tasks.*",
+            "accounting.view"
+          ],
+          "level": 20,
+          "color": "#3B82F6"
+        },
+        {
+          "name": "Cashier",
+          "slug": "cashier",
+          "permissions": ["pos.operate", "inventory.view", "crm.view"],
+          "level": 50,
+          "color": "#10B981"
+        }
+      ]
+    },
+    {
+      "localId": "franchisee-2",
+      "parentLocalId": "franchisor",
+      "workspace": {
+        "name": "Franchisee 2 — Surabaya",
+        "slug": "franchisee-surabaya",
+        "type": "group",
+        "description": "Surabaya franchisee location",
+        "timezone": "Asia/Jakarta",
+        "language": "id"
+      },
+      "enabledFeatures": ["pos", "inventory", "crm", "hr", "accounting", "tasks"],
+      "roles": [
+        {
+          "name": "Franchisee Owner",
+          "slug": "franchisee-owner",
+          "permissions": ["*"],
+          "level": 0,
+          "color": "#6366F1"
+        },
+        {
+          "name": "Store Manager",
+          "slug": "store-manager",
+          "permissions": [
+            "pos.*",
+            "inventory.*",
+            "crm.*",
+            "hr.view",
+            "tasks.*",
+            "accounting.view"
+          ],
+          "level": 20,
+          "color": "#3B82F6"
+        },
+        {
+          "name": "Cashier",
+          "slug": "cashier",
+          "permissions": ["pos.operate", "inventory.view", "crm.view"],
+          "level": 50,
+          "color": "#10B981"
+        }
+      ]
+    },
+    {
+      "localId": "franchisee-3",
+      "parentLocalId": "franchisor",
+      "workspace": {
+        "name": "Franchisee 3 — Bandung",
+        "slug": "franchisee-bandung",
+        "type": "group",
+        "description": "Bandung franchisee location",
+        "timezone": "Asia/Jakarta",
+        "language": "id"
+      },
+      "enabledFeatures": ["pos", "inventory", "crm", "hr", "accounting", "tasks"],
+      "roles": [
+        {
+          "name": "Franchisee Owner",
+          "slug": "franchisee-owner",
+          "permissions": ["*"],
+          "level": 0,
+          "color": "#6366F1"
+        },
+        {
+          "name": "Store Manager",
+          "slug": "store-manager",
+          "permissions": [
+            "pos.*",
+            "inventory.*",
+            "crm.*",
+            "hr.view",
+            "tasks.*",
+            "accounting.view"
+          ],
+          "level": 20,
+          "color": "#3B82F6"
+        },
+        {
+          "name": "Cashier",
+          "slug": "cashier",
+          "permissions": ["pos.operate", "inventory.view", "crm.view"],
+          "level": 50,
+          "color": "#10B981"
+        }
+      ]
+    }
+  ]
+}

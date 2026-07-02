@@ -1,0 +1,1 @@
+export { QsrPayablesGeneralSettings } from "./QsrPayablesSettings"

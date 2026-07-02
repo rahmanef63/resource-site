@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "inventory",
+  "version": "1.0.0",
+  "category": "administration",
+  "title": "Inventory Management",
+  "description": "Comprehensive inventory management with multi-warehouse support, stock tracking, and demand forecasting",
+  "namespace": "@/frontend/slices/inventory",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/inventory/schema.ts",
+    "rootPaths": [
+      "convex/features/inventory"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/inventory",
+    "configExport": "inventoryConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

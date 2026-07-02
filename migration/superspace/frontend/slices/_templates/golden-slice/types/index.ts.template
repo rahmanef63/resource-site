@@ -1,0 +1,10 @@
+/**
+ * Type definitions for the __SLUG__ feature.
+ */
+
+export interface __PASCAL__Item {
+  id: string
+  name: string
+  createdAt: number
+  updatedAt: number
+}

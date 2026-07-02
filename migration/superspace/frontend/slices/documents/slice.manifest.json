@@ -1,0 +1,17 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "documents",
+  "version": "1.2.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add documents",
+    "consumerPath": "slices/documents"
+  },
+  "files": [],
+  "convex": {},
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

@@ -1,0 +1,1 @@
+export { QsrDashboardGeneralSettings } from "./QsrDashboardSettings"

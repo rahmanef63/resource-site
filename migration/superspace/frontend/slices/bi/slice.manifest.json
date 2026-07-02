@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "bi",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add bi",
+    "consumerPath": "slices/bi"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/bi/schema.ts",
+    "rootPaths": [
+      "convex/features/bi"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

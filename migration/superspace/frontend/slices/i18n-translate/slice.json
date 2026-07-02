@@ -1,0 +1,24 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "i18n-translate",
+  "version": "0.1.0",
+  "category": "productivity",
+  "title": "i18n Translate",
+  "description": "Google Translate widget — drop-in language switcher. No API key, no Google Cloud billing. Auto-detect browser language, persist via localStorage + cookie.",
+  "namespace": "@/frontend/slices/i18n-translate",
+  "kind": "frontend-only",
+  "frontend": {
+    "slicePath": "frontend/slices/i18n-translate",
+    "configExport": "i18nTranslateConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

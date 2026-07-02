@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "pos",
+  "version": "1.0.0",
+  "category": "productivity",
+  "title": "POS",
+  "description": "Point of Sale and retail management",
+  "namespace": "@/frontend/slices/pos",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/pos/schema.ts",
+    "rootPaths": [
+      "convex/features/pos"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/pos",
+    "configExport": "posConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "marketing",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add marketing",
+    "consumerPath": "slices/marketing"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/marketing/schema.ts",
+    "rootPaths": [
+      "convex/features/marketing"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

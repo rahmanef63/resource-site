@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "example",
+  "version": "1.0.0",
+  "category": "productivity",
+  "title": "Example Feature",
+  "description": "A minimal example feature demonstrating SuperSpace patterns and conventions",
+  "namespace": "@/frontend/slices/example",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/example/schema.ts",
+    "rootPaths": [
+      "convex/features/example"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/example",
+    "configExport": "exampleConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

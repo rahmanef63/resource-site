@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "inventory",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add inventory",
+    "consumerPath": "slices/inventory"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/inventory/schema.ts",
+    "rootPaths": [
+      "convex/features/inventory"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "qsr-master-data",
+  "version": "1.0.0",
+  "category": "administration",
+  "title": "QSR Master Data",
+  "description": "Vendor purchases + product HPP catalog — supplier registry, ingredient pricing class, recipe costing.",
+  "namespace": "@/frontend/slices/qsr-master-data",
+  "kind": "frontend-only",
+  "frontend": {
+    "slicePath": "frontend/slices/qsr-master-data",
+    "configExport": "qsrMasterDataConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

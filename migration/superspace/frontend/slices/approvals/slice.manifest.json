@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "approvals",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add approvals",
+    "consumerPath": "slices/approvals"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/approvals/schema.ts",
+    "rootPaths": [
+      "convex/features/approvals"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

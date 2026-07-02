@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "forms",
+  "version": "1.0.0",
+  "category": "productivity",
+  "title": "Forms",
+  "description": "Build custom forms for data collection",
+  "namespace": "@/frontend/slices/forms",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/forms/schema.ts",
+    "rootPaths": [
+      "convex/features/forms"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/forms",
+    "configExport": "formsConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

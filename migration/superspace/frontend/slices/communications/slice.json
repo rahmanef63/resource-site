@@ -1,0 +1,24 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "communications",
+  "version": "1.0.0",
+  "category": "communication",
+  "title": "Communications",
+  "description": "Unified communication platform with channels, direct messages, voice/video calls, and AI integrations",
+  "namespace": "@/frontend/slices/communications",
+  "kind": "frontend-only",
+  "frontend": {
+    "slicePath": "frontend/slices/communications",
+    "configExport": "communicationsConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

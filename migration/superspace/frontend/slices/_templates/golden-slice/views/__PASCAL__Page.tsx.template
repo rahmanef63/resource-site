@@ -1,0 +1,53 @@
+/**
+ * __TITLE__ — main view.
+ *
+ * Patterns demonstrated:
+ * 1. Real-time data via useQuery (returns undefined while loading)
+ * 2. Writes via useMutation (RBAC + audit enforced server-side)
+ * 3. Loading state with skeletons
+ * 4. FeatureShell as the canonical page wrapper
+ */
+"use client"
+
+import type { Id } from "@convex/_generated/dataModel"
+import { useQuery, useMutation } from "convex/react"
+import { api } from "@/frontend/shared/foundation/utils/convex/any-api"
+import { FeatureShell } from "@/frontend/shared/ui/layout/feature-shell"
+import { Skeleton } from "@/components/ui/skeleton"
+
+interface __PASCAL__ViewProps {
+  workspaceId: Id<"workspaces">
+}
+
+export function __PASCAL__View({ workspaceId }: __PASCAL__ViewProps) {
+  // Real-time, reactive query. undefined === loading.
+  const items = useQuery(api.features.__CAMEL__.queries.getData, { workspaceId })
+
+  // Mutations validate permission + log audit on the server.
+  const createItem = useMutation(api.features.__CAMEL__.mutations.createItem)
+
+  if (items === undefined) {
+    return (
+      <FeatureShell featureId="__SLUG__" padding>
+        <div className="space-y-4">
+          <Skeleton className="h-8 w-64" />
+          <Skeleton className="h-24 w-full" />
+          <Skeleton className="h-24 w-full" />
+        </div>
+      </FeatureShell>
+    )
+  }
+
+  return (
+    <FeatureShell featureId="__SLUG__">
+      <div className="p-6">
+        {/* TODO: build the __TITLE__ UI. `createItem` is wired and ready. */}
+        <div className="rounded-lg border border-dashed p-8 text-center text-muted-foreground">
+          Start building __TITLE__ here.
+        </div>
+      </div>
+    </FeatureShell>
+  )
+}
+
+export default __PASCAL__View

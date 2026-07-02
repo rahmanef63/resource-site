@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "contacts",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add contacts",
+    "consumerPath": "slices/contacts"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/contacts/schema.ts",
+    "rootPaths": [
+      "convex/features/contacts"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

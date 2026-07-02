@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "guest-booking",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add guest-booking",
+    "consumerPath": "slices/guest-booking"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/guestBooking/schema.ts",
+    "rootPaths": [
+      "convex/features/guestBooking"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

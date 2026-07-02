@@ -1,0 +1,24 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "qsr-petty-cash",
+  "version": "1.0.0",
+  "category": "administration",
+  "title": "Qsr Petty Cash",
+  "description": "Qsr Petty Cash feature",
+  "namespace": "@/frontend/slices/qsr-petty-cash",
+  "kind": "frontend-only",
+  "frontend": {
+    "slicePath": "frontend/slices/qsr-petty-cash",
+    "configExport": "qsrPettyCashConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

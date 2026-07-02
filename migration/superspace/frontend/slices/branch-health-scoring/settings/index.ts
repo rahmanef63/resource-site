@@ -1,0 +1,1 @@
+export { BranchHealthScoringGeneralSettings } from "./BranchHealthScoringSettings"

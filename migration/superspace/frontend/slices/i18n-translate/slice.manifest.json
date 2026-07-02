@@ -1,0 +1,17 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "i18n-translate",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add i18n-translate",
+    "consumerPath": "slices/i18n-translate"
+  },
+  "files": [],
+  "convex": {},
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

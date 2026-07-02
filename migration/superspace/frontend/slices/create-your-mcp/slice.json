@@ -1,0 +1,68 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "create-your-mcp",
+  "version": "0.2.0",
+  "category": "ai",
+  "kind": "full",
+  "title": "Create Your MCP",
+  "description": "Turn any rr-based app into an MCP server that ChatGPT custom apps, Claude.ai connectors, Cursor MCP, and other AI clients can authenticate to. OAuth 2.1 + PKCE flow with code → bearer exchange, env-configured vendor-host allowlist, single-use codes, 1-year bearer tokens, scope-tagged tools, opaque error collapsing, constant-time token compare. Static MCP_API_KEY fallback for service-account / CI scripts. Sanitized from rahmanef.com 2026-05-16 — vendor literals (chatgpt.com / OpenAI paths) replaced with MCP_OAUTH_ALLOWED_HOSTS + MCP_OAUTH_ALLOWED_PATH_PREFIXES env vars so the slice ships portable.",
+  "namespace": "@/frontend/slices/create-your-mcp",
+  "frontend": {
+    "slicePath": "frontend/slices/create-your-mcp",
+    "configExport": "createYourMcpFeature"
+  },
+  "convex": {
+    "tablesExport": "createYourMcpTables",
+    "schemaPath": "convex/features/create-your-mcp/_schema.ts",
+    "rootPaths": ["convex/features/create-your-mcp"]
+  },
+  "deps": {
+    "npm": ["convex@^1.16.0"],
+    "shadcn": [],
+    "env": [
+      { "name": "MCP_API_KEY", "scope": "server", "required": false, "description": "Static bearer for service-account / CI access. Min 32 chars. Same value must be set on Convex (npx convex env set MCP_API_KEY …) and on the Next host so both validation paths agree." },
+      { "name": "MCP_OAUTH_ALLOWED_HOSTS", "scope": "convex", "required": false, "description": "CSV of vendor domains allowed in redirect_uri (e.g. chatgpt.com,claude.ai,cursor.sh). Empty = no remote redirects (localhost only)." },
+      { "name": "MCP_OAUTH_ALLOWED_PATH_PREFIXES", "scope": "convex", "required": false, "description": "CSV of path prefixes allowed under each allowed host (e.g. /aip/,/connector/,/oauth/). Empty = any path under allowed hosts accepted." },
+      { "name": "NEXT_PUBLIC_SITE_URL", "scope": "next-public", "required": true, "description": "Public site origin — used to render the protected-resource metadata link in the WWW-Authenticate challenge." }
+    ],
+    "peers": [
+      { "slug": "convex-auth", "range": "^0.1", "reason": "requireAdmin calls getAuthUserId from @convex-dev/auth." }
+    ]
+  },
+  "registers": [],
+  "audit": [],
+  "license": "MIT",
+  "tags": ["ai", "mcp", "oauth", "pkce", "chatgpt", "claude", "cursor", "convex", "backend", "integration"],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "convex",
+          "range": "^1.16.0"
+        }
+      ]
+    },
+    "provides": {
+      "components": [
+        "McpAdminView"
+      ],
+      "utils": [
+        "dispatchJsonRpc",
+        "checkAuth",
+        "extractBearer",
+        "runWithMcpContext",
+        "getMcpContext"
+      ],
+      "hooks": [],
+      "convex": {
+        "tables": [
+          "oauthCodes",
+          "oauthAccessTokens"
+        ],
+        "rbac": [
+          "admin"
+        ]
+      }
+    }
+  }
+}

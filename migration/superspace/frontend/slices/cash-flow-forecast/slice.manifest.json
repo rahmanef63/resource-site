@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "cash-flow-forecast",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add cash-flow-forecast",
+    "consumerPath": "slices/cash-flow-forecast"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/cashFlowForecast/schema.ts",
+    "rootPaths": [
+      "convex/features/cashFlowForecast"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "maintenance-scheduling",
+  "version": "1.0.0",
+  "category": "administration",
+  "title": "Maintenance Scheduling",
+  "description": "Preventive and reactive maintenance with recurring schedules and cost tracking.",
+  "namespace": "@/frontend/slices/maintenance-scheduling",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/maintenanceScheduling/schema.ts",
+    "rootPaths": [
+      "convex/features/maintenanceScheduling"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/maintenance-scheduling",
+    "configExport": "maintenanceSchedulingConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

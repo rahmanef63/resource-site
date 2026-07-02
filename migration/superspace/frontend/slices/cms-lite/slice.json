@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "cms-lite",
+  "version": "1.0.0",
+  "category": "productivity",
+  "title": "CMS Lite (deprecated)",
+  "description": "Deprecated 2026-05-07 — use Blog slice for content publishing. Notion-clone (sibling project) will replace remaining cms-lite surfaces. See docs/coordination/cms-lite-removal-plan.md.",
+  "namespace": "@/frontend/slices/cms-lite",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/cmsLite/schema.ts",
+    "rootPaths": [
+      "convex/features/cmsLite"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/cms-lite",
+    "configExport": "cmsLiteConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

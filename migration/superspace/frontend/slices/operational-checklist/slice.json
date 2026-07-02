@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "operational-checklist",
+  "version": "1.0.0",
+  "category": "administration",
+  "title": "Operational Checklist",
+  "description": "Build operational checklists and run them through the daily/audit workflow with photo + notes capture.",
+  "namespace": "@/frontend/slices/operational-checklist",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/operationalChecklist/schema.ts",
+    "rootPaths": [
+      "convex/features/operationalChecklist"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/operational-checklist",
+    "configExport": "operationalChecklistConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

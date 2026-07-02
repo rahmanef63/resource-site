@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "integrations",
+  "version": "1.0.0",
+  "category": "administration",
+  "title": "Integrations",
+  "description": "Connect with third-party services and APIs",
+  "namespace": "@/frontend/slices/integrations",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/integrations/schema.ts",
+    "rootPaths": [
+      "convex/features/integrations"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/integrations",
+    "configExport": "integrationsConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "forms",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add forms",
+    "consumerPath": "slices/forms"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/forms/schema.ts",
+    "rootPaths": [
+      "convex/features/forms"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "datasets",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add datasets",
+    "consumerPath": "slices/datasets"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/datasets/schema.ts",
+    "rootPaths": [
+      "convex/features/datasets"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

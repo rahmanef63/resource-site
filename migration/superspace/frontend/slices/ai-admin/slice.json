@@ -1,0 +1,75 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "ai-admin",
+  "version": "0.3.0",
+  "category": "ai",
+  "kind": "full",
+  "title": "AI Admin — Console (Instructions · Skills · Tools · Agents · Providers)",
+  "description": "Operator console for the whole AI stack — API sources (Anthropic/OpenAI/Google/Mistral/Ollama), model registry with capabilities + pricing, skill library, tool registry, agent definitions, per-workspace cost budgets, full audit log. Plugs into the admin-panel section registry. Every other ai-* slice reads its registries here.",
+  "namespace": "@/frontend/slices/ai-admin",
+  "convex": {
+    "tablesExport": "aiAdminTables",
+    "schemaPath": "convex/features/ai-admin/_schema.ts",
+    "rootPaths": ["convex/features/ai-admin"]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/ai-admin",
+    "configExport": ""
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": ["card", "button", "badge", "tabs", "table", "dialog", "input", "label", "select", "textarea", "switch"],
+    "env": [
+      { "name": "AI_ADMIN_ENCRYPTION_KEY", "scope": "convex", "required": true }
+    ],
+    "peers": [
+      { "slug": "convex-auth", "range": "^0.1" },
+      { "slug": "rbac-roles", "range": "^0.1" },
+      { "slug": "admin-panel", "range": "^0.1" },
+      { "slug": "audit-log", "range": "^0.1" }
+    ]
+  },
+  "registers": [],
+  "audit": [],
+  "license": "MIT",
+  "tags": ["ai", "ai:admin", "config", "providers", "models", "skills", "tools", "agents", "budgets"],
+  "contract": {
+    "requires": {
+      "auth": "convex",
+      "rbac": [
+        "admin.read",
+        "admin.write"
+      ],
+      "env": [
+        "AI_ADMIN_ENCRYPTION_KEY"
+      ],
+      "deps": [
+        "convex-auth",
+        "rbac-roles",
+        "admin-panel",
+        "audit-log"
+      ]
+    },
+    "provides": {
+      "utils": [],
+      "components": [
+        "AdminSection",
+        "ProvidersTable",
+        "ModelsGrid",
+        "SkillsGrid",
+        "ToolsTable",
+        "AgentsTable",
+        "BudgetsCard",
+        "AuditTable"
+      ]
+    },
+    "generalization": {
+      "level": "portable",
+      "forbiddenTerms": [
+        "rahmanef",
+        "rahmanef.com"
+      ],
+      "requiredProps": []
+    }
+  }
+}

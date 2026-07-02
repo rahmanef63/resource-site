@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "damage-reports",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add damage-reports",
+    "consumerPath": "slices/damage-reports"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/damageReports/schema.ts",
+    "rootPaths": [
+      "convex/features/damageReports"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

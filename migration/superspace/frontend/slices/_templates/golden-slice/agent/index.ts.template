@@ -1,0 +1,33 @@
+/**
+ * AI agent registration for __TITLE__.
+ *
+ * NOTE: cross-slice AI types come from the shared facade, NEVER the ai slice
+ * internals (`../../ai/types` is a cross-slice barrel violation).
+ */
+import { AgentDefinition } from "@/frontend/shared/ai"
+
+export const agent: AgentDefinition = {
+  name: "__TITLE__ Agent",
+  description: "Helps with __TITLE__ tasks.",
+  icon: "__ICON__",
+  capabilities: [],
+  prompts: {
+    system: `You are a __TITLE__ assistant. You help users with __TITLE__ operations.`,
+  },
+}
+
+import { subAgentRegistry } from "@/frontend/shared/ai/agent"
+import type { SubAgent } from "@/frontend/shared/ai/agent"
+
+export function register__PASCAL__Agent() {
+  const subAgent: SubAgent = {
+    id: "__SLUG__-agent",
+    name: "__TITLE__ Agent",
+    description: agent.description,
+    featureId: "__SLUG__",
+    tools: [],
+    canHandle: (query: string): number =>
+      query.toLowerCase().includes("__SLUG__") ? 0.6 : 0,
+  }
+  subAgentRegistry.register(subAgent, { priority: 10, enabled: true })
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "ai",
+  "version": "2.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add ai",
+    "consumerPath": "slices/ai"
+  },
+  "files": [],
+  "convex": {},
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

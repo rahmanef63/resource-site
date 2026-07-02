@@ -1,0 +1,1 @@
+export { QsrMasterDataGeneralSettings } from "./QsrMasterDataSettings"

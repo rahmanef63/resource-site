@@ -1,0 +1,17 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "qsr-product-changes",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add qsr-product-changes",
+    "consumerPath": "slices/qsr-product-changes"
+  },
+  "files": [],
+  "convex": {},
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

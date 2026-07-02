@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "owner-analytics",
+  "version": "0.1.0",
+  "category": "analytics",
+  "title": "Owner Analytics",
+  "description": "Strategic financial dashboards, channel mix, and asset expansion tracking for property owners",
+  "namespace": "@/frontend/slices/owner-analytics",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/ownerAnalytics/schema.ts",
+    "rootPaths": [
+      "convex/features/ownerAnalytics"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/owner-analytics",
+    "configExport": "ownerAnalyticsConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

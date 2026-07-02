@@ -1,0 +1,24 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "platform-admin",
+  "version": "1.0.0",
+  "category": "administration",
+  "title": "Platform Admin",
+  "description": "Super Admin panel for managing features, workspaces, and system configuration",
+  "namespace": "@/frontend/slices/platform-admin",
+  "kind": "frontend-only",
+  "frontend": {
+    "slicePath": "frontend/slices/platform-admin",
+    "configExport": "platformAdminConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

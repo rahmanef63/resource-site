@@ -1,0 +1,24 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "ai",
+  "version": "2.0.0",
+  "category": "communication",
+  "title": "AI",
+  "description": "AI assistant",
+  "namespace": "@/frontend/slices/ai",
+  "kind": "frontend-only",
+  "frontend": {
+    "slicePath": "frontend/slices/ai",
+    "configExport": "aiConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

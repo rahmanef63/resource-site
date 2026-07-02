@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "operational-checklist",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add operational-checklist",
+    "consumerPath": "slices/operational-checklist"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/operationalChecklist/schema.ts",
+    "rootPaths": [
+      "convex/features/operationalChecklist"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

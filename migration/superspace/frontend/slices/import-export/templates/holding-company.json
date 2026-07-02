@@ -1,0 +1,293 @@
+{
+  "version": "2.0",
+  "createdAt": 0,
+  "meta": {
+    "name": "Holding Company + Subsidiaries",
+    "description": "Holding company with 3 subsidiary businesses across different industries. Each subsidiary runs independently with shared governance.",
+    "author": "SuperSpace",
+    "tags": ["holding", "subsidiaries", "conglomerate", "enterprise", "multi-business"]
+  },
+  "workspaces": [
+    {
+      "localId": "holding",
+      "workspace": {
+        "name": "Holding Company",
+        "slug": "holding",
+        "type": "organization",
+        "description": "Group-level oversight — consolidated reporting, governance, and group HR",
+        "timezone": "Asia/Jakarta",
+        "language": "id",
+        "themePreset": "corporate"
+      },
+      "enabledFeatures": [
+        "accounting",
+        "analytics",
+        "approvals",
+        "bi",
+        "crm",
+        "documents",
+        "hr",
+        "projects",
+        "reports"
+      ],
+      "roles": [
+        {
+          "name": "Owner",
+          "slug": "owner",
+          "permissions": ["*"],
+          "level": 0,
+          "isSystemRole": true
+        },
+        {
+          "name": "Group CEO",
+          "slug": "group-ceo",
+          "permissions": ["*"],
+          "level": 5,
+          "color": "#1E293B"
+        },
+        {
+          "name": "CFO",
+          "slug": "cfo",
+          "description": "Group Chief Financial Officer",
+          "permissions": [
+            "accounting.*",
+            "bi.*",
+            "reports.*",
+            "approvals.*",
+            "analytics.view"
+          ],
+          "level": 10,
+          "color": "#DC2626"
+        },
+        {
+          "name": "Group HR Director",
+          "slug": "group-hr-director",
+          "permissions": ["hr.*", "reports.view", "documents.*"],
+          "level": 10,
+          "color": "#7C3AED"
+        },
+        {
+          "name": "Board Member",
+          "slug": "board-member",
+          "description": "Read-only access to consolidated reports and documents",
+          "permissions": [
+            "reports.view",
+            "bi.view",
+            "analytics.view",
+            "documents.view",
+            "accounting.view"
+          ],
+          "level": 30,
+          "color": "#64748B"
+        },
+        {
+          "name": "Group Auditor",
+          "slug": "group-auditor",
+          "permissions": [
+            "*.view",
+            "audit-log.view",
+            "reports.*",
+            "accounting.view"
+          ],
+          "level": 40,
+          "color": "#78716C"
+        }
+      ]
+    },
+    {
+      "localId": "subsidiary-tech",
+      "parentLocalId": "holding",
+      "workspace": {
+        "name": "Tech Subsidiary",
+        "slug": "subsidiary-tech",
+        "type": "organization",
+        "description": "Technology & software subsidiary",
+        "timezone": "Asia/Jakarta",
+        "language": "id",
+        "themePreset": "modern"
+      },
+      "enabledFeatures": [
+        "projects",
+        "tasks",
+        "crm",
+        "hr",
+        "accounting",
+        "documents",
+        "knowledge",
+        "communications",
+        "analytics"
+      ],
+      "roles": [
+        {
+          "name": "CEO",
+          "slug": "ceo",
+          "permissions": ["*"],
+          "level": 5,
+          "color": "#1E40AF"
+        },
+        {
+          "name": "CTO",
+          "slug": "cto",
+          "permissions": [
+            "projects.*",
+            "tasks.*",
+            "documents.*",
+            "knowledge.*",
+            "hr.view",
+            "analytics.view"
+          ],
+          "level": 10,
+          "color": "#0891B2"
+        },
+        {
+          "name": "Product Manager",
+          "slug": "product-manager",
+          "permissions": ["projects.*", "tasks.*", "crm.*", "documents.*", "analytics.view"],
+          "level": 20,
+          "color": "#7C3AED"
+        },
+        {
+          "name": "Engineer",
+          "slug": "engineer",
+          "permissions": ["projects.view", "tasks.*", "documents.*", "knowledge.*"],
+          "level": 40,
+          "color": "#10B981"
+        }
+      ]
+    },
+    {
+      "localId": "subsidiary-retail",
+      "parentLocalId": "holding",
+      "workspace": {
+        "name": "Retail Subsidiary",
+        "slug": "subsidiary-retail",
+        "type": "organization",
+        "description": "Retail & distribution subsidiary",
+        "timezone": "Asia/Jakarta",
+        "language": "id",
+        "themePreset": "retail"
+      },
+      "enabledFeatures": [
+        "pos",
+        "inventory",
+        "crm",
+        "accounting",
+        "hr",
+        "marketing",
+        "analytics",
+        "tasks"
+      ],
+      "roles": [
+        {
+          "name": "CEO",
+          "slug": "ceo",
+          "permissions": ["*"],
+          "level": 5,
+          "color": "#1E40AF"
+        },
+        {
+          "name": "Retail Operations Director",
+          "slug": "retail-ops-director",
+          "permissions": [
+            "pos.*",
+            "inventory.*",
+            "crm.*",
+            "marketing.*",
+            "hr.view",
+            "analytics.view",
+            "tasks.*"
+          ],
+          "level": 15,
+          "color": "#D97706"
+        },
+        {
+          "name": "Store Manager",
+          "slug": "store-manager",
+          "permissions": ["pos.*", "inventory.*", "crm.*", "tasks.*"],
+          "level": 25,
+          "color": "#3B82F6"
+        },
+        {
+          "name": "Sales Staff",
+          "slug": "sales-staff",
+          "permissions": ["pos.operate", "inventory.view", "crm.view", "tasks.view"],
+          "level": 50,
+          "color": "#10B981"
+        }
+      ]
+    },
+    {
+      "localId": "subsidiary-services",
+      "parentLocalId": "holding",
+      "workspace": {
+        "name": "Services Subsidiary",
+        "slug": "subsidiary-services",
+        "type": "organization",
+        "description": "Professional services subsidiary",
+        "timezone": "Asia/Jakarta",
+        "language": "id"
+      },
+      "enabledFeatures": [
+        "crm",
+        "projects",
+        "tasks",
+        "calendar",
+        "hr",
+        "accounting",
+        "support",
+        "documents",
+        "forms"
+      ],
+      "roles": [
+        {
+          "name": "CEO",
+          "slug": "ceo",
+          "permissions": ["*"],
+          "level": 5,
+          "color": "#1E40AF"
+        },
+        {
+          "name": "Service Director",
+          "slug": "service-director",
+          "permissions": [
+            "crm.*",
+            "projects.*",
+            "support.*",
+            "hr.view",
+            "accounting.view",
+            "reports.view"
+          ],
+          "level": 15,
+          "color": "#6D28D9"
+        },
+        {
+          "name": "Consultant",
+          "slug": "consultant",
+          "permissions": [
+            "crm.view",
+            "projects.*",
+            "tasks.*",
+            "calendar.*",
+            "documents.*",
+            "support.*"
+          ],
+          "level": 40,
+          "color": "#0891B2"
+        },
+        {
+          "name": "Client Liaison",
+          "slug": "client-liaison",
+          "description": "External client — view deliverables and submit requests",
+          "permissions": [
+            "projects.view",
+            "documents.view",
+            "support.create",
+            "forms.submit"
+          ],
+          "level": 70,
+          "color": "#F59E0B"
+        }
+      ]
+    }
+  ]
+}

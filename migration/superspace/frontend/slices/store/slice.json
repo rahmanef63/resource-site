@@ -1,0 +1,24 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "store",
+  "version": "1.0.0",
+  "category": "administration",
+  "title": "Store",
+  "description": "Unified store: workspace hierarchy + menu management. Role-gated tabs — Workspace visible to all members, Menu visible to roles with manage_menus permission.",
+  "namespace": "@/frontend/slices/store",
+  "kind": "frontend-only",
+  "frontend": {
+    "slicePath": "frontend/slices/store",
+    "configExport": "storeConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

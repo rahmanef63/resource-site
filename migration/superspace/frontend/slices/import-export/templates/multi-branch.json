@@ -1,0 +1,165 @@
+{
+  "version": "2.0",
+  "createdAt": 0,
+  "meta": {
+    "name": "Multi-Branch Business",
+    "description": "Head office + 2 branch workspaces. Each branch is a child of HQ.",
+    "author": "SuperSpace",
+    "tags": ["multi-branch", "retail", "franchise", "multi-location"]
+  },
+  "workspaces": [
+    {
+      "localId": "hq",
+      "workspace": {
+        "name": "HQ",
+        "slug": "hq",
+        "type": "organization",
+        "description": "Head office — consolidated view across all branches",
+        "timezone": "Asia/Jakarta",
+        "language": "id",
+        "themePreset": "corporate"
+      },
+      "enabledFeatures": [
+        "accounting",
+        "analytics",
+        "bi",
+        "crm",
+        "hr",
+        "inventory",
+        "projects",
+        "reports",
+        "tasks"
+      ],
+      "roles": [
+        {
+          "name": "Owner",
+          "slug": "owner",
+          "permissions": ["*"],
+          "level": 0,
+          "isSystemRole": true
+        },
+        {
+          "name": "Regional Manager",
+          "slug": "regional-manager",
+          "description": "Oversees multiple branches",
+          "permissions": [
+            "*",
+            "workspace.manage"
+          ],
+          "level": 10,
+          "color": "#6366F1"
+        },
+        {
+          "name": "Finance",
+          "slug": "finance",
+          "description": "Financial oversight across branches",
+          "permissions": [
+            "accounting.*",
+            "bi.view",
+            "reports.*",
+            "analytics.view"
+          ],
+          "level": 30,
+          "color": "#F59E0B"
+        },
+        {
+          "name": "HR Manager",
+          "slug": "hr-manager",
+          "permissions": ["hr.*", "reports.view"],
+          "level": 30,
+          "color": "#EC4899"
+        }
+      ]
+    },
+    {
+      "localId": "branch-1",
+      "parentLocalId": "hq",
+      "workspace": {
+        "name": "Branch 1",
+        "slug": "branch-1",
+        "type": "group",
+        "description": "Branch office 1",
+        "timezone": "Asia/Jakarta",
+        "language": "id"
+      },
+      "enabledFeatures": ["crm", "inventory", "pos", "tasks", "calendar", "hr"],
+      "roles": [
+        {
+          "name": "Branch Manager",
+          "slug": "branch-manager",
+          "description": "Manages day-to-day branch operations",
+          "permissions": [
+            "crm.*",
+            "inventory.*",
+            "pos.*",
+            "tasks.*",
+            "calendar.*",
+            "hr.view",
+            "reports.view"
+          ],
+          "level": 20,
+          "color": "#3B82F6"
+        },
+        {
+          "name": "Cashier",
+          "slug": "cashier",
+          "permissions": ["pos.operate", "inventory.view", "tasks.view"],
+          "level": 50,
+          "color": "#10B981"
+        },
+        {
+          "name": "Warehouse Staff",
+          "slug": "warehouse-staff",
+          "permissions": ["inventory.*", "tasks.*"],
+          "level": 50,
+          "color": "#14B8A6"
+        }
+      ]
+    },
+    {
+      "localId": "branch-2",
+      "parentLocalId": "hq",
+      "workspace": {
+        "name": "Branch 2",
+        "slug": "branch-2",
+        "type": "group",
+        "description": "Branch office 2",
+        "timezone": "Asia/Jakarta",
+        "language": "id"
+      },
+      "enabledFeatures": ["crm", "inventory", "pos", "tasks", "calendar", "hr"],
+      "roles": [
+        {
+          "name": "Branch Manager",
+          "slug": "branch-manager",
+          "description": "Manages day-to-day branch operations",
+          "permissions": [
+            "crm.*",
+            "inventory.*",
+            "pos.*",
+            "tasks.*",
+            "calendar.*",
+            "hr.view",
+            "reports.view"
+          ],
+          "level": 20,
+          "color": "#3B82F6"
+        },
+        {
+          "name": "Cashier",
+          "slug": "cashier",
+          "permissions": ["pos.operate", "inventory.view", "tasks.view"],
+          "level": 50,
+          "color": "#10B981"
+        },
+        {
+          "name": "Warehouse Staff",
+          "slug": "warehouse-staff",
+          "permissions": ["inventory.*", "tasks.*"],
+          "level": 50,
+          "color": "#14B8A6"
+        }
+      ]
+    }
+  ]
+}

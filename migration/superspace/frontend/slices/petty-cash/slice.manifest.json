@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "petty-cash",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add petty-cash",
+    "consumerPath": "slices/petty-cash"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/pettyCash/schema.ts",
+    "rootPaths": [
+      "convex/features/pettyCash"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

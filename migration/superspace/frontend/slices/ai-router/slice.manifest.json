@@ -1,0 +1,81 @@
+{
+  "$schema": "../../../docs/slice.manifest.schema.json",
+  "name": "ai-router",
+  "version": "0.5.0",
+  "description": "Tier-routed LLM access via OpenRouter \u2014 nano (Haiku) for classification, mid (Sonnet) for chat, flagship (Opus) for deep reasoning. Per-call usage log.",
+  "category": "ai",
+  "stability": "beta",
+  "deps": {
+    "shared": [],
+    "slices": [],
+    "convexFeatures": [
+      "aiRouter"
+    ],
+    "npm": {
+      "ai": "^4.0.0",
+      "@openrouter/ai-sdk-provider": "^0.0.5"
+    },
+    "env": [
+      {
+        "name": "OPENROUTER_API_KEY",
+        "required": true,
+        "scope": "server",
+        "description": "OpenRouter API key. Get from https://openrouter.ai/keys"
+      }
+    ]
+  },
+  "files": {
+    "include": [
+      "**/*"
+    ],
+    "exclude": [
+      "*.test.ts",
+      "*.test.tsx",
+      "*.spec.ts"
+    ]
+  },
+  "convexFiles": {
+    "include": [
+      "**/*.ts"
+    ],
+    "exclude": [
+      "*.test.ts"
+    ]
+  },
+  "permissions": [
+    "ai.invoke",
+    "ai.view-usage"
+  ],
+  "schemaTables": [
+    {
+      "name": "ai_router_usage",
+      "namespaced": true,
+      "indexes": [
+        "by_workspace",
+        "by_workspace_createdAt"
+      ]
+    },
+    {
+      "name": "ai_router_calls",
+      "namespaced": true,
+      "indexes": [
+        "by_workspace",
+        "by_workspace_status"
+      ]
+    }
+  ],
+  "compatibility": {
+    "next": ">=15 <17",
+    "react": "^19",
+    "convex": "^1.36",
+    "tailwind": "4",
+    "auth": "any"
+  },
+  "tags": [
+    "ai",
+    "llm",
+    "openrouter",
+    "tier-routing"
+  ],
+  "notes": "Adopted alongside the untouched first-party AI engine (convex/features/ai). rr's ai-router convex was relocated to convex/features/aiRouter; frontend refs point at api.features.aiRouter. Scaffolded non-functional (no live provider/SDK calls)."
+}

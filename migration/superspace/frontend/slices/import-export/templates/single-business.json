@@ -1,0 +1,79 @@
+{
+  "version": "2.0",
+  "createdAt": 0,
+  "meta": {
+    "name": "Single Business",
+    "description": "Single workspace with standard roles for a small-medium business",
+    "author": "SuperSpace",
+    "tags": ["starter", "smb", "single-workspace"]
+  },
+  "workspaces": [
+    {
+      "localId": "main",
+      "workspace": {
+        "name": "My Business",
+        "slug": "my-business",
+        "type": "organization",
+        "description": "Main workspace",
+        "timezone": "Asia/Jakarta",
+        "language": "id",
+        "themePreset": "corporate"
+      },
+      "enabledFeatures": ["crm", "projects", "tasks", "calendar", "documents", "hr"],
+      "roles": [
+        {
+          "name": "Owner",
+          "slug": "owner",
+          "permissions": ["*"],
+          "level": 0,
+          "isSystemRole": true
+        },
+        {
+          "name": "Manager",
+          "slug": "manager",
+          "description": "Full access except billing and workspace settings",
+          "permissions": [
+            "crm.*",
+            "projects.*",
+            "tasks.*",
+            "calendar.*",
+            "documents.*",
+            "hr.view",
+            "reports.view",
+            "analytics.view"
+          ],
+          "level": 20,
+          "color": "#3B82F6"
+        },
+        {
+          "name": "Staff",
+          "slug": "staff",
+          "description": "Day-to-day operations",
+          "permissions": [
+            "crm.view",
+            "crm.create",
+            "projects.view",
+            "tasks.*",
+            "calendar.*",
+            "documents.view",
+            "documents.create"
+          ],
+          "level": 50,
+          "color": "#10B981"
+        },
+        {
+          "name": "Client",
+          "slug": "client",
+          "description": "External client — read-only access to shared resources",
+          "permissions": [
+            "projects.view",
+            "documents.view",
+            "calendar.view"
+          ],
+          "level": 70,
+          "color": "#F59E0B"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "owner-transfers",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add owner-transfers",
+    "consumerPath": "slices/owner-transfers"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/ownerTransfers/schema.ts",
+    "rootPaths": [
+      "convex/features/ownerTransfers"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

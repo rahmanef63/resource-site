@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "branch-health-scoring",
+  "version": "1.0.0",
+  "category": "analytics",
+  "title": "Branch Health Scoring",
+  "description": "Capture branch health snapshots across revenue, expense, ops, staff, and customer scores.",
+  "namespace": "@/frontend/slices/branch-health-scoring",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/branchHealthScoring/schema.ts",
+    "rootPaths": [
+      "convex/features/branchHealthScoring"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/branch-health-scoring",
+    "configExport": "branchHealthScoringConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

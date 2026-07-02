@@ -1,0 +1,24 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "content",
+  "version": "1.0.0",
+  "category": "creativity",
+  "title": "Content Library",
+  "description": "Centralized content management for images, videos, audio, and documents with AI generation capabilities.",
+  "namespace": "@/frontend/slices/content",
+  "kind": "frontend-only",
+  "frontend": {
+    "slicePath": "frontend/slices/content",
+    "configExport": "contentConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

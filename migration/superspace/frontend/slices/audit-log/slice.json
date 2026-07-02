@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "audit-log",
+  "version": "1.0.0",
+  "category": "administration",
+  "title": "Audit Log",
+  "description": "View activity logs and audit trail",
+  "namespace": "@/frontend/slices/audit-log",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/auditLog/schema.ts",
+    "rootPaths": [
+      "convex/features/auditLog"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/audit-log",
+    "configExport": "auditLogConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

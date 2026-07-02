@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "daily-closing",
+  "version": "1.0.0",
+  "category": "administration",
+  "title": "Daily Closing",
+  "description": "End-of-day register close with per-payment-method variance and approval workflow.",
+  "namespace": "@/frontend/slices/daily-closing",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/dailyClosing/schema.ts",
+    "rootPaths": [
+      "convex/features/dailyClosing"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/daily-closing",
+    "configExport": "dailyClosingConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "cms-lite",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add cms-lite",
+    "consumerPath": "slices/cms-lite"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/cmsLite/schema.ts",
+    "rootPaths": [
+      "convex/features/cmsLite"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

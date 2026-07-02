@@ -1,0 +1,24 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "projects",
+  "version": "1.0.0",
+  "category": "productivity",
+  "title": "Projects",
+  "description": "Project management with team discussions",
+  "namespace": "@/frontend/slices/projects",
+  "kind": "frontend-only",
+  "frontend": {
+    "slicePath": "frontend/slices/projects",
+    "configExport": "projectsConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

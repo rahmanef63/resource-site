@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "daily-closing",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add daily-closing",
+    "consumerPath": "slices/daily-closing"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/dailyClosing/schema.ts",
+    "rootPaths": [
+      "convex/features/dailyClosing"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

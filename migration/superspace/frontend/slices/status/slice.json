@@ -1,0 +1,24 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "status",
+  "version": "2.0.0",
+  "category": "communication",
+  "title": "Status",
+  "description": "Share status updates with your team",
+  "namespace": "@/frontend/slices/status",
+  "kind": "frontend-only",
+  "frontend": {
+    "slicePath": "frontend/slices/status",
+    "configExport": "statusConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

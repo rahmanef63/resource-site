@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "analytics",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add analytics",
+    "consumerPath": "slices/analytics"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/analytics/schema.ts",
+    "rootPaths": [
+      "convex/features/analytics"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

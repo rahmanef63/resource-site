@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "owner-analytics",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add owner-analytics",
+    "consumerPath": "slices/owner-analytics"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/ownerAnalytics/schema.ts",
+    "rootPaths": [
+      "convex/features/ownerAnalytics"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

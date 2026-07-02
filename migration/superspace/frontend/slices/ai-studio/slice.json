@@ -1,0 +1,66 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "ai-studio",
+  "version": "0.2.0",
+  "category": "ai",
+  "kind": "full",
+  "title": "AI Studio — Generation Canvas",
+  "description": "AI is the primary UI — single big prompt input → live-streaming generation canvas with iteration toolbar. Suno / Midjourney / Lovable pattern. Includes prompt history, version tree (branch & compare outputs), variation grid, share-to-link.",
+  "namespace": "@/frontend/slices/ai-studio",
+  "convex": {
+    "tablesExport": "aiStudioTables",
+    "schemaPath": "convex/features/ai-studio/_schema.ts",
+    "rootPaths": ["convex/features/ai-studio"]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/ai-studio",
+    "configExport": "aiStudioConfig"
+  },
+  "deps": {
+    "npm": ["ai@^4.0.0"],
+    "shadcn": ["button", "card", "badge", "textarea", "tabs", "tooltip", "scroll-area", "select"],
+    "env": [],
+    "peers": [
+      { "slug": "convex-auth", "range": "^0.1" },
+      { "slug": "ai-router", "range": "^0.1" },
+      { "slug": "ai-admin", "range": "^0.1" }
+    ]
+  },
+  "registers": [],
+  "audit": [],
+  "license": "MIT",
+  "tags": ["ai", "ai:studio", "generation", "streaming", "history", "branching", "image-gen"],
+  "contract": {
+    "requires": {
+      "auth": "convex",
+      "rbac": [
+        "studio.read",
+        "studio.write"
+      ],
+      "deps": [
+        "convex-auth",
+        "ai-router",
+        "ai-admin"
+      ]
+    },
+    "provides": {
+      "tools": [
+        "ai-studio.generate"
+      ],
+      "components": [
+        "StudioCanvas",
+        "StudioPromptBar",
+        "StudioVersionTree",
+        "StudioVariationGrid"
+      ]
+    },
+    "generalization": {
+      "level": "portable",
+      "forbiddenTerms": [
+        "rahmanef",
+        "rahmanef.com"
+      ],
+      "requiredProps": []
+    }
+  }
+}

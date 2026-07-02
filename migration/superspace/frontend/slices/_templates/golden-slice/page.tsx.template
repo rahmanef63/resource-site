@@ -1,0 +1,35 @@
+/**
+ * __TITLE__ Feature — page entry point.
+ *
+ * Keep this thin: guard the workspace, delegate to the View. Re-exports the
+ * default from views/ so `page.tsx` stays the consistent import target.
+ */
+"use client"
+
+import type { Id } from "@convex/_generated/dataModel"
+import { __PASCAL__View } from "./views/__PASCAL__Page"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { AlertCircle } from "lucide-react"
+
+interface __PASCAL__PageProps {
+  workspaceId?: Id<"workspaces"> | null
+}
+
+export default function __PASCAL__Page({ workspaceId }: __PASCAL__PageProps) {
+  // Always guard against a missing workspace (no selection / deep link / deleted).
+  if (!workspaceId) {
+    return (
+      <div className="flex h-full items-center justify-center p-6">
+        <Alert className="max-w-md">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>No Workspace Selected</AlertTitle>
+          <AlertDescription>
+            Please select a workspace to access the __TITLE__ feature.
+          </AlertDescription>
+        </Alert>
+      </div>
+    )
+  }
+
+  return <__PASCAL__View workspaceId={workspaceId} />
+}

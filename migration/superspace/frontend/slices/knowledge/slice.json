@@ -1,0 +1,24 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "knowledge",
+  "version": "1.0.0",
+  "category": "productivity",
+  "title": "Knowledge",
+  "description": "Centralized knowledge base with documents, articles, and AI-consumable data",
+  "namespace": "@/frontend/slices/knowledge",
+  "kind": "frontend-only",
+  "frontend": {
+    "slicePath": "frontend/slices/knowledge",
+    "configExport": "knowledgeConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

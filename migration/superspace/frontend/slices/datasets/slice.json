@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "datasets",
+  "version": "0.1.0",
+  "category": "administration",
+  "title": "Datasets",
+  "description": "Generic data containers — define schema once, ingest from any business or remote source.",
+  "namespace": "@/frontend/slices/datasets",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/datasets/schema.ts",
+    "rootPaths": [
+      "convex/features/datasets"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/datasets",
+    "configExport": "datasetsConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

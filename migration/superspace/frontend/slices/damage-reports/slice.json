@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "damage-reports",
+  "version": "1.0.0",
+  "category": "administration",
+  "title": "Damage Reports",
+  "description": "Report and track damage incidents from reported to resolved.",
+  "namespace": "@/frontend/slices/damage-reports",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/damageReports/schema.ts",
+    "rootPaths": [
+      "convex/features/damageReports"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/damage-reports",
+    "configExport": "damageReportsConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

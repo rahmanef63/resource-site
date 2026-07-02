@@ -1,0 +1,1 @@
+export { __PASCAL__GeneralSettings } from "./__PASCAL__Settings"

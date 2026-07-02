@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "customer-loyalty",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add customer-loyalty",
+    "consumerPath": "slices/customer-loyalty"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/customerLoyalty/schema.ts",
+    "rootPaths": [
+      "convex/features/customerLoyalty"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

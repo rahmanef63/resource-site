@@ -1,0 +1,30 @@
+"use client"
+
+import { defineFeaturePreview } from "@/frontend/shared/preview"
+import type { FeaturePreviewProps } from "@/frontend/shared/preview"
+
+function __PASCAL__Preview({ compact }: FeaturePreviewProps) {
+  if (compact) {
+    return (
+      <div className="p-4 text-center">
+        <h3 className="text-lg font-semibold">__TITLE__</h3>
+        <p className="mt-2 text-xs text-muted-foreground">Preview</p>
+      </div>
+    )
+  }
+  return (
+    <div className="flex h-full items-center justify-center p-6 text-muted-foreground">
+      __TITLE__ preview — replace with a mock of your real view.
+    </div>
+  )
+}
+
+export default defineFeaturePreview({
+  featureId: "__SLUG__",
+  name: "__TITLE__",
+  description: "__TITLE__ feature.",
+  component: __PASCAL__Preview,
+  category: "__CATEGORY__",
+  tags: ["__SLUG__"],
+  mockDataSets: [],
+})

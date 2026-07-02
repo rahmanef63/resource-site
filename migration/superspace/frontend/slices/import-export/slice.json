@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "import-export",
+  "version": "1.0.0",
+  "category": "administration",
+  "title": "Import/Export",
+  "description": "Import and export data across workspace",
+  "namespace": "@/frontend/slices/import-export",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/importExport/schema.ts",
+    "rootPaths": [
+      "convex/features/importExport"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/import-export",
+    "configExport": "importExportConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

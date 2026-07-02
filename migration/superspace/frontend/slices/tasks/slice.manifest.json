@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "tasks",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add tasks",
+    "consumerPath": "slices/tasks"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/tasks/schema.ts",
+    "rootPaths": [
+      "convex/features/tasks"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

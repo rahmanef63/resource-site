@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "asset-management",
+  "version": "1.0.0",
+  "category": "administration",
+  "title": "Asset Management",
+  "description": "Track fixed assets with location, assignment, depreciation and transaction ledger.",
+  "namespace": "@/frontend/slices/asset-management",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/assetManagement/schema.ts",
+    "rootPaths": [
+      "convex/features/assetManagement"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/asset-management",
+    "configExport": "assetManagementConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

@@ -1,0 +1,73 @@
+import { defineFeature } from '@/frontend/shared/lib/features/defineFeature'
+
+/**
+ * Petty Cash Feature Configuration
+ *
+ * This is the single source of truth for the petty-cash feature.
+ * Auto-discovered by the feature registry system.
+ *
+ * @see frontend/shared/lib/features/registry.ts for auto-discovery
+ * @see frontend/shared/lib/features/defineFeature.ts for schema
+ */
+export default defineFeature({
+  // Basic Info
+  id: 'petty-cash',
+  name: 'Petty Cash',
+  description: 'Cash-on-hand request → approval → disbursement → close workflow with variance tracking.',
+
+  // UI Config
+  ui: {
+    icon: 'Wallet',                  // Lucide React icon name
+    path: '/dashboard/petty-cash',
+    component: 'PettyCashPage',
+    category: 'administration',
+    order: 100,
+  },
+
+  // Technical Config
+  technical: {
+    featureType: 'optional',
+    hasUI: true,
+    hasConvex: true,
+    hasTests: true,
+    version: '1.0.0',
+  },
+
+  // Development Status
+  status: {
+    state: 'beta',                      // development | beta | stable | deprecated
+    isReady: true,                      // Set to true when ready for production
+    expectedRelease: undefined,         // Optional: 'Q1 2025'
+  },
+
+  // RBAC permission keys (declarative — role documents hold the authoritative grants)
+  permissions: [
+    'pettyCash.view',
+    'pettyCash.create',
+    'pettyCash.approve',
+    'pettyCash.reject',
+    'pettyCash.disburse',
+    'pettyCash.close',
+    'pettyCash.cancel',
+  ],
+
+  // JSON Generation Policy
+  generation: {
+    mode: 'full-json',
+  },
+
+  // Bundle Membership
+  // Defines which workspace templates include this feature
+  // core: Cannot be disabled | recommended: Enabled by default | optional: User can enable
+  bundles: {
+    core: [],
+    recommended: ["business-pro"],
+    optional: ["custom"],
+  },
+
+  // Metadata
+  tags: [
+    "petty-cash",
+    "administration"
+],
+})

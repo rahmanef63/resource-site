@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "hr",
+  "version": "1.0.0",
+  "category": "administration",
+  "title": "HR Management",
+  "description": "Human Resources Management",
+  "namespace": "@/frontend/slices/hr",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/hr/schema.ts",
+    "rootPaths": [
+      "convex/features/hr"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/hr",
+    "configExport": "hrConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

@@ -1,0 +1,128 @@
+/**
+ * ⚠️ LEGACY FILE - DO NOT USE IN NEXT.JS
+ * 
+ * This file was designed for a standalone React app with React Router.
+ * It is NOT compatible with Next.js App Router.
+ * 
+ * For Next.js admin layouts, use:
+ * - app/dashboard/layout.tsx
+ * - components/sidebar.tsx
+ * - app/dashboard/cms-lite/* routes
+ * 
+ * This file is kept for reference only.
+ */
+
+"use client";
+
+import { Outlet, Link, useLocation, Navigate, useNavigate } from "react-router-dom";
+import NextImage from "next/image";
+import { LayoutDashboard, Package, FileText, Image, Settings, Layout, Star, Link as LinkIcon, Menu as MenuIcon, Bot, Briefcase, Users, LogOut } from "lucide-react";
+import { LoadingSpinner } from "../../../shared/components/Loading";
+import { Button } from "../../../shared/components/Button";
+import { useEffect, useState } from "react";
+import { useBackend } from "../shared/hooks/useBackend";
+
+
+export default function AdminLayout() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const token = localStorage.getItem("auth_token");
+  const userEmail = localStorage.getItem("user_email");
+  const userRole = localStorage.getItem("user_role");
+  const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
+
+  useEffect(() => {
+    const backend = useBackend();    backend.settings.get().then((res) => setSiteSettings(res.settings));
+  }, []);
+
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem("auth_token");
+    localStorage.removeItem("user_email");
+    localStorage.removeItem("user_role");
+    navigate("/login");
+  };
+
+  const navItems = [
+    { path: "/admin", label: "Dashboard", icon: LayoutDashboard },
+    { path: "/admin/products", label: "Products", icon: Package },
+    { path: "/admin/posts", label: "Blog Posts", icon: FileText },
+    { path: "/admin/portfolio", label: "Portfolio", icon: Image },
+    { path: "/admin/services", label: "Services", icon: Briefcase },
+    { path: "/admin/landing", label: "Landing Page", icon: Layout },
+    { path: "/admin/navigation", label: "Navigation", icon: MenuIcon },
+    { path: "/admin/features", label: "Features", icon: Star },
+    { path: "/admin/quicklinks", label: "Quick Links", icon: LinkIcon },
+    { path: "/admin/ai", label: "AI Chatbot", icon: Bot },
+    ...(userRole === "owner" ? [{ path: "/admin/users", label: "Users", icon: Users }] : []),
+    { path: "/admin/settings", label: "Settings", icon: Settings },
+  ];
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="flex">
+        <aside className="w-64 border-r min-h-screen p-6">
+          <Link to="/" className="flex items-center gap-3 mb-8">
+            {siteSettings?.logoUrl ? (
+              <NextImage
+                src={siteSettings.logoUrl}
+                alt={siteSettings.brandName || "Logo"}
+                width={128}
+                height={32}
+                className="h-8 w-auto"
+                sizes="128px"
+              />
+            ) : (
+              <span className="text-2xl font-bold">{siteSettings?.brandName || "Admin"}</span>
+            )}
+          </Link>
+          
+          <nav className="space-y-2 mb-8">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = location.pathname === item.path;
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-colors ${
+                    isActive
+                      ? "bg-primary text-primary-foreground"
+                      : "hover:bg-muted"
+                  }`}
+                >
+                  <Icon className="w-5 h-5" />
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
+
+          <div className="pt-6 border-t space-y-2">
+            <div className="text-sm text-muted-foreground px-4">
+              {userEmail}
+              <div className="text-xs">
+                {userRole === "owner" ? "Owner" : "Editor"}
+              </div>
+            </div>
+            <Button
+              variant="ghost"
+              onClick={handleLogout}
+              className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Logout
+            </Button>
+          </div>
+        </aside>
+
+        <main className="flex-1 p-8">
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  );
+}

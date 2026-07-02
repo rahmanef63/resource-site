@@ -1,0 +1,27 @@
+"use client"
+import { useQuery, useMutation } from "convex/react"
+import { api } from "@/convex/_generated/api"
+import type { Id } from "@convex/_generated/dataModel"
+
+/**
+ * Data hook for __TITLE__.
+ *
+ * Pattern:
+ * 1. useQuery with "skip" guard for conditional fetching
+ * 2. useMutation for writes
+ * 3. Return isLoading + data + actions
+ */
+export function use__PASCAL__(workspaceId: Id<"workspaces"> | null | undefined) {
+  const data = useQuery(
+    api.features.__CAMEL__.queries.getData,
+    workspaceId ? { workspaceId } : "skip",
+  )
+
+  const createItem = useMutation(api.features.__CAMEL__.mutations.createItem)
+
+  return {
+    isLoading: data === undefined && !!workspaceId,
+    data,
+    createItem,
+  }
+}

@@ -1,0 +1,1 @@
+export { QsrProductChangesGeneralSettings } from "./QsrProductChangesSettings"

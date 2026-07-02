@@ -1,0 +1,428 @@
+/**
+ * Example: Complete Filter Implementation
+ * 
+ * File ini adalah contoh lengkap bagaimana menerapkan universal filter system
+ * ke sebuah feature (dalam hal ini: Database feature).
+ * 
+ * Copy pattern ini untuk features lain seperti:
+ * - Documents
+ * - Tasks
+ * - Projects
+ * - Team Members
+ * - etc.
+ */
+
+'use client';
+
+import { useState } from 'react';
+import { useQuery } from 'convex/react';
+import { api } from '@/convex/_generated/api';
+import { useFeatureFilters } from '@/frontend/features/database/filters';
+import { DatabaseFilters } from '@/frontend/features/database/components';
+import { createFilter } from '@/components/ui/filters';
+import { 
+  Calendar, 
+  Users, 
+  Star, 
+  Check, 
+  X, 
+  Clock,
+  AlertCircle,
+  Ban,
+} from 'lucide-react';
+
+// ============================================================================
+// STEP 1: Define Properties
+// ============================================================================
+
+// Ini biasanya datang dari database/API
+const exampleProperties = [
+  { key: 'name', type: 'text' as const, label: 'Name' },
+  { key: 'email', type: 'email' as const, label: 'Email' },
+  { key: 'status', type: 'select' as const, label: 'Status' },
+  { key: 'priority', type: 'multi_select' as const, label: 'Priority' },
+  { key: 'assignee', type: 'user' as const, label: 'Assignee' },
+  { key: 'created_at', type: 'created_at' as const, label: 'Created' },
+  { key: 'due_date', type: 'date' as const, label: 'Due Date' },
+  { key: 'score', type: 'number' as const, label: 'Score' },
+  { key: 'is_active', type: 'checkbox' as const, label: 'Is Active' },
+];
+
+// ============================================================================
+// STEP 2: Setup Feature Component
+// ============================================================================
+
+export function DatabaseViewWithFilters() {
+  const workspaceId = 'workspace_123'; // From context/params
+  const databaseId = 'database_456'; // From context/params
+  
+  // ========================================================================
+  // STEP 3: Initialize Filter System
+  // ========================================================================
+  
+  const databaseFilters = useFeatureFilters({
+    // Unique feature ID (untuk localStorage persistence)
+    featureId: `database-${databaseId}`,
+    
+    // Properties dari database
+    properties: exampleProperties,
+    
+    // Default filters (optional)
+    // User akan langsung lihat filters ini saat pertama load
+    defaultFilters: [
+      createFilter('status', 'not_equals', ['cancelled']),
+      createFilter('is_active', 'equals', [true]),
+    ],
+    
+    // Custom options untuk select/multiselect fields (optional)
+    customOptions: {
+      status: [
+        { 
+          value: 'todo', 
+          label: 'To Do', 
+          icon: <Clock className="size-3 text-primary" /> 
+        },
+        { 
+          value: 'in-progress', 
+          label: 'In Progress', 
+          icon: <AlertCircle className="size-3 text-yellow-500" /> 
+        },
+        { 
+          value: 'done', 
+          label: 'Done', 
+          icon: <Check className="size-3 text-green-500" /> 
+        },
+        { 
+          value: 'cancelled', 
+          label: 'Cancelled', 
+          icon: <Ban className="size-3 text-destructive" /> 
+        },
+      ],
+      priority: [
+        { value: 'low', label: 'Low', icon: <Star className="size-3" /> },
+        { value: 'medium', label: 'Medium', icon: <Star className="size-3" /> },
+        { value: 'high', label: 'High', icon: <Star className="size-3" /> },
+        { value: 'urgent', label: 'Urgent', icon: <Star className="size-3" /> },
+      ],
+    },
+    
+    // Property overrides (optional)
+    // Customize labels, icons, className untuk specific properties
+    propertyOverrides: {
+      created_at: {
+        label: 'Date Created',
+        icon: <Calendar className="size-4" />,
+      },
+      assignee: {
+        label: 'Assigned To',
+        icon: <Users className="size-4" />,
+      },
+    },
+    
+    // Group filters by category (optional)
+    groups: [
+      { 
+        group: 'Basic Info', 
+        fields: ['name', 'email'] 
+      },
+      { 
+        group: 'Status & Priority', 
+        fields: ['status', 'priority', 'is_active'] 
+      },
+      { 
+        group: 'People', 
+        fields: ['assignee'] 
+      },
+      { 
+        group: 'Dates', 
+        fields: ['created_at', 'due_date'] 
+      },
+      { 
+        group: 'Metrics', 
+        fields: ['score'] 
+      },
+    ],
+    
+    // Callback when filters change
+    onFiltersChange: (filters, query) => {
+      console.log('Active filters:', filters);
+      console.log('Convex query:', query);
+      // Query otomatis akan trigger refetch via useQuery
+    },
+    
+    // Enable/disable localStorage persistence (default: true)
+    persistFilters: true,
+    
+    // Custom storage key (optional)
+    // Default: `${featureId}-filters`
+    storageKey: `database-${databaseId}-filters`,
+  });
+  
+  // ========================================================================
+  // STEP 4: Use Filter Query in Convex
+  // ========================================================================
+  
+  const records = useQuery(
+    api.database.listRecords,
+    {
+      workspaceId,
+      databaseId,
+      // Pass convex query ke backend
+      filter: databaseFilters.convexQuery,
+    }
+  );
+  
+  // ========================================================================
+  // STEP 5: Render UI
+  // ========================================================================
+  
+  return (
+    <div className="space-y-4 p-6">
+      <h1 className="text-2xl font-bold">Database Records</h1>
+      
+      {/* Filter UI */}
+      <div className="flex items-start gap-2.5">
+        <DatabaseFilters
+          properties={exampleProperties}
+          filters={databaseFilters.filters}
+          onFiltersChange={databaseFilters.setFilters}
+          variant="outline"
+          size="sm"
+        />
+      </div>
+      
+      {/* Debug Info */}
+      <div className="bg-muted p-4 rounded-lg space-y-2">
+        <p className="text-sm font-medium">
+          Active Filters: {databaseFilters.hasFilters ? databaseFilters.filters.length : 'None'}
+        </p>
+        
+        {/* Filter Actions */}
+        <div className="flex gap-2">
+          <button
+            onClick={databaseFilters.clearFilters}
+            className="text-sm text-destructive hover:underline"
+            disabled={!databaseFilters.hasFilters}
+          >
+            Clear All Filters
+          </button>
+          <button
+            onClick={databaseFilters.resetToDefaults}
+            className="text-sm text-primary hover:underline"
+          >
+            Reset to Defaults
+          </button>
+        </div>
+      </div>
+      
+      {/* Records Display */}
+      <div className="border rounded-lg p-4">
+        <h2 className="text-lg font-semibold mb-4">
+          Records ({records?.length ?? 0})
+        </h2>
+        
+        {records === undefined ? (
+          <p>Loading...</p>
+        ) : records.length === 0 ? (
+          <p className="text-muted-foreground">
+            No records found. Try adjusting your filters.
+          </p>
+        ) : (
+          <ul className="space-y-2">
+            {records.map((record: any) => (
+              <li key={record._id} className="p-2 border rounded">
+                {/* Render record data */}
+                <pre className="text-xs overflow-auto">
+                  {JSON.stringify(record, null, 2)}
+                </pre>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+      
+      {/* Convex Query Debug */}
+      {databaseFilters.convexQuery && (
+        <details className="bg-muted p-4 rounded-lg">
+          <summary className="font-medium cursor-pointer">
+            Convex Query (Debug)
+          </summary>
+          <pre className="text-xs mt-2 overflow-auto">
+            {JSON.stringify(databaseFilters.convexQuery, null, 2)}
+          </pre>
+        </details>
+      )}
+    </div>
+  );
+}
+
+// ============================================================================
+// BACKEND: Convex Query Handler
+// ============================================================================
+
+/**
+ * File: convex/database.ts
+ * 
+ * ```typescript
+ * import { query } from "./_generated/server";
+ * import { v } from "convex/values";
+ * import { applyConvexFilters } from "./lib/filters";
+ * 
+ * export const listRecords = query({
+ *   args: {
+ *     workspaceId: v.id("workspaces"),
+ *     databaseId: v.id("databases"),
+ *     filter: v.optional(v.any()), // ⭐ Add filter argument
+ *   },
+ *   handler: async (ctx, args) => {
+ *     // 1. Fetch base records
+ *     let records = await ctx.db
+ *       .query("records")
+ *       .withIndex("by_workspace_and_database", q =>
+ *         q.eq("workspaceId", args.workspaceId)
+ *          .eq("databaseId", args.databaseId)
+ *       )
+ *       .collect();
+ *     
+ *     // 2. Apply filters ⭐
+ *     if (args.filter) {
+ *       records = applyConvexFilters(records, args.filter);
+ *     }
+ *     
+ *     return records;
+ *   },
+ * });
+ * ```
+ */
+
+// ============================================================================
+// VARIATIONS: Different Use Cases
+// ============================================================================
+
+// ────────────────────────────────────────────────────────────────────────────
+// Variation 1: Minimal Setup (No Customization)
+// ────────────────────────────────────────────────────────────────────────────
+
+export function MinimalFilterExample() {
+  const filters = useFeatureFilters({
+    featureId: 'simple-list',
+    properties: exampleProperties,
+  });
+  
+  return (
+    <DatabaseFilters
+      properties={exampleProperties}
+      filters={filters.filters}
+      onFiltersChange={filters.setFilters}
+    />
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// Variation 2: With Preset Filters
+// ────────────────────────────────────────────────────────────────────────────
+
+export function PresetFiltersExample() {
+  const filters = useFeatureFilters({
+    featureId: 'preset-example',
+    properties: exampleProperties,
+    defaultFilters: [
+      createFilter('status', 'equals', ['active']),
+      createFilter('priority', 'contains', ['high', 'urgent']),
+    ],
+  });
+  
+  return (
+    <div>
+      <DatabaseFilters
+        properties={exampleProperties}
+        filters={filters.filters}
+        onFiltersChange={filters.setFilters}
+      />
+      
+      {/* Quick preset buttons */}
+      <div className="flex gap-2 mt-4">
+        <button onClick={() => filters.setFilters([
+          createFilter('status', 'equals', ['active'])
+        ])}>
+          Show Active Only
+        </button>
+        <button onClick={() => filters.setFilters([
+          createFilter('priority', 'equals', ['urgent'])
+        ])}>
+          Urgent Only
+        </button>
+        <button onClick={filters.resetToDefaults}>
+          Reset to Default
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// Variation 3: No Persistence (Temporary Filters)
+// ────────────────────────────────────────────────────────────────────────────
+
+export function TemporaryFiltersExample() {
+  const filters = useFeatureFilters({
+    featureId: 'temp-view',
+    properties: exampleProperties,
+    persistFilters: false, // Won't save to localStorage
+  });
+  
+  return (
+    <DatabaseFilters
+      properties={exampleProperties}
+      filters={filters.filters}
+      onFiltersChange={filters.setFilters}
+    />
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// Variation 4: Multiple Filter Sets (e.g., Per View)
+// ────────────────────────────────────────────────────────────────────────────
+
+export function MultipleFilterSetsExample() {
+  const viewId = 'view_123';
+  
+  const filters = useFeatureFilters({
+    featureId: 'database',
+    properties: exampleProperties,
+    storageKey: `database-view-${viewId}-filters`, // Per-view persistence
+  });
+  
+  return (
+    <DatabaseFilters
+      properties={exampleProperties}
+      filters={filters.filters}
+      onFiltersChange={filters.setFilters}
+    />
+  );
+}
+
+// ============================================================================
+// SUMMARY
+// ============================================================================
+
+/**
+ * ✅ TO ADD FILTERS TO ANY FEATURE:
+ * 
+ * 1. Import useFeatureFilters hook
+ * 2. Call with config (featureId + properties minimum)
+ * 3. Render DatabaseFilters component
+ * 4. Pass convexQuery ke backend
+ * 5. Use applyConvexFilters di Convex handler
+ * 
+ * DONE! 🎉
+ * 
+ * ✨ BENEFITS:
+ * - Auto-generate filter fields from properties
+ * - Visible filter chips (like Notion/Airtable)
+ * - Customizable options, icons, groups
+ * - LocalStorage persistence
+ * - Type-safe with TypeScript
+ * - Reusable across all features
+ * - DRY & SSOT principles
+ */

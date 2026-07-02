@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "petty-cash",
+  "version": "1.0.0",
+  "category": "administration",
+  "title": "Petty Cash",
+  "description": "Cash-on-hand request → approval → disbursement → close workflow with variance tracking.",
+  "namespace": "@/frontend/slices/petty-cash",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/pettyCash/schema.ts",
+    "rootPaths": [
+      "convex/features/pettyCash"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/petty-cash",
+    "configExport": "pettyCashConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "bi",
+  "version": "1.0.0",
+  "category": "analytics",
+  "title": "Business Intelligence",
+  "description": "Advanced analytics and business intelligence",
+  "namespace": "@/frontend/slices/bi",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/bi/schema.ts",
+    "rootPaths": [
+      "convex/features/bi"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/bi",
+    "configExport": "biConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

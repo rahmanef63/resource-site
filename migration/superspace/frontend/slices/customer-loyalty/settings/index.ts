@@ -1,0 +1,1 @@
+export { CustomerLoyaltyGeneralSettings } from "./CustomerLoyaltySettings"

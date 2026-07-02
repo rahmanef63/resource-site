@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "approvals",
+  "version": "1.0.0",
+  "category": "administration",
+  "title": "Approvals",
+  "description": "Approval workflows and request management",
+  "namespace": "@/frontend/slices/approvals",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/approvals/schema.ts",
+    "rootPaths": [
+      "convex/features/approvals"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/approvals",
+    "configExport": "approvalsConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

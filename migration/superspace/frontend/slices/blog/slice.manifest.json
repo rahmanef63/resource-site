@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "blog",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add blog",
+    "consumerPath": "slices/blog"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/blog/schema.ts",
+    "rootPaths": [
+      "convex/features/blog"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "kpi-thresholds",
+  "version": "1.0.0",
+  "category": "analytics",
+  "title": "Kpi Thresholds",
+  "description": "Define KPI alert thresholds and triage triggered alerts across branches.",
+  "namespace": "@/frontend/slices/kpi-thresholds",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/kpiThresholds/schema.ts",
+    "rootPaths": [
+      "convex/features/kpiThresholds"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/kpi-thresholds",
+    "configExport": "kpiThresholdsConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

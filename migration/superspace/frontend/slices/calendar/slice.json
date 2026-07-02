@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "calendar",
+  "version": "1.0.0",
+  "category": "productivity",
+  "title": "Calendar",
+  "description": "Team calendar with event management and scheduling",
+  "namespace": "@/frontend/slices/calendar",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/calendar/schema.ts",
+    "rootPaths": [
+      "convex/features/calendar"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/calendar",
+    "configExport": "calendarConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

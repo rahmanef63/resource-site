@@ -1,0 +1,59 @@
+import { defineFeature } from "@/frontend/shared/lib/features/defineFeature"
+
+/**
+ * __TITLE__ Feature Configuration
+ *
+ * SINGLE SOURCE OF TRUTH for the __SLUG__ feature. Auto-discovered by the
+ * feature registry — never hardcode this feature anywhere else.
+ *
+ * @see frontend/shared/lib/features/registry.server.ts (auto-discovery)
+ * @see frontend/shared/lib/features/defineFeature.ts   (schema)
+ */
+export default defineFeature({
+  // Identity
+  id: "__SLUG__",
+  name: "__TITLE__",
+  description: "__TITLE__ feature.",
+
+  // UI
+  ui: {
+    icon: "__ICON__", // Lucide icon name — https://lucide.dev/icons
+    path: "/dashboard/__SLUG__",
+    component: "__PASCAL__Page",
+    category: "__CATEGORY__",
+    order: 100,
+  },
+
+  // Technical
+  technical: {
+    featureType: "optional", // default | optional | experimental | system
+    hasUI: true,
+    hasConvex: true, // requires convex/features/__CAMEL__/
+    hasTests: false,
+    version: "1.0.0",
+  },
+
+  // Status
+  status: {
+    state: "development", // development | beta | stable | deprecated
+    isReady: false,
+  },
+
+  // Bundle membership
+  bundles: {
+    core: [],
+    recommended: [],
+    optional: ["custom"],
+  },
+
+  // Permissions — format: {feature}.{action}
+  permissions: [
+    "__SLUG__.view",
+    "__SLUG__.create",
+    "__SLUG__.edit",
+    "__SLUG__.delete",
+  ],
+
+  // Search
+  tags: ["__SLUG__"],
+})

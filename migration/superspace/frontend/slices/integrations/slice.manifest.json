@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "integrations",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add integrations",
+    "consumerPath": "slices/integrations"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/integrations/schema.ts",
+    "rootPaths": [
+      "convex/features/integrations"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

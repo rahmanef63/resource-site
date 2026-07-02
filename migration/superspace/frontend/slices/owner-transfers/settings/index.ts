@@ -1,0 +1,1 @@
+export { OwnerTransfersGeneralSettings } from "./OwnerTransfersSettings"

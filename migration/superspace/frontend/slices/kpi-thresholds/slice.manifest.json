@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "kpi-thresholds",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add kpi-thresholds",
+    "consumerPath": "slices/kpi-thresholds"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/kpiThresholds/schema.ts",
+    "rootPaths": [
+      "convex/features/kpiThresholds"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

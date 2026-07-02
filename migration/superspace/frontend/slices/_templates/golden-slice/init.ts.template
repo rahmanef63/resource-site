@@ -1,0 +1,19 @@
+/**
+ * __TITLE__ feature initialization — registers settings + agent.
+ */
+import { registerFeatureSettings } from "@/frontend/shared/settings"
+import { Settings } from "lucide-react"
+import { __PASCAL__GeneralSettings } from "./settings"
+import { register__PASCAL__Agent } from "./agent"
+
+registerFeatureSettings("__SLUG__", () => [
+  {
+    id: "__SLUG__-general",
+    label: "General",
+    icon: Settings,
+    order: 100,
+    component: __PASCAL__GeneralSettings,
+  },
+])
+
+register__PASCAL__Agent()

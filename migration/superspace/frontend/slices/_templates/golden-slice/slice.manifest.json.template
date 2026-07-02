@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "__SLUG__",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add __SLUG__",
+    "consumerPath": "slices/__SLUG__"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/__CAMEL__/schema.ts",
+    "rootPaths": [
+      "convex/features/__CAMEL__"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

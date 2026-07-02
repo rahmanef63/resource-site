@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "maintenance-scheduling",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add maintenance-scheduling",
+    "consumerPath": "slices/maintenance-scheduling"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/maintenanceScheduling/schema.ts",
+    "rootPaths": [
+      "convex/features/maintenanceScheduling"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

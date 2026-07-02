@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "crm",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add crm",
+    "consumerPath": "slices/crm"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/crm/schema.ts",
+    "rootPaths": [
+      "convex/features/crm"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

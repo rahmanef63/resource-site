@@ -1,0 +1,24 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "qsr-allowances",
+  "version": "1.0.0",
+  "category": "administration",
+  "title": "QSR Allowances",
+  "description": "Employee allowances — luar-kota, transport, kos subsidies + monthly incentives by branch.",
+  "namespace": "@/frontend/slices/qsr-allowances",
+  "kind": "frontend-only",
+  "frontend": {
+    "slicePath": "frontend/slices/qsr-allowances",
+    "configExport": "qsrAllowancesConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

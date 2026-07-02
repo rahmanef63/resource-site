@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "accounting",
+  "version": "1.0.0",
+  "category": "administration",
+  "title": "Accounting",
+  "description": "Financial Management and Accounting",
+  "namespace": "@/frontend/slices/accounting",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/accounting/schema.ts",
+    "rootPaths": [
+      "convex/features/accounting"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/accounting",
+    "configExport": "accountingConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

@@ -1,0 +1,174 @@
+{
+  "version": "2.0",
+  "createdAt": 0,
+  "meta": {
+    "name": "Agency + Clients",
+    "description": "Digital agency HQ + dedicated workspaces for 2 clients. Clients have limited visibility into their own projects only.",
+    "author": "SuperSpace",
+    "tags": ["agency", "clients", "digital", "creative", "freelance"]
+  },
+  "workspaces": [
+    {
+      "localId": "agency",
+      "workspace": {
+        "name": "Agency HQ",
+        "slug": "agency-hq",
+        "type": "organization",
+        "description": "Internal workspace — all projects, resources, and operations",
+        "timezone": "Asia/Jakarta",
+        "language": "id",
+        "themePreset": "modern"
+      },
+      "enabledFeatures": [
+        "projects",
+        "tasks",
+        "calendar",
+        "documents",
+        "crm",
+        "accounting",
+        "hr",
+        "analytics",
+        "communications",
+        "knowledge"
+      ],
+      "roles": [
+        {
+          "name": "Owner",
+          "slug": "owner",
+          "permissions": ["*"],
+          "level": 0,
+          "isSystemRole": true
+        },
+        {
+          "name": "Creative Director",
+          "slug": "creative-director",
+          "description": "Leads creative strategy and approvals",
+          "permissions": [
+            "projects.*",
+            "tasks.*",
+            "documents.*",
+            "crm.*",
+            "calendar.*",
+            "analytics.view"
+          ],
+          "level": 10,
+          "color": "#8B5CF6"
+        },
+        {
+          "name": "Account Manager",
+          "slug": "account-manager",
+          "description": "Client relationship and project coordination",
+          "permissions": [
+            "crm.*",
+            "projects.*",
+            "tasks.*",
+            "calendar.*",
+            "documents.*",
+            "communications.*"
+          ],
+          "level": 20,
+          "color": "#3B82F6"
+        },
+        {
+          "name": "Designer",
+          "slug": "designer",
+          "permissions": [
+            "projects.view",
+            "tasks.*",
+            "documents.*",
+            "calendar.view"
+          ],
+          "level": 40,
+          "color": "#EC4899"
+        },
+        {
+          "name": "Developer",
+          "slug": "developer",
+          "permissions": [
+            "projects.view",
+            "tasks.*",
+            "documents.*",
+            "knowledge.*",
+            "calendar.view"
+          ],
+          "level": 40,
+          "color": "#10B981"
+        }
+      ]
+    },
+    {
+      "localId": "client-1",
+      "parentLocalId": "agency",
+      "workspace": {
+        "name": "Client 1",
+        "slug": "client-1",
+        "type": "group",
+        "description": "Dedicated workspace for Client 1 — project updates and deliverables",
+        "timezone": "Asia/Jakarta",
+        "language": "id"
+      },
+      "enabledFeatures": ["projects", "tasks", "documents", "communications"],
+      "roles": [
+        {
+          "name": "Agency Lead",
+          "slug": "agency-lead",
+          "description": "Agency team member managing this client",
+          "permissions": ["*"],
+          "level": 10,
+          "color": "#8B5CF6"
+        },
+        {
+          "name": "Client Contact",
+          "slug": "client-contact",
+          "description": "Client stakeholder — view and comment only",
+          "permissions": [
+            "projects.view",
+            "tasks.view",
+            "documents.view",
+            "communications.view",
+            "communications.create"
+          ],
+          "level": 60,
+          "color": "#F59E0B"
+        }
+      ]
+    },
+    {
+      "localId": "client-2",
+      "parentLocalId": "agency",
+      "workspace": {
+        "name": "Client 2",
+        "slug": "client-2",
+        "type": "group",
+        "description": "Dedicated workspace for Client 2 — project updates and deliverables",
+        "timezone": "Asia/Jakarta",
+        "language": "id"
+      },
+      "enabledFeatures": ["projects", "tasks", "documents", "communications"],
+      "roles": [
+        {
+          "name": "Agency Lead",
+          "slug": "agency-lead",
+          "description": "Agency team member managing this client",
+          "permissions": ["*"],
+          "level": 10,
+          "color": "#8B5CF6"
+        },
+        {
+          "name": "Client Contact",
+          "slug": "client-contact",
+          "description": "Client stakeholder — view and comment only",
+          "permissions": [
+            "projects.view",
+            "tasks.view",
+            "documents.view",
+            "communications.view",
+            "communications.create"
+          ],
+          "level": 60,
+          "color": "#F59E0B"
+        }
+      ]
+    }
+  ]
+}

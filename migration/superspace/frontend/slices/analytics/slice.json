@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "analytics",
+  "version": "1.0.0",
+  "category": "analytics",
+  "title": "Analytics",
+  "description": "Monitor your business performance with real-time analytics",
+  "namespace": "@/frontend/slices/analytics",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/analytics/schema.ts",
+    "rootPaths": [
+      "convex/features/analytics"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/analytics",
+    "configExport": "analyticsConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

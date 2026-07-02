@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "cash-flow-forecast",
+  "version": "1.0.0",
+  "category": "analytics",
+  "title": "Cash Flow Forecast",
+  "description": "Build cash-flow forecasts from bucketed revenue and expense line items.",
+  "namespace": "@/frontend/slices/cash-flow-forecast",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/cashFlowForecast/schema.ts",
+    "rootPaths": [
+      "convex/features/cashFlowForecast"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/cash-flow-forecast",
+    "configExport": "cashFlowForecastConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

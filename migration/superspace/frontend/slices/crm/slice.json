@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "crm",
+  "version": "1.0.0",
+  "category": "administration",
+  "title": "CRM",
+  "description": "Customer Relationship Management with contacts, leads, opportunities, and sales pipeline",
+  "namespace": "@/frontend/slices/crm",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/crm/schema.ts",
+    "rootPaths": [
+      "convex/features/crm"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/crm",
+    "configExport": "crmConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

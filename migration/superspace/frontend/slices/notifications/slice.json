@@ -1,0 +1,24 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "notifications",
+  "version": "0.1.0",
+  "category": "communication",
+  "title": "Notifications",
+  "description": "Per-page Notify Me popover with localStorage-backed subscription state. UI primitive consumed by other slices — not a top-level route.",
+  "namespace": "@/frontend/slices/notifications",
+  "kind": "frontend-only",
+  "frontend": {
+    "slicePath": "frontend/slices/notifications",
+    "configExport": "notificationsConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

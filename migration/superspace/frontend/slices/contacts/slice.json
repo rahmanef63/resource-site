@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "contacts",
+  "version": "1.0.0",
+  "category": "social",
+  "title": "Contacts",
+  "description": "Manage your contacts and connections",
+  "namespace": "@/frontend/slices/contacts",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/contacts/schema.ts",
+    "rootPaths": [
+      "convex/features/contacts"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/contacts",
+    "configExport": "contactsConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

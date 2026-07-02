@@ -1,0 +1,24 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "documents",
+  "version": "1.2.0",
+  "category": "productivity",
+  "title": "Documents",
+  "description": "Collaborative document editor with real-time sync (Deprecated - use Knowledge > Docs)",
+  "namespace": "@/frontend/slices/documents",
+  "kind": "frontend-only",
+  "frontend": {
+    "slicePath": "frontend/slices/documents",
+    "configExport": "documentsConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

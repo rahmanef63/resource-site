@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "customer-loyalty",
+  "version": "1.0.0",
+  "category": "administration",
+  "title": "Customer Loyalty",
+  "description": "Customer loyalty program with tiered memberships and a points transaction ledger.",
+  "namespace": "@/frontend/slices/customer-loyalty",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/customerLoyalty/schema.ts",
+    "rootPaths": [
+      "convex/features/customerLoyalty"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/customer-loyalty",
+    "configExport": "customerLoyaltyConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

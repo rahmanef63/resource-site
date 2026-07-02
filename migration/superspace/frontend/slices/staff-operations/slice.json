@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "staff-operations",
+  "version": "0.1.0",
+  "category": "productivity",
+  "title": "Staff Operations",
+  "description": "Housekeeping, laundry, damage reports, and shift scheduling for hospitality ops",
+  "namespace": "@/frontend/slices/staff-operations",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/staffOperations/schema.ts",
+    "rootPaths": [
+      "convex/features/staffOperations"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/staff-operations",
+    "configExport": "staffOperationsConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

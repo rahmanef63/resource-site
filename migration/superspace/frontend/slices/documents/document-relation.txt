@@ -1,0 +1,181 @@
+﻿// ================= DOCS (NOTION-LIKE DOCUMENTS, TERPISAH DARI CMS pages) =================
+docs [icon: file, color: orange] {
+  id string pk
+  workspaceId string fk
+  title string
+  slug string
+  icon string
+  coverUrl string
+  parentId string fk              // nesting dokumen
+  path string                     // materialized path: "root/design/spec"
+  position number             // zero-based ordering
+  isListed boolean                // tampil di nav-doc sidebar (standalone docs)
+  createdById string fk
+  updatedById string fk
+  createdAt timestamp @default(now)
+  updatedAt timestamp @default(now)
+  deletedAt timestamp
+  // UNIQUE(workspaceId,slug)
+}
+
+docBlocks [icon: blocks, color: orange] {
+  id string pk
+  docId string fk
+  parentId string fk              // null = root
+  position number             // zero-based ordering
+  type string                     // paragraph|heading|todo|toggle|quote|code|image|video|divider|callout|db_view|embed|...
+  text json                       // richtext (content + marks) utk block text
+  props json                      // per-type config
+  bindings json                   // data-binding opsional
+  layout json                     // style/size/position opsional
+  createdAt timestamp @default(now)
+  updatedAt timestamp @default(now)
+  // INDEX: (docId,order)
+}
+
+docTree [icon: network, color: orange] {
+  id string pk
+  ancestorId string fk            // -> docs.id
+  descendantId string fk          // -> docs.id
+  distance number                 // 0=self,1=child,...
+  // UNIQUE(ancestorId,descendantId)
+}
+
+// Jika perlu hubungan eksplisit antara block "db_view" dengan dbViews:
+docDbViewEmbeds [icon: link, color: orange] {
+  id string pk
+  docBlockId string fk            // -> docBlocks.id (harus type='db_view')
+  viewId string fk                // -> dbViews.id
+  createdAt timestamp @default(now)
+  // UNIQUE(docBlockId)
+}
+
+// ================= DB (NOTION-LIKE DATABASES) =================
+dbTables [icon: table, color: teal] {
+  id string pk
+  workspaceId string fk
+  name string
+  slug string
+  description string
+  icon string
+  coverUrl string
+  isPublic boolean
+  createdById string fk
+  updatedById string fk
+  createdAt timestamp @default(now)
+  updatedAt timestamp @default(now)
+  deletedAt timestamp
+  // UNIQUE(workspaceId,slug)
+}
+
+dbFields [icon: tag, color: teal] {
+  id string pk
+  tableId string fk
+  name string
+  key string                      // stable key, dipakai di dbRows.data
+  type string                     // title|rich_text|number|select|multi_select|date|checkbox|files|url|email|phone|people|status|formula|relation|rollup|created_time|updated_time|created_by|updated_by
+  options json                    // per-type (select options, format number, formula expr, dsb.)
+  isRequired boolean
+  isPrimary boolean               // maksimal 1 per table (misal "Title")
+  position number             // zero-based ordering
+  createdAt timestamp @default(now)
+  updatedAt timestamp @default(now)
+  // UNIQUE(tableId,key)
+  // CHECK: at most one isPrimary=true per tableId
+}
+
+dbRelations [icon: arrows-left-right, color: teal] {
+  id string pk
+  tableId string fk               // table pemilik field relation
+  fieldId string fk               // -> dbFields.id (type='relation')
+  targetTableId string fk
+  symmetric boolean               // true jika ada pasangan inverse otomatis
+  inverseFieldId string fk        // opsional: field relation di target (jika explicit)
+  // UNIQUE(fieldId)
+}
+
+dbRows [icon: rows, color: teal] {
+  id string pk
+  tableId string fk
+  workspaceId string fk
+  data json                       // {key:value} sesuai dbFields
+  computed json                   // hasil rollup/formula (opsional)
+  docId string fk                 // -> docs.id (1:1) "1 row DB = 1 doc page"
+  createdById string fk
+  updatedById string fk
+  createdAt timestamp @default(now)
+  updatedAt timestamp @default(now)
+  deletedAt timestamp
+  // UNIQUE(docId)                // pastikan 1:1 row<->doc
+  // INDEX: (tableId,createdAt)
+}
+
+dbLinks [icon: link, color: teal] {
+  id string pk
+  relationId string fk            // -> dbRelations.id
+  fromRowId string fk             // -> dbRows.id
+  toRowId string fk               // -> dbRows.id
+  createdAt timestamp @default(now)
+  // UNIQUE(relationId,fromRowId,toRowId)
+}
+
+dbViews [icon: layout, color: teal] {
+  id string pk
+  tableId string fk
+  name string
+  type string                     // table|board|calendar|gallery|list|timeline
+  config json                     // {filters,sorts,groupBy,visibleProps,calendarDateProp,boardGroupProp,cardPreviewProp,...}
+  position number             // zero-based ordering
+  createdById string fk
+  createdAt timestamp @default(now)
+  updatedAt timestamp @default(now)
+  // UNIQUE(tableId,name)
+}
+
+dbViewFavorites [icon: star, color: teal] {
+  id string pk
+  viewId string fk
+  userId string fk
+  pinned boolean
+  position number             // zero-based ordering
+  // UNIQUE(viewId,userId)
+}
+
+
+// Docs
+workspaces.id < docs.workspaceId
+users.id < docs.createdById
+users.id < docs.updatedById
+docs.id < docs.parentId
+docs.id < docBlocks.docId
+docBlocks.id < docBlocks.parentId
+docs.id < docTree.ancestorId
+docs.id < docTree.descendantId
+docBlocks.id < docDbViewEmbeds.docBlockId
+dbViews.id < docDbViewEmbeds.viewId
+
+// DB
+workspaces.id < dbTables.workspaceId
+users.id < dbTables.createdById
+users.id < dbTables.updatedById
+
+dbTables.id < dbFields.tableId
+dbTables.id < dbViews.tableId
+users.id < dbViews.createdById
+
+dbFields.id < dbRelations.fieldId
+dbTables.id < dbRelations.tableId
+dbTables.id < dbRelations.targetTableId
+
+dbTables.id < dbRows.tableId
+workspaces.id < dbRows.workspaceId
+users.id < dbRows.createdById
+users.id < dbRows.updatedById
+docs.id < dbRows.docId
+
+dbRelations.id < dbLinks.relationId
+dbRows.id < dbLinks.fromRowId
+dbRows.id < dbLinks.toRowId
+
+dbViews.id < dbViewFavorites.viewId
+users.id < dbViewFavorites.userId

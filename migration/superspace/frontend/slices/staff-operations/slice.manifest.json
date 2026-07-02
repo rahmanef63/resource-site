@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "staff-operations",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add staff-operations",
+    "consumerPath": "slices/staff-operations"
+  },
+  "files": [],
+  "convex": {
+    "schemaPath": "convex/features/staffOperations/schema.ts",
+    "rootPaths": [
+      "convex/features/staffOperations"
+    ]
+  },
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

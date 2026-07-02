@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "blog",
+  "version": "1.0.0",
+  "category": "content",
+  "title": "Blog",
+  "description": "Tulis artikel, pengumuman, dan konten untuk pelanggan dengan editor sederhana.",
+  "namespace": "@/frontend/slices/blog",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/blog/schema.ts",
+    "rootPaths": [
+      "convex/features/blog"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/blog",
+    "configExport": "blogConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

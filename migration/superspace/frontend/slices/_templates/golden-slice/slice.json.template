@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "__SLUG__",
+  "version": "1.0.0",
+  "category": "__CATEGORY__",
+  "title": "__TITLE__",
+  "description": "__TITLE__ feature.",
+  "namespace": "@/frontend/slices/__SLUG__",
+  "kind": "full",
+  "convex": {
+    "schemaPath": "convex/features/__CAMEL__/schema.ts",
+    "rootPaths": [
+      "convex/features/__CAMEL__"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/__SLUG__",
+    "configExport": "__CAMEL__Config"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

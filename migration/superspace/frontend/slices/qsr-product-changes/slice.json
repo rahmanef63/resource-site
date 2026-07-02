@@ -1,0 +1,24 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "qsr-product-changes",
+  "version": "1.0.0",
+  "category": "administration",
+  "title": "QSR Product Changes",
+  "description": "Weekly product additions/removals/price changes per branch — recipe lifecycle audit trail.",
+  "namespace": "@/frontend/slices/qsr-product-changes",
+  "kind": "frontend-only",
+  "frontend": {
+    "slicePath": "frontend/slices/qsr-product-changes",
+    "configExport": "qsrProductChangesConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}

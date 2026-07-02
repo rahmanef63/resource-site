@@ -1,0 +1,24 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "support",
+  "version": "1.0.0",
+  "category": "communication",
+  "title": "Support",
+  "description": "Customer support and helpdesk ticketing system",
+  "namespace": "@/frontend/slices/support",
+  "kind": "frontend-only",
+  "frontend": {
+    "slicePath": "frontend/slices/support",
+    "configExport": "supportConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": []
+}
