@@ -20,6 +20,9 @@ export type CatalogSearchItem = {
    *  category. Resolved server-side (function props don't cross the
    *  server→client boundary). */
   family?: string | null;
+  /** Optional server-precomputed sort keys. When any item carries `sort`,
+   *  CatalogTabs renders a Sort control; absent → no sort UI (back-compat). */
+  sort?: { title?: string; updatedAt?: number };
   node: React.ReactNode;
 };
 

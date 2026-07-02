@@ -12,12 +12,15 @@ export function SearchRow({
   placeholder,
   filteredLen,
   totalLen,
+  trailing,
 }: {
   q: string;
   setQ: (v: string) => void;
   placeholder: string;
   filteredLen: number;
   totalLen: number;
+  /** Right-aligned control slot (e.g. the Sort dropdown). */
+  trailing?: React.ReactNode;
 }) {
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -41,7 +44,8 @@ export function SearchRow({
           </button>
         )}
       </div>
-      <div className="text-xs text-muted-foreground">
+      {trailing}
+      <div className="whitespace-nowrap text-xs text-muted-foreground">
         {filteredLen === totalLen
           ? `${totalLen} item${totalLen > 1 ? "s" : ""}`
           : `${filteredLen} of ${totalLen}`}
@@ -62,7 +66,10 @@ export function TagRow({
   clearAll: () => void;
 }) {
   return (
-    <div className="flex flex-wrap gap-1.5">
+    <div className="flex flex-wrap items-center gap-1.5">
+      <span className="mr-1 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+        Filter
+      </span>
       {allTags.map((t) => {
         const on = activeTags.has(t);
         return (

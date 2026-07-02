@@ -22,6 +22,7 @@ import { CatalogTabs } from "@/components/site/catalog/catalog-tabs";
 import { IframeThumbnail } from "@/components/site/catalog/iframe-thumbnail";
 import { MockThumbnail } from "@/components/site/catalog/mock-thumbnail";
 import { UseWideLayout } from "@/components/site/use-wide-layout";
+import { getLatestUpdate } from "@/lib/content/changelog-helpers";
 import { FAMILY_LABEL, familyOfSlug } from "./family-map";
 
 export const metadata = {
@@ -62,6 +63,10 @@ export default function SlicesPage() {
       tags: s.tags,
       group: s.category,
       family: familyOfSlug(s.slug),
+      sort: {
+        title: s.title,
+        updatedAt: getLatestUpdate(s.slug, "slice")?.date ?? 0,
+      },
       node: (
         <CatalogCard
           href={`/slices/${s.slug}`}

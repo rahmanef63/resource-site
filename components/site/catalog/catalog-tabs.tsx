@@ -7,6 +7,7 @@ import {
   CatalogGrid, CatalogGroupedGrid,
   SearchRow, TagRow,
 } from "./catalog-tabs-parts";
+import { SortSelect, sortItems, type SortMode } from "./catalog-sort";
 
 /**
  * Tab-first catalog navigation. Mirrors shadcn/ui's /charts page nav:
@@ -42,6 +43,7 @@ export function CatalogTabs({
   const [q, setQ] = React.useState("");
   const [activeTags, setActiveTags] = React.useState<Set<string>>(new Set());
   const [tab, setTab] = React.useState<string>("all");
+  const [sortMode, setSortMode] = React.useState<SortMode>("featured");
 
   const filtered = React.useMemo(() => {
     const needle = q.trim().toLowerCase();
@@ -54,6 +56,9 @@ export function CatalogTabs({
       return true;
     });
   }, [items, q, activeTags]);
+
+  const hasSort = React.useMemo(() => items.some((it) => it.sort), [items]);
+  const sorted = React.useMemo(() => sortItems(filtered, sortMode), [filtered, sortMode]);
 
   function toggleTag(t: string) {
     setActiveTags((s) => {
@@ -76,6 +81,7 @@ export function CatalogTabs({
       placeholder={placeholder}
       filteredLen={filtered.length}
       totalLen={items.length}
+      trailing={hasSort ? <SortSelect value={sortMode} onChange={setSortMode} /> : undefined}
     />
   );
 
@@ -101,8 +107,11 @@ export function CatalogTabs({
   }
 
   const hasFamilies = items.some((it) => it.family);
+  // Family sub-grouping re-buckets the list; when the user picks an explicit
+  // sort, render flat so the chosen order is honored end-to-end.
+  const grouped = hasFamilies && sortMode === "featured";
   const renderGrid = (list: CatalogSearchItem[]) =>
-    hasFamilies ? (
+    grouped ? (
       <CatalogGroupedGrid
         items={list}
         familyLabel={familyLabel}
@@ -117,7 +126,7 @@ export function CatalogTabs({
       <div className="space-y-4">
         {searchRow}
         {tagRow}
-        {renderGrid(filtered)}
+        {renderGrid(sorted)}
       </div>
     );
   }
@@ -151,7 +160,7 @@ export function CatalogTabs({
 
         <TabsContent value="all" className="space-y-10">
           {activeGroupOrder.map((g) => {
-            const inGroup = filtered.filter((it) => it.group === g);
+            const inGroup = sorted.filter((it) => it.group === g);
             if (inGroup.length === 0) return null;
             return (
               <section key={g}>
@@ -168,7 +177,7 @@ export function CatalogTabs({
         </TabsContent>
 
         {activeGroupOrder.map((g) => {
-          const inGroup = filtered.filter((it) => it.group === g);
+          const inGroup = sorted.filter((it) => it.group === g);
           return (
             <TabsContent key={g} value={g}>
               {renderGrid(inGroup)}
