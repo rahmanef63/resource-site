@@ -44,6 +44,8 @@ export interface AdminConsoleProps {
   /** Controlled active section id (omit for internal URL-synced state). */
   activeId?: string
   onNavigate?: (id: string) => void
+  /** Optional node in the section header row — e.g. a notifications bell. */
+  headerSlot?: React.ReactNode
 }
 
 function icon(name: string) {
@@ -65,6 +67,7 @@ export function AdminConsole({
   components,
   activeId,
   onNavigate,
+  headerSlot,
 }: AdminConsoleProps) {
   const visible = React.useMemo(() => filterSections(sections, access, tier), [sections, access, tier])
   const internal = useAdminSection(visible)
@@ -129,9 +132,10 @@ export function AdminConsole({
       </nav>
 
       <main className="overflow-y-auto p-4">
-        {section && (
-          <div className="mb-4">
-            <h2 className="text-lg font-semibold tracking-tight">{section.label}</h2>
+        {(section || headerSlot) && (
+          <div className="mb-4 flex items-center justify-between gap-2">
+            <h2 className="text-lg font-semibold tracking-tight">{section?.label}</h2>
+            {headerSlot}
           </div>
         )}
         <SectionBody section={section} components={components} />

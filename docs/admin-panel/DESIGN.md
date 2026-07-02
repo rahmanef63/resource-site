@@ -218,16 +218,22 @@ Both gated by `requirePermission` from `rbac-roles` (`crm.manage`, `content.mana
 10. **Verify** — install into a consumer, confirm gate filtering (platform_admin vs
     workspace_owner vs denied), and that reuse mounts resolve via `@/features/*`.
 
-## 7. Open questions
+## 7. Open questions — resolved 2026-07-02 (v0.1.0)
 
-- Slice→slice import ban vs. composition: registry references peer barrels by path but the
-  slice can't hard-import them. Confirm the pattern = "soft peer registered in the host
-  app, registry holds string ids + host provides the component map" vs. lazy dynamic import.
-- Should `admin-panel` (template-base shell) be **promoted** into `frontend/slices/` so
-  `admin-console` has a stable published peer, or stay template-base and get copied in?
-- Media library: reuse `media-studio` (editor) or add a light `MediaLibraryAdapter` grid?
-  Current plan = adapter grid, no new slice.
-- Leads public-write abuse surface: reuse `comments` forbiddenWords + `rate-limit`, or
-  fold a dedicated guard into `leads.ts`?
-- Broadcast: is `resend-newsletter`'s send pipeline enough, or does patsi-umi's
-  segmented broadcast need its own `broadcast` gap section later?
+- ~~Slice→slice import ban vs. composition~~ → **RESOLVED**: host provides the component
+  map. Registry holds string ids only; consumer passes reuse-section nodes via the
+  `components` prop. No hard peer imports, no lazy dynamic import. Shipped.
+- ~~Promote `admin-panel` template-base shell into `frontend/slices/`~~ → **RESOLVED**: no.
+  `admin-console` owns a self-contained portable shell (`AccessGate` + `AdminConsole`,
+  access injected) — one copyable folder, no shell peer to track.
+- ~~Media library: reuse `media-studio` or build `MediaLibraryAdapter` grid~~ → **RESOLVED**:
+  docs-only. Mount `media-studio` via `components={{ media }}`; browse-only adapter grid
+  deferred until a consumer needs it.
+- ~~Leads public-write abuse surface~~ → **PARTIAL**: `leads.create` ships with length
+  guards + a README "front with `rate-limit`" recipe. An optional `serverKey` gate to close
+  the direct-Convex bypass is deferred (PLAN.md D2).
+- ~~Broadcast gap section~~ → **RESOLVED**: deferred (PLAN.md D5). `resend-newsletter`'s send
+  pipeline covers it; the `newsletter` registry id maps there. Add a segmented `broadcast`
+  section only when a consumer needs segmentation.
+
+Remaining follow-ups tracked in [`PLAN.md`](./PLAN.md) (Waves 2–6 + decisions D1–D9).

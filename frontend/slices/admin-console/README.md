@@ -77,3 +77,57 @@ export default defineSchema({ ...adminConsoleTables, /* … */ })
 
 `ac_leads.create` is public (contact-form ingestion) — put the `rate-limit`
 slice in front of it. Everything else is `requireAdmin`.
+
+## Wiring the owned sections to Convex
+
+The 5 owned sections are store-agnostic (they carry ids as strings). Map your
+Convex docs to the component props and mount via the `components` map.
+
+### Leads inbox → `ac_leads`
+
+```tsx
+import { useQuery, useMutation } from "convex/react"
+import { api } from "@/convex/_generated/api"
+import { LeadsInbox, type Lead } from "@/features/admin-console"
+
+function LeadsSection() {
+  const rows = useQuery(api.features.admin_console.leads.list, {}) ?? []
+  const updateStatus = useMutation(api.features.admin_console.leads.updateStatus)
+  const addNote = useMutation(api.features.admin_console.leads.addNote)
+  const leads: Lead[] = rows.map((r) => ({ ...r, id: r._id })) // _id → id, rest 1:1
+  return (
+    <LeadsInbox
+      leads={leads}
+      onUpdateStatus={(id, status) => updateStatus({ id: id as Id<"ac_leads">, status })}
+      onAddNote={(id, note) => addNote({ id: id as Id<"ac_leads">, note })}
+    />
+  )
+}
+// mount: components={{ leads: <LeadsSection /> }}
+```
+
+### Navigation config → `ac_nav_items`
+
+`NavConfigManager` `onChange` emits the FULL list (new rows carry temp string
+ids like `n<timestamp>`). Debounce, then reconcile against the server list:
+
+```tsx
+// upsert WITHOUT id inserts and returns the real Id; map temp→real before reorder.
+// per changed row → upsert({ id?, label, href, order, visible })
+// removed rows      → remove({ id })
+// finally           → reorder({ ids: finalOrderOfRealIds })
+```
+
+`navConfig.list` is public (it powers the live site menu); every write is
+`requireAdmin`. The UI edits label/href/order/visible; `upsert` also accepts
+optional `icon`/`parentId`/`target` for richer nav.
+
+### Media library
+
+There is no owned media section — mount your installed `media-studio` (or any
+grid) via `components={{ media: <MediaStudio /> }}`. A browse-only
+`MediaLibraryAdapter` is deferred until a consumer needs it.
+
+> Audit-log, Analytics and SEO viewers are adapter-driven the same way: pass
+> `entries` / `data` / `pages` from your own source, or leave the mock for a
+> zero-backend demo.

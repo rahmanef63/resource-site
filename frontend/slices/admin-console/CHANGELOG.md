@@ -13,7 +13,12 @@
 - 5 owned gap sections, adapter-driven with in-memory mocks: `AnalyticsDashboard`,
   `AuditLogViewer` (filter + diff drawer), `NavConfigManager` (reorder + toggle),
   `LeadsInbox` (status pipeline + notes drawer), `SeoHealthPanel` (per-page score).
-- Pure gate logic (`lib/access.ts`) + unit tests (`lib/access.test.ts`).
+- `AdminConsole` optional `headerSlot` prop — a node in the section header row
+  (e.g. a notifications bell) with no peer dependency.
+- Pure gate logic (`lib/access.ts`) + unit tests (`lib/access.test.ts`);
+  `useAdminSection` URL-sync tests (`hooks/useAdminSection.test.tsx`).
+- README wiring recipes for the owned Leads + Navigation sections over the
+  `ac_leads` / `ac_nav_items` Convex backend.
 - Convex copy-source: `ac_leads` + `ac_nav_items` with `requireAdmin`-gated
   queries/mutations; `ac_leads.create` public for contact-form ingestion
   (length-guarded, pair with the rate-limit slice).
