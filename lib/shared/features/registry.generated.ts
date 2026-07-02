@@ -6,6 +6,7 @@ import type { RegisteredSlice } from "./registry";
 
 import { aboutProfileConfig } from "@/features/about-profile/config";
 import { adminConfig } from "@/features/admin/config";
+import { adminConsoleConfig } from "@/features/admin-console/config";
 import { aiRouterConfig } from "@/features/ai-router/config";
 import { appStoreConfig } from "@/features/app-store/config";
 import { appshellConfig } from "@/features/appshell/config";
@@ -49,6 +50,11 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     ...adminConfig,
     importPath: "@/features/admin/config",
     version: "0.2.1",
+  },
+  {
+    ...adminConsoleConfig,
+    importPath: "@/features/admin-console/config",
+    version: "0.1.0",
   },
   {
     ...aiRouterConfig,
