@@ -66,12 +66,19 @@ metadata trio present) · **shared** (# files importing `@/frontend/shared`) ·
 | rate-limit | ✅ trio | pulled rr→SS, hardened |
 | user-management | ✅ | reconcile |
 
-### LEAF (2) — low coupling; promote first
+### LEAF (2) — lowest coupling, but NOT free (verified 2026-07-02)
 
-| slug | shared | cvxReact | rbac | loc |
-|---|---|---|---|---|
-| datasets | 3 | 1 | 6 | 175 |
-| notifications | 3 | 0 | 1 | 395 |
+| slug | shared | cvxReact | rbac | loc | reality |
+|---|---|---|---|---|---|
+| datasets | 3 | 1 | 6 | 175 | thin wrapper over `@/frontend/shared/datasets` — real logic is in shared; promotion needs that module lifted first (cascade) |
+| notifications | 3 | 0 | 1 | 395 | payload (`NotifyMePopover`+`useSubscription`) is clean, but **superseded by rr's existing `notifications-center`** → reconcile, don't add a dupe |
+
+**No-free-promotion rule (verified):** every SS slice carries SS-framework skin
+(`config.ts`→SS `defineFeature`, `agent/`, `settings/`, `init.ts`,
+`features-preview/`) that rr slices don't use. Promotion = strip that skin, keep
+the payload component, rewrite to props + rr trio. Leaves still cascade into
+`@/frontend/shared/*` sub-modules. Budget every promotion as real surgery +
+per-slice verify, not a copy.
 
 ### SHARED-COUPLED (24) — need `@/frontend/shared` decoupling
 
@@ -96,7 +103,12 @@ cms-lite (19652 loc, 30 tables) — deprecated in SS; do not lift.
 
 ## Wave plan (IMPROVE)
 
-- **Wave 1** — LEAF: `datasets`, `notifications`. Proof-of-pipeline.
+- **Wave 0 (prereq)** — lift shared primitives that leaves depend on:
+  `@/frontend/shared/datasets`, `@/frontend/shared/ai/agent` (or drop the agent
+  skin), and decide the SS-`defineFeature`→rr-`defineFeature` mapping. Without
+  this, even LEAF promotions cascade.
+- **Wave 1** — LEAF after Wave 0: reconcile `notifications`→`notifications-center`;
+  promote `datasets` once `shared/datasets` is lifted. Proof-of-pipeline.
 - **Wave 2** — low-coupling SHARED (shared ≤ 8, no cascade): approvals, bi,
   blog, forms (resume prior lift), integrations, marketing, projects, status,
   support, i18n-translate, example.
