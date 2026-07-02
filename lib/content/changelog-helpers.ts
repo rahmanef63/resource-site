@@ -28,51 +28,50 @@ export function changelogHref(ref: Pick<ChangelogRef, "releaseId" | "page">): st
   return `/changelog${query}#${ref.releaseId}`;
 }
 
-function bulletMatches(
-  b: ChangelogBullet,
-  slug: string,
-  kind: "slice" | "template",
-): boolean {
-  if (typeof b === "string") return false;
-  if (b.slug !== slug) return false;
-  // Default kind on bullets is "slice" — match that when caller asks for slice.
-  const bKind = b.kind ?? "slice";
-  return bKind === kind;
-}
-
 function bulletText(b: ChangelogBullet): string {
   return typeof b === "string" ? b : b.text;
 }
 
 /**
- * Latest changelog entry that references the given slug + kind. Used to
- * surface "Updated Nd ago" badges on catalog cards + detail page
- * headers. Returns null when nothing references the slug yet.
+ * Latest changelog reference per `${kind}:${slug}`, precomputed ONCE at module
+ * load. releases are newest-first, so the first bullet seen for a key is its
+ * latest reference. Turns getLatestUpdate from O(releases×bullets) per call
+ * (~123 badges × 163 releases per page) into O(1). See docs/perf-audit.md.
  */
-export function getLatestUpdate(
-  slug: string,
-  kind: "slice" | "template",
-): ChangelogRef | null {
-  // releases are sorted newest-first by the barrel, so the first match
-  // is the latest reference — and its index gives the /changelog page.
+const latestRefByKey: Map<string, ChangelogRef> = (() => {
+  const map = new Map<string, ChangelogRef>();
   for (let i = 0; i < releases.length; i++) {
     const entry = releases[i];
     const bullets: ChangelogBullet[] = [
       ...(entry.bullets ?? []),
       ...((entry.groups ?? []).flatMap((g) => g.bullets)),
     ];
-    const match = bullets.find((b) => bulletMatches(b, slug, kind));
-    if (match) {
-      return {
+    for (const b of bullets) {
+      if (typeof b === "string" || !b.slug) continue;
+      const key = `${b.kind ?? "slice"}:${b.slug}`;
+      if (map.has(key)) continue; // first match wins (newest-first order)
+      map.set(key, {
         releaseId: entry.id,
         version: entry.version,
         date: entry.date,
-        bulletText: bulletText(match),
+        bulletText: bulletText(b),
         page: Math.floor(i / CHANGELOG_PAGE_SIZE) + 1,
-      };
+      });
     }
   }
-  return null;
+  return map;
+})();
+
+/**
+ * Latest changelog entry that references the given slug + kind. Used to
+ * surface "Updated Nd ago" badges on catalog cards + detail page headers.
+ * Returns null when nothing references the slug yet.
+ */
+export function getLatestUpdate(
+  slug: string,
+  kind: "slice" | "template",
+): ChangelogRef | null {
+  return latestRefByKey.get(`${kind}:${slug}`) ?? null;
 }
 
 /** Human-readable "3d ago" / "2w ago" / "Sep 14" for a ms epoch. */

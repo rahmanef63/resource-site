@@ -22,15 +22,13 @@ export function useIframeLazyLoad<T extends HTMLElement = HTMLDivElement>(
       setVisible(true);
       return;
     }
+    // Two-way: mount the iframe when the card enters the viewport, UNMOUNT it
+    // when it leaves. Prevents the catalog from accumulating ~74 resident
+    // preview documents after one scroll-through (perf-audit.md root cause #1).
+    // rootMargin pre-loads slightly ahead so scrolling stays smooth.
     const io = new IntersectionObserver(
       (entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting) {
-            setVisible(true);
-            io.disconnect();
-            break;
-          }
-        }
+        for (const e of entries) setVisible(e.isIntersecting);
       },
       { rootMargin },
     );
