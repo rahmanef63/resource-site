@@ -4,5 +4,5 @@
 import type { ComponentType } from "react";
 
 export const SLICE_PREVIEWS: Record<string, () => Promise<{ default: ComponentType }>> = {
-  "admin-console": () => import("@/features/admin-console/page"),
+
 };

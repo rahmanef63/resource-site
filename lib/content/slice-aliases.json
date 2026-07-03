@@ -21,5 +21,6 @@
   "notion-shell": "notion-ui",
   "notion-database": "notion-ui",
   "notion-sidebar": "notion-ui",
-  "notion": "notion-app"
+  "notion": "notion-app",
+  "admin-console": "admin"
 }

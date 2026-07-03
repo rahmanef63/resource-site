@@ -76,7 +76,12 @@
             "properties": {
               "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
               "title": { "type": "string" },
-              "description": { "type": "string" }
+              "description": { "type": "string" },
+              "convex": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Convex root paths for THIS variant. When installing this variant the CLI pulls only these (not the slice-level union). Should be a subset of convex.rootPaths."
+              }
             }
           }
         }

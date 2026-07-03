@@ -1,9 +1,9 @@
-import { defineFeature } from "@/lib/shared/features/defineFeature"
+import { defineFeature } from "@/lib/shared/features/defineFeature";
 
-export const adminConfig = defineFeature({
+export const adminFeature = defineFeature({
   slug: "admin",
-  title: "Admin — Generic Shell",
+  title: "Admin — generic shell + composed console",
   category: "infra",
-  routes: [{ path: "/admin", view: () => import("./page") }],
-  nav: { label: "Admin", group: "tools", order: 99 },
-})
+  routes: [],
+  nav: { label: "Admin", group: "settings", icon: "Shield", order: 1 },
+});

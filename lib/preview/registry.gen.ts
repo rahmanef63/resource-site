@@ -4,8 +4,6 @@ import type { SlicePreviewModule } from "@/shared/preview/types";
 
 export const PREVIEW_REGISTRY: Record<string, () => Promise<{ default: SlicePreviewModule }>> = {
   "activity": () => import("@/features/activity/preview"),
-  "admin": () => import("@/features/admin/preview"),
-  "admin-console": () => import("@/features/admin-console/preview"),
   "admin-panel": () => import("@/components/templates/_shared/previews/admin-panel.preview"),
   "ai-chat": () => import("@/features/ai-chat/preview"),
   "appshell": () => import("@/features/appshell/preview"),

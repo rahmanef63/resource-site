@@ -3,113 +3,47 @@
   "slug": "admin",
   "version": "0.2.1",
   "category": "infra",
-  "title": "Admin \u2014 Generic Shell",
-  "description": "Per-instance admin landing scaffold + portable nav-from-registry factory. Consumer supplies a SliceRegistryAdapter (each slice declares its own admin.activity[]) and a queryTable reader; the slice's buildAdminStats(opts) emits the { counts, unreadMessages, activity } shape Convex's admin.stats query returns. Pure UI/factory \u2014 no Convex tables owned. Gated by requireAdmin on Convex side; superadmin email gate via SUPER_ADMIN_EMAIL env.",
-  "namespace": "@/features/admin",
   "kind": "full",
-  "convex": {
-    "tablesExport": "",
-    "schemaPath": "convex/features/admin/_schema.ts",
-    "rootPaths": [
-      "convex/features/admin"
+  "title": "Admin — generic shell + composed console",
+  "description": "Access-gated admin surfaces behind one slug, in two variants. shell: a minimal generic single-instance admin shell (a titled card region + a buildAdminStats() factory + SliceAdminLabels) over convex/features/admin — zero composed sections, wire your own. console: the composed multi-section console — an access-gated two-column shell driving a 26-section registry that mounts OTHER rr slices (users → user-management, roles → rbac-roles, analytics/audit, AI → ai-admin, tenants → platform-admin) via a components map, over convex/features/admin_console (ac_leads, ac_nav_items). Install one with `npx rr add admin shell|console`, or both with `npx rr add admin`; each variant pulls ONLY its own convex backend (per-variant convex gating). NOT the multi-tenant control plane — that stays the separate `platform-admin` slice (referenced here as the `tenants` section provider).",
+  "namespace": "@/features/admin",
+  "variants": {
+    "default": "console",
+    "items": [
+      { "id": "shell", "title": "Shell", "description": "Minimal generic admin shell (titled card + buildAdminStats).", "convex": ["convex/features/admin"] },
+      { "id": "console", "title": "Console", "description": "Composed access-gated 26-section console mounting other rr slices.", "convex": ["convex/features/admin_console"] }
     ]
   },
   "frontend": {
     "slicePath": "frontend/slices/admin",
-    "configExport": "adminConfig"
+    "configExport": "adminFeature"
+  },
+  "convex": {
+    "tablesExport": "",
+    "schemaPath": "",
+    "rootPaths": ["convex/features/admin", "convex/features/admin_console"]
   },
   "deps": {
     "npm": [],
-    "shadcn": [
-      "card",
-      "button"
-    ],
+    "shadcn": ["badge", "button", "card", "input", "progress", "scroll-area", "select", "sheet", "table", "textarea"],
     "env": [
-      {
-        "name": "SUPER_ADMIN_EMAIL",
-        "scope": "convex",
-        "required": false,
-        "description": "Single-person super-admin email gate."
-      }
+      { "name": "SUPER_ADMIN_EMAIL", "scope": "convex", "required": false, "description": "shell variant — single super-admin gate." },
+      { "name": "PLATFORM_ADMIN_EMAILS", "scope": "convex", "required": false, "description": "console variant — comma-separated platform-admin allowlist." }
     ],
-    "peers": [
-      {
-        "slug": "convex-auth",
-        "range": "^0.1",
-        "reason": "requireAdmin gate uses convex-auth user identity."
-      }
-    ]
+    "peers": []
   },
-  "registers": [
-    "registry"
-  ],
-  "audit": [
-    "bp:public-fn-validator"
-  ],
+  "registers": [],
+  "audit": [],
   "license": "MIT",
-  "tags": [
-    "infra",
-    "admin",
-    "shell",
-    "crud",
-    "nav-from-registry"
-  ],
-  "previews": [
-    {
-      "component": "AdminPage",
-      "kind": "scenarios",
-      "scenarios": [
-        {
-          "id": "default",
-          "title": "Default labels",
-          "description": "generic shell copy"
-        },
-        {
-          "id": "saas",
-          "title": "SaaS admin",
-          "description": "rebranded for a SaaS console"
-        },
-        {
-          "id": "blog",
-          "title": "Blog CMS",
-          "description": "rebranded for a content site"
-        }
-      ],
-      "seed": "AdminPage shell rendered with three SliceAdminLabels presets"
-    }
-  ],
+  "tags": ["admin", "console", "shell", "access-gate", "rbac", "sections", "dashboard", "infra"],
+  "previews": [],
   "contract": {
-    "requires": {
-      "auth": "convex",
-      "rbac": [
-        "admin.read"
-      ],
-      "env": [
-        "SUPER_ADMIN_EMAIL"
-      ],
-      "deps": [
-        "convex-auth"
-      ]
-    },
     "provides": {
-      "components": [
-        "AdminPage",
-        "buildAdminStats",
-        "DEFAULT_ADMIN_LABELS",
-        "resolveAdminLabels"
-      ]
-    },
-    "generalization": {
-      "level": "portable",
-      "forbiddenTerms": [
-        "rahmanef",
-        "rahmanef.com"
-      ],
-      "requiredProps": [
-        "sliceRegistry",
-        "queryTable",
-        "labels"
-      ]
+      "tools": [],
+      "components": ["AdminPage", "AdminConsole", "AccessGate"],
+      "utils": ["buildAdminStats", "filterSections", "hasPermission"],
+      "hooks": [],
+      "convex": { "tables": ["ac_leads", "ac_nav_items"], "rbac": [] }
     }
   }
 }

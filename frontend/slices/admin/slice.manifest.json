@@ -10,35 +10,35 @@
   },
   "files": [
     "README.md",
-    "components/index.ts",
     "config.ts",
-    "hooks/index.ts",
     "index.ts",
-    "lib/index.ts",
-    "lib/registry-adapter.ts",
-    "lib/registry-labels.ts",
-    "lib/registry-stats.ts",
-    "lib/registry-types.ts",
-    "page.tsx",
-    "types/index.ts",
-    "utils/index.ts"
+    "variants/console/CHANGELOG.md",
+    "variants/console/README.md",
+    "variants/console/components/AccessGate.tsx",
+    "variants/console/components/AdminConsole.tsx",
+    "variants/console/components/sections/AnalyticsDashboard.tsx",
+    "variants/console/components/sections/AuditLogViewer.tsx",
+    "variants/console/components/sections/LeadsInbox.tsx",
+    "variants/console/components/sections/NavConfigManager.tsx",
+    "variants/console/components/sections/SeoHealthPanel.tsx",
+    "variants/console/hooks/useAdminSection.ts",
+    "variants/console/index.ts",
+    "variants/console/lib/access.ts",
+    "variants/console/lib/index.ts",
+    "variants/console/lib/mock.ts",
+    "variants/console/lib/sections.ts",
+    "variants/console/page.tsx",
+    "variants/shell/README.md",
+    "variants/shell/index.ts",
+    "variants/shell/lib/index.ts",
+    "variants/shell/lib/registry-adapter.ts",
+    "variants/shell/lib/registry-labels.ts",
+    "variants/shell/lib/registry-stats.ts",
+    "variants/shell/lib/registry-types.ts",
+    "variants/shell/page.tsx"
   ],
-  "convex": {
-    "schemaPath": "convex/features/admin/_schema.ts",
-    "rootPaths": [
-      "convex/features/admin"
-    ]
-  },
   "imports": {
-    "shared": [
-      "@/components/ui/card",
-      "@/components/ui/button",
-      "@/components/ui/badge"
-    ],
-    "external": [
-      "react",
-      "next/link",
-      "lucide-react"
-    ]
+    "shared": [],
+    "external": []
   }
 }

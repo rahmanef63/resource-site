@@ -25,7 +25,8 @@
     "notion-shell": "notion-ui",
     "notion-database": "notion-ui",
     "notion-sidebar": "notion-ui",
-    "notion": "notion-app"
+    "notion": "notion-app",
+    "admin-console": "admin"
   },
   "layouts": [],
   "recipes": [],
@@ -928,40 +929,23 @@
     },
     {
       "slug": "admin",
-      "title": "Admin — Generic Shell",
+      "title": "Admin — generic shell + composed console",
       "category": "infra",
-      "description": "HEADLESS admin scaffold — no chrome of its own; pair with dashboard-shell for app chrome. Per-instance admin landing scaffold + portable nav-from-registry factory. Consumer supplies a SliceRegistryAdapter (each slice declares its own admin.activity[]) + queryTable reader; the slice's buildAdminStats(opts) emits the { counts, unreadMessages, activity } shape Convex's admin.stats query returns. Pulled UP from rahmanef.com (Wave N+3.1, commit b542389) — domain literals dropped at the kitab boundary. Gated by requireAdmin on Convex side; superadmin email gate via SUPER_ADMIN_EMAIL env.",
+      "description": "Access-gated admin surfaces behind one slug, in two variants — each pulls ONLY its own convex backend (per-variant convex gating). shell: a HEADLESS minimal generic admin shell — a titled landing region + a portable buildAdminStats(opts) nav-from-registry factory (consumer supplies a SliceRegistryAdapter + queryTable reader) over convex/features/admin; superadmin gate via SUPER_ADMIN_EMAIL. console: the composed admin panel distilled from ~15 project admin panels — a gated two-column shell (AdminConsole) over a 26-section registry (ADMIN_CONSOLE_SECTIONS: observability / identity / ai / content / commerce / config) that mounts OTHER rr slices via a consumer-supplied `components` map (users→user-management, roles→rbac-roles, ai→ai-admin, tenants→platform-admin) plus 5 owned gap sections (Analytics, Audit-log, Nav config, SEO health, Leads/CRM) over convex/features/admin_console (ac_leads + ac_nav_items); gate injected, PLATFORM_ADMIN_EMAILS allowlist. Install one with `npx rr add admin shell|console`, or both with `npx rr add admin`. NOT the multi-tenant control plane — that's the separate `platform-admin` slice (the console's `tenants` section provider).",
       "source": "rahmanef63/resource-site",
       "install": "npx rahman-resources add admin",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `rr add admin`. Wire <AdminPage labels={...} /> at /admin and call buildAdminStats({ sliceRegistry, queryTable }) inside convex/features/admin/query.ts — sliceRegistry.entries flat-maps each feature's admin.activity[] declarations. Set SUPER_ADMIN_EMAIL via `npx convex env set` to lock down /admin to one address.",
-      "tags": [
-        "infra",
-        "admin",
-        "shell",
-        "crud",
-        "nav-from-registry"
-      ]
-    },
-    {
-      "slug": "admin-console",
-      "title": "Admin Console — Composed Admin Panel",
-      "category": "infra",
-      "description": "The ideal admin panel as a portable slice, distilled from ~15 project admin panels (docs/admin-panel/COMPARISON.md + DESIGN.md). A gated two-column shell (AdminConsole) over a 26-section catalog (ADMIN_CONSOLE_SECTIONS) spanning observability / identity / ai / content / commerce / config — each section tagged with the rr slice that supplies it or `self` for the gap sections. Reuse sections mount from a consumer-supplied `components` map (no slice→slice imports); the 5 owned gap sections nothing else covered — Analytics, Audit-log viewer, Navigation config, SEO health, Leads/CRM inbox — are adapter-driven with in-memory mocks so the whole console runs backend-free. Access is injected (no hard Convex import); gate logic is pure + unit-tested. Convex copy-source ships ac_leads + ac_nav_items with requireAdmin-gated CRUD.",
-      "source": "rahmanef63/resource-site",
-      "install": "npx rahman-resources add admin-console",
-      "npmPackages": [],
-      "exampleCode": "",
-      "agentRecipe": "Run `rr add admin-console`. Mount <AdminConsole access={useAdminAccess()} components={{ users: <UsersPanel/>, ... }} /> at /admin — owned sections (analytics, audit-log, nav-config, seo-health, leads) render as-is; map each reuse section id to the panel from the peer slice you installed. Compose adminConsoleTables into convex/schema.ts and front ac_leads.create with the rate-limit slice.",
+      "agentRecipe": "Run `npx rr add admin` for both, or `npx rr add admin shell` / `console` for one — each variant pulls only its own convex backend. shell: mount <AdminPage labels={...} /> + call buildAdminStats({ sliceRegistry, queryTable }) in convex/features/admin/query.ts; lock down with SUPER_ADMIN_EMAIL. console: mount <AdminConsole access={useAdminAccess()} components={{ users: <UsersPanel/>, ... }} /> — owned sections (analytics/audit-log/nav-config/seo-health/leads) render as-is, map each reuse section id to the panel from the peer slice you installed; compose adminConsoleTables into convex/schema.ts and front ac_leads.create with rate-limit; gate via PLATFORM_ADMIN_EMAILS.",
       "tags": [
         "infra",
         "admin",
         "console",
+        "shell",
         "dashboard",
         "composition",
         "rbac",
-        "crud",
+        "access-gate",
         "registry"
       ]
     },
@@ -3356,88 +3340,54 @@
     },
     {
       "slug": "admin",
-      "title": "Admin — Generic Shell",
+      "title": "Admin — generic shell + composed console",
       "category": "infra",
       "kind": "full",
       "version": "0.2.1",
-      "description": "HEADLESS admin scaffold — no chrome of its own; pair with dashboard-shell for app chrome. Per-instance admin landing scaffold + portable nav-from-registry factory. Consumer supplies a SliceRegistryAdapter (each slice declares its own admin.activity[]) + queryTable reader; the slice's buildAdminStats(opts) emits the { counts, unreadMessages, activity } shape Convex's admin.stats query returns. Pulled UP from rahmanef.com (Wave N+3.1, commit b542389) — domain literals dropped at the kitab boundary. Gated by requireAdmin on Convex side; superadmin email gate via SUPER_ADMIN_EMAIL env.",
+      "description": "Access-gated admin surfaces behind one slug, in two variants — each pulls ONLY its own convex backend (per-variant convex gating). shell: a HEADLESS minimal generic admin shell — a titled landing region + a portable buildAdminStats(opts) nav-from-registry factory (consumer supplies a SliceRegistryAdapter + queryTable reader) over convex/features/admin; superadmin gate via SUPER_ADMIN_EMAIL. console: the composed admin panel distilled from ~15 project admin panels — a gated two-column shell (AdminConsole) over a 26-section registry (ADMIN_CONSOLE_SECTIONS: observability / identity / ai / content / commerce / config) that mounts OTHER rr slices via a consumer-supplied `components` map (users→user-management, roles→rbac-roles, ai→ai-admin, tenants→platform-admin) plus 5 owned gap sections (Analytics, Audit-log, Nav config, SEO health, Leads/CRM) over convex/features/admin_console (ac_leads + ac_nav_items); gate injected, PLATFORM_ADMIN_EMAILS allowlist. Install one with `npx rr add admin shell|console`, or both with `npx rr add admin`. NOT the multi-tenant control plane — that's the separate `platform-admin` slice (the console's `tenants` section provider).",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/admin",
       "convexPaths": [
-        "convex/features/admin"
+        "convex/features/admin",
+        "convex/features/admin_console"
       ],
       "npm": [],
       "shadcn": [
+        "badge",
+        "button",
         "card",
-        "button"
+        "input",
+        "progress",
+        "scroll-area",
+        "select",
+        "sheet",
+        "table",
+        "textarea"
       ],
       "env": [
         {
           "name": "SUPER_ADMIN_EMAIL",
           "scope": "convex",
-          "required": false
-        }
-      ],
-      "peers": [
-        {
-          "slug": "convex-auth",
-          "range": "^0.1",
-          "reason": "requireAdmin gate uses convex-auth user identity."
-        }
-      ],
-      "providers": [],
-      "tags": [
-        "infra",
-        "admin",
-        "shell",
-        "crud",
-        "nav-from-registry"
-      ],
-      "agentRecipe": "Run `rr add admin`. Wire <AdminPage labels={...} /> at /admin and call buildAdminStats({ sliceRegistry, queryTable }) inside convex/features/admin/query.ts — sliceRegistry.entries flat-maps each feature's admin.activity[] declarations. Set SUPER_ADMIN_EMAIL via `npx convex env set` to lock down /admin to one address."
-    },
-    {
-      "slug": "admin-console",
-      "title": "Admin Console — Composed Admin Panel",
-      "category": "infra",
-      "kind": "full",
-      "version": "0.1.0",
-      "description": "The ideal admin panel as a portable slice, distilled from ~15 project admin panels (docs/admin-panel/COMPARISON.md + DESIGN.md). A gated two-column shell (AdminConsole) over a 26-section catalog (ADMIN_CONSOLE_SECTIONS) spanning observability / identity / ai / content / commerce / config — each section tagged with the rr slice that supplies it or `self` for the gap sections. Reuse sections mount from a consumer-supplied `components` map (no slice→slice imports); the 5 owned gap sections nothing else covered — Analytics, Audit-log viewer, Navigation config, SEO health, Leads/CRM inbox — are adapter-driven with in-memory mocks so the whole console runs backend-free. Access is injected (no hard Convex import); gate logic is pure + unit-tested. Convex copy-source ships ac_leads + ac_nav_items with requireAdmin-gated CRUD.",
-      "source": "rahmanef63/resource-site",
-      "slicePath": "frontend/slices/admin-console",
-      "convexPaths": [
-        "convex/features/admin_console"
-      ],
-      "npm": [],
-      "shadcn": [
-        "card",
-        "button",
-        "badge",
-        "input",
-        "table",
-        "select",
-        "sheet",
-        "scroll-area",
-        "progress",
-        "textarea"
-      ],
-      "env": [
+          "required": false,
+          "description": "shell variant — single super-admin gate."
+        },
         {
           "name": "PLATFORM_ADMIN_EMAILS",
           "scope": "convex",
           "required": false,
-          "description": "Comma-separated superadmin email allowlist; resolves the platform_admin access level."
+          "description": "console variant — comma-separated platform-admin allowlist."
         }
       ],
       "peers": [
         {
           "slug": "convex-auth",
           "range": "^0.1",
-          "reason": "requireAdmin gate on ac_leads / ac_nav_items uses convex-auth identity."
+          "reason": "requireAdmin gate uses convex-auth identity."
         },
         {
           "slug": "rbac-roles",
           "range": "^0.1",
-          "reason": "section gates are permission tokens resolved by rbac-roles."
+          "reason": "console section gates are permission tokens resolved by rbac-roles."
         }
       ],
       "providers": [],
@@ -3445,13 +3395,35 @@
         "infra",
         "admin",
         "console",
+        "shell",
         "dashboard",
         "composition",
         "rbac",
-        "crud",
+        "access-gate",
         "registry"
       ],
-      "agentRecipe": "Run `rr add admin-console`. Mount <AdminConsole access={useAdminAccess()} components={{ users: <UsersPanel/>, ... }} /> at /admin — owned sections (analytics, audit-log, nav-config, seo-health, leads) render as-is; map each reuse section id to the panel from the peer slice you installed. Compose adminConsoleTables into convex/schema.ts and front ac_leads.create with the rate-limit slice."
+      "agentRecipe": "Run `npx rr add admin` for both, or `npx rr add admin shell` / `console` for one — each variant pulls only its own convex backend. shell: mount <AdminPage labels={...} /> + call buildAdminStats({ sliceRegistry, queryTable }) in convex/features/admin/query.ts; lock down with SUPER_ADMIN_EMAIL. console: mount <AdminConsole access={useAdminAccess()} components={{ users: <UsersPanel/>, ... }} /> — owned sections (analytics/audit-log/nav-config/seo-health/leads) render as-is, map each reuse section id to the panel from the peer slice you installed; compose adminConsoleTables into convex/schema.ts and front ac_leads.create with rate-limit; gate via PLATFORM_ADMIN_EMAILS.",
+      "variants": {
+        "default": "console",
+        "items": [
+          {
+            "id": "shell",
+            "title": "Shell",
+            "description": "Minimal generic admin shell (titled card + buildAdminStats).",
+            "convex": [
+              "convex/features/admin"
+            ]
+          },
+          {
+            "id": "console",
+            "title": "Console",
+            "description": "Composed access-gated 26-section console mounting other rr slices.",
+            "convex": [
+              "convex/features/admin_console"
+            ]
+          }
+        ]
+      }
     },
     {
       "slug": "platform-admin",

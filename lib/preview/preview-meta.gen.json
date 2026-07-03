@@ -29,64 +29,6 @@
     ]
   },
   {
-    "slug": "admin",
-    "title": "Admin — Generic Shell",
-    "category": "infra",
-    "previews": [
-      {
-        "component": "AdminPage",
-        "kind": "scenarios",
-        "scenarios": [
-          {
-            "id": "default",
-            "title": "Default labels",
-            "description": "generic shell copy"
-          },
-          {
-            "id": "saas",
-            "title": "SaaS admin",
-            "description": "rebranded for a SaaS console"
-          },
-          {
-            "id": "blog",
-            "title": "Blog CMS",
-            "description": "rebranded for a content site"
-          }
-        ],
-        "seed": "AdminPage shell rendered with three SliceAdminLabels presets"
-      }
-    ]
-  },
-  {
-    "slug": "admin-console",
-    "title": "Admin Console — Composed Admin Panel",
-    "category": "infra",
-    "previews": [
-      {
-        "component": "AdminConsole",
-        "kind": "scenarios",
-        "scenarios": [
-          {
-            "id": "platform-admin",
-            "title": "Platform admin",
-            "description": "every section visible, Leads inbox active"
-          },
-          {
-            "id": "content-owner",
-            "title": "Content owner",
-            "description": "content + settings sections only"
-          },
-          {
-            "id": "denied",
-            "title": "Denied",
-            "description": "no admin access — fallback copy"
-          }
-        ],
-        "seed": "AdminConsole rendered with mock access + mock section adapters, backend-free"
-      }
-    ]
-  },
-  {
     "slug": "admin-panel",
     "title": "Admin Panel — Unified Product Admin",
     "category": "infra",

@@ -1,4 +1,3 @@
-export { adminConsoleConfig } from "./config"
 export { AdminConsole, type AdminConsoleProps } from "./components/AdminConsole"
 export { AccessGate } from "./components/AccessGate"
 export { AnalyticsDashboard } from "./components/sections/AnalyticsDashboard"

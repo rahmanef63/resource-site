@@ -1280,7 +1280,13 @@ async function resolveLiftPlan(parsed, target, variant) {
         toAbs: path.join(target, slice.slicePath),
       });
     }
-    for (const cp of slice.convexPaths ?? []) {
+    // Per-variant convex gating: when a variant is installed and it declares
+    // its own `convex` roots, pull ONLY those (not the slice-level union) — so
+    // `add admin shell` doesn't drag the console variant's backend. Add-all and
+    // variants without a `convex` field fall back to the slice union (as today).
+    const variantDef = variant && variants ? (variants.items ?? []).find((v) => v.id === variant) : null;
+    const convexToPull = variantDef?.convex ?? slice.convexPaths ?? [];
+    for (const cp of convexToPull) {
       steps.push({ from: cp, toRel: cp, toAbs: path.join(target, cp) });
     }
     npm.push(...(slice.npm ?? []));
