@@ -764,35 +764,6 @@
     ]
   },
   {
-    "slug": "landing-sections",
-    "title": "Landing Sections",
-    "category": "content",
-    "previews": [
-      {
-        "component": "LandingSectionShell",
-        "kind": "scenarios",
-        "scenarios": [
-          {
-            "id": "hero-only",
-            "title": "Hero only",
-            "description": "Single hero band"
-          },
-          {
-            "id": "hero-features",
-            "title": "Hero + features",
-            "description": "Hero followed by a features grid"
-          },
-          {
-            "id": "full-page",
-            "title": "Full page",
-            "description": "Hero + features + CTA stacked, scaled to fit"
-          }
-        ],
-        "seed": "3 seed sections (hero/features/cta) rendered by local mini-blocks wrapped in LandingSectionShell, scaled in a fixed-height frame"
-      }
-    ]
-  },
-  {
     "slug": "library",
     "title": "Library — resource hub (prompts · visuals · snippets · links)",
     "category": "data",
@@ -1252,6 +1223,35 @@
           }
         ],
         "seed": "PERMISSION_GROUPS catalog + the selected role preset's resolved permissions"
+      }
+    ]
+  },
+  {
+    "slug": "sections",
+    "title": "Sections — composable marketing/landing sections",
+    "category": "content",
+    "previews": [
+      {
+        "component": "LandingSectionShell",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "hero-only",
+            "title": "Hero only",
+            "description": "Single hero band"
+          },
+          {
+            "id": "hero-features",
+            "title": "Hero + features",
+            "description": "Hero followed by a features grid"
+          },
+          {
+            "id": "full-page",
+            "title": "Full page",
+            "description": "Hero + features + CTA stacked, scaled to fit"
+          }
+        ],
+        "seed": "3 seed sections (hero/features/cta) rendered by local mini-blocks wrapped in LandingSectionShell, scaled in a fixed-height frame"
       }
     ]
   },

@@ -101,7 +101,7 @@ export type Act = {
  */
 export const ACT_SLUGS: Record<ActId, string[]> = {
   marketing: [
-    "landing-sections",
+    "sections",
     "marketing-chrome",
     "motion-kit",
     "motion-primitives",

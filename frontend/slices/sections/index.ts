@@ -7,7 +7,7 @@
  *   4. Registering /admin/landing + /admin/landing/[id] routes that
  *      render <LandingView/> + <LandingEditorView id/>
  */
-export { landingSectionsFeature } from "./config";
+export { sectionsFeature } from "./config";
 export { LandingProvider, useLandingStore, type LandingStore } from "./landing-context";
 export { landingReducer } from "./reducer";
 export { defaultLandingSections } from "./seed-factory";

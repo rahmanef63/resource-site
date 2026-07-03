@@ -3,13 +3,13 @@
   "repo": "rahmanef63/resource-site",
   "branch": "main",
   "aliases": {
-    "blog-section": "landing-sections",
-    "faq-section": "landing-sections",
-    "portfolio-section": "landing-sections",
-    "changelog-feed": "landing-sections",
-    "feature-grid": "landing-sections",
-    "testimonials-grid": "landing-sections",
-    "pricing-page": "landing-sections",
+    "blog-section": "sections",
+    "faq-section": "sections",
+    "portfolio-section": "sections",
+    "changelog-feed": "sections",
+    "feature-grid": "sections",
+    "testimonials-grid": "sections",
+    "pricing-page": "sections",
     "files": "file-upload",
     "onboarding-wizard": "site-setup-wizard",
     "media-studio": "design-studio",
@@ -20,7 +20,8 @@
     "settings-page": "settings",
     "shell-settings": "settings",
     "doku-payment": "payment",
-    "midtrans-payment": "payment"
+    "midtrans-payment": "payment",
+    "landing-sections": "sections"
   },
   "layouts": [],
   "recipes": [],
@@ -1118,15 +1119,15 @@
       ]
     },
     {
-      "slug": "landing-sections",
-      "title": "Landing Sections",
+      "slug": "sections",
+      "title": "Sections — composable marketing/landing sections",
       "category": "content",
       "description": "Canonical landing-page composition slice — replaces the former standalone hero / cta / pricing-page / faq-section / feature-grid / testimonials-grid / blog-section / portfolio-section / changelog-feed slices (all merged here as `kind` variants in v0.2.0). Ships a pure reducer (v0.4.0: LANDING_UPSERT auto-shifts sibling `order` to keep positions unique; LANDING_DELETE closes the gap) + LandingProvider store adapter + admin LandingView/LandingEditorView built on the shared CRUD primitives, plus a per-section LandingSectionShell (background image + custom Tailwind className overlay + scroll-reveal). NEW in v0.4.0: a `sections/` library of config-driven public renderers (StatsSection, TestimonialsSection, FaqSection, PricingSection, NewsletterSection, CustomSection) that read `LandingSection.config` JSON merged over template defaults — content stays dashboard-controlled without per-template renderer code; plus `parse-config` helpers (parseConfigBadge/parseConfigField) and `sections/config` guards (parseConfigObject, cfg*). Sections carry { kind, order, title, subtitle, enabled, imageUrl, imageRatio, bgImageUrl, className, config (JSON) } with up/down reorder arrows. Lifted from the _templates fleet `_shared/landing` (2026-06-11) — the 8 standalone templates ship a byte-similar copy; this rr slice is the SSOT. Used by all 7 rr website templates.",
       "source": "rahman-resources (lifted from _templates fleet)",
-      "install": "npx rahman-resources add landing-sections",
+      "install": "npx rahman-resources add sections",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add landing-sections`. Fold `landingReducer` into your root reducer (cases LANDING_UPSERT + LANDING_DELETE), seed State.landingSections with `defaultLandingSections()`, wrap your StoreProvider with `<LandingProvider value={adapter}/>` where adapter maps {items, publicBase, adminBase, create, update, remove} from your dispatch. Mount `<LandingView/>` at `/admin/landing` and `<LandingEditorView id={params.id}/>` at `/admin/landing/[id]`. In HomePage iterate `state.landingSections.filter(s => s.enabled).sort((a,b) => a.order - b.order)` and render each inside `<LandingSectionShell section={s}>`; for stats/testimonials/pricing/faq/newsletter/custom kinds drop in the shipped `<StatsSection/>` etc. (they read `section.config` JSON over your template defaults), or map the remaining kinds (hero/features/blog/etc.) to your own renderer. Use `parseConfigBadge(section.config)` for a section badge. Requires the template-base shared surface that ships in every rr website template: `@/components/templates/_shared/motion` (Reveal/Stagger/CountUp/Marquee/useInView — the motion-kit primitives), `@/components/templates/_shared/ui/section-head`, and `@/components/templates/_shared/crud/*`. Sections also use shadcn accordion/card/carousel + embla-carousel-autoplay.",
+      "agentRecipe": "Run `npx rr add sections`. Fold `landingReducer` into your root reducer (cases LANDING_UPSERT + LANDING_DELETE), seed State.landingSections with `defaultLandingSections()`, wrap your StoreProvider with `<LandingProvider value={adapter}/>` where adapter maps {items, publicBase, adminBase, create, update, remove} from your dispatch. Mount `<LandingView/>` at `/admin/landing` and `<LandingEditorView id={params.id}/>` at `/admin/landing/[id]`. In HomePage iterate `state.landingSections.filter(s => s.enabled).sort((a,b) => a.order - b.order)` and render each inside `<LandingSectionShell section={s}>`; for stats/testimonials/pricing/faq/newsletter/custom kinds drop in the shipped `<StatsSection/>` etc. (they read `section.config` JSON over your template defaults), or map the remaining kinds (hero/features/blog/etc.) to your own renderer. Use `parseConfigBadge(section.config)` for a section badge. Requires the template-base shared surface that ships in every rr website template: `@/components/templates/_shared/motion` (Reveal/Stagger/CountUp/Marquee/useInView — the motion-kit primitives), `@/components/templates/_shared/ui/section-head`, and `@/components/templates/_shared/crud/*`. Sections also use shadcn accordion/card/carousel + embla-carousel-autoplay.",
       "tags": [
         "admin",
         "landing",
@@ -3800,14 +3801,14 @@
       "agentRecipe": "Run `npx rr add notion`. Wire the `@notion/*` path alias to `./slices/notion/*` in tsconfig. Minimal mount: `<EditorAdapterProvider adapter={{ data }}><PageEditor pageId={id}/></EditorAdapterProvider>` where `data` implements EditorDataAdapter (block+page CRUD over your store — see lib/dataAdapter.ts; a localStorage reference impl lives in the rr preview). Add capabilities incrementally: `selection` for multi-select, `comments` for per-block threads, `database.renderDatabase` to mount your database renderer inside database blocks, `mention.search` for @-typeahead, `page.navigateToPage`/`uploadFile` for nav + media. Convex hosts: copy convex/features/notion (_blocks/_blockOps are pure, unit-tested array ops) and keep handlers thin."
     },
     {
-      "slug": "landing-sections",
-      "title": "Landing Sections",
+      "slug": "sections",
+      "title": "Sections — composable marketing/landing sections",
       "category": "content",
       "kind": "ui",
       "version": "0.4.0",
       "description": "Canonical landing-page composition slice — replaces the former standalone hero / cta / pricing-page / faq-section / feature-grid / testimonials-grid / blog-section / portfolio-section / changelog-feed slices (all merged here as `kind` variants in v0.2.0). Ships a pure reducer (v0.4.0: LANDING_UPSERT auto-shifts sibling `order` to keep positions unique; LANDING_DELETE closes the gap) + LandingProvider store adapter + admin LandingView/LandingEditorView built on the shared CRUD primitives, plus a per-section LandingSectionShell (background image + custom Tailwind className overlay + scroll-reveal). NEW in v0.4.0: a `sections/` library of config-driven public renderers (StatsSection, TestimonialsSection, FaqSection, PricingSection, NewsletterSection, CustomSection) that read `LandingSection.config` JSON merged over template defaults — content stays dashboard-controlled without per-template renderer code; plus `parse-config` helpers (parseConfigBadge/parseConfigField) and `sections/config` guards (parseConfigObject, cfg*). Sections carry { kind, order, title, subtitle, enabled, imageUrl, imageRatio, bgImageUrl, className, config (JSON) } with up/down reorder arrows. Lifted from the _templates fleet `_shared/landing` (2026-06-11) — the 8 standalone templates ship a byte-similar copy; this rr slice is the SSOT. Used by all 7 rr website templates.",
       "source": "rahman-resources (lifted from _templates fleet)",
-      "slicePath": "frontend/slices/landing-sections",
+      "slicePath": "frontend/slices/sections",
       "convexPaths": [],
       "npm": [
         "lucide-react@^0.400.0",
@@ -3839,7 +3840,7 @@
         "crud",
         "renderer"
       ],
-      "agentRecipe": "Run `npx rr add landing-sections`. Fold `landingReducer` into your root reducer (cases LANDING_UPSERT + LANDING_DELETE), seed State.landingSections with `defaultLandingSections()`, wrap your StoreProvider with `<LandingProvider value={adapter}/>` where adapter maps {items, publicBase, adminBase, create, update, remove} from your dispatch. Mount `<LandingView/>` at `/admin/landing` and `<LandingEditorView id={params.id}/>` at `/admin/landing/[id]`. In HomePage iterate `state.landingSections.filter(s => s.enabled).sort((a,b) => a.order - b.order)` and render each inside `<LandingSectionShell section={s}>`; for stats/testimonials/pricing/faq/newsletter/custom kinds drop in the shipped `<StatsSection/>` etc. (they read `section.config` JSON over your template defaults), or map the remaining kinds (hero/features/blog/etc.) to your own renderer. Use `parseConfigBadge(section.config)` for a section badge. Requires the template-base shared surface that ships in every rr website template: `@/components/templates/_shared/motion` (Reveal/Stagger/CountUp/Marquee/useInView — the motion-kit primitives), `@/components/templates/_shared/ui/section-head`, and `@/components/templates/_shared/crud/*`. Sections also use shadcn accordion/card/carousel + embla-carousel-autoplay."
+      "agentRecipe": "Run `npx rr add sections`. Fold `landingReducer` into your root reducer (cases LANDING_UPSERT + LANDING_DELETE), seed State.landingSections with `defaultLandingSections()`, wrap your StoreProvider with `<LandingProvider value={adapter}/>` where adapter maps {items, publicBase, adminBase, create, update, remove} from your dispatch. Mount `<LandingView/>` at `/admin/landing` and `<LandingEditorView id={params.id}/>` at `/admin/landing/[id]`. In HomePage iterate `state.landingSections.filter(s => s.enabled).sort((a,b) => a.order - b.order)` and render each inside `<LandingSectionShell section={s}>`; for stats/testimonials/pricing/faq/newsletter/custom kinds drop in the shipped `<StatsSection/>` etc. (they read `section.config` JSON over your template defaults), or map the remaining kinds (hero/features/blog/etc.) to your own renderer. Use `parseConfigBadge(section.config)` for a section badge. Requires the template-base shared surface that ships in every rr website template: `@/components/templates/_shared/motion` (Reveal/Stagger/CountUp/Marquee/useInView — the motion-kit primitives), `@/components/templates/_shared/ui/section-head`, and `@/components/templates/_shared/crud/*`. Sections also use shadcn accordion/card/carousel + embla-carousel-autoplay."
     },
     {
       "slug": "motion-kit",

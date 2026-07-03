@@ -1,11 +1,11 @@
 {
-  "blog-section": "landing-sections",
-  "faq-section": "landing-sections",
-  "portfolio-section": "landing-sections",
-  "changelog-feed": "landing-sections",
-  "feature-grid": "landing-sections",
-  "testimonials-grid": "landing-sections",
-  "pricing-page": "landing-sections",
+  "blog-section": "sections",
+  "faq-section": "sections",
+  "portfolio-section": "sections",
+  "changelog-feed": "sections",
+  "feature-grid": "sections",
+  "testimonials-grid": "sections",
+  "pricing-page": "sections",
   "files": "file-upload",
   "onboarding-wizard": "site-setup-wizard",
   "media-studio": "design-studio",
@@ -16,5 +16,6 @@
   "settings-page": "settings",
   "shell-settings": "settings",
   "doku-payment": "payment",
-  "midtrans-payment": "payment"
+  "midtrans-payment": "payment",
+  "landing-sections": "sections"
 }

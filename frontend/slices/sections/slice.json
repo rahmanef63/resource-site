@@ -1,15 +1,15 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
-  "slug": "landing-sections",
+  "slug": "sections",
   "version": "0.4.0",
   "category": "content",
   "kind": "ui",
-  "title": "Landing Sections",
+  "title": "Sections — composable marketing/landing sections",
   "description": "Landing-page composition: admin CRUD over the section list PLUS (v0.4.0) a config-driven public section renderer library. Ships a pure reducer (LANDING_UPSERT auto-shifts sibling order; LANDING_DELETE closes the gap) + LandingProvider store adapter + admin LandingView/LandingEditorView built on the shared CRUD primitives, plus a per-section LandingSectionShell (background image + custom Tailwind className overlay + scroll-reveal). NEW: sections/ renderers (StatsSection, TestimonialsSection, FaqSection, PricingSection, NewsletterSection, CustomSection) read `LandingSection.config` JSON over template defaults so content stays dashboard-controlled, plus parse-config helpers (parseConfigBadge/parseConfigField). Sections carry { kind, order, title, subtitle, enabled, imageUrl, imageRatio, bgImageUrl, className, config (JSON) } with up/down reorder arrows. Consumers map each `kind` to a section (shipped for stats/testimonials/pricing/faq/newsletter/custom) or their own renderer wrapped in <LandingSectionShell>. Lifted from the _templates fleet `_shared/landing` (2026-06-11); SSOT for all 7 rr website templates.",
-  "namespace": "@/features/landing-sections",
+  "namespace": "@/features/sections",
   "frontend": {
     "slicePath": "frontend/slices/landing-sections",
-    "configExport": "landingSectionsFeature"
+    "configExport": "sectionsFeature"
   },
   "convex": {
     "tablesExport": "",

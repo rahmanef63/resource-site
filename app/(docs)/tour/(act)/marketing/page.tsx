@@ -30,7 +30,7 @@ const SECTIONS: { heading: string; blurb: string; slugs: string[] }[] = [
     heading: "The landing page",
     blurb:
       "Hero, feature grid, pricing tiers, FAQ, and blog — the full above-and-below-the-fold section kit, plus the sticky nav/footer chrome that frames it.",
-    slugs: ["landing-sections", "marketing-chrome"],
+    slugs: ["sections", "marketing-chrome"],
   },
   {
     heading: "Social proof",

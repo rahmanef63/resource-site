@@ -41,7 +41,7 @@ render publicly. You wire it up in four steps:
 ### 1. Fold `landingReducer` into your root reducer
 
 ```ts
-import { landingReducer, type LandingSlice, type LandingAction } from "@/features/landing-sections";
+import { landingReducer, type LandingSlice, type LandingAction } from "@/features/sections";
 
 type State = LandingSlice & { /* …your other slices */ };
 type Action = LandingAction | /* …your other actions */;
@@ -61,7 +61,7 @@ export function reducer(state: State, action: Action): State {
 ### 2. Seed `landingSections` in initial State
 
 ```ts
-import { defaultLandingSections } from "@/features/landing-sections";
+import { defaultLandingSections } from "@/features/sections";
 
 const initialState: State = {
   landingSections: defaultLandingSections(),
@@ -72,7 +72,7 @@ const initialState: State = {
 ### 3. Wrap your StoreProvider with `<LandingProvider>`
 
 ```tsx
-import { LandingProvider, type LandingStore } from "@/features/landing-sections";
+import { LandingProvider, type LandingStore } from "@/features/sections";
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
   const { state, dispatch } = useStore();
@@ -96,11 +96,11 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
 
 ```tsx
 // app/admin/landing/page.tsx
-import { LandingView } from "@/features/landing-sections";
+import { LandingView } from "@/features/sections";
 export default function Page() { return <LandingView />; }
 
 // app/admin/landing/[id]/page.tsx
-import { LandingEditorView } from "@/features/landing-sections";
+import { LandingEditorView } from "@/features/sections";
 export default function Page({ params }: { params: { id: string } }) {
   return <LandingEditorView id={params.id} />;
 }
