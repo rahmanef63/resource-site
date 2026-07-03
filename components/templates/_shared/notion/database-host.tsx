@@ -5,7 +5,7 @@
  *  whole `{ db, rows }` doc, debounce-saved by useNotionDoc). */
 
 import { NotionDatabase, DatabaseIOActions } from "@/features/notion-database";
-import { LoadingSkeleton } from "@/features/loading-states";
+import { LoadingSkeleton } from "@/features/feedback-states";
 import { useNotionDoc } from "./use-notion-doc";
 import { useDatabaseCallbacks } from "./use-database-callbacks";
 import { INITIAL_DATABASE, userLookup, type DatabaseDoc } from "./defaults";

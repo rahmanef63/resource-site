@@ -1,4 +1,3 @@
-export { loadingStatesFeature } from "./config";
 export {
   LoadingSkeleton,
   type LoadingSkeletonProps,

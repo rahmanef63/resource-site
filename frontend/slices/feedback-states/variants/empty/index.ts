@@ -1,4 +1,3 @@
-export { emptyStatesFeature } from "./config";
 export {
   EmptyState,
   type EmptyStateProps,

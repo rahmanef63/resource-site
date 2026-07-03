@@ -8,5 +8,7 @@
   "pricing-page": "landing-sections",
   "files": "file-upload",
   "onboarding-wizard": "site-setup-wizard",
-  "media-studio": "design-studio"
+  "media-studio": "design-studio",
+  "loading-states": "feedback-states",
+  "empty-states": "feedback-states"
 }

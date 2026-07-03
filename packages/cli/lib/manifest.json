@@ -12,7 +12,9 @@
     "pricing-page": "landing-sections",
     "files": "file-upload",
     "onboarding-wizard": "site-setup-wizard",
-    "media-studio": "design-studio"
+    "media-studio": "design-studio",
+    "loading-states": "feedback-states",
+    "empty-states": "feedback-states"
   },
   "layouts": [],
   "recipes": [],
@@ -1514,41 +1516,24 @@
       ]
     },
     {
-      "slug": "empty-states",
-      "title": "Empty States — 404/500/403 + zero-data",
+      "slug": "feedback-states",
+      "title": "Feedback States — loading skeletons + empty/error states",
       "category": "ui",
-      "description": "Configurable EmptyState composing the shadcn Empty primitive: kind presets 404 / 500 / 403 / no-results / empty-list / first-use with default lucide icon + copy, all overridable. Primary/secondary actions. ErrorPage full-page wrapper is a drop-in for app/not-found.tsx and app/error.tsx (recipes in README).",
+      "description": "Two co-located placeholder surfaces behind one slug. loading: a configurable LoadingSkeleton over the shadcn Skeleton (kind presets text / card / list / table / form / page / block, overridable count + columns) plus a spinner LoadingState (inline / block / overlay) for in-flight work. empty: a configurable EmptyState over the shadcn Empty (404 / 500 / 403 / no-results / empty-list / first-use, overridable icon/title/copy/actions) plus an ErrorPage full-page wrapper for app/not-found.tsx and app/error.tsx. Install one surface with `npx rr add feedback-states loading|empty`, or both with `npx rr add feedback-states`. Replaces ad-hoc animate-pulse divs, hand-rolled Loader2 spans, and one-off error pages.",
       "source": "rr original",
-      "install": "npx rahman-resources add empty-states",
+      "install": "npx rahman-resources add feedback-states",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add empty-states`. Drop <EmptyState kind=\"no-results\" /> into zero-data spots; wrap with <ErrorPage kind=\"404\" /> in app/not-found.tsx and kind=\"500\" in app/error.tsx. Every preset's icon/title/description/action overridable per use.",
+      "agentRecipe": "Run `npx rr add feedback-states` for both, or `npx rr add feedback-states loading` / `empty` for one surface. loading: <LoadingSkeleton kind=\"table\" count={8} /> mirrors streamed content, kind=\"page\" drops into route loading.tsx, <LoadingState variant=\"inline|block|overlay\" /> for in-flight work. empty: <EmptyState kind=\"no-results\" /> in zero-data spots, <ErrorPage kind=\"404\" /> in app/not-found.tsx and kind=\"500\" in app/error.tsx. Every preset overridable per use.",
       "tags": [
+        "loading",
+        "skeleton",
+        "spinner",
         "empty-state",
         "404",
         "500",
         "403",
         "error-page",
-        "no-results",
-        "onboarding",
-        "basics"
-      ]
-    },
-    {
-      "slug": "loading-states",
-      "title": "Loading States — skeletons + spinners SSOT",
-      "category": "ui",
-      "description": "Configurable LoadingSkeleton composing the shadcn Skeleton primitive: kind presets text / card / list / table / form / page / block with overridable count + columns. Spinner-based LoadingState (inline / block / overlay) covers in-flight work where a skeleton would be wrong. The page kind drops straight into a route loading.tsx (recipe in README).",
-      "source": "rr original",
-      "install": "npx rahman-resources add loading-states",
-      "npmPackages": [],
-      "exampleCode": "",
-      "agentRecipe": "Run `npx rr add loading-states`. Pick the LoadingSkeleton kind that mirrors the streamed content (<LoadingSkeleton kind=\"table\" count={8} />); use kind=\"page\" inside route loading.tsx. For in-flight work (submits, refetches) use <LoadingState variant=\"inline|block|overlay\" /> instead of a skeleton.",
-      "tags": [
-        "loading",
-        "skeleton",
-        "spinner",
-        "suspense",
         "fallback",
         "placeholder",
         "basics"
@@ -4511,49 +4496,23 @@
       "agentRecipe": "Run `npx rr add pages-cms`. Wrap your admin surface in <LocalPagesProvider seed={defaultPages()}> (localStorage, zero backend) or supply your own PagesStore via <PagesProvider>. Render <PagesView publicBase adminBase> for the list and <PageEditorView id publicBase adminBase> for the editor route. Public catch-all looks up the page by slug and renders <BlocksRenderer blocks={page.blocks} />. Add block kinds by extending the PageBlock union + emptyBlock + the renderer/editor switches."
     },
     {
-      "slug": "empty-states",
-      "title": "Empty States — 404/500/403 + zero-data",
+      "slug": "feedback-states",
+      "title": "Feedback States — loading skeletons + empty/error states",
       "category": "ui",
       "kind": "ui",
       "version": "0.2.0",
-      "description": "Configurable EmptyState composing the shadcn Empty primitive: kind presets 404 / 500 / 403 / no-results / empty-list / first-use with default lucide icon + copy, all overridable. Primary/secondary actions. ErrorPage full-page wrapper is a drop-in for app/not-found.tsx and app/error.tsx (recipes in README).",
+      "description": "Two co-located placeholder surfaces behind one slug. loading: a configurable LoadingSkeleton over the shadcn Skeleton (kind presets text / card / list / table / form / page / block, overridable count + columns) plus a spinner LoadingState (inline / block / overlay) for in-flight work. empty: a configurable EmptyState over the shadcn Empty (404 / 500 / 403 / no-results / empty-list / first-use, overridable icon/title/copy/actions) plus an ErrorPage full-page wrapper for app/not-found.tsx and app/error.tsx. Install one surface with `npx rr add feedback-states loading|empty`, or both with `npx rr add feedback-states`. Replaces ad-hoc animate-pulse divs, hand-rolled Loader2 spans, and one-off error pages.",
       "source": "rr original",
-      "slicePath": "frontend/slices/empty-states",
+      "slicePath": "frontend/slices/feedback-states",
       "convexPaths": [],
-      "npm": [],
-      "shadcn": [
-        "empty",
-        "button"
+      "npm": [
+        "lucide-react@^0.400.0"
       ],
-      "env": [],
-      "peers": [],
-      "providers": [],
-      "tags": [
-        "empty-state",
-        "404",
-        "500",
-        "403",
-        "error-page",
-        "no-results",
-        "onboarding",
-        "basics"
-      ],
-      "agentRecipe": "Run `npx rr add empty-states`. Drop <EmptyState kind=\"no-results\" /> into zero-data spots; wrap with <ErrorPage kind=\"404\" /> in app/not-found.tsx and kind=\"500\" in app/error.tsx. Every preset's icon/title/description/action overridable per use."
-    },
-    {
-      "slug": "loading-states",
-      "title": "Loading States — skeletons + spinners SSOT",
-      "category": "ui",
-      "kind": "ui",
-      "version": "0.2.0",
-      "description": "Configurable LoadingSkeleton composing the shadcn Skeleton primitive: kind presets text / card / list / table / form / page / block with overridable count + columns. Spinner-based LoadingState (inline / block / overlay) covers in-flight work where a skeleton would be wrong. The page kind drops straight into a route loading.tsx (recipe in README).",
-      "source": "rr original",
-      "slicePath": "frontend/slices/loading-states",
-      "convexPaths": [],
-      "npm": [],
       "shadcn": [
         "skeleton",
-        "spinner"
+        "spinner",
+        "empty",
+        "button"
       ],
       "env": [],
       "peers": [],
@@ -4562,12 +4521,31 @@
         "loading",
         "skeleton",
         "spinner",
-        "suspense",
+        "empty-state",
+        "404",
+        "500",
+        "403",
+        "error-page",
         "fallback",
         "placeholder",
         "basics"
       ],
-      "agentRecipe": "Run `npx rr add loading-states`. Pick the LoadingSkeleton kind that mirrors the streamed content (<LoadingSkeleton kind=\"table\" count={8} />); use kind=\"page\" inside route loading.tsx. For in-flight work (submits, refetches) use <LoadingState variant=\"inline|block|overlay\" /> instead of a skeleton."
+      "agentRecipe": "Run `npx rr add feedback-states` for both, or `npx rr add feedback-states loading` / `empty` for one surface. loading: <LoadingSkeleton kind=\"table\" count={8} /> mirrors streamed content, kind=\"page\" drops into route loading.tsx, <LoadingState variant=\"inline|block|overlay\" /> for in-flight work. empty: <EmptyState kind=\"no-results\" /> in zero-data spots, <ErrorPage kind=\"404\" /> in app/not-found.tsx and kind=\"500\" in app/error.tsx. Every preset overridable per use.",
+      "variants": {
+        "default": "loading",
+        "items": [
+          {
+            "id": "loading",
+            "title": "Loading",
+            "description": "Skeletons + spinners for in-flight UI (LoadingSkeleton, LoadingState)."
+          },
+          {
+            "id": "empty",
+            "title": "Empty",
+            "description": "404/500/403 + zero-data placeholders (EmptyState, ErrorPage)."
+          }
+        ]
+      }
     },
     {
       "slug": "marketing-chrome",

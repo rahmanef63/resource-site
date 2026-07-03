@@ -1,5 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { LoadingSkeleton } from "@/features/loading-states";
+import { LoadingSkeleton } from "@/features/feedback-states";
 
 interface Props {
   /** Show the docs-shell tab strip placeholder. Off for simple text

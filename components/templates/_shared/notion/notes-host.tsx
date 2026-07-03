@@ -15,7 +15,7 @@ import {
   collectHeadings,
 } from "@/features/notion-shell";
 import { SelectionProvider, SelectableBlock, SelectionMarquee } from "@/features/selection";
-import { LoadingSkeleton } from "@/features/loading-states";
+import { LoadingSkeleton } from "@/features/feedback-states";
 import { useNotionDoc } from "./use-notion-doc";
 import { useBlockOps } from "./use-block-ops";
 import { NOTES_BLOCK_RENDERERS, TocHeadingsContext } from "./block-renderers";

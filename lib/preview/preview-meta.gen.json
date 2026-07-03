@@ -484,50 +484,6 @@
     ]
   },
   {
-    "slug": "empty-states",
-    "title": "Empty States — 404/500/403 + zero-data",
-    "category": "ui",
-    "previews": [
-      {
-        "component": "EmptyState",
-        "kind": "scenarios",
-        "scenarios": [
-          {
-            "id": "404",
-            "title": "404 — Not found",
-            "description": "missing page fallback"
-          },
-          {
-            "id": "500",
-            "title": "500 — Server error",
-            "description": "unexpected error fallback"
-          },
-          {
-            "id": "403",
-            "title": "403 — Access denied",
-            "description": "permission-gated resource"
-          },
-          {
-            "id": "no-results",
-            "title": "No results",
-            "description": "empty search / filter result"
-          },
-          {
-            "id": "empty-list",
-            "title": "Empty list",
-            "description": "collection with no items yet"
-          },
-          {
-            "id": "first-use",
-            "title": "First use",
-            "description": "onboarding / get-started state"
-          }
-        ],
-        "seed": "EmptyState rendered once per kind preset with default icon/title/description"
-      }
-    ]
-  },
-  {
     "slug": "faq-section",
     "title": "FAQ Section",
     "category": "ui",
@@ -602,6 +558,109 @@
           }
         ],
         "seed": "3 static feature items with lucide icons"
+      }
+    ]
+  },
+  {
+    "slug": "feedback-states",
+    "title": "Feedback States — loading skeletons + empty/error states",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "LoadingSkeleton",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "text",
+            "title": "Text lines",
+            "description": "paragraph placeholder, last line shorter"
+          },
+          {
+            "id": "card",
+            "title": "Card",
+            "description": "avatar header + body lines in a card frame"
+          },
+          {
+            "id": "list",
+            "title": "List rows",
+            "description": "avatar + two-line rows"
+          },
+          {
+            "id": "table",
+            "title": "Table",
+            "description": "header row + data rows"
+          },
+          {
+            "id": "form",
+            "title": "Form",
+            "description": "label + field pairs + submit button"
+          },
+          {
+            "id": "page",
+            "title": "Page",
+            "description": "route loading.tsx drop-in — title + prose + grid"
+          }
+        ],
+        "seed": "LoadingSkeleton rendered once per kind preset with default counts"
+      },
+      {
+        "component": "LoadingState",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "inline",
+            "title": "Inline",
+            "description": "spinner + label in flowing text"
+          },
+          {
+            "id": "block",
+            "title": "Block",
+            "description": "centered column for panel bodies"
+          },
+          {
+            "id": "overlay",
+            "title": "Overlay",
+            "description": "blur veil over a relative parent"
+          }
+        ],
+        "seed": "LoadingState rendered per variant over demo content"
+      },
+      {
+        "component": "EmptyState",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "404",
+            "title": "404 — Not found",
+            "description": "missing page fallback"
+          },
+          {
+            "id": "500",
+            "title": "500 — Server error",
+            "description": "unexpected error fallback"
+          },
+          {
+            "id": "403",
+            "title": "403 — Access denied",
+            "description": "permission-gated resource"
+          },
+          {
+            "id": "no-results",
+            "title": "No results",
+            "description": "empty search / filter result"
+          },
+          {
+            "id": "empty-list",
+            "title": "Empty list",
+            "description": "collection with no items yet"
+          },
+          {
+            "id": "first-use",
+            "title": "First use",
+            "description": "onboarding / get-started state"
+          }
+        ],
+        "seed": "EmptyState rendered once per kind preset with default icon/title/description"
       }
     ]
   },
@@ -793,72 +852,6 @@
           }
         ],
         "seed": "5 static LibraryRow cards (display-only); scenario selects which subset feeds the grid"
-      }
-    ]
-  },
-  {
-    "slug": "loading-states",
-    "title": "Loading States — skeletons + spinners SSOT",
-    "category": "ui",
-    "previews": [
-      {
-        "component": "LoadingSkeleton",
-        "kind": "scenarios",
-        "scenarios": [
-          {
-            "id": "text",
-            "title": "Text lines",
-            "description": "paragraph placeholder, last line shorter"
-          },
-          {
-            "id": "card",
-            "title": "Card",
-            "description": "avatar header + body lines in a card frame"
-          },
-          {
-            "id": "list",
-            "title": "List rows",
-            "description": "avatar + two-line rows"
-          },
-          {
-            "id": "table",
-            "title": "Table",
-            "description": "header row + data rows"
-          },
-          {
-            "id": "form",
-            "title": "Form",
-            "description": "label + field pairs + submit button"
-          },
-          {
-            "id": "page",
-            "title": "Page",
-            "description": "route loading.tsx drop-in — title + prose + grid"
-          }
-        ],
-        "seed": "LoadingSkeleton rendered once per kind preset with default counts"
-      },
-      {
-        "component": "LoadingState",
-        "kind": "scenarios",
-        "scenarios": [
-          {
-            "id": "inline",
-            "title": "Inline",
-            "description": "spinner + label in flowing text"
-          },
-          {
-            "id": "block",
-            "title": "Block",
-            "description": "centered column for panel bodies"
-          },
-          {
-            "id": "overlay",
-            "title": "Overlay",
-            "description": "blur veil over a relative parent"
-          }
-        ],
-        "seed": "LoadingState rendered per variant over demo content"
       }
     ]
   },
