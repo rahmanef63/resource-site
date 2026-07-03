@@ -53,7 +53,7 @@ Why split? Component butuh consumer-side Tailwind scan + theme tokens + logic tw
 | Command | Apa kerjanya |
 |---|---|
 | `npx rr init <app>` | Scaffold project baru |
-| `npx rr add <slug>` | Copy slice/template ke consumer (auto cascade shared deps) |
+| `npx rr add <slug> [variant]` | Copy slice/template ke consumer (auto cascade shared deps). Slice ber-`variants`: `add <slug> <variant>` copy satu varian (flatten ke slice root), `add <slug>` copy semua + root switcher, pilih via prop `variant=` (shadcn-style). Contract: `docs/slice-architecture.md#variants-shadcn-style` |
 | `npx rr list [templates\|features\|skills]` | List available items |
 | `npx rr info <slug>` | Full metadata |
 | `npx rr lift <slug>` | Manual: kirim improvement consumer → rr (operator only) |

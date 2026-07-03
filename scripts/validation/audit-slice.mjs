@@ -29,6 +29,7 @@ import {
   readSliceConfig,
   versionTrio,
 } from "./audit-slice-helpers.mjs";
+import { variantErrors } from "./audit-slice-variants.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(__dirname, "../..");
@@ -68,6 +69,9 @@ for (const slice of slices) {
       `[${slice.folder}] slice.manifest.json version "${ver.manifest}" != slice.json "${ver.json}"`,
     );
   }
+
+  // 0c. variants gate (shadcn-style) — see audit-slice-variants.mjs.
+  errors.push(...variantErrors(slice));
 
   // 1. naming
   if (slice.slugFromJson !== slice.folder) {

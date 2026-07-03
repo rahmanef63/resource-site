@@ -169,7 +169,7 @@ ${kleur.dim("Consumer's components/ui/ + lib/utils.ts (shadcn) are never touched
 
 // Flags that take a value (`--flag x`). Anything else is boolean, so a boolean
 // flag placed before a positional no longer swallows that positional.
-const VALUE_FLAGS = new Set(["target", "template", "category", "at", "skills", "features"]);
+const VALUE_FLAGS = new Set(["target", "template", "category", "at", "skills", "features", "variant"]);
 
 function parseFlags(rest) {
   const positional = [];
@@ -486,7 +486,7 @@ function runShell(cmd, args, cwd) {
 
 async function runAdd(rest) {
   const { positional, flags } = parseFlags(rest);
-  const [slug, targetArg = "."] = positional;
+  const [slug, ...restPos] = positional;
   if (!slug) {
     console.error(kleur.red("Missing slug."));
     printHelp();
@@ -495,6 +495,22 @@ async function runAdd(rest) {
   const found = findEntry(slug);
   if (!found) throw new Error(`"${slug}" not found. Run ${kleur.cyan("npx rahman-resources list")}.`);
   const { kind, entry } = found;
+
+  // Variant disambiguation: a 2nd positional is a variant iff the slice
+  // declares it (shadcn-style). `--variant` wins; anything else is the target
+  // dir. Non-variant slices have empty `variantIds`, so positional[1] stays
+  // the target exactly as before → byte-for-byte back-compat.
+  const variantIds = (entry.variants?.items ?? []).map((v) => v.id);
+  let variant = typeof flags.variant === "string" ? flags.variant : undefined;
+  let targetArg = typeof flags.target === "string" ? flags.target : ".";
+  for (const p of restPos) {
+    if (!variant && variantIds.includes(p)) variant = p;
+    else if (targetArg === ".") targetArg = p;
+  }
+  if (variant && !variantIds.includes(variant)) {
+    console.error(kleur.red(`"${slug}" has no variant "${variant}". Available: ${variantIds.join(", ") || "(none — this slice has no variants)"}`));
+    process.exit(1);
+  }
   const target = path.resolve(process.cwd(), targetArg);
 
   // ── Pre-flight compose check (Phase B). Skipped with --force. ───────────
@@ -540,11 +556,15 @@ async function runAdd(rest) {
 
   if (kind === "slice") {
     console.log(
-      kleur.bold(`\n→ Adding slice ${kleur.cyan(entry.slug)} `) +
+      kleur.bold(`\n→ Adding slice ${kleur.cyan(entry.slug)}${variant ? kleur.magenta(`:${variant}`) : ""} `) +
       kleur.dim(`[SLICE — drop-in feature]`) +
       kleur.bold(` to ${kleur.dim(target)}\n`),
     );
-    await runLift([`rahman:${entry.slug}`, ...(targetArg !== "." ? ["--target", targetArg] : [])]);
+    await runLift([
+      `rahman:${entry.slug}`,
+      ...(targetArg !== "." ? ["--target", targetArg] : []),
+      ...(variant ? ["--variant", variant] : []),
+    ]);
     // Augment consumer .env.example with this slice's env requirements.
     // Idempotent — re-running `add` does not duplicate entries.
     try {
@@ -1132,11 +1152,12 @@ async function runLift(rest) {
   }
   const target = path.resolve(process.cwd(), typeof flags.target === "string" ? flags.target : ".");
   const dryRun = !!flags["dry-run"];
+  const variant = typeof flags.variant === "string" ? flags.variant : undefined;
 
   const parsed = parseLiftSource(src);
-  console.log(kleur.bold(`\n→ Lift ${kleur.cyan(src)} ${dryRun ? kleur.yellow("(dry-run)") : ""}\n`));
+  console.log(kleur.bold(`\n→ Lift ${kleur.cyan(src)}${variant ? kleur.magenta(` :${variant}`) : ""} ${dryRun ? kleur.yellow("(dry-run)") : ""}\n`));
 
-  const plan = await resolveLiftPlan(parsed, target);
+  const plan = await resolveLiftPlan(parsed, target, variant);
 
   for (const step of plan.steps) {
     console.log(`  ${kleur.dim(step.from)} → ${kleur.cyan(step.toRel)}`);
@@ -1189,9 +1210,9 @@ async function runLift(rest) {
     const slice = (manifest.slices ?? []).find((s) => s.slug === parsed.slug);
     if (slice) {
       const rr = readRr(target);
-      rrAddSlice(rr, parsed.slug, { version: slice.version, category: slice.category });
+      rrAddSlice(rr, parsed.slug, { version: slice.version, category: slice.category, variant });
       writeRr(rr, target);
-      console.log(kleur.dim(`  rr.json: slices += ${parsed.slug}@${slice.version}`));
+      console.log(kleur.dim(`  rr.json: slices += ${parsed.slug}@${slice.version}${variant ? `:${variant}` : ""}`));
     }
   }
 
@@ -1219,7 +1240,7 @@ function parseLiftSource(src) {
   return { kind: "github", owner: gh[1], repo: gh[2], subPath: gh[3] };
 }
 
-async function resolveLiftPlan(parsed, target) {
+async function resolveLiftPlan(parsed, target, variant) {
   const steps = [];
   const peers = [];
   const npm = [];
@@ -1231,11 +1252,34 @@ async function resolveLiftPlan(parsed, target) {
     if (!slice) {
       throw new Error(`Slice not found in manifest: ${parsed.slug}. Run 'list slices'.`);
     }
-    steps.push({
-      from: slice.slicePath,
-      toRel: slice.slicePath,
-      toAbs: path.join(target, slice.slicePath),
-    });
+    // Variant install (shadcn-style): copy only variants/<id>/ (flattened into
+    // the slice root so imports resolve at @/features/<slug> exactly like a
+    // non-variant slice) + an optional shared/ folder. Without a variant, the
+    // whole slice tree is pulled (all variants + the root switcher) unchanged.
+    const variants = slice.variants;
+    if (variant && variants) {
+      if (!(variants.items ?? []).some((v) => v.id === variant)) {
+        throw new Error(`Slice "${parsed.slug}" has no variant "${variant}". Available: ${(variants.items ?? []).map((v) => v.id).join(", ")}`);
+      }
+      steps.push({
+        from: `${slice.slicePath}/variants/${variant}`,
+        toRel: slice.slicePath,
+        toAbs: path.join(target, slice.slicePath),
+      });
+      if (variants.shared) {
+        steps.push({
+          from: `${slice.slicePath}/${variants.shared}`,
+          toRel: `${slice.slicePath}/${variants.shared}`,
+          toAbs: path.join(target, slice.slicePath, variants.shared),
+        });
+      }
+    } else {
+      steps.push({
+        from: slice.slicePath,
+        toRel: slice.slicePath,
+        toAbs: path.join(target, slice.slicePath),
+      });
+    }
     for (const cp of slice.convexPaths ?? []) {
       steps.push({ from: cp, toRel: cp, toAbs: path.join(target, cp) });
     }

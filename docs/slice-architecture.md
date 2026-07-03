@@ -464,6 +464,49 @@ Each PR also:
 - Does the `lift` command need a write-lock file (`.lift-history.json`) so users can rollback a partial lift?
 - For multi-provider slices (e.g., `payment` with midtrans + doku), does the slice declare `providers: ["midtrans", "doku"]` in `slice.json` and consumer picks one at install time? Or is each provider its own slice (`midtrans-payment`, `doku-payment`) with shared `payment-base` peer?
   - **Tentative answer**: each provider is its own slice. Shared concerns (types, base table) live in `payment-base`. Provider slices declare `peers: [{ slug: "payment-base" }]`. Easier to validate, easier to compose, easier to publish-slice from a consumer.
+  - **Resolved 2026-07-03 → Variants (below).** Reverses the tentative answer: `midtrans-payment` + `doku-payment` collapse into one `payment` slice with `doku` / `midtrans` *variants*. The Convex backend already discriminates on `provider: v.union("midtrans","doku","stripe")`, so the base is genuinely shared. See [`docs/SLICE-CONSOLIDATION-PLAN.md`](./SLICE-CONSOLIDATION-PLAN.md).
+
+---
+
+## Variants (shadcn-style)
+
+A slice with several near-identical surfaces (render modes, providers, layouts) declares **variants** instead of splitting into look-alike slugs. Landed as a purely additive mechanism 2026-07-03 (Phase 0 — no-op on all 78 non-variant slices).
+
+**Folder shape**
+
+```
+frontend/slices/<slug>/
+├── slice.json            # declares `variants`
+├── index.ts              # all-mode switcher (author-written): variant prop → component
+├── shared/               # optional — copied for EVERY variant
+└── variants/
+    ├── <id-a>/index.ts   # exports the SAME canonical component name as index.ts
+    └── <id-b>/index.ts
+```
+
+**`slice.json`**
+
+```json
+"variants": {
+  "default": "chat",
+  "shared": "shared",
+  "items": [
+    { "id": "chat",   "title": "Chat",   "description": "Conversational panel." },
+    { "id": "studio", "title": "Studio", "description": "Generation canvas." }
+  ]
+}
+```
+
+`default` must be one of `items[].id`; `shared` is optional. `audit:slices` gates that every `items[].id` has a `variants/<id>/` folder, `default ∈ ids`, and `shared/` exists when named.
+
+**Install**
+
+- `npx rr add <slug> <variant>` — copies **only** `variants/<id>/` (its contents flatten into the slice root, so imports resolve at `@/features/<slug>` exactly like a non-variant slice) + `shared/`. The variant `2nd positional` is disambiguated against the declared ids; anything else is the target dir; `--variant <id>` is explicit.
+- `npx rr add <slug>` — copies the whole tree (all variants + the root switcher). Pick at runtime via the shadcn-style prop: `<AiWorkspace variant="studio" />`.
+
+**Import rules (flatten-safe):** inside a variant, file→file imports must be relative-within-variant; variant→shared must use `@/features/<slug>/shared/...`; **never** import `@/features/<slug>/variants/<id>/...`. Slice-level `npm`/`shadcn`/`convexPaths`/`version` stay shared across variants in v1 (a single-variant install may pull an unused dep — acceptable; add per-item `npm` later only if a footprint diverges).
+
+**Files that implement it:** `packages/cli/lib/slice-schema.json` (`variants`), `packages/cli/bin/cli.js` (`runAdd`/`runLift`/`resolveLiftPlan`), `packages/cli/scripts/gen-manifest.mjs` (`sliceJsonVariants`, emit-when-present), `scripts/validation/audit-slice.mjs` (gate), `packages/cli/lib/rr-schema.json` + `rr.mjs` (records the installed variant).
 
 ---
 

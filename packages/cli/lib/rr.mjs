@@ -98,9 +98,10 @@ export function addSlice(rr, slug, opts = {}) {
   if (existing) {
     if (opts.version) existing.version = opts.version;
     if (opts.category) existing.category = opts.category;
+    if (opts.variant) existing.variant = opts.variant;
     return rr;
   }
-  rr.slices.push({ slug, version: opts.version ?? "main", category: opts.category, addedAt: today() });
+  rr.slices.push({ slug, version: opts.version ?? "main", category: opts.category, addedAt: today(), ...(opts.variant ? { variant: opts.variant } : {}) });
   return rr;
 }
 

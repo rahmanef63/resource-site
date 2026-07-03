@@ -99,18 +99,15 @@ const features = loadFeatures().filter((f) => !ALIASES[f.slug]).map((f) => {
   };
 });
 
-// Version SSOT = frontend/slices/<slug>/slice.json (audit:slices gates the
-// trio to it). The catalog (slices.ts) version is display-only and lags —
-// prefer the slice.json value so the distributed manifest never ships stale.
-function sliceJsonVersion(slug) {
+// slice.json is the SSOT (audit:slices gates to it). The catalog (slices.ts)
+// version is display-only and lags — prefer slice.json so the distributed
+// manifest never ships stale `version`, and so `variants` (shadcn-style) is
+// carried through for the CLI to resolve `add <slug> <variant>`.
+function readSliceJson(slug) {
   for (const base of ["frontend/slices", "template-base/frontend/slices"]) {
     const p = path.resolve(__dirname, `../../../${base}/${slug}/slice.json`);
     if (existsSync(p)) {
-      try {
-        return JSON.parse(readFileSync(p, "utf8")).version ?? null;
-      } catch {
-        return null;
-      }
+      try { return JSON.parse(readFileSync(p, "utf8")); } catch { return null; }
     }
   }
   return null;
@@ -119,6 +116,7 @@ function sliceJsonVersion(slug) {
 const slices = loadSlices().filter((s) => !ALIASES[s.slug]).map((s) => {
   // Derive `kind` if not explicit. backend = has convex, no slicePath bits;
   // ui = slicePath present, convexPaths empty; full = both.
+  const sj = readSliceJson(s.slug);
   const hasFrontend = !!s.slicePath;
   const hasBackend = (s.convexPaths ?? []).length > 0;
   const inferred = hasFrontend && hasBackend ? "full" : hasBackend ? "backend" : "ui";
@@ -127,7 +125,7 @@ const slices = loadSlices().filter((s) => !ALIASES[s.slug]).map((s) => {
     title: s.title,
     category: s.category,
     kind: s.kind ?? inferred,
-    version: sliceJsonVersion(s.slug) ?? s.version,
+    version: sj?.version ?? s.version,
     description: s.description,
     source: s.source ?? "",
     slicePath: s.slicePath,
@@ -139,6 +137,8 @@ const slices = loadSlices().filter((s) => !ALIASES[s.slug]).map((s) => {
     providers: s.providers ?? [],
     tags: s.tags ?? [],
     agentRecipe: s.agentRecipe ?? "",
+    // Emit only when present → manifest bytes unchanged for non-variant slices.
+    ...(sj?.variants ? { variants: sj.variants } : {}),
   };
 });
 

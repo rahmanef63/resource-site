@@ -51,6 +51,37 @@
       ],
       "description": "Slice shape \u2014 ui (no convex), backend (no UI), full (both)."
     },
+    "variants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["default", "items"],
+      "description": "shadcn-style variants. Each item's files live at variants/<id>/; an optional shared/ folder is copied for every variant. `npx rr add <slug> <id>` installs one variant (flattened to slice root); `npx rr add <slug>` installs all + a root index.ts switcher selected via a `variant` prop.",
+      "properties": {
+        "default": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "description": "Fallback variant id for the all-mode switcher. Must be one of items[].id."
+        },
+        "shared": {
+          "type": "string",
+          "description": "Folder (relative to slice root) copied for every variant. Omit if variants are self-contained."
+        },
+        "items": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+              "title": { "type": "string" },
+              "description": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
     "title": {
       "type": "string",
       "minLength": 3

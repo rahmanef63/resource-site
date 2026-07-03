@@ -74,6 +74,7 @@
           "slug": { "type": "string" },
           "version": { "type": "string" },
           "category": { "type": "string" },
+          "variant": { "type": "string", "description": "Installed variant id, when added with `add <slug> <variant>`." },
           "addedAt": { "type": "string", "format": "date" }
         }
       }
