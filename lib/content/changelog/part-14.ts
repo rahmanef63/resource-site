@@ -2,6 +2,37 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SS-variants",
+    "version": "slice-variants-wave",
+    "date": 1783036800000,
+    "kind": "feature",
+    "title": "shadcn-style slice variants — 80 slices consolidated to 71",
+    "body": "New variant mechanism: a slice can declare `variants` in slice.json. `npx rr add <slug> <variant>` installs one variant (its files flatten to the slice root, so imports resolve at @/features/<slug> like any slice); `npx rr add <slug>` installs all variants + a root switcher and you pick via a prop — exactly the shadcn pattern. An optional `shared/` folder is copied for every variant, and each variant can declare its own `convex` roots so it pulls only its own backend. Purely additive: the ~60 non-variant slices install exactly as before, and every old slug keeps working via an alias. Used to collapse the confusingly-named slice families into fewer, clearer slices.",
+    "groups": [
+      {
+        "heading": "Merged into variant slices",
+        "bullets": [
+          { "text": "feedback-states — loading + empty (was loading-states + empty-states)", "slug": "feedback-states" },
+          { "text": "profile — resume + card (was resume + about-profile)", "slug": "profile" },
+          { "text": "settings — account + appearance (was settings-page + shell-settings)", "slug": "settings" },
+          { "text": "payment — doku + midtrans (was doku-payment + midtrans-payment)", "slug": "payment" },
+          { "text": "notion-ui — page + database + sidebar (was notion-shell + notion-database + notion-sidebar)", "slug": "notion-ui" },
+          { "text": "admin — shell + console, each pulling only its own convex (was admin + admin-console)", "slug": "admin" }
+        ]
+      },
+      {
+        "heading": "Renamed for clarity (old slugs aliased)",
+        "bullets": [
+          { "text": "files → file-upload (vs file-explorer)", "slug": "file-upload" },
+          { "text": "media-studio → design-studio (vs image-editor)", "slug": "design-studio" },
+          { "text": "onboarding-wizard → site-setup-wizard", "slug": "site-setup-wizard" },
+          { "text": "notion → notion-app (vs notion-ui primitives)", "slug": "notion-app" },
+          { "text": "landing-sections → sections", "slug": "sections" }
+        ]
+      }
+    ]
+  },
+  {
     "id": "AG-bridge",
     "version": "agentic-wave-3b",
     "date": 1781049600000,
