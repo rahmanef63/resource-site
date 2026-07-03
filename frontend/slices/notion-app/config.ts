@@ -11,9 +11,9 @@ import { defineFeature } from "@/lib/shared/features/defineFeature";
  * specs, block-tree/turn-into/markdown/inline-decorator utils). Components +
  * convex land in later milestones behind the EditorAdapter seam.
  */
-export const notionConfig = defineFeature({
-  slug: "notion",
-  title: "Notion — Block Editor",
+export const notionAppConfig = defineFeature({
+  slug: "notion-app",
+  title: "Notion App — Block Editor",
   category: "content",
   routes: [],
   nav: { label: "Notion", group: "content", order: 60 },

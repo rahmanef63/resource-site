@@ -1,5 +1,5 @@
 // `notion` cluster public barrel.
-export { notionConfig } from "./config";
+export { notionAppConfig } from "./config";
 
 // Cluster-private shared model (also reachable via @notion/shared/*).
 export type {

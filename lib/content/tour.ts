@@ -150,7 +150,7 @@ export const ACT_SLUGS: Record<ActId, string[]> = {
     "create-your-mcp",
   ],
   content: [
-    "notion",
+    "notion-app",
     "notion-ui",
     "comments",
     "markdown",

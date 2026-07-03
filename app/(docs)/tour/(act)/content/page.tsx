@@ -41,7 +41,7 @@ export const metadata = {
  * future Act V slug so nothing silently vanishes (audit:tour enforces a total +
  * disjoint partition against the live catalog).
  */
-const FEATURED = "notion";
+const FEATURED = "notion-app";
 
 const SECTIONS: { heading: string; blurb: string; slugs: string[] }[] = [
   {

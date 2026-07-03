@@ -20,5 +20,6 @@
   "landing-sections": "sections",
   "notion-shell": "notion-ui",
   "notion-database": "notion-ui",
-  "notion-sidebar": "notion-ui"
+  "notion-sidebar": "notion-ui",
+  "notion": "notion-app"
 }

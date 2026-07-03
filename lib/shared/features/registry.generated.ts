@@ -23,7 +23,7 @@ import { mediaStudioConfig } from "@/features/design-studio/config";
 import { htmlStudioConfig } from "@/features/html-studio/config";
 import { imageEditorConfig } from "@/features/image-editor/config";
 import { mediaViewerConfig } from "@/features/media-viewer/config";
-import { notionConfig } from "@/features/notion/config";
+import { notionAppConfig } from "@/features/notion-app/config";
 import { osTerminalConfig } from "@/features/os-terminal/config";
 import { platformAdminConfig } from "@/features/platform-admin/config";
 import { quicklinksConfig } from "@/features/quicklinks/config";
@@ -132,8 +132,8 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     version: "1.2.1",
   },
   {
-    ...notionConfig,
-    importPath: "@/features/notion/config",
+    ...notionAppConfig,
+    importPath: "@/features/notion-app/config",
     version: "1.1.1",
   },
   {
