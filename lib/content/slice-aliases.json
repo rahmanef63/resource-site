@@ -10,5 +10,7 @@
   "onboarding-wizard": "site-setup-wizard",
   "media-studio": "design-studio",
   "loading-states": "feedback-states",
-  "empty-states": "feedback-states"
+  "empty-states": "feedback-states",
+  "resume": "profile",
+  "about-profile": "profile"
 }

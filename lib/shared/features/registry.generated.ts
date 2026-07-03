@@ -4,7 +4,6 @@
 import { registerFeatures } from "./registerFeature";
 import type { RegisteredSlice } from "./registry";
 
-import { aboutProfileConfig } from "@/features/about-profile/config";
 import { adminConfig } from "@/features/admin/config";
 import { adminConsoleConfig } from "@/features/admin-console/config";
 import { aiRouterConfig } from "@/features/ai-router/config";
@@ -33,7 +32,6 @@ import { quicklinksConfig } from "@/features/quicklinks/config";
 import { reelEditorConfig } from "@/features/reel-editor/config";
 import { resendNewsletterConfig } from "@/features/resend-newsletter/config";
 import { resourcesLauncherAdminConfig } from "@/features/resources-launcher-admin/config";
-import { resumeConfig } from "@/features/resume/config";
 import { seoConfig } from "@/features/seo/config";
 import { shellSettingsConfig } from "@/features/shell-settings/config";
 import { startHereConfig } from "@/features/start-here/config";
@@ -41,11 +39,6 @@ import { systemMonitorConfig } from "@/features/system-monitor/config";
 import { vectorSearchConfig } from "@/features/vector-search/config";
 
 export const REGISTERED_SLICES: RegisteredSlice[] = [
-  {
-    ...aboutProfileConfig,
-    importPath: "@/features/about-profile/config",
-    version: "1.0.0",
-  },
   {
     ...adminConfig,
     importPath: "@/features/admin/config",
@@ -184,11 +177,6 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...resourcesLauncherAdminConfig,
     importPath: "@/features/resources-launcher-admin/config",
-    version: "1.0.0",
-  },
-  {
-    ...resumeConfig,
-    importPath: "@/features/resume/config",
     version: "1.0.0",
   },
   {

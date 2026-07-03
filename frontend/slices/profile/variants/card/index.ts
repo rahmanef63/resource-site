@@ -25,7 +25,6 @@ export type {
   AboutProfile as AboutProfileData,
   AboutLink,
   AboutFaq,
-  AppDescriptor,
 } from "./lib/host";
 
 export { aboutProfileConfig } from "./config";

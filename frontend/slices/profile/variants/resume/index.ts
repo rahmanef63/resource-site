@@ -26,7 +26,6 @@ export type {
   ResumeContact,
   ResumeExperience,
   ResumeProject,
-  AppDescriptor,
 } from "./lib/host";
 
 export { resumeConfig } from "./config";

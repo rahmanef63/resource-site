@@ -1,0 +1,78 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "profile",
+  "version": "1.0.0",
+  "category": "os",
+  "kind": "ui",
+  "title": "Profile — CV + identity card",
+  "description": "One owner's identity in two renderings, behind one slug. resume: a formal one-column printable CV (summary / skills / experience / projects) with Print/PDF, rendered by <Resume /> off a configureResume() seam. card: a compact \"About This Mac\"-style identity card (avatar / monogram, name, roles, outbound links, FAQ accordion) rendered by <AboutProfile /> off a configureAbout() seam. Both render a populated placeholder unwired — zero backend. Install one surface with `npx rr add profile resume|card`, or both with `npx rr add profile`.",
+  "namespace": "@/features/profile",
+  "variants": {
+    "default": "resume",
+    "items": [
+      { "id": "resume", "title": "Resume", "description": "Formal one-column printable CV (Resume + configureResume)." },
+      { "id": "card", "title": "Card", "description": "Compact avatar + links + FAQ identity card (AboutProfile + configureAbout)." }
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/profile",
+    "configExport": "profileConfig"
+  },
+  "convex": {
+    "tablesExport": "",
+    "schemaPath": "",
+    "rootPaths": []
+  },
+  "deps": {
+    "npm": [
+      "lucide-react"
+    ],
+    "shadcn": [
+      "button",
+      "scroll-area",
+      "avatar"
+    ],
+    "env": [],
+    "peers": []
+  },
+  "registers": [],
+  "audit": [],
+  "license": "MIT",
+  "tags": [
+    "resume",
+    "cv",
+    "profile",
+    "portfolio",
+    "about",
+    "identity",
+    "bio",
+    "card",
+    "links",
+    "faq",
+    "print",
+    "ui"
+  ],
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "none",
+      "deps": [
+        { "npm": "react", "range": "^19" },
+        { "npm": "lucide-react", "range": "^0.400.0" }
+      ]
+    },
+    "provides": {
+      "tools": [],
+      "routes": [],
+      "components": ["Resume", "AboutProfile"],
+      "hooks": ["useResumeProfile", "useAboutProfile"],
+      "utils": ["configureResume", "resumeApp", "configureAbout", "aboutProfileApp"],
+      "tables": []
+    },
+    "generalization": {
+      "level": "portable",
+      "forbiddenTerms": ["rahman", "rahmanef"],
+      "requiredProps": []
+    }
+  }
+}

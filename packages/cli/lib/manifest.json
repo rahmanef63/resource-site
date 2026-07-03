@@ -14,7 +14,9 @@
     "onboarding-wizard": "site-setup-wizard",
     "media-studio": "design-studio",
     "loading-states": "feedback-states",
-    "empty-states": "feedback-states"
+    "empty-states": "feedback-states",
+    "resume": "profile",
+    "about-profile": "profile"
   },
   "layouts": [],
   "recipes": [],
@@ -188,21 +190,26 @@
       ]
     },
     {
-      "slug": "resume",
-      "title": "Resume — one-column CV renderer",
+      "slug": "profile",
+      "title": "Profile — CV + identity card",
       "category": "os",
-      "description": "A clean one-column résumé / CV app: name, roles, location, contact row, summary, skills, experience (role · org · period + bullet points) and projects. The data is INJECTED via a single ResumeProfile seam — call configureResume(myProfile) at boot to render your own person (Convex query, CMS, a JSON file), or keep the bundled generic placeholder profile so it renders fully populated with zero backend. A 'Print / PDF' button calls window.print() against a print-friendly layout.",
+      "description": "One owner's identity in two co-located variants, behind one slug. resume: a clean one-column résumé / CV — name, roles, location, contacts, summary, skills, experience (role · org · period + bullets), projects — rendered by <Resume /> off a configureResume() seam, with a Print / PDF button. card: an \"About This Mac\"-style identity card — avatar / monogram, name, roles, outbound links, FAQ accordion — rendered by <AboutProfile /> off a configureAbout() seam. Both render a populated placeholder unwired (zero backend). Install one surface with `npx rr add profile resume|card`, or both with `npx rr add profile`.",
       "source": "rahmanef63/os-vps",
-      "install": "npx rahman-resources add resume",
+      "install": "npx rahman-resources add profile",
       "npmPackages": [],
-      "exampleCode": "\"use client\";\nimport { Resume } from \"@/features/resume\";\n\nexport default function ResumeDemo() {\n  // Unwired -> generic placeholder profile; configureResume(profile) for real data.\n  return <div className=\"h-dvh w-full\"><Resume /></div>;\n}",
-      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A one-column résumé / CV renderer driven by injected data. Fully client-side; no backend required.\n\nSTEP 1 — Install. `npx rr add resume`. Ensure `@/features/resume` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: `npx shadcn@latest add button scroll-area`.\n\nSTEP 3 — Mount. `<Resume />` in a height-bearing box — unwired it renders a generic placeholder profile (Alex Rivera). Or register `resumeApp` in an appshell manifest.\n\nSTEP 4 — Real data. `configureResume(profile)` once at boot with a ResumeProfile { name, roles[], location, summary, contacts[{label,href}], skills[], experience[{role,org,period,points[]}], projects[{name,desc,url?}] } sourced from Convex / a CMS / a JSON file. The \"Print / PDF\" button calls window.print() against a print-friendly layout.",
+      "exampleCode": "\"use client\";\nimport { Resume, AboutProfile } from \"@/features/profile\";\n\nexport default function ProfileDemo() {\n  // Unwired -> generic placeholders; configureResume(cv) / configureAbout(card) for real data.\n  return (\n    <div className=\"grid h-dvh grid-cols-2 gap-4\">\n      <Resume />\n      <AboutProfile />\n    </div>\n  );\n}",
+      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Two identity renderers driven by injected data. Fully client-side; no backend required.\n\nSTEP 1 — Install. `npx rr add profile` for both, or `npx rr add profile resume` / `card` for one. Ensure `@/features/profile` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: `npx shadcn@latest add button scroll-area avatar`.\n\nSTEP 3 — Mount. `<Resume />` (CV) or `<AboutProfile />` (card) in a height-bearing box — unwired each renders a generic placeholder. Or register `resumeApp` / `aboutProfileApp` in an appshell manifest.\n\nSTEP 4 — Real data. `configureResume(profile)` with a ResumeProfile { name, roles[], location, summary, contacts[], skills[], experience[], projects[] }, and/or `configureAbout(card)` with { name, roles[], description, links[], faq[] }, once at boot from Convex / a CMS / a JSON file. Resume's \"Print / PDF\" button calls window.print() against a print-friendly layout.",
       "tags": [
         "resume",
         "cv",
         "profile",
         "portfolio",
         "about",
+        "identity",
+        "bio",
+        "card",
+        "links",
+        "faq",
         "print",
         "ui"
       ]
@@ -224,27 +231,6 @@
         "launcher",
         "guide",
         "os",
-        "ui"
-      ]
-    },
-    {
-      "slug": "about-profile",
-      "title": "About — identity / profile card",
-      "category": "os",
-      "description": "A macOS 'About This Mac'-style identity card as an OS app: avatar (or monogram fallback), name, roles, location, a short description, a list of outbound links and an accordion FAQ. The whole card is driven by ONE injected AboutProfile (name / roles[] / location / description / links[{label,href}] / faq[{q,a}] / avatarUrl?): call configureAbout(yourProfile) to wire your own identity, or keep the bundled generic mock person so the card renders fully populated with zero backend.",
-      "source": "rahmanef63/os-vps",
-      "install": "npx rahman-resources add about-profile",
-      "npmPackages": [],
-      "exampleCode": "\"use client\";\nimport { AboutProfile } from \"@/features/about-profile\";\n\nexport default function AboutDemo() {\n  // Unwired -> generic mock person; configureAbout for your real identity.\n  return <div className=\"h-dvh w-full\"><AboutProfile /></div>;\n}",
-      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. An \"About / identity\" card OS app. Fully client-side; data injected.\n\nSTEP 1 — Install. `npx rr add about-profile`. Ensure `@/features/about-profile` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: `npx shadcn@latest add button scroll-area avatar`.\n\nSTEP 3 — Mount. `<AboutProfile />` in a height-bearing box — unwired it renders a generic mock person (avatar/monogram, name, roles, location, links, accordion FAQ). Or register `aboutProfileApp` in an appshell manifest.\n\nSTEP 4 — Real identity. `configureAbout({ name, roles, location?, description, links:[{label,href}], faq:[{q,a}], avatarUrl? })` — avatarUrl is optional (monogram fallback); location / links / faq collapse gracefully when empty.",
-      "tags": [
-        "about",
-        "profile",
-        "identity",
-        "bio",
-        "card",
-        "links",
-        "faq",
         "ui"
       ]
     },
@@ -1949,21 +1935,22 @@
       "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A curated icon-launcher admin (CRUD + reorder). Fully client-side; backend optional.\n\nSTEP 1 — Install. `npx rr add resources-launcher-admin`. Ensure `@/features/resources-launcher-admin` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: `npx shadcn@latest add button input label scroll-area native-select`.\n\nSTEP 3 — Mount. `<ResourcesAdmin />` in a height-bearing box — unwired it runs on an in-memory mock store (add / edit / remove / reorder all live). Or register `resourcesAdminApp` in an appshell manifest.\n\nSTEP 4 — Real backend. `configureResources({ mode:\"live\", list, upsert, remove, canManage })` — list returns rows { id, label, icon, url, group, order }; upsert takes the same minus id to insert (pass id to patch); canManage gates the editor + reorder. Icons are lucide NAME strings resolved via resolveIcon."
     },
     {
-      "slug": "resume",
-      "title": "Resume — one-column CV renderer",
+      "slug": "profile",
+      "title": "Profile — CV + identity card",
       "category": "os",
       "kind": "ui",
       "version": "1.0.0",
-      "description": "A clean one-column résumé / CV app: name, roles, location, contact row, summary, skills, experience (role · org · period + bullet points) and projects. The data is INJECTED via a single ResumeProfile seam — call configureResume(myProfile) at boot to render your own person (Convex query, CMS, a JSON file), or keep the bundled generic placeholder profile so it renders fully populated with zero backend. A 'Print / PDF' button calls window.print() against a print-friendly layout.",
+      "description": "One owner's identity in two co-located variants, behind one slug. resume: a clean one-column résumé / CV — name, roles, location, contacts, summary, skills, experience (role · org · period + bullets), projects — rendered by <Resume /> off a configureResume() seam, with a Print / PDF button. card: an \"About This Mac\"-style identity card — avatar / monogram, name, roles, outbound links, FAQ accordion — rendered by <AboutProfile /> off a configureAbout() seam. Both render a populated placeholder unwired (zero backend). Install one surface with `npx rr add profile resume|card`, or both with `npx rr add profile`.",
       "source": "rahmanef63/os-vps",
-      "slicePath": "frontend/slices/resume",
+      "slicePath": "frontend/slices/profile",
       "convexPaths": [],
       "npm": [
         "lucide-react"
       ],
       "shadcn": [
         "button",
-        "scroll-area"
+        "scroll-area",
+        "avatar"
       ],
       "env": [],
       "peers": [],
@@ -1974,10 +1961,30 @@
         "profile",
         "portfolio",
         "about",
+        "identity",
+        "bio",
+        "card",
+        "links",
+        "faq",
         "print",
         "ui"
       ],
-      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A one-column résumé / CV renderer driven by injected data. Fully client-side; no backend required.\n\nSTEP 1 — Install. `npx rr add resume`. Ensure `@/features/resume` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: `npx shadcn@latest add button scroll-area`.\n\nSTEP 3 — Mount. `<Resume />` in a height-bearing box — unwired it renders a generic placeholder profile (Alex Rivera). Or register `resumeApp` in an appshell manifest.\n\nSTEP 4 — Real data. `configureResume(profile)` once at boot with a ResumeProfile { name, roles[], location, summary, contacts[{label,href}], skills[], experience[{role,org,period,points[]}], projects[{name,desc,url?}] } sourced from Convex / a CMS / a JSON file. The \"Print / PDF\" button calls window.print() against a print-friendly layout."
+      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Two identity renderers driven by injected data. Fully client-side; no backend required.\n\nSTEP 1 — Install. `npx rr add profile` for both, or `npx rr add profile resume` / `card` for one. Ensure `@/features/profile` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: `npx shadcn@latest add button scroll-area avatar`.\n\nSTEP 3 — Mount. `<Resume />` (CV) or `<AboutProfile />` (card) in a height-bearing box — unwired each renders a generic placeholder. Or register `resumeApp` / `aboutProfileApp` in an appshell manifest.\n\nSTEP 4 — Real data. `configureResume(profile)` with a ResumeProfile { name, roles[], location, summary, contacts[], skills[], experience[], projects[] }, and/or `configureAbout(card)` with { name, roles[], description, links[], faq[] }, once at boot from Convex / a CMS / a JSON file. Resume's \"Print / PDF\" button calls window.print() against a print-friendly layout.",
+      "variants": {
+        "default": "resume",
+        "items": [
+          {
+            "id": "resume",
+            "title": "Resume",
+            "description": "Formal one-column printable CV (Resume + configureResume)."
+          },
+          {
+            "id": "card",
+            "title": "Card",
+            "description": "Compact avatar + links + FAQ identity card (AboutProfile + configureAbout)."
+          }
+        ]
+      }
     },
     {
       "slug": "start-here",
@@ -2009,39 +2016,6 @@
         "ui"
       ],
       "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A guided onboarding tour that renders your live app catalog as a path of stages. Fully client-side; the catalog is injected.\n\nSTEP 1 — Install. `npx rr add start-here`. Ensure `@/features/start-here` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: `npx shadcn@latest add button scroll-area`.\n\nSTEP 3 — Mount. `<StartHere />` in a height-bearing box — unwired it reads an in-memory mock catalog (generic apps + 3 stages) so the tour is fully alive. Or register `startHereApp` in an appshell manifest.\n\nSTEP 4 — Real catalog. `configureStartHere({ mode:\"live\", apps, open, stages })` — apps is your live registry as [{ id, title, icon, description? }]; open(id) launches the real app/window; stages is [{ title, blurb, appIds }] (apps not placed fall into a final \"Everything else\" stage). Drift-proof: read the registry, never hardcode the list."
-    },
-    {
-      "slug": "about-profile",
-      "title": "About — identity / profile card",
-      "category": "os",
-      "kind": "ui",
-      "version": "1.0.0",
-      "description": "A macOS 'About This Mac'-style identity card as an OS app: avatar (or monogram fallback), name, roles, location, a short description, a list of outbound links and an accordion FAQ. The whole card is driven by ONE injected AboutProfile (name / roles[] / location / description / links[{label,href}] / faq[{q,a}] / avatarUrl?): call configureAbout(yourProfile) to wire your own identity, or keep the bundled generic mock person so the card renders fully populated with zero backend.",
-      "source": "rahmanef63/os-vps",
-      "slicePath": "frontend/slices/about-profile",
-      "convexPaths": [],
-      "npm": [
-        "lucide-react"
-      ],
-      "shadcn": [
-        "button",
-        "scroll-area",
-        "avatar"
-      ],
-      "env": [],
-      "peers": [],
-      "providers": [],
-      "tags": [
-        "about",
-        "profile",
-        "identity",
-        "bio",
-        "card",
-        "links",
-        "faq",
-        "ui"
-      ],
-      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. An \"About / identity\" card OS app. Fully client-side; data injected.\n\nSTEP 1 — Install. `npx rr add about-profile`. Ensure `@/features/about-profile` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: `npx shadcn@latest add button scroll-area avatar`.\n\nSTEP 3 — Mount. `<AboutProfile />` in a height-bearing box — unwired it renders a generic mock person (avatar/monogram, name, roles, location, links, accordion FAQ). Or register `aboutProfileApp` in an appshell manifest.\n\nSTEP 4 — Real identity. `configureAbout({ name, roles, location?, description, links:[{label,href}], faq:[{q,a}], avatarUrl? })` — avatarUrl is optional (monogram fallback); location / links / faq collapse gracefully when empty."
     },
     {
       "slug": "os-terminal",
