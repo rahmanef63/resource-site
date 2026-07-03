@@ -54,7 +54,7 @@ export default defineConfig({
   resolve: {
     // Mirrors tsconfig paths — specific mappings before the generic "@" root.
     alias: [
-      { find: /^@notion\//, replacement: path.resolve(__dirname, "frontend/slices/notion") + "/" },
+      { find: /^@notion\//, replacement: path.resolve(__dirname, "frontend/slices/notion-app") + "/" },
       { find: /^@\/features\//, replacement: path.resolve(__dirname, "frontend/slices") + "/" },
       { find: /^@\/shared\//, replacement: path.resolve(__dirname, "components/shared") + "/" },
       { find: /^@\//, replacement: path.resolve(__dirname, ".") + "/" },

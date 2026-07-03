@@ -19,7 +19,7 @@ const run = (...args) =>
 describe("manifest aliases", () => {
   it("manifest carries the U3 alias map", () => {
     expect(manifest.aliases).toBeTruthy();
-    expect(manifest.aliases["blog-section"]).toBe("landing-sections");
+    expect(manifest.aliases["blog-section"]).toBe("sections");
   });
 
   it("aliased slugs are NOT listed as their own entries", () => {
@@ -38,7 +38,7 @@ describe("manifest aliases", () => {
     expect(r.status).toBe(0);
     const all = r.stdout + r.stderr;
     expect(all).toContain("superseded by");
-    expect(all).toContain("landing-sections");
+    expect(all).toContain("sections");
   });
 
   it("info <unknown> still fails", () => {
