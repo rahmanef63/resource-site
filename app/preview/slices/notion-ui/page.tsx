@@ -5,7 +5,7 @@ import { RotateCcw } from "lucide-react";
 import {
   NotionDatabase,
   DatabaseIOActions,
-} from "@/features/notion-database";
+} from "@/features/notion-ui";
 import type {
   Database,
   DatabaseViewConfig,
@@ -15,7 +15,7 @@ import type {
   PropertyType,
   PropertyValue,
   SelectOption,
-} from "@/features/notion-shell";
+} from "@/features/notion-ui";
 import { Button } from "@/components/ui/button";
 
 import {

@@ -12,7 +12,7 @@ import type {
   PropertyType,
   PropertyValue,
   SelectOption,
-} from "@/features/notion-shell";
+} from "@/features/notion-ui";
 import type { DatabaseDoc } from "./defaults";
 import { makeRow, newId } from "./defaults";
 import {

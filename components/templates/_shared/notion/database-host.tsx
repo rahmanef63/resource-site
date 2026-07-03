@@ -4,7 +4,7 @@
  *  page body. State lives in one `notion_docs` row (kind "database",
  *  whole `{ db, rows }` doc, debounce-saved by useNotionDoc). */
 
-import { NotionDatabase, DatabaseIOActions } from "@/features/notion-database";
+import { NotionDatabase, DatabaseIOActions } from "@/features/notion-ui";
 import { LoadingSkeleton } from "@/features/feedback-states";
 import { useNotionDoc } from "./use-notion-doc";
 import { useDatabaseCallbacks } from "./use-database-callbacks";

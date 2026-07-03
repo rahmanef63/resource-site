@@ -12,7 +12,7 @@ import {
   type BlockRendererProps,
   type BlockRenderers,
   type TocHeading,
-} from "@/features/notion-shell";
+} from "@/features/notion-ui";
 import { NotionDatabaseHost } from "./database-host";
 
 /** Inline database block — mounts the same convex-persisted database the

@@ -13,7 +13,7 @@ import {
   InlineFormatToolbar,
   PageActionsMenu,
   collectHeadings,
-} from "@/features/notion-shell";
+} from "@/features/notion-ui";
 import { SelectionProvider, SelectableBlock, SelectionMarquee } from "@/features/selection";
 import { LoadingSkeleton } from "@/features/feedback-states";
 import { useNotionDoc } from "./use-notion-doc";

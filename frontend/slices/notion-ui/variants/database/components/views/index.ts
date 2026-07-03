@@ -1,5 +1,5 @@
 /** Default view registry — maps DbView → component. Pure barrel so
- *  callers can `import { VIEW_REGISTRY } from "@/features/notion-shell"`
+ *  callers can `import { VIEW_REGISTRY } from "@/features/notion-ui/shared"`
  *  or grab one view directly. Override / extend at the host by
  *  spreading a custom map. */
 

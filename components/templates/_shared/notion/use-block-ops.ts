@@ -4,7 +4,7 @@
  *  the doc's `blocks` array, plus focus glue. Adapted from the rr
  *  notion-shell preview (page-demo.tsx). */
 
-import { focusBlock, type Block, type BlockType } from "@/features/notion-shell";
+import { focusBlock, type Block, type BlockType } from "@/features/notion-ui";
 import type { NotesDoc } from "./defaults";
 
 type SetDoc = (next: NotesDoc | ((prev: NotesDoc) => NotesDoc)) => void;

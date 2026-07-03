@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import type { Database, Page, PropertyValue } from "@/features/notion-shell";
+import type { Database, Page, PropertyValue } from "@/features/notion-ui";
 
 export const newId = (): string =>
   (typeof crypto !== "undefined" && "randomUUID" in crypto)

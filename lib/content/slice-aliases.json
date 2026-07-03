@@ -17,5 +17,8 @@
   "shell-settings": "settings",
   "doku-payment": "payment",
   "midtrans-payment": "payment",
-  "landing-sections": "sections"
+  "landing-sections": "sections",
+  "notion-shell": "notion-ui",
+  "notion-database": "notion-ui",
+  "notion-sidebar": "notion-ui"
 }

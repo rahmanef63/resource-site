@@ -16,7 +16,7 @@ export const CSV_SKIP = SKIP;
 export const CSV_TITLE = TITLE;
 export const CSV_NEW_PREFIX = NEW_PREFIX;
 
-/** @deprecated use `PROPERTY_TYPES_CSV_IMPORTABLE` from `@/features/notion-shell`
+/** @deprecated use `PROPERTY_TYPES_CSV_IMPORTABLE` from `@/features/notion-ui/shared`
  *  — this re-export stays for back-compat with consumers that imported
  *  `NEW_TYPES` before the SSOT registry landed (v0.5.2). */
 export const NEW_TYPES = PROPERTY_TYPES_CSV_IMPORTABLE;

@@ -2,7 +2,7 @@
  *  Insert / Move items in the notion-database preview. Pure
  *  (db|rows) → next — the page wires them into setDb / setRows. */
 
-import type { Database, Page } from "@/features/notion-shell";
+import type { Database, Page } from "@/features/notion-ui";
 
 /** Move a column one slot. offset -1 = left, +1 = right. No-op at edges. */
 export function reorderProperty(db: Database, propId: string, offset: -1 | 1): Database {

@@ -151,9 +151,7 @@ export const ACT_SLUGS: Record<ActId, string[]> = {
   ],
   content: [
     "notion",
-    "notion-shell",
-    "notion-sidebar",
-    "notion-database",
+    "notion-ui",
     "comments",
     "markdown",
     "library",

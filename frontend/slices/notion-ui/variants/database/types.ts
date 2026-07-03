@@ -31,10 +31,10 @@ export type {
   PropertyValue,
   RollupAggregate,
   SelectOption,
-} from "@/features/notion-shell";
+} from "@/features/notion-ui/shared";
 
 export {
   PROPERTY_TYPE_META,
   PROPERTY_TYPES_USER_ADDABLE,
   PROPERTY_TYPES_CSV_IMPORTABLE,
-} from "@/features/notion-shell";
+} from "@/features/notion-ui/shared";

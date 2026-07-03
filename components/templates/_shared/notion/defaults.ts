@@ -2,7 +2,7 @@
  *  notion-database preview (`app/preview/slices/notion-database/previewState.ts`)
  *  — convex hosts hydrate over these on first load. */
 
-import type { Database, Page, PropertyValue, Block, PageFont } from "@/features/notion-shell";
+import type { Database, Page, PropertyValue, Block, PageFont } from "@/features/notion-ui";
 
 export const newId = (): string =>
   typeof crypto !== "undefined" && "randomUUID" in crypto

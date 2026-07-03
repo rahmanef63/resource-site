@@ -48,7 +48,7 @@ const SECTIONS: { heading: string; blurb: string; slugs: string[] }[] = [
     heading: "The Notion stack",
     blurb:
       "A document workspace in slices: the page shell, the tree-nav sidebar, and the 11-view database that wrap the featured block editor above.",
-    slugs: ["notion-shell", "notion-sidebar", "notion-database"],
+    slugs: ["notion-ui"],
   },
   {
     heading: "Write & collaborate",
