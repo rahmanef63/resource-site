@@ -1,0 +1,38 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "payment",
+  "version": "0.4.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add payment",
+    "consumerPath": "slices/payment"
+  },
+  "files": [
+    "README.md",
+    "config.ts",
+    "index.ts",
+    "variants/doku/CHANGELOG.md",
+    "variants/doku/README.md",
+    "variants/doku/components/DokuDirectForm.tsx",
+    "variants/doku/components/DokuPaymentInstructions.tsx",
+    "variants/doku/components/DokuStatusBadge.tsx",
+    "variants/doku/components/checkout-page.tsx",
+    "variants/doku/components/providers/doku.tsx",
+    "variants/doku/index.ts",
+    "variants/doku/lib/channels.ts",
+    "variants/doku/lib/format.ts",
+    "variants/doku/lib/tools.ts",
+    "variants/midtrans/CHANGELOG.md",
+    "variants/midtrans/README.md",
+    "variants/midtrans/components/checkout-page.tsx",
+    "variants/midtrans/components/orders-page.tsx",
+    "variants/midtrans/components/providers/midtrans.tsx",
+    "variants/midtrans/index.ts",
+    "variants/midtrans/lib/tools.ts"
+  ],
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

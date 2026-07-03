@@ -20,11 +20,9 @@ import { commandMenuConfig } from "@/features/command-menu/config";
 import { commentsConfig } from "@/features/comments/config";
 import { convexAuthConfig } from "@/features/convex-auth/config";
 import { mediaStudioConfig } from "@/features/design-studio/config";
-import { dokuPaymentConfig } from "@/features/doku-payment/config";
 import { htmlStudioConfig } from "@/features/html-studio/config";
 import { imageEditorConfig } from "@/features/image-editor/config";
 import { mediaViewerConfig } from "@/features/media-viewer/config";
-import { midtransPaymentConfig } from "@/features/midtrans-payment/config";
 import { notionConfig } from "@/features/notion/config";
 import { osTerminalConfig } from "@/features/os-terminal/config";
 import { platformAdminConfig } from "@/features/platform-admin/config";
@@ -119,11 +117,6 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     version: "1.0.0",
   },
   {
-    ...dokuPaymentConfig,
-    importPath: "@/features/doku-payment/config",
-    version: "0.4.0",
-  },
-  {
     ...htmlStudioConfig,
     importPath: "@/features/html-studio/config",
     version: "1.0.0",
@@ -137,11 +130,6 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     ...mediaViewerConfig,
     importPath: "@/features/media-viewer/config",
     version: "1.2.1",
-  },
-  {
-    ...midtransPaymentConfig,
-    importPath: "@/features/midtrans-payment/config",
-    version: "0.2.0",
   },
   {
     ...notionConfig,

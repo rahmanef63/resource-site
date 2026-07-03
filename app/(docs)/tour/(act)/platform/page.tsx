@@ -26,7 +26,7 @@ export const metadata = {
  * Routing is delegated to <SliceShowcase>, which picks the mount strategy per
  * slug from the shared infra — NO per-page liveMount branch here:
  *   • liveMount:false (key-gated: resend-newsletter, cal-com-booking,
- *     doku-payment, midtrans-payment) → <CapabilityCard> (env-free demo iframe +
+ *     payment) → <CapabilityCard> (env-free demo iframe +
  *     "needs <KEY>" badge, or a static card)
  *   • PREVIEW_REGISTRY[slug] present → <LazySliceMount> (code-split-on-scroll)
  *   • else previewPath set → lazy <IframeThumbnail> of that route
@@ -65,8 +65,7 @@ const SECTIONS: { heading: string; blurb: string; slugs: string[] }[] = [
     slugs: [
       "resend-newsletter",
       "cal-com-booking",
-      "doku-payment",
-      "midtrans-payment",
+      "payment",
       "storefront-checkout",
       "broadcast-channel-sync",
     ],

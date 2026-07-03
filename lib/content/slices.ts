@@ -1053,7 +1053,7 @@ export default async function Page({ params }: { params: Promise<{ slug?: string
         "saas-marketing-os": { status: "recommended" },
         "cms-public-storefront": { status: "recommended" },
       },
-      enhances: ["midtrans-payment", "doku-payment", "resend-newsletter", "ai-router"],
+      enhances: ["payment", "resend-newsletter", "ai-router"],
     },
     exampleCode: `// convex/auth.ts
 import { convexAuth } from "@convex-dev/auth/server";
@@ -1068,33 +1068,39 @@ import { convexAuthNextjsMiddleware } from "@convex-dev/auth/nextjs/server";
 export default convexAuthNextjsMiddleware();`,
   },
   {
-    slug: "doku-payment",
-    title: "DOKU — Indonesia Payment",
+    slug: "payment",
+    title: "Payment — Indonesia PSP (DOKU · Midtrans)",
     category: "integrations",
     kind: "full",
     version: "0.4.0",
-    description: "Pembayaran lokal Indonesia via DOKU — Checkout (hosted) + Direct (VA / QRIS / e-Wallet / PayLater / Minimarket / Kartu). HMAC-signed REST + signature-verified webhook + idempotent retries. Sibling slice to midtrans-payment dengan paymentOrders schema yang dishare.",
+    description: "Indonesia payment providers behind one slug + ONE shared Convex backend (convex/features/payment discriminates on a provider column: paymentOrders + paymentWebhookEvents, unprefixed). Two frontend variants: doku — DOKU Hosted Checkout + Direct (VA / QRIS / e-Wallet / PayLater), HMAC-SHA256 signed REST, signature-verified webhook, idempotent retries, dependency-free, server-side env only. midtrans — Snap hosted-modal checkout + orders history (needs npm midtrans-client + a NEXT_PUBLIC_MIDTRANS_CLIENT_KEY). Install one with `npx rr add payment doku|midtrans`, or both. A future stripe variant is reserved in the schema's provider union.",
     source: "rahmanef63/resource-site",
     docsUrl: "https://sandbox.doku.com/integration",
     install: "",
-    slicePath: "frontend/slices/doku-payment",
+    slicePath: "frontend/slices/payment",
     convexPaths: ["convex/features/payment"],
-    npm: [],
-    shadcn: ["card", "button", "dialog", "input", "label", "select", "badge", "skeleton"],
+    npm: ["midtrans-client@^1.4.2"],
+    shadcn: ["badge", "button", "card", "dialog", "input", "label", "select", "skeleton"],
     env: [
-      { name: "DOKU_CLIENT_ID", scope: "convex", required: true },
-      { name: "DOKU_SECRET_KEY", scope: "convex", required: true },
+      { name: "DOKU_CLIENT_ID", scope: "convex" },
+      { name: "DOKU_SECRET_KEY", scope: "convex" },
       { name: "DOKU_IS_PRODUCTION", scope: "convex" },
-      { name: "DOKU_NOTIFY_PATH", scope: "convex" },
+      { name: "MIDTRANS_SERVER_KEY", scope: "convex" },
+      { name: "MIDTRANS_CLIENT_KEY", scope: "next-public" },
+      { name: "MIDTRANS_IS_PRODUCTION", scope: "convex" },
     ],
-    peers: [{ slug: "convex-auth", range: "^0.1", reason: "Order ownership requires authenticated user." }],
-    providers: ["doku"],
-    tags: ["payment", "doku", "indonesia", "qris", "virtual-account", "ewallet", "checkout"],
+    peers: [{ slug: "convex-auth", range: "^0.1", reason: "Order ownership requires authenticated user (guest checkout works without)." }],
+    providers: ["doku", "midtrans"],
+    variants: [
+      { title: "doku", desc: "npx rr add payment doku — Hosted Checkout + Direct channel picker, HMAC REST, dependency-free." },
+      { title: "midtrans", desc: "npx rr add payment midtrans — Snap hosted-modal button + orders (needs midtrans-client + next-public key)." },
+    ],
+    tags: ["payment", "checkout", "indonesia", "doku", "midtrans", "snap", "qris", "virtual-account", "ewallet", "psp"],
     usedBy: ["personal-brand-os", "konsultan-os", "wirausaha-os", "kreator-studio-os", "riset-kit", "agency-studio-os", "cms-public-storefront"],
-    agentRecipe: "Run `npx rr add doku-payment`. DOKU dual-mode: Checkout (hosted, all channels) atau Direct (single channel, returns VA/QRIS/deeplink). Webhook di /webhooks/doku verify HMAC-SHA256 (canonical: Client-Id + Request-Id + Request-Timestamp + Request-Target + Digest). Idempotency by request_id index. Server-only — no NEXT_PUBLIC_*. Sandbox default (api-sandbox.doku.com); flip DOKU_IS_PRODUCTION=true for live.",
-    previewPath: "/preview/slices/doku-payment",
+    agentRecipe: "Run `npx rr add payment` for both providers, or `npx rr add payment doku` / `midtrans`. Either variant copies the shared convex/features/payment backend. doku: Checkout (hosted) or Direct (single channel → VA/QRIS/deeplink); webhook /webhooks/doku verifies HMAC-SHA256; server-only, no NEXT_PUBLIC_*. midtrans: Snap.js + window.snap.pay(token); webhook verifies signature_key; needs NEXT_PUBLIC_MIDTRANS_CLIENT_KEY. Both patch paymentOrders by orderId; sandbox by default.",
+    previewPath: "/preview/slices/payment",
     wiring: `// app/checkout/page.tsx
-export { default } from "@/features/doku-payment/components/checkout-page";
+export { default } from "@/features/payment/components/checkout-page";
 
 // convex/http.ts
 import { dokuWebhook } from "./features/payment/http";
@@ -1112,58 +1118,8 @@ http.route({ path: "/webhooks/doku", method: "POST", handler: dokuWebhook });`,
         "riset-kit": { status: "recommended", note: "Paid research bundle — one-time Checkout flow." },
         "cms-public-storefront": { status: "recommended", note: "Cart checkout — Direct mode untuk control UI atau Checkout untuk quick wins." },
       },
-      conflicts: ["midtrans-payment", "stripe-payment"],
+      conflicts: ["stripe-payment"],
       enhances: ["convex-auth", "ai-router"],
-    },
-  },
-  {
-    slug: "midtrans-payment",
-    title: "Midtrans — Indonesia Payment",
-    category: "integrations",
-    kind: "full",
-    version: "0.2.0",
-    description: "Pembayaran lokal Indonesia via Midtrans Snap (BCA, Mandiri, BRI, e-wallet GoPay/OVO/Dana, QRIS). Webhook untuk konfirmasi. Provider-isolated under components/providers/midtrans + actions/midtrans so Doku/Stripe land as siblings.",
-    source: "rahmanef63/resource-site",
-    docsUrl: "https://docs.midtrans.com",
-    install: "npm i midtrans-client",
-    slicePath: "frontend/slices/midtrans-payment",
-    convexPaths: ["convex/features/payment"],
-    npm: ["midtrans-client@^1.4.2"],
-    shadcn: ["card", "button", "dialog", "input", "label"],
-    env: [
-      { name: "MIDTRANS_SERVER_KEY", scope: "convex", required: true },
-      { name: "MIDTRANS_CLIENT_KEY", scope: "next-public", required: true },
-      { name: "MIDTRANS_IS_PRODUCTION", scope: "convex" },
-    ],
-    peers: [{ slug: "convex-auth", range: "^0.1", reason: "Order ownership requires authenticated user." }],
-    providers: ["midtrans"],
-    tags: ["payment", "midtrans", "indonesia", "qris", "snap"],
-    usedBy: ["wirausaha-os", "konsultan-os", "kreator-studio-os"],
-    agentRecipe: "Run `npx rr add midtrans-payment`. Midtrans Snap untuk pembayaran instant. Webhook ke Convex HTTP action /api/midtrans-callback untuk update order status. Ingat: PPN 11% sudah included di amount, jangan double-count.",
-    previewPath: "/preview/slices/midtrans-payment",
-    wiring: `// app/checkout/page.tsx
-export { default } from "@/features/midtrans-payment/components/checkout-page";
-
-// app/layout.tsx
-<Script src="https://app.sandbox.midtrans.com/snap/snap.js"
-        data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY} />
-
-// convex/http.ts
-http.route({ path: "/webhooks/midtrans", method: "POST", handler: midtransWebhook });`,
-    defaultView: "mobile",
-    defaultZoom: 1,
-    compat: {
-      templates: {
-        "personal-brand-os": { status: "warn", note: "Personal-brand has no checkout slice; you'll add one manually." },
-        "agency-studio-os": { status: "warn", note: "B2B template; payment slice not included." },
-        "saas-marketing-os": { status: "warn", note: "SaaS biasanya butuh recurring billing — Midtrans Snap untuk one-time only." },
-        "konsultan-os": { status: "recommended", note: "Alternative Indonesian gateway." },
-        "wirausaha-os": { status: "recommended", note: "Alternative Indonesian gateway." },
-        "kreator-studio-os": { status: "recommended", note: "Alternative Indonesian gateway." },
-        "cms-public-storefront": { status: "recommended", note: "Alternative Indonesian gateway." },
-      },
-      conflicts: ["stripe-payment", "doku-payment"],
-      enhances: ["convex-auth"],
     },
   },
   {
@@ -2243,8 +2199,8 @@ const [count, setCount] = useBroadcastSync("rr:counter", 0);
     env: [],
     peers: [
       {
-        slug: "doku-payment",
-        range: "^0.2",
+        slug: "payment",
+        range: "^0.4",
         reason: "Optional payment step — checkout page composes DokuDirectForm + DokuPaymentInstructions (or swap midtrans-payment).",
       },
     ],

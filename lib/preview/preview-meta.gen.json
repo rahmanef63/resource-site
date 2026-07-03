@@ -450,40 +450,6 @@
     ]
   },
   {
-    "slug": "doku-payment",
-    "title": "DOKU — Indonesia Payment",
-    "category": "integrations",
-    "previews": [
-      {
-        "component": "DokuPaymentInstructions",
-        "kind": "scenarios",
-        "scenarios": [
-          {
-            "id": "virtual-account",
-            "title": "Virtual Account",
-            "description": "BCA VA — big monospace number + copy button + how-to link."
-          },
-          {
-            "id": "qris",
-            "title": "QRIS",
-            "description": "QR string rendered with a scan hint (no remote image)."
-          },
-          {
-            "id": "ewallet",
-            "title": "e-Wallet",
-            "description": "GoPay — deep-link button + web fallback."
-          },
-          {
-            "id": "retail",
-            "title": "PayLater / link",
-            "description": "Kredivo — simple continue-to-payment link."
-          }
-        ],
-        "seed": "static demo instructions per channel; sandbox — no real charge, links are placeholders"
-      }
-    ]
-  },
-  {
     "slug": "faq-section",
     "title": "FAQ Section",
     "category": "ui",
@@ -948,35 +914,6 @@
           }
         ],
         "seed": "fully offline — bundled SVG samples + data-URI remote payload"
-      }
-    ]
-  },
-  {
-    "slug": "midtrans-payment",
-    "title": "Midtrans — Indonesia Payment",
-    "category": "integrations",
-    "previews": [
-      {
-        "component": "MidtransCheckout",
-        "kind": "scenarios",
-        "scenarios": [
-          {
-            "id": "single-item",
-            "title": "Single item",
-            "description": "Rp 150.000 order — the default checkout card."
-          },
-          {
-            "id": "cart",
-            "title": "Larger cart",
-            "description": "Rp 1.250.000 multi-item total."
-          },
-          {
-            "id": "subscription",
-            "title": "Subscription",
-            "description": "Rp 49.000 monthly plan."
-          }
-        ],
-        "seed": "amount/orderId per scenario; Pay button is a sandbox stub — no real Snap, no charge"
       }
     ]
   },

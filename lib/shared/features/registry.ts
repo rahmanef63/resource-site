@@ -11,7 +11,7 @@
 import type { SliceConfig, SliceCategory } from "./defineFeature";
 
 export type RegisteredSlice = SliceConfig & {
-  /** Resolved import path (e.g., "@/features/midtrans-payment/config"). */
+  /** Resolved import path (e.g., "@/features/payment/config"). */
   importPath: string;
   /** Slice's semver from slice.json. */
   version: string;

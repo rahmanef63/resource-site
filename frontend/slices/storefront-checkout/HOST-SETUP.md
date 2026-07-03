@@ -45,7 +45,7 @@ export const placeOrder = action({
 });
 ```
 
-## 4. Checkout page composition (with doku-payment)
+## 4. Checkout page composition (with payment)
 
 ```tsx
 const { items, subtotal, clear } = useCart();
@@ -66,7 +66,7 @@ const { items, subtotal, clear } = useCart();
 
 ## Notes
 
-- Guest checkout needs the doku-payment ≥0.2 backend (optional `userId` +
+- Guest checkout needs the payment ≥0.2 backend (optional `userId` +
   `buyer` on paymentOrders, key-guarded actions, guest-readable status query).
 - Empty-cart and payment-not-configured states are handled gracefully —
   fresh clones without DOKU creds show the form error + a contact fallback,

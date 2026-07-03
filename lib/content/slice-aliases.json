@@ -14,5 +14,7 @@
   "resume": "profile",
   "about-profile": "profile",
   "settings-page": "settings",
-  "shell-settings": "settings"
+  "shell-settings": "settings",
+  "doku-payment": "payment",
+  "midtrans-payment": "payment"
 }

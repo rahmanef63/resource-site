@@ -2,8 +2,8 @@
 
 Guest cart + checkout composition for catalog storefronts. Anonymous buyers
 add catalog items to a localStorage cart, then check out without an account —
-the payment step plugs in via a sibling payment slice (`doku-payment` /
-`midtrans-payment`).
+the payment step plugs in via a sibling payment slice (`payment` /
+`payment`).
 
 Proven end-to-end on **wirausaha-os** (2026-06-10): catalog → cart →
 server-priced `placeOrder` action → DOKU Direct instructions → webhook flips
@@ -30,7 +30,7 @@ No Convex imports anywhere — props-driven R3. The HOST owns:
   action re-reads each `slug` from the catalog table and computes the charge
   server-side — a tampered client can never set its own amount.
 - Guest order status reads use the unguessable `orderId` as the capability
-  token (see `doku-payment`'s `getOrderByOrderId` guest mode).
+  token (see `payment`'s `getOrderByOrderId` guest mode).
 
 ## Quick start
 

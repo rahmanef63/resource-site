@@ -18,7 +18,9 @@
     "resume": "profile",
     "about-profile": "profile",
     "settings-page": "settings",
-    "shell-settings": "settings"
+    "shell-settings": "settings",
+    "doku-payment": "payment",
+    "midtrans-payment": "payment"
   },
   "layouts": [],
   "recipes": [],
@@ -382,45 +384,27 @@
       ]
     },
     {
-      "slug": "doku-payment",
-      "title": "DOKU — Indonesia Payment",
+      "slug": "payment",
+      "title": "Payment — Indonesia PSP (DOKU · Midtrans)",
       "category": "integrations",
-      "description": "Pembayaran lokal Indonesia via DOKU — Checkout (hosted) + Direct (VA / QRIS / e-Wallet / PayLater / Minimarket / Kartu). HMAC-signed REST + signature-verified webhook + idempotent retries. Sibling slice to midtrans-payment dengan paymentOrders schema yang dishare.",
+      "description": "Indonesia payment providers behind one slug + ONE shared Convex backend (convex/features/payment discriminates on a provider column: paymentOrders + paymentWebhookEvents, unprefixed). Two frontend variants: doku — DOKU Hosted Checkout + Direct (VA / QRIS / e-Wallet / PayLater), HMAC-SHA256 signed REST, signature-verified webhook, idempotent retries, dependency-free, server-side env only. midtrans — Snap hosted-modal checkout + orders history (needs npm midtrans-client + a NEXT_PUBLIC_MIDTRANS_CLIENT_KEY). Install one with `npx rr add payment doku|midtrans`, or both. A future stripe variant is reserved in the schema's provider union.",
       "source": "rahmanef63/resource-site",
       "docsUrl": "https://sandbox.doku.com/integration",
       "install": "",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add doku-payment`. DOKU dual-mode: Checkout (hosted, all channels) atau Direct (single channel, returns VA/QRIS/deeplink). Webhook di /webhooks/doku verify HMAC-SHA256 (canonical: Client-Id + Request-Id + Request-Timestamp + Request-Target + Digest). Idempotency by request_id index. Server-only — no NEXT_PUBLIC_*. Sandbox default (api-sandbox.doku.com); flip DOKU_IS_PRODUCTION=true for live.",
+      "agentRecipe": "Run `npx rr add payment` for both providers, or `npx rr add payment doku` / `midtrans`. Either variant copies the shared convex/features/payment backend. doku: Checkout (hosted) or Direct (single channel → VA/QRIS/deeplink); webhook /webhooks/doku verifies HMAC-SHA256; server-only, no NEXT_PUBLIC_*. midtrans: Snap.js + window.snap.pay(token); webhook verifies signature_key; needs NEXT_PUBLIC_MIDTRANS_CLIENT_KEY. Both patch paymentOrders by orderId; sandbox by default.",
       "tags": [
         "payment",
-        "doku",
+        "checkout",
         "indonesia",
+        "doku",
+        "midtrans",
+        "snap",
         "qris",
         "virtual-account",
         "ewallet",
-        "checkout"
-      ]
-    },
-    {
-      "slug": "midtrans-payment",
-      "title": "Midtrans — Indonesia Payment",
-      "category": "integrations",
-      "description": "Pembayaran lokal Indonesia via Midtrans Snap (BCA, Mandiri, BRI, e-wallet GoPay/OVO/Dana, QRIS). Webhook untuk konfirmasi. Provider-isolated under components/providers/midtrans + actions/midtrans so Doku/Stripe land as siblings.",
-      "source": "rahmanef63/resource-site",
-      "docsUrl": "https://docs.midtrans.com",
-      "install": "npm i midtrans-client",
-      "npmPackages": [
-        "midtrans-client"
-      ],
-      "exampleCode": "",
-      "agentRecipe": "Run `npx rr add midtrans-payment`. Midtrans Snap untuk pembayaran instant. Webhook ke Convex HTTP action /api/midtrans-callback untuk update order status. Ingat: PPN 11% sudah included di amount, jangan double-count.",
-      "tags": [
-        "payment",
-        "midtrans",
-        "indonesia",
-        "qris",
-        "snap"
+        "psp"
       ]
     },
     {
@@ -2284,78 +2268,14 @@
       "agentRecipe": "Run `rr add convex-auth`. Then create convex/auth.ts using the kitab pattern (Resend provider). Set env via `npx convex env set` for self-hosted."
     },
     {
-      "slug": "doku-payment",
-      "title": "DOKU — Indonesia Payment",
+      "slug": "payment",
+      "title": "Payment — Indonesia PSP (DOKU · Midtrans)",
       "category": "integrations",
       "kind": "full",
       "version": "0.4.0",
-      "description": "Pembayaran lokal Indonesia via DOKU — Checkout (hosted) + Direct (VA / QRIS / e-Wallet / PayLater / Minimarket / Kartu). HMAC-signed REST + signature-verified webhook + idempotent retries. Sibling slice to midtrans-payment dengan paymentOrders schema yang dishare.",
+      "description": "Indonesia payment providers behind one slug + ONE shared Convex backend (convex/features/payment discriminates on a provider column: paymentOrders + paymentWebhookEvents, unprefixed). Two frontend variants: doku — DOKU Hosted Checkout + Direct (VA / QRIS / e-Wallet / PayLater), HMAC-SHA256 signed REST, signature-verified webhook, idempotent retries, dependency-free, server-side env only. midtrans — Snap hosted-modal checkout + orders history (needs npm midtrans-client + a NEXT_PUBLIC_MIDTRANS_CLIENT_KEY). Install one with `npx rr add payment doku|midtrans`, or both. A future stripe variant is reserved in the schema's provider union.",
       "source": "rahmanef63/resource-site",
-      "slicePath": "frontend/slices/doku-payment",
-      "convexPaths": [
-        "convex/features/payment"
-      ],
-      "npm": [],
-      "shadcn": [
-        "card",
-        "button",
-        "dialog",
-        "input",
-        "label",
-        "select",
-        "badge",
-        "skeleton"
-      ],
-      "env": [
-        {
-          "name": "DOKU_CLIENT_ID",
-          "scope": "convex",
-          "required": true
-        },
-        {
-          "name": "DOKU_SECRET_KEY",
-          "scope": "convex",
-          "required": true
-        },
-        {
-          "name": "DOKU_IS_PRODUCTION",
-          "scope": "convex"
-        },
-        {
-          "name": "DOKU_NOTIFY_PATH",
-          "scope": "convex"
-        }
-      ],
-      "peers": [
-        {
-          "slug": "convex-auth",
-          "range": "^0.1",
-          "reason": "Order ownership requires authenticated user."
-        }
-      ],
-      "providers": [
-        "doku"
-      ],
-      "tags": [
-        "payment",
-        "doku",
-        "indonesia",
-        "qris",
-        "virtual-account",
-        "ewallet",
-        "checkout"
-      ],
-      "agentRecipe": "Run `npx rr add doku-payment`. DOKU dual-mode: Checkout (hosted, all channels) atau Direct (single channel, returns VA/QRIS/deeplink). Webhook di /webhooks/doku verify HMAC-SHA256 (canonical: Client-Id + Request-Id + Request-Timestamp + Request-Target + Digest). Idempotency by request_id index. Server-only — no NEXT_PUBLIC_*. Sandbox default (api-sandbox.doku.com); flip DOKU_IS_PRODUCTION=true for live."
-    },
-    {
-      "slug": "midtrans-payment",
-      "title": "Midtrans — Indonesia Payment",
-      "category": "integrations",
-      "kind": "full",
-      "version": "0.2.0",
-      "description": "Pembayaran lokal Indonesia via Midtrans Snap (BCA, Mandiri, BRI, e-wallet GoPay/OVO/Dana, QRIS). Webhook untuk konfirmasi. Provider-isolated under components/providers/midtrans + actions/midtrans so Doku/Stripe land as siblings.",
-      "source": "rahmanef63/resource-site",
-      "slicePath": "frontend/slices/midtrans-payment",
+      "slicePath": "frontend/slices/payment",
       "convexPaths": [
         "convex/features/payment"
       ],
@@ -2363,22 +2283,35 @@
         "midtrans-client@^1.4.2"
       ],
       "shadcn": [
-        "card",
+        "badge",
         "button",
+        "card",
         "dialog",
         "input",
-        "label"
+        "label",
+        "select",
+        "skeleton"
       ],
       "env": [
         {
+          "name": "DOKU_CLIENT_ID",
+          "scope": "convex"
+        },
+        {
+          "name": "DOKU_SECRET_KEY",
+          "scope": "convex"
+        },
+        {
+          "name": "DOKU_IS_PRODUCTION",
+          "scope": "convex"
+        },
+        {
           "name": "MIDTRANS_SERVER_KEY",
-          "scope": "convex",
-          "required": true
+          "scope": "convex"
         },
         {
           "name": "MIDTRANS_CLIENT_KEY",
-          "scope": "next-public",
-          "required": true
+          "scope": "next-public"
         },
         {
           "name": "MIDTRANS_IS_PRODUCTION",
@@ -2389,20 +2322,41 @@
         {
           "slug": "convex-auth",
           "range": "^0.1",
-          "reason": "Order ownership requires authenticated user."
+          "reason": "Order ownership requires authenticated user (guest checkout works without)."
         }
       ],
       "providers": [
+        "doku",
         "midtrans"
       ],
       "tags": [
         "payment",
-        "midtrans",
+        "checkout",
         "indonesia",
+        "doku",
+        "midtrans",
+        "snap",
         "qris",
-        "snap"
+        "virtual-account",
+        "ewallet",
+        "psp"
       ],
-      "agentRecipe": "Run `npx rr add midtrans-payment`. Midtrans Snap untuk pembayaran instant. Webhook ke Convex HTTP action /api/midtrans-callback untuk update order status. Ingat: PPN 11% sudah included di amount, jangan double-count."
+      "agentRecipe": "Run `npx rr add payment` for both providers, or `npx rr add payment doku` / `midtrans`. Either variant copies the shared convex/features/payment backend. doku: Checkout (hosted) or Direct (single channel → VA/QRIS/deeplink); webhook /webhooks/doku verifies HMAC-SHA256; server-only, no NEXT_PUBLIC_*. midtrans: Snap.js + window.snap.pay(token); webhook verifies signature_key; needs NEXT_PUBLIC_MIDTRANS_CLIENT_KEY. Both patch paymentOrders by orderId; sandbox by default.",
+      "variants": {
+        "default": "doku",
+        "items": [
+          {
+            "id": "doku",
+            "title": "DOKU",
+            "description": "Hosted Checkout + Direct channel picker, HMAC REST, dependency-free."
+          },
+          {
+            "id": "midtrans",
+            "title": "Midtrans",
+            "description": "Snap hosted-checkout button + orders history (needs midtrans-client + next-public key)."
+          }
+        ]
+      }
     },
     {
       "slug": "resend-newsletter",
@@ -3944,8 +3898,8 @@
       "env": [],
       "peers": [
         {
-          "slug": "doku-payment",
-          "range": "^0.2",
+          "slug": "payment",
+          "range": "^0.4",
           "reason": "Optional payment step — checkout page composes DokuDirectForm + DokuPaymentInstructions (or swap midtrans-payment)."
         }
       ],
