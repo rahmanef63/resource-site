@@ -140,7 +140,7 @@ export const ACT_SLUGS: Record<ActId, string[]> = {
     "media-viewer",
     "media-studio",
     "image-picker",
-    "files",
+    "file-upload",
   ],
   ai: [
     "ai-chat",

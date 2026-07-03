@@ -8,7 +8,7 @@ import {
 import {
   FilesAdapterProvider, useLocalStorageFilesAdapter,
   useFileUpload, useFileUrl, parseFileRef,
-} from "@/features/files";
+} from "@/features/file-upload";
 
 const searchUnsplash = unsplashSearchVia("/api/unsplash");
 

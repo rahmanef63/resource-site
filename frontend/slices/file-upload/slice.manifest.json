@@ -1,6 +1,6 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
-  "slug": "files",
+  "slug": "file-upload",
   "version": "0.3.0",
   "tier": 2,
   "distribution": {

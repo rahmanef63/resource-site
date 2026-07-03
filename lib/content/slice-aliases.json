@@ -5,5 +5,6 @@
   "changelog-feed": "landing-sections",
   "feature-grid": "landing-sections",
   "testimonials-grid": "landing-sections",
-  "pricing-page": "landing-sections"
+  "pricing-page": "landing-sections",
+  "files": "file-upload"
 }

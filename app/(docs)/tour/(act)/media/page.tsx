@@ -59,7 +59,7 @@ const SECTIONS: { heading: string; blurb: string; slugs: string[] }[] = [
     heading: "View & feed",
     blurb:
       "Look at and supply media: the quick-look viewer (image/video/audio/pdf), the one-button image picker (gallery/upload/Unsplash), and the storage-adapter upload resolver.",
-    slugs: ["media-viewer", "image-picker", "files"],
+    slugs: ["media-viewer", "image-picker", "file-upload"],
   },
 ];
 

@@ -7,7 +7,7 @@ import {
   FilesAdapterProvider,
   useLocalStorageFilesAdapter,
   type FileRef,
-} from "@/features/files";
+} from "@/features/file-upload";
 
 function Inner() {
   const [files, setFiles] = React.useState<FileRef[]>([]);
