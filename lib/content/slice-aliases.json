@@ -6,5 +6,7 @@
   "feature-grid": "landing-sections",
   "testimonials-grid": "landing-sections",
   "pricing-page": "landing-sections",
-  "files": "file-upload"
+  "files": "file-upload",
+  "onboarding-wizard": "site-setup-wizard",
+  "media-studio": "design-studio"
 }

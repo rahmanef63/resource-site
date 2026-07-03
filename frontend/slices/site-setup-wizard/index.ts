@@ -1,4 +1,4 @@
-/** onboarding-wizard — first-run site setup for clone-to-own templates.
+/** site-setup-wizard — first-run site setup for clone-to-own templates.
  *  Props-driven (R3): host injects backend calls (save/seedSample/seeded),
  *  upload control (ImageField), and theme bridge (presetOptions +
  *  onPresetPreview). See HOST-SETUP.md for the wiring recipe. */

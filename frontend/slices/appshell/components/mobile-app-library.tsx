@@ -14,7 +14,7 @@ const CATEGORY: Record<string, string> = {
   "os-terminal": "Files & System",
   "system-monitor": "Files & System",
   "os-settings": "Files & System",
-  "media-studio": "Creative",
+  "design-studio": "Creative",
   "reel-editor": "Creative",
   "media-viewer": "Creative",
   "code-editor": "Develop",

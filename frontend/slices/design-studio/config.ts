@@ -7,7 +7,7 @@ export type MediaStudioConfig = {
 };
 
 export const mediaStudioConfig: MediaStudioConfig = {
-  slug: "media-studio",
+  slug: "design-studio",
   title: "Media Studio — photo / social design canvas",
   category: "os",
 };

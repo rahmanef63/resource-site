@@ -1,4 +1,4 @@
-// Contracts for the onboarding-wizard slice. PROPS-DRIVEN (R3): no
+// Contracts for the site-setup-wizard slice. PROPS-DRIVEN (R3): no
 // convex/react import anywhere in this slice — the host wires its own
 // backend calls (settings.upsert, seed.seedSample, setup.status) into props.
 

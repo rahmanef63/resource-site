@@ -7,5 +7,5 @@ export * from "./setup-health";
 export * from "./setup-health-ui";
 export * from "./update-card";
 export * from "./backup-card";
-export * from "./onboarding-wizard";
+export * from "./site-setup-wizard";
 export * from "./onboarding-steps";

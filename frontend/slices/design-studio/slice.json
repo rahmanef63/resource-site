@@ -1,14 +1,14 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
-  "slug": "media-studio",
+  "slug": "design-studio",
   "version": "1.0.0",
   "category": "os",
   "kind": "ui",
-  "title": "Media Studio — photo / social design canvas",
+  "title": "Design Studio — photo / social design canvas",
   "description": "Lightweight photo/social studio. Tool rail (move/text/rect/ellipse/sticker with shortcuts), checkerboard canvas with live CSS-filter adjustments + 8 named presets, per-layer clip masks and custom CSS, text/shape/sticker/image/HTML-embed layers, social aspect presets with platform safe-area guides (TikTok/Reels/IG/YouTube), debounced undo+redo, and JSON/HTML export + import (os-rr/layers@1). Fully offline: new image layers pull from bundled SVG data-URI samples; host fs persistence and a real media library inject via configureMediaStudio (lib/host.ts).",
-  "namespace": "@/features/media-studio",
+  "namespace": "@/features/design-studio",
   "frontend": {
-    "slicePath": "frontend/slices/media-studio",
+    "slicePath": "frontend/slices/design-studio",
     "configExport": "mediaStudioConfig"
   },
   "deps": {

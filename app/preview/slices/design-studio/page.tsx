@@ -1,6 +1,6 @@
 "use client";
 
-import { MediaStudio } from "@/features/media-studio";
+import { MediaStudio } from "@/features/design-studio";
 
 // Live preview: the offline design canvas on its demo composition.
 //  • Tools V/T/R/O/S place layers; drag with Move; ⌘Z / ⇧⌘Z history.

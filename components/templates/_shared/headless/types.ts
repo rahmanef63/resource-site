@@ -36,10 +36,10 @@ export interface BackupSnapshot {
   [key: string]: unknown;
 }
 
-/** Onboarding types graduated to the onboarding-wizard slice (2026-06-06);
+/** Onboarding types graduated to the site-setup-wizard slice (2026-06-06);
  *  re-exported here so existing headless-surface consumers keep working. */
 export type {
   OnboardingFields,
   ImageFieldComponent,
   PresetOption,
-} from "@/features/onboarding-wizard";
+} from "@/features/site-setup-wizard";

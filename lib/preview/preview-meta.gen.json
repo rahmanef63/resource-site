@@ -426,6 +426,30 @@
     ]
   },
   {
+    "slug": "design-studio",
+    "title": "Design Studio — photo / social design canvas",
+    "category": "os",
+    "previews": [
+      {
+        "component": "MediaStudio",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "blank-canvas",
+            "title": "Blank canvas",
+            "description": "Default headline + gradient background; place layers with the tools"
+          },
+          {
+            "id": "social-story",
+            "title": "Social story",
+            "description": "9:16 doc loaded via payload — sticker, masked image, safe-area aspect"
+          }
+        ],
+        "seed": "fully offline — gradient tints + bundled SVG data-URI sample images"
+      }
+    ]
+  },
+  {
     "slug": "doku-payment",
     "title": "DOKU — Indonesia Payment",
     "category": "integrations",
@@ -911,30 +935,6 @@
     ]
   },
   {
-    "slug": "media-studio",
-    "title": "Media Studio — photo / social design canvas",
-    "category": "os",
-    "previews": [
-      {
-        "component": "MediaStudio",
-        "kind": "scenarios",
-        "scenarios": [
-          {
-            "id": "blank-canvas",
-            "title": "Blank canvas",
-            "description": "Default headline + gradient background; place layers with the tools"
-          },
-          {
-            "id": "social-story",
-            "title": "Social story",
-            "description": "9:16 doc loaded via payload — sticker, masked image, safe-area aspect"
-          }
-        ],
-        "seed": "fully offline — gradient tints + bundled SVG data-URI sample images"
-      }
-    ]
-  },
-  {
     "slug": "media-viewer",
     "title": "Preview — media quick-look",
     "category": "os",
@@ -1164,29 +1164,6 @@
           }
         ],
         "seed": "in-memory page list held in a demo store; CRUD callbacks mutate it so edits persist while mounted"
-      }
-    ]
-  },
-  {
-    "slug": "onboarding-wizard",
-    "title": "Onboarding Wizard — first-run site setup",
-    "category": "ui",
-    "previews": [
-      {
-        "component": "OnboardingWizard",
-        "kind": "variants",
-        "axes": [
-          {
-            "prop": "presetPicker",
-            "values": [
-              "on",
-              "off"
-            ],
-            "default": "on",
-            "description": "Branding step with vs without the theme preset Select (host may omit presetOptions)."
-          }
-        ],
-        "seed": "Mock save/seed callbacks; step through Identitas → Branding (color chips, mode buttons, swatch Select) → Konten → Selesai."
       }
     ]
   },
@@ -1426,6 +1403,29 @@
           }
         ],
         "seed": "fully offline — an in-preview useState adapter; the consumer injects its real appearance store"
+      }
+    ]
+  },
+  {
+    "slug": "site-setup-wizard",
+    "title": "Site Setup Wizard — first-run site setup",
+    "category": "ui",
+    "previews": [
+      {
+        "component": "OnboardingWizard",
+        "kind": "variants",
+        "axes": [
+          {
+            "prop": "presetPicker",
+            "values": [
+              "on",
+              "off"
+            ],
+            "default": "on",
+            "description": "Branding step with vs without the theme preset Select (host may omit presetOptions)."
+          }
+        ],
+        "seed": "Mock save/seed callbacks; step through Identitas → Branding (color chips, mode buttons, swatch Select) → Konten → Selesai."
       }
     ]
   },

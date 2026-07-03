@@ -23,7 +23,7 @@ const aspectLabel = (value: string): string =>
 export function useStudioInspector(s: StudioInspector): void {
   const aspect = aspectLabel(s.aspect);
   usePublishInspector(
-    "media-studio",
+    "design-studio",
     {
       subject: "Untitled design",
       props: [

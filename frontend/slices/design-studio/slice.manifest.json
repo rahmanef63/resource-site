@@ -1,12 +1,12 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
-  "slug": "media-studio",
+  "slug": "design-studio",
   "version": "1.0.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
-    "command": "npx rr add media-studio",
-    "consumerPath": "slices/media-studio"
+    "command": "npx rr add design-studio",
+    "consumerPath": "slices/design-studio"
   },
   "files": [
     "CHANGELOG.md",

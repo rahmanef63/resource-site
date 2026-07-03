@@ -13,7 +13,7 @@ import type { AppDescriptor } from "./lib/host";
 export { default as MediaStudio } from "./app";
 
 export const mediaStudioApp: AppDescriptor = {
-  id: "media-studio",
+  id: "design-studio",
   title: "Image Editor",
   icon: Image,
   gradient: "linear-gradient(160deg,#ff9f43,#ee5253)",

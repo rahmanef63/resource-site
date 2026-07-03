@@ -2308,15 +2308,15 @@ const [count, setCount] = useBroadcastSync("rr:counter", 0);
     defaultZoom: 0.9,
   },
   {
-    slug: "onboarding-wizard",
-    title: "Onboarding Wizard — first-run site setup",
+    slug: "site-setup-wizard",
+    title: "Site Setup Wizard — first-run site setup",
     category: "ui",
     kind: "ui",
     version: "0.2.0",
     tagline: "Post-claim setup wizard: identitas, branding + theme preset live-preview, seed konten — semua props-driven, zero backend lock-in.",
     description: "Post-claim onboarding wizard for clone-to-own templates, graduated from the headless template surface (2026-06-06). Multi-step card flow (Identitas / Branding / Konten / Selesai) that stores ALL site config in the host backend via a props-driven save callback — a non-coder configures their site with zero code. Branding step ships a readable shadcn Select theme-preset picker (color swatches per preset + grouped headers + live preview callback — replaces the white-on-white native select), brand color quick-chips, light/dark/system default mode, logo/favicon upload via injected ImageField, and optional Analytics ID. Identity step hints invalid email format. 'Lewati setup' marks onboarded without fields and reverts any browsed-but-unsaved preset. Props-driven (R3): no convex/react import — host wires settings.upsert / seed.seedSample / setup.status into props; pairs naturally with the theme-presets slice (registry + tweakcnSwatches + previewTweakcnPreset) but works with any theme system or none.",
     source: "personal-brand-os",
-    slicePath: "frontend/slices/onboarding-wizard",
+    slicePath: "frontend/slices/site-setup-wizard",
     convexPaths: [],
     npm: [],
     shadcn: ["button", "card", "input", "label", "progress", "select"],
@@ -2324,8 +2324,8 @@ const [count, setCount] = useBroadcastSync("rr:counter", 0);
     peers: [],
     tags: ["ui", "onboarding", "wizard", "setup", "first-run", "branding", "theme", "clone-to-own", "templates"],
     usedBy: ["personal-brand-os"],
-    agentRecipe: "Run `npx rr add onboarding-wizard`. Show from your admin gate when `setup.status().onboarded === false`: `<OnboardingWizard onDone={...} save={(f) => settingsUpsert(f)} seedSample={() => seedSample({})} seeded={status?.seeded} ImageField={ImageField} presetOptions={presets} onPresetPreview={(n) => preview(n)} />`. `save` receives Partial<OnboardingFields> + `markOnboarded: true` — back it with a `settings.upsert` mutation that patches only provided fields. Theme bridge (optional): with the theme-presets slice installed build `presetOptions` from `groupTweakcnPresets(registry.items)` + `tweakcnSwatches(p)` and pass `useThemePreset().preview` as `onPresetPreview` — the picker then live-previews while the user browses and `Lewati setup` reverts via `onPresetPreview(null)`. Omit `presetOptions` to hide the picker entirely; omit `ImageField` to hide logo/favicon upload. Full wiring recipe in the slice's HOST-SETUP.md.",
-    previewPath: "/preview/slices/onboarding-wizard",
+    agentRecipe: "Run `npx rr add site-setup-wizard`. Show from your admin gate when `setup.status().onboarded === false`: `<OnboardingWizard onDone={...} save={(f) => settingsUpsert(f)} seedSample={() => seedSample({})} seeded={status?.seeded} ImageField={ImageField} presetOptions={presets} onPresetPreview={(n) => preview(n)} />`. `save` receives Partial<OnboardingFields> + `markOnboarded: true` — back it with a `settings.upsert` mutation that patches only provided fields. Theme bridge (optional): with the theme-presets slice installed build `presetOptions` from `groupTweakcnPresets(registry.items)` + `tweakcnSwatches(p)` and pass `useThemePreset().preview` as `onPresetPreview` — the picker then live-previews while the user browses and `Lewati setup` reverts via `onPresetPreview(null)`. Omit `presetOptions` to hide the picker entirely; omit `ImageField` to hide logo/favicon upload. Full wiring recipe in the slice's HOST-SETUP.md.",
+    previewPath: "/preview/slices/site-setup-wizard",
     defaultView: "desktop",
     defaultZoom: 0.9,
   },
@@ -2677,8 +2677,8 @@ const [count, setCount] = useBroadcastSync("rr:counter", 0);
     },
   },
   {
-    slug: "media-studio",
-    title: "Media Studio — photo / social design canvas",
+    slug: "design-studio",
+    title: "Design Studio — photo / social design canvas",
     category: "os",
     kind: "ui",
     version: "1.0.0",
@@ -2686,7 +2686,7 @@ const [count, setCount] = useBroadcastSync("rr:counter", 0);
     description:
       "A layered canvas studio: image/text/shape layers with filters, masks, transforms, safe-area guides and aspect presets (1:1/4:5/9:16/16:9), plus an export modal (download / copy / import JSON). Runs fully offline on bundled gradient-SVG samples. Host wiring is one call: configureMediaStudio({ saveDoc, imageSources }) lights up Save-to-host and feeds real image sources. Self-contained: inspector hooks are inert seams in lib/host.ts.",
     source: "rahmanef63/os-vps",
-    slicePath: "frontend/slices/media-studio",
+    slicePath: "frontend/slices/design-studio",
     convexPaths: [],
     npm: ["lucide-react"],
     shadcn: ["button", "dialog", "badge", "tooltip", "scroll-area"],
@@ -2696,11 +2696,11 @@ const [count, setCount] = useBroadcastSync("rr:counter", 0);
     resourceType: "module",
     maturity: "beta",
     compat: { enhances: ["appshell"] },
-    previewPath: "/preview/slices/media-studio",
+    previewPath: "/preview/slices/design-studio",
     defaultView: "desktop",
     agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Layered canvas editor. Fully client-side; no backend required.
 
-STEP 1 — Install. \`npx rr add media-studio\`. Ensure \`@/features/media-studio\` resolves and Tailwind scans the slice folder.
+STEP 1 — Install. \`npx rr add design-studio\`. Ensure \`@/features/design-studio\` resolves and Tailwind scans the slice folder.
 
 STEP 2 — Deps. npm: \`lucide-react\`. shadcn: button, dialog, badge, tooltip, scroll-area.
 
@@ -2708,7 +2708,7 @@ STEP 3 — Mount. \`<MediaStudio />\` in a height-bearing box — unwired it edi
 
 STEP 4 — Host wiring. \`configureMediaStudio({ saveDoc, imageSources })\` — saveDoc persists the serialized document (enables Save-to-host in the export modal); imageSources supplies image URLs for new layers.`,
     exampleCode: `"use client";
-import { MediaStudio } from "@/features/media-studio";
+import { MediaStudio } from "@/features/design-studio";
 
 export default function StudioDemo() {
   return <div className="h-dvh w-full"><MediaStudio /></div>;

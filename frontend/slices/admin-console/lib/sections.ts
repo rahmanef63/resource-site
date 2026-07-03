@@ -78,7 +78,7 @@ export const ADMIN_CONSOLE_SECTIONS: readonly AdminConsoleSection[] = [
   { id: "comments",     label: "Comments",      icon: "MessageSquare",     group: "content", priority: "P1", required: "content.manage", tiers: A, provider: "comments" },
   { id: "testimonials", label: "Testimonials",  icon: "Quote",             group: "content", priority: "P2", required: "content.manage", tiers: A, provider: "testimonials" },
   { id: "changelog",    label: "Changelog",     icon: "GitCommitHorizontal",group: "content", priority: "P2", required: "content.manage", tiers: A, provider: "changelog-feed" },
-  { id: "media",        label: "Media Library", icon: "ImagePlus",         group: "content", priority: "P1", required: "content.manage", tiers: A, provider: "media-studio" },
+  { id: "media",        label: "Media Library", icon: "ImagePlus",         group: "content", priority: "P1", required: "content.manage", tiers: A, provider: "design-studio" },
   { id: "nav-config",   label: "Navigation",    icon: "Menu",              group: "content", priority: "P1", required: "content.manage", tiers: A, provider: "self" },
   { id: "seo-health",   label: "SEO Health",    icon: "Search",            group: "content", priority: "P1", required: "content.manage", tiers: A, provider: "self" },
 

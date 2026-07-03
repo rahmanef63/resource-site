@@ -1,12 +1,12 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
-  "slug": "onboarding-wizard",
+  "slug": "site-setup-wizard",
   "version": "0.2.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
-    "command": "npx rr add onboarding-wizard",
-    "consumerPath": "slices/onboarding-wizard"
+    "command": "npx rr add site-setup-wizard",
+    "consumerPath": "slices/site-setup-wizard"
   },
   "files": [
     "HOST-SETUP.md",

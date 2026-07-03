@@ -3,11 +3,11 @@ import type { SampleKind } from "./samples";
 
 export type EditorTarget = { app: string; label: string };
 
-// Which editor opens which media kind. Images → image editor (media-studio),
+// Which editor opens which media kind. Images → image editor (design-studio),
 // timed media (video/audio) → video editor (reel-editor). Others (pdf/text)
 // have no editor.
 export function editorFor(kind: SampleKind): EditorTarget | null {
-  if (kind === "image") return { app: "media-studio", label: "Image Editor" };
+  if (kind === "image") return { app: "design-studio", label: "Design Studio" };
   if (kind === "video" || kind === "audio")
     return { app: "reel-editor", label: "Video Editor" };
   return null;

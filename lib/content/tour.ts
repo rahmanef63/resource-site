@@ -110,7 +110,7 @@ export const ACT_SLUGS: Record<ActId, string[]> = {
     "testimonials",
     "services",
     "seo",
-    "onboarding-wizard",
+    "site-setup-wizard",
     "contact-form-resend",
   ],
   "os-appshell": [
@@ -138,7 +138,7 @@ export const ACT_SLUGS: Record<ActId, string[]> = {
     "image-editor",
     "reel-editor",
     "media-viewer",
-    "media-studio",
+    "design-studio",
     "image-picker",
     "file-upload",
   ],

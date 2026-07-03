@@ -7,7 +7,7 @@ import {
   tweakcnSwatches,
   useThemePreset,
 } from "@/features/theme-presets";
-import { OnboardingWizard, type PresetOption } from "@/features/onboarding-wizard";
+import { OnboardingWizard, type PresetOption } from "@/features/site-setup-wizard";
 
 /** Wires the wizard to a mock backend + the live theme-presets registry —
  *  same bridge a template host writes (see the slice's HOST-SETUP.md). */

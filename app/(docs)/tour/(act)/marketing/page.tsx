@@ -48,7 +48,7 @@ const SECTIONS: { heading: string; blurb: string; slugs: string[] }[] = [
     heading: "Convert & ship",
     blurb:
       "Close the loop: the onboarding wizard that greets a first-time user, the contact form wired to Resend, and the SEO metadata that gets the page found.",
-    slugs: ["onboarding-wizard", "contact-form-resend", "seo"],
+    slugs: ["site-setup-wizard", "contact-form-resend", "seo"],
   },
 ];
 

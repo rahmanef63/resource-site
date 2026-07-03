@@ -32,13 +32,13 @@ export const metadata = {
  *
  * The remaining 5 slugs are grouped into two readable sections (curated order
  * from the tour recon). Heavy editors stay LAST in their section and either
- * registry-lazy (media-studio) or iframe-isolated (reel-editor) so the video-NLE
+ * registry-lazy (design-studio) or iframe-isolated (reel-editor) so the video-NLE
  * + canvas-studio chunks only load on scroll. A "More media" catch-all absorbs
  * any future media slug so nothing silently vanishes (audit:tour enforces a
  * total + disjoint partition against the live catalog).
  *
  * Per-slug mount (resolved inside SliceShowcase → Preview):
- *   • image-editor / media-viewer / media-studio / image-picker → in
+ *   • image-editor / media-viewer / design-studio / image-picker → in
  *     PREVIEW_REGISTRY → <LazySliceMount> (code-split-on-scroll)
  *   • reel-editor / files → no registry entry, have previewPath →
  *     <IframeThumbnail> (provider/document isolation, good for the heavy NLE)
@@ -53,7 +53,7 @@ const SECTIONS: { heading: string; blurb: string; slugs: string[] }[] = [
     heading: "The editors",
     blurb:
       "The heavy hitters: the video-timeline NLE with realtime WebM export, and the standalone offline canvas studio. (The layered raster editor with 1-click background removal is featured above.)",
-    slugs: ["reel-editor", "media-studio"],
+    slugs: ["reel-editor", "design-studio"],
   },
   {
     heading: "View & feed",

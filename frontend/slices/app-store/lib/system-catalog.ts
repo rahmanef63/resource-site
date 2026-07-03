@@ -44,7 +44,7 @@ export const SYSTEM_CATALOG: SystemEntry[] = [
   { id: "browser", title: "Browser", kind: "app", icon: Globe, gradient: "linear-gradient(160deg,#22b1ff,#1666e0)", desc: "Drive a real headless Chromium on the VPS." },
   { id: "code-editor", title: "Code", kind: "app", icon: Code, gradient: "linear-gradient(160deg,#7a5cff,#4f2fd6)", desc: "Edit host files in a tabbed code editor." },
   { id: "os-terminal", title: "Terminal", kind: "app", icon: Terminal, gradient: "linear-gradient(160deg,#2b2f3a,#11141b)", desc: "Run shell commands on the host." },
-  { id: "media-studio", title: "Image Editor", kind: "app", icon: Image, gradient: "linear-gradient(160deg,#ff8a3d,#ff5fa2)", desc: "Layered canvas image editing." },
+  { id: "design-studio", title: "Design Studio", kind: "app", icon: Image, gradient: "linear-gradient(160deg,#ff8a3d,#ff5fa2)", desc: "Photo & social-graphic design canvas." },
   { id: "reel-editor", title: "Video Editor", kind: "app", icon: Clapperboard, gradient: "linear-gradient(160deg,#ff5fa2,#b13bff)", desc: "Timeline-based reel editing." },
   { id: "media-viewer", title: "Preview", kind: "app", icon: Eye, gradient: "linear-gradient(160deg,#34d39a,#0f9e6a)", desc: "Quick-look images and media." },
   { id: "create-app", title: "Create App", kind: "app", icon: PlusSquare, gradient: "linear-gradient(160deg,#16c2c2,#0a8a8a)", desc: "Author a custom runtime app." },
