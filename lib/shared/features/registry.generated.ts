@@ -33,7 +33,6 @@ import { reelEditorConfig } from "@/features/reel-editor/config";
 import { resendNewsletterConfig } from "@/features/resend-newsletter/config";
 import { resourcesLauncherAdminConfig } from "@/features/resources-launcher-admin/config";
 import { seoConfig } from "@/features/seo/config";
-import { shellSettingsConfig } from "@/features/shell-settings/config";
 import { startHereConfig } from "@/features/start-here/config";
 import { systemMonitorConfig } from "@/features/system-monitor/config";
 import { vectorSearchConfig } from "@/features/vector-search/config";
@@ -183,11 +182,6 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     ...seoConfig,
     importPath: "@/features/seo/config",
     version: "0.3.0",
-  },
-  {
-    ...shellSettingsConfig,
-    importPath: "@/features/shell-settings/config",
-    version: "1.0.0",
   },
   {
     ...startHereConfig,

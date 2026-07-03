@@ -53,8 +53,7 @@ const SECTIONS: { heading: string; blurb: string; slugs: string[] }[] = [
       "The building blocks and feedback surfaces: command palette, settings, notifications, dialogs, selection, plus the empty/loading states and quicklinks that finish a screen.",
     slugs: [
       "command-menu",
-      "settings-page",
-      "shell-settings",
+      "settings",
       "notifications-center",
       "responsive-dialog",
       "selection",

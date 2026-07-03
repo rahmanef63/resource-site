@@ -1342,64 +1342,6 @@
     ]
   },
   {
-    "slug": "settings-page",
-    "title": "Settings Page — adapter-driven shell",
-    "category": "ui",
-    "previews": [
-      {
-        "component": "SettingsShell",
-        "kind": "scenarios",
-        "scenarios": [
-          {
-            "id": "profile",
-            "title": "Profile",
-            "description": "avatar + name/email/bio fields with Save"
-          },
-          {
-            "id": "preferences",
-            "title": "Preferences",
-            "description": "theme + language Select + density toggle"
-          },
-          {
-            "id": "notifications",
-            "title": "Notifications",
-            "description": "four switch rows with label + description"
-          },
-          {
-            "id": "danger-zone",
-            "title": "Danger zone",
-            "description": "destructive Delete account wrapped in AlertDialog"
-          }
-        ],
-        "seed": "SettingsShell over a localStorage demo adapter seeded with a demo user"
-      }
-    ]
-  },
-  {
-    "slug": "shell-settings",
-    "title": "Shell Settings — settings-app UI primitives",
-    "category": "ui",
-    "previews": [
-      {
-        "component": "AppearancePanel",
-        "kind": "scenarios",
-        "scenarios": [
-          {
-            "id": "full-adapter",
-            "title": "Full adapter",
-            "description": "Style/Mode/Accent/Wallpaper + reduce-transparency + Display device override, all live"
-          },
-          {
-            "id": "minimal",
-            "title": "Minimal adapter",
-            "description": "Only style + theme provided — the other groups simply don't render"
-          }
-        ],
-        "seed": "fully offline — an in-preview useState adapter; the consumer injects its real appearance store"
-      }
-    ]
-  },
-  {
     "slug": "site-setup-wizard",
     "title": "Site Setup Wizard — first-run site setup",
     "category": "ui",

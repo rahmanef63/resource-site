@@ -1,8 +1,7 @@
-export { settingsPageFeature } from "./config";
 export {
   SettingsShell,
   type SettingsShellProps,
-  type SettingsSection,
+  type SettingsSectionId,
 } from "./components/SettingsShell";
 export { ProfileSection, type ProfileSectionProps } from "./components/sections/ProfileSection";
 export {

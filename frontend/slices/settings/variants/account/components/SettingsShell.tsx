@@ -19,13 +19,13 @@ import { PreferencesSection } from "./sections/PreferencesSection";
 import { NotificationsSection } from "./sections/NotificationsSection";
 import { DangerZone } from "./sections/DangerZone";
 
-export type SettingsSection =
+export type SettingsSectionId =
   | "profile"
   | "preferences"
   | "notifications"
   | "danger-zone";
 
-const NAV: { id: SettingsSection; label: string; icon: React.ElementType }[] = [
+const NAV: { id: SettingsSectionId; label: string; icon: React.ElementType }[] = [
   { id: "profile", label: "Profile", icon: User },
   { id: "preferences", label: "Preferences", icon: SlidersHorizontal },
   { id: "notifications", label: "Notifications", icon: Bell },
@@ -35,8 +35,8 @@ const NAV: { id: SettingsSection; label: string; icon: React.ElementType }[] = [
 export interface SettingsShellProps {
   adapter: SettingsAdapter;
   /** Controlled active section. Omit for internal state. */
-  active?: SettingsSection;
-  onNavigate?: (section: SettingsSection) => void;
+  active?: SettingsSectionId;
+  onNavigate?: (section: SettingsSectionId) => void;
   onDeleteAccount?: () => void | Promise<void>;
   className?: string;
 }
@@ -48,9 +48,9 @@ export function SettingsShell({
   onDeleteAccount,
   className,
 }: SettingsShellProps) {
-  const [internal, setInternal] = React.useState<SettingsSection>("profile");
+  const [internal, setInternal] = React.useState<SettingsSectionId>("profile");
   const current = active ?? internal;
-  const go = (s: SettingsSection) => (onNavigate ? onNavigate(s) : setInternal(s));
+  const go = (s: SettingsSectionId) => (onNavigate ? onNavigate(s) : setInternal(s));
 
   const { values, loading, saving, save } = useSettings(adapter);
 
@@ -59,7 +59,7 @@ export function SettingsShell({
       <nav className="md:w-56 md:shrink-0">
         {/* Mobile: section picker */}
         <div className="md:hidden">
-          <Select value={current} onValueChange={(v) => go(v as SettingsSection)}>
+          <Select value={current} onValueChange={(v) => go(v as SettingsSectionId)}>
             <SelectTrigger className="w-full">
               <SelectValue />
             </SelectTrigger>

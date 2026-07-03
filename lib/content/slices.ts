@@ -2582,24 +2582,28 @@ const [count, setCount] = useBroadcastSync("rr:counter", 0);
     defaultZoom: 0.7,
   },
   {
-    slug: "settings-page",
-    title: "Settings Page — adapter-driven shell",
+    slug: "settings",
+    title: "Settings — account + appearance shells",
     category: "ui",
     kind: "ui",
-    version: "0.2.0",
-    tagline: "Profile / Preferences / Notifications / Danger-zone settings shell — consumer owns persistence via a 2-method adapter.",
-    description: "SettingsShell two-column settings surface: section nav (mobile collapses to a Select) + Profile (avatar/name/email/bio), Preferences (theme/language/density), Notifications (switch rows), Danger zone (AlertDialog-confirmed delete). SettingsAdapter = load() + save(patch) — wire to Convex or anything; createMemoryAdapter ships for demos. Optimistic save with rollback.",
+    version: "1.0.0",
+    tagline: "Two adapter-driven settings shells — account (async load+save) and appearance (sync per-setting) — the slice owns no data.",
+    description: "Two settings surfaces behind one slug, each adapter-driven so the slice owns no data. account: SettingsShell two-column surface (nav collapses to a Select on mobile) — Profile (avatar/name/email/bio), Preferences (theme/language/density), Notifications (switch rows), Danger zone (AlertDialog-confirmed delete) over an ASYNC SettingsAdapter { load, save(patch) } with optimistic save + rollback; createMemoryAdapter ships for demos. appearance: AppearancePanel (style/mode/accent/wallpaper/reduce-transparency/display) over a SYNC per-setting AppearanceAdapter, plus the generic SettingsSection / SettingsRow / Segmented / AccentSwatches primitives you compose custom panels from. Install one surface with `npx rr add settings account|appearance`, or both with `npx rr add settings`.",
     source: "rr original",
-    slicePath: "frontend/slices/settings-page",
+    slicePath: "frontend/slices/settings",
     convexPaths: [],
-    npm: [],
-    shadcn: ["card", "button", "input", "label", "switch", "select", "separator", "avatar", "alert-dialog", "textarea", "skeleton"],
+    npm: ["lucide-react@^0.400.0"],
+    shadcn: ["alert-dialog", "avatar", "button", "card", "input", "label", "select", "separator", "skeleton", "switch", "textarea", "toggle-group"],
     env: [],
     peers: [],
-    tags: ["settings", "account", "profile", "preferences", "notifications", "danger-zone", "basics"],
+    variants: [
+      { title: "account", desc: "npx rr add settings account — SettingsShell over an async load+save adapter (profile/preferences/notifications/danger-zone)." },
+      { title: "appearance", desc: "npx rr add settings appearance — AppearancePanel over a sync per-setting adapter + Section/Row/Segmented primitives." },
+    ],
+    tags: ["settings", "preferences", "account", "appearance", "theme", "adapter", "shell", "primitives", "ui", "basics"],
     usedBy: [],
-    agentRecipe: "Run `npx rr add settings-page`. Implement SettingsAdapter { load, save } over your backend (Convex query + mutation), pass to <SettingsShell adapter>. save receives per-section partial patches — shallow-merge server-side. onDeleteAccount callback wires the danger zone.",
-    previewPath: "/preview/slices/settings-page",
+    agentRecipe: "Run `npx rr add settings` for both, or `npx rr add settings account` / `appearance` for one. account: implement SettingsAdapter { load, save } over your backend (Convex query + mutation), pass to <SettingsShell adapter>; save gets per-section partial patches (shallow-merge server-side); onDeleteAccount wires the danger zone. appearance: build an AppearanceAdapter (per-setting SegSetting values) from your appearance store, pass to <AppearancePanel appearance>; or compose custom panels from <SettingsSection>/<SettingsRow>/<Segmented>/<AccentSwatches>.",
+    previewPath: "/preview/slices/settings",
     defaultView: "desktop",
     defaultZoom: 0.75,
   },
@@ -2702,46 +2706,6 @@ import { Quicklinks } from "@/features/quicklinks";
 
 export default function LinksDemo() {
   return <div className="h-dvh w-full"><Quicklinks /></div>;
-}`,
-  },
-  {
-    slug: "shell-settings",
-    title: "Shell Settings — settings-app UI primitives",
-    category: "ui",
-    kind: "ui",
-    version: "1.0.0",
-    tagline: "Section/Row/AccentSwatches/Segmented primitives + an appearance panel over an injectable adapter.",
-    description:
-      "The settings-app building blocks: SettingsSection, Row, AccentSwatches, a slice-local Segmented control, and a ready AppearancePanel (style/mode/accent/wallpaper/device/transparency groups — every group optional). Pure presentation: the injected AppearanceAdapter IS the contract, so it binds to any appearance store (appshell capabilities, zustand, plain useState) with zero slice edits.",
-    source: "rahmanef63/os-vps",
-    slicePath: "frontend/slices/shell-settings",
-    convexPaths: [],
-    npm: ["lucide-react"],
-    shadcn: ["button", "switch", "toggle-group", "separator"],
-    env: [],
-    peers: [],
-    tags: ["settings", "preferences", "appearance", "primitives", "ui"],
-    resourceType: "module",
-    maturity: "stable",
-    compat: { enhances: ["appshell", "settings-page"] },
-    previewPath: "/preview/slices/shell-settings",
-    defaultView: "desktop",
-    agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Settings UI primitives. Pure presentation; state injected.
-
-STEP 1 — Install. \`npx rr add shell-settings\`. Ensure \`@/features/shell-settings\` resolves and Tailwind scans the slice folder.
-
-STEP 2 — Deps. npm: \`lucide-react\`. shadcn: button, switch, toggle-group, separator.
-
-STEP 3 — Mount. \`<AppearancePanel adapter={adapter} />\` with an AppearanceAdapter (all groups optional — omit a group to hide it), or compose SettingsSection/Row/AccentSwatches/Segmented directly for custom panels.
-
-STEP 4 — Bind. Wire the adapter to your appearance store (theme mode, accent, wallpaper, device, transparency) — the panel re-renders from the values you pass; no internal state.`,
-    exampleCode: `"use client";
-import { useState } from "react";
-import { AppearancePanel } from "@/features/shell-settings";
-
-export default function SettingsDemo() {
-  const [mode, setMode] = useState<"light" | "dark">("light");
-  return <AppearancePanel adapter={{ mode: { value: mode, set: setMode } }} />;
 }`,
   },
 ];

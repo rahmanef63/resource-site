@@ -12,5 +12,7 @@
   "loading-states": "feedback-states",
   "empty-states": "feedback-states",
   "resume": "profile",
-  "about-profile": "profile"
+  "about-profile": "profile",
+  "settings-page": "settings",
+  "shell-settings": "settings"
 }

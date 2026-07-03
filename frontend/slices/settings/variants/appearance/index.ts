@@ -9,6 +9,3 @@ export { Segmented } from "./components/segmented";
 export { AccentSwatches } from "./components/accent-swatches";
 export { AppearancePanel } from "./components/appearance-panel";
 export type { AppearanceAdapter, SegSetting, SettingOption } from "./lib/types";
-
-export { shellSettingsConfig } from "./config";
-export type { ShellSettingsConfig } from "./config";
