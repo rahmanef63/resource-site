@@ -1,0 +1,51 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "ai-workspace",
+  "version": "0.3.0",
+  "category": "ai",
+  "kind": "full",
+  "title": "AI Workspace — chat · studio · agents",
+  "description": "Three AI surfaces behind one slug, in three variants. chat: a floating `<AiChatFab />` + `createAgenticChatSend` — real function-calling over any ToolHost (@/shared/agentic), key-guarded, over convex/features/aiChat. studio: `<AiStudioPage />` — a single-prompt generation canvas (variation grid + version tree, Suno/Midjourney/Lovable pattern) plus `aiStudioTools` so a shared agent can drive generations. agents: `<AiAgentsPage />` — an autonomous-worker run dashboard plus `createAgentRunner(host)` which drives the shared function-calling loop and records each tool_use as a RunStep trace. Install one with `npx rr add ai-workspace chat|studio|agents`, or all with `npx rr add ai-workspace`; only the chat variant pulls a convex backend (per-variant convex gating). studio + agents are frontend-only — wire your own persistence.",
+  "namespace": "@/features/ai-workspace",
+  "variants": {
+    "default": "chat",
+    "items": [
+      { "id": "chat", "title": "Chat", "description": "Floating assistant FAB with real function-calling over any ToolHost.", "convex": ["convex/features/aiChat"] },
+      { "id": "studio", "title": "Studio", "description": "Single-prompt generation canvas + agentic generate tool.", "convex": [] },
+      { "id": "agents", "title": "Agents", "description": "Autonomous-worker run dashboard + createAgentRunner loop.", "convex": [] }
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/ai-workspace",
+    "configExport": "aiWorkspaceFeature"
+  },
+  "convex": {
+    "tablesExport": "",
+    "schemaPath": "",
+    "rootPaths": ["convex/features/aiChat"]
+  },
+  "deps": {
+    "npm": ["ai@^4.0.0", "@ai-sdk/anthropic@^0.0.50", "@ai-sdk/openai@^0.0.60"],
+    "shadcn": ["avatar", "badge", "button", "card", "progress", "scroll-area", "select", "separator", "slider", "switch", "table", "tabs", "textarea", "tooltip"],
+    "env": [
+      { "name": "ANTHROPIC_API_KEY", "scope": "convex", "required": false, "description": "chat variant — enables the aiChat action; falls back to a wire-me-up notice when unset." },
+      { "name": "OPENAI_API_KEY", "scope": "convex", "required": false, "description": "chat variant — optional OpenAI model provider." },
+      { "name": "GOOGLE_GENERATIVE_AI_API_KEY", "scope": "convex", "required": false, "description": "chat variant — optional Google model provider." }
+    ],
+    "peers": []
+  },
+  "registers": [],
+  "audit": [],
+  "license": "MIT",
+  "tags": ["ai", "ai:chatbot", "ai:studio", "ai:agent", "agent-mode", "tool-calls", "streaming", "generation", "async", "traces", "multimodal"],
+  "previews": [],
+  "contract": {
+    "provides": {
+      "tools": ["ai-studio.generate"],
+      "components": ["AiChatFab", "AiStudioPage", "AiAgentsPage"],
+      "utils": ["createAgenticChatSend", "createAgentRunner"],
+      "hooks": [],
+      "convex": { "tables": [], "rbac": [] }
+    }
+  }
+}

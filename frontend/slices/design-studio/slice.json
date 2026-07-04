@@ -9,7 +9,7 @@
   "namespace": "@/features/design-studio",
   "frontend": {
     "slicePath": "frontend/slices/design-studio",
-    "configExport": "mediaStudioConfig"
+    "configExport": "designStudioConfig"
   },
   "deps": {
     "npm": [

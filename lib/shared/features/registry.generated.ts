@@ -17,7 +17,7 @@ import { codeEditorConfig } from "@/features/code-editor/config";
 import { commandMenuConfig } from "@/features/command-menu/config";
 import { commentsConfig } from "@/features/comments/config";
 import { convexAuthConfig } from "@/features/convex-auth/config";
-import { mediaStudioConfig } from "@/features/design-studio/config";
+import { designStudioConfig } from "@/features/design-studio/config";
 import { htmlStudioConfig } from "@/features/html-studio/config";
 import { imageEditorConfig } from "@/features/image-editor/config";
 import { mediaViewerConfig } from "@/features/media-viewer/config";
@@ -100,7 +100,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     version: "0.4.0",
   },
   {
-    ...mediaStudioConfig,
+    ...designStudioConfig,
     importPath: "@/features/design-studio/config",
     version: "1.0.0",
   },

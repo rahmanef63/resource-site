@@ -22,5 +22,8 @@
   "notion-database": "notion-ui",
   "notion-sidebar": "notion-ui",
   "notion": "notion-app",
-  "admin-console": "admin"
+  "admin-console": "admin",
+  "ai-chat": "ai-workspace",
+  "ai-studio": "ai-workspace",
+  "ai-agents": "ai-workspace"
 }

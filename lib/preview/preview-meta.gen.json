@@ -52,30 +52,6 @@
     ]
   },
   {
-    "slug": "ai-chat",
-    "title": "AI Chat — Workbench / Sidebar / Search",
-    "category": "ai",
-    "previews": [
-      {
-        "component": "AiChatFab",
-        "kind": "scenarios",
-        "scenarios": [
-          {
-            "id": "with-mock-bot",
-            "title": "Wired assistant",
-            "description": "A `chat` prop is injected; sending a message returns a canned reply after a short delay."
-          },
-          {
-            "id": "unconfigured",
-            "title": "Not wired up",
-            "description": "No `chat` prop — the FAB still opens and answers with a wire-me-up notice."
-          }
-        ],
-        "seed": "mock chat resolves a canned reply ~500ms after send; FAB + panel anchored inside the preview card"
-      }
-    ]
-  },
-  {
     "slug": "appshell",
     "title": "AppShell — Desktop + Mobile OS Shell",
     "category": "os",

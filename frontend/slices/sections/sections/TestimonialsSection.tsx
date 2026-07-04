@@ -71,7 +71,7 @@ export function TestimonialsSection({
                       {Array.from({ length: 5 }).map((_, s) => (
                         <Star
                           key={s}
-                          className={`size-4 ${s < (t.rating ?? 0) ? "fill-amber-400 text-amber-400" : "text-muted-foreground/40"}`}
+                          className={cn("size-4", s < (t.rating ?? 0) ? "fill-amber-400 text-amber-400" : "text-muted-foreground/40")}
                         />
                       ))}
                     </span>

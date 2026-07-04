@@ -1,10 +1,9 @@
 /**
- * ai-chat slice — public barrel.
+ * ai-workspace › chat variant — public barrel.
  *
- * Three-column AI chatbot workbench. Mount `<ChatWorkbench />` at the
- * route of your choice; wire `bindings` to your Convex API surface.
+ * Floating AI assistant FAB + real function-calling bridge.
  *
- *   import { ChatWorkbench, useChat } from "@/features/ai-chat";
+ *   import { AiChatFab, createAgenticChatSend } from "@/features/ai-workspace";
  *
  * NOTE: the full three-column workbench is still roadmap (W5). What
  * ships today is the minimal real implementation used across the

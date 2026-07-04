@@ -674,7 +674,7 @@ export default function TerminalDemo() {
     tags: ["ai", "assistant", "chat", "agents", "streaming", "automations", "ui"],
     resourceType: "module",
     maturity: "stable",
-    compat: { enhances: ["appshell", "ai-chat"] },
+    compat: { enhances: ["appshell", "ai-workspace"] },
     previewPath: "/preview/slices/assistant",
     defaultView: "desktop",
     agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Agent workspace with streaming chat. Fully client-side; model injected.
@@ -1175,16 +1175,15 @@ export const subscribe = mutation({
     },
   },
   // ─────────────────────────────────────────────────────────────
-  // AI features (consolidated 2026-05-16 — was 7 entries, merged into
-  // 3 consumer archetypes + 1 admin + 1 backend).
+  // AI features. chat/studio/agents consolidated 2026-07-04 into the
+  // ai-workspace variant slice; ai-admin + ai-router stay separate.
   //
   // Ordering follows the user mental model:
-  //   1. ai-chat   — talk to the model (chatbot / copilot / search)
-  //   2. ai-studio — make stuff with the model (generation canvas)
-  //   3. ai-agents — let the model work asynchronously (workers)
-  //   4. ai-admin  — operator console (instructions / skills / tools /
+  //   1. ai-workspace — talk to / make with / delegate to the model
+  //                     (chat · studio · agents variants)
+  //   2. ai-admin  — operator console (instructions / skills / tools /
   //                  agents / providers / budgets / audit)
-  //   5. ai-router — backend infra (provider proxy + cost guard)
+  //   3. ai-router — backend infra (provider proxy + cost guard)
   //
   // Tag taxonomy:
   //   "ai"            — umbrella (every entry)
@@ -1194,117 +1193,50 @@ export const subscribe = mutation({
   //                     image-gen, voice
   // ─────────────────────────────────────────────────────────────
   {
-    slug: "ai-chat",
-    title: "AI Chat — Workbench / Sidebar / Search",
+    slug: "ai-workspace",
+    title: "AI Workspace — chat · studio · agents",
     category: "ai",
     kind: "full",
     version: "0.3.0",
-    tagline: "One AI chat backend, 3 surfaces: ChatGPT-style workbench, sidebar copilot, or search.",
-    description: "One conversational AI feature, three render modes. Same Convex backend (threads + streaming + tool calls + RAG), pick the surface via prop:\n\n  • workbench — Claude.ai / ChatGPT three-column page (default)\n  • sidebar — collapsible copilot panel inside another CRUD app\n  • search — single-question + answer + citations (Perplexity)\n\nUse cases:\n  – Customer-support chatbot embedded in your marketing site\n  – Developer copilot in your PR/docs admin\n  – Knowledge-base search over your blog + docs corpus\n  – Internal AI assistant in your dashboard\n\nWhat it ships: multi-provider (Anthropic / OpenAI / Google / Mistral / Ollama), multimodal (text + image + PDF + audio), typed tool calls with inline inspector, agent mode (plan→execute→reflect), branching threads, RAG citations, resumable streams, usage telemetry. Public surface = consumer chat; admin surface = persona, fallback, guardrails per-bot.",
+    tagline: "Three AI surfaces behind one slug — chat FAB, generation studio, agent runner. Install one variant or all.",
+    description: "Three AI surfaces as shadcn-style variants — `npx rr add ai-workspace <variant>` for one, or `npx rr add ai-workspace` for all + a switcher. Only the chat variant pulls a Convex backend (per-variant convex gating).\n\n  • chat — floating <AiChatFab /> + createAgenticChatSend: real function-calling over any ToolHost (@/shared/agentic), key-guarded, over convex/features/aiChat.\n  • studio — <AiStudioPage /> single-prompt generation canvas (variation grid + version tree, Suno / Midjourney / Lovable pattern) + aiStudioTools so a shared agent can drive generations.\n  • agents — <AiAgentsPage /> autonomous-worker run dashboard + createAgentRunner(host) which drives the shared function-calling loop and records each tool_use as a RunStep trace.\n\nUse cases: support chatbot in a marketing site, AI generation product (image / code / text / audio), background workers (nightly audits, scheduled crawls, moderation). studio + agents are frontend-only — wire your own persistence.",
     source: "rahmanef63/resource-site",
     docsUrl: "https://sdk.vercel.ai/docs",
     install: "npm i ai @ai-sdk/anthropic @ai-sdk/openai",
-    slicePath: "frontend/slices/ai-chat",
-    convexPaths: ["convex/features/ai"],
+    slicePath: "frontend/slices/ai-workspace",
+    convexPaths: ["convex/features/aiChat"],
     npm: ["ai@^4.0.0", "@ai-sdk/anthropic@^0.0.50", "@ai-sdk/openai@^0.0.60"],
-    shadcn: ["button", "card", "badge", "avatar", "scroll-area", "select", "separator", "slider", "switch", "textarea", "tabs", "command", "sheet"],
+    shadcn: ["avatar", "badge", "button", "card", "progress", "scroll-area", "select", "separator", "slider", "switch", "table", "tabs", "textarea", "tooltip"],
     env: [
       { name: "ANTHROPIC_API_KEY", scope: "convex", required: false },
       { name: "OPENAI_API_KEY", scope: "convex", required: false },
       { name: "GOOGLE_GENERATIVE_AI_API_KEY", scope: "convex", required: false },
     ],
     peers: [
-      { slug: "convex-auth", range: "^0.1", reason: "Thread ownership requires authenticated user." },
-      { slug: "ai-router", range: "^0.1", reason: "Routes provider calls through tiered proxy." },
-      { slug: "ai-admin", range: "^0.1", reason: "Reads instructions / skills / tools / models from ai-admin registry." },
-      { slug: "vector-search", range: "^0.1", reason: "Optional — RAG / search modes pull workspace embeddings." },
+      { slug: "convex-auth", range: "^0.1", reason: "chat/studio/agents ownership requires an authenticated user." },
+      { slug: "ai-router", range: "^0.1", reason: "Routes provider calls through the tiered proxy." },
+      { slug: "ai-admin", range: "^0.1", reason: "Reads instructions / skills / tools / models / agent defs from the ai-admin registry." },
+      { slug: "vector-search", range: "^0.1", reason: "Optional — chat RAG mode pulls workspace embeddings." },
     ],
-    tags: ["ai", "ai:chat", "streaming", "multimodal", "tool-calls", "agent-mode", "rag", "citations", "branching", "history"],
+    tags: ["ai", "ai:chatbot", "ai:studio", "ai:agent", "agent-mode", "tool-calls", "streaming", "generation", "async", "traces", "multimodal"],
     usedBy: [],
-    agentRecipe: "Run `npx rr add ai-chat`. Pick `mode=\"workbench\" | \"sidebar\" | \"search\"` on `<AIChat />` (or use the convenience exports `<AIChatWorkbench />`, `<AIChatSidebar />`, `<AIChatSearch />`). Same backend tables + streaming action for all three.",
-    previewPath: "/preview/slices/ai-chat",
-    adminPreviewPath: "/preview/slices/ai-chat/admin",
+    variants: [
+      { title: "chat", desc: "Floating assistant FAB with real function-calling over any ToolHost (convex/features/aiChat)." },
+      { title: "studio", desc: "Single-prompt generation canvas + agentic generate tool. Frontend-only." },
+      { title: "agents", desc: "Autonomous-worker run dashboard + createAgentRunner loop. Frontend-only." },
+    ],
+    agentRecipe: "Run `npx rr add ai-workspace <chat|studio|agents>` for one surface, or `npx rr add ai-workspace` for all. chat: mount <AiChatFab chat={useAction(api.features.aiChat.action.chat)} />. studio: mount <AiStudioPage /> + drive via aiStudioTools. agents: mount <AiAgentsPage /> + trigger via createAgentRunner(host).",
+    previewPath: "/preview/slices/ai-workspace",
     defaultSurface: "public",
     defaultView: "desktop",
     defaultZoom: 0.55,
     compat: {
       templates: {
-        "personal-brand-os": { status: "recommended", note: "Customer support (workbench) + author copilot (sidebar)." },
-        "kreator-studio-os": { status: "recommended", note: "Default content-ideation surface (workbench mode)." },
-        "saas-marketing-os": { status: "warn", note: "Only the search mode is a natural fit for marketing sites." },
+        "personal-brand-os": { status: "recommended", note: "Support chat + post-draft studio + scheduled agent audits." },
+        "kreator-studio-os": { status: "recommended", note: "Content ideation (chat) + creator-output studio + background batch runs." },
+        "saas-marketing-os": { status: "warn", note: "Mainly chat search mode fits marketing sites." },
       },
-      enhances: ["ai-router", "ai-admin", "vector-search"],
-    },
-  },
-  {
-    slug: "ai-studio",
-    title: "AI Studio — Generation Canvas",
-    category: "ai",
-    kind: "full",
-    version: "0.2.0",
-    description: "AI is the primary UI — single big prompt input → live-streaming output → variation grid → version tree. Suno / Midjourney / Lovable / v0 pattern. Output kinds: text, code, image, audio (configurable per template).\n\nUse cases:\n  – AI image generation product (creative output)\n  – AI logo / banner / social-post studio\n  – AI code-snippet generator (component scaffolder)\n  – AI music / voiceover producer\n  – AI blog-draft factory (text)\n\nFeatures: prompt history, branch + compare outputs, like + favorite, share-to-link, templates from ai-admin.",
-    source: "rahmanef63/resource-site",
-    install: "",
-    slicePath: "frontend/slices/ai-studio",
-    convexPaths: ["convex/features/ai"],
-    npm: ["ai@^4.0.0"],
-    shadcn: ["button", "card", "badge", "textarea", "tabs", "tooltip", "scroll-area", "select"],
-    env: [],
-    peers: [
-      { slug: "convex-auth", range: "^0.1", reason: "Generation history per user." },
-      { slug: "ai-router", range: "^0.1", reason: "All generation calls flow through router." },
-      { slug: "ai-admin", range: "^0.1", reason: "Templates + few-shot library + moderation rules live in ai-admin." },
-    ],
-    tags: ["ai", "ai:studio", "generation", "streaming", "history", "branching", "image-gen"],
-    usedBy: [],
-    agentRecipe: "Run `npx rr add ai-studio`. Mount `<GeneratorCanvas />` at /. Use case: prompt → output IS the entire product. Wire your output renderer (text/image/code/audio) via the OutputSlot adapter. Templates loaded from ai-admin.studio.templates.",
-    previewPath: "/preview/slices/ai-studio",
-    adminPreviewPath: "/preview/slices/ai-studio/admin",
-    defaultSurface: "public",
-    defaultView: "desktop",
-    defaultZoom: 0.6,
-    compat: {
-      templates: {
-        "kreator-studio-os": { status: "recommended", note: "Native fit for creator-output products." },
-        "personal-brand-os": { status: "recommended", note: "Post-draft factory + cover-image studio." },
-      },
-      enhances: ["ai-router", "ai-admin"],
-    },
-  },
-  {
-    slug: "ai-agents",
-    title: "AI Agents — Autonomous Workers",
-    category: "ai",
-    kind: "full",
-    version: "0.2.0",
-    description: "Background AI workers. Define an agent (skill × model × tools × max-iter), trigger it on-demand or on a cron schedule, watch the step-by-step trace as it runs. Devin / Replit-Agent / Manus pattern.\n\nUse cases:\n  – Nightly audit-bp on the codebase (PR-reviewer style)\n  – Weekly SEO crawl + content suggestions\n  – Auto-moderate comment queue\n  – Scheduled data ingestion + summarization\n  – Long-form research task with multi-source citations\n\nFeatures: queue + live trace, per-step retry policy, hard cost cap, shareable trace URLs, full audit-log integration.",
-    source: "rahmanef63/resource-site",
-    install: "",
-    slicePath: "frontend/slices/ai-agents",
-    convexPaths: ["convex/features/ai"],
-    npm: ["ai@^4.0.0"],
-    shadcn: ["button", "card", "badge", "table", "tabs", "scroll-area", "progress"],
-    env: [],
-    peers: [
-      { slug: "convex-auth", range: "^0.1", reason: "Per-user agent run ownership." },
-      { slug: "ai-router", range: "^0.1", reason: "Step calls flow through router." },
-      { slug: "ai-admin", range: "^0.1", reason: "Agent definitions live in ai-admin → Agents." },
-      { slug: "audit-log", range: "^0.1", reason: "Every step logged." },
-    ],
-    tags: ["ai", "ai:agents", "agent-mode", "tool-calls", "async", "queue", "traces"],
-    usedBy: [],
-    agentRecipe: "Run `npx rr add ai-agents`. Mount `<RunnerDashboard />` at /agents. Trigger runs via `runAgent({agentSlug, input, scheduleAt?})`. Cron scheduler via Convex cron — wire if you need scheduled runs. Agent definitions managed in ai-admin.",
-    previewPath: "/preview/slices/ai-agents",
-    adminPreviewPath: "/preview/slices/ai-agents/admin",
-    defaultSurface: "public",
-    defaultView: "desktop",
-    defaultZoom: 0.6,
-    compat: {
-      templates: {
-        "personal-brand-os": { status: "recommended", note: "Schedule SEO audits, comment moderation, weekly digests." },
-        "kreator-studio-os": { status: "recommended", note: "Background batch generations." },
-      },
-      enhances: ["ai-router", "ai-admin", "audit-log"],
+      enhances: ["ai-router", "ai-admin", "vector-search", "audit-log"],
     },
   },
   {
@@ -1338,7 +1270,7 @@ export const subscribe = mutation({
         "personal-brand-os": { status: "recommended", note: "Mounts as admin section — owner manages all AI." },
         "kreator-studio-os": { status: "recommended" },
       },
-      enhances: ["ai-chat", "ai-studio", "ai-agents", "ai-router", "audit-log"],
+      enhances: ["ai-workspace", "ai-router", "audit-log"],
     },
   },
   {
@@ -1347,7 +1279,7 @@ export const subscribe = mutation({
     category: "ai",
     kind: "backend",
     version: "0.5.0",
-    description: "Backend infrastructure (no UI). Single proxy that every other ai-* feature calls. Tier-routed — nano (Haiku) for classification, mid (Sonnet) for chat, flagship (Opus) for deep reasoning. Per-call usage log + cost guard. Works with direct provider keys or OpenRouter umbrella.\n\nNot something you mount — installed automatically as a peer when you add ai-chat / ai-studio / ai-agents.",
+    description: "Backend infrastructure (no UI). Single proxy that every other ai-* feature calls. Tier-routed — nano (Haiku) for classification, mid (Sonnet) for chat, flagship (Opus) for deep reasoning. Per-call usage log + cost guard. Works with direct provider keys or OpenRouter umbrella.\n\nNot something you mount — installed automatically as a peer when you add ai-workspace.",
     source: "rahmanef63/resource-site",
     docsUrl: "https://sdk.vercel.ai/docs",
     install: "npm i ai @openrouter/ai-sdk-provider",
@@ -1383,9 +1315,9 @@ export const complete = action({
       templates: {
         "personal-brand-os": { status: "recommended" },
         "kreator-studio-os": { status: "recommended" },
-        "saas-marketing-os": { status: "warn", note: "Only needed if site uses ai-chat search mode." },
+        "saas-marketing-os": { status: "warn", note: "Only needed if site uses ai-workspace chat search mode." },
       },
-      enhances: ["ai-chat", "ai-studio", "ai-agents", "ai-admin"],
+      enhances: ["ai-workspace", "ai-admin"],
     },
   },
   {

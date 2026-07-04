@@ -46,13 +46,13 @@ const SECTIONS: { heading: string; blurb: string; slugs: string[] }[] = [
     heading: "The chat product",
     blurb:
       "A model-driven app surface, env-free in the demo: the ChatGPT-style chat workbench, the generation studio, and the local-first assistant with user-built agents & skills.",
-    slugs: ["ai-chat", "ai-studio", "assistant"],
+    slugs: ["ai-workspace", "assistant"],
   },
   {
     heading: "Agents & control",
     blurb:
       "Orchestration and the operator console: autonomous multi-step agents and the AI admin (providers, skills, models, moderation).",
-    slugs: ["ai-agents", "ai-admin"],
+    slugs: ["ai-admin"],
   },
   {
     heading: "The backend that powers it (bring your keys)",

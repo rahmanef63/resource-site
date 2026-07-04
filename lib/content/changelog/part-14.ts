@@ -6,7 +6,7 @@ export const entries: ChangelogEntry[] = [
     "version": "slice-variants-wave",
     "date": 1783036800000,
     "kind": "feature",
-    "title": "shadcn-style slice variants — 80 slices consolidated to 71",
+    "title": "shadcn-style slice variants — 80 slices consolidated to 69",
     "body": "New variant mechanism: a slice can declare `variants` in slice.json. `npx rr add <slug> <variant>` installs one variant (its files flatten to the slice root, so imports resolve at @/features/<slug> like any slice); `npx rr add <slug>` installs all variants + a root switcher and you pick via a prop — exactly the shadcn pattern. An optional `shared/` folder is copied for every variant, and each variant can declare its own `convex` roots so it pulls only its own backend. Purely additive: the ~60 non-variant slices install exactly as before, and every old slug keeps working via an alias. Used to collapse the confusingly-named slice families into fewer, clearer slices.",
     "groups": [
       {
@@ -17,7 +17,8 @@ export const entries: ChangelogEntry[] = [
           { "text": "settings — account + appearance (was settings-page + shell-settings)", "slug": "settings" },
           { "text": "payment — doku + midtrans (was doku-payment + midtrans-payment)", "slug": "payment" },
           { "text": "notion-ui — page + database + sidebar (was notion-shell + notion-database + notion-sidebar)", "slug": "notion-ui" },
-          { "text": "admin — shell + console, each pulling only its own convex (was admin + admin-console)", "slug": "admin" }
+          { "text": "admin — shell + console, each pulling only its own convex (was admin + admin-console)", "slug": "admin" },
+          { "text": "ai-workspace — chat + studio + agents, only the chat variant pulls convex (was ai-chat + ai-studio + ai-agents; studio/agents views lifted from superspace)", "slug": "ai-workspace" }
         ]
       },
       {

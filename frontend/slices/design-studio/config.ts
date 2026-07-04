@@ -1,15 +1,15 @@
-// Slice config (rr: frontend.configExport = "mediaStudioConfig").
-export type MediaStudioConfig = {
+// Slice config (rr: frontend.configExport = "designStudioConfig").
+export type DesignStudioConfig = {
   /** Registry identity — MUST equal slice.json slug/title/category. */
   slug: string;
   title: string;
   category: "os";
 };
 
-export const mediaStudioConfig: MediaStudioConfig = {
+export const designStudioConfig: DesignStudioConfig = {
   slug: "design-studio",
-  title: "Media Studio — photo / social design canvas",
+  title: "Design Studio — photo / social design canvas",
   category: "os",
 };
 
-export default mediaStudioConfig;
+export default designStudioConfig;

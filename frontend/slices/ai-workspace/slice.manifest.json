@@ -1,0 +1,32 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "ai-workspace",
+  "version": "0.3.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add ai-workspace",
+    "consumerPath": "slices/ai-workspace"
+  },
+  "files": [
+    "README.md",
+    "config.ts",
+    "index.ts",
+    "variants/agents/index.ts",
+    "variants/agents/runner.ts",
+    "variants/agents/types.ts",
+    "variants/agents/views/AiAgentsPage.tsx",
+    "variants/chat/agentic-send.ts",
+    "variants/chat/components/AiChatFab.tsx",
+    "variants/chat/index.ts",
+    "variants/chat/preview.tsx",
+    "variants/studio/index.ts",
+    "variants/studio/tools.ts",
+    "variants/studio/types.ts",
+    "variants/studio/views/AiStudioPage.tsx"
+  ],
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

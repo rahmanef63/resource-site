@@ -140,9 +140,7 @@ export const ACT_SLUGS: Record<ActId, string[]> = {
     "file-upload",
   ],
   ai: [
-    "ai-chat",
-    "ai-studio",
-    "ai-agents",
+    "ai-workspace",
     "ai-admin",
     "assistant",
     "ai-router",

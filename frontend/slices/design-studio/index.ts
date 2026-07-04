@@ -29,5 +29,5 @@ export type { MediaStudioHost, StudioDocSaver, AppDescriptor, AppProps } from ".
 export { parseDoc } from "./lib/serialize";
 export type { LayerDoc, Layer } from "./lib/model";
 
-export { mediaStudioConfig } from "./config";
-export type { MediaStudioConfig } from "./config";
+export { designStudioConfig } from "./config";
+export type { DesignStudioConfig } from "./config";
