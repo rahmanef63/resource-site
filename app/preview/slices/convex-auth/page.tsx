@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { SlicePreviewLayout } from "@/components/slice-previews/preview-layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

@@ -1,5 +1,3 @@
-"use client";
-
 import { Resume, AboutProfile } from "@/features/profile";
 
 // Live preview: both variants on the bundled placeholder identity.

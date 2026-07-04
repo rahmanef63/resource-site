@@ -1,5 +1,3 @@
-"use client";
-
 import { ThemePresetProvider } from "@/features/theme-presets";
 import { SwitcherSpotlight } from "./SwitcherSpotlight";
 import { ThemeWidgets } from "./theme-widgets";

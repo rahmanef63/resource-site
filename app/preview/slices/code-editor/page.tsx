@@ -1,5 +1,3 @@
-"use client";
-
 import { CodeEditor } from "@/features/code-editor";
 
 // Live preview: the overlay syntax editor on its writable in-memory mock fs.

@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { ThemePresetProvider } from "@/features/theme-presets";
 import { WizardPlayground } from "./wizard-playground";

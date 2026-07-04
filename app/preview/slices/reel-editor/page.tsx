@@ -1,5 +1,3 @@
-"use client";
-
 import { ReelEditor } from "@/features/reel-editor";
 
 // Live preview: the full video timeline editor with a sample composition.

@@ -1,5 +1,3 @@
-"use client";
-
 import { SelectionCanvas } from "./SelectionCanvas";
 
 /** Full-bleed canvas preview for the selection slice — shows marquee select

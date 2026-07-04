@@ -2,6 +2,22 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "perf-ppr",
+    "version": "perf-skeletons-caching-wave",
+    "date": 1783123200000,
+    "kind": "improvement",
+    "title": "Perf pass — preview skeletons, lazy recharts, deploy-life caching, dead-dep cut",
+    "body": "The site had cacheComponents (PPR) on but barely used it. This wave closes the gaps a ponytail/perf audit surfaced: (1) a route-level loading.tsx paints an instant skeleton for all 63 /preview/** routes (each ships a 0.4–1.1MB slice chunk) instead of blank, plus a preview-shaped skeleton for /tour. (2) recharts (~150kB) is code-split out of the markdown slice — it only loads when a chart fence actually renders, not on every markdown page (ChartBlock now next/dynamic's a ChartCanvas chunk, mirroring the already-lazy MermaidBlock). (3) the slice-files fs walkers get cacheLife('max') + cacheTag('slice-files') so immutable repo files cache for the deploy's life instead of a 5–15min revalidate. (4) 25 zero-interactivity preview pages + the docs footer + code-tab dropped 'use client', leaving the client graph so they PPR-prerender. (5) dropped 13 unused @radix-ui/react-* direct deps (all UI already uses the radix-ui meta package) + collapsed 5 dead optimizePackageImports entries to one.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          { "text": "markdown — recharts code-split behind next/dynamic (ChartBlock → ChartCanvas + chart-spec)", "slug": "markdown" }
+        ]
+      }
+    ]
+  },
+  {
     "id": "SS-variants",
     "version": "slice-variants-wave",
     "date": 1783036800000,

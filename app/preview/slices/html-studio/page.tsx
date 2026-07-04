@@ -1,5 +1,3 @@
-"use client";
-
 import { HtmlStudio } from "@/features/html-studio";
 
 // Live preview: the sandboxed HTML/CSS/JS editor + live iframe preview on the

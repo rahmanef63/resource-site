@@ -1,5 +1,3 @@
-"use client";
-
 import { MediaStudio } from "@/features/design-studio";
 
 // Live preview: the offline design canvas on its demo composition.

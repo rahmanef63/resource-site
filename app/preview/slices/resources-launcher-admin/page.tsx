@@ -1,5 +1,3 @@
-"use client";
-
 import { ResourcesAdmin } from "@/features/resources-launcher-admin";
 
 // Live preview: the curated icon-launcher CRUD on the in-memory mock store.

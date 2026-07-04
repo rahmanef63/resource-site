@@ -1,5 +1,3 @@
-"use client";
-
 import { Search, Globe, Share2 } from "lucide-react";
 import {
   SlicePreviewLayout,

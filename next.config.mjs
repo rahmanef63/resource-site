@@ -46,11 +46,7 @@ const nextConfig = {
     optimizePackageImports: [
       "lucide-react",
       "@tabler/icons-react",
-      "@radix-ui/react-dialog",
-      "@radix-ui/react-dropdown-menu",
-      "@radix-ui/react-tabs",
-      "@radix-ui/react-tooltip",
-      "@radix-ui/react-scroll-area",
+      "radix-ui",
       "cmdk",
       "sonner",
     ],

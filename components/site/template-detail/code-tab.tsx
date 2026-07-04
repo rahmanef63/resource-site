@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { FileCode, Package, Rocket, Terminal } from "lucide-react";
 import { CodeBlock } from "@/components/site/code-block";

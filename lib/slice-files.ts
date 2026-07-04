@@ -1,4 +1,5 @@
 import { cache } from "react";
+import { cacheLife, cacheTag } from "next/cache";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 
@@ -59,6 +60,10 @@ function isTextFile(name: string): boolean {
 export const readSliceFiles = cache(
   async function readSliceFiles(slicePath: string): Promise<SliceFile[]> {
     "use cache";
+    // Repo files are immutable within a deploy — cache for the deploy's life
+    // instead of the default 5–15min revalidate. Bust via revalidateTag on redeploy.
+    cacheLife("max");
+    cacheTag("slice-files");
     return readPathsFiles([slicePath]);
   },
 );
@@ -72,6 +77,8 @@ export const readSliceFiles = cache(
  * cache wouldn't dedupe across call sites. Caller can wrap if needed. */
 export async function readPathsFiles(rootPaths: string[]): Promise<SliceFile[]> {
   "use cache";
+  cacheLife("max");
+  cacheTag("slice-files");
   const repoRoot = process.cwd();
   const out: SliceFile[] = [];
   const multi = rootPaths.length > 1;

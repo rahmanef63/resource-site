@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { Users, Send } from "lucide-react";
 import { SlicePreviewLayout, PreviewSection, FlowDiagram } from "@/components/slice-previews/preview-layout";

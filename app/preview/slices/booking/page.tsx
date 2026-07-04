@@ -1,5 +1,3 @@
-"use client";
-
 import { Booking } from "@/features/booking";
 
 // Live preview: the request form + owner inbox on the in-memory mock store.

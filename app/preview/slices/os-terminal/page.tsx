@@ -1,5 +1,3 @@
-"use client";
-
 import { Terminal } from "@/features/os-terminal";
 
 // Live preview: the shell emulator in mock mode — 17 built-ins (try `help`,

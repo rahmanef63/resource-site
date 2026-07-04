@@ -1,5 +1,3 @@
-"use client";
-
 import { SystemMonitor } from "@/features/system-monitor";
 
 // Live preview: gauges + sparklines + process table on the wavy mock

@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { ShieldCheck } from "lucide-react";
 import { PreviewPage, PreviewHeader } from "@/components/site/preview-kit";

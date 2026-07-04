@@ -9,20 +9,23 @@
     "consumerPath": "slices/markdown"
   },
   "files": [
+    "CHANGELOG.md",
     "components/ChartBlock.tsx",
+    "components/ChartCanvas.tsx",
     "components/MarkdownPage.tsx",
     "components/MarkdownReader.tsx",
     "components/MdNodeView.tsx",
     "components/MermaidBlock.tsx",
     "components/ReviewTab.tsx",
     "components/WriteTab.tsx",
+    "components/chart-spec.ts",
     "config.ts",
     "index.ts",
     "lib/comments.ts",
     "lib/inline.tsx",
-    "lib/parse.test.ts",
+    "lib/katex-lazy.tsx",
     "lib/parse.ts",
-    "slice.json"
+    "preview.tsx"
   ],
   "imports": {
     "shared": [],

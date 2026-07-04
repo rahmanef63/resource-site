@@ -1,5 +1,3 @@
-"use client";
-
 import { Browser } from "@/features/browser";
 
 // Live preview: full browser chrome on the offline canvas demo renderer —

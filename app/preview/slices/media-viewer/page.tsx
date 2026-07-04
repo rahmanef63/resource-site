@@ -1,5 +1,3 @@
-"use client";
-
 import { MediaViewer } from "@/features/media-viewer";
 
 // Live preview: the quick-look viewer on its offline sample gallery.
