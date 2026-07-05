@@ -10,16 +10,20 @@ export function buildBestPracticesPrompt(): string {
   const sections = BEST_PRACTICES.map((section) => {
     const rules = section.rules
       .map((r) => {
-        const lines = [`- **${r.title}** — ${r.rule}`];
+        const badge = r.tier ? `[${r.tier}] ` : "";
+        const lines = [`- **${badge}${r.title}** — ${r.rule}`];
         if (r.why) lines.push(`  - Why: ${r.why}`);
         return lines.join("\n");
       })
       .join("\n");
+    const tier = section.tier ? ` (${section.tier})` : "";
     const intro = section.intro ? `\n${section.intro}\n` : "";
-    return `## ${section.title}${intro}\n${rules}`;
+    return `## ${section.title}${tier}${intro}\n${rules}`;
   }).join("\n\n");
 
-  return `You are coding inside a project that follows Rahman Resources (rr) conventions. Honor every rule below for every file you write or edit. When in doubt, ask before deviating.
+  return `You are coding inside a project that follows Rahman Resources (rr) conventions. Honor every rule below for every file you write or edit.
+
+Every rule carries a tier — **P0** (security & data integrity, never violate), **P1** (architecture, violate only with a \`// TODO(rr): …\` marker + commit-body note), **P2** (style, tooling-enforced). When two rules conflict, the higher tier wins. When you can't ask the user mid-task: take the recommended option, mark \`// TODO(rr): confirm — chose X over Y because …\`, and continue. Never silently guess. If a P0 conflicts with the task itself, STOP and report — do not route around P0.
 
 # rr conventions (single source of truth)
 
@@ -27,16 +31,14 @@ ${sections}
 
 ---
 
-# How to apply
+# Agent protocol
 
-- BEFORE writing code: scan whether the change crosses a rule. If yes, follow the rule even if the user didn't mention it.
-- BEFORE introducing a dependency: check whether an rr slice covers it (\`npx rr list slices\` or the catalog at /slices).
-- BEFORE adding a new feature: check if it should be a vertical slice under \`frontend/slices/<slug>/\` + \`convex/features/<slug>/\` per the structure rules.
-- AFTER editing: run \`npx tsc --noEmit\` and any project-local \`npm run validate:*\` before committing.
-
-# Output format
-
-When you propose a change, state which rules it honors. Example: "I'm using \`requireAdmin\` from \`convex/_shared/auth\` per the 'Server-side authz on every mutation' rule, and indexing the query via \`.withIndex\` per 'No bare .collect()'."
-
-If you find existing code that violates a rule, point it out — but only fix it if the user asks, since the diff may surface scope-creep.`;
+1. BEFORE writing code: scan whether the change crosses a rule; follow it even if unasked.
+2. BEFORE adding a dependency: check the rr catalog (\`npx rr list\` or /slices) first.
+3. BEFORE a new feature: does it belong in \`slices/<slug>/\` (+ \`convex/features/<slug>/\`)?
+4. AFTER editing: \`npx tsc --noEmit\` + relevant \`npm run validate:*\` / \`audit:*\`.
+5. When proposing changes, STATE which rules they honor — e.g. "Using \`requireAdmin\` per 'server-side authz'; indexed via \`.withIndex\` per 'no bare .collect()'."
+6. Existing code violating a rule: point it out, fix ONLY if asked (scope-creep guard).
+7. Blocked on a decision and can't ask: take the recommended option, mark \`// TODO(rr): …\`, list it in the commit body.
+8. P0 conflict with the task itself: stop and report; do not route around P0.`;
 }

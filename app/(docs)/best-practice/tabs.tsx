@@ -5,7 +5,23 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Check, Copy } from "lucide-react";
 import { DocCard } from "@/components/site/doc-primitives";
-import type { BestPracticeSection } from "@/lib/content/best-practices";
+import type { BestPracticeSection, BestPracticeTier } from "@/lib/content/best-practices";
+
+const TIER_STYLES: Record<BestPracticeTier, string> = {
+  P0: "bg-destructive/10 text-destructive border-destructive/30",
+  P1: "bg-amber-500/10 text-amber-600 border-amber-500/30 dark:text-amber-400",
+  P2: "bg-muted text-muted-foreground border-border",
+};
+
+function TierBadge({ tier }: { tier: BestPracticeTier }) {
+  return (
+    <span
+      className={`inline-flex shrink-0 items-center rounded-md border px-1.5 py-0.5 text-[10px] font-semibold ${TIER_STYLES[tier]}`}
+    >
+      {tier}
+    </span>
+  );
+}
 
 type Props = {
   sections: BestPracticeSection[];
@@ -24,7 +40,10 @@ export function BestPracticeTabs({ sections, prompt }: Props) {
         {sections.map((section) => (
           <section key={section.id} className="space-y-4">
             <div>
-              <h2 className="text-2xl font-semibold tracking-tight">{section.title}</h2>
+              <h2 className="flex items-center gap-2 text-2xl font-semibold tracking-tight">
+                {section.title}
+                {section.tier && <TierBadge tier={section.tier} />}
+              </h2>
               {section.intro && (
                 <p className="mt-1 text-sm text-muted-foreground max-w-3xl">
                   {section.intro}
@@ -34,7 +53,10 @@ export function BestPracticeTabs({ sections, prompt }: Props) {
             <div className="grid grid-cols-1 gap-3">
               {section.rules.map((r) => (
                 <DocCard key={r.title} className="min-w-0 p-4 space-y-2">
-                  <h3 className="text-sm font-semibold">{r.title}</h3>
+                  <h3 className="flex items-center gap-2 text-sm font-semibold">
+                    {r.tier && <TierBadge tier={r.tier} />}
+                    {r.title}
+                  </h3>
                   <p className="text-sm text-muted-foreground">{r.rule}</p>
                   {r.why && (
                     <p className="text-xs text-muted-foreground">
