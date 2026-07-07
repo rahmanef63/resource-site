@@ -1,0 +1,172 @@
+/**
+ * appshell skin utilities — composed material surfaces, press feedback and the
+ * app-icon tile. Split from appshell.css (which @imports this file, so
+ * consumers still import only appshell.css). Everything here is driven by the
+ * ChromeKit vars applied per shell (use-shell-tokens.ts): --glass-enabled,
+ * --saturate, --icon-gloss, --icon-plate, --ease-*.
+ *
+ * Motion note: the .press-* transitions are zeroed by the global reduce-motion
+ * kill-switches in app/globals.css (.reduce-motion / prefers-reduced-motion,
+ * !important zero durations) — feedback stays, motion dies. No extra guard.
+ */
+@layer components {
+  /* ── material surfaces ─────────────────────────────────────────────────────
+     One utility per chrome material (bar / menu-popover / window body): the
+     per-shell surface var + glass gated on the kit axes. Replaces the ad-hoc
+     `bg-card/95 backdrop-blur` call sites so a kit can retint or flatten every
+     surface centrally (Android: --glass-enabled 0 ⇒ flat M3 tint). */
+  .material-bar {
+    background: var(--glass-bar);
+    -webkit-backdrop-filter: blur(calc(var(--blur) * var(--glass-enabled, 1)))
+      saturate(var(--saturate, 180%));
+    backdrop-filter: blur(calc(var(--blur) * var(--glass-enabled, 1)))
+      saturate(var(--saturate, 180%));
+  }
+  .material-menu {
+    background: var(--glass-menu);
+    -webkit-backdrop-filter: blur(calc(var(--blur) * var(--glass-enabled, 1)))
+      saturate(var(--saturate, 180%));
+    backdrop-filter: blur(calc(var(--blur) * var(--glass-enabled, 1)))
+      saturate(var(--saturate, 180%));
+  }
+  .material-window {
+    background: var(--window-bg);
+    -webkit-backdrop-filter: blur(calc(var(--blur) * var(--glass-enabled, 1)))
+      saturate(var(--saturate, 180%));
+    backdrop-filter: blur(calc(var(--blur) * var(--glass-enabled, 1)))
+      saturate(var(--saturate, 180%));
+  }
+
+  /* ── press feedback (GestureProfile.pressFeedback) ─────────────────────────
+     Applied by the touch surfaces in later phases: iOS/macOS press = scale,
+     Android press = M3 ripple state-layer (CSS-only approximation: expands
+     while held, fades on release). */
+  .press-scale {
+    transition: transform 160ms var(--ease-standard, cubic-bezier(0.2, 0.8, 0.2, 1));
+  }
+  .press-scale:active {
+    transform: scale(0.92);
+  }
+  .press-ripple {
+    position: relative;
+    overflow: hidden;
+  }
+  .press-ripple::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(circle at 50% 50%, currentColor 0%, transparent 70%);
+    opacity: 0;
+    transform: scale(0.5);
+    transition:
+      opacity 300ms var(--ease-decel, cubic-bezier(0.05, 0.7, 0.1, 1)),
+      transform 300ms var(--ease-decel, cubic-bezier(0.05, 0.7, 0.1, 1));
+  }
+  .press-ripple:active::after {
+    opacity: 0.12;
+    transform: scale(1.6);
+  }
+
+  /* ── ripple (pointer-anchored, M3 standard) ────────────────────────────────
+     A real Material ink ripple, distinct from .press-ripple above (which is a
+     center-fixed :active approximation with no JS). Contract for the
+     useRipple()-style hook (owned elsewhere): put `.ripple-host` on the tap
+     target itself (position:relative + overflow:hidden so the ink clips to
+     the target's own shape/radius); on pointerdown the hook injects an
+     absolutely-positioned `<span class="ripple-ink">` sized to cover the
+     target's longest dimension, positioned so its center sits at the pointer
+     coords (left/top/width/height set inline by the hook), then removes the
+     node on animationend. `currentColor` picks up whatever `color` the
+     consumer sets, so a filled/tonal surface gets a matching-tinted ink
+     without any extra prop. Generic naming (not Android-specific) since
+     other press-feedback profiles could reuse it too. */
+  .ripple-host {
+    position: relative;
+    overflow: hidden;
+  }
+  .ripple-ink {
+    position: absolute;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.16;
+    pointer-events: none;
+    transform: scale(0);
+    animation: ripple-expand 450ms cubic-bezier(0.2, 0, 0, 1) forwards;
+  }
+  @keyframes ripple-expand {
+    to {
+      transform: scale(2.5);
+      opacity: 0;
+    }
+  }
+
+  /* ── app-icon tile ─────────────────────────────────────────────────────────
+     The shade/depth + glyph treatment for an app icon, defined ONCE and applied
+     wherever an icon/showcase tile is drawn (AppIcon, the App Store + Docs
+     lists, the desktop showcase icons). It layers over ANY `background` — a
+     flat colour or an app's `linear-gradient` — so the look stays DRY +
+     dynamic, no per-app styling. In @layer components (below Tailwind's
+     utilities) so a per-call-site override like `rounded-full` still wins.
+     Theme-independent: a macOS icon looks the same in light or dark.
+
+     Per-OS gating (kit icon axes, calc-in-color keeps it pure-var):
+     --icon-plate keeps only the hairline contour; --icon-gloss owns the whole
+     Sonoma depth stack (contact line, soft drop, bevel, base shade, dome, rim).
+     macOS (1,1) full · iOS (0,1) flat squircle NO drop shadow · Android (0,1)
+     flat circle · Windows (0,0) plate-less glyph. */
+  .icon-tile {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-icon);
+    /* dark separation contour · contact line · soft drop · inner top bevel · inner base shade */
+    box-shadow:
+      0 0 0 0.5px rgba(0, 0, 0, calc(0.1 * var(--icon-plate, 1))),
+      0 1px 1px rgba(0, 0, 0, calc(0.18 * var(--icon-gloss, 1))),
+      0 4px 10px -3px rgba(0, 0, 0, calc(0.26 * var(--icon-gloss, 1))),
+      inset 0 1px 1px rgba(255, 255, 255, calc(0.5 * var(--icon-gloss, 1))),
+      inset 0 -3px 6px -2px rgba(0, 0, 0, calc(0.15 * var(--icon-gloss, 1)));
+  }
+  /* shade the fill colour: a gentle top wash (Sonoma-matte, not a glossy hot
+     spot) + a soft lit-top → dark-bottom ramp so the base colour deepens toward
+     the base — the requested "shade di bg fill", over any colour. */
+  .icon-tile::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: var(--icon-gloss, 1);
+    background:
+      radial-gradient(120% 80% at 50% -10%, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0) 72%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.02) 36%, rgba(0, 0, 0, 0.06) 66%, rgba(0, 0, 0, 0.18) 100%);
+  }
+  /* light top rim only (the dark separation comes from the box-shadow contour) */
+  .icon-tile::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: var(--icon-gloss, 1);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+  /* the glyph — white with an all-around contour so it stays legible even on the
+     palest brand fills; centred above the shade. One rule → every tile matches
+     (the badge's own <svg> is nested, so `> svg` only hits the app glyph). */
+  .icon-tile > svg {
+    position: relative;
+    z-index: 1;
+    color: #fff;
+    filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.45)) drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.4));
+  }
+  /* plate:0 (Windows — flat Fluent glyphs, no tile). The fill is an inline
+     per-app gradient (app-icon.tsx style prop) which only !important beats,
+     and CSS cannot key a rule on a custom-property VALUE without style
+     queries — so this one gate rides the data-shell attribute instead of
+     --icon-plate. P3 (Windows pass) recolors the glyph per app. */
+  [data-shell="windows"] .icon-tile {
+    background: transparent !important;
+  }
+}

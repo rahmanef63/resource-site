@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useMemo } from "react";
-import { Keyboard, X } from "lucide-react";
+import { Keyboard, X } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import {
   setShortcutHelpOpen,
   useShortcutHelpOpen,
   useShortcuts,
   type ShortcutHint,
-} from "@/features/appshell";
+} from "../../../lib/shortcuts";
 
 // ⌘/ cheat sheet — every registered shortcut hint, grouped.
 export function ShortcutHelpOverlay() {

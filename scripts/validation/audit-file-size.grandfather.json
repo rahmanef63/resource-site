@@ -1,1 +1,4 @@
-[]
+[
+  "frontend/slices/appshell/components/desktop-icons.tsx",
+  "frontend/slices/appshell/components/window.tsx"
+]

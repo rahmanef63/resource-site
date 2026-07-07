@@ -10,11 +10,10 @@ import type { ShellId } from "./shells";
 export type SlotRegion =
   | "overlay" // full-screen overlays (e.g. command palette) — desktop + mobile
   | "rightPanel" // desktop right dock (e.g. inspector)
+  | "menuBarStatus" // desktop menu-bar trailing cluster (e.g. control center)
   | "notifications" // transient toast stack — desktop + mobile
   | "topPill" // mobile top-center status pill (e.g. dynamic island)
   | "controlCenter" // mobile pull-down control center
-  | "menuBarStatus" // desktop menu-bar trailing cluster (e.g. control center)
-  | "today" // mobile widgets / today page
   | "desktopWidgets"; // desktop wallpaper-layer widget stack (behind windows)
 
 /**
@@ -24,13 +23,14 @@ export type SlotRegion =
  */
 export type FeatureDescriptor = {
   id: string;
+  /** System default (search/⌘K, inspector, notifications, control-center,
+   *  widgets) vs a custom feature added by the host. Documents provenance;
+   *  default "system". */
+  kind?: "system" | "custom";
   /** Components mounted into named surface regions. */
   slots?: Partial<Record<SlotRegion, ComponentType>>;
   /** Optional context provider the feature needs wrapped around the shell. */
   provider?: ComponentType<{ children: ReactNode }>;
-  /** System default (search/inspector/notifications/control-center/widgets) vs
-   *  a custom feature added by the host. Documents provenance; default "system". */
-  kind?: "system" | "custom";
 };
 
 export type Brand = {
@@ -56,18 +56,13 @@ export type ShellManifest = {
   routing?: boolean;
   /** Sync document.title to the focused window ("App — Brand"). Default on. */
   titleSync?: boolean;
-  /**
-   * OPTIONAL agentic seam. A consumer that wires an agent (e.g. rr) passes a
-   * tiny mount component here that self-registers the shell's ToolCollection
-   * (via @/shared/agentic `useAgentTools`). appshell CORE never imports the
-   * agentic kit — a consumer WITHOUT a @/shared/agentic module simply omits
-   * this and the shell stays agent-free. The component renders null; it exists
-   * only to host the registration hook at a stable position.
-   */
-  agentMount?: ComponentType;
   /** Initial shell (macOS/Windows/Dashboard/…). Unset = responsive auto. The
    *  user's live choice (Settings → Shell) overrides this and persists. */
   shell?: ShellId;
+  /** rr: optional agent surface (e.g. AppshellAgentMount from ./agentic) that
+   *  self-registers its tools on the host. Upstream keeps agentic out of core;
+   *  this slice mounts it here when the consumer supplies it. */
+  agentMount?: ComponentType;
 };
 
 /** Identity helper — gives a feature its type + a stable authoring shape. */

@@ -22,9 +22,19 @@ export function AppFrame({
   children: ReactNode;
   className?: string;
   bodyClassName?: string;
-  /** Pad the body for notch/home-bar (mobile fullscreen). Default on. */
-  safeArea?: boolean;
+  /**
+   * Which safe areas to pad the scrolling body for. `true` (default, the
+   * original behavior) = bottom only — home-indicator clearance on a phone, a
+   * no-op var(--sai-bottom) everywhere else. `"top"` / `"both"` additionally
+   * reserve pt-11 (the 44px status-bar row): opt in when the OS chrome floats
+   * OVER the app instead of reserving its own header row — today only the
+   * mobile fullscreen app layer (mobile-shell.tsx) needs that, now that its
+   * OS-imposed header is gone (P2 ios-fullscreen-app-chrome).
+   */
+  safeArea?: boolean | "top" | "bottom" | "both";
 }) {
+  const padTop = safeArea === "top" || safeArea === "both";
+  const padBottom = safeArea === true || safeArea === "bottom" || safeArea === "both";
   return (
     <div className={cn("@container flex h-full min-h-0 flex-col", className)}>
       {header && (
@@ -36,7 +46,8 @@ export function AppFrame({
       <div
         className={cn(
           "min-h-0 flex-1 overflow-auto",
-          safeArea && "[padding-bottom:var(--sai-bottom)]",
+          padTop && "pt-11",
+          padBottom && "[padding-bottom:var(--sai-bottom)]",
           bodyClassName,
         )}
       >

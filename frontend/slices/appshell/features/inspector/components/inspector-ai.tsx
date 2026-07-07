@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Send } from "lucide-react";
+import { PaperPlaneTilt as Send } from "@phosphor-icons/react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -18,7 +18,7 @@ function errText(err: unknown): string {
 
 // Scoped Alfa chat. Prepends the focused app's context so replies are grounded
 // in what the user is looking at (the mock-os "AI mode" per app, made real).
-export function InspectorAI({ subject, info }: { appId: string; subject: string; info: InspectorInfo }) {
+export function InspectorAI({ appId, subject, info }: { appId: string; subject: string; info: InspectorInfo }) {
   const chat = useShellChat();
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [busy, setBusy] = useState(false);

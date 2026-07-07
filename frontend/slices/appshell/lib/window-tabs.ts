@@ -1,7 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { M, emit, patch, shellStore } from "./store-state";
+import { M, emit, patch, shellStore, topWindowBy } from "./store-state";
 import { registerCommands } from "./commands";
 import { focusWindow } from "./store";
 import { spaceOf } from "./spaces";
@@ -21,17 +21,7 @@ export function groupMembers(groupId: string): WinId[] {
 
 /** The member that renders for the group (highest z, not minimized). */
 export function groupTop(groupId: string): WinId | null {
-  let best: WinId | null = null;
-  let bestZ = -1;
-  for (const id of groupMembers(groupId)) {
-    const w = M.state.windows[id];
-    if (!w || w.minimized) continue;
-    if (w.z > bestZ) {
-      bestZ = w.z;
-      best = id;
-    }
-  }
-  return best;
+  return topWindowBy(groupMembers(groupId));
 }
 
 export function useGroupTop(groupId: string | undefined): WinId | null {

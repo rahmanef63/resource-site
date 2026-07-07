@@ -4,7 +4,6 @@
    complementary zone. Pick one → it snaps to fill the half. Listens to the store's
    transient `onSnap` pulse; the pick itself only calls existing actions (restore /
    snapWindow), so it forks no window state. Windows-shell local UI. */
-import { Button } from "@/components/ui/button";
 import { useEffect, useRef, useState } from "react";
 import { useWindowOrder } from "../../../hooks/use-shell";
 import { useApps } from "../../../lib/registry";
@@ -51,28 +50,24 @@ export function SnapAssist() {
     setState(null);
   };
 
-  // Position the panel over the empty half (snapRect is in surface coords; the
-  // windows-shell section is inset-0, so they map straight to absolute px).
+  // Position the candidates over the empty half (snapRect is in surface
+  // coords; the windows-shell section is inset-0, so they map straight to
+  // absolute px). Real Win11 Snap Assist has NO scrim and NO panel chrome —
+  // the thumbnails float directly over the wallpaper in the empty half; only
+  // a transparent click-away layer sits behind them to dismiss on an outside
+  // click.
   const r = snapRect(state.fill);
 
   return (
-    <div
-      className="absolute inset-0 z-[55] bg-black/30 backdrop-blur-[2px] animate-in fade-in duration-150"
-      onClick={() => setState(null)}
-    >
+    <div className="absolute inset-0 z-[55]" onClick={() => setState(null)}>
       <div
-        className="absolute flex flex-col gap-3 overflow-auto rounded-2xl border border-white/15 bg-card/70 p-4 shadow-2xl backdrop-blur-xl"
+        className="absolute grid animate-in content-center gap-3 fade-in duration-150 sm:grid-cols-2"
         style={{ left: r.x, top: r.y, width: r.w, height: r.h }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="shrink-0 text-center text-xs font-medium uppercase tracking-widest text-muted-foreground">
-          Fill the {state.fill} half
-        </div>
-        <div className="grid flex-1 content-start gap-3 sm:grid-cols-2">
-          {candidates.map((id) => (
-            <Candidate key={id} id={id} app={apps} onPick={() => pick(id)} />
-          ))}
-        </div>
+        {candidates.map((id) => (
+          <Candidate key={id} id={id} app={apps} onPick={() => pick(id)} />
+        ))}
       </div>
     </div>
   );
@@ -83,10 +78,10 @@ function Candidate({ id, app, onPick }: { id: string; app: ReturnType<typeof use
   if (!win) return null;
   const a = app.find((x) => x.id === win.app);
   return (
-    <Button type="button" variant="ghost"
+    <button
       onClick={onPick}
       title={win.title}
-      className="h-auto p-0 font-normal hover:bg-transparent group flex flex-col overflow-hidden rounded-xl border border-border bg-background text-left shadow transition hover:-translate-y-0.5 hover:ring-2 hover:ring-primary"
+      className="group flex flex-col overflow-hidden rounded-xl border border-border bg-background text-left shadow transition hover:-translate-y-0.5 hover:ring-2 hover:ring-primary"
     >
       <div className="h-6 w-full" style={{ background: a?.gradient ?? "var(--muted)" }} />
       <div className="grid flex-1 place-items-center py-4">
@@ -96,6 +91,6 @@ function Candidate({ id, app, onPick }: { id: string; app: ReturnType<typeof use
         {a && <span className="size-4 shrink-0"><AppIcon app={a} /></span>}
         <span className="min-w-0 flex-1 truncate text-xs font-medium">{win.title}</span>
       </div>
-    </Button>
+    </button>
   );
 }

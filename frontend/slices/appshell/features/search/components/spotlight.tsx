@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { MagnifyingGlass as Search } from "@phosphor-icons/react";
 import {
   useApps,
   useCommands,
@@ -19,6 +18,9 @@ import {
 } from "@/features/appshell";
 
 import { matches, type Command } from "../lib";
+import { evaluate } from "../lib/calc";
+import { convert } from "../lib/convert";
+import { SpotlightRow } from "./spotlight-parts";
 
 // The panel MOUNTS per open (and unmounts on close), so query/selection state
 // starts fresh every time without effect-driven resets (set-state-in-effect).
@@ -88,19 +90,30 @@ function SpotlightPanel() {
 
   const results = useMemo(() => {
     const base = commands.filter((c) => matches(q, c.keywords ? `${c.label} ${c.keywords}` : c.label));
-    const folderCmds: Command[] = folderHits.map((h) => ({
-      id: h.id,
-      label: h.label,
-      hint: h.hint ?? "Folder",
-      run: h.run,
-    }));
-    return [...base, ...folderCmds];
+    const folderCmds: Command[] = folderHits.map((h) => ({ id: h.id, label: h.label, hint: h.hint ?? "Folder", run: h.run }));
+    const ans = evaluate(q.trim()); // arithmetic query → synthetic "= <answer>" row on top; runAt's toast confirms it
+    const calcCmds: Command[] = ans === null ? [] : [{ id: "calc", label: `= ${ans}`, hint: "Result", run: () => void navigator.clipboard?.writeText(String(ans)) }];
+    const conv = convert(q.trim()); // unit query ("10 km to mi") → synthetic "= <result> <unit>" row, same pattern as calc
+    const convCmds: Command[] = conv === null ? [] : [{ id: "convert", label: `= ${conv}`, hint: "Convert", run: () => void navigator.clipboard?.writeText(conv) }];
+    // Web fallback pinned LAST (like macOS Spotlight) so a query never dead-ends —
+    // opens a REAL search tab (the in-OS browser app is a mock, so don't route through it).
+    const query = q.trim();
+    const webCmds: Command[] = query
+      ? [{ id: "web", label: `Search the web for “${query}”`, hint: "Web", run: () => window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, "_blank", "noopener,noreferrer") }]
+      : [];
+    return [...convCmds, ...calcCmds, ...base, ...folderCmds, ...webCmds];
   }, [commands, q, folderHits]);
 
-  // Focus after the open transition paints (mount = open).
+  // Focus after the open transition paints (mount = open); restore focus to the
+  // element that opened Spotlight on close (cleanup runs on unmount = close).
+  const prevFocusRef = useRef<HTMLElement | null>(null);
   useEffect(() => {
+    prevFocusRef.current = document.activeElement as HTMLElement | null;
     const id = requestAnimationFrame(() => inputRef.current?.focus());
-    return () => cancelAnimationFrame(id);
+    return () => {
+      cancelAnimationFrame(id);
+      prevFocusRef.current?.focus();
+    };
   }, []);
 
   // Clamp the selection in render when results shrink — no clamp effect.
@@ -129,47 +142,49 @@ function SpotlightPanel() {
     }
   };
 
+  // Stable ids so the input can point aria-activedescendant at the active option.
+  const listId = "spotlight-results";
+  const activeId = results.length > 0 ? `spotlight-option-${selIdx}` : undefined;
+
   return (
     <div
-      className="absolute inset-0 z-[9000] flex items-start justify-center bg-black/20 pt-[18vh]"
+      className="absolute inset-0 z-[9000] flex items-start justify-center bg-transparent pt-[18vh]"
       onClick={close}
     >
       <div
-        className="glass w-full max-w-xl overflow-hidden rounded-2xl border border-border shadow-2xl"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Spotlight search"
+        className="glass w-full max-w-[680px] overflow-hidden rounded-2xl border border-border shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <input
-          ref={inputRef}
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          onKeyDown={onKey}
-          placeholder="Search apps, folders, actions…"
-          className="w-full bg-transparent px-5 py-4 text-base outline-none placeholder:text-muted-foreground"
-        />
+        <div className="flex items-center gap-3 px-5 py-3">
+          <Search className="size-5 shrink-0 text-muted-foreground" />
+          <input
+            ref={inputRef}
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            onKeyDown={onKey}
+            placeholder="Search apps, folders, actions…"
+            aria-label="Spotlight search"
+            role="combobox"
+            aria-expanded={results.length > 0}
+            aria-controls={listId}
+            aria-activedescendant={activeId}
+            className="w-full bg-transparent text-[22px] font-normal outline-none placeholder:text-muted-foreground"
+          />
+        </div>
         {results.length > 0 && (
-          <ul className="max-h-80 overflow-y-auto border-t border-border p-2">
+          <ul id={listId} role="listbox" className="max-h-80 overflow-y-auto border-t border-border p-2">
             {results.map((c, i) => (
-              <li key={c.id}>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  onMouseMove={() => setSel(i)}
-                  onClick={() => runAt(i)}
-                  className={cn(
-                    "h-auto flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm",
-                    i === selIdx ? "bg-primary/15 text-foreground" : "text-foreground/80",
-                  )}
-                >
-                  <span
-                    className="grid size-7 shrink-0 place-items-center rounded-md text-xs font-bold text-white"
-                    style={{ background: c.app?.gradient ?? "var(--accent)" }}
-                  >
-                    {c.app ? null : c.hint === "Folder" ? "📁" : "⚡"}
-                  </span>
-                  <span className="flex-1 truncate">{c.label}</span>
-                  <span className="text-[11px] text-muted-foreground">{c.hint}</span>
-                </Button>
-              </li>
+              <SpotlightRow
+                key={c.id}
+                cmd={c}
+                index={i}
+                selected={i === selIdx}
+                onHover={() => setSel(i)}
+                onRun={() => runAt(i)}
+              />
             ))}
           </ul>
         )}

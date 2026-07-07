@@ -47,13 +47,8 @@ function urlToApp(
   return { app, path: rest.length ? "/" + rest.join("/") : undefined };
 }
 
-// Visible = focused AND not minimized. Mobile/android "home" dismisses by
-// minimizing (the window stays alive for instant resume, focus is untouched),
-// so the URL must derive from visibility, not bare focus — minimize → "/",
-// restore → the slug again.
-function visibleAppId(): string | null {
-  const win = shellStore.getWindow(shellStore.getFocused() ?? "");
-  return win && !win.minimized ? win.app : null;
+function focusedAppId(): string | null {
+  return shellStore.getWindow(shellStore.getFocused() ?? "")?.app ?? null;
 }
 
 /** Two-way focused-app ⇄ URL sync. Rendered (null) inside <AppShell>. */
@@ -61,7 +56,7 @@ export function UrlSync({ apps }: { apps: AppDescriptor[] }) {
   const pathname = usePathname();
   const focused = useFocused();
   const win = useWindow(focused ?? "");
-  const visibleApp = win && !win.minimized ? win.app : null;
+  const focusedApp = win?.app ?? null;
   const payload = win?.payload;
 
   const pathnameRef = useRef(pathname);
@@ -74,37 +69,34 @@ export function UrlSync({ apps }: { apps: AppDescriptor[] }) {
   });
 
   // State → URL. push on app change (so back/forward walks focus history),
-  // replace on same-app path tweaks AND on dismiss (visibleApp null → "/",
-  // e.g. mobile "Done" minimizes the focused window). The first pass only
-  // records the baseline so a deep-linked URL isn't clobbered before
-  // URL→state opens its window.
+  // replace on same-app path tweaks. The first pass only records the baseline
+  // so a deep-linked URL isn't clobbered before URL→state opens its window.
   useEffect(() => {
-    const target = stateToUrl(apps, visibleApp, payload);
+    const target = stateToUrl(apps, focusedApp, payload);
     if (!booted.current || target === pathnameRef.current) {
       booted.current = true;
-      prevApp.current = visibleApp;
+      prevApp.current = focusedApp;
       return;
     }
     // pushState on app change (so back/forward walks focus history), replaceState
     // on same-app path tweaks. usePathname tracks the History API in Next 16.
-    if (visibleApp && visibleApp !== prevApp.current) {
+    if (focusedApp && focusedApp !== prevApp.current) {
       window.history.pushState(null, "", target);
     } else {
       window.history.replaceState(null, "", target);
     }
     pathnameRef.current = target;
-    prevApp.current = visibleApp;
+    prevApp.current = focusedApp;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visibleApp, payload]);
+  }, [focusedApp, payload]);
 
   // URL → state: open/focus the app named in the URL (deep link + back/forward).
   // Reads the focused app live so a focus change can't re-enter this effect.
   useEffect(() => {
     const target = urlToApp(apps, pathname);
-    if (!target || target.app.id === visibleAppId()) return;
+    if (!target || target.app.id === focusedAppId()) return;
     // Focus an existing window rather than spawn one — else a `multi` app (Files)
-    // would open a duplicate on every back/forward (focusApp also restores a
-    // minimized one, so back from "/" onto a dismissed app's slug reopens it).
+    // would open a duplicate on every back/forward.
     if (focusApp(target.app.id)) return;
     openWindow(
       target.app.id,

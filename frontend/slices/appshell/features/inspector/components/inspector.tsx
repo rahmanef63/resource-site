@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { PanelRightClose, Sparkles, SlidersHorizontal } from "lucide-react";
+import { SidebarSimple as PanelRightClose, Sparkle as Sparkles, SlidersHorizontal } from "@phosphor-icons/react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
   useFocusedApp,
@@ -30,25 +29,23 @@ export function Inspector() {
   const subject = app?.title ?? appId ?? "Desktop";
 
   return (
-    <aside className="absolute right-0 top-[30px] bottom-0 z-[40] flex w-[300px] max-w-[85vw] flex-col border-l border-border bg-card/80 backdrop-blur-xl">
+    <aside className="absolute right-0 top-[30px] bottom-0 z-[40] flex w-[300px] flex-col border-l border-border bg-card/80 backdrop-blur-xl">
       <header className="flex items-center gap-2 border-b border-border px-3 py-2">
-        <Sparkles className="size-4 text-[var(--accent)]" />
+        <Sparkles className="size-4 text-[var(--os-accent)]" />
         <div className="min-w-0 flex-1">
           <p className="truncate text-xs font-semibold">{subject}</p>
           {info?.subject ? (
             <p className="truncate text-[10px] text-muted-foreground">{info.subject}</p>
           ) : null}
         </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          aria-label="Close inspector (⌘I)"
+        <button
+          type="button"
           title="Close inspector (⌘I)"
           onClick={() => setInspectorOpen(false)}
-          className="size-6 rounded text-muted-foreground hover:bg-secondary"
+          className="grid size-6 place-items-center rounded text-muted-foreground hover:bg-secondary"
         >
           <PanelRightClose className="size-4" />
-        </Button>
+        </button>
       </header>
 
       <div className="flex gap-1 border-b border-border p-1.5">
@@ -60,9 +57,7 @@ export function Inspector() {
         {tab === "props" ? (
           <PropsTab info={info} />
         ) : (
-          // key: a focused-app change REMOUNTS the chat — thread/draft reset
-          // without an effect-driven setState (react-hooks/set-state-in-effect).
-          <InspectorAI key={appId ?? "desktop"} appId={appId ?? "desktop"} subject={subject} info={info ?? {}} />
+          <InspectorAI appId={appId ?? "desktop"} subject={subject} info={info ?? {}} />
         )}
       </div>
     </aside>
@@ -71,17 +66,17 @@ export function Inspector() {
 
 function TabBtn({ icon, label, on, onClick }: { icon: React.ReactNode; label: string; on: boolean; onClick: () => void }) {
   return (
-    <Button
-      variant="ghost"
+    <button
+      type="button"
       onClick={onClick}
       className={cn(
-        "h-auto flex-1 gap-1.5 rounded-md py-1.5 text-xs font-medium",
+        "flex flex-1 items-center justify-center gap-1.5 rounded-md py-1.5 text-xs font-medium transition-colors",
         on ? "bg-secondary text-foreground" : "text-muted-foreground hover:bg-secondary/60",
       )}
     >
       {icon}
       {label}
-    </Button>
+    </button>
   );
 }
 
@@ -113,14 +108,14 @@ function PropsTab({ info }: { info: ReturnType<typeof useInspectorInfo> }) {
             </p>
             <div className="flex flex-wrap gap-1.5">
               {info.actions.map((a) => (
-                <Button
+                <button
                   key={a.id}
-                  variant="outline"
+                  type="button"
                   onClick={() => void a.run()}
-                  className="h-auto rounded-md px-2.5 py-1 text-xs"
+                  className="rounded-md border border-border bg-background px-2.5 py-1 text-xs hover:bg-secondary"
                 >
                   {a.label}
-                </Button>
+                </button>
               ))}
             </div>
           </div>

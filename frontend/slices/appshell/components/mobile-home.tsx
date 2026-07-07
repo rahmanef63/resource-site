@@ -1,84 +1,66 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import { MagnifyingGlass as Search } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { AppDescriptor } from "../lib/types";
 import { AppIcon } from "./app-icon";
-import { Clock } from "./clock";
-import { Slot } from "../registry/feature-registry";
 import { MobileAppLibrary } from "./mobile-app-library";
-import { AppActionSheet, AppsGrid } from "./mobile-home-parts";
+import { AppActionSheet } from "./mobile-action-sheet";
+import { Page, AppsGrid, useLongPress } from "./mobile-home-parts";
+import { MobileStatusBar } from "./mobile-status-bar";
+import { useEdgeDrag, type EdgeSide } from "./mobile-edge-drag";
 
-// Paged iPhone home: [Today widgets] · [App grid] · [App Library]. The status
-// clock, dock, page dots and home-indicator persist across pages.
+// Paged iPhone home: [App grid] · [App Library]. The dock, search pill/page
+// dots and home-indicator persist across pages.
 export function MobileHome({
   apps,
   dockApps,
-  inactive = false,
   onLaunch,
   onSearch,
-  onControlCenter,
-  onNotifications,
+  onEdgeDrag,
+  onEdgeDragEnd,
+  hasNotifications,
   indicator,
 }: {
   apps: AppDescriptor[];
   dockApps: AppDescriptor[];
-  inactive?: boolean; // an app layer covers the home — pull it from tab/AT order
-  onLaunch: (app: AppDescriptor) => void;
+  onLaunch: (app: AppDescriptor, rect?: DOMRect) => void;
   onSearch: () => void;
-  onControlCenter: () => void;
-  onNotifications?: () => void;
+  /** Top-edge pull gesture (P2 ios-nc-cc-drag-follow) — see mobile-edge-drag.ts
+   *  for the full contract. `onEdgeDrag` fires continuously (0→1) while
+   *  pulling; `onEdgeDragEnd` fires once on release with the open/closed
+   *  decision. */
+  onEdgeDrag: (side: EdgeSide, progress: number) => void;
+  onEdgeDragEnd: (side: EdgeSide, open: boolean) => void;
+  hasNotifications: boolean;
   indicator: React.ReactNode;
 }) {
   const pagerRef = useRef<HTMLDivElement>(null);
-  const [page, setPage] = useState(1); // 0 widgets · 1 apps · 2 library
+  const [page, setPage] = useState(0); // 0 apps · 1 library — opens on apps (scrollLeft 0)
+  const [paging, setPaging] = useState(false); // true while the pager is actively scrolling — cross-fades dots<->search pill
+  const pagingTimer = useRef<number | null>(null);
   const [ctxApp, setCtxApp] = useState<AppDescriptor | null>(null); // long-press sheet
-
-  // Open on the app grid (the middle page), like iPhone's default home.
-  useLayoutEffect(() => {
-    const el = pagerRef.current;
-    if (el) el.scrollLeft = el.clientWidth;
-  }, []);
+  const [ctxRect, setCtxRect] = useState<DOMRect | null>(null);
+  const dockLP = useLongPress((app, rect) => { setCtxApp(app); setCtxRect(rect); }); // dock icons get the same haptic-touch hold as the grid
+  const onTopPointerDown = useEdgeDrag(hasNotifications, onEdgeDrag, onEdgeDragEnd);
 
   const onScroll = () => {
     const el = pagerRef.current;
     if (el) setPage(Math.round(el.scrollLeft / el.clientWidth));
-  };
-
-  // Swipe DOWN from the top safe-area: LEFT half → Notification Center,
-  // RIGHT half → Control Center (iPhone's split gesture).
-  const onTopPointerDown = (e: React.PointerEvent) => {
-    const sy = e.clientY;
-    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-    const left = e.clientX - rect.left < rect.width / 2;
-    let fired = false;
-    const cleanup = () => {
-      window.removeEventListener("pointermove", move);
-      window.removeEventListener("pointerup", cleanup);
-    };
-    const move = (ev: PointerEvent) => {
-      if (!fired && ev.clientY - sy > 40) {
-        fired = true;
-        cleanup();
-        if (left && onNotifications) onNotifications();
-        else onControlCenter();
-      }
-    };
-    window.addEventListener("pointermove", move);
-    window.addEventListener("pointerup", cleanup);
+    setPaging(true);
+    if (pagingTimer.current) window.clearTimeout(pagingTimer.current);
+    pagingTimer.current = window.setTimeout(() => setPaging(false), 150);
   };
 
   return (
-    <div className="absolute inset-0 flex flex-col" inert={inactive} aria-hidden={inactive}>
-      {/* top safe area: status clock + Dynamic Island live here; swipe down →
-          NC (left) / CC (right). Height = base bar + the device notch inset. */}
-      <div
-        className="flex shrink-0 items-end px-7 pb-0.5 text-[13px] font-semibold text-white/90 [touch-action:none]"
-        style={{ height: "calc(2.25rem + var(--sai-top))" }}
-        onPointerDown={onTopPointerDown}
-      >
-        <Clock mode="time" />
+    <div className="absolute inset-0 flex flex-col">
+      {/* top safe area: status bar + Dynamic Island; drag down → NC (left) / CC
+          (right), tracked 1:1 (mobile-edge-drag.ts). Status bar is
+          pointer-events-none, so the gesture still hits this container. */}
+      <div className="h-11 shrink-0 [touch-action:none]" onPointerDown={onTopPointerDown}>
+        <MobileStatusBar />
       </div>
 
       <div
@@ -86,32 +68,80 @@ export function MobileHome({
         onScroll={onScroll}
         className="flex min-h-0 flex-1 snap-x snap-mandatory overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        <Page active={page === 0}>
-          <Slot region="today" />
+        <Page>
+          <AppsGrid
+            apps={apps}
+            onLaunch={onLaunch}
+            onSearch={onSearch}
+            onContext={(app, rect) => { setCtxApp(app); setCtxRect(rect); }}
+            onEditModeEnter={() => setCtxApp(null)}
+          />
         </Page>
-        <Page active={page === 1}>
-          <AppsGrid apps={apps} onLaunch={onLaunch} onSearch={onSearch} onContext={setCtxApp} />
-        </Page>
-        <Page active={page === 2}>
-          <MobileAppLibrary apps={apps} onOpen={onLaunch} />
+        <Page>
+          <MobileAppLibrary apps={apps} onOpen={onLaunch} onContext={(app) => { setCtxApp(app); setCtxRect(null); }} />
         </Page>
       </div>
 
-      <div className="flex justify-center gap-1.5 pb-2 pt-1.5">
-        {[0, 1, 2].map((i) => (
-          <span key={i} className={cn("size-[7px] rounded-full", i === page ? "bg-white/90" : "bg-white/40")} />
-        ))}
+      {/* Persistent frosted Search pill (real iOS default); paging dots only
+          while the pager is actively swiping — the two cross-fade in place. */}
+      <div className="relative flex h-[26px] items-center justify-center pb-2 pt-1.5">
+        <Button
+          type="button"
+          variant="ghost"
+          onClick={onSearch}
+          className={cn(
+            "glass absolute h-[26px] min-w-[70px] gap-1.5 rounded-full bg-white/20 px-3 text-[12px] font-medium text-white transition-opacity hover:bg-white/25 hover:text-white",
+            paging ? "pointer-events-none opacity-0" : "opacity-100",
+          )}
+        >
+          <Search className="size-3" />
+          Search
+        </Button>
+        <div
+          className={cn(
+            "absolute flex items-center gap-1.5 transition-opacity",
+            paging ? "opacity-100" : "pointer-events-none opacity-0",
+          )}
+        >
+          {/* ponytail: the 7px dot IS the tap target (matches iOS dot size); no enlarged hitbox. */}
+          {["Apps", "App Library"].map((label, i) => (
+            <button
+              key={i}
+              type="button"
+              aria-label={`Go to ${label} page`}
+              aria-current={i === page ? "true" : undefined}
+              onClick={() => {
+                const el = pagerRef.current;
+                if (el) el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
+              }}
+              className={cn("size-[7px] rounded-full transition-colors", i === page ? "bg-white/90" : "bg-white/40")}
+            />
+          ))}
+        </div>
       </div>
 
       {dockApps.length > 0 && (
         <div
-          className="glass mx-3 mb-3.5 flex justify-around rounded-[30px] border border-white/30 px-3.5 py-3"
-          style={{ background: "rgba(255,255,255,.18)" }}
+          className="mx-2 mb-3.5 grid grid-cols-4 place-items-center rounded-[36px] px-3.5 py-3"
+          style={{
+            background: "rgba(255,255,255,.18)",
+            backdropFilter: "blur(50px) saturate(180%)",
+            WebkitBackdropFilter: "blur(50px) saturate(180%)",
+          }}
         >
           {dockApps.map((app) => (
-            <Button key={app.id} type="button" variant="ghost" size="icon" aria-label={app.title} onClick={() => onLaunch(app)} className="h-auto w-auto hover:bg-transparent size-[60px] p-0">
+            <button
+              key={app.id}
+              onPointerDown={dockLP.startHold(app)}
+              onContextMenu={(e) => { e.preventDefault(); setCtxApp(app); setCtxRect((e.currentTarget as HTMLElement).getBoundingClientRect()); }}
+              onClick={(e) => {
+                if (dockLP.held.current) { dockLP.held.current = false; return; }
+                onLaunch(app, (e.currentTarget as HTMLElement).getBoundingClientRect());
+              }}
+              className="size-[60px] p-0"
+            >
               <AppIcon app={app} />
-            </Button>
+            </button>
           ))}
         </div>
       )}
@@ -121,21 +151,11 @@ export function MobileHome({
       {ctxApp && (
         <AppActionSheet
           app={ctxApp}
-          onOpen={() => { setCtxApp(null); onLaunch(ctxApp); }}
-          onClose={() => setCtxApp(null)}
+          rect={ctxRect}
+          onOpen={() => { setCtxApp(null); onLaunch(ctxApp, ctxRect ?? undefined); }}
+          onClose={() => { setCtxApp(null); setCtxRect(null); }}
         />
       )}
     </div>
-  );
-}
-
-// Off-canvas pages sit at ±100vw but would otherwise stay in tab/AT order —
-// inert pulls them out; the swipe still works because the scroll gesture
-// belongs to the pager container, not the (inert) page content.
-function Page({ active, children }: { active: boolean; children: React.ReactNode }) {
-  return (
-    <section inert={!active} aria-hidden={!active} className="h-full w-full shrink-0 snap-center overflow-hidden">
-      {children}
-    </section>
   );
 }

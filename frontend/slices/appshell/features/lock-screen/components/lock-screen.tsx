@@ -1,13 +1,27 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Lock } from "lucide-react";
-import { autoLockMinutes, lock, requestUnlock, useLocked } from "@/features/appshell";
+import { Camera, Flashlight, type Icon } from "@phosphor-icons/react";
+import { Button } from "@/components/ui/button";
+import { autoLockMinutes, lock, requestUnlock, useLocked } from "../../../lib/lock";
+import { useResponsive } from "../../../responsive/use-responsive";
+import { useShellPrefs } from "../../../registry/shells";
+import { DesktopLockCurtain, AndroidLockCurtain } from "./lock-screen-os-parts";
 
 // Fullscreen privacy curtain: blurred backdrop, big clock, click/key unlocks
 // (through the consumer guard when one is injected). Owns the idle timer.
 // The curtain MOUNTS per lock, so the clock seeds in a lazy initializer
 // instead of an effect-driven setState (react-hooks v6).
+//
+// Mobile gets the real iOS lock-screen look (date-over-time, transparent over
+// the wallpaper, home-indicator + "Swipe up to unlock") via MobileLockCurtain
+// below — untouched since an earlier phase. Desktop-surface shells
+// (macOS/Windows/dashboard) get their own per-OS looks from
+// lock-screen-os-parts.tsx's DesktopLockCurtain. Android is mobile-surface
+// (isMobile is true whenever it's active) but does NOT reuse the iOS-tuned
+// MobileLockCurtain — it gets its own AndroidLockCurtain, so the branch below
+// checks the active shell id before falling back to isMobile. All branches
+// share the same idle-timer + unlock plumbing via the shared responsive seam.
 export function LockScreen() {
   const locked = useLocked();
 
@@ -32,6 +46,9 @@ export function LockScreen() {
 }
 
 function LockCurtain() {
+  const { isMobile } = useResponsive();
+  const prefs = useShellPrefs();
+  const shellId = isMobile ? prefs.mobile : prefs.desktop;
   const [now, setNow] = useState<Date>(() => new Date());
 
   useEffect(() => {
@@ -57,20 +74,57 @@ function LockCurtain() {
     };
   }, []);
 
+  const onUnlock = () => void requestUnlock();
+  if (!isMobile) return <DesktopLockCurtain now={now} onUnlock={onUnlock} shellId={shellId} />;
+  if (shellId === "android") return <AndroidLockCurtain now={now} onUnlock={onUnlock} />;
+  return <MobileLockCurtain now={now} onUnlock={onUnlock} />;
+}
+
+// Transparent over the Wallpaper layer beneath (no curtain tint), date-line
+// above a MEDIUM-weight ~88px clock — iOS 16+'s default weight, not the
+// pre-16 thin/light look (see the audit's critic correction) — plus
+// decorative frosted flashlight/camera corner buttons and a home-indicator +
+// "Swipe up to unlock" affordance instead of the desktop caption.
+function MobileLockCurtain({ now, onUnlock }: { now: Date; onUnlock: () => void }) {
   return (
     <div
-      className="absolute inset-0 z-[9500] flex cursor-pointer flex-col items-center justify-center gap-3 bg-background/35 backdrop-blur-2xl"
-      onClick={() => void requestUnlock()}
+      className="absolute inset-0 z-[9500] flex cursor-pointer flex-col bg-transparent text-white"
+      onClick={onUnlock}
     >
-      <div className="text-6xl font-light tracking-tight">
-        {now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+      <div className="flex flex-1 flex-col items-center justify-center gap-1 [text-shadow:0_1px_10px_rgba(0,0,0,0.35)]">
+        <span className="text-[17px] font-semibold">
+          {now.toLocaleDateString([], { weekday: "long", day: "numeric", month: "long" })}
+        </span>
+        <span className="text-[88px] font-medium leading-none tracking-tight tabular-nums">
+          {now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}
+        </span>
       </div>
-      <div className="text-sm text-muted-foreground">
-        {now.toLocaleDateString([], { weekday: "long", day: "numeric", month: "long" })}
+
+      <div className="flex items-center justify-between px-7 pb-8">
+        <CornerButton icon={Flashlight} label="Flashlight" />
+        <CornerButton icon={Camera} label="Camera" />
       </div>
-      <div className="mt-8 flex items-center gap-2 text-xs text-muted-foreground">
-        <Lock className="size-3.5" /> Click to unlock
+
+      <div className="flex flex-col items-center gap-2.5 pb-2">
+        <span className="text-[13px] text-white/80">Swipe up to unlock</span>
+        <span className="h-[5px] w-[134px] rounded-full bg-white" />
       </div>
     </div>
+  );
+}
+
+// Decorative — real iOS wires these to the flashlight/camera; here they are
+// safe no-ops that must not also trigger the unlock click behind them.
+function CornerButton({ icon: Icon, label }: { icon: Icon; label: string }) {
+  return (
+    <Button
+      type="button"
+      variant="ghost"
+      aria-label={label}
+      onClick={(e) => e.stopPropagation()}
+      className="flex size-[50px] items-center justify-center rounded-full bg-white/15 p-0 text-white backdrop-blur-xl hover:bg-white/25"
+    >
+      <Icon className="size-5" />
+    </Button>
   );
 }

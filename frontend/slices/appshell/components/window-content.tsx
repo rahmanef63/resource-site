@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState, type ComponentType } from "react";
-import { Loader2 } from "lucide-react";
 import { useApp } from "../lib/registry";
+import { AppErrorBoundary } from "./app-error-boundary";
+import { OsSpinner } from "./os-spinner";
 import type { AppProps } from "../lib/types";
 
 // Loads an app's lazy bundle into a window. We use a plain useState/useEffect
@@ -13,7 +14,7 @@ import type { AppProps } from "../lib/types";
 // window). A setState on import-resolve always re-renders, so the spinner clears
 // the instant the module is ready. The import is bundler-cached (and warmed on
 // dock hover), so this stays cheap.
-export function WindowContent({ app, payload, winId }: { app: string; payload?: unknown; winId?: string }) {
+export function WindowContent({ app, payload }: { app: string; payload?: unknown }) {
   const descriptor = useApp(app);
   // Keyed by app id: when the window switches app the stale module no longer
   // matches, so `Comp` derives back to null (spinner) without a synchronous
@@ -46,10 +47,16 @@ export function WindowContent({ app, payload, winId }: { app: string; payload?: 
   if (!Comp) {
     return (
       <div className="grid h-full place-items-center text-muted-foreground">
-        <Loader2 className="animate-spin" />
+        <OsSpinner />
       </div>
     );
   }
 
-  return <Comp payload={payload} winId={winId} />;
+  // A crashing app is contained to its own window (recoverable) instead of
+  // taking down the whole shell.
+  return (
+    <AppErrorBoundary resetKey={app}>
+      <Comp payload={payload} />
+    </AppErrorBoundary>
+  );
 }

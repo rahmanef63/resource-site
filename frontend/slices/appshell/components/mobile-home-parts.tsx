@@ -1,80 +1,39 @@
 "use client";
-/* iPhone-home sub-surfaces — the app grid page (upward-swipe search + long-press
-   quick actions) and the haptic-touch action sheet. Split from mobile-home.tsx
-   (≤200-LOC modularity gate). */
-import { useRef } from "react";
-import { Button } from "@/components/ui/button";
-import type { AppDescriptor } from "../lib/types";
-import { useQuickLinks } from "../registry/capabilities";
-import { AppIcon } from "./app-icon";
-import { QuicklinkIcon } from "./quicklink-icon";
 
-// Long-press quick-actions sheet (iPhone's haptic-touch menu): Open + whatever
-// menu items the app declares for the macOS menu bar — one declaration, both OSes.
-export function AppActionSheet({
-  app, onOpen, onClose,
-}: {
-  app: AppDescriptor;
-  onOpen: () => void;
-  onClose: () => void;
-}) {
-  const items = (app.menus ?? []).flatMap((m) => m.items).filter(
-    (it): it is Extract<typeof it, { label: string }> => !("sep" in it),
-  );
-  return (
-    <div className="absolute inset-0 z-[45] flex flex-col justify-end" onClick={onClose}>
-      <div className="absolute inset-0 bg-black/35 backdrop-blur-[2px]" />
-      <div
-        className="relative mx-4 mb-6 overflow-hidden rounded-2xl bg-card/95 text-card-foreground shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-center gap-2.5 border-b border-border px-4 py-3">
-          <span className="size-9"><AppIcon app={app} /></span>
-          <strong className="text-[15px]">{app.title}</strong>
-        </div>
-        <Button type="button" variant="ghost" onClick={onOpen} className="h-auto block w-full justify-start rounded-none px-4 py-3 text-left text-[15px] font-medium">
-          Open
-        </Button>
-        {items.slice(0, 4).map((it, i) => (
-          <Button
-            key={i}
-            type="button"
-            variant="ghost"
-            disabled={it.disabled}
-            onClick={() => { onClose(); it.onSelect?.(); }}
-            className="h-auto block w-full justify-start rounded-none border-t border-border px-4 py-3 text-left text-[15px]"
-          >
-            {it.label}
-          </Button>
-        ))}
-      </div>
-    </div>
-  );
+import { useRef, useState } from "react";
+import { CornersOut as Fullscreen, Gear, Palette } from "@phosphor-icons/react";
+import { cn } from "@/lib/utils";
+import { isBrowserFullscreen, toggleBrowserFullscreen } from "../lib/browser-fullscreen";
+import { openWindow } from "../lib/store";
+import type { AppDescriptor } from "../lib/types";
+import { AppIcon } from "./app-icon";
+import { ContextMenu, useContextMenu, type MenuItem } from "./shells/context-menu";
+
+export function Page({ children }: { children: React.ReactNode }) {
+  return <section className="h-full w-full shrink-0 snap-center overflow-hidden">{children}</section>;
 }
 
-// App grid page. A clear upward swipe (not a horizontal page flick) opens search;
-// holding an icon ~450ms (or right-click) opens its quick-actions sheet.
-export function AppsGrid({
-  apps,
-  onLaunch,
-  onSearch,
-  onContext,
-}: {
-  apps: AppDescriptor[];
-  onLaunch: (app: AppDescriptor) => void;
-  onSearch: () => void;
-  onContext: (app: AppDescriptor) => void;
-}) {
-  const { items: links, open: openLink } = useQuickLinks();
-  // Long-press bookkeeping: a fired hold must swallow the click that follows.
+// 450ms haptic-touch long-press → quick-actions sheet, anchored to the pressed
+// icon's rect (mobile-action-sheet.tsx). Shared by the app grid AND the dock.
+// `held` is exposed so each consumer's onClick can swallow the click that
+// fires right after a hold. Movement >12px before the sheet opens cancels (it
+// was a scroll, not a hold). `onJiggle` (optional) fires if the press is
+// STILL held ~450ms after the sheet itself opened — real iOS's "keep holding
+// past the menu" → icon-reorder/jiggle mode.
+export function useLongPress(
+  onContext: (app: AppDescriptor, rect: DOMRect) => void,
+  onJiggle?: () => void,
+) {
   const holdTimer = useRef<number | null>(null);
+  const jiggleTimer = useRef<number | null>(null);
   const held = useRef(false);
-
   const startHold = (app: AppDescriptor) => (e: React.PointerEvent) => {
     held.current = false;
     const sx = e.clientX, sy = e.clientY;
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
     const cancel = () => {
       if (holdTimer.current) { window.clearTimeout(holdTimer.current); holdTimer.current = null; }
+      if (jiggleTimer.current) { window.clearTimeout(jiggleTimer.current); jiggleTimer.current = null; }
       window.removeEventListener("pointermove", move);
       window.removeEventListener("pointerup", up);
     };
@@ -84,20 +43,60 @@ export function AppsGrid({
     const up = () => cancel();
     holdTimer.current = window.setTimeout(() => {
       held.current = true;
-      cancel();
-      onContext(app);
+      holdTimer.current = null;
+      window.removeEventListener("pointermove", move); // sheet is up — small post-open drift shouldn't cancel it
+      onContext(app, rect);
+      if (onJiggle) jiggleTimer.current = window.setTimeout(onJiggle, 450);
     }, 450);
     window.addEventListener("pointermove", move);
     window.addEventListener("pointerup", up);
   };
+  return { startHold, held };
+}
+
+// App grid page. A clear vertical swipe (up or down, not a horizontal page
+// flick) opens search; holding an icon ~450ms lifts it and opens its
+// quick-actions sheet; continuing to hold past that enters a lightweight
+// jiggle/edit mode (every icon wobbles) — tap any icon or empty space to
+// exit. No minus-badges/reorder: apps aren't removable or reorderable in this
+// OS, so a badge would have nothing to do — skipped rather than half-built.
+export function AppsGrid({
+  apps,
+  onLaunch,
+  onSearch,
+  onContext,
+  onEditModeEnter,
+}: {
+  apps: AppDescriptor[];
+  onLaunch: (app: AppDescriptor, rect?: DOMRect) => void;
+  onSearch: () => void;
+  onContext: (app: AppDescriptor, rect: DOMRect) => void;
+  /** Notifies a parent-owned quick-actions sheet to close when jiggle mode
+   *  takes over (optional — the grid still enters/exits jiggle fine without it). */
+  onEditModeEnter?: () => void;
+}) {
+  const [pressedId, setPressedId] = useState<string | null>(null);
+  const [homeEdit, setHomeEdit] = useState(false);
+  const { startHold, held } = useLongPress(
+    (app, rect) => { setPressedId(null); onContext(app, rect); },
+    () => { setHomeEdit(true); onEditModeEnter?.(); },
+  );
+  const emptyMenu = useContextMenu();
+  const emptyCtxItems: MenuItem[] = [
+    {
+      label: isBrowserFullscreen() ? "Exit Full Screen" : "Enter Full Screen",
+      icon: Fullscreen,
+      onClick: () => toggleBrowserFullscreen(),
+    },
+    { type: "sep" },
+    { label: "Settings", icon: Gear, onClick: () => openWindow("settings", "Settings") },
+    { label: "Personalize", icon: Palette, onClick: () => openWindow("settings", "Personalization", undefined, { section: "appearance" }) },
+  ];
 
   const onPointerDown = (e: React.PointerEvent) => {
+    if (homeEdit) return;
     const sy = e.clientY;
     const sx = e.clientX;
-    // Only let an upward swipe mean "search" when the grid is already scrolled
-    // to the top — otherwise it fights the vertical scroll that reveals
-    // overflow apps + quicklinks.
-    const atTop = (e.currentTarget as HTMLElement).scrollTop <= 0;
     let fired = false;
     const cleanup = () => {
       window.removeEventListener("pointermove", move);
@@ -106,7 +105,8 @@ export function AppsGrid({
     const move = (ev: PointerEvent) => {
       const dy = ev.clientY - sy;
       const dx = ev.clientX - sx;
-      if (!fired && atTop && dy < -70 && Math.abs(dx) < 50) {
+      // Real iPhone: swipe UP or DOWN on the home grid opens Spotlight search.
+      if (!fired && Math.abs(dy) > 70 && Math.abs(dx) < 50) {
         fired = true;
         cleanup();
         onSearch();
@@ -117,48 +117,46 @@ export function AppsGrid({
   };
 
   return (
-    // Scrolls vertically so every app + quicklink is reachable (the grid used to
-    // be clipped by the page's overflow-hidden, hiding the trailing quicklinks).
-    // touch-action:pan-y keeps horizontal swipes free for the home pager.
-    <div
-      onPointerDown={onPointerDown}
-      className="grid h-full grid-cols-4 content-start gap-x-2.5 gap-y-5 overflow-y-auto px-[18px] pt-3.5 pb-5 [touch-action:pan-y] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-    >
-      {apps.map((app) => (
-        <Button
-          key={app.id}
-          type="button"
-          variant="ghost"
-          onPointerDown={startHold(app)}
-          onContextMenu={(e) => { e.preventDefault(); onContext(app); }}
-          onClick={() => { if (held.current) { held.current = false; return; } onLaunch(app); }}
-          className="h-auto p-0 hover:bg-transparent flex flex-col items-center gap-1.5"
-        >
-          <span className="aspect-square w-full max-w-[62px]">
-            <AppIcon app={app} />
-          </span>
-          <span className="max-w-full truncate text-[11px] font-medium text-white [text-shadow:0_1px_3px_rgba(0,0,0,0.5)]">
-            {app.title}
-          </span>
-        </Button>
-      ))}
-      {links.map((link) => (
-        <Button
-          key={link.id}
-          type="button"
-          variant="ghost"
-          onClick={() => openLink(link)}
-          className="h-auto p-0 hover:bg-transparent flex flex-col items-center gap-1.5"
-        >
-          <span className="aspect-square w-full max-w-[62px]">
-            <QuicklinkIcon link={link} />
-          </span>
-          <span className="max-w-full truncate text-[11px] font-medium text-white [text-shadow:0_1px_3px_rgba(0,0,0,0.5)]">
-            {link.title}
-          </span>
-        </Button>
-      ))}
-    </div>
+    <>
+      <div
+        onPointerDown={onPointerDown}
+        onClick={() => { if (homeEdit) setHomeEdit(false); }}
+        onContextMenu={(e) => { if (e.target === e.currentTarget) emptyMenu.open(e); }}
+        className="grid h-full grid-cols-4 content-start gap-x-2.5 gap-y-5 px-[18px] py-3.5 [touch-action:pan-x]"
+      >
+        {apps.map((app, i) => (
+          <button
+            key={app.id}
+            onPointerDown={(e) => { setPressedId(app.id); startHold(app)(e); }}
+            onPointerUp={() => setPressedId(null)}
+            onPointerCancel={() => setPressedId(null)}
+            // Desktop right-click has no "hold" duration to simulate the real
+            // haptic-touch → jiggle escalation, so it jumps straight to edit
+            // mode — the closest desktop-mouse equivalent of a sustained hold.
+            onContextMenu={(e) => { e.preventDefault(); setPressedId(null); setHomeEdit(true); onEditModeEnter?.(); }}
+            onClick={(e) => {
+              e.stopPropagation(); // don't also fire the grid's exit-edit-mode handler
+              if (held.current) { held.current = false; return; }
+              if (homeEdit) { setHomeEdit(false); return; }
+              onLaunch(app, (e.currentTarget as HTMLElement).getBoundingClientRect());
+            }}
+            style={{ "--i": i } as React.CSSProperties}
+            className={cn(
+              "flex flex-col items-center gap-1.5 transition-transform duration-150",
+              pressedId === app.id && "scale-110",
+              homeEdit && "jiggle",
+            )}
+          >
+            <span className="aspect-square w-full max-w-[62px]">
+              <AppIcon app={app} />
+            </span>
+            <span className="max-w-full truncate text-[11px] font-medium text-white [text-shadow:0_1px_3px_rgba(0,0,0,0.5)]">
+              {app.title}
+            </span>
+          </button>
+        ))}
+      </div>
+      <ContextMenu pos={emptyMenu.pos} onClose={emptyMenu.close} items={emptyCtxItems} />
+    </>
   );
 }
-

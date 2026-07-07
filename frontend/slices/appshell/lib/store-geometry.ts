@@ -20,7 +20,6 @@ export function setChromeInsets(i: { top?: number; bottom?: number }) {
   topInset = i.top ?? TOPBAR;
   bottomInset = i.bottom ?? DOCK_RESERVE;
 }
-
 function viewport() {
   return { vw: window.innerWidth, vh: window.innerHeight };
 }
@@ -60,6 +59,20 @@ export function snapRect(zone: SnapZone): Rect {
     r13: { x: GAP * 2 + twoThirdW, y: top, w: thirdW, h: availH },
   };
   return map[zone];
+}
+
+// Repeated same-direction arrow-snap cycles the column WIDTH (the
+// Rectangle/Magnet/FancyZones idiom): ⌘+← → left-half → left-third →
+// left-two-thirds → back to half. Pressing the OTHER direction (or snapping a
+// free/quadrant window) restarts that side's cycle at the half. This is the
+// only way the thirds zones (l13/l23/r13/r23) — which snapRect already tiles —
+// become reachable from the keyboard.
+const LEFT_CYCLE: SnapZone[] = ["left", "l13", "l23"];
+const RIGHT_CYCLE: SnapZone[] = ["right", "r13", "r23"];
+export function nextSnapZone(side: "left" | "right", current: SnapZone | undefined): SnapZone {
+  const cycle = side === "left" ? LEFT_CYCLE : RIGHT_CYCLE;
+  const i = current ? cycle.indexOf(current) : -1; // -1 (other zone) → start at half
+  return cycle[(i + 1) % cycle.length];
 }
 
 // Spawn placement: the classic cascade, but clamped to the work area so the

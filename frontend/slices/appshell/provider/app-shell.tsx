@@ -2,22 +2,14 @@
 
 import { useEffect, type ComponentType, type ReactNode } from "react";
 import { OsDesktop } from "../components/desktop";
+import { IconDefaults } from "../components/icon-defaults";
 import { configureWindowTitle, startWindowTitleSync } from "../lib/window-title";
-import { AppRegistryProvider } from "../lib/registry";
-import { ResponsiveProvider } from "../responsive/responsive-provider";
 import { BrandProvider } from "../registry/brand";
 import { FeatureRegistryProvider } from "../registry/feature-registry";
 import { ShellConfigProvider } from "../registry/shell-config";
-import { CapabilitiesProvider, useShellAppearance } from "../registry/capabilities";
+import { CapabilitiesProvider } from "../registry/capabilities";
 import { UrlSync } from "../runtime/use-url-sync";
 import type { ShellManifest } from "../registry/types";
-
-// ResponsiveProvider needs the appearance device override, so it mounts via a
-// child of CapabilitiesProvider (a plain hoist couldn't call the hook).
-function ResponsiveBoundary({ children }: { children: ReactNode }) {
-  const { device } = useShellAppearance();
-  return <ResponsiveProvider device={device}>{children}</ResponsiveProvider>;
-}
 
 function withProviders(
   providers: ComponentType<{ children: ReactNode }>[],
@@ -34,11 +26,8 @@ function withProviders(
  */
 export function AppShell({ manifest }: { manifest: ShellManifest }) {
   const features = manifest.features ?? [];
-  // OPTIONAL agentic seam — a consumer that runs an agent injects a mount
-  // component (manifest.agentMount) that self-registers appshellTools via
-  // @/shared/agentic. appshell core stays brand- AND agent-free, so a consumer
-  // without that module compiles. rr passes <AppshellAgentMount/> (see
-  // appshell/agentic.tsx); a non-agent consumer (os-vps) omits it.
+  // Optional agent surface (rr) — a consumer-supplied component that self-
+  // registers its tools on the host. Non-visual; mounts once inside the tree.
   const AgentMount = manifest.agentMount;
 
   // Tab title follows the focused window ("Files — Brand"); audit found it
@@ -51,28 +40,22 @@ export function AppShell({ manifest }: { manifest: ShellManifest }) {
     .map((f) => f.provider)
     .filter((p): p is ComponentType<{ children: ReactNode }> => Boolean(p));
 
+  // IconDefaults sets phosphor weight="fill" + the .os-accent-icons wrapper (icons
+  // recolor with the theme accent) for the whole shell — one mount here so every
+  // AppShell consumer inherits it (rahmanef-com wires it at the app layout).
   return (
-    <CapabilitiesProvider value={manifest.capabilities}>
-      <BrandProvider brand={manifest.brand}>
-        <ShellConfigProvider
-          value={{
-            persistKey: manifest.persistKey ?? "appshell:layout",
-            routing: manifest.routing !== false,
-          }}
-        >
-          <FeatureRegistryProvider features={features}>
-            {/* Registry + responsive mount ABOVE the feature-provider seam so a
-                FeatureDescriptor.provider can call useApps()/useResponsive(). */}
-            <AppRegistryProvider apps={manifest.apps}>
-              <ResponsiveBoundary>
-                {manifest.routing !== false && <UrlSync apps={manifest.apps} />}
-                {AgentMount ? <AgentMount /> : null}
-                {withProviders(providers, <OsDesktop />)}
-              </ResponsiveBoundary>
-            </AppRegistryProvider>
-          </FeatureRegistryProvider>
-        </ShellConfigProvider>
-      </BrandProvider>
-    </CapabilitiesProvider>
+    <IconDefaults>
+      <CapabilitiesProvider value={manifest.capabilities}>
+        <BrandProvider brand={manifest.brand}>
+          <ShellConfigProvider value={{ persistKey: manifest.persistKey ?? "appshell:layout" }}>
+            <FeatureRegistryProvider features={features}>
+              {manifest.routing !== false && <UrlSync apps={manifest.apps} />}
+              {AgentMount ? <AgentMount /> : null}
+              {withProviders(providers, <OsDesktop apps={manifest.apps} />)}
+            </FeatureRegistryProvider>
+          </ShellConfigProvider>
+        </BrandProvider>
+      </CapabilitiesProvider>
+    </IconDefaults>
   );
 }

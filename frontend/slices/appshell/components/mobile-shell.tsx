@@ -1,20 +1,24 @@
 "use client";
 
-import { useState } from "react";
-import { usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { useRef, useState } from "react";
 import { useApps } from "../lib/registry";
 import { useWindowOrder, useFocused, useWindow } from "../hooks/use-shell";
-import { shellStore, openWindow, focusApp, minimizeWindow, restoreWindow, toggleSpotlight } from "../lib/store";
-import { AppIcon } from "./app-icon";
-import { HomeIndicator } from "./home-indicator";
+import { shellStore, openWindow, minimizeWindow, restoreWindow, toggleSpotlight } from "../lib/store";
+import { AppFrame } from "../primitives/app-frame";
 import { WindowContent } from "./window-content";
 import { MobileSwitcher } from "./mobile-switcher";
 import { MobileHome } from "./mobile-home";
 import { MobileNotifications } from "./mobile-notifications";
+import { MobileStatusBar } from "./mobile-status-bar";
+import { Indicator, appZoomStyle } from "./mobile-shell-parts";
+import { useAppZoom } from "./use-app-zoom";
+import type { EdgeSide } from "./mobile-edge-drag";
 import { Slot } from "../registry/feature-registry";
-import { useShellConfig } from "../registry/shell-config";
 import { ShellUIProvider, type ShellUI } from "../registry/shell-ui";
+
+// Real catalog ids — the old "files-manager"/"os-terminal"/"system-monitor"/
+// "os-settings" matched zero apps (renamed/dropped), leaving the iOS dock empty.
+const DOCK_IDS = ["site", "book", "files", "settings"];
 
 // Phones: no floating windows — a paged home + one fullscreen app at a time.
 // Reuses the same store (open/minimize/focus) so state matches the desktop.
@@ -22,31 +26,22 @@ export function MobileShell() {
   const apps = useApps();
   const order = useWindowOrder();
   const focused = useFocused();
+  const [home, setHome] = useState(true);
   const [switcher, setSwitcher] = useState(false);
   const [cc, setCc] = useState(false);
   const [nc, setNc] = useState(false); // notification center (pull down, left half)
+  const [ncDrag, setNcDrag] = useState<number | undefined>(undefined);
+  const [ccDrag, setCcDrag] = useState<number | undefined>(undefined);
+  const [closing, setClosing] = useState(false); // playing the reverse icon-zoom (P2 ios-app-open-zoom)
+  const rootRef = useRef<HTMLDivElement>(null);
+  const frameRef = useRef<HTMLDivElement>(null);
+  const zoom = useAppZoom(rootRef, frameRef);
 
-  // Dock = manifest-pinned apps (AppDescriptor.pinned — the generic shell never
-  // hardcodes project app ids); falls back to the first 4 dockable apps.
-  const pinned = apps.filter((a) => a.pinned);
-  const dockApps = (pinned.length ? pinned : apps.filter((a) => !a.noDock)).slice(0, 4);
-
-  // URL → surface: a pathname naming an app slug shows the app pane (UrlSync
-  // opens/focuses its window in the shared store; we only flip off the grid),
-  // anything else shows the grid — covers initial deep links AND back/forward.
-  // User gestures (launch/Done) override, keyed to the pathname they were made
-  // at, so the derivation wins again when the URL actually changes — no
-  // effect-driven setState (react-hooks/set-state-in-effect). Gated like
-  // UrlSync (manifest.routing): opted out, the URL never names an app, so the
-  // grid-first default + gesture overrides behave exactly as before.
-  const { routing } = useShellConfig();
-  const pathname = usePathname();
-  const urlSlug = pathname.split("/").filter(Boolean)[0];
-  const urlIsApp =
-    routing !== false && !!urlSlug && apps.some((a) => (a.slug ?? a.id) === urlSlug);
-  const [homeChoice, setHomeChoice] = useState<{ key: string; home: boolean } | null>(null);
-  const home = homeChoice?.key === pathname ? homeChoice.home : !urlIsApp;
-  const setHome = (h: boolean) => setHomeChoice({ key: pathname, home: h });
+  const dockApps = apps.filter((a) => DOCK_IDS.includes(a.id));
+  // Hide noDock utility/sensitive apps (admin/users/preview/page) from the home
+  // grid + App Library, exactly like Android/macOS/Windows do. Keep the FULL list
+  // for the active-app lookup below (a noDock app can still be open).
+  const homeApps = apps.filter((a) => !a.noDock);
 
   // The visible app is the FOCUSED window (front-most) — fall back to the newest
   // non-minimized one. `order` is append-only and doesn't track focus.
@@ -59,11 +54,12 @@ export function MobileShell() {
   const activeApp = top ? apps.find((a) => a.id === top.app) : null;
 
   // SSOT navigation: open / resume bring a window to the front; home minimises.
-  // Resume-don't-duplicate (real-iOS): a home tap brings the existing window
-  // forward; only a missing one spawns — multi apps get extra windows from
-  // explicit affordances (dock hover "New Window" on desktop), not home taps.
-  const launch = (app: (typeof apps)[number]) => {
-    if (!focusApp(app.id)) openWindow(app.id, app.title, app.defaultSize, undefined, { multi: app.multi });
+  // `rect` (the tapped icon's bounding box, from AppsGrid/dock/AppActionSheet)
+  // drives the icon-zoom open (use-app-zoom.ts) — omit it for a plain fade
+  // (programmatic opens, e.g. Spotlight results, and switcher resume).
+  const launch = (app: (typeof apps)[number], rect?: DOMRect) => {
+    zoom.open(rect);
+    openWindow(app.id, app.title, app.defaultSize, undefined, { multi: app.multi });
     setSwitcher(false);
     setHome(false);
   };
@@ -76,21 +72,46 @@ export function MobileShell() {
     setSwitcher(false);
     setHome(false);
   };
+  // Reverses the icon-zoom (when one was captured at launch) and delays the
+  // actual minimize/home commit until it finishes — mirrors use-window-exit's
+  // idiom for the desktop shells' close/minimize animations.
   const goHome = () => {
-    if (topId) minimizeWindow(topId);
+    if (closing) return;
     setSwitcher(false);
-    setHome(true);
+    if (!topId) return setHome(true);
+    if (!zoom.vars) {
+      minimizeWindow(topId);
+      return setHome(true);
+    }
+    setClosing(true);
+    zoom.close(() => {
+      minimizeWindow(topId);
+      setClosing(false);
+      setHome(true);
+    });
   };
 
   const openSwitcher = () => setSwitcher(true);
 
-  // Horizontal home-bar swipe → cycle the open (non-minimized) apps, iOS-style.
-  const switchApp = (dir: -1 | 1) => {
-    const live = order.filter((id) => !shellStore.getWindow(id)?.minimized);
-    if (live.length < 2 || !topId) return;
-    const next = live[(live.indexOf(topId) + dir + live.length) % live.length];
-    restoreWindow(next);
-    setHome(false);
+  // P2 ios-nc-cc-drag-follow (mobile-home half — see mobile-edge-drag.ts for
+  // the full contract): drives a live 0–1 progress into MobileNotifications'
+  // `dragProgress` prop and Control Center's (via the Slot's `slotProps`),
+  // both of which already accept it. NC must be *mounted* while dragging
+  // (MobileNotifications still gates on `open`, per its own comment), so `nc`
+  // OR an in-flight drag both count as open; CC reads dragProgress on its own
+  // regardless of its `open` state, so cc only flips on a committed open.
+  const onEdgeDrag = (side: EdgeSide, progress: number) => {
+    if (side === "nc") setNcDrag(progress);
+    else setCcDrag(progress);
+  };
+  const onEdgeDragEnd = (side: EdgeSide, open: boolean) => {
+    if (side === "nc") {
+      setNcDrag(undefined);
+      setNc(open);
+    } else {
+      setCcDrag(undefined);
+      if (open) setCc(true);
+    }
   };
 
   const shellUI: ShellUI = {
@@ -103,59 +124,42 @@ export function MobileShell() {
 
   return (
     <ShellUIProvider value={shellUI}>
-      <div className="absolute inset-0 z-[10] flex flex-col">
-      {/* Home is inert while an app covers it (a11y: its grid, pager pages and
-          home-indicator otherwise stay in tab/AT order under the opaque app
-          layer). It stays visually mounted for the appOpen zoom. */}
+      <div ref={rootRef} className="absolute inset-0 z-[10] flex flex-col overscroll-none">
       <MobileHome
-        apps={apps}
+        apps={homeApps}
         dockApps={dockApps}
-        inactive={!!(showApp && activeApp)}
         onLaunch={launch}
         onSearch={toggleSpotlight}
-        onControlCenter={() => setCc(true)}
-        onNotifications={() => setNc(true)}
-        indicator={<HomeIndicator onHome={goHome} onSwitcher={openSwitcher} onSwitchApp={switchApp} />}
+        onEdgeDrag={onEdgeDrag}
+        onEdgeDragEnd={onEdgeDragEnd}
+        hasNotifications
+        indicator={<Indicator onTap={openSwitcher} />}
       />
 
-      {/* APP fullscreen */}
+      {/* APP fullscreen — edge-to-edge (P2 ios-fullscreen-app-chrome): no OS
+          header, the status bar overlays the top safe area and the home
+          indicator floats over the bottom one; the app scrolls under both. */}
       {showApp && activeApp && (
         <div
-          className="absolute inset-0 z-[10] flex flex-col [animation:appOpen_.28s_cubic-bezier(.2,.8,.2,1)] [transform-origin:center_bottom]"
-          style={{ background: "var(--surface)" }}
+          ref={frameRef}
+          className="absolute inset-0 z-[10] flex flex-col overflow-hidden"
+          style={appZoomStyle(zoom.vars, closing)}
         >
-          <header
-            className="flex shrink-0 items-center gap-2.5 border-b border-border px-3.5"
-            style={{ background: "var(--glass-bar)", height: "calc(3rem + var(--sai-top))", paddingTop: "var(--sai-top)" }}
-          >
-            <span className="size-[30px] shrink-0">
-              <AppIcon app={activeApp} />
-            </span>
-            <strong className="flex-1 truncate text-base">{activeApp.title}</strong>
-            {/* primary exit control — keep the pill visually compact but give it a ≥36px hit area */}
-            <Button type="button" variant="ghost" onClick={goHome} className="h-9 min-w-9 rounded-md px-3 text-sm font-medium text-primary">
-              Done
-            </Button>
-          </header>
-          {/* The home-indicator overlays the content edge-to-edge (real-iOS), so
-              raise --sai-bottom INSIDE the app pane to include its 34px zone —
-              every app already pads with var(--sai-bottom), so bumping the var
-              clears the pill centrally without double-padding anyone. */}
-          <main
-            className="relative min-h-0 flex-1 overflow-auto [container-type:inline-size]"
-            style={{ "--sai-bottom": "calc(env(safe-area-inset-bottom, 0px) + 34px)" } as React.CSSProperties}
-          >
+          <div className="pointer-events-none absolute inset-x-0 top-0 z-[20] h-11">
+            <MobileStatusBar showReturnPill={false} />
+          </div>
+          <AppFrame safeArea="top" className="h-full" bodyClassName="overscroll-none pb-[calc(13px_+_var(--sai-bottom))]">
             <WindowContent app={top.app} payload={top.payload} />
-          </main>
-          <div className="absolute inset-x-0 bottom-0 z-[5]">
-            <HomeIndicator light={false} onHome={goHome} onSwitcher={openSwitcher} onSwitchApp={switchApp} />
+          </AppFrame>
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[20]">
+            <Indicator light={false} onTap={openSwitcher} />
           </div>
         </div>
       )}
 
       {switcher && <MobileSwitcher onPick={resume} onHome={goHome} />}
-      <MobileNotifications open={nc} onClose={() => setNc(false)} />
-      <Slot region="controlCenter" />
+      <MobileNotifications open={nc || ncDrag !== undefined} onClose={() => setNc(false)} dragProgress={ncDrag} />
+      <Slot region="controlCenter" slotProps={{ dragProgress: ccDrag }} />
       <Slot region="topPill" />
       </div>
     </ShellUIProvider>

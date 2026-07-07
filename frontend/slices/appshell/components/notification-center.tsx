@@ -5,24 +5,25 @@
    state lives in the window store so the clock + ⌘ commands can drive it. Opening
    marks everything read (clears the menu-bar unread dot). Desktop chrome — render
    once in the desktop surface. */
-import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
-import { X, BellOff } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { BellSlash as BellOff } from "@phosphor-icons/react";
 import { useNotificationCenterOpen } from "../hooks/use-shell";
 import { setNotificationCenterOpen } from "../lib/store";
 import {
   useNotifications,
-  dismissNotification,
   clearNotifications,
   markNotificationsRead,
-  type NotificationItem,
 } from "../lib/toast";
 import { useBrand } from "../registry/brand";
+import { useFeaturedWidgets, useOpenApp, WidgetView } from "../registry/widgets";
+import { NotifCard, MonthCalendar } from "./notif-shared";
 
 export function NotificationCenter() {
   const open = useNotificationCenterOpen();
   const items = useNotifications();
+  const widgets = useFeaturedWidgets();
+  const openApp = useOpenApp();
+  const brand = useBrand();
   const close = () => setNotificationCenterOpen(false);
 
   // Opening = "seen": clear the unread badge. Esc closes.
@@ -36,128 +37,60 @@ export function NotificationCenter() {
 
   if (!open) return null;
 
+  // Tapping a widget opens its app and closes the panel (like a notification).
+  const onWidget = (id: string, payload?: unknown) => {
+    openApp(id, payload);
+    close();
+  };
+
   return (
     <>
       <div className="fixed inset-0 z-[889]" onClick={close} />
-      <aside
-        className="glass fixed right-0 top-0 bottom-0 z-[890] flex w-[340px] max-w-[calc(100vw-12px)] flex-col gap-3 border-l border-border p-3 pt-9 shadow-[-20px_0_60px_-20px_rgba(0,0,0,0.5)] animate-in slide-in-from-right duration-200"
-        style={{ background: "var(--glass-menu)" }}
-      >
-        <header className="flex items-center px-1">
-          <h2 className="text-[15px] font-semibold">Notifications</h2>
-          {items.length > 0 && (
-            <Button type="button" variant="ghost" onClick={clearNotifications} className="h-auto p-0 font-normal hover:bg-transparent ml-auto text-xs font-medium text-primary hover:underline">
+      <aside className="fixed right-0 top-0 bottom-0 z-[890] flex w-[330px] flex-col gap-3 p-3 pt-[calc(var(--menubar-h)+6px)] animate-in slide-in-from-right duration-200">
+        {items.length > 0 && (
+          <div className="flex items-center px-1">
+            <button onClick={clearNotifications} className="ml-auto text-xs font-medium text-muted-foreground hover:text-foreground hover:underline">
               Clear All
-            </Button>
-          )}
-        </header>
+            </button>
+          </div>
+        )}
 
-        <div className="flex-1 space-y-2 overflow-y-auto">
-          {items.length === 0 ? (
-            <div className="mt-10 flex flex-col items-center gap-2 text-muted-foreground">
-              <BellOff className="size-7 opacity-50" />
-              <p className="text-sm">No Notifications</p>
-            </div>
-          ) : (
-            items.map((n) => <NotifCard key={n.id} n={n} />)
+        {/* Notifications + widgets share one scroll column (macOS Notification
+            Center); the month calendar stays pinned at the bottom. */}
+        <div className="flex-1 space-y-4 overflow-y-auto pr-0.5 [scrollbar-width:thin]">
+          <div className="space-y-2">
+            {items.length === 0 ? (
+              <div className="mt-6 flex flex-col items-center gap-2 text-muted-foreground">
+                <BellOff className="size-7 opacity-50" />
+                <p className="text-sm">No Notifications</p>
+              </div>
+            ) : (
+              items.map((n) => (
+                <NotifCard
+                  key={n.id}
+                  n={n}
+                  brandPrefix={brand.name}
+                  surfaceClassName="border border-white/20 bg-[var(--glass-menu)] shadow-md backdrop-blur-xl"
+                />
+              ))
+            )}
+          </div>
+
+          {widgets.length > 0 && (
+            <section className="space-y-2">
+              <h3 className="px-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Widgets</h3>
+              <div className="flex flex-wrap justify-center gap-3">
+                {widgets.map(({ appId, option }) => (
+                  <WidgetView key={appId + ":" + option.id} option={option} size="small" openApp={onWidget} />
+                ))}
+              </div>
+            </section>
           )}
         </div>
 
-        <MonthCalendar />
+        <MonthCalendar surfaceClassName="border border-white/20 bg-[var(--glass-menu)] shadow-md backdrop-blur-xl" />
       </aside>
     </>
   );
 }
 
-const TONE_DOT: Record<NotificationItem["tone"], string> = {
-  default: "bg-primary",
-  success: "bg-success",
-  error: "bg-destructive",
-};
-
-function NotifCard({ n }: { n: NotificationItem }) {
-  const brand = useBrand();
-  return (
-    <div className="group relative rounded-2xl border border-border bg-background/70 p-3 pr-8 shadow-sm">
-      <div className="flex items-center gap-2">
-        <span className={cn("size-2 shrink-0 rounded-full", TONE_DOT[n.tone])} />
-        <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-          {brand.name} · {relTime(n.ts)}
-        </span>
-      </div>
-      <p className="mt-1 text-[13px] leading-snug text-foreground">{n.message}</p>
-      {n.action && (
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={() => {
-            n.action?.onClick();
-            dismissNotification(n.id);
-          }}
-          className="mt-2 h-auto rounded-lg px-2.5 py-1 text-xs font-medium"
-        >
-          {n.action.label}
-        </Button>
-      )}
-      <Button type="button" variant="ghost"
-        aria-label="Dismiss"
-        onClick={() => dismissNotification(n.id)}
-        className="h-auto p-0 font-normal hover:bg-transparent absolute right-2 top-2 grid size-5 place-items-center rounded-full text-muted-foreground opacity-0 transition-opacity hover:bg-muted group-hover:opacity-100"
-      >
-        <X className="size-3.5" />
-      </Button>
-    </div>
-  );
-}
-
-function relTime(ts: number): string {
-  if (!ts) return "now";
-  const s = Math.max(0, Math.floor((Date.now() - ts) / 1000));
-  if (s < 60) return "now";
-  const m = Math.floor(s / 60);
-  if (m < 60) return `${m}m ago`;
-  const h = Math.floor(m / 60);
-  if (h < 24) return `${h}h ago`;
-  return `${Math.floor(h / 24)}d ago`;
-}
-
-const DOW = ["S", "M", "T", "W", "T", "F", "S"];
-
-// Lightweight current-month grid (no dep) — today highlighted with the accent.
-function MonthCalendar() {
-  const now = new Date();
-  const y = now.getFullYear();
-  const mo = now.getMonth();
-  const today = now.getDate();
-  const first = new Date(y, mo, 1).getDay();
-  const days = new Date(y, mo + 1, 0).getDate();
-  const cells: (number | null)[] = [
-    ...Array.from({ length: first }, () => null),
-    ...Array.from({ length: days }, (_, i) => i + 1),
-  ];
-
-  return (
-    <div className="rounded-2xl border border-border bg-background/70 p-3">
-      <div className="mb-2 px-1 text-[13px] font-semibold">
-        {now.toLocaleDateString([], { month: "long", year: "numeric" })}
-      </div>
-      <div className="grid grid-cols-7 gap-y-1 text-center text-[11px]">
-        {DOW.map((d, i) => (
-          <span key={i} className="font-medium text-muted-foreground">{d}</span>
-        ))}
-        {cells.map((d, i) => (
-          <span
-            key={i}
-            className={cn(
-              "mx-auto grid size-6 place-items-center rounded-full tabular-nums",
-              d === today ? "bg-primary font-semibold text-primary-foreground" : "text-foreground/80",
-            )}
-          >
-            {d ?? ""}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Pin, Trash2, X } from "lucide-react";
+import { PushPin as Pin, Trash as Trash2, X } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,7 +14,7 @@ import {
   togglePinClip,
   useClipboardOpen,
   useClips,
-} from "@/features/appshell";
+} from "../../../lib/clipboard";
 
 // ⌘⇧V clipboard history — pinned entries stick, click copies back to the
 // system clipboard. Capture (document copy/cut) starts with this feature.

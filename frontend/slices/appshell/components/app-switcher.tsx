@@ -1,9 +1,11 @@
 "use client";
-/* ⌘Tab app switcher — hold ⌘/Ctrl and tap Tab to cycle running apps MRU-first;
-   release the modifier to focus the highlighted app (Shift reverses, Esc cancels).
-   Reads the window store for the running set and only the focus action mutates it.
+/* ⌘Tab / Alt+Tab app switcher — hold ⌘/Ctrl (macOS) or Alt (Windows) and tap Tab
+   to cycle running apps MRU-first; release the held modifier to focus the
+   highlighted app (Shift reverses, Esc cancels). Reads the window store for the
+   running set and only the focus action mutates it.
    Note: some browsers reserve ⌘/Ctrl+Tab for tab switching and won't deliver it
-   to the page — best-effort preventDefault. Desktop chrome; render once. */
+   to the page — best-effort preventDefault. Alt+Tab is NOT browser-reserved so it
+   fires reliably. Desktop chrome; render once (one shell mounts at a time). */
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useApps } from "../lib/registry";
@@ -37,7 +39,8 @@ export function AppSwitcher() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "Tab") {
+      // Meta/Ctrl (macOS ⌘Tab) OR Alt (Windows Alt+Tab) both drive the same cycle.
+      if ((e.metaKey || e.ctrlKey || e.altKey) && e.key === "Tab") {
         const list = runRef.current;
         if (list.length < 2) return;
         e.preventDefault();
@@ -48,7 +51,8 @@ export function AppSwitcher() {
       }
     };
     const onUp = (e: KeyboardEvent) => {
-      if (e.key !== "Meta" && e.key !== "Control") return;
+      // Commit on release of whichever modifier opened the switcher.
+      if (e.key !== "Meta" && e.key !== "Control" && e.key !== "Alt") return;
       const i = idxRef.current;
       if (i == null) return;
       const app = runRef.current[i];

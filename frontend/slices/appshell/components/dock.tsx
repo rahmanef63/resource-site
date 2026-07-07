@@ -1,64 +1,33 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { LayoutGrid, Grid3x3 } from "lucide-react";
+import { GridFour as LayoutGrid, GridNine as Grid3x3 } from "@phosphor-icons/react";
 import { useApps } from "../lib/registry";
 import { useWindowOrder, useFocused } from "../hooks/use-shell";
 import { shellStore, setLauncherOpen } from "../lib/store";
-import { useQuickLinks } from "../registry/capabilities";
-import { BASE, DockIcon, PlainIcon } from "./dock-parts";
-import { QuicklinkIcon } from "./quicklink-icon";
-import type { AppDescriptor, WindowState } from "../lib/types";
-
-// ── macOS dock magnification ─────────────────────────────────────────────────
-// Icon size is driven by LAYOUT width so the glass bar actually grows + re-centres
-// as icons magnify. Crucially the magnification CONSERVES total width: a FIXED
-// pool of extra width (DOCK_EXTRA) is shared out among icons by a gaussian weight,
-// so the bar has just TWO widths — collapsed at rest, one stable expanded size on
-// hover — instead of fluctuating as the cursor moves. Icons are square, so the bar
-// grows in height too. Distance is measured against each slot's FIXED rest centre
-// (the centre-justified row's centre x is invariant under symmetric growth), so
-// there's no measure→grow feedback.
-const SEP_W = 13; // divider slot px
-const GAP = 8; // px between slots
-const MAG_SIGMA = 100; // bell-curve spread (≈3 icons each side ripple)
-const DOCK_EXTRA = 340; // pool px shared by gaussian weight (peak icon ≈ +DOCK_EXTRA/restNorm)
-
-type Slot =
-  | { kind: "app"; app: AppDescriptor; windows: WindowState[] }
-  | { kind: "sep" }
-  | { kind: "plain"; id: string; label: string; onClick: () => void; node: React.ReactNode };
+import type { WindowState } from "../lib/types";
+import { BASE, SEP_W, GAP, MAG_SIGMA, DOCK_EXTRA, type Slot } from "./dock-helpers";
+import { DockIcon, PlainIcon } from "./dock-parts";
 
 export function Dock({ onMissionControl }: { onMissionControl?: () => void }) {
-  const apps = useApps().filter((a) => !a.noDock);
+  const allApps = useApps();
+  // Trash lives at the dock's TAIL after a separator (macOS convention) — pull it
+  // out of the main app run.
+  const apps = allApps.filter((a) => !a.noDock && a.id !== "trash" && a.id !== "files");
+  const filesApp = allApps.find((a) => a.id === "files");
+  const trashApp = allApps.find((a) => a.id === "trash");
   const order = useWindowOrder();
   const focused = useFocused();
-  const { items: links, open: openLink } = useQuickLinks();
   const wins = order.map((id) => shellStore.getWindow(id)).filter(Boolean) as WindowState[];
   const rowRef = useRef<HTMLDivElement>(null);
 
   const slots: Slot[] = [
     ...apps.map((app): Slot => ({ kind: "app", app, windows: wins.filter((w) => w.app === app.id) })),
-    // Quicklinks ride in their own dock cluster after the app separator.
-    ...(links.length
-      ? [
-          { kind: "sep" } as Slot,
-          ...links.map(
-            (link): Slot => ({
-              kind: "plain",
-              id: `ql-${link.id}`,
-              label: link.title,
-              onClick: () => openLink(link),
-              node: <QuicklinkIcon link={link} />,
-            }),
-          ),
-        ]
-      : []),
     { kind: "sep" },
     {
       kind: "plain", id: "launchpad", label: "Launchpad", onClick: () => setLauncherOpen(true),
       node: (
-        <span className="grid size-full place-items-center rounded-[var(--radius-icon)] bg-gradient-to-b from-zinc-500 to-zinc-700 text-white">
+        <span className="grid size-full place-items-center rounded-[var(--radius-icon)] bg-gradient-to-b from-muted-foreground to-foreground text-white">
           <LayoutGrid className="size-[54%]" />
         </span>
       ),
@@ -67,11 +36,20 @@ export function Dock({ onMissionControl }: { onMissionControl?: () => void }) {
       ? [{
           kind: "plain", id: "mission-control", label: "Mission Control", onClick: onMissionControl,
           node: (
-            <span className="grid size-full place-items-center rounded-[var(--radius-icon)] bg-gradient-to-b from-slate-600 to-slate-800 text-white">
+            <span className="grid size-full place-items-center rounded-[var(--radius-icon)] bg-gradient-to-b from-foreground to-muted-foreground text-white">
               <Grid3x3 className="size-[54%]" />
             </span>
           ),
         } as Slot]
+      : []),
+    // Files + Trash tail — a separator then the Files folder + Trash, like the
+    // real macOS dock's "Files, folders, and Trash" section.
+    ...(filesApp || trashApp
+      ? [
+          { kind: "sep" } as Slot,
+          ...(filesApp ? [{ kind: "app", app: filesApp, windows: wins.filter((w) => w.app === filesApp.id) } as Slot] : []),
+          ...(trashApp ? [{ kind: "app", app: trashApp, windows: wins.filter((w) => w.app === trashApp.id) } as Slot] : []),
+        ]
       : []),
   ];
 
@@ -105,6 +83,10 @@ export function Dock({ onMissionControl }: { onMissionControl?: () => void }) {
   const zoneEls = useRef<(HTMLDivElement | null)[]>([]);
   const mouseX = useRef<number | null>(null);
   const raf = useRef(0);
+  // Was the row hovering as of the LAST applied frame — lets apply() tell an
+  // enter/leave transition (mouseX flips null↔value between frames) apart from
+  // continued in-dock tracking (mouseX keeps changing while already hovering).
+  const wasHovering = useRef(false);
 
   const apply = () => {
     raf.current = 0;
@@ -112,6 +94,15 @@ export function Dock({ onMissionControl }: { onMissionControl?: () => void }) {
     if (!row) return;
     const mx = mouseX.current;
     const hovering = mx != null;
+    // Real macOS magnification tracks the cursor 1:1 with no perceptible lag —
+    // only the grow/shrink on enter/leave is eased. So: entering or leaving the
+    // dock gets the ~200ms glide (matches SLOT_TRANS/ZONE_TRANS's class default,
+    // repeated here since inline style wins once set); every other frame — the
+    // cursor sweeping while already hovering — collapses to a near-instant 60ms.
+    const entering = hovering && !wasHovering.current;
+    const leaving = !hovering && wasHovering.current;
+    const dur = entering || leaving ? "200ms" : "60ms";
+    wasHovering.current = hovering;
     const rc = row.getBoundingClientRect(); // ONE read per frame (no per-slot reflow)
     const rowCenter = rc.left + rc.width / 2;
     const weights = slots.map((s, i) => {
@@ -126,8 +117,8 @@ export function Dock({ onMissionControl }: { onMissionControl?: () => void }) {
       const w = BASE + (hovering ? DOCK_EXTRA * (weights[i] / restNorm) : 0);
       const slot = slotEls.current[i];
       const zone = zoneEls.current[i];
-      if (slot) slot.style.width = `${w}px`;
-      if (zone) zone.style.height = `${w}px`;
+      if (slot) { slot.style.transitionDuration = dur; slot.style.width = `${w}px`; }
+      if (zone) { zone.style.transitionDuration = dur; zone.style.height = `${w}px`; }
     });
   };
   const schedule = () => { if (!raf.current) raf.current = requestAnimationFrame(apply); };
@@ -143,9 +134,11 @@ export function Dock({ onMissionControl }: { onMissionControl?: () => void }) {
     <div className="pointer-events-none absolute inset-x-0 bottom-2 z-[880] flex justify-center">
       <div
         ref={rowRef}
+        role="toolbar"
+        aria-label="Dock"
         onPointerMove={(e) => { mouseX.current = e.clientX; schedule(); }}
         onPointerLeave={() => { mouseX.current = null; schedule(); }}
-        className="glass pointer-events-auto flex items-end rounded-[22px] border border-white/40 px-2.5 py-2 shadow-[0_1px_0_rgba(255,255,255,0.4)_inset,0_18px_50px_-10px_rgba(0,0,0,0.5)] dark:border-white/10"
+        className="glass pointer-events-auto flex items-end rounded-2xl border border-white/25 px-2.5 py-2 shadow-[0_0_0_0.5px_rgba(0,0,0,0.1),0_10px_30px_-8px_rgba(0,0,0,0.35)] dark:border-white/10"
         style={{ background: "var(--dock-bg)", gap: GAP }}
       >
         {slots.map((s, i) => {

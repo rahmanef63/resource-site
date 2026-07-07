@@ -1,7 +1,6 @@
 "use client";
 
-import { Check, X, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Check, X, CircleNotch as Loader2 } from "@phosphor-icons/react";
 import { useActivities, useShellUI } from "@/features/appshell";
 
 // iPhone Dynamic Island: a top-center pill that appears ONLY while something is
@@ -17,18 +16,20 @@ export function DynamicIsland() {
   const tone = a.tone ?? "active";
 
   return (
-    <div className="pointer-events-none absolute inset-x-0 top-1.5 z-[60] flex justify-center">
-      <Button
+    // top-[var(--island-top)] (appshell.css) — the SAME top edge the idle
+    // pill in mobile-status-bar.tsx uses, so this live-activity pill never
+    // jumps relative to the idle island it's replacing.
+    <div className="pointer-events-none absolute inset-x-0 top-[var(--island-top)] z-[60] flex justify-center">
+      <button
         type="button"
-        variant="ghost"
         disabled={!a.appId}
         onClick={() => a.appId && openAppById(a.appId)}
-        className="h-auto hover:bg-black/85 pointer-events-auto flex max-w-[80%] items-center gap-2.5 rounded-full bg-black/85 px-3.5 py-2 text-white shadow-xl backdrop-blur disabled:cursor-default"
-        style={{ animation: "appOpen .25s cubic-bezier(.2,.8,.2,1)" }}
+        className="pointer-events-auto flex min-h-[var(--island-h)] min-w-[var(--island-w)] max-w-[80%] items-center gap-2.5 rounded-full bg-black px-3.5 py-2 text-white shadow-xl disabled:cursor-default [transform-origin:top_center]"
+        style={{ animation: "islandSpring 0.55s ease-out" }}
       >
         <span className="grid size-5 shrink-0 place-items-center">
           {tone === "done" ? (
-            <Check className="size-4 text-success" />
+            <Check className="size-4 text-emerald-400" />
           ) : tone === "error" ? (
             <X className="size-4 text-destructive" />
           ) : pct != null ? (
@@ -45,7 +46,7 @@ export function DynamicIsland() {
             {a.detail}
           </span>
         )}
-      </Button>
+      </button>
     </div>
   );
 }

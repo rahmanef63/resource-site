@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import { ResponsiveContext } from "./use-responsive";
-import { MOBILE_W as MOBILE_BREAKPOINT } from "./responsive-provider";
+
+const MOBILE_BREAKPOINT = 768;
 
 // True when the viewport is phone-sized. Inside the shell this reads the single
 // <ResponsiveProvider> source of truth; outside it (rare — a standalone preview,

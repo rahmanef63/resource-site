@@ -1,7 +1,7 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
-import { M, emit, patch, shellStore } from "./store-state";
+import { useState, useSyncExternalStore } from "react";
+import { M, emit, patch, shellStore, topWindowBy } from "./store-state";
 import { registerCommands } from "./commands";
 import { toast } from "./toast";
 import type { WinId } from "./types";
@@ -20,17 +20,7 @@ export function spaceOf(win: { spaceId?: number } | undefined): number {
 }
 
 function topWindowIn(space: number): WinId | null {
-  let best: WinId | null = null;
-  let bestZ = -1;
-  for (const id of M.state.order) {
-    const w = M.state.windows[id];
-    if (!w || w.minimized || spaceOf(w) !== space) continue;
-    if (w.z > bestZ) {
-      bestZ = w.z;
-      best = id;
-    }
-  }
-  return best;
+  return topWindowBy(M.state.order, (w) => spaceOf(w) === space);
 }
 
 export function setActiveSpace(n: number): void {
@@ -56,6 +46,21 @@ export function useActiveSpace(): number {
     shellStore.getActiveSpace,
     shellStore.getActiveSpace,
   );
+}
+
+/** Which way the active Space just moved — drives DesktopChrome's directional
+ *  slide-in (real macOS slides the whole desktop). "Adjusting state during
+ *  render" (react.dev's sanctioned pattern for prev-vs-current diffing) rather
+ *  than reading a ref in render, which the React Compiler rejects; null until
+ *  the first switch. */
+export function useSpaceSlideDirection(active: number): "left" | "right" | null {
+  const [prev, setPrev] = useState(active);
+  const [dir, setDir] = useState<"left" | "right" | null>(null);
+  if (prev !== active) {
+    setDir(active > prev ? "right" : "left");
+    setPrev(active);
+  }
+  return dir;
 }
 
 registerCommands("spaces", [

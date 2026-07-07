@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect } from "react";
-import { X } from "lucide-react";
+import { X } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import {
   closeQuickLook,
   previewerFor,
   toggleQuickLook,
   useQuickLook,
-} from "@/features/appshell";
+} from "../../../lib/quick-look";
 
 function inEditable(): boolean {
   const el = document.activeElement as HTMLElement | null;

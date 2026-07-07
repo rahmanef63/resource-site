@@ -11,7 +11,6 @@ import { useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, Home, Activity, Search } from "lucide-react";
 import { registerShell } from "../../../registry/shells";
-import { useShellConfig } from "../../../registry/shell-config";
 import { useBrand } from "../../../registry/brand";
 import { useApps } from "../../../lib/registry";
 import { useWindowOrder, useFocused, useWindow } from "../../../hooks/use-shell";
@@ -36,11 +35,12 @@ function DashboardShell() {
   // store), anything else shows Home. User gestures override, keyed to the
   // pathname they were made at, so the derivation wins again when the URL
   // actually changes — no effect-driven setState.
-  const { routing } = useShellConfig();
+  // ponytail: upstream moved routing control to the manifest/UrlSync layer and
+  // dropped it from ShellConfig — this dashboard shell stays URL-driven.
   const pathname = usePathname();
   const urlSlug = pathname.split("/").filter(Boolean)[0];
   const urlIsApp =
-    routing !== false && !!urlSlug && allApps.some((a) => (a.slug ?? a.id) === urlSlug);
+    !!urlSlug && allApps.some((a) => (a.slug ?? a.id) === urlSlug);
   const [homeChoice, setHomeChoice] = useState<{ key: string; home: boolean } | null>(null);
   const home = homeChoice?.key === pathname ? homeChoice.home : !urlIsApp;
   const setHome = (h: boolean) => setHomeChoice({ key: pathname, home: h });
@@ -133,7 +133,7 @@ function DashboardShell() {
         {/* container context is REQUIRED: app @container styles never match without it */}
         <main className="min-h-0 flex-1 overflow-hidden [container-type:inline-size]">
           {pane ? (
-            <WindowContent key={pane.id} app={pane.app} payload={pane.payload} winId={pane.id} />
+            <WindowContent key={pane.id} app={pane.app} payload={pane.payload} />
           ) : (
             <DashboardHome apps={apps} onOpenApp={launch} />
           )}

@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useMemo, type CSSProperties, type ReactNode } from "react";
+import { createContext, useContext, type CSSProperties, type ReactNode } from "react";
 import type { DeviceMode } from "../responsive/use-responsive";
 
 export type ThemeMode = "light" | "dark";
@@ -44,8 +44,13 @@ export type ServerToggle = {
   toggle: () => void;
 };
 
-// A user website shortcut surfaced in the dock / Launchpad / mobile grid / Today
-// widget. The consumer owns the data + how it opens (the shell never knows URLs).
+// Capabilities the consumer injects via the manifest, so the generic shell + its
+// feature slices have NO hard dependency on a project's appearance store, host
+// API or AI backend. Each is a hook (called by the shell at a stable position)
+// so the consumer can wire it to reactive sources (a theme store, a polled
+// telemetry endpoint, …). Optional members degrade gracefully via the defaults.
+// Quick links — an rr-slice capability upstream (rahmanef-com) dropped; kept here
+// because this slice's quicklink-icon + mock-capabilities depend on it.
 export type QuickLink = { id: string; title: string; url: string };
 export type QuickLinks = {
   items: QuickLink[];
@@ -54,11 +59,6 @@ export type QuickLinks = {
   faviconUrl: (url: string) => string | null;
 };
 
-// Capabilities the consumer injects via the manifest, so the generic shell + its
-// feature slices have NO hard dependency on a project's appearance store, host
-// API or AI backend. Each is a hook (called by the shell at a stable position)
-// so the consumer can wire it to reactive sources (a theme store, a polled
-// telemetry endpoint, …). Optional members degrade gracefully via the defaults.
 export type ShellCapabilities = {
   /** Theme/device/wallpaper source. */
   useAppearance: () => ShellAppearance;
@@ -72,7 +72,7 @@ export type ShellCapabilities = {
   useChat?: () => (messages: ChatMessage[]) => AsyncGenerator<string>;
   /** shell-control-center: optional server-mode tile (null hides it). */
   useServerToggle?: () => ServerToggle | null;
-  /** Website shortcuts for the dock / Launchpad / mobile grid / Today widget. */
+  /** rr quick-links strip source (empty by default). */
   useQuickLinks?: () => QuickLinks;
 };
 
@@ -111,16 +111,9 @@ export function CapabilitiesProvider({
   children: ReactNode;
 }) {
   // Merge over the defaults so every capability key is a callable hook — keeps
-  // the accessor hooks unconditional. Memoized on `value` so consumers don't
-  // re-render on every provider render, and explicitly-undefined keys are
-  // stripped first (otherwise `{ useSearch: undefined }` would override the
-  // default and crash the unconditional accessor).
-  const merged = useMemo<Required<ShellCapabilities>>(() => {
-    const defined = Object.fromEntries(
-      Object.entries(value ?? {}).filter(([, v]) => v !== undefined),
-    ) as ShellCapabilities;
-    return { ...DEFAULT_CAPABILITIES, ...defined };
-  }, [value]);
+  // the accessor hooks unconditional (the merged object is stable for the app's
+  // lifetime, so the hook order never changes between renders).
+  const merged: Required<ShellCapabilities> = { ...DEFAULT_CAPABILITIES, ...value };
   return (
     <CapabilitiesContext.Provider value={merged}>{children}</CapabilitiesContext.Provider>
   );

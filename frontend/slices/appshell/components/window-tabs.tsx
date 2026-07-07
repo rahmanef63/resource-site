@@ -1,6 +1,6 @@
 "use client";
 
-import { X } from "lucide-react";
+import { X } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useWindowOrder } from "../hooks/use-shell";

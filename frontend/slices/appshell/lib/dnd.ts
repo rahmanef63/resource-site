@@ -46,8 +46,14 @@ export function deliverDrop(appId: string, data: DragData): boolean {
   return true;
 }
 
-/** Spread these onto any element to make it a cross-app drag source. */
-export function makeDragProps(data: DragData): {
+/** Spread these onto any element to make it a cross-app drag source.
+ * `ghostLabel`, when given, swaps the browser's washed-out half-opacity
+ * default drag snapshot for a small opaque pill (native OS drag proxies are
+ * full-opacity, not a translucent DOM screenshot). The pill is built off-screen
+ * so the browser can still rasterize it for setDragImage, then removed on the
+ * next frame — dataTransfer.setDragImage snapshots synchronously during
+ * dragstart, so the element only needs to exist for that one tick. */
+export function makeDragProps(data: DragData, ghostLabel?: string): {
   draggable: true;
   onDragStart: (e: React.DragEvent) => void;
 } {
@@ -56,8 +62,30 @@ export function makeDragProps(data: DragData): {
     onDragStart: (e) => {
       e.dataTransfer.setData(DND_MIME, JSON.stringify(data));
       e.dataTransfer.effectAllowed = "copy";
+      if (ghostLabel) setDragGhost(e, ghostLabel);
     },
   };
+}
+
+function setDragGhost(e: React.DragEvent, label: string): void {
+  if (typeof e.dataTransfer.setDragImage !== "function") return;
+  const ghost = document.createElement("div");
+  ghost.textContent = label;
+  Object.assign(ghost.style, {
+    position: "fixed",
+    top: "-999px",
+    left: "-999px",
+    padding: "6px 12px",
+    borderRadius: "8px",
+    background: "color-mix(in oklab, var(--foreground) 85%, transparent)",
+    color: "var(--background)",
+    font: "600 12px var(--font-os, system-ui)",
+    whiteSpace: "nowrap",
+    boxShadow: "0 8px 20px -4px rgba(0,0,0,0.45)",
+  });
+  document.body.appendChild(ghost);
+  e.dataTransfer.setDragImage(ghost, 14, 14);
+  requestAnimationFrame(() => ghost.remove());
 }
 
 /** Parse a shell payload off a drag event (null for native/file drags). */

@@ -33,6 +33,17 @@ export function severityFor(file, repoRoot) {
   if (parts[0] === "app" && parts[1] === "preview" && parts[2] === "slices") {
     return "warning";
   }
+  // frontend/slices/appshell/* → the OS shell. Unlike form/content templates it
+  // legitimately ships non-form interactive chrome (window traffic-lights,
+  // taskbar/dock buttons, dynamic island, quick-settings) as raw <button>, and
+  // it's re-synced 1:1 from the upstream OS (rahmanef-com/features/appshell)
+  // which has no shadcn-only gate — wrapping every chrome button in <Button>
+  // (no unstyled variant) would restyle the chrome and fight every future sync.
+  // WARNING not ERROR here (visible, non-blocking) — a documented carve-out for
+  // this one slice; every other slice stays the 2026-06-02 hard gate below.
+  if (parts[0] === "frontend" && parts[1] === "slices" && parts[2] === "appshell") {
+    return "warning";
+  }
   // frontend/slices/<slug>/* → slice source (copied into consumers by
   // `rr add`). HARD GATE (2026-06-02): burndown complete — 66 raw <button>
   // converted to shadcn Button, 7 raw <input type=file> moved behind the

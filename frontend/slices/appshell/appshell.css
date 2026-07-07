@@ -8,15 +8,37 @@
  *
  * Light values live on :root; `.dark` overrides them. Pairs with the shadcn
  * theme tokens already in the consumer's globals (--background/--foreground/…).
+ *
+ * Split (200-LOC gate): skin utilities (.material-*, .press-*, .icon-tile) →
+ * appshell-materials.css; wallpaper presets (.wp-*) → appshell-wallpapers.css;
+ * <OsSpinner/> keyframes → appshell-spinner.css; per-shell focus rings →
+ * appshell-focus.css. All pulled in below so consumers still import only
+ * this file.
  */
+@import "./appshell-materials.css";
+@import "./appshell-wallpapers.css";
+@import "./appshell-spinner.css";
+@import "./appshell-focus.css";
 
 :root {
-  --sai-top: env(safe-area-inset-top, 0px);
-  --sai-right: env(safe-area-inset-right, 0px);
   --sai-bottom: env(safe-area-inset-bottom, 0px);
-  --sai-left: env(safe-area-inset-left, 0px);
+  /* Global menu bar height (macOS 24px "notchless" metric — real macOS only
+     grows this on notched MacBooks). desktop-parts.tsx/menu-bar.tsx consume it;
+     notification-center.tsx/toast-host.tsx (owned elsewhere) also read it via
+     calc(var(--menubar-h) + Npx). */
+  --menubar-h: 24px;
   --blur: 30px;
-  --accent: #2f7bf6;
+  /* OS chrome accent (Spotlight/Inspector). Renamed from --accent so it no
+     longer shadows shadcn's neutral --accent (which `bg-accent` hovers read). */
+  --os-accent: #2f7bf6;
+
+  /* Brand tokens — base values so var(--brand*) resolves with NO brand picked
+     (the app's applyBrand() overrides these inline when a hex is set, and
+     removes them to fall back here). Derived from --primary so they track
+     light/dark automatically. */
+  --brand: var(--primary);
+  --brand-soft: color-mix(in oklch, var(--primary) 16%, transparent);
+  --brand-strong: color-mix(in oklch, var(--primary) 80%, black);
 
   --glass-bar: rgba(250, 250, 252, 0.62);
   --glass-menu: rgba(252, 252, 254, 0.86);
@@ -25,11 +47,30 @@
   --window-head: rgba(255, 255, 255, 0.55);
   --hover-strong: rgba(0, 0, 0, 0.09);
   --dock-bg: rgba(255, 255, 255, 0.34);
+  /* Win11 Mica/Acrylic — near-opaque, ACCENT-tinted material (not a live blur
+     like macOS vibrancy). The windows ChromeKit's surface.* tokens all point
+     at this one shared tint (taskbar, titlebar, flyouts). */
+  --mica-win: color-mix(in srgb, rgba(243, 243, 243, 0.88) 90%, var(--os-accent) 10%);
 
   --radius-win: 12px;
   --radius-icon: 22%;
   --shadow-win: 0 0 0 0.5px rgba(0, 0, 0, 0.16), 0 24px 60px -12px rgba(0, 0, 0, 0.42),
     0 8px 22px -10px rgba(0, 0, 0, 0.3);
+  /* Focus elevation ramp (window.tsx swaps by `focused`): the key window keeps
+     the big soft shadow, inactive windows drop to a tight one — the depth cue
+     real desktops use to mark focus. Alias tracks per-shell --shadow-win. */
+  --shadow-win-active: var(--shadow-win);
+  --shadow-win-inactive: 0 0 0 0.5px rgba(0, 0, 0, 0.12), 0 6px 18px -6px rgba(0, 0, 0, 0.22);
+  /* Traffic lights when the window is NOT key (real macOS greys all three). */
+  --tl-idle: #d1d1d6;
+
+  /* iOS Dynamic Island — single-sourced geometry (real iPhone: 126x37.33 @
+     11.33px from the top). mobile-status-bar.tsx's idle pill and
+     dynamic-island.tsx's live-activity pill both consume these so the two
+     states share the exact top edge and never jump. */
+  --island-w: 126px;
+  --island-h: 37px;
+  --island-top: 11px;
 }
 
 .dark {
@@ -40,50 +81,134 @@
   --window-head: rgba(60, 60, 68, 0.5);
   --hover-strong: rgba(255, 255, 255, 0.14);
   --dock-bg: rgba(40, 40, 48, 0.42);
+  --mica-win: color-mix(in srgb, rgba(32, 32, 32, 0.78) 90%, var(--os-accent) 10%);
+  /* Faint inner top-edge hairline highlight (titlebar-metrics polish) — dark
+     windows on a dark wallpaper otherwise read as edgeless; a 0.5px inset
+     rim reads as the same light-catch macOS gives a translucent frame. */
   --shadow-win: 0 0 0 0.5px rgba(0, 0, 0, 0.6), 0 28px 70px -12px rgba(0, 0, 0, 0.7),
-    0 8px 22px -10px rgba(0, 0, 0, 0.55);
+    0 8px 22px -10px rgba(0, 0, 0, 0.55), inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+  --tl-idle: #4f4f55;
 }
 
-/* glass helper — applied alongside theme tokens, never raw hex in components */
+/* glass helper — applied alongside theme tokens, never raw hex in components.
+   Gated on the kit axes: --glass-enabled 0 flattens (blur × 0), --saturate is
+   the per-OS vibrancy (mac 180% / Win Acrylic 130% / M3 flat 100%). */
 .glass {
-  -webkit-backdrop-filter: blur(var(--blur)) saturate(180%);
-  backdrop-filter: blur(var(--blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(calc(var(--blur) * var(--glass-enabled, 1)))
+    saturate(var(--saturate, 180%));
+  backdrop-filter: blur(calc(var(--blur) * var(--glass-enabled, 1))) saturate(var(--saturate, 180%));
 }
 
-/* wallpapers — the desktop background (manifest appearance picks the key) */
-.wp-aurora {
-  background:
-    radial-gradient(120% 120% at 18% 12%, #6a8dff 0%, rgba(106, 141, 255, 0) 46%),
-    radial-gradient(120% 110% at 86% 22%, #ff7ac4 0%, rgba(255, 122, 196, 0) 42%),
-    radial-gradient(120% 120% at 70% 88%, #5be0c8 0%, rgba(91, 224, 200, 0) 48%),
-    linear-gradient(160deg, #2a2f6b 0%, #1b2050 60%, #141738 100%);
-}
-.wp-dusk {
-  background:
-    radial-gradient(130% 120% at 80% 8%, #ffb066 0%, rgba(255, 176, 102, 0) 45%),
-    radial-gradient(120% 120% at 12% 30%, #ff6f91 0%, rgba(255, 111, 145, 0) 42%),
-    linear-gradient(160deg, #5a2a55 0%, #2e1b46 55%, #16122e 100%);
-}
-.wp-mist {
-  background:
-    radial-gradient(120% 120% at 22% 18%, #c9d4e6 0%, rgba(201, 212, 230, 0) 50%),
-    radial-gradient(120% 120% at 86% 80%, #aebfd6 0%, rgba(174, 191, 214, 0) 50%),
-    linear-gradient(160deg, #eef1f6 0%, #dde3ee 60%, #cfd7e6 100%);
-}
-.wp-noir {
-  background: linear-gradient(160deg, #121316 0%, #0a0a0c 100%);
-}
-.wp-graphite {
-  background:
-    radial-gradient(120% 120% at 30% 20%, #3a3f4b 0%, rgba(58, 63, 75, 0) 55%),
-    linear-gradient(160deg, #23262e 0%, #16181d 70%, #0e0f13 100%);
+/* Text selection follows the active OS accent (macOS ~30% systemBlue wash is
+   the shared approximation; Windows/Android retint via their kit accent). */
+::selection {
+  background: color-mix(in oklab, var(--os-accent) 30%, transparent);
 }
 
-/* Per-OS flavours — the "auto" wallpaper resolves to the active shell's pick
-   (ShellDescriptor.wallpaper); these are also selectable as plain presets. */
-.wp-win11    { background: radial-gradient(90% 75% at 50% 35%, #3b82f6 0%, #1e40af 42%, #0b1f4a 100%); }
-.wp-material { background: linear-gradient(150deg, #cfe0ff 0%, #e8def8 55%, #ffd8e4 100%); }
-.dark .wp-material { background: linear-gradient(150deg, #1f2c47 0%, #322c4b 55%, #46263a 100%); }
-.wp-ios      { background: linear-gradient(165deg, #0f2a6b 0%, #5b3bb4 48%, #c84fa0 100%); }
-/* "auto" swatch in pickers — a hue ring that reads as "follows the OS". */
-.wp-auto     { background: conic-gradient(from 220deg at 50% 50%, #3b82f6, #8b5cf6, #ec4899, #f59e0b, #10b981, #3b82f6); }
+/* Menu-bar dropdowns + the desktop/context menu: 13px rows with a full-row
+   accent highlight on focus/hover (real macOS, not the shadcn neutral grey).
+   Scoped to .os-menu (applied by menu-bar-parts.tsx's <Menu> + context-menu.tsx)
+   so unrelated shadcn dropdowns elsewhere (e.g. in-app toolbars) keep their
+   default look. */
+.os-menu {
+  /* Unlayered (this file has no top-level @layer) so it wins over the shadcn
+     DropdownMenuContent defaults (bg-popover etc. live in Tailwind's utilities
+     layer, which otherwise beats .material-menu's own @layer components rule)
+     without any !important — the background is repeated here for that reason,
+     .material-menu still supplies the backdrop-filter half (uncontested). */
+  background: var(--glass-menu);
+  padding: 4px;
+  border-radius: 10px;
+  font-size: 13px;
+}
+.os-menu [data-slot="dropdown-menu-item"] {
+  min-height: 22px;
+  border-radius: 5px;
+  padding-block: 2px;
+}
+.os-menu [data-slot="dropdown-menu-item"]:focus {
+  background: var(--os-accent);
+  color: #fff;
+}
+/* the ⌘-shortcut hint is muted-foreground by default — flip it white too so a
+   selected row reads as one solid accent block, not two-tone. */
+.os-menu [data-slot="dropdown-menu-item"]:focus [data-slot="dropdown-menu-shortcut"] {
+  color: inherit;
+}
+/* context-menu.tsx is a hand-rolled <button> menu (no Radix, no data-slot) —
+   the rule above only ever matched menu-bar-parts.tsx's shadcn <Menu>. Same
+   row treatment, keyed on the plain button + its own focus/hover state. */
+.os-menu button:not(:disabled):hover,
+.os-menu button:not(:disabled):focus {
+  background: var(--os-accent);
+  color: #fff;
+}
+
+/* Wallpaper/material/spinner/focus splits — see the header comment above. */
+
+/* iOS home-screen icon: a real squircle (continuous-curvature superellipse,
+   not a circular-arc border-radius), fully flat — --icon-gloss is already 0
+   for this kit so bevel/dome are already invisible; box-shadow still needs
+   killing (--icon-plate's hairline contour, a macOS-only cue). Additive +
+   scoped to [data-shell=ios] only. Mask (not clip-path) for resolution
+   independence; path = a sampled n=5 superellipse (48 pts) in a 0-1 viewBox. */
+[data-shell="ios"] .icon-tile {
+  border-radius: 0;
+  box-shadow: none;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3Cpath d='M1 .5 L.998 .721 L.993 .791 L.984 .84 L.972 .879 L.956 .91 L.935 .935 L.91 .956 L.879 .972 L.84 .984 L.791 .993 L.721 .998 L.5 1 L.279 .998 L.209 .993 L.16 .984 L.121 .972 L.09 .956 L.065 .935 L.044 .91 L.028 .879 L.016 .84 L.007 .791 L.002 .721 L0 .5 L.002 .279 L.007 .209 L.016 .16 L.028 .121 L.044 .09 L.065 .065 L.09 .044 L.121 .028 L.16 .016 L.209 .007 L.279 .002 L.5 0 L.721 .002 L.791 .007 L.84 .016 L.879 .028 L.91 .044 L.935 .065 L.956 .09 L.972 .121 L.984 .16 L.993 .209 L.998 .279 Z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3Cpath d='M1 .5 L.998 .721 L.993 .791 L.984 .84 L.972 .879 L.956 .91 L.935 .935 L.91 .956 L.879 .972 L.84 .984 L.791 .993 L.721 .998 L.5 1 L.279 .998 L.209 .993 L.16 .984 L.121 .972 L.09 .956 L.065 .935 L.044 .91 L.028 .879 L.016 .84 L.007 .791 L.002 .721 L0 .5 L.002 .279 L.007 .209 L.016 .16 L.028 .121 L.044 .09 L.065 .065 L.09 .044 L.121 .028 L.16 .016 L.209 .007 L.279 .002 L.5 0 L.721 .002 L.791 .007 L.84 .016 L.879 .028 L.91 .044 L.935 .065 L.956 .09 L.972 .121 L.984 .16 L.993 .209 L.998 .279 Z'/%3E%3C/svg%3E");
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+/* Android adaptive icon: the shared --icon-gloss axis (0 for this kit, same as
+   iOS) kills the whole Sonoma bevel/dome/rim stack, which is correct — but it
+   also zeroes the ONE drop shadow real Pixel icons keep (iOS's flat squircle
+   above is the only shell meant to be fully shadow-less, per the P0 icon-axes
+   correction). Scoped override (not a new token axis) restores just that
+   single soft shadow + the existing hairline (--icon-plate=1) on top of the
+   already-flat base, so android-round-flat-icons reads as flat+round+shadowed
+   without touching chrome-kit-data.ts or adding a TokenPack axis for one shell. */
+[data-shell="android"] .icon-tile {
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, calc(0.1 * var(--icon-plate, 1))),
+    0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* M3 dynamic color (android-dynamic-color-m3) — a Material-You-style tonal
+   ramp derived from the shell's own accent seed (--os-accent, set to the M3
+   baseline blue by chrome-kit-data.ts's ANDROID_TOKENS.accent while this
+   shell is active) via color-mix, so downstream QS tiles / search pill /
+   notification chips can harmonize with the "wallpaper" instead of borrowing
+   the brand --primary token. Tone approximations: primary-container ≈ M3
+   tone 90 light / 30 dark, on-primary-container ≈ tone 10 light / 90 dark,
+   surface-container ≈ a faint neutral wash toward the shell's --background.
+   Consumed elsewhere — not applied to any component by this file. */
+[data-shell="android"] {
+  --m3-primary-container: color-mix(in oklch, var(--os-accent) 30%, white);
+  --m3-on-primary-container: color-mix(in oklch, var(--os-accent) 65%, black);
+  --m3-surface-container: color-mix(in oklch, var(--os-accent) 6%, var(--background));
+}
+[data-shell="android"].dark {
+  --m3-primary-container: color-mix(in oklch, var(--os-accent) 35%, black);
+  --m3-on-primary-container: color-mix(in oklch, var(--os-accent) 30%, white);
+  --m3-surface-container: color-mix(in oklch, var(--os-accent) 10%, var(--background));
+}
+
+/* ── Feature-icon accent colouring ──────────────────────────────────────────
+   User choice "semua icon accent": every phosphor glyph in the OS takes the
+   theme accent so changing the theme preset / brand hex visibly recolours the
+   icons. Phosphor renders fill=currentColor, so we set the glyph's `color`.
+   Scoped to the .os-accent-icons wrapper (IconDefaults). @layer base so any
+   Tailwind text-utility placed directly on a glyph wins and opts back out —
+   used for glyphs on a coloured tile (text-inherit → follow the tile's white/
+   black) and semantic glyphs (text-destructive). Custom inline SVGs (traffic
+   lights, status-bar bars, window-caption marks, RF monogram) use other
+   viewBoxes and are deliberately NOT matched. */
+@layer base {
+  .os-accent-icons svg[viewBox="0 0 256 256"] {
+    color: var(--os-accent);
+  }
+}

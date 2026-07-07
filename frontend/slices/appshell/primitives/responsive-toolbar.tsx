@@ -1,7 +1,7 @@
 "use client";
 
 import type { ComponentType } from "react";
-import { MoreHorizontal } from "lucide-react";
+import { DotsThree as MoreHorizontal } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {

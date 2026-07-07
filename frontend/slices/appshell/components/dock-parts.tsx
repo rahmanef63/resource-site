@@ -1,18 +1,14 @@
 "use client";
-/* Dock slot internals — HoverPanel caption/window-list, DockIcon (app slot with
-   right-click menu + deep-link <Link>), PlainIcon (launchpad/mission-control).
-   Split from dock.tsx so each file stays under the 200-LOC modularity gate.
-   BASE is the resting icon size the magnification math in dock.tsx shares. */
-import { Button } from "@/components/ui/button";
+
+import { useState } from "react";
 import Link from "next/link";
-import { Plus } from "lucide-react";
+import { Plus } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
-import { openWindow, focusApp, restoreWindow, closeWindow } from "../lib/store";
+import { openWindow, focusApp, restoreWindow, closeWindow, minimizeWindow } from "../lib/store";
 import { AppIcon } from "./app-icon";
 import { useContextMenu, ContextMenu, type MenuItem } from "./shells/context-menu";
 import type { AppDescriptor, WindowState } from "../lib/types";
-
-export const BASE = 50; // resting icon px (dock.tsx magnification shares it)
+import { BASE, SLOT_TRANS, ZONE_TRANS } from "./dock-helpers";
 
 // Floating panel above an icon (CSS-only; pb-4 bridges the gap so the cursor can
 // travel from icon to panel without it closing). `wide` = the running-app menu
@@ -32,14 +28,6 @@ export function HoverPanel({ wide, children }: { wide?: boolean; children: React
   );
 }
 
-// A dock slot: a fixed-height (BASE) layout box that owns the WIDTH (so the bar
-// keeps a constant height while it expands sideways), holding an absolute,
-// bottom-anchored icon ZONE sized w×w that OVERFLOWS upward — the magnified icon
-// rises out of the bar (in front of it) instead of sitting inside. width + height
-// transition so hover-in/out (and the redistribution as the cursor moves) glide.
-export const SLOT_TRANS = "transition-[width] duration-200 ease-out";
-export const ZONE_TRANS = "transition-[height] duration-200 ease-out";
-
 export function DockIcon({
   app, windows, focused, slotRef, zoneRef,
 }: {
@@ -53,15 +41,23 @@ export function DockIcon({
   const href = "/" + (app.slug ?? app.id);
   const hasMenu = windows.length > 0 || !!app.multi;
   const ctx = useContextMenu();
+  // Launch bounce — only plays when activate() actually OPENS a new window
+  // (not when it merely focuses an already-running one); cleared on
+  // animationend so it can replay on the next launch.
+  const [bouncing, setBouncing] = useState(false);
 
   const activate = () => {
-    if (!focusApp(app.id)) openWindow(app.id, app.title, app.defaultSize, undefined, { multi: app.multi });
+    if (!focusApp(app.id)) {
+      openWindow(app.id, app.title, app.defaultSize, undefined, { multi: app.multi });
+      setBouncing(true);
+    }
   };
 
   // macOS dock right-click menu — running-state aware.
   const ctxItems: MenuItem[] = running
     ? [
         { label: "Show All Windows", onClick: () => windows.forEach((w) => restoreWindow(w.id)) },
+        { label: "Hide", onClick: () => windows.forEach((w) => minimizeWindow(w.id)) },
         ...(app.multi ? [{ label: "New Window", onClick: () => openWindow(app.id, app.title, app.defaultSize, undefined, { multi: true }) } as MenuItem] : []),
         { type: "sep" as const },
         { label: `Quit ${app.title}`, onClick: () => windows.forEach((w) => closeWindow(w.id)) },
@@ -72,16 +68,16 @@ export function DockIcon({
       ];
 
   return (
-    <div ref={slotRef} className={cn(`relative shrink-0 ${SLOT_TRANS}`)} style={{ width: BASE, height: BASE }}>
-      <div ref={zoneRef} className={cn(`group absolute inset-x-0 bottom-0 ${ZONE_TRANS}`)} style={{ height: BASE }}>
+    <div ref={slotRef} className={`relative shrink-0 ${SLOT_TRANS}`} style={{ width: BASE, height: BASE }}>
+      <div ref={zoneRef} className={`group absolute inset-x-0 bottom-0 ${ZONE_TRANS}`} style={{ height: BASE }}>
         {hasMenu ? (
           <HoverPanel wide>
             <div className="px-2 py-1 text-center text-[11px] font-semibold text-muted-foreground">{app.title}</div>
             {windows.map((wd, i) => (
-              <Button type="button" variant="ghost"
+              <button
                 key={wd.id}
                 onClick={() => restoreWindow(wd.id)}
-                className={cn("h-auto p-0 font-normal hover:bg-transparent", 
+                className={cn(
                   "flex w-full items-center gap-2 rounded-md px-2 py-1 text-left text-[12px]",
                   wd.id === focused ? "bg-primary/15 text-foreground" : "text-foreground/80 hover:bg-[var(--hover-strong)]",
                 )}
@@ -89,15 +85,15 @@ export function DockIcon({
                 <span className="truncate">{wd.title}</span>
                 {windows.length > 1 && <span className="ml-auto text-[10px] text-muted-foreground">{i + 1}</span>}
                 {wd.minimized && <span className="text-[10px] text-muted-foreground">hidden</span>}
-              </Button>
+              </button>
             ))}
             {app.multi && (
-              <Button type="button" variant="ghost"
+              <button
                 onClick={() => openWindow(app.id, app.title, app.defaultSize, undefined, { multi: true })}
-                className="h-auto p-0 font-normal hover:bg-transparent flex w-full items-center gap-2 rounded-md px-2 py-1 text-left text-[12px] text-foreground/80 hover:bg-[var(--hover-strong)]"
+                className="flex w-full items-center gap-2 rounded-md px-2 py-1 text-left text-[12px] text-foreground/80 hover:bg-[var(--hover-strong)]"
               >
                 <Plus className="size-3.5" /> New Window
-              </Button>
+              </button>
             )}
           </HoverPanel>
         ) : (
@@ -116,7 +112,8 @@ export function DockIcon({
               activate();
             }
           }}
-          className="relative block size-full drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]"
+          onAnimationEnd={() => setBouncing(false)}
+          className={cn("relative block size-full drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]", bouncing && "dock-bounce")}
         >
           <AppIcon app={app} />
           {running && (
@@ -139,14 +136,13 @@ export function PlainIcon({
   children: React.ReactNode;
 }) {
   return (
-    <div ref={slotRef} className={cn(`relative shrink-0 ${SLOT_TRANS}`)} style={{ width: BASE, height: BASE }}>
-      <div ref={zoneRef} className={cn(`group absolute inset-x-0 bottom-0 ${ZONE_TRANS}`)} style={{ height: BASE }}>
+    <div ref={slotRef} className={`relative shrink-0 ${SLOT_TRANS}`} style={{ width: BASE, height: BASE }}>
+      <div ref={zoneRef} className={`group absolute inset-x-0 bottom-0 ${ZONE_TRANS}`} style={{ height: BASE }}>
         <HoverPanel><span className="text-[12.5px] font-medium">{label}</span></HoverPanel>
-        <Button type="button" variant="ghost" onClick={onClick} aria-label={label} className="h-auto p-0 font-normal hover:bg-transparent relative block size-full drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
+        <button aria-label={label} onClick={onClick} className="relative block size-full drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
           {children}
-        </Button>
+        </button>
       </div>
     </div>
   );
 }
-

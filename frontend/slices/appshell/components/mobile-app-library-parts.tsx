@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { AppDescriptor } from "../lib/types";
 import { AppIcon } from "./app-icon";
+import { useLongPress } from "./mobile-home-parts";
 
 // One iPhone folder-card: a 2×2 cell grid. ≤4 apps → big icons; >4 → 3 big + a
 // 2×2 mini cluster for the rest. Big icon = launch; cluster/label = open folder.
@@ -25,7 +26,7 @@ export function FolderCard({
   return (
     <Button type="button" variant="ghost" onClick={onExpand} className="h-auto p-0 hover:bg-transparent flex flex-col items-center gap-1.5" aria-label={`${name} folder`}>
       <div
-        className="grid aspect-square w-full grid-cols-2 grid-rows-2 gap-2 rounded-[22px] border border-white/15 p-2.5 backdrop-blur-xl"
+        className="grid aspect-square w-full grid-cols-2 grid-rows-2 gap-2 rounded-[34px] p-2.5 backdrop-blur-xl"
         style={{ background: "rgba(255,255,255,.14)" }}
       >
         {big.map((a) => (
@@ -66,11 +67,14 @@ export function AlphaList({
   apps,
   q,
   onOpen,
+  onContext,
 }: {
   apps: AppDescriptor[];
   q: string;
   onOpen: (app: AppDescriptor) => void;
+  onContext: (app: AppDescriptor) => void;
 }) {
+  const lp = useLongPress(onContext);
   if (apps.length === 0) return <p className="px-1 text-sm text-white/60">No apps match “{q}”.</p>;
   return (
     <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-width:none]">
@@ -90,7 +94,9 @@ export function AlphaList({
             <Button
               type="button"
               variant="ghost"
-              onClick={() => onOpen(a)}
+              onPointerDown={lp.startHold(a)}
+              onContextMenu={(e) => { e.preventDefault(); onContext(a); }}
+              onClick={() => { if (lp.held.current) { lp.held.current = false; return; } onOpen(a); }}
               className="h-auto flex w-full items-center gap-3 rounded-xl px-1 py-1.5 text-left hover:bg-white/10"
             >
               <span className="size-9 shrink-0">

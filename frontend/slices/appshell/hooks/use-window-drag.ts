@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState, type RefObject } from "react";
+import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
 import {
   shellStore,
   moveWindow,
@@ -12,7 +12,7 @@ import {
 } from "../lib/store";
 import type { WinId, SnapZone } from "../lib/types";
 
-type ResizeDir = "l" | "r" | "b" | "br";
+type ResizeDir = "l" | "r" | "t" | "b" | "tl" | "tr" | "bl" | "br";
 
 // Writes geometry straight to the element's style during the gesture (no React
 // state per frame, no desktop re-render) and commits the final rect to the
@@ -20,12 +20,32 @@ type ResizeDir = "l" | "r" | "b" | "br";
 export function useWindowDrag(id: WinId, ref: RefObject<HTMLDivElement | null>) {
   const [zone, setZone] = useState<SnapZone | null>(null);
   const raf = useRef(0);
+  // Active-gesture teardown. A drag/resize attaches window-level pointer
+  // listeners that are normally removed on pointer-up — but if the window
+  // unmounts mid-gesture (agent closeWindow / Space switch / tab-merge),
+  // pointer-up never fires and the listeners + RAF leak forever. We stash the
+  // teardown here and run it on unmount.
+  const teardown = useRef<(() => void) | null>(null);
+  useEffect(() => () => teardown.current?.(), []);
+
+  // Gesture writes must stay untransitioned: mark the node so useWindowFlip
+  // skips store-driven glides while dragging, and strip any live inline
+  // transition (a snap glide in flight) so per-frame writes don't smear.
+  const gestureOn = useCallback(() => {
+    const el = ref.current;
+    if (el) { el.dataset.dragging = "1"; el.style.transition = "none"; }
+  }, [ref]);
+  const gestureOff = useCallback(() => {
+    const el = ref.current;
+    if (el) { delete el.dataset.dragging; el.style.transition = ""; }
+  }, [ref]);
 
   const startDrag = useCallback(
     (e: React.PointerEvent) => {
       if (e.button !== 0) return;
       const win = shellStore.getWindow(id);
       if (!win) return;
+      gestureOn();
       focusWindow(id);
       if (win.maximized) toggleMaximize(id);
       const sx = e.clientX, sy = e.clientY;
@@ -46,11 +66,16 @@ export function useWindowDrag(id: WinId, ref: RefObject<HTMLDivElement | null>) 
         cx = ev.clientX; cy = ev.clientY;
         if (!raf.current) raf.current = requestAnimationFrame(apply);
       };
-      const up = () => {
+      const detach = () => {
         cancelAnimationFrame(raf.current); raf.current = 0;
-        setZone(null);
+        gestureOff();
         window.removeEventListener("pointermove", move);
         window.removeEventListener("pointerup", up);
+        teardown.current = null;
+      };
+      const up = () => {
+        detach();
+        setZone(null);
         if (z) snapWindow(id, z);
         else if (ref.current) {
           // offsetLeft/Top are relative to the desktop surface (the offset
@@ -59,10 +84,11 @@ export function useWindowDrag(id: WinId, ref: RefObject<HTMLDivElement | null>) 
           moveWindow(id, ref.current.offsetLeft, ref.current.offsetTop);
         }
       };
+      teardown.current = detach;
       window.addEventListener("pointermove", move);
       window.addEventListener("pointerup", up);
     },
-    [id, ref],
+    [id, ref, gestureOn, gestureOff],
   );
 
   const startResize = useCallback(
@@ -71,38 +97,50 @@ export function useWindowDrag(id: WinId, ref: RefObject<HTMLDivElement | null>) 
       if (e.button !== 0) return;
       const win = shellStore.getWindow(id);
       if (!win) return;
+      gestureOn();
       focusWindow(id);
       const sx = e.clientX, sy = e.clientY;
-      const ow = win.w, oh = win.h, ox = win.x;
+      const ow = win.w, oh = win.h, ox = win.x, oy = win.y;
       let cx = sx, cy = sy;
       const apply = () => {
         raf.current = 0;
-        let w = ow, h = oh, x = ox;
+        let w = ow, h = oh, x = ox, y = oy;
         if (dir.includes("r")) w = Math.max(300, ow + (cx - sx));
         if (dir.includes("b")) h = Math.max(200, oh + (cy - sy));
         if (dir.includes("l")) { w = Math.max(300, ow - (cx - sx)); x = ox + (ow - w); }
+        if (dir.includes("t")) { h = Math.max(200, oh - (cy - sy)); y = oy + (oh - h); }
         const el = ref.current;
-        if (el) { el.style.width = w + "px"; el.style.height = h + "px"; el.style.left = x + "px"; }
+        if (el) { el.style.width = w + "px"; el.style.height = h + "px"; el.style.left = x + "px"; el.style.top = y + "px"; }
       };
       const move = (ev: PointerEvent) => {
         cx = ev.clientX; cy = ev.clientY;
         if (!raf.current) raf.current = requestAnimationFrame(apply);
       };
-      const up = () => {
+      const detach = () => {
         cancelAnimationFrame(raf.current); raf.current = 0;
+        gestureOff();
         window.removeEventListener("pointermove", move);
         window.removeEventListener("pointerup", up);
+        teardown.current = null;
+      };
+      const up = () => {
+        detach();
         const el = ref.current;
         if (el) {
-          const r = el.getBoundingClientRect();
-          moveWindow(id, r.left, r.top);
-          resizeWindow(id, r.width, r.height);
+          // offsetLeft/Top are surface-relative (same coordinate space as win.x/y),
+          // exactly like the drag commit at the top of this hook. getBoundingClientRect
+          // is VIEWPORT-relative, so on the macOS shell (desktop section is top-[30px])
+          // it double-counts the 30px menu-bar offset and the window walks down on every
+          // resize. offsetWidth/Height are the border-box size, == rect.w/h untransformed.
+          moveWindow(id, el.offsetLeft, el.offsetTop);
+          resizeWindow(id, el.offsetWidth, el.offsetHeight);
         }
       };
+      teardown.current = detach;
       window.addEventListener("pointermove", move);
       window.addEventListener("pointerup", up);
     },
-    [id, ref],
+    [id, ref, gestureOn, gestureOff],
   );
 
   return { startDrag, startResize, zone };

@@ -13,16 +13,16 @@
    the surface resolves via `resolveShell()`. No shell forks the window store —
    they only call the existing store actions. */
 import { useSyncExternalStore, type ComponentType } from "react";
-import type { LucideIcon } from "lucide-react";
+import type { Icon } from "@phosphor-icons/react";
 import { registerCommands } from "../lib/commands";
 
-export type ShellId = "macos" | "windows" | "dashboard" | "ios" | "android";
+export type ShellId = "macos" | "windows" | "dashboard" | "mobile" | "ios" | "android";
 export type ShellSurface = "desktop" | "mobile";
 
 export type ShellDescriptor = {
   id: ShellId;
   label: string;
-  icon: LucideIcon;
+  icon: Icon;
   /** Phone-shaped (mobile) shells render framed on a wide screen. */
   surface: ShellSurface;
   group: "Desktop" | "Mobile";
@@ -38,7 +38,7 @@ export type ShellDescriptor = {
 };
 
 const REGISTRY = new Map<ShellId, ShellDescriptor>();
-const order: ShellId[] = ["dashboard", "macos", "windows", "ios", "android"];
+const order: ShellId[] = ["dashboard", "macos", "windows", "mobile", "ios", "android"];
 
 export function registerShell(d: ShellDescriptor): void {
   REGISTRY.set(d.id, d);
@@ -76,10 +76,12 @@ const KEY = "sv:shell";
 export type ShellPrefs = { desktop: ShellId; mobile: ShellId };
 const DEFAULTS: ShellPrefs = { desktop: "macos", mobile: "ios" };
 const DESKTOP_IDS: ShellId[] = ["macos", "windows", "dashboard"];
-const MOBILE_IDS: ShellId[] = ["ios", "android"];
+const MOBILE_IDS: ShellId[] = ["ios", "android", "mobile"];
 
 export function surfaceOf(id: ShellId): ShellSurface {
-  return MOBILE_IDS.includes(id) ? "mobile" : "desktop";
+  // The registered descriptor IS the source of truth; the ID array is only a
+  // fallback for ids whose shell hasn't registered yet (load() runs at import).
+  return getShell(id)?.surface ?? (MOBILE_IDS.includes(id) ? "mobile" : "desktop");
 }
 
 function load(): ShellPrefs {
@@ -111,12 +113,6 @@ export function setShell(surface: ShellSurface, id: ShellId): void {
     /* ignore */
   }
   subs.forEach((f) => f());
-}
-
-/** Current (validated) shell prefs — the SSOT read for non-React callers
- *  (profiles snapshots); never re-read/re-default `sv:shell` elsewhere. */
-export function getShellPrefs(): ShellPrefs {
-  return prefs;
 }
 
 export function useShellPrefs(): ShellPrefs {
