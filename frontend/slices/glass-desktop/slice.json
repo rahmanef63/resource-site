@@ -1,0 +1,36 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "glass-desktop",
+  "version": "0.1.0",
+  "category": "os",
+  "kind": "full",
+  "title": "Lucent Desktop",
+  "description": "Interactive dark-glass desktop: a configurable widget canvas (add / remove / resize / drag / reorder, persisted) across two spaces, with glass chrome. Widgets are registry-composed (one component + one registry entry + one seed row). Runs on a localStorage LayoutStore adapter, swappable for Convex. Props: initialSpace (0|1), store (LayoutStore), brand ({ name, glyph? }) — no hardcoded consumer URLs/env/roles. Storage namespace: rr:glass-desktop:v1.",
+  "namespace": "@/features/glass-desktop",
+  "frontend": {
+    "slicePath": "frontend/slices/glass-desktop"
+  },
+  "deps": {
+    "npm": ["lucide-react", "clsx", "tailwind-merge"],
+    "shadcn": ["button", "switch", "checkbox", "slider", "dropdown-menu", "input", "tooltip", "sonner", "dialog"],
+    "env": [],
+    "peers": []
+  },
+  "registers": [],
+  "audit": [],
+  "license": "MIT",
+  "tags": ["shell", "desktop", "widgets", "glass", "os"],
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "none"
+    },
+    "provides": {
+      "components": ["GlassDesktop"],
+      "hooks": [],
+      "tools": [],
+      "routes": [],
+      "tables": []
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "glass-desktop",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add glass-desktop",
+    "consumerPath": "slices/glass-desktop"
+  },
+  "files": [
+    "api/README.md",
+    "components/glass-desktop.tsx",
+    "config/constants.ts",
+    "config/default-layout.seed.ts",
+    "config/theme.css",
+    "index.ts",
+    "lib/widget-registry.ts",
+    "types.ts"
+  ],
+  "imports": {
+    "shared": [],
+    "external": ["react"]
+  }
+}

@@ -1,0 +1,47 @@
+/* glass-desktop — Lucent theme tokens (Build Plan Appendix A, copy-authoritative).
+   Tailwind v4 @theme. Imported by the desktop shell root (T3).
+   Semantic statuses (success/warn/danger/info) resolve through the shared tones
+   SSOT onto these accents — do NOT reference accent-* directly for status. */
+@theme {
+  /* surfaces */
+  --color-canvas: oklch(16% 0.015 260);
+  --color-glass-hi: oklch(30% 0.02 260 / 0.72);
+  --color-glass-lo: oklch(22% 0.02 260 / 0.60);
+  --color-glass-solid: oklch(24% 0.02 260 / 0.92); /* perf fallback R5 */
+  --color-hairline: oklch(100% 0 0 / 0.10);
+  --color-hairline-hover: oklch(100% 0 0 / 0.16);
+
+  /* ink */
+  --color-ink-hi: oklch(97% 0.005 260 / 0.95);
+  --color-ink-mid: oklch(97% 0.005 260 / 0.60);
+  --color-ink-low: oklch(97% 0.005 260 / 0.36);
+
+  /* accents — L78 C.14, hue only varies */
+  --color-accent-blue: oklch(78% 0.14 250);
+  --color-accent-green: oklch(78% 0.14 155);
+  --color-accent-amber: oklch(78% 0.14 75);
+  --color-accent-coral: oklch(78% 0.14 25);
+  --color-accent-violet: oklch(78% 0.14 305);
+
+  /* geometry */
+  --radius-widget: 22px;
+  --radius-pill: 999px;
+  --radius-control: 12px;
+  --spacing-cell-w: 150px;
+  --spacing-cell-h: 71px;
+  --spacing-cell-gap: 8px;
+
+  /* effects */
+  --blur-glass: 24px;
+  --shadow-widget: 0 12px 32px oklch(0% 0 0 / 0.35), inset 0 1px 0 oklch(100% 0 0 / 0.08);
+  --shadow-drag: 0 24px 56px oklch(0% 0 0 / 0.50), inset 0 1px 0 oklch(100% 0 0 / 0.10);
+
+  /* type (families provided by next/font variables) */
+  --font-ui: var(--font-spline-sans), system-ui, sans-serif;
+  --font-numeric: var(--font-spline-sans-mono), ui-monospace, monospace;
+
+  /* motion */
+  --ease-settle: cubic-bezier(0.32, 0.72, 0.28, 1);
+  --duration-micro: 160ms;
+  --duration-settle: 320ms;
+}
