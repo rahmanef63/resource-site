@@ -1,8 +1,10 @@
-/* glass-desktop — Lucent theme tokens (Build Plan Appendix A, copy-authoritative).
-   Tailwind v4 @theme. Imported by the desktop shell root (T3).
-   Semantic statuses (success/warn/danger/info) resolve through the shared tones
-   SSOT onto these accents — do NOT reference accent-* directly for status. */
-@theme {
+/* glass-desktop — Lucent theme tokens (Build Plan Appendix A).
+   Defined in a plain :root block (NOT Tailwind's @theme): the slice components
+   consume these via var(...) directly, and this file is imported as a stylesheet
+   OUTSIDE Tailwind's entry — an @theme at-rule would be ignored by the browser,
+   leaving every token undefined (black wallpaper, no glass, monochrome charts).
+   Token names are Lucent-namespaced so they don't collide with rr's shadcn set. */
+:root {
   /* surfaces */
   --color-canvas: oklch(16% 0.015 260);
   --color-glass-hi: oklch(30% 0.02 260 / 0.72);
@@ -23,6 +25,13 @@
   --color-accent-coral: oklch(78% 0.14 25);
   --color-accent-violet: oklch(78% 0.14 305);
 
+  /* tones SSOT — semantic status resolves through these onto the accents;
+     never reference --color-accent-* directly for status meaning. */
+  --tone-info: var(--color-accent-blue);
+  --tone-success: var(--color-accent-green);
+  --tone-warn: var(--color-accent-amber);
+  --tone-danger: var(--color-accent-coral);
+
   /* geometry */
   --radius-widget: 22px;
   --radius-pill: 999px;
@@ -36,7 +45,7 @@
   --shadow-widget: 0 12px 32px oklch(0% 0 0 / 0.35), inset 0 1px 0 oklch(100% 0 0 / 0.08);
   --shadow-drag: 0 24px 56px oklch(0% 0 0 / 0.50), inset 0 1px 0 oklch(100% 0 0 / 0.10);
 
-  /* type (families provided by next/font variables) */
+  /* type (Spline Sans via next/font is optional polish; falls back to system) */
   --font-ui: var(--font-spline-sans), system-ui, sans-serif;
   --font-numeric: var(--font-spline-sans-mono), ui-monospace, monospace;
 
