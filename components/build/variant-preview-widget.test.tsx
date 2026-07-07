@@ -27,7 +27,7 @@ describe("LazyWidget", () => {
     const { rerender } = render(
       <LazyWidget slug="convex-auth" component="AuthCard" variant={variant} />,
     );
-    const signin = await screen.findByRole("tab", { name: "Sign in" });
+    const signin = await screen.findByRole("tab", { name: "Sign in" }, { timeout: 8000 });
     expect(signin.getAttribute("aria-selected")).toBe("true");
 
     rerender(
@@ -37,7 +37,9 @@ describe("LazyWidget", () => {
         variant={{ ...variant, defaultPasswordMode: "signup" }}
       />,
     );
-    const signup = await screen.findByRole("tab", { name: "Sign up" });
+    const signup = await screen.findByRole("tab", { name: "Sign up" }, { timeout: 8000 });
     expect(signup.getAttribute("aria-selected")).toBe("true");
-  });
+    // Cold dynamic-import of the convex-auth preview module is slow to transform
+    // under full-suite load (~5s); give this test headroom past the 5s default.
+  }, 20000);
 });

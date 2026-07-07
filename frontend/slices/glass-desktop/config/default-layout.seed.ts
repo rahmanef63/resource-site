@@ -1,37 +1,60 @@
 // glass-desktop — default placement seed (Build Plan §7, LOC-exempt seed).
-// 21 instances across the two spaces; col/row = -1 so use-layout's packLayout
-// assigns dense positions on load.
-import type { LayoutStateV1, WidgetInstance } from "../types";
-
-function seed(widgetId: string, space: 0 | 1, instanceId: string = widgetId): WidgetInstance {
-  return { instanceId, widgetId, space, col: -1, row: -1 };
-}
+// 50 instances / 47 components across two spaces; col/row = -1
+// so use-layout's packLayout assigns dense positions on load.
+import type { LayoutStateV1 } from "../types";
 
 export const defaultLayout: LayoutStateV1 = {
   version: 1,
   instances: [
-    // Space 0 — Today
-    seed("clock-digital", 0),
-    seed("date-badge", 0),
-    seed("clock-world", 0),
-    seed("timer-countdown", 0),
-    seed("weather-now", 0),
-    seed("weather-hourly", 0),
-    seed("agenda-today", 0),
-    seed("task-list", 0),
-    // Space 1 — System & work
-    seed("cpu-graph", 1),
-    seed("ring-gauge", 1, "ring-gauge:battery"),
-    seed("ring-gauge", 1, "ring-gauge:memory"),
-    seed("ring-gauge", 1, "ring-gauge:storage"),
-    seed("quick-toggles", 1),
-    seed("net-throughput", 1),
-    seed("watchlist", 1),
-    seed("revenue-card", 1),
-    seed("dot-heatmap", 1),
-    seed("now-playing", 1),
-    seed("audio-eq", 1),
-    seed("contacts-row", 1),
-    seed("inbox-count", 1),
+  { instanceId: "agenda-today", widgetId: "agenda-today", space: 0, col: -1, row: -1 },
+  { instanceId: "calendar-month", widgetId: "calendar-month", space: 0, col: -1, row: -1 },
+  { instanceId: "clock-analog", widgetId: "clock-analog", space: 0, col: -1, row: -1 },
+  { instanceId: "clock-digital", widgetId: "clock-digital", space: 0, col: -1, row: -1 },
+  { instanceId: "clock-flip", widgetId: "clock-flip", space: 0, col: -1, row: -1 },
+  { instanceId: "clock-world", widgetId: "clock-world", space: 0, col: -1, row: -1 },
+  { instanceId: "date-badge", widgetId: "date-badge", space: 0, col: -1, row: -1 },
+  { instanceId: "date-card", widgetId: "date-card", space: 0, col: -1, row: -1 },
+  { instanceId: "focus-session", widgetId: "focus-session", space: 0, col: -1, row: -1 },
+  { instanceId: "next-event", widgetId: "next-event", space: 0, col: -1, row: -1 },
+  { instanceId: "precip-now", widgetId: "precip-now", space: 0, col: -1, row: -1 },
+  { instanceId: "stopwatch", widgetId: "stopwatch", space: 0, col: -1, row: -1 },
+  { instanceId: "sun-arc", widgetId: "sun-arc", space: 0, col: -1, row: -1 },
+  { instanceId: "task-list", widgetId: "task-list", space: 0, col: -1, row: -1 },
+  { instanceId: "ticket-card", widgetId: "ticket-card", space: 0, col: -1, row: -1 },
+  { instanceId: "time-combo", widgetId: "time-combo", space: 0, col: -1, row: -1 },
+  { instanceId: "timer-countdown", widgetId: "timer-countdown", space: 0, col: -1, row: -1 },
+  { instanceId: "voice-memo", widgetId: "voice-memo", space: 0, col: -1, row: -1 },
+  { instanceId: "weather-days", widgetId: "weather-days", space: 0, col: -1, row: -1 },
+  { instanceId: "weather-full", widgetId: "weather-full", space: 0, col: -1, row: -1 },
+  { instanceId: "weather-hourly", widgetId: "weather-hourly", space: 0, col: -1, row: -1 },
+  { instanceId: "weather-now", widgetId: "weather-now", space: 0, col: -1, row: -1 },
+  { instanceId: "week-strip", widgetId: "week-strip", space: 0, col: -1, row: -1 },
+  { instanceId: "wind-compass", widgetId: "wind-compass", space: 0, col: -1, row: -1 },
+  { instanceId: "audio-eq", widgetId: "audio-eq", space: 1, col: -1, row: -1 },
+  { instanceId: "contact-card", widgetId: "contact-card", space: 1, col: -1, row: -1 },
+  { instanceId: "contacts-row", widgetId: "contacts-row", space: 1, col: -1, row: -1 },
+  { instanceId: "cpu-graph", widgetId: "cpu-graph", space: 1, col: -1, row: -1 },
+  { instanceId: "currency-convert", widgetId: "currency-convert", space: 1, col: -1, row: -1 },
+  { instanceId: "device-audio", widgetId: "device-audio", space: 1, col: -1, row: -1 },
+  { instanceId: "dot-heatmap", widgetId: "dot-heatmap", space: 1, col: -1, row: -1 },
+  { instanceId: "file-search", widgetId: "file-search", space: 1, col: -1, row: -1 },
+  { instanceId: "inbox-count", widgetId: "inbox-count", space: 1, col: -1, row: -1 },
+  { instanceId: "net-throughput", widgetId: "net-throughput", space: 1, col: -1, row: -1 },
+  { instanceId: "now-playing", widgetId: "now-playing", space: 1, col: -1, row: -1 },
+  { instanceId: "orders-summary", widgetId: "orders-summary", space: 1, col: -1, row: -1 },
+  { instanceId: "palette", widgetId: "palette", space: 1, col: -1, row: -1 },
+  { instanceId: "quick-toggles", widgetId: "quick-toggles", space: 1, col: -1, row: -1 },
+  { instanceId: "reaction-tray", widgetId: "reaction-tray", space: 1, col: -1, row: -1 },
+  { instanceId: "revenue-card", widgetId: "revenue-card", space: 1, col: -1, row: -1 },
+  { instanceId: "ring-gauge:battery", widgetId: "ring-gauge", space: 1, col: -1, row: -1 },
+  { instanceId: "ring-gauge:memory", widgetId: "ring-gauge", space: 1, col: -1, row: -1 },
+  { instanceId: "ring-gauge:storage", widgetId: "ring-gauge", space: 1, col: -1, row: -1 },
+  { instanceId: "social-count:loop", widgetId: "social-count", space: 1, col: -1, row: -1 },
+  { instanceId: "social-count:wavelength", widgetId: "social-count", space: 1, col: -1, row: -1 },
+  { instanceId: "ticker-spark", widgetId: "ticker-spark", space: 1, col: -1, row: -1 },
+  { instanceId: "usage-meter", widgetId: "usage-meter", space: 1, col: -1, row: -1 },
+  { instanceId: "visitors-spark", widgetId: "visitors-spark", space: 1, col: -1, row: -1 },
+  { instanceId: "watchlist", widgetId: "watchlist", space: 1, col: -1, row: -1 },
+  { instanceId: "web-search", widgetId: "web-search", space: 1, col: -1, row: -1 },
   ],
 };

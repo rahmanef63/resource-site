@@ -16,7 +16,7 @@ import { MenuBar } from "./menu-bar";
 import { WidgetPicker } from "@/features/glass-desktop/components/config/widget-picker";
 import { usePersistentState } from "@/features/glass-desktop/hooks/use-persistent-state";
 import type { LayoutStore } from "@/features/glass-desktop/types";
-import "../../config/theme.css";
+import { LucentTheme } from "@/features/glass-desktop/components/engine/lucent-theme";
 
 export interface DesktopShellProps {
   /** Brand shown in the menu bar. Portability prop — no hardcoded consumer. */
@@ -46,6 +46,7 @@ export function DesktopShell({ brand, store }: DesktopShellProps) {
         className={cn("relative h-dvh w-full overflow-hidden")}
         style={{ color: "var(--color-ink-hi)", fontFamily: "var(--font-ui)" }}
       >
+        <LucentTheme />
         {/* z-0: Dusk Field wallpaper. */}
         <Wallpaper style={{ zIndex: Z.wallpaper }} />
 
