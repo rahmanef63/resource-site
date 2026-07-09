@@ -9,6 +9,13 @@ import { sources } from "@/lib/content/sources";
 
 export const metadata = { title: "Directory" };
 
+// Apps built from this library — related projects, not slice sources (those live in sources.ts).
+const relatedProjects = [
+  { name: "Rahman OS", url: "https://shell.rahmanef.com", tag: "shell.rahmanef.com", description: "Manifest-driven desktop/mobile web-OS shell — windows, dock, widgets, app store." },
+  { name: "Topside", url: "https://os.rahmanef.com", tag: "os.rahmanef.com", description: "Mobile-first web cockpit for a headless Linux VPS." },
+  { name: "belajar-with-rahmanef", url: "https://study-with.rahmanef.com", tag: "study-with.rahmanef.com", description: "Learn AI through a browser web-OS desktop. Charity project." },
+];
+
 export default function DirectoryPage() {
   return (
     <div className="space-y-8">
@@ -63,6 +70,38 @@ export default function DirectoryPage() {
           </div>
         ))}
       </DocCard>
+
+      <div className="space-y-3">
+        <div>
+          <p className="text-sm font-semibold">Related projects</p>
+          <p className="text-sm text-muted-foreground">
+            Apps built from this library — the slices in action.
+          </p>
+        </div>
+        <DocCard className="divide-y divide-border">
+          {relatedProjects.map((p) => (
+            <div key={p.url} className="flex items-center gap-4 px-4 py-4">
+              <div className="flex size-12 shrink-0 items-center justify-center rounded-lg border bg-muted/40 text-muted-foreground">
+                <Box className="size-5" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
+                  <p className="truncate text-sm font-semibold">{p.name}</p>
+                  <Badge variant="outline" className="rounded-full font-mono text-[10px]">
+                    {p.tag}
+                  </Badge>
+                </div>
+                <p className="mt-1 text-sm text-muted-foreground">{p.description}</p>
+              </div>
+              <Button asChild variant="outline" size="sm" className="shrink-0 gap-1">
+                <Link href={p.url} target="_blank" rel="noopener noreferrer">
+                  View <ArrowUpRight className="size-3" />
+                </Link>
+              </Button>
+            </div>
+          ))}
+        </DocCard>
+      </div>
 
       <p className="text-xs text-muted-foreground">
         Don't see a source? File an issue on the resources repo.
