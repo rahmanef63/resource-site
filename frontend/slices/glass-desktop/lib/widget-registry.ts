@@ -1,53 +1,17 @@
 // glass-desktop — the widget registry (Build Plan §5.2 "registry, not switch").
 // Composition of 47 WidgetDefs — one component + one entry + one seed row each.
 import type { WidgetRegistry } from "../types";
-import { ClockDigital } from "../components/widgets/time/clock-digital";
-import { DateBadge } from "../components/widgets/calendar/date-badge";
-import { ClockWorld } from "../components/widgets/time/clock-world";
-import { TimerCountdown } from "../components/widgets/timers/timer-countdown";
-import { TaskList } from "../components/widgets/utilities/task-list";
-import { AgendaToday } from "../components/widgets/calendar/agenda-today";
-import { WeatherNow } from "../components/widgets/weather/weather-now";
-import { WeatherHourly } from "../components/widgets/weather/weather-hourly";
-import { NowPlaying } from "../components/widgets/media/now-playing";
-import { AudioEq } from "../components/widgets/media/audio-eq";
-import { InboxCount } from "../components/widgets/people/inbox-count";
-import { ContactsRow } from "../components/widgets/people/contacts-row";
-import { CpuGraph } from "../components/widgets/system-finance-analytics/cpu-graph";
-import { RingGaugeWidget } from "../components/widgets/system-finance-analytics/ring-gauge";
-import { QuickToggles } from "../components/widgets/system-finance-analytics/quick-toggles";
-import { NetThroughput } from "../components/widgets/system-finance-analytics/net-throughput";
-import { Watchlist } from "../components/widgets/system-finance-analytics/watchlist";
-import { RevenueCard } from "../components/widgets/system-finance-analytics/revenue-card";
-import { DotHeatmap } from "../components/widgets/system-finance-analytics/dot-heatmap";
-import { ClockAnalog } from "../components/widgets/time/clock-analog";
-import { ClockFlip } from "../components/widgets/time/clock-flip";
-import { SunArc } from "../components/widgets/time/sun-arc";
-import { DateCard } from "../components/widgets/time/date-card";
-import { TimeCombo } from "../components/widgets/time/time-combo";
-import { Stopwatch } from "../components/widgets/timers/stopwatch";
-import { FocusSession } from "../components/widgets/timers/focus-session";
-import { VoiceMemo } from "../components/widgets/timers/voice-memo";
-import { WeekStrip } from "../components/widgets/calendar/week-strip";
-import { CalendarMonth } from "../components/widgets/calendar/calendar-month";
-import { NextEvent } from "../components/widgets/calendar/next-event";
-import { TicketCard } from "../components/widgets/calendar/ticket-card";
-import { WeatherDays } from "../components/widgets/weather/weather-days";
-import { WindCompass } from "../components/widgets/weather/wind-compass";
-import { PrecipNow } from "../components/widgets/weather/precip-now";
-import { WeatherFull } from "../components/widgets/weather/weather-full";
-import { ReactionTray } from "../components/widgets/media/reaction-tray";
-import { DeviceAudio } from "../components/widgets/media/device-audio";
-import { FileSearch } from "../components/widgets/utilities/file-search";
-import { WebSearch } from "../components/widgets/utilities/web-search";
-import { Palette } from "../components/widgets/utilities/palette";
-import { SocialCount } from "../components/widgets/social/social-count";
-import { ContactCard } from "../components/widgets/people/contact-card";
-import { TickerSpark } from "../components/widgets/finance/ticker-spark";
-import { CurrencyConvert } from "../components/widgets/finance/currency-convert";
-import { VisitorsSpark } from "../components/widgets/analytics/visitors-spark";
-import { UsageMeter } from "../components/widgets/analytics/usage-meter";
-import { OrdersSummary } from "../components/widgets/analytics/orders-summary";
+import { ClockDigital, ClockWorld, ClockAnalog, ClockFlip, SunArc, DateCard, TimeCombo } from "../features/time";
+import { DateBadge, AgendaToday, WeekStrip, CalendarMonth, NextEvent, TicketCard } from "../features/calendar";
+import { WeatherNow, WeatherHourly, WeatherDays, WindCompass, PrecipNow, WeatherFull } from "../features/weather";
+import { TimerCountdown, Stopwatch, FocusSession, VoiceMemo } from "../features/timers";
+import { TaskList, FileSearch, WebSearch, Palette } from "../features/utilities";
+import { NowPlaying, AudioEq, ReactionTray, DeviceAudio } from "../features/media";
+import { InboxCount, ContactsRow, ContactCard } from "../features/people";
+import { SocialCount } from "../features/social";
+import { CpuGraph, RingGaugeWidget, QuickToggles, NetThroughput } from "../features/system";
+import { TickerSpark, CurrencyConvert, Watchlist, RevenueCard } from "../features/finance";
+import { VisitorsSpark, UsageMeter, OrdersSummary, DotHeatmap } from "../features/analytics";
 
 export const widgetRegistry: WidgetRegistry = {
   "clock-digital": { id: "clock-digital", family: "time", size: "WP", title: "Digital Clock", component: ClockDigital },
