@@ -56,3 +56,19 @@ export function appForFile(entry: FsEntry): "media-viewer" | "code-editor" | nul
 export function isImage(entry: FsEntry): boolean {
   return entry.kind === "file" && IMAGE.has(entry.ext?.toLowerCase() ?? "");
 }
+
+const TEXT = new Set(["txt", "md", "markdown", "json", "csv", "log", "ts", "tsx", "js", "jsx", "css", "html", "sh", "yml", "yaml", "xml"]);
+export type PreviewKind = "image" | "audio" | "video" | "pdf" | "text";
+
+// Which inline preview an entry gets in the lightbox (null = no preview → the
+// host's onOpenFile, or an icon card).
+export function previewKind(entry: FsEntry): PreviewKind | null {
+  if (entry.kind !== "file") return null;
+  const ext = entry.ext?.toLowerCase() ?? "";
+  if (IMAGE.has(ext)) return "image";
+  if (VIDEO.has(ext)) return "video";
+  if (AUDIO.has(ext)) return "audio";
+  if (ext === "pdf") return "pdf";
+  if (TEXT.has(ext)) return "text";
+  return null;
+}

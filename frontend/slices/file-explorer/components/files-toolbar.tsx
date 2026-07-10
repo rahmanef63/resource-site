@@ -33,6 +33,8 @@ export function FilesToolbar(props: {
   onUploadFolder: () => void;
   onPaste: () => void;
   onOpenSidebar: () => void;
+  onToggleSidebar: () => void;
+  sidebarCollapsed: boolean;
   dropTarget: string | null;
   onCrumbDragOver: (e: DragEvent, dest: string) => void;
   onCrumbDragLeave: (dest: string) => void;
@@ -40,13 +42,24 @@ export function FilesToolbar(props: {
 }) {
   return (
     <div className="flex h-11 items-center gap-2 border-b border-border px-2">
-      {/* Drawer toggle — only when the inline rail is hidden (narrow). */}
+      {/* Drawer toggle — mobile only (opens the left Sheet). */}
       <Button
         variant="ghost"
         size="icon"
         onClick={props.onOpenSidebar}
         aria-label="Open sidebar"
         className="size-7 shrink-0 md:hidden [@media(pointer:coarse)]:size-9"
+      >
+        <PanelLeft className="size-4" />
+      </Button>
+      {/* Rail collapse toggle — desktop only. */}
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={props.onToggleSidebar}
+        aria-label={props.sidebarCollapsed ? "Show sidebar" : "Hide sidebar"}
+        title={props.sidebarCollapsed ? "Show sidebar" : "Hide sidebar"}
+        className="hidden size-7 shrink-0 md:inline-flex"
       >
         <PanelLeft className="size-4" />
       </Button>

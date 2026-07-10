@@ -23,6 +23,8 @@ import { useFileCommands } from "../hooks/use-file-commands";
 import { useDnd } from "../hooks/use-dnd";
 import { useWindowDrop } from "../hooks/use-window-drop";
 import { sortEntries, type SortKey, type ViewMode } from "../lib/types";
+import { FilePreview } from "./file-preview";
+import { usePreview } from "../hooks/use-preview";
 
 // The explorer body. Assumes a FileExplorerAdapterProvider is mounted above it
 // (the public <FileExplorer> wrapper does that). Root div is h-full.
@@ -39,15 +41,17 @@ export function ExplorerView({
 }) {
   const fs = useFiles(initialPath);
   useAgentTools(fileExplorerTools, fs);
+  const { preview, handleOpen, closePreview } = usePreview(onOpenFile);
   const sel = useFileSelection(fs.entries);
-  const cmd = useFileCommands(fs, sel, onOpenFile);
+  const cmd = useFileCommands(fs, sel, handleOpen);
   const dnd = useDnd(sel.selected, sel.selectOne, fs.move, fs.upload);
   const win = useWindowDrop(dnd, fs.path);
   const uploadRef = useRef<FilePickerHandle>(null);
   const folderRef = useRef<FilePickerHandle>(null);
   const [view, setView] = useState<ViewMode>("grid");
   const [sort, setSort] = useState<SortKey>("name");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false); // mobile Sheet drawer
+  const [collapsed, setCollapsed] = useState(false); // desktop rail collapse
 
   const ordered = useMemo(
     () => (fs.entries ? sortEntries(fs.entries, sort) : null),
@@ -91,7 +95,7 @@ export function ExplorerView({
     >
       {win.dragActive && <DropOverlay />}
       {/* Inline rail on wide screens; left Sheet drawer on narrow/mobile. */}
-      <aside className="hidden w-60 shrink-0 border-r border-border md:flex">{sidebar}</aside>
+      <aside className={cn("hidden w-60 shrink-0 border-r border-border", !collapsed && "md:flex")}>{sidebar}</aside>
       <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
         <SheetContent side="left" className="w-72 p-0">
           <SheetTitle className="sr-only">Files</SheetTitle>
@@ -120,6 +124,8 @@ export function ExplorerView({
           onUploadFolder={openFolderPicker}
           onPaste={fs.paste}
           onOpenSidebar={() => setSidebarOpen(true)}
+          onToggleSidebar={() => setCollapsed((v) => !v)}
+          sidebarCollapsed={collapsed}
           dropTarget={dnd.dropTarget}
           onCrumbDragOver={dnd.onDragOver}
           onCrumbDragLeave={dnd.onDragLeave}
@@ -185,6 +191,7 @@ export function ExplorerView({
       )}
       <UploadInput ref={uploadRef} onFiles={fs.upload} />
       <UploadInput ref={folderRef} onFiles={fs.upload} directory />
+      {preview && <FilePreview path={preview.path} entry={preview.entry} onClose={closePreview} />}
     </div>
   );
 }

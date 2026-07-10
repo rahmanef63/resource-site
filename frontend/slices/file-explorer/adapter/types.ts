@@ -48,6 +48,12 @@ export type FileExplorerAdapter = {
   usage: () => Promise<FsUsage>;
   /** Bytes URL for image/media thumbnails ("" when unavailable, e.g. mock). */
   rawUrl: (path: string) => string;
+  /** Async bytes URL (Convex storage.getUrl is async). Optional; the preview
+   *  falls back to the sync `rawUrl`. Returns "" when the entry has no blob. */
+  readUrl?: (path: string) => Promise<string>;
+  /** Read a file's text body — pretty JSON for /Database rows, inline content
+   *  for write-created files. Optional; returns null when gated/missing. */
+  read?: (path: string) => Promise<{ content: string; mime?: string; size?: number } | null>;
   /** Create an empty file (the tree's inline "new file" affordance). Optional;
    * adapters without write support simply omit it (the tree no-ops the create). */
   write?: (path: string, content: string) => Promise<unknown>;

@@ -44,6 +44,7 @@ export type FsFunctionRefs = {
   usage: unknown;
   upload?: unknown;
   rawUrl?: unknown;
+  read?: unknown;
 };
 
 export function createConvexAdapter({
@@ -77,5 +78,10 @@ export function createConvexAdapter({
     // Convex storage URLs are async; resolve via api.rawUrl in the consumer if
     // thumbnails are needed. Default "" => icon fallback (no network on render).
     rawUrl: () => "",
+    readUrl: (path) =>
+      api.rawUrl ? (client.query(api.rawUrl, { path }) as Promise<string>) : Promise.resolve(""),
+    read: api.read
+      ? (path) => client.query(api.read!, { path }) as Promise<{ content: string; mime?: string; size?: number } | null>
+      : undefined,
   };
 }

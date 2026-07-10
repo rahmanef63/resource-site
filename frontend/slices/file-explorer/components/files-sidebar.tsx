@@ -53,7 +53,7 @@ export function FilesSidebar({
   const favorites = roots.length ? roots : [{ label: "Home", path: "~" }];
   const ratio = usage && usage.total > 0 ? usage.used / usage.total : 0;
   return (
-    <div className="flex h-full min-h-0 flex-col">
+    <div className="flex h-full w-full min-h-0 flex-col">
       <div className="flex items-center gap-2 px-3 pt-3 pb-1 text-[11px] font-semibold text-muted-foreground">
         <Star className="size-3.5" />
         <span>Favorites</span>
