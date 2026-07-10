@@ -787,7 +787,7 @@ export default function StoreDemo() {
     slicePath: "frontend/slices/file-explorer",
     convexPaths: [],
     npm: ["lucide-react"],
-    shadcn: ["button", "input", "scroll-area", "separator", "dropdown-menu", "sheet"],
+    shadcn: ["button", "input", "scroll-area", "separator", "dropdown-menu", "sheet", "dialog"],
     env: [],
     peers: [],
     tags: ["files", "file-manager", "explorer", "tree", "breadcrumb", "crud", "sidebar", "ui"],

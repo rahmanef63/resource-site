@@ -40,6 +40,7 @@ function remapBlobs(b: MockBlobs, from: string, to: string, mode: "move" | "copy
   for (const k of Object.keys(b)) {
     if (k !== from && !k.startsWith(from + "/")) continue;
     const nk = to + k.slice(from.length);
+    if (nk !== k) revoke(b[nk]); // free a blob being overwritten at the destination (rename-onto-existing)
     if (mode === "copy") b[nk] = b[k].blob ? { ...b[k], url: URL.createObjectURL(b[k].blob!) } : { ...b[k] };
     else { b[nk] = b[k]; delete b[k]; }
   }

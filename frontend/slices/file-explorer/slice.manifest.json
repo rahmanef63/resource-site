@@ -9,6 +9,7 @@
     "consumerPath": "slices/file-explorer"
   },
   "files": [
+    "CHANGELOG.md",
     "adapter/context.tsx",
     "adapter/convex.ts",
     "adapter/index.ts",
@@ -51,7 +52,8 @@
     "lib/icons.ts",
     "lib/read-drop.ts",
     "lib/tools.ts",
-    "lib/types.ts"
+    "lib/types.ts",
+    "preview.tsx"
   ],
   "imports": {
     "shared": [
@@ -61,7 +63,9 @@
       "@/components/ui/separator",
       "@/components/ui/dropdown-menu",
       "@/components/ui/sheet",
+      "@/components/ui/dialog",
       "@/shared/ui/FilePicker",
+      "@/shared/agentic",
       "@/lib/utils"
     ],
     "external": [

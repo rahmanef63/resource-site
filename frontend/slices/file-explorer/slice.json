@@ -21,7 +21,8 @@
       "scroll-area",
       "separator",
       "dropdown-menu",
-      "sheet"
+      "sheet",
+      "dialog"
     ],
     "env": [],
     "peers": []
