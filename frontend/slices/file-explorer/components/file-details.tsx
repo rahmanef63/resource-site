@@ -52,6 +52,14 @@ export function FileDetails({
         </span>
       </div>
       <div className="ml-auto flex items-center gap-2 text-[11px] text-muted-foreground">
+        {entry?.meta?.endpoint && (
+          <span
+            className="max-w-[180px] truncate font-mono text-[10px] text-sky-500"
+            title={entry.meta.endpoint}
+          >
+            {entry.meta.endpoint}
+          </span>
+        )}
         <span>{kind}</span>
         {entry?.kind === "file" && (
           <span className="tabular-nums">{fmtSize(entry.size)}</span>

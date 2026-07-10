@@ -776,10 +776,10 @@ export default function StoreDemo() {
   },
   {
     slug: "file-explorer",
-    title: "File Explorer — Tree + CRUD + Breadcrumb",
+    title: "File Explorer — Tree + CRUD + Preview + Properties",
     category: "os",
     kind: "full",
-    version: "1.5.0",
+    version: "1.6.0",
     tagline: "Backend-agnostic file manager: directory tree sidebar, breadcrumb nav, grid/list views, full CRUD.",
     description:
       "A complete, portable file-directory explorer: a collapsible folder TREE sidebar (lazy-loaded per dir), a responsive BREADCRUMB that auto-collapses to a dropdown, grid + list views with sort, multi-select, a right-click context menu, drag-and-drop (internal move + external file/folder upload), inline rename, and full CRUD (new folder, rename, cut/copy/paste, move, delete/trash, empty trash). The filesystem backend is INJECTED via a small FileExplorerAdapter (list/mkdir/remove/move/copy/upload/usage/rawUrl) — point it at a real API or use the bundled createMockAdapter() (a writable in-memory tree) so it works with zero backend. Opening a file fires an onOpenFile(path, entry) callback you wire to your own viewer/editor. Self-contained: imports only @/components/ui/* + @/lib/utils. Ported from os-vps (Topside) files manager. Pairs with appshell as the file-dir counterpart to a notion-style sidebar.",

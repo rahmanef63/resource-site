@@ -75,7 +75,9 @@ export function FilePreview({ path, entry, onClose }: { path: string; entry: FsE
           {status === "ready" && kind === "video" && src && (<video src={src} controls className="max-h-[72vh] max-w-full" />)}
           {status === "ready" && kind === "pdf" && src && (
             <iframe src={src} title={entry.name}
-              sandbox="allow-scripts allow-same-origin" referrerPolicy="no-referrer"
+              // No allow-scripts: the browser renders a real PDF without it, and
+              // a .pdf node whose bytes are actually text/html can't execute.
+              sandbox="allow-same-origin" referrerPolicy="no-referrer"
               className="h-[72vh] w-full rounded border border-border bg-white" />
           )}
           {status === "ready" && kind === "text" && text != null && (

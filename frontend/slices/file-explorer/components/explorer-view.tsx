@@ -10,7 +10,6 @@ import { DropOverlay } from "./drop-overlay";
 import { FilesSidebar } from "./files-sidebar";
 import { FilesToolbar } from "./files-toolbar";
 import { FileView } from "./file-view";
-import { FileContextMenu } from "./file-context-menu";
 import { FileDetails } from "./file-details";
 import { FileStatusBar } from "./file-status-bar";
 import { UploadInput } from "./upload-input";
@@ -23,7 +22,7 @@ import { useFileCommands } from "../hooks/use-file-commands";
 import { useDnd } from "../hooks/use-dnd";
 import { useWindowDrop } from "../hooks/use-window-drop";
 import { sortEntries, type SortKey, type ViewMode } from "../lib/types";
-import { FilePreview } from "./file-preview";
+import { ExplorerOverlays } from "./explorer-overlays";
 import { usePreview } from "../hooks/use-preview";
 
 // The explorer body. Assumes a FileExplorerAdapterProvider is mounted above it
@@ -41,7 +40,8 @@ export function ExplorerView({
 }) {
   const fs = useFiles(initialPath);
   useAgentTools(fileExplorerTools, fs);
-  const { preview, handleOpen, closePreview } = usePreview(onOpenFile);
+  const { preview, properties, handleOpen, closePreview, openProperties, closeProperties } =
+    usePreview(onOpenFile);
   const sel = useFileSelection(fs.entries);
   const cmd = useFileCommands(fs, sel, handleOpen);
   const dnd = useDnd(sel.selected, sel.selectOne, fs.move, fs.upload);
@@ -171,27 +171,19 @@ export function ExplorerView({
         />
       </div>
 
-      {cmd.ctx && (
-        <FileContextMenu
-          ctx={cmd.ctx}
-          hasClipboard={!!fs.clip}
-          inTrash={cmd.inTrash}
-          onClose={() => cmd.setCtx(null)}
-          onOpen={() => cmd.ctx?.entry && cmd.open(cmd.ctx.entry)}
-          onRename={() => cmd.ctx?.entry && cmd.setRenaming(cmd.ctx.entry.name)}
-          onNewFolder={cmd.newFolder}
-          onUpload={openPicker}
-          onUploadFolder={openFolderPicker}
-          onCut={() => cmd.cut(cmd.targets())}
-          onCopy={() => cmd.copy(cmd.targets())}
-          onPaste={fs.paste}
-          onDownload={() => fs.setError(null)}
-          onDelete={() => cmd.del(cmd.targets())}
-        />
-      )}
       <UploadInput ref={uploadRef} onFiles={fs.upload} />
       <UploadInput ref={folderRef} onFiles={fs.upload} directory />
-      {preview && <FilePreview path={preview.path} entry={preview.entry} onClose={closePreview} />}
+      <ExplorerOverlays
+        fs={fs}
+        cmd={cmd}
+        openPicker={openPicker}
+        openFolderPicker={openFolderPicker}
+        preview={preview}
+        properties={properties}
+        closePreview={closePreview}
+        closeProperties={closeProperties}
+        openProperties={openProperties}
+      />
     </div>
   );
 }

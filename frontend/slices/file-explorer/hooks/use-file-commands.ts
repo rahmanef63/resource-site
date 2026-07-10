@@ -107,6 +107,39 @@ export function useFileCommands(
     setRenaming(name);
   }, [fs, sel]);
 
+  // Download a file: resolve its bytes URL (readUrl → rawUrl → a Blob built from
+  // the text body) and trigger a browser download. Works on any adapter that
+  // exposes bytes; on the mock those are the seeded/uploaded data URLs.
+  const download = useCallback(
+    async (entry: FsEntry) => {
+      if (entry.kind === "dir") return;
+      const full = joinPath(fs.path, entry.name);
+      const adapter = fs.api.fs;
+      let url = (await adapter.readUrl?.(full)) || adapter.rawUrl(full);
+      let revoke = false;
+      if (!url) {
+        const doc = await adapter.read?.(full);
+        if (doc?.content != null) {
+          url = URL.createObjectURL(new Blob([doc.content], { type: doc.mime || "text/plain" }));
+          revoke = true;
+        }
+      }
+      if (!url) return fs.setError("Nothing to download for this file");
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = entry.name;
+      // download is ignored for cross-origin URLs; _blank then views (new tab)
+      // instead of navigating the OS away. data:/blob: honor download regardless.
+      a.target = "_blank";
+      a.rel = "noopener";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      if (revoke) setTimeout(() => URL.revokeObjectURL(url), 4000);
+    },
+    [fs],
+  );
+
   const onKey = useCallback(
     (e: KeyboardEvent) => {
       if (renaming) return;
@@ -132,6 +165,6 @@ export function useFileCommands(
 
   return {
     renaming, setRenaming, ctx, setCtx, inTrash,
-    go, open, openPath, onContext, targets, cut, copy, del, emptyTrash, doRename, newFolder, onKey,
+    go, open, openPath, onContext, targets, cut, copy, del, emptyTrash, doRename, newFolder, download, onKey,
   };
 }

@@ -2,10 +2,14 @@ import { useCallback, useState } from "react";
 import { previewKind } from "../lib/icons";
 import type { FsEntry } from "../adapter";
 
-// Route opening a previewable file (image/pdf/audio/video/text) into the
-// in-explorer lightbox; anything else falls through to the host's onOpenFile.
+type Target = { path: string; entry: FsEntry };
+
+// In-explorer modal state: the preview lightbox (image/pdf/audio/video/text) and
+// the Properties editor. `handleOpen` routes a previewable file into the
+// lightbox; anything else falls through to the host's onOpenFile.
 export function usePreview(onOpenFile?: (path: string, entry: FsEntry) => void) {
-  const [preview, setPreview] = useState<{ path: string; entry: FsEntry } | null>(null);
+  const [preview, setPreview] = useState<Target | null>(null);
+  const [properties, setProperties] = useState<Target | null>(null);
   const handleOpen = useCallback(
     (path: string, entry: FsEntry) => {
       if (previewKind(entry)) setPreview({ path, entry });
@@ -13,5 +17,12 @@ export function usePreview(onOpenFile?: (path: string, entry: FsEntry) => void) 
     },
     [onOpenFile],
   );
-  return { preview, handleOpen, closePreview: () => setPreview(null) };
+  return {
+    preview,
+    properties,
+    handleOpen,
+    closePreview: () => setPreview(null),
+    openProperties: (path: string, entry: FsEntry) => setProperties({ path, entry }),
+    closeProperties: () => setProperties(null),
+  };
 }

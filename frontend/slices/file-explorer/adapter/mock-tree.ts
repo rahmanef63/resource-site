@@ -111,6 +111,7 @@ export function seedTree(): Tree {
     "/Documents": [
       dir("Invoices"),
       dir("Contracts"),
+      file("hello.pdf", 394, "pdf"),
       file("resume.pdf", 320_000, "pdf"),
       file("plan.md", 2300, "md"),
       file("budget.csv", 18_400, "csv"),
@@ -127,6 +128,7 @@ export function seedTree(): Tree {
     ],
     "/Music": [
       dir("Playlists"),
+      file("beep.wav", 1004, "wav"),
       file("track-01.mp3", 6_200_000, "mp3"),
       file("track-02.mp3", 5_800_000, "mp3"),
     ],
@@ -134,6 +136,7 @@ export function seedTree(): Tree {
     "/Pictures": [
       dir("Camera"),
       dir("Wallpapers"),
+      file("logo.svg", 380, "svg"),
       file("avatar.jpg", 240_000, "jpg"),
     ],
     "/Pictures/Camera": [
@@ -155,6 +158,7 @@ export function seedTree(): Tree {
       file("package.json", 2040, "json"),
       file("README.md", 4120, "md"),
       file("tsconfig.json", 640, "json"),
+      file("data.json", 74, "json"),
     ],
     "/Projects/file-explorer/src": [
       file("index.ts", 3200, "ts"),
@@ -162,7 +166,9 @@ export function seedTree(): Tree {
       file("styles.css", 1400, "css"),
     ],
     "/Projects/website": [
-      file("index.html", 2200, "html"),
+      // Seeded with metadata so Properties shows a live example (custom icon +
+      // endpoint). The 🌐 glyph replaces the generic icon in the explorer.
+      { ...file("index.html", 180, "html"), meta: { icon: "🌐", endpoint: "https://api.example.com/site" } },
       file("main.js", 7800, "js"),
     ],
     "/Downloads": [

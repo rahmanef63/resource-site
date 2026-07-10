@@ -48,6 +48,7 @@ export function FileContextMenu({
   onCopy,
   onPaste,
   onDownload,
+  onProperties,
   onDelete,
 }: {
   ctx: ContextState;
@@ -63,6 +64,7 @@ export function FileContextMenu({
   onCopy: () => void;
   onPaste: () => void;
   onDownload: () => void;
+  onProperties: () => void;
   onDelete: () => void;
 }) {
   useEffect(() => {
@@ -83,8 +85,9 @@ export function FileContextMenu({
           { label: "Cut", shortcut: "⌘X", run: onCut },
           { label: "Copy", shortcut: "⌘C", run: onCopy },
           ...(hasClipboard ? [{ label: "Paste", shortcut: "⌘V", run: onPaste }] : []),
-          { label: "Download", run: onDownload },
+          ...(ctx.entry.kind !== "dir" ? [{ label: "Download", run: onDownload }] : []),
         ],
+        [{ label: "Properties", run: onProperties }],
         [
           {
             label: inTrash ? "Delete Permanently" : "Move to Trash",

@@ -78,6 +78,7 @@ export function FileItem({
 }) {
   const Icon = iconFor(entry);
   const color = colorFor(entry);
+  const glyph = entry.meta?.icon; // custom icon (emoji) set via Properties
   const isMobile = useIsMobile();
   const { rawUrl } = useFsAdapter();
   const [thumbFail, setThumbFail] = useState(false);
@@ -131,6 +132,10 @@ export function FileItem({
               dropActive && "scale-110",
             )}
           />
+        ) : glyph ? (
+          <span className={cn("flex size-9 shrink-0 items-center justify-center text-2xl leading-none transition-transform", dropActive && "scale-110")}>
+            {glyph}
+          </span>
         ) : (
           <Icon
             className={cn(
@@ -169,7 +174,11 @@ export function FileItem({
       )}
     >
       <span className="flex min-w-0 items-center gap-2">
-        <Icon className={cn("size-4 shrink-0", selected ? "" : color)} />
+        {glyph ? (
+          <span className="size-4 shrink-0 text-center text-sm leading-none">{glyph}</span>
+        ) : (
+          <Icon className={cn("size-4 shrink-0", selected ? "" : color)} />
+        )}
         {renaming ? (
           <RenameInput initial={entry.name} onCommit={commit} onCancel={onRenameCancel} />
         ) : (

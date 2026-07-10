@@ -1,11 +1,11 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "file-explorer",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "category": "os",
   "kind": "full",
-  "title": "File Explorer \u2014 Tree + CRUD + Breadcrumb",
-  "description": "A complete, backend-agnostic file explorer: a directory tree sidebar, breadcrumb navigation with history, grid and list views, full CRUD (new folder, rename, move, copy, delete/Trash), drag-and-drop upload and move (files AND folders, structure preserved), a right-click context menu, multi-select (cmd/shift), and keyboard shortcuts. Storage is pluggable via an injectable FileExplorerAdapter (host fs / S3 / Convex / your own); the slice ships an in-memory mock so the whole UI is demoable with zero backend.",
+  "title": "File Explorer \u2014 Tree + CRUD + Preview + Properties",
+  "description": "A complete, backend-agnostic file explorer: a directory tree sidebar, breadcrumb navigation with history, grid and list views, full CRUD (new folder, rename, move, copy, delete/Trash), drag-and-drop upload and move (files AND folders, structure preserved), an inline preview lightbox (image / audio / video / pdf / text), file download, a Properties editor (edit the text body plus metadata: a custom icon glyph, an endpoint URL, and arbitrary key/values), a right-click context menu, multi-select (cmd/shift), and keyboard shortcuts. Storage is pluggable via an injectable FileExplorerAdapter (host fs / S3 / Convex / your own); the bundled in-memory mock is a real filesystem with bytes, so preview, upload, download, and editing all work with zero backend.",
   "namespace": "@/features/file-explorer",
   "frontend": {
     "slicePath": "frontend/slices/file-explorer",
@@ -40,6 +40,9 @@
     "crud",
     "drag-drop",
     "upload",
+    "download",
+    "preview",
+    "properties",
     "adapter",
     "ui"
   ],

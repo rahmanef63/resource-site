@@ -10,6 +10,9 @@ export type FsEntry = {
   size: number;
   ext?: string;
   mime?: string;
+  /** User-editable metadata (custom icon glyph, endpoint URL, arbitrary keys),
+   *  set via the Properties dialog. String map so it's backend-portable. */
+  meta?: Record<string, string>;
 };
 
 export type FsRoot = { label: string; path: string };
@@ -57,4 +60,7 @@ export type FileExplorerAdapter = {
   /** Create an empty file (the tree's inline "new file" affordance). Optional;
    * adapters without write support simply omit it (the tree no-ops the create). */
   write?: (path: string, content: string) => Promise<unknown>;
+  /** Persist custom metadata (icon glyph, endpoint URL, arbitrary keys) on a
+   *  node. Optional; adapters without metadata support omit it. */
+  setMeta?: (path: string, meta: Record<string, string>) => Promise<unknown>;
 };

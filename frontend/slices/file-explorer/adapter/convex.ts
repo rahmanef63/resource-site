@@ -45,6 +45,7 @@ export type FsFunctionRefs = {
   upload?: unknown;
   rawUrl?: unknown;
   read?: unknown;
+  setMeta?: unknown;
 };
 
 export function createConvexAdapter({
@@ -82,6 +83,9 @@ export function createConvexAdapter({
       api.rawUrl ? (client.query(api.rawUrl, { path }) as Promise<string>) : Promise.resolve(""),
     read: api.read
       ? (path) => client.query(api.read!, { path }) as Promise<{ content: string; mime?: string; size?: number } | null>
+      : undefined,
+    setMeta: api.setMeta
+      ? (path, meta) => client.mutation(api.setMeta!, { path, meta })
       : undefined,
   };
 }
