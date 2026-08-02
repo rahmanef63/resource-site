@@ -22,6 +22,11 @@ export const ALLOWED_IMPORT_PREFIXES = [
   "@notion/",
   // Convex barrels
   "@convex/",
+  "@/convex/",
+  // Peer slices declared in deps.peers — imported via their public barrel
+  // ONLY (@/features/<peer>), never a deep path. The ai-* cluster (lifted from
+  // models-rahmanef-com) depends on ai-core / workspaces / memory-graph this way.
+  "@/features/",
   // Standard libs / frameworks
   "react",
   "react-dom",

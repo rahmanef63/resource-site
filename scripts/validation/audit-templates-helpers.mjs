@@ -4,6 +4,26 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 
+// AI feature cluster lifted 1:1 from models-rahmanef-com — deliberately plain-CSS
+// + design-token (no shadcn). Carved out of the raw-primitive hard gate like
+// appshell; see severityFor(). `audit-log` is NOT here — it merges into rr's
+// existing shadcn audit-log slice.
+export const AI_NOSHADCN_CLUSTER = new Set([
+  "ai-core",
+  "workspaces",
+  "byok",
+  "provider-pool",
+  "memory",
+  "memory-graph",
+  "combos",
+  "scheduled-agents",
+  "messaging-channels",
+  "api-compat",
+  "mcp-client",
+  "usage-rollups",
+  "spend-caps",
+]);
+
 export function slugForFile(file, repoRoot) {
   const rel = path.relative(repoRoot, file);
   const parts = rel.split(path.sep);
@@ -42,6 +62,17 @@ export function severityFor(file, repoRoot) {
   // WARNING not ERROR here (visible, non-blocking) — a documented carve-out for
   // this one slice; every other slice stays the 2026-06-02 hard gate below.
   if (parts[0] === "frontend" && parts[1] === "slices" && parts[2] === "appshell") {
+    return "warning";
+  }
+  // frontend/slices/<ai-cluster>/* → the AI feature cluster lifted 1:1 from
+  // models-rahmanef-com, which is deliberately plain-CSS + design-token based
+  // (NO shadcn — a documented choice in that app's CLAUDE.md). Its dialog/error
+  // primitives are the no-shadcn ResponsiveDialog/ErrorLine shipped by ai-core;
+  // wrapping them in shadcn <Button>/<Dialog> would restyle the cluster and
+  // fight future re-syncs from models. Same carve-out spirit as appshell —
+  // WARNING not ERROR, visible + non-blocking. Every other slice keeps the hard
+  // gate below. (Cluster sign-off 2026-08-02.)
+  if (parts[0] === "frontend" && parts[1] === "slices" && AI_NOSHADCN_CLUSTER.has(parts[2])) {
     return "warning";
   }
   // frontend/slices/<slug>/* → slice source (copied into consumers by

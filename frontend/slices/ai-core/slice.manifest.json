@@ -1,0 +1,32 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "ai-core",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add ai-core",
+    "consumerPath": "slices/ai-core"
+  },
+  "files": [
+    "README.md",
+    "index.ts",
+    "config.ts",
+    "components/responsive-dialog.tsx",
+    "components/error-boundary.tsx",
+    "hooks/use-theme.ts",
+    "lib/format.ts",
+    "lib/errors.tsx"
+  ],
+  "convex": {
+    "schemaPath": "",
+    "rootPaths": []
+  },
+  "imports": {
+    "shared": [],
+    "external": [
+      "react",
+      "lucide-react"
+    ]
+  }
+}

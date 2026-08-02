@@ -4,6 +4,7 @@
 import { registerFeatures } from "./registerFeature";
 import type { RegisteredSlice } from "./registry";
 
+import { aiCoreConfig } from "@/features/ai-core/config";
 import { aiRouterConfig } from "@/features/ai-router/config";
 import { appStoreConfig } from "@/features/app-store/config";
 import { appshellConfig } from "@/features/appshell/config";
@@ -34,6 +35,11 @@ import { systemMonitorConfig } from "@/features/system-monitor/config";
 import { vectorSearchConfig } from "@/features/vector-search/config";
 
 export const REGISTERED_SLICES: RegisteredSlice[] = [
+  {
+    ...aiCoreConfig,
+    importPath: "@/features/ai-core/config",
+    version: "0.1.0",
+  },
   {
     ...aiRouterConfig,
     importPath: "@/features/ai-router/config",

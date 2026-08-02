@@ -1,0 +1,68 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "ai-core",
+  "version": "0.1.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "AI Core Kit",
+  "description": "Shared UI + helper substrate for the ai-* slice cluster (lifted from models-rahmanef-com). Ships the ResponsiveDialog/ConfirmDialog overlay primitive (+ useConfirm), SectionErrorBoundary, a light/dark useTheme hook, fmt/ago/dt formatters, and a provider-agnostic ConvexError renderer (errData/ErrorLine/FRIENDLY). React-only, no Convex, no shadcn — the lightweight no-shadcn dialog variant. Foundation the byok/workspaces/memory/combos/scheduled-agents/channels slices import via @/features/ai-core.",
+  "namespace": "@/features/ai-core",
+  "convex": {
+    "tablesExport": "",
+    "schemaPath": "",
+    "rootPaths": []
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/ai-core",
+    "configExport": "aiCoreConfig"
+  },
+  "deps": {
+    "npm": [
+      "lucide-react"
+    ],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "license": "MIT",
+  "tags": [
+    "ui",
+    "dialog",
+    "theme",
+    "error-state",
+    "no-shadcn",
+    "ai"
+  ],
+  "contract": {
+    "requires": {
+      "auth": "none",
+      "deps": []
+    },
+    "provides": {
+      "components": [
+        "ResponsiveDialog",
+        "ConfirmDialog",
+        "SectionErrorBoundary",
+        "ErrorLine"
+      ],
+      "hooks": [
+        "useConfirm",
+        "useTheme"
+      ],
+      "utils": [
+        "fmt",
+        "ago",
+        "dt",
+        "errData"
+      ]
+    },
+    "generalization": {
+      "level": "generic",
+      "forbiddenTerms": [],
+      "requiredProps": []
+    }
+  }
+}
