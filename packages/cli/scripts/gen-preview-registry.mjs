@@ -1,0 +1,156 @@
+#!/usr/bin/env node
+// gen-preview-registry.mjs — VP wave: generate the variant-preview registry.
+//
+// Scans top-level frontend/slices/<slug>/slice.json for `previews` blocks and
+// the sibling preview.tsx, then emits:
+//   · lib/preview/registry.gen.ts        — slug → () => import(...) (code-split)
+//   · lib/preview/preview-meta.gen.json  — declared metadata for builder + AI tools
+//
+// Consistency gates (exit 1):
+//   · previews declared but preview.tsx missing (and vice versa)
+//   · kind "variants" without axes / kind "scenarios" without scenarios
+//   · more than 3 axes per component (keeps AI tool schemas small)
+//
+// Run: node packages/cli/scripts/gen-preview-registry.mjs [--check]
+// --check: regenerate in-memory and diff against disk (CI guard, no writes).
+
+import { existsSync, readFileSync, readdirSync, statSync, writeFileSync, mkdirSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const REPO = path.resolve(__dirname, "../../..");
+// Two scan roots: canonical slices (preview.tsx colocated) + template-base
+// copy-templates. template-base has its OWN node_modules (second react —
+// hooks crash) and is tsc-excluded, so its render files live SITE-SIDE at
+// components/templates/_shared/previews/<slug>.preview.tsx and must import
+// only site-compiled code; the `previews` declaration stays in the slice's
+// slice.json. Nothing preview-related ships to consumers for these slices.
+const ROOTS = [
+  {
+    dir: path.join(REPO, "frontend", "slices"),
+    previewTsx: (dir) => path.join(dir, "preview.tsx"),
+    importPath: (slug) => `@/features/${slug}/preview`,
+  },
+  {
+    dir: path.join(REPO, "template-base", "frontend", "slices"),
+    previewTsx: (_dir, slug) =>
+      path.join(REPO, "components", "templates", "_shared", "previews", `${slug}.preview.tsx`),
+    importPath: (slug) => `@/components/templates/_shared/previews/${slug}.preview`,
+  },
+];
+const OUT_DIR = path.join(REPO, "lib", "preview");
+const OUT_TS = path.join(OUT_DIR, "registry.gen.ts");
+const OUT_JSON = path.join(OUT_DIR, "preview-meta.gen.json");
+
+const check = process.argv.includes("--check");
+const errors = [];
+const entries = [];
+
+const seenSlugs = new Map(); // slug → root dir (collision guard)
+for (const root of ROOTS) {
+for (const slug of readdirSync(root.dir).sort()) {
+  const dir = path.join(root.dir, slug);
+  if (!statSync(dir).isDirectory() || slug.startsWith("_")) continue;
+  const sliceJsonPath = path.join(dir, "slice.json");
+  const previewPath = root.previewTsx(dir, slug);
+  const hasPreviewTsx = existsSync(previewPath);
+  if (!existsSync(sliceJsonPath)) {
+    if (hasPreviewTsx) errors.push(`[${slug}] preview.tsx without slice.json`);
+    continue;
+  }
+  let sliceJson;
+  try {
+    sliceJson = JSON.parse(readFileSync(sliceJsonPath, "utf8"));
+  } catch (e) {
+    errors.push(`[${slug}] slice.json parse: ${e.message}`);
+    continue;
+  }
+  const previews = sliceJson.previews;
+  const optedOut = Array.isArray(previews) && previews.length === 0; // `"previews": []` = explicit no-preview
+  if ((!previews || optedOut) && !hasPreviewTsx) continue;
+  if (optedOut && hasPreviewTsx) {
+    errors.push(`[${slug}] preview.tsx exists but previews is [] (opt-out) — remove one`);
+    continue;
+  }
+  if (previews && !hasPreviewTsx) {
+    errors.push(`[${slug}] slice.json declares previews but preview.tsx is missing`);
+    continue;
+  }
+  if (!previews && hasPreviewTsx) {
+    errors.push(`[${slug}] preview.tsx exists but slice.json has no previews block`);
+    continue;
+  }
+  for (const p of previews) {
+    if (p.kind === "variants" && (!p.axes || p.axes.length === 0)) {
+      errors.push(`[${slug}] ${p.component}: kind "variants" requires axes`);
+    }
+    if (p.kind === "scenarios" && (!p.scenarios || p.scenarios.length === 0)) {
+      errors.push(`[${slug}] ${p.component}: kind "scenarios" requires scenarios`);
+    }
+    if (p.axes && p.axes.length > 3) {
+      errors.push(`[${slug}] ${p.component}: max 3 variant axes (got ${p.axes.length})`);
+    }
+    for (const ax of p.axes ?? []) {
+      if (ax.default != null && !ax.values.includes(ax.default)) {
+        errors.push(`[${slug}] ${p.component}.${ax.prop}: default "${ax.default}" not in values`);
+      }
+    }
+  }
+  if (seenSlugs.has(slug)) {
+    errors.push(`[${slug}] preview declared in both ${seenSlugs.get(slug)} and ${root.dir}`);
+    continue;
+  }
+  seenSlugs.set(slug, root.dir);
+  entries.push({
+    slug,
+    title: sliceJson.title ?? slug,
+    category: sliceJson.category ?? "ui",
+    importPath: root.importPath(slug),
+    previews,
+  });
+}
+}
+entries.sort((a, b) => a.slug.localeCompare(b.slug));
+
+if (errors.length > 0) {
+  console.error(`✖ gen-preview-registry: ${errors.length} error(s)`);
+  for (const e of errors) console.error(`  · ${e}`);
+  process.exit(1);
+}
+
+const ts = [
+  "// AUTO-GENERATED by packages/cli/scripts/gen-preview-registry.mjs — do not edit.",
+  "// One dynamic import per slug keeps every preview in its own client chunk.",
+  'import type { SlicePreviewModule } from "@/shared/preview/types";',
+  "",
+  "export const PREVIEW_REGISTRY: Record<string, () => Promise<{ default: SlicePreviewModule }>> = {",
+  ...entries.map(
+    (e) => `  "${e.slug}": () => import("${e.importPath}"),`,
+  ),
+  "};",
+  "",
+  "export type PreviewSlug = keyof typeof PREVIEW_REGISTRY;",
+  "",
+].join("\n");
+
+// importPath is registry-internal — keep the server-safe meta JSON shape stable.
+const json =
+  JSON.stringify(entries.map(({ importPath: _importPath, ...rest }) => rest), null, 2) + "\n";
+
+if (check) {
+  const tsOnDisk = existsSync(OUT_TS) ? readFileSync(OUT_TS, "utf8") : "";
+  const jsonOnDisk = existsSync(OUT_JSON) ? readFileSync(OUT_JSON, "utf8") : "";
+  if (tsOnDisk !== ts || jsonOnDisk !== json) {
+    console.error(
+      "✖ preview registry drift — run: node packages/cli/scripts/gen-preview-registry.mjs",
+    );
+    process.exit(1);
+  }
+  console.log(`✓ preview registry in sync (${entries.length} slice(s))`);
+} else {
+  mkdirSync(OUT_DIR, { recursive: true });
+  writeFileSync(OUT_TS, ts);
+  writeFileSync(OUT_JSON, json);
+  console.log(`Wrote ${entries.length} preview slice(s) → lib/preview/{registry.gen.ts, preview-meta.gen.json}`);
+}

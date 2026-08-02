@@ -1,0 +1,26 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "faq-section",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add faq-section",
+    "consumerPath": "slices/faq-section"
+  },
+  "files": [
+    "README.md",
+    "components/FAQItem.tsx",
+    "config.ts",
+    "index.ts",
+    "views/FAQSection.tsx"
+  ],
+  "imports": {
+    "shared": [],
+    "external": [
+      "next/link",
+      "@/components/ui/accordion",
+      "@/components/ui/button"
+    ]
+  }
+}

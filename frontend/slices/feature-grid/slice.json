@@ -1,0 +1,108 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "feature-grid",
+  "version": "0.1.0",
+  "deprecated": "landing-sections",
+  "category": "ui",
+  "kind": "ui",
+  "title": "Feature Grid",
+  "description": "Reusable, prop-driven feature grid section for marketing pages. Composes a header (eyebrow / title / subtitle) with a responsive 1-4 column grid of feature cards. Each item accepts a title, body, optional Lucide icon (component or string fallback), optional image, and optional link CTA. Three visual layouts: cards (shadcn Card), minimal (borderless), alternating (image-left/right rows).",
+  "namespace": "@/features/feature-grid",
+  "frontend": {
+    "slicePath": "frontend/slices/feature-grid",
+    "configExport": "featureGridFeature"
+  },
+  "convex": {
+    "tablesExport": "",
+    "schemaPath": "",
+    "rootPaths": []
+  },
+  "deps": {
+    "npm": [
+      "lucide-react@^0.400.0",
+      "next@^15"
+    ],
+    "shadcn": [
+      "button",
+      "card"
+    ],
+    "env": [],
+    "peers": []
+  },
+  "registers": [],
+  "audit": [],
+  "license": "MIT",
+  "tags": [
+    "ui",
+    "marketing",
+    "features",
+    "grid",
+    "section"
+  ],
+  "previews": [
+    {
+      "component": "FeatureGridSection",
+      "kind": "variants",
+      "axes": [
+        {
+          "prop": "layout",
+          "values": [
+            "cards",
+            "minimal",
+            "alternating",
+            "grouped"
+          ],
+          "default": "cards",
+          "description": "Card grid, borderless minimal, alternating media rows, or grouped"
+        },
+        {
+          "prop": "columns",
+          "values": [
+            "1",
+            "2",
+            "3",
+            "4"
+          ],
+          "default": "3",
+          "description": "Grid columns at lg"
+        },
+        {
+          "prop": "align",
+          "values": [
+            "left",
+            "center"
+          ],
+          "default": "left",
+          "description": "Card and header alignment"
+        }
+      ],
+      "seed": "3 static feature items with lucide icons"
+    }
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        },
+        {
+          "npm": "next",
+          "range": "^15"
+        }
+      ]
+    },
+    "provides": {
+      "components": [
+        "FeatureGridSection",
+        "FeatureCard"
+      ],
+      "utils": [],
+      "hooks": [],
+      "convex": {
+        "tables": [],
+        "rbac": []
+      }
+    }
+  }
+}

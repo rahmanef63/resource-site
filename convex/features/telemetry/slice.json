@@ -1,0 +1,35 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "telemetry",
+  "version": "0.1.0",
+  "category": "infra",
+  "title": "Slice Telemetry Receiver",
+  "description": "Privacy-preserving telemetry endpoint + 30-day aggregate query for kitab slice quality scoring. Hashed consumer IDs, 1 KB payload cap, 60/hr rate limit.",
+  "namespace": "@convex/features/telemetry",
+  "convex": {
+    "tablesExport": "telemetryTables",
+    "schemaPath": "convex/features/telemetry/_schema.ts",
+    "rootPaths": ["convex/features/telemetry"]
+  },
+  "frontend": {
+    "slicePath": "",
+    "configExport": ""
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [
+      {
+        "name": "RAHMAN_RESOURCES_TELEMETRY",
+        "scope": "server",
+        "required": false,
+        "description": "Set to 1 in the consumer app to opt in to sending events."
+      }
+    ],
+    "peers": []
+  },
+  "registers": [],
+  "audit": ["bp:public-fn-validator"],
+  "license": "MIT",
+  "tags": ["infra", "telemetry", "privacy", "quality"]
+}

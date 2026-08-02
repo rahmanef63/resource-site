@@ -1,0 +1,137 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "rbac-roles",
+  "version": "0.3.0",
+  "category": "auth",
+  "title": "RBAC \u2014 Roles & Permissions",
+  "description": "RBAC engine ported from superspace: 6 system role presets (owner/admin/manager/staff/client/guest with levels), dot-namespaced permissions with `*` / `feature.*` wildcard matching, pure check helpers (resolvePermissions / hasPermission / roleHasPermission), and props-driven UI primitives \u2014 <PermissionGate>, usePermissions, <RoleBadge>, <PermissionMatrix>. Convex template ships a tenant-scoped rbac_roles table + checkPermission / requirePermission helpers + seedSystemRoles. No Clerk. Pair with `user-management` for the members/invites UI.",
+  "namespace": "@/features/rbac-roles",
+  "convex": {
+    "tablesExport": "rbacRolesTables",
+    "schemaPath": "convex/features/rbac-roles/_schema.ts",
+    "rootPaths": [
+      "convex/features/rbac-roles"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/rbac-roles",
+    "configExport": "rbacRolesFeature"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [
+      "badge",
+      "checkbox",
+      "label"
+    ],
+    "env": [
+      {
+        "name": "PLATFORM_ADMIN_EMAILS",
+        "scope": "convex",
+        "description": "Comma-separated emails granted cross-tenant superadmin (`*`)."
+      }
+    ],
+    "peers": [
+      {
+        "slug": "convex-auth",
+        "range": "^0.1",
+        "reason": "Permission checks resolve the authed user via getAuthUserId."
+      }
+    ]
+  },
+  "registers": [],
+  "audit": [
+    "bp:public-fn-validator"
+  ],
+  "license": "MIT",
+  "tags": [
+    "rbac",
+    "auth",
+    "permissions",
+    "roles",
+    "authorization",
+    "no-clerk",
+    "convex"
+  ],
+  "previews": [
+    {
+      "component": "PermissionMatrix",
+      "kind": "variants",
+      "axes": [
+        {
+          "prop": "role",
+          "values": [
+            "admin",
+            "manager",
+            "staff",
+            "guest"
+          ],
+          "default": "manager",
+          "description": "Seeds the matrix `value` from this role preset's permission set."
+        },
+        {
+          "prop": "readOnly",
+          "values": [
+            "false",
+            "true"
+          ],
+          "default": "false",
+          "description": "PermissionMatrix `readOnly` \u2014 locks the checkboxes for inspection."
+        }
+      ],
+      "seed": "PERMISSION_GROUPS catalog + the selected role preset's resolved permissions"
+    }
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "next",
+          "range": "^15"
+        },
+        {
+          "npm": "react",
+          "range": "^18"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "rbac-roles.list_roles",
+        "rbac-roles.list_permissions",
+        "rbac-roles.check",
+        "rbac-roles.grant",
+        "rbac-roles.revoke"
+      ],
+      "components": [
+        "PermissionGate",
+        "RoleBadge",
+        "PermissionMatrix"
+      ],
+      "hooks": [
+        "usePermissions"
+      ],
+      "utils": [
+        "PERMS",
+        "matchPermission",
+        "ROLE_PRESETS",
+        "ROLE_MAP",
+        "resolvePermissions",
+        "hasPermission",
+        "roleHasPermission",
+        "roleLevel",
+        "isAtLeast",
+        "PERMISSION_GROUPS"
+      ],
+      "convex": {
+        "tables": [
+          "rbac_roles"
+        ],
+        "rbac": [
+          "roles.view",
+          "roles.manage"
+        ]
+      }
+    }
+  }
+}

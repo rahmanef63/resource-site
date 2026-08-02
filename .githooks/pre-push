@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# pre-push hook — Track J / catalog quality gate.
+#
+# Runs the audit chain that pre-commit skips for speed. Catches drift in
+# slice metadata trio + raw HTML primitives + hardcoded preview URLs in
+# templates before they leave the local repo.
+#
+# Bypass: `git push --no-verify` (only when you know what you're doing).
+
+set -e
+
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+
+echo "→ pre-push: audit:slices + audit:templates + audit:file-size + audit:convex-features"
+npm run audit:slices --silent
+npm run audit:templates --silent
+npm run audit:file-size --silent
+npm run audit:convex-features --silent
+npm run audit:docs-primitives --silent
+
+echo "→ pre-push: vitest (behavioral gate — audits alone never caught a dead click)"
+# vitest intermittently exits 1 with ALL tests green (environmental teardown
+# flake, ~1/4 of hook-context runs, 2026-06-11). One retry: a real failure
+# stays red on both runs; the flake passes the second.
+npm run test --silent || {
+  echo "↻ pre-push: vitest non-zero — retrying once (known green-but-exit-1 flake)"
+  npm run test --silent || {
+    echo ""
+    echo "❌ pre-push: tests FAILED twice. Bypass (NOT recommended): git push --no-verify"
+    exit 1
+  }
+}
+
+echo "→ pre-push: npm run build (catches Next-only errors tsc misses — cacheComponents conflicts, Turbopack loader issues, etc)"
+npm run build --silent > /tmp/rr-prepush-build.log 2>&1 || {
+  echo ""
+  echo "❌ pre-push: production build FAILED. See /tmp/rr-prepush-build.log"
+  tail -40 /tmp/rr-prepush-build.log
+  echo ""
+  echo "   Bypass (NOT recommended): git push --no-verify"
+  exit 1
+}
+
+echo "✓ pre-push: catalog gates + build green"

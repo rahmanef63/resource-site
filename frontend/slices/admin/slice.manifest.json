@@ -1,0 +1,44 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "admin",
+  "version": "0.2.1",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add admin",
+    "consumerPath": "slices/admin"
+  },
+  "files": [
+    "README.md",
+    "config.ts",
+    "index.ts",
+    "variants/console/CHANGELOG.md",
+    "variants/console/README.md",
+    "variants/console/components/AccessGate.tsx",
+    "variants/console/components/AdminConsole.tsx",
+    "variants/console/components/sections/AnalyticsDashboard.tsx",
+    "variants/console/components/sections/AuditLogViewer.tsx",
+    "variants/console/components/sections/LeadsInbox.tsx",
+    "variants/console/components/sections/NavConfigManager.tsx",
+    "variants/console/components/sections/SeoHealthPanel.tsx",
+    "variants/console/hooks/useAdminSection.ts",
+    "variants/console/index.ts",
+    "variants/console/lib/access.ts",
+    "variants/console/lib/index.ts",
+    "variants/console/lib/mock.ts",
+    "variants/console/lib/sections.ts",
+    "variants/console/page.tsx",
+    "variants/shell/README.md",
+    "variants/shell/index.ts",
+    "variants/shell/lib/index.ts",
+    "variants/shell/lib/registry-adapter.ts",
+    "variants/shell/lib/registry-labels.ts",
+    "variants/shell/lib/registry-stats.ts",
+    "variants/shell/lib/registry-types.ts",
+    "variants/shell/page.tsx"
+  ],
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

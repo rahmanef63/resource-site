@@ -1,0 +1,34 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "landing-sections",
+  "version": "0.4.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add landing-sections",
+    "consumerPath": "slices/landing-sections"
+  },
+  "files": [
+    "README.md",
+    "components/LandingSectionShell.tsx",
+    "config.ts",
+    "index.ts",
+    "landing-context.tsx",
+    "landing-fields.ts",
+    "reducer.ts",
+    "seed-factory.ts",
+    "types.ts",
+    "views/LandingEditorView.tsx",
+    "views/LandingView.tsx"
+  ],
+  "imports": {
+    "shared": [],
+    "external": [
+      "@/components/templates/_shared/crud/CrudFormView",
+      "@/components/templates/_shared/crud/CrudListView",
+      "@/components/templates/_shared/crud/types",
+      "@/components/ui/badge",
+      "@/lib/utils"
+    ]
+  }
+}

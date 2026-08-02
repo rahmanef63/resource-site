@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+# pre-commit hook — Track J / local-first quality gate.
+#
+# Runs fast authoritative checks before commit lands. Audit chain catches
+# drift at commit time so it never reaches pre-push.
+#   1. typecheck                  — tsc --noEmit, ~5-10s incremental
+#   2. validate:contracts:check   — Phase A contract validator
+#   3. audit:slices               — naming/imports/schema/trio enforcement
+#   4. audit:templates            — shadcn + hardcoded /preview/<slug> leak
+#   5. audit:file-size            — ≤200 LOC modularity cap
+#
+# Heavier checks (lint, vitest, build) still run only in CI/pre-push.
+#
+# Bypass: `git commit --no-verify`
+#
+# Activation: `npm install` runs the package.json `prepare` script which
+# points core.hooksPath at this directory. To activate manually:
+#   git config core.hooksPath .githooks
+
+set -e
+
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+
+echo "pre-commit: typecheck + contracts + audit chain"
+
+if ! npm run --silent typecheck; then
+  echo ""
+  echo "pre-commit: typecheck FAILED — fix tsc errors or bypass with --no-verify" >&2
+  exit 1
+fi
+
+if ! npm run --silent validate:contracts:check; then
+  echo ""
+  echo "pre-commit: contract validator FAILED — fix slice.contract.ts or bypass with --no-verify" >&2
+  exit 1
+fi
+
+if ! npm run --silent audit:slices; then
+  echo ""
+  echo "pre-commit: audit:slices FAILED — fix slice naming/imports/trio or bypass with --no-verify" >&2
+  exit 1
+fi
+
+if ! npm run --silent audit:templates; then
+  echo ""
+  echo "pre-commit: audit:templates FAILED — wrap raw HTML or fix hardcoded /preview/<slug> or bypass with --no-verify" >&2
+  exit 1
+fi
+
+if ! npm run --silent audit:file-size; then
+  echo ""
+  echo "pre-commit: audit:file-size FAILED — split files >200 LOC or bypass with --no-verify" >&2
+  exit 1
+fi
+
+# Catalog scalars (lib/content/slices.ts title/category/version/kind) are
+# GENERATED from each slice.json (the SSOT). Replaces validate-slice-parity —
+# drift is now auto-fixable, not just flagged.
+if ! npm run --silent gen:catalog:check; then
+  echo ""
+  echo "pre-commit: catalog scalar drift — run 'npm run gen:catalog' and stage lib/content/slices.ts, or bypass with --no-verify" >&2
+  exit 1
+fi
+
+if ! npm run --silent validate:changelog; then
+  echo ""
+  echo "pre-commit: changelog data invalid (dup id / future date) — fix lib/content/changelog/part-*.ts" >&2
+  exit 1
+fi
+
+# Skills SSOT (lib/content/claude-skills.ts) → packages/cli/lib/skills.json.
+# Sync was publish-time only, so the site could advertise a skill the CLI
+# didn't know for weeks. Gate it here too.
+if ! node packages/cli/scripts/sync-skills.mjs --check; then
+  echo ""
+  echo "pre-commit: skills drift — run 'node packages/cli/scripts/sync-skills.mjs' and stage packages/cli/lib/skills.json, or bypass with --no-verify" >&2
+  exit 1
+fi
+
+echo "pre-commit: ok"
+exit 0

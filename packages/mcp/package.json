@@ -1,0 +1,42 @@
+{
+  "name": "rahman-resources-mcp",
+  "version": "1.2.5",
+  "description": "Model Context Protocol server for the Rahman Resources registry — stdio + HTTP transports. Exposes templates, slices, features, recipes, Claude skills, and CRUD workflows as MCP tools/resources.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Rahman <casadezian@gmail.com>",
+  "homepage": "https://github.com/rahmanef63/resource-site",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rahmanef63/resource-site.git",
+    "directory": "packages/mcp"
+  },
+  "bin": {
+    "rahman-resources-mcp": "bin/server.mjs"
+  },
+  "files": [
+    "bin",
+    "src",
+    "Dockerfile",
+    "docker-compose.yml",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "prepublishOnly": "node scripts/check-peer.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "rahman-resources": "^1.14.0"
+  },
+  "keywords": [
+    "rahman",
+    "mcp",
+    "model-context-protocol",
+    "claude",
+    "templates",
+    "scaffolder"
+  ]
+}

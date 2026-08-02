@@ -1,0 +1,30 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "testimonials",
+  "version": "0.1.1",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add testimonials",
+    "consumerPath": "slices/testimonials"
+  },
+  "files": [
+    "README.md",
+    "config.ts",
+    "index.ts"
+  ],
+  "convexFiles": [
+    "convex/features/testimonials/_schema.ts",
+    "convex/features/testimonials/query.ts",
+    "convex/features/testimonials/mutation.ts"
+  ],
+  "imports": {
+    "shared": [
+      "convex/_shared/auth"
+    ],
+    "external": [
+      "convex/server",
+      "convex/values"
+    ]
+  }
+}

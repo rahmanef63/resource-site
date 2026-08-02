@@ -1,0 +1,157 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "user-management",
+  "version": "0.7.0",
+  "category": "auth",
+  "title": "User Management",
+  "description": "Full members + invites + roles-admin surface ported from superspace, props-driven + RBAC-agnostic. <UserManagementPanel> tabs Members + Roles: member table (search / filter / sort, inline role dropdown, soft-remove), InviteDialog + PendingInvites (resend / cancel), and a RolesPanel to create / edit / delete custom roles via a permission matrix (system roles read-only). All permission-gated. You pass `roles` + `currentPerms` + the permission catalog (resolved from rbac-roles) + CRUD/invite/role callbacks; the slice imports no other slice's frontend. Plus a TeamsPanel (named user groups) and tenant-hierarchy support: a generic um_tenant_links edge tree + propagating invites (InviteDialog gains a 'propagate to sub-workspaces' toggle with same / step-down role strategy). Convex ships um_members + um_invites + um_teams + um_team_members + um_tenant_links + member / invite / team / hierarchy endpoints (gated via rbac-roles' requirePermission); roles CRUD reuses rbac-roles'. rr never owns the tenant entities \u2014 only the tree edges. Plus an AccessMatrix (users \u00d7 tenants grid, inline role assign) backed by getAccessMatrix. P0\u2013P4c: the full superspace-parity user-management epic, complete.",
+  "namespace": "@/features/user-management",
+  "convex": {
+    "tablesExport": "userManagementTables",
+    "schemaPath": "convex/features/user-management/_schema.ts",
+    "rootPaths": [
+      "convex/features/user-management"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/user-management",
+    "configExport": "userManagementFeature"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [
+      "avatar",
+      "badge",
+      "button",
+      "checkbox",
+      "dialog",
+      "dropdown-menu",
+      "input",
+      "label",
+      "select",
+      "switch",
+      "table",
+      "tabs",
+      "textarea"
+    ],
+    "env": [],
+    "peers": [
+      {
+        "slug": "rbac-roles",
+        "range": "^0.2",
+        "reason": "Roles + resolved permissions + the convex permission helpers (requirePermission, getActorPermissions)."
+      },
+      {
+        "slug": "convex-auth",
+        "range": "^0.1",
+        "reason": "Member identity (name/email/avatar) joined from the users table."
+      }
+    ]
+  },
+  "registers": [],
+  "audit": [
+    "bp:public-fn-validator"
+  ],
+  "license": "MIT",
+  "tags": [
+    "user-management",
+    "members",
+    "rbac",
+    "auth",
+    "team",
+    "admin",
+    "convex",
+    "no-clerk"
+  ],
+  "previews": [
+    {
+      "component": "UserManagementPanel",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "members",
+          "title": "Members tab",
+          "description": "table + role dropdowns + invite"
+        },
+        {
+          "id": "roles",
+          "title": "Roles tab",
+          "description": "role list + permission editor"
+        },
+        {
+          "id": "teams",
+          "title": "Teams tab",
+          "description": "named user groups"
+        },
+        {
+          "id": "access",
+          "title": "Access matrix",
+          "description": "per-tenant grant grid"
+        }
+      ],
+      "seed": "4 demo members + 4 roles + 2 teams in rr-demo:user-management; role/grant edits persist"
+    }
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "next",
+          "range": "^15"
+        },
+        {
+          "npm": "react",
+          "range": "^18"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "user-management.list",
+        "user-management.invite",
+        "user-management.set_role",
+        "user-management.disable",
+        "user-management.remove"
+      ],
+      "components": [
+        "UserManagementPanel",
+        "MembersPanel",
+        "MembersTable",
+        "MembersToolbar",
+        "MemberRowActions",
+        "RoleChip",
+        "InviteDialog",
+        "PendingInvites",
+        "RolesPanel",
+        "RoleEditor",
+        "RolePermissionGrid",
+        "TeamsPanel",
+        "TeamDetail",
+        "AccessMatrix"
+      ],
+      "hooks": [
+        "useMembersView"
+      ],
+      "utils": [
+        "can",
+        "matchPermission"
+      ],
+      "convex": {
+        "tables": [
+          "um_members",
+          "um_invites",
+          "um_teams",
+          "um_team_members",
+          "um_tenant_links"
+        ],
+        "rbac": [
+          "members.view",
+          "members.manage",
+          "members.invite",
+          "roles.view",
+          "roles.manage"
+        ]
+      }
+    }
+  }
+}

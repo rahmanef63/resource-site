@@ -1,0 +1,52 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "workspace-shell",
+  "version": "1.0.0",
+  "category": "ui",
+  "kind": "full",
+  "title": "Workspace Shell — atomic (workspace × menuSet) NavContext",
+  "description": "Unified workspace + menu navigation context. Atomic 2-axis switcher (workspace × menuSet) with tiered RBAC.",
+  "namespace": "@/features/workspace-shell",
+  "frontend": {
+    "slicePath": "frontend/slices/workspace-shell",
+    "configExport": "default"
+  },
+  "convex": {
+    "schemaPath": "convex/features/workspaceShell/schema.ts",
+    "tablesExport": "workspaceShellTables",
+    "rootPaths": [
+      "convex/features/workspaceShell"
+    ]
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [
+      "dropdown-menu",
+      "popover",
+      "command",
+      "tabs"
+    ],
+    "env": [],
+    "peers": [
+      {
+        "slug": "convex-auth",
+        "range": "^0.1",
+        "reason": "user session for menu assignment + nav context cache"
+      }
+    ]
+  },
+  "registers": [
+    "registry",
+    "preview-registry"
+  ],
+  "audit": [
+    "bp:ui-consistency",
+    "bp:rbac-coverage"
+  ],
+  "tags": [
+    "navigation",
+    "workspace",
+    "menu",
+    "shell"
+  ]
+}

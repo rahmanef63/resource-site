@@ -1,0 +1,134 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "comments",
+  "version": "0.3.0",
+  "category": "content",
+  "title": "Comments \u2014 Threaded",
+  "description": "Polymorphic-target threaded comments. Consumer picks `TargetRef = { kind, id, subId? }` (e.g. page+block, blog+slug, task+id). Renderless <CommentsThread> + <CommentsAnchor> wrappers; useComments(bindings, opts) hook returns items + openCount + CRUD + forbiddenWords guard. Adapter pattern \u2014 see contract-negotiations-2026-05-15 \u00a71.",
+  "namespace": "@/features/comments",
+  "kind": "full",
+  "convex": {
+    "tablesExport": "commentsTables",
+    "schemaPath": "convex/features/comments/_schema.ts",
+    "rootPaths": [
+      "convex/features/comments"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/comments",
+    "configExport": "commentsConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [
+      "button",
+      "textarea",
+      "avatar"
+    ],
+    "env": [],
+    "peers": [
+      {
+        "slug": "convex-auth",
+        "range": "^0.1",
+        "reason": "Comment author identity from convex-auth."
+      }
+    ]
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": [
+    "bp:public-fn-validator"
+  ],
+  "license": "MIT",
+  "tags": [
+    "content",
+    "social",
+    "comments",
+    "threaded",
+    "annotations"
+  ],
+  "previews": [
+    {
+      "component": "CommentsThread",
+      "kind": "variants",
+      "axes": [
+        {
+          "prop": "density",
+          "values": [
+            "comfortable",
+            "compact"
+          ],
+          "default": "comfortable",
+          "description": "Row spacing of the thread skin \u2014 airy vs. dense"
+        },
+        {
+          "prop": "resolved",
+          "values": [
+            "show",
+            "hide"
+          ],
+          "default": "show",
+          "description": "Include resolved comments or hide them from the list"
+        }
+      ],
+      "seed": "seeded thread (2 roots + 1 reply) in rr-demo:comments; posting a reply persists via createDemoStore"
+    }
+  ],
+  "contract": {
+    "requires": {
+      "auth": "convex",
+      "rbac": [
+        "comment.create",
+        "comment.read"
+      ],
+      "convex": {
+        "prefix": "comment_",
+        "tables": [
+          "comment_threads"
+        ]
+      },
+      "deps": [
+        "convex-auth"
+      ]
+    },
+    "provides": {
+      "tools": [
+        "comments.list",
+        "comments.add",
+        "comments.resolve",
+        "comments.remove"
+      ],
+      "tables": [
+        "comment_threads"
+      ],
+      "hooks": [
+        "useComments"
+      ],
+      "utils": [
+        "buildThread"
+      ],
+      "components": [
+        "CommentsThread",
+        "CommentsAnchor"
+      ]
+    },
+    "migrationFrom": {
+      "0.1.0": "comments-v0.1.0-to-v0.2.0-polymorphic-target"
+    },
+    "generalization": {
+      "level": "needs-adapter",
+      "forbiddenTerms": [
+        "pageId",
+        "blockId",
+        "targetType"
+      ],
+      "requiredProps": [
+        "target",
+        "bindings",
+        "forbiddenWords",
+        "pathMap"
+      ]
+    }
+  }
+}

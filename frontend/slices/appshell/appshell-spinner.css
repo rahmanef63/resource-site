@@ -1,0 +1,53 @@
+/* os-spinner.tsx keyframes — split out of appshell.css (200-LOC gate), same
+ * @import pattern as appshell-materials.css/appshell-wallpapers.css.
+ *
+ * One shared fade+pulse keyframe drives BOTH the macOS/iOS 8-spoke ring and
+ * the Windows chasing-dot ring (`--i`, a per-tick index set inline by
+ * os-spinner.tsx, staggers the phase via a NEGATIVE delay — same trick as
+ * globals.css's `.jiggle`) — only the tick's shape/color differ in markup.
+ * Android's M3 arc gets its own two-part rotate + grow/shrink animation
+ * (that geometry has no ring-of-ticks equivalent). Reduce-motion is handled
+ * for free by globals.css's kill-switch (it zeroes animation-duration on
+ * every element, this file included).
+ */
+.os-spinner-tick {
+  animation: os-spinner-pulse 1s linear infinite;
+  animation-delay: calc(var(--i, 0) * -125ms);
+}
+@keyframes os-spinner-pulse {
+  0%, 39%, 100% {
+    opacity: 0.25;
+    transform: scale(0.82);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.os-spinner-arc-rotate {
+  animation: os-spinner-arc-rotate 1.6s linear infinite;
+}
+@keyframes os-spinner-arc-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.os-spinner-arc-dash {
+  animation: os-spinner-arc-dash 1.4s ease-in-out infinite;
+}
+@keyframes os-spinner-arc-dash {
+  0% {
+    stroke-dasharray: 1 100;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 65 100;
+    stroke-dashoffset: -20;
+  }
+  100% {
+    stroke-dasharray: 65 100;
+    stroke-dashoffset: -85;
+  }
+}

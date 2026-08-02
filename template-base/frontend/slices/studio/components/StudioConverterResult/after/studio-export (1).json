@@ -1,0 +1,2249 @@
+{
+  "version": "0.5",
+  "root": [
+    "div-234"
+  ],
+  "nodes": {
+    "span-7": {
+      "type": "icon",
+      "props": {
+        "className": "",
+        "fontSize": "24px",
+        "name": "hub",
+        "size": 24
+      },
+      "children": []
+    },
+    "div-6": {
+      "type": "div",
+      "props": {
+        "className": "flex items-center justify-center bg-[#2b8cee]/20 rounded-lg size-10 text-[#2b8cee]"
+      },
+      "children": [
+        "span-7"
+      ]
+    },
+    "h1-9": {
+      "type": "text",
+      "props": {
+        "className": "text-slate-900 dark:text-white text-base font-bold leading-tight tracking-tight",
+        "tag": "h1",
+        "content": "AI Nexus"
+      },
+      "children": []
+    },
+    "p-10": {
+      "type": "text",
+      "props": {
+        "className": "text-slate-500 dark:text-[#9dabb9] text-xs font-medium",
+        "tag": "p",
+        "content": "v2.4.0 (Stable)"
+      },
+      "children": []
+    },
+    "div-8": {
+      "type": "div",
+      "props": {
+        "className": "flex flex-col"
+      },
+      "children": [
+        "h1-9",
+        "p-10"
+      ]
+    },
+    "div-5": {
+      "type": "div",
+      "props": {
+        "className": "flex items-center gap-3 px-2"
+      },
+      "children": [
+        "div-6",
+        "div-8"
+      ]
+    },
+    "span-13": {
+      "type": "icon",
+      "props": {
+        "className": "group-hover:scale-110 transition-transform",
+        "fontSize": "20px",
+        "name": "dashboard",
+        "size": 20
+      },
+      "children": []
+    },
+    "span-14": {
+      "type": "text",
+      "props": {
+        "className": "text-sm font-medium",
+        "tag": "span",
+        "content": "Dashboard"
+      },
+      "children": []
+    },
+    "a-12": {
+      "type": "link",
+      "props": {
+        "className": "flex items-center gap-3 px-3 py-2.5 rounded-lg bg-[#2b8cee] text-white shadow-sm shadow-[#2b8cee]/20 transition-all group",
+        "href": "#"
+      },
+      "children": [
+        "span-13",
+        "span-14"
+      ]
+    },
+    "span-16": {
+      "type": "icon",
+      "props": {
+        "className": "group-hover:scale-110 transition-transform",
+        "fontSize": "20px",
+        "name": "smart_toy",
+        "size": 20
+      },
+      "children": []
+    },
+    "span-17": {
+      "type": "text",
+      "props": {
+        "className": "text-sm font-medium",
+        "tag": "span",
+        "content": "Agents"
+      },
+      "children": []
+    },
+    "a-15": {
+      "type": "link",
+      "props": {
+        "className": "flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-[#9dabb9] hover:bg-slate-100 dark:hover:bg-[#1c2127] hover:text-slate-900 dark:hover:text-white transition-colors group",
+        "href": "#"
+      },
+      "children": [
+        "span-16",
+        "span-17"
+      ]
+    },
+    "span-19": {
+      "type": "icon",
+      "props": {
+        "className": "group-hover:scale-110 transition-transform",
+        "fontSize": "20px",
+        "name": "menu_book",
+        "size": 20
+      },
+      "children": []
+    },
+    "span-20": {
+      "type": "text",
+      "props": {
+        "className": "text-sm font-medium",
+        "tag": "span",
+        "content": "Knowledge"
+      },
+      "children": []
+    },
+    "a-18": {
+      "type": "link",
+      "props": {
+        "className": "flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-[#9dabb9] hover:bg-slate-100 dark:hover:bg-[#1c2127] hover:text-slate-900 dark:hover:text-white transition-colors group",
+        "href": "#"
+      },
+      "children": [
+        "span-19",
+        "span-20"
+      ]
+    },
+    "span-22": {
+      "type": "icon",
+      "props": {
+        "className": "group-hover:scale-110 transition-transform",
+        "fontSize": "20px",
+        "name": "description",
+        "size": 20
+      },
+      "children": []
+    },
+    "a-21": {
+      "type": "link",
+      "props": {
+        "className": "flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-[#9dabb9] hover:bg-slate-100 dark:hover:bg-[#1c2127] hover:text-slate-900 dark:hover:text-white transition-colors group",
+        "href": "https://app-companion-430619.appspot.com/projects/1066880693357531312?usegapi=1&jsh=m%3B%2F_%2Fscs%2Fabc-static%2F_%2Fjs%2Fk%3Dgapi.lb.en.PJsh2cctCQI.O%2Fd%3D1%2Frs%3DAHpOoo_QlMhY2cycn60Rs8eI1WInRwuahw%2Fm%3D__features__#"
+      },
+      "children": [
+        "span-22"
+      ]
+    },
+    "span-24": {
+      "type": "text",
+      "props": {
+        "className": "text-sm font-medium cursor-text",
+        "display": "inline !important",
+        "tag": "span",
+        "content": "Logs"
+      },
+      "children": []
+    },
+    "a-23": {
+      "type": "link",
+      "props": {
+        "className": "flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-[#9dabb9] hover:bg-slate-100 dark:hover:bg-[#1c2127] hover:text-slate-900 dark:hover:text-white transition-colors group",
+        "fontSize": "0.875rem",
+        "display": "inline !important",
+        "href": "https://app-companion-430619.appspot.com/projects/1066880693357531312?usegapi=1&jsh=m%3B%2F_%2Fscs%2Fabc-static%2F_%2Fjs%2Fk%3Dgapi.lb.en.PJsh2cctCQI.O%2Fd%3D1%2Frs%3DAHpOoo_QlMhY2cycn60Rs8eI1WInRwuahw%2Fm%3D__features__#"
+      },
+      "children": [
+        "span-24"
+      ]
+    },
+    "text-25": {
+      "type": "text",
+      "props": {
+        "tag": "span",
+        "content": "Base"
+      },
+      "children": []
+    },
+    "span-27": {
+      "type": "icon",
+      "props": {
+        "className": "group-hover:scale-110 transition-transform",
+        "fontSize": "20px",
+        "name": "tune",
+        "size": 20
+      },
+      "children": []
+    },
+    "span-28": {
+      "type": "text",
+      "props": {
+        "className": "text-sm font-medium",
+        "tag": "span",
+        "content": "Menu Config"
+      },
+      "children": []
+    },
+    "a-26": {
+      "type": "link",
+      "props": {
+        "className": "flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-[#9dabb9] hover:bg-slate-100 dark:hover:bg-[#1c2127] hover:text-slate-900 dark:hover:text-white transition-colors group",
+        "href": "#"
+      },
+      "children": [
+        "span-27",
+        "span-28"
+      ]
+    },
+    "span-30": {
+      "type": "icon",
+      "props": {
+        "className": "group-hover:scale-110 transition-transform",
+        "fontSize": "20px",
+        "name": "description",
+        "size": 20
+      },
+      "children": []
+    },
+    "span-31": {
+      "type": "text",
+      "props": {
+        "className": "text-sm font-medium",
+        "tag": "span",
+        "content": "Logs"
+      },
+      "children": []
+    },
+    "a-29": {
+      "type": "link",
+      "props": {
+        "className": "flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-[#9dabb9] hover:bg-slate-100 dark:hover:bg-[#1c2127] hover:text-slate-900 dark:hover:text-white transition-colors group",
+        "href": "#"
+      },
+      "children": [
+        "span-30",
+        "span-31"
+      ]
+    },
+    "nav-11": {
+      "type": "div",
+      "props": {
+        "className": "flex flex-col gap-1",
+        "tag": "nav"
+      },
+      "children": [
+        "a-12",
+        "a-15",
+        "a-18",
+        "a-21",
+        "a-23",
+        "text-25",
+        "a-26",
+        "a-29"
+      ]
+    },
+    "div-4": {
+      "type": "div",
+      "props": {
+        "className": "flex flex-col gap-6"
+      },
+      "children": [
+        "div-5",
+        "nav-11"
+      ]
+    },
+    "div-34": {
+      "type": "div",
+      "props": {
+        "className": "bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8",
+        "backgroundImage": "url(\"https://lh3.googleusercontent.com/aida-public/AB6AXuDeqpYL5ngAhXENe9g2FJddit6rmjf7lg0ymevVmNgjlQKmyTyeTrOqZ-UHPBHlQHrYhmYFtq46tuaPJZbZD5Gj9q8fpRVaa2R2Qz1D_PcakPMjlmQXCopAZVv6O1qE6XaptxkAZJwxrgEm7V0AY2yO2z3Ywr3mVZtwczKmouyA80N3nU6598i2PZPgUrjeWXDv7wjG-Rz3Q7KgPpgvHNmLC4gMpAIWEJrKQROWlJK9SAmzaYkCUBZ24LK7U4LzLMbmNksJPcNRbxE\")"
+      },
+      "children": []
+    },
+    "span-36": {
+      "type": "text",
+      "props": {
+        "className": "text-sm font-medium text-slate-900 dark:text-white truncate",
+        "tag": "span",
+        "content": "Sarah Connor"
+      },
+      "children": []
+    },
+    "span-37": {
+      "type": "text",
+      "props": {
+        "className": "text-xs text-slate-500 dark:text-[#9dabb9] truncate",
+        "tag": "span",
+        "content": "Admin"
+      },
+      "children": []
+    },
+    "div-35": {
+      "type": "div",
+      "props": {
+        "className": "flex flex-col overflow-hidden"
+      },
+      "children": [
+        "span-36",
+        "span-37"
+      ]
+    },
+    "div-33": {
+      "type": "div",
+      "props": {
+        "className": "flex items-center gap-3 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-[#1c2127] cursor-pointer transition-colors"
+      },
+      "children": [
+        "div-34",
+        "div-35"
+      ]
+    },
+    "div-32": {
+      "type": "div",
+      "props": {
+        "className": "border-t border-slate-200 dark:border-slate-800 pt-4 px-2"
+      },
+      "children": [
+        "div-33"
+      ]
+    },
+    "div-3": {
+      "type": "div",
+      "props": {
+        "className": "flex h-full flex-col justify-between p-4"
+      },
+      "children": [
+        "div-4",
+        "div-32"
+      ]
+    },
+    "aside-2": {
+      "type": "div",
+      "props": {
+        "className": "flex w-64 flex-col border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111418] shrink-0 z-20 transition-all duration-300",
+        "tag": "aside"
+      },
+      "children": [
+        "div-3"
+      ]
+    },
+    "span-42": {
+      "type": "icon",
+      "props": {
+        "className": "text-[#2b8cee]",
+        "fontSize": "20px",
+        "name": "workspaces",
+        "size": 20
+      },
+      "children": []
+    },
+    "span-43": {
+      "type": "text",
+      "props": {
+        "className": "text-sm font-semibold",
+        "tag": "span",
+        "content": "Workspace: Operations"
+      },
+      "children": []
+    },
+    "span-44": {
+      "type": "icon",
+      "props": {
+        "className": "text-slate-400",
+        "fontSize": "18px",
+        "name": "expand_more",
+        "size": 18
+      },
+      "children": []
+    },
+    "div-41": {
+      "type": "div",
+      "props": {
+        "className": "hidden md:flex items-center gap-2 text-slate-900 dark:text-white px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-[#283039] border border-slate-200 dark:border-transparent cursor-pointer hover:border-[#2b8cee]/50 transition-colors"
+      },
+      "children": [
+        "span-42",
+        "span-43",
+        "span-44"
+      ]
+    },
+    "span-47": {
+      "type": "icon",
+      "props": {
+        "className": "text-slate-400 group-focus-within:text-[#2b8cee] transition-colors",
+        "fontSize": "20px",
+        "name": "search",
+        "size": 20
+      },
+      "children": []
+    },
+    "div-46": {
+      "type": "div",
+      "props": {
+        "className": "absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+      },
+      "children": [
+        "span-47"
+      ]
+    },
+    "input-48": {
+      "type": "input",
+      "props": {
+        "className": "block w-full pl-10 pr-3 py-2 border-none rounded-lg leading-5 bg-slate-100 dark:bg-[#1c2127] text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#2b8cee]/50 sm:text-sm transition-all",
+        "type": "text",
+        "placeholder": "Search agents, logs, or commands..."
+      },
+      "children": []
+    },
+    "span-50": {
+      "type": "text",
+      "props": {
+        "className": "text-xs text-slate-400 border border-slate-300 dark:border-slate-600 rounded px-1.5 py-0.5",
+        "tag": "span",
+        "content": "⌘K"
+      },
+      "children": []
+    },
+    "div-49": {
+      "type": "div",
+      "props": {
+        "className": "absolute inset-y-0 right-0 pr-2 flex items-center"
+      },
+      "children": [
+        "span-50"
+      ]
+    },
+    "div-45": {
+      "type": "div",
+      "props": {
+        "className": "relative w-64 md:w-96 group"
+      },
+      "children": [
+        "div-46",
+        "input-48",
+        "div-49"
+      ]
+    },
+    "div-40": {
+      "type": "div",
+      "props": {
+        "className": "flex items-center gap-6"
+      },
+      "children": [
+        "div-41",
+        "div-45"
+      ]
+    },
+    "span-53": {
+      "type": "icon",
+      "props": {
+        "className": "",
+        "fontSize": "24px",
+        "name": "notifications",
+        "size": 24
+      },
+      "children": []
+    },
+    "span-54": {
+      "type": "text",
+      "props": {
+        "className": "absolute top-2 right-2 size-2 bg-red-500 rounded-full border-2 border-white dark:border-[#111418]",
+        "tag": "span",
+        "content": ""
+      },
+      "children": []
+    },
+    "button-52": {
+      "type": "button",
+      "props": {
+        "className": "relative p-2 text-slate-500 hover:text-[#2b8cee] dark:text-[#9dabb9] dark:hover:text-white transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-[#283039]"
+      },
+      "children": [
+        "span-53",
+        "span-54"
+      ]
+    },
+    "span-56": {
+      "type": "icon",
+      "props": {
+        "className": "",
+        "fontSize": "24px",
+        "name": "settings",
+        "size": 24
+      },
+      "children": []
+    },
+    "button-55": {
+      "type": "button",
+      "props": {
+        "className": "p-2 text-slate-500 hover:text-[#2b8cee] dark:text-[#9dabb9] dark:hover:text-white transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-[#283039]"
+      },
+      "children": [
+        "span-56"
+      ]
+    },
+    "span-58": {
+      "type": "icon",
+      "props": {
+        "className": "",
+        "fontSize": "24px",
+        "name": "help",
+        "size": 24
+      },
+      "children": []
+    },
+    "button-57": {
+      "type": "button",
+      "props": {
+        "className": "p-2 text-slate-500 hover:text-[#2b8cee] dark:text-[#9dabb9] dark:hover:text-white transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-[#283039]"
+      },
+      "children": [
+        "span-58"
+      ]
+    },
+    "div-51": {
+      "type": "div",
+      "props": {
+        "className": "flex items-center gap-4"
+      },
+      "children": [
+        "button-52",
+        "button-55",
+        "button-57"
+      ]
+    },
+    "header-39": {
+      "type": "div",
+      "props": {
+        "className": "h-16 flex items-center justify-between px-6 border-b border-slate-200 dark:border-[#283039] bg-white/80 dark:bg-[#111418]/80 backdrop-blur-md sticky top-0 z-10 shrink-0",
+        "tag": "header"
+      },
+      "children": [
+        "div-40",
+        "div-51"
+      ]
+    },
+    "span-64": {
+      "type": "icon",
+      "props": {
+        "className": "text-[#2b8cee]",
+        "fontSize": "64px",
+        "name": "smart_toy",
+        "size": 64
+      },
+      "children": []
+    },
+    "div-63": {
+      "type": "div",
+      "props": {
+        "className": "absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"
+      },
+      "children": [
+        "span-64"
+      ]
+    },
+    "p-65": {
+      "type": "text",
+      "props": {
+        "className": "text-slate-500 dark:text-[#9dabb9] text-sm font-medium",
+        "tag": "p",
+        "content": "Total Agents"
+      },
+      "children": []
+    },
+    "h3-67": {
+      "type": "text",
+      "props": {
+        "className": "text-3xl font-bold text-slate-900 dark:text-white",
+        "tag": "h3",
+        "content": "12"
+      },
+      "children": []
+    },
+    "span-68": {
+      "type": "text",
+      "props": {
+        "className": "text-xs font-medium text-emerald-500 bg-emerald-500/10 px-1.5 py-0.5 rounded",
+        "tag": "span",
+        "content": "+2 new"
+      },
+      "children": []
+    },
+    "div-66": {
+      "type": "div",
+      "props": {
+        "className": "flex items-baseline gap-2"
+      },
+      "children": [
+        "h3-67",
+        "span-68"
+      ]
+    },
+    "div-62": {
+      "type": "div",
+      "props": {
+        "className": "flex flex-col gap-1 p-5 rounded-xl border border-slate-200 dark:border-[#283039] bg-white dark:bg-[#1c2127] shadow-sm relative overflow-hidden group hover:border-[#2b8cee]/30 transition-all"
+      },
+      "children": [
+        "div-63",
+        "p-65",
+        "div-66"
+      ]
+    },
+    "span-71": {
+      "type": "icon",
+      "props": {
+        "className": "text-red-500",
+        "fontSize": "64px",
+        "name": "warning",
+        "size": 64
+      },
+      "children": []
+    },
+    "div-70": {
+      "type": "div",
+      "props": {
+        "className": "absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"
+      },
+      "children": [
+        "span-71"
+      ]
+    },
+    "p-72": {
+      "type": "text",
+      "props": {
+        "className": "text-red-600 dark:text-red-400 text-sm font-medium",
+        "tag": "p",
+        "content": "Active Alerts"
+      },
+      "children": []
+    },
+    "h3-74": {
+      "type": "text",
+      "props": {
+        "className": "text-3xl font-bold text-slate-900 dark:text-white",
+        "tag": "h3",
+        "content": "2"
+      },
+      "children": []
+    },
+    "span-75": {
+      "type": "text",
+      "props": {
+        "className": "text-xs font-medium text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/30 px-1.5 py-0.5 rounded",
+        "tag": "span",
+        "content": "Critical"
+      },
+      "children": []
+    },
+    "div-73": {
+      "type": "div",
+      "props": {
+        "className": "flex items-baseline gap-2"
+      },
+      "children": [
+        "h3-74",
+        "span-75"
+      ]
+    },
+    "div-69": {
+      "type": "div",
+      "props": {
+        "className": "flex flex-col gap-1 p-5 rounded-xl border border-red-200 dark:border-red-900/30 bg-red-50 dark:bg-red-900/10 shadow-sm relative overflow-hidden group hover:border-red-500/50 transition-all"
+      },
+      "children": [
+        "div-70",
+        "p-72",
+        "div-73"
+      ]
+    },
+    "span-78": {
+      "type": "icon",
+      "props": {
+        "className": "text-[#2b8cee]",
+        "fontSize": "64px",
+        "name": "memory",
+        "size": 64
+      },
+      "children": []
+    },
+    "div-77": {
+      "type": "div",
+      "props": {
+        "className": "absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"
+      },
+      "children": [
+        "span-78"
+      ]
+    },
+    "p-79": {
+      "type": "text",
+      "props": {
+        "className": "text-slate-500 dark:text-[#9dabb9] text-sm font-medium",
+        "tag": "p",
+        "content": "Running Jobs"
+      },
+      "children": []
+    },
+    "h3-81": {
+      "type": "text",
+      "props": {
+        "className": "text-3xl font-bold text-slate-900 dark:text-white",
+        "tag": "h3",
+        "content": "8"
+      },
+      "children": []
+    },
+    "span-82": {
+      "type": "text",
+      "props": {
+        "className": "text-xs font-medium text-slate-500 dark:text-slate-400",
+        "tag": "span",
+        "content": "98% load"
+      },
+      "children": []
+    },
+    "div-80": {
+      "type": "div",
+      "props": {
+        "className": "flex items-baseline gap-2"
+      },
+      "children": [
+        "h3-81",
+        "span-82"
+      ]
+    },
+    "div-76": {
+      "type": "div",
+      "props": {
+        "className": "flex flex-col gap-1 p-5 rounded-xl border border-slate-200 dark:border-[#283039] bg-white dark:bg-[#1c2127] shadow-sm relative overflow-hidden group hover:border-[#2b8cee]/30 transition-all"
+      },
+      "children": [
+        "div-77",
+        "p-79",
+        "div-80"
+      ]
+    },
+    "span-85": {
+      "type": "icon",
+      "props": {
+        "className": "text-[#2b8cee]",
+        "fontSize": "64px",
+        "name": "database",
+        "size": 64
+      },
+      "children": []
+    },
+    "div-84": {
+      "type": "div",
+      "props": {
+        "className": "absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"
+      },
+      "children": [
+        "span-85"
+      ]
+    },
+    "p-86": {
+      "type": "text",
+      "props": {
+        "className": "text-slate-500 dark:text-[#9dabb9] text-sm font-medium",
+        "tag": "p",
+        "content": "KB Entries"
+      },
+      "children": []
+    },
+    "h3-88": {
+      "type": "text",
+      "props": {
+        "className": "text-3xl font-bold text-slate-900 dark:text-white",
+        "tag": "h3",
+        "content": "14,205"
+      },
+      "children": []
+    },
+    "span-89": {
+      "type": "text",
+      "props": {
+        "className": "text-xs font-medium text-[#2b8cee] bg-[#2b8cee]/10 px-1.5 py-0.5 rounded",
+        "tag": "span",
+        "content": "Updated 1m ago"
+      },
+      "children": []
+    },
+    "div-87": {
+      "type": "div",
+      "props": {
+        "className": "flex items-baseline gap-2"
+      },
+      "children": [
+        "h3-88",
+        "span-89"
+      ]
+    },
+    "div-83": {
+      "type": "div",
+      "props": {
+        "className": "flex flex-col gap-1 p-5 rounded-xl border border-slate-200 dark:border-[#283039] bg-white dark:bg-[#1c2127] shadow-sm relative overflow-hidden group hover:border-[#2b8cee]/30 transition-all"
+      },
+      "children": [
+        "div-84",
+        "p-86",
+        "div-87"
+      ]
+    },
+    "section-61": {
+      "type": "div",
+      "props": {
+        "className": "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4",
+        "tag": "section"
+      },
+      "children": [
+        "div-62",
+        "div-69",
+        "div-76",
+        "div-83"
+      ]
+    },
+    "span-94": {
+      "type": "icon",
+      "props": {
+        "className": "text-[#2b8cee]",
+        "name": "grid_view"
+      },
+      "children": []
+    },
+    "text-95": {
+      "type": "text",
+      "props": {
+        "tag": "span",
+        "content": "Agent Status Grid"
+      },
+      "children": []
+    },
+    "h2-93": {
+      "type": "text",
+      "props": {
+        "className": "text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2"
+      },
+      "children": [
+        "span-94",
+        "text-95"
+      ]
+    },
+    "text-97": {
+      "type": "text",
+      "props": {
+        "tag": "span",
+        "content": "View All Agents"
+      },
+      "children": []
+    },
+    "button-96": {
+      "type": "button",
+      "props": {
+        "className": "text-sm font-medium text-[#2b8cee] hover:text-[#2b8cee]/80",
+        "text": "View All Agents"
+      },
+      "children": [
+        "text-97"
+      ]
+    },
+    "div-92": {
+      "type": "div",
+      "props": {
+        "className": "flex items-center justify-between"
+      },
+      "children": [
+        "h2-93",
+        "button-96"
+      ]
+    },
+    "span-102": {
+      "type": "icon",
+      "props": {
+        "className": "",
+        "fontSize": "24px",
+        "name": "psychology",
+        "size": 24
+      },
+      "children": []
+    },
+    "div-101": {
+      "type": "div",
+      "props": {
+        "className": "p-2 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
+      },
+      "children": [
+        "span-102"
+      ]
+    },
+    "span-104": {
+      "type": "text",
+      "props": {
+        "className": "animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75",
+        "tag": "span",
+        "content": ""
+      },
+      "children": []
+    },
+    "span-105": {
+      "type": "text",
+      "props": {
+        "className": "relative inline-flex rounded-full h-3 w-3 bg-blue-500",
+        "tag": "span",
+        "content": ""
+      },
+      "children": []
+    },
+    "span-103": {
+      "type": "text",
+      "props": {
+        "className": "relative flex h-3 w-3"
+      },
+      "children": [
+        "span-104",
+        "span-105"
+      ]
+    },
+    "div-100": {
+      "type": "div",
+      "props": {
+        "className": "flex items-start justify-between"
+      },
+      "children": [
+        "div-101",
+        "span-103"
+      ]
+    },
+    "h3-107": {
+      "type": "text",
+      "props": {
+        "className": "text-base font-bold text-slate-900 dark:text-white group-hover:text-[#2b8cee] transition-colors",
+        "tag": "h3",
+        "content": "Agent Alpha"
+      },
+      "children": []
+    },
+    "p-108": {
+      "type": "text",
+      "props": {
+        "className": "text-xs font-medium text-slate-500 dark:text-[#9dabb9] mt-1",
+        "tag": "p",
+        "content": "Processing"
+      },
+      "children": []
+    },
+    "p-109": {
+      "type": "text",
+      "props": {
+        "className": "text-sm text-slate-600 dark:text-slate-300 mt-2 line-clamp-1",
+        "tag": "p",
+        "content": "Scraping Documentation"
+      },
+      "children": []
+    },
+    "div-106": {
+      "type": "div",
+      "props": {},
+      "children": [
+        "h3-107",
+        "p-108",
+        "p-109"
+      ]
+    },
+    "div-111": {
+      "type": "div",
+      "props": {
+        "className": "h-full bg-blue-500 w-3/4 rounded-full"
+      },
+      "children": []
+    },
+    "div-110": {
+      "type": "div",
+      "props": {
+        "className": "h-1 w-full bg-slate-100 dark:bg-slate-800 rounded-full mt-2 overflow-hidden"
+      },
+      "children": [
+        "div-111"
+      ]
+    },
+    "div-99": {
+      "type": "div",
+      "props": {
+        "className": "flex flex-col justify-between gap-3 rounded-xl border border-slate-200 dark:border-[#283039] bg-white dark:bg-[#1c2127] p-4 hover:shadow-md hover:border-[#2b8cee]/40 transition-all cursor-pointer group"
+      },
+      "children": [
+        "div-100",
+        "div-106",
+        "div-110"
+      ]
+    },
+    "span-115": {
+      "type": "icon",
+      "props": {
+        "className": "",
+        "fontSize": "24px",
+        "name": "coffee",
+        "size": 24
+      },
+      "children": []
+    },
+    "div-114": {
+      "type": "div",
+      "props": {
+        "className": "p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400"
+      },
+      "children": [
+        "span-115"
+      ]
+    },
+    "span-117": {
+      "type": "text",
+      "props": {
+        "className": "relative inline-flex rounded-full h-3 w-3 bg-slate-400",
+        "tag": "span",
+        "content": ""
+      },
+      "children": []
+    },
+    "span-116": {
+      "type": "text",
+      "props": {
+        "className": "relative flex h-3 w-3"
+      },
+      "children": [
+        "span-117"
+      ]
+    },
+    "div-113": {
+      "type": "div",
+      "props": {
+        "className": "flex items-start justify-between"
+      },
+      "children": [
+        "div-114",
+        "span-116"
+      ]
+    },
+    "h3-119": {
+      "type": "text",
+      "props": {
+        "className": "text-base font-bold text-slate-900 dark:text-white group-hover:text-[#2b8cee] transition-colors",
+        "tag": "h3",
+        "content": "Agent Beta"
+      },
+      "children": []
+    },
+    "p-120": {
+      "type": "text",
+      "props": {
+        "className": "text-xs font-medium text-slate-500 dark:text-[#9dabb9] mt-1",
+        "tag": "p",
+        "content": "Idle"
+      },
+      "children": []
+    },
+    "p-121": {
+      "type": "text",
+      "props": {
+        "className": "text-sm text-slate-600 dark:text-slate-300 mt-2 line-clamp-1",
+        "tag": "p",
+        "content": "Waiting for Task"
+      },
+      "children": []
+    },
+    "div-118": {
+      "type": "div",
+      "props": {},
+      "children": [
+        "h3-119",
+        "p-120",
+        "p-121"
+      ]
+    },
+    "div-123": {
+      "type": "div",
+      "props": {
+        "className": "h-full bg-slate-400 w-0 rounded-full"
+      },
+      "children": []
+    },
+    "div-122": {
+      "type": "div",
+      "props": {
+        "className": "h-1 w-full bg-slate-100 dark:bg-slate-800 rounded-full mt-2 overflow-hidden"
+      },
+      "children": [
+        "div-123"
+      ]
+    },
+    "div-112": {
+      "type": "div",
+      "props": {
+        "className": "flex flex-col justify-between gap-3 rounded-xl border border-slate-200 dark:border-[#283039] bg-white dark:bg-[#1c2127] p-4 hover:shadow-md hover:border-[#2b8cee]/40 transition-all cursor-pointer group"
+      },
+      "children": [
+        "div-113",
+        "div-118",
+        "div-122"
+      ]
+    },
+    "span-127": {
+      "type": "icon",
+      "props": {
+        "className": "",
+        "fontSize": "24px",
+        "name": "error",
+        "size": 24
+      },
+      "children": []
+    },
+    "div-126": {
+      "type": "div",
+      "props": {
+        "className": "p-2 rounded-lg bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400"
+      },
+      "children": [
+        "span-127"
+      ]
+    },
+    "span-129": {
+      "type": "text",
+      "props": {
+        "className": "relative inline-flex rounded-full h-3 w-3 bg-red-500",
+        "tag": "span",
+        "content": ""
+      },
+      "children": []
+    },
+    "span-128": {
+      "type": "text",
+      "props": {
+        "className": "relative flex h-3 w-3"
+      },
+      "children": [
+        "span-129"
+      ]
+    },
+    "div-125": {
+      "type": "div",
+      "props": {
+        "className": "flex items-start justify-between"
+      },
+      "children": [
+        "div-126",
+        "span-128"
+      ]
+    },
+    "h3-131": {
+      "type": "text",
+      "props": {
+        "className": "text-base font-bold text-slate-900 dark:text-white group-hover:text-red-500 transition-colors",
+        "tag": "h3",
+        "content": "Agent Gamma"
+      },
+      "children": []
+    },
+    "p-132": {
+      "type": "text",
+      "props": {
+        "className": "text-xs font-medium text-red-500 mt-1",
+        "tag": "p",
+        "content": "Error"
+      },
+      "children": []
+    },
+    "p-133": {
+      "type": "text",
+      "props": {
+        "className": "text-sm text-slate-600 dark:text-slate-300 mt-2 line-clamp-1",
+        "tag": "p",
+        "content": "Rate Limit Exceeded"
+      },
+      "children": []
+    },
+    "div-130": {
+      "type": "div",
+      "props": {},
+      "children": [
+        "h3-131",
+        "p-132",
+        "p-133"
+      ]
+    },
+    "div-135": {
+      "type": "div",
+      "props": {
+        "className": "h-full bg-red-500 w-full rounded-full"
+      },
+      "children": []
+    },
+    "div-134": {
+      "type": "div",
+      "props": {
+        "className": "h-1 w-full bg-slate-100 dark:bg-slate-800 rounded-full mt-2 overflow-hidden"
+      },
+      "children": [
+        "div-135"
+      ]
+    },
+    "div-124": {
+      "type": "div",
+      "props": {
+        "className": "flex flex-col justify-between gap-3 rounded-xl border border-red-200 dark:border-red-900/30 bg-red-50/50 dark:bg-[#1c2127] p-4 hover:shadow-md hover:border-red-500/50 transition-all cursor-pointer group"
+      },
+      "children": [
+        "div-125",
+        "div-130",
+        "div-134"
+      ]
+    },
+    "span-139": {
+      "type": "icon",
+      "props": {
+        "className": "",
+        "fontSize": "24px",
+        "name": "database",
+        "size": 24
+      },
+      "children": []
+    },
+    "div-138": {
+      "type": "div",
+      "props": {
+        "className": "p-2 rounded-lg bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400"
+      },
+      "children": [
+        "span-139"
+      ]
+    },
+    "span-141": {
+      "type": "text",
+      "props": {
+        "className": "animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75",
+        "tag": "span",
+        "content": ""
+      },
+      "children": []
+    },
+    "span-142": {
+      "type": "text",
+      "props": {
+        "className": "relative inline-flex rounded-full h-3 w-3 bg-purple-500",
+        "tag": "span",
+        "content": ""
+      },
+      "children": []
+    },
+    "span-140": {
+      "type": "text",
+      "props": {
+        "className": "relative flex h-3 w-3"
+      },
+      "children": [
+        "span-141",
+        "span-142"
+      ]
+    },
+    "div-137": {
+      "type": "div",
+      "props": {
+        "className": "flex items-start justify-between"
+      },
+      "children": [
+        "div-138",
+        "span-140"
+      ]
+    },
+    "h3-144": {
+      "type": "text",
+      "props": {
+        "className": "text-base font-bold text-slate-900 dark:text-white group-hover:text-[#2b8cee] transition-colors",
+        "tag": "h3",
+        "content": "Agent Delta"
+      },
+      "children": []
+    },
+    "p-145": {
+      "type": "text",
+      "props": {
+        "className": "text-xs font-medium text-slate-500 dark:text-[#9dabb9] mt-1",
+        "tag": "p",
+        "content": "Processing"
+      },
+      "children": []
+    },
+    "p-146": {
+      "type": "text",
+      "props": {
+        "className": "text-sm text-slate-600 dark:text-slate-300 mt-2 line-clamp-1",
+        "tag": "p",
+        "content": "Data Mining"
+      },
+      "children": []
+    },
+    "div-143": {
+      "type": "div",
+      "props": {},
+      "children": [
+        "h3-144",
+        "p-145",
+        "p-146"
+      ]
+    },
+    "div-148": {
+      "type": "div",
+      "props": {
+        "className": "h-full bg-purple-500 w-1/2 rounded-full"
+      },
+      "children": []
+    },
+    "div-147": {
+      "type": "div",
+      "props": {
+        "className": "h-1 w-full bg-slate-100 dark:bg-slate-800 rounded-full mt-2 overflow-hidden"
+      },
+      "children": [
+        "div-148"
+      ]
+    },
+    "div-136": {
+      "type": "div",
+      "props": {
+        "className": "flex flex-col justify-between gap-3 rounded-xl border border-slate-200 dark:border-[#283039] bg-white dark:bg-[#1c2127] p-4 hover:shadow-md hover:border-[#2b8cee]/40 transition-all cursor-pointer group"
+      },
+      "children": [
+        "div-137",
+        "div-143",
+        "div-147"
+      ]
+    },
+    "span-152": {
+      "type": "icon",
+      "props": {
+        "className": "",
+        "fontSize": "24px",
+        "name": "pause_circle",
+        "size": 24
+      },
+      "children": []
+    },
+    "div-151": {
+      "type": "div",
+      "props": {
+        "className": "p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400"
+      },
+      "children": [
+        "span-152"
+      ]
+    },
+    "span-154": {
+      "type": "text",
+      "props": {
+        "className": "relative inline-flex rounded-full h-3 w-3 bg-slate-400",
+        "tag": "span",
+        "content": ""
+      },
+      "children": []
+    },
+    "span-153": {
+      "type": "text",
+      "props": {
+        "className": "relative flex h-3 w-3"
+      },
+      "children": [
+        "span-154"
+      ]
+    },
+    "div-150": {
+      "type": "div",
+      "props": {
+        "className": "flex items-start justify-between"
+      },
+      "children": [
+        "div-151",
+        "span-153"
+      ]
+    },
+    "h3-156": {
+      "type": "text",
+      "props": {
+        "className": "text-base font-bold text-slate-900 dark:text-white group-hover:text-[#2b8cee] transition-colors",
+        "tag": "h3",
+        "content": "Agent Epsilon"
+      },
+      "children": []
+    },
+    "p-157": {
+      "type": "text",
+      "props": {
+        "className": "text-xs font-medium text-slate-500 dark:text-[#9dabb9] mt-1",
+        "tag": "p",
+        "content": "Standby"
+      },
+      "children": []
+    },
+    "p-158": {
+      "type": "text",
+      "props": {
+        "className": "text-sm text-slate-600 dark:text-slate-300 mt-2 line-clamp-1",
+        "tag": "p",
+        "content": "Ready for assignment"
+      },
+      "children": []
+    },
+    "div-155": {
+      "type": "div",
+      "props": {},
+      "children": [
+        "h3-156",
+        "p-157",
+        "p-158"
+      ]
+    },
+    "div-160": {
+      "type": "div",
+      "props": {
+        "className": "h-full bg-slate-400 w-0 rounded-full"
+      },
+      "children": []
+    },
+    "div-159": {
+      "type": "div",
+      "props": {
+        "className": "h-1 w-full bg-slate-100 dark:bg-slate-800 rounded-full mt-2 overflow-hidden"
+      },
+      "children": [
+        "div-160"
+      ]
+    },
+    "div-149": {
+      "type": "div",
+      "props": {
+        "className": "flex flex-col justify-between gap-3 rounded-xl border border-slate-200 dark:border-[#283039] bg-white dark:bg-[#1c2127] p-4 hover:shadow-md hover:border-[#2b8cee]/40 transition-all cursor-pointer group"
+      },
+      "children": [
+        "div-150",
+        "div-155",
+        "div-159"
+      ]
+    },
+    "span-164": {
+      "type": "icon",
+      "props": {
+        "className": "",
+        "fontSize": "24px",
+        "name": "description",
+        "size": 24
+      },
+      "children": []
+    },
+    "div-163": {
+      "type": "div",
+      "props": {
+        "className": "p-2 rounded-lg bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400"
+      },
+      "children": [
+        "span-164"
+      ]
+    },
+    "span-166": {
+      "type": "text",
+      "props": {
+        "className": "animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75",
+        "tag": "span",
+        "content": ""
+      },
+      "children": []
+    },
+    "span-167": {
+      "type": "text",
+      "props": {
+        "className": "relative inline-flex rounded-full h-3 w-3 bg-orange-500",
+        "tag": "span",
+        "content": ""
+      },
+      "children": []
+    },
+    "span-165": {
+      "type": "text",
+      "props": {
+        "className": "relative flex h-3 w-3"
+      },
+      "children": [
+        "span-166",
+        "span-167"
+      ]
+    },
+    "div-162": {
+      "type": "div",
+      "props": {
+        "className": "flex items-start justify-between"
+      },
+      "children": [
+        "div-163",
+        "span-165"
+      ]
+    },
+    "h3-169": {
+      "type": "text",
+      "props": {
+        "className": "text-base font-bold text-slate-900 dark:text-white group-hover:text-[#2b8cee] transition-colors",
+        "tag": "h3",
+        "content": "Agent Zeta"
+      },
+      "children": []
+    },
+    "p-170": {
+      "type": "text",
+      "props": {
+        "className": "text-xs font-medium text-slate-500 dark:text-[#9dabb9] mt-1",
+        "tag": "p",
+        "content": "Processing"
+      },
+      "children": []
+    },
+    "p-171": {
+      "type": "text",
+      "props": {
+        "className": "text-sm text-slate-600 dark:text-slate-300 mt-2 line-clamp-1",
+        "tag": "p",
+        "content": "Text Summarization"
+      },
+      "children": []
+    },
+    "div-168": {
+      "type": "div",
+      "props": {},
+      "children": [
+        "h3-169",
+        "p-170",
+        "p-171"
+      ]
+    },
+    "div-173": {
+      "type": "div",
+      "props": {
+        "className": "h-full bg-orange-500 w-5/6 rounded-full"
+      },
+      "children": []
+    },
+    "div-172": {
+      "type": "div",
+      "props": {
+        "className": "h-1 w-full bg-slate-100 dark:bg-slate-800 rounded-full mt-2 overflow-hidden"
+      },
+      "children": [
+        "div-173"
+      ]
+    },
+    "div-161": {
+      "type": "div",
+      "props": {
+        "className": "flex flex-col justify-between gap-3 rounded-xl border border-slate-200 dark:border-[#283039] bg-white dark:bg-[#1c2127] p-4 hover:shadow-md hover:border-[#2b8cee]/40 transition-all cursor-pointer group"
+      },
+      "children": [
+        "div-162",
+        "div-168",
+        "div-172"
+      ]
+    },
+    "div-98": {
+      "type": "div",
+      "props": {
+        "className": "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+      },
+      "children": [
+        "div-99",
+        "div-112",
+        "div-124",
+        "div-136",
+        "div-149",
+        "div-161"
+      ]
+    },
+    "div-91": {
+      "type": "div",
+      "props": {
+        "className": "xl:col-span-2 flex flex-col gap-4"
+      },
+      "children": [
+        "div-92",
+        "div-98"
+      ]
+    },
+    "span-177": {
+      "type": "icon",
+      "props": {
+        "className": "text-[#2b8cee]",
+        "name": "history"
+      },
+      "children": []
+    },
+    "text-178": {
+      "type": "text",
+      "props": {
+        "tag": "span",
+        "content": "Recent Activity"
+      },
+      "children": []
+    },
+    "h2-176": {
+      "type": "text",
+      "props": {
+        "className": "text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2"
+      },
+      "children": [
+        "span-177",
+        "text-178"
+      ]
+    },
+    "text-180": {
+      "type": "text",
+      "props": {
+        "tag": "span",
+        "content": "View Logs"
+      },
+      "children": []
+    },
+    "button-179": {
+      "type": "button",
+      "props": {
+        "className": "text-sm font-medium text-[#2b8cee] hover:text-[#2b8cee]/80",
+        "text": "View Logs"
+      },
+      "children": [
+        "text-180"
+      ]
+    },
+    "div-175": {
+      "type": "div",
+      "props": {
+        "className": "flex items-center justify-between"
+      },
+      "children": [
+        "h2-176",
+        "button-179"
+      ]
+    },
+    "div-184": {
+      "type": "div",
+      "props": {
+        "className": "absolute -left-[5px] top-6 h-2.5 w-2.5 rounded-full border border-white dark:border-[#1c2127] bg-[#2b8cee]"
+      },
+      "children": []
+    },
+    "span-187": {
+      "type": "text",
+      "props": {
+        "className": "text-sm font-bold text-slate-900 dark:text-white",
+        "tag": "span",
+        "content": "File Indexing Complete"
+      },
+      "children": []
+    },
+    "span-188": {
+      "type": "text",
+      "props": {
+        "className": "text-xs font-mono text-slate-400",
+        "tag": "span",
+        "content": "10:02 AM"
+      },
+      "children": []
+    },
+    "div-186": {
+      "type": "div",
+      "props": {
+        "className": "flex justify-between items-start"
+      },
+      "children": [
+        "span-187",
+        "span-188"
+      ]
+    },
+    "text-190": {
+      "type": "text",
+      "props": {
+        "tag": "span",
+        "content": "Agent Alpha successfully indexed"
+      },
+      "children": []
+    },
+    "span-191": {
+      "type": "text",
+      "props": {
+        "className": "text-[#2b8cee] font-medium",
+        "tag": "span",
+        "content": "50 files"
+      },
+      "children": []
+    },
+    "text-192": {
+      "type": "text",
+      "props": {
+        "tag": "span",
+        "content": "into Vector DB."
+      },
+      "children": []
+    },
+    "p-189": {
+      "type": "text",
+      "props": {
+        "className": "text-sm text-slate-600 dark:text-slate-300"
+      },
+      "children": [
+        "text-190",
+        "span-191",
+        "text-192"
+      ]
+    },
+    "div-185": {
+      "type": "div",
+      "props": {
+        "className": "flex flex-col gap-1"
+      },
+      "children": [
+        "div-186",
+        "p-189"
+      ]
+    },
+    "li-183": {
+      "type": "div",
+      "props": {
+        "className": "relative pl-6 py-4 border-l border-slate-200 dark:border-slate-700 ml-4 hover:bg-slate-50 dark:hover:bg-[#283039]/50 rounded-r-lg transition-colors group",
+        "tag": "li"
+      },
+      "children": [
+        "div-184",
+        "div-185"
+      ]
+    },
+    "div-194": {
+      "type": "div",
+      "props": {
+        "className": "absolute -left-[5px] top-6 h-2.5 w-2.5 rounded-full border border-white dark:border-[#1c2127] bg-emerald-500"
+      },
+      "children": []
+    },
+    "span-197": {
+      "type": "text",
+      "props": {
+        "className": "text-sm font-bold text-slate-900 dark:text-white",
+        "tag": "span",
+        "content": "System Health Check"
+      },
+      "children": []
+    },
+    "span-198": {
+      "type": "text",
+      "props": {
+        "className": "text-xs font-mono text-slate-400",
+        "tag": "span",
+        "content": "10:00 AM"
+      },
+      "children": []
+    },
+    "div-196": {
+      "type": "div",
+      "props": {
+        "className": "flex justify-between items-start"
+      },
+      "children": [
+        "span-197",
+        "span-198"
+      ]
+    },
+    "p-199": {
+      "type": "text",
+      "props": {
+        "className": "text-sm text-slate-600 dark:text-slate-300",
+        "tag": "p",
+        "content": "Routine diagnostics passed. All services operational."
+      },
+      "children": []
+    },
+    "div-195": {
+      "type": "div",
+      "props": {
+        "className": "flex flex-col gap-1"
+      },
+      "children": [
+        "div-196",
+        "p-199"
+      ]
+    },
+    "li-193": {
+      "type": "div",
+      "props": {
+        "className": "relative pl-6 py-4 border-l border-slate-200 dark:border-slate-700 ml-4 hover:bg-slate-50 dark:hover:bg-[#283039]/50 rounded-r-lg transition-colors group",
+        "tag": "li"
+      },
+      "children": [
+        "div-194",
+        "div-195"
+      ]
+    },
+    "div-201": {
+      "type": "div",
+      "props": {
+        "className": "absolute -left-[5px] top-6 h-2.5 w-2.5 rounded-full border border-white dark:border-[#1c2127] bg-blue-400"
+      },
+      "children": []
+    },
+    "span-204": {
+      "type": "text",
+      "props": {
+        "className": "text-sm font-bold text-slate-900 dark:text-white",
+        "tag": "span",
+        "content": "Policy Update"
+      },
+      "children": []
+    },
+    "span-205": {
+      "type": "text",
+      "props": {
+        "className": "text-xs font-mono text-slate-400",
+        "tag": "span",
+        "content": "09:55 AM"
+      },
+      "children": []
+    },
+    "div-203": {
+      "type": "div",
+      "props": {
+        "className": "flex justify-between items-start"
+      },
+      "children": [
+        "span-204",
+        "span-205"
+      ]
+    },
+    "text-207": {
+      "type": "text",
+      "props": {
+        "tag": "span",
+        "content": "Admin"
+      },
+      "children": []
+    },
+    "span-208": {
+      "type": "text",
+      "props": {
+        "className": "font-medium text-slate-900 dark:text-white",
+        "tag": "span",
+        "content": "J.Doe"
+      },
+      "children": []
+    },
+    "text-209": {
+      "type": "text",
+      "props": {
+        "tag": "span",
+        "content": "updated Access Control policies."
+      },
+      "children": []
+    },
+    "p-206": {
+      "type": "text",
+      "props": {
+        "className": "text-sm text-slate-600 dark:text-slate-300"
+      },
+      "children": [
+        "text-207",
+        "span-208",
+        "text-209"
+      ]
+    },
+    "div-202": {
+      "type": "div",
+      "props": {
+        "className": "flex flex-col gap-1"
+      },
+      "children": [
+        "div-203",
+        "p-206"
+      ]
+    },
+    "li-200": {
+      "type": "div",
+      "props": {
+        "className": "relative pl-6 py-4 border-l border-slate-200 dark:border-slate-700 ml-4 hover:bg-slate-50 dark:hover:bg-[#283039]/50 rounded-r-lg transition-colors group",
+        "tag": "li"
+      },
+      "children": [
+        "div-201",
+        "div-202"
+      ]
+    },
+    "div-211": {
+      "type": "div",
+      "props": {
+        "className": "absolute -left-[5px] top-6 h-2.5 w-2.5 rounded-full border border-white dark:border-[#1c2127] bg-red-500"
+      },
+      "children": []
+    },
+    "span-214": {
+      "type": "text",
+      "props": {
+        "className": "text-sm font-bold text-slate-900 dark:text-white",
+        "tag": "span",
+        "content": "API Warning"
+      },
+      "children": []
+    },
+    "span-215": {
+      "type": "text",
+      "props": {
+        "className": "text-xs font-mono text-slate-400",
+        "tag": "span",
+        "content": "09:42 AM"
+      },
+      "children": []
+    },
+    "div-213": {
+      "type": "div",
+      "props": {
+        "className": "flex justify-between items-start"
+      },
+      "children": [
+        "span-214",
+        "span-215"
+      ]
+    },
+    "p-216": {
+      "type": "text",
+      "props": {
+        "className": "text-sm text-slate-600 dark:text-slate-300",
+        "tag": "p",
+        "content": "External API latency detected on Endpoint /v1/chat."
+      },
+      "children": []
+    },
+    "div-212": {
+      "type": "div",
+      "props": {
+        "className": "flex flex-col gap-1"
+      },
+      "children": [
+        "div-213",
+        "p-216"
+      ]
+    },
+    "li-210": {
+      "type": "div",
+      "props": {
+        "className": "relative pl-6 py-4 border-l border-slate-200 dark:border-slate-700 ml-4 hover:bg-slate-50 dark:hover:bg-[#283039]/50 rounded-r-lg transition-colors group",
+        "tag": "li"
+      },
+      "children": [
+        "div-211",
+        "div-212"
+      ]
+    },
+    "div-218": {
+      "type": "div",
+      "props": {
+        "className": "absolute -left-[5px] top-6 h-2.5 w-2.5 rounded-full border border-white dark:border-[#1c2127] bg-slate-400"
+      },
+      "children": []
+    },
+    "span-221": {
+      "type": "text",
+      "props": {
+        "className": "text-sm font-bold text-slate-900 dark:text-white",
+        "tag": "span",
+        "content": "Agent Standby"
+      },
+      "children": []
+    },
+    "span-222": {
+      "type": "text",
+      "props": {
+        "className": "text-xs font-mono text-slate-400",
+        "tag": "span",
+        "content": "09:30 AM"
+      },
+      "children": []
+    },
+    "div-220": {
+      "type": "div",
+      "props": {
+        "className": "flex justify-between items-start"
+      },
+      "children": [
+        "span-221",
+        "span-222"
+      ]
+    },
+    "p-223": {
+      "type": "text",
+      "props": {
+        "className": "text-sm text-slate-600 dark:text-slate-300",
+        "tag": "p",
+        "content": "Agent Epsilon entered low-power standby mode."
+      },
+      "children": []
+    },
+    "div-219": {
+      "type": "div",
+      "props": {
+        "className": "flex flex-col gap-1"
+      },
+      "children": [
+        "div-220",
+        "p-223"
+      ]
+    },
+    "li-217": {
+      "type": "div",
+      "props": {
+        "className": "relative pl-6 py-4 border-l border-slate-200 dark:border-slate-700 ml-4 hover:bg-slate-50 dark:hover:bg-[#283039]/50 rounded-r-lg transition-colors group",
+        "tag": "li"
+      },
+      "children": [
+        "div-218",
+        "div-219"
+      ]
+    },
+    "ul-182": {
+      "type": "div",
+      "props": {
+        "className": "flex flex-col",
+        "tag": "ul"
+      },
+      "children": [
+        "li-183",
+        "li-193",
+        "li-200",
+        "li-210",
+        "li-217"
+      ]
+    },
+    "div-181": {
+      "type": "div",
+      "props": {
+        "className": "bg-white dark:bg-[#1c2127] rounded-xl border border-slate-200 dark:border-[#283039] p-2 h-full min-h-[400px]"
+      },
+      "children": [
+        "ul-182"
+      ]
+    },
+    "div-174": {
+      "type": "div",
+      "props": {
+        "className": "xl:col-span-1 flex flex-col gap-4"
+      },
+      "children": [
+        "div-175",
+        "div-181"
+      ]
+    },
+    "div-90": {
+      "type": "div",
+      "props": {
+        "className": "grid grid-cols-1 xl:grid-cols-3 gap-8"
+      },
+      "children": [
+        "div-91",
+        "div-174"
+      ]
+    },
+    "p-226": {
+      "type": "text",
+      "props": {
+        "tag": "p",
+        "content": "© 2023 AI Nexus Command Center. All rights reserved."
+      },
+      "children": []
+    },
+    "text-229": {
+      "type": "text",
+      "props": {
+        "tag": "span",
+        "content": "System Status"
+      },
+      "children": []
+    },
+    "a-228": {
+      "type": "link",
+      "props": {
+        "className": "hover:text-[#2b8cee]",
+        "href": "#",
+        "label": "System Status"
+      },
+      "children": [
+        "text-229"
+      ]
+    },
+    "text-231": {
+      "type": "text",
+      "props": {
+        "tag": "span",
+        "content": "Privacy Policy"
+      },
+      "children": []
+    },
+    "a-230": {
+      "type": "link",
+      "props": {
+        "className": "hover:text-[#2b8cee]",
+        "href": "#",
+        "label": "Privacy Policy"
+      },
+      "children": [
+        "text-231"
+      ]
+    },
+    "text-233": {
+      "type": "text",
+      "props": {
+        "tag": "span",
+        "content": "Documentation"
+      },
+      "children": []
+    },
+    "a-232": {
+      "type": "link",
+      "props": {
+        "className": "hover:text-[#2b8cee]",
+        "href": "#",
+        "label": "Documentation"
+      },
+      "children": [
+        "text-233"
+      ]
+    },
+    "div-227": {
+      "type": "div",
+      "props": {
+        "className": "flex gap-4 mt-2 md:mt-0"
+      },
+      "children": [
+        "a-228",
+        "a-230",
+        "a-232"
+      ]
+    },
+    "div-225": {
+      "type": "div",
+      "props": {
+        "className": "flex flex-col md:flex-row justify-between items-center text-xs text-slate-400 dark:text-[#9dabb9]"
+      },
+      "children": [
+        "p-226",
+        "div-227"
+      ]
+    },
+    "footer-224": {
+      "type": "div",
+      "props": {
+        "className": "mt-8 border-t border-slate-200 dark:border-[#283039] pt-6 pb-2",
+        "tag": "footer"
+      },
+      "children": [
+        "div-225"
+      ]
+    },
+    "div-60": {
+      "type": "div",
+      "props": {
+        "className": "max-w-7xl mx-auto flex flex-col gap-8"
+      },
+      "children": [
+        "section-61",
+        "div-90",
+        "footer-224"
+      ]
+    },
+    "div-59": {
+      "type": "div",
+      "props": {
+        "className": "flex-1 overflow-y-auto p-6 md:p-8 scroll-smooth"
+      },
+      "children": [
+        "div-60"
+      ]
+    },
+    "main-38": {
+      "type": "div",
+      "props": {
+        "className": "flex-1 flex flex-col h-full overflow-hidden bg-[#f6f7f8] dark:bg-[#101922] relative",
+        "tag": "main"
+      },
+      "children": [
+        "header-39",
+        "div-59"
+      ]
+    },
+    "div-1": {
+      "type": "div",
+      "props": {
+        "className": "flex h-screen w-full flex-row overflow-hidden"
+      },
+      "children": [
+        "aside-2",
+        "main-38"
+      ]
+    },
+    "div-234": {
+      "type": "div",
+      "props": {
+        "className": "font-display bg-[#f6f7f8] dark:bg-[#101922] text-slate-900 dark:text-white antialiased overflow-hidden"
+      },
+      "children": [
+        "div-1"
+      ]
+    }
+  },
+  "metadata": {
+    "name": "Imported Layout",
+    "createdAt": "2026-04-08T04:21:14.196Z",
+    "updatedAt": "2026-04-08T04:21:14.196Z",
+    "externalAssets": {
+      "links": [
+        "{\"href\":\"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap\",\"rel\":\"stylesheet\",\"crossorigin\":null}",
+        "{\"href\":\"https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap\",\"rel\":\"stylesheet\",\"crossorigin\":null}",
+        "{\"href\":\"https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap\",\"rel\":\"stylesheet\",\"crossorigin\":null}"
+      ],
+      "styles": [
+        "/* Custom scrollbar for webkit browsers */\n        ::-webkit-scrollbar {\n            width: 8px;\n            height: 8px;\n        }\n        ::-webkit-scrollbar-track {\n            background: #101922; \n        }\n        ::-webkit-scrollbar-thumb {\n            background: #2b8cee; \n            border-radius: 4px;\n        }\n        ::-webkit-scrollbar-thumb:hover {\n            background: #1a5bb0; \n        }"
+      ]
+    }
+  }
+}

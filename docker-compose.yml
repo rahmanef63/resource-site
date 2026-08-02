@@ -1,0 +1,71 @@
+# si-coder canonical compose for Rahman Resources (rr).
+# Stack: Next.js frontend + self-hosted Convex backend.
+# Deploy via Dokploy → `node ~/.agents/skills/si-coder/scripts/deploy.js`.
+#
+# CRITICAL si-coder rules embedded:
+#   1. NEVER use `:latest` for convex-backend in production — pin a digest tag
+#      via CONVEX_SELF_HOSTED_IMAGE env override at Dokploy. Tags:
+#      https://github.com/get-convex/convex-backend/releases
+#   2. Bind backend to 127.0.0.1 only; Dokploy reverse proxy reaches it via
+#      the internal Docker network. Public traffic goes through Dokploy.
+#   3. JWT_PRIVATE_KEY + JWKS MUST be set on convex-backend env (PEM PKCS8
+#      RSA private key + JWKS JSON). Without these, @convex-dev/auth crashes
+#      mid-action — see si-coder skill "Generating JWT Keys".
+#   4. convex_data volume = the only durable asset. Backup before any
+#      `docker volume rm`. See docs/db-backup.md (TBD).
+#   5. PBKDF2 password hashing already in convex/features/auth/auth.ts —
+#      do NOT switch to Scrypt; Scrypt times out behind reverse proxy.
+
+services:
+  frontend:
+    build:
+      context: .
+      args:
+        # Inlined into the client bundle at build time (see Dockerfile ARG).
+        NEXT_PUBLIC_CONVEX_URL: ${NEXT_PUBLIC_CONVEX_URL:-}
+    container_name: resources-frontend
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      NEXT_TELEMETRY_DISABLED: "1"
+      NODE_ENV: production
+      # NEXT_PUBLIC_CONVEX_URL is inlined at build time — set it as a Docker
+      # build arg in Dokploy, NOT as runtime env. See Dockerfile ARG line.
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  backend:
+    # SECURITY: pin to digest in production via Dokploy env override.
+    # Example: ghcr.io/get-convex/convex-backend:62ef0ae6b91bc7e44b3a82a1e80b1f0d
+    image: ${CONVEX_SELF_HOSTED_IMAGE:-ghcr.io/get-convex/convex-backend:latest}
+    container_name: resources-convex-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    # Bind to localhost only — Dokploy's reverse proxy reaches the
+    # container via internal Docker network. 0.0.0.0 binding risks
+    # accidentally exposing 3210 directly if proxy/firewall mis-configured.
+    ports:
+      - "127.0.0.1:3210:3210"
+    # DATABASE: default is SQLite at /convex/data (durable via convex_data volume).
+    # For production multi-instance or high-throughput, set POSTGRES_URL or
+    # MYSQL_URL via Dokploy env override; the backend auto-switches on boot.
+    # Example: POSTGRES_URL=postgres://user:pass@postgres:5432/convex
+    volumes:
+      - convex_data:/convex/data
+    # /version is the canonical readiness probe. If backend is wedged
+    # (DB connection lost, panic recovering), Dokploy restarts the container
+    # instead of silently serving 5xx.
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://127.0.0.1:3210/version || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+volumes:
+  convex_data:

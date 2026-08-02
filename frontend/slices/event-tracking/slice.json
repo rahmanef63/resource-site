@@ -1,0 +1,59 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "event-tracking",
+  "version": "0.1.0",
+  "category": "data",
+  "kind": "ui",
+  "title": "Analytics",
+  "description": "Nav-registered analytics stub. Ships config.ts (defineFeature) only \u2014 the full event SDK (client emitter + Convex ingestion, batched flush via requestIdleCallback, UTM first-touch attribution) is sourced from template-base admin-panel/slices/events on demand.",
+  "namespace": "@/features/event-tracking",
+  "frontend": {
+    "slicePath": "frontend/slices/event-tracking",
+    "configExport": "eventTrackingFeature"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [],
+  "audit": [],
+  "license": "MIT",
+  "tags": [
+    "events",
+    "analytics",
+    "instrumentation",
+    "attribution",
+    "utm",
+    "p0"
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "next",
+          "range": "^15"
+        },
+        {
+          "npm": "react",
+          "range": "^18"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "event-tracking.track",
+        "event-tracking.query",
+        "event-tracking.funnel"
+      ],
+      "components": [],
+      "utils": [],
+      "hooks": [],
+      "convex": {
+        "tables": [],
+        "rbac": []
+      }
+    }
+  }
+}

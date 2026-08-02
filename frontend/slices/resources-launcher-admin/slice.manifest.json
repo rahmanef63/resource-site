@@ -1,0 +1,32 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "resources-launcher-admin",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add resources-launcher-admin",
+    "consumerPath": "slices/resources-launcher-admin"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "README.md",
+    "app.tsx",
+    "components/resource-editor.tsx",
+    "config.ts",
+    "index.ts",
+    "lib/host.ts",
+    "lib/icons.ts",
+    "slice.json"
+  ],
+  "imports": {
+    "shared": [
+      "@/components/ui/button",
+      "@/components/ui/input",
+      "@/components/ui/label",
+      "@/components/ui/scroll-area",
+      "@/components/ui/native-select"
+    ],
+    "external": ["react", "lucide-react"]
+  }
+}

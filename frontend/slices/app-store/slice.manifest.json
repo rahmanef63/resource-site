@@ -1,0 +1,39 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "app-store",
+  "version": "1.2.1",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add app-store",
+    "consumerPath": "slices/app-store"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "README.md",
+    "app.tsx",
+    "components/app-console.tsx",
+    "components/create-app.tsx",
+    "components/featured-card.tsx",
+    "components/glyph-picker.tsx",
+    "components/host-frame.tsx",
+    "components/icon-preview.tsx",
+    "components/runtime-app.tsx",
+    "components/segmented.tsx",
+    "components/store-app-card.tsx",
+    "components/store-sidebar.tsx",
+    "components/system-card.tsx",
+    "config.ts",
+    "index.ts",
+    "lib/apps-store.ts",
+    "lib/enabled-store.ts",
+    "lib/glyph.ts",
+    "lib/host.ts",
+    "lib/store-catalog.ts",
+    "lib/system-catalog.ts",
+    "lib/tools.ts",
+    "lib/use-container.ts",
+    "lib/use-installed-apps.ts",
+    "slice.json"
+  ]
+}

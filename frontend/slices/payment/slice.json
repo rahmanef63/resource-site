@@ -1,0 +1,92 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "payment",
+  "version": "0.4.0",
+  "category": "integrations",
+  "kind": "full",
+  "title": "Payment — Indonesia PSP (DOKU · Midtrans)",
+  "description": "Indonesia payment providers behind one slug and ONE shared Convex backend (convex/features/payment discriminates on a `provider` column — paymentOrders + paymentWebhookEvents, unprefixed). Two frontend variants: doku — DOKU Hosted Checkout + Direct channel picker (22-channel registry, HMAC-SHA256 signed REST, dependency-free, server-side env only); midtrans — Midtrans Snap hosted-checkout button + orders history (needs npm midtrans-client + a NEXT_PUBLIC_MIDTRANS_CLIENT_KEY). Install one provider with `npx rr add payment doku|midtrans`, or both with `npx rr add payment`. Either variant copies the shared payment backend. A future `stripe` variant is already reserved in the schema's provider union.",
+  "namespace": "@/features/payment",
+  "variants": {
+    "default": "doku",
+    "items": [
+      { "id": "doku", "title": "DOKU", "description": "Hosted Checkout + Direct channel picker, HMAC REST, dependency-free." },
+      { "id": "midtrans", "title": "Midtrans", "description": "Snap hosted-checkout button + orders history (needs midtrans-client + next-public key)." }
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/payment",
+    "configExport": "paymentFeature"
+  },
+  "convex": {
+    "tablesExport": "paymentTables",
+    "schemaPath": "convex/features/payment/_schema.ts",
+    "rootPaths": ["convex/features/payment"]
+  },
+  "deps": {
+    "npm": [
+      "midtrans-client@^1.4.2"
+    ],
+    "shadcn": [
+      "badge",
+      "button",
+      "card",
+      "dialog",
+      "input",
+      "label",
+      "select",
+      "skeleton"
+    ],
+    "env": [
+      { "name": "DOKU_CLIENT_ID", "scope": "convex", "required": false, "description": "doku variant — Merchant Client-Id from DOKU dashboard." },
+      { "name": "DOKU_SECRET_KEY", "scope": "convex", "required": false, "description": "doku variant — HMAC secret for outbound signing + inbound verification." },
+      { "name": "DOKU_IS_PRODUCTION", "scope": "convex", "required": false, "description": "doku variant — true|false; defaults false (sandbox)." },
+      { "name": "DOKU_NOTIFY_PATH", "scope": "convex", "required": false, "description": "doku variant — path DOKU calls; defaults /webhooks/doku." },
+      { "name": "MIDTRANS_SERVER_KEY", "scope": "convex", "required": false, "description": "midtrans variant — Snap server key." },
+      { "name": "MIDTRANS_CLIENT_KEY", "scope": "next-public", "required": false, "description": "midtrans variant — Snap client key (browser)." },
+      { "name": "MIDTRANS_IS_PRODUCTION", "scope": "convex", "required": false, "description": "midtrans variant — true|false; defaults false (sandbox)." }
+    ],
+    "peers": [
+      { "slug": "convex-auth", "range": "^0.1", "reason": "Optional — signed-in orders attach userId; GUEST checkout works without auth (buyer contact on the order, status via unguessable orderId).", "optional": true }
+    ]
+  },
+  "registers": [],
+  "audit": [],
+  "license": "MIT",
+  "tags": [
+    "payment",
+    "checkout",
+    "indonesia",
+    "doku",
+    "midtrans",
+    "psp",
+    "convex",
+    "webhook",
+    "integrations"
+  ],
+  "previews": [],
+  "contract": {
+    "provides": {
+      "tools": [
+        "doku-payment.channels",
+        "doku-payment.create_invoice",
+        "doku-payment.status",
+        "doku-payment.refund",
+        "midtrans-payment.create_invoice",
+        "midtrans-payment.status",
+        "midtrans-payment.refund"
+      ],
+      "tables": ["paymentOrders", "paymentWebhookEvents"],
+      "routes": ["/checkout/doku", "/checkout/midtrans", "/midtrans/callback"],
+      "hooks": ["useDokuCheckout", "useMidtransPayment"],
+      "components": ["DokuCheckout", "DokuDirectForm", "CheckoutPage", "MidtransSnap", "MidtransStatusBadge"],
+      "events": ["payment.captured", "payment.failed", "payment.refunded"],
+      "convex": { "tables": ["paymentOrders", "paymentWebhookEvents"], "rbac": [] }
+    },
+    "generalization": {
+      "level": "portable",
+      "forbiddenTerms": [],
+      "requiredProps": []
+    }
+  }
+}

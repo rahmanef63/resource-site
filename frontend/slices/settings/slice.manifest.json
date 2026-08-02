@@ -1,0 +1,40 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "settings",
+  "version": "1.0.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add settings",
+    "consumerPath": "slices/settings"
+  },
+  "files": [
+    "README.md",
+    "config.ts",
+    "index.ts",
+    "variants/account/CHANGELOG.md",
+    "variants/account/README.md",
+    "variants/account/components/SettingsShell.tsx",
+    "variants/account/components/sections/DangerZone.tsx",
+    "variants/account/components/sections/NotificationsSection.tsx",
+    "variants/account/components/sections/PreferencesSection.tsx",
+    "variants/account/components/sections/ProfileSection.tsx",
+    "variants/account/hooks/useSettings.ts",
+    "variants/account/index.ts",
+    "variants/account/lib/adapter.ts",
+    "variants/account/lib/tools.ts",
+    "variants/appearance/CHANGELOG.md",
+    "variants/appearance/README.md",
+    "variants/appearance/components/accent-swatches.tsx",
+    "variants/appearance/components/appearance-panel.tsx",
+    "variants/appearance/components/row.tsx",
+    "variants/appearance/components/section.tsx",
+    "variants/appearance/components/segmented.tsx",
+    "variants/appearance/index.ts",
+    "variants/appearance/lib/types.ts"
+  ],
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

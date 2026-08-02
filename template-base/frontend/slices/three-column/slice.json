@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "three-column",
+  "version": "0.1.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "Three-Column Layout — Sidebar/Content/Inspector",
+  "description": "Facade slice over shared/ui/layout/container/three-column/. Collapsible left/right + resizable widths + responsive + PanelSection compound (Header/Items/Footer) + footer slots per panel. Pair with the panel primitives (PanelGroup/PanelMenu/PanelSeparator) for shadcn-sidebar-like ergonomics inside each column.",
+  "namespace": "@/features/three-column",
+  "convex": { "tablesExport": "", "schemaPath": "", "rootPaths": [] },
+  "frontend": { "slicePath": "frontend/slices/three-column", "configExport": "" },
+  "deps": {
+    "npm": [],
+    "shadcn": ["sheet", "scroll-area", "separator", "tooltip"],
+    "env": [],
+    "peers": []
+  },
+  "registers": [],
+  "license": "MIT",
+  "tags": ["ui", "layout", "three-column", "sidebar", "inspector", "panel-section", "responsive", "resizable"],
+  "providers": []
+}

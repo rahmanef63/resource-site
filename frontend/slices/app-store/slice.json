@@ -1,0 +1,86 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "app-store",
+  "version": "1.2.1",
+  "category": "os",
+  "kind": "ui",
+  "title": "App Store \u2014 install, create + toggle apps",
+  "description": "The dynamic half of an app registry, in two surfaces. AppStore: a storefront with featured hero, category sidebar, install/uninstall cards for a curated catalog, and toggles that disable built-in apps/shell features (the DISABLED set is persisted so new apps always ship enabled). CreateApp: build a custom app \u2014 name, glyph, accent gradient, runtime (html/node/python/shell), entry \u2014 with live manifest preview. Both write one localStorage registry; useInstalledApps() turns it into appshell-style descriptors (html apps mount in a sandboxed iframe, command apps in a terminal-style console). The console's shell is INJECTED via configureAppStoreExec (demo echo by default). Self-contained: inspector hooks are inert seams in lib/host.ts; responsive via slice-local AppFrame/TouchList/useContainer shims \u2014 below ~600px pane width the category rail collapses to a filter-chip row.",
+  "namespace": "@/features/app-store",
+  "frontend": {
+    "slicePath": "frontend/slices/app-store",
+    "configExport": "appStoreConfig"
+  },
+  "deps": {
+    "npm": [
+      "lucide-react"
+    ],
+    "shadcn": [
+      "button",
+      "input",
+      "badge",
+      "card",
+      "separator",
+      "scroll-area"
+    ],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": [
+    "bp:ui-consistency"
+  ],
+  "license": "MIT",
+  "tags": [
+    "app-store",
+    "registry",
+    "installer",
+    "dynamic-apps",
+    "launcher",
+    "ui"
+  ],
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "none",
+      "deps": [
+        {
+          "npm": "react",
+          "range": "^19"
+        },
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "app-store.list",
+        "app-store.search",
+        "app-store.install",
+        "app-store.uninstall"
+      ],
+      "routes": [],
+      "components": [
+        "AppStore",
+        "CreateApp"
+      ],
+      "hooks": [
+        "useInstalledApps",
+        "useApps",
+        "useDisabledIds"
+      ],
+      "utils": [
+        "createApp",
+        "setInstalled",
+        "configureAppStoreExec",
+        "appStoreApp",
+        "createAppApp"
+      ],
+      "tables": []
+    }
+  }
+}

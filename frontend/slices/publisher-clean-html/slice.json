@@ -1,0 +1,89 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "publisher-clean-html",
+  "version": "0.1.0",
+  "category": "content",
+  "kind": "ui",
+  "title": "Publisher — clean HTML",
+  "description": "Pure engine: render a node tree to a standalone, framework-runtime-free HTML document with one deduped per-module CSS bundle. Bring your own ModuleRegistry (each module is a pure render(props, children) -> { html, css? }); publishPage walks the tree, escapes every prop by its schema-declared control type (url -> safe-URL, richtext -> DOMPurify, svg -> SVG profile, else HTML-escape), dedups CSS by moduleId (~60-80% shrink), splices author classes/inline-styles onto each rendered root, and assembles <!DOCTYPE> + reset + framework + module CSS + a deterministic CSP plan. Layered sanitization spine: HTML escape + safe-URL, CSS-value guard (expression()/{}/</), </style RAWTEXT neutraliser, injectable DOMPurify (configureRichtextSanitizer — fail-closed without it). Stateless + env-free; no Convex, zero npm deps. Ships a PublishPreview iframe-srcdoc pane. Harvested + decoupled from the Instatic CMS publisher (host caching / loops / visual-components / Layer-C islands left behind).",
+  "namespace": "@/features/publisher-clean-html",
+  "frontend": {
+    "slicePath": "frontend/slices/publisher-clean-html",
+    "configExport": "publisherCleanHtmlFeature"
+  },
+  "convex": {
+    "tablesExport": "",
+    "schemaPath": "",
+    "rootPaths": []
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [],
+  "audit": [],
+  "license": "MIT",
+  "tags": [
+    "content",
+    "publisher",
+    "html",
+    "static-export",
+    "sanitization",
+    "csp",
+    "css-dedup",
+    "render"
+  ],
+  "previews": [
+    {
+      "component": "PublishPreview",
+      "kind": "variants",
+      "axes": [
+        {
+          "prop": "cssEmission",
+          "values": [
+            "inline",
+            "external"
+          ],
+          "default": "inline",
+          "description": "Embed CSS in a <style> block, or link an external bundle (re-inlined for this iframe preview)"
+        }
+      ],
+      "seed": "4-node demo tree (body > section > heading + 3 paragraphs), one of which carries an inert <script> string to show schema-typed escaping"
+    }
+  ],
+  "contract": {
+    "requires": {
+      "deps": []
+    },
+    "provides": {
+      "components": [
+        "PublishPreview"
+      ],
+      "utils": [
+        "publishPage",
+        "renderNode",
+        "createModuleRegistry",
+        "escapeProps",
+        "CssCollector",
+        "sanitizeModuleCSS",
+        "escapeHtml",
+        "safeUrl",
+        "isSafeUrl",
+        "sanitiseCssValue",
+        "sanitizeRichtext",
+        "sanitizeSvg",
+        "configureRichtextSanitizer",
+        "createBaseCspPlan",
+        "serializeCsp",
+        "PUBLISHER_RESET_CSS"
+      ],
+      "hooks": [],
+      "convex": {
+        "tables": [],
+        "rbac": []
+      }
+    }
+  }
+}

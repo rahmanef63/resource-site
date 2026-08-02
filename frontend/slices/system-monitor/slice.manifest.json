@@ -1,0 +1,40 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "system-monitor",
+  "version": "1.2.1",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add system-monitor",
+    "consumerPath": "slices/system-monitor"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "README.md",
+    "app.tsx",
+    "components/circular-gauge.tsx",
+    "components/gauge-grid.tsx",
+    "components/glass-panel.tsx",
+    "components/host-frame.tsx",
+    "components/process-table.tsx",
+    "components/sparkline.tsx",
+    "config.ts",
+    "index.ts",
+    "lib/format.ts",
+    "lib/host.ts",
+    "lib/palette.ts",
+    "lib/tools.ts",
+    "lib/use-stats-history.ts",
+    "slice.json"
+  ],
+  "imports": {
+    "shared": [
+      "@/components/ui/scroll-area",
+      "@/lib/utils"
+    ],
+    "external": [
+      "react",
+      "lucide-react"
+    ]
+  }
+}

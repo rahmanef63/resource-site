@@ -1,0 +1,33 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "activity",
+  "version": "0.3.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add activity",
+    "consumerPath": "slices/activity"
+  },
+  "files": [
+    "README.md",
+    "components/ActivityItem.tsx",
+    "components/StatsPanel.tsx",
+    "config.ts",
+    "index.ts",
+    "lib/defaults.ts",
+    "lib/format.ts",
+    "lib/grouping.ts",
+    "lib/tools.ts",
+    "lib/types.ts",
+    "views/ActivityFeed.tsx"
+  ],
+  "imports": {
+    "shared": [],
+    "external": [
+      "convex",
+      "lucide-react",
+      "next/link",
+      "react"
+    ]
+  }
+}

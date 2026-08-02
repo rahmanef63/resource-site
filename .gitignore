@@ -1,0 +1,32 @@
+node_modules/
+.next/
+out/
+dist/
+/build/
+.env
+.env.local
+.env.*.local
+*.log
+.DS_Store
+.vscode/
+.turbo/
+.pnpm-store/
+*.tsbuildinfo
+
+# generator backups
+*.backup
+.npmrc
+
+# Slice-DNA lineage — committed shards are *.dna.json, *.local.json is per-user
+.kitab/lineage/*.local.json
+coverage/
+
+# playwright e2e
+/test-results/
+/playwright-report/
+
+# claude session artifacts
+.claude/projects/
+
+# convex deploy staging dir (scripts/deploy-convex-functions.mjs)
+.convex-deploy/

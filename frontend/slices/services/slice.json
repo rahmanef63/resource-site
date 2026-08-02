@@ -1,0 +1,52 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "services",
+  "version": "0.1.1",
+  "category": "content",
+  "kind": "backend",
+  "title": "Services",
+  "description": "Service offerings backend — title + summary + deliverables array + sort order. Public `listAll` + `get`, admin `create` / `update` / `remove`, internal `seed`. Pair with a frontend services grid/list. Lifted 2026-05-16 from rahmanef.com; token-based admin gate swapped for `requireAdmin(ctx)` from `_shared/auth`.",
+  "namespace": "@/features/services",
+  "frontend": {
+    "slicePath": "frontend/slices/services",
+    "configExport": "servicesFeature"
+  },
+  "convex": {
+    "tablesExport": "servicesTables",
+    "schemaPath": "convex/features/services/_schema.ts",
+    "rootPaths": ["convex/features/services"]
+  },
+  "deps": {
+    "npm": ["convex@^1.16.0"],
+    "shadcn": [],
+    "env": [{ "name": "SUPER_ADMIN_EMAIL", "scope": "convex", "required": false }],
+    "peers": [{ "slug": "convex-auth", "range": "^0.1", "reason": "requireAdmin calls getAuthUserId from @convex-dev/auth." }]
+  },
+  "registers": [],
+  "audit": [],
+  "license": "MIT",
+  "tags": ["content", "services", "convex", "backend", "marketing", "agency"],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "convex",
+          "range": "^1.16.0"
+        }
+      ]
+    },
+    "provides": {
+      "components": [],
+      "utils": [],
+      "hooks": [],
+      "convex": {
+        "tables": [
+          "services"
+        ],
+        "rbac": [
+          "admin"
+        ]
+      }
+    }
+  }
+}

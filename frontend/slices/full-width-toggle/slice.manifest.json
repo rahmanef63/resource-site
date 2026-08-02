@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../docs/slice.manifest.schema.json",
+  "name": "full-width-toggle",
+  "version": "0.1.1",
+  "description": "Page-container width toggle (contained / wide / full). Per-device localStorage with cross-tab sync. useFullWidth hook + FullWidthToggle button + WidthContainer wrapper.",
+  "category": "ui",
+  "stability": "stable",
+  "deps": {
+    "shared": [],
+    "slices": [],
+    "convexFeatures": [],
+    "npm": {}
+  },
+  "files": {
+    "include": ["**/*"],
+    "exclude": ["*.test.ts", "*.test.tsx"]
+  },
+  "compatibility": {
+    "next": ">=14 <17",
+    "react": "^18 || ^19",
+    "tailwind": "3||4",
+    "auth": "any"
+  },
+  "tags": ["ui", "layout", "preference", "localstorage", "dashboard"],
+  "notes": "Pure client-side slice — no Convex, no env, no shadcn primitives beyond stock `button`. Drop into dashboard shell. localStorage key namespace: 'rr.fullWidth.<device>'."
+}

@@ -1,0 +1,105 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "resend-newsletter",
+  "version": "0.2.0",
+  "category": "integrations",
+  "title": "Resend \u2014 Transactional & Newsletter",
+  "description": "Newsletter subscribe form + admin send-broadcast pipeline via Resend.",
+  "namespace": "@/features/resend-newsletter",
+  "convex": {
+    "tablesExport": "newsletterTables",
+    "schemaPath": "convex/features/newsletter/_schema.ts",
+    "rootPaths": [
+      "convex/features/newsletter"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/resend-newsletter",
+    "configExport": "resendNewsletterConfig"
+  },
+  "deps": {
+    "npm": [
+      "resend@^4.0.0"
+    ],
+    "shadcn": [
+      "button",
+      "card",
+      "input",
+      "label",
+      "textarea"
+    ],
+    "env": [
+      {
+        "name": "RESEND_API_KEY",
+        "scope": "convex",
+        "required": true
+      },
+      {
+        "name": "RESEND_FROM",
+        "scope": "convex",
+        "required": true,
+        "description": "Verified sender, e.g., \"hello@yourdomain.com\"."
+      }
+    ],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": [
+    "bp:public-fn-validator"
+  ],
+  "license": "MIT",
+  "tags": [
+    "email",
+    "newsletter",
+    "resend"
+  ],
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "convex",
+      "rbac": [
+        "newsletter.subscribe",
+        "newsletter.unsubscribe",
+        "newsletter.send-broadcast",
+        "newsletter.list-subscribers"
+      ],
+      "env": [
+        "RESEND_API_KEY",
+        "RESEND_FROM"
+      ],
+      "convex": {
+        "prefix": "newsletter_",
+        "tables": [
+          "newsletter_subscribers",
+          "newsletter_broadcasts"
+        ]
+      },
+      "deps": [
+        "convex-auth"
+      ]
+    },
+    "provides": {
+      "tools": [
+        "resend-newsletter.subscribe",
+        "resend-newsletter.unsubscribe",
+        "resend-newsletter.list",
+        "resend-newsletter.send_campaign"
+      ],
+      "tables": [
+        "newsletter_subscribers",
+        "newsletter_broadcasts"
+      ],
+      "routes": [
+        "/newsletter"
+      ],
+      "components": [
+        "SubscribeForm"
+      ]
+    },
+    "generalization": {
+      "level": "portable"
+    }
+  }
+}

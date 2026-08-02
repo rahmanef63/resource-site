@@ -1,0 +1,33 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "library",
+  "version": "0.2.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add library",
+    "consumerPath": "slices/library"
+  },
+  "files": [
+    "README.md",
+    "components/CopyButton.tsx",
+    "components/PayloadRender.tsx",
+    "components/UpvotePanel.tsx",
+    "config.ts",
+    "index.ts",
+    "lib/defaults.ts",
+    "lib/tools.ts",
+    "lib/types.ts",
+    "views/LibraryDetail.tsx",
+    "views/LibraryIndex.tsx"
+  ],
+  "imports": {
+    "shared": [],
+    "external": [
+      "convex",
+      "next/image",
+      "next/link",
+      "react"
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "pricing-page",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add pricing-page",
+    "consumerPath": "slices/pricing-page"
+  },
+  "files": [
+    "README.md",
+    "components/PricingFAQ.tsx",
+    "components/PricingTier.tsx",
+    "config.ts",
+    "index.ts",
+    "views/PricingSection.tsx"
+  ],
+  "imports": {
+    "shared": [
+      "components/ui/accordion",
+      "components/ui/button",
+      "components/ui/card",
+      "lib/utils"
+    ],
+    "external": [
+      "lucide-react",
+      "next/link"
+    ]
+  }
+}

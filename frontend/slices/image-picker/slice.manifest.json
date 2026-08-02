@@ -1,0 +1,42 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "image-picker",
+  "version": "0.3.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add image-picker",
+    "consumerPath": "slices/image-picker"
+  },
+  "files": [
+    "components/ImageBanner.tsx",
+    "components/ImagePickerButton.tsx",
+    "components/ImagePickerDialog.tsx",
+    "components/image-picker/GalleryTab.tsx",
+    "components/image-picker/LinkTab.tsx",
+    "components/image-picker/UnsplashTab.tsx",
+    "components/image-picker/UploadTab.tsx",
+    "index.ts",
+    "lib/galleryPresets.ts",
+    "lib/imageStyle.ts",
+    "lib/parseImage.ts",
+    "lib/tools.ts",
+    "lib/unsplashCurated.ts",
+    "lib/unsplashSearch.ts",
+    "slice.json",
+    "types.ts"
+  ],
+  "imports": {
+    "shared": [
+      "@/shared/ui/FilePicker"
+    ],
+    "external": [
+      "@/components/ui/button",
+      "@/components/ui/dialog",
+      "@/components/ui/input",
+      "@/lib/utils",
+      "lucide-react",
+      "react"
+    ]
+  }
+}

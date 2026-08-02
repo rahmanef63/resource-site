@@ -1,0 +1,96 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "cal-com-booking",
+  "version": "0.2.0",
+  "category": "data",
+  "title": "Cal.com Booking",
+  "description": "Embedded Cal.com booking widget + webhook receiver to mirror bookings into Convex.",
+  "namespace": "@/features/cal-com-booking",
+  "convex": {
+    "tablesExport": "bookingsTables",
+    "schemaPath": "convex/features/bookings/_schema.ts",
+    "rootPaths": [
+      "convex/features/bookings"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/cal-com-booking",
+    "configExport": "calComBookingConfig"
+  },
+  "deps": {
+    "npm": [
+      "@calcom/embed-react@^1.5.0"
+    ],
+    "shadcn": [
+      "card"
+    ],
+    "env": [
+      {
+        "name": "NEXT_PUBLIC_CALCOM_USERNAME",
+        "scope": "next-public",
+        "required": true
+      },
+      {
+        "name": "CALCOM_WEBHOOK_SECRET",
+        "scope": "convex",
+        "required": true
+      }
+    ],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": [
+    "bp:public-fn-validator"
+  ],
+  "license": "MIT",
+  "tags": [
+    "data",
+    "scheduling",
+    "cal-com",
+    "bookings"
+  ],
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "convex",
+      "rbac": [
+        "bookings.view",
+        "bookings.cancel",
+        "bookings.reschedule"
+      ],
+      "env": [
+        "NEXT_PUBLIC_CALCOM_USERNAME",
+        "CALCOM_WEBHOOK_SECRET"
+      ],
+      "convex": {
+        "prefix": "cal_com_booking_",
+        "tables": [
+          "cal_com_booking_bookings"
+        ]
+      },
+      "deps": [
+        "convex-auth"
+      ]
+    },
+    "provides": {
+      "tools": [
+        "cal-com-booking.list",
+        "cal-com-booking.cancel",
+        "cal-com-booking.reschedule"
+      ],
+      "tables": [
+        "cal_com_booking_bookings"
+      ],
+      "events": [
+        "booking.created",
+        "booking.rescheduled",
+        "booking.cancelled"
+      ]
+    },
+    "generalization": {
+      "level": "portable"
+    }
+  }
+}

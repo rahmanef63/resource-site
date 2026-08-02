@@ -1,0 +1,42 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "booking",
+  "version": "1.0.0",
+  "category": "os",
+  "kind": "ui",
+  "title": "Booking — session request form + owner inbox",
+  "description": "One app that is BOTH a public 'book a session' request form AND the owner's triage inbox — it flips to show the inbox when the viewer can manage. Visitors submit name/email/topic (+ optional preferred time / note); the owner sees pending requests with Confirm / Decline. The backend is INJECTED via a small BookingAdapter (submit/list/setStatus/canManage): point configureBooking at your store (Convex, a REST endpoint, an inbox service) or keep the bundled in-memory mock so it renders fully interactive — form + inbox — with zero backend.",
+  "namespace": "@/features/booking",
+  "frontend": {
+    "slicePath": "frontend/slices/booking",
+    "configExport": "bookingConfig"
+  },
+  "deps": {
+    "npm": ["lucide-react"],
+    "shadcn": ["button", "input", "textarea", "scroll-area"],
+    "env": [],
+    "peers": []
+  },
+  "registers": ["registry"],
+  "audit": ["bp:ui-consistency"],
+  "license": "MIT",
+  "tags": ["booking", "contact", "form", "inbox", "lead", "scheduling", "ui"],
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "none",
+      "deps": [
+        { "npm": "react", "range": "^19" },
+        { "npm": "lucide-react", "range": "^0.400.0" }
+      ]
+    },
+    "provides": {
+      "tools": [],
+      "routes": [],
+      "components": ["Booking"],
+      "hooks": [],
+      "utils": ["configureBooking", "bookingApp"],
+      "tables": []
+    }
+  }
+}

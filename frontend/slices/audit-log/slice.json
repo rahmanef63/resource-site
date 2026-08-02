@@ -1,0 +1,92 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "audit-log",
+  "version": "0.3.0",
+  "category": "infra",
+  "title": "Audit Log \u2014 Workspace Events",
+  "description": "Workspace-scoped audit event recorder. Canonical logAuditEvent helper for mutations + actions; supports entity tracking, before/after diff, IP/user-agent capture.",
+  "namespace": "@/features/audit-log",
+  "kind": "backend",
+  "convex": {
+    "tablesExport": "auditLogTables",
+    "schemaPath": "convex/features/audit-log/_schema.ts",
+    "rootPaths": [
+      "convex/features/audit-log"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/audit-log",
+    "configExport": "auditLogConfig"
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [],
+    "env": [],
+    "peers": [
+      {
+        "slug": "convex-auth",
+        "range": "^0.1",
+        "reason": "Event actor resolved via authenticated user."
+      }
+    ]
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": [
+    "bp:public-fn-validator"
+  ],
+  "license": "MIT",
+  "tags": [
+    "infra",
+    "audit",
+    "compliance",
+    "logging"
+  ],
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "convex",
+      "rbac": [
+        "audit.read",
+        "audit.write"
+      ],
+      "convex": {
+        "prefix": "audit_",
+        "tables": [
+          "audit_events"
+        ]
+      },
+      "deps": [
+        "convex-auth"
+      ]
+    },
+    "provides": {
+      "tools": [
+        "audit-log.query",
+        "audit-log.export"
+      ],
+      "tables": [
+        "audit_events"
+      ],
+      "hooks": [
+        "createAuditLogger"
+      ],
+      "components": []
+    },
+    "migrationFrom": {
+      "0.1.0": "audit-log-v0.1.0-to-v0.2.0-tenant-adapter"
+    },
+    "generalization": {
+      "level": "needs-adapter",
+      "forbiddenTerms": [
+        "workspaceId",
+        "auditLogs"
+      ],
+      "requiredProps": [
+        "tenantAdapter",
+        "bindings"
+      ]
+    }
+  }
+}

@@ -1,0 +1,61 @@
+/* Drop into app/globals.css. Each preset overrides OKLch tokens. */
+
+:root, [data-theme="zinc"] {
+  --background: oklch(0.98 0 0);
+  --foreground: oklch(0.15 0 0);
+  --primary: oklch(0.18 0 0);
+  --primary-foreground: oklch(0.98 0 0);
+  --border: oklch(0.92 0 0);
+  --muted: oklch(0.96 0 0);
+  --muted-foreground: oklch(0.45 0 0);
+}
+
+[data-theme="rose"] {
+  --background: oklch(0.99 0.01 350);
+  --foreground: oklch(0.18 0.05 350);
+  --primary: oklch(0.55 0.20 0);
+  --primary-foreground: oklch(0.99 0 0);
+  --border: oklch(0.92 0.02 350);
+  --muted: oklch(0.96 0.01 350);
+  --muted-foreground: oklch(0.45 0.05 350);
+}
+
+[data-theme="emerald"] {
+  --background: oklch(0.99 0.01 160);
+  --foreground: oklch(0.18 0.05 160);
+  --primary: oklch(0.55 0.18 160);
+  --primary-foreground: oklch(0.99 0 0);
+  --border: oklch(0.92 0.02 160);
+  --muted: oklch(0.96 0.01 160);
+  --muted-foreground: oklch(0.45 0.05 160);
+}
+
+[data-theme="amber"] {
+  --background: oklch(0.99 0.01 80);
+  --foreground: oklch(0.18 0.05 80);
+  --primary: oklch(0.65 0.18 80);
+  --primary-foreground: oklch(0.18 0 0);
+  --border: oklch(0.92 0.02 80);
+  --muted: oklch(0.96 0.01 80);
+  --muted-foreground: oklch(0.45 0.05 80);
+}
+
+[data-theme="violet"] {
+  --background: oklch(0.99 0.01 290);
+  --foreground: oklch(0.18 0.05 290);
+  --primary: oklch(0.55 0.20 290);
+  --primary-foreground: oklch(0.99 0 0);
+  --border: oklch(0.92 0.02 290);
+  --muted: oklch(0.96 0.01 290);
+  --muted-foreground: oklch(0.45 0.05 290);
+}
+
+[data-theme="slate"] {
+  --background: oklch(0.99 0.01 240);
+  --foreground: oklch(0.20 0.04 240);
+  --primary: oklch(0.30 0.05 240);
+  --primary-foreground: oklch(0.99 0 0);
+  --border: oklch(0.92 0.02 240);
+  --muted: oklch(0.96 0.01 240);
+  --muted-foreground: oklch(0.45 0.04 240);
+}

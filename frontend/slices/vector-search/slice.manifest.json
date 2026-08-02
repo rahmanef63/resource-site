@@ -1,0 +1,75 @@
+{
+  "$schema": "../../../docs/slice.manifest.schema.json",
+  "name": "vector-search",
+  "version": "0.2.0",
+  "description": "Embeddings-based search using Convex vector indexes. Inserts compute OpenAI text-embedding-3-small (1536d), queries do cosine similarity via Convex vectorIndex.",
+  "category": "data",
+  "stability": "beta",
+  "deps": {
+    "shared": [],
+    "slices": [],
+    "convexFeatures": [
+      "search"
+    ],
+    "npm": {
+      "@convex-dev/vector-search": "^0.0.5"
+    },
+    "env": [
+      {
+        "name": "OPENAI_API_KEY",
+        "required": true,
+        "scope": "server",
+        "description": "OpenAI key used by Convex action to compute text-embedding-3-small vectors."
+      }
+    ]
+  },
+  "files": {
+    "include": [
+      "**/*"
+    ],
+    "exclude": [
+      "*.test.ts",
+      "*.test.tsx",
+      "*.spec.ts"
+    ]
+  },
+  "convexFiles": {
+    "include": [
+      "**/*.ts"
+    ],
+    "exclude": [
+      "*.test.ts"
+    ]
+  },
+  "permissions": [
+    "search.query",
+    "search.index",
+    "search.reindex"
+  ],
+  "schemaTables": [
+    {
+      "name": "vector_search_documents",
+      "namespaced": true,
+      "indexes": [
+        "by_workspace",
+        "by_workspace_source",
+        "by_workspace_indexedAt"
+      ]
+    }
+  ],
+  "compatibility": {
+    "next": ">=15 <17",
+    "react": "^19",
+    "convex": "^1.36",
+    "tailwind": "4",
+    "auth": "any"
+  },
+  "tags": [
+    "search",
+    "vector",
+    "embeddings",
+    "convex",
+    "openai"
+  ],
+  "notes": "Existing schema uses non-namespaced `searchDocuments`. On consumer adoption rename to `vector_search_documents` per 2026-05-12 decision. Vector index uses 1536 dims (text-embedding-3-small). Switching embedding model requires reindex + dim change."
+}

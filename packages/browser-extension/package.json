@@ -1,0 +1,17 @@
+{
+  "name": "rahman-browser-extension",
+  "version": "0.1.0",
+  "description": "MV3 extension: DOM/form scanner + selector actions for the os-vps remote browser.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Rahman Fakhrul Aziz",
+  "files": ["src", "manifest.json", "README.md"],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "esbuild src/content-script.ts --bundle --format=iife --outfile=dist/content-script.js && esbuild src/background.ts --bundle --format=esm --outfile=dist/background.js && cp manifest.json dist/"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "typescript": "^5.7.0"
+  }
+}

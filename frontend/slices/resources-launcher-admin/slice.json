@@ -1,0 +1,47 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "resources-launcher-admin",
+  "version": "1.0.0",
+  "category": "os",
+  "kind": "ui",
+  "title": "Resources Admin — curated icon-launcher CRUD",
+  "description": "An owner-gated admin app for a curated icon-launcher: add / edit / remove / reorder links (label, lucide icon NAME, url, group, order) that open in a new tab. The backend is INJECTED via a small ResourcesAdapter (list / upsert / remove / canManage): point configureResources at your store (Convex, REST, …) or keep the bundled in-memory mock so the whole CRUD — including reorder — is interactive with zero backend. Icons are stored as lucide NAME strings and resolved to components client-side, so the same data drives a public launcher surface.",
+  "namespace": "@/features/resources-launcher-admin",
+  "frontend": {
+    "slicePath": "frontend/slices/resources-launcher-admin",
+    "configExport": "resourcesLauncherAdminConfig"
+  },
+  "deps": {
+    "npm": ["lucide-react"],
+    "shadcn": ["button", "input", "label", "scroll-area", "native-select"],
+    "env": [],
+    "peers": []
+  },
+  "registers": ["registry"],
+  "audit": ["bp:ui-consistency"],
+  "license": "MIT",
+  "tags": ["launcher", "links", "bookmarks", "admin", "crud", "icons", "ui"],
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "none",
+      "deps": [
+        { "npm": "react", "range": "^19" },
+        { "npm": "lucide-react", "range": "^0.400.0" }
+      ]
+    },
+    "provides": {
+      "tools": [],
+      "routes": [],
+      "components": ["ResourcesAdmin"],
+      "hooks": [],
+      "utils": ["configureResources", "resourcesAdminApp", "resolveIcon"],
+      "tables": []
+    },
+    "generalization": {
+      "level": "portable",
+      "forbiddenTerms": ["rahmanef"],
+      "requiredProps": []
+    }
+  }
+}

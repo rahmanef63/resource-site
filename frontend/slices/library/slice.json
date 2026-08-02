@@ -1,0 +1,122 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "library",
+  "version": "0.2.0",
+  "category": "data",
+  "kind": "full",
+  "title": "Library \u2014 resource hub (prompts \u00b7 visuals \u00b7 snippets \u00b7 links)",
+  "description": "Grab-bag resource hub. One polymorphic `libraryItems` table holds six kinds \u2014 prompt, image, video, link, download, snippet \u2014 with per-kind payload fields switched on `kind` (no joins). Attribution-first: every item carries optional source/license/tools so re-shares stay correct. Collections group items. Convex-backed (schema + queries + unauthenticated mutations); SEO override fields reused from the `seo` peer slice so the surface matches blog/projects rows. Public view = filterable card grid + per-item detail with copy-to-clipboard for prompts/snippets and an opt-in upvote control. Lifted 2026-05-28 from rahmanef.com; 432-LOC mutations + 330-LOC detail split for the 200-LOC cap; Indonesian copy + custom primitives stripped (prop-driven English defaults); cross-slice auth + comments-votes coupling dropped (consumer wraps mutations + supplies the upvote handler).",
+  "namespace": "@/features/library",
+  "frontend": {
+    "slicePath": "frontend/slices/library",
+    "configExport": "libraryFeature"
+  },
+  "convex": {
+    "tablesExport": "libraryTables",
+    "schemaPath": "convex/features/library/_schema.ts",
+    "rootPaths": [
+      "convex/features/library"
+    ]
+  },
+  "deps": {
+    "npm": [
+      "convex@^1.17",
+      "next@^15",
+      "react@^18"
+    ],
+    "shadcn": [],
+    "env": [],
+    "peers": [
+      {
+        "slug": "seo",
+        "range": "^0.2",
+        "reason": "Library item SEO override fields reuse the seo slice's metadata shape so the surface matches blog/projects rows."
+      }
+    ]
+  },
+  "registers": [],
+  "audit": [
+    "bp:public-fn-validator"
+  ],
+  "license": "MIT",
+  "tags": [
+    "library",
+    "resources",
+    "prompts",
+    "snippets",
+    "moodboard",
+    "downloads",
+    "attribution",
+    "seo",
+    "personal-brand"
+  ],
+  "previews": [
+    {
+      "component": "LibraryIndex",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "all-kinds",
+          "title": "Mixed catalog",
+          "description": "Cards across prompt / snippet / image kinds with tool filters"
+        },
+        {
+          "id": "prompts-only",
+          "title": "Single kind",
+          "description": "Only prompt entries \u2014 narrower grid, focused filter row"
+        },
+        {
+          "id": "empty",
+          "title": "Empty state",
+          "description": "No items \u2014 empty-text fallback renders"
+        }
+      ],
+      "seed": "5 static LibraryRow cards (display-only); scenario selects which subset feeds the grid"
+    }
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "convex",
+          "range": "^1.17"
+        },
+        {
+          "npm": "next",
+          "range": "^15"
+        },
+        {
+          "npm": "react",
+          "range": "^18"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "library.search",
+        "library.get",
+        "library.upvote"
+      ],
+      "components": [
+        "LibraryIndex",
+        "LibraryDetail",
+        "PayloadRender",
+        "CopyButton",
+        "UpvotePanel"
+      ],
+      "utils": [
+        "DEFAULT_COPY",
+        "DEFAULT_KIND_LABELS",
+        "ALL_KINDS"
+      ],
+      "hooks": [],
+      "convex": {
+        "tables": [
+          "libraryItems",
+          "libraryCollections"
+        ],
+        "rbac": []
+      }
+    }
+  }
+}

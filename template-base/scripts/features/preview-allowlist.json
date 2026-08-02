@@ -1,0 +1,25 @@
+{
+  "$schema": "Preview validator allowlist — slices excused from the import-real-components rule with documented reason. Reviewed each Phase boundary; entries should shrink, not grow.",
+  "allowlist": {
+    "cms-lite": {
+      "reason": "Admin pages (AdminDashboard/Products/Posts/etc.) are bound to Convex query hooks and cms-lite-specific React Contexts (LanguageContext, ThemeContext, CartContext, CurrencyContext). Preview cannot mount real components without the full provider tree. Defer presentational sub-component extraction to Phase B Step 26+ (cms-lite slice completion).",
+      "addedAt": "2026-04-28",
+      "reviewBy": "Phase B (Step 26-65)"
+    },
+    "guest-booking": {
+      "reason": "Tier-4 scaffold — no slice components or views exist yet. UI implementation pending Phase B Step 26+.",
+      "addedAt": "2026-04-28",
+      "reviewBy": "Phase B"
+    },
+    "owner-analytics": {
+      "reason": "Tier-4 scaffold — no slice components or views exist yet. UI implementation pending Phase B Step 26+.",
+      "addedAt": "2026-04-28",
+      "reviewBy": "Phase B"
+    },
+    "staff-operations": {
+      "reason": "Tier-4 scaffold — no slice components or views exist yet. UI implementation pending Phase B Step 26+.",
+      "addedAt": "2026-04-28",
+      "reviewBy": "Phase B"
+    }
+  }
+}

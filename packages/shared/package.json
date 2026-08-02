@@ -1,0 +1,41 @@
+{
+  "name": "rahman-shared",
+  "version": "0.3.1",
+  "description": "Shared UI utils, hooks, helpers, and a portable Notion-style formula engine for the Rahman Resources registry. Pure utilities (cn, formatDate, sanitizeHtml, useDebounce) + ./formulaEngine subpath (host-adapted, ~50 fns, lambdas, member access). UI components are distributed via the rahman-resources CLI scaffolder.",
+  "license": "MIT",
+  "author": "Rahman Fakhrul Aziz",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rahmanef63/resource-site.git",
+    "directory": "packages/shared"
+  },
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./hooks/*": "./src/hooks/*.ts",
+    "./lib/*": "./src/lib/*.ts",
+    "./formulaEngine": "./src/formulaEngine/index.ts"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "clsx": "^2.1.0",
+    "tailwind-merge": "^2.5.0",
+    "date-fns": "^4.1.0",
+    "sanitize-html": "^2.13.0"
+  },
+  "peerDependencies": {
+    "react": "^19",
+    "react-dom": "^19"
+  },
+  "scripts": {
+    "publish:dry": "npm publish --dry-run"
+  }
+}

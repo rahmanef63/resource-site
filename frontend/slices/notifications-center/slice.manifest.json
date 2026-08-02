@@ -1,0 +1,40 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "notifications-center",
+  "version": "0.2.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add notifications-center",
+    "consumerPath": "slices/notifications-center"
+  },
+  "files": [
+    "README.md",
+    "components/NotificationBell.tsx",
+    "components/NotificationItem.tsx",
+    "components/NotificationList.tsx",
+    "config.ts",
+    "hooks/useNotifications.ts",
+    "index.ts",
+    "lib/adapter.ts",
+    "lib/relativeTime.ts",
+    "lib/tools.ts",
+    "lib/types.ts"
+  ],
+  "imports": {
+    "shared": [],
+    "external": [
+      "lucide-react",
+      "react",
+      "@/components/ui/avatar",
+      "@/components/ui/badge",
+      "@/components/ui/button",
+      "@/components/ui/popover",
+      "@/components/ui/scroll-area",
+      "@/components/ui/separator",
+      "@/components/ui/sheet",
+      "@/components/ui/tabs",
+      "@/lib/utils"
+    ]
+  }
+}

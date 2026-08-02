@@ -1,0 +1,41 @@
+/* Per-shell keyboard-focus rings — split out of appshell.css (200-LOC gate),
+ * same @import pattern as appshell-materials.css/appshell-wallpapers.css.
+ *
+ * Critic item: "Keyboard-focus rings are one neutral shadcn ring in every
+ * shell" — every control (shadcn's `focus-visible:ring-1 ring-ring` plus the
+ * many hand-rolled <button>s in the shells that carry no focus utility at
+ * all) shares one flat grey --ring. These rules override that per shell,
+ * scoped by [data-shell] so unrelated chrome (marketing pages, the
+ * dashboard/mobile fallback shells) keeps the neutral --ring untouched.
+ *
+ * This file (like appshell.css itself) has no top-level @layer, so it wins
+ * the cascade over Tailwind's layered `focus-visible:ring-*` utilities
+ * regardless of selector order/specificity — same unlayered trick appshell.css
+ * already documents for `.os-menu` beating shadcn's DropdownMenuContent.
+ */
+[data-shell="macos"] :focus-visible,
+[data-shell="windows"] :focus-visible,
+[data-shell="ios"] :focus-visible,
+[data-shell="android"] :focus-visible {
+  outline: none;
+}
+
+/* macOS: a soft systemBlue halo (glow, not a hard ring). */
+[data-shell="macos"] :focus-visible {
+  box-shadow: 0 0 0 3.5px color-mix(in oklab, var(--os-accent) 55%, transparent);
+}
+
+/* Windows: Fluent's high-visibility DUAL outline — a 1px background gap
+ * riding the control edge, then a 2px foreground outline just outside it. */
+[data-shell="windows"] :focus-visible {
+  box-shadow:
+    0 0 0 1px var(--background),
+    0 0 0 3px var(--foreground);
+}
+
+/* iOS/Android: touch shells only need a ring for hardware-keyboard tabbing —
+ * thin and accent-colored, no halo/dual-outline desktop treatment. */
+[data-shell="ios"] :focus-visible,
+[data-shell="android"] :focus-visible {
+  box-shadow: 0 0 0 2px var(--os-accent);
+}

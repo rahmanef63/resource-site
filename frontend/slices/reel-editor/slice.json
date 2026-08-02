@@ -1,0 +1,96 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "reel-editor",
+  "version": "1.2.1",
+  "category": "os",
+  "kind": "ui",
+  "title": "Reel \u2014 video timeline editor",
+  "description": "In-browser video editor: real media clips (image/video/audio) on a layered multi-track timeline (top row renders frontmost), unified Canvas-2D draw path shared by the live preview and the realtime WebM exporter (with real mixed audio), per-clip trim/speed/reverse, volume/fades/auto-duck, dissolve/wipe/slide transitions, keyframes with easing + animation presets, text styling, color grading, filmstrip thumbnails + waveforms, config-driven resizable workspace layouts, a container-first compact mode (narrow pane \u2192 preview over tabbed timeline/edit/AI/files), a project-files quick-import pane with an injectable fs adapter, draft auto-save, and an editor settings dialog. Self-contained: toasts via sonner, shell hooks are no-ops until wired.",
+  "namespace": "@/features/reel-editor",
+  "frontend": {
+    "slicePath": "frontend/slices/reel-editor",
+    "configExport": "reelEditorConfig"
+  },
+  "deps": {
+    "npm": [
+      "lucide-react",
+      "react-resizable-panels",
+      "sonner"
+    ],
+    "shadcn": [
+      "button",
+      "input",
+      "tooltip",
+      "dialog",
+      "dropdown-menu",
+      "resizable",
+      "tabs",
+      "sonner"
+    ],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": [
+    "bp:ui-consistency"
+  ],
+  "license": "MIT",
+  "tags": [
+    "video",
+    "timeline",
+    "editor",
+    "nle",
+    "ui"
+  ],
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "none",
+      "deps": [
+        {
+          "npm": "react",
+          "range": "^19"
+        },
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        },
+        {
+          "npm": "react-resizable-panels",
+          "range": "^4"
+        },
+        {
+          "npm": "sonner",
+          "range": "^1"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "reel-editor.project.inspect",
+        "reel-editor.ratio.set",
+        "reel-editor.title.add",
+        "reel-editor.clip.split",
+        "reel-editor.clip.remove",
+        "reel-editor.clip.duplicate",
+        "reel-editor.clip.speed",
+        "reel-editor.clip.crossfade",
+        "reel-editor.clip.move_track",
+        "reel-editor.history.undo",
+        "reel-editor.history.redo"
+      ],
+      "routes": [],
+      "components": [
+        "ReelEditor"
+      ],
+      "hooks": [],
+      "utils": [
+        "configureReelFs",
+        "reelEditorApp"
+      ],
+      "tables": []
+    }
+  }
+}

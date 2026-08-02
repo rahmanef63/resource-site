@@ -1,0 +1,94 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "media-viewer",
+  "version": "1.2.1",
+  "category": "os",
+  "kind": "ui",
+  "title": "Preview \u2014 media quick-look",
+  "description": "Quick-look media viewer. Zoomable images with dimensions + checkerboard transparency, an audio player with CSS-bar waveform/transport, a video player with play/pause + scrubber + volume, and PDF/text surfaces. Type-indicator chip, Download, and Open-in-editor handoff via an injectable opener (image \u2192 image editor, video/audio \u2192 video editor). Remote files render through an injectable media source (identity by default \u2014 public URLs just work); the bundled sample gallery is fully offline. Container-query responsive: the toolbar wraps with bigger touch targets and the stage tightens its padding in compact panes.",
+  "namespace": "@/features/media-viewer",
+  "frontend": {
+    "slicePath": "frontend/slices/media-viewer",
+    "configExport": "mediaViewerConfig"
+  },
+  "deps": {
+    "npm": [
+      "lucide-react"
+    ],
+    "shadcn": [
+      "button",
+      "badge",
+      "separator",
+      "tooltip",
+      "slider"
+    ],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": [
+    "bp:ui-consistency"
+  ],
+  "license": "MIT",
+  "tags": [
+    "media",
+    "preview",
+    "viewer",
+    "ui"
+  ],
+  "previews": [
+    {
+      "component": "MediaViewer",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "sample-gallery",
+          "title": "Sample gallery",
+          "description": "Offline carousel: images, simulated video/audio transport, pdf, text"
+        },
+        {
+          "id": "remote-image",
+          "title": "Remote payload",
+          "description": "payload={path,name,kind} through the identity media source (data-URI, offline)"
+        }
+      ],
+      "seed": "fully offline \u2014 bundled SVG samples + data-URI remote payload"
+    }
+  ],
+  "contract": {
+    "requires": {
+      "auth": "none",
+      "deps": [
+        {
+          "npm": "react",
+          "range": "^19"
+        },
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "media-viewer.info",
+        "media-viewer.next",
+        "media-viewer.prev",
+        "media-viewer.zoom.set"
+      ],
+      "routes": [],
+      "components": [
+        "MediaViewer"
+      ],
+      "hooks": [],
+      "utils": [
+        "configureMediaOpener",
+        "configureMediaSource",
+        "mediaViewerApp"
+      ],
+      "tables": []
+    }
+  }
+}

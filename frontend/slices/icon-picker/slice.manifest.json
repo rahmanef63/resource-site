@@ -1,0 +1,60 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "icon-picker",
+  "version": "0.5.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add icon-picker",
+    "consumerPath": "slices/icon-picker"
+  },
+  "files": [
+    "README.md",
+    "components/DynamicIcon.tsx",
+    "components/IconPicker.tsx",
+    "components/IconPickerInline.tsx",
+    "components/PickerSkeleton.tsx",
+    "components/picker-parts/ColorRow.tsx",
+    "components/picker-parts/EmojiTab.tsx",
+    "components/picker-parts/IconTab.tsx",
+    "components/picker-parts/Sections.tsx",
+    "components/picker-parts/Toolbar.tsx",
+    "components/picker-parts/cells.tsx",
+    "config.ts",
+    "index.ts",
+    "lib/colors.ts",
+    "lib/defaults.ts",
+    "lib/emoji-catalog.ts",
+    "lib/emoji-keywords.ts",
+    "lib/lucide-catalog.ts",
+    "lib/lucide-icons.ts",
+    "lib/parse.ts",
+    "lib/phosphor-catalog.ts",
+    "lib/phosphor-icons-a.ts",
+    "lib/phosphor-icons-b.ts",
+    "lib/phosphor-icons.ts",
+    "lib/picker-handlers.ts",
+    "lib/recents.ts",
+    "lib/search-haystacks.ts",
+    "lib/style-pref.ts",
+    "lib/tools.ts",
+    "lib/twemoji.ts"
+  ],
+  "imports": {
+    "shared": [
+      "@/components/ui/dialog",
+      "@/components/ui/input",
+      "@/components/ui/popover",
+      "@/components/ui/scroll-area",
+      "@/components/ui/tabs",
+      "@/lib/utils"
+    ],
+    "external": [
+      "@phosphor-icons/react",
+      "@radix-ui/react-slot",
+      "lucide-react",
+      "react",
+      "vitest"
+    ]
+  }
+}

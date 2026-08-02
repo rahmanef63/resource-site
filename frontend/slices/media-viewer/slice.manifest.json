@@ -1,0 +1,45 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "media-viewer",
+  "version": "1.2.1",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add media-viewer",
+    "consumerPath": "slices/media-viewer"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "README.md",
+    "app.tsx",
+    "components/app-frame.tsx",
+    "components/audio-player.tsx",
+    "components/image-view.tsx",
+    "components/media-stage.tsx",
+    "components/remote-view.tsx",
+    "components/slider.tsx",
+    "components/transport.tsx",
+    "components/video-player.tsx",
+    "components/viewer-toolbar.tsx",
+    "config.ts",
+    "index.ts",
+    "lib/host.ts",
+    "lib/media.ts",
+    "lib/samples.ts",
+    "lib/tools.ts",
+    "lib/use-playback.ts",
+    "slice.json"
+  ],
+  "imports": {
+    "shared": [],
+    "external": [
+      "@/components/ui/badge",
+      "@/components/ui/button",
+      "@/components/ui/separator",
+      "@/components/ui/tooltip",
+      "@/lib/utils",
+      "lucide-react",
+      "react"
+    ]
+  }
+}

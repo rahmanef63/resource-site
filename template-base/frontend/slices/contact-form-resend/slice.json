@@ -1,0 +1,29 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "contact-form-resend",
+  "version": "0.1.0",
+  "category": "integrations",
+  "kind": "full",
+  "title": "Contact Form + Resend",
+  "description": "Contact form posting to Resend email API. Server Action + Zod input validation. Convex mutation for storage + Resend send.",
+  "namespace": "@/features/contact-form-resend",
+  "convex": { "tablesExport": "", "schemaPath": "", "rootPaths": [] },
+  "frontend": {
+    "slicePath": "template-base/frontend/slices/contact-form-resend",
+    "configExport": ""
+  },
+  "deps": {
+    "npm": ["resend@^4.0.0", "framer-motion@^11.0.0"],
+    "shadcn": ["card", "button", "input", "label", "textarea"],
+    "env": [
+      { "name": "RESEND_API_KEY", "scope": "convex", "required": true, "description": "Resend API key for email delivery." }
+    ],
+    "peers": [
+      { "slug": "convex-auth", "range": "^0.1", "reason": "Optional — anonymous submission works without auth." }
+    ]
+  },
+  "registers": [],
+  "license": "MIT",
+  "tags": ["form", "email", "resend", "convex"],
+  "providers": []
+}

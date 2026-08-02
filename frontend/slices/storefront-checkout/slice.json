@@ -1,0 +1,78 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "storefront-checkout",
+  "version": "0.2.0",
+  "category": "content",
+  "kind": "ui",
+  "title": "Storefront Checkout \u2014 guest cart + checkout composition",
+  "description": "Guest-friendly shopping cart for catalog storefronts: CartProvider context with localStorage persistence (survives reload, no login needed), CartWidget header button with count badge + slide-over sheet (qty steppers, subtotal, checkout CTA), and CheckoutSummary order panel. Props-driven R3 \u2014 zero Convex imports; the host resolves numeric prices from its own catalog before add() and MUST re-price server-side at checkout (client subtotal is display-only). Pairs with payment or payment for the actual payment step; see HOST-SETUP.md for the full catalog \u2192 cart \u2192 place-order \u2192 instructions flow proven on wirausaha-os.",
+  "namespace": "@/features/storefront-checkout",
+  "registers": [],
+  "audit": [],
+  "frontend": {
+    "slicePath": "frontend/slices/storefront-checkout",
+    "configExport": ""
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [
+      "badge",
+      "button",
+      "card",
+      "separator",
+      "sheet"
+    ],
+    "env": [],
+    "peers": [
+      {
+        "slug": "payment",
+        "range": "^0.4",
+        "optional": true,
+        "reason": "Payment step \u2014 checkout page composes DokuDirectForm + DokuPaymentInstructions (or swap payment)."
+      }
+    ]
+  },
+  "previews": [
+    {
+      "component": "CartWidget",
+      "kind": "variants",
+      "axes": [
+        {
+          "prop": "seeded",
+          "values": [
+            "empty",
+            "filled"
+          ],
+          "default": "filled",
+          "description": "Cart contents \u2014 empty state vs two seeded demo items."
+        }
+      ],
+      "seed": "Wrapped in CartProvider (isolated storageKey). Click the cart trigger to open the sheet \u2014 qty steppers, remove, subtotal, checkout CTA."
+    }
+  ],
+  "contract": {
+    "provides": {
+      "tools": [
+        "storefront-checkout.cart",
+        "storefront-checkout.add",
+        "storefront-checkout.set_qty",
+        "storefront-checkout.remove",
+        "storefront-checkout.clear"
+      ],
+      "components": [
+        "CartProvider",
+        "CartWidget",
+        "CheckoutSummary"
+      ],
+      "utils": [
+        "formatIDR"
+      ],
+      "hooks": [
+        "useCart"
+      ],
+      "types": [
+        "CartItem"
+      ]
+    }
+  }
+}

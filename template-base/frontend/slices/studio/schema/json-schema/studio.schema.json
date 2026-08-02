@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://superspace.dev/schemas/studio/studio.schema.json",
+  "title": "StudioUnifiedDocument",
+  "description": "SuperSpace Studio Unified document schema v1.0",
+  "type": "object",
+  "required": ["studioVersion", "kind", "metadata"],
+  "additionalProperties": true,
+  "properties": {
+    "$schema": { "type": "string", "format": "uri" },
+    "studioVersion": {
+      "type": "string",
+      "const": "1.0",
+      "description": "Studio document format version. Always '1.0'."
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["ui-layout", "workflow", "unified"],
+      "description": "Document kind discriminator."
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["id", "name", "createdAt", "updatedAt"],
+      "additionalProperties": true,
+      "properties": {
+        "id":          { "type": "string" },
+        "name":        { "type": "string" },
+        "description": { "type": "string" },
+        "author":      { "type": "string" },
+        "tags":        { "type": "array", "items": { "type": "string" } },
+        "version":     { "type": "string" },
+        "createdAt":   { "type": "string" },
+        "updatedAt":   { "type": "string" },
+        "workspaceId": { "type": "string" },
+        "isTemplate":  { "type": "boolean" }
+      }
+    },
+    "ui": {
+      "description": "UI schema section. Present for kind=ui-layout or kind=unified.",
+      "$comment": "Validated separately by the UI schema validator."
+    },
+    "flow": {
+      "description": "Flow section. Present for kind=workflow or kind=unified.",
+      "$comment": "Basic structure validated; full flow semantics are runtime-only."
+    }
+  },
+
+  "if": { "properties": { "kind": { "const": "ui-layout" } } },
+  "then": { "required": ["ui"] },
+
+  "note:runtime-only-rules": [
+    "ui section is validated against ui.schema.json when present",
+    "flow section shape is validated permissively"
+  ]
+}

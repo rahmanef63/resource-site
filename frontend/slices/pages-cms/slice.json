@@ -1,0 +1,90 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "pages-cms",
+  "version": "0.1.0",
+  "category": "content",
+  "kind": "ui",
+  "title": "Pages CMS — block-composed multi-page editor",
+  "description": "A small multi-page CMS: list, create, edit, duplicate, and publish pages composed from 11 block kinds (hero, text, feature-list, cta, logo-cloud, testimonial, video, image-gallery, faq, stats, pricing-table). Admin views (PagesView list + CRUD, PageEditorView block editor) plus a read-only public BlockRenderer. Ships a localStorage adapter (LocalPagesProvider) + a generic Home/About/Pricing seed so it runs env-free — or wire the bundled reducer/store-context to your own backend. Pure UI; no Convex required.",
+  "namespace": "@/features/pages-cms",
+  "frontend": {
+    "slicePath": "frontend/slices/pages-cms",
+    "configExport": "pagesCmsFeature"
+  },
+  "convex": {
+    "tablesExport": "",
+    "schemaPath": "",
+    "rootPaths": []
+  },
+  "deps": {
+    "npm": [
+      "lucide-react@^0.400.0"
+    ],
+    "shadcn": [
+      "badge",
+      "button",
+      "table",
+      "input",
+      "textarea",
+      "label",
+      "select",
+      "switch",
+      "card",
+      "dialog"
+    ],
+    "env": [],
+    "peers": []
+  },
+  "registers": [],
+  "audit": [],
+  "license": "MIT",
+  "tags": [
+    "content",
+    "cms",
+    "pages",
+    "blocks",
+    "editor",
+    "builder",
+    "basics"
+  ],
+  "previews": [],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [],
+      "components": [
+        "PagesView",
+        "PageEditorView",
+        "PageEditorBlocks",
+        "BlockEditor",
+        "BlockRenderer",
+        "PageCreateDialog",
+        "PagesProvider",
+        "LocalPagesProvider"
+      ],
+      "utils": [
+        "pagesReducer",
+        "duplicatePage",
+        "blankPage",
+        "buildPageNavItems",
+        "defaultPages",
+        "emptyBlock"
+      ],
+      "hooks": [
+        "usePagesStore",
+        "usePage"
+      ],
+      "convex": {
+        "tables": [],
+        "rbac": []
+      }
+    }
+  }
+}

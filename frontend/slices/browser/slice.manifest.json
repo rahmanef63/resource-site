@@ -1,0 +1,51 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "browser",
+  "version": "1.2.1",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add browser",
+    "consumerPath": "slices/browser"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "README.md",
+    "app.tsx",
+    "components/ai-panel.tsx",
+    "components/bookmark-bar.tsx",
+    "components/browser-menu.tsx",
+    "components/favicon.tsx",
+    "components/history-view.tsx",
+    "components/mock-pane.tsx",
+    "components/omnibar.tsx",
+    "components/remote-view.tsx",
+    "components/tab-bar.tsx",
+    "config.ts",
+    "index.ts",
+    "lib/demo-browser.ts",
+    "lib/host.ts",
+    "lib/storage.ts",
+    "lib/tools.ts",
+    "lib/url.ts",
+    "lib/use-inspector.ts",
+    "lib/use-remote-browser.ts",
+    "lib/use-screencast.ts",
+    "slice.json"
+  ],
+  "imports": {
+    "shared": [
+      "@/components/ui/button",
+      "@/components/ui/dropdown-menu",
+      "@/components/ui/input",
+      "@/components/ui/scroll-area",
+      "@/components/ui/sheet",
+      "@/components/ui/tooltip",
+      "@/lib/utils"
+    ],
+    "external": [
+      "react",
+      "lucide-react"
+    ]
+  }
+}

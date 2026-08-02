@@ -1,0 +1,41 @@
+{
+  "$schema": "../../../docs/slice.manifest.schema.json",
+  "name": "broadcast-channel-sync",
+  "version": "0.2.0",
+  "description": "Cross-tab + cross-iframe state sync using the browser BroadcastChannel API with localStorage fallback for older engines. Frontend-only, zero backend dependency.",
+  "category": "misc",
+  "stability": "beta",
+  "deps": {
+    "shared": [],
+    "slices": [],
+    "convexFeatures": [],
+    "npm": {},
+    "env": []
+  },
+  "files": {
+    "include": [
+      "**/*"
+    ],
+    "exclude": [
+      "*.test.ts",
+      "*.test.tsx",
+      "*.spec.ts"
+    ]
+  },
+  "permissions": [],
+  "schemaTables": [],
+  "compatibility": {
+    "next": ">=15 <17",
+    "react": "^19",
+    "convex": "any",
+    "tailwind": "4",
+    "auth": "any"
+  },
+  "tags": [
+    "realtime",
+    "cross-tab",
+    "broadcast-channel",
+    "frontend-only"
+  ],
+  "notes": "Pure-browser slice \u2014 no Convex schema or env vars. Falls back to `storage` event when BroadcastChannel unavailable (Safari < 15.4). Wrap consumer-side in `useSyncExternalStore` for React 19 concurrent-safe reads."
+}

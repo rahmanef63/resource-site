@@ -1,0 +1,77 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "assistant",
+  "version": "1.1.1",
+  "category": "os",
+  "kind": "ui",
+  "title": "Assistant \u2014 agent workspace with streaming chat",
+  "description": "A full agent workspace: streaming chat with typing deltas and graceful error notes, plus a library where users CREATE and manage agents (persona, avatar gradient, system prompt), skills, and automations (trigger + schedule forms) \u2014 all persisted in localStorage, no backend. Preset agents/skills ship as starting points. The model is INJECTED: configureAssistantStream takes any (messages) => AsyncIterable<string> \u2014 your SSE endpoint, the AI SDK, an agent loop \u2014 and until wired a typing demo stream keeps the whole UI working offline. Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
+  "namespace": "@/features/assistant",
+  "frontend": {
+    "slicePath": "frontend/slices/assistant",
+    "configExport": "assistantConfig"
+  },
+  "deps": {
+    "npm": [
+      "lucide-react"
+    ],
+    "shadcn": [
+      "badge",
+      "button",
+      "dropdown-menu",
+      "input",
+      "scroll-area",
+      "switch",
+      "textarea"
+    ],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": [
+    "bp:ui-consistency"
+  ],
+  "license": "MIT",
+  "tags": [
+    "ai",
+    "assistant",
+    "chat",
+    "agents",
+    "streaming",
+    "automations",
+    "ui"
+  ],
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "none",
+      "deps": [
+        {
+          "npm": "react",
+          "range": "^19"
+        },
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
+      ]
+    },
+    "provides": {
+      "routes": [],
+      "components": [
+        "Assistant"
+      ],
+      "hooks": [],
+      "utils": [
+        "registerAssistantTools",
+        "getAssistantRegistry",
+        "configureAgentStream",
+        "configureAssistantStream",
+        "assistantApp"
+      ],
+      "tables": []
+    }
+  }
+}

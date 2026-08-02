@@ -1,0 +1,33 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "file-upload",
+  "version": "0.3.0",
+  "tier": 2,
+  "distribution": {
+    "method": "manual"
+  },
+  "files": [
+    "adapter/context.tsx",
+    "adapter/localStorageAdapter.ts",
+    "adapter/types.ts",
+    "components/FileChip.tsx",
+    "components/FileUploadButton.tsx",
+    "hooks/useFileUpload.ts",
+    "hooks/useFileUrl.ts",
+    "index.ts",
+    "lib/parse.ts",
+    "lib/tools.ts",
+    "types/index.ts"
+  ],
+  "imports": {
+    "shared": [
+      "@/shared/ui/FilePicker"
+    ],
+    "external": [
+      "@/components/ui/button",
+      "@/lib/utils",
+      "lucide-react",
+      "react"
+    ]
+  }
+}

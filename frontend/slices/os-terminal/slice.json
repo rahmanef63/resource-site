@@ -1,0 +1,75 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "os-terminal",
+  "version": "1.2.1",
+  "category": "os",
+  "kind": "ui",
+  "title": "Terminal \u2014 shell emulator with live passthrough + PTY seam",
+  "description": "A React-DOM terminal: monospace glass aesthetic, colored prompt, arrow-key history, red stderr, mode banner. A built-in command set (ls\u00b7cd\u00b7pwd\u00b7cat\u00b7mkdir\u00b7touch\u00b7rm\u00b7mv\u00b7cp\u00b7echo\u00b7whoami\u00b7date\u00b7uname\u00b7df\u00b7ps\u00b7neofetch\u00b7help\u00b7clear) runs against an in-memory FsModel, so it works with ZERO backend. Wire configureTerminal({ mode:\"live\", fs, exec, sys }) and ls/cat read through your real filesystem, file mutations mirror to it, host-truth commands (df/ps/whoami/uname/date) and any unknown command pass through exec.run as a one-shot shell call (stdout/stderr/exit rendered), and neofetch shows real sys.stats. For a REAL interactive shell (vim/top/tab-completion) wire configurePty({ transport, screen }) \u2014 transport streams PTY bytes (createSsePtyTransport ships the os-vps SSE wire shape) and screen injects your VT renderer (e.g. xterm.js); a touch key bar (Esc/Tab/sticky Ctrl\u00b7Alt/arrows/chords/paste) covers soft keyboards. Self-contained: shell inspector hooks are inert seams and the default OsApi is a mock adapter in lib/host-mock.ts.",
+  "namespace": "@/features/os-terminal",
+  "frontend": {
+    "slicePath": "frontend/slices/os-terminal",
+    "configExport": "osTerminalConfig"
+  },
+  "deps": {
+    "npm": [
+      "lucide-react"
+    ],
+    "shadcn": [
+      "button"
+    ],
+    "env": [],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": [
+    "bp:ui-consistency"
+  ],
+  "license": "MIT",
+  "tags": [
+    "terminal",
+    "shell",
+    "cli",
+    "emulator",
+    "exec",
+    "pty",
+    "ui"
+  ],
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "none",
+      "deps": [
+        {
+          "npm": "react",
+          "range": "^19"
+        },
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "os-terminal.run",
+        "os-terminal.cwd",
+        "os-terminal.clear"
+      ],
+      "routes": [],
+      "components": [
+        "Terminal"
+      ],
+      "hooks": [],
+      "utils": [
+        "configureTerminal",
+        "configurePty",
+        "createSsePtyTransport",
+        "osTerminalApp"
+      ],
+      "tables": []
+    }
+  }
+}

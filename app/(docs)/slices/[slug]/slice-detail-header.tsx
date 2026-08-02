@@ -1,0 +1,104 @@
+// Compact header strip for slice detail page — mirrors TemplateDetail
+// header pattern so /slices/<slug> and /layouts/<slug> have identical
+// docs-shell behavior (small header above FeatureBar + tabs).
+//
+// BS-fix (2026-05-20) — was a tall 6-section pile before, which pushed
+// the FeatureBar tab strip + iframe preview off-screen since the
+// docs-shell does NOT scroll-wrap `{children}` when `hasTabs`.
+
+import Link from "next/link";
+import { ArrowLeft, ArrowRight, ExternalLink, Layers } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { CopyPageButton } from "@/components/site/copy-page-button";
+import { RecentlyUpdatedBadge } from "@/components/site/recently-updated-badge";
+import { MaturityBadge } from "@/components/site/maturity-badge";
+import { getDemoUrl } from "@/lib/content/template-subdomains";
+import type { SliceEntry } from "@/lib/content/slices";
+
+const KIND_CLASS = {
+  ui: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300",
+  backend: "bg-blue-500/15 text-blue-700 dark:text-blue-300",
+  full: "bg-purple-500/15 text-purple-700 dark:text-purple-300",
+} as const;
+
+export function SliceDetailHeader({
+  slice,
+  siteUrl,
+  installCommand,
+  prev,
+  next,
+}: {
+  slice: SliceEntry;
+  siteUrl: string;
+  installCommand: string;
+  prev?: { slug: string; title: string } | null;
+  next?: { slug: string; title: string } | null;
+}) {
+  const demoUrl = getDemoUrl(slice.slug);
+  return (
+    <header className="flex flex-col items-start justify-between gap-2 border-b bg-background/60 px-4 py-3 sm:flex-row sm:items-center">
+      <div className="min-w-0">
+        <div className="mb-1 flex items-center gap-1.5">
+          <Link
+            href="/slices"
+            className="inline-flex items-center gap-1 text-[10px] text-muted-foreground hover:text-foreground"
+          >
+            <ArrowLeft className="size-3" /> All slices
+          </Link>
+          <Badge variant="secondary" className="rounded-full text-[10px]">
+            v{slice.version}
+          </Badge>
+          <Badge variant="outline" className="rounded-full text-[10px] capitalize">
+            {slice.category}
+          </Badge>
+          {slice.kind && (
+            <Badge
+              className={
+                "rounded-full text-[10px] uppercase " +
+                (KIND_CLASS[slice.kind as keyof typeof KIND_CLASS] ?? KIND_CLASS.full)
+              }
+            >
+              {slice.kind}
+            </Badge>
+          )}
+          <MaturityBadge status={slice.maturity} />
+          <RecentlyUpdatedBadge slug={slice.slug} kind="slice" />
+        </div>
+        <h1 className="flex items-center gap-2 truncate text-lg font-semibold tracking-tight">
+          <Layers className="size-4 shrink-0 text-muted-foreground" />
+          {slice.title}
+        </h1>
+      </div>
+      <div className="flex items-center gap-1">
+        {demoUrl && (
+          <Button asChild variant="outline" size="sm" className="hidden gap-1.5 text-xs sm:inline-flex">
+            <Link href={demoUrl} target="_blank" rel="noopener noreferrer">
+              <ExternalLink className="size-3" />
+              Live demo
+            </Link>
+          </Button>
+        )}
+        <CopyPageButton
+          title={slice.title}
+          url={`${siteUrl}/slices/${slice.slug}`}
+          body={installCommand}
+        />
+        {prev && (
+          <Button asChild variant="ghost" size="icon" className="size-8" aria-label={`Previous: ${prev.title}`}>
+            <Link href={`/slices/${prev.slug}`}>
+              <ArrowLeft className="size-4" />
+            </Link>
+          </Button>
+        )}
+        {next && (
+          <Button asChild variant="ghost" size="icon" className="size-8" aria-label={`Next: ${next.title}`}>
+            <Link href={`/slices/${next.slug}`}>
+              <ArrowRight className="size-4" />
+            </Link>
+          </Button>
+        )}
+      </div>
+    </header>
+  );
+}

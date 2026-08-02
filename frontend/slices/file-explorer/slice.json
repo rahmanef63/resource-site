@@ -1,0 +1,113 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "file-explorer",
+  "version": "1.6.0",
+  "category": "os",
+  "kind": "full",
+  "title": "File Explorer \u2014 Tree + CRUD + Preview + Properties",
+  "description": "A complete, backend-agnostic file explorer: a directory tree sidebar, breadcrumb navigation with history, grid and list views, full CRUD (new folder, rename, move, copy, delete/Trash), drag-and-drop upload and move (files AND folders, structure preserved), an inline preview lightbox (image / audio / video / pdf / text), file download, a Properties editor (edit the text body plus metadata: a custom icon glyph, an endpoint URL, and arbitrary key/values), a right-click context menu, multi-select (cmd/shift), and keyboard shortcuts. Storage is pluggable via an injectable FileExplorerAdapter (host fs / S3 / Convex / your own); the bundled in-memory mock is a real filesystem with bytes, so preview, upload, download, and editing all work with zero backend.",
+  "namespace": "@/features/file-explorer",
+  "frontend": {
+    "slicePath": "frontend/slices/file-explorer",
+    "configExport": "fileExplorerConfig"
+  },
+  "deps": {
+    "npm": [
+      "lucide-react"
+    ],
+    "shadcn": [
+      "button",
+      "input",
+      "scroll-area",
+      "separator",
+      "dropdown-menu",
+      "sheet",
+      "dialog"
+    ],
+    "env": [],
+    "peers": []
+  },
+  "registers": [],
+  "audit": [
+    "bp:ui-consistency"
+  ],
+  "license": "MIT",
+  "tags": [
+    "files",
+    "file-manager",
+    "explorer",
+    "tree",
+    "breadcrumb",
+    "crud",
+    "drag-drop",
+    "upload",
+    "download",
+    "preview",
+    "properties",
+    "adapter",
+    "ui"
+  ],
+  "previews": [
+    {
+      "component": "FileExplorer",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "root",
+          "title": "Home root",
+          "description": "top-level folders + files"
+        },
+        {
+          "id": "documents",
+          "title": "Documents",
+          "description": "opens into /Documents"
+        },
+        {
+          "id": "projects",
+          "title": "Projects",
+          "description": "opens into /Projects"
+        }
+      ],
+      "seed": "in-memory mock adapter (seeded tree); rename / new-folder / move persist for the mount"
+    }
+  ],
+  "contract": {
+    "requires": {
+      "auth": "none",
+      "deps": [
+        {
+          "npm": "react",
+          "range": "^18"
+        },
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [
+        "file-explorer.list",
+        "file-explorer.navigate",
+        "file-explorer.mkdir",
+        "file-explorer.rename",
+        "file-explorer.move",
+        "file-explorer.trash",
+        "file-explorer.remove",
+        "file-explorer.empty_trash"
+      ],
+      "routes": [],
+      "components": [
+        "FileExplorer",
+        "FileExplorerAdapterProvider"
+      ],
+      "hooks": [
+        "useFsAdapter"
+      ],
+      "utils": [
+        "createMockAdapter"
+      ],
+      "tables": []
+    }
+  }
+}

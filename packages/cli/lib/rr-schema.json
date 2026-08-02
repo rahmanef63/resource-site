@@ -1,0 +1,109 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://rahmanef63.github.io/resource-site/rr.schema.json",
+  "title": "rr.json — Rahman Resources project manifest",
+  "description": "Project-local manifest written by `rahman-resources init` and patched by `add` / `add-skill` / `upgrade`. Mirrors what shadcn's components.json does for shadcn, but for the vertical-slice kitab flow (templates + features + Claude skills).",
+  "type": "object",
+  "required": ["version", "framework", "aliases", "layout"],
+  "additionalProperties": true,
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": { "type": "integer", "minimum": 1 },
+    "framework": { "type": "string", "enum": ["next-16", "next-15", "vite", "remix"] },
+    "style": { "type": "string", "default": "shadcn-new-york" },
+    "rsc": { "type": "boolean", "default": true },
+    "tailwind": {
+      "type": "object",
+      "properties": {
+        "config": { "type": "string" },
+        "css": { "type": "string" }
+      }
+    },
+    "aliases": {
+      "type": "object",
+      "required": ["components", "ui", "shared", "templates", "lib"],
+      "properties": {
+        "components": { "type": "string" },
+        "ui": { "type": "string" },
+        "shared": { "type": "string", "description": "Cross-template _shared scaffolding (site-shell, admin-shell, store factory)." },
+        "templates": { "type": "string", "description": "Per-template folders root (e.g. components/templates)." },
+        "slices": { "type": "string", "description": "Optional slice-root pattern, may use {template} placeholder." },
+        "features": { "type": "string" },
+        "convex": { "type": "string" },
+        "lib": { "type": "string" },
+        "hooks": { "type": "string" }
+      }
+    },
+    "layout": {
+      "type": "object",
+      "required": ["kind"],
+      "properties": {
+        "kind": { "type": "string", "enum": ["vertical-slice", "feature-folders"] },
+        "publicRoute": { "type": "string" },
+        "adminRoute": { "type": "string" },
+        "sliceRoot": { "type": "string" }
+      }
+    },
+    "template": {
+      "type": "object",
+      "required": ["slug", "version"],
+      "properties": {
+        "slug": { "type": "string" },
+        "version": { "type": "string" }
+      }
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["slug"],
+        "properties": {
+          "slug": { "type": "string" },
+          "version": { "type": "string" },
+          "addedAt": { "type": "string", "format": "date" }
+        }
+      }
+    },
+    "slices": {
+      "type": "array",
+      "description": "Tier-3 portable slice references — each entry mirrors a slice that has been lifted into this project.",
+      "items": {
+        "type": "object",
+        "required": ["slug"],
+        "properties": {
+          "slug": { "type": "string" },
+          "version": { "type": "string" },
+          "category": { "type": "string" },
+          "variant": { "type": "string", "description": "Installed variant id, when added with `add <slug> <variant>`." },
+          "addedAt": { "type": "string", "format": "date" }
+        }
+      }
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["slug", "source"],
+        "properties": {
+          "slug": { "type": "string" },
+          "source": { "type": "string", "enum": ["anthropics", "rahman", "custom"] },
+          "version": { "type": "string", "default": "main" },
+          "addedAt": { "type": "string", "format": "date" }
+        }
+      }
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "provider": { "type": "string", "enum": ["convex-auth", "clerk", "next-auth", "none"] }
+      }
+    },
+    "convex": {
+      "type": "object",
+      "properties": {
+        "self_hosted": { "type": "boolean" },
+        "deploymentUrl": { "type": "string" }
+      }
+    }
+  }
+}

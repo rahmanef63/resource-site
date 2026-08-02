@@ -1,0 +1,28 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "selection",
+  "version": "0.2.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add selection",
+    "consumerPath": "slices/selection"
+  },
+  "files": [
+    "components/SelectableBlock.tsx",
+    "components/SelectionMarquee.tsx",
+    "components/SelectionProvider.tsx",
+    "index.ts",
+    "lib/useMarquee.ts",
+    "slice.json"
+  ],
+  "imports": {
+    "shared": [],
+    "external": [
+      "@/components/ui/button",
+      "@/lib/utils",
+      "react",
+      "react-dom"
+    ]
+  }
+}

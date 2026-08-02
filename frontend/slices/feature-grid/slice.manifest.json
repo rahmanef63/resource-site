@@ -1,0 +1,28 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "feature-grid",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add feature-grid",
+    "consumerPath": "slices/feature-grid"
+  },
+  "files": [
+    "README.md",
+    "components/FeatureCard.tsx",
+    "config.ts",
+    "index.ts",
+    "views/FeatureGridSection.tsx"
+  ],
+  "imports": {
+    "shared": [],
+    "external": [
+      "lucide-react",
+      "next/image",
+      "next/link",
+      "@/components/ui/button",
+      "@/components/ui/card"
+    ]
+  }
+}

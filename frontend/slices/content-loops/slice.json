@@ -1,0 +1,79 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "content-loops",
+  "version": "0.1.0",
+  "category": "content",
+  "kind": "ui",
+  "title": "Content Loops",
+  "description": "A data-source-driven repeater. Register pluggable LoopEntitySource backends (each declares fields + an async fetch returning { items, totalItems }), then drop <ContentLoop source sourceId filters orderBy variants={[A, B]} /> to render a child component per item, round-robining items across variants (item i -> variants[i % n]). Ships the source registry (namespaced ids, no shadowing), createMockLoopSource so it runs env-free, none/infinite pagination via useLoopPagination (Load more button), and a generic LoopItem field-bag. Write your own source that fetches from Convex/REST and register it — the contract is identical to the mock. Harvested + decoupled from the Instatic CMS base.loop engine (publisher / page-tree / entryStack machinery stripped to props).",
+  "namespace": "@/features/content-loops",
+  "frontend": {
+    "slicePath": "frontend/slices/content-loops",
+    "configExport": "contentLoopsFeature"
+  },
+  "convex": {
+    "tablesExport": "",
+    "schemaPath": "",
+    "rootPaths": []
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": [
+      "button"
+    ],
+    "env": [],
+    "peers": []
+  },
+  "registers": [],
+  "audit": [],
+  "license": "MIT",
+  "tags": [
+    "content",
+    "loop",
+    "repeater",
+    "list",
+    "data-source",
+    "pagination",
+    "variants"
+  ],
+  "previews": [
+    {
+      "component": "ContentLoop",
+      "kind": "variants",
+      "axes": [
+        {
+          "prop": "pagination",
+          "values": [
+            "none",
+            "infinite"
+          ],
+          "default": "none",
+          "description": "Single page, or accumulate pages behind a Load more button"
+        }
+      ],
+      "seed": "mock source: 9 synthetic posts (title, excerpt, author); two variants (card + featured)"
+    }
+  ],
+  "contract": {
+    "requires": {
+      "deps": []
+    },
+    "provides": {
+      "components": [
+        "ContentLoop"
+      ],
+      "utils": [
+        "loopSourceRegistry",
+        "createMockLoopSource"
+      ],
+      "hooks": [
+        "useLoopPagination",
+        "useLoopItems"
+      ],
+      "convex": {
+        "tables": [],
+        "rbac": []
+      }
+    }
+  }
+}

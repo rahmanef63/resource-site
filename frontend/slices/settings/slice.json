@@ -1,0 +1,92 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "settings",
+  "version": "1.0.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "Settings — account + appearance shells",
+  "description": "Two adapter-driven settings shells behind one slug — the consumer injects an adapter and the slice owns no data. account: a profile / preferences / notifications / danger-zone shell (<SettingsShell />) over an ASYNC load+save SettingsAdapter, collapsing to a Select on mobile, with a createMemoryAdapter() for demos. appearance: a style / mode / accent / wallpaper / reduce-transparency / display shell (<AppearancePanel />) over a SYNC per-setting AppearanceAdapter, plus the generic SettingsSection / SettingsRow / Segmented / AccentSwatches primitives you compose your own panels from. Install one surface with `npx rr add settings account|appearance`, or both with `npx rr add settings`.",
+  "namespace": "@/features/settings",
+  "variants": {
+    "default": "account",
+    "items": [
+      { "id": "account", "title": "Account", "description": "Profile/preferences/notifications/danger-zone shell over an async load+save adapter." },
+      { "id": "appearance", "title": "Appearance", "description": "Style/mode/accent/wallpaper/display shell over a sync per-setting adapter + the shared Section/Row/Segmented primitives." }
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/settings",
+    "configExport": "settingsFeature"
+  },
+  "convex": {
+    "tablesExport": "",
+    "schemaPath": "",
+    "rootPaths": []
+  },
+  "deps": {
+    "npm": [
+      "lucide-react@^0.400.0"
+    ],
+    "shadcn": [
+      "alert-dialog",
+      "avatar",
+      "button",
+      "card",
+      "input",
+      "label",
+      "select",
+      "separator",
+      "skeleton",
+      "switch",
+      "textarea",
+      "toggle-group"
+    ],
+    "env": [],
+    "peers": []
+  },
+  "registers": [],
+  "audit": [],
+  "license": "MIT",
+  "tags": [
+    "settings",
+    "preferences",
+    "account",
+    "appearance",
+    "theme",
+    "adapter",
+    "shell",
+    "primitives",
+    "ui"
+  ],
+  "previews": [],
+  "contract": {
+    "provides": {
+      "tools": [
+        "settings-page.get",
+        "settings-page.set"
+      ],
+      "components": [
+        "SettingsShell",
+        "ProfileSection",
+        "PreferencesSection",
+        "NotificationsSection",
+        "DangerZone",
+        "AppearancePanel",
+        "SettingsSection",
+        "SettingsRow",
+        "Segmented",
+        "AccentSwatches"
+      ],
+      "utils": [
+        "createMemoryAdapter"
+      ],
+      "hooks": [
+        "useSettings"
+      ],
+      "convex": {
+        "tables": [],
+        "rbac": []
+      }
+    }
+  }
+}

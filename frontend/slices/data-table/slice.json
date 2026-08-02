@@ -1,0 +1,103 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "data-table",
+  "version": "0.2.0",
+  "category": "data",
+  "kind": "ui",
+  "title": "Data Table \u2014 TanStack + shadcn",
+  "description": "Generic, reusable data table built on TanStack Table v8 + shadcn Table. Pass typed columns and rows; get sorting (clickable headers with indicator), a column-bound toolbar search, Previous/Next pagination with page readout, optional checkbox row selection, and a column-visibility dropdown. Density toggle (compact/comfortable) controls row padding.",
+  "namespace": "@/features/data-table",
+  "frontend": {
+    "slicePath": "frontend/slices/data-table",
+    "configExport": "dataTableFeature"
+  },
+  "convex": {
+    "tablesExport": "",
+    "schemaPath": "",
+    "rootPaths": []
+  },
+  "deps": {
+    "npm": [
+      "@tanstack/react-table@^8.21.0",
+      "lucide-react@^0.400.0"
+    ],
+    "shadcn": [
+      "table",
+      "button",
+      "input",
+      "checkbox",
+      "dropdown-menu"
+    ],
+    "env": [],
+    "peers": []
+  },
+  "registers": [],
+  "audit": [],
+  "license": "MIT",
+  "tags": [
+    "data",
+    "table",
+    "datagrid",
+    "tanstack",
+    "sorting",
+    "pagination"
+  ],
+  "previews": [
+    {
+      "component": "DataTable",
+      "kind": "variants",
+      "axes": [
+        {
+          "prop": "density",
+          "values": [
+            "compact",
+            "comfortable"
+          ],
+          "default": "comfortable",
+          "description": "Row padding density"
+        },
+        {
+          "prop": "selectable",
+          "values": [
+            "on",
+            "off"
+          ],
+          "default": "on",
+          "description": "Checkbox row-selection column"
+        }
+      ],
+      "seed": "12 static invoice rows (id, customer, status, amount, date)"
+    }
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "@tanstack/react-table",
+          "range": "^8.21.0"
+        },
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
+      ]
+    },
+    "provides": {
+      "tools": [],
+      "components": [
+        "DataTable",
+        "DataTableToolbar",
+        "DataTablePagination",
+        "DataTableColumnHeader"
+      ],
+      "utils": [
+        "selectionColumn"
+      ],
+      "hooks": [],
+      "convex": {
+        "tables": [],
+        "rbac": []
+      }
+    }
+  }
+}

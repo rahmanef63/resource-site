@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "motion-primitives",
+  "version": "0.1.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "Motion Primitives (8)",
+  "description": "Facade slice over shared/ui/motion/. 8 framer-motion-powered primitives: marquee, kinetic-heading, magnetic, cursor-spotlight, stat-counter, reading-progress, grain, lightbox.",
+  "namespace": "@/features/motion-primitives",
+  "convex": { "tablesExport": "", "schemaPath": "", "rootPaths": [] },
+  "frontend": { "slicePath": "frontend/slices/motion-primitives", "configExport": "" },
+  "deps": {
+    "npm": ["framer-motion@^11.0.0"],
+    "shadcn": [],
+    "env": [],
+    "peers": []
+  },
+  "registers": [],
+  "license": "MIT",
+  "tags": ["ui", "motion", "animation", "marquee", "framer-motion"],
+  "providers": []
+}

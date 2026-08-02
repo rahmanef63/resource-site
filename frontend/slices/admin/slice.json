@@ -1,0 +1,49 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "admin",
+  "version": "0.2.1",
+  "category": "infra",
+  "kind": "full",
+  "title": "Admin — generic shell + composed console",
+  "description": "Access-gated admin surfaces behind one slug, in two variants. shell: a minimal generic single-instance admin shell (a titled card region + a buildAdminStats() factory + SliceAdminLabels) over convex/features/admin — zero composed sections, wire your own. console: the composed multi-section console — an access-gated two-column shell driving a 26-section registry that mounts OTHER rr slices (users → user-management, roles → rbac-roles, analytics/audit, AI → ai-admin, tenants → platform-admin) via a components map, over convex/features/admin_console (ac_leads, ac_nav_items). Install one with `npx rr add admin shell|console`, or both with `npx rr add admin`; each variant pulls ONLY its own convex backend (per-variant convex gating). NOT the multi-tenant control plane — that stays the separate `platform-admin` slice (referenced here as the `tenants` section provider).",
+  "namespace": "@/features/admin",
+  "variants": {
+    "default": "console",
+    "items": [
+      { "id": "shell", "title": "Shell", "description": "Minimal generic admin shell (titled card + buildAdminStats).", "convex": ["convex/features/admin"] },
+      { "id": "console", "title": "Console", "description": "Composed access-gated 26-section console mounting other rr slices.", "convex": ["convex/features/admin_console"] }
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/admin",
+    "configExport": "adminFeature"
+  },
+  "convex": {
+    "tablesExport": "",
+    "schemaPath": "",
+    "rootPaths": ["convex/features/admin", "convex/features/admin_console"]
+  },
+  "deps": {
+    "npm": [],
+    "shadcn": ["badge", "button", "card", "input", "progress", "scroll-area", "select", "sheet", "table", "textarea"],
+    "env": [
+      { "name": "SUPER_ADMIN_EMAIL", "scope": "convex", "required": false, "description": "shell variant — single super-admin gate." },
+      { "name": "PLATFORM_ADMIN_EMAILS", "scope": "convex", "required": false, "description": "console variant — comma-separated platform-admin allowlist." }
+    ],
+    "peers": []
+  },
+  "registers": [],
+  "audit": [],
+  "license": "MIT",
+  "tags": ["admin", "console", "shell", "access-gate", "rbac", "sections", "dashboard", "infra"],
+  "previews": [],
+  "contract": {
+    "provides": {
+      "tools": [],
+      "components": ["AdminPage", "AdminConsole", "AccessGate"],
+      "utils": ["buildAdminStats", "filterSections", "hasPermission"],
+      "hooks": [],
+      "convex": { "tables": ["ac_leads", "ac_nav_items"], "rbac": [] }
+    }
+  }
+}

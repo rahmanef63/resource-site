@@ -1,0 +1,43 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "ai-admin",
+  "version": "0.3.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add ai-admin",
+    "consumerPath": "slices/ai-admin"
+  },
+  "files": [
+    "README.md",
+    "config.ts",
+    "index.ts",
+    "types.ts"
+  ],
+  "convex": {
+    "schemaPath": "convex/features/ai-admin/_schema.ts",
+    "rootPaths": [
+      "convex/features/ai-admin"
+    ]
+  },
+  "imports": {
+    "shared": [
+      "@/components/ui/card",
+      "@/components/ui/button",
+      "@/components/ui/badge",
+      "@/components/ui/tabs",
+      "@/components/ui/table",
+      "@/components/ui/dialog",
+      "@/components/ui/input",
+      "@/components/ui/label",
+      "@/components/ui/select",
+      "@/components/ui/textarea",
+      "@/components/ui/switch",
+      "@/lib/utils"
+    ],
+    "external": [
+      "react",
+      "lucide-react"
+    ]
+  }
+}

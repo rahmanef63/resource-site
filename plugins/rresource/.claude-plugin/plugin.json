@@ -1,0 +1,9 @@
+{
+  "name": "rresource",
+  "description": "Kitab template installer. Each skill scaffolds one template (layout / recipe / feature) into the active project — copies source files, updates schema, registers nav, lists deps + verification steps.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Rahman",
+    "url": "https://rahmanef.com"
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "vector-search",
+  "version": "0.2.0",
+  "category": "data",
+  "title": "Convex Vector Search",
+  "description": "Embeddings-based search via @convex-dev/vector-search. Embed on insert, query by vector similarity.",
+  "namespace": "@/features/vector-search",
+  "convex": {
+    "tablesExport": "searchTables",
+    "schemaPath": "convex/features/search/_schema.ts",
+    "rootPaths": [
+      "convex/features/search"
+    ]
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/vector-search",
+    "configExport": "vectorSearchConfig"
+  },
+  "deps": {
+    "npm": [
+      "@convex-dev/vector-search@^0.0.5"
+    ],
+    "shadcn": [
+      "card",
+      "input"
+    ],
+    "env": [
+      {
+        "name": "OPENAI_API_KEY",
+        "scope": "convex",
+        "required": true,
+        "description": "For text-embedding-3-small."
+      }
+    ],
+    "peers": []
+  },
+  "registers": [
+    "registry"
+  ],
+  "audit": [
+    "bp:public-fn-validator"
+  ],
+  "license": "MIT",
+  "tags": [
+    "search",
+    "vector",
+    "embeddings",
+    "convex"
+  ],
+  "previews": [],
+  "contract": {
+    "requires": {
+      "auth": "convex",
+      "rbac": [
+        "search.query",
+        "search.index",
+        "search.reindex"
+      ],
+      "env": [
+        "OPENAI_API_KEY"
+      ],
+      "convex": {
+        "prefix": "vector_",
+        "tables": [
+          "vector_search_documents"
+        ]
+      },
+      "deps": [
+        "convex-auth"
+      ]
+    },
+    "provides": {
+      "tools": [
+        "vector-search.query",
+        "vector-search.index",
+        "vector-search.reindex"
+      ],
+      "tables": [
+        "vector_search_documents"
+      ],
+      "routes": [
+        "/search"
+      ],
+      "components": [
+        "SearchPage"
+      ]
+    },
+    "generalization": {
+      "level": "portable"
+    }
+  }
+}

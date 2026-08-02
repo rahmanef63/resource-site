@@ -1,0 +1,28 @@
+{
+  "version": "0.5",
+  "root": ["hero"],
+  "nodes": {
+    "hero": {
+      "type": "div",
+      "props": {
+        "direction": "row",
+        "align": "center",
+        "justify": "space-between",
+        "wrap": "wrap",
+        "gap": "lg",
+        "background": "#f9fafb"
+      },
+      "children": ["title", "btn"]
+    },
+    "title": {
+      "type": "text",
+      "props": { "content": "Hello World" },
+      "children": []
+    },
+    "btn": {
+      "type": "button",
+      "props": { "text": "Action", "variant": "default" },
+      "children": []
+    }
+  }
+}

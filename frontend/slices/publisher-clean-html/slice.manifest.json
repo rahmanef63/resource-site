@@ -1,0 +1,37 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "publisher-clean-html",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add publisher-clean-html",
+    "consumerPath": "slices/publisher-clean-html"
+  },
+  "files": [
+    "README.md",
+    "components/PublishPreview.tsx",
+    "config.ts",
+    "index.ts",
+    "lib/class-injection.ts",
+    "lib/css-collector.ts",
+    "lib/csp-plan.ts",
+    "lib/escape-props.ts",
+    "lib/inline-style.ts",
+    "lib/module-registry.ts",
+    "lib/publish-page.ts",
+    "lib/render-node.ts",
+    "lib/reset-css.ts",
+    "lib/sanitize/css-value.ts",
+    "lib/sanitize/html.ts",
+    "lib/sanitize/index.ts",
+    "lib/sanitize/richtext.ts",
+    "lib/sanitize/runtime.ts",
+    "lib/sanitize/svg.ts",
+    "lib/types.ts"
+  ],
+  "imports": {
+    "shared": [],
+    "external": []
+  }
+}

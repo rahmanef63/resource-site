@@ -1,0 +1,108 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "testimonials-grid",
+  "version": "0.1.0",
+  "deprecated": "landing-sections",
+  "category": "ui",
+  "kind": "ui",
+  "title": "Testimonials Grid",
+  "description": "Reusable, prop-driven testimonials section for marketing pages. Composes a header (eyebrow / title / subtitle) with a responsive 1-3 column grid of testimonial cards. Each item accepts quote, author, optional role, company, avatar, star rating, and featured flag. Three visual layouts: cards (shadcn Card grid), quote-stack (minimal centered quote flow), masonry (CSS columns flow).",
+  "namespace": "@/features/testimonials-grid",
+  "frontend": {
+    "slicePath": "frontend/slices/testimonials-grid",
+    "configExport": "testimonialsGridFeature"
+  },
+  "convex": {
+    "tablesExport": "",
+    "schemaPath": "",
+    "rootPaths": []
+  },
+  "deps": {
+    "npm": [
+      "lucide-react@^0.400.0",
+      "next@^15"
+    ],
+    "shadcn": [
+      "avatar",
+      "button",
+      "card"
+    ],
+    "env": [],
+    "peers": []
+  },
+  "registers": [],
+  "audit": [],
+  "license": "MIT",
+  "tags": [
+    "ui",
+    "marketing",
+    "testimonials",
+    "social-proof",
+    "grid",
+    "section"
+  ],
+  "previews": [
+    {
+      "component": "TestimonialsGridSection",
+      "kind": "variants",
+      "axes": [
+        {
+          "prop": "layout",
+          "values": [
+            "cards",
+            "quote-stack",
+            "masonry"
+          ],
+          "default": "cards",
+          "description": "Even card grid, centered quote stack, or masonry columns"
+        },
+        {
+          "prop": "columns",
+          "values": [
+            "1",
+            "2",
+            "3"
+          ],
+          "default": "2",
+          "description": "Columns at lg (cards/masonry)"
+        },
+        {
+          "prop": "align",
+          "values": [
+            "left",
+            "center"
+          ],
+          "default": "left",
+          "description": "Card and header alignment"
+        }
+      ],
+      "seed": "3 static testimonials, first one featured"
+    }
+  ],
+  "contract": {
+    "requires": {
+      "deps": [
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        },
+        {
+          "npm": "next",
+          "range": "^15"
+        }
+      ]
+    },
+    "provides": {
+      "components": [
+        "TestimonialsGridSection",
+        "TestimonialCard"
+      ],
+      "utils": [],
+      "hooks": [],
+      "convex": {
+        "tables": [],
+        "rbac": []
+      }
+    }
+  }
+}

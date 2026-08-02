@@ -1,0 +1,28 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "content-loops",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add content-loops",
+    "consumerPath": "slices/content-loops"
+  },
+  "files": [
+    "README.md",
+    "components/ContentLoop.tsx",
+    "config.ts",
+    "hooks/use-loop-items.ts",
+    "hooks/use-loop-pagination.ts",
+    "index.ts",
+    "lib/mock-source.ts",
+    "lib/registry.ts",
+    "lib/types.ts"
+  ],
+  "imports": {
+    "shared": [],
+    "external": [
+      "@/components/ui/button"
+    ]
+  }
+}

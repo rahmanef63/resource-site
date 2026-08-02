@@ -1,0 +1,38 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "motion-kit",
+  "version": "0.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add motion-kit",
+    "consumerPath": "slices/motion-kit"
+  },
+  "files": [
+    "HOST-SETUP.md",
+    "README.md",
+    "globals-motion.css",
+    "index.ts",
+    "motion/count-up.tsx",
+    "motion/index.ts",
+    "motion/marquee.tsx",
+    "motion/reveal.tsx",
+    "motion/stagger.tsx",
+    "motion/use-in-view.ts",
+    "slice.json",
+    "ui/accordion.tsx",
+    "ui/carousel-context.tsx",
+    "ui/carousel.tsx"
+  ],
+  "imports": {
+    "shared": [],
+    "external": [
+      "@/components/ui/button",
+      "@/lib/utils",
+      "embla-carousel-react",
+      "lucide-react",
+      "radix-ui",
+      "react"
+    ]
+  }
+}
