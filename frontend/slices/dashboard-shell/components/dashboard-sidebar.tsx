@@ -89,9 +89,12 @@ export function DashboardSidebar({
   pathname,
   collapsible = "icon",
 }: DashboardSidebarProps) {
-  // Mobile renders inside a Sheet — closing it on navigate is the expected UX.
-  const { isMobile, setOpenMobile } = useSidebar();
-  const onNavigate = isMobile ? () => setOpenMobile(false) : undefined;
+  const { isMobile } = useSidebar();
+
+  // Phones never get a sheet-shaped copy of the rail — the same nav ships as
+  // the dock + <MobileMenuDrawer> thumbnail grid, so this returns nothing and
+  // shadcn's mobile Sheet branch is never reached.
+  if (isMobile) return null;
 
   return (
     <Sidebar collapsible={collapsible}>
@@ -107,13 +110,13 @@ export function DashboardSidebar({
               <SidebarMenu>
                 {group.items.map((item) => (
                   <SidebarMenuItem key={item.id}>
-                    <Row item={item} pathname={pathname} onNavigate={onNavigate} />
+                    <Row item={item} pathname={pathname} />
                     {item.badge ? <SidebarMenuBadge>{item.badge}</SidebarMenuBadge> : null}
                     {item.items?.length ? (
                       <SidebarMenuSub>
                         {item.items.map((child) => (
                           <SidebarMenuSubItem key={child.id}>
-                            <Row item={child} pathname={pathname} onNavigate={onNavigate} sub />
+                            <Row item={child} pathname={pathname} sub />
                           </SidebarMenuSubItem>
                         ))}
                       </SidebarMenuSub>

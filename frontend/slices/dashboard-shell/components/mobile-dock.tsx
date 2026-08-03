@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import { isActive } from "../lib/nav";
 import type { NavItem } from "../lib/types";
@@ -11,7 +10,9 @@ import type { NavItem } from "../lib/types";
 export interface MobileDockProps {
   items: NavItem[];
   pathname: string;
-  /** Hide the trailing "Menu" button that opens the sidebar sheet. */
+  /** Opens the thumbnail menu drawer — the mobile face of the sidebar. */
+  onMenu?: () => void;
+  /** Hide the trailing "Menu" button. */
   hideMenu?: boolean;
   className?: string;
 }
@@ -21,9 +22,9 @@ export interface MobileDockProps {
  * Pure CSS breakpoint (`md:hidden`): no JS media query, so no hydration flash
  * and no second source of truth for "am I mobile".
  */
-export function MobileDock({ items, pathname, hideMenu, className }: MobileDockProps) {
-  const { toggleSidebar } = useSidebar();
-  if (!items.length && hideMenu) return null;
+export function MobileDock({ items, pathname, onMenu, hideMenu, className }: MobileDockProps) {
+  const showMenu = !hideMenu && !!onMenu;
+  if (!items.length && !showMenu) return null;
 
   return (
     <nav
@@ -38,12 +39,12 @@ export function MobileDock({ items, pathname, hideMenu, className }: MobileDockP
         {items.map((item) => (
           <DockButton key={item.id} item={item} active={isActive(pathname, item)} />
         ))}
-        {hideMenu ? null : (
+        {showMenu ? (
           <DockButton
-            item={{ id: "__menu", label: "Menu", icon: Menu, onSelect: toggleSidebar }}
+            item={{ id: "__menu", label: "Menu", icon: Menu, onSelect: onMenu }}
             active={false}
           />
-        )}
+        ) : null}
       </div>
     </nav>
   );

@@ -310,6 +310,11 @@
             "id": "mobile-dock",
             "title": "Mobile dock",
             "description": "The bottom dock the same nav produces on small screens."
+          },
+          {
+            "id": "mobile-menu",
+            "title": "Mobile menu drawer",
+            "description": "The tile drawer the dock's Menu button opens — the mobile face of the rail."
           }
         ],
         "seed": "generic 2-group nav (Home / Posts / Media / Settings); no store, no backend"

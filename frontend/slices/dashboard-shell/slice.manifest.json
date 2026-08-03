@@ -1,8 +1,8 @@
 {
   "$schema": "../../../docs/slice.manifest.schema.json",
   "name": "dashboard-shell",
-  "version": "1.1.0",
-  "description": "One responsive dashboard chrome: desktop rail + topbar, mobile sheet sidebar + bottom dock, both driven by a single `nav` prop. Slots for workspace switcher, user menu, topbar actions and a secondary column.",
+  "version": "1.2.0",
+  "description": "One responsive dashboard chrome: desktop rail + topbar; mobile drops the sidebar entirely for a bottom dock + thumbnail-tile menu drawer. All three faces read a single `nav` prop.",
   "category": "ui",
   "stability": "stable",
   "deps": {
@@ -10,7 +10,8 @@
     "slices": [],
     "convexFeatures": [],
     "npm": {
-      "lucide-react": "^0.4 || ^0.5"
+      "lucide-react": "^0.4 || ^0.5",
+      "vaul": "^1"
     }
   },
   "files": {
@@ -37,5 +38,5 @@
     "responsive",
     "shell"
   ],
-  "notes": "Needs shadcn `sidebar` installed (it brings sheet + tooltip). No Convex, no env, no localStorage. Pair with full-width-toggle in the topbar `actions` slot, workspace-shell in `sidebarHeader`."
+  "notes": "Needs shadcn `sidebar` + `drawer` installed (sidebar brings sheet + tooltip; drawer brings vaul). No Convex, no env, no localStorage. Pair with full-width-toggle in the topbar `actions` slot, workspace-shell in `sidebarHeader`."
 }

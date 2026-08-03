@@ -3,7 +3,10 @@
 import * as React from "react";
 import { usePathname } from "next/navigation";
 import { ThreeColumnLayoutAdvanced } from "@/components/previews/three-column/ThreeColumnLayout";
+import { MobileMenuDrawer } from "@/features/dashboard-shell";
 import { DocsSidebar } from "./docs-sidebar";
+import { buildSections } from "./docs-sidebar/build-sections";
+import { sectionsToNav } from "./docs-sidebar/to-nav";
 import { FeatureProvider, useFeatureContext } from "./feature-context";
 import { FeatureBar } from "./feature-bar";
 
@@ -35,6 +38,16 @@ function DocsShellInner({ children }: { children: React.ReactNode }) {
   React.useEffect(() => {
     setMobileView("center");
   }, [pathname]);
+
+  // Mobile navigation is the SAME thumbnail drawer the dashboard-shell slice
+  // ships — the docs list never renders as a full-screen sidebar on a phone.
+  // Asking three-column for the "left" view opens the drawer instead.
+  const [menuOpen, setMenuOpen] = React.useState(false);
+  const docsNav = React.useMemo(() => sectionsToNav(buildSections()), []);
+  const onMobileViewChange = React.useCallback((view: "left" | "center") => {
+    if (view === "left") setMenuOpen(true);
+    else setMobileView(view);
+  }, []);
 
   const activeRender = hasTabs && activeTab
     ? tabs.find((t) => t.id === activeTab)?.render
@@ -73,6 +86,13 @@ function DocsShellInner({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="h-[calc(100svh-3.5rem)] w-full">
+      <MobileMenuDrawer
+        groups={docsNav}
+        open={menuOpen}
+        onOpenChange={setMenuOpen}
+        pathname={pathname ?? "/"}
+        title="Docs"
+      />
       <ThreeColumnLayoutAdvanced
         left={<DocsSidebar />}
         center={center}
@@ -86,7 +106,7 @@ function DocsShellInner({ children }: { children: React.ReactNode }) {
         rightCollapsed={!rightOpen}
         onRightCollapsedChange={(collapsed) => setRightOpen(!collapsed)}
         mobileView={mobileView}
-        onMobileViewChange={setMobileView}
+        onMobileViewChange={onMobileViewChange}
         showCollapseButtons
         resizable
         persistState

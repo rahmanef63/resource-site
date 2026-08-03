@@ -1,14 +1,22 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
+import { Menu } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+  useSidebar,
+} from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import { activeTitle, deriveDock } from "../lib/nav";
 import type { Brand, NavGroup, NavItem } from "../lib/types";
 import { DashboardSidebar } from "./dashboard-sidebar";
 import { MobileDock } from "./mobile-dock";
+import { MobileMenuDrawer } from "./mobile-menu-drawer";
 
 export interface DashboardShellProps {
   /** Sidebar nav — the SSOT for the desktop rail AND the mobile dock. */
@@ -63,6 +71,8 @@ export function DashboardShell({
   const pathname = activePath ?? routePath;
   const dockItems = dock === false ? [] : (dock ?? deriveDock(nav, dockMax));
   const heading = title ?? activeTitle(pathname, nav);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const openMenu = () => setMenuOpen(true);
 
   return (
     <SidebarProvider className={cn("group/dashboard", className)}>
@@ -79,7 +89,7 @@ export function DashboardShell({
         {topbar === null ? null : (
           topbar ?? (
             <header className="flex h-14 shrink-0 items-center gap-2 border-b px-3 sm:px-4">
-              <SidebarTrigger className="-ml-1" />
+              <ShellTrigger onMenu={openMenu} />
               <Separator orientation="vertical" className="mr-1 h-4" />
               <div className="min-w-0 flex-1 truncate text-sm font-medium">{heading}</div>
               {actions ? <div className="flex items-center gap-1">{actions}</div> : null}
@@ -105,7 +115,34 @@ export function DashboardShell({
         </div>
       </SidebarInset>
 
-      {dockItems.length ? <MobileDock items={dockItems} pathname={pathname} /> : null}
+      {dockItems.length ? (
+        <MobileDock items={dockItems} pathname={pathname} onMenu={openMenu} />
+      ) : null}
+
+      {/* The mobile face of the rail: thumbnail tiles, never a sheet list. */}
+      <MobileMenuDrawer
+        groups={nav}
+        open={menuOpen}
+        onOpenChange={setMenuOpen}
+        pathname={pathname}
+        title={brand?.name ?? "Menu"}
+        description={brand?.caption}
+      />
     </SidebarProvider>
+  );
+}
+
+/** Topbar trigger: collapses the rail on desktop, opens the tile drawer on
+ *  mobile (where no rail exists). Lives under the provider so it can read
+ *  `isMobile` from shadcn's own hook — one source for the breakpoint. */
+function ShellTrigger({ onMenu }: { onMenu: () => void }) {
+  const { isMobile } = useSidebar();
+
+  if (!isMobile) return <SidebarTrigger className="-ml-1" />;
+
+  return (
+    <Button variant="ghost" size="icon" className="-ml-1 size-8" onClick={onMenu} aria-label="Open menu">
+      <Menu className="size-4" />
+    </Button>
   );
 }

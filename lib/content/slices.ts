@@ -1538,9 +1538,9 @@ const actions = [
     title: "Dashboard Shell — one responsive shell + mobile dock",
     category: "ui",
     kind: "ui",
-    version: "1.1.0",
+    version: "1.2.0",
     description:
-      "THE dashboard chrome — one shell, two faces. Desktop: collapsible rail (shadcn Sidebar, ⌘B, cookie-persisted) + topbar. Mobile: the same rail as a sheet plus a bottom dock. Both faces render from ONE `nav` prop (groups → items → one level of sub-items), so the dock is derived, not a second nav to keep in sync — flag `dock: true` on the items you want down there, or let it take the first few. Slots for everything project-specific: sidebarHeader (workspace switcher), sidebarFooter (user menu), actions (search/notifications), topbar (full replace), secondary (narrow contextual column = the old three-column 'advanced' archetype). Breakpoints are CSS (`md:hidden`) + shadcn's sheet — the slice never measures the viewport, so no hydration flash. Zero backend: `activePath` drives it from state, otherwise it reads usePathname(). Merged 2026-08-03 from the superspace facade + appshell's cockpit shell + the template `_shared` admin chrome.",
+      "THE dashboard chrome — one shell, three faces. Desktop: collapsible rail (shadcn Sidebar, ⌘B, cookie-persisted) + topbar. Mobile: NO sidebar at all — a bottom dock plus a thumbnail-tile menu drawer (drill-down one level for sub-items). Every face renders from ONE `nav` prop (groups → items → one level of sub-items), so the dock is derived, not a second nav to keep in sync — flag `dock: true` on the items you want down there, or let it take the first few. Slots for everything project-specific: sidebarHeader (workspace switcher), sidebarFooter (user menu), actions (search/notifications), topbar (full replace), secondary (narrow contextual column = the old three-column 'advanced' archetype). The dock is CSS (`md:hidden`); the rail + trigger read `isMobile` from shadcn's own useSidebar() — one breakpoint source, no second media query. Zero backend: `activePath` drives it from state, otherwise it reads usePathname(). Merged 2026-08-03 from the superspace facade + appshell's cockpit shell + the template `_shared` admin chrome.",
     source: "superspace",
     docsUrl: "",
     install: "",
@@ -1553,7 +1553,7 @@ const actions = [
     tags: ["ui", "layout", "dashboard", "sidebar", "dock", "responsive", "shell"],
     usedBy: ["personal-brand-os", "agency-studio-os", "konsultan-os", "wirausaha-os", "kreator-studio-os", "riset-kit", "cms-public-storefront"],
     agentRecipe:
-      "Run `npx rr add dashboard-shell` (needs shadcn `sidebar` installed). Wrap app/(dashboard)/layout.tsx in <DashboardShell brand nav>. `nav` is the SSOT: [{ id, label?, items: [{ id, label, href|onSelect, icon?, badge?, exact?, dock?, items? }] }]. Mobile dock derives from it (dock:true items, else the first `dockMax` — a Menu button opening the sheet is appended). Slots: sidebarHeader (workspace-shell switcher), sidebarFooter (user menu), actions (topbar right side, e.g. FullWidthToggle), topbar (full replace / null), secondary (contextual column). Pass activePath to drive it from state instead of the router. Helpers exported: isActive / deriveDock / activeItem / activeTitle / flattenNav.",
+      "Run `npx rr add dashboard-shell` (needs shadcn `sidebar` + `drawer` installed). Wrap app/(dashboard)/layout.tsx in <DashboardShell brand nav>. `nav` is the SSOT: [{ id, label?, items: [{ id, label, href|onSelect, icon?, badge?, exact?, dock?, items? }] }]. Mobile dock derives from it (dock:true items, else the first `dockMax` — a Menu button opening the tile drawer is appended; the rail is never rendered under md). Slots: sidebarHeader (workspace-shell switcher), sidebarFooter (user menu), actions (topbar right side, e.g. FullWidthToggle), topbar (full replace / null), secondary (contextual column). Pass activePath to drive it from state instead of the router. Helpers exported: isActive / deriveDock / activeItem / activeTitle / flattenNav.",
     previewPath: "/preview/slices/dashboard-shell",
     defaultView: "desktop",
     defaultZoom: 0.6,

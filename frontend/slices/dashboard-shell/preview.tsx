@@ -10,8 +10,10 @@
 import { FileText, Home, Image as ImageIcon, Settings, Users } from "lucide-react";
 import type { SlicePreviewModule } from "@/shared/preview/types";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { useState } from "react";
 import { DashboardShell } from "./components/dashboard-shell";
 import { MobileDock } from "./components/mobile-dock";
+import { MobileMenuDrawer } from "./components/mobile-menu-drawer";
 import { deriveDock } from "./lib/nav";
 import type { NavGroup } from "./lib/types";
 
@@ -48,19 +50,8 @@ function Body({ label }: { label: string }) {
 
 const preview: SlicePreviewModule = {
   DashboardShell: ({ variant }) => {
-    if (variant.scenario === "mobile-dock") {
-      return (
-        <SidebarProvider className="min-h-0">
-          <div className="relative mx-auto h-[420px] w-full max-w-[360px] transform-gpu overflow-hidden rounded-xl border bg-background">
-            <Body label="page content" />
-            <MobileDock
-              items={deriveDock(DEMO_NAV)}
-              pathname="/app/posts"
-              className="absolute inset-x-0 bottom-0 md:block"
-            />
-          </div>
-        </SidebarProvider>
-      );
+    if (variant.scenario === "mobile-dock" || variant.scenario === "mobile-menu") {
+      return <MobilePhone menuOpen={variant.scenario === "mobile-menu"} />;
     }
 
     // transform-gpu = containing block for the shell's position:fixed sidebar,
@@ -91,5 +82,34 @@ const preview: SlicePreviewModule = {
     );
   },
 };
+
+/** Phone-sized frame showing the two mobile surfaces the rail turns into:
+ *  the bottom dock, and the tile drawer its Menu button opens. Both are the
+ *  real components — `md:block` only overrides the `md:hidden` the dock uses
+ *  in real apps, because this frame sits inside a desktop viewport. */
+function MobilePhone({ menuOpen }: { menuOpen: boolean }) {
+  const [open, setOpen] = useState(menuOpen);
+  return (
+    <SidebarProvider className="min-h-0">
+      <div className="relative mx-auto h-[460px] w-full max-w-[360px] transform-gpu overflow-hidden rounded-xl border bg-background">
+        <Body label="page content" />
+        <MobileDock
+          items={deriveDock(DEMO_NAV)}
+          pathname="/app/posts"
+          onMenu={() => setOpen(true)}
+          className="absolute inset-x-0 bottom-0 md:block"
+        />
+        <MobileMenuDrawer
+          groups={DEMO_NAV}
+          open={open}
+          onOpenChange={setOpen}
+          pathname="/app/posts"
+          title={BRAND.name}
+          description={BRAND.caption}
+        />
+      </div>
+    </SidebarProvider>
+  );
+}
 
 export default preview;

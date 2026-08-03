@@ -5,9 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { IconBrandGithub as Github } from "@tabler/icons-react";
-import { Menu, Plus } from "lucide-react";
+import { BookOpen, Bot, Boxes, Compass, Download, Menu, Plus, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+import { MobileMenuDrawer, type NavGroup } from "@/features/dashboard-shell";
 import { CommandPalette } from "./command-palette";
 import { ThemePresetSwitcher } from "./theme-preset-switcher";
 import { site } from "@/lib/content/site";
@@ -18,12 +18,18 @@ import { cn } from "@/lib/utils";
 // "Modules" relabel that split the taxonomy three ways). Directory lives under
 // the Get Started sidebar cluster; the navbar keeps the curated quick-links.
 const NAV = [
-  { label: "Docs", href: "/docs" },
-  { label: "Tour", href: "/tour" },
-  { label: "Slices", href: "/slices" },
-  { label: "Best Practice", href: "/best-practice" },
-  { label: "Agents", href: "/agents" },
-  { label: "Install", href: "/installation" },
+  { label: "Docs", href: "/docs", icon: BookOpen },
+  { label: "Tour", href: "/tour", icon: Compass },
+  { label: "Slices", href: "/slices", icon: Boxes },
+  { label: "Best Practice", href: "/best-practice", icon: ShieldCheck },
+  { label: "Agents", href: "/agents", icon: Bot },
+  { label: "Install", href: "/installation", icon: Download },
+];
+
+// Mobile nav is the same thumbnail drawer the dashboard-shell slice ships —
+// the site never shows a sheet-shaped link list on a phone.
+const MOBILE_NAV: NavGroup[] = [
+  { id: "site", items: NAV.map((i) => ({ id: i.href, label: i.label, href: i.href, icon: i.icon })) },
 ];
 
 function BrandMark({ className }: { className?: string }) {
@@ -63,6 +69,7 @@ function useDetailDim(pathname: string | null): boolean {
 export function TopNavbar() {
   const pathname = usePathname();
   const dim = useDetailDim(pathname);
+  const [menuOpen, setMenuOpen] = React.useState(false);
   return (
     <header
       className={cn(
@@ -139,33 +146,22 @@ export function TopNavbar() {
               New
             </Link>
           </Button>
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Menu">
-                <Menu className="size-4" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="w-72 p-0">
-              <SheetTitle className="sr-only">Navigation</SheetTitle>
-              <div className="border-b px-4 py-4">
-                <Link href="/" className="flex items-center gap-2">
-                  <BrandMark />
-                  <span className="font-semibold">{site.name}</span>
-                </Link>
-              </div>
-              <nav className="flex flex-col gap-1 p-2">
-                {NAV.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </nav>
-            </SheetContent>
-          </Sheet>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="lg:hidden"
+            aria-label="Menu"
+            onClick={() => setMenuOpen(true)}
+          >
+            <Menu className="size-4" />
+          </Button>
+          <MobileMenuDrawer
+            groups={MOBILE_NAV}
+            open={menuOpen}
+            onOpenChange={setMenuOpen}
+            pathname={pathname ?? "/"}
+            title={site.name}
+          />
         </div>
       </div>
     </header>

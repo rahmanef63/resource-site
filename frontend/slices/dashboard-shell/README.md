@@ -2,9 +2,11 @@
 
 **Dashboard Shell — one responsive shell + mobile dock**
 
-Desktop: collapsible rail + topbar. Mobile: sheet sidebar + bottom dock. Both
-faces render from the SAME `nav` prop — the dock derives from it, so there is
-no second mobile navigation to keep in sync.
+Desktop: collapsible rail + topbar. Mobile: **no sidebar at all** — a bottom
+dock plus a `MobileMenuDrawer` of thumbnail tiles (the Menu tile / topbar
+button opens it; items with sub-items drill down one level). Every face renders
+from the SAME `nav` prop, so there is no second mobile navigation to keep in
+sync and a phone never gets a sheet-shaped copy of the desktop list.
 
 ## Install
 
@@ -47,7 +49,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 | `brand` | — | `{ name, logo?, href?, caption? }`. Ignored when `sidebarHeader` is set. |
 | `sidebarHeader` | brand block | Workspace switcher slot (e.g. `workspace-shell`). |
 | `sidebarFooter` | — | User menu slot. |
-| `dock` | derived from `nav` | Explicit items, or `false` to drop the dock. |
+| `dock` | derived from `nav` | Explicit items, or `false` to drop the dock (the topbar button still opens the drawer). |
 | `dockMax` | `4` | Cap when deriving (a "Menu" button is appended). |
 | `title` / `actions` | active item's label | Topbar heading + right-hand slot. |
 | `topbar` | default header | Full replace; `null` = no topbar. |
@@ -63,8 +65,9 @@ Helpers are exported too — `isActive`, `deriveDock`, `activeItem`,
 
 ## Constraints (rr conventions)
 
-- shadcn primitives only; needs the `sidebar` primitive installed.
-- No Convex, no env, no localStorage. Breakpoints are CSS (`md:hidden`) plus
-  shadcn's Sidebar sheet — the slice never measures the viewport itself.
+- shadcn primitives only; needs the `sidebar` + `drawer` primitives installed.
+- No Convex, no env, no localStorage. The dock is CSS (`md:hidden`); the rail
+  and the trigger read `isMobile` from shadcn's own `useSidebar()` — one source
+  for the breakpoint, no second media query of our own.
 
 Run `npm run slices:check` before commit.

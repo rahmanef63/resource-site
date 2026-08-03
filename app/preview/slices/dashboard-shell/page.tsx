@@ -5,7 +5,7 @@ import { SlicePreviewLayout, PreviewSection } from "@/components/slice-previews/
 import { Button } from "@/components/ui/button";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { DashboardShell, MobileDock, deriveDock } from "@/features/dashboard-shell";
+import { DashboardShell, MobileDock, MobileMenuDrawer, deriveDock } from "@/features/dashboard-shell";
 import { DEMO_NAV } from "@/features/dashboard-shell/preview";
 
 function Content() {
@@ -20,12 +20,13 @@ function Content() {
 
 export default function Page() {
   const [viewport, setViewport] = React.useState<"mobile" | "desktop">("desktop");
+  const [menuOpen, setMenuOpen] = React.useState(false);
 
   return (
     <SlicePreviewLayout
       title="Dashboard Shell — Responsive"
       kind="ui"
-      description="One `nav` prop drives both faces: desktop rail + topbar, mobile sheet sidebar + bottom dock. This preview mounts the real slice — no mock chrome."
+      description="One `nav` prop drives every face: desktop rail + topbar; mobile has no sidebar at all — a bottom dock plus a thumbnail-tile menu drawer. This preview mounts the real slice — no mock chrome."
       sourceUrl="https://github.com/rahmanef63/resource-site/tree/main/frontend/slices/dashboard-shell"
     >
       <PreviewSection title="Live demo" hint="Toggle the viewport">
@@ -66,15 +67,26 @@ export default function Page() {
                 <Content />
               </DashboardShell>
             ) : (
-              /* The dock is `md:hidden` in real apps — forced visible here because
-                 this phone frame is a box inside a desktop viewport. */
+              /* On mobile there is no sidebar at all: the dock plus the tile
+                 drawer its Menu button opens. `md:block` only overrides the
+                 dock's `md:hidden` because this phone frame is a box inside a
+                 desktop viewport. */
               <SidebarProvider className="min-h-0">
                 <div className="absolute inset-0">
                   <Content />
                   <MobileDock
                     items={deriveDock(DEMO_NAV)}
                     pathname="/app/posts"
+                    onMenu={() => setMenuOpen(true)}
                     className="absolute inset-x-0 bottom-0 md:block"
+                  />
+                  <MobileMenuDrawer
+                    groups={DEMO_NAV}
+                    open={menuOpen}
+                    onOpenChange={setMenuOpen}
+                    pathname="/app/posts"
+                    title="Acme"
+                    description="Workspace"
                   />
                 </div>
               </SidebarProvider>

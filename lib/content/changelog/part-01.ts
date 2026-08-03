@@ -2,6 +2,39 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "MOBILE-TILE-DRAWER",
+    "version": "dashboard-merge-wave-4",
+    "date": 1785715200000,
+    "kind": "feature",
+    "title": "No sidebars on mobile — every menu is a thumbnail drawer now",
+    "body": "A phone was still getting a sheet-shaped copy of the desktop sidebar: shadcn's Sidebar renders its list inside a Sheet under md, and the site navbar and docs shell each had their own list-in-a-sheet. That is three different mobile menus with the same shape and none of them thumb-friendly. dashboard-shell 1.2.0 replaces all of it with one component — MobileMenuDrawer: a bottom drawer of thumbnail TILES (icon in a rounded square + label, 4 per row), grouped exactly like the rail, with one level of drill-down for items that have sub-items and a back chevron. The rail itself no longer renders at all under md (DashboardSidebar returns null when shadcn's own useSidebar() reports mobile), so there is no second copy to keep in sync: the dock's Menu tile and the topbar button both open the drawer. The docs shell and the marketing navbar now mount the same drawer — docs clusters and slice categories became tiles, and tapping a category drills into its slices.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          {
+            "text": "dashboard-shell 1.2.0 — MobileMenuDrawer + MobileMenuTiles; DashboardSidebar returns null on mobile; MobileDock takes `onMenu`; needs shadcn `drawer` (vaul)",
+            "slug": "dashboard-shell"
+          }
+        ]
+      },
+      {
+        "heading": "Site",
+        "bullets": [
+          "docs shell: asking three-column for the mobile \"left\" view opens the tile drawer instead of the full-screen sidebar list; new docs-sidebar/to-nav.ts maps the docs tree (clusters → tiles, branches → drill-down) with a per-label icon map",
+          "top navbar: the lg:hidden Sheet link-list is gone — same drawer, six tiles",
+          "/admin and every preview inherit it from the slice; the dock's Menu tile and the topbar hamburger open the same surface"
+        ]
+      },
+      {
+        "heading": "Left alone on purpose",
+        "bullets": [
+          "build-shell's left column is an input FORM, not navigation; file-explorer / code-editor mobile sheets hold content trees; appshell app-chrome is OS window chrome"
+        ]
+      }
+    ]
+  },
+  {
     "id": "PANEL-NAV-ROLLOUT",
     "version": "dashboard-merge-wave-3",
     "date": 1785715200000,
