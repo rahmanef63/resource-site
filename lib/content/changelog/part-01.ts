@@ -2,6 +2,39 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "PANEL-NAV-ROLLOUT",
+    "version": "dashboard-merge-wave-3",
+    "date": 1785715200000,
+    "kind": "improvement",
+    "title": "Settings joins the one-navigation pattern — and the audit says the rest should not",
+    "body": "Third and last pass of the dashboard merge. A sweep of every slice that renders its own persistent left rail turned up six; five of them are NOT app navigation and were deliberately left alone — user-management's Roles/Teams rails list adapter DATA rows (master-detail, and they already sit inside horizontal tabs), image-editor's rail is a canvas tool palette, reel-editor's files pane is a content browser and its track-head column is one row per timeline track. Only settings qualified: a hard-coded four-section catalog rendered as a second rail. It now follows the admin console's pattern — `SettingsShell nav={false}` renders the active panel only, and `settingsSectionsToNav(onSelect, { activeId, dockCount })` hands the sections to the app sidebar as plain data (structural shape, no cross-slice import). The section catalog moved to lib/nav.ts as the SSOT for both the built-in rail and the mapper, with the old `SettingsSectionId` export path kept alive. Default stays `nav: true`, so every existing consumer renders byte-identically.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          {
+            "text": "settings 1.1.0 — account variant: `nav={false}` panel-only mode + `settingsSectionsToNav()`; SETTINGS_SECTIONS is now the single catalog behind both faces; 6 unit tests",
+            "slug": "settings"
+          }
+        ]
+      },
+      {
+        "heading": "Left alone on purpose",
+        "bullets": [
+          "user-management RolesPanel / TeamsPanel — the rail lists adapter data (roles, teams), not app sections; converting a data list into sidebar nav would be wrong",
+          "image-editor tool-rail (canvas tool palette), reel-editor files-pane (content browser) and track-head (one row per timeline track)"
+        ]
+      },
+      {
+        "heading": "Site",
+        "bullets": [
+          "/preview/slices/settings gains an \"in the app shell\" section: the sections drive the ONE sidebar while SettingsShell renders panels only",
+          "dockCount defaults to 3 across the mappers — the shell appends its own Menu button, and 5 labels in one dock row truncate on a 360px screen"
+        ]
+      }
+    ]
+  },
+  {
     "id": "ONE-DASHBOARD-ADOPTION",
     "version": "dashboard-merge-wave-2",
     "date": 1785715200000,

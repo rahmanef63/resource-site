@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "settings",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -22,6 +22,7 @@
     "variants/account/hooks/useSettings.ts",
     "variants/account/index.ts",
     "variants/account/lib/adapter.ts",
+    "variants/account/lib/nav.ts",
     "variants/account/lib/tools.ts",
     "variants/appearance/CHANGELOG.md",
     "variants/appearance/README.md",

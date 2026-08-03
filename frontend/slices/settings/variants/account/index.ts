@@ -26,3 +26,11 @@ export {
   type DensityPref,
 } from "./lib/adapter";
 export { settingsPageTools, type SettingsPageCtx } from "./lib/tools";
+export {
+  settingsSectionsToNav,
+  SETTINGS_SECTIONS,
+  type SettingsNavSection,
+  type SettingsNavItem,
+  type SettingsNavGroup,
+  type SettingsNavIcon,
+} from "./lib/nav";

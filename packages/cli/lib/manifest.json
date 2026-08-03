@@ -1452,7 +1452,7 @@
       "install": "npx rahman-resources add settings",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add settings` for both, or `npx rr add settings account` / `appearance` for one. account: implement SettingsAdapter { load, save } over your backend (Convex query + mutation), pass to <SettingsShell adapter>; save gets per-section partial patches (shallow-merge server-side); onDeleteAccount wires the danger zone. appearance: build an AppearanceAdapter (per-setting SegSetting values) from your appearance store, pass to <AppearancePanel appearance>; or compose custom panels from <SettingsSection>/<SettingsRow>/<Segmented>/<AccentSwatches>.",
+      "agentRecipe": "Run `npx rr add settings` for both, or `npx rr add settings account` / `appearance` for one. account: implement SettingsAdapter { load, save } over your backend (Convex query + mutation), pass to <SettingsShell adapter>; save gets per-section partial patches (shallow-merge server-side); onDeleteAccount wires the danger zone. Already have a dashboard sidebar? Feed it settingsSectionsToNav(setSection, { activeId }) and render <SettingsShell nav={false} active onNavigate> so there is ONE nav, not two. appearance: build an AppearanceAdapter (per-setting SegSetting values) from your appearance store, pass to <AppearancePanel appearance>; or compose custom panels from <SettingsSection>/<SettingsRow>/<Segmented>/<AccentSwatches>.",
       "tags": [
         "settings",
         "preferences",
@@ -4268,7 +4268,7 @@
       "title": "Settings — account + appearance shells",
       "category": "ui",
       "kind": "ui",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "Two settings surfaces behind one slug, each adapter-driven so the slice owns no data. account: SettingsShell two-column surface (nav collapses to a Select on mobile) — Profile (avatar/name/email/bio), Preferences (theme/language/density), Notifications (switch rows), Danger zone (AlertDialog-confirmed delete) over an ASYNC SettingsAdapter { load, save(patch) } with optimistic save + rollback; createMemoryAdapter ships for demos. appearance: AppearancePanel (style/mode/accent/wallpaper/reduce-transparency/display) over a SYNC per-setting AppearanceAdapter, plus the generic SettingsSection / SettingsRow / Segmented / AccentSwatches primitives you compose custom panels from. Install one surface with `npx rr add settings account|appearance`, or both with `npx rr add settings`.",
       "source": "rr original",
       "slicePath": "frontend/slices/settings",
@@ -4305,7 +4305,7 @@
         "ui",
         "basics"
       ],
-      "agentRecipe": "Run `npx rr add settings` for both, or `npx rr add settings account` / `appearance` for one. account: implement SettingsAdapter { load, save } over your backend (Convex query + mutation), pass to <SettingsShell adapter>; save gets per-section partial patches (shallow-merge server-side); onDeleteAccount wires the danger zone. appearance: build an AppearanceAdapter (per-setting SegSetting values) from your appearance store, pass to <AppearancePanel appearance>; or compose custom panels from <SettingsSection>/<SettingsRow>/<Segmented>/<AccentSwatches>.",
+      "agentRecipe": "Run `npx rr add settings` for both, or `npx rr add settings account` / `appearance` for one. account: implement SettingsAdapter { load, save } over your backend (Convex query + mutation), pass to <SettingsShell adapter>; save gets per-section partial patches (shallow-merge server-side); onDeleteAccount wires the danger zone. Already have a dashboard sidebar? Feed it settingsSectionsToNav(setSection, { activeId }) and render <SettingsShell nav={false} active onNavigate> so there is ONE nav, not two. appearance: build an AppearanceAdapter (per-setting SegSetting values) from your appearance store, pass to <AppearancePanel appearance>; or compose custom panels from <SettingsSection>/<SettingsRow>/<Segmented>/<AccentSwatches>.",
       "variants": {
         "default": "account",
         "items": [
