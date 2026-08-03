@@ -4,47 +4,27 @@ import * as React from "react";
 import { Bell, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { AdminSidebarMobileTrigger } from "./admin-sidebar";
-import type { AdminNavItem, Brand, User } from "../types/common";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 /**
- * Shared admin topbar — search + notifications + actions slot.
+ * Shared admin topbar — sidebar trigger + search + notifications + actions.
  *
- * Per-template: pass `actions` slot for things like "New post", "Reset demo",
- * profile menu. Notification count is rendered if > 0.
+ * Mounted as the `topbar` slot of the dashboard-shell slice, so it carries no
+ * nav of its own: the trigger opens the slice's rail (desktop) or sheet
+ * (mobile), and the mobile bottom dock covers quick navigation.
  */
 export function AdminTopbar({
   searchPlaceholder = "Search…",
   notifCount = 0,
   actions,
-  // Sidebar trigger props (passes through to mobile sheet)
-  brand,
-  appLabel,
-  homeHref,
-  primaryNav,
-  settingsNav,
-  user,
 }: {
   searchPlaceholder?: string;
   notifCount?: number;
   actions?: React.ReactNode;
-  brand: Pick<Brand, "brandLetter" | "brandName">;
-  appLabel: string;
-  homeHref: string;
-  primaryNav: AdminNavItem[];
-  settingsNav?: AdminNavItem[];
-  user: User;
 }) {
   return (
-    <header className="flex h-14 items-center gap-2 border-b border-border/60 bg-background px-4">
-      <AdminSidebarMobileTrigger
-        brand={brand}
-        appLabel={appLabel}
-        homeHref={homeHref}
-        primaryNav={primaryNav}
-        settingsNav={settingsNav}
-        user={user}
-      />
+    <header className="flex h-14 shrink-0 items-center gap-2 border-b border-border/60 bg-background px-4">
+      <SidebarTrigger />
       <div className="relative max-w-md flex-1">
         <Search className="pointer-events-none absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
         <Input placeholder={searchPlaceholder} className="pl-8" />

@@ -4,8 +4,11 @@
 // ponytail: additive shim so `@/features/appshell` stays backward-compatible;
 // fold into the split barrels if/when consumers migrate to the upstream names.
 
-// Bundled single-pane cockpit shell (also self-registers as ShellId "dashboard").
-export { DashboardShell } from "./components/shells/dashboard/dashboard-shell";
+// The single-pane cockpit shell moved OUT of appshell — a route-based dashboard
+// is the `dashboard-shell` slice's job (one nav prop → rail + mobile dock).
+// appshell stays the windowed OS: macOS / Windows / iOS / Android. A consumer
+// that wants a dashboard chrome inside the switcher registers one via
+// registerShell({ id: "…", surface: "desktop", render }).
 export { QuicklinkIcon } from "./components/quicklink-icon";
 // Reusable app-window chrome (all regions optional).
 export { AppHeader, AppSidebar, AppInspector } from "./components/layout/app-chrome";

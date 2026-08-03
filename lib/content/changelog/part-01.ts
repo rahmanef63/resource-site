@@ -2,6 +2,44 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "ONE-DASHBOARD",
+    "version": "dashboard-merge-wave",
+    "date": 1785715200000,
+    "kind": "improvement",
+    "title": "Six dashboards collapse into one — dashboard-shell 1.0.0",
+    "body": "The repo carried six overlapping dashboard chromes: a facade slice pointing at superspace-coupled code under template-base (tsc-EXCLUDED, so it never compiled — and it advertised a `sidebar`/`topbar` API the component never had, meaning `npx rr add dashboard-shell` shipped consumers a broken import), a mock desktop/mobile pair that existed only so the preview had something renderable, appshell's single-pane cockpit shell, and the template `_shared` admin chrome in two archetypes (simple + advanced). This wave replaces all of them with one real, in-tree, typechecked slice. ONE `nav` prop is the SSOT: the desktop rail, the mobile sheet and the bottom dock all render from it — flag `dock: true` on the items you want docked, or let it take the first few. Breakpoints are CSS (`md:hidden`) plus shadcn's Sidebar sheet, so the slice never measures the viewport and there's no hydration flash. Slots cover what used to be forked components: sidebarHeader (workspace switcher), sidebarFooter (user menu), actions, topbar (full replace), secondary (the old three-column 'advanced' archetype). Net −3.4k lines.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          {
+            "text": "dashboard-shell 1.0.0 — real slice at frontend/slices/dashboard-shell (was a facade over template-base): DashboardShell + DashboardSidebar + MobileDock + nav helpers (isActive / deriveDock / activeItem / activeTitle / flattenNav), unit-tested",
+            "slug": "dashboard-shell"
+          },
+          {
+            "text": "appshell 1.6.0 — the bundled `dashboard` shell mode is gone (ShellId, shell order, DESKTOP_IDS, chrome-kit + its test, slice-extras barrel). appshell stays the windowed OS (macOS / Windows / iOS / Android); a route-based dashboard is dashboard-shell's job, and consumers can still registerShell() their own single-pane chrome",
+            "slug": "appshell"
+          }
+        ]
+      },
+      {
+        "heading": "Deleted duplicates",
+        "bullets": [
+          "template-base/frontend/slices/dashboard-shell (facade) + shared/ui/layout/dashboard/{Desktop,Mobile,Responsive}DashboardShell + mobile/{MobileDashboardDock,MobilePortalHome,MobileWorkspaceLauncher,MobileProfileSheet,MobileTopBar,useUnifiedMobileWorkspaceContext} — dead once the facade went (nothing in template-base mounted them); dashboard-routes.ts + mobile-chrome-title.tsx kept, they're still imported by AppSidebar / header presets / command-menu",
+          "app/preview/slices/dashboard-shell/{shells,shell-parts}.tsx — the mock chrome; the preview now mounts the real slice",
+          "components/templates/_shared/ui/{admin-sidebar,admin-nav-items,dashboard-shell-advanced,secondary-sidebar}.tsx — dashboard-shell.tsx is now a ~140-line adapter mapping template types (Brand/User/AdminNav*) onto the slice, DashboardShellAdvanced is an alias, and AdminTopbar dropped its own mobile nav (the sheet + dock cover it)"
+        ]
+      },
+      {
+        "heading": "Site",
+        "bullets": [
+          "Catalog/manifest/CLI regenerated — dashboard-shell recipe + wiring now describe the API that actually exists",
+          "lib/templates/configs.ts layout-scaffold prompt no longer emits the phantom `<ResponsiveDashboardShell variant=… />` call"
+        ]
+      }
+    ]
+  },
+  {
     "id": "ADMIN-CONSOLE-SLICE-AND-CATALOG-SORT",
     "version": "slices@admin-console",
     "date": 1782950400000,

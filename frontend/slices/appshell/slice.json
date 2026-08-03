@@ -1,11 +1,11 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "appshell",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "category": "os",
   "kind": "full",
-  "title": "AppShell \u2014 Desktop + Mobile OS Shell",
-  "description": "Generic, brand-free OS-style shell framework. One <AppShell manifest> wrapper provider gives a project a SWITCHABLE multi-shell OS \u2014 macOS, Windows 11, Android (Material-You), iOS, plus consumer-registered shells (e.g. a single-pane Dashboard) \u2014 over ONE shared window store, driven entirely by a manifest (brand, apps, features, surface regions, capabilities, persistence, keymap). Features (search/\u2318K with a dynamic command registry, quick-look, clipboard history, share sheet, shortcut cheat-sheet, lock screen, widgets incl. a desktop wallpaper-layer stack, control-center, inspector, notifications with actions + app badges) plug in via extension points; window manager covers snap halves/quadrants/thirds, always-on-top, virtual desktops (Spaces), window tabs, saved layouts, session profiles, cross-app drag & drop, focus mode and document.title sync. Responsiveness is a single provider + shared primitives. Imports no apps or brand strings \u2014 the consumer injects everything.",
+  "title": "AppShell — Desktop + Mobile OS Shell",
+  "description": "Generic, brand-free OS-style shell framework. One <AppShell manifest> wrapper provider gives a project a SWITCHABLE multi-shell OS — macOS, Windows 11, Android (Material-You), iOS, plus consumer-registered shells (register a single-pane cockpit with registerShell(); a route-based dashboard is the separate dashboard-shell slice) — over ONE shared window store, driven entirely by a manifest (brand, apps, features, surface regions, capabilities, persistence, keymap). Features (search/⌘K with a dynamic command registry, quick-look, clipboard history, share sheet, shortcut cheat-sheet, lock screen, widgets incl. a desktop wallpaper-layer stack, control-center, inspector, notifications with actions + app badges) plug in via extension points; window manager covers snap halves/quadrants/thirds, always-on-top, virtual desktops (Spaces), window tabs, saved layouts, session profiles, cross-app drag & drop, focus mode and document.title sync. Responsiveness is a single provider + shared primitives. Imports no apps or brand strings — the consumer injects everything.",
   "namespace": "@/features/appshell",
   "frontend": {
     "slicePath": "frontend/slices/appshell",
@@ -56,7 +56,7 @@
         {
           "id": "sidebar-collapsed",
           "title": "Sidebar collapsed",
-          "description": "AppFrame body with the rail hidden \u2014 content spans the full pane."
+          "description": "AppFrame body with the rail hidden — content spans the full pane."
         },
         {
           "id": "sidebar-expanded",
@@ -69,7 +69,7 @@
           "description": "AppFrame header + toolbar rows above the sidebar/content body."
         }
       ],
-      "seed": "Scaled-down shell chrome in a fixed-height card \u2014 AppFrame header/toolbar/body composed with a mock sidebar + content list (no window manager, no providers)."
+      "seed": "Scaled-down shell chrome in a fixed-height card — AppFrame header/toolbar/body composed with a mock sidebar + content list (no window manager, no providers)."
     }
   ],
   "contract": {
@@ -123,8 +123,7 @@
         "MasterDetail",
         "ResponsiveToolbar",
         "TouchList",
-        "QuicklinkIcon",
-        "DashboardShell"
+        "QuicklinkIcon"
       ],
       "tables": []
     }

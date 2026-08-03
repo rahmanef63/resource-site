@@ -8,7 +8,6 @@ export * from "./ui/section-head";
 export * from "./ui/site-nav";
 export * from "./ui/site-footer";
 export * from "./ui/site-shell";
-export * from "./ui/admin-sidebar";
 export * from "./ui/admin-topbar";
 export * from "./ui/dashboard-shell";
 export * from "./ui/stat-card";

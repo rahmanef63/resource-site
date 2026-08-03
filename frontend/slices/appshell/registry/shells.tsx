@@ -16,7 +16,7 @@ import { useSyncExternalStore, type ComponentType } from "react";
 import type { Icon } from "@phosphor-icons/react";
 import { registerCommands } from "../lib/commands";
 
-export type ShellId = "macos" | "windows" | "dashboard" | "mobile" | "ios" | "android";
+export type ShellId = "macos" | "windows" | "mobile" | "ios" | "android";
 export type ShellSurface = "desktop" | "mobile";
 
 export type ShellDescriptor = {
@@ -38,7 +38,7 @@ export type ShellDescriptor = {
 };
 
 const REGISTRY = new Map<ShellId, ShellDescriptor>();
-const order: ShellId[] = ["dashboard", "macos", "windows", "mobile", "ios", "android"];
+const order: ShellId[] = ["macos", "windows", "mobile", "ios", "android"];
 
 export function registerShell(d: ShellDescriptor): void {
   REGISTRY.set(d.id, d);
@@ -75,7 +75,7 @@ const KEY = "sv:shell";
 
 export type ShellPrefs = { desktop: ShellId; mobile: ShellId };
 const DEFAULTS: ShellPrefs = { desktop: "macos", mobile: "ios" };
-const DESKTOP_IDS: ShellId[] = ["macos", "windows", "dashboard"];
+const DESKTOP_IDS: ShellId[] = ["macos", "windows"];
 const MOBILE_IDS: ShellId[] = ["ios", "android", "mobile"];
 
 export function surfaceOf(id: ShellId): ShellSurface {

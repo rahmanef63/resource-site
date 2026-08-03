@@ -32,7 +32,7 @@ export type ChromeLayout =
       dock: "fixed-bottom" | "none";
       pages: boolean;
     }
-  | { kind: "single-pane"; nav: "sidebar" | "bottom-tabs" }; // dashboard
+  | { kind: "single-pane"; nav: "sidebar" | "bottom-tabs" }; // consumer-registered single-pane shells
 
 // ── skin pack ─────────────────────────────────────────────────────────────────
 export type TokenPack = {

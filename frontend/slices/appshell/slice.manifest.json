@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "appshell",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -35,8 +35,6 @@
     "components/shells/android/android-parts.tsx",
     "components/shells/android/android-shell.tsx",
     "components/shells/context-menu.tsx",
-    "components/shells/dashboard/dashboard-parts.tsx",
-    "components/shells/dashboard/dashboard-shell.tsx",
     "components/shells/window-overview.tsx",
     "components/shells/windows/snap-assist.tsx",
     "components/shells/windows/start-menu.tsx",

@@ -1,0 +1,88 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "dashboard-shell",
+  "version": "1.0.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "Dashboard Shell — one responsive shell + mobile dock",
+  "description": "The single dashboard chrome: persistent collapsible rail + topbar on desktop, sheet sidebar + bottom dock on mobile. ONE `nav` prop (groups → items → one level of sub-items) is the SSOT for both faces — the dock derives from the same items (flag `dock: true`, or it takes the first few), so there is no second mobile nav to keep in sync. Slots for everything project-specific: sidebarHeader (workspace switcher), sidebarFooter (user menu), actions (search/notifications), topbar (full replace), secondary (narrow contextual column = the old three-column 'advanced' archetype). Breakpoints are shadcn's Sidebar sheet plus a `md:hidden` dock — no viewport measuring, no hydration flash. Zero backend: pass `activePath` to drive it from state, or let it read usePathname().",
+  "namespace": "@/features/dashboard-shell",
+  "convex": {
+    "tablesExport": "",
+    "schemaPath": "",
+    "rootPaths": []
+  },
+  "frontend": {
+    "slicePath": "frontend/slices/dashboard-shell",
+    "configExport": "dashboardShellConfig"
+  },
+  "deps": {
+    "npm": [
+      "lucide-react"
+    ],
+    "shadcn": [
+      "sidebar",
+      "button",
+      "separator",
+      "sheet",
+      "tooltip"
+    ],
+    "env": [],
+    "peers": []
+  },
+  "registers": [],
+  "audit": [
+    "bp:ui-consistency"
+  ],
+  "license": "MIT",
+  "tags": [
+    "ui",
+    "layout",
+    "dashboard",
+    "sidebar",
+    "dock",
+    "responsive",
+    "shell"
+  ],
+  "providers": [],
+  "previews": [
+    {
+      "component": "DashboardShell",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "desktop",
+          "title": "Desktop",
+          "description": "Collapsible rail + topbar. Toggle the trigger to see icon-collapse."
+        },
+        {
+          "id": "secondary",
+          "title": "Secondary column",
+          "description": "Rail + narrow contextual column + content — the three-column archetype."
+        },
+        {
+          "id": "mobile-dock",
+          "title": "Mobile dock",
+          "description": "The bottom dock the same nav produces on small screens."
+        }
+      ],
+      "seed": "generic 2-group nav (Home / Posts / Media / Settings); no store, no backend"
+    }
+  ],
+  "contract": {
+    "requires": {
+      "auth": "none"
+    },
+    "provides": {
+      "components": [
+        "DashboardShell",
+        "DashboardSidebar",
+        "MobileDock"
+      ],
+      "hooks": []
+    },
+    "generalization": {
+      "level": "portable"
+    }
+  }
+}

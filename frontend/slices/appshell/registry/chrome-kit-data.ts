@@ -1,7 +1,7 @@
 /* Built-in ChromeKit data — split out of chrome-kit.ts (200-LOC gate) and
    re-exported from there. Seed kits for the 6 shells that already register.
    Insets mirror today's hardcoded chrome (store-geometry's TOPBAR=30 /
-   DOCK_RESERVE=92 for macOS; mobile/dashboard shells reserve nothing). In full
+   DOCK_RESERVE=92 for macOS; mobile shells reserve nothing). In full
    Phase A each block moves next to its shell module and the Surface reads
    insets from here instead of the imperative setChromeInsets call.
 
@@ -109,10 +109,6 @@ export const BUILTIN_CHROME_KITS: ChromeKit[] = [
       ease: { standard: "cubic-bezier(0.8, 0, 0.2, 1)", decelerate: "cubic-bezier(0, 0, 0, 1)", spring: "cubic-bezier(0.3, 1.25, 0.4, 1)" },
     },
     gestures: { back: "none", appSwitch: "cmd-tab", home: "none", scrollBounce: false, pressFeedback: "highlight" },
-  },
-  {
-    id: "dashboard", surface: "desktop", insets: { top: 0, bottom: 0 },
-    layout: { kind: "single-pane", nav: "sidebar" },
   },
   {
     id: "ios", surface: "mobile", insets: { top: 0, bottom: 0 },

@@ -289,7 +289,7 @@
   },
   {
     "slug": "dashboard-shell",
-    "title": "Dashboard Shell — Responsive",
+    "title": "Dashboard Shell — one responsive shell + mobile dock",
     "category": "ui",
     "previews": [
       {
@@ -297,17 +297,22 @@
         "kind": "scenarios",
         "scenarios": [
           {
-            "id": "flat-nav",
-            "title": "Flat nav",
-            "description": "Single Workspace group — simple CMS-archetype admin"
+            "id": "desktop",
+            "title": "Desktop",
+            "description": "Collapsible rail + topbar. Toggle the trigger to see icon-collapse."
           },
           {
-            "id": "grouped-nav",
-            "title": "Grouped nav",
-            "description": "Labeled SidebarGroups (Pages / Settings) via primaryNavGroups"
+            "id": "secondary",
+            "title": "Secondary column",
+            "description": "Rail + narrow contextual column + content — the three-column archetype."
+          },
+          {
+            "id": "mobile-dock",
+            "title": "Mobile dock",
+            "description": "The bottom dock the same nav produces on small screens."
           }
         ],
-        "seed": "static demo brand/nav/user — renders the real _shared DashboardShell all 8 OS templates mount"
+        "seed": "generic 2-group nav (Home / Posts / Media / Settings); no store, no backend"
       }
     ]
   },
@@ -550,7 +555,7 @@
   },
   {
     "slug": "file-explorer",
-    "title": "File Explorer — Tree + CRUD + Breadcrumb",
+    "title": "File Explorer — Tree + CRUD + Preview + Properties",
     "category": "os",
     "previews": [
       {

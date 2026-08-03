@@ -861,7 +861,7 @@ export default function FileExplorerDemo() {
     title: "AppShell — Desktop + Mobile OS Shell",
     category: "os",
     kind: "full",
-    version: "1.5.1",
+    version: "1.6.0",
     tagline: "Manifest-driven macOS-style window manager + iOS-style mobile surface in one slice.",
     description:
       "Generic, brand-free OS-style shell framework. One <AppShell manifest> wrapper provider gives a project a macOS-style window manager (drag/snap/maximize, dock, menu bar, Spotlight) AND an iOS-style mobile surface (home pager, app library, control center, widgets), driven entirely by a manifest: brand, apps, features, surface regions, capabilities, persistence, keymap. Five shell features (search, inspector, notifications, control-center, widgets) are bundled as defineFeature() contributions inside the slice and mount via named <Slot>s. Responsiveness is a single ResponsiveProvider + 4 DRY primitives (AppFrame, MasterDetail, ResponsiveToolbar, TouchList). Imports nothing project-specific — the consumer injects data/auth/AI through manifest.capabilities. Lifted from os-vps (Topside).",
@@ -1535,36 +1535,47 @@ const actions = [
   },
   {
     slug: "dashboard-shell",
-    title: "Dashboard Shell — Responsive",
+    title: "Dashboard Shell — one responsive shell + mobile dock",
     category: "ui",
     kind: "ui",
-    version: "0.1.0",
-    description: "ResponsiveDashboardShell — desktop sidebar + topbar, mobile dock + sheet sidebar, breakpoint-aware. Ports superspace's layout/dashboard/{Desktop,Mobile,Responsive}DashboardShell + sidebar primary/secondary slots. Facade slice — pulls from template-base/frontend/slices/dashboard-shell.",
+    version: "1.0.0",
+    description:
+      "THE dashboard chrome — one shell, two faces. Desktop: collapsible rail (shadcn Sidebar, ⌘B, cookie-persisted) + topbar. Mobile: the same rail as a sheet plus a bottom dock. Both faces render from ONE `nav` prop (groups → items → one level of sub-items), so the dock is derived, not a second nav to keep in sync — flag `dock: true` on the items you want down there, or let it take the first few. Slots for everything project-specific: sidebarHeader (workspace switcher), sidebarFooter (user menu), actions (search/notifications), topbar (full replace), secondary (narrow contextual column = the old three-column 'advanced' archetype). Breakpoints are CSS (`md:hidden`) + shadcn's sheet — the slice never measures the viewport, so no hydration flash. Zero backend: `activePath` drives it from state, otherwise it reads usePathname(). Merged 2026-08-03 from the superspace facade + appshell's cockpit shell + the template `_shared` admin chrome.",
     source: "superspace",
     docsUrl: "",
     install: "",
-    slicePath: "template-base/frontend/slices/dashboard-shell",
+    slicePath: "frontend/slices/dashboard-shell",
     convexPaths: [],
-    npm: [],
-    shadcn: ["sheet", "scroll-area", "separator", "tooltip"],
+    npm: ["lucide-react"],
+    shadcn: ["sidebar", "button", "separator", "sheet", "tooltip"],
     env: [],
     peers: [],
-    tags: ["ui", "layout", "dashboard", "sidebar", "topbar", "responsive"],
+    tags: ["ui", "layout", "dashboard", "sidebar", "dock", "responsive", "shell"],
     usedBy: ["personal-brand-os", "agency-studio-os", "konsultan-os", "wirausaha-os", "kreator-studio-os", "riset-kit", "cms-public-storefront"],
-    agentRecipe: "Run `npx rr add dashboard-shell`. Wraps app/(admin) routes. <ResponsiveDashboardShell sidebar={<AppSidebar />} topbar={<TopBar />}>{children}</ResponsiveDashboardShell>. Mobile: sidebar collapses to <Sheet>. Desktop: persistent sidebar + topbar. Embed FullWidthToggle in topbar for instant container resize.",
+    agentRecipe:
+      "Run `npx rr add dashboard-shell` (needs shadcn `sidebar` installed). Wrap app/(dashboard)/layout.tsx in <DashboardShell brand nav>. `nav` is the SSOT: [{ id, label?, items: [{ id, label, href|onSelect, icon?, badge?, exact?, dock?, items? }] }]. Mobile dock derives from it (dock:true items, else the first `dockMax` — a Menu button opening the sheet is appended). Slots: sidebarHeader (workspace-shell switcher), sidebarFooter (user menu), actions (topbar right side, e.g. FullWidthToggle), topbar (full replace / null), secondary (contextual column). Pass activePath to drive it from state instead of the router. Helpers exported: isActive / deriveDock / activeItem / activeTitle / flattenNav.",
     previewPath: "/preview/slices/dashboard-shell",
     defaultView: "desktop",
     defaultZoom: 0.6,
-    wiring: `import { ResponsiveDashboardShell } from "@/features/dashboard-shell";
+    wiring: `import { DashboardShell } from "@/features/dashboard-shell";
 import { FullWidthToggle } from "@/features/full-width-toggle";
+import { FileText, Home, Settings } from "lucide-react";
 
-<ResponsiveDashboardShell
-  mode="authenticated"
-  sidebar={<AppSidebar />}
-  topbar={<><BreadcrumbSlot /><FullWidthToggle /></>}
->
+const nav = [
+  {
+    id: "workspace",
+    label: "Workspace",
+    items: [
+      { id: "home", label: "Home", icon: Home, href: "/app", exact: true, dock: true },
+      { id: "posts", label: "Posts", icon: FileText, href: "/app/posts", dock: true },
+    ],
+  },
+  { id: "system", items: [{ id: "settings", label: "Settings", icon: Settings, href: "/app/settings" }] },
+];
+
+<DashboardShell brand={{ name: "Acme" }} nav={nav} actions={<FullWidthToggle />}>
   {children}
-</ResponsiveDashboardShell>`,
+</DashboardShell>`,
   },
   {
     slug: "three-column",

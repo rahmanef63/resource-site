@@ -37,7 +37,7 @@ describe("chrome-kit registry", () => {
   it("seeds one kit per registered shell, each surface-correct", () => {
     registerBuiltinChromeKits();
     expect(BUILTIN_CHROME_KITS.map((k) => k.id).sort()).toEqual(
-      ["android", "dashboard", "ios", "macos", "mobile", "windows"],
+      ["android", "ios", "macos", "mobile", "windows"],
     );
     for (const k of BUILTIN_CHROME_KITS) {
       const expectSurface = ["ios", "android", "mobile"].includes(k.id) ? "mobile" : "desktop";

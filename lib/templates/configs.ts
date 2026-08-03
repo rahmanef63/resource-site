@@ -92,13 +92,15 @@ Source: ${repoBase("cookbook/layouts/" + slug)}
 
 ## Files to copy
 \`\`\`bash
-cp -r ~/projects/resource-site/cookbook/layouts/${slug}/* frontend/shared/ui/layout/dashboard/
+npx rr add dashboard-shell        # the shell itself (rail + mobile dock)
+cp -r ~/projects/resource-site/cookbook/layouts/${slug}/* slices/dashboard-shell/
 \`\`\`
 
 ## Wire
-1. Mount \`<ResponsiveDashboardShell variant="${s.variant ?? "tabs"}" ${s.aiBtn ? "ai " : ""}${s.sidebarToggle ? "sidebarToggle " : ""}${s.tabsHeader ? "tabsHeader " : ""}rightNav="${s.rightNav ?? "avatar"}" />\` at \`app/dashboard/layout.tsx\`.
-2. Configure primary nav + more-menu in \`navConfig.ts\`.
-${s.aiBtn ? "3. Wire AI FAB to <AIAgentConsole>." : ""}
+1. Mount \`<DashboardShell brand nav actions={${s.rightNav ?? "avatar"} slot} />\` at \`app/dashboard/layout.tsx\` (import from \`@/features/dashboard-shell\`).
+2. Define the nav ONCE — groups → items; flag \`dock: true\` on the ${s.variant ?? "tabs"} entries you want in the mobile bottom dock${s.aiBtn ? ", and pass the AI action as a dock item with `onSelect`" : ""}. The rail, the mobile sheet and the dock all read it.
+${s.sidebarToggle ? "3. The topbar's SidebarTrigger is on by default; pass `topbar` to replace the whole header." : ""}
+${s.aiBtn ? "4. Wire the AI dock item to <AIAgentConsole>." : ""}
 
 Hard rules: shadcn primitives, @convex-dev/auth, no raw <button>.
 `,

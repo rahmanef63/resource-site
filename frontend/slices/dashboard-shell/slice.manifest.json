@@ -1,0 +1,28 @@
+{
+  "$schema": "../../../docs/slice.manifest.schema.json",
+  "name": "dashboard-shell",
+  "version": "1.0.0",
+  "description": "One responsive dashboard chrome: desktop rail + topbar, mobile sheet sidebar + bottom dock, both driven by a single `nav` prop. Slots for workspace switcher, user menu, topbar actions and a secondary column.",
+  "category": "ui",
+  "stability": "stable",
+  "deps": {
+    "shared": [],
+    "slices": [],
+    "convexFeatures": [],
+    "npm": {
+      "lucide-react": "^0.4 || ^0.5"
+    }
+  },
+  "files": {
+    "include": ["**/*"],
+    "exclude": ["*.test.ts", "*.test.tsx"]
+  },
+  "compatibility": {
+    "next": ">=14 <17",
+    "react": "^18 || ^19",
+    "tailwind": "3||4",
+    "auth": "any"
+  },
+  "tags": ["ui", "layout", "dashboard", "sidebar", "dock", "responsive", "shell"],
+  "notes": "Needs shadcn `sidebar` installed (it brings sheet + tooltip). No Convex, no env, no localStorage. Pair with full-width-toggle in the topbar `actions` slot, workspace-shell in `sidebarHeader`."
+}
