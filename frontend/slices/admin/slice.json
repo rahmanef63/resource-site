@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "admin",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "category": "infra",
   "kind": "full",
   "title": "Admin — generic shell + composed console",
@@ -10,8 +10,22 @@
   "variants": {
     "default": "console",
     "items": [
-      { "id": "shell", "title": "Shell", "description": "Minimal generic admin shell (titled card + buildAdminStats).", "convex": ["convex/features/admin"] },
-      { "id": "console", "title": "Console", "description": "Composed access-gated 26-section console mounting other rr slices.", "convex": ["convex/features/admin_console"] }
+      {
+        "id": "shell",
+        "title": "Shell",
+        "description": "Minimal generic admin shell (titled card + buildAdminStats).",
+        "convex": [
+          "convex/features/admin"
+        ]
+      },
+      {
+        "id": "console",
+        "title": "Console",
+        "description": "Composed access-gated 26-section console mounting other rr slices.",
+        "convex": [
+          "convex/features/admin_console"
+        ]
+      }
     ]
   },
   "frontend": {
@@ -21,29 +35,76 @@
   "convex": {
     "tablesExport": "",
     "schemaPath": "",
-    "rootPaths": ["convex/features/admin", "convex/features/admin_console"]
+    "rootPaths": [
+      "convex/features/admin",
+      "convex/features/admin_console"
+    ]
   },
   "deps": {
     "npm": [],
-    "shadcn": ["badge", "button", "card", "input", "progress", "scroll-area", "select", "sheet", "table", "textarea"],
+    "shadcn": [
+      "badge",
+      "button",
+      "card",
+      "input",
+      "progress",
+      "scroll-area",
+      "select",
+      "sheet",
+      "table",
+      "textarea"
+    ],
     "env": [
-      { "name": "SUPER_ADMIN_EMAIL", "scope": "convex", "required": false, "description": "shell variant — single super-admin gate." },
-      { "name": "PLATFORM_ADMIN_EMAILS", "scope": "convex", "required": false, "description": "console variant — comma-separated platform-admin allowlist." }
+      {
+        "name": "SUPER_ADMIN_EMAIL",
+        "scope": "convex",
+        "required": false,
+        "description": "shell variant — single super-admin gate."
+      },
+      {
+        "name": "PLATFORM_ADMIN_EMAILS",
+        "scope": "convex",
+        "required": false,
+        "description": "console variant — comma-separated platform-admin allowlist."
+      }
     ],
     "peers": []
   },
   "registers": [],
   "audit": [],
   "license": "MIT",
-  "tags": ["admin", "console", "shell", "access-gate", "rbac", "sections", "dashboard", "infra"],
+  "tags": [
+    "admin",
+    "console",
+    "shell",
+    "access-gate",
+    "rbac",
+    "sections",
+    "dashboard",
+    "infra"
+  ],
   "previews": [],
   "contract": {
     "provides": {
       "tools": [],
-      "components": ["AdminPage", "AdminConsole", "AccessGate"],
-      "utils": ["buildAdminStats", "filterSections", "hasPermission"],
+      "components": [
+        "AdminPage",
+        "AdminConsole",
+        "AccessGate"
+      ],
+      "utils": [
+        "buildAdminStats",
+        "filterSections",
+        "hasPermission"
+      ],
       "hooks": [],
-      "convex": { "tables": ["ac_leads", "ac_nav_items"], "rbac": [] }
+      "convex": {
+        "tables": [
+          "ac_leads",
+          "ac_nav_items"
+        ],
+        "rbac": []
+      }
     }
   }
 }

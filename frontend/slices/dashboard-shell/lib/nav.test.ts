@@ -36,6 +36,11 @@ describe("isActive", () => {
   it("is false without an href", () => {
     expect(isActive("/app", {})).toBe(false);
   });
+
+  it("an explicit `active` wins over the path (button items)", () => {
+    expect(isActive("/app", { active: true })).toBe(true);
+    expect(isActive("/app", { href: "/app", active: false })).toBe(false);
+  });
 });
 
 describe("deriveDock", () => {

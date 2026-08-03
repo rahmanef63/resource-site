@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import * as Icons from "lucide-react"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -13,6 +12,7 @@ import {
   type AdminTier,
 } from "../lib/sections"
 import { canSeeAdmin, filterSections } from "../lib/access"
+import { sectionIcon } from "../lib/nav"
 import { useAdminSection } from "../hooks/useAdminSection"
 import { AnalyticsDashboard } from "./sections/AnalyticsDashboard"
 import { AuditLogViewer } from "./sections/AuditLogViewer"
@@ -46,11 +46,12 @@ export interface AdminConsoleProps {
   onNavigate?: (id: string) => void
   /** Optional node in the section header row — e.g. a notifications bell. */
   headerSlot?: React.ReactNode
-}
-
-function icon(name: string) {
-  const I = (Icons as unknown as Record<string, React.ComponentType<{ className?: string }>>)[name]
-  return I ?? Icons.Square
+  /**
+   * Render the built-in section rail. Set `false` when the sections already
+   * feed your app sidebar (see `sectionsToNav`) — the console then renders the
+   * active panel only, so the user sees ONE navigation, not two.
+   */
+  nav?: boolean
 }
 
 /**
@@ -68,6 +69,7 @@ export function AdminConsole({
   activeId,
   onNavigate,
   headerSlot,
+  nav = true,
 }: AdminConsoleProps) {
   const visible = React.useMemo(() => filterSections(sections, access, tier), [sections, access, tier])
   const internal = useAdminSection(visible)
@@ -95,6 +97,21 @@ export function AdminConsole({
   const section = visible.find((s) => s.id === active)
   const groups = Array.from(new Set(visible.map((s) => s.group)))
 
+  const panel = (
+    <main className="overflow-y-auto p-4">
+      {(section || headerSlot) && (
+        <div className="mb-4 flex items-center justify-between gap-2">
+          <h2 className="text-lg font-semibold tracking-tight">{section?.label}</h2>
+          {headerSlot}
+        </div>
+      )}
+      <SectionBody section={section} components={components} />
+    </main>
+  )
+
+  // Panel-only mode: the host shell already renders these sections as its nav.
+  if (!nav) return panel
+
   return (
     <div className="grid h-full w-full grid-cols-[220px_1fr]">
       <nav className="border-r bg-muted/30">
@@ -105,7 +122,7 @@ export function AdminConsole({
               {visible
                 .filter((s) => s.group === g)
                 .map((s) => {
-                  const Ic = icon(s.icon)
+                  const Ic = sectionIcon(s.icon)
                   return (
                     <Button
                       key={s.id}
@@ -131,15 +148,7 @@ export function AdminConsole({
         </ScrollArea>
       </nav>
 
-      <main className="overflow-y-auto p-4">
-        {(section || headerSlot) && (
-          <div className="mb-4 flex items-center justify-between gap-2">
-            <h2 className="text-lg font-semibold tracking-tight">{section?.label}</h2>
-            {headerSlot}
-          </div>
-        )}
-        <SectionBody section={section} components={components} />
-      </main>
+      {panel}
     </div>
   )
 }

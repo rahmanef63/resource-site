@@ -142,8 +142,11 @@ const nextConfig = {
       // Dashboard becomes operator root; admin is now a sub-section
       // alongside workspace. See docs/architecture/dashboard-vision.md.
       // Permanent so any external link (docs, PR, shared URL) keeps working.
-      { source: "/preview/:tpl/admin", destination: "/preview/:tpl/dashboard/admin", permanent: true },
-      { source: "/preview/:tpl/admin/:path*", destination: "/preview/:tpl/dashboard/admin/:path*", permanent: true },
+      // :tpl excludes "slices" — /preview/slices/<slug> is the slice-preview
+      // namespace, and the greedy rule used to 308 the `admin` slice preview
+      // into a 404 at /preview/slices/dashboard/admin.
+      { source: "/preview/:tpl((?!slices/)[^/]+)/admin", destination: "/preview/:tpl/dashboard/admin", permanent: true },
+      { source: "/preview/:tpl((?!slices/)[^/]+)/admin/:path*", destination: "/preview/:tpl/dashboard/admin/:path*", permanent: true },
 
       // P5 (2026-06-19): retire /layouts + /templates catalogs and the old
       // /preview/<layout-slug> section/OS demos. lib/content/layouts.ts is now

@@ -7,6 +7,13 @@ export { LeadsInbox } from "./components/sections/LeadsInbox"
 export { SeoHealthPanel } from "./components/sections/SeoHealthPanel"
 export { useAdminSection } from "./hooks/useAdminSection"
 export {
+  sectionIcon,
+  sectionsToNav,
+  type ConsoleNavGroup,
+  type ConsoleNavItem,
+  type SectionIcon,
+} from "./lib/nav"
+export {
   ADMIN_CONSOLE_SECTIONS,
   SECTION_PROVIDERS,
   ALL_TIERS,

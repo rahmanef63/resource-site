@@ -12,6 +12,8 @@ export interface NavItem {
   badge?: ReactNode;
   /** Exact-match the active check (default: prefix match on path segments). */
   exact?: boolean;
+  /** Force the active state — for button items (`onSelect`) the path can't tell. */
+  active?: boolean;
   /** Promote to the mobile dock. No item flagged → dock takes the first few. */
   dock?: boolean;
   /** One level of sub-nav (rendered as a shadcn SidebarMenuSub). */

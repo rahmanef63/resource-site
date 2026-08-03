@@ -3,7 +3,18 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { AlertTriangle } from "lucide-react";
+import {
+  AlertTriangle,
+  Box,
+  FileCode,
+  GaugeCircle,
+  GitBranch,
+  Layout,
+  LayoutGrid,
+  PackageSearch,
+  Settings,
+  Sparkles,
+} from "lucide-react";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
@@ -14,13 +25,32 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/admin/app-sidebar";
+import { DashboardShell, type NavGroup } from "@/features/dashboard-shell";
+import { NavUser } from "@/components/admin/nav-user";
+
+// rr operator nav — the SSOT for the desktop rail AND the mobile dock.
+const NAV: NavGroup[] = [
+  {
+    id: "edit",
+    label: "Edit",
+    items: [
+      { id: "overview", label: "Overview", href: "/admin", icon: Sparkles, exact: true, dock: true },
+      { id: "site", label: "Site", href: "/admin/site", icon: Settings },
+      { id: "layouts", label: "Layouts", href: "/admin/layouts", icon: Layout, dock: true },
+      { id: "sources", label: "Sources", href: "/admin/sources", icon: Box },
+      { id: "export", label: "Export", href: "/admin/export", icon: FileCode },
+    ],
+  },
+  {
+    id: "inspect",
+    label: "Inspect",
+    items: [
+      { id: "lineage", label: "Lineage", href: "/admin/lineage", icon: GitBranch },
+      { id: "quality", label: "Quality", href: "/admin/quality", icon: GaugeCircle },
+      { id: "registry", label: "Registry", href: "/admin/registry", icon: PackageSearch, dock: true },
+    ],
+  },
+];
 
 // Map known paths → breadcrumb label. Falls back to titlecased segment.
 const LABELS: Record<string, string> = {
@@ -46,7 +76,9 @@ function BreadcrumbTrail({ pathname }: { pathname: string }) {
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        <BreadcrumbItem className="hidden md:block">
+        {/* On mobile the parent crumbs are hidden — but at /admin itself the
+            root crumb IS the title, so keep it visible when it's alone. */}
+        <BreadcrumbItem className={rest.length ? "hidden md:block" : undefined}>
           <BreadcrumbLink asChild>
             <Link href="/admin">Operator</Link>
           </BreadcrumbLink>
@@ -74,6 +106,9 @@ function BreadcrumbTrail({ pathname }: { pathname: string }) {
   );
 }
 
+/** rr's operator panel — mounts the dashboard-shell slice we ship, so /admin
+ *  dogfoods the one dashboard: rail + ⌘B on desktop, sheet sidebar + bottom
+ *  dock on mobile. */
 export function AdminShell({
   children,
   email,
@@ -91,28 +126,33 @@ export function AdminShell({
   }
 
   return (
-    <SidebarProvider>
-      <AppSidebar email={email} onLogout={logout} />
-      <SidebarInset>
-        <header className="flex h-14 shrink-0 items-center gap-2 border-b bg-background/60 px-3 backdrop-blur transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-          <SidebarTrigger className="-ml-1" />
-          <Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
-          <BreadcrumbTrail pathname={pathname} />
-        </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 sm:p-6">
-          <Alert className="border-amber-500/30 bg-amber-500/5">
-            <AlertTriangle className="size-3.5 text-amber-500" />
-            <AlertDescription className="text-[11px] leading-relaxed">
-              Local edits live in your browser.{" "}
-              <Link href="/admin/export" className="underline">
-                Export
-              </Link>{" "}
-              to commit. Inspect tabs are read-only.
-            </AlertDescription>
-          </Alert>
-          {children}
-        </div>
-      </SidebarInset>
-    </SidebarProvider>
+    <DashboardShell
+      brand={{
+        name: "Operator",
+        caption: "rr control room",
+        href: "/admin",
+        logo: (
+          <span className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+            <LayoutGrid className="size-4" />
+          </span>
+        ),
+      }}
+      nav={NAV}
+      title={<BreadcrumbTrail pathname={pathname} />}
+      sidebarFooter={<NavUser email={email} onLogout={logout} />}
+      contentClassName="flex flex-col gap-4 p-4 sm:p-6"
+    >
+      <Alert className="border-amber-500/30 bg-amber-500/5">
+        <AlertTriangle className="size-3.5 text-amber-500" />
+        <AlertDescription className="text-[11px] leading-relaxed">
+          Local edits live in your browser.{" "}
+          <Link href="/admin/export" className="underline">
+            Export
+          </Link>{" "}
+          to commit. Inspect tabs are read-only.
+        </AlertDescription>
+      </Alert>
+      {children}
+    </DashboardShell>
   );
 }

@@ -2,6 +2,38 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "ONE-DASHBOARD-ADOPTION",
+    "version": "dashboard-merge-wave-2",
+    "date": 1785715200000,
+    "kind": "improvement",
+    "title": "Every sidebar in the repo now IS the dashboard-shell slice",
+    "body": "Wave 1 built the one dashboard but left the surfaces that actually render on their own hand-rolled chrome — so nothing looked different. This wave migrates them. rr's own /admin operator panel drops its bespoke SidebarProvider + AppSidebar + NavMain (382 lines) and mounts the slice: same rail and breadcrumb topbar on desktop, and on mobile it now gets the bottom dock (Overview / Layouts / Registry / Menu) it never had. The three preview routes that faked a dashboard with `grid-cols-[220px_1fr]` divs now mount the real thing, so what the catalog shows is what `npx rr add` gives you. The admin console gains `nav={false}` + a `sectionsToNav()` mapper: its 26 sections feed the ONE app sidebar instead of stacking a second rail beside it — one navigation, one dock, on every screen. Three orphan sidebars (shared/layout/AppSidebar, site-sidebar and its two group files) had no importers left and are deleted.",
+    "groups": [
+      {
+        "heading": "Slices touched",
+        "bullets": [
+          {
+            "text": "admin 0.3.0 — console variant: `nav={false}` renders the panel only; new `sectionsToNav(sections, onSelect, { activeId, dockCount })` maps sections onto a dashboard-shell `nav` (structural, no cross-slice import)",
+            "slug": "admin"
+          },
+          {
+            "text": "dashboard-shell — NavItem gains `active?: boolean` so button items (onSelect, no href) can drive the rail + dock highlight",
+            "slug": "dashboard-shell"
+          }
+        ]
+      },
+      {
+        "heading": "Site",
+        "bullets": [
+          "/admin mounts DashboardShell — components/admin/{app-sidebar,nav-main}.tsx deleted, NavUser kept as the sidebar footer",
+          "/preview/slices/{admin,admin-panel,workspace-shell} render the real shell; workspace-shell's switcher now sits in `sidebarHeader`, its menuSet drives rail + dock",
+          "Deleted with no importers: components/shared/layout/AppSidebar.tsx, components/site/site-sidebar.tsx + site-sidebar/{sidebar-grouped-items,sidebar-list-group}.tsx",
+          "next.config: the /preview/:tpl/admin → /dashboard/admin redirect was swallowing /preview/slices/admin (308 → 404, the admin slice preview was unreachable). :tpl now excludes the slices namespace"
+        ]
+      }
+    ]
+  },
+  {
     "id": "ONE-DASHBOARD",
     "version": "dashboard-merge-wave",
     "date": 1785715200000,

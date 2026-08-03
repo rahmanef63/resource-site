@@ -1,24 +1,30 @@
-import { LayoutDashboard, Users, FileText, Mail, Settings, ShieldCheck, BarChart3, Bot, Image as ImageIcon, Webhook, KeyRound, Activity, Folder, Wrench, Bell, Boxes, Database } from "lucide-react";
-import { Button } from "@/components/ui/button";
+"use client";
+
+import * as React from "react";
+import {
+  Activity, BarChart3, Bell, Bot, Boxes, Database, FileText, Folder, Image as ImageIcon,
+  KeyRound, LayoutDashboard, Mail, Settings, ShieldCheck, Users, Webhook, Wrench,
+} from "lucide-react";
+import { DashboardShell, type NavGroup } from "@/features/dashboard-shell";
 
 const SECTIONS = [
-  { Icon: LayoutDashboard, label: "Overview" },
-  { Icon: Users, label: "Members" },
-  { Icon: ShieldCheck, label: "Roles" },
-  { Icon: FileText, label: "Content" },
-  { Icon: ImageIcon, label: "Media" },
-  { Icon: Mail, label: "Email" },
-  { Icon: BarChart3, label: "Analytics" },
-  { Icon: Bot, label: "AI" },
-  { Icon: Database, label: "Database" },
-  { Icon: Boxes, label: "Slices" },
-  { Icon: Webhook, label: "Webhooks" },
-  { Icon: KeyRound, label: "API keys" },
-  { Icon: Activity, label: "Audit log" },
-  { Icon: Folder, label: "Files" },
-  { Icon: Bell, label: "Notifications" },
-  { Icon: Wrench, label: "Settings" },
-  { Icon: Settings, label: "Advanced" },
+  { id: "overview", label: "Overview", icon: LayoutDashboard, group: "Workspace" },
+  { id: "members", label: "Members", icon: Users, group: "Workspace" },
+  { id: "roles", label: "Roles", icon: ShieldCheck, group: "Workspace" },
+  { id: "content", label: "Content", icon: FileText, group: "Content" },
+  { id: "media", label: "Media", icon: ImageIcon, group: "Content" },
+  { id: "email", label: "Email", icon: Mail, group: "Content" },
+  { id: "analytics", label: "Analytics", icon: BarChart3, group: "Insights" },
+  { id: "ai", label: "AI", icon: Bot, group: "Insights" },
+  { id: "database", label: "Database", icon: Database, group: "Platform" },
+  { id: "slices", label: "Slices", icon: Boxes, group: "Platform" },
+  { id: "webhooks", label: "Webhooks", icon: Webhook, group: "Platform" },
+  { id: "api-keys", label: "API keys", icon: KeyRound, group: "Platform" },
+  { id: "audit", label: "Audit log", icon: Activity, group: "Platform" },
+  { id: "files", label: "Files", icon: Folder, group: "Platform" },
+  { id: "notifications", label: "Notifications", icon: Bell, group: "System" },
+  { id: "settings", label: "Settings", icon: Wrench, group: "System" },
+  { id: "advanced", label: "Advanced", icon: Settings, group: "System" },
 ];
 
 const STATS = [
@@ -29,53 +35,68 @@ const STATS = [
 ];
 
 export default function Page() {
+  const [active, setActive] = React.useState("overview");
+
+  const nav: NavGroup[] = React.useMemo(() => {
+    const groups: NavGroup[] = [];
+    SECTIONS.forEach((s, i) => {
+      const item = {
+        id: s.id,
+        label: s.label,
+        icon: s.icon,
+        onSelect: () => setActive(s.id),
+        active: s.id === active,
+        dock: i < 3,
+      };
+      const g = groups.find((x) => x.id === s.group);
+      if (g) g.items.push(item);
+      else groups.push({ id: s.group, label: s.group, items: [item] });
+    });
+    return groups;
+  }, [active]);
+
+  const section = SECTIONS.find((s) => s.id === active);
+
   return (
-    <main className="min-h-screen bg-background">
-      <div className="grid min-h-screen grid-cols-[220px_1fr]">
-        <aside className="border-r border-border/60 bg-muted/20 p-3">
-          <div className="mb-4 flex items-center gap-2 px-2">
-            <div className="grid size-7 place-items-center rounded bg-primary/15"><ShieldCheck className="size-4 text-primary" /></div>
-            <span className="text-sm font-semibold">Admin</span>
-          </div>
-          <nav className="space-y-0.5">
-            {SECTIONS.map(({ Icon, label }, i) => (
-              <Button key={label} variant="ghost" type="button" className={`flex h-auto w-full items-center justify-start gap-2 rounded-md px-2 py-1.5 text-left text-xs transition ${i === 0 ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted/40"}`}>
-                <Icon className="size-3.5" />
-                {label}
-              </Button>
-            ))}
-          </nav>
-        </aside>
-        <div className="p-6">
-          <header className="mb-6 flex items-end justify-between">
-            <div>
-              <h1 className="text-2xl font-bold">Overview</h1>
-              <p className="text-sm text-muted-foreground">17-section admin shell. RBAC-gated.</p>
+    <div className="relative h-svh transform-gpu overflow-hidden">
+      <DashboardShell
+        brand={{ name: "Admin", caption: "acme.workspace" }}
+        nav={nav}
+        title={section?.label}
+        contentClassName="p-6"
+      >
+        <header className="mb-6">
+          <h1 className="text-2xl font-bold">{section?.label}</h1>
+          <p className="text-sm text-muted-foreground">17-section admin shell. RBAC-gated.</p>
+        </header>
+        <div className="mb-6 grid gap-3 md:grid-cols-4">
+          {STATS.map((s) => (
+            <div key={s.label} className="rounded-lg border border-border/60 bg-card p-4">
+              <p className="text-xs text-muted-foreground">{s.label}</p>
+              <p className="mt-2 text-2xl font-bold">{s.value}</p>
+              <p className="mt-1 text-[10px] font-medium text-emerald-600 dark:text-emerald-400">
+                {s.change} vs last week
+              </p>
             </div>
-            <span className="rounded-full border border-border/60 bg-muted/40 px-3 py-1 text-xs">acme.workspace</span>
-          </header>
-          <div className="mb-6 grid gap-3 md:grid-cols-4">
-            {STATS.map((s) => (
-              <div key={s.label} className="rounded-lg border border-border/60 bg-card p-4">
-                <p className="text-xs text-muted-foreground">{s.label}</p>
-                <p className="mt-2 text-2xl font-bold">{s.value}</p>
-                <p className="mt-1 text-[10px] font-medium text-emerald-600 dark:text-emerald-400">{s.change} vs last week</p>
+          ))}
+        </div>
+        <div className="rounded-lg border border-border/60 bg-card p-5">
+          <h2 className="text-sm font-semibold">Recent activity</h2>
+          <div className="mt-3 space-y-2 text-xs">
+            {[
+              "alice@acme published Post #247",
+              "bob@acme invited 3 members",
+              "system reseeded RBAC roles",
+              "carol@acme exported 12 audit rows",
+            ].map((a) => (
+              <div key={a} className="flex items-center gap-2 rounded border border-border/40 bg-muted/20 px-3 py-2">
+                <div className="size-1.5 rounded-full bg-emerald-500" />
+                {a}
               </div>
             ))}
           </div>
-          <div className="rounded-lg border border-border/60 bg-card p-5">
-            <h2 className="text-sm font-semibold">Recent activity</h2>
-            <div className="mt-3 space-y-2 text-xs">
-              {["alice@acme published Post #247", "bob@acme invited 3 members", "system reseeded RBAC roles", "carol@acme exported 12 audit rows"].map((a) => (
-                <div key={a} className="flex items-center gap-2 rounded border border-border/40 bg-muted/20 px-3 py-2">
-                  <div className="size-1.5 rounded-full bg-emerald-500" />
-                  {a}
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
-      </div>
-    </main>
+      </DashboardShell>
+    </div>
   );
 }

@@ -5,11 +5,13 @@ function normalize(p: string): string {
   return trimmed === "" ? "/" : trimmed;
 }
 
-/** Prefix-match on whole segments (`/a/b` matches `/a`, `/ab` does not). */
+/** Prefix-match on whole segments (`/a/b` matches `/a`, `/ab` does not).
+ *  An explicit `active` wins — button items have no href to match. */
 export function isActive(
   pathname: string,
-  item: Pick<NavItem, "href" | "exact">,
+  item: Pick<NavItem, "href" | "exact" | "active">,
 ): boolean {
+  if (item.active !== undefined) return item.active;
   if (!item.href) return false;
   const href = normalize(item.href);
   const path = normalize(pathname);
