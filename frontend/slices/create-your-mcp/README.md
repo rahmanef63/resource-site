@@ -91,18 +91,27 @@ service-account integration pattern, not a security back door.
 
 ## Security notes
 
+- **Tokens and auth codes stored as sha256, never in the clear.** The raw
+  bearer is returned to the client exactly once, at mint; the raw code
+  exists only in flight between the consent redirect and the token
+  exchange. A database dump contains no usable credential, and the
+  digest — not the bearer — is what reaches Convex as a function argument.
 - PKCE S256 only (downgrade to "plain" is rejected)
-- Single-use codes — `consumed` flag patched BEFORE token mint
+- Single-use codes — the row is DELETED before the token is minted, so a
+  replay is indistinguishable from an unknown code and the table stays
+  bounded
 - 5-min code TTL, 1-year token TTL (rotate via `revokeToken` on leak)
-- Constant-time token compare
+- Constant-time compare on the static `MCP_API_KEY` path — that one is a
+  raw string equality check, which hashing does not cover
 - Opaque error collapse on all `invalid_grant` paths — attacker can't
-  distinguish which step (unknown / consumed / expired / PKCE / redirect /
-  client) failed
+  distinguish which step (unknown / already redeemed / expired / PKCE /
+  redirect / client) failed
 - Redirect-URI allowlist (env-configured) + path-prefix allowlist for
   defense-in-depth against open-redirect bounces
 - `userinfo` and `fragment` rejected in redirect_uri
 - HTTPS-only redirects in prod (localhost exception for dev)
-- Token preview only on admin wire (raw token never leaves Convex)
+- No token preview in the admin list — there is no stored raw value to
+  preview. Tokens are identified by `label` + `createdAt`.
 
 ## Add tools
 

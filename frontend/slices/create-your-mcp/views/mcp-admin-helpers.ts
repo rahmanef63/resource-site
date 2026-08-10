@@ -1,6 +1,7 @@
 export type McpTokenRow = {
   _id: string;
-  tokenPreview: string;
+  // no token/preview field by design — only the sha256 digest is stored,
+  // so there is no raw value the admin list could show or leak.
   userId: string;
   clientId: string;
   scope: string | null;

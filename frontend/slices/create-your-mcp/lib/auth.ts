@@ -1,8 +1,9 @@
 // Bearer-token check for the MCP endpoint. Two paths:
 //
 // 1. OAuth-issued token — validated via slices/create-your-mcp:findToken
-//    Convex query. Each successful call returns the row id so the route
-//    can bump lastUsedAt.
+//    Convex query, which is handed sha256(bearer), never the bearer.
+//    Each successful call returns the row id so the route can bump
+//    lastUsedAt.
 //
 // 2. Static MCP_API_KEY env var — kept as a developer/CI escape hatch
 //    (curl smoke tests, server scripts, service accounts). Disabled if
@@ -11,6 +12,8 @@
 // The two paths are CO-EQUAL — both flow through `requireAdmin` on
 // every downstream Convex mutation. The env path is the documented
 // service-account integration pattern for backend automation.
+
+import { sha256Base64Url } from "./hash";
 
 type FindTokenResult = { _id: string; scope: string | null } | null;
 
@@ -22,6 +25,9 @@ export type AuthResult =
       kind: "oauth";
       tokenId: string;
       convexToken: string;
+      // digest of convexToken — hand this to touchToken so the raw
+      // bearer never becomes a Convex function argument.
+      tokenHash: string;
       scope: string | null;
     };
 
@@ -50,23 +56,26 @@ export const tokenMatches = (provided: string, expected: string): boolean => {
 
 // Caller injects a `findToken` function (the route wires the consumer's
 // Convex client) so the slice stays decoupled from any specific HTTP
-// client setup. Returns null on any invalid/expired/revoked path.
+// client setup. It is called with sha256(bearer) — the stored digest —
+// NOT the bearer. Returns null on any invalid/expired/revoked path.
 export const checkAuth = async (
   headers: Headers,
-  findToken: (token: string) => Promise<FindTokenResult>,
+  findToken: (tokenHash: string) => Promise<FindTokenResult>,
 ): Promise<AuthResult> => {
   const provided = extractBearer(headers);
   if (!provided) return { ok: false };
 
   // Try OAuth-issued token first — primary path for AI clients.
   try {
-    const row = await findToken(provided);
+    const tokenHash = await sha256Base64Url(provided);
+    const row = await findToken(tokenHash);
     if (row) {
       return {
         ok: true,
         kind: "oauth",
         tokenId: row._id,
         convexToken: provided,
+        tokenHash,
         scope: row.scope,
       };
     }

@@ -58,7 +58,6 @@ export function McpTokenTable({ rows, onRevoke }: McpTokenTableProps) {
           <tr>
             <th className="px-3 py-3 text-left text-[10px] uppercase tracking-widest font-medium">Status</th>
             <th className="px-3 py-3 text-left text-[10px] uppercase tracking-widest font-medium">Label / Client</th>
-            <th className="px-3 py-3 text-left text-[10px] uppercase tracking-widest font-medium">Token</th>
             <th className="px-3 py-3 text-left text-[10px] uppercase tracking-widest font-medium">Created</th>
             <th className="px-3 py-3 text-left text-[10px] uppercase tracking-widest font-medium">Last used</th>
             <th className="px-3 py-3 text-left text-[10px] uppercase tracking-widest font-medium">Expires</th>
@@ -87,9 +86,6 @@ export function McpTokenTable({ rows, onRevoke }: McpTokenTableProps) {
                       scope: {r.scope}
                     </div>
                   )}
-                </td>
-                <td className="px-3 py-3">
-                  <code className="text-xs font-mono">{r.tokenPreview}</code>
                 </td>
                 <td className="px-3 py-3 text-xs text-muted-foreground tabular-nums">{formatTime(r.createdAt)}</td>
                 <td className="px-3 py-3 text-xs text-muted-foreground tabular-nums">{formatTime(r.lastUsedAt)}</td>

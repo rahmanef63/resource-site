@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "create-your-mcp",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",

@@ -11,6 +11,30 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-08-10 — `create-your-mcp` 0.3.0: tokens + auth codes hashed at rest ⚠ BREAKING
+
+Found by auditing the `chatgpt-mcp` Claude Code skill (the recipe this slice was built
+from) against every implementation of it. The recipe told you to store raw values and
+index them; the slice did exactly that.
+
+**Slices:**
+- `create-your-mcp` 0.3.0 — `oauthAccessTokens.token` → `tokenHash` (index `by_token` →
+  `by_hash`) and `oauthCodes.code` → `codeHash` (`by_code` → `by_code_hash`). Only the
+  sha256 digest is persisted; the raw bearer is returned to the client exactly once, at
+  mint, so a database dump now contains no usable credential. `findToken` / `touchToken`
+  take the digest, not the bearer — the raw token never becomes a Convex function
+  argument. `adminList` loses `tokenPreview` (and the token column in `McpTokenTable`):
+  it only existed because the raw value was in the row, and there is nothing left to
+  redact. The `consumed` flag is gone — `exchangeCode` DELETES the code row, so a replay
+  hits the same opaque `invalid_grant` and the table stops growing one dead row per
+  successful login. The constant-time compare stays: it guards the static `MCP_API_KEY`
+  env path, which hashing does not cover.
+
+**Upgrading:** this is a schema change with no migration, on purpose. Any token that was
+stored in plaintext should be treated as compromised, not carried forward — drop both
+tables, take the new schema, and re-issue from the admin view. Tokens mint in seconds;
+a rotation is cheaper and safer than a rehash.
+
 ### 2026-06-11 — Track A: copy-source security hardening + catalog version sync
 
 Final track of the audit. Copy-source functions (consumers inherit via `npx rr add`;

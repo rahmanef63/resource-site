@@ -12,7 +12,6 @@ const ONE_DAY = 24 * 60 * 60 * 1000;
 const mockRows: McpTokenRow[] = [
   {
     _id: "row_chatgpt_prod" as const,
-    tokenPreview: "9f3a2c1e…b8d4",
     userId: "user_admin",
     clientId: "chatgpt-prod",
     scope: "cms.read cms.write",
@@ -25,7 +24,6 @@ const mockRows: McpTokenRow[] = [
   },
   {
     _id: "row_claude_connector" as const,
-    tokenPreview: "1d7f4b08…3e9a",
     userId: "user_admin",
     clientId: "claude-connector",
     scope: "cms.read",
@@ -38,7 +36,6 @@ const mockRows: McpTokenRow[] = [
   },
   {
     _id: "row_cursor_local" as const,
-    tokenPreview: "5c2e8d77…f0a1",
     userId: "user_admin",
     clientId: "cursor-mcp",
     scope: "cms.read",
@@ -51,7 +48,6 @@ const mockRows: McpTokenRow[] = [
   },
   {
     _id: "row_revoked_leak" as const,
-    tokenPreview: "8a0bcc91…7d2e",
     userId: "user_admin",
     clientId: "chatgpt-dev",
     scope: null,

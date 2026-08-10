@@ -1,11 +1,13 @@
 import { query } from "../../_generated/server";
 import { v } from "convex/values";
 import { requireAdmin } from "../../_shared/auth";
+import { sha256Base64Url } from "./_pkce";
 
 // Admin view of every issued access token. requireAdmin gates this at
 // the query layer — Convex HTTP queries are directly reachable, so a
-// Next.js layout-only gate is not enough. Raw `token` field stripped
-// from the wire so it never leaves Convex; admin sees a preview only.
+// Next.js layout-only gate is not enough. There is no token preview to
+// return: only the digest is stored, so there is nothing to redact.
+// Tokens are identified in the UI by `label` + `createdAt`.
 export const adminList = query({
   args: { limit: v.optional(v.number()) },
   handler: async (ctx, { limit }) => {
@@ -17,7 +19,6 @@ export const adminList = query({
       .take(limit ?? 200);
     return rows.map((r) => ({
       _id: r._id,
-      tokenPreview: `${r.token.slice(0, 8)}…${r.token.slice(-4)}`,
       userId: r.userId,
       clientId: r.clientId,
       scope: r.scope ?? null,
@@ -31,16 +32,17 @@ export const adminList = query({
   },
 });
 
-// Public — called from /api/mcp route. Returns null on any invalid /
-// expired / revoked state so the route can fall back to the static
-// MCP_API_KEY env check.
+// Public — called from /api/mcp route with sha256(bearer), never the
+// bearer itself, so the raw credential never appears in a Convex
+// function argument. Returns null on any invalid / expired / revoked
+// state so the route can fall back to the static MCP_API_KEY env check.
 export const findToken = query({
-  args: { token: v.string() },
-  handler: async (ctx, { token }) => {
-    if (!token || token.length < 32) return null;
+  args: { tokenHash: v.string() },
+  handler: async (ctx, { tokenHash }) => {
+    if (!tokenHash || tokenHash.length < 32) return null;
     const row = await ctx.db
       .query("oauthAccessTokens")
-      .withIndex("by_token", (q) => q.eq("token", token))
+      .withIndex("by_hash", (q) => q.eq("tokenHash", tokenHash))
       .first();
     if (!row) return null;
     if (row.revokedAt) return null;

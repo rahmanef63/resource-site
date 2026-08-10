@@ -66,9 +66,9 @@ const unauthorized = (siteUrl: string) =>
 export async function POST(req: Request) {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "";
 
-  const auth = await checkAuth(req.headers, async (token) => {
+  const auth = await checkAuth(req.headers, async (tokenHash) => {
     return (await convexHttp.query("features/create_your_mcp:findToken", {
-      token,
+      tokenHash,
     })) as { _id: string; scope: string | null } | null;
   });
   if (!auth.ok) return unauthorized(siteUrl);
@@ -88,6 +88,8 @@ export async function POST(req: Request) {
   // already validated it.
   const bearer =
     auth.kind === "oauth" ? auth.convexToken : (process.env.MCP_API_KEY as string);
+  // digest, for the lastUsedAt bump — never send the raw bearer to Convex
+  const bearerHash = auth.kind === "oauth" ? auth.tokenHash : "";
 
   return runWithMcpContext({ token: bearer }, async () => {
     const opts = { serverInfo: SERVER_INFO, instructions: INSTRUCTIONS };
@@ -98,7 +100,7 @@ export async function POST(req: Request) {
       const responses = results.filter((r) => r !== null);
       if (auth.kind === "oauth") {
         void convexHttp
-          .mutation("features/create_your_mcp:touchToken", { token: bearer })
+          .mutation("features/create_your_mcp:touchToken", { tokenHash: bearerHash })
           .catch(() => undefined);
       }
       if (responses.length === 0) return new NextResponse(null, { status: 202 });
@@ -108,7 +110,7 @@ export async function POST(req: Request) {
     const result = await dispatchJsonRpc(body, TOOLS, auth.scope, opts);
     if (auth.kind === "oauth") {
       void convexHttp
-        .mutation("features/create_your_mcp:touchToken", { token: bearer })
+        .mutation("features/create_your_mcp:touchToken", { tokenHash: bearerHash })
         .catch(() => undefined);
     }
     if (result === null) return new NextResponse(null, { status: 202 });

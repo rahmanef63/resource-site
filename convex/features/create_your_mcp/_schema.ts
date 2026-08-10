@@ -16,8 +16,14 @@ import { v } from "convex/values";
 export const createYourMcpTables = {
   // Ephemeral authorization codes — minted at /oauth/authorize after
   // admin consent, redeemed at /api/oauth/token. Always single-use.
+  //
+  // Only the sha256 digest is stored. The raw code exists in flight
+  // between the consent redirect and the token exchange, and nowhere
+  // else. There is no `consumed` flag: the row is DELETED on exchange,
+  // so a replay finds nothing (same opaque invalid_grant) and the table
+  // does not grow one dead row per successful login forever.
   oauthCodes: defineTable({
-    code: v.string(),
+    codeHash: v.string(),
     codeChallenge: v.string(),
     codeChallengeMethod: v.string(),
     redirectUri: v.string(),
@@ -26,17 +32,20 @@ export const createYourMcpTables = {
     resource: v.optional(v.string()),
     userId: v.id("users"),
     expiresAt: v.number(),
-    consumed: v.boolean(),
     createdAt: v.number(),
   })
-    .index("by_code", ["code"])
+    .index("by_code_hash", ["codeHash"])
     .index("by_user_time", ["userId", "createdAt"]),
 
   // Long-lived access tokens issued after successful code exchange.
   // The MCP route validates Bearer against this table on every call.
   // 1-year TTL default — rotate via revokeToken if leaked.
+  //
+  // Only the sha256 digest is stored; the raw bearer is returned to the
+  // client exactly once, at mint. A database dump therefore contains no
+  // usable credential, and the admin list has nothing to redact.
   oauthAccessTokens: defineTable({
-    token: v.string(),
+    tokenHash: v.string(),
     userId: v.id("users"),
     clientId: v.string(),
     scope: v.optional(v.string()),
@@ -47,6 +56,6 @@ export const createYourMcpTables = {
     revokedAt: v.optional(v.number()),
     label: v.optional(v.string()),
   })
-    .index("by_token", ["token"])
+    .index("by_hash", ["tokenHash"])
     .index("by_user_time", ["userId", "createdAt"]),
 };
