@@ -19,21 +19,21 @@ npm run audit:file-size --silent
 npm run audit:convex-features --silent
 npm run audit:docs-primitives --silent
 
-echo "→ pre-push: vitest (behavioral gate — audits alone never caught a dead click)"
+echo "→ pre-push: NODE_ENV=test vitest (behavioral gate — audits alone never caught a dead click)"
 # vitest intermittently exits 1 with ALL tests green (environmental teardown
 # flake, ~1/4 of hook-context runs, 2026-06-11). One retry: a real failure
 # stays red on both runs; the flake passes the second.
-npm run test --silent || {
+NODE_ENV=test npm run test --silent || {
   echo "↻ pre-push: vitest non-zero — retrying once (known green-but-exit-1 flake)"
-  npm run test --silent || {
+  NODE_ENV=test npm run test --silent || {
     echo ""
     echo "❌ pre-push: tests FAILED twice. Bypass (NOT recommended): git push --no-verify"
     exit 1
   }
 }
 
-echo "→ pre-push: npm run build (catches Next-only errors tsc misses — cacheComponents conflicts, Turbopack loader issues, etc)"
-npm run build --silent > /tmp/rr-prepush-build.log 2>&1 || {
+echo "→ pre-push: NODE_ENV=production npm run build (catches Next-only errors tsc misses — cacheComponents conflicts, Turbopack loader issues, etc)"
+NODE_ENV=production npm run build --silent > /tmp/rr-prepush-build.log 2>&1 || {
   echo ""
   echo "❌ pre-push: production build FAILED. See /tmp/rr-prepush-build.log"
   tail -40 /tmp/rr-prepush-build.log
