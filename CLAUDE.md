@@ -64,23 +64,27 @@ CLI baca `rr.json` (consumer project manifest) — schema di `packages/cli/lib/r
 
 ## Hard Rules
 
-1. **NO Clerk.** Auth = `@convex-dev/auth`.
-2. **All UI = shadcn primitives** atau composed dari shadcn. Forbid raw `<button>`, `<dialog>`, `<input type=date|file>`. Pakai `ResponsiveDialog`, `DateField`, `FileUpload`.
+1. **Auth follows the active profile.** rr's own Next + Convex runtime uses `@convex-dev/auth` (NO Clerk in rr). For Svelte + Convex consumers, use `convex-svelte` `setupAuth`/`useAuth` as the framework boundary and verify the selected provider/adapter against current Svelte support; never transplant React auth providers into Svelte.
+2. **All shared UI = shadcn-family primitives** atau composed wrappers: shadcn/ui for rr/Next, shadcn-svelte for Svelte consumers. Keep native semantics when they are the correct accessible primitive; never hand-roll a parallel design system.
 3. **Copy-first flow.** Jangan greenfield. `cp -r` dari source → adjust import alias → strip business-specific bits.
-4. **Stack:** Next 16 + React 19 + Tailwind 4 + Convex self-hosted + TS strict.
-5. **Slice contract.** Setiap vertical feature = tier-3 slice di rr `frontend/slices/<slug>/` (dgn `slice.json` — composition contract sekarang di-fold ke dalam `slice.json` di bawah block `contract`, id/version derived dari scalar slice.json) + `convex/features/<slug>/` (dgn `<slug>Tables` schema export). Imports di dalam slice WAJIB resolve via `@/components/ui/*`, `@/shared/*`, `@/features/<own-slug>/*`, `@convex/*`, atau relative-within-slice. No `../../` reaching out. Audit-bp gates ini di CI (`npm run audit:slices`). **Version SSOT = PAIR: `slice.json.version` === `slice.manifest.json.version`**, di-gate `audit:slices` (bukan trio lagi — `slice.contract.ts` di-fold ke `slice.json.contract` 2026-06-21). `lib/content/slices.ts` scalar (version/title/category/kind) di-**generate** dari slice.json via `gen-slice-catalog.mjs` (gated `gen:catalog:check` di pre-commit + `slices:check`) — drift udah gak mungkin, prose catalog tetap hand-authored.
+4. **Stack profiles:** rr runtime remains Next + React + Tailwind + Convex. Consumer best-practice profiles are **Next.js OR Svelte 5**, with **Convex optional**. Exact reviewed versions + official docs live only in `lib/content/best-practice-techs.ts` and drive `/best-practice` + its generated prompt. Svelte profile = Svelte 5 Runes + SvelteKit + Bun + shadcn-svelte; no legacy Svelte syntax for new code.
+5. **Slice contract.** Consumer feature UI stays at ROOT `slices/<slug>/`; framework route files are thin adapters and repeated page families use one dynamic `[slug]` route + registry/data SSOT. Source copy di rr = tier-3 slice di `frontend/slices/<slug>/` (dgn `slice.json` — composition contract sekarang di-fold ke dalam `slice.json` di bawah block `contract`, id/version derived dari scalar slice.json) + `convex/features/<slug>/` (dgn `<slug>Tables` schema export). Imports di dalam slice WAJIB resolve via `@/components/ui/*`, `@/shared/*`, `@/features/<own-slug>/*`, `@convex/*`, atau relative-within-slice. No `../../` reaching out. Audit-bp gates ini di CI (`npm run audit:slices`). **Version SSOT = PAIR: `slice.json.version` === `slice.manifest.json.version`**, di-gate `audit:slices` (bukan trio lagi — `slice.contract.ts` di-fold ke `slice.json.contract` 2026-06-21). `lib/content/slices.ts` scalar (version/title/category/kind) di-**generate** dari slice.json via `gen-slice-catalog.mjs` (gated `gen:catalog:check` di pre-commit + `slices:check`) — drift udah gak mungkin, prose catalog tetap hand-authored.
 6. **rr backend = admin-only.** Slice demo di site jalan pakai client localStorage adapter, BUKAN Convex. `convex/features/*` = **copy-source** — consumer compose ke backend mereka sendiri pas `npx rr add <slug>`. rr's OWN backend (`api-resource.rahmanef.com`) cuma deploy `rate_limit` (admin-login limiter) via `npm run deploy:convex` (allowlist `ADMIN_CONVEX` di `scripts/deploy-convex-functions.mjs`). JANGAN compose semua feature ke `convex/schema.ts` — itu bikin library jadi monolit.
 
 ## Forbidden
 
-- `<a href="/internal">` (pakai `next/link` atau `SmartLink`)
-- `<img src="...">` (pakai `next/image`)
+- Next profile: `<a href="/internal">` (pakai `next/link` atau `SmartLink`)
+- Next profile: `<img src="...">` (pakai `next/image`)
 - bare `.collect()` di Convex queries (pakai `.withIndex(...).take(N)`)
 - public Convex fn tanpa `args: { ... }` validator (audit-bp P0)
-- Server Action tanpa authn+authz (audit-bp P0)
-- `NEXT_PUBLIC_*` untuk sensitive values (leak ke client bundle)
-- `middleware.ts` di Next 16 (pakai `proxy.ts`)
-- runtime `fs.readdir`/`readFile` ke dir repo TANPA nambahin dir itu ke `outputFileTracingIncludes` di `next.config.mjs` — lokal jalan, di image docker standalone diam-diam kosong (lihat docs/deploy.md)
+- Next profile: Server Action tanpa authn+authz (audit-bp P0)
+- Next profile: `NEXT_PUBLIC_*` untuk sensitive values (leak ke client bundle)
+- Next profile: `middleware.ts` di Next 16 (pakai `proxy.ts`)
+- Next profile: runtime `fs.readdir`/`readFile` ke dir repo TANPA nambahin dir itu ke `outputFileTracingIncludes` di `next.config.mjs` — lokal jalan, di image docker standalone diam-diam kosong (lihat docs/deploy.md)
+
+- Svelte profile: legacy reactivity/events in NEW code (`$:`, `export let`, `on:click`, `createEventDispatcher`, `<slot>`); use Runes, event attributes, callback props, snippets.
+- Svelte profile: npm/pnpm/yarn lockfiles; package manager = Bun only.
+
 
 ## Source Map (kalau copy dari project lain)
 

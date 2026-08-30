@@ -110,10 +110,10 @@ export function GET(req: NextRequest) {
       tags: r.tags,
     })),
     rules: [
-      "NO Clerk — use @convex-dev/auth",
-      "shadcn-only UI",
+      "best-practice profile: Next.js or Svelte 5; Convex optional — exact reviewed versions at /best-practice",
+      "root slices/<slug> vertical slices + thin dynamic route adapters + registry/data SSOT",
+      "active framework shadcn port + theme tokens",
       "copy-first flow",
-      "stack: Next 16 + React 19 + Tailwind 4 + Convex self-hosted + TS strict",
       "workspace isolation per Convex query",
       "RBAC + audit log on every mutation",
       "commit convex/_generated before deploy",

@@ -109,10 +109,10 @@ notion-clone   ✅        ✅          ✅          ✅          ✅         ✅
       <section className="mt-12 space-y-4">
         <h2 className="text-2xl font-semibold tracking-tight">Hard rules</h2>
         <ul className="list-disc space-y-2 pl-6 text-sm">
-          <li><strong>NO Clerk.</strong> Auth = <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">@convex-dev/auth</code>.</li>
-          <li><strong>shadcn-only UI.</strong> No raw <code>&lt;button&gt;</code> / <code>&lt;dialog&gt;</code> / native date+file inputs. Use ResponsiveDialog, DateField, FileUpload.</li>
+          <li><strong>Profile-aware auth.</strong> rr runtime uses <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">@convex-dev/auth</code>; Svelte consumers use the current convex-svelte auth boundary/provider support.</li>
+          <li><strong>shadcn-family UI.</strong> rr/Next uses shadcn/ui; Svelte consumers use shadcn-svelte. Compose shared wrappers and tokens instead of a second design system.</li>
           <li><strong>Copy-first.</strong> Never greenfield. Every artifact comes from a proven source project (see CLAUDE.md Source Map).</li>
-          <li><strong>Stack lock</strong>: Next 16 + React 19 + Tailwind 4 + Convex self-hosted + TS strict.</li>
+          <li><strong>Stack profiles.</strong> rr runtime stays Next/React; consumers select Next.js or Svelte 5 with Convex optional. Exact reviewed versions live in <code>best-practice-techs.ts</code>.</li>
           <li><strong>≤200 LOC per file.</strong> Enforced by <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">audit-file-size</code> across 1.4K+ files.</li>
           <li><strong>Audit chain green</strong> before push: audit-slice (44 slices), audit-templates (36 templates), audit-file-size.</li>
           <li><strong>No marketing chrome on workspace surfaces.</strong> Notion-clone template renders <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">h-dvh</code> full-bleed (BZ-wave) — workspace = the product, not a landing about it.</li>

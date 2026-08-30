@@ -3,6 +3,7 @@ import { features, stack } from "@/lib/content/sections";
 import { site } from "@/lib/content/site";
 import { slices } from "@/lib/content/slices";
 import { isHidden } from "@/lib/content/hidden-slugs";
+import { BEST_PRACTICE_TECHS } from "@/lib/content/best-practice-techs";
 
 async function buildBody() {
   "use cache";
@@ -74,16 +75,16 @@ async function buildBody() {
   lines.push("");
   lines.push("## Hard rules (12-rule doctrine — full text at /best-practice)");
   lines.push("");
-  lines.push("- NO Clerk. Use @convex-dev/auth.");
-  lines.push("- All UI = shadcn primitives. No raw HTML buttons / dialogs / native date/file inputs.");
-  lines.push("- Copy-first flow. Never greenfield — copy from a source project, adjust imports.");
-  lines.push("- Stack: Next 16 + React 19 + Tailwind 4 + Convex self-hosted + TS strict.");
-  lines.push("- Next 16: use `proxy.ts` not `middleware.ts`; `next/link` + `next/image` only.");
-  lines.push("- Workspace isolation per Convex query (`.withIndex('by_workspace', …)`).");
-  lines.push("- No bare `.collect()` — use `.withIndex(...).take(N)` or paginate.");
-  lines.push("- Every public mutation/query MUST declare `args:` validators + server-side authz (`requireUser`/`requireAdmin`).");
+  lines.push(`- Consumer profiles: ${BEST_PRACTICE_TECHS.nextjs.label} ${BEST_PRACTICE_TECHS.nextjs.version} OR ${BEST_PRACTICE_TECHS.svelte.label} ${BEST_PRACTICE_TECHS.svelte.version}; Convex ${BEST_PRACTICE_TECHS.convex.version} is optional. See /best-practice for the active generated prompt.`);
+  lines.push("- Root `slices/<slug>` vertical slices stay canonical; routes are thin adapters; repeated page families use one dynamic `[slug]` route + registry/data SSOT.");
+  lines.push("- Use the active framework's shadcn port + shared theme tokens; preserve DRY/SSOT.");
+  lines.push("- Svelte profile: Svelte 5 Runes + modern events/snippets + Bun only; no new legacy Svelte syntax.");
+  lines.push("- Next profile: use `proxy.ts` not `middleware.ts`; `next/link` + `next/image` for internal/image optimization paths.");
+  lines.push("- When Convex is active: isolate tenant/workspace reads with indexes; validate args + authorize handlers server-side.");
+  lines.push("- When Convex is active: no growing bare `.collect()` — use indexes + `.take(N)` or paginate.");
+  lines.push("- When Convex is active: every public mutation/query declares `args:` validators; user-owned writes authorize server-side.");
   lines.push("- RBAC + audit log on every mutation.");
-  lines.push("- `NEXT_PUBLIC_*` only for non-sensitive values.");
+  lines.push("- Next profile: `NEXT_PUBLIC_*` only for non-sensitive values.");
   lines.push("- **File modularity: 200-line hard cap per source file** (excl. catalog/seed/_generated). Compose, don't accumulate. Gate: `npm run audit:file-size`.");
   lines.push("- Slice contract: `slice.json` (with an embedded `contract` block) + `slice.manifest.json` mandatory per slice. Imports resolve via `@/components/ui/*`, `@/shared/*`, `@/features/<own-slug>/*`, `@convex/*`, or relative-within-slice.");
   lines.push("- Solo-dev: push direct to main (no PR); Dokploy auto-deploys on push.");
