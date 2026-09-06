@@ -38,8 +38,8 @@ Root project (consumer) **tidak disentuh** RR:
 
 | Package | Version | Purpose |
 |---|---|---|
-| `rahman-resources` | 1.14.0 | CLI installer (`npx rahman-resources …` / alias `resources …`) |
-| `rahman-resources-mcp` | 1.2.3 | MCP server (14 tools + ~70 resources) |
+| `rahman-resources` | published 1.16.2 · next 1.17.0 | CLI installer (`npx rahman-resources …` / alias `resources …`) |
+| `rahman-resources-mcp` | published 1.2.5 · next 1.3.0 | MCP server (tools + dynamic `rr://` resources, including infrastructure definitions) |
 | `rahman-shared` | 0.3.0 | Pure utils + hooks (cn, formatDate, sanitizeHtml, useDebounce, useClickOutside, useResponsive) + ./formulaEngine |
 
 **Distribusi rule:**

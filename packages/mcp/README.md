@@ -1,6 +1,6 @@
 # rahman-resources-mcp
 
-Model Context Protocol server for the Rahman Resources kitab. Exposes templates, slices, features, recipes, and Claude Skills to any MCP-aware client.
+Model Context Protocol server for the Rahman Resources kitab. Exposes templates, slices, features, recipes, Claude Skills, and public infrastructure/provider setup guidance to any MCP-aware client.
 
 Two transports:
 - **stdio** (default) — Claude Code, Cursor, Cline
@@ -54,6 +54,8 @@ Or build the published `packages/mcp/Dockerfile` — stateless Streamable HTTP a
 | `rr_list_features`  | backend / integration features |
 | `rr_list_recipes`   | UI patterns to copy manually |
 | `rr_list_skills`    | Claude Skills inventory (anthropics + rahman) |
+| `rr_list_infrastructure` | provider field/setup guidance; filter by provider |
+| `rr_get_infrastructure` | exact provider resource definition by id |
 | `rr_search`         | fuzzy search across all kinds |
 | `rr_get`            | full entry by slug (any kind) |
 | `rr_compose_init_command`  | emit `npx rahman-resources init …` |
@@ -63,6 +65,8 @@ Or build the published `packages/mcp/Dockerfile` — stateless Streamable HTTP a
 
 ```
 rr://manifest                 — full kitab manifest
+rr://infrastructure           — full public infrastructure guidance catalog
+rr://infrastructure/{id}      — one exact provider field/resource definition
 rr://templates/{slug}         — one template
 rr://features/{slug}          — one feature
 rr://recipes/{slug}           — one recipe
@@ -71,7 +75,7 @@ rr://skills/{slug}            — one Claude skill
 
 ## Source of truth
 
-Manifest + skills inventory are loaded from the `rahman-resources` runtime dep (`rahman-resources/lib/{manifest,skills}.json`). When working in the monorepo, the loader falls back to the sibling CLI package at `packages/cli/lib/`. Regenerate via:
+Manifest, skills inventory, and infrastructure guidance are loaded from the `rahman-resources` runtime dep (`rahman-resources/lib/{manifest,skills,infrastructure-resources}.json`). When working in the monorepo, the loader falls back to the sibling CLI package at `packages/cli/lib/`. Regenerate via:
 
 ```bash
 cd packages/cli && node scripts/gen-manifest.mjs

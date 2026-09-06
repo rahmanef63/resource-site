@@ -31,6 +31,25 @@ export const TOOLS = [
     inputSchema: { type: "object", properties: {} },
   },
   {
+    name: "rr_list_infrastructure",
+    description:
+      "List public infrastructure/provider field guidance from Rahman Resources. Returns where a value comes from, whether it is public/sensitive/secret, inheritance guidance, automation level, and official links. Credential values are never stored here.",
+    inputSchema: {
+      type: "object",
+      properties: { provider: { type: "string", description: "Optional provider filter, e.g. convex, google_cloud, doku." } },
+    },
+  },
+  {
+    name: "rr_get_infrastructure",
+    description:
+      "Get one exact infrastructure resource definition by id, e.g. convex.custom_site_domain or doku.payment_secret_key. Use before asking a user for any provider field.",
+    inputSchema: {
+      type: "object",
+      required: ["id"],
+      properties: { id: { type: "string" } },
+    },
+  },
+  {
     name: "rr_list_skills",
     description: "List available Claude Skills (anthropics/skills repo + Rahman extras). Used by add-skill / builder UI.",
     inputSchema: {

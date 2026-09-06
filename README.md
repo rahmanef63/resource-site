@@ -54,7 +54,7 @@ Open http://localhost:3000.
 { "mcpServers": { "rahman-resources": { "command": "npx", "args": ["rahman-resources-mcp"] } } }
 ```
 
-8 tools (rr_list_*, rr_search, rr_get, rr_compose_*) + `rr://` resources. See `packages/mcp/README.md`.
+MCP exposes bounded `rr_list_*`, `rr_get*`, search/compose tools plus `rr://` resources, including public infrastructure setup definitions. See `packages/mcp/README.md`.
 
 ## Bundle Builder
 

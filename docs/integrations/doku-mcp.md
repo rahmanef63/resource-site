@@ -1,132 +1,66 @@
-# DOKU MCP Integration — Track B
+# DOKU MCP Integration
 
-Optional layer on top of the `doku-payment` slice. Lets an MCP-aware client
-(Claude Code, Claude Desktop, VSCode MCP, n8n, custom agent) **invoke
-DOKU directly** as tools — without going through our Convex actions.
+DOKU MCP is an optional agentic-payment surface. It is separate from the `doku-payment` slice and from DOKU's REST payment `Secret Key`.
 
-> Track A (the slice) is enough for most projects. Use Track B when your
-> template ships an AI assistant that should be able to create payments
-> on its own (e.g. `kreator-studio-os` with `ai-router`, or a support
-> chat that says "OK, here's your payment link").
+## SSOT and credential boundary
 
-## When to use
+Rahman Resources owns **public setup definitions only**. It never stores DOKU credential values.
 
-| Scenario | Track A (slice) | Track B (MCP) |
-|---|---|---|
-| User clicks "Pay" in your UI | ✅ | n/a |
-| Cron job creates monthly invoice | ✅ | n/a |
-| Chatbot generates payment link mid-conversation | ✅ (via tool-call to Convex action) | ✅ (direct from agent) |
-| Claude Code drives an end-to-end demo | n/a | ✅ |
-| You want the agent to read payment status / refund | ✅ | ✅ |
+- RR: field labels, official endpoints, setup steps, validation rules, security guidance.
+- MSO Integrations: private named DOKU Payment and DOKU MCP credential authority. Payment uses Client ID + HMAC Secret Key; MCP uses Client ID + MCP API Key. The methods never substitute for each other.
+- Deployment secret store: runtime destination for DOKU Payment credentials when a consumer backend needs them; it is not the credential source of truth.
+- Baton: project binding, inheritance/override choice, setup status, blocker, and verification evidence.
+- Project/deployment: only the runtime secret reference/injection required by the consumer; never a copied RR/Baton credential value.
 
-Both tracks use the same DOKU credentials and merchant account — Track B
-is **additive**, not a replacement.
+Do not paste DOKU keys into chat, project notes, `rr.json`, MCP resources, Git, or a committed `.mcp.json`.
 
-## Prerequisites
+## Official endpoints
 
-1. DOKU MCP credentials: contact DOKU sales, request **"Payment
-   Integration via MCP Server (AI Agents)"**. You'll get an API key +
-   Client-Id (same shape as the REST credentials).
-2. Base64-encode the API key for the `Authorization` header:
-   ```bash
-   printf '%s:' "$DOKU_MCP_API_KEY" | base64
-   ```
+DOKU currently documents Streamable HTTP MCP endpoints as:
 
-## Claude Code config
+| Environment | Endpoint |
+|---|---|
+| Sandbox | `https://api-sandbox.doku.com/doku-mcp-server/mcp` |
+| Production | `https://mcp.doku.com/mcp` |
 
-Drop this into `.claude/mcp.json` at your project root (or the global
-`~/.claude/mcp.json`):
+The DOKU MCP form requires a DOKU Client ID and DOKU API Key. Keep the API Key private. The MCP API Key is a different field from the HMAC `DOKU_SECRET_KEY` used by Checkout/Direct REST signing.
 
-```json
-{
-  "mcpServers": {
-    "doku": {
-      "type": "http",
-      "url": "https://mcp.doku.com",
-      "headers": {
-        "Client-Id": "${DOKU_MCP_CLIENT_ID}",
-        "Authorization": "Basic ${DOKU_MCP_API_KEY_B64}"
-      }
-    }
-  }
-}
-```
+## Setup flow
 
-Then run `claude` — `Tools` panel shows `checkout_payment`,
-`direct_payment`, `get_payment_status` (names per DOKU's published
-schema; verify after first connection).
+1. Open the official DOKU MCP Server guide and choose Sandbox first.
+2. Obtain/enable the DOKU Client ID and MCP API Key for the intended environment.
+3. Create or select a **named DOKU MCP connection in MSO Integrations**. Enter credentials only through the private setup surface; never through Baton/RR/chat arguments.
+4. In Baton, bind that named connection to the project that needs agentic payments. A workspace/global account may be inherited by children; a child can override its resource/connection when it uses a different merchant/environment.
+5. Configure the MCP client using the official endpoint and runtime-injected headers from the private connection.
+6. Verify with a bounded non-destructive MCP capability/tool-list check before enabling payment mutations.
+7. Record only sanitized verification evidence/status in Baton.
 
-Export the env vars at session start:
+## Payment API vs MCP
 
-```bash
-export DOKU_MCP_CLIENT_ID="MCH-…"
-export DOKU_MCP_API_KEY_B64="$(printf '%s:' "$DOKU_MCP_API_KEY" | base64)"
-```
+For ordinary application checkout, use the `payment doku` slice. Its REST credentials are owned by the named DOKU Payment connection in MSO Integrations and injected server-side into the consumer deployment when needed:
 
-## Auto-setup helper
+- `DOKU_CLIENT_ID`
+- `DOKU_SECRET_KEY`
+- `DOKU_IS_PRODUCTION` (explicit environment switch; Sandbox by default)
 
-Run from the project root:
+DOKU Checkout currently documents Sandbox `https://api-sandbox.doku.com/checkout/v1/payment` and Production `https://api.doku.com/checkout/v1/payment`.
 
-```bash
-node scripts/setup-doku-mcp.mjs
-```
+For AI-agent direct payment tools, use DOKU MCP with its Client ID + MCP API Key and the MCP endpoint above. Do not assume the REST Secret Key and MCP API Key are interchangeable.
 
-Reads `DOKU_MCP_CLIENT_ID` + `DOKU_MCP_API_KEY` from `.env.local`, base64-encodes
-the key, and writes the snippet into `.claude/mcp.json` (preserves
-existing servers).
+## Safe helper
 
-## Server-side proxy (advanced)
-
-If your backend needs to invoke DOKU MCP (e.g. server-rendered AI
-response that creates a payment), wrap it as a Convex action. We don't
-ship this by default — it duplicates the REST API surface for negligible
-benefit — but the pattern is:
-
-```ts
-// convex/features/payment/actions/doku-mcp-proxy.ts
-"use node";
-import { action } from "../../../_generated/server";
-import { v } from "convex/values";
-
-export const callDokuMcp = action({
-  args: { tool: v.string(), input: v.any() },
-  handler: async (_ctx, { tool, input }) => {
-    const auth = "Basic " + Buffer.from(process.env.DOKU_MCP_API_KEY + ":").toString("base64");
-    const res = await fetch(`${process.env.DOKU_MCP_URL}/tools/${tool}`, {
-      method: "POST",
-      headers: {
-        "Client-Id": process.env.DOKU_MCP_CLIENT_ID!,
-        "Authorization": auth,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(input),
-    });
-    return await res.json();
-  },
-});
-```
-
-Use this only if you can't reach Track A from the chatbot pipeline.
+`node scripts/setup-doku-mcp.mjs` now creates a **credential-free example** only. It never reads DOKU secrets and never writes an active `.claude/mcp.json`. Its output is documentation for the client/integration layer; private values must still come from MSO Integrations at runtime.
 
 ## Security
 
-- MCP credentials are **server-only** — never expose to the browser or
-  embed in shipped JS.
-- Treat the `.claude/mcp.json` like `.env` — gitignore it or use env-var
-  substitution as in the example above.
-- Rate-limit agent-driven payments at the application layer; an agent
-  in a loop could spam orders.
-
-## Trouble-shooting
-
-| Symptom | Likely cause |
-|---|---|
-| MCP server lists 0 tools | Wrong Client-Id, expired key, or base64 missing trailing `:` |
-| 401 Unauthorized | Authorization header missing `Basic ` prefix |
-| Tools succeed but webhooks don't fire | Notification URL not set in dashboard, or signature secret mismatch |
+- Start in Sandbox and require human approval for payment-creating/refund tools until the project has explicit production policy.
+- Keep the MCP tool allowlist narrow; read/status tools can be enabled before mutation tools.
+- Payment notification/webhook handlers remain authoritative for final payment status and must verify signatures/idempotency.
+- Use separate named connections when different projects use different DOKU merchants or environments.
+- Never encode a secret merely to make it "safe"; Base64 is not encryption.
 
 ## Sources
 
-- DOKU MCP Server overview — `docs.doku.com/integration/mcp-server`
-- DOKU contact-sales (request MCP creds) — `doku.com/contact`
-- MCP spec — `modelcontextprotocol.io`
+- DOKU MCP Server: https://developers.doku.com/accept-payments/doku-mcp-server
+- Retrieve Payment Credential: https://developers.doku.com/get-started-with-doku-api/retrieve-payment-credential
+- DOKU Checkout Integration Guide: https://developers.doku.com/accept-payments/doku-checkout/integration-guide

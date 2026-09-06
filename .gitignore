@@ -30,3 +30,6 @@ coverage/
 
 # convex deploy staging dir (scripts/deploy-convex-functions.mjs)
 .convex-deploy/
+
+# Local migration/self-host env variants may contain credentials.
+.env.local.*

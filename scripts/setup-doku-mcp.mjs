@@ -1,82 +1,44 @@
 #!/usr/bin/env node
 /**
- * setup-doku-mcp — write a DOKU MCP server entry into .claude/mcp.json.
+ * setup-doku-mcp — generate a credential-free DOKU MCP setup descriptor.
  *
- * Reads:
- *   DOKU_MCP_CLIENT_ID  (required)
- *   DOKU_MCP_API_KEY    (required) — will be base64-encoded as "<key>:"
- *   DOKU_MCP_URL        (optional) — defaults to https://mcp.doku.com
- *
- * From `.env.local` in cwd, then process.env.
- *
- * Writes to `.claude/mcp.json` (creates dir if missing). Preserves any
- * existing `mcpServers.*` entries.
- *
- * Idempotent — re-running updates the `doku` entry, leaves others.
+ * This helper intentionally never reads DOKU credential values and never
+ * writes an active .claude/mcp.json. RR owns public guidance; MSO Integrations
+ * owns private named credentials; Baton owns project binding/status.
  */
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 
 const CWD = process.cwd();
-const ENV_FILE = resolve(CWD, ".env.local");
-const MCP_FILE = resolve(CWD, ".claude/mcp.json");
-const DEFAULT_URL = "https://mcp.doku.com";
+const OUTPUT = resolve(CWD, ".claude/doku-mcp.example.json");
+const environment = (process.env.DOKU_MCP_ENV ?? "sandbox").trim().toLowerCase();
 
-function readDotenv() {
-  if (!existsSync(ENV_FILE)) return {};
-  const text = readFileSync(ENV_FILE, "utf8");
-  const map = {};
-  for (const line of text.split("\n")) {
-    const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/);
-    if (!m) continue;
-    const [, k, v] = m;
-    map[k] = v.replace(/^['"]|['"]$/g, "");
-  }
-  return map;
-}
-
-function readEnv(name) {
-  return process.env[name] ?? readDotenv()[name];
-}
-
-function die(msg) {
-  console.error(`[setup-doku-mcp] ${msg}`);
+if (!new Set(["sandbox", "production"]).has(environment)) {
+  console.error("[setup-doku-mcp] DOKU_MCP_ENV must be sandbox or production.");
   process.exit(1);
 }
 
-const clientId = readEnv("DOKU_MCP_CLIENT_ID");
-const apiKey = readEnv("DOKU_MCP_API_KEY");
-const url = readEnv("DOKU_MCP_URL") ?? DEFAULT_URL;
+const url =
+  environment === "production"
+    ? "https://mcp.doku.com/mcp"
+    : "https://api-sandbox.doku.com/doku-mcp-server/mcp";
 
-if (!clientId) die("DOKU_MCP_CLIENT_ID not set (env or .env.local).");
-if (!apiKey) die("DOKU_MCP_API_KEY not set (env or .env.local).");
-
-const auth = "Basic " + Buffer.from(`${apiKey}:`).toString("base64");
-
-let config = { mcpServers: {} };
-if (existsSync(MCP_FILE)) {
-  try {
-    config = JSON.parse(readFileSync(MCP_FILE, "utf8"));
-    if (!config.mcpServers || typeof config.mcpServers !== "object") {
-      config.mcpServers = {};
-    }
-  } catch (err) {
-    die(`Existing ${MCP_FILE} is not valid JSON — refusing to overwrite.\n  ${err.message}`);
-  }
-}
-
-config.mcpServers.doku = {
-  type: "http",
+const descriptor = {
+  provider: "doku",
+  transport: "http-streamable",
+  environment,
   url,
-  headers: {
-    "Client-Id": clientId,
-    Authorization: auth,
-  },
+  credentialAuthority: "mso-integrations",
+  projectBindingAuthority: "baton",
+  requiredResourceDefinitions: ["doku.mcp_client_id", "doku.mcp_api_key"],
+  warning:
+    "Credential values are intentionally absent. Configure a named private DOKU connection in MSO Integrations and inject it at runtime using the MCP client's supported auth mechanism.",
+  docs: "https://developers.doku.com/accept-payments/doku-mcp-server",
 };
 
-mkdirSync(dirname(MCP_FILE), { recursive: true });
-writeFileSync(MCP_FILE, JSON.stringify(config, null, 2) + "\n");
+mkdirSync(dirname(OUTPUT), { recursive: true });
+writeFileSync(OUTPUT, `${JSON.stringify(descriptor, null, 2)}\n`, { mode: 0o600 });
 
-console.log(`[setup-doku-mcp] wrote DOKU MCP entry → ${MCP_FILE}`);
-console.log(`[setup-doku-mcp] reload Claude Code to pick up the new server.`);
+console.log(`[setup-doku-mcp] wrote credential-free descriptor → ${OUTPUT}`);
+console.log("[setup-doku-mcp] no DOKU Client ID/API Key was read or persisted.");

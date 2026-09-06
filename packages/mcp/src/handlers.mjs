@@ -1,30 +1,14 @@
 // MCP request handlers (tools + resources) wired to the data-loader.
 
-import { findEntry, getManifest, getSkills, searchAll, getWorkflow, WORKFLOW_KINDS } from "./data-loader.mjs";
+import { findEntry, getManifest, getSkills, getInfrastructureResources, searchAll, getWorkflow, WORKFLOW_KINDS } from "./data-loader.mjs";
+import { getInfrastructure, listInfrastructure } from "./infrastructure-resources.mjs";
+import { allSlugs, nearestSlugs } from "./catalog-suggestions.mjs";
 import { listLineageResources, readLineageResource, LINEAGE_URI_PREFIX } from "./resources/lineage.mjs";
 import { TOOLS } from "./tools-definitions.mjs";
 import {
   ok, text, errorResp, notFound, resourceJson, resourceMarkdown, resourceError,
   composeInit, composeAdd, composeApp, auditSlices,
 } from "./response-builders.mjs";
-
-// Cheap "did you mean" — substring/prefix overlap against every known slug.
-// Not levenshtein; good enough to catch the typo'd-or-renamed-slug case.
-function nearestSlugs(slug, candidates, cap = 3) {
-  const q = String(slug ?? "").toLowerCase();
-  if (q.length < 3) return [];
-  return candidates
-    .filter((c) => c.includes(q) || q.includes(c) || c.slice(0, 4) === q.slice(0, 4))
-    .slice(0, cap);
-}
-
-function allSlugs() {
-  const m = getManifest();
-  return [
-    ...(m.layouts ?? []), ...(m.features ?? []), ...(m.recipes ?? []), ...(m.slices ?? []),
-    ...(getSkills().skills ?? []),
-  ].map((e) => e.slug);
-}
 
 function listTemplates({ tag } = {}) {
   const m = getManifest();
@@ -72,7 +56,6 @@ function listSkills({ category } = {}) {
     .map(({ slug, title, category: c, description, source, path }) => ({ slug, title, category: c, description, source, path }));
 }
 
-
 export const handleListTools = async () => ({ tools: TOOLS });
 
 export const handleCallTool = async (req) => {
@@ -86,6 +69,7 @@ export const handleCallTool = async (req) => {
       case "rr_list_features":  return ok(listFeatures(args));
       case "rr_list_recipes":   return ok(listRecipes());
       case "rr_list_skills":    return ok(listSkills(args));
+      case "rr_list_infrastructure": return ok(listInfrastructure(args));
       case "rr_search":         return ok(searchAll(args.query));
       case "rr_get": {
         const found = findEntry(args.slug);
@@ -98,6 +82,11 @@ export const handleCallTool = async (req) => {
       case "rr_compose_init_command": return text(composeInit(args));
       case "rr_compose_add_commands": return text(composeAdd(args));
       case "rr_list_slices":          return ok(listSlices(args));
+      case "rr_get_infrastructure": {
+        const resource = getInfrastructure(args.id);
+        if (resource) return ok(resource);
+        return notFound(`No infrastructure resource with id "${args.id}".`, { tryTools: ["rr_list_infrastructure", "rr_search"] });
+      }
       case "rr_get_slice": {
         const slice = getSlice(args.slug);
         if (slice) return ok(slice);
@@ -123,6 +112,7 @@ export const handleListResources = async () => {
   const skills = getSkills().skills ?? [];
   const resources = [
     { uri: "rr://manifest", name: "Rahman Resources manifest", description: "Full rr manifest (templates + features + recipes + slices).", mimeType: "application/json" },
+    { uri: "rr://infrastructure", name: "Infrastructure resource catalog", description: "Public provider field guidance; credential values never appear here.", mimeType: "application/json" },
   ];
   for (const t of m.layouts ?? []) {
     resources.push({ uri: `rr://templates/${t.slug}`, name: t.title, description: t.description, mimeType: "application/json" });
@@ -135,6 +125,9 @@ export const handleListResources = async () => {
   }
   for (const s of skills) {
     resources.push({ uri: `rr://skills/${s.slug}`, name: s.title, description: s.description, mimeType: "application/json" });
+  }
+  for (const ir of getInfrastructureResources().resources ?? []) {
+    resources.push({ uri: `rr://infrastructure/${ir.id}`, name: ir.label, description: ir.purpose, mimeType: "application/json" });
   }
   for (const sl of m.slices ?? []) {
     resources.push({ uri: `rr://slices/${sl.slug}`, name: sl.title, description: sl.description, mimeType: "application/json" });
@@ -160,6 +153,14 @@ export const handleReadResource = async (req) => {
   const uri = req.params.uri;
   if (uri === "rr://manifest") {
     return resourceJson(uri, getManifest());
+  }
+  if (uri === "rr://infrastructure") {
+    return resourceJson(uri, getInfrastructureResources());
+  }
+  const infrastructure = uri.match(/^rr:\/\/infrastructure\/(.+)$/);
+  if (infrastructure) {
+    const resource = getInfrastructure(infrastructure[1]);
+    return resource ? resourceJson(uri, resource) : resourceError(uri, `Infrastructure resource not found: ${infrastructure[1]}`);
   }
   if (typeof uri === "string" && uri.startsWith(LINEAGE_URI_PREFIX)) {
     const result = await readLineageResource(uri);

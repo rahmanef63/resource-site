@@ -11,6 +11,23 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-06 — Infrastructure resource SSOT + DOKU credential split (CLI 1.17.0 / MCP 1.3.0)
+
+**CLI / catalog:**
+- Added a versioned `infrastructure-resources.json` resource class for provider field guidance. RR owns definitions only; MSO Integrations owns private credentials; Baton owns project binding/inheritance/status.
+- DOKU Payment REST and DOKU MCP are modeled as separate credential surfaces. Payment uses Client ID + HMAC Secret Key; MCP uses Client ID + MCP API Key. Runtime payment secrets may be injected into a deployment, but the deployment is not the credential source of truth.
+- DOKU setup guidance now links the exact Back Office/API settings and official docs, with secret classification, inheritance recommendation, validation, and automation metadata.
+
+**MCP (1.3.0):**
+- Added `rr_list_infrastructure` / `rr_get_infrastructure` and `rr://infrastructure[/<id>]`, all read-only and credential-free.
+- Raised the runtime `rahman-resources` floor to `^1.17.0` so MCP cannot serve a stale catalog that predates infrastructure resources.
+
+**Site / safety:**
+- `/api/knowledge` now exposes provider infrastructure definitions and provider filtering.
+- Replaced the legacy DOKU helper that copied credentials into project MCP JSON with a credential-free descriptor; private values must come from MSO Integrations at runtime.
+- `.env.local.*` migration/self-host variants are ignored to prevent accidental credential commits.
+
+
 ### 2026-08-10 — `create-your-mcp` 0.3.0: tokens + auth codes hashed at rest ⚠ BREAKING
 
 Found by auditing the `chatgpt-mcp` Claude Code skill (the recipe this slice was built

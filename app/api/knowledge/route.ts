@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import infrastructureCatalog from "@/packages/cli/lib/infrastructure-resources.json";
 import { layouts, getLayout } from "@/lib/content/layouts";
 import { recipes, getRecipe } from "@/lib/content/recipes";
 import { slices } from "@/lib/content/slices";
@@ -21,8 +22,10 @@ import { site } from "@/lib/content/site";
  *   ?layout=<slug>    — detail for one layout (existing)
  *   ?recipe=<slug>    — detail for one recipe (existing, recipes deprecated)
  *   ?slice=<slug>     — NEW: detail for one slice
- *   ?resource=<slug>  — NEW: detail for any resource (slice|template|layout)
- *   ?type=<source>    — NEW: filter list by source (slice|template|layout)
+ *   ?resource=<slug>  — detail for any code resource (slice|template|layout)
+ *   ?infrastructure=<id> — detail for one provider field/resource definition
+ *   ?provider=<id>    — filter infrastructure guidance by provider
+ *   ?type=<source>    — filter code resources by source (slice|template|layout)
  *
  * Default (no query) returns the full catalog index — paginate-yourself
  * via ?type= if the payload gets too big for your agent.
@@ -33,6 +36,8 @@ export function GET(req: NextRequest) {
   const recipe = searchParams.get("recipe");
   const slice = searchParams.get("slice");
   const resource = searchParams.get("resource");
+  const infrastructure = searchParams.get("infrastructure");
+  const provider = searchParams.get("provider");
   const type = searchParams.get("type") as ResourceSource | null;
 
   if (layout) {
@@ -55,6 +60,11 @@ export function GET(req: NextRequest) {
     if (!r) return Response.json({ error: "resource not found" }, { status: 404 });
     return Response.json({ kind: "resource", site, resource: r });
   }
+  if (infrastructure) {
+    const item = infrastructureCatalog.resources.find((entry) => entry.id === infrastructure);
+    if (!item) return Response.json({ error: "infrastructure resource not found" }, { status: 404 });
+    return Response.json({ kind: "infrastructure", site, resource: item });
+  }
 
   const filteredResources = type ? getResourcesBySource(type) : resources;
 
@@ -62,7 +72,21 @@ export function GET(req: NextRequest) {
     site,
     stack,
     features: features.map((f) => ({ title: f.title, description: f.description })),
-    counts: resourceCounts(),
+    counts: { ...resourceCounts(), infrastructure: infrastructureCatalog.resources.length },
+    infrastructure: infrastructureCatalog.resources
+      .filter((entry) => !provider || entry.provider === provider)
+      .map((entry) => ({
+        id: entry.id,
+        provider: entry.provider,
+        fieldKey: entry.fieldKey,
+        label: entry.label,
+        purpose: entry.purpose,
+        secretClassification: entry.secretClassification,
+        inherit: entry.inherit,
+        automation: entry.automation,
+        docsUrl: entry.docsUrl,
+        ...(entry.actionUrl ? { actionUrl: entry.actionUrl } : {}),
+      })),
     /** Unified view — slices + templates + layouts in one list with source discriminator. */
     resources: filteredResources.map((r) => ({
       source: r.source,

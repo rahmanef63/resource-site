@@ -29,6 +29,7 @@ function resolveCliFile(file) {
 
 const manifestPath = resolveCliFile("manifest.json");
 const skillsPath = resolveCliFile("skills.json");
+const infrastructurePath = resolveCliFile("infrastructure-resources.json");
 
 // Workflow markdown files live at lib/workflows/<kind>.md inside the CLI bundle.
 // Resolved lazily — same fallback strategy as manifest/skills.
@@ -53,6 +54,7 @@ export function getWorkflow(kind) {
 
 let _manifest = null;
 let _skills = null;
+let _infrastructure = null;
 
 export function getManifest() {
   if (_manifest) return _manifest;
@@ -66,6 +68,12 @@ export function getSkills() {
   return _skills;
 }
 
+export function getInfrastructureResources() {
+  if (_infrastructure) return _infrastructure;
+  _infrastructure = require(infrastructurePath);
+  return _infrastructure;
+}
+
 export function findEntry(slug) {
   const m = getManifest();
   for (const kind of ["layouts", "recipes", "features"]) {
@@ -74,6 +82,8 @@ export function findEntry(slug) {
   }
   const skill = (getSkills().skills ?? []).find((s) => s.slug === slug);
   if (skill) return { kind: "skill", entry: skill };
+  const infrastructure = (getInfrastructureResources().resources ?? []).find((r) => r.id === slug);
+  if (infrastructure) return { kind: "infrastructure", entry: infrastructure };
   return null;
 }
 
@@ -92,6 +102,10 @@ export function searchAll(query) {
   for (const sk of getSkills().skills ?? []) {
     const s = score(sk.slug) * 4 + score(sk.title) * 3 + score(sk.description) * 2 + score(sk.category);
     if (s > 0) hits.push({ kind: "skill", slug: sk.slug, title: sk.title, description: sk.description, score: s });
+  }
+  for (const r of getInfrastructureResources().resources ?? []) {
+    const s = score(r.id) * 4 + score(r.label) * 3 + score(r.purpose) * 2 + score(`${r.provider} ${r.fieldKey}`);
+    if (s > 0) hits.push({ kind: "infrastructure", slug: r.id, title: r.label, description: r.purpose, score: s });
   }
   return hits.sort((a, b) => b.score - a.score).slice(0, 25);
 }
