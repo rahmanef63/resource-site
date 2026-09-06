@@ -28,7 +28,7 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 - `.env.local.*` migration/self-host variants are ignored to prevent accidental credential commits.
 
 **Security dependencies:**
-- Updated the production dependency tree to patched releases: `@convex-dev/auth` 0.0.95 / `@auth/core` 0.41.3, Convex 1.45.0 / `ws` 8.21.0, Next 16.3.4 / Sharp 0.35.4, plus patched Axios/FormData/Nanoid/Mermaid/DOMPurify/Sanitize HTML/PostCSS resolutions. `npm audit --omit=dev` now reports zero vulnerabilities.
+- Updated production and build-time dependency trees to patched releases: `@convex-dev/auth` 0.0.95 / `@auth/core` 0.41.3, Convex 1.45.0 / `ws` 8.21.0, Next 16.3.4 / Sharp 0.35.4, plus patched Axios/FormData/Nanoid/Mermaid/DOMPurify/Sanitize HTML/PostCSS/Babel/Vite support packages. `sanitize-html` 2.17.7 requires Node >=22.12, so the site builder/runner now use Node 22; the MCP image remains independently Node 20. The production Docker context excludes tests and package-source trees that are verified before image build. Both full and production-only npm audits report zero vulnerabilities.
 
 
 ### 2026-08-10 — `create-your-mcp` 0.3.0: tokens + auth codes hashed at rest ⚠ BREAKING
