@@ -1,8 +1,8 @@
 # rahman-resources-mcp — HTTP MCP server for ChatGPT Apps SDK + general clients.
 # Stateless Streamable HTTP at /mcp. Read-only kitab manifest, no DB.
 #
-# Build context = packages/mcp/. The dep `rahman-resources` (npm) ships the
-# manifest, so the container is tiny — no monorepo copy needed.
+# Build context = packages/mcp/. Runtime catalog data is a generated snapshot
+# under runtime/rahman-resources, verified against the CLI SSOT before release.
 
 FROM node:20-alpine
 
@@ -16,6 +16,7 @@ RUN npm install --omit=dev --no-audit --no-fund
 # Then code.
 COPY bin ./bin
 COPY src ./src
+COPY runtime ./runtime
 
 ENV NODE_ENV=production
 ENV HOST=0.0.0.0

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "cliVersion": "1.17.0",
+  "aggregateSha256": "51316253101a58206f6e25c10f9fe2192ee1598fee5203725f6e79e0a5d9bfc7",
+  "files": {
+    "manifest.json": "f61058e006f2ebdc2f3d1e816c0e2b5d4e2c8189aef6d64651a63e5fcd74dd33",
+    "skills.json": "b33fec208df80c0f3d3602470c82b27a065c16b08c4c03761e8ee14eeebd007b",
+    "infrastructure-resources.json": "f9b6182bcbd3eadb184c9fcbb724d70eaac612197e19b9284790f421cc925fa7",
+    "dna.mjs": "0a0c7d4db73025ea77880d720cfbb29d891c6220bab8fb4ae3421235e5af4c0a",
+    "dna-graph.mjs": "81ed75a12732a3d94977eceb1065335becf1c9947953e807abce4708d69c2c3c",
+    "workflows/templates.md": "2cf39ebec18f0e99409e973b7a40be298bed0e88782ea09786ed4f0b941f149d",
+    "workflows/features.md": "6ae5c4f4ed707dccae5ec111f39121c05df442f487419c57139bcebbefeeeb16",
+    "workflows/recipes.md": "01b2a695117b14dde7fe30fb5cc63ea2d5bf32b93326f30931fe578dcbd73476",
+    "workflows/skills.md": "6c214018755810844daea2e855166b5edf61829ce18d0a19552b9f4dcfaacc84"
+  }
+}

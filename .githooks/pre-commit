@@ -78,5 +78,11 @@ if ! node packages/cli/scripts/sync-skills.mjs --check; then
   exit 1
 fi
 
+if ! node packages/mcp/scripts/sync-runtime.mjs --check; then
+  echo ""
+  echo "pre-commit: MCP runtime snapshot drift — run 'node packages/mcp/scripts/sync-runtime.mjs' and stage packages/mcp/runtime, or bypass with --no-verify" >&2
+  exit 1
+fi
+
 echo "pre-commit: ok"
 exit 0

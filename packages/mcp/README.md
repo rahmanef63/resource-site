@@ -73,10 +73,16 @@ rr://recipes/{slug}           — one recipe
 rr://skills/{slug}            — one Claude skill
 ```
 
-## Source of truth
+## Source of truth and runtime bundle
 
-Manifest, skills inventory, and infrastructure guidance are loaded from the `rahman-resources` runtime dep (`rahman-resources/lib/{manifest,skills,infrastructure-resources}.json`). When working in the monorepo, the loader falls back to the sibling CLI package at `packages/cli/lib/`. Regenerate via:
+`packages/cli/lib` remains the single definition authority for the manifest, skills, infrastructure guidance, workflows, and DNA helpers. Local monorepo development reads that sibling CLI source directly. Published/container MCP builds read `runtime/rahman-resources/`, a generated snapshot with per-file and aggregate SHA-256 metadata.
+
+Regenerate and verify the snapshot with:
 
 ```bash
-cd packages/cli && node scripts/gen-manifest.mjs
+node packages/cli/scripts/gen-manifest.mjs
+node packages/mcp/scripts/sync-runtime.mjs
+node packages/mcp/scripts/sync-runtime.mjs --check
 ```
+
+The MCP package therefore has no runtime npm dependency on `rahman-resources`; `prepublishOnly` rejects a stale generated bundle.

@@ -5,17 +5,14 @@
 //   rr://graph/lineage/<slug>               — single slice DNA
 //   rr://graph/consumers/<consumer-name>    — every slice that consumer adopted
 //
-// Data is loaded via dna.mjs from `.kitab/lineage/<slug>.dna.json`. The CLI
-// package is a runtime dep of this MCP package, so the import resolves either
-// via node_modules (published) or sibling-monorepo path (dev). The fallback
-// mirrors data-loader.mjs's strategy for manifest.json.
+// Data is loaded via dna.mjs from `.kitab/lineage/<slug>.dna.json`. Local
+// development reads the sibling CLI SSOT; published/container builds read the
+// generated runtime snapshot bundled with this MCP package.
 
-import { createRequire } from "node:module";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Load dna.mjs via dynamic import, resolved against the runtime-dep CLI package
@@ -24,20 +21,12 @@ let _dnaModulePromise = null;
 function loadDna() {
   if (_dnaModulePromise) return _dnaModulePromise;
   _dnaModulePromise = (async () => {
-    // Strategy 1: published rahman-resources package
-    try {
-      const resolved = require.resolve("rahman-resources/lib/dna.mjs");
-      return await import(resolved);
-    } catch {
-      // fall through
-    }
-    // Strategy 2: sibling-monorepo path
-    const local = path.resolve(__dirname, "../../../cli/lib/dna.mjs");
-    if (existsSync(local)) {
-      return await import(local);
-    }
+    const sibling = path.resolve(__dirname, "../../../cli/lib/dna.mjs");
+    if (existsSync(sibling)) return await import(sibling);
+    const bundled = path.resolve(__dirname, "../../runtime/rahman-resources/lib/dna.mjs");
+    if (existsSync(bundled)) return await import(bundled);
     throw new Error(
-      "rahman-resources-mcp: cannot locate rahman-resources/lib/dna.mjs — install rahman-resources as a dep or run from the monorepo.",
+      "rahman-resources-mcp: bundled dna.mjs is missing — run packages/mcp/scripts/sync-runtime.mjs.",
     );
   })();
   return _dnaModulePromise;

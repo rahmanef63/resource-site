@@ -19,17 +19,17 @@
     "src",
     "Dockerfile",
     "docker-compose.yml",
-    "README.md"
+    "README.md",
+    "runtime"
   ],
   "engines": {
     "node": ">=18"
   },
   "scripts": {
-    "prepublishOnly": "node scripts/check-peer.mjs"
+    "prepublishOnly": "node scripts/sync-runtime.mjs --check"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.0.0",
-    "rahman-resources": "^1.17.0"
+    "@modelcontextprotocol/sdk": "^1.0.0"
   },
   "keywords": [
     "rahman",

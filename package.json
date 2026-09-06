@@ -47,7 +47,9 @@
     "test:coverage": "vitest run --coverage",
     "prepare": "git config core.hooksPath .githooks 2>/dev/null || true",
     "shots:capture": "node scripts/capture-shots.mjs",
-    "deploy:convex": "node scripts/deploy-convex-functions.mjs"
+    "deploy:convex": "node scripts/deploy-convex-functions.mjs",
+    "mcp:runtime:sync": "node packages/mcp/scripts/sync-runtime.mjs",
+    "mcp:runtime:check": "node packages/mcp/scripts/sync-runtime.mjs --check"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.81",
