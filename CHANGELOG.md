@@ -20,12 +20,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 **MCP (1.3.0):**
 - Added `rr_list_infrastructure` / `rr_get_infrastructure` and `rr://infrastructure[/<id>]`, all read-only and credential-free.
-- Raised the runtime `rahman-resources` floor to `^1.17.0` so MCP cannot serve a stale catalog that predates infrastructure resources.
+- Made MCP 1.3.0 standalone at runtime: a hash-verified generated snapshot bundles the CLI-owned manifest, skills, infrastructure catalog, workflows, and DNA helpers. Local monorepo development still reads the sibling CLI SSOT first; `prepublishOnly` and pre-commit reject snapshot drift, so MCP no longer waits on a CLI npm publish to deploy safely.
 
 **Site / safety:**
 - `/api/knowledge` now exposes provider infrastructure definitions and provider filtering.
 - Replaced the legacy DOKU helper that copied credentials into project MCP JSON with a credential-free descriptor; private values must come from MSO Integrations at runtime.
 - `.env.local.*` migration/self-host variants are ignored to prevent accidental credential commits.
+
+**Security dependencies:**
+- Updated the production dependency tree to patched releases: `@convex-dev/auth` 0.0.95 / `@auth/core` 0.41.3, Convex 1.45.0 / `ws` 8.21.0, Next 16.3.4 / Sharp 0.35.4, plus patched Axios/FormData/Nanoid/Mermaid/DOMPurify/Sanitize HTML/PostCSS resolutions. `npm audit --omit=dev` now reports zero vulnerabilities.
 
 
 ### 2026-08-10 — `create-your-mcp` 0.3.0: tokens + auth codes hashed at rest ⚠ BREAKING
