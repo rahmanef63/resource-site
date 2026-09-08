@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-09 — Svelte/Convex best-practice baseline aligned to template starter
+
+**Site / agent guidance:**
+- Updated the Svelte + Convex best-practice profile to the current `template-svelte-convex-starter` contract: Bun 1.4.2 / Node 22.23.2, Svelte 5.57.0, SvelteKit 2.70.3, TypeScript 6.0.3, Vite 8.2.2, Tailwind 4.3.3, shadcn-svelte 1.5.1, Convex 1.45.0 and convex-svelte 0.14.0.
+- Added `CONTRACT.md` + product PRD ownership, root feature slices/public barrels/thin routes/lazy registry SSOT, generated Convex types, args+returns validators, backend authz, bounded/indexed reads and widen→backfill→tighten schema evolution.
+- Clean Svelte clones now explicitly keep auth/private data, BYOK AI, MCP, payment/email and cloud integrations disabled until required and acceptance-tested; provider/model/tool results remain untrusted with allowlists, budgets, cancellation and explicit tool review.
+- Svelte release guidance now requires frozen Bun install, asset/type/lint/unit/build gates, narrow-mobile/mobile/desktop Playwright, development hydration smoke, and applicable Node/container evidence. Next-only 200-line and GitHub-Actions restrictions no longer leak into the Svelte prompt.
+
 ### 2026-09-06 — Infrastructure resource SSOT + DOKU credential split (CLI 1.17.0 / MCP 1.3.0)
 
 **CLI / catalog:**

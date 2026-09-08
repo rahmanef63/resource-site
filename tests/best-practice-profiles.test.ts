@@ -1,10 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { buildBestPracticesPrompt, bestPracticesForSelection } from "@/lib/content/best-practices-prompt";
+import {
+  buildBestPracticesPrompt,
+  bestPracticesForSelection,
+} from "@/lib/content/best-practices-prompt";
 import { BEST_PRACTICE_TECHS } from "@/lib/content/best-practice-techs";
 
 describe("best-practice technology profiles", () => {
   it("keeps Next-only guidance free of Svelte and Convex-only rules", () => {
-    const prompt = buildBestPracticesPrompt({ frontend: "nextjs", convex: false });
+    const prompt = buildBestPracticesPrompt({
+      frontend: "nextjs",
+      convex: false,
+    });
     expect(prompt).toContain(`Next.js ${BEST_PRACTICE_TECHS.nextjs.version}`);
     expect(prompt).toContain("proxy.ts not middleware.ts");
     expect(prompt).toContain("ROOT `slices/<slug>/`");
@@ -15,19 +21,31 @@ describe("best-practice technology profiles", () => {
   });
 
   it("builds Svelte + Convex from shared rules without leaking Next-only syntax", () => {
-    const prompt = buildBestPracticesPrompt({ frontend: "svelte", convex: true });
+    const prompt = buildBestPracticesPrompt({
+      frontend: "svelte",
+      convex: true,
+    });
     expect(prompt).toContain(`Svelte ${BEST_PRACTICE_TECHS.svelte.version}`);
     expect(prompt).toContain(`Convex ${BEST_PRACTICE_TECHS.convex.version}`);
     expect(prompt).toContain("Svelte 5 Runes");
     expect(prompt).toContain("convex-svelte");
-    expect(prompt).toContain("Bun only");
-    expect(prompt).toContain("Validators on every public function");
+    expect(prompt).toContain("bun@1.4.2");
+    expect(prompt).toContain("CONTRACT.md");
+    expect(prompt).toContain("lazy typed registry");
+    expect(prompt).toContain("disabled until required");
+    expect(prompt).toContain("narrow-mobile/mobile/desktop");
+    expect(prompt).toContain("Validators on every registered function");
     expect(prompt).not.toContain("proxy.ts not middleware.ts");
     expect(prompt).not.toContain("NEXT_PUBLIC_ only for non-sensitive values");
+    expect(prompt).not.toContain("≤200 lines per source file");
+    expect(prompt).not.toContain("No GitHub Actions cloud minutes");
   });
 
   it("filters docs with the same applicability logic as prompts", () => {
-    const svelte = bestPracticesForSelection({ frontend: "svelte", convex: false });
+    const svelte = bestPracticesForSelection({
+      frontend: "svelte",
+      convex: false,
+    });
     const ids = svelte.map((section) => section.id);
     expect(ids).toContain("svelte-app");
     expect(ids).toContain("dynamic-pages");

@@ -10,7 +10,7 @@ import type { BestPracticeTechId } from "./best-practice-techs";
 //
 // Edit ONE file; both surfaces refresh.
 //
-// Mirrors rr conventions v3 (2026-08-31). Canonical source = CLAUDE.md in
+// Mirrors rr conventions v4 (2026-09-09). Canonical source = CLAUDE.md in
 // the rr repo; if this disagrees with CLAUDE.md, CLAUDE.md wins.
 
 /** Rule tier — higher tier wins on conflict. See the "Rule tiers" section. */
@@ -83,7 +83,7 @@ export const BEST_PRACTICES: BestPracticeSection[] = [
         title: "Svelte profile",
         tier: "P1",
         appliesTo: ["svelte"],
-        rule: "Use the reviewed Svelte 5 + SvelteKit versions from the active profile, TypeScript strict, Bun, Tailwind v4, and shadcn-svelte. New Svelte code MUST use Runes and current Svelte 5 syntax.",
+        rule: "Use the reviewed Svelte 5 + SvelteKit versions from the active profile, TypeScript strict, the repository-pinned Bun runtime, Tailwind v4, and shadcn-svelte. New Svelte code MUST use Runes/current syntax, and a clean clone must remain usable with optional capabilities disabled and no credentials.",
       },
       {
         title: "Tailwind v4",
@@ -125,6 +125,12 @@ export const BEST_PRACTICES: BestPracticeSection[] = [
           "slices/cta/\n  ├── components/  ├── lib/  ├── hooks/  ├── config/\n  ├── utils/  ├── api/  ├── types.ts  ├── index.ts\n  └── slice.json  slice.manifest.json",
       },
       {
+        title: "Svelte project contract is the maintained SSOT",
+        tier: "P1",
+        appliesTo: ["svelte"],
+        rule: "Start each Svelte product from a maintained `CONTRACT.md` that maps authoritative files for runtime, identity, assets/metadata, feature registry, backend, integrations and environment consumers. Add/adapt a product PRD with measurable acceptance; do not let template demo copy become the product specification.",
+      },
+      {
         title: "Convex backend location follows the frontend",
         tier: "P1",
         appliesTo: ["convex"],
@@ -136,7 +142,7 @@ export const BEST_PRACTICES: BestPracticeSection[] = [
         rule: "Cross-slice access goes through the target slice barrel only. Use the host alias (`@/features/<slug>` in the Next rr convention or `$features/<slug>` in the Svelte starter), shared UI/backend aliases, or relative paths within the same slice. No `../../` reaching into another slice's internals.",
         why: "Deep imports lock you into another slice's internal layout. The barrel is the contract.",
         example:
-          "// DON'T — deep import into another slice\nimport { parseMention } from \"@/features/comments/lib/mention-parser\";\n\n// DO — through the barrel\nimport { parseMention } from \"@/features/comments\";",
+          '// DON\'T — deep import into another slice\nimport { parseMention } from "@/features/comments/lib/mention-parser";\n\n// DO — through the barrel\nimport { parseMention } from "@/features/comments";',
       },
       {
         title: "Metadata PAIR (not trio)",
@@ -149,7 +155,7 @@ export const BEST_PRACTICES: BestPracticeSection[] = [
         tier: "P1",
         rule: "Portable slices NEVER hardcode consumer URLs, env names, role enums, or copy. Hardcode = lift blocker.",
         example:
-          "// BAD\nconst SITE = \"https://rahmanef.com\";\n\n// GOOD\nexport function HeroView({ siteUrl }: { siteUrl: string }) { … }",
+          '// BAD\nconst SITE = "https://rahmanef.com";\n\n// GOOD\nexport function HeroView({ siteUrl }: { siteUrl: string }) { … }',
       },
       {
         title: "rr backend is admin-only",
@@ -175,12 +181,19 @@ export const BEST_PRACTICES: BestPracticeSection[] = [
         title: "One dynamic route for one page family",
         tier: "P1",
         rule: "When multiple pages share one shape, use one dynamic route plus a registry/data SSOT. Do not create one hardcoded page file per entity.",
-        example: "// Next: app/apps/[slug]/page.tsx\n// SvelteKit: src/routes/apps/[slug]/+page.svelte\n// Both resolve slug -> one registry/data source -> slice component",
+        example:
+          "// Next: app/apps/[slug]/page.tsx\n// SvelteKit: src/routes/apps/[slug]/+page.svelte\n// Both resolve slug -> one registry/data source -> slice component",
       },
       {
         title: "Navigation derives from the same registry",
         tier: "P1",
         rule: "Menus, breadcrumbs, page titles, sitemap entries, permissions, and dynamic-page lookup derive from one typed registry where possible. Never maintain parallel route/nav arrays for the same facts.",
+      },
+      {
+        title: "Svelte registry lazy-loads feature screens",
+        tier: "P1",
+        appliesTo: ["svelte"],
+        rule: "For a repeated Svelte page family, the typed registry owns metadata and a `loadScreen` dynamic import. The route validates the slug and loads only the selected screen so initial SSR is preserved without eagerly bundling every feature.",
       },
       {
         title: "Thin route boundaries",
@@ -195,18 +208,18 @@ export const BEST_PRACTICES: BestPracticeSection[] = [
     appliesTo: ["convex"],
     rules: [
       {
-        title: "Validators on every public function",
+        title: "Validators on every registered function",
         tier: "P0",
-        rule: "Every `mutation()` / `query()` reachable from the client MUST declare `args:` with `v.*` validators.",
-        why: "Without them, anything goes from a crafted client. audit-bp marks missing validators as P0.",
+        rule: "Every public or internal Convex query/mutation/action declares object-form `args` AND `returns` validators. Add semantic bounds beyond broad `v.string()`/`v.number()` where the domain requires them.",
+        why: "Validated inputs and outputs keep the generated API trustworthy and fail closed when contracts drift.",
         example:
           '// DO\nexport const setRole = mutation({\n  args: { userId: v.id("users"), role: v.union(v.literal("admin"), v.literal("member")) },\n  handler: async (ctx, args) => { /* … */ },\n});',
       },
       {
         title: "Server-side authz inside every handler",
         tier: "P0",
-        rule: "Call `requireUser` / `requireAdmin` from `convex/_shared/auth.ts` as the FIRST line of the handler. Route-layer gates do not protect Convex HTTP endpoints.",
-        why: "Convex HTTP queries are directly reachable — Next.js layout gates don't protect them.",
+        rule: "Authenticate and authorize ownership/tenant membership inside every protected Convex handler before protected data access. Reuse the repository's shared auth helper; route, layout, selected-workspace and hidden-UI gates never grant backend authority.",
+        why: "Convex functions are independently callable; client and framework UI gates are not authorization boundaries.",
         example:
           "// DO\nhandler: async (ctx, args) => {\n  await requireAdmin(ctx);\n  await ctx.db.patch(args.id, { role: args.role });\n}",
       },
@@ -216,6 +229,16 @@ export const BEST_PRACTICES: BestPracticeSection[] = [
         rule: "`ctx.db.query(...).collect()` scans the table. Use `.withIndex(...).take(N)` or paginate; add the index in `defineTable(…).index(…)`. Exception: tiny bounded config tables (< ~50 rows) may `.collect()` with a `// TODO(rr): bounded table` marker.",
         why: "Bare collects bypass query-budget guardrails and degrade as the table grows.",
         example: `// BAD\nawait ctx.db.query("posts").collect();\n\n// GOOD\nawait ctx.db.query("posts").withIndex("by_author", q => q.eq("authorId", args.authorId)).take(50);`,
+      },
+      {
+        title: "Generated Convex types are source-owned build artifacts",
+        tier: "P1",
+        rule: "Use generated `api`/`internal` references plus generated `Doc`/`Id` types, regenerate with the official CLI after backend changes, commit generated files when the project contract requires clean-clone typechecking, and never edit `_generated` by hand.",
+      },
+      {
+        title: "Schema evolution is widen → backfill → tighten",
+        tier: "P0",
+        rule: "For existing production data, deploy compatible schema/code first, backfill in bounded resumable batches, verify representative populated data, then tighten validation. Never clear production tables just to satisfy a schema deploy.",
       },
     ],
   },
@@ -242,12 +265,12 @@ export const BEST_PRACTICES: BestPracticeSection[] = [
       {
         title: "next/link + next/image only",
         tier: "P1",
-        rule: "Never use `<a href=\"/internal\">` or `<img src=…>`. Use `<Link>` / `<Image>` so Next can prefetch + optimise.",
+        rule: 'Never use `<a href="/internal">` or `<img src=…>`. Use `<Link>` / `<Image>` so Next can prefetch + optimise.',
       },
       {
         title: "Cache Components for static reads",
         tier: "P1",
-        rule: "Use Cache Components when explicit caching helps: set `cacheComponents: true`, then apply `\"use cache\"` with `cacheLife` / `cacheTag` at the correct boundary. Do not use the old `experimental.cacheComponents` flag.",
+        rule: 'Use Cache Components when explicit caching helps: set `cacheComponents: true`, then apply `"use cache"` with `cacheLife` / `cacheTag` at the correct boundary. Do not use the old `experimental.cacheComponents` flag.',
       },
       {
         title: "runtime fs reads need outputFileTracingIncludes",
@@ -272,9 +295,24 @@ export const BEST_PRACTICES: BestPracticeSection[] = [
         rule: "Use event attributes (`onclick`, `oninput`, `onsubmit`) and callback props. Use snippets + `{@render ...}` instead of legacy `<slot>`; do not reach for `createEventDispatcher` for new components.",
       },
       {
-        title: "Bun is the package manager",
+        title: "Bun is pinned and is the only package manager",
         tier: "P1",
-        rule: "Use `bun install`, `bun add`, `bunx`, and `bun run`. Commit `bun.lock`; do not create npm/pnpm/yarn lockfiles in the Svelte starter.",
+        rule: "Honor `packageManager`/`engines.bun` and the current starter baseline (`bun@1.4.2`, `>=1.4.2 <2` at the 2026-09-09 review). Use `bun install`, `bun add`, `bunx`, and `bun run`; commit one `bun.lock` and never create npm/pnpm/yarn lockfiles in the Svelte product.",
+      },
+      {
+        title: "Request state never lives in a mutable server singleton",
+        tier: "P0",
+        rule: "Module-level immutable config/registries are fine; user/session/token/draft state is request-scoped or component/context scoped. Never share an authenticated mutable client or per-user state across SvelteKit server requests.",
+      },
+      {
+        title: "Optional capabilities are disabled by default",
+        tier: "P0",
+        rule: "A clean clone starts without credentials. Auth/private data, payment/email, BYOK AI, remote MCP and cloud/provider integrations stay off until the product requires them; enabling config does not count as lifecycle acceptance.",
+      },
+      {
+        title: "Identity, assets and SEO are config-driven",
+        tier: "P1",
+        rule: "Keep public product identity, locale, metadata/SEO and asset catalog in explicit configuration SSOTs. Regenerate/check derived assets, preserve finalized custom artwork, require an explicit canonical production origin, and opt into search indexing deliberately; previews remain noindex.",
       },
       {
         title: "Svelte AI tooling is part of verification",
@@ -286,13 +324,19 @@ export const BEST_PRACTICES: BestPracticeSection[] = [
         tier: "P1",
         rule: "Keep `src/routes/**/+page(.server).ts` and `+page.svelte` as route/data adapters. Reusable feature code remains in root vertical slices and is imported through their barrels.",
       },
+      {
+        title: "AI, MCP and provider results are untrusted",
+        tier: "P0",
+        rule: "Keep provider/model/tool endpoints and tools allowlisted, inputs/outputs bounded, cancellation and safe errors explicit, and remote tool execution behind exact-argument human review. Do not install an automatic arbitrary tool loop as a starter default.",
+      },
     ],
   },
   {
     id: "data-fetching",
     title: "Data fetching",
     tier: "P1",
-    intro: "Server data should flow through the framework/backend integration, not lifecycle-effect synchronization.",
+    intro:
+      "Server data should flow through the framework/backend integration, not lifecycle-effect synchronization.",
     rules: [
       {
         title: "Next + Convex dynamic first paint",
@@ -358,7 +402,7 @@ export const BEST_PRACTICES: BestPracticeSection[] = [
       {
         title: "Logging",
         tier: "P1",
-        rule: "Server-side `console.error(\"[<slice>:<fn>]\", err)` with a context prefix. No PII in logs. No `console.log` left in shipped client code.",
+        rule: 'Server-side `console.error("[<slice>:<fn>]", err)` with a context prefix. No PII in logs. No `console.log` left in shipped client code.',
       },
     ],
   },
@@ -387,7 +431,13 @@ export const BEST_PRACTICES: BestPracticeSection[] = [
       {
         title: "App-level e2e stays global",
         tier: "P1",
-        rule: "Playwright smoke is app-level, not slice-owned. Run it with the project package runner (`npm run` in rr/Next today; `bun run` in the Svelte starter). Test files are excluded from the 200-LOC cap but still obey single-responsibility.",
+        rule: "Playwright smoke is app-level, not slice-owned. Run it with the project package runner (`npm run` in rr/Next today; `bun run` in the Svelte starter). Query accessible behavior and preserve focused test responsibility.",
+      },
+      {
+        title: "Svelte release browser matrix",
+        tier: "P1",
+        appliesTo: ["svelte"],
+        rule: "Release evidence covers narrow-mobile, mobile and desktop production-browser flows plus a development-server hydration/navigation smoke. Verify success, empty, denied, failure and retry states; static check/build output is not browser proof.",
       },
     ],
   },
@@ -401,14 +451,23 @@ export const BEST_PRACTICES: BestPracticeSection[] = [
       {
         title: "≤200 lines per source file",
         tier: "P2",
-        rule: "Hard cap enforced by `audit:file-size` + eslint `max-lines`. Exclusions: pure data exports (`lib/content/*.ts`, `*/seed.ts`, theme presets), `_generated/`, test files, and `components/ui/*` (vendored shadcn — never edit, never count; customize by wrapping in `shared/` or slice components, or regenerate via the shadcn CLI).",
+        appliesTo: ["nextjs"],
+        rule: "Hard cap enforced by rr/Next `audit:file-size` + eslint `max-lines`. Exclusions: pure data exports (`lib/content/*.ts`, `*/seed.ts`, theme presets), `_generated/`, test files, and `components/ui/*` (vendored shadcn — never edit, never count; customize by wrapping in `shared/` or slice components, or regenerate via the shadcn CLI).",
         why: "Large files hide concerns, resist diff review, force consumers to scroll instead of compose.",
-        example: "// BAD: 400-line PostEditor.tsx (toolbar + body + sidebar + status)\n// GOOD: PostEditor.tsx (≤200) composes <Toolbar/> + <EditorBody/> + <SidebarMeta/> + <StatusPanel/>",
+        example:
+          "// BAD: 400-line PostEditor.tsx (toolbar + body + sidebar + status)\n// GOOD: PostEditor.tsx (≤200) composes <Toolbar/> + <EditorBody/> + <SidebarMeta/> + <StatusPanel/>",
       },
       {
-        title: "Single responsibility per file",
+        title:
+          "Svelte prefers cohesive boundaries over arbitrary file-size splits",
         tier: "P2",
-        rule: "One default export OR one cohesive named-export cluster per file. Prefixed exports (`createX`, `parseX`, `serializeX`, `validateX`) = 4 files, not 4 exports.",
+        appliesTo: ["svelte"],
+        rule: "Do not split a Svelte component solely to satisfy a numeric line cap. Extract shared primitives or independent behavior when there is a real boundary/second consumer; keep feature-local cohesive code local.",
+      },
+      {
+        title: "Single cohesive responsibility per file",
+        tier: "P2",
+        rule: "Keep each file centered on one cohesive responsibility. A cohesive named-export cluster is fine; split when exports evolve independently or the boundary becomes hard to review/test, not just to satisfy an arbitrary line count.",
       },
       {
         title: "Extract on the SECOND occurrence",
@@ -419,7 +478,8 @@ export const BEST_PRACTICES: BestPracticeSection[] = [
         title: "Dynamic over hardcoded",
         tier: "P2",
         rule: "Lookup maps over if/switch-chains; derived selectors over literal arrays; `labels` props over inline copy.",
-        example: "// BAD\nif (kind === 'admin') return <AdminLink/>;\nif (kind === 'user') return <UserLink/>;\n\n// GOOD\nconst LINKS = { admin: AdminLink, user: UserLink };\nconst L = LINKS[kind];\nreturn <L/>;",
+        example:
+          "// BAD\nif (kind === 'admin') return <AdminLink/>;\nif (kind === 'user') return <UserLink/>;\n\n// GOOD\nconst LINKS = { admin: AdminLink, user: UserLink };\nconst L = LINKS[kind];\nreturn <L/>;",
       },
       {
         title: "Compose, don't accumulate",
@@ -491,8 +551,15 @@ export const BEST_PRACTICES: BestPracticeSection[] = [
       {
         title: "Solo-dev = push direct to main",
         tier: "P1",
+        appliesTo: ["nextjs"],
         rule: "Tests + typecheck + validate green → push direct to main. No PRs. Dokploy auto-deploys. Risky changes go to staging first: `git push origin main:staging` → verify `e2e:staging` → then main.",
         why: "PRs add ceremony without review benefit when the solo dev is also the reviewer.",
+      },
+      {
+        title: "Svelte CI/release gate follows the starter contract",
+        tier: "P1",
+        appliesTo: ["svelte"],
+        rule: "CI uses `bun install --frozen-lockfile`, full check/lint/unit/build and asset validation, Playwright production + dev hydration gates, and the applicable Node/container smoke. Hosting is adapter-specific (for example adapter-node on Dokploy/VPS or the Vercel adapter); verify the exact deployed revision and runtime behavior.",
       },
       {
         title: "Conventional commits",
@@ -512,6 +579,7 @@ export const BEST_PRACTICES: BestPracticeSection[] = [
       {
         title: "No GitHub Actions cloud minutes",
         tier: "P1",
+        appliesTo: ["nextjs"],
         rule: "Local CI via the pre-push hook or `/sc-git ci`; Dokploy builds on push.",
       },
     ],
@@ -576,14 +644,36 @@ export const BEST_PRACTICES: BestPracticeSection[] = [
       "What tooling guards each rule. If a rule has no tooling row, the prompt is its only guard — treat it as P1.",
     rules: [
       { title: "≤200 LOC", rule: "`audit:file-size` + eslint `max-lines`" },
-      { title: "Barrel-only imports", rule: "eslint `no-restricted-imports` / boundaries + `audit:slices`" },
-      { title: "No raw `<a>` / `<img>` / `<button>`", rule: "eslint `no-restricted-syntax`" },
-      { title: "Validators + authz on Convex fns", rule: "`audit-bp` (P0 gate)", appliesTo: ["convex"] },
+      {
+        title: "Barrel-only imports",
+        rule: "eslint `no-restricted-imports` / boundaries + `audit:slices`",
+      },
+      {
+        title: "No raw `<a>` / `<img>` / `<button>`",
+        rule: "eslint `no-restricted-syntax`",
+      },
+      {
+        title: "Validators + authz on Convex fns",
+        rule: "`audit-bp` (P0 gate)",
+        appliesTo: ["convex"],
+      },
       { title: "Metadata pair version match", rule: "`audit:slices`" },
-      { title: "Catalog scalars = generated", rule: "`gen:catalog:check` (pre-commit)" },
-      { title: "Profile versions + docs freshness", rule: "`best-practice-techs.ts` SSOT + profile tests" },
-      { title: "Skills JSON sync", rule: "`sync-skills.mjs --check` (prepublishOnly)" },
-      { title: "Types", rule: "framework checker (`tsc` for Next; `svelte-check` for Svelte)" },
+      {
+        title: "Catalog scalars = generated",
+        rule: "`gen:catalog:check` (pre-commit)",
+      },
+      {
+        title: "Profile versions + docs freshness",
+        rule: "`best-practice-techs.ts` SSOT + profile tests",
+      },
+      {
+        title: "Skills JSON sync",
+        rule: "`sync-skills.mjs --check` (prepublishOnly)",
+      },
+      {
+        title: "Types",
+        rule: "framework checker (`tsc` for Next; `svelte-check` for Svelte)",
+      },
     ],
   },
 ];

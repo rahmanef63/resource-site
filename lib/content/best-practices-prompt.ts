@@ -12,10 +12,14 @@ import {
   type BestPracticeSelection,
 } from "./best-practice-techs";
 
-export function bestPracticesForSelection(selection: BestPracticeSelection): BestPracticeSection[] {
+export function bestPracticesForSelection(
+  selection: BestPracticeSelection,
+): BestPracticeSection[] {
   return BEST_PRACTICES.flatMap((section) => {
     if (!appliesToSelection(section.appliesTo, selection)) return [];
-    const rules = section.rules.filter((rule) => appliesToSelection(rule.appliesTo, selection));
+    const rules = section.rules.filter((rule) =>
+      appliesToSelection(rule.appliesTo, selection),
+    );
     return rules.length ? [{ ...section, rules }] : [];
   });
 }
@@ -23,23 +27,36 @@ export function bestPracticesForSelection(selection: BestPracticeSelection): Bes
 export function buildBestPracticesPrompt(
   selection: BestPracticeSelection = DEFAULT_BEST_PRACTICE_SELECTION,
 ): string {
-  const active = activeBestPracticeTechs(selection).map((id) => BEST_PRACTICE_TECHS[id]);
+  const active = activeBestPracticeTechs(selection).map(
+    (id) => BEST_PRACTICE_TECHS[id],
+  );
   const profile = active
-    .map((tech) => `${tech.label} ${tech.version}${tech.companions.length ? ` (${tech.companions.join(", ")})` : ""}`)
+    .map(
+      (tech) =>
+        `${tech.label} ${tech.version}${tech.companions.length ? ` (${tech.companions.join(", ")})` : ""}`,
+    )
     .join(" + ");
   const docs = active
     .flatMap((tech) => tech.docs.map((doc) => `- ${doc.label}: ${doc.url}`))
     .join("\n");
-  const sections = bestPracticesForSelection(selection).map(renderSection).join("\n\n");
-  const packageProtocol = selection.frontend === "svelte"
-    ? "Use Bun only: bun install / bun add / bunx / bun run. Do not create npm, pnpm, or yarn lockfiles."
-    : "Respect the repository's committed package manager and lockfile; do not introduce a second package manager.";
-  const svelteGuard = selection.frontend === "svelte"
-    ? "\nSvelte guard: all new Svelte code uses Svelte 5 Runes and modern event/snippet syntax. No new `$:`, `export let`, `on:click`, `createEventDispatcher`, or `<slot>`."
-    : "";
+  const sections = bestPracticesForSelection(selection)
+    .map(renderSection)
+    .join("\n\n");
+  const packageProtocol =
+    selection.frontend === "svelte"
+      ? "Use the repository-pinned Bun toolchain (starter baseline: bun@1.4.2, engines >=1.4.2 <2): bun install / bun add / bunx / bun run. Commit one bun.lock; do not create npm, pnpm, or yarn lockfiles."
+      : "Respect the repository's committed package manager and lockfile; do not introduce a second package manager.";
+  const svelteGuard =
+    selection.frontend === "svelte"
+      ? "\nSvelte guard: all new Svelte code uses Svelte 5 Runes and modern event/snippet syntax. No new `$:`, `export let`, `on:click`, `createEventDispatcher`, or `<slot>`."
+      : "";
   const convexGuard = selection.convex
-    ? "\nConvex guard: public functions validate args; user-owned writes authorize server-side; growing reads are indexed and bounded/paginated."
+    ? "\nConvex guard: registered functions validate args + returns; private reads/writes authenticate and authorize server-side; growing reads are indexed and bounded/paginated; generated API/data-model types stay canonical."
     : "";
+  const svelteStarterContract =
+    selection.frontend === "svelte"
+      ? `\n\nSvelte starter contract: begin from the maintained CONTRACT.md + product PRD; keep root slices/<slug>, public barrels, thin SvelteKit routes and a lazy typed registry SSOT; clean clones boot without credentials and optional auth/AI/MCP/payment/email/cloud features stay disabled until required. Treat provider/model/tool output as untrusted. Release evidence includes frozen Bun install, verify/assets/unit/build, Playwright narrow-mobile/mobile/desktop, dev hydration smoke and applicable Node/container smoke.`
+      : "";
 
   return `You are coding inside a project that follows Rahman Resources (rr) conventions. Honor every active rule below for every file you write or edit.
 
@@ -51,7 +68,7 @@ Docs reviewed: ${BEST_PRACTICE_DOCS_REVIEWED}
 Official references used by this profile:
 ${docs}
 
-${packageProtocol}${svelteGuard}${convexGuard}
+${packageProtocol}${svelteGuard}${convexGuard}${svelteStarterContract}
 
 Architecture invariant: consumer feature code lives in ROOT \`slices/<slug>/\` vertical slices. Route/page files are thin adapters. Repeated page families use one dynamic \`[slug]\` route backed by a typed registry/data SSOT. Preserve DRY + SSOT; never create compatibility placeholder files just to keep obsolete imports alive.
 
@@ -78,11 +95,13 @@ ${sections}
 function renderSection(section: BestPracticeSection): string {
   const tier = section.tier ? ` (${section.tier})` : "";
   const intro = section.intro ? `\n${section.intro}\n` : "";
-  const rules = section.rules.map((rule) => {
-    const badge = rule.tier ? `[${rule.tier}] ` : "";
-    const lines = [`- **${badge}${rule.title}** — ${rule.rule}`];
-    if (rule.why) lines.push(`  - Why: ${rule.why}`);
-    return lines.join("\n");
-  }).join("\n");
+  const rules = section.rules
+    .map((rule) => {
+      const badge = rule.tier ? `[${rule.tier}] ` : "";
+      const lines = [`- **${badge}${rule.title}** — ${rule.rule}`];
+      if (rule.why) lines.push(`  - Why: ${rule.why}`);
+      return lines.join("\n");
+    })
+    .join("\n");
   return `## ${section.title}${tier}${intro}\n${rules}`;
 }
