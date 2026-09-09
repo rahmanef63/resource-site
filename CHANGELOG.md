@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-09 — OAuth-first integration onboarding contract
+
+**Site / agent guidance:**
+- Made OAuth/OIDC the default authentication UX for every provider/plugin that supports it, with server-held client secrets, state/PKCE/nonce where applicable, exact callbacks, least privilege, encrypted token custody, refresh and revoke lifecycle.
+- Manual API keys/tokens are now an explicit fallback contract: every secret field must ship with the official provider URL, 3–6 numbered acquisition steps, minimum scopes/permissions, rotation guidance, exact paste location, masked/server-side storage, verification and disconnect/revoke instructions.
+- Remote MCP follows the same rule: prefer advertised OAuth discovery; bearer/manual auth is fallback and may not weaken workspace authorization or tool approval.
+- Added regression coverage so the generated Next and Svelte/Convex best-practice prompts both carry the OAuth-first contract.
+
 ### 2026-09-09 — Svelte/Convex best-practice baseline aligned to template starter
 
 **Site / agent guidance:**

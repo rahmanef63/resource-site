@@ -15,6 +15,9 @@ describe("best-practice technology profiles", () => {
     expect(prompt).toContain("proxy.ts not middleware.ts");
     expect(prompt).toContain("ROOT `slices/<slug>/`");
     expect(prompt).toContain("dynamic `[slug]` route");
+    expect(prompt).toContain("OAuth first, least privilege");
+    expect(prompt).toContain("NEVER render a blank secret field by itself");
+    expect(prompt).toContain("official provider setup URL");
     expect(prompt).not.toContain("Runes for all new reactivity");
     expect(prompt).not.toContain("Validators on every public function");
     expect(prompt).not.toContain("convex-svelte");
@@ -34,6 +37,9 @@ describe("best-practice technology profiles", () => {
     expect(prompt).toContain("lazy typed registry");
     expect(prompt).toContain("disabled until required");
     expect(prompt).toContain("narrow-mobile/mobile/desktop");
+    expect(prompt).toContain("OAuth first, least privilege");
+    expect(prompt).toContain("MCP prefers OAuth discovery");
+    expect(prompt).toContain("3–6 numbered steps");
     expect(prompt).toContain("Validators on every registered function");
     expect(prompt).not.toContain("proxy.ts not middleware.ts");
     expect(prompt).not.toContain("NEXT_PUBLIC_ only for non-sensitive values");

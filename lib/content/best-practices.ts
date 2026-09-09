@@ -243,6 +243,35 @@ export const BEST_PRACTICES: BestPracticeSection[] = [
     ],
   },
   {
+    id: "integration-auth",
+    title: "Integration & plugin authentication",
+    tier: "P0",
+    intro:
+      "Connecting a provider must feel like signing in, not configuring infrastructure. OAuth/OIDC is the default when the provider supports it; manual secrets are an explicit fallback with complete acquisition guidance.",
+    rules: [
+      {
+        title: "OAuth first, least privilege",
+        tier: "P0",
+        rule: "For every plugin/provider integration, prefer the provider's supported OAuth/OIDC authorization flow over asking the user to copy credentials. Keep client secrets server-side; bind state/PKCE/nonce as applicable; use an exact redirect allowlist; request the minimum provider permissions; store tokens encrypted server-side; implement expiry/refresh/revocation; and never put access or refresh tokens in URLs, browser localStorage, or public env variables.",
+      },
+      {
+        title: "Manual API key fallback must teach the user",
+        tier: "P0",
+        rule: "If OAuth is unavailable or inappropriate and a token/API key is required, NEVER render a blank secret field by itself. The same integration surface must provide an official provider setup URL, 3–6 numbered steps to obtain the credential, exact minimum scopes/permissions, expiry/rotation guidance, note when the secret is shown only once, the exact field where it is pasted, masked/server-side secure storage, a verify/test action, and disconnect/revoke instructions.",
+      },
+      {
+        title: "Do not fake OAuth readiness",
+        tier: "P0",
+        rule: "Only show OAuth as actionable when the backend/operator client configuration and callback lifecycle are actually implemented and configured. If provider OAuth credentials or discovery are missing, show the OAuth path as unavailable and expose the documented fallback instead of a broken button or fabricated success.",
+      },
+      {
+        title: "MCP prefers OAuth discovery",
+        tier: "P1",
+        rule: "For remote MCP, prefer standards-based OAuth discovery/authorization when the server advertises it. Bearer/manual auth is fallback only; it must follow the same official-link + numbered-steps + minimum-scope contract and must never weaken tool approval or workspace authorization.",
+      },
+    ],
+  },
+  {
     id: "next-app",
     title: "Next.js rules",
     appliesTo: ["nextjs"],
