@@ -33,3 +33,6 @@ coverage/
 
 # Local migration/self-host env variants may contain credentials.
 .env.local.*
+
+# Local MSO runtime state — never commit
+.mso/
