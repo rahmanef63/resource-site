@@ -1,6 +1,7 @@
 // Alias fall-through e2e — `rr info <old-slug>` must resolve through
 // manifest.aliases with a "superseded by" warning (UX wave U3 contract).
 // Spawns the real CLI against the real bundled manifest, fully offline.
+// @vitest-environment node
 import { describe, expect, it } from "vitest";
 import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";

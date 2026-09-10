@@ -3,6 +3,7 @@
 // We exercise the file-element and contract-element branches plus the drift
 // arithmetic and the applyMerge guard.
 
+// @vitest-environment node
 import { describe, it, expect } from "vitest";
 import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";

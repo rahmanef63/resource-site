@@ -21,14 +21,14 @@ function sharedFanoutPlugin() {
     resolveId(source: string) {
       // vite:alias runs first, so the specifier may already be rewritten to
       // the components/shared absolute path — handle both forms.
-      const componentsShared = path.resolve(__dirname, "components/shared") + "/"
+      const componentsShared = path.resolve(import.meta.dirname, "components/shared") + "/"
       let rel: string
       if (source.startsWith("@/shared/")) rel = source.slice("@/shared/".length)
       else if (source.startsWith(componentsShared)) rel = source.slice(componentsShared.length)
       else return null
       return (
-        resolveExisting(path.resolve(__dirname, "components/shared", rel)) ??
-        resolveExisting(path.resolve(__dirname, "lib/shared", rel))
+        resolveExisting(path.resolve(import.meta.dirname, "components/shared", rel)) ??
+        resolveExisting(path.resolve(import.meta.dirname, "lib/shared", rel))
       )
     },
   }
@@ -54,10 +54,10 @@ export default defineConfig({
   resolve: {
     // Mirrors tsconfig paths — specific mappings before the generic "@" root.
     alias: [
-      { find: /^@notion\//, replacement: path.resolve(__dirname, "frontend/slices/notion-app") + "/" },
-      { find: /^@\/features\//, replacement: path.resolve(__dirname, "frontend/slices") + "/" },
-      { find: /^@\/shared\//, replacement: path.resolve(__dirname, "components/shared") + "/" },
-      { find: /^@\//, replacement: path.resolve(__dirname, ".") + "/" },
+      { find: /^@notion\//, replacement: path.resolve(import.meta.dirname, "frontend/slices/notion-app") + "/" },
+      { find: /^@\/features\//, replacement: path.resolve(import.meta.dirname, "frontend/slices") + "/" },
+      { find: /^@\/shared\//, replacement: path.resolve(import.meta.dirname, "components/shared") + "/" },
+      { find: /^@\//, replacement: path.resolve(import.meta.dirname, ".") + "/" },
     ],
   },
 })

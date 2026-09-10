@@ -2,6 +2,71 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "DETERMINISTIC-VITEST-ENVIRONMENTS",
+    "version": "site@deterministic-vitest",
+    "date": 1789084800000,
+    "kind": "improvement",
+    "title": "Deterministic Vitest test environments",
+    "body": "Vitest now runs consistently across hosts: repository test scripts force NODE_ENV=test, Node-only suites opt into the Node environment, and Vite path resolution uses ESM-native paths.",
+    "groups": []
+  },
+  {
+    "id": "OAUTH-FIRST-INTEGRATION-ONBOARDING",
+    "version": "site@oauth-first-integrations",
+    "date": 1788912000000,
+    "kind": "improvement",
+    "title": "OAuth-first integration onboarding contract",
+    "body": "Provider and plugin onboarding now leads with OAuth/OIDC whenever it is supported. The contract keeps client secrets server-side and requires exact callbacks, least privilege, state, PKCE and nonce where applicable, encrypted token custody, plus refresh, disconnect and revoke lifecycle handling. Manual API keys and bearer tokens remain an explicit fallback rather than a parallel default.",
+    "groups": [
+      {
+        "heading": "Fallback credentials",
+        "bullets": [
+          "Every manual secret field must include the official provider URL, 3–6 numbered acquisition steps, minimum scopes or permissions, rotation guidance, exact paste location, masked server-side storage, and verification plus disconnect/revoke instructions."
+        ]
+      },
+      {
+        "heading": "Remote MCP",
+        "bullets": [
+          "Prefer advertised OAuth discovery; bearer/manual authentication is fallback and may not weaken workspace authorization or tool approval."
+        ]
+      },
+      {
+        "heading": "Coverage",
+        "bullets": [
+          "Generated Next and Svelte/Convex best-practice prompts both carry the OAuth-first contract."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "SVELTE-CONVEX-STARTER-BASELINE",
+    "version": "site@svelte-convex-starter",
+    "date": 1788912000000,
+    "kind": "improvement",
+    "title": "Svelte/Convex best-practice baseline aligned to template starter",
+    "body": "The Svelte + Convex profile now matches the current template-svelte-convex-starter baseline: Bun 1.4.2 / Node 22.23.2, Svelte 5.57.0, SvelteKit 2.70.3, TypeScript 6.0.3, Vite 8.2.2, Tailwind 4.3.3, shadcn-svelte 1.5.1, Convex 1.45.0 and convex-svelte 0.14.0.",
+    "groups": [
+      {
+        "heading": "Architecture and backend",
+        "bullets": [
+          "Requires CONTRACT.md and product PRD ownership; root feature slices with public barrels, thin routes and a lazy registry SSOT; generated Convex types; args and returns validators; backend authorization; bounded indexed reads; and widen → backfill → tighten schema evolution."
+        ]
+      },
+      {
+        "heading": "Safe clean clones",
+        "bullets": [
+          "Auth/private data, BYOK AI, MCP, payment/email and cloud integrations remain disabled until required and acceptance-tested. Provider, model and tool results stay untrusted behind allowlists, budgets, cancellation and explicit tool review."
+        ]
+      },
+      {
+        "heading": "Release evidence",
+        "bullets": [
+          "Requires frozen Bun install plus asset, type, lint, unit and build gates; narrow-mobile, mobile and desktop Playwright; development hydration smoke; and applicable Node/container evidence. Next-only 200-line and GitHub Actions restrictions no longer leak into the Svelte prompt."
+        ]
+      }
+    ]
+  },
+  {
     "id": "MOBILE-TILE-DRAWER",
     "version": "dashboard-merge-wave-4",
     "date": 1785715200000,

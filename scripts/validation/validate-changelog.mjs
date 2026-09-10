@@ -6,9 +6,11 @@
 //      "Updated today" for a day that hadn't happened),
 //   2. duplicate entry ids (anchors + badge deep links silently collide).
 //
-// Run: node scripts/validation/validate-changelog.mjs [dir]
+// Run: node scripts/validation/validate-changelog.mjs [dir] [root-changelog]
 // Exit 1 on any error. Wired into `validate:changelog` + pre-commit.
 // Optional [dir] points at an alternate part-*.ts directory (tests).
+// Every root dated entry from 2026-09-09 onward must carry exactly one
+// `public-changelog:<id>` marker, which must resolve to its public counterpart.
 
 import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
@@ -18,6 +20,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIR = process.argv[2]
   ? path.resolve(process.argv[2])
   : path.resolve(__dirname, "../../lib/content/changelog");
+const ROOT_CHANGELOG = process.argv[3]
+  ? path.resolve(process.argv[3])
+  : process.argv[2]
+    ? null
+    : path.resolve(__dirname, "../../CHANGELOG.md");
 
 // Entries are JSON-ish ("id": …) or plain TS (id: …) literals — match both.
 const TOKEN = /^\s*"?(id|date)"?\s*:\s*("([^"]+)"|(\d{10,}))\s*,?\s*$/;
@@ -68,9 +75,60 @@ for (const file of readdirSync(DIR).filter((f) => /^part-\d+\.ts$/.test(f))) {
   }
 }
 
+const PUBLIC_CHANGELOG_CUTOFF = "2026-09-09";
+const ROOT_DATED_SECTION = /^###\s+(\d{4}-\d{2}-\d{2})\s+—/;
+const ROOT_SECTION = /^##(?:\s|$)/;
+const ROOT_PUBLIC_ENTRY = /<!--\s*public-changelog:([A-Z0-9][A-Z0-9-]*)\s*-->/;
+
+if (ROOT_CHANGELOG) {
+  const root = readFileSync(ROOT_CHANGELOG, "utf8");
+  const rootMarkerSeen = new Map();
+  let activeEntry = null;
+
+  const validateActiveEntry = () => {
+    if (!activeEntry) return;
+
+    if (activeEntry.date >= PUBLIC_CHANGELOG_CUTOFF && activeEntry.markers.length !== 1) {
+      const requirement = activeEntry.markers.length === 0
+        ? "is missing a public-changelog marker"
+        : `must contain exactly one public-changelog marker (found ${activeEntry.markers.length})`;
+      errors.push(`${path.basename(ROOT_CHANGELOG)}:${activeEntry.line} root changelog entry ${requirement}`);
+    }
+
+    for (const { id, line } of activeEntry.markers) {
+      if (!seen.has(id)) {
+        errors.push(`${path.basename(ROOT_CHANGELOG)}:${line} root changelog references missing public entry "${id}"`);
+      }
+      if (rootMarkerSeen.has(id)) {
+        errors.push(`${path.basename(ROOT_CHANGELOG)}:${line} duplicate public-changelog marker "${id}" (first seen at line ${rootMarkerSeen.get(id)})`);
+      } else {
+        rootMarkerSeen.set(id, line);
+      }
+    }
+  };
+
+  for (const [index, line] of root.split("\n").entries()) {
+    const datedSection = line.match(ROOT_DATED_SECTION);
+    if (datedSection || ROOT_SECTION.test(line)) {
+      validateActiveEntry();
+      activeEntry = datedSection
+        ? { date: datedSection[1], line: index + 1, markers: [] }
+        : null;
+      continue;
+    }
+
+    const marker = line.match(ROOT_PUBLIC_ENTRY);
+    if (marker && activeEntry) {
+      activeEntry.markers.push({ id: marker[1], line: index + 1 });
+    }
+  }
+
+  validateActiveEntry();
+}
+
 if (errors.length > 0) {
   console.error(`✖ validate-changelog: ${errors.length} error(s)`);
   for (const e of errors) console.error(`  · ${e}`);
   process.exit(1);
 }
-console.log(`✓ validate-changelog: ${seen.size} entries — ids unique, no future dates`);
+console.log(`✓ validate-changelog: ${seen.size} entries — ids unique, no future dates, root sections resolve`);

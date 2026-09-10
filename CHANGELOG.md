@@ -11,7 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-11 — Deterministic Vitest test environments
+<!-- public-changelog:DETERMINISTIC-VITEST-ENVIRONMENTS -->
+
+**Tooling:**
+- Test scripts now force `NODE_ENV=test`, Node-only suites declare their runner environment, and the Vitest config uses ESM-native paths so test behavior is consistent across hosts.
+
 ### 2026-09-09 — OAuth-first integration onboarding contract
+<!-- public-changelog:OAUTH-FIRST-INTEGRATION-ONBOARDING -->
 
 **Site / agent guidance:**
 - Made OAuth/OIDC the default authentication UX for every provider/plugin that supports it, with server-held client secrets, state/PKCE/nonce where applicable, exact callbacks, least privilege, encrypted token custody, refresh and revoke lifecycle.
@@ -20,6 +27,7 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 - Added regression coverage so the generated Next and Svelte/Convex best-practice prompts both carry the OAuth-first contract.
 
 ### 2026-09-09 — Svelte/Convex best-practice baseline aligned to template starter
+<!-- public-changelog:SVELTE-CONVEX-STARTER-BASELINE -->
 
 **Site / agent guidance:**
 - Updated the Svelte + Convex best-practice profile to the current `template-svelte-convex-starter` contract: Bun 1.4.2 / Node 22.23.2, Svelte 5.57.0, SvelteKit 2.70.3, TypeScript 6.0.3, Vite 8.2.2, Tailwind 4.3.3, shadcn-svelte 1.5.1, Convex 1.45.0 and convex-svelte 0.14.0.

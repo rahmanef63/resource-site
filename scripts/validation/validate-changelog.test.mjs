@@ -1,3 +1,4 @@
+// @vitest-environment node
 // Unit tests for the changelog data gate — both failure modes have
 // actually shipped (future-dated entries, and the dup-id risk that comes
 // with hand-prepended literals).
@@ -11,12 +12,18 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SCRIPT = path.resolve(__dirname, "validate-changelog.mjs");
 
-function runOn(parts) {
+function runOn(parts, root) {
   const dir = mkdtempSync(path.join(tmpdir(), "rr-changelog-"));
   for (const [name, content] of Object.entries(parts)) {
     writeFileSync(path.join(dir, name), content);
   }
-  return spawnSync("node", [SCRIPT, dir], { encoding: "utf8" });
+  const args = [SCRIPT, dir];
+  if (root !== undefined) {
+    const rootPath = path.join(dir, "CHANGELOG.md");
+    writeFileSync(rootPath, root);
+    args.push(rootPath);
+  }
+  return spawnSync("node", args, { encoding: "utf8" });
 }
 
 const entry = (id, date) => `
@@ -54,6 +61,49 @@ describe("validate-changelog", () => {
   it("fails pre-2020 dates (wrong epoch unit)", () => {
     const r = runOn({ "part-01.ts": entry("A", 1780790400) }); // seconds, not ms
     expect(r.status).toBe(1);
+  });
+
+  it("fails an unmarked root entry on or after the public changelog cutoff", () => {
+    const r = runOn(
+      { "part-01.ts": entry("PUBLIC", 1788912000000) },
+      "## [Unreleased]\n\n### 2026-09-09 — Missing marker\n",
+    );
+    expect(r.status).toBe(1);
+    expect(r.stderr).toContain("root changelog entry is missing a public-changelog marker");
+  });
+
+  it("fails a marked root entry when its public entry is missing", () => {
+    const r = runOn(
+      { "part-01.ts": entry("PUBLIC", 1780790400000) },
+      "## [Unreleased]\n\n### 2026-09-09 — Missing public entry\n<!-- public-changelog:MISSING -->\n",
+    );
+    expect(r.status).toBe(1);
+    expect(r.stderr).toContain('root changelog references missing public entry "MISSING"');
+  });
+
+  it("passes a marked root entry when its public entry exists", () => {
+    const r = runOn(
+      { "part-01.ts": entry("PUBLIC", 1780790400000) },
+      "## [Unreleased]\n\n### 2026-09-09 — Public entry\n<!-- public-changelog:PUBLIC -->\n",
+    );
+    expect(r.status).toBe(0);
+  });
+
+  it("passes an unmarked root entry before the public changelog cutoff", () => {
+    const r = runOn(
+      { "part-01.ts": entry("PUBLIC", 1780790400000) },
+      "## [Unreleased]\n\n### 2026-09-08 — Legacy entry\n",
+    );
+    expect(r.status).toBe(0);
+  });
+
+  it("fails duplicate public changelog marker ids in root entries", () => {
+    const r = runOn(
+      { "part-01.ts": entry("PUBLIC", 1780790400000) },
+      "## [Unreleased]\n\n### 2026-09-09 — First entry\n<!-- public-changelog:PUBLIC -->\n\n### 2026-09-10 — Second entry\n<!-- public-changelog:PUBLIC -->\n",
+    );
+    expect(r.status).toBe(1);
+    expect(r.stderr).toContain('duplicate public-changelog marker "PUBLIC"');
   });
 
   it("validates the real changelog", () => {
