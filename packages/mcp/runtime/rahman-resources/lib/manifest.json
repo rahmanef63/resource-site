@@ -656,6 +656,25 @@
       ]
     },
     {
+      "slug": "full-width-toggle",
+      "title": "Full Width Toggle",
+      "category": "ui",
+      "description": "Page-container width preference with contained, wide, and full modes. Persists per device in localStorage, synchronizes same-tab and cross-tab changes, and ships a toggle plus container wrapper. React/Next remains the default distribution; Svelte 5 / SvelteKit is available explicitly with --framework sveltekit.",
+      "source": "rr original",
+      "docsUrl": "",
+      "install": "npx rr add full-width-toggle",
+      "npmPackages": [],
+      "exampleCode": "",
+      "agentRecipe": "Run `npx rr add full-width-toggle` for the React/Next default, or `npx rr add full-width-toggle --framework sveltekit` for Svelte 5/SvelteKit. Place <FullWidthToggle variant=\"icon|button|segment\" /> in an app-shell action slot and wrap page content in <WidthContainer as=\"main\">. Storage key is `layout:widthMode`; modes are contained, wide, and full, with same-tab plus cross-tab sync.",
+      "tags": [
+        "ui",
+        "layout",
+        "preference",
+        "localstorage",
+        "dashboard"
+      ]
+    },
+    {
       "slug": "three-column",
       "title": "Three-Column Layout — Sidebar/Content/Inspector",
       "category": "ui",
@@ -2932,6 +2951,53 @@
         "shell"
       ],
       "agentRecipe": "Run `npx rr add dashboard-shell` (needs shadcn `sidebar` + `drawer` installed). Wrap app/(dashboard)/layout.tsx in <DashboardShell brand nav>. `nav` is the SSOT: [{ id, label?, items: [{ id, label, href|onSelect, icon?, badge?, exact?, dock?, items? }] }]. Mobile dock derives from it (dock:true items, else the first `dockMax` — a Menu button opening the tile drawer is appended; the rail is never rendered under md). Slots: sidebarHeader (workspace-shell switcher), sidebarFooter (user menu), actions (topbar right side, e.g. FullWidthToggle), topbar (full replace / null), secondary (contextual column). Pass activePath to drive it from state instead of the router. Helpers exported: isActive / deriveDock / activeItem / activeTitle / flattenNav."
+    },
+    {
+      "slug": "full-width-toggle",
+      "title": "Full Width Toggle",
+      "category": "ui",
+      "kind": "ui",
+      "version": "0.2.0",
+      "description": "Page-container width preference with contained, wide, and full modes. Persists per device in localStorage, synchronizes same-tab and cross-tab changes, and ships a toggle plus container wrapper. React/Next remains the default distribution; Svelte 5 / SvelteKit is available explicitly with --framework sveltekit.",
+      "source": "rr original",
+      "slicePath": "frontend/slices/full-width-toggle",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/full-width-toggle"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/full-width-toggle-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5"
+            ],
+            "shadcn": []
+          }
+        }
+      },
+      "convexPaths": [],
+      "npm": [
+        "lucide-react@^0.400.0"
+      ],
+      "shadcn": [
+        "button"
+      ],
+      "env": [],
+      "peers": [],
+      "providers": [],
+      "tags": [
+        "ui",
+        "layout",
+        "preference",
+        "localstorage",
+        "dashboard"
+      ],
+      "agentRecipe": "Run `npx rr add full-width-toggle` for the React/Next default, or `npx rr add full-width-toggle --framework sveltekit` for Svelte 5/SvelteKit. Place <FullWidthToggle variant=\"icon|button|segment\" /> in an app-shell action slot and wrap page content in <WidthContainer as=\"main\">. Storage key is `layout:widthMode`; modes are contained, wide, and full, with same-tab plus cross-tab sync."
     },
     {
       "slug": "three-column",

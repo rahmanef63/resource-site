@@ -1578,6 +1578,39 @@ const nav = [
 </DashboardShell>`,
   },
   {
+    slug: "full-width-toggle",
+    title: "Full Width Toggle",
+    category: "ui",
+    kind: "ui",
+    version: "0.2.0",
+    description:
+      "Page-container width preference with contained, wide, and full modes. Persists per device in localStorage, synchronizes same-tab and cross-tab changes, and ships a toggle plus container wrapper. React/Next remains the default distribution; Svelte 5 / SvelteKit is available explicitly with --framework sveltekit.",
+    source: "rr original",
+    docsUrl: "",
+    install: "npx rr add full-width-toggle",
+    slicePath: "frontend/slices/full-width-toggle",
+    convexPaths: [],
+    npm: ["lucide-react@^0.400.0"],
+    shadcn: ["button"],
+    env: [],
+    peers: [],
+    tags: ["ui", "layout", "preference", "localstorage", "dashboard"],
+    agentRecipe:
+      "Run `npx rr add full-width-toggle` for the React/Next default, or `npx rr add full-width-toggle --framework sveltekit` for Svelte 5/SvelteKit. Place <FullWidthToggle variant=\"icon|button|segment\" /> in an app-shell action slot and wrap page content in <WidthContainer as=\"main\">. Storage key is `layout:widthMode`; modes are contained, wide, and full, with same-tab plus cross-tab sync.",
+    previewPath: "/preview/slices/full-width-toggle",
+    defaultView: "desktop",
+    defaultZoom: 0.7,
+    wiring: `import { FullWidthToggle, WidthContainer } from "@/features/full-width-toggle";
+
+<header className="flex justify-end">
+  <FullWidthToggle variant="segment" />
+</header>
+
+<WidthContainer as="main">
+  {children}
+</WidthContainer>`,
+  },
+  {
     slug: "three-column",
     title: "Three-Column Layout — Sidebar/Content/Inspector",
     category: "ui",

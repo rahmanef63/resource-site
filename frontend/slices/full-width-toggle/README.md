@@ -8,7 +8,7 @@ Page-container width preference with three modes:
 | `wide` | `max-w-screen-2xl mx-auto` | Dense dashboards |
 | `full` | `w-full` | Data tables, edge-to-edge layouts |
 
-Persists to `localStorage` (`layout:widthMode`) + cross-tab sync.
+Persists to per-device `localStorage` (`layout:widthMode`) + same-tab and cross-tab sync. React/Next remains the default install; pass `--framework sveltekit` (or `svelte`) for the additive Svelte 5 distribution.
 
 ## Files
 
@@ -21,6 +21,13 @@ frontend/slices/full-width-toggle/
 └── components/
     ├── FullWidthToggle.tsx        # button (icon / button / segment variants)
     └── WidthContainer.tsx         # wrapper that applies the current width
+
+frontend/slices/full-width-toggle-svelte/
+├── index.ts
+├── lib/width-mode.ts              # same storage key, mode helpers, classes
+└── components/
+    ├── FullWidthToggle.svelte     # native button/SVG variant controls
+    └── WidthContainer.svelte      # Svelte wrapper with storage sync
 ```
 
 ## Usage
@@ -83,6 +90,25 @@ Hook returns `"contained"` during SSR / before hydration to avoid hydration mism
 ## Deps
 
 - shadcn `button`
-- `lucide-react` icons (already in stock kitab)
+- `lucide-react` icons
 
-No Convex tables, no env vars, no install.
+No Convex tables or env vars.
+
+## Svelte / SvelteKit
+
+```sh
+npx rr add full-width-toggle --framework sveltekit
+```
+
+```svelte
+<script lang="ts">
+  import { FullWidthToggle, WidthContainer } from "$lib/slices/full-width-toggle";
+</script>
+
+<FullWidthToggle variant="segment" />
+<WidthContainer as="main">
+  <slot />
+</WidthContainer>
+```
+
+The Svelte distribution uses the same `layout:widthMode` key and mode classes as React. It intentionally avoids React, shadcn, and lucide dependencies; only `svelte@^5` is required.

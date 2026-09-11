@@ -65,6 +65,36 @@ describe("framework-aware slice distribution", () => {
     });
   });
 
+  it("keeps full-width-toggle on React by default and selects its SvelteKit source deterministically", () => {
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "full-width-toggle");
+    const target = mkTarget();
+
+    expect(slice.slicePath).toBe("frontend/slices/full-width-toggle");
+    expect(slice.defaultFramework).toBe("react-next");
+    expect(slice.frameworks).toEqual({
+      "react-next": { path: "frontend/slices/full-width-toggle" },
+      "svelte-sveltekit": {
+        path: "frontend/slices/full-width-toggle-svelte",
+        aliases: ["svelte", "sveltekit"],
+        deps: { npm: ["svelte@^5"], shadcn: [] },
+      },
+    });
+
+    const defaultResult = runCli("add", "full-width-toggle", "--target", target, "--dry-run");
+    expect(defaultResult.status).toBe(0);
+    expect(defaultResult.stdout).toContain("frontend/slices/full-width-toggle →");
+    expect(defaultResult.stdout).toContain("lucide-react");
+    expect(defaultResult.stdout).toContain("shadcn: button");
+
+    const svelteResult = runCli("add", "full-width-toggle", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteResult.status).toBe(0);
+    expect(svelteResult.stdout).toContain("frontend/slices/full-width-toggle-svelte →");
+    expect(svelteResult.stdout).toContain("svelte@^5");
+    expect(svelteResult.stdout).not.toContain("lucide-react");
+    expect(svelteResult.stdout).not.toContain("npx shadcn@latest add button");
+  });
+
   it("keeps feedback-states on React by default and selects its SvelteKit source deterministically", () => {
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "feedback-states");

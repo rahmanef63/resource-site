@@ -2,6 +2,23 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-FULL-WIDTH-TOGGLE-DISTRIBUTION",
+    "version": "full-width-toggle@0.2.0",
+    "date": 1789084800000,
+    "kind": "feature",
+    "title": "SvelteKit Full Width Toggle slice distribution",
+    "body": "full-width-toggle now has an additive Svelte 5 / SvelteKit distribution. Select it explicitly with rr add full-width-toggle --framework sveltekit (or svelte), while the React/Next source remains the deterministic default.",
+    "groups": [
+      {
+        "heading": "Framework-specific layout preference UI",
+        "bullets": [
+          "Both distributions preserve contained, wide, and full layout classes plus the existing layout:widthMode localStorage key for per-device persistence.",
+          "The Svelte source keeps same-tab notification and cross-tab storage synchronization, uses native buttons/SVG icons, and requires only svelte@^5."
+        ]
+      }
+    ]
+  },
+  {
     "id": "SVELTE-FEEDBACK-STATES-DISTRIBUTION",
     "version": "feedback-states@0.2.1",
     "date": 1789084800000,

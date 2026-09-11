@@ -1,19 +1,26 @@
 {
   "$schema": "../../../docs/slice.manifest.schema.json",
   "name": "full-width-toggle",
-  "version": "0.1.1",
-  "description": "Page-container width toggle (contained / wide / full). Per-device localStorage with cross-tab sync. useFullWidth hook + FullWidthToggle button + WidthContainer wrapper.",
+  "version": "0.2.0",
+  "description": "Page-container width toggle (contained / wide / full). Per-device localStorage with cross-tab sync. useFullWidth hook + FullWidthToggle button + WidthContainer wrapper. React/Next default; Svelte/SvelteKit available through slice.json framework metadata.",
   "category": "ui",
   "stability": "stable",
   "deps": {
     "shared": [],
     "slices": [],
     "convexFeatures": [],
-    "npm": {}
+    "npm": {
+      "lucide-react": "^0.400.0"
+    }
   },
   "files": {
-    "include": ["**/*"],
-    "exclude": ["*.test.ts", "*.test.tsx"]
+    "include": [
+      "**/*"
+    ],
+    "exclude": [
+      "*.test.ts",
+      "*.test.tsx"
+    ]
   },
   "compatibility": {
     "next": ">=14 <17",
@@ -21,6 +28,12 @@
     "tailwind": "3||4",
     "auth": "any"
   },
-  "tags": ["ui", "layout", "preference", "localstorage", "dashboard"],
-  "notes": "Pure client-side slice — no Convex, no env, no shadcn primitives beyond stock `button`. Drop into dashboard shell. localStorage key namespace: 'rr.fullWidth.<device>'."
+  "tags": [
+    "ui",
+    "layout",
+    "preference",
+    "localstorage",
+    "dashboard"
+  ],
+  "notes": "Pure client-side slice — no Convex or env. React/Next default uses shadcn `button` and lucide-react; explicit Svelte/SvelteKit distribution uses native buttons/SVG icons and requires only `svelte@^5`. localStorage key: `layout:widthMode`."
 }

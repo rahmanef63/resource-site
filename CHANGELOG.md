@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-11 — SvelteKit Full Width Toggle slice distribution
+<!-- public-changelog:SVELTE-FULL-WIDTH-TOGGLE-DISTRIBUTION -->
+
+**Slices:**
+- Added an additive Svelte 5 / SvelteKit distribution for `full-width-toggle`, selected explicitly with `npx rr add full-width-toggle --framework sveltekit` (or `svelte`).
+- React/Next remains the default install. Both distributions preserve `contained` / `wide` / `full` classes, the `layout:widthMode` localStorage key, per-device persistence, same-tab notification, and cross-tab `storage` synchronization.
+- Published the canonical slice through the generated CLI/MCP manifest with framework metadata, while the Svelte variant uses native buttons/SVG icons and requires only `svelte@^5`.
+
 ### 2026-09-11 — SvelteKit Feedback States slice distribution
 <!-- public-changelog:SVELTE-FEEDBACK-STATES-DISTRIBUTION -->
 

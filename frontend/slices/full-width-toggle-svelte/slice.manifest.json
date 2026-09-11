@@ -1,0 +1,23 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "full-width-toggle-svelte",
+  "version": "0.2.0",
+  "tier": 2,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add full-width-toggle --framework sveltekit",
+    "consumerPath": "slices/full-width-toggle"
+  },
+  "files": [
+    "README.md",
+    "components/FullWidthToggle.svelte",
+    "components/WidthContainer.svelte",
+    "index.ts",
+    "lib/width-mode.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [],
+    "external": ["svelte"]
+  }
+}
