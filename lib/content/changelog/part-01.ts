@@ -2,6 +2,23 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-FEEDBACK-STATES-DISTRIBUTION",
+    "version": "feedback-states@0.2.1",
+    "date": 1789084800000,
+    "kind": "feature",
+    "title": "SvelteKit Feedback States slice distribution",
+    "body": "feedback-states is the first concrete Svelte 5 / SvelteKit distribution. Select it explicitly with rr add feedback-states --framework sveltekit (or svelte), while the legacy React/Next path remains the deterministic default.",
+    "groups": [
+      {
+        "heading": "Framework-specific source and dependencies",
+        "bullets": [
+          "The Svelte source ships loading skeletons and spinners plus empty and error states without React, Next, shadcn, or icon dependencies; it requires only svelte@^5.",
+          "Both framework distributions retain loading and empty variant selection, so explicit framework choice changes only the copied source and declared dependencies."
+        ]
+      }
+    ]
+  },
+  {
     "id": "FRAMEWORK-AWARE-SLICE-DISTRIBUTION",
     "version": "site@framework-aware-slice-distribution",
     "date": 1789084800000,

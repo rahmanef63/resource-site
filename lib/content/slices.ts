@@ -2394,7 +2394,7 @@ const [count, setCount] = useBroadcastSync("rr:counter", 0);
     title: "Feedback States — loading skeletons + empty/error states",
     category: "ui",
     kind: "ui",
-    version: "0.2.0",
+    version: "0.2.1",
     tagline: "The \"no real content yet\" family — skeletons + spinners and 404/500/403 + zero-data, in two installable variants.",
     description: "Two co-located placeholder surfaces behind one slug. loading: a configurable LoadingSkeleton over the shadcn Skeleton (kind presets text / card / list / table / form / page / block, overridable count + columns) plus a spinner LoadingState (inline / block / overlay) for in-flight work. empty: a configurable EmptyState over the shadcn Empty (404 / 500 / 403 / no-results / empty-list / first-use, overridable icon/title/copy/actions) plus an ErrorPage full-page wrapper for app/not-found.tsx and app/error.tsx. Install one surface with `npx rr add feedback-states loading|empty`, or both with `npx rr add feedback-states`. Replaces ad-hoc animate-pulse divs, hand-rolled Loader2 spans, and one-off error pages.",
     source: "rr original",

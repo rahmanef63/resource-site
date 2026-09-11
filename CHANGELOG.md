@@ -11,6 +11,13 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-11 — SvelteKit Feedback States slice distribution
+<!-- public-changelog:SVELTE-FEEDBACK-STATES-DISTRIBUTION -->
+
+**Slices:**
+- Added the first concrete Svelte 5 / SvelteKit distribution: `feedback-states` now installs deterministic Svelte loading, empty, and error-state components with `npx rr add feedback-states --framework sveltekit` (or the `svelte` alias).
+- The legacy React/Next path remains the explicit default, including its existing shadcn dependencies and variant behavior. The Svelte distribution has its own source tree, requires only `svelte@^5`, and supports the same `loading` / `empty` variant selection.
+
 ### 2026-09-11 — Framework-aware React/Next and Svelte/SvelteKit slice distribution
 <!-- public-changelog:FRAMEWORK-AWARE-SLICE-DISTRIBUTION -->
 

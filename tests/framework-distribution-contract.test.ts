@@ -65,6 +65,33 @@ describe("framework-aware slice distribution", () => {
     });
   });
 
+  it("keeps feedback-states on React by default and selects its SvelteKit source deterministically", () => {
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "feedback-states");
+    const target = mkTarget();
+
+    expect(slice.slicePath).toBe("frontend/slices/feedback-states");
+    expect(slice.defaultFramework).toBe("react-next");
+    expect(slice.frameworks).toEqual({
+      "react-next": { path: "frontend/slices/feedback-states" },
+      "svelte-sveltekit": {
+        path: "frontend/slices/feedback-states-svelte",
+        aliases: ["svelte", "sveltekit"],
+        deps: { npm: ["svelte@^5"], shadcn: [] },
+      },
+    });
+
+    const defaultResult = runCli("add", "feedback-states", "--target", target, "--dry-run");
+    expect(defaultResult.status).toBe(0);
+    expect(defaultResult.stdout).toContain("frontend/slices/feedback-states →");
+
+    const svelteResult = runCli("add", "feedback-states", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteResult.status).toBe(0);
+    expect(svelteResult.stdout).toContain("frontend/slices/feedback-states-svelte →");
+    expect(svelteResult.stdout).toContain("svelte@^5");
+    expect(svelteResult.stdout).not.toContain("npx shadcn@latest add button");
+  });
+
   it("uses the default framework path and forwards an explicit framework through add", () => {
     installFrameworkFixture();
     const target = mkTarget();

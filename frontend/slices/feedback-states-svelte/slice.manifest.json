@@ -1,0 +1,26 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "feedback-states-svelte",
+  "version": "0.2.1",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add feedback-states --framework sveltekit",
+    "consumerPath": "slices/feedback-states"
+  },
+  "files": [
+    "README.md",
+    "index.ts",
+    "svelte-components.d.ts",
+    "variants/empty/components/FeedbackEmptyState.svelte",
+    "variants/empty/components/FeedbackErrorPage.svelte",
+    "variants/empty/index.ts",
+    "variants/loading/components/FeedbackLoadingSkeleton.svelte",
+    "variants/loading/components/FeedbackLoadingState.svelte",
+    "variants/loading/index.ts"
+  ],
+  "imports": {
+    "shared": [],
+    "external": ["svelte"]
+  }
+}
