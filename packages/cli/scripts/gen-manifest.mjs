@@ -17,6 +17,7 @@ import {
   parseNpmPackages,
 } from "./parse-content.mjs";
 import { readFileSync } from "node:fs";
+import { frameworkDistribution } from "./framework-distribution.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.resolve(__dirname, "../lib/manifest.json");
@@ -120,6 +121,7 @@ const slices = loadSlices().filter((s) => !ALIASES[s.slug]).map((s) => {
   const hasFrontend = !!s.slicePath;
   const hasBackend = (s.convexPaths ?? []).length > 0;
   const inferred = hasFrontend && hasBackend ? "full" : hasBackend ? "backend" : "ui";
+  const slicePath = sj?.frontend?.slicePath ?? s.slicePath;
   return {
     slug: s.slug,
     title: s.title,
@@ -128,7 +130,8 @@ const slices = loadSlices().filter((s) => !ALIASES[s.slug]).map((s) => {
     version: sj?.version ?? s.version,
     description: s.description,
     source: s.source ?? "",
-    slicePath: s.slicePath,
+    slicePath,
+    ...frameworkDistribution(sj?.frontend, slicePath),
     convexPaths: s.convexPaths ?? [],
     npm: s.npm ?? [],
     shadcn: s.shadcn ?? [],

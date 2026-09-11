@@ -2,6 +2,23 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "FRAMEWORK-AWARE-SLICE-DISTRIBUTION",
+    "version": "site@framework-aware-slice-distribution",
+    "date": 1789084800000,
+    "kind": "feature",
+    "title": "Framework-aware React/Next and Svelte/SvelteKit slice distribution",
+    "body": "Slice distribution now preserves legacy frontend.slicePath as the implicit react-next source while allowing deterministic defaultFramework plus framework-specific path descriptors. Generated CLI and MCP manifest entries expose availability, defaults, aliases and dependency overrides without removing legacy fields.",
+    "groups": [
+      {
+        "heading": "CLI selection and validation",
+        "bullets": [
+          "rr add and rr lift accept --framework. An explicit unavailable framework fails with the available choices; it never falls back silently.",
+          "Validation rejects missing declared framework paths, invalid or ambiguous defaults, and duplicate aliases. Framework-specific dependency descriptors can override npm, shadcn, env, peers, and sharedFiles before Svelte slice waves land."
+        ]
+      }
+    ]
+  },
+  {
     "id": "DETERMINISTIC-VITEST-ENVIRONMENTS",
     "version": "site@deterministic-vitest",
     "date": 1789084800000,

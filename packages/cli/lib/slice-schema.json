@@ -132,12 +132,53 @@
         "slicePath": {
           "type": "string",
           "pattern": "^(template-base/)?frontend/slices/[a-z0-9_/-]+$",
-          "description": "Portable home \u2192 frontend/slices/<slug>. Foundation home \u2192 template-base/frontend/slices/<slug>."
+          "description": "Legacy React/Next portable home → frontend/slices/<slug>. Foundation home → template-base/frontend/slices/<slug>. When frameworks is omitted this is the implicit react-next path."
         },
         "configExport": {
           "type": "string",
           "pattern": "^([a-zA-Z][a-zA-Z0-9_]*)?$",
           "description": "Name of the defineFeature(...) export the registry generators look for. Empty for ui-only slices."
+        },
+        "defaultFramework": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "description": "Deterministic framework selected by default. Omit for legacy slices to resolve react-next. Must name a declared framework when frameworks is present."
+        },
+        "frameworks": {
+          "type": "object",
+          "description": "Framework-specific distribution homes. Legacy slicePath remains the implicit react-next descriptor when omitted from this map.",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path"],
+            "properties": {
+              "path": {
+                "type": "string",
+                "pattern": "^(template-base/)?frontend/slices/[a-z0-9_/-]+$",
+                "description": "Repo-relative portable source path for this framework."
+              },
+              "aliases": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9][a-z0-9-]*$"
+                },
+                "description": "Optional CLI aliases for this framework, unique across the framework map."
+              },
+              "deps": {
+                "type": "object",
+                "additionalProperties": false,
+                "description": "Selected-framework dependency overrides. Any declared key replaces the corresponding slice-level deps key for this framework.",
+                "properties": {
+                  "npm": { "type": "array", "items": { "type": "string" } },
+                  "shadcn": { "type": "array", "items": { "type": "string" } },
+                  "env": { "type": "array", "items": { "type": "object" } },
+                  "peers": { "type": "array", "items": { "type": "object" } },
+                  "sharedFiles": { "type": "array", "items": { "type": "string" } }
+                }
+              }
+            }
+          }
         }
       }
     },

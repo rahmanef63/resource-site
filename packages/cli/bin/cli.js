@@ -3,7 +3,7 @@
 // Aliases: `rahman-resources`, `resources`, `rr` (all run this file).
 // Usage:
 //   npx rr init <app-name> [--template <slug>] [--features a,b] [--skills x,y] [--with-shadcn-all]
-//   npx rr add <slug> [target-dir] [--at root|preview] [--with-shadcn-all]
+//   npx rr add <slug> [target-dir] [--framework <id>] [--at root|preview] [--with-shadcn-all]
 //   npx rr add-skill <slug> [target-dir]
 //   npx rr scaffold-slice <slug> [--category <cat>] [--target <dir>]
 //   npx rr list [layouts|recipes|features|skills|slices]
@@ -121,10 +121,10 @@ ${kleur.dim("Bins: rahman-resources / resources / rr (all run this CLI).")}
 ${kleur.bold("Usage:")}
   npx rr init <app-name> [--template <slug>] [--features a,b] [--skills x,y]
                          [--no-install] [--with-shadcn-reinit] [--with-shadcn-all]
-  npx rr add <slug> [target-dir] [--at root|preview] [--with-shadcn-all]
+  npx rr add <slug> [target-dir] [--framework <id>] [--at root|preview] [--with-shadcn-all]
   npx rr add-skill <slug> [target-dir]
   npx rr scaffold-slice <slug> [--category <cat>] [--target <dir>]
-  npx rr lift <source>:<path> [--target <dir>] [--dry-run]
+  npx rr lift <source>:<path> [--framework <id>] [--target <dir>] [--dry-run]
   npx rr publish-slice <local-slice-dir> [--open-pr]
   npx rr list [layouts|recipes|features|skills|slices]
   npx rr info <slug>
@@ -142,6 +142,9 @@ ${kleur.bold("Init flags:")}
                           (heavy; ~50 components — use only if you'll customize beyond the template)
 
 ${kleur.bold("Add flags:")}
+  --framework <id>       install a declared framework distribution (default: slice default,
+                         or legacy react-next); unsupported values list available frameworks
+  --dry-run              show the selected slice distribution without writing files
   --at root               install template AT app/(public)/ + app/admin/ (default — rewrites
                           /preview/<slug> path constants in nav-config/robots/sitemap)
   --at preview            install template AT app/preview/<slug>/ (sandbox; keeps hardcoded
@@ -169,7 +172,7 @@ ${kleur.dim("Consumer's components/ui/ + lib/utils.ts (shadcn) are never touched
 
 // Flags that take a value (`--flag x`). Anything else is boolean, so a boolean
 // flag placed before a positional no longer swallows that positional.
-const VALUE_FLAGS = new Set(["target", "template", "category", "at", "skills", "features", "variant"]);
+const VALUE_FLAGS = new Set(["target", "template", "category", "at", "skills", "features", "variant", "framework"]);
 
 function parseFlags(rest) {
   const positional = [];
@@ -502,6 +505,7 @@ async function runAdd(rest) {
   // the target exactly as before → byte-for-byte back-compat.
   const variantIds = (entry.variants?.items ?? []).map((v) => v.id);
   let variant = typeof flags.variant === "string" ? flags.variant : undefined;
+  const framework = typeof flags.framework === "string" ? flags.framework : undefined;
   let targetArg = typeof flags.target === "string" ? flags.target : ".";
   for (const p of restPos) {
     if (!variant && variantIds.includes(p)) variant = p;
@@ -564,6 +568,8 @@ async function runAdd(rest) {
       `rahman:${entry.slug}`,
       ...(targetArg !== "." ? ["--target", targetArg] : []),
       ...(variant ? ["--variant", variant] : []),
+      ...(framework ? ["--framework", framework] : []),
+      ...(flags["dry-run"] ? ["--dry-run"] : []),
     ]);
     // Augment consumer .env.example with this slice's env requirements.
     // Idempotent — re-running `add` does not duplicate entries.
@@ -1153,11 +1159,12 @@ async function runLift(rest) {
   const target = path.resolve(process.cwd(), typeof flags.target === "string" ? flags.target : ".");
   const dryRun = !!flags["dry-run"];
   const variant = typeof flags.variant === "string" ? flags.variant : undefined;
+  const framework = typeof flags.framework === "string" ? flags.framework : undefined;
 
   const parsed = parseLiftSource(src);
-  console.log(kleur.bold(`\n→ Lift ${kleur.cyan(src)}${variant ? kleur.magenta(` :${variant}`) : ""} ${dryRun ? kleur.yellow("(dry-run)") : ""}\n`));
+  console.log(kleur.bold(`\n→ Lift ${kleur.cyan(src)}${framework ? kleur.blue(` [${framework}]`) : ""}${variant ? kleur.magenta(` :${variant}`) : ""} ${dryRun ? kleur.yellow("(dry-run)") : ""}\n`));
 
-  const plan = await resolveLiftPlan(parsed, target, variant);
+  const plan = await resolveLiftPlan(parsed, target, variant, framework);
 
   for (const step of plan.steps) {
     console.log(`  ${kleur.dim(step.from)} → ${kleur.cyan(step.toRel)}`);
@@ -1240,7 +1247,25 @@ function parseLiftSource(src) {
   return { kind: "github", owner: gh[1], repo: gh[2], subPath: gh[3] };
 }
 
-async function resolveLiftPlan(parsed, target, variant) {
+function resolveSliceFramework(slice, requested) {
+  const declared = slice.frameworks ?? {};
+  const frameworks = {
+    ...(slice.slicePath ? { "react-next": { path: slice.slicePath } } : {}),
+    ...declared,
+  };
+  const aliases = new Map();
+  for (const [name, descriptor] of Object.entries(frameworks)) {
+    for (const alias of descriptor.aliases ?? []) aliases.set(alias, name);
+  }
+  const selected = requested ? (frameworks[requested] ? requested : aliases.get(requested)) : (slice.defaultFramework ?? "react-next");
+  if (!selected || !frameworks[selected]) {
+    const available = Object.keys(frameworks);
+    throw new Error(`Slice "${slice.slug}" does not support framework "${requested ?? slice.defaultFramework}". Available: ${available.join(", ") || "(none)"}`);
+  }
+  return { name: selected, ...frameworks[selected] };
+}
+
+async function resolveLiftPlan(parsed, target, variant, requestedFramework) {
   const steps = [];
   const peers = [];
   const npm = [];
@@ -1252,6 +1277,8 @@ async function resolveLiftPlan(parsed, target, variant) {
     if (!slice) {
       throw new Error(`Slice not found in manifest: ${parsed.slug}. Run 'list slices'.`);
     }
+    const framework = resolveSliceFramework(slice, requestedFramework);
+    const slicePath = framework.path;
     // Variant install (shadcn-style): copy only variants/<id>/ (flattened into
     // the slice root so imports resolve at @/features/<slug> exactly like a
     // non-variant slice) + an optional shared/ folder. Without a variant, the
@@ -1262,22 +1289,22 @@ async function resolveLiftPlan(parsed, target, variant) {
         throw new Error(`Slice "${parsed.slug}" has no variant "${variant}". Available: ${(variants.items ?? []).map((v) => v.id).join(", ")}`);
       }
       steps.push({
-        from: `${slice.slicePath}/variants/${variant}`,
-        toRel: slice.slicePath,
-        toAbs: path.join(target, slice.slicePath),
+        from: `${slicePath}/variants/${variant}`,
+        toRel: slicePath,
+        toAbs: path.join(target, slicePath),
       });
       if (variants.shared) {
         steps.push({
-          from: `${slice.slicePath}/${variants.shared}`,
-          toRel: `${slice.slicePath}/${variants.shared}`,
-          toAbs: path.join(target, slice.slicePath, variants.shared),
+          from: `${slicePath}/${variants.shared}`,
+          toRel: `${slicePath}/${variants.shared}`,
+          toAbs: path.join(target, slicePath, variants.shared),
         });
       }
     } else {
       steps.push({
-        from: slice.slicePath,
-        toRel: slice.slicePath,
-        toAbs: path.join(target, slice.slicePath),
+        from: slicePath,
+        toRel: slicePath,
+        toAbs: path.join(target, slicePath),
       });
     }
     // Per-variant convex gating: when a variant is installed and it declares
@@ -1289,10 +1316,11 @@ async function resolveLiftPlan(parsed, target, variant) {
     for (const cp of convexToPull) {
       steps.push({ from: cp, toRel: cp, toAbs: path.join(target, cp) });
     }
-    npm.push(...(slice.npm ?? []));
-    shadcn.push(...(slice.shadcn ?? []));
-    env.push(...(slice.env ?? []));
-    peers.push(...(slice.peers ?? []));
+    const deps = framework.deps ?? {};
+    npm.push(...(deps.npm ?? slice.npm ?? []));
+    shadcn.push(...(deps.shadcn ?? slice.shadcn ?? []));
+    env.push(...(deps.env ?? slice.env ?? []));
+    peers.push(...(deps.peers ?? slice.peers ?? []));
   } else if (parsed.kind === "superspace-local") {
     const SUPERSPACE = process.env.RAHMAN_SUPERSPACE_PATH ?? path.join(process.env.HOME ?? "", "projects/superspace");
     const localFromAbs = path.join(SUPERSPACE, parsed.subPath);

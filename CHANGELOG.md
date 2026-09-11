@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-11 — Framework-aware React/Next and Svelte/SvelteKit slice distribution
+<!-- public-changelog:FRAMEWORK-AWARE-SLICE-DISTRIBUTION -->
+
+**CLI / contract:**
+- Kept legacy `frontend.slicePath` as the implicit `react-next` source while adding deterministic `defaultFramework` plus framework path/dependency descriptors for future Svelte/SvelteKit slice variants.
+- Generated CLI/MCP manifest entries now expose framework availability, default, paths, aliases, and per-framework dependency overrides without removing legacy fields.
+- `rr add` and `rr lift` accept `--framework`; explicit unsupported requests fail with the available choices instead of silently falling back. Slice validation rejects missing framework paths, invalid/ambiguous defaults, and duplicate aliases.
+
 ### 2026-09-11 — Deterministic Vitest test environments
 <!-- public-changelog:DETERMINISTIC-VITEST-ENVIRONMENTS -->
 

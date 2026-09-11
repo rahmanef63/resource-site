@@ -88,6 +88,27 @@ npx rr add command-menu
 npx rahman-resources add command-menu
 ```
 
+### Pilih framework distribution
+
+`frontend.slicePath` tetap kompatibel untuk semua slice lama dan berarti
+`react-next`. Slice yang menyediakan lebih dari satu source tree dapat
+mendeklarasikan `frontend.defaultFramework` dan `frontend.frameworks`; CLI
+memilih default yang deterministik bila flag tidak diberikan.
+
+```bash
+# Default slice (legacy = react-next)
+npx rr add command-menu
+
+# Jangan fallback diam-diam: minta distribution yang tersedia secara eksplisit
+npx rr add some-slice --framework svelte-sveltekit
+npx rr lift rahman:some-slice --framework svelte-sveltekit --dry-run
+```
+
+Jika framework yang diminta tidak tersedia, CLI gagal dan menampilkan daftar
+framework yang tersedia. Descriptor framework dapat mengganti `npm`, `shadcn`,
+`env`, `peers`, atau `sharedFiles` untuk distribution itu tanpa mengubah deps
+React/Next yang lama.
+
 **Yang terjadi otomatis:**
 - CLI download file dari npm package `rahman-resources`
 - Files masuk ke `my-new-app/slices/command-menu/`

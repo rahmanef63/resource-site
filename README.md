@@ -37,6 +37,9 @@ npx rahman-resources@latest init my-app --with-shadcn-all
 
 # Then add slices as you need them:
 npx rahman-resources@latest add appshell
+
+# A slice with multiple distributions can select one explicitly:
+npx rahman-resources@latest add example-slice --framework svelte-sveltekit
 ```
 
 Cross-platform — macOS / Linux / Windows PowerShell + WSL.

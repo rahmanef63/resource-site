@@ -90,7 +90,17 @@ Every slice MUST contain a `slice.json` at its root:
   },
   "frontend": {
     "slicePath": "frontend/slices/midtrans-payment",
-    "configExport": "midtransPaymentFeature"
+    "configExport": "midtransPaymentFeature",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "react-next": {
+        "path": "frontend/slices/midtrans-payment"
+      },
+      "svelte-sveltekit": {
+        "path": "frontend/slices/midtrans-payment-svelte",
+        "deps": { "npm": ["@convex-dev/convex-svelte@^0.14"] }
+      }
+    }
   },
   "deps": {
     "npm": ["midtrans-client@^1.4"],
@@ -120,6 +130,9 @@ Field meanings:
 | `convex.tablesExport` | Name of the table-fragment export in `schema.ts`. Root composes via `...sliceTables`. |
 | `convex.rootPaths` | Folders the lift pulls into the consumer's `convex/`. |
 | `frontend.configExport` | Name of the `defineFeature(...)` export to register. |
+| `frontend.slicePath` | Legacy React/Next source path. It remains required and is the implicit `react-next` distribution for old metadata. |
+| `frontend.defaultFramework` | Optional deterministic default. Omit for legacy `react-next`. |
+| `frontend.frameworks` | Optional framework map. Every descriptor has a source `path`, optional unique CLI `aliases`, and optional `deps` keys that override the corresponding slice-level dependency lists. |
 | `deps.npm` | Plain npm install lines. |
 | `deps.shadcn` | shadcn primitives this slice imports — auto-installed by `rr add`. |
 | `deps.env` | Required env vars + scope. `scope: "convex"` = backend; `"next-public"` = client bundle (NEXT_PUBLIC_*); `"server"` = server-only Next env. |

@@ -876,7 +876,7 @@
       "slug": "create-your-mcp",
       "title": "Create Your MCP",
       "category": "ai",
-      "description": "Turn any rr-based app into an MCP server that ChatGPT custom apps, Claude.ai connectors, Cursor MCP, and other AI clients authenticate to. OAuth 2.1 + PKCE flow with code → bearer exchange, env-configured vendor-host allowlist, single-use codes, 1-year bearer tokens, scope-tagged tools, opaque error collapsing, constant-time token compare. Static MCP_API_KEY fallback for service-account / CI scripts. Sanitized 2026-05-16 from rahmanef.com's production MCP integration — vendor literals (chatgpt.com / OpenAI paths) replaced with MCP_OAUTH_ALLOWED_HOSTS + MCP_OAUTH_ALLOWED_PATH_PREFIXES env vars so the slice ships portable.",
+      "description": "Turn any rr-based app into an MCP server that ChatGPT custom apps, Claude.ai connectors, Cursor MCP, and other AI clients authenticate to. OAuth 2.1 + PKCE flow with code → bearer exchange, env-configured vendor-host allowlist, single-use codes deleted on redemption, 1-year bearer tokens stored as sha256 (the raw value is returned once, at mint), scope-tagged tools, opaque error collapsing, constant-time compare on the static-key path. Static MCP_API_KEY fallback for service-account / CI scripts. Sanitized 2026-05-16 from rahmanef.com's production MCP integration — vendor literals (chatgpt.com / OpenAI paths) replaced with MCP_OAUTH_ALLOWED_HOSTS + MCP_OAUTH_ALLOWED_PATH_PREFIXES env vars so the slice ships portable.",
       "source": "rahmanef.com",
       "install": "npx rahman-resources add create-your-mcp",
       "npmPackages": [],
@@ -1534,6 +1534,12 @@
       "description": "Shared UI + helper substrate for the ai-* slice cluster (lifted from models-rahmanef-com). Ships the ResponsiveDialog/ConfirmDialog overlay primitive (+ useConfirm), SectionErrorBoundary, a light/dark useTheme hook, fmt/ago/dt formatters, and a provider-agnostic ConvexError renderer (errData/ErrorLine/FRIENDLY). React-only, no Convex, no shadcn — the lightweight no-shadcn dialog variant. Foundation the byok/workspaces/memory/combos/scheduled-agents/channels slices import via @/features/ai-core.",
       "source": "models-rahmanef-com",
       "slicePath": "frontend/slices/ai-core",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/ai-core"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "lucide-react"
@@ -1561,6 +1567,12 @@
       "description": "A Photoshop-style raster image editor built on Konva. Layers panel (reorder, opacity, visibility, lock, 16 blend modes), free transform (move/scale/rotate/flip via a Transformer), image + text + shape + paint layers, brush & eraser with size/opacity/hardness, non-destructive adjustments + filters, canvas resize/aspect presets, and LAYER STYLES: stroke, drop shadow, outer glow, clipping mask. One-click BACKGROUND REMOVAL runs fully in-browser via @imgly/background-removal (free, no API key — downloads a small ONNX model on first use). Undo/redo, zoom/pan, shortcuts, PNG/JPG/WebP export. v2 adds an AI FUNCTION-CALLING layer: every editor operation is a named, schema'd command (EDITOR_COMMANDS registry + useEditorCommands binding) driven by an in-editor chat; the streaming bridge is injectable via configureAgentStream(fn) and everything except the chat works without it. A headless server barrel (server.ts) runs commands against documents with no DOM. Image I/O via props (initialImage / onSave).",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/image-editor",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/image-editor"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "lucide-react",
@@ -1609,6 +1621,12 @@
       "description": "A complete in-browser video editor. Real media clips (image/video/audio) on a layered multi-track timeline — the top row renders frontmost, with ▲▼ reorder and per-track lock/hide/mute. ONE Canvas-2D draw path is shared by the live preview and the realtime MediaRecorder exporter, so what you see is exactly what renders (WebM with real mixed audio: per-clip volume/fades/auto-duck through a streaming audio graph). Per-clip trim/speed (0.25–4×)/reverse, dissolve/wipe/slide transitions via clip overlap, keyframes (opacity/scale/x/y/rotation) with easing + one-click In/Out animation presets, text styling with preset grid, color grading + vignette, filmstrip thumbnails + real waveforms, snapping, split/duplicate. The workspace is config-driven: 6 resizable layout presets (react-resizable-panels v4) incl. quick-import files-pane layouts, plus custom composition size. Drafts auto-save to localStorage. Self-contained: toasts via sonner, the files pane runs on an injectable fs adapter (configureReelFs; in-memory mock by default), and shell hooks (inspector/activity) are inert seams in lib/host.ts.",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/reel-editor",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/reel-editor"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "lucide-react",
@@ -1651,6 +1669,12 @@
       "description": "A quick-look media viewer in the macOS Preview spirit. Images render on a zoomable (40–300%) checkerboard stage so transparency reads; audio gets a card player with a CSS-bar waveform + transport; video gets play/pause + scrubber + volume; PDFs embed full-bleed and text gets a simple surface. The toolbar carries a type-indicator chip, zoom, Download, Open-in-editor, and prev/next. Two integration seams in lib/host.ts make it portable: configureMediaSource maps fs paths to fetchable URLs (identity by default, so public URLs work with zero wiring) and configureMediaOpener routes the Open-in-editor handoff (image → image-editor, video/audio → reel-editor) to your shell — both inert until set. Launched bare it shows a fully offline sample gallery (inline SVG gradients, simulated A/V playback). Pairs with file-explorer (onOpenFile → MediaViewer payload) and the editors.",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/media-viewer",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/media-viewer"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "lucide-react"
@@ -1687,6 +1711,12 @@
       "description": "A lightweight code editor in the VS-Code spirit without the weight: a transparent textarea layered over a highlighted pre (regex tokenizer for JS/TS/JSON/CSS) gives real editing with live syntax color and a line-number gutter; a tab strip tracks dirty buffers with Cmd/Ctrl+S save; a status bar shows path, Ln/Col, tab size, language and save state. The explorer is a lazy per-directory tree — each folder lists on expand, with inline new-file/new-folder affordances — rendered as a rail on desktop and a Sheet on mobile, and the new-file form is a responsive dialog ⇄ bottom drawer. The filesystem is INJECTED via a small CodeFsAdapter (list/read/write/mkdir): point configureCodeFs at a real API or use the bundled writable in-memory mock (seeded sample tree) so it works with zero backend. Writes are best-effort — a read-only host flags the save but keeps the local buffer. Pairs with file-explorer (onOpenFile → payload) and appshell.",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/code-editor",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/code-editor"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "lucide-react"
@@ -1722,6 +1752,12 @@
       "description": "An Activity-Monitor-style dashboard: circular CPU/RAM/disk/GPU gauges, rolling CPU + network sparklines on glass panels, and a live process table — polling every 1.5s with a ~40-point history. Telemetry is INJECTED via a small SysMonAdapter (stats/processes): point configureSysmon at a real host API (/proc, an agent, a cloud endpoint) or keep the bundled wavy in-browser mock so the dashboard renders alive with zero backend. Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/system-monitor",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/system-monitor"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "lucide-react"
@@ -1752,6 +1788,12 @@
       "description": "One app that is BOTH a public 'book a session' request form AND the owner's triage inbox — it flips to show the inbox when the viewer can manage. Visitors submit name/email/topic (+ optional preferred time / note); the owner sees pending requests with Confirm / Decline. The backend is INJECTED via a small BookingAdapter (submit/list/setStatus/canManage): point configureBooking at your store, or keep the bundled in-memory mock so it renders fully interactive — form + inbox — with zero backend.",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/booking",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/booking"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "lucide-react"
@@ -1785,6 +1827,12 @@
       "description": "A tiny web-page studio: write HTML / CSS / JS and see it render LIVE in a sandboxed iframe (srcdoc + sandbox=allow-scripts WITHOUT allow-same-origin, so user code runs in an opaque origin and cannot read the host) — then Save to a shareable /p/<slug>. Code / Split / Preview view toggle, a device-width preview (responsive / tablet / phone), a saved-pages rail, and public/private visibility. The backend is INJECTED via a small HtmlStudioAdapter (save/load/list/remove): point configureHtmlStudio at your store, or keep the bundled in-memory mock so the editor + live preview + saved list are fully interactive with zero backend.",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/html-studio",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/html-studio"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "lucide-react"
@@ -1819,6 +1867,12 @@
       "description": "An owner-gated admin app for a curated icon-launcher: add / edit / remove / reorder links (label, lucide icon NAME, url, group, order) that open in a new tab. The backend is INJECTED via a small ResourcesAdapter (list/upsert/remove/canManage): point configureResources at your store, or keep the bundled in-memory mock so the whole CRUD — including reorder — is interactive with zero backend. Icons are stored as lucide NAME strings and resolved client-side, so the same data drives a public launcher surface.",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/resources-launcher-admin",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/resources-launcher-admin"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "lucide-react"
@@ -1853,6 +1907,12 @@
       "description": "One owner's identity in two co-located variants, behind one slug. resume: a clean one-column résumé / CV — name, roles, location, contacts, summary, skills, experience (role · org · period + bullets), projects — rendered by <Resume /> off a configureResume() seam, with a Print / PDF button. card: an \"About This Mac\"-style identity card — avatar / monogram, name, roles, outbound links, FAQ accordion — rendered by <AboutProfile /> off a configureAbout() seam. Both render a populated placeholder unwired (zero backend). Install one surface with `npx rr add profile resume|card`, or both with `npx rr add profile`.",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/profile",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/profile"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "lucide-react"
@@ -1905,6 +1965,12 @@
       "description": "A guided 'Start Here' tour that lays the OS out as a path of stages, each stage opening real apps from the LIVE registry — drift-proof, it reads the injected app catalog instead of a hardcoded list, so adding an app surfaces it automatically (in a stage if listed, else a final 'Everything else' bucket). The catalog, the open(id) callback, and the stage journey are INJECTED via a small StartHereAdapter (apps / open / stages): point configureStartHere at your live app registry + window opener, or keep the bundled in-memory mock (a few generic apps + 3 stages) so the welcome tour renders fully alive with zero host.",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/start-here",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/start-here"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "lucide-react"
@@ -1936,6 +2002,12 @@
       "description": "A React-DOM terminal: monospace glass aesthetic, colored prompt, arrow-key history, red stderr. Built-ins (ls·cd·pwd·cat·mkdir·touch·rm·mv·cp·echo·whoami·date·uname·df·ps·neofetch·help·clear) run against an in-memory FsModel, so it works with ZERO backend. Wire configureTerminal({ mode:\"live\", fs, exec }) and ls/cat read through your real filesystem, file mutations mirror to it, and any unknown command passes through exec.run as a one-shot shell call (stdout/stderr/exit rendered). Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/os-terminal",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/os-terminal"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "lucide-react"
@@ -1963,6 +2035,12 @@
       "description": "A full agent workspace: streaming chat with typing deltas and graceful error notes, plus a library where users CREATE and manage agents (persona, avatar gradient, system prompt), skills, and automations (trigger + schedule forms) — all persisted in localStorage, no backend. Preset agents/skills ship as starting points. The model is INJECTED: configureAssistantStream takes any (messages) => AsyncIterable<string> — your SSE endpoint, the AI SDK, an agent loop — and until wired a typing demo stream keeps the whole UI working offline. Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/assistant",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/assistant"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "lucide-react"
@@ -2002,6 +2080,12 @@
       "description": "Full browser chrome for a REMOTE headless browser: omnibar with search-or-URL detection, bookmark bar, history view (localStorage-persisted), favicons with globe fallback, busy states, and a screenshot viewport that forwards clicks/typing/keys/scroll into the remote page. The backend is INJECTED via a small BrowserAdapter (state/screenshot/act): point configureBrowser at a real headless-Chromium service (e.g. Playwright behind an authed route — any site renders, no X-Frame-Options problem) or keep the bundled offline canvas demo renderer that fakes the viewport so the whole chrome works with zero backend. Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/browser",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/browser"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "lucide-react"
@@ -2037,6 +2121,12 @@
       "description": "The dynamic half of an app registry, in two surfaces. AppStore: a storefront with featured hero, category sidebar, install/uninstall cards for a curated catalog, and toggles that disable built-in apps/shell features (the DISABLED set is persisted so new apps always ship enabled). CreateApp: build a custom app — name, glyph, accent gradient, runtime (html/node/python/shell), entry — with live manifest preview. Both write one localStorage registry; useInstalledApps() turns it into appshell-style descriptors (html apps mount in a sandboxed iframe, command apps in a terminal-style console). The console's shell is INJECTED via configureAppStoreExec (demo echo by default). Self-contained: inspector hooks are inert seams in lib/host.ts; the Create-App flow is bundled in (no cross-slice imports).",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/app-store",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/app-store"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "lucide-react"
@@ -2072,6 +2162,12 @@
       "description": "A complete, portable file-directory explorer: a collapsible folder TREE sidebar (lazy-loaded per dir), a responsive BREADCRUMB that auto-collapses to a dropdown, grid + list views with sort, multi-select, a right-click context menu, drag-and-drop (internal move + external file/folder upload), inline rename, and full CRUD (new folder, rename, cut/copy/paste, move, delete/trash, empty trash). The filesystem backend is INJECTED via a small FileExplorerAdapter (list/mkdir/remove/move/copy/upload/usage/rawUrl) — point it at a real API or use the bundled createMockAdapter() (a writable in-memory tree) so it works with zero backend. Opening a file fires an onOpenFile(path, entry) callback you wire to your own viewer/editor. Self-contained: imports only @/components/ui/* + @/lib/utils. Ported from os-vps (Topside) files manager. Pairs with appshell as the file-dir counterpart to a notion-style sidebar.",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/file-explorer",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/file-explorer"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "lucide-react"
@@ -2109,6 +2205,12 @@
       "description": "Generic, brand-free OS-style shell framework. One <AppShell manifest> wrapper provider gives a project a macOS-style window manager (drag/snap/maximize, dock, menu bar, Spotlight) AND an iOS-style mobile surface (home pager, app library, control center, widgets), driven entirely by a manifest: brand, apps, features, surface regions, capabilities, persistence, keymap. Five shell features (search, inspector, notifications, control-center, widgets) are bundled as defineFeature() contributions inside the slice and mount via named <Slot>s. Responsiveness is a single ResponsiveProvider + 4 DRY primitives (AppFrame, MasterDetail, ResponsiveToolbar, TouchList). Imports nothing project-specific — the consumer injects data/auth/AI through manifest.capabilities. Lifted from os-vps (Topside).",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/appshell",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/appshell"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "lucide-react",
@@ -2150,6 +2252,12 @@
       "description": "@convex-dev/auth with Password (PBKDF2-SHA256 100k, self-hosted-friendly), Anonymous (guest), Google OAuth, and Resend magic-link. Ships a production SignInPage plus a presentational, props-driven AuthCard (v0.3) — choose `methods` (google, github, magic-link, password signin/signup tabs, phone OTP, anonymous) and render the card anywhere with different props; handlers default to a mock so it's interactive with zero wiring. i18n via labels. No Clerk.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/convex-auth",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/convex-auth"
+        }
+      },
       "convexPaths": [
         "convex/features/auth"
       ],
@@ -2216,6 +2324,12 @@
       "description": "Indonesia payment providers behind one slug + ONE shared Convex backend (convex/features/payment discriminates on a provider column: paymentOrders + paymentWebhookEvents, unprefixed). Two frontend variants: doku — DOKU Hosted Checkout + Direct (VA / QRIS / e-Wallet / PayLater), HMAC-SHA256 signed REST, signature-verified webhook, idempotent retries, dependency-free, server-side env only. midtrans — Snap hosted-modal checkout + orders history (needs npm midtrans-client + a NEXT_PUBLIC_MIDTRANS_CLIENT_KEY). Install one with `npx rr add payment doku|midtrans`, or both. A future stripe variant is reserved in the schema's provider union.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/payment",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/payment"
+        }
+      },
       "convexPaths": [
         "convex/features/payment"
       ],
@@ -2307,6 +2421,12 @@
       "description": "Transactional email + newsletter blast via Resend. Double opt-in flow + audience segmentation. Magic-link delivery for Convex Auth. Bundles the subscribers list backend (subscribe / confirm / unsubscribe / count) — formerly the standalone `subscribers` slice, merged here in v0.1.3.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/resend-newsletter",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/resend-newsletter"
+        }
+      },
       "convexPaths": [
         "convex/features/newsletter",
         "convex/features/subscribers"
@@ -2351,6 +2471,12 @@
       "description": "Three AI surfaces as shadcn-style variants — `npx rr add ai-workspace <variant>` for one, or `npx rr add ai-workspace` for all + a switcher. Only the chat variant pulls a Convex backend (per-variant convex gating).\n\n  • chat — floating <AiChatFab /> + createAgenticChatSend: real function-calling over any ToolHost (@/shared/agentic), key-guarded, over convex/features/aiChat.\n  • studio — <AiStudioPage /> single-prompt generation canvas (variation grid + version tree, Suno / Midjourney / Lovable pattern) + aiStudioTools so a shared agent can drive generations.\n  • agents — <AiAgentsPage /> autonomous-worker run dashboard + createAgentRunner(host) which drives the shared function-calling loop and records each tool_use as a RunStep trace.\n\nUse cases: support chatbot in a marketing site, AI generation product (image / code / text / audio), background workers (nightly audits, scheduled crawls, moderation). studio + agents are frontend-only — wire your own persistence.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/ai-workspace",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/ai-workspace"
+        }
+      },
       "convexPaths": [
         "convex/features/aiChat"
       ],
@@ -2464,6 +2590,12 @@
       "description": "Central operator console for the whole AI stack. Every other ai-* feature reads its registries from here. Tabs ordered to match the build-flow:\n\n  1. Providers   — register Anthropic / OpenAI / Google / Mistral / Ollama (API keys AES-encrypted at rest)\n  2. Models      — per-provider catalog (capabilities, context window, pricing)\n  3. Instructions — custom system-prompt library (Claude Projects-style)\n  4. Skills      — named instruction + model default + tool defaults (consumed by chat + studio)\n  5. Tools       — JSON-schema function specs + impl (http / convex / shell) + sandbox flag\n  6. Agents      — skill × model × tools × max-iter (consumed by ai-agents)\n  7. Budgets     — per-workspace cost caps + alerts + hard kill\n  8. Audit       — every AI call: actor / agent / tokens / cost / latency / outcome\n\nIncludes Create-Agent / Create-Skill / Create-Tool / Create-Instruction wizards.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/ai-admin",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/ai-admin"
+        }
+      },
       "convexPaths": [
         "convex/features/ai"
       ],
@@ -2536,6 +2668,12 @@
       "description": "Backend infrastructure (no UI). Single proxy that every other ai-* feature calls. Tier-routed — nano (Haiku) for classification, mid (Sonnet) for chat, flagship (Opus) for deep reasoning. Per-call usage log + cost guard. Works with direct provider keys or OpenRouter umbrella.\n\nNot something you mount — installed automatically as a peer when you add ai-workspace.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/ai-router",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/ai-router"
+        }
+      },
       "convexPaths": [
         "convex/features/ai"
       ],
@@ -2572,6 +2710,12 @@
       "description": "Embeddings-based search via Convex's built-in vector index. Embed via OpenAI text-embedding-3-small (1536-dim), query via vectorIndex().",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/vector-search",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/vector-search"
+        }
+      },
       "convexPaths": [
         "convex/features/search"
       ],
@@ -2609,6 +2753,12 @@
       "description": "Embedded Cal.com booking widget + webhook receiver to mirror bookings into Convex.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/cal-com-booking",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/cal-com-booking"
+        }
+      },
       "convexPaths": [
         "convex/features/bookings"
       ],
@@ -2649,6 +2799,12 @@
       "description": "Renderless ⌘K command palette + generic search modal. Consumer supplies CommandGroup[] + onSelect + label bag; slice owns dialog chrome, ⌘K hotkey, MRU history. Pulled UP from notion-page-clone's command-palette renderless surface (Wave N+3.7) — Nosion adapters dropped at the kitab boundary.",
       "source": "notion-page-clone (consumerVersion 0.3.0) + earlier superspace facade",
       "slicePath": "frontend/slices/command-menu",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/command-menu"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "cmdk@^1.0.0"
@@ -2679,7 +2835,13 @@
       "version": "0.1.0",
       "description": "Eight ready-to-style motion components: marquee, kinetic-heading, magnetic, cursor-spotlight, stat-counter, reading-progress, grain, lightbox. Framer-Motion-powered, tree-shakeable. Facade slice — pulls from template-base/frontend/slices/motion-primitives.",
       "source": "rahmanef.com",
-      "slicePath": "template-base/frontend/slices/motion-primitives",
+      "slicePath": "frontend/slices/motion-primitives",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/motion-primitives"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "framer-motion@^11.0.0"
@@ -2705,7 +2867,13 @@
       "version": "0.1.0",
       "description": "ResponsiveDialog — auto-switches between bottom Sheet (mobile) and centered Dialog (desktop) at the md breakpoint. Same API as shadcn Dialog. Kitab forbids raw <dialog>; use this everywhere. Facade slice — pulls from template-base/frontend/slices/responsive-dialog.",
       "source": "superspace",
-      "slicePath": "template-base/frontend/slices/responsive-dialog",
+      "slicePath": "frontend/slices/responsive-dialog",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/responsive-dialog"
+        }
+      },
       "convexPaths": [],
       "npm": [],
       "shadcn": [
@@ -2734,6 +2902,12 @@
       "description": "THE dashboard chrome — one shell, three faces. Desktop: collapsible rail (shadcn Sidebar, ⌘B, cookie-persisted) + topbar. Mobile: NO sidebar at all — a bottom dock plus a thumbnail-tile menu drawer (drill-down one level for sub-items). Every face renders from ONE `nav` prop (groups → items → one level of sub-items), so the dock is derived, not a second nav to keep in sync — flag `dock: true` on the items you want down there, or let it take the first few. Slots for everything project-specific: sidebarHeader (workspace switcher), sidebarFooter (user menu), actions (search/notifications), topbar (full replace), secondary (narrow contextual column = the old three-column 'advanced' archetype). The dock is CSS (`md:hidden`); the rail + trigger read `isMobile` from shadcn's own useSidebar() — one breakpoint source, no second media query. Zero backend: `activePath` drives it from state, otherwise it reads usePathname(). Merged 2026-08-03 from the superspace facade + appshell's cockpit shell + the template `_shared` admin chrome.",
       "source": "superspace",
       "slicePath": "frontend/slices/dashboard-shell",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/dashboard-shell"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "lucide-react"
@@ -2767,7 +2941,13 @@
       "version": "0.1.0",
       "description": "ThreeColumnLayoutAdvanced — collapsible left/right + resizable widths + responsive breakpoints + PanelSection compound (Header/Items/Footer) + per-panel footer slots. Models shadcn sidebar API for the panel interior. Pair with PanelGroup/PanelMenu/PanelSeparator primitives. Trigger ≠ header (V-wave separation rule).",
       "source": "superspace",
-      "slicePath": "template-base/frontend/slices/three-column",
+      "slicePath": "frontend/slices/three-column",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/three-column"
+        }
+      },
       "convexPaths": [],
       "npm": [],
       "shadcn": [
@@ -2800,6 +2980,12 @@
       "description": "Same-origin cross-tab + cross-iframe state sync via BroadcastChannel API. Tiny, no backend, no install.",
       "source": "Web Platform — BroadcastChannel API",
       "slicePath": "frontend/slices/broadcast-channel-sync",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/broadcast-channel-sync"
+        }
+      },
       "convexPaths": [],
       "npm": [],
       "shadcn": [],
@@ -2823,6 +3009,12 @@
       "description": "RBAC engine ported from superspace. 6 system role presets (owner/admin/manager/staff/client/guest with levels), dot-namespaced permissions with `*` / `feature.*` wildcard matching, and pure check helpers (resolvePermissions / hasPermission / roleHasPermission). Props-driven UI primitives: <PermissionGate>, usePermissions, <RoleBadge>, <PermissionMatrix>. Convex template ships a tenant-scoped rbac_roles table + checkPermission / requirePermission helpers + idempotent seedSystemRoles, with a PLATFORM_ADMIN_EMAILS superadmin bypass. Pair with `user-management` for the members / invites / roles-admin UI. @convex-dev/auth aware — no Clerk.",
       "source": "superspace",
       "slicePath": "frontend/slices/rbac-roles",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/rbac-roles"
+        }
+      },
       "convexPaths": [
         "convex/features/rbac_roles"
       ],
@@ -2867,6 +3059,12 @@
       "description": "Full superspace-parity user management, props-driven + RBAC-agnostic. <UserManagementPanel> tabs Members + Roles + Teams + Access: member table (search / filter / sort, inline role dropdown, soft-remove), InviteDialog (with an optional 'propagate to sub-workspaces' toggle — same / step-down role strategy) + PendingInvites, a RolesPanel (custom roles via permission matrix; system roles read-only), a TeamsPanel (named user groups), and an AccessMatrix (users × tenants grid with inline role assignment). All permission-gated. You pass `roles` + `currentPerms` + the permission catalog (resolved from rbac-roles) + callbacks; the slice imports no other slice's frontend. Convex ships um_members + um_invites + um_teams + um_team_members + um_tenant_links + member / invite / team / hierarchy endpoints + getAccessMatrix (gated via rbac-roles' requirePermission); roles CRUD reuses rbac-roles'. The hierarchy is a generic edge tree — rr never owns the tenant entities. P0–P4c: the complete user-management epic.",
       "source": "superspace",
       "slicePath": "frontend/slices/user-management",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/user-management"
+        }
+      },
       "convexPaths": [
         "convex/features/user_management"
       ],
@@ -2921,6 +3119,12 @@
       "description": "17-section admin surface (events, funnels, attribution, users, A/B, flags, pricing, CMS, email, audit, ...) gated by RBAC. Auto-filters sidebar by tier (solo/influencer/organization) and user permissions. Single backend resolver (getMyAdminAccess) mirrors frontend gate so UI can never leak.",
       "source": "superspace + spec",
       "slicePath": "template-base/frontend/slices/admin-panel",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "template-base/frontend/slices/admin-panel"
+        }
+      },
       "convexPaths": [
         "template-base/convex/features/admin-panel"
       ],
@@ -2962,7 +3166,13 @@
       "version": "0.1.0",
       "description": "Client SDK + Convex ingestion endpoint for structured product events. Auto-captures page_view/signup/login + UTM/referrer/first-touch attribution. Batched flush via requestIdleCallback. Targets <100ms p99 ingestion.",
       "source": "spec + superspace analytics",
-      "slicePath": "template-base/frontend/slices/admin-panel/slices/events",
+      "slicePath": "frontend/slices/event-tracking",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/event-tracking"
+        }
+      },
       "convexPaths": [
         "template-base/convex/features/admin-panel",
         "template-base/convex/features/analytics"
@@ -2997,6 +3207,12 @@
       "description": "Emoji + lucide (outline) + phosphor (fill) icon picker with search, 10-color palette, Twemoji/native toggle, recents tracking, and smart positioning. Two-tab layout (Emoji | Icon) with sub-variant pills (Native | Twemoji / Lucide | Phosphor fill). One string stores emoji OR lucide:Name OR phosphor:Name OR with ?c=hex tint — backwards-compat with raw-emoji fields. Popover auto-flips on collision (caps to Radix `--radix-popover-content-available-height`) and falls back to centered Dialog when neither side fits. Two variants: Popover (compact trigger) and Inline (full sheet/dialog use). Lifted 2026-05-25 from open-silong.",
       "source": "open-silong",
       "slicePath": "frontend/slices/icon-picker",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/icon-picker"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "@phosphor-icons/react@^2.1.10"
@@ -3034,6 +3250,12 @@
       "description": "Public-facing weekly activity log. Lists user-facing activities grouped by ISO week with schema.org-friendly markup, designed to maximise SEO so the question 'what is <person> working on this week?' lands here. Convex-backed (schema + queries + unauthenticated mutations); MCP-friendly so AI workflows (Claude / GPT / custom agents) can append entries directly. All user-facing copy + per-category labels + date/time locale are prop-driven (English defaults). Lifted 2026-05-27 from rahmanef.com; 225-LOC view split into view + 2 sub-components + 4 lib helpers for the 200-LOC cap; Indonesian strings + custom primitives stripped; cross-slice auth import dropped (consumer wraps mutations).",
       "source": "rahmanef.com",
       "slicePath": "frontend/slices/activity",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/activity"
+        }
+      },
       "convexPaths": [
         "convex/features/activity"
       ],
@@ -3068,6 +3290,12 @@
       "description": "Convex-backed per-key request counter. Atomic check-and-increment via `consume` mutation; expired rows pruned by `_pruneExpired` internalMutation wired to a 5-min cron. Replaces single-replica in-memory Map so multi-replica Next deployments share buckets. Limits live in an in-code POLICY map keyed by namespace prefix (admin-login:<ip>, mcp:<ip>) — never caller-supplied; optional RATE_LIMIT_SERVER_KEY env gates anonymous calls. Lifted 2026-05-16 from rahmanef.com; hardened 2026-06-07.",
       "source": "rahmanef.com",
       "slicePath": "frontend/slices/rate-limit",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/rate-limit"
+        }
+      },
       "convexPaths": [
         "convex/features/rate_limit"
       ],
@@ -3094,6 +3322,12 @@
       "description": "Quote/name/role rotator backend. Public `listAll` + `get` (no auth — testimonials are public), admin CRUD via `requireAdmin`, internal `seed` for one-shot bootstrap. Indexed by `order` so carousel/grid keeps stable rotation. Lifted 2026-05-16 from rahmanef.com; token-based admin gate swapped for rr `_shared/auth`.",
       "source": "rahmanef.com",
       "slicePath": "frontend/slices/testimonials",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/testimonials"
+        }
+      },
       "convexPaths": [
         "convex/features/testimonials"
       ],
@@ -3132,6 +3366,12 @@
       "description": "Service offerings backend — title + summary + deliverables array + sort order. Public read, admin CRUD, internal seed. Pairs with a frontend services grid/list (consumer-side). Lifted 2026-05-16 from rahmanef.com; token-based admin gate swapped for rr `_shared/auth`.",
       "source": "rahmanef.com",
       "slicePath": "frontend/slices/services",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/services"
+        }
+      },
       "convexPaths": [
         "convex/features/services"
       ],
@@ -3167,10 +3407,16 @@
       "title": "Create Your MCP",
       "category": "ai",
       "kind": "full",
-      "version": "0.2.0",
-      "description": "Turn any rr-based app into an MCP server that ChatGPT custom apps, Claude.ai connectors, Cursor MCP, and other AI clients authenticate to. OAuth 2.1 + PKCE flow with code → bearer exchange, env-configured vendor-host allowlist, single-use codes, 1-year bearer tokens, scope-tagged tools, opaque error collapsing, constant-time token compare. Static MCP_API_KEY fallback for service-account / CI scripts. Sanitized 2026-05-16 from rahmanef.com's production MCP integration — vendor literals (chatgpt.com / OpenAI paths) replaced with MCP_OAUTH_ALLOWED_HOSTS + MCP_OAUTH_ALLOWED_PATH_PREFIXES env vars so the slice ships portable.",
+      "version": "0.3.0",
+      "description": "Turn any rr-based app into an MCP server that ChatGPT custom apps, Claude.ai connectors, Cursor MCP, and other AI clients authenticate to. OAuth 2.1 + PKCE flow with code → bearer exchange, env-configured vendor-host allowlist, single-use codes deleted on redemption, 1-year bearer tokens stored as sha256 (the raw value is returned once, at mint), scope-tagged tools, opaque error collapsing, constant-time compare on the static-key path. Static MCP_API_KEY fallback for service-account / CI scripts. Sanitized 2026-05-16 from rahmanef.com's production MCP integration — vendor literals (chatgpt.com / OpenAI paths) replaced with MCP_OAUTH_ALLOWED_HOSTS + MCP_OAUTH_ALLOWED_PATH_PREFIXES env vars so the slice ships portable.",
       "source": "rahmanef.com",
       "slicePath": "frontend/slices/create-your-mcp",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/create-your-mcp"
+        }
+      },
       "convexPaths": [
         "convex/features/create_your_mcp"
       ],
@@ -3232,6 +3478,12 @@
       "description": "Contact form posting to Resend email API. Server Action + Zod input validation. Convex mutation for storage + Resend send.",
       "source": "cescadesigns",
       "slicePath": "template-base/frontend/slices/contact-form-resend",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "template-base/frontend/slices/contact-form-resend"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "resend@^4.0.0",
@@ -3276,6 +3528,12 @@
       "description": "Access-gated admin surfaces behind one slug, in two variants — each pulls ONLY its own convex backend (per-variant convex gating). shell: a HEADLESS minimal generic admin shell — a titled landing region + a portable buildAdminStats(opts) nav-from-registry factory (consumer supplies a SliceRegistryAdapter + queryTable reader) over convex/features/admin; superadmin gate via SUPER_ADMIN_EMAIL. console: the composed admin panel distilled from ~15 project admin panels — a gated two-column shell (AdminConsole) over a 26-section registry (ADMIN_CONSOLE_SECTIONS: observability / identity / ai / content / commerce / config) that mounts OTHER rr slices via a consumer-supplied `components` map (users→user-management, roles→rbac-roles, ai→ai-admin, tenants→platform-admin) plus 5 owned gap sections (Analytics, Audit-log, Nav config, SEO health, Leads/CRM) over convex/features/admin_console (ac_leads + ac_nav_items); gate injected, PLATFORM_ADMIN_EMAILS allowlist. Install one with `npx rr add admin shell|console`, or both with `npx rr add admin`. NOT the multi-tenant control plane — that's the separate `platform-admin` slice (the console's `tenants` section provider).",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/admin",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/admin"
+        }
+      },
       "convexPaths": [
         "convex/features/admin",
         "convex/features/admin_console"
@@ -3363,6 +3621,12 @@
       "description": "Multi-tenant SaaS control plane. Workspace lifecycle ops (list/delete/cascade), per-tenant tier presets (gates + quota), KPI dashboard grid. Consumer-domain bits injected via adapter props (tenantTablesAdapter / tierPresets / kpiSources). Contract-only scaffold; canonical implementation lands via /rr-send from superspace. See docs/contract-negotiations-2026-05-15.md §4.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/platform-admin",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/platform-admin"
+        }
+      },
       "convexPaths": [],
       "npm": [],
       "shadcn": [],
@@ -3410,6 +3674,12 @@
       "description": "Workspace-scoped audit event recorder. Canonical logAuditEvent helper for mutations + actions; supports entity tracking, before/after diff, IP/user-agent capture.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/audit-log",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/audit-log"
+        }
+      },
       "convexPaths": [
         "convex/features/audit-log"
       ],
@@ -3441,6 +3711,12 @@
       "description": "Polymorphic-target threaded comments. Consumer picks `TargetRef = { kind, id, subId? }` (e.g. page+block, blog+slug, task+id). Reply nesting is real: `parentId` end-to-end + `buildThread(flat) → CommentNode[]` tree (oldest-first, orphan-safe). Renderless <CommentsThread> + <CommentsAnchor> wrappers; useComments(bindings, opts) returns items + `tree` + openCount + CRUD + forbiddenWords guard. Adapter pattern — see contract-negotiations §1.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/comments",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/comments"
+        }
+      },
       "convexPaths": [
         "convex/features/comments"
       ],
@@ -3477,6 +3753,12 @@
       "description": "Service slice for SEO metadata generation — Anthropic-backed action with per-user 24h cost guard + portable persona prop. No public route. Backend exposes generate + generateAndApply mutations gated by requireAdmin; consumers inject brand voice via the personaContext arg (or buildSeoSystemPrompt factory).",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/seo",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/seo"
+        }
+      },
       "convexPaths": [
         "convex/features/seo"
       ],
@@ -3515,6 +3797,12 @@
       "description": "A pure render-to-clean-HTML engine harvested from the Instatic CMS publisher, decoupled from its host caching / loops / visual-components / Layer-C islands. publishPage(tree, registry, options) walks a generic node tree bottom-up: render children, escape every prop by its schema-declared control type (url -> safe-URL, richtext -> DOMPurify, svg -> SVG profile, else HTML-escape), dedup CSS by moduleId (~60-80% shrink), splice author classes + inline styles onto each rendered root, then assemble <!DOCTYPE> + reset + framework + module CSS + a deterministic (sorted) CSP plan. Bring your own ModuleRegistry (each module is a pure render(props, children) -> { html, css? }). Security spine: HTML escape + safe-URL, CSS-value guard (expression()/{}/</), </style RAWTEXT neutraliser, and an injectable DOMPurify seam (configureRichtextSanitizer) that fails closed — without a runtime, richtext strips all tags and SVG returns empty. Stateless, env-free, ZERO npm deps, no Convex. Ships a PublishPreview iframe-srcdoc pane. A Wave-1 leaf of the feature-harvest ULTRAPLAN; a dependency of the planned visual-page-canvas.",
       "source": "rahman-resources",
       "slicePath": "frontend/slices/publisher-clean-html",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/publisher-clean-html"
+        }
+      },
       "convexPaths": [],
       "npm": [],
       "shadcn": [],
@@ -3542,6 +3830,12 @@
       "description": "A data-source-driven repeater harvested from the Instatic CMS base.loop engine, decoupled from its publisher / page-tree / entryStack machinery into a plain React slice. Register pluggable LoopEntitySource backends (each declares display fields + an async fetch returning { items, totalItems }); drop <ContentLoop source|sourceId filters orderBy variants={[A, B]} /> to render one component per item, round-robining items across variants so alternating / featured layouts need no per-item branching. Ships a namespaced source registry (ids must be 'ns.name', so consumer sources can't shadow each other), createMockLoopSource for env-free previews + tests, and none/infinite pagination via useLoopPagination (a shadcn Load more button accumulates pageSize chunks). LoopItem.fields is a generic resolved-value bag — variants read item.fields.title directly, no second lookup. UI-only: no Convex tables shipped; point a source's fetch at Convex/REST when you have a backend. First slice of the feature-harvest ULTRAPLAN (docs/feature-harvest) and a dependency of the planned site-templates-engine + visual-page-canvas.",
       "source": "rahman-resources",
       "slicePath": "frontend/slices/content-loops",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/content-loops"
+        }
+      },
       "convexPaths": [],
       "npm": [],
       "shadcn": [
@@ -3570,6 +3864,12 @@
       "description": "Markdown (.md) page container with optional CRUD surfaces. <MarkdownPage content={md} tabs={['read','write','review']}/> — Read renders rich text (headings, lists, todo, GitHub-style callouts, fenced code, KaTeX, tables, images, <details> toggles, inline marks); Write is a raw-source editor with snippet toolbar + live preview; Review overlays block-anchored comments (add/resolve, controlled via onAddComment/onResolveComment or internal fallback). Fenced ```mermaid blocks render as SVG diagrams (dynamic-imported mermaid) and ```chart blocks as recharts bar/line/area/pie from a JSON spec. Self-contained: ships its own parser (parseMarkdown → MdNode[]) + inline renderer, no notion runtime dependency. Sync is by shared grammar: the notion cluster's blocksToMarkdown / markdownToBlocks bridge (@notion/shared/lib/markdown) emits/consumes the exact same markdown this slice parses, so anything readable in the notion block page is readable here and vice-versa. No store, no Convex — comments CRUD is consumer-wired callbacks.",
       "source": "rahman-resources",
       "slicePath": "frontend/slices/markdown",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/markdown"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "katex@^0.16",
@@ -3608,7 +3908,13 @@
       "version": "1.1.1",
       "description": "Nested vertical slice (slice-of-slices) housing the full notion-page-clone block editor. Mount <PageEditor pageId/> inside <EditorAdapterProvider adapter/> — with `{}` it is a working plain-text/markdown block editor (slash menu, markdown triggers `# - > [] etc.`, dnd-kit drag with column layouts, per-block toolbar with turn-into/color/duplicate, per-block undo, paste-markdown import); host capabilities light up per optional adapter: data (block+page CRUD), selection (multi-select), comments (per-block popover), ai (Ask-AI panel), database (render + picker), mention (@-typeahead), page (nav/uploads/covers). Cluster-private shared layer under @notion/* — vendored block/page/database model, uid, inline markdown, page→md/html export. Pure convex block helpers (_blocks/_blockOps, unit-tested) ship in convex/features/notion. Same markdown grammar as the standalone `markdown` slice (blocksToMarkdown/markdownToBlocks bridge).",
       "source": "notion-page-clone",
-      "slicePath": "frontend/slices/notion-app",
+      "slicePath": "frontend/slices/notion",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/notion"
+        }
+      },
       "convexPaths": [
         "convex/features/notion"
       ],
@@ -3652,7 +3958,13 @@
       "version": "0.4.0",
       "description": "Canonical landing-page composition slice — replaces the former standalone hero / cta / pricing-page / faq-section / feature-grid / testimonials-grid / blog-section / portfolio-section / changelog-feed slices (all merged here as `kind` variants in v0.2.0). Ships a pure reducer (v0.4.0: LANDING_UPSERT auto-shifts sibling `order` to keep positions unique; LANDING_DELETE closes the gap) + LandingProvider store adapter + admin LandingView/LandingEditorView built on the shared CRUD primitives, plus a per-section LandingSectionShell (background image + custom Tailwind className overlay + scroll-reveal). NEW in v0.4.0: a `sections/` library of config-driven public renderers (StatsSection, TestimonialsSection, FaqSection, PricingSection, NewsletterSection, CustomSection) that read `LandingSection.config` JSON merged over template defaults — content stays dashboard-controlled without per-template renderer code; plus `parse-config` helpers (parseConfigBadge/parseConfigField) and `sections/config` guards (parseConfigObject, cfg*). Sections carry { kind, order, title, subtitle, enabled, imageUrl, imageRatio, bgImageUrl, className, config (JSON) } with up/down reorder arrows. Lifted from the _templates fleet `_shared/landing` (2026-06-11) — the 8 standalone templates ship a byte-similar copy; this rr slice is the SSOT. Used by all 7 rr website templates.",
       "source": "rahman-resources (lifted from _templates fleet)",
-      "slicePath": "frontend/slices/sections",
+      "slicePath": "frontend/slices/landing-sections",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/landing-sections"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "lucide-react@^0.400.0",
@@ -3695,6 +4007,12 @@
       "description": "Zero-dependency scroll-motion layer (IntersectionObserver + CSS) plus an embla carousel and a radix accordion, packaged so any page gets tasteful entrance animations without pulling in a motion library. Ships Reveal (fade-up/fade/fade-left/fade-right/zoom), Stagger (incremental per-child reveal for grids/lists), CountUp (rAF count-to-value with locale formatting; integers), Marquee (infinite logo/brand strip with hover-pause + edge fade), and the useInView hook behind them; plus Carousel (embla, optional Autoplay plugin) and Accordion (radix). All reveal + keyframe motion is gated behind prefers-reduced-motion. Consumers append globals-motion.css to their app/globals.css for the [data-reveal] transitions + accordion/marquee/blob keyframes. Lifted 2026-06-10 from the _templates fleet `_shared/motion` copy — the 8 standalone website templates already ship a byte-identical copy; this rr slice is the SSOT so future scaffolds get it via `npx rr add motion-kit`. Pairs with landing-sections (its renderers consume these primitives).",
       "source": "rahman-resources (lifted from _templates fleet)",
       "slicePath": "frontend/slices/motion-kit",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/motion-kit"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "embla-carousel-react@^8.6.0",
@@ -3731,6 +4049,12 @@
       "description": "Guest-friendly shopping cart for catalog storefronts. CartProvider holds items in React context with localStorage persistence (anonymous buyers keep their cart across reloads, zero backend). CartWidget is a header trigger with live count badge opening a slide-over Sheet: per-item qty steppers, remove, subtotal, checkout CTA to a host route. CheckoutSummary renders the order panel on the checkout page. Props-driven R3 — no convex/react anywhere; the host resolves a NUMERIC price per catalog item before add() and MUST re-price every line server-side when placing the order (client subtotal is display-only, never the charge). Proven end-to-end on wirausaha-os: catalog → cart → server-priced placeOrder action → DOKU Direct instructions → webhook flips paid (reactive). Pairs with doku-payment ≥0.2 (guest checkout: optional userId + buyer contact, key-guarded actions, guest-readable status query) or midtrans-payment.",
       "source": "wirausaha-os guest-checkout build-out 2026-06-10",
       "slicePath": "frontend/slices/storefront-checkout",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/storefront-checkout"
+        }
+      },
       "convexPaths": [],
       "npm": [],
       "shadcn": [
@@ -3770,6 +4094,12 @@
       "description": "Single unified theme controller for next-themes apps. ThemePresetSwitcher ships a Palette-icon Popover trigger with three stacked sections: (1) sticky light/dark/system mode tabs, (2) sticky preset-count row with a Default reset button, (3) scrollable color-preset list grouped by mood (Profesional / Bold / Hangat / Artistik / Gelap + Lainnya). Hover-to-preview + click-to-commit + restore-on-close semantics. ThemePresetProvider context wraps state so deeply-nested consumers read via useThemePreset() instead of mounting the switcher directly. ThemeColorSync wrapper enables live tweakcn-CSS-variable preview on routes that need it. Tweakcn registry (~30 curated presets after HIDDEN_PRESETS filter drops Doom 64 / Cyberpunk / Neo Brutalism / Bubblegum / Candyland / Pastel Dreams) ships inside the slice as registry-data.json and loads lazily via dynamic import — code-splits into its own chunk, zero consumer public/ setup, no network roundtrip to a hosted URL. localStorage key `host:theme-preset` (rename via slice fork). CK-1F (2026-05-23) — collapsed prior TweakcnSwitcher + ThemePicker + phantom `theme-preset-switcher` catalog entry into this single component.",
       "source": "CareerPack + notion-page-clone",
       "slicePath": "frontend/slices/theme-presets",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/theme-presets"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "next-themes@^0.4.6"
@@ -3803,6 +4133,12 @@
       "description": "Post-claim onboarding wizard for clone-to-own templates, graduated from the headless template surface (2026-06-06). Multi-step card flow (Identitas / Branding / Konten / Selesai) that stores ALL site config in the host backend via a props-driven save callback — a non-coder configures their site with zero code. Branding step ships a readable shadcn Select theme-preset picker (color swatches per preset + grouped headers + live preview callback — replaces the white-on-white native select), brand color quick-chips, light/dark/system default mode, logo/favicon upload via injected ImageField, and optional Analytics ID. Identity step hints invalid email format. 'Lewati setup' marks onboarded without fields and reverts any browsed-but-unsaved preset. Props-driven (R3): no convex/react import — host wires settings.upsert / seed.seedSample / setup.status into props; pairs naturally with the theme-presets slice (registry + tweakcnSwatches + previewTweakcnPreset) but works with any theme system or none.",
       "source": "personal-brand-os",
       "slicePath": "frontend/slices/site-setup-wizard",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/site-setup-wizard"
+        }
+      },
       "convexPaths": [],
       "npm": [],
       "shadcn": [
@@ -3837,7 +4173,13 @@
       "version": "0.3.0",
       "description": "Host-pluggable file upload + URL resolution. Ships <FileUploadButton>, <FileChip>, useFileUpload(), useFileUrl() — all reading from a FilesAdapter the host wires via <FilesAdapterProvider>. Bundled localStorage demo adapter stores blobs as data URLs (small files only). Drop in your own adapter for Convex / S3 / GCS / R2. The slice itself has zero backend coupling, proving the storage-adapter pattern for the rest of the open-silong blocked-pending-adapter wave (cover, workspace-io, templates, …).",
       "source": "notion-page-clone",
-      "slicePath": "frontend/slices/file-upload",
+      "slicePath": "frontend/slices/files",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/files"
+        }
+      },
       "convexPaths": [],
       "npm": [],
       "shadcn": [
@@ -3866,6 +4208,12 @@
       "description": "Framework-agnostic multi-selection for any vertical list (Notion-style blocks, table rows, cards). Hold-and-drag on empty space draws a rubber-band rectangle — AutoCAD-style: drag RIGHT selects only fully-enclosed items (solid ring), drag LEFT selects anything the rectangle touches (dashed green ring). Click an item's edge to select (Shift = range, Cmd/Ctrl = toggle). Selecting activates items with a ring + data-block-selected attribute. Backspace/Delete bulk-deletes, Escape and click-outside clear, and a floating count toolbar offers Delete/Clear. SelectionProvider owns only the id set — the host owns the data via onBulkDelete(ids). Pairs with notion-shell (the notion-clone template wires it onto the editor); lifted from notion-page-clone's block-selection slice.",
       "source": "notion-page-clone",
       "slicePath": "frontend/slices/selection",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/selection"
+        }
+      },
       "convexPaths": [],
       "npm": [],
       "shadcn": [],
@@ -3894,6 +4242,12 @@
       "description": "The pure, props-driven Notion-clone primitives suite behind one slug, over one shared domain-type model (Block / Page / Property / Database / DbView …). page: the page + block editor (NotionPage / NotionHeader / NotionBlock, SlashMenu, block renderers, inline-markdown decorator, built-in code (highlight.js) + equation (KaTeX)). database: a drop-in 11-view database (table/board/list/gallery/calendar/feed/chart/dashboard/form/map/timeline, 18 property/cell types, per-type column config, filter/sort/group/calculate, row peek + multi-select, cell drag-fill, formula engine, CSV/JSON import-export). sidebar: a standalone tree-nav sidebar (dnd reorder + reparent with depth projection, inline rename, per-row icon picker). All stateless + callback-CRUD — the host owns the data. Install one surface with `npx rr add notion-ui page|database|sidebar`, or all with `npx rr add notion-ui`; the shared/ domain type model is copied for every variant. NOT the full Notion app — that's the separate `notion` slice (adapter + Convex backed).",
       "source": "notion-page-clone",
       "slicePath": "frontend/slices/notion-ui",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/notion-ui"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "@dnd-kit/core@^6",
@@ -3991,6 +4345,12 @@
       "description": "Generic image/wallpaper picker — not coupled to Notion. The headline API is ONE button (ImagePickerButton) that opens a dialog with 4 tabs: Gallery (12 colours + 8 gradients + Notion textures), Upload (drag/click, ≤8MB), Link (paste any https image URL), Unsplash (bundled curated landscapes + live search). On pick, onChange fires with an ImageValue ({ type, value, positionY?, metadata? }). ImageBanner is the optional reposition-able band — render an ImageValue as a full-width cover / profile header / card hero with hover controls: Change (opens the dialog), Reposition (drag the vertical focal point), Remove. The slice imports NO other slice and NO backend — the upload backend and Unsplash search are INJECTED as props (onUpload + searchUnsplash), so it drops into any app: wire onUpload to the `files` slice and searchUnsplash to a server route via unsplashSearchVia('/api/unsplash') that holds UNSPLASH_ACCESS_KEY server-side (never NEXT_PUBLIC). Ships a curated Unsplash fallback + gallery so it works with zero config. parseImage normalizes legacy raw-string values; imageStyle builds the focal-point CSS. Wired into the notion-page-clone template as the page cover via NotionPage's coverSlot.",
       "source": "notion-page-clone",
       "slicePath": "frontend/slices/image-picker",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/image-picker"
+        }
+      },
       "convexPaths": [],
       "npm": [],
       "shadcn": [
@@ -4033,7 +4393,13 @@
       "version": "1.0.0",
       "description": "Unified workspace + menu navigation primitive. NavContext = (workspaceId, menuSetId) atomic pair. 2-tier dropdown switcher (workspace radio + menuSet picker), ContextBadge header chip, full editor with tabs (menus / workspace tree / settings), tiered RBAC (admin menus.manage, user menus.fork). Replaces silo'd menu-store + workspace-store slices in superspace. Resolver chain: user nav-context cache > user assignment > workspace default > system. Source: superspace.",
       "source": "superspace",
-      "slicePath": "template-base/frontend/slices/workspace-shell",
+      "slicePath": "frontend/slices/workspace-shell",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/workspace-shell"
+        }
+      },
       "convexPaths": [
         "template-base/convex/features/workspaceShell"
       ],
@@ -4074,6 +4440,12 @@
       "description": "Grab-bag resource hub. One polymorphic `libraryItems` table holds six kinds — prompt, image, video, link, download, snippet — with per-kind payload fields switched on `kind` (no joins). Attribution-first: every item carries optional source/license/tools so re-shares stay correct. Collections group items. Convex-backed (schema + queries + unauthenticated mutations); SEO override fields reused from the `seo` peer slice so the surface matches blog/projects rows. Public view = filterable card grid + per-item detail with copy-to-clipboard for prompts/snippets and an opt-in upvote control. Lifted 2026-05-28 from rahmanef.com; 432-LOC mutations + 330-LOC detail split for the 200-LOC cap; Indonesian copy + custom primitives stripped (prop-driven English defaults); cross-slice auth + comments-votes coupling dropped (consumer wraps mutations + supplies the upvote handler).",
       "source": "rahmanef.com",
       "slicePath": "frontend/slices/library",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/library"
+        }
+      },
       "convexPaths": [
         "convex/features/library"
       ],
@@ -4114,6 +4486,12 @@
       "description": "Generic DataTable<TData> on TanStack Table v8 + shadcn Table. Sorting (3-state column headers), toolbar search bound to any column, pagination, checkbox row selection with count footer, column-visibility dropdown. density compact|comfortable + selectable on|off variant axes. Pure UI — consumer supplies columns + data.",
       "source": "rr original (shadcn data-table pattern)",
       "slicePath": "frontend/slices/data-table",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/data-table"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "@tanstack/react-table@^8.21.0"
@@ -4151,6 +4529,12 @@
       "description": "A small multi-page CMS. PagesView (list + CRUD: create/edit/duplicate/delete/publish) + PageEditorView (metadata form + block editor) + a read-only public BlockRenderer. Pages are composed of 11 block kinds: hero, text, feature-list, cta, logo-cloud, testimonial, video, image-gallery, faq, stats, pricing-table. Ships a localStorage adapter (LocalPagesProvider) + a generic Home/About/Pricing seed so it runs env-free — or wire the bundled pagesReducer + PagesProvider to your own backend (optional Convex copy-source included). Pure UI; no Convex required.",
       "source": "rr original (generalized from saas-marketing pages engine)",
       "slicePath": "frontend/slices/pages-cms",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/pages-cms"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "lucide-react"
@@ -4190,6 +4574,12 @@
       "description": "Two co-located placeholder surfaces behind one slug. loading: a configurable LoadingSkeleton over the shadcn Skeleton (kind presets text / card / list / table / form / page / block, overridable count + columns) plus a spinner LoadingState (inline / block / overlay) for in-flight work. empty: a configurable EmptyState over the shadcn Empty (404 / 500 / 403 / no-results / empty-list / first-use, overridable icon/title/copy/actions) plus an ErrorPage full-page wrapper for app/not-found.tsx and app/error.tsx. Install one surface with `npx rr add feedback-states loading|empty`, or both with `npx rr add feedback-states`. Replaces ad-hoc animate-pulse divs, hand-rolled Loader2 spans, and one-off error pages.",
       "source": "rr original",
       "slicePath": "frontend/slices/feedback-states",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/feedback-states"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "lucide-react@^0.400.0"
@@ -4242,6 +4632,12 @@
       "description": "MarketingHeader (split | centered | minimal layouts, sticky option, mobile sheet menu) + MarketingFooter (columns | slim layouts, link columns, social icons, legal bar). Brand / nav / CTA / columns all props — no hardcoded content. Lucide stand-ins for brand glyphs; swap a brand icon set post-copy (README).",
       "source": "rr original (extracted from template duplication)",
       "slicePath": "frontend/slices/marketing-chrome",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/marketing-chrome"
+        }
+      },
       "convexPaths": [],
       "npm": [],
       "shadcn": [
@@ -4272,6 +4668,12 @@
       "description": "Two settings surfaces behind one slug, each adapter-driven so the slice owns no data. account: SettingsShell two-column surface (nav collapses to a Select on mobile) — Profile (avatar/name/email/bio), Preferences (theme/language/density), Notifications (switch rows), Danger zone (AlertDialog-confirmed delete) over an ASYNC SettingsAdapter { load, save(patch) } with optimistic save + rollback; createMemoryAdapter ships for demos. appearance: AppearancePanel (style/mode/accent/wallpaper/reduce-transparency/display) over a SYNC per-setting AppearanceAdapter, plus the generic SettingsSection / SettingsRow / Segmented / AccentSwatches primitives you compose custom panels from. Install one surface with `npx rr add settings account|appearance`, or both with `npx rr add settings`.",
       "source": "rr original",
       "slicePath": "frontend/slices/settings",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/settings"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "lucide-react@^0.400.0"
@@ -4331,6 +4733,12 @@
       "description": "NotificationBell (ghost icon button, unread badge, popover or sheet surface) + NotificationList (All/Unread tabs, mark-all-read, clear, ScrollArea rows with kind icon, relative time, hover actions). NotificationsAdapter contract (list/markRead/markAllRead/dismiss/clear) with a useSyncExternalStore-friendly memory adapter included — swap in Convex for production (sketch in README).",
       "source": "rr original (appshell toast-log pattern, standalone)",
       "slicePath": "frontend/slices/notifications-center",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/notifications-center"
+        }
+      },
       "convexPaths": [],
       "npm": [],
       "shadcn": [
@@ -4365,6 +4773,12 @@
       "description": "A layered canvas studio: image/text/shape layers with filters, masks, transforms, safe-area guides and aspect presets (1:1/4:5/9:16/16:9), plus an export modal (download / copy / import JSON). Runs fully offline on bundled gradient-SVG samples. Host wiring is one call: configureMediaStudio({ saveDoc, imageSources }) lights up Save-to-host and feeds real image sources. Self-contained: inspector hooks are inert seams in lib/host.ts.",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/design-studio",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/design-studio"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "lucide-react"
@@ -4399,6 +4813,12 @@
       "description": "A website-shortcut grid: add/remove links with auto favicons (Google s2) and new-tab open. State lives behind an injectable QuicklinksStore — createLocalStore persists to localStorage (SSR-safe hydrate), createMemoryStore suits previews/tests, configureQuicklinks swaps in a host store. Pairs with appshell: the useQuickLinks capability + QuicklinkIcon surface the same links in the dock/Launchpad/mobile grid.",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/quicklinks",
+      "defaultFramework": "react-next",
+      "frameworks": {
+        "react-next": {
+          "path": "frontend/slices/quicklinks"
+        }
+      },
       "convexPaths": [],
       "npm": [
         "lucide-react"

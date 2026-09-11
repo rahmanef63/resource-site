@@ -13,6 +13,7 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { validateFrameworkMetadata } from "./validate-framework-metadata.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(__dirname, "../../..");
@@ -41,7 +42,10 @@ for (const file of sliceFiles) {
     results.push({ file: rel, errors: [`JSON parse: ${e.message}`] });
     continue;
   }
-  const errors = validate(parsed, schema, "");
+  const errors = [
+    ...validate(parsed, schema, ""),
+    ...validateFrameworkMetadata(parsed, REPO),
+  ];
   results.push({ file: rel, errors });
 }
 
@@ -151,6 +155,13 @@ function validate(value, sch, p) {
     if (sch.properties) {
       for (const [k, sub] of Object.entries(sch.properties)) {
         if (k in value) errs.push(...validate(value[k], sub, p ? `${p}.${k}` : k));
+      }
+    }
+    if (sch.additionalProperties && typeof sch.additionalProperties === "object") {
+      for (const [k, item] of Object.entries(value)) {
+        if (!sch.properties || !(k in sch.properties)) {
+          errs.push(...validate(item, sch.additionalProperties, p ? `${p}.${k}` : k));
+        }
       }
     }
   }
