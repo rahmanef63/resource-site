@@ -5,11 +5,27 @@
   "category": "os",
   "kind": "ui",
   "title": "Start Here — guided OS onboarding tour",
-  "description": "A guided 'Start Here' tour that lays the OS out as a path of stages, each stage opening real apps from the LIVE registry — drift-proof, it reads the injected app catalog instead of a hardcoded list, so adding an app surfaces it automatically (in a stage if listed, else a final 'Everything else' bucket). The catalog, the open(id) callback, and the stage journey are INJECTED via a small StartHereAdapter (apps / open / stages): point configureStartHere at your live app registry + window opener, or keep the bundled in-memory mock (a few generic apps + 3 stages) so the welcome tour renders fully alive with zero host.",
+  "description": "A guided 'Start Here' tour that lays the OS out as a path of stages, each stage opening real apps from the LIVE registry — drift-proof, it reads the injected app catalog instead of a hardcoded list, so adding an app surfaces it automatically (in a stage if listed, else a final 'Everything else' bucket). The catalog, the open(id) callback, and the stage journey are INJECTED via a small StartHereAdapter (apps / open / stages): point configureStartHere at your live app registry + window opener, or keep the bundled in-memory mock (a few generic apps + 3 stages) so the welcome tour renders fully alive with zero host. React/Next remains the deterministic default; an additive Svelte 5 / SvelteKit distribution preserves the same injected journey semantics through the framework-aware CLI contract.",
   "namespace": "@/features/start-here",
   "frontend": {
     "slicePath": "frontend/slices/start-here",
-    "configExport": "startHereConfig"
+    "configExport": "startHereConfig",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/start-here-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5"
+          ],
+          "shadcn": []
+        }
+      }
+    }
   },
   "deps": {
     "npm": ["lucide-react"],

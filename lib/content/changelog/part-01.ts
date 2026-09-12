@@ -2,12 +2,30 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-START-HERE-DISTRIBUTION",
+    "version": "start-here@1.0.0",
+    "date": 1789171200000,
+    "kind": "feature",
+    "title": "SvelteKit Start Here slice distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/start-here — [before: start-here was available only through the React/Next distribution] → [after: React/Next remains the default and an additive Svelte 5 / SvelteKit distribution shares the injected journey contract]. Explicit Svelte installs use rr add start-here --framework sveltekit (or svelte) and require only svelte@^5.",
+    "groups": [
+      {
+        "heading": "Framework-specific guided onboarding",
+        "bullets": [
+          "Authored stage IDs resolve against the injected app catalog; unknown IDs and empty stages are filtered, visible numbering stays contiguous, and unplaced apps append automatically to Everything else.",
+          "The Svelte host keeps a stable delegated API identity while adapter replacement notifies subscribers, and each app action preserves aria-label=\"Open <title>\" plus open(app.id) parity."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-FULL-WIDTH-TOGGLE-DISTRIBUTION",
     "version": "full-width-toggle@0.2.0",
     "date": 1789084800000,
     "kind": "feature",
     "title": "SvelteKit Full Width Toggle slice distribution",
-    "body": "full-width-toggle now has an additive Svelte 5 / SvelteKit distribution. Select it explicitly with rr add full-width-toggle --framework sveltekit (or svelte), while the React/Next source remains the deterministic default.",
+    "body": "Related: https://resource.rahmanef.com/slices/full-width-toggle — [before: full-width-toggle shipped only as the React/Next slice] → [after: React/Next remains the default and an additive Svelte 5 / SvelteKit distribution preserves the same width modes and persistence semantics]. Select it explicitly with rr add full-width-toggle --framework sveltekit (or svelte).",
     "groups": [
       {
         "heading": "Framework-specific layout preference UI",
@@ -24,7 +42,7 @@ export const entries: ChangelogEntry[] = [
     "date": 1789084800000,
     "kind": "feature",
     "title": "SvelteKit Feedback States slice distribution",
-    "body": "feedback-states is the first concrete Svelte 5 / SvelteKit distribution. Select it explicitly with rr add feedback-states --framework sveltekit (or svelte), while the legacy React/Next path remains the deterministic default.",
+    "body": "Related: https://resource.rahmanef.com/slices/feedback-states — [before: feedback-states shipped only as the React/Next slice] → [after: React/Next remains the default and an additive Svelte 5 / SvelteKit distribution provides equivalent loading, empty, and error-state primitives]. Select it explicitly with rr add feedback-states --framework sveltekit (or svelte).",
     "groups": [
       {
         "heading": "Framework-specific source and dependencies",
@@ -41,7 +59,7 @@ export const entries: ChangelogEntry[] = [
     "date": 1789084800000,
     "kind": "feature",
     "title": "Framework-aware React/Next and Svelte/SvelteKit slice distribution",
-    "body": "Slice distribution now preserves legacy frontend.slicePath as the implicit react-next source while allowing deterministic defaultFramework plus framework-specific path descriptors. Generated CLI and MCP manifest entries expose availability, defaults, aliases and dependency overrides without removing legacy fields.",
+    "body": "Related: https://resource.rahmanef.com/slices — [before: slice distribution had one implicit React/Next source path] → [after: each slice can declare deterministic framework availability, aliases, paths, and dependency overrides while React/Next stays the default]. Generated CLI and MCP manifest entries expose availability, defaults, aliases and dependency overrides without removing legacy fields.",
     "groups": [
       {
         "heading": "CLI selection and validation",

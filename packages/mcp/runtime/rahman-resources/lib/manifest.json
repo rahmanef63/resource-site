@@ -1988,6 +1988,19 @@
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/start-here"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/start-here-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5"
+            ],
+            "shadcn": []
+          }
         }
       },
       "convexPaths": [],

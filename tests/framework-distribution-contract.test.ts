@@ -122,6 +122,37 @@ describe("framework-aware slice distribution", () => {
     expect(svelteResult.stdout).not.toContain("npx shadcn@latest add button");
   });
 
+  it("keeps start-here on React by default and selects its SvelteKit source deterministically", () => {
+    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "start-here");
+    const target = mkTarget();
+
+    expect(slice.slicePath).toBe("frontend/slices/start-here");
+    expect(slice.defaultFramework).toBe("react-next");
+    expect(slice.frameworks).toEqual({
+      "react-next": { path: "frontend/slices/start-here" },
+      "svelte-sveltekit": {
+        path: "frontend/slices/start-here-svelte",
+        aliases: ["svelte", "sveltekit"],
+        deps: { npm: ["svelte@^5"], shadcn: [] },
+      },
+    });
+
+    const defaultResult = runCli("add", "start-here", "--target", target, "--dry-run");
+    expect(defaultResult.status).toBe(0);
+    expect(defaultResult.stdout).toContain("frontend/slices/start-here →");
+    expect(defaultResult.stdout).toContain("lucide-react");
+
+    const svelteResult = runCli("add", "start-here", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteResult.status).toBe(0);
+    expect(svelteResult.stdout).toContain("frontend/slices/start-here-svelte →");
+    expect(svelteResult.stdout).toContain("svelte@^5");
+    expect(svelteResult.stdout).not.toContain("lucide-react");
+    expect(svelteResult.stdout).not.toContain("npx shadcn@latest add button");
+    expect(svelteResult.stdout).not.toContain("npx shadcn@latest add scroll-area");
+  });
+
   it("uses the default framework path and forwards an explicit framework through add", () => {
     installFrameworkFixture();
     const target = mkTarget();

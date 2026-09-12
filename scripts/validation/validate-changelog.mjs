@@ -15,6 +15,13 @@
 import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  governanceErrorsForRootSection,
+  governanceErrorsForStructuredEntry,
+  ROOT_DATED_SECTION,
+  ROOT_PUBLIC_ENTRY,
+  ROOT_SECTION,
+} from "./changelog-governance.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIR = process.argv[2]
@@ -34,51 +41,101 @@ const TOKEN = /^\s*"?(id|date)"?\s*:\s*("([^"]+)"|(\d{10,}))\s*,?\s*$/;
 const FUTURE_SLACK_MS = 36 * 60 * 60 * 1000;
 const MIN_DATE = Date.UTC(2020, 0, 1);
 
+const isGovernanceDate = (date) => date >= Date.UTC(2026, 8, 12);
+
 const errors = [];
 const seen = new Map(); // id -> file
 
+const validatePublicEntry = (entry, file) => {
+  if (!entry || entry.id === null || entry.date === null) return;
+
+  const entryText = entry.lines.join("\n");
+  errors.push(
+    ...governanceErrorsForStructuredEntry({
+      id: entry.id,
+      date: entry.date,
+      text: entryText,
+      file,
+      line: entry.dateLine || entry.line,
+    }),
+  );
+};
+
 for (const file of readdirSync(DIR).filter((f) => /^part-\d+\.ts$/.test(f))) {
   const lines = readFileSync(path.join(DIR, file), "utf8").split("\n");
-  let pendingId = null;
-  let pendingLine = 0;
+  let pending = null;
+
+  const flush = () => {
+    if (!pending) return;
+
+    const candidate = pending;
+    pending = null;
+
+    if (candidate.date === null) return;
+    validatePublicEntry(candidate, file);
+  };
 
   for (let n = 0; n < lines.length; n++) {
-    const m = lines[n].match(TOKEN);
-    if (!m) continue;
-    const [, keyName, , str, num] = m;
+    const line = lines[n];
+    const m = line.match(TOKEN);
 
-    if (keyName === "id" && str) {
-      if (pendingId !== null) {
-        errors.push(`${file}:${pendingLine} entry "${pendingId}" has no date field before the next id`);
+    if (m) {
+      const [, keyName, , str, num] = m;
+
+      if (keyName === "id") {
+        if (pending !== null) {
+          if (pending.date === null) {
+            errors.push(
+              `${file}:${pending.line} entry "${pending.id}" has no date field before the next id`,
+            );
+          }
+          flush();
+        }
+
+        if (seen.has(str)) {
+          errors.push(`${file}:${n + 1} duplicate id "${str}" (first seen in ${seen.get(str)})`);
+        } else {
+          seen.set(str, `${file}:${n + 1}`);
+        }
+
+        pending = {
+          id: str,
+          line: n + 1,
+          date: null,
+          dateLine: null,
+          lines: [line],
+        };
       }
-      if (seen.has(str)) {
-        errors.push(`${file}:${n + 1} duplicate id "${str}" (first seen in ${seen.get(str)})`);
-      } else {
-        seen.set(str, `${file}:${n + 1}`);
+
+      if (keyName === "date" && num && pending !== null) {
+        const date = Number(num);
+        if (date > Date.now() + FUTURE_SLACK_MS) {
+          errors.push(
+            `${file}:${n + 1} entry "${pending.id}" is future-dated (${new Date(date).toISOString().slice(0, 10)})`,
+          );
+        }
+        if (date < MIN_DATE) {
+          errors.push(`${file}:${n + 1} entry "${pending.id}" date is before 2020 — wrong epoch unit?`);
+        }
+        pending.date = date;
+        pending.dateLine = n + 1;
       }
-      pendingId = str;
-      pendingLine = n + 1;
     }
 
-    if (keyName === "date" && num && pendingId !== null) {
-      const date = Number(num);
-      if (date > Date.now() + FUTURE_SLACK_MS) {
-        errors.push(
-          `${file}:${n + 1} entry "${pendingId}" is future-dated (${new Date(date).toISOString().slice(0, 10)})`,
-        );
-      }
-      if (date < MIN_DATE) {
-        errors.push(`${file}:${n + 1} entry "${pendingId}" date is before 2020 — wrong epoch unit?`);
-      }
-      pendingId = null;
+    if (pending !== null) {
+      pending.lines.push(line);
     }
   }
-}
 
-const PUBLIC_CHANGELOG_CUTOFF = "2026-09-09";
-const ROOT_DATED_SECTION = /^###\s+(\d{4}-\d{2}-\d{2})\s+—/;
-const ROOT_SECTION = /^##(?:\s|$)/;
-const ROOT_PUBLIC_ENTRY = /<!--\s*public-changelog:([A-Z0-9][A-Z0-9-]*)\s*-->/;
+  if (pending !== null) {
+    if (pending.date === null) {
+      errors.push(
+        `${file}:${pending.line} entry "${pending.id}" has no date field before the next id`,
+      );
+    }
+    flush();
+  }
+}
 
 if (ROOT_CHANGELOG) {
   const root = readFileSync(ROOT_CHANGELOG, "utf8");
@@ -86,25 +143,14 @@ if (ROOT_CHANGELOG) {
   let activeEntry = null;
 
   const validateActiveEntry = () => {
-    if (!activeEntry) return;
-
-    if (activeEntry.date >= PUBLIC_CHANGELOG_CUTOFF && activeEntry.markers.length !== 1) {
-      const requirement = activeEntry.markers.length === 0
-        ? "is missing a public-changelog marker"
-        : `must contain exactly one public-changelog marker (found ${activeEntry.markers.length})`;
-      errors.push(`${path.basename(ROOT_CHANGELOG)}:${activeEntry.line} root changelog entry ${requirement}`);
-    }
-
-    for (const { id, line } of activeEntry.markers) {
-      if (!seen.has(id)) {
-        errors.push(`${path.basename(ROOT_CHANGELOG)}:${line} root changelog references missing public entry "${id}"`);
-      }
-      if (rootMarkerSeen.has(id)) {
-        errors.push(`${path.basename(ROOT_CHANGELOG)}:${line} duplicate public-changelog marker "${id}" (first seen at line ${rootMarkerSeen.get(id)})`);
-      } else {
-        rootMarkerSeen.set(id, line);
-      }
-    }
+    errors.push(
+      ...governanceErrorsForRootSection({
+        section: activeEntry,
+        file: path.basename(ROOT_CHANGELOG),
+        seen,
+        rootMarkerSeen,
+      }),
+    );
   };
 
   for (const [index, line] of root.split("\n").entries()) {
@@ -112,9 +158,13 @@ if (ROOT_CHANGELOG) {
     if (datedSection || ROOT_SECTION.test(line)) {
       validateActiveEntry();
       activeEntry = datedSection
-        ? { date: datedSection[1], line: index + 1, markers: [] }
+        ? { date: datedSection[1], line: index + 1, markers: [], lines: [] }
         : null;
       continue;
+    }
+
+    if (activeEntry) {
+      activeEntry.lines.push(line);
     }
 
     const marker = line.match(ROOT_PUBLIC_ENTRY);
@@ -131,4 +181,4 @@ if (errors.length > 0) {
   for (const e of errors) console.error(`  · ${e}`);
   process.exit(1);
 }
-console.log(`✓ validate-changelog: ${seen.size} entries — ids unique, no future dates, root sections resolve`);
+console.log(`✓ validate-changelog: ${seen.size} entries — ids unique, no future dates, root sections resolve, governance requirements verified`);

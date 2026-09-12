@@ -11,10 +11,20 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-12 — SvelteKit Start Here slice distribution
+<!-- public-changelog:SVELTE-START-HERE-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/start-here
+- [before: `start-here` was available only through the React/Next distribution and empty/unknown authored stages could leave numbering/connectors inconsistent] → [after: React/Next remains the default while an additive Svelte 5 / SvelteKit distribution shares the same injected journey contract, filters invisible stages, keeps contiguous numbering, and appends unplaced apps to `Everything else`]
+- Explicit Svelte installs use `npx rr add start-here --framework sveltekit` (or `svelte`) and require only `svelte@^5`; runtime adapter replacement keeps a stable delegated API identity.
+
 ### 2026-09-11 — SvelteKit Full Width Toggle slice distribution
 <!-- public-changelog:SVELTE-FULL-WIDTH-TOGGLE-DISTRIBUTION -->
 
 **Slices:**
+- Related: https://resource.rahmanef.com/slices/full-width-toggle
+- [before: `full-width-toggle` shipped only as the React/Next slice] → [after: React/Next remains the default and an additive Svelte 5 / SvelteKit distribution preserves the same width modes and persistence semantics]
 - Added an additive Svelte 5 / SvelteKit distribution for `full-width-toggle`, selected explicitly with `npx rr add full-width-toggle --framework sveltekit` (or `svelte`).
 - React/Next remains the default install. Both distributions preserve `contained` / `wide` / `full` classes, the `layout:widthMode` localStorage key, per-device persistence, same-tab notification, and cross-tab `storage` synchronization.
 - Published the canonical slice through the generated CLI/MCP manifest with framework metadata, while the Svelte variant uses native buttons/SVG icons and requires only `svelte@^5`.
@@ -23,6 +33,8 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 <!-- public-changelog:SVELTE-FEEDBACK-STATES-DISTRIBUTION -->
 
 **Slices:**
+- Related: https://resource.rahmanef.com/slices/feedback-states
+- [before: `feedback-states` shipped only as the React/Next slice] → [after: React/Next remains the default and an additive Svelte 5 / SvelteKit distribution provides equivalent loading, empty, and error-state primitives]
 - Added the first concrete Svelte 5 / SvelteKit distribution: `feedback-states` now installs deterministic Svelte loading, empty, and error-state components with `npx rr add feedback-states --framework sveltekit` (or the `svelte` alias).
 - The legacy React/Next path remains the explicit default, including its existing shadcn dependencies and variant behavior. The Svelte distribution has its own source tree, requires only `svelte@^5`, and supports the same `loading` / `empty` variant selection.
 
@@ -30,6 +42,8 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 <!-- public-changelog:FRAMEWORK-AWARE-SLICE-DISTRIBUTION -->
 
 **CLI / contract:**
+- Related: https://resource.rahmanef.com/slices
+- [before: slice distribution had one implicit React/Next source path] → [after: each slice can declare deterministic framework availability, aliases, paths, and dependency overrides while React/Next stays the default]
 - Kept legacy `frontend.slicePath` as the implicit `react-next` source while adding deterministic `defaultFramework` plus framework path/dependency descriptors for future Svelte/SvelteKit slice variants.
 - Generated CLI/MCP manifest entries now expose framework availability, default, paths, aliases, and per-framework dependency overrides without removing legacy fields.
 - `rr add` and `rr lift` accept `--framework`; explicit unsupported requests fail with the available choices instead of silently falling back. Slice validation rejects missing framework paths, invalid/ambiguous defaults, and duplicate aliases.

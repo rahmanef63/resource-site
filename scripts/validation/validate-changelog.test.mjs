@@ -26,17 +26,33 @@ function runOn(parts, root) {
   return spawnSync("node", args, { encoding: "utf8" });
 }
 
-const entry = (id, date) => `
+const entry = (id, date, overrides = {}) => {
+  const body = overrides.body
+    ? overrides.body
+    : `
+  "body": "",
+`;
+  return `
   {
     "id": "${id}",
     "date": ${date},
-  },
+${body}  },
 `;
+};
+
+const governedBody =
+  "    \"body\": \"Related: https://resource.rahmanef.com/slices/x — [before: old behavior] → [after: new behavior]\",";
+const governedBodyNoRelated =
+  "    \"body\": \"[before: old behavior] → [after: new behavior]\",";
+const governedBodyNoTransform =
+  "    \"body\": \"Related: https://resource.rahmanef.com/slices/x\",";
 
 describe("validate-changelog", () => {
   it("passes clean data", () => {
     const r = runOn({
-      "part-01.ts": entry("A", 1780790400000) + entry("B", 1700000000000),
+      "part-01.ts":
+        `\n  {\n    \"id\": \"A\",\n    \"date\": 1780790400000,\n  },\n` +
+        `\n  {\n    \"id\": \"B\",\n    \"date\": 1700000000000,\n  },\n`,
     });
     expect(r.status).toBe(0);
     expect(r.stdout).toContain("2 entries");
@@ -104,6 +120,56 @@ describe("validate-changelog", () => {
     );
     expect(r.status).toBe(1);
     expect(r.stderr).toContain('duplicate public-changelog marker "PUBLIC"');
+  });
+
+  it("fails a governed 2026-09-12 structured entry when Related is absent", () => {
+    const r = runOn({
+      "part-01.ts": entry(
+        "GOV-TEST",
+        1789171200000,
+        { body: governedBodyNoRelated },
+      ),
+    });
+    expect(r.status).toBe(1);
+    expect(r.stderr).toContain("missing Related public URL");
+    expect(r.stderr).toContain("public entry \"GOV-TEST\"");
+  });
+
+  it("fails a governed 2026-09-12 structured entry when transformation is absent", () => {
+    const r = runOn({
+      "part-01.ts": entry("GOV-TEST", 1789171200000, { body: governedBodyNoTransform }),
+    });
+    expect(r.status).toBe(1);
+    expect(r.stderr).toContain("missing [before] → [after] transformation");
+    expect(r.stderr).toContain("public entry \"GOV-TEST\"");
+  });
+
+  it("passes a governed 2026-09-12 entry when root and public data contain both fields", () => {
+    const parts = {
+      "part-01.ts": entry("GOV-TEST", 1789171200000, { body: governedBody }),
+    };
+    const root =
+      "## [Unreleased]\n\n### 2026-09-12 — Governed entry\n<!-- public-changelog:GOV-TEST -->\n\n**Slices:**\n- Related: https://resource.rahmanef.com/slices/gov-test\n- [before: old behavior] → [after: new behavior]\n";
+
+    const r = runOn(parts, root);
+    expect(r.status).toBe(0);
+  });
+
+  it("requires retrofit-governance fields for 2026-09-11 explicit IDs", () => {
+    const parts = {
+      "part-01.ts": entry(
+        "SVELTE-FULL-WIDTH-TOGGLE-DISTRIBUTION",
+        1789084800000,
+        { body: governedBodyNoTransform },
+      ),
+    };
+    const root =
+      "## [Unreleased]\n\n### 2026-09-11 — SvelteKit Full Width Toggle slice distribution\n<!-- public-changelog:SVELTE-FULL-WIDTH-TOGGLE-DISTRIBUTION -->\n\n**Slices:**\n- Related: https://resource.rahmanef.com/slices/full-width-toggle\n";
+
+    const r = runOn(parts, root);
+    expect(r.status).toBe(1);
+    expect(r.stderr).toContain("missing [before] → [after] transformation");
+    expect(r.stderr).toContain('public-changelog marker "SVELTE-FULL-WIDTH-TOGGLE-DISTRIBUTION"');
   });
 
   it("validates the real changelog", () => {

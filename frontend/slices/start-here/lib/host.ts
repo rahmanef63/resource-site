@@ -9,6 +9,7 @@
 // by design: read the catalog, never hardcode a list (origin: rahmanef-com web-OS).
 
 import type { ComponentType } from "react";
+import { useSyncExternalStore } from "react";
 import type { LucideIcon } from "lucide-react";
 import { BookOpen, Home, Library, Settings, Sparkles, StickyNote, Store } from "lucide-react";
 
@@ -96,10 +97,23 @@ function createMockStartHere(): StartHereAdapter {
 }
 
 let adapter: StartHereAdapter = createMockStartHere();
+let revision = 0;
+const listeners = new Set<() => void>();
 
 /** Host wiring: swap the mock for the live app registry + window opener. */
 export function configureStartHere(a: StartHereAdapter): void {
   adapter = a;
+  revision += 1;
+  listeners.forEach((listener) => listener());
+}
+
+function subscribe(listener: () => void): () => void {
+  listeners.add(listener);
+  return () => void listeners.delete(listener);
+}
+
+function getSnapshot(): number {
+  return revision;
 }
 
 // Stable identity — the component keeps `api` in memo deps, so a fresh object
@@ -118,5 +132,6 @@ const api = {
 };
 
 export function useStartHereApi(): typeof api {
+  useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
   return api;
 }
