@@ -2,6 +2,24 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-SEO-SERVICE-DISTRIBUTION",
+    "version": "seo@0.3.0",
+    "date": 1789257600000,
+    "kind": "feature",
+    "title": "SvelteKit SEO service distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/seo — [before: seo was installable only through the default React/Next framework contract even though its public service surface is framework-neutral TypeScript] → [after: React/Next remains the default while explicit Svelte/SvelteKit installs reuse the same framework-neutral SEO service contract without duplicated source or invented UI]. Select it explicitly with rr add seo --framework sveltekit (or svelte).",
+    "groups": [
+      {
+        "heading": "Shared framework-neutral service contract",
+        "bullets": [
+          "The persona factory and typed SEO tool bindings remain one canonical pure-TypeScript source; the Svelte descriptor points to that same path instead of forking equivalent files.",
+          "No Svelte, React, Lucide, or shadcn UI dependency is introduced for the explicit SvelteKit distribution; existing Convex environment and convex-auth peer requirements continue unchanged."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-START-HERE-DISTRIBUTION",
     "version": "start-here@1.0.0",
     "date": 1789171200000,

@@ -3836,6 +3836,17 @@
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/seo"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/seo",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [],
+            "shadcn": []
+          }
         }
       },
       "convexPaths": [

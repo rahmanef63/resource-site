@@ -153,6 +153,35 @@ describe("framework-aware slice distribution", () => {
     expect(svelteResult.stdout).not.toContain("npx shadcn@latest add scroll-area");
   });
 
+  it("keeps seo on the shared service source for explicit SvelteKit without invented UI deps", () => {
+    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "seo");
+    const target = mkTarget();
+
+    expect(slice.slicePath).toBe("frontend/slices/seo");
+    expect(slice.defaultFramework).toBe("react-next");
+    expect(slice.frameworks).toEqual({
+      "react-next": { path: "frontend/slices/seo" },
+      "svelte-sveltekit": {
+        path: "frontend/slices/seo",
+        aliases: ["svelte", "sveltekit"],
+        deps: { npm: [], shadcn: [] },
+      },
+    });
+
+    const defaultResult = runCli("add", "seo", "--target", target, "--dry-run");
+    expect(defaultResult.status).toBe(0);
+    expect(defaultResult.stdout).toContain("frontend/slices/seo →");
+
+    const svelteResult = runCli("add", "seo", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteResult.status).toBe(0);
+    expect(svelteResult.stdout).toContain("frontend/slices/seo →");
+    expect(svelteResult.stdout).not.toContain("svelte@^5");
+    expect(svelteResult.stdout).not.toContain("lucide-react");
+    expect(svelteResult.stdout).not.toContain("npx shadcn@latest add");
+  });
+
   it("uses the default framework path and forwards an explicit framework through add", () => {
     installFrameworkFixture();
     const target = mkTarget();

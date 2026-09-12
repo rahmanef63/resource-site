@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — SvelteKit SEO service distribution
+<!-- public-changelog:SVELTE-SEO-SERVICE-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/seo
+- [before: `seo` was installable only through the default React/Next framework contract even though its public service surface is framework-neutral TypeScript] → [after: React/Next remains the default while explicit Svelte/SvelteKit installs reuse the same framework-neutral SEO service contract without duplicated source or invented UI]
+- Explicit Svelte installs use `npx rr add seo --framework sveltekit` (or `svelte`). No Svelte runtime/UI dependency is added because the slice exposes service factories/tools plus its Convex backend rather than framework components.
+
 ### 2026-09-12 — SvelteKit Start Here slice distribution
 <!-- public-changelog:SVELTE-START-HERE-DISTRIBUTION -->
 

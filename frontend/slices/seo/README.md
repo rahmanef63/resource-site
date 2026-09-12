@@ -7,8 +7,21 @@ Service slice for SEO metadata generation — Anthropic-backed action with per-u
 ## Install
 
 ```bash
+# React/Next default
 npx rr add seo
+
+# Svelte/SvelteKit explicit contract
+npx rr add seo --framework sveltekit
 ```
+
+## Framework distribution
+
+The SEO slice is a service contract, not a UI surface. Its exported persona factory and typed tool bindings are pure TypeScript, while generation/persistence live in Convex. Because there is no React component to translate, the explicit Svelte/SvelteKit distribution intentionally reuses the same canonical source path instead of duplicating files or inventing a Svelte screen.
+
+- React/Next remains the deterministic default.
+- `--framework sveltekit` (or `svelte`) selects the same framework-neutral service source.
+- No `svelte`, React, Lucide, or shadcn runtime dependency is added by the Svelte descriptor.
+- Existing Convex env and `convex-auth` peer requirements still apply.
 
 ## Use
 
