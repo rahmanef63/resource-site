@@ -7,9 +7,9 @@
 // pointing at your backend — every other file imports ONLY this seam.
 
 import type { ComponentType } from "react";
+import { useSyncExternalStore } from "react";
 import type { LucideIcon } from "lucide-react";
 
-// ── Shell inspector bus — inert outside a shell ────────────────────────────
 export type InspectorInfo = {
   subject?: string;
   props?: { label: string; value: string }[];
@@ -19,7 +19,6 @@ export type InspectorInfo = {
 };
 export function usePublishInspector(_appId: string, _info: InspectorInfo, _deps: unknown[]): void {}
 
-// ── App descriptor (appshell-compatible subset the barrel uses) ────────────
 export type AppDescriptor = {
   id: string;
   slug?: string;
@@ -30,7 +29,6 @@ export type AppDescriptor = {
   defaultSize?: { w: number; h: number };
 };
 
-// ── Booking adapter (public request submit + owner inbox) ──────────────────
 export type BookingRequest = {
   name: string;
   email: string;
@@ -43,17 +41,12 @@ export type BookingRow = BookingRequest & { id: string; status: BookingStatus; c
 
 export type BookingAdapter = {
   mode: "mock" | "live";
-  /** Public write — anyone can submit a request. */
   submit: (req: BookingRequest) => Promise<void>;
-  /** Owner inbox read. Omit to expose a write-only public form (no inbox). */
   list?: () => Promise<BookingRow[]>;
-  /** Owner action on a request. */
   setStatus?: (id: string, status: Exclude<BookingStatus, "pending">) => Promise<void>;
-  /** Is the current viewer allowed to see + triage the inbox? */
   canManage?: () => Promise<boolean>;
 };
 
-// In-browser mock so the slice is alive (form + inbox) with zero backend.
 function createMockBooking(): BookingAdapter {
   const rows: BookingRow[] = [
     {
@@ -84,28 +77,51 @@ function createMockBooking(): BookingAdapter {
 }
 
 let adapter: BookingAdapter = createMockBooking();
+let revision = 0;
+const listeners = new Set<() => void>();
 
-/** Host wiring: swap the mock for a real backend (Convex, REST, inbox svc…). */
-export function configureBooking(a: BookingAdapter): void {
-  adapter = a;
+export function configureBooking(next: BookingAdapter): void {
+  adapter = next;
+  revision += 1;
+  listeners.forEach((listener) => listener());
 }
 
-// Stable identity — components keep `api` in effect deps, so a fresh object
-// per render would re-run effects. Delegates live to the current adapter.
-const api = {
+function subscribe(listener: () => void): () => void {
+  listeners.add(listener);
+  return () => void listeners.delete(listener);
+}
+
+function getSnapshot(): number {
+  return revision;
+}
+
+export type BookingApi = {
+  readonly mode: BookingAdapter["mode"];
+  readonly revision: number;
+  readonly hasInbox: boolean;
+  submit: (req: BookingRequest) => Promise<void>;
+  list: () => Promise<BookingRow[]>;
+  setStatus: (id: string, status: Exclude<BookingStatus, "pending">) => Promise<void>;
+  canManage: () => Promise<boolean>;
+};
+
+export const bookingApi: BookingApi = {
   get mode() {
     return adapter.mode;
+  },
+  get revision() {
+    return revision;
   },
   get hasInbox() {
     return !!adapter.list;
   },
-  submit: (req: BookingRequest) => adapter.submit(req),
-  list: () => (adapter.list ? adapter.list() : Promise.resolve([] as BookingRow[])),
-  setStatus: (id: string, s: Exclude<BookingStatus, "pending">) =>
-    adapter.setStatus ? adapter.setStatus(id, s) : Promise.resolve(),
+  submit: (req) => adapter.submit(req),
+  list: () => (adapter.list ? adapter.list() : Promise.resolve([])),
+  setStatus: (id, status) => (adapter.setStatus ? adapter.setStatus(id, status) : Promise.resolve()),
   canManage: () => (adapter.canManage ? adapter.canManage() : Promise.resolve(false)),
 };
 
-export function useBookingApi(): typeof api {
-  return api;
+export function useBookingApi(): BookingApi {
+  useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
+  return bookingApi;
 }

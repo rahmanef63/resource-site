@@ -20,9 +20,10 @@ export const bookingApp: AppDescriptor = {
 };
 
 // Host wiring seam (real backend: submit + owner inbox).
-export { configureBooking } from "./lib/host";
+export { bookingApi, configureBooking } from "./lib/host";
 export type {
   BookingAdapter,
+  BookingApi,
   BookingRequest,
   BookingRow,
   BookingStatus,

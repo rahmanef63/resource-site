@@ -2,6 +2,24 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-BOOKING-DISTRIBUTION",
+    "version": "booking@1.1.0",
+    "date": 1789257600000,
+    "kind": "feature",
+    "title": "SvelteKit Booking slice distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/booking — [before: booking shipped only as a React/Next form + owner inbox and mounted consumers did not react when the injected adapter was replaced at runtime] → [after: React/Next remains the default with reactive adapter replacement, while an additive Svelte 5 / SvelteKit distribution preserves the public form, owner inbox, triage actions, and injectable backend contract]. Select it explicitly with rr add booking --framework sveltekit (or svelte).",
+    "groups": [
+      {
+        "heading": "Cross-framework booking parity",
+        "bullets": [
+          "The Svelte 5 component preserves required name/email/topic validation, optional preferred time/note fields, success/error feedback, owner inbox visibility, and Confirm/Decline actions through the same BookingAdapter semantics.",
+          "The Svelte distribution uses native controls and a stable subscribable host API; the React host now uses the established external-store revision pattern so runtime adapter replacement refreshes mounted consumers."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-SEO-SERVICE-DISTRIBUTION",
     "version": "seo@0.3.0",
     "date": 1789257600000,

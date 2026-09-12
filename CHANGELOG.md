@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — SvelteKit Booking slice distribution
+<!-- public-changelog:SVELTE-BOOKING-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/booking
+- [before: `booking` shipped only as a React/Next form + owner inbox and mounted consumers did not react when the injected adapter was replaced at runtime] → [after: React/Next remains the default with reactive adapter replacement, while an additive Svelte 5 / SvelteKit distribution preserves the public form, owner inbox, triage actions, and injectable backend contract]
+- Explicit Svelte installs use `npx rr add booking --framework sveltekit` (or `svelte`) and require only `svelte@^5`; the Svelte UI uses native controls without React, `lucide-react`, or React shadcn dependencies.
+
 ### 2026-09-13 — SvelteKit SEO service distribution
 <!-- public-changelog:SVELTE-SEO-SERVICE-DISTRIBUTION -->
 

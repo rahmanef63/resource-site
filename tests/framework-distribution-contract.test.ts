@@ -182,6 +182,36 @@ describe("framework-aware slice distribution", () => {
     expect(svelteResult.stdout).not.toContain("npx shadcn@latest add");
   });
 
+  it("keeps booking on React by default and selects its real SvelteKit UI distribution", () => {
+    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "booking");
+    const target = mkTarget();
+
+    expect(slice.slicePath).toBe("frontend/slices/booking");
+    expect(slice.defaultFramework).toBe("react-next");
+    expect(slice.frameworks).toEqual({
+      "react-next": { path: "frontend/slices/booking" },
+      "svelte-sveltekit": {
+        path: "frontend/slices/booking-svelte",
+        aliases: ["svelte", "sveltekit"],
+        deps: { npm: ["svelte@^5"], shadcn: [] },
+      },
+    });
+
+    const defaultResult = runCli("add", "booking", "--target", target, "--dry-run");
+    expect(defaultResult.status).toBe(0);
+    expect(defaultResult.stdout).toContain("frontend/slices/booking →");
+    expect(defaultResult.stdout).toContain("lucide-react");
+
+    const svelteResult = runCli("add", "booking", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteResult.status).toBe(0);
+    expect(svelteResult.stdout).toContain("frontend/slices/booking-svelte →");
+    expect(svelteResult.stdout).toContain("svelte@^5");
+    expect(svelteResult.stdout).not.toContain("lucide-react");
+    expect(svelteResult.stdout).not.toContain("npx shadcn@latest add");
+  });
+
   it("uses the default framework path and forwards an explicit framework through add", () => {
     installFrameworkFixture();
     const target = mkTarget();

@@ -32,3 +32,20 @@ configureBooking({
 
 Every other file in the slice imports ONLY this seam. Omit `list` / `canManage`
 for a write-only public form with no inbox.
+
+## Framework distribution
+
+React/Next remains the default:
+
+```bash
+npx rr add booking
+```
+
+Svelte 5 / SvelteKit is additive and explicit:
+
+```bash
+npx rr add booking --framework sveltekit
+# alias: --framework svelte
+```
+
+The Svelte distribution preserves the same `BookingAdapter` contract, public form, owner inbox, Confirm/Decline actions, and runtime adapter replacement. It uses native controls and no React, `lucide-react`, or React shadcn components.

@@ -1803,7 +1803,7 @@
       "title": "Booking — session request form + owner inbox",
       "category": "os",
       "kind": "ui",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "One app that is BOTH a public 'book a session' request form AND the owner's triage inbox — it flips to show the inbox when the viewer can manage. Visitors submit name/email/topic (+ optional preferred time / note); the owner sees pending requests with Confirm / Decline. The backend is INJECTED via a small BookingAdapter (submit/list/setStatus/canManage): point configureBooking at your store, or keep the bundled in-memory mock so it renders fully interactive — form + inbox — with zero backend.",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/booking",
@@ -1811,6 +1811,19 @@
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/booking"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/booking-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5"
+            ],
+            "shadcn": []
+          }
         }
       },
       "convexPaths": [],

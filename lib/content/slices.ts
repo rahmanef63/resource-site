@@ -435,7 +435,7 @@ export default function MonitorDemo() {
     title: "Booking — session request form + owner inbox",
     category: "os",
     kind: "ui",
-    version: "1.0.0",
+    version: "1.1.0",
     tagline: "Public 'book a session' form + the owner's triage inbox in one app — backend injected.",
     description:
       "One app that is BOTH a public 'book a session' request form AND the owner's triage inbox — it flips to show the inbox when the viewer can manage. Visitors submit name/email/topic (+ optional preferred time / note); the owner sees pending requests with Confirm / Decline. The backend is INJECTED via a small BookingAdapter (submit/list/setStatus/canManage): point configureBooking at your store, or keep the bundled in-memory mock so it renders fully interactive — form + inbox — with zero backend.",

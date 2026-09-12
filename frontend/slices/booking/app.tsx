@@ -12,6 +12,7 @@ import { useBookingApi, type BookingRow } from "./lib/host";
 // is both the public request form AND the owner inbox (flips on canManage).
 export default function Booking() {
   const api = useBookingApi();
+  const adapterRevision = api.revision;
   const [rows, setRows] = useState<BookingRow[]>([]);
   const [canSee, setCanSee] = useState(false);
   const [name, setName] = useState("");
@@ -30,7 +31,7 @@ export default function Booking() {
     const ok = await api.canManage();
     setCanSee(ok);
     if (ok) setRows(await api.list());
-  }, [api]);
+  }, [api, adapterRevision]);
 
   useEffect(() => {
     void reload().catch(() => {});

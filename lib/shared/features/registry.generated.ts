@@ -68,7 +68,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...bookingConfig,
     importPath: "@/features/booking/config",
-    version: "1.0.0",
+    version: "1.1.0",
   },
   {
     ...broadcastChannelSyncConfig,
