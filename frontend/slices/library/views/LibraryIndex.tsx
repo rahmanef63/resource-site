@@ -1,11 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { LibraryIndexProps, LibraryRow } from "../lib/types";
-import { ALL_KINDS, DEFAULT_COPY, DEFAULT_KIND_LABELS } from "../lib/defaults";
+import {
+  ALL_KINDS,
+  collectLibraryTools,
+  filterLibraryItems,
+  resolveKindLabels,
+  resolveLibraryCopy,
+} from "../lib/core";
 
 // Grid of library cards with kind + tool filters. All copy + kind
 // labels are prop-driven (English defaults). Detail routes are
@@ -16,23 +22,14 @@ export function LibraryIndex({
   copy: copyOverride,
   kindLabels: kindLabelsOverride,
 }: LibraryIndexProps) {
-  const copy = { ...DEFAULT_COPY, ...copyOverride };
-  const kindLabels = { ...DEFAULT_KIND_LABELS, ...kindLabelsOverride };
+  const copy = resolveLibraryCopy(copyOverride);
+  const kindLabels = resolveKindLabels(kindLabelsOverride);
 
   const [kind, setKind] = useState<LibraryRow["kind"] | "all">("all");
   const [tool, setTool] = useState("");
 
-  const allTools = useMemo(() => {
-    const s = new Set<string>();
-    for (const i of items) for (const t of i.tools ?? []) s.add(t);
-    return Array.from(s).sort();
-  }, [items]);
-
-  const filtered = items.filter((i) => {
-    if (kind !== "all" && i.kind !== kind) return false;
-    if (tool && !(i.tools ?? []).includes(tool)) return false;
-    return true;
-  });
+  const allTools = collectLibraryTools(items);
+  const filtered = filterLibraryItems(items, kind, tool);
 
   const chip = (active: boolean) =>
     cn(

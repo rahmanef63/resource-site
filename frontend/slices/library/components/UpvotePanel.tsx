@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { UpvoteHandler } from "../lib/types";
+import { optimisticVote, settleVote } from "../lib/core";
 
 // Decoupled upvote control. The vote backend is consumer-owned: pass an
 // `onUpvote` handler that persists the toggle and resolves the new
@@ -30,11 +31,14 @@ export function UpvotePanel({
     if (busy || !onUpvote) return;
     setBusy(true);
     const prev = voted;
-    setVoted(!prev);
-    setCount((c) => (prev ? Math.max(0, c - 1) : c + 1));
+    const optimistic = optimisticVote(count, prev);
+    setVoted(optimistic.voted);
+    setCount(optimistic.count);
     try {
       const { voted: next } = await onUpvote(itemId);
-      setVoted(next);
+      const settled = settleVote(count, prev, next);
+      setVoted(settled.voted);
+      setCount(settled.count);
     } catch {
       setVoted(prev);
       setCount((c) => (prev ? c + 1 : Math.max(0, c - 1)));

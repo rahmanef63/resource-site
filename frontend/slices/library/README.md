@@ -56,6 +56,19 @@ export const create = mutation({
 // repeat for update / remove / *Collection / seed
 ```
 
+### Frameworks
+
+React/Next remains the default. Native Svelte 5/SvelteKit uses the same `LibraryRow` / `LibraryItem` model, defaults, tools, and exact same Convex `libraryTables` / queries / mutations:
+
+```bash
+npx rr add seo
+npx rr add library --framework sveltekit
+```
+
+Fetch `listPublic` / `getBySlug` with your SvelteKit Convex integration and pass the resulting rows into `LibraryIndex` / `LibraryDetail`. No Svelte-specific backend is created.
+
+Native video payloads accept optional `videoCaptionsUrl`; both renderers emit a captions `<track>` when/where supported by the row model.
+
 Mount the views:
 
 ```tsx
@@ -94,6 +107,7 @@ export default async function Page() {
 | `kind` | `prompt` \| `image` \| `video` \| `link` \| `download` \| `snippet` — discriminator |
 | `promptText` / `imageUrl` / `videoUrl` / `linkUrl` / `fileStorageId` / `snippetCode` | per-kind payload — `validatePayload` enforces the matching one on create |
 | `collectionId` | optional group via `libraryCollections` |
+| `videoCaptionsUrl` | optional captions track URL for native video payloads |
 | `sourceName` / `sourceUrl` / `license` / `tools` | attribution surface |
 | `published` / `deletedAt` | soft-publish + soft-delete; reads filter both |
 | `upvotes` / `views` | cached counters (vote toggle is consumer-owned) |

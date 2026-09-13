@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { CopyButton } from "./CopyButton";
 import type { LibraryCopy, LibraryItem } from "../lib/types";
+import { formatLibraryFileSize, libraryVideoSource } from "../lib/core";
 
 // Switches on `item.kind` to render the kind-specific payload. Video
 // embeds YouTube (nocookie) / Vimeo when the URL matches, else falls
@@ -51,15 +52,14 @@ export function PayloadRender({
         </figure>
       ) : null;
     case "video": {
-      const url = item.videoUrl ?? "";
-      const yt = url.match(/(?:youtu\.be\/|v=)([\w-]{11})/)?.[1];
-      const vm = url.match(/vimeo\.com\/(\d+)/)?.[1];
+      const media = libraryVideoSource(item.videoUrl);
+      if (!media) return null;
       const frame = "aspect-video border-2 border-current rounded-md overflow-hidden";
-      if (yt)
+      if (media.kind === "youtube")
         return (
           <div className={frame}>
             <iframe
-              src={`https://www.youtube-nocookie.com/embed/${yt}`}
+              src={media.src}
               title={item.title}
               className="w-full h-full"
               allow="accelerometer; encrypted-media; picture-in-picture"
@@ -67,11 +67,11 @@ export function PayloadRender({
             />
           </div>
         );
-      if (vm)
+      if (media.kind === "vimeo")
         return (
           <div className={frame}>
             <iframe
-              src={`https://player.vimeo.com/video/${vm}`}
+              src={media.src}
               title={item.title}
               className="w-full h-full"
               allow="autoplay; fullscreen"
@@ -79,7 +79,11 @@ export function PayloadRender({
             />
           </div>
         );
-      return <video src={url} controls className="w-full border-2 border-current rounded-md" />;
+      return (
+        <video src={media.src} controls className="w-full border-2 border-current rounded-md">
+          <track kind="captions" src={item.videoCaptionsUrl} />
+        </video>
+      );
     }
     case "link":
       return item.linkUrl ? (
@@ -100,7 +104,7 @@ export function PayloadRender({
           className="inline-flex items-center gap-2 border-2 border-current rounded-md bg-foreground text-background hover:bg-background hover:text-foreground transition-colors px-4 py-2 text-sm uppercase tracking-wider font-medium"
         >
           {copy.downloadLabel} {item.fileName ?? "file"}
-          {item.fileSize ? ` · ${Math.round(item.fileSize / 1024)} KB` : ""}
+          {item.fileSize ? ` · ${formatLibraryFileSize(item.fileSize)}` : ""}
         </a>
       ) : null;
     case "snippet":

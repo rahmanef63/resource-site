@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-14 — SvelteKit Library distribution
+<!-- public-changelog:SVELTE-LIBRARY-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/library
+- Preview: https://resource.rahmanef.com/preview/slices/library
+- [before: `library` rendered only through React/Next, kept filtering/media/upvote semantics inside renderer components, had no public preview route, and native video rows had no captions field] → [after: React/Next remains the default while Svelte/SvelteKit gets native index/detail/payload/copy/upvote UI over one portable core and the exact same Convex library backend + seo peer, with optional video captions modeled end-to-end]
+- Native Svelte uses Runes + `$derived`, keyed each blocks, no `$effect`, and every Svelte file must pass the official Svelte autofixer plus compiler.
+
 ### 2026-09-14 — SvelteKit Image Picker distribution
 <!-- public-changelog:SVELTE-IMAGE-PICKER-DISTRIBUTION -->
 

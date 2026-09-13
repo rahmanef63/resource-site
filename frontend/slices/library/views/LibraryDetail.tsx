@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { LibraryDetailProps } from "../lib/types";
-import { DEFAULT_COPY, DEFAULT_KIND_LABELS } from "../lib/defaults";
+import { resolveKindLabels, resolveLibraryCopy } from "../lib/core";
 import { PayloadRender } from "../components/PayloadRender";
 import { UpvotePanel } from "../components/UpvotePanel";
 
@@ -13,8 +13,8 @@ export function LibraryDetail({
   copy: copyOverride,
   kindLabels: kindLabelsOverride,
 }: LibraryDetailProps) {
-  const copy = { ...DEFAULT_COPY, ...copyOverride };
-  const kindLabels = { ...DEFAULT_KIND_LABELS, ...kindLabelsOverride };
+  const copy = resolveLibraryCopy(copyOverride);
+  const kindLabels = resolveKindLabels(kindLabelsOverride);
 
   return (
     <section className="py-12 lg:py-20">

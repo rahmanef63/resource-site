@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-LIBRARY-DISTRIBUTION",
+    "version": "library@0.3.0",
+    "date": 1789344000000,
+    "kind": "feature",
+    "title": "SvelteKit Library distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/library — [before: library rendered only through React/Next, kept filtering/media/upvote semantics inside renderer components, had no public preview route, and native video rows had no captions field] → [after: React/Next remains the default while Svelte/SvelteKit gets native index/detail/payload/copy/upvote UI over one portable core and the exact same Convex library backend + seo peer, with optional video captions modeled end-to-end].",
+    "groups": [
+      {
+        "heading": "One resource model and backend, native framework surfaces",
+        "bullets": [
+          "Portable core owns copy/label resolution, kind/tool filtering, tool extraction, video provider resolution, file-size formatting, and optimistic/settled upvote transitions; React consumes the same core.",
+          "Svelte LibraryIndex/LibraryDetail/PayloadRender/CopyButton/UpvotePanel reuse the same types/defaults/tools plus convex/features/library and the seo peer; no Svelte-specific backend exists.",
+          "Official Svelte accessibility validation added optional videoCaptionsUrl through the frontend model and Convex create/update validators; public preview now lives at https://resource.rahmanef.com/preview/slices/library."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-IMAGE-PICKER-DISTRIBUTION",
     "version": "image-picker@0.4.0",
     "date": 1789344000000,

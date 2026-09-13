@@ -18,3 +18,5 @@ Imports `seoFieldsShape` / `seoPatchShape` from `../seo/fields`. Install the [`s
 ## Auth
 
 No auth check lives here — the slice ships portable CRUD primitives. The consumer chooses the auth model and wraps the `internalMutation`s with a public `mutation` that validates the bearer / OAuth / session first. See the [slice README](../../../frontend/slices/library/README.md#install).
+
+- `videoCaptionsUrl` is an optional native-video captions track field.

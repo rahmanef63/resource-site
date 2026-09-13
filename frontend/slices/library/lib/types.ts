@@ -30,6 +30,7 @@ export type LibraryItem = LibraryRow & {
   imageAlt?: string;
   videoUrl?: string;
   videoProvider?: string;
+  videoCaptionsUrl?: string;
   linkUrl?: string;
   fileStorageId?: string;
   fileName?: string;

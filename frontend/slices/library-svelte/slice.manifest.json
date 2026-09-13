@@ -1,0 +1,31 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "library-svelte",
+  "version": "0.3.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add library --framework sveltekit",
+    "consumerPath": "slices/library"
+  },
+  "files": [
+    "README.md",
+    "components/CopyButton.svelte",
+    "components/PayloadRender.svelte",
+    "components/UpvotePanel.svelte",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts",
+    "views/LibraryDetail.svelte",
+    "views/LibraryIndex.svelte"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/library/lib/types.ts",
+      "frontend/slices/library/lib/defaults.ts",
+      "frontend/slices/library/lib/core.ts",
+      "frontend/slices/library/lib/tools.ts"
+    ],
+    "external": ["svelte", "convex"]
+  }
+}
