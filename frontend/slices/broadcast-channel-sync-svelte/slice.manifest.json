@@ -1,0 +1,22 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "broadcast-channel-sync-svelte",
+  "version": "0.3.0",
+  "tier": 2,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add broadcast-channel-sync --framework sveltekit",
+    "consumerPath": "slices/broadcast-channel-sync"
+  },
+  "files": [
+    "README.md",
+    "config.ts",
+    "index.ts",
+    "lib/store.ts",
+    "lib/tools.ts"
+  ],
+  "imports": {
+    "shared": ["@/shared/agentic"],
+    "external": []
+  }
+}

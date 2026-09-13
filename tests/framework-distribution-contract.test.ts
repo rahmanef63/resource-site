@@ -246,6 +246,36 @@ describe("framework-aware slice distribution", () => {
     expect(svelteResult.stdout).not.toContain("npx shadcn@latest add");
   });
 
+  it("keeps broadcast-channel-sync on React by default and selects its Svelte store distribution", () => {
+    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "broadcast-channel-sync");
+    const target = mkTarget();
+
+    expect(slice.slicePath).toBe("frontend/slices/broadcast-channel-sync");
+    expect(slice.defaultFramework).toBe("react-next");
+    expect(slice.frameworks).toEqual({
+      "react-next": { path: "frontend/slices/broadcast-channel-sync" },
+      "svelte-sveltekit": {
+        path: "frontend/slices/broadcast-channel-sync-svelte",
+        aliases: ["svelte", "sveltekit"],
+        deps: { npm: [], shadcn: [] },
+      },
+    });
+
+    const defaultResult = runCli("add", "broadcast-channel-sync", "--target", target, "--dry-run");
+    expect(defaultResult.status).toBe(0);
+    expect(defaultResult.stdout).toContain("frontend/slices/broadcast-channel-sync →");
+
+    const svelteResult = runCli("add", "broadcast-channel-sync", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteResult.status).toBe(0);
+    expect(svelteResult.stdout).toContain("frontend/slices/broadcast-channel-sync-svelte →");
+    expect(svelteResult.stdout).not.toContain("svelte@^5");
+    expect(svelteResult.stdout).not.toContain("react");
+    expect(svelteResult.stdout).not.toContain("lucide-react");
+    expect(svelteResult.stdout).not.toContain("npx shadcn@latest add");
+  });
+
   it("keeps testimonials on one framework-neutral backend source for explicit SvelteKit", () => {
     execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));

@@ -2,6 +2,24 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-BROADCAST-CHANNEL-SYNC-DISTRIBUTION",
+    "version": "broadcast-channel-sync@0.3.0",
+    "date": 1789257600000,
+    "kind": "feature",
+    "title": "SvelteKit BroadcastChannel sync distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/broadcast-channel-sync — [before: broadcast-channel-sync exposed only a React hook while its docs promised a localStorage fallback the runtime did not implement] → [after: React/Next remains the default, both adapters share BroadcastChannel-to-storage fallback semantics, and Svelte/SvelteKit gets a self-contained subscribable store distribution].",
+    "groups": [
+      {
+        "heading": "Cross-framework same-origin sync",
+        "bullets": [
+          "The React hook now uses the same lazy transport semantics documented by the slice: BroadcastChannel first, then localStorage plus storage events when BroadcastChannel is unavailable.",
+          "The Svelte distribution exposes subscribe/set/update/get/destroy store semantics, stays SSR-safe, and preserves the read/publish agent tool contract without React UI dependencies."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-TESTIMONIALS-DISTRIBUTION",
     "version": "testimonials@0.2.0",
     "date": 1789257600000,

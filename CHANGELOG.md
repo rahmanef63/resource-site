@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — SvelteKit BroadcastChannel sync distribution
+<!-- public-changelog:SVELTE-BROADCAST-CHANNEL-SYNC-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/broadcast-channel-sync
+- [before: `broadcast-channel-sync` exposed only a React hook while its docs promised a localStorage fallback the runtime did not implement] → [after: React/Next remains the default, both adapters share BroadcastChannel-to-storage fallback semantics, and Svelte/SvelteKit gets a self-contained subscribable store distribution]
+- The default barrel now exports the documented React hook plus a framework-neutral store creator; Svelte installs add no React, Lucide, shadcn, or required Svelte runtime dependency.
+
 ### 2026-09-13 — SvelteKit Testimonials backend distribution
 <!-- public-changelog:SVELTE-TESTIMONIALS-DISTRIBUTION -->
 

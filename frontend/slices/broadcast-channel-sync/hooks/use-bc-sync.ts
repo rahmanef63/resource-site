@@ -1,27 +1,30 @@
 "use client";
 
-// BroadcastChannel + localStorage hybrid sync hook.
-// Source-of-truth = caller's React state; this hook just rebroadcasts changes
-// to other tabs/iframes of the same origin.
-
 import { useEffect, useRef, useState } from "react";
+import { createBroadcastSyncStore, type BroadcastSyncStore } from "../lib/store";
 
-export function useBroadcastSync<T>(channelName: string, initial: T): [T, (v: T) => void] {
+/** React adapter over the framework-neutral BroadcastChannel/storage transport. */
+export function useBroadcastSync<T>(channelName: string, initial: T): [T, (value: T) => void] {
   const [value, setValue] = useState<T>(initial);
-  const chRef = useRef<BroadcastChannel | null>(null);
+  const valueRef = useRef(value);
+  const storeRef = useRef<BroadcastSyncStore<T> | null>(null);
+  valueRef.current = value;
 
   useEffect(() => {
-    if (typeof BroadcastChannel === "undefined") return;
-    const ch = new BroadcastChannel(channelName);
-    chRef.current = ch;
-    ch.onmessage = (e) => setValue(e.data as T);
-    return () => ch.close();
+    const store = createBroadcastSyncStore(channelName, valueRef.current);
+    storeRef.current = store;
+    const unsubscribe = store.subscribe(setValue);
+    return () => {
+      unsubscribe();
+      store.destroy();
+      if (storeRef.current === store) storeRef.current = null;
+    };
   }, [channelName]);
 
-  function set(v: T) {
-    setValue(v);
-    chRef.current?.postMessage(v);
-  }
+  const set = (next: T) => {
+    if (storeRef.current) storeRef.current.set(next);
+    else setValue(next);
+  };
 
   return [value, set];
 }

@@ -1,14 +1,28 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "broadcast-channel-sync",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "category": "data",
   "title": "BroadcastChannel \u2014 Cross-tab Sync",
-  "description": "Cross-tab + cross-iframe state sync via BroadcastChannel + localStorage fallback. Tiny, no backend.",
+  "description": "Cross-tab + cross-iframe state sync with one transport contract: BroadcastChannel when available and same-origin localStorage/storage-event fallback otherwise. React/Next remains the default hook distribution; an additive Svelte/SvelteKit distribution exposes a Svelte-readable store plus the same bounded agent tool surface.",
   "namespace": "@/features/broadcast-channel-sync",
   "frontend": {
     "slicePath": "frontend/slices/broadcast-channel-sync",
-    "configExport": "broadcastChannelSyncConfig"
+    "configExport": "broadcastChannelSyncConfig",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/broadcast-channel-sync-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [],
+          "shadcn": []
+        }
+      }
+    }
   },
   "deps": {
     "npm": [],
@@ -37,10 +51,14 @@
       ],
       "hooks": [
         "useBroadcastSync"
+      ],
+      "utils": [
+        "createBroadcastSyncStore"
       ]
     },
     "generalization": {
       "level": "portable"
     }
-  }
+  },
+  "kind": "ui"
 }

@@ -1638,7 +1638,7 @@ const nav = [
     title: "BroadcastChannel — Cross-tab Sync",
     category: "data",
     kind: "ui",
-    version: "0.2.0",
+    version: "0.3.0",
     description: "Same-origin cross-tab + cross-iframe state sync via BroadcastChannel API. Tiny, no backend, no install.",
     source: "Web Platform — BroadcastChannel API",
     docsUrl: "https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API",
@@ -1651,13 +1651,11 @@ const nav = [
     peers: [],
     tags: ["realtime", "cross-tab", "broadcast-channel", "demo-pattern"],
     usedBy: ["personal-brand-os"],
-    agentRecipe: "Run `npx rr add broadcast-channel-sync`. Use BroadcastChannel only for demo / cross-iframe state mirroring. Production data still goes through Convex realtime. Use the useBroadcastSync(channelName, initial) hook from @/features/broadcast-channel-sync.",
+    agentRecipe: "Run `npx rr add broadcast-channel-sync` for React/Next or add `--framework sveltekit` for the Svelte store adapter. Use this for same-origin tab/iframe mirroring, not durable server data; production persistence still belongs in Convex or another backend.",
     previewPath: "/preview/slices/broadcast-channel-sync",
-    wiring: `import { useBroadcastSync } from "@/features/broadcast-channel-sync";
-
-const [count, setCount] = useBroadcastSync("rr:counter", 0);
-<button onClick={() => setCount(count + 1)}>{count}</button>
-// Any tab on the same origin sees the change instantly.`,
+    wiring: `// React: useBroadcastSync("rr:counter", 0)
+// Svelte: createBroadcastSyncStore("rr:counter", 0)
+// BroadcastChannel is preferred; same-origin storage events are the fallback.`,
     defaultView: "tablet",
     defaultZoom: 0.8,
     compat: {

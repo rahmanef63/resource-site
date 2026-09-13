@@ -1,4 +1,3 @@
-export { useBroadcastSync } from "./hooks/use-bc-sync";
 export {
   createBroadcastSyncStore,
   type BroadcastSyncChannel,

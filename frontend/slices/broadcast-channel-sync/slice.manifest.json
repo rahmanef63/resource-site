@@ -1,8 +1,8 @@
 {
   "$schema": "../../../docs/slice.manifest.schema.json",
   "name": "broadcast-channel-sync",
-  "version": "0.2.0",
-  "description": "Cross-tab + cross-iframe state sync using the browser BroadcastChannel API with localStorage fallback for older engines. Frontend-only, zero backend dependency.",
+  "version": "0.3.0",
+  "description": "Cross-tab + cross-iframe state sync using BroadcastChannel with a same-origin localStorage/storage-event fallback. React hook default; additive Svelte store distribution.",
   "category": "misc",
   "stability": "beta",
   "deps": {
@@ -37,5 +37,5 @@
     "broadcast-channel",
     "frontend-only"
   ],
-  "notes": "Pure-browser slice \u2014 no Convex schema or env vars. Falls back to `storage` event when BroadcastChannel unavailable (Safari < 15.4). Wrap consumer-side in `useSyncExternalStore` for React 19 concurrent-safe reads."
+  "notes": "Pure-browser slice with SSR-safe lazy transport. BroadcastChannel is preferred; localStorage/storage events are the fallback. Explicit Svelte installs use the additive store distribution."
 }
