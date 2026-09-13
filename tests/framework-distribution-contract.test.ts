@@ -286,6 +286,42 @@ describe("framework-aware slice distribution", () => {
     expect(svelteResult.stdout).not.toContain("next@^15");
   });
 
+  it("keeps notifications-center on React by default and selects native Svelte inbox UI over the same adapter core", () => {
+    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "notifications-center");
+    const target = mkTarget();
+
+    expect(slice.slicePath).toBe("frontend/slices/notifications-center");
+    expect(slice.defaultFramework).toBe("react-next");
+    const svelte = slice.frameworks["svelte-sveltekit"];
+    expect(svelte.path).toBe("frontend/slices/notifications-center-svelte");
+    expect(svelte.aliases).toEqual(["svelte", "sveltekit"]);
+    expect(svelte.deps.npm).toEqual(["svelte@^5"]);
+    expect(svelte.deps.shadcn).toEqual([]);
+    expect(svelte.deps.sharedFiles).toEqual([
+      "frontend/slices/notifications-center/lib/types.ts",
+      "frontend/slices/notifications-center/lib/adapter.ts",
+      "frontend/slices/notifications-center/lib/relativeTime.ts",
+      "frontend/slices/notifications-center/lib/state.ts",
+      "frontend/slices/notifications-center/lib/tools.ts",
+    ]);
+
+    const defaultResult = runCli("add", "notifications-center", "--target", target, "--dry-run");
+    expect(defaultResult.status).toBe(0);
+    expect(defaultResult.stdout).toContain("frontend/slices/notifications-center →");
+    expect(defaultResult.stdout).toContain("lucide-react");
+    expect(defaultResult.stdout).toContain("shadcn: button popover sheet badge scroll-area separator tabs avatar");
+
+    const svelteResult = runCli("add", "notifications-center", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteResult.status).toBe(0);
+    expect(svelteResult.stdout).toContain("frontend/slices/notifications-center-svelte →");
+    expect(svelteResult.stdout).toContain("frontend/slices/notifications-center/lib/state.ts →");
+    expect(svelteResult.stdout).toContain("svelte@^5");
+    expect(svelteResult.stdout).not.toContain("lucide-react");
+    expect(svelteResult.stdout).not.toContain("npx shadcn@latest add");
+  });
+
   it("keeps comments on React by default and selects native Svelte renderless adapters over the same thread core", () => {
     execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));

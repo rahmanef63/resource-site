@@ -2,9 +2,9 @@
 // agent acts through the exact adapter-backed API the bell/list UI uses.
 
 import { defineToolCollection, noArgs, obj, str } from "@/shared/agentic";
-import type { UseNotifications } from "../hooks/useNotifications";
+import type { NotificationsState } from "./state";
 
-export type NotificationsCenterCtx = UseNotifications;
+export type NotificationsCenterCtx = NotificationsState;
 
 export const notificationsCenterTools = defineToolCollection<NotificationsCenterCtx>({
   namespace: "notifications-center",

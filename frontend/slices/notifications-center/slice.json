@@ -1,15 +1,38 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "notifications-center",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "category": "ui",
   "kind": "ui",
-  "title": "Notifications Center \u2014 bell + inbox",
-  "description": "Standalone notification inbox \u2014 a bell trigger with an unread badge that opens a panel (popover on desktop, sheet on mobile) listing notifications with All/Unread tabs, per-row mark-read + dismiss, and bulk mark-all-read + clear. Adapter-driven: the host supplies the feed via a NotificationsAdapter (Convex, websocket, or the bundled in-memory store). Pure UI, no backend coupling, theme-token styling.",
+  "title": "Notifications Center — bell + inbox",
+  "description": "Adapter-driven notification inbox with one framework-neutral snapshot/sort/filter/action core, native React and Svelte bell/list/item UI, and host-supplied feed adapters. React/Next remains default; Svelte/SvelteKit reuses the same notification, adapter, unread, relative-time, tool, and mutation semantics without shadcn/Lucide.",
   "namespace": "@/features/notifications-center",
   "frontend": {
     "slicePath": "frontend/slices/notifications-center",
-    "configExport": "notificationsCenterFeature"
+    "configExport": "notificationsCenterFeature",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/notifications-center-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/notifications-center/lib/types.ts",
+            "frontend/slices/notifications-center/lib/adapter.ts",
+            "frontend/slices/notifications-center/lib/relativeTime.ts",
+            "frontend/slices/notifications-center/lib/state.ts",
+            "frontend/slices/notifications-center/lib/tools.ts"
+          ]
+        }
+      }
+    }
   },
   "convex": {
     "tablesExport": "",
@@ -56,7 +79,7 @@
             "sheet"
           ],
           "default": "popover",
-          "description": "Panel surface \u2014 floating popover (desktop) or side sheet (mobile)"
+          "description": "Panel surface — floating popover (desktop) or side sheet (mobile)"
         }
       ],
       "seed": "8 static mixed-kind notifications with static ISO timestamps"
@@ -73,12 +96,12 @@
         {
           "id": "all-read",
           "title": "All read",
-          "description": "Same feed, every row already read \u2014 unread tab empty"
+          "description": "Same feed, every row already read — unread tab empty"
         },
         {
           "id": "empty",
           "title": "Empty state",
-          "description": "No notifications \u2014 caught-up fallback renders"
+          "description": "No notifications — caught-up fallback renders"
         }
       ],
       "seed": "Same 8 static notifications; scenario toggles read-state + emptiness"
@@ -108,7 +131,10 @@
       ],
       "utils": [
         "createMemoryNotificationsAdapter",
-        "relativeTime"
+        "relativeTime",
+        "createNotificationsState",
+        "filterNotifications",
+        "sortNotificationsNewestFirst"
       ],
       "hooks": [
         "useNotifications"

@@ -11,6 +11,7 @@ export {
   type NotificationsAdapter,
 } from "./lib/adapter";
 export { relativeTime } from "./lib/relativeTime";
+export { createNotificationsState, filterNotifications, sortNotificationsNewestFirst, type NotificationTab, type NotificationsState } from "./lib/state";
 export type {
   Notification,
   NotificationKind,

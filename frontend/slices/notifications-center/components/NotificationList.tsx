@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import type { Notification } from "../lib/types";
+import { filterNotifications } from "../lib/state";
 import { NotificationItem } from "./NotificationItem";
 
 export type NotificationListProps = {
@@ -36,7 +37,7 @@ export function NotificationList({
 }: NotificationListProps) {
   const [tab, setTab] = React.useState<"all" | "unread">("all");
   const unread = unreadCount ?? notifications.filter((n) => !n.read).length;
-  const rows = tab === "unread" ? notifications.filter((n) => !n.read) : notifications;
+  const rows = filterNotifications(notifications, tab);
 
   return (
     <div className={cn("flex flex-col", className)}>

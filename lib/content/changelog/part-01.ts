@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-NOTIFICATIONS-CENTER-DISTRIBUTION",
+    "version": "notifications-center@0.3.0",
+    "date": 1789257600000,
+    "kind": "feature",
+    "title": "SvelteKit Notifications Center distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/notifications-center — [before: notifications-center coupled live feed state to the React hook, duplicated public preview seed data, and its catalog omitted the default Lucide dependency] → [after: React/Next remains the default while Svelte/SvelteKit gets native bell/list/item UI plus a readable adapter over the exact same notification state, adapter, time, mutation, and agent-tool semantics].",
+    "groups": [
+      {
+        "heading": "One notification engine, native inbox surfaces",
+        "bullets": [
+          "The shared state core now owns newest-first sorting, All/Unread filtering, unread counts, and adapter mutation actions for React and Svelte.",
+          "The Svelte 5 distribution shares notification types, adapter contract/reference store, relative time, state, and agent tools without React, Next, Lucide, or shadcn dependencies.",
+          "Public preview: https://resource.rahmanef.com/preview/slices/notifications-center mounts the canonical preview module, and the default React catalog once again includes lucide-react@^0.400.0."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-COMMENTS-DISTRIBUTION",
     "version": "comments@0.4.0",
     "date": 1789257600000,

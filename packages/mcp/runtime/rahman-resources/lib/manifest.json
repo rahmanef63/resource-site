@@ -1489,12 +1489,12 @@
       "slug": "notifications-center",
       "title": "Notifications Center — bell + inbox",
       "category": "ui",
-      "description": "NotificationBell (ghost icon button, unread badge, popover or sheet surface) + NotificationList (All/Unread tabs, mark-all-read, clear, ScrollArea rows with kind icon, relative time, hover actions). NotificationsAdapter contract (list/markRead/markAllRead/dismiss/clear) with a useSyncExternalStore-friendly memory adapter included — swap in Convex for production (sketch in README).",
+      "description": "Adapter-driven notification inbox with one shared newest-first snapshot/filter/action core. React/Next keeps the shadcn + Lucide bell/list/item UI; Svelte/SvelteKit ships native bell/list/item UI and a Svelte-readable adapter over the same NotificationsAdapter, relative-time, unread, mutation, and agent-tool semantics.",
       "source": "rr original (appshell toast-log pattern, standalone)",
       "install": "npx rahman-resources add notifications-center",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add notifications-center`. Mount <NotificationBell adapter> in your topbar. Implement NotificationsAdapter over your feed (Convex query + mutations) or start with createMemoryNotificationsAdapter(seed). surface=\"sheet\" for mobile-heavy apps.",
+      "agentRecipe": "Run `npx rr add notifications-center` (or `--framework sveltekit`). Bind your host feed through NotificationsAdapter, or start with createMemoryNotificationsAdapter(seed). The shared state core sorts newest-first and exposes unread + mark/dismiss/clear semantics; use surface=\"sheet\" for mobile-heavy apps.",
       "tags": [
         "notifications",
         "inbox",
@@ -5148,18 +5148,40 @@
       "title": "Notifications Center — bell + inbox",
       "category": "ui",
       "kind": "ui",
-      "version": "0.2.0",
-      "description": "NotificationBell (ghost icon button, unread badge, popover or sheet surface) + NotificationList (All/Unread tabs, mark-all-read, clear, ScrollArea rows with kind icon, relative time, hover actions). NotificationsAdapter contract (list/markRead/markAllRead/dismiss/clear) with a useSyncExternalStore-friendly memory adapter included — swap in Convex for production (sketch in README).",
+      "version": "0.3.0",
+      "description": "Adapter-driven notification inbox with one shared newest-first snapshot/filter/action core. React/Next keeps the shadcn + Lucide bell/list/item UI; Svelte/SvelteKit ships native bell/list/item UI and a Svelte-readable adapter over the same NotificationsAdapter, relative-time, unread, mutation, and agent-tool semantics.",
       "source": "rr original (appshell toast-log pattern, standalone)",
       "slicePath": "frontend/slices/notifications-center",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/notifications-center"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/notifications-center-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/notifications-center/lib/types.ts",
+              "frontend/slices/notifications-center/lib/adapter.ts",
+              "frontend/slices/notifications-center/lib/relativeTime.ts",
+              "frontend/slices/notifications-center/lib/state.ts",
+              "frontend/slices/notifications-center/lib/tools.ts"
+            ]
+          }
         }
       },
       "convexPaths": [],
-      "npm": [],
+      "npm": [
+        "lucide-react@^0.400.0"
+      ],
       "shadcn": [
         "button",
         "popover",
@@ -5182,7 +5204,7 @@
         "toast",
         "basics"
       ],
-      "agentRecipe": "Run `npx rr add notifications-center`. Mount <NotificationBell adapter> in your topbar. Implement NotificationsAdapter over your feed (Convex query + mutations) or start with createMemoryNotificationsAdapter(seed). surface=\"sheet\" for mobile-heavy apps."
+      "agentRecipe": "Run `npx rr add notifications-center` (or `--framework sveltekit`). Bind your host feed through NotificationsAdapter, or start with createMemoryNotificationsAdapter(seed). The shared state core sorts newest-first and exposes unread + mark/dismiss/clear semantics; use surface=\"sheet\" for mobile-heavy apps."
     },
     {
       "slug": "design-studio",

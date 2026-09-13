@@ -4,6 +4,20 @@ Standalone notification inbox — a `Bell` trigger with an unread badge that
 opens a panel (popover on desktop, sheet on mobile) listing notifications.
 Adapter-driven: **the host supplies the feed.** Pure UI, no backend coupling.
 
+## Install
+
+```bash
+npx rr add notifications-center
+# Svelte 5 / SvelteKit
+npx rr add notifications-center --framework sveltekit
+```
+
+React/Next remains the default distribution. Both frameworks share notification
+types, adapter semantics, newest-first sorting/filtering, unread counts, relative
+time, mutation actions, and agent tools through the canonical TypeScript core.
+The Svelte distribution replaces only the UI/store adapter and has no Lucide or
+shadcn dependency.
+
 ## Surface
 
 | Component | Props | Notes |
@@ -12,8 +26,9 @@ Adapter-driven: **the host supplies the feed.** Pure UI, no backend coupling.
 | `NotificationList` | `notifications, unreadCount?, now?, maxHeight?, on*` | Header (Mark all read / Clear) + All/Unread tabs + scrollable list. Embeddable standalone (settings page, drawer). |
 | `NotificationItem` | `notification, now?, onMarkRead?, onDismiss?` | One row: kind icon (or actor avatar), title/body, relative time, unread dot, hover row actions. |
 
-`useNotifications(adapter)` binds an adapter to React and returns
-`{ notifications, unreadCount, markRead, markAllRead, dismiss, clear }`.
+`useNotifications(adapter)` binds the shared state core to React and returns
+`{ notifications, unreadCount, markRead, markAllRead, dismiss, clear }`. Svelte
+consumers can use `createNotificationsStore(adapter)` for the same live state.
 
 ## `Notification` shape
 
@@ -95,6 +110,9 @@ Convex `_creationTime` is epoch-ms — convert to ISO for `createdAt`. Use a
 - env: none · Convex tables: none (host-owned)
 
 ## Notes
+
+- Feed state sorts `createdAt` newest-first before All/Unread filtering, so direct
+  component usage and adapter-backed usage share the documented ordering.
 
 - Relative time renders via `relativeTime(iso, now?)` — pure + deterministic;
   pass a fixed `now` for stable SSR/snapshot output. The seam exists so the

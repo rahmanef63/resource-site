@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — SvelteKit Notifications Center distribution
+<!-- public-changelog:SVELTE-NOTIFICATIONS-CENTER-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/notifications-center
+- Preview: https://resource.rahmanef.com/preview/slices/notifications-center
+- [before: `notifications-center` coupled live feed state to the React hook, duplicated public preview seed data, and its catalog omitted the default Lucide dependency] → [after: React/Next remains the default while Svelte/SvelteKit gets native bell/list/item UI plus a readable adapter over the exact same notification state, adapter, time, mutation, and agent-tool semantics]
+- The shared state now enforces newest-first ordering + All/Unread filtering, the public route hosts canonical `preview.tsx`, and the React installer again declares `lucide-react@^0.400.0`.
+
 ### 2026-09-13 — SvelteKit Comments distribution
 <!-- public-changelog:SVELTE-COMMENTS-DISTRIBUTION -->
 

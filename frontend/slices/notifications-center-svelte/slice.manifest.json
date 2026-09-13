@@ -1,0 +1,33 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "notifications-center-svelte",
+  "version": "0.3.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add notifications-center --framework sveltekit",
+    "consumerPath": "slices/notifications-center"
+  },
+  "files": [
+    "README.md",
+    "components/NotificationBell.svelte",
+    "components/NotificationItem.svelte",
+    "components/NotificationList.svelte",
+    "config.ts",
+    "index.ts",
+    "lib/store.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/notifications-center/lib/types.ts",
+      "frontend/slices/notifications-center/lib/adapter.ts",
+      "frontend/slices/notifications-center/lib/relativeTime.ts",
+      "frontend/slices/notifications-center/lib/state.ts",
+      "frontend/slices/notifications-center/lib/tools.ts"
+    ],
+    "external": [
+      "svelte"
+    ]
+  }
+}
