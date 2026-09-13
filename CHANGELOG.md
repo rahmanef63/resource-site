@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — Exact shared-file fetch for framework distributions
+<!-- public-changelog:FRAMEWORK-SHARED-FILE-FETCH-FIX -->
+
+**CLI / contract:**
+- Related: https://resource.rahmanef.com/slices
+- [before: shared-file copy steps used `tiged`, which turned file paths into empty directories while reporting success] → [after: shared files are fetched as exact raw files, unsafe traversal paths are rejected, and actual `rr add` copies preserve file contents and destinations]
+- Added focused raw-file tests plus an actual remote-copy verification against `lib/shared/theme-presets/apply.ts`.
+
 ### 2026-09-13 — Framework shared-file distribution
 <!-- public-changelog:FRAMEWORK-SHARED-FILES-DISTRIBUTION -->
 

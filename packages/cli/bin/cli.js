@@ -35,6 +35,7 @@ import { runCompose, preflight as composePreflight } from "./compose.mjs";
 import { runUpdate as runUpdate3Way } from "./update.mjs";
 import { runMigrate } from "./migrate.mjs";
 import { augmentConsumerEnv } from "../lib/env-augment.mjs";
+import { pullRawFile } from "../lib/raw-file.mjs";
 
 const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -1191,6 +1192,8 @@ async function runLift(rest) {
       copyLocalTree(step.localFromAbs, step.toAbs);
     } else if (parsed.kind === "github") {
       await pullFromRepo(step.githubRepo, step.githubSubPath, "main", step.toAbs);
+    } else if (step.sharedFile) {
+      await pullRawFile({ repo: REPO, branch: BRANCH, repoPath: step.from, dest: step.toAbs });
     } else {
       await pull(step.from, step.toAbs);
     }
@@ -1323,6 +1326,7 @@ async function resolveLiftPlan(parsed, target, variant, requestedFramework) {
         from: sharedFile,
         toRel: sharedFile,
         toAbs: path.join(target, sharedFile),
+        sharedFile: true,
       });
     }
     npm.push(...(deps.npm ?? slice.npm ?? []));

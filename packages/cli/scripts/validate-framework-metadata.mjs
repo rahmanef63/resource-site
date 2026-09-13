@@ -1,6 +1,12 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
 
+const isSafeSharedFilePath = (value) => {
+  if (typeof value !== "string" || value.length === 0) return false;
+  if (path.isAbsolute(value) || value.includes("\\")) return false;
+  return value.split("/").every((part) => part && part !== "." && part !== "..");
+};
+
 export function validateFrameworkMetadata(slice, repo) {
   const frontend = slice.frontend;
   if (!frontend || typeof frontend !== "object") return [];
@@ -10,7 +16,9 @@ export function validateFrameworkMetadata(slice, repo) {
   const defaultFramework = frontend.defaultFramework ?? "react-next";
 
   for (const sharedFile of slice.deps?.sharedFiles ?? []) {
-    if (!existsSync(path.join(repo, sharedFile))) {
+    if (!isSafeSharedFilePath(sharedFile)) {
+      errors.push(`deps.sharedFiles path must be repo-relative and traversal-free: ${sharedFile}`);
+    } else if (!existsSync(path.join(repo, sharedFile))) {
       errors.push(`deps.sharedFiles path missing on disk: ${sharedFile}`);
     }
   }
@@ -42,7 +50,9 @@ export function validateFrameworkMetadata(slice, repo) {
       errors.push(`frontend.frameworks.${name}.path missing on disk: ${descriptor.path}`);
     }
     for (const sharedFile of descriptor.deps?.sharedFiles ?? []) {
-      if (!existsSync(path.join(repo, sharedFile))) {
+      if (!isSafeSharedFilePath(sharedFile)) {
+        errors.push(`frontend.frameworks.${name}.deps.sharedFiles path must be repo-relative and traversal-free: ${sharedFile}`);
+      } else if (!existsSync(path.join(repo, sharedFile))) {
         errors.push(`frontend.frameworks.${name}.deps.sharedFiles path missing on disk: ${sharedFile}`);
       }
     }

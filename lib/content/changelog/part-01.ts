@@ -2,6 +2,24 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "FRAMEWORK-SHARED-FILE-FETCH-FIX",
+    "version": "site@framework-shared-file-fetch",
+    "date": 1789257600000,
+    "kind": "fix",
+    "title": "Exact shared-file fetch for framework distributions",
+    "body": "Related: https://resource.rahmanef.com/slices — [before: shared-file copy steps used tiged, which turned file paths into empty directories while reporting success] → [after: shared files are fetched as exact raw files, unsafe traversal paths are rejected, and actual rr add copies preserve file contents and destinations].",
+    "groups": [
+      {
+        "heading": "Verified shared-file delivery",
+        "bullets": [
+          "Rahman-source shared files now use the raw GitHub file endpoint instead of the tree-oriented tiged path, while ordinary slice and Convex directory pulls keep their existing flow.",
+          "Validation rejects absolute, traversal, and backslash shared-file paths; focused tests cover URL/path safety, exact file writes, and missing-file failures."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "FRAMEWORK-SHARED-FILES-DISTRIBUTION",
     "version": "site@framework-shared-files",
     "date": 1789257600000,
