@@ -793,6 +793,40 @@ describe("framework-aware slice distribution", () => {
     expect(svelteResult.stdout).not.toContain("npx shadcn@latest add");
   });
 
+  it("keeps site-setup-wizard on React by default and selects native Svelte onboarding UI over the same wizard core", () => {
+    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "site-setup-wizard");
+    const target = mkTarget();
+
+    expect(slice.slicePath).toBe("frontend/slices/site-setup-wizard");
+    expect(slice.defaultFramework).toBe("react-next");
+    const svelte = slice.frameworks["svelte-sveltekit"];
+    expect(svelte.path).toBe("frontend/slices/site-setup-wizard-svelte");
+    expect(svelte.aliases).toEqual(["svelte", "sveltekit"]);
+    expect(svelte.deps.npm).toEqual(["svelte@^5"]);
+    expect(svelte.deps.shadcn).toEqual([]);
+    expect(svelte.deps.sharedFiles).toEqual([
+      "frontend/slices/site-setup-wizard/lib/core.ts",
+      "frontend/slices/site-setup-wizard/lib/tools.ts",
+    ]);
+
+    const defaultResult = runCli("add", "site-setup-wizard", "--target", target, "--dry-run");
+    expect(defaultResult.status).toBe(0);
+    expect(defaultResult.stdout).toContain("frontend/slices/site-setup-wizard →");
+    expect(defaultResult.stdout).toContain("lucide-react@^0.400.0");
+    expect(defaultResult.stdout).toContain("shadcn: button card input label progress select");
+
+    const svelteResult = runCli("add", "site-setup-wizard", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteResult.status).toBe(0);
+    expect(svelteResult.stdout).toContain("frontend/slices/site-setup-wizard-svelte →");
+    expect(svelteResult.stdout).toContain("frontend/slices/site-setup-wizard/lib/core.ts →");
+    expect(svelteResult.stdout).toContain("frontend/slices/site-setup-wizard/lib/tools.ts →");
+    expect(svelteResult.stdout).toContain("svelte@^5");
+    expect(svelteResult.stdout).not.toContain("lucide-react");
+    expect(svelteResult.stdout).not.toContain("shadcn:");
+  });
+
   it("uses the default framework path and forwards an explicit framework through add", () => {
     installFrameworkFixture();
     const target = mkTarget();

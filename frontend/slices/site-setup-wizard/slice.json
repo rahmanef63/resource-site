@@ -1,20 +1,42 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "site-setup-wizard",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "category": "ui",
   "kind": "ui",
   "title": "Site Setup Wizard — first-run site setup",
-  "description": "Post-claim onboarding wizard for clone-to-own templates. Multi-step card flow (Identitas / Branding / Konten / Selesai) that stores ALL site config in the host backend via a props-driven save callback — a non-coder configures their site with zero code. Branding step ships a readable shadcn Select theme-preset picker (color swatches per preset + grouped headers + live preview callback — replaces the white-on-white native select), brand color quick-chips, light/dark/system default mode, logo/favicon upload via injected ImageField, and optional Analytics ID. Skippable; seed-sample hook included; email format hint on the identity step.",
+  "description": "Post-claim onboarding wizard for clone-to-own templates. React/Next remains the default UI; Svelte 5/SvelteKit adds a native Identitas / Branding / Konten / Selesai flow over the same framework-neutral step, field, preset, validation, save-payload and agent-tool semantics. Host callbacks still own save/seed/upload/theme-preview behavior; no backend is invented.",
   "namespace": "@/features/site-setup-wizard",
   "registers": [],
   "audit": [],
   "frontend": {
     "slicePath": "frontend/slices/site-setup-wizard",
-    "configExport": ""
+    "configExport": "",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/site-setup-wizard-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/site-setup-wizard/lib/core.ts",
+            "frontend/slices/site-setup-wizard/lib/tools.ts"
+          ]
+        }
+      }
+    }
   },
   "deps": {
-    "npm": [],
+    "npm": [
+      "lucide-react@^0.400.0"
+    ],
     "shadcn": [
       "button",
       "card",

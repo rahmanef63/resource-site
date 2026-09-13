@@ -11,6 +11,16 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — SvelteKit Site Setup Wizard distribution
+<!-- public-changelog:SVELTE-SITE-SETUP-WIZARD-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/site-setup-wizard
+- Preview: https://resource.rahmanef.com/preview/slices/site-setup-wizard
+- [before: `site-setup-wizard` kept step/field/preset/save semantics inside React state, hard-coupled its public preview to `theme-presets`, and omitted the default Lucide dependency] → [after: React/Next remains the default while Svelte/SvelteKit gets a native first-run wizard over the exact same portable onboarding state, validation, preset, save-payload, and agent-tool semantics]
+- The public preview now hosts canonical `preview.tsx`; host-owned save/seed/upload/theme-preview callbacks remain the integration boundary.
+
+
 ### 2026-09-13 — SvelteKit Storefront Checkout distribution
 <!-- public-changelog:SVELTE-STOREFRONT-CHECKOUT-DISTRIBUTION -->
 

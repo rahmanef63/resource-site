@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-SITE-SETUP-WIZARD-DISTRIBUTION",
+    "version": "site-setup-wizard@0.3.0",
+    "date": 1789257600000,
+    "kind": "feature",
+    "title": "SvelteKit Site Setup Wizard distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/site-setup-wizard — [before: site-setup-wizard kept step/field/preset/save semantics inside React state, hard-coupled its public preview to theme-presets, and omitted the default Lucide dependency] → [after: React/Next remains the default while Svelte/SvelteKit gets a native first-run wizard over the exact same portable onboarding state, validation, preset, save-payload, and agent-tool semantics].",
+    "groups": [
+      {
+        "heading": "One onboarding core, native framework surfaces",
+        "bullets": [
+          "The portable core owns bounded steps, field state, preset normalize/group, optional-email validation, seeded state, and final save payload semantics for both frameworks.",
+          "The Svelte 5 distribution preserves Identitas, Branding, Konten, Selesai, skip/save, seed, grouped preset live preview, brand controls, optional image-upload snippet, and Analytics ID without React, Next, Lucide, or shadcn.",
+          "Public preview: https://resource.rahmanef.com/preview/slices/site-setup-wizard now mounts canonical preview.tsx; the default React catalog declares lucide-react@^0.400.0."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-STOREFRONT-CHECKOUT-DISTRIBUTION",
     "version": "storefront-checkout@0.3.0",
     "date": 1789257600000,

@@ -8,14 +8,12 @@ import { Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { OnboardingFields } from "../lib/types";
+import { isValidOptionalEmail, type OnboardingFields } from "../lib/core";
 
 export type SetField = (k: keyof OnboardingFields, v: string) => void;
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 export function StepIdentity({ f, set }: { f: OnboardingFields; set: SetField }) {
-  const emailInvalid = f.contactEmail.length > 0 && !EMAIL_RE.test(f.contactEmail);
+  const emailInvalid = !isValidOptionalEmail(f.contactEmail);
   return (
     <div className="space-y-4">
       <div>

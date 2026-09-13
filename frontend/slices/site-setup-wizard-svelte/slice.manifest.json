@@ -1,0 +1,31 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "site-setup-wizard-svelte",
+  "version": "0.3.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add site-setup-wizard --framework sveltekit",
+    "consumerPath": "slices/site-setup-wizard"
+  },
+  "files": [
+    "README.md",
+    "components/Field.svelte",
+    "components/OnboardingWizard.svelte",
+    "components/StepBranding.svelte",
+    "components/StepContent.svelte",
+    "components/StepDone.svelte",
+    "components/StepIdentity.svelte",
+    "components/ThemePresetField.svelte",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/site-setup-wizard/lib/core.ts",
+      "frontend/slices/site-setup-wizard/lib/tools.ts"
+    ],
+    "external": ["svelte"]
+  }
+}
