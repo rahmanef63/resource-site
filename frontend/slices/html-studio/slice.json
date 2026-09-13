@@ -1,46 +1,118 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "html-studio",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "category": "os",
   "kind": "ui",
   "title": "HTML Studio — sandboxed HTML/CSS/JS editor with live preview",
-  "description": "A tiny web-page studio: write HTML / CSS / JS and see it render LIVE in a SANDBOXED iframe (srcdoc + sandbox=\"allow-scripts\" WITHOUT allow-same-origin, so user code runs in an opaque origin and cannot read the host) — then Save to a shareable /p/<slug>. Code / Split / Preview view toggle, a device-width preview (responsive / tablet / phone), a saved-pages rail, and public/private visibility. The backend is INJECTED via a small HtmlStudioAdapter (save/load/list/remove): point configureHtmlStudio at your store, or keep the bundled in-memory mock so the editor + live preview + saved list are fully interactive with zero backend.",
+  "description": "Sandboxed HTML/CSS/JS studio with one framework-neutral document store, mock/live HtmlStudioAdapter, device/view helpers, starter document, share helpers, and exact opaque-origin iframe sandbox contract. React/Next remains the default Lucide + shadcn renderer; Svelte 5/SvelteKit gets native Code/Split/Preview, responsive/tablet/phone preview, 250ms live srcdoc, Save/open/delete list, public/private visibility, copy-link and payload-slug flows over the same core.",
   "namespace": "@/features/html-studio",
   "frontend": {
     "slicePath": "frontend/slices/html-studio",
-    "configExport": "htmlStudioConfig"
+    "configExport": "htmlStudioConfig",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/html-studio-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/html-studio/lib/core.ts"
+          ]
+        }
+      }
+    }
   },
   "deps": {
-    "npm": ["lucide-react"],
-    "shadcn": ["button", "input", "textarea", "scroll-area"],
+    "npm": [
+      "lucide-react@^0.400.0"
+    ],
+    "shadcn": [
+      "button",
+      "input",
+      "textarea",
+      "scroll-area"
+    ],
     "env": [],
-    "peers": []
+    "peers": [],
+    "sharedFiles": [
+      "frontend/slices/html-studio/lib/core.ts"
+    ]
   },
-  "registers": ["registry"],
-  "audit": ["bp:ui-consistency"],
+  "registers": [
+    "registry"
+  ],
+  "audit": [
+    "bp:ui-consistency"
+  ],
   "license": "MIT",
-  "tags": ["html", "editor", "sandbox", "iframe", "preview", "playground", "code", "ui"],
-  "previews": [],
+  "tags": [
+    "html",
+    "editor",
+    "sandbox",
+    "iframe",
+    "preview",
+    "playground",
+    "code",
+    "ui"
+  ],
+  "previews": [
+    {
+      "component": "HtmlStudio",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "mock-studio",
+          "title": "Mock studio",
+          "description": "Editor + sandboxed live preview + saved pages on bundled in-memory adapter"
+        }
+      ],
+      "seed": "Starter interactive HTML page + one saved Welcome page"
+    }
+  ],
   "contract": {
     "requires": {
       "auth": "none",
       "deps": [
-        { "npm": "react", "range": "^19" },
-        { "npm": "lucide-react", "range": "^0.400.0" }
+        {
+          "npm": "react",
+          "range": "^19"
+        },
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
       ]
     },
     "provides": {
       "tools": [],
       "routes": [],
-      "components": ["HtmlStudio"],
+      "components": [
+        "HtmlStudio"
+      ],
       "hooks": [],
-      "utils": ["configureHtmlStudio", "htmlStudioApp"],
+      "utils": [
+        "configureHtmlStudio",
+        "htmlStudioApi",
+        "HTML_SANDBOX",
+        "shareUrl",
+        "payloadSlug",
+        "htmlStudioApp"
+      ],
       "tables": []
     },
     "generalization": {
       "level": "portable",
-      "forbiddenTerms": ["rahmanef"]
+      "forbiddenTerms": [
+        "rahmanef"
+      ]
     }
   }
 }

@@ -113,7 +113,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...htmlStudioConfig,
     importPath: "@/features/html-studio/config",
-    version: "1.0.0",
+    version: "1.1.0",
   },
   {
     ...imageEditorConfig,

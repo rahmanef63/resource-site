@@ -1,43 +1,53 @@
 # html-studio — sandboxed HTML/CSS/JS editor with live preview
 
-A tiny web-page studio. Type HTML / CSS / JS, watch it render live in a
-**sandboxed** iframe, then Save to a shareable `/p/<slug>`. Code / Split /
-Preview view toggle, device-width preview (responsive / tablet / phone), a
-saved-pages rail, and public/private visibility.
+A tiny web-page studio. Type HTML / CSS / JS, watch it render live in a sandboxed iframe, then Save to a shareable `/p/<slug>`. Code / Split / Preview, responsive/tablet/phone widths, saved pages and public/private visibility are backed by one framework-neutral document adapter/core.
 
 ## Security boundary
 
-The preview iframe runs user code with `sandbox="allow-scripts allow-forms
-allow-popups allow-presentation"` — crucially **without** `allow-same-origin`,
-so the framed document gets a unique opaque origin and cannot read the host's
-cookies / localStorage. Keep that intact wherever the HTML renders; it is the
-containment, not a scrubber (the studio renders arbitrary markup on purpose).
+Every framework uses the same `HTML_SANDBOX` constant:
 
-## Mount
+`allow-scripts allow-forms allow-popups allow-presentation`
+
+It intentionally omits **`allow-same-origin`**. Arbitrary `srcdoc` code therefore runs in an opaque origin and cannot read the host's cookies/localStorage. Do not add `allow-same-origin` in a renderer; this boundary is containment, not sanitization.
+
+## React / Next (default)
 
 ```tsx
 import { HtmlStudio } from "@/features/html-studio";
 
-// Zero wiring → in-memory mock store (editor + live preview + saved list all live)
-<HtmlStudio />
+<div className="h-dvh"><HtmlStudio /></div>
 ```
 
-Pass `payload={{ slug }}` to open a saved page, or hand `htmlStudioApp`
-(lazy `load`) to an appshell-style launcher.
+The default renderer uses Lucide + shadcn. `htmlStudioApp` remains the React/appshelly lazy descriptor.
 
-## Host seam (`lib/host.ts`)
+## Svelte 5 / SvelteKit
+
+```bash
+npx rr add html-studio --framework sveltekit
+```
+
+```svelte
+<script lang="ts">
+  import { HtmlStudio } from "@/features/html-studio-svelte";
+</script>
+
+<div class="h-dvh"><HtmlStudio /></div>
+```
+
+The Svelte renderer preserves the 250ms live preview, Code/Split/Preview modes, device widths, Save/open/delete list, visibility, copy-link and `payload={{ slug }}` behavior without React, Next, Lucide or shadcn runtime imports.
+
+## Shared host seam
 
 ```ts
 import { configureHtmlStudio } from "@/features/html-studio";
 
 configureHtmlStudio({
   mode: "live",
-  save: (doc) => myApi.publishPage(doc),     // returns { slug }
-  load: (slug) => myApi.getPage(slug),        // SavedPage | null
-  list: () => myApi.listPages(),              // omit to hide the saved rail
+  save: (doc) => myApi.publishPage(doc),
+  load: (slug) => myApi.getPage(slug),
+  list: () => myApi.listPages(),
   remove: (slug) => myApi.deletePage(slug),
 });
 ```
 
-Every other file in the slice imports ONLY this seam. Omit `save` for a
-read-only sandbox, or `list` to hide the saved-pages rail.
+With no wiring, the bundled in-memory mock keeps editor, preview, Save, saved list and open/delete flows interactive. Omit `save` for read-only mode or `list` to hide the saved rail.

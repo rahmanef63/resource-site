@@ -474,14 +474,14 @@ export default function BookingDemo() {
     title: "HTML Studio — sandboxed HTML/CSS/JS editor with live preview",
     category: "os",
     kind: "ui",
-    version: "1.0.0",
+    version: "1.1.0",
     tagline: "Write HTML/CSS/JS, see it render live in a sandboxed iframe (opaque origin), Save to a shareable link — backend injected.",
     description:
-      "A tiny web-page studio: write HTML / CSS / JS and see it render LIVE in a sandboxed iframe (srcdoc + sandbox=allow-scripts WITHOUT allow-same-origin, so user code runs in an opaque origin and cannot read the host) — then Save to a shareable /p/<slug>. Code / Split / Preview view toggle, a device-width preview (responsive / tablet / phone), a saved-pages rail, and public/private visibility. The backend is INJECTED via a small HtmlStudioAdapter (save/load/list/remove): point configureHtmlStudio at your store, or keep the bundled in-memory mock so the editor + live preview + saved list are fully interactive with zero backend.",
+      "Sandboxed HTML/CSS/JS studio with one framework-neutral document store, mock/live HtmlStudioAdapter, device/view helpers, starter document, share helpers, and exact opaque-origin iframe sandbox contract. React/Next remains the default Lucide + shadcn renderer; Svelte 5/SvelteKit gets native Code/Split/Preview, responsive/tablet/phone preview, 250ms live srcdoc, Save/open/delete list, public/private visibility, copy-link and payload-slug flows over the same core.",
     source: "rahmanef63/os-vps",
     slicePath: "frontend/slices/html-studio",
     convexPaths: [],
-    npm: ["lucide-react"],
+    npm: ["lucide-react@^0.400.0"],
     shadcn: ["button", "input", "textarea", "scroll-area"],
     env: [],
     peers: [],
@@ -495,11 +495,11 @@ export default function BookingDemo() {
 
 STEP 1 — Install. \`npx rr add html-studio\`. Ensure \`@/features/html-studio\` resolves and Tailwind scans the slice folder.
 
-STEP 2 — Deps. npm: \`lucide-react\`. shadcn: \`npx shadcn@latest add button input textarea scroll-area\`.
+STEP 2 — React deps. npm: \`lucide-react@^0.400.0\`. shadcn: \`npx shadcn@latest add button input textarea scroll-area\`. SvelteKit: \`npx rr add html-studio --framework sveltekit\` installs only \`svelte@^5\` + the shared portable core.
 
 STEP 3 — Mount. \`<HtmlStudio />\` in a height-bearing box — unwired it runs on an in-memory mock (editor + live sandboxed preview + saved list all live). Pass \`payload={{ slug }}\` to open a page, or register \`htmlStudioApp\` in an appshell manifest.
 
-STEP 4 — Real backend. \`configureHtmlStudio({ mode:"live", save, load, list, remove })\` — save takes { slug?, title, html, visibility } and returns { slug }; load(slug) -> SavedPage | null; omit save for a read-only sandbox or list to hide the saved rail. KEEP the iframe sandbox without allow-same-origin — it is the security boundary.`,
+STEP 4 — Real backend. \`configureHtmlStudio({ mode:"live", save, load, list, remove })\` — save takes { slug?, title, html, visibility } and returns { slug }; load(slug) -> SavedPage | null; omit save for a read-only sandbox or list to hide the saved rail. React and Svelte share the exact \`HTML_SANDBOX\`; KEEP it without allow-same-origin so arbitrary srcdoc stays in an opaque origin.`,
     exampleCode: `"use client";
 import { HtmlStudio } from "@/features/html-studio";
 

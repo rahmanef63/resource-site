@@ -22,6 +22,7 @@ export const PREVIEW_REGISTRY: Record<string, () => Promise<{ default: SlicePrev
   "feedback-states": () => import("@/features/feedback-states/preview"),
   "file-explorer": () => import("@/features/file-explorer/preview"),
   "full-width-toggle": () => import("@/features/full-width-toggle/preview"),
+  "html-studio": () => import("@/features/html-studio/preview"),
   "icon-picker": () => import("@/features/icon-picker/preview"),
   "image-editor": () => import("@/features/image-editor/preview"),
   "image-picker": () => import("@/features/image-picker/preview"),

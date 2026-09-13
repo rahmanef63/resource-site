@@ -8,7 +8,8 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useHtmlStudioApi } from "./lib/host";
 import type { AppProps, PageRow, Visibility } from "./lib/host";
-import { DEVICE_ICON, DEVICE_NEXT, SPLIT_MIN, STARTER, shareUrl, payloadSlug } from "./lib/util";
+import { DEVICE_NEXT, SPLIT_MIN, STARTER, shareUrl, payloadSlug } from "./lib/util";
+import { DEVICE_ICON } from "./lib/device-icons";
 import type { Device, View } from "./lib/util";
 import { Toolbar } from "./components/toolbar";
 import { Editor, PreviewPane } from "./components/panes";

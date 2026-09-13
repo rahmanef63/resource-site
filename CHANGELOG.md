@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — SvelteKit HTML Studio distribution
+<!-- public-changelog:SVELTE-HTML-STUDIO-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/html-studio
+- Preview: https://resource.rahmanef.com/preview/slices/html-studio
+- [before: `html-studio` mixed its mock/live document adapter and sandbox/device helpers with React/Lucide host code, had no native Svelte distribution, and the catalog left Lucide unversioned] → [after: React/Next remains the default Lucide/shadcn renderer while Svelte/SvelteKit gets native Code/Split/Preview, device widths, saved-page CRUD, visibility, payload-open and copy-link flows over one portable document/sandbox core]
+- Security boundary remains exact across renderers: arbitrary `srcdoc` uses `allow-scripts allow-forms allow-popups allow-presentation` and never `allow-same-origin`.
+
 ### 2026-09-13 — SvelteKit Resources Launcher Admin distribution
 <!-- public-changelog:SVELTE-RESOURCES-LAUNCHER-ADMIN-DISTRIBUTION -->
 

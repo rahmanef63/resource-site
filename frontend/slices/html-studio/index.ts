@@ -3,14 +3,6 @@
 import { CodeXml } from "lucide-react";
 import type { AppDescriptor } from "./lib/host";
 
-// Public barrel — consumers import ONLY from here.
-//
-// Two ways in:
-//   1. <HtmlStudio /> — mount directly. Unwired it runs on an in-memory mock
-//      store, so the editor + live sandboxed preview + saved list are all
-//      interactive with zero backend. Pass payload={{ slug }} to open a page.
-//   2. `htmlStudioApp` — appshell-style descriptor (lazy `load`) for hosts
-//      that mount apps via a dock/launcher manifest.
 export { default as HtmlStudio } from "./app";
 
 export const htmlStudioApp: AppDescriptor = {
@@ -22,17 +14,28 @@ export const htmlStudioApp: AppDescriptor = {
   defaultSize: { w: 880, h: 600 },
 };
 
-// Host wiring seam (real backend: save / load / list / remove a page).
 export { configureHtmlStudio } from "./lib/host";
+export type { AppDescriptor, AppProps } from "./lib/host";
+export {
+  DEVICE_NEXT,
+  DEVICE_W,
+  HTML_SANDBOX,
+  SPLIT_MIN,
+  STARTER,
+  cx,
+  htmlStudioApi,
+  payloadSlug,
+  shareUrl,
+} from "./lib/core";
 export type {
-  HtmlStudioAdapter,
+  Device,
   HtmlDoc,
-  SavedPage,
+  HtmlStudioAdapter,
   PageRow,
+  SavedPage,
+  View,
   Visibility,
-  AppDescriptor,
-  AppProps,
-} from "./lib/host";
+} from "./lib/core";
 
 export { htmlStudioConfig } from "./config";
 export type { HtmlStudioConfig } from "./config";

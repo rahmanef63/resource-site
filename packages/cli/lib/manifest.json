@@ -184,12 +184,12 @@
       "slug": "html-studio",
       "title": "HTML Studio — sandboxed HTML/CSS/JS editor with live preview",
       "category": "os",
-      "description": "A tiny web-page studio: write HTML / CSS / JS and see it render LIVE in a sandboxed iframe (srcdoc + sandbox=allow-scripts WITHOUT allow-same-origin, so user code runs in an opaque origin and cannot read the host) — then Save to a shareable /p/<slug>. Code / Split / Preview view toggle, a device-width preview (responsive / tablet / phone), a saved-pages rail, and public/private visibility. The backend is INJECTED via a small HtmlStudioAdapter (save/load/list/remove): point configureHtmlStudio at your store, or keep the bundled in-memory mock so the editor + live preview + saved list are fully interactive with zero backend.",
+      "description": "Sandboxed HTML/CSS/JS studio with one framework-neutral document store, mock/live HtmlStudioAdapter, device/view helpers, starter document, share helpers, and exact opaque-origin iframe sandbox contract. React/Next remains the default Lucide + shadcn renderer; Svelte 5/SvelteKit gets native Code/Split/Preview, responsive/tablet/phone preview, 250ms live srcdoc, Save/open/delete list, public/private visibility, copy-link and payload-slug flows over the same core.",
       "source": "rahmanef63/os-vps",
       "install": "npx rahman-resources add html-studio",
       "npmPackages": [],
       "exampleCode": "\"use client\";\nimport { HtmlStudio } from \"@/features/html-studio\";\n\nexport default function HtmlStudioDemo() {\n  // Unwired -> in-memory mock; configureHtmlStudio for a real backend.\n  return <div className=\"h-dvh w-full\"><HtmlStudio /></div>;\n}",
-      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A sandboxed HTML/CSS/JS studio: editor + live iframe preview + saved pages. Fully client-side; backend optional.\n\nSTEP 1 — Install. `npx rr add html-studio`. Ensure `@/features/html-studio` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: `npx shadcn@latest add button input textarea scroll-area`.\n\nSTEP 3 — Mount. `<HtmlStudio />` in a height-bearing box — unwired it runs on an in-memory mock (editor + live sandboxed preview + saved list all live). Pass `payload={{ slug }}` to open a page, or register `htmlStudioApp` in an appshell manifest.\n\nSTEP 4 — Real backend. `configureHtmlStudio({ mode:\"live\", save, load, list, remove })` — save takes { slug?, title, html, visibility } and returns { slug }; load(slug) -> SavedPage | null; omit save for a read-only sandbox or list to hide the saved rail. KEEP the iframe sandbox without allow-same-origin — it is the security boundary.",
+      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A sandboxed HTML/CSS/JS studio: editor + live iframe preview + saved pages. Fully client-side; backend optional.\n\nSTEP 1 — Install. `npx rr add html-studio`. Ensure `@/features/html-studio` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — React deps. npm: `lucide-react@^0.400.0`. shadcn: `npx shadcn@latest add button input textarea scroll-area`. SvelteKit: `npx rr add html-studio --framework sveltekit` installs only `svelte@^5` + the shared portable core.\n\nSTEP 3 — Mount. `<HtmlStudio />` in a height-bearing box — unwired it runs on an in-memory mock (editor + live sandboxed preview + saved list all live). Pass `payload={{ slug }}` to open a page, or register `htmlStudioApp` in an appshell manifest.\n\nSTEP 4 — Real backend. `configureHtmlStudio({ mode:\"live\", save, load, list, remove })` — save takes { slug?, title, html, visibility } and returns { slug }; load(slug) -> SavedPage | null; omit save for a read-only sandbox or list to hide the saved rail. React and Svelte share the exact `HTML_SANDBOX`; KEEP it without allow-same-origin so arbitrary srcdoc stays in an opaque origin.",
       "tags": [
         "html",
         "editor",
@@ -1900,19 +1900,35 @@
       "title": "HTML Studio — sandboxed HTML/CSS/JS editor with live preview",
       "category": "os",
       "kind": "ui",
-      "version": "1.0.0",
-      "description": "A tiny web-page studio: write HTML / CSS / JS and see it render LIVE in a sandboxed iframe (srcdoc + sandbox=allow-scripts WITHOUT allow-same-origin, so user code runs in an opaque origin and cannot read the host) — then Save to a shareable /p/<slug>. Code / Split / Preview view toggle, a device-width preview (responsive / tablet / phone), a saved-pages rail, and public/private visibility. The backend is INJECTED via a small HtmlStudioAdapter (save/load/list/remove): point configureHtmlStudio at your store, or keep the bundled in-memory mock so the editor + live preview + saved list are fully interactive with zero backend.",
+      "version": "1.1.0",
+      "description": "Sandboxed HTML/CSS/JS studio with one framework-neutral document store, mock/live HtmlStudioAdapter, device/view helpers, starter document, share helpers, and exact opaque-origin iframe sandbox contract. React/Next remains the default Lucide + shadcn renderer; Svelte 5/SvelteKit gets native Code/Split/Preview, responsive/tablet/phone preview, 250ms live srcdoc, Save/open/delete list, public/private visibility, copy-link and payload-slug flows over the same core.",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/html-studio",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/html-studio"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/html-studio-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/html-studio/lib/core.ts"
+            ]
+          }
         }
       },
       "convexPaths": [],
       "npm": [
-        "lucide-react"
+        "lucide-react@^0.400.0"
       ],
       "shadcn": [
         "button",
@@ -1922,7 +1938,9 @@
       ],
       "env": [],
       "peers": [],
-      "sharedFiles": [],
+      "sharedFiles": [
+        "frontend/slices/html-studio/lib/core.ts"
+      ],
       "providers": [],
       "tags": [
         "html",
@@ -1934,7 +1952,7 @@
         "code",
         "ui"
       ],
-      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A sandboxed HTML/CSS/JS studio: editor + live iframe preview + saved pages. Fully client-side; backend optional.\n\nSTEP 1 — Install. `npx rr add html-studio`. Ensure `@/features/html-studio` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: `npx shadcn@latest add button input textarea scroll-area`.\n\nSTEP 3 — Mount. `<HtmlStudio />` in a height-bearing box — unwired it runs on an in-memory mock (editor + live sandboxed preview + saved list all live). Pass `payload={{ slug }}` to open a page, or register `htmlStudioApp` in an appshell manifest.\n\nSTEP 4 — Real backend. `configureHtmlStudio({ mode:\"live\", save, load, list, remove })` — save takes { slug?, title, html, visibility } and returns { slug }; load(slug) -> SavedPage | null; omit save for a read-only sandbox or list to hide the saved rail. KEEP the iframe sandbox without allow-same-origin — it is the security boundary."
+      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A sandboxed HTML/CSS/JS studio: editor + live iframe preview + saved pages. Fully client-side; backend optional.\n\nSTEP 1 — Install. `npx rr add html-studio`. Ensure `@/features/html-studio` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — React deps. npm: `lucide-react@^0.400.0`. shadcn: `npx shadcn@latest add button input textarea scroll-area`. SvelteKit: `npx rr add html-studio --framework sveltekit` installs only `svelte@^5` + the shared portable core.\n\nSTEP 3 — Mount. `<HtmlStudio />` in a height-bearing box — unwired it runs on an in-memory mock (editor + live sandboxed preview + saved list all live). Pass `payload={{ slug }}` to open a page, or register `htmlStudioApp` in an appshell manifest.\n\nSTEP 4 — Real backend. `configureHtmlStudio({ mode:\"live\", save, load, list, remove })` — save takes { slug?, title, html, visibility } and returns { slug }; load(slug) -> SavedPage | null; omit save for a read-only sandbox or list to hide the saved rail. React and Svelte share the exact `HTML_SANDBOX`; KEEP it without allow-same-origin so arbitrary srcdoc stays in an opaque origin."
     },
     {
       "slug": "resources-launcher-admin",

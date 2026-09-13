@@ -641,6 +641,25 @@
     ]
   },
   {
+    "slug": "html-studio",
+    "title": "HTML Studio — sandboxed HTML/CSS/JS editor with live preview",
+    "category": "os",
+    "previews": [
+      {
+        "component": "HtmlStudio",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "mock-studio",
+            "title": "Mock studio",
+            "description": "Editor + sandboxed live preview + saved pages on bundled in-memory adapter"
+          }
+        ],
+        "seed": "Starter interactive HTML page + one saved Welcome page"
+      }
+    ]
+  },
+  {
     "slug": "icon-picker",
     "title": "Icon Picker",
     "category": "ui",

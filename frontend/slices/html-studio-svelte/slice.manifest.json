@@ -1,0 +1,25 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "html-studio-svelte",
+  "version": "1.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add html-studio --framework sveltekit",
+    "consumerPath": "slices/html-studio"
+  },
+  "files": [
+    "README.md",
+    "app.svelte",
+    "components/SavedPages.svelte",
+    "components/StudioPane.svelte",
+    "components/StudioToolbar.svelte",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": ["frontend/slices/html-studio/lib/core.ts"],
+    "external": ["svelte"]
+  }
+}

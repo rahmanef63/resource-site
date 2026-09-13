@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-HTML-STUDIO-DISTRIBUTION",
+    "version": "html-studio@1.1.0",
+    "date": 1789257600000,
+    "kind": "feature",
+    "title": "SvelteKit HTML Studio distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/html-studio — [before: html-studio mixed its mock/live document adapter and sandbox/device helpers with React/Lucide host code, had no native Svelte distribution, and the catalog left Lucide unversioned] → [after: React/Next remains the default Lucide/shadcn renderer while Svelte/SvelteKit gets native Code/Split/Preview, device widths, saved-page CRUD, visibility, payload-open and copy-link flows over one portable document/sandbox core].",
+    "groups": [
+      {
+        "heading": "One document adapter and one opaque-origin sandbox contract",
+        "bullets": [
+          "The portable core owns HtmlDoc/SavedPage/PageRow, the mock/live adapter, stable htmlStudioApi, view/device widths, starter HTML, share/payload helpers and the exact HTML_SANDBOX constant.",
+          "Native Svelte preserves the 250ms live srcdoc preview, Code/Split/Preview modes, responsive/tablet/phone widths, Save/open/delete rail, public/private visibility and copy-link behavior without React, Next, Lucide or shadcn runtime imports.",
+          "Security remains invariant: HTML_SANDBOX is allow-scripts allow-forms allow-popups allow-presentation and intentionally excludes allow-same-origin; public preview: https://resource.rahmanef.com/preview/slices/html-studio."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-RESOURCES-LAUNCHER-ADMIN-DISTRIBUTION",
     "version": "resources-launcher-admin@1.1.0",
     "date": 1789257600000,
