@@ -1,0 +1,32 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "ai-core-svelte",
+  "version": "0.2.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add ai-core --framework sveltekit",
+    "consumerPath": "slices/ai-core"
+  },
+  "files": [
+    "README.md",
+    "components/ResponsiveDialog.svelte",
+    "components/ConfirmDialog.svelte",
+    "components/ErrorLine.svelte",
+    "components/SectionErrorBoundary.svelte",
+    "lib/theme-store.ts",
+    "lib/confirm-store.ts",
+    "index.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/ai-core/lib/format.ts",
+      "frontend/slices/ai-core/lib/error-core.ts",
+      "frontend/slices/ai-core/lib/theme.ts"
+    ],
+    "external": [
+      "svelte"
+    ]
+  }
+}

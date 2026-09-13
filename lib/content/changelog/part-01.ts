@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-AI-CORE-DISTRIBUTION",
+    "version": "ai-core@0.2.0",
+    "date": 1789257600000,
+    "kind": "feature",
+    "title": "SvelteKit AI Core distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/ai-core — [before: ai-core coupled provider-safe error presentation and theme persistence to React-only adapters and had no native Svelte distribution] → [after: React/Next remains the default while Svelte/SvelteKit gets native dialog, confirm, boundary, error-line, theme, and confirm-store adapters over the exact same framework-neutral error/theme/format core].",
+    "groups": [
+      {
+        "heading": "Shared semantics, native framework surfaces",
+        "bullets": [
+          "Provider error parsing/friendly copy/admin detail now lives in one error-core shared by React and Svelte.",
+          "Dark-default theme parsing, toggling, storage key, read/apply semantics now live in one theme core shared by the React hook and Svelte store.",
+          "Public preview: https://resource.rahmanef.com/preview/slices/ai-core mounts the canonical preview module for confirm, error, and formatter behavior."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-ACTIVITY-DISTRIBUTION",
     "version": "activity@0.4.0",
     "date": 1789257600000,

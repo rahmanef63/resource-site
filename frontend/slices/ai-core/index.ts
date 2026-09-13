@@ -1,8 +1,9 @@
-// Core slice public barrel (core v0.1.0). The shared UI + helper substrate every feature slice sits
-// on. React-only — no Convex, no app-root coupling — so depending on `core` keeps a slice copy-clean.
-// Consumers import ONLY from `@/features/core`.
+// Core slice public barrel. React/Next remains the default adapter; portable
+// theme/error/format semantics are exported so alternate framework adapters can
+// reuse the exact same behavior.
 export { ResponsiveDialog, ConfirmDialog, useConfirm } from "./components/responsive-dialog";
 export { SectionErrorBoundary } from "./components/error-boundary";
 export { useTheme, type Theme } from "./hooks/use-theme";
 export { fmt, ago, dt } from "./lib/format";
-export { errData, ErrorLine, FRIENDLY, type ChatErrData } from "./lib/errors";
+export { errData, presentError, ErrorLine, FRIENDLY, type ChatErrData } from "./lib/errors";
+export { DEFAULT_THEME, THEME_STORAGE_KEY, parseTheme, nextTheme, readTheme, applyTheme } from "./lib/theme";

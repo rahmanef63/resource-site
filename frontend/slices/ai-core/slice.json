@@ -1,11 +1,11 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "ai-core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "category": "ui",
   "kind": "ui",
   "title": "AI Core Kit",
-  "description": "Shared UI + helper substrate for the ai-* slice cluster (lifted from models-rahmanef-com). Ships the ResponsiveDialog/ConfirmDialog overlay primitive (+ useConfirm), SectionErrorBoundary, a light/dark useTheme hook, fmt/ago/dt formatters, and a provider-agnostic ConvexError renderer (errData/ErrorLine/FRIENDLY). React-only, no Convex, no shadcn — the lightweight no-shadcn dialog variant. Foundation the byok/workspaces/memory/combos/scheduled-agents/channels slices import via @/features/ai-core.",
+  "description": "Shared AI dashboard UI/helper substrate with one framework-neutral formatter, error-presentation, and theme core. React/Next remains the default adapter; Svelte 5/SvelteKit adds native dialog, confirm, error-boundary, error-line, theme, and confirm-store adapters without React/Lucide/shadcn leakage.",
   "namespace": "@/features/ai-core",
   "convex": {
     "tablesExport": "",
@@ -14,7 +14,28 @@
   },
   "frontend": {
     "slicePath": "frontend/slices/ai-core",
-    "configExport": "aiCoreConfig"
+    "configExport": "aiCoreConfig",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/ai-core-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/ai-core/lib/format.ts",
+            "frontend/slices/ai-core/lib/error-core.ts",
+            "frontend/slices/ai-core/lib/theme.ts"
+          ]
+        }
+      }
+    }
   },
   "deps": {
     "npm": [
@@ -56,7 +77,12 @@
         "fmt",
         "ago",
         "dt",
-        "errData"
+        "errData",
+        "presentError",
+        "parseTheme",
+        "nextTheme",
+        "readTheme",
+        "applyTheme"
       ]
     },
     "generalization": {
@@ -64,5 +90,29 @@
       "forbiddenTerms": [],
       "requiredProps": []
     }
-  }
+  },
+  "previews": [
+    {
+      "component": "AiCorePreview",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "confirm",
+          "title": "Confirm dialog",
+          "description": "Native dialog confirm flow with close/confirm behavior"
+        },
+        {
+          "id": "error",
+          "title": "Error presentation",
+          "description": "Provider-friendly headline with admin detail/copy payload"
+        },
+        {
+          "id": "format",
+          "title": "Formatters",
+          "description": "Compact number plus relative and absolute time helpers"
+        }
+      ],
+      "seed": "static confirm/error/formatter examples over canonical ai-core behavior"
+    }
+  ]
 }

@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — SvelteKit AI Core distribution
+<!-- public-changelog:SVELTE-AI-CORE-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/ai-core
+- Preview: https://resource.rahmanef.com/preview/slices/ai-core
+- [before: `ai-core` coupled provider-safe error presentation and theme persistence to React-only adapters and had no native Svelte distribution] → [after: React/Next remains the default while Svelte/SvelteKit gets native dialog, confirm, boundary, error-line, theme, and confirm-store adapters over the exact same framework-neutral error/theme/format core]
+- The new public preview mounts canonical `preview.tsx` behavior for confirm, provider error, and formatter scenarios.
+
 ### 2026-09-13 — SvelteKit Activity distribution
 <!-- public-changelog:SVELTE-ACTIVITY-DISTRIBUTION -->
 

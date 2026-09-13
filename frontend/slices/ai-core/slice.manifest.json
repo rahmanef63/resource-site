@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "ai-core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -16,7 +16,9 @@
     "components/error-boundary.tsx",
     "hooks/use-theme.ts",
     "lib/format.ts",
-    "lib/errors.tsx"
+    "lib/errors.tsx",
+    "lib/error-core.ts",
+    "lib/theme.ts"
   ],
   "convex": {
     "schemaPath": "",

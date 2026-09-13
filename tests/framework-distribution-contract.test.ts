@@ -64,7 +64,7 @@ describe("framework-aware slice distribution", () => {
 
     expect(slice.slicePath).toBe("frontend/slices/ai-core");
     expect(slice.defaultFramework).toBe("react-next");
-    expect(slice.frameworks).toEqual({
+    expect(slice.frameworks).toMatchObject({
       "react-next": { path: "frontend/slices/ai-core" },
     });
   });
@@ -247,6 +247,42 @@ describe("framework-aware slice distribution", () => {
     expect(svelteResult.stdout).not.toContain("svelte@^5");
     expect(svelteResult.stdout).not.toContain("react");
     expect(svelteResult.stdout).not.toContain("lucide-react");
+    expect(svelteResult.stdout).not.toContain("npx shadcn@latest add");
+  });
+
+  it("keeps ai-core on React by default and selects its native SvelteKit distribution over shared portable cores", () => {
+    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "ai-core");
+    const target = mkTarget();
+
+    expect(slice.slicePath).toBe("frontend/slices/ai-core");
+    expect(slice.defaultFramework).toBe("react-next");
+    const svelte = slice.frameworks["svelte-sveltekit"];
+    expect(svelte.path).toBe("frontend/slices/ai-core-svelte");
+    expect(svelte.aliases).toEqual(["svelte", "sveltekit"]);
+    expect(svelte.deps.npm).toEqual(["svelte@^5"]);
+    expect(svelte.deps.shadcn).toEqual([]);
+    expect(svelte.deps.sharedFiles).toEqual([
+      "frontend/slices/ai-core/lib/format.ts",
+      "frontend/slices/ai-core/lib/error-core.ts",
+      "frontend/slices/ai-core/lib/theme.ts",
+    ]);
+
+    const defaultResult = runCli("add", "ai-core", "--target", target, "--dry-run");
+    expect(defaultResult.status).toBe(0);
+    expect(defaultResult.stdout).toContain("frontend/slices/ai-core →");
+    expect(defaultResult.stdout).toContain("lucide-react");
+
+    const svelteResult = runCli("add", "ai-core", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteResult.status).toBe(0);
+    expect(svelteResult.stdout).toContain("frontend/slices/ai-core-svelte →");
+    expect(svelteResult.stdout).toContain("frontend/slices/ai-core/lib/error-core.ts →");
+    expect(svelteResult.stdout).toContain("frontend/slices/ai-core/lib/theme.ts →");
+    expect(svelteResult.stdout).toContain("svelte@^5");
+    expect(svelteResult.stdout).not.toContain("lucide-react");
+    expect(svelteResult.stdout).not.toContain("react@^18");
+    expect(svelteResult.stdout).not.toContain("next@^15");
     expect(svelteResult.stdout).not.toContain("npx shadcn@latest add");
   });
 

@@ -153,7 +153,7 @@ export const slices: SliceEntry[] = [
     title: "AI Core Kit",
     category: "ui",
     kind: "ui",
-    version: "0.1.0",
+    version: "0.2.0",
     tagline: "No-shadcn dialog + error + theme substrate for the ai-* cluster.",
     description:
       "Shared UI + helper substrate for the ai-* slice cluster (lifted from models-rahmanef-com). Ships the ResponsiveDialog/ConfirmDialog overlay primitive (+ useConfirm), SectionErrorBoundary, a light/dark useTheme hook, fmt/ago/dt formatters, and a provider-agnostic ConvexError renderer (errData/ErrorLine/FRIENDLY). React-only, no Convex, no shadcn — the lightweight no-shadcn dialog variant. Foundation the byok/workspaces/memory/combos/scheduled-agents/channels slices import via @/features/ai-core.",
