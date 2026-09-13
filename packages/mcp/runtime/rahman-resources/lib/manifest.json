@@ -3158,7 +3158,7 @@
       "title": "RBAC — Roles & Permissions",
       "category": "auth",
       "kind": "full",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "description": "RBAC engine ported from superspace. 6 system role presets (owner/admin/manager/staff/client/guest with levels), dot-namespaced permissions with `*` / `feature.*` wildcard matching, and pure check helpers (resolvePermissions / hasPermission / roleHasPermission). Props-driven UI primitives: <PermissionGate>, usePermissions, <RoleBadge>, <PermissionMatrix>. Convex template ships a tenant-scoped rbac_roles table + checkPermission / requirePermission helpers + idempotent seedSystemRoles, with a PLATFORM_ADMIN_EMAILS superadmin bypass. Pair with `user-management` for the members / invites / roles-admin UI. @convex-dev/auth aware — no Clerk.",
       "source": "superspace",
       "slicePath": "frontend/slices/rbac-roles",
@@ -3166,6 +3166,27 @@
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/rbac-roles"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/rbac-roles-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/rbac-roles/lib/permissions.ts",
+              "frontend/slices/rbac-roles/lib/roles.ts",
+              "frontend/slices/rbac-roles/lib/check.ts",
+              "frontend/slices/rbac-roles/lib/permission-catalog.ts",
+              "frontend/slices/rbac-roles/lib/api.ts",
+              "frontend/slices/rbac-roles/lib/tools.ts"
+            ]
+          }
         }
       },
       "convexPaths": [

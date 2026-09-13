@@ -3,6 +3,7 @@
 // members / invites / roles-admin surface.
 
 export { PERMS, matchPermission, type Permission, type CorePermission } from "./lib/permissions";
+export { createPermissionsApi, type PermissionsApi } from "./lib/api";
 export {
   ROLE_PRESETS, ROLE_MAP, ROLE_SLUGS, DEFAULT_ROLE_SLUG,
   type RolePreset, type RoleSlug,
@@ -13,7 +14,7 @@ export {
 export {
   PERMISSION_GROUPS, type PermissionDef, type PermissionGroup,
 } from "./lib/permission-catalog";
-export { usePermissions, type PermissionsApi } from "./hooks/usePermissions";
+export { usePermissions } from "./hooks/usePermissions";
 export { PermissionGate } from "./components/PermissionGate";
 export { RoleBadge } from "./components/RoleBadge";
 export { PermissionMatrix } from "./components/PermissionMatrix";

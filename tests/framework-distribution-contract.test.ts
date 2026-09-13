@@ -286,6 +286,45 @@ describe("framework-aware slice distribution", () => {
     expect(svelteResult.stdout).not.toContain("next@^15");
   });
 
+  it("keeps rbac-roles on React by default and selects its native SvelteKit distribution over the same RBAC engine", () => {
+    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "rbac-roles");
+    const target = mkTarget();
+
+    expect(slice.slicePath).toBe("frontend/slices/rbac-roles");
+    expect(slice.defaultFramework).toBe("react-next");
+    const svelte = slice.frameworks["svelte-sveltekit"];
+    expect(svelte.path).toBe("frontend/slices/rbac-roles-svelte");
+    expect(svelte.aliases).toEqual(["svelte", "sveltekit"]);
+    expect(svelte.deps.npm).toEqual(["svelte@^5"]);
+    expect(svelte.deps.shadcn).toEqual([]);
+    expect(svelte.deps.sharedFiles).toEqual([
+      "frontend/slices/rbac-roles/lib/permissions.ts",
+      "frontend/slices/rbac-roles/lib/roles.ts",
+      "frontend/slices/rbac-roles/lib/check.ts",
+      "frontend/slices/rbac-roles/lib/permission-catalog.ts",
+      "frontend/slices/rbac-roles/lib/api.ts",
+      "frontend/slices/rbac-roles/lib/tools.ts",
+    ]);
+
+    const defaultResult = runCli("add", "rbac-roles", "--target", target, "--dry-run");
+    expect(defaultResult.status).toBe(0);
+    expect(defaultResult.stdout).toContain("frontend/slices/rbac-roles →");
+    expect(defaultResult.stdout).toContain("convex/features/rbac_roles → convex/features/rbac_roles");
+    expect(defaultResult.stdout).toContain("shadcn: badge checkbox label");
+
+    const svelteResult = runCli("add", "rbac-roles", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteResult.status).toBe(0);
+    expect(svelteResult.stdout).toContain("frontend/slices/rbac-roles-svelte →");
+    expect(svelteResult.stdout).toContain("convex/features/rbac_roles → convex/features/rbac_roles");
+    expect(svelteResult.stdout).toContain("frontend/slices/rbac-roles/lib/api.ts →");
+    expect(svelteResult.stdout).toContain("svelte@^5");
+    expect(svelteResult.stdout).not.toContain("shadcn: badge");
+    expect(svelteResult.stdout).not.toContain("react");
+    expect(svelteResult.stdout).not.toContain("next");
+  });
+
   it("keeps ai-core on React by default and selects its native SvelteKit distribution over shared portable cores", () => {
     execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));

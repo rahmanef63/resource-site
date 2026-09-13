@@ -1,0 +1,10 @@
+export { default as PermissionGate } from "./components/PermissionGate.svelte";
+export { default as RoleBadge } from "./components/RoleBadge.svelte";
+export { default as PermissionMatrix } from "./components/PermissionMatrix.svelte";
+export { rbacRolesConfig, type RbacRolesConfig } from "./config";
+export { PERMS, matchPermission, type Permission, type CorePermission } from "../rbac-roles/lib/permissions";
+export { ROLE_PRESETS, ROLE_MAP, ROLE_SLUGS, DEFAULT_ROLE_SLUG, type RoleSlug, type RolePreset } from "../rbac-roles/lib/roles";
+export { resolvePermissions, hasPermission, roleHasPermission, roleLevel, isAtLeast } from "../rbac-roles/lib/check";
+export { PERMISSION_GROUPS, type PermissionDef, type PermissionGroup } from "../rbac-roles/lib/permission-catalog";
+export { createPermissionsApi, type PermissionsApi } from "../rbac-roles/lib/api";
+export { rbacRolesTools, type RbacRolesCtx } from "../rbac-roles/lib/tools";

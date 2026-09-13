@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — SvelteKit RBAC Roles distribution
+<!-- public-changelog:SVELTE-RBAC-ROLES-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/rbac-roles
+- Preview: https://resource.rahmanef.com/preview/slices/rbac-roles
+- [before: `rbac-roles` exposed its wildcard role/permission engine through React/shadcn UI and duplicated public preview behavior] → [after: React/Next remains the default while Svelte/SvelteKit gets native permission-gate, role-badge, and permission-matrix UI over the exact same RBAC core, tools, and Convex backend]
+- `createPermissionsApi` now owns `can`, `canAny`, and `canAll` semantics for both framework adapters, and the public route hosts canonical `preview.tsx`.
+
 ### 2026-09-13 — SvelteKit Marketing Chrome distribution
 <!-- public-changelog:SVELTE-MARKETING-CHROME-DISTRIBUTION -->
 

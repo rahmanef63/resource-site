@@ -1676,7 +1676,7 @@ const nav = [
     title: "RBAC — Roles & Permissions",
     category: "auth",
     kind: "full",
-    version: "0.3.0",
+    version: "0.4.0",
     tagline: "RBAC engine: 6 role presets + wildcard permissions + <PermissionGate>. Props-driven. No Clerk.",
     description: "RBAC engine ported from superspace. 6 system role presets (owner/admin/manager/staff/client/guest with levels), dot-namespaced permissions with `*` / `feature.*` wildcard matching, and pure check helpers (resolvePermissions / hasPermission / roleHasPermission). Props-driven UI primitives: <PermissionGate>, usePermissions, <RoleBadge>, <PermissionMatrix>. Convex template ships a tenant-scoped rbac_roles table + checkPermission / requirePermission helpers + idempotent seedSystemRoles, with a PLATFORM_ADMIN_EMAILS superadmin bypass. Pair with `user-management` for the members / invites / roles-admin UI. @convex-dev/auth aware — no Clerk.",
     source: "superspace",

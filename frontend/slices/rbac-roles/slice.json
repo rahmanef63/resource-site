@@ -1,10 +1,10 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "rbac-roles",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "category": "auth",
-  "title": "RBAC \u2014 Roles & Permissions",
-  "description": "RBAC engine ported from superspace: 6 system role presets (owner/admin/manager/staff/client/guest with levels), dot-namespaced permissions with `*` / `feature.*` wildcard matching, pure check helpers (resolvePermissions / hasPermission / roleHasPermission), and props-driven UI primitives \u2014 <PermissionGate>, usePermissions, <RoleBadge>, <PermissionMatrix>. Convex template ships a tenant-scoped rbac_roles table + checkPermission / requirePermission helpers + seedSystemRoles. No Clerk. Pair with `user-management` for the members/invites UI.",
+  "title": "RBAC — Roles & Permissions",
+  "description": "RBAC engine with six system role presets, dot-namespaced permissions, * / feature.* wildcard matching, one framework-neutral permission API, native React and Svelte UI adapters, and a tenant-scoped Convex authorization backend. React/Next remains default; Svelte/SvelteKit reuses the same role, permission, catalog, tool, and backend semantics.",
   "namespace": "@/features/rbac-roles",
   "convex": {
     "tablesExport": "rbacRolesTables",
@@ -15,7 +15,31 @@
   },
   "frontend": {
     "slicePath": "frontend/slices/rbac-roles",
-    "configExport": "rbacRolesFeature"
+    "configExport": "rbacRolesFeature",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/rbac-roles-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/rbac-roles/lib/permissions.ts",
+            "frontend/slices/rbac-roles/lib/roles.ts",
+            "frontend/slices/rbac-roles/lib/check.ts",
+            "frontend/slices/rbac-roles/lib/permission-catalog.ts",
+            "frontend/slices/rbac-roles/lib/api.ts",
+            "frontend/slices/rbac-roles/lib/tools.ts"
+          ]
+        }
+      }
+    }
   },
   "deps": {
     "npm": [],
@@ -76,7 +100,7 @@
             "true"
           ],
           "default": "false",
-          "description": "PermissionMatrix `readOnly` \u2014 locks the checkboxes for inspection."
+          "description": "PermissionMatrix `readOnly` — locks the checkboxes for inspection."
         }
       ],
       "seed": "PERMISSION_GROUPS catalog + the selected role preset's resolved permissions"
@@ -121,7 +145,8 @@
         "roleHasPermission",
         "roleLevel",
         "isAtLeast",
-        "PERMISSION_GROUPS"
+        "PERMISSION_GROUPS",
+        "createPermissionsApi"
       ],
       "convex": {
         "tables": [

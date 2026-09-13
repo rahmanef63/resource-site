@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-RBAC-ROLES-DISTRIBUTION",
+    "version": "rbac-roles@0.4.0",
+    "date": 1789257600000,
+    "kind": "feature",
+    "title": "SvelteKit RBAC Roles distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/rbac-roles — [before: rbac-roles exposed its wildcard role/permission engine through React/shadcn UI and duplicated public preview behavior] → [after: React/Next remains the default while Svelte/SvelteKit gets native permission-gate, role-badge, and permission-matrix UI over the exact same RBAC core, tools, and Convex backend].",
+    "groups": [
+      {
+        "heading": "One authorization engine, native UI adapters",
+        "bullets": [
+          "The canonical permission matcher, role presets, permission catalog, createPermissionsApi and agent tools are shared unchanged between React and Svelte.",
+          "The Svelte 5 distribution replaces only PermissionGate, RoleBadge and PermissionMatrix rendering; the tenant-scoped Convex RBAC backend remains the same source.",
+          "Public preview: https://resource.rahmanef.com/preview/slices/rbac-roles now mounts the canonical preview module instead of maintaining a second demo flow."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-MARKETING-CHROME-DISTRIBUTION",
     "version": "marketing-chrome@0.3.0",
     "date": 1789257600000,

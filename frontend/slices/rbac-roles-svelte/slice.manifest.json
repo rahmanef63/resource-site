@@ -1,0 +1,31 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "rbac-roles-svelte",
+  "version": "0.4.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add rbac-roles --framework sveltekit",
+    "consumerPath": "slices/rbac-roles"
+  },
+  "files": [
+    "README.md",
+    "components/PermissionGate.svelte",
+    "components/PermissionMatrix.svelte",
+    "components/RoleBadge.svelte",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/rbac-roles/lib/permissions.ts",
+      "frontend/slices/rbac-roles/lib/roles.ts",
+      "frontend/slices/rbac-roles/lib/check.ts",
+      "frontend/slices/rbac-roles/lib/permission-catalog.ts",
+      "frontend/slices/rbac-roles/lib/api.ts",
+      "frontend/slices/rbac-roles/lib/tools.ts"
+    ],
+    "external": ["svelte"]
+  }
+}
