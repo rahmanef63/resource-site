@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-EVENT-TRACKING-CONTRACT",
+    "version": "event-tracking@0.2.0",
+    "date": 1789344000000,
+    "kind": "feature",
+    "title": "SvelteKit Event Tracking contract",
+    "body": "Related: https://resource.rahmanef.com/slices/event-tracking — [before: event-tracking@0.1.0 was labeled as UI/full-stack, declared React/Next requirements and a template/Convex implementation that the canonical slice did not actually ship, while its config and agentic barrel imports leaked React coupling into otherwise headless TypeScript] → [after: event-tracking@0.2.0 is an explicit framework-neutral instrumentation contract; React/Next stays the default install contract and Svelte/SvelteKit reuses the exact same TypeScript source with zero framework runtime dependencies].",
+    "groups": [
+      {
+        "heading": "One headless analytics contract for both frameworks",
+        "bullets": [
+          "The canonical catalog now points at frontend/slices/event-tracking, no longer advertises an absent template/Convex implementation, and removes the synthetic event-stream preview route.",
+          "eventTrackingFeature is plain framework-neutral metadata, and agent tools import define/schema modules directly instead of the React-exporting agentic barrel.",
+          "Explicit SvelteKit install copies the same TypeScript source and adds no Svelte, React, Next, Lucide, or shadcn runtime dependency."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-LIBRARY-DISTRIBUTION",
     "version": "library@0.3.0",
     "date": 1789344000000,

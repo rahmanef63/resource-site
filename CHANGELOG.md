@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-14 — SvelteKit Event Tracking contract
+<!-- public-changelog:SVELTE-EVENT-TRACKING-CONTRACT -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/event-tracking
+- [before: `event-tracking@0.1.0` was labeled as UI/full-stack, declared React/Next requirements and a template/Convex implementation that the canonical slice did not actually ship, while its config and agentic barrel imports leaked React coupling into otherwise headless TypeScript] → [after: `event-tracking@0.2.0` is an explicit framework-neutral instrumentation contract; React/Next stays the default install contract and Svelte/SvelteKit reuses the exact same TypeScript source with zero framework runtime dependencies]
+- No Svelte renderer is invented: the stale synthetic event-stream preview is removed, the host injects `EventTrackingCtx.track/query/funnel`, and guarded analytics reads remain a server-boundary responsibility.
+
 ### 2026-09-14 — SvelteKit Library distribution
 <!-- public-changelog:SVELTE-LIBRARY-DISTRIBUTION -->
 

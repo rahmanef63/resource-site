@@ -776,21 +776,20 @@
     },
     {
       "slug": "event-tracking",
-      "title": "Event Tracking — P0 Instrumentation",
+      "title": "Analytics",
       "category": "data",
-      "description": "Client SDK + Convex ingestion endpoint for structured product events. Auto-captures page_view/signup/login + UTM/referrer/first-touch attribution. Batched flush via requestIdleCallback. Targets <100ms p99 ingestion.",
-      "source": "spec + superspace analytics",
+      "description": "Framework-neutral analytics instrumentation contract. The host injects an EventTrackingCtx transport for event emit, guarded event queries, and funnel reads; the canonical slice ships no renderer or storage backend.",
+      "source": "rahmanef63/resource-site",
       "install": "npx rahman-resources add event-tracking",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add event-tracking`. Writes to analyticsEvents table (no new schema). Anonymous page_view allowed pre-signup; other events require workspaceId. Session id per tab (sessionStorage), first-touch UTM in localStorage. Flush every ~500ms via requestIdleCallback. Cap retry queue at 500.",
+      "agentRecipe": "Run `npx rr add event-tracking` (React/default) or `npx rr add event-tracking --framework sveltekit`. Bind EventTrackingCtx.track/query/funnel to your analytics transport; enforce authorization on query/funnel at the server boundary. The slice intentionally does not invent a UI or persistence backend.",
       "tags": [
         "events",
         "analytics",
         "instrumentation",
-        "attribution",
-        "utm",
-        "p0"
+        "portable",
+        "headless"
       ]
     },
     {
@@ -3430,44 +3429,45 @@
     },
     {
       "slug": "event-tracking",
-      "title": "Event Tracking — P0 Instrumentation",
+      "title": "Analytics",
       "category": "data",
-      "kind": "full",
-      "version": "0.1.0",
-      "description": "Client SDK + Convex ingestion endpoint for structured product events. Auto-captures page_view/signup/login + UTM/referrer/first-touch attribution. Batched flush via requestIdleCallback. Targets <100ms p99 ingestion.",
-      "source": "spec + superspace analytics",
+      "kind": "backend",
+      "version": "0.2.0",
+      "description": "Framework-neutral analytics instrumentation contract. The host injects an EventTrackingCtx transport for event emit, guarded event queries, and funnel reads; the canonical slice ships no renderer or storage backend.",
+      "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/event-tracking",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/event-tracking"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/event-tracking",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [],
+            "shadcn": []
+          }
         }
       },
-      "convexPaths": [
-        "template-base/convex/features/admin-panel",
-        "template-base/convex/features/analytics"
-      ],
+      "convexPaths": [],
       "npm": [],
       "shadcn": [],
       "env": [],
-      "peers": [
-        {
-          "slug": "admin-panel",
-          "range": "^0.1",
-          "reason": "Lives under admin slice events subfolder."
-        }
-      ],
+      "peers": [],
       "sharedFiles": [],
       "providers": [],
       "tags": [
         "events",
         "analytics",
         "instrumentation",
-        "attribution",
-        "utm",
-        "p0"
+        "portable",
+        "headless"
       ],
-      "agentRecipe": "Run `npx rr add event-tracking`. Writes to analyticsEvents table (no new schema). Anonymous page_view allowed pre-signup; other events require workspaceId. Session id per tab (sessionStorage), first-touch UTM in localStorage. Flush every ~500ms via requestIdleCallback. Cap retry queue at 500."
+      "agentRecipe": "Run `npx rr add event-tracking` (React/default) or `npx rr add event-tracking --framework sveltekit`. Bind EventTrackingCtx.track/query/funnel to your analytics transport; enforce authorization on query/funnel at the server boundary. The slice intentionally does not invent a UI or persistence backend."
     },
     {
       "slug": "icon-picker",

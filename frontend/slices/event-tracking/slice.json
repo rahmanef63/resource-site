@@ -1,15 +1,29 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "event-tracking",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "category": "data",
-  "kind": "ui",
+  "kind": "backend",
   "title": "Analytics",
-  "description": "Nav-registered analytics stub. Ships config.ts (defineFeature) only \u2014 the full event SDK (client emitter + Convex ingestion, batched flush via requestIdleCallback, UTM first-touch attribution) is sourced from template-base admin-panel/slices/events on demand.",
+  "description": "Framework-neutral analytics instrumentation contract. Host code injects an EventTrackingCtx transport for emit/query/funnel operations; no renderer or framework runtime is required. React/Next remains the default install contract and explicit Svelte/SvelteKit reuses the same TypeScript source.",
   "namespace": "@/features/event-tracking",
   "frontend": {
     "slicePath": "frontend/slices/event-tracking",
-    "configExport": "eventTrackingFeature"
+    "configExport": "eventTrackingFeature",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/event-tracking",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [],
+          "shadcn": []
+        }
+      }
+    }
   },
   "deps": {
     "npm": [],
@@ -30,16 +44,7 @@
   ],
   "contract": {
     "requires": {
-      "deps": [
-        {
-          "npm": "next",
-          "range": "^15"
-        },
-        {
-          "npm": "react",
-          "range": "^18"
-        }
-      ]
+      "deps": []
     },
     "provides": {
       "tools": [
@@ -54,6 +59,10 @@
         "tables": [],
         "rbac": []
       }
+    },
+    "generalization": {
+      "level": "portable"
     }
-  }
+  },
+  "previews": []
 }

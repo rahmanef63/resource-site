@@ -1740,24 +1740,30 @@ const nav = [
   },
   {
     slug: "event-tracking",
-    title: "Event Tracking — P0 Instrumentation",
+    title: "Analytics",
     category: "data",
-    kind: "full",
-    version: "0.1.0",
-    description: "Client SDK + Convex ingestion endpoint for structured product events. Auto-captures page_view/signup/login + UTM/referrer/first-touch attribution. Batched flush via requestIdleCallback. Targets <100ms p99 ingestion.",
-    source: "spec + superspace analytics",
-    slicePath: "template-base/frontend/slices/admin-panel/slices/events",
-    convexPaths: ["template-base/convex/features/admin-panel", "template-base/convex/features/analytics"],
+    kind: "backend",
+    version: "0.2.0",
+    description: "Framework-neutral analytics instrumentation contract. The host injects an EventTrackingCtx transport for event emit, guarded event queries, and funnel reads; the canonical slice ships no renderer or storage backend.",
+    source: "rahmanef63/resource-site",
+    slicePath: "frontend/slices/event-tracking",
+    convexPaths: [],
     npm: [],
     shadcn: [],
     env: [],
-    peers: [{ slug: "admin-panel", range: "^0.1", reason: "Lives under admin slice events subfolder." }],
-    tags: ["events", "analytics", "instrumentation", "attribution", "utm", "p0"],
+    peers: [],
+    tags: ["events", "analytics", "instrumentation", "portable", "headless"],
     usedBy: ["personal-brand-os"],
-    agentRecipe: "Run `npx rr add event-tracking`. Writes to analyticsEvents table (no new schema). Anonymous page_view allowed pre-signup; other events require workspaceId. Session id per tab (sessionStorage), first-touch UTM in localStorage. Flush every ~500ms via requestIdleCallback. Cap retry queue at 500.",
-    previewPath: "/preview/slices/event-tracking",
-    defaultView: "desktop",
-    defaultZoom: 0.7,
+    agentRecipe: "Run `npx rr add event-tracking` (React/default) or `npx rr add event-tracking --framework sveltekit`. Bind EventTrackingCtx.track/query/funnel to your analytics transport; enforce authorization on query/funnel at the server boundary. The slice intentionally does not invent a UI or persistence backend.",
+    wiring: `import { eventTrackingTools, type EventTrackingCtx } from "@/features/event-tracking";
+
+const analytics: EventTrackingCtx = {
+  track: (name, props) => hostAnalytics.track(name, props),
+  query: (filters) => guardedAnalyticsQuery(filters),
+  funnel: (steps) => guardedFunnelQuery(steps),
+};
+
+// Register eventTrackingTools with analytics in your tool host.`,
   },
   {
     slug: "icon-picker",

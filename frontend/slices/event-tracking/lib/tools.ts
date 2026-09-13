@@ -3,7 +3,8 @@
 // Convex functions). Query/funnel reads must be server-gated (analytics are
 // sensitive); track is the standard client emit.
 
-import { arr, defineToolCollection, num, obj, str } from "@/shared/agentic";
+import { defineToolCollection } from "@/shared/agentic/define";
+import { arr, num, obj, str } from "@/shared/agentic/schema";
 
 export type EventTrackingCtx = {
   /** Emit one event; resolves to a short ack. */
