@@ -4,8 +4,7 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { ImageValue } from "../../types";
-
-const URL_RX = /^https?:\/\/[^\s]+/i;
+import { validateImageLink } from "../../lib/core";
 
 export function LinkTab({ onSelect }: { onSelect: (c: ImageValue) => void }) {
   const [url, setUrl] = React.useState("");
@@ -14,7 +13,8 @@ export function LinkTab({ onSelect }: { onSelect: (c: ImageValue) => void }) {
 
   const submit = async () => {
     const v = url.trim();
-    if (!URL_RX.test(v)) { setErr("Paste a full https:// image URL"); return; }
+    const problem = validateImageLink(v);
+    if (problem) { setErr(problem); return; }
     setErr(null);
     setVerifying(true);
     await new Promise<void>((resolve) => {

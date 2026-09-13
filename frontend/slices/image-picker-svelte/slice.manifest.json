@@ -1,0 +1,37 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "image-picker-svelte",
+  "version": "0.4.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add image-picker --framework sveltekit",
+    "consumerPath": "slices/image-picker"
+  },
+  "files": [
+    "README.md",
+    "components/GalleryTab.svelte",
+    "components/ImageBanner.svelte",
+    "components/ImagePickerButton.svelte",
+    "components/ImagePickerDialog.svelte",
+    "components/LinkTab.svelte",
+    "components/UnsplashTab.svelte",
+    "components/UploadTab.svelte",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/image-picker/types.ts",
+      "frontend/slices/image-picker/lib/core.ts",
+      "frontend/slices/image-picker/lib/galleryPresets.ts",
+      "frontend/slices/image-picker/lib/imageStyle.ts",
+      "frontend/slices/image-picker/lib/parseImage.ts",
+      "frontend/slices/image-picker/lib/tools.ts",
+      "frontend/slices/image-picker/lib/unsplashCurated.ts",
+      "frontend/slices/image-picker/lib/unsplashSearch.ts"
+    ],
+    "external": ["svelte"]
+  }
+}

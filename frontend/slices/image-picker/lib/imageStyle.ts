@@ -3,11 +3,18 @@
  *  `background`. `resolvedUrl` is the host-resolved URL for upload (FileRef)
  *  values. */
 
-import type { CSSProperties } from "react";
 import type { ImageValue } from "../types";
 import { isUrlImage } from "./parseImage";
 
-export function imageStyle(img: ImageValue, resolvedUrl?: string | null): CSSProperties {
+export type ImageStyle = {
+  background?: string;
+  backgroundImage?: string;
+  backgroundSize?: string;
+  backgroundPosition?: string;
+  backgroundRepeat?: string;
+};
+
+export function imageStyle(img: ImageValue, resolvedUrl?: string | null): ImageStyle {
   const posY = img.positionY ?? 50;
   if (isUrlImage(img)) {
     const url = resolvedUrl ?? img.value;

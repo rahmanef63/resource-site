@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import type { ImageValue, ImageField, ImageSourceProps } from "../types";
 import { parseImage } from "../lib/parseImage";
 import { imageStyle } from "../lib/imageStyle";
+import { positionYFromClient } from "../lib/core";
 import { ImagePickerDialog } from "./ImagePickerDialog";
 
 interface Props extends ImageSourceProps {
@@ -34,8 +35,7 @@ export function ImageBanner({ image, onChange, resolvedUrl, onUpload, searchUnsp
   const setY = (clientY: number, el: HTMLElement) => {
     if (!data) return;
     const r = el.getBoundingClientRect();
-    const pct = ((clientY - r.top) / r.height) * 100;
-    onChange({ ...data, positionY: Math.max(0, Math.min(100, pct)) });
+    onChange({ ...data, positionY: positionYFromClient(clientY, r.top, r.height) });
   };
 
   React.useEffect(() => {

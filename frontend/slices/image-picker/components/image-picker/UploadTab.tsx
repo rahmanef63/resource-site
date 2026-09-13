@@ -5,8 +5,7 @@ import { UploadCloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FilePicker } from "@/shared/ui/FilePicker";
 import type { ImageValue, UploadFn } from "../../types";
-
-const MAX = 8 * 1024 * 1024;
+import { validateUploadFile } from "../../lib/core";
 
 export function UploadTab({ onSelect, onUpload }: { onSelect: (c: ImageValue) => void; onUpload: UploadFn }) {
   const [file, setFile] = React.useState<File | null>(null);
@@ -19,8 +18,8 @@ export function UploadTab({ onSelect, onUpload }: { onSelect: (c: ImageValue) =>
 
   const pick = (f: File | undefined) => {
     if (!f) return;
-    if (!f.type.startsWith("image/")) { setErr("Images only"); return; }
-    if (f.size > MAX) { setErr("Max 8 MB"); return; }
+    const problem = validateUploadFile(f);
+    if (problem) { setErr(problem); return; }
     setErr(null);
     setFile(f);
     setPreview(URL.createObjectURL(f));

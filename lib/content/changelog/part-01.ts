@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-IMAGE-PICKER-DISTRIBUTION",
+    "version": "image-picker@0.4.0",
+    "date": 1789344000000,
+    "kind": "feature",
+    "title": "SvelteKit Image Picker distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/image-picker — [before: image-picker was React-only, duplicated link/upload/Unsplash/focal-point semantics inside renderer code, its default installer omitted Lucide plus the shared FilePicker primitive, and its public preview coupled a second demo to file-upload] → [after: React/Next remains the default while Svelte/SvelteKit gets native picker/dialog/banner/tabs over one portable image core, and both framework installers now copy only the dependencies they actually need].",
+    "groups": [
+      {
+        "heading": "One image core, native framework surfaces",
+        "bullets": [
+          "Portable semantics now own tab availability/labels, upload + link validation, focal-point clamp/reposition math, Unsplash mapping/search, curated/gallery data, CSS URL escaping, parsing, and agent tools.",
+          "Native Svelte preserves Gallery, conditional Upload, Link, curated/live Unsplash, dialog/trigger, and keyboard/pointer ImageBanner reposition behavior without React, Next, Lucide, shadcn, or the React FilePicker primitive.",
+          "Default React install now pins lucide-react@^0.400.0 and copies components/shared/ui/FilePicker.tsx; public preview hosts canonical preview.tsx at https://resource.rahmanef.com/preview/slices/image-picker."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-OFFICIAL-BP-HTML-STUDIO",
     "version": "html-studio@1.1.1",
     "date": 1789344000000,

@@ -16,7 +16,7 @@ export function GalleryTab({ onSelect }: { onSelect: (c: ImageValue) => void }) 
           <div className="grid grid-cols-4 gap-2 sm:grid-cols-6">
             {sec.items.map((item, i) => (
               <Button
-                key={i}
+                key={`${item.type}:${item.value}`}
                 type="button"
                 variant="ghost"
                 size="icon"

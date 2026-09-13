@@ -1312,12 +1312,12 @@
       "slug": "image-picker",
       "title": "Image Picker — one-button image/wallpaper chooser (gallery · upload · link · Unsplash · reposition)",
       "category": "ui",
-      "description": "Generic image/wallpaper picker — not coupled to Notion. The headline API is ONE button (ImagePickerButton) that opens a dialog with 4 tabs: Gallery (12 colours + 8 gradients + Notion textures), Upload (drag/click, ≤8MB), Link (paste any https image URL), Unsplash (bundled curated landscapes + live search). On pick, onChange fires with an ImageValue ({ type, value, positionY?, metadata? }). ImageBanner is the optional reposition-able band — render an ImageValue as a full-width cover / profile header / card hero with hover controls: Change (opens the dialog), Reposition (drag the vertical focal point), Remove. The slice imports NO other slice and NO backend — the upload backend and Unsplash search are INJECTED as props (onUpload + searchUnsplash), so it drops into any app: wire onUpload to the `files` slice and searchUnsplash to a server route via unsplashSearchVia('/api/unsplash') that holds UNSPLASH_ACCESS_KEY server-side (never NEXT_PUBLIC). Ships a curated Unsplash fallback + gallery so it works with zero config. parseImage normalizes legacy raw-string values; imageStyle builds the focal-point CSS. Wired into the notion-page-clone template as the page cover via NotionPage's coverSlot.",
+      "description": "Generic image/wallpaper picker — not coupled to Notion. The headline API is ONE button (ImagePickerButton) that opens a dialog with 4 tabs: Gallery (12 colours + 8 gradients + Notion textures), Upload (drag/click, ≤8MB), Link (paste any https image URL), Unsplash (bundled curated landscapes + live search). On pick, onChange fires with an ImageValue ({ type, value, positionY?, metadata? }). ImageBanner is the optional reposition-able band — render an ImageValue as a full-width cover / profile header / card hero with hover controls: Change (opens the dialog), Reposition (drag the vertical focal point), Remove. The slice imports NO other slice and NO backend — the upload backend and Unsplash search are INJECTED as props (onUpload + searchUnsplash), so it drops into any app: wire onUpload to the `files` slice and searchUnsplash to a server route via unsplashSearchVia('/api/unsplash') that holds UNSPLASH_ACCESS_KEY server-side (never NEXT_PUBLIC). Ships a curated Unsplash fallback + gallery so it works with zero config. parseImage normalizes legacy raw-string values; imageStyle builds the focal-point CSS. Wired into the notion-page-clone template as the page cover via NotionPage's coverSlot. React/Next remains the default renderer; native Svelte 5/SvelteKit ships the same picker/dialog/banner behavior over shared portable image semantics.",
       "source": "notion-page-clone",
       "install": "npx rahman-resources add image-picker",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add image-picker`. The headline component is `<ImagePickerButton label=\"Change image\" onChange={(img)=>save(img)} onUpload={…} searchUnsplash={…} />` — ONE button that opens the 4-tab dialog (gallery / upload / link / Unsplash). For a reposition-able cover/hero band use `<ImageBanner image={value} onChange={save} resolvedUrl={…} onUpload={…} searchUnsplash={…} />` (also passable to notion-shell's `<NotionPage coverSlot={…} />`). Inject the backend: `onUpload` = the `files` slice's useFileUpload().upload (returns a FileRef); resolve upload images for display with `resolvedUrl` = files useFileUrl(parseFileRef(imageRef(parseImage(value))).storageId). `searchUnsplash` = `unsplashSearchVia('/api/unsplash')` — add a server route that proxies api.unsplash.com with UNSPLASH_ACCESS_KEY (never expose the key client-side). Ships a curated Unsplash + gallery fallback so it works with zero wiring. ImageValue = { type, value, positionY?, metadata? }; parseImage handles legacy string values.",
+      "agentRecipe": "Run `npx rr add image-picker` for React/Next or `npx rr add image-picker --framework sveltekit` for native Svelte 5. The headline component is `<ImagePickerButton label=\"Change image\" onChange={(img)=>save(img)} onUpload={…} searchUnsplash={…} />` — ONE button that opens the 4-tab dialog (gallery / upload / link / Unsplash). For a reposition-able cover/hero band use `<ImageBanner image={value} onChange={save} resolvedUrl={…} onUpload={…} searchUnsplash={…} />` (also passable to notion-shell's `<NotionPage coverSlot={…} />`). Inject the backend: `onUpload` = the `files` slice's useFileUpload().upload (returns a FileRef); resolve upload images for display with `resolvedUrl` = files useFileUrl(parseFileRef(imageRef(parseImage(value))).storageId). `searchUnsplash` = `unsplashSearchVia('/api/unsplash')` — add a server route that proxies api.unsplash.com with UNSPLASH_ACCESS_KEY (never expose the key client-side). Ships a curated Unsplash + gallery fallback so it works with zero wiring. ImageValue = { type, value, positionY?, metadata? }; parseImage handles legacy string values.",
       "tags": [
         "ui",
         "image",
@@ -4878,18 +4878,43 @@
       "title": "Image Picker — one-button image/wallpaper chooser (gallery · upload · link · Unsplash · reposition)",
       "category": "ui",
       "kind": "ui",
-      "version": "0.3.0",
-      "description": "Generic image/wallpaper picker — not coupled to Notion. The headline API is ONE button (ImagePickerButton) that opens a dialog with 4 tabs: Gallery (12 colours + 8 gradients + Notion textures), Upload (drag/click, ≤8MB), Link (paste any https image URL), Unsplash (bundled curated landscapes + live search). On pick, onChange fires with an ImageValue ({ type, value, positionY?, metadata? }). ImageBanner is the optional reposition-able band — render an ImageValue as a full-width cover / profile header / card hero with hover controls: Change (opens the dialog), Reposition (drag the vertical focal point), Remove. The slice imports NO other slice and NO backend — the upload backend and Unsplash search are INJECTED as props (onUpload + searchUnsplash), so it drops into any app: wire onUpload to the `files` slice and searchUnsplash to a server route via unsplashSearchVia('/api/unsplash') that holds UNSPLASH_ACCESS_KEY server-side (never NEXT_PUBLIC). Ships a curated Unsplash fallback + gallery so it works with zero config. parseImage normalizes legacy raw-string values; imageStyle builds the focal-point CSS. Wired into the notion-page-clone template as the page cover via NotionPage's coverSlot.",
+      "version": "0.4.0",
+      "description": "Generic image/wallpaper picker — not coupled to Notion. The headline API is ONE button (ImagePickerButton) that opens a dialog with 4 tabs: Gallery (12 colours + 8 gradients + Notion textures), Upload (drag/click, ≤8MB), Link (paste any https image URL), Unsplash (bundled curated landscapes + live search). On pick, onChange fires with an ImageValue ({ type, value, positionY?, metadata? }). ImageBanner is the optional reposition-able band — render an ImageValue as a full-width cover / profile header / card hero with hover controls: Change (opens the dialog), Reposition (drag the vertical focal point), Remove. The slice imports NO other slice and NO backend — the upload backend and Unsplash search are INJECTED as props (onUpload + searchUnsplash), so it drops into any app: wire onUpload to the `files` slice and searchUnsplash to a server route via unsplashSearchVia('/api/unsplash') that holds UNSPLASH_ACCESS_KEY server-side (never NEXT_PUBLIC). Ships a curated Unsplash fallback + gallery so it works with zero config. parseImage normalizes legacy raw-string values; imageStyle builds the focal-point CSS. Wired into the notion-page-clone template as the page cover via NotionPage's coverSlot. React/Next remains the default renderer; native Svelte 5/SvelteKit ships the same picker/dialog/banner behavior over shared portable image semantics.",
       "source": "notion-page-clone",
       "slicePath": "frontend/slices/image-picker",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/image-picker"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/image-picker-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/image-picker/types.ts",
+              "frontend/slices/image-picker/lib/core.ts",
+              "frontend/slices/image-picker/lib/galleryPresets.ts",
+              "frontend/slices/image-picker/lib/imageStyle.ts",
+              "frontend/slices/image-picker/lib/parseImage.ts",
+              "frontend/slices/image-picker/lib/tools.ts",
+              "frontend/slices/image-picker/lib/unsplashCurated.ts",
+              "frontend/slices/image-picker/lib/unsplashSearch.ts"
+            ]
+          }
         }
       },
       "convexPaths": [],
-      "npm": [],
+      "npm": [
+        "lucide-react@^0.400.0"
+      ],
       "shadcn": [
         "dialog",
         "button",
@@ -4904,7 +4929,9 @@
         }
       ],
       "peers": [],
-      "sharedFiles": [],
+      "sharedFiles": [
+        "components/shared/ui/FilePicker.tsx"
+      ],
       "providers": [],
       "tags": [
         "ui",
@@ -4921,7 +4948,7 @@
         "portable",
         "dialog"
       ],
-      "agentRecipe": "Run `npx rr add image-picker`. The headline component is `<ImagePickerButton label=\"Change image\" onChange={(img)=>save(img)} onUpload={…} searchUnsplash={…} />` — ONE button that opens the 4-tab dialog (gallery / upload / link / Unsplash). For a reposition-able cover/hero band use `<ImageBanner image={value} onChange={save} resolvedUrl={…} onUpload={…} searchUnsplash={…} />` (also passable to notion-shell's `<NotionPage coverSlot={…} />`). Inject the backend: `onUpload` = the `files` slice's useFileUpload().upload (returns a FileRef); resolve upload images for display with `resolvedUrl` = files useFileUrl(parseFileRef(imageRef(parseImage(value))).storageId). `searchUnsplash` = `unsplashSearchVia('/api/unsplash')` — add a server route that proxies api.unsplash.com with UNSPLASH_ACCESS_KEY (never expose the key client-side). Ships a curated Unsplash + gallery fallback so it works with zero wiring. ImageValue = { type, value, positionY?, metadata? }; parseImage handles legacy string values."
+      "agentRecipe": "Run `npx rr add image-picker` for React/Next or `npx rr add image-picker --framework sveltekit` for native Svelte 5. The headline component is `<ImagePickerButton label=\"Change image\" onChange={(img)=>save(img)} onUpload={…} searchUnsplash={…} />` — ONE button that opens the 4-tab dialog (gallery / upload / link / Unsplash). For a reposition-able cover/hero band use `<ImageBanner image={value} onChange={save} resolvedUrl={…} onUpload={…} searchUnsplash={…} />` (also passable to notion-shell's `<NotionPage coverSlot={…} />`). Inject the backend: `onUpload` = the `files` slice's useFileUpload().upload (returns a FileRef); resolve upload images for display with `resolvedUrl` = files useFileUrl(parseFileRef(imageRef(parseImage(value))).storageId). `searchUnsplash` = `unsplashSearchVia('/api/unsplash')` — add a server route that proxies api.unsplash.com with UNSPLASH_ACCESS_KEY (never expose the key client-side). Ships a curated Unsplash + gallery fallback so it works with zero wiring. ImageValue = { type, value, positionY?, metadata? }; parseImage handles legacy string values."
     },
     {
       "slug": "workspace-shell",

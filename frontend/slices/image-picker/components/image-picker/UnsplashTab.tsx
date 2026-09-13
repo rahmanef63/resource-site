@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CURATED_UNSPLASH } from "../../lib/unsplashCurated";
 import type { ImageValue, UnsplashPhoto, UnsplashSearchFn } from "../../types";
+import { toUnsplashImageValue } from "../../lib/core";
 
 export function UnsplashTab({
   onSelect, searchUnsplash, defaultQuery,
@@ -40,11 +41,7 @@ export function UnsplashTab({
   }, [q, searchUnsplash]);
 
   const photos = results ?? CURATED_UNSPLASH;
-  const pick = (p: UnsplashPhoto) =>
-    onSelect({
-      type: "unsplash", value: p.regular, positionY: 50,
-      metadata: { id: p.id, thumb: p.thumb, full: p.full, photographer: p.photographer, photographerUrl: p.photographerUrl, source: p.source },
-    });
+  const pick = (p: UnsplashPhoto) => onSelect(toUnsplashImageValue(p));
 
   return (
     <div className="@container space-y-3 p-4">

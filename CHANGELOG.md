@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-14 — SvelteKit Image Picker distribution
+<!-- public-changelog:SVELTE-IMAGE-PICKER-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/image-picker
+- Preview: https://resource.rahmanef.com/preview/slices/image-picker
+- [before: `image-picker` was React-only, duplicated link/upload/Unsplash/focal-point semantics inside renderer code, its default installer omitted Lucide plus the shared FilePicker primitive, and its public preview coupled a second demo to `file-upload`] → [after: React/Next remains the default while Svelte/SvelteKit gets native picker/dialog/banner/tabs over one portable image core, and both framework installers now copy only the dependencies they actually need]
+- Native Svelte follows the official Svelte AI guidance: Runes mode, keyed lists, event-driven debounce/cleanup, `$state.raw` for replace-only search results, snippets, `<svelte:window>`, and `{@attach}`; every Svelte file is gated by the official autofixer plus compiler.
+
 ### 2026-09-14 — Official Svelte best-practice hardening: HTML Studio
 <!-- public-changelog:SVELTE-OFFICIAL-BP-HTML-STUDIO -->
 

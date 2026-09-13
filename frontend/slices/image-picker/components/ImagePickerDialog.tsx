@@ -12,12 +12,11 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import type { ImageValue, ImageSourceProps } from "../types";
+import { pickerTabLabel, pickerTabs, type ImagePickerTab } from "../lib/core";
 import { GalleryTab } from "./image-picker/GalleryTab";
 import { UploadTab } from "./image-picker/UploadTab";
 import { LinkTab } from "./image-picker/LinkTab";
 import { UnsplashTab } from "./image-picker/UnsplashTab";
-
-type Tab = "gallery" | "upload" | "link" | "unsplash";
 
 interface Props extends ImageSourceProps {
   open: boolean;
@@ -29,13 +28,8 @@ interface Props extends ImageSourceProps {
 }
 
 export function ImagePickerDialog({ open, onOpenChange, onSelect, onUpload, searchUnsplash, title = "Choose image", defaultQuery }: Props) {
-  const [tab, setTab] = React.useState<Tab>(defaultQuery ? "unsplash" : "gallery");
-  const tabs: { id: Tab; label: string }[] = [
-    { id: "gallery", label: "Gallery" },
-    ...(onUpload ? [{ id: "upload" as const, label: "Upload" }] : []),
-    { id: "link", label: "Link" },
-    { id: "unsplash", label: "Unsplash" },
-  ];
+  const [tab, setTab] = React.useState<ImagePickerTab>(defaultQuery ? "unsplash" : "gallery");
+  const tabs = pickerTabs(!!onUpload).map((id) => ({ id, label: pickerTabLabel(id) }));
   const handle = (c: ImageValue) => { onSelect(c); onOpenChange(false); };
 
   return (

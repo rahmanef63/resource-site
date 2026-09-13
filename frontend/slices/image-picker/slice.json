@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "image-picker",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "category": "ui",
   "kind": "ui",
   "title": "Image Picker \u2014 one-button image/wallpaper chooser (gallery \u00b7 upload \u00b7 link \u00b7 Unsplash \u00b7 reposition)",
@@ -11,10 +11,38 @@
   "audit": [],
   "frontend": {
     "slicePath": "frontend/slices/image-picker",
-    "configExport": ""
+    "configExport": "",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/image-picker-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/image-picker/types.ts",
+            "frontend/slices/image-picker/lib/core.ts",
+            "frontend/slices/image-picker/lib/galleryPresets.ts",
+            "frontend/slices/image-picker/lib/imageStyle.ts",
+            "frontend/slices/image-picker/lib/parseImage.ts",
+            "frontend/slices/image-picker/lib/tools.ts",
+            "frontend/slices/image-picker/lib/unsplashCurated.ts",
+            "frontend/slices/image-picker/lib/unsplashSearch.ts"
+          ]
+        }
+      }
+    }
   },
   "deps": {
-    "npm": [],
+    "npm": [
+      "lucide-react@^0.400.0"
+    ],
     "shadcn": [
       "dialog",
       "button",
@@ -28,7 +56,10 @@
         "description": "Unsplash API key for live search via unsplashSearchVia('/api/unsplash'). Optional \u2014 bundled curated fallback works with zero config. Keep server-side, never NEXT_PUBLIC."
       }
     ],
-    "peers": []
+    "peers": [],
+    "sharedFiles": [
+      "components/shared/ui/FilePicker.tsx"
+    ]
   },
   "previews": [
     {
@@ -62,6 +93,16 @@
     "requires": {
       "env": [
         "UNSPLASH_ACCESS_KEY"
+      ],
+      "deps": [
+        {
+          "npm": "react",
+          "range": "^19"
+        },
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
       ]
     },
     "provides": {
