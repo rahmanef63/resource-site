@@ -137,6 +137,7 @@ const slices = loadSlices().filter((s) => !ALIASES[s.slug]).map((s) => {
     shadcn: s.shadcn ?? [],
     env: s.env ?? [],
     peers: s.peers ?? [],
+    sharedFiles: sj?.deps?.sharedFiles ?? s.sharedFiles ?? [],
     providers: s.providers ?? [],
     tags: s.tags ?? [],
     agentRecipe: s.agentRecipe ?? "",

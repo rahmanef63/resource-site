@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — Framework shared-file distribution
+<!-- public-changelog:FRAMEWORK-SHARED-FILES-DISTRIBUTION -->
+
+**CLI / contract:**
+- Related: https://resource.rahmanef.com/slices
+- [before: framework descriptors could declare `sharedFiles`, but generated manifests and `rr add`/`rr lift` did not carry or copy them] → [after: base and framework-specific shared files are emitted, validated on disk, copied to their repo-relative destinations, and framework overrides replace the base list deterministically]
+- This closes the DRY gap needed by framework variants that share a framework-neutral core instead of duplicating it.
+
 ### 2026-09-13 — SvelteKit BroadcastChannel sync distribution
 <!-- public-changelog:SVELTE-BROADCAST-CHANNEL-SYNC-DISTRIBUTION -->
 

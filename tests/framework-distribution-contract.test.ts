@@ -31,12 +31,16 @@ function installFrameworkFixture() {
       "react-next": { path: "frontend/slices/framework-fixture" },
       "svelte-sveltekit": {
         path: "frontend/slices/framework-fixture-svelte",
-        deps: { npm: ["svelte@^5"] },
+        deps: {
+          npm: ["svelte@^5"],
+          sharedFiles: ["lib/shared/theme-presets/apply.ts"],
+        },
       },
     },
     defaultFramework: "react-next",
     convexPaths: [],
     npm: ["react@^19"],
+    sharedFiles: ["lib/shared/agentic/index.ts"],
     shadcn: [],
     env: [],
     peers: [],
@@ -437,10 +441,14 @@ describe("framework-aware slice distribution", () => {
     const defaultResult = runCli("add", "framework-fixture", "--target", target, "--dry-run");
     expect(defaultResult.status).toBe(0);
     expect(defaultResult.stdout).toContain("frontend/slices/framework-fixture →");
+    expect(defaultResult.stdout).toContain("lib/shared/agentic/index.ts →");
+    expect(defaultResult.stdout).not.toContain("lib/shared/theme-presets/apply.ts →");
 
     const explicitResult = runCli("add", "framework-fixture", "--target", target, "--framework", "svelte-sveltekit", "--dry-run");
     expect(explicitResult.status).toBe(0);
     expect(explicitResult.stdout).toContain("frontend/slices/framework-fixture-svelte →");
+    expect(explicitResult.stdout).toContain("lib/shared/theme-presets/apply.ts →");
+    expect(explicitResult.stdout).not.toContain("lib/shared/agentic/index.ts →");
     expect(explicitResult.stdout).toContain("svelte@^5");
   });
 
@@ -470,7 +478,11 @@ describe("framework-aware slice distribution", () => {
         defaultFramework: "not-declared",
         frameworks: {
           "react-next": { path: "frontend/slices/ai-core", aliases: ["web"] },
-          "svelte-sveltekit": { path: "frontend/slices/missing-svelte", aliases: ["web"] },
+          "svelte-sveltekit": {
+            path: "frontend/slices/missing-svelte",
+            aliases: ["web"],
+            deps: { sharedFiles: ["lib/shared/missing-framework-file.ts"] },
+          },
         },
       },
       deps: {},
@@ -484,6 +496,7 @@ describe("framework-aware slice distribution", () => {
     expect(result.stderr).toContain('defaultFramework "not-declared" is not declared');
     expect(result.stderr).toContain('duplicate framework alias "web"');
     expect(result.stderr).toContain("missing on disk: frontend/slices/missing-svelte");
+    expect(result.stderr).toContain("deps.sharedFiles path missing on disk: lib/shared/missing-framework-file.ts");
   });
 });
 

@@ -2,6 +2,24 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "FRAMEWORK-SHARED-FILES-DISTRIBUTION",
+    "version": "site@framework-shared-files",
+    "date": 1789257600000,
+    "kind": "improvement",
+    "title": "Framework shared-file distribution",
+    "body": "Related: https://resource.rahmanef.com/slices — [before: framework descriptors could declare sharedFiles, but generated manifests and rr add/lift did not carry or copy them] → [after: base and framework-specific shared files are emitted, validated on disk, copied to their repo-relative destinations, and framework overrides replace the base list deterministically].",
+    "groups": [
+      {
+        "heading": "DRY framework packaging",
+        "bullets": [
+          "The generated CLI/MCP manifest now carries base deps.sharedFiles, while a selected framework can replace that list through its dependency override.",
+          "Slice validation rejects missing shared-file paths before release, and rr add/lift include each selected shared file as an explicit copy step to the same repo-relative destination."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-BROADCAST-CHANNEL-SYNC-DISTRIBUTION",
     "version": "broadcast-channel-sync@0.3.0",
     "date": 1789257600000,

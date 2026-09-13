@@ -9,6 +9,12 @@ export function validateFrameworkMetadata(slice, repo) {
   const frameworks = frontend.frameworks;
   const defaultFramework = frontend.defaultFramework ?? "react-next";
 
+  for (const sharedFile of slice.deps?.sharedFiles ?? []) {
+    if (!existsSync(path.join(repo, sharedFile))) {
+      errors.push(`deps.sharedFiles path missing on disk: ${sharedFile}`);
+    }
+  }
+
   if (!frameworks) {
     if (defaultFramework !== "react-next") {
       errors.push(`frontend.defaultFramework "${defaultFramework}" requires frontend.frameworks to declare that framework`);
@@ -34,6 +40,11 @@ export function validateFrameworkMetadata(slice, repo) {
     }
     if (typeof descriptor.path === "string" && !existsSync(path.join(repo, descriptor.path))) {
       errors.push(`frontend.frameworks.${name}.path missing on disk: ${descriptor.path}`);
+    }
+    for (const sharedFile of descriptor.deps?.sharedFiles ?? []) {
+      if (!existsSync(path.join(repo, sharedFile))) {
+        errors.push(`frontend.frameworks.${name}.deps.sharedFiles path missing on disk: ${sharedFile}`);
+      }
     }
     for (const alias of descriptor.aliases ?? []) {
       if (available.has(alias) || aliases.has(alias)) {

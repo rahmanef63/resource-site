@@ -1566,6 +1566,7 @@
       "shadcn": [],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "ui",
@@ -1616,6 +1617,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "image-editor",
@@ -1665,6 +1667,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "video",
@@ -1707,6 +1710,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "media",
@@ -1750,6 +1754,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "code",
@@ -1786,6 +1791,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "monitoring",
@@ -1838,6 +1844,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "booking",
@@ -1877,6 +1884,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "html",
@@ -1918,6 +1926,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "launcher",
@@ -1956,6 +1965,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "resume",
@@ -2026,6 +2036,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "onboarding",
@@ -2060,6 +2071,7 @@
       "shadcn": [],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "terminal",
@@ -2104,6 +2116,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "ai",
@@ -2145,6 +2158,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "browser",
@@ -2187,6 +2201,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "app-store",
@@ -2228,6 +2243,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "files",
@@ -2276,6 +2292,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "shell",
@@ -2347,6 +2364,7 @@
         }
       ],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "auth",
@@ -2424,6 +2442,7 @@
           "reason": "Order ownership requires authenticated user (guest checkout works without)."
         }
       ],
+      "sharedFiles": [],
       "providers": [
         "doku",
         "midtrans"
@@ -2499,6 +2518,7 @@
         }
       ],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "email",
@@ -2585,6 +2605,7 @@
           "reason": "Optional — chat RAG mode pulls workspace embeddings."
         }
       ],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "ai",
@@ -2689,6 +2710,7 @@
           "reason": "Every config change + AI call routes through audit-log."
         }
       ],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "ai",
@@ -2737,6 +2759,7 @@
         }
       ],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "ai",
@@ -2779,6 +2802,7 @@
         }
       ],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "search",
@@ -2826,6 +2850,7 @@
         }
       ],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "data",
@@ -2860,6 +2885,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "ui",
@@ -2894,6 +2920,7 @@
       "shadcn": [],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "ui",
@@ -2927,6 +2954,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "ui",
@@ -2966,6 +2994,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "ui",
@@ -3015,6 +3044,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "ui",
@@ -3050,6 +3080,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "ui",
@@ -3094,6 +3125,7 @@
       "shadcn": [],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "realtime",
@@ -3141,6 +3173,7 @@
           "reason": "RBAC checks resolve the authed user via getAuthUserId."
         }
       ],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "rbac",
@@ -3200,6 +3233,7 @@
           "reason": "Member identity (name/email/avatar) joined from the users table."
         }
       ],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "user-management",
@@ -3250,6 +3284,7 @@
           "reason": "AdminShell is the INNER section nav — mount AdminPage inside the dashboard-shell app chrome."
         }
       ],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "admin",
@@ -3290,6 +3325,7 @@
           "reason": "Lives under admin slice events subfolder."
         }
       ],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "events",
@@ -3330,6 +3366,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "icon",
@@ -3371,6 +3408,7 @@
       "shadcn": [],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "activity",
@@ -3422,6 +3460,7 @@
         }
       ],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "infra",
@@ -3475,6 +3514,7 @@
           "reason": "requireAdmin uses getAuthUserId from @convex-dev/auth."
         }
       ],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "content",
@@ -3528,6 +3568,7 @@
           "reason": "requireAdmin uses getAuthUserId from @convex-dev/auth."
         }
       ],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "content",
@@ -3592,6 +3633,7 @@
           "reason": "requireAdmin uses getAuthUserId from @convex-dev/auth."
         }
       ],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "ai",
@@ -3647,6 +3689,7 @@
           "reason": "Optional — anonymous submission works without auth."
         }
       ],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "form",
@@ -3714,6 +3757,7 @@
           "reason": "console section gates are permission tokens resolved by rbac-roles."
         }
       ],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "infra",
@@ -3792,6 +3836,7 @@
           "reason": "Control-plane panels mount inside the dashboard-shell app chrome — no chrome of its own."
         }
       ],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "infra",
@@ -3841,6 +3886,7 @@
           "reason": "Event actor resolved via authenticated user."
         }
       ],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "infra",
@@ -3882,6 +3928,7 @@
           "reason": "Comment author identity from convex-auth."
         }
       ],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "content",
@@ -3937,6 +3984,7 @@
           "reason": "Cost guard + requireAdmin gates use convex-auth user identity."
         }
       ],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "content",
@@ -3967,6 +4015,7 @@
       "shadcn": [],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "content",
@@ -4002,6 +4051,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "content",
@@ -4043,6 +4093,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "content",
@@ -4096,6 +4147,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "content",
@@ -4146,6 +4198,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "admin",
@@ -4184,6 +4237,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "ui",
@@ -4231,6 +4285,7 @@
           "reason": "Optional payment step — checkout page composes DokuDirectForm + DokuPaymentInstructions (or swap midtrans-payment)."
         }
       ],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "ecommerce",
@@ -4269,6 +4324,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "ui",
@@ -4310,6 +4366,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "ui",
@@ -4361,6 +4418,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "data",
@@ -4406,6 +4464,7 @@
       "shadcn": [],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "ui",
@@ -4461,6 +4520,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "ui",
@@ -4554,6 +4614,7 @@
         }
       ],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "ui",
@@ -4606,6 +4667,7 @@
           "reason": "User session required for menuSet assignment + nav-context cache."
         }
       ],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "ui",
@@ -4650,6 +4712,7 @@
           "reason": "Library item SEO override fields reuse the seo slice's metadata shape so the surface matches blog/projects rows."
         }
       ],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "library",
@@ -4694,6 +4757,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "table",
@@ -4740,6 +4804,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "content",
@@ -4792,6 +4857,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "loading",
@@ -4847,6 +4913,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "header",
@@ -4894,6 +4961,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "settings",
@@ -4953,6 +5021,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "notifications",
@@ -4992,6 +5061,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "canvas",
@@ -5028,6 +5098,7 @@
       ],
       "env": [],
       "peers": [],
+      "sharedFiles": [],
       "providers": [],
       "tags": [
         "shortcuts",

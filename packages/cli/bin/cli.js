@@ -1317,6 +1317,14 @@ async function resolveLiftPlan(parsed, target, variant, requestedFramework) {
       steps.push({ from: cp, toRel: cp, toAbs: path.join(target, cp) });
     }
     const deps = framework.deps ?? {};
+    const sharedFiles = deps.sharedFiles ?? slice.sharedFiles ?? [];
+    for (const sharedFile of sharedFiles) {
+      steps.push({
+        from: sharedFile,
+        toRel: sharedFile,
+        toAbs: path.join(target, sharedFile),
+      });
+    }
     npm.push(...(deps.npm ?? slice.npm ?? []));
     shadcn.push(...(deps.shadcn ?? slice.shadcn ?? []));
     env.push(...(deps.env ?? slice.env ?? []));
