@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "html-studio-svelte",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -19,7 +19,11 @@
     "svelte-components.d.ts"
   ],
   "imports": {
-    "shared": ["frontend/slices/html-studio/lib/core.ts"],
-    "external": ["svelte"]
+    "shared": [
+      "frontend/slices/html-studio/lib/core.ts"
+    ],
+    "external": [
+      "svelte"
+    ]
   }
 }

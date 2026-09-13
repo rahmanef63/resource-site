@@ -1,5 +1,9 @@
 # html-studio changelog
 
+## 1.1.1 — 2026-09-14
+
+- Svelte best-practice hardening: live-preview debounce now runs from the textarea input path with lifecycle cleanup instead of mutating preview state from `$effect`. The official `@sveltejs/mcp svelte-autofixer` reports zero issues and zero suggestions across all native Svelte components.
+
 ## 1.1.0 — 2026-09-13
 
 - Moved document types, mock/live adapter, device/view helpers, starter doc, share/payload helpers and the exact iframe sandbox contract into one framework-neutral `lib/core.ts`.

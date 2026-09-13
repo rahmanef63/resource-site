@@ -1,10 +1,10 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "html-studio",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "category": "os",
   "kind": "ui",
-  "title": "HTML Studio — sandboxed HTML/CSS/JS editor with live preview",
+  "title": "HTML Studio \u2014 sandboxed HTML/CSS/JS editor with live preview",
   "description": "Sandboxed HTML/CSS/JS studio with one framework-neutral document store, mock/live HtmlStudioAdapter, device/view helpers, starter document, share helpers, and exact opaque-origin iframe sandbox contract. React/Next remains the default Lucide + shadcn renderer; Svelte 5/SvelteKit gets native Code/Split/Preview, responsive/tablet/phone preview, 250ms live srcdoc, Save/open/delete list, public/private visibility, copy-link and payload-slug flows over the same core.",
   "namespace": "@/features/html-studio",
   "frontend": {

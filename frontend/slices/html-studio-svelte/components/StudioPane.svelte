@@ -1,13 +1,13 @@
 <script lang="ts">
   import { DEVICE_W, HTML_SANDBOX, type Device } from "@/features/html-studio/lib/core";
-  let { html = $bindable(), preview, showEditor, showPreview, device, onCycleDevice }: {
-    html: string; preview: string; showEditor: boolean; showPreview: boolean; device: Device; onCycleDevice: () => void;
+  let { html, onHtmlChange, preview, showEditor, showPreview, device, onCycleDevice }: {
+    html: string; onHtmlChange: (html: string) => void; preview: string; showEditor: boolean; showPreview: boolean; device: Device; onCycleDevice: () => void;
   } = $props();
   let previewWidth = $derived(DEVICE_W[device]);
 </script>
 
 {#if showEditor}
-  <textarea bind:value={html} spellcheck="false" placeholder="<!doctype html> …" class={`h-full min-h-0 min-w-0 resize-none border-0 bg-muted p-3 font-mono text-xs leading-relaxed text-foreground outline-none ${showPreview ? "w-1/2" : "flex-1"}`}></textarea>
+  <textarea value={html} oninput={(event) => onHtmlChange(event.currentTarget.value)} spellcheck="false" placeholder="<!doctype html> …" class={`h-full min-h-0 min-w-0 resize-none border-0 bg-muted p-3 font-mono text-xs leading-relaxed text-foreground outline-none ${showPreview ? "w-1/2" : "flex-1"}`}></textarea>
 {/if}
 {#if showPreview}
   <section class={`flex min-h-0 min-w-0 flex-col bg-muted ${showEditor ? "w-1/2" : "flex-1"}`}>

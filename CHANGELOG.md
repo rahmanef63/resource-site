@@ -11,6 +11,24 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-14 — Official Svelte best-practice hardening: HTML Studio
+<!-- public-changelog:SVELTE-OFFICIAL-BP-HTML-STUDIO -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/html-studio
+- Preview: https://resource.rahmanef.com/preview/slices/html-studio
+- [before: `html-studio@1.1.0` used `$effect` to debounce editor HTML into preview state even though the interaction was user-event driven] → [after: `html-studio@1.1.1` performs the debounce from the input handler with lifecycle cleanup, and every native Svelte file passes the official Svelte autofixer with zero issues and zero suggestions]
+- The opaque-origin iframe sandbox contract is unchanged; `allow-same-origin` remains forbidden.
+
+### 2026-09-14 — Official Svelte best-practice hardening: Resources Launcher Admin
+<!-- public-changelog:SVELTE-OFFICIAL-BP-RESOURCES-LAUNCHER-ADMIN -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/resources-launcher-admin
+- Preview: https://resource.rahmanef.com/preview/slices/resources-launcher-admin
+- [before: `resources-launcher-admin@1.1.0` copied keyed-editor props into form state through `$effect` and left icon options unkeyed] → [after: `resources-launcher-admin@1.1.1` uses a rune-backed form class plus keyed icon options, with the official Svelte autofixer reporting zero issues and zero suggestions]
+- Repo guidance now requires official `@sveltejs/mcp` documentation lookup plus `svelte-autofixer` for every new or edited Svelte file.
+
 ### 2026-09-13 — SvelteKit HTML Studio distribution
 <!-- public-changelog:SVELTE-HTML-STUDIO-DISTRIBUTION -->
 

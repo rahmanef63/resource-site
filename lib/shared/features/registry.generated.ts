@@ -113,7 +113,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...htmlStudioConfig,
     importPath: "@/features/html-studio/config",
-    version: "1.1.0",
+    version: "1.1.1",
   },
   {
     ...imageEditorConfig,
@@ -158,7 +158,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...resourcesLauncherAdminConfig,
     importPath: "@/features/resources-launcher-admin/config",
-    version: "1.1.0",
+    version: "1.1.1",
   },
   {
     ...seoConfig,

@@ -85,6 +85,16 @@ CLI baca `rr.json` (consumer project manifest) — schema di `packages/cli/lib/r
 - Svelte profile: legacy reactivity/events in NEW code (`$:`, `export let`, `on:click`, `createEventDispatcher`, `<slot>`); use Runes, event attributes, callback props, snippets.
 - Svelte profile: npm/pnpm/yarn lockfiles; package manager = Bun only.
 
+### Official Svelte AI quality gate
+
+For every new or edited `.svelte`, `.svelte.ts`, or `.svelte.js` file, use the official Svelte tooling before considering the work complete:
+
+1. Run `npx -y @sveltejs/mcp list-sections`, then fetch every relevant section with `get-documentation`.
+2. Follow modern Svelte 5 guidance: Runes mode, reactive `$props`, `$derived` for computed state, `$effect` only for true side effects, keyed `{#each}` blocks, modern event attributes, snippets instead of slots for new APIs, and `<svelte:window>` / `<svelte:document>` for global listeners.
+3. Run `npx -y @sveltejs/mcp svelte-autofixer <file> --svelte-version 5` on every changed Svelte file and keep iterating until both `issues` and `suggestions` are empty.
+4. Also run the Svelte compiler / project type gates. Compiler-clean is necessary but does not replace the official autofixer; the autofixer can catch best-practice problems that compile successfully.
+5. Do not add Svelte to the RR root runtime solely for validation; use the official MCP CLI or the existing isolated compiler environment.
+
 
 ## Source Map (kalau copy dari project lain)
 

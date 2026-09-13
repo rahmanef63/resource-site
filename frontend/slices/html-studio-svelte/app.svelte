@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import StudioToolbar from "./components/StudioToolbar.svelte";
   import SavedPages from "./components/SavedPages.svelte";
   import StudioPane from "./components/StudioPane.svelte";
@@ -35,10 +35,19 @@
   let showEditor = $derived(effectiveView === "code" || effectiveView === "split");
   let showPreview = $derived(effectiveView === "preview" || effectiveView === "split");
 
-  $effect(() => {
-    const source = html;
-    const timer = setTimeout(() => (preview = source), 250);
-    return () => clearTimeout(timer);
+  let previewTimer: ReturnType<typeof setTimeout> | undefined;
+
+  function updateHtml(nextHtml: string) {
+    html = nextHtml;
+    if (previewTimer) clearTimeout(previewTimer);
+    previewTimer = setTimeout(() => {
+      preview = nextHtml;
+      previewTimer = undefined;
+    }, 250);
+  }
+
+  onDestroy(() => {
+    if (previewTimer) clearTimeout(previewTimer);
   });
 
   async function refreshList() {
@@ -138,7 +147,8 @@
     {/if}
     <div class="flex min-h-0 min-w-0 flex-1" bind:clientWidth={bodyWidth}>
       <StudioPane
-        bind:html
+        {html}
+        onHtmlChange={updateHtml}
         {preview}
         {showEditor}
         {showPreview}

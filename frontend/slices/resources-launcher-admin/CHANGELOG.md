@@ -1,5 +1,9 @@
 # resources-launcher-admin changelog
 
+## 1.1.1 — 2026-09-14
+
+- Svelte best-practice hardening: `ResourceEditor.svelte` now uses keyed icon options and a rune-backed form class instead of copying prop values into `$state` via `$effect`. The official `@sveltejs/mcp svelte-autofixer` reports zero issues and zero suggestions.
+
 ## 1.1.0 — 2026-09-13
 
 - Added one framework-neutral `lib/core.ts` for resource models, mock/live adapter state, icon-name catalog, input normalization, sorting and reorder semantics.

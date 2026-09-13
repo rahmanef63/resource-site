@@ -2,6 +2,42 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-OFFICIAL-BP-HTML-STUDIO",
+    "version": "html-studio@1.1.1",
+    "date": 1789344000000,
+    "kind": "fix",
+    "title": "Official Svelte best-practice hardening — HTML Studio",
+    "body": "Related: https://resource.rahmanef.com/slices/html-studio — [before: html-studio@1.1.0 used $effect to debounce editor HTML into preview state even though the interaction was user-event driven] → [after: html-studio@1.1.1 performs the debounce from the input handler with lifecycle cleanup, and every native Svelte file passes the official Svelte autofixer with zero issues and zero suggestions].",
+    "groups": [
+      {
+        "heading": "Official Svelte AI gate",
+        "bullets": [
+          "Preview debounce is now event-driven and cleaned up on destroy; the opaque-origin HTML_SANDBOX contract is unchanged.",
+          "All native Svelte HTML Studio components pass @sveltejs/mcp svelte-autofixer with zero issues and suggestions."
+        ]
+      }
+    ]
+  },
+
+  {
+    "id": "SVELTE-OFFICIAL-BP-RESOURCES-LAUNCHER-ADMIN",
+    "version": "resources-launcher-admin@1.1.1",
+    "date": 1789344000000,
+    "kind": "fix",
+    "title": "Official Svelte best-practice hardening — Resources Launcher Admin",
+    "body": "Related: https://resource.rahmanef.com/slices/resources-launcher-admin — [before: resources-launcher-admin@1.1.0 copied keyed-editor props into form state through $effect and left icon options unkeyed] → [after: resources-launcher-admin@1.1.1 uses a rune-backed form class plus keyed icon options, with the official Svelte autofixer reporting zero issues and zero suggestions].",
+    "groups": [
+      {
+        "heading": "Official Svelte AI gate",
+        "bullets": [
+          "ResourceEditor no longer mutates form state from $effect; its keyed parent mount remains the reset boundary.",
+          "The icon option list is keyed, and the repo guidance now requires official Svelte documentation lookup plus autofixer for every changed Svelte file."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-HTML-STUDIO-DISTRIBUTION",
     "version": "html-studio@1.1.0",
     "date": 1789257600000,

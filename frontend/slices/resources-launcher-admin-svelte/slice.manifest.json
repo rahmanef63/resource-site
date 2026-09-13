@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "resources-launcher-admin-svelte",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -17,7 +17,11 @@
     "svelte-components.d.ts"
   ],
   "imports": {
-    "shared": ["frontend/slices/resources-launcher-admin/lib/core.ts"],
-    "external": ["svelte"]
+    "shared": [
+      "frontend/slices/resources-launcher-admin/lib/core.ts"
+    ],
+    "external": [
+      "svelte"
+    ]
   }
 }

@@ -474,7 +474,7 @@ export default function BookingDemo() {
     title: "HTML Studio — sandboxed HTML/CSS/JS editor with live preview",
     category: "os",
     kind: "ui",
-    version: "1.1.0",
+    version: "1.1.1",
     tagline: "Write HTML/CSS/JS, see it render live in a sandboxed iframe (opaque origin), Save to a shareable link — backend injected.",
     description:
       "Sandboxed HTML/CSS/JS studio with one framework-neutral document store, mock/live HtmlStudioAdapter, device/view helpers, starter document, share helpers, and exact opaque-origin iframe sandbox contract. React/Next remains the default Lucide + shadcn renderer; Svelte 5/SvelteKit gets native Code/Split/Preview, responsive/tablet/phone preview, 250ms live srcdoc, Save/open/delete list, public/private visibility, copy-link and payload-slug flows over the same core.",
@@ -513,7 +513,7 @@ export default function HtmlStudioDemo() {
     title: "Resources Admin — curated icon-launcher CRUD",
     category: "os",
     kind: "ui",
-    version: "1.1.0",
+    version: "1.1.1",
     tagline: "Owner-gated CRUD for a curated icon-launcher — add/edit/remove/reorder links that open in a new tab, backend injected.",
     description:
       "Owner-gated curated launcher CRUD over one framework-neutral ResourcesAdapter/core. React/Next remains the default Lucide + shadcn surface; Svelte 5/SvelteKit gets native add/edit/remove/reorder UI over the same mock/live adapter, resource model, icon-name catalog, normalization, sorting, and permission state. Backend wiring stays injected through configureResources (list/upsert/remove/canManage).",

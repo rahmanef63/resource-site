@@ -1,10 +1,10 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "resources-launcher-admin",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "category": "os",
   "kind": "ui",
-  "title": "Resources Admin — curated icon-launcher CRUD",
+  "title": "Resources Admin \u2014 curated icon-launcher CRUD",
   "description": "Owner-gated curated launcher CRUD with one framework-neutral ResourcesAdapter/core. React/Next remains the default Lucide + shadcn surface; Svelte 5/SvelteKit gets native add/edit/remove/reorder UI over the same mock/live adapter, resource model, icon-name catalog, normalization, sorting, and permission state. The backend stays injected via configureResources (list/upsert/remove/canManage), so zero-backend mock mode remains fully interactive.",
   "namespace": "@/features/resources-launcher-admin",
   "frontend": {
