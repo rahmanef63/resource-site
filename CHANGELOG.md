@@ -11,6 +11,16 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — SvelteKit Theme Presets distribution
+<!-- public-changelog:SVELTE-THEME-PRESETS-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/theme-presets
+- Preview: https://resource.rahmanef.com/preview/slices/theme-presets
+- [before: `theme-presets` kept provider/default-resolution state inside React, hard-coupled display mode to `next-themes`, duplicated its public preview playground, and omitted the default Lucide dependency] → [after: React/Next remains the default while Svelte/SvelteKit gets native provider/switcher/mode/theme-color UI over the exact same preset registry, CSS injection, persistence, default-resolution, grouping, swatch, and agent-tool core]
+- Visitor explicit choice still wins over site default and host/template default; the bundled tweakcn registry remains one shared source.
+
+
 ### 2026-09-13 — SvelteKit Site Setup Wizard distribution
 <!-- public-changelog:SVELTE-SITE-SETUP-WIZARD-DISTRIBUTION -->
 

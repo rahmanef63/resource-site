@@ -1,0 +1,39 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "theme-presets-svelte",
+  "version": "0.5.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add theme-presets --framework sveltekit",
+    "consumerPath": "slices/theme-presets"
+  },
+  "files": [
+    "README.md",
+    "components/SaveSiteDefaultButton.svelte",
+    "components/ThemeColorSync.svelte",
+    "components/ThemePresetProvider.svelte",
+    "components/ThemePresetSwitcher.svelte",
+    "components/ThemeProviders.svelte",
+    "config.ts",
+    "index.ts",
+    "lib/mode.ts",
+    "lib/store.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/theme-presets/lib/core.ts",
+      "frontend/slices/theme-presets/lib/tools.ts",
+      "frontend/slices/theme-presets/lib/tweakcn.ts",
+      "frontend/slices/theme-presets/lib/tweakcn/apply.ts",
+      "frontend/slices/theme-presets/lib/tweakcn/cssBuilder.ts",
+      "frontend/slices/theme-presets/lib/tweakcn/groups.ts",
+      "frontend/slices/theme-presets/lib/tweakcn/registry-data.json",
+      "frontend/slices/theme-presets/lib/tweakcn/registry.ts",
+      "frontend/slices/theme-presets/lib/tweakcn/tokens.ts",
+      "frontend/slices/theme-presets/lib/tweakcn/types.ts"
+    ],
+    "external": ["svelte"]
+  }
+}

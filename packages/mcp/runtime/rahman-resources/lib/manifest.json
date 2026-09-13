@@ -1176,12 +1176,12 @@
       "slug": "theme-presets",
       "title": "Theme Presets — unified switcher with bundled tweakcn registry",
       "category": "ui",
-      "description": "Single unified theme controller for next-themes apps. ThemePresetSwitcher ships a Palette-icon Popover trigger with three stacked sections: (1) sticky light/dark/system mode tabs, (2) sticky preset-count row with a Default reset button, (3) scrollable color-preset list grouped by mood (Profesional / Bold / Hangat / Artistik / Gelap + Lainnya). Hover-to-preview + click-to-commit + restore-on-close semantics. ThemePresetProvider context wraps state so deeply-nested consumers read via useThemePreset() instead of mounting the switcher directly. ThemeColorSync wrapper enables live tweakcn-CSS-variable preview on routes that need it. Tweakcn registry (~30 curated presets after HIDDEN_PRESETS filter drops Doom 64 / Cyberpunk / Neo Brutalism / Bubblegum / Candyland / Pastel Dreams) ships inside the slice as registry-data.json and loads lazily via dynamic import — code-splits into its own chunk, zero consumer public/ setup, no network roundtrip to a hosted URL. localStorage key `host:theme-preset` (rename via slice fork). CK-1F (2026-05-23) — collapsed prior TweakcnSwitcher + ThemePicker + phantom `theme-preset-switcher` catalog entry into this single component.",
+      "description": "Runtime tweakcn color presets with React/Next kept as the default distribution and native Svelte 5/SvelteKit provider, switcher, site-default-save, display-mode, and theme-color adapters over one shared preset engine. Visitor choice resolves above site default above host default; registry-data.json stays bundled and lazy-loaded; grouping, swatches, CSS injection, persistence, preview/restore, and agent tools remain one framework-neutral source. React display mode uses next-themes; Svelte uses a browser-native light/dark/system adapter.",
       "source": "CareerPack + notion-page-clone",
       "install": "npx rahman-resources add theme-presets",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add theme-presets` (registry-data.json ships inside the slice — no separate public/ copy step). Wrap your tree once with `<ThemePresetProvider>` (inside next-themes' ThemeProvider). Mount `<ThemePresetSwitcher />` anywhere in your header / sidebar / settings — one component handles light/dark/system + preset palette. Wrap dashboard with `<ThemeColorSync>` if you need live tweakcn variable preview on inner routes. Deeply-nested consumers read state via `useThemePreset()` (returns `{ presetName, registry, setPreset, preview, restore, isReady }`). For lower-level access: `applyTweakcnPreset(name)`, `previewTweakcnPreset(name)`, `restoreTweakcnPreset()`, `groupTweakcnPresets(items)`, `tweakcnSwatches(preset)` all exported from `@/features/theme-presets`. To rename localStorage key, fork `STORAGE_KEY` in `lib/tweakcn/types.ts`.",
+      "agentRecipe": "React/Next: `npx rr add theme-presets`, mount `<ThemeProviders>` or `<ThemePresetProvider>` inside next-themes and use `<ThemePresetSwitcher />`. SvelteKit: `npx rr add theme-presets --framework sveltekit`; mount `<ThemeProviders>` for preset + light/dark/system context, then `<ThemePresetSwitcher />`, optional `<ThemeColorSync />`, and `<SaveSiteDefaultButton onSave={...} />`. Both distributions share visitor > site > host default resolution, registry-data.json, CSS injection, grouping/swatches, preview/restore and agent tools. Tailwind 4 globals must map `--color-*` directly from runtime variables (see README/HOST-SETUP).",
       "tags": [
         "ui",
         "theme",
@@ -1191,7 +1191,8 @@
         "switcher",
         "popover",
         "next-themes",
-        "notion-like"
+        "svelte",
+        "sveltekit"
       ]
     },
     {
@@ -4455,19 +4456,45 @@
       "title": "Theme Presets — unified switcher with bundled tweakcn registry",
       "category": "ui",
       "kind": "ui",
-      "version": "0.4.0",
-      "description": "Single unified theme controller for next-themes apps. ThemePresetSwitcher ships a Palette-icon Popover trigger with three stacked sections: (1) sticky light/dark/system mode tabs, (2) sticky preset-count row with a Default reset button, (3) scrollable color-preset list grouped by mood (Profesional / Bold / Hangat / Artistik / Gelap + Lainnya). Hover-to-preview + click-to-commit + restore-on-close semantics. ThemePresetProvider context wraps state so deeply-nested consumers read via useThemePreset() instead of mounting the switcher directly. ThemeColorSync wrapper enables live tweakcn-CSS-variable preview on routes that need it. Tweakcn registry (~30 curated presets after HIDDEN_PRESETS filter drops Doom 64 / Cyberpunk / Neo Brutalism / Bubblegum / Candyland / Pastel Dreams) ships inside the slice as registry-data.json and loads lazily via dynamic import — code-splits into its own chunk, zero consumer public/ setup, no network roundtrip to a hosted URL. localStorage key `host:theme-preset` (rename via slice fork). CK-1F (2026-05-23) — collapsed prior TweakcnSwitcher + ThemePicker + phantom `theme-preset-switcher` catalog entry into this single component.",
+      "version": "0.5.0",
+      "description": "Runtime tweakcn color presets with React/Next kept as the default distribution and native Svelte 5/SvelteKit provider, switcher, site-default-save, display-mode, and theme-color adapters over one shared preset engine. Visitor choice resolves above site default above host default; registry-data.json stays bundled and lazy-loaded; grouping, swatches, CSS injection, persistence, preview/restore, and agent tools remain one framework-neutral source. React display mode uses next-themes; Svelte uses a browser-native light/dark/system adapter.",
       "source": "CareerPack + notion-page-clone",
       "slicePath": "frontend/slices/theme-presets",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/theme-presets"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/theme-presets-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/theme-presets/lib/core.ts",
+              "frontend/slices/theme-presets/lib/tools.ts",
+              "frontend/slices/theme-presets/lib/tweakcn.ts",
+              "frontend/slices/theme-presets/lib/tweakcn/apply.ts",
+              "frontend/slices/theme-presets/lib/tweakcn/cssBuilder.ts",
+              "frontend/slices/theme-presets/lib/tweakcn/groups.ts",
+              "frontend/slices/theme-presets/lib/tweakcn/registry-data.json",
+              "frontend/slices/theme-presets/lib/tweakcn/registry.ts",
+              "frontend/slices/theme-presets/lib/tweakcn/tokens.ts",
+              "frontend/slices/theme-presets/lib/tweakcn/types.ts"
+            ]
+          }
         }
       },
       "convexPaths": [],
       "npm": [
-        "next-themes@^0.4.6"
+        "next-themes@^0.4.6",
+        "lucide-react@^0.400.0"
       ],
       "shadcn": [
         "button",
@@ -4486,9 +4513,10 @@
         "switcher",
         "popover",
         "next-themes",
-        "notion-like"
+        "svelte",
+        "sveltekit"
       ],
-      "agentRecipe": "Run `npx rr add theme-presets` (registry-data.json ships inside the slice — no separate public/ copy step). Wrap your tree once with `<ThemePresetProvider>` (inside next-themes' ThemeProvider). Mount `<ThemePresetSwitcher />` anywhere in your header / sidebar / settings — one component handles light/dark/system + preset palette. Wrap dashboard with `<ThemeColorSync>` if you need live tweakcn variable preview on inner routes. Deeply-nested consumers read state via `useThemePreset()` (returns `{ presetName, registry, setPreset, preview, restore, isReady }`). For lower-level access: `applyTweakcnPreset(name)`, `previewTweakcnPreset(name)`, `restoreTweakcnPreset()`, `groupTweakcnPresets(items)`, `tweakcnSwatches(preset)` all exported from `@/features/theme-presets`. To rename localStorage key, fork `STORAGE_KEY` in `lib/tweakcn/types.ts`."
+      "agentRecipe": "React/Next: `npx rr add theme-presets`, mount `<ThemeProviders>` or `<ThemePresetProvider>` inside next-themes and use `<ThemePresetSwitcher />`. SvelteKit: `npx rr add theme-presets --framework sveltekit`; mount `<ThemeProviders>` for preset + light/dark/system context, then `<ThemePresetSwitcher />`, optional `<ThemeColorSync />`, and `<SaveSiteDefaultButton onSave={...} />`. Both distributions share visitor > site > host default resolution, registry-data.json, CSS injection, grouping/swatches, preview/restore and agent tools. Tailwind 4 globals must map `--color-*` directly from runtime variables (see README/HOST-SETUP)."
     },
     {
       "slug": "site-setup-wizard",

@@ -1,19 +1,21 @@
-/** theme-presets — bundled tweakcn-style color preset system + unified
- *  switcher. Drop ThemePresetProvider near the app root (inside
- *  next-themes' ThemeProvider), then mount ThemePresetSwitcher anywhere
- *  in the header / sidebar / settings. Registry ships INSIDE the slice
- *  (no consumer public/ setup needed; loaded lazily via dynamic import). */
+/** theme-presets — bundled tweakcn color preset engine + framework adapters. */
 
 export {
   ThemePresetProvider,
   useThemePreset,
   DEFAULT_PRESET_NAME,
+  type ThemePresetContextValue,
 } from "./components/ThemePresetProvider";
 export { ThemePresetSwitcher } from "./components/ThemePresetSwitcher";
 export { SaveSiteDefaultButton } from "./components/SaveSiteDefaultButton";
 export { ThemeColorSync } from "./components/ThemeColorSync";
 export { ThemeProviders } from "./components/ThemeProviders";
-
+export {
+  createThemePresetStore,
+  type ThemePresetEngine,
+  type ThemePresetSnapshot,
+  type ThemePresetStore,
+} from "./lib/core";
 export {
   applyTweakcnPreset,
   bootTweakcnPreset,

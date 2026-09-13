@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-THEME-PRESETS-DISTRIBUTION",
+    "version": "theme-presets@0.5.0",
+    "date": 1789257600000,
+    "kind": "feature",
+    "title": "SvelteKit Theme Presets distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/theme-presets — [before: theme-presets kept provider/default-resolution state inside React, hard-coupled display mode to next-themes, duplicated its public preview playground, and omitted the default Lucide dependency] → [after: React/Next remains the default while Svelte/SvelteKit gets native provider/switcher/mode/theme-color UI over the exact same preset registry, CSS injection, persistence, default-resolution, grouping, swatch, and agent-tool core].",
+    "groups": [
+      {
+        "heading": "One preset engine, native framework adapters",
+        "bullets": [
+          "The shared core now owns visitor-choice > site-default > host-default resolution, registry readiness, commit/clear, preview, and restore semantics.",
+          "The Svelte 5 distribution adds native provider/switcher/theme-color UI plus a browser light/dark/system mode store while reusing the exact bundled tweakcn registry, CSS builder/apply path, groups, swatches, and agent tools.",
+          "Public preview: https://resource.rahmanef.com/preview/slices/theme-presets now mounts canonical preview.tsx, and the default React installer declares both next-themes@^0.4.6 and lucide-react@^0.400.0."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-SITE-SETUP-WIZARD-DISTRIBUTION",
     "version": "site-setup-wizard@0.3.0",
     "date": 1789257600000,

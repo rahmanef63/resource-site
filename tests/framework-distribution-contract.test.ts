@@ -827,6 +827,50 @@ describe("framework-aware slice distribution", () => {
     expect(svelteResult.stdout).not.toContain("shadcn:");
   });
 
+  it("keeps theme-presets on React/next-themes by default and selects native Svelte preset UI over the same tweakcn core", () => {
+    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "theme-presets");
+    const target = mkTarget();
+
+    expect(slice.slicePath).toBe("frontend/slices/theme-presets");
+    expect(slice.defaultFramework).toBe("react-next");
+    const svelte = slice.frameworks["svelte-sveltekit"];
+    expect(svelte.path).toBe("frontend/slices/theme-presets-svelte");
+    expect(svelte.aliases).toEqual(["svelte", "sveltekit"]);
+    expect(svelte.deps.npm).toEqual(["svelte@^5"]);
+    expect(svelte.deps.shadcn).toEqual([]);
+    expect(svelte.deps.sharedFiles).toEqual([
+      "frontend/slices/theme-presets/lib/core.ts",
+      "frontend/slices/theme-presets/lib/tools.ts",
+      "frontend/slices/theme-presets/lib/tweakcn.ts",
+      "frontend/slices/theme-presets/lib/tweakcn/apply.ts",
+      "frontend/slices/theme-presets/lib/tweakcn/cssBuilder.ts",
+      "frontend/slices/theme-presets/lib/tweakcn/groups.ts",
+      "frontend/slices/theme-presets/lib/tweakcn/registry-data.json",
+      "frontend/slices/theme-presets/lib/tweakcn/registry.ts",
+      "frontend/slices/theme-presets/lib/tweakcn/tokens.ts",
+      "frontend/slices/theme-presets/lib/tweakcn/types.ts",
+    ]);
+
+    const defaultResult = runCli("add", "theme-presets", "--target", target, "--dry-run");
+    expect(defaultResult.status).toBe(0);
+    expect(defaultResult.stdout).toContain("frontend/slices/theme-presets →");
+    expect(defaultResult.stdout).toContain("next-themes@^0.4.6");
+    expect(defaultResult.stdout).toContain("lucide-react@^0.400.0");
+    expect(defaultResult.stdout).toContain("shadcn: button popover");
+
+    const svelteResult = runCli("add", "theme-presets", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteResult.status).toBe(0);
+    expect(svelteResult.stdout).toContain("frontend/slices/theme-presets-svelte →");
+    expect(svelteResult.stdout).toContain("frontend/slices/theme-presets/lib/core.ts →");
+    expect(svelteResult.stdout).toContain("frontend/slices/theme-presets/lib/tweakcn/registry-data.json →");
+    expect(svelteResult.stdout).toContain("svelte@^5");
+    expect(svelteResult.stdout).not.toContain("next-themes");
+    expect(svelteResult.stdout).not.toContain("lucide-react");
+    expect(svelteResult.stdout).not.toContain("shadcn:");
+  });
+
   it("uses the default framework path and forwards an explicit framework through add", () => {
     installFrameworkFixture();
     const target = mkTarget();

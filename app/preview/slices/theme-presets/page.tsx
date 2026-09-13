@@ -1,30 +1,46 @@
-import { ThemePresetProvider } from "@/features/theme-presets";
-import { SwitcherSpotlight } from "./SwitcherSpotlight";
-import { ThemeWidgets } from "./theme-widgets";
+"use client";
 
-/** theme-presets preview: a live "theme playground". The spotlighted switcher
- *  (labelled pill + bouncing arrow) makes the trigger obvious; the shadcn
- *  widget board below re-skins instantly when a preset is picked. Hover any
- *  preset to preview live; click to commit. */
+import * as React from "react";
+import preview from "@/features/theme-presets/preview";
+import {
+  PreviewSection,
+  SlicePreviewLayout,
+} from "@/components/slice-previews/preview-layout";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+const SwitcherPreview = preview.ThemePresetSwitcher;
+type Size = "sm" | "mobile";
+
 export default function Page() {
-  return (
-    <ThemePresetProvider>
-      <main className="mx-auto flex min-h-screen max-w-5xl flex-col items-center gap-8 bg-background px-6 py-10">
-        <header className="flex flex-col items-center gap-3 text-center">
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">
-            theme-presets · v0.2.0
-          </p>
-          <h1 className="text-3xl font-semibold tracking-tight">Theme playground</h1>
-          <p className="max-w-prose text-sm text-muted-foreground">
-            Light / dark / system + ~30 tweakcn color presets in one Popover.
-            The registry ships inside the slice — no <code>globals.css</code>{" "}
-            setup. Pick one and watch every widget below re-skin.
-          </p>
-          <SwitcherSpotlight />
-        </header>
+  const [size, setSize] = React.useState<Size>("sm");
 
-        <ThemeWidgets />
-      </main>
-    </ThemePresetProvider>
+  return (
+    <SlicePreviewLayout
+      title="Theme Presets"
+      kind="ui"
+      description="Unified light/dark/system + bundled tweakcn color preset switcher hosted from the canonical slice preview module."
+      sourceUrl="https://github.com/rahmanef63/resource-site/tree/main/frontend/slices/theme-presets"
+    >
+      <PreviewSection title="Theme switcher" hint={`size="${size}"`}>
+        <div className="mb-4 inline-flex rounded-md border border-input p-0.5">
+          {(["sm", "mobile"] as const).map((value) => (
+            <Button
+              key={value}
+              type="button"
+              variant="ghost"
+              onClick={() => setSize(value)}
+              className={cn(
+                "h-auto rounded px-3 py-1 text-xs",
+                size === value ? "bg-accent font-medium" : "text-muted-foreground",
+              )}
+            >
+              {value}
+            </Button>
+          ))}
+        </div>
+        <SwitcherPreview variant={{ size }} />
+      </PreviewSection>
+    </SlicePreviewLayout>
   );
 }
