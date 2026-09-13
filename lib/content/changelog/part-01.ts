@@ -2,6 +2,24 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-SERVICES-DISTRIBUTION",
+    "version": "services@0.2.0",
+    "date": 1789257600000,
+    "kind": "feature",
+    "title": "SvelteKit Services backend distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/services — [before: services was backend-only but its copied config depended on the React-typed defineFeature helper and explicit Svelte installs were unsupported] → [after: React/Next remains the default while Svelte/SvelteKit reuses the same framework-neutral backend source with no invented UI/runtime dependency].",
+    "groups": [
+      {
+        "heading": "Framework-neutral services contract",
+        "bullets": [
+          "The copied registry config no longer imports the React-typed defineFeature helper; explicit SvelteKit installs reuse the canonical TypeScript + Convex source without React, Svelte, Lucide, or shadcn UI dependencies.",
+          "Public listAll remains index-ordered and bounded to 500 rows, get remains a public content read, admin create/update/remove stay server-gated by requireAdmin(ctx), and seed remains internal-only."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-RATE-LIMIT-DISTRIBUTION",
     "version": "rate-limit@0.4.0",
     "date": 1789257600000,

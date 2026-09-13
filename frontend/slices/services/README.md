@@ -1,27 +1,34 @@
 # services
 
-**Services**
-
-Service offerings backend — title + summary + deliverables array + sort order. Public `listAll` + `get`, admin `create` / `update` / `remove`, internal `seed`. Pair with a frontend services grid/list. Lifted 2026-05-16 from rahmanef.com; token-based admin gate swapped for `requireAdmin(ctx)` from `_shared/auth`.
+Backend-only service-offerings data contract: public `listAll` / `get`, admin `create` / `update` / `remove`, and an internal one-shot `seed`. Pair it with the UI framework of your choice.
 
 ## Install
+
+React/Next remains the default distribution contract:
 
 ```bash
 npx rr add services
 ```
 
+The same framework-neutral source is available explicitly to Svelte/SvelteKit consumers:
+
+```bash
+npx rr add services --framework sveltekit
+```
+
+No React or Svelte runtime package is required by this backend-only slice.
+
 ## Use
 
-- Frontend exports — see [`./index.ts`](./index.ts)
-- Convex schema + queries + mutations — see [`convex/features/services/`](../../../convex/features/services/)
-- Dep peers + env + RBAC scopes — see [`./slice.contract.ts`](./slice.contract.ts)
+- Public TypeScript exports: [`./index.ts`](./index.ts)
+- Convex schema, queries, and mutations: [`convex/features/services/`](../../../convex/features/services/)
+- Canonical dependencies, environment guidance, RBAC, and framework distribution metadata: [`./slice.json`](./slice.json)
 
-## Constraints (rr conventions)
+Compose `servicesTables` into the host schema. Read through `features.services.query.listAll` / `get`; mutations `create`, `update`, and `remove` enforce `requireAdmin(ctx)`. `seed` is internal-only.
 
-Follows the full rr rule set — see [`frontend/slices/_templates/example-feature/README.md`](../_templates/example-feature/README.md) for the canonical list. Key gates:
-- shadcn primitives only (`audit:templates`)
-- ≤200 LOC per file (`audit:file-size`)
-- Metadata trio: `slice.json` + `slice.contract.ts` + `slice.manifest.json` (`audit:slices`)
-- Convex public fn require `args:` validator + auth gate
+## Security and bounds
 
-Run `npm run slices:check` before commit; pre-push hook re-runs the chain.
+- Public reads are intentional content reads; `listAll` is bounded to 500 rows and ordered by the `by_order` index.
+- Admin mutations authorize server-side with `requireAdmin(ctx)`.
+- `seed` is an `internalMutation`, so it is not a public client endpoint.
+- `SUPER_ADMIN_EMAIL` is optional host configuration; secrets do not belong in slice metadata or docs.

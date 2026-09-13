@@ -876,12 +876,12 @@
       "slug": "services",
       "title": "Services",
       "category": "content",
-      "description": "Service offerings backend — title + summary + deliverables array + sort order. Public read, admin CRUD, internal seed. Pairs with a frontend services grid/list (consumer-side). Lifted 2026-05-16 from rahmanef.com; token-based admin gate swapped for rr `_shared/auth`.",
+      "description": "Framework-neutral service-offerings backend: bounded public list/get, server-authorized admin CRUD, and internal seed. React/Next remains the default distribution contract; explicit Svelte/SvelteKit installs reuse the same TypeScript + Convex source without invented UI.",
       "source": "rahmanef.com",
       "install": "npx rahman-resources add services",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add services`. Compose `servicesTables` into root schema. Use `useQuery(api.features.services.queries.listAll)` from a server component / route to render service cards. CRUD via admin UI calling `create` / `update` / `remove` after `requireAdmin` passes.",
+      "agentRecipe": "Run `npx rr add services` (or `--framework sveltekit`). Compose `servicesTables` into the root schema. Read from `api.features.services.query.listAll` / `get` through the host Convex client; call `create` / `update` / `remove` only through authenticated admin flows because authorization is enforced server-side by `requireAdmin`.",
       "tags": [
         "content",
         "services",
@@ -3470,20 +3470,29 @@
       "title": "Services",
       "category": "content",
       "kind": "backend",
-      "version": "0.1.1",
-      "description": "Service offerings backend — title + summary + deliverables array + sort order. Public read, admin CRUD, internal seed. Pairs with a frontend services grid/list (consumer-side). Lifted 2026-05-16 from rahmanef.com; token-based admin gate swapped for rr `_shared/auth`.",
+      "version": "0.2.0",
+      "description": "Framework-neutral service-offerings backend: bounded public list/get, server-authorized admin CRUD, and internal seed. React/Next remains the default distribution contract; explicit Svelte/SvelteKit installs reuse the same TypeScript + Convex source without invented UI.",
       "source": "rahmanef.com",
       "slicePath": "frontend/slices/services",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/services"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/services",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ]
         }
       },
       "convexPaths": [
         "convex/features/services"
       ],
-      "npm": [],
+      "npm": [
+        "convex@^1.16.0"
+      ],
       "shadcn": [],
       "env": [
         {
@@ -3508,7 +3517,7 @@
         "marketing",
         "agency"
       ],
-      "agentRecipe": "Run `npx rr add services`. Compose `servicesTables` into root schema. Use `useQuery(api.features.services.queries.listAll)` from a server component / route to render service cards. CRUD via admin UI calling `create` / `update` / `remove` after `requireAdmin` passes."
+      "agentRecipe": "Run `npx rr add services` (or `--framework sveltekit`). Compose `servicesTables` into the root schema. Read from `api.features.services.query.listAll` / `get` through the host Convex client; call `create` / `update` / `remove` only through authenticated admin flows because authorization is enforced server-side by `requireAdmin`."
     },
     {
       "slug": "create-your-mcp",

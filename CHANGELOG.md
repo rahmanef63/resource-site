@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — SvelteKit Services backend distribution
+<!-- public-changelog:SVELTE-SERVICES-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/services
+- [before: `services` was backend-only but its copied config depended on the React-typed `defineFeature` helper and explicit Svelte installs were unsupported] → [after: React/Next remains the default while Svelte/SvelteKit reuses the same framework-neutral backend source with no invented UI/runtime dependency]
+- Public reads remain bounded and admin CRUD stays server-authorized through `requireAdmin(ctx)`; docs now point to the actual `features.services.query` / `mutation` surface.
+
 ### 2026-09-13 — SvelteKit Rate Limit service distribution
 <!-- public-changelog:SVELTE-RATE-LIMIT-DISTRIBUTION -->
 
