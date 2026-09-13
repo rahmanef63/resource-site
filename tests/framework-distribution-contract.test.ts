@@ -246,6 +246,37 @@ describe("framework-aware slice distribution", () => {
     expect(svelteResult.stdout).not.toContain("npx shadcn@latest add");
   });
 
+  it("keeps testimonials on one framework-neutral backend source for explicit SvelteKit", () => {
+    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "testimonials");
+    const target = mkTarget();
+
+    expect(slice.slicePath).toBe("frontend/slices/testimonials");
+    expect(slice.defaultFramework).toBe("react-next");
+    expect(slice.convexPaths).toEqual(["convex/features/testimonials"]);
+    expect(slice.frameworks).toEqual({
+      "react-next": { path: "frontend/slices/testimonials" },
+      "svelte-sveltekit": { path: "frontend/slices/testimonials", aliases: ["svelte", "sveltekit"] },
+    });
+
+    const defaultResult = runCli("add", "testimonials", "--target", target, "--dry-run");
+    expect(defaultResult.status).toBe(0);
+    expect(defaultResult.stdout).toContain("frontend/slices/testimonials →");
+    expect(defaultResult.stdout).toContain("convex/features/testimonials →");
+    expect(defaultResult.stdout).toContain("convex@^1.16.0");
+
+    const svelteResult = runCli("add", "testimonials", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteResult.status).toBe(0);
+    expect(svelteResult.stdout).toContain("frontend/slices/testimonials →");
+    expect(svelteResult.stdout).toContain("convex/features/testimonials →");
+    expect(svelteResult.stdout).toContain("convex@^1.16.0");
+    expect(svelteResult.stdout).not.toContain("svelte@^5");
+    expect(svelteResult.stdout).not.toContain("react");
+    expect(svelteResult.stdout).not.toContain("lucide-react");
+    expect(svelteResult.stdout).not.toContain("npx shadcn@latest add");
+  });
+
   it("keeps services on one framework-neutral backend source for explicit SvelteKit", () => {
     execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));

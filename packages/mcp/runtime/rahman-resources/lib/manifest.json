@@ -858,12 +858,12 @@
       "slug": "testimonials",
       "title": "Testimonials",
       "category": "content",
-      "description": "Quote/name/role rotator backend. Public `listAll` + `get` (no auth — testimonials are public), admin CRUD via `requireAdmin`, internal `seed` for one-shot bootstrap. Indexed by `order` so carousel/grid keeps stable rotation. Lifted 2026-05-16 from rahmanef.com; token-based admin gate swapped for rr `_shared/auth`.",
+      "description": "Framework-neutral testimonials backend: bounded public list/get, server-authorized admin CRUD, and internal seed. React/Next remains the default distribution contract; explicit Svelte/SvelteKit installs reuse the same TypeScript + Convex source without invented UI.",
       "source": "rahmanef.com",
       "install": "npx rahman-resources add testimonials",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add testimonials`. Compose `testimonialsTables` into root schema. Bootstrap via `npx convex run internal.features.testimonials.mutations.seed '{\"items\":[{\"quote\":\"...\",\"name\":\"...\",\"role\":\"...\",\"order\":1}]}'`. Render with `useQuery(api.features.testimonials.queries.listAll)`.",
+      "agentRecipe": "Run `npx rr add testimonials` (or `--framework sveltekit`). Compose `testimonialsTables` into the root schema. Read from `api.features.testimonials.query.listAll` / `get` through the host Convex client; call `create` / `update` / `remove` only through authenticated admin flows because authorization is enforced server-side by `requireAdmin`.",
       "tags": [
         "content",
         "testimonials",
@@ -3426,20 +3426,29 @@
       "title": "Testimonials",
       "category": "content",
       "kind": "backend",
-      "version": "0.1.1",
-      "description": "Quote/name/role rotator backend. Public `listAll` + `get` (no auth — testimonials are public), admin CRUD via `requireAdmin`, internal `seed` for one-shot bootstrap. Indexed by `order` so carousel/grid keeps stable rotation. Lifted 2026-05-16 from rahmanef.com; token-based admin gate swapped for rr `_shared/auth`.",
+      "version": "0.2.0",
+      "description": "Framework-neutral testimonials backend: bounded public list/get, server-authorized admin CRUD, and internal seed. React/Next remains the default distribution contract; explicit Svelte/SvelteKit installs reuse the same TypeScript + Convex source without invented UI.",
       "source": "rahmanef.com",
       "slicePath": "frontend/slices/testimonials",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/testimonials"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/testimonials",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ]
         }
       },
       "convexPaths": [
         "convex/features/testimonials"
       ],
-      "npm": [],
+      "npm": [
+        "convex@^1.16.0"
+      ],
       "shadcn": [],
       "env": [
         {
@@ -3463,7 +3472,7 @@
         "backend",
         "marketing"
       ],
-      "agentRecipe": "Run `npx rr add testimonials`. Compose `testimonialsTables` into root schema. Bootstrap via `npx convex run internal.features.testimonials.mutations.seed '{\"items\":[{\"quote\":\"...\",\"name\":\"...\",\"role\":\"...\",\"order\":1}]}'`. Render with `useQuery(api.features.testimonials.queries.listAll)`."
+      "agentRecipe": "Run `npx rr add testimonials` (or `--framework sveltekit`). Compose `testimonialsTables` into the root schema. Read from `api.features.testimonials.query.listAll` / `get` through the host Convex client; call `create` / `update` / `remove` only through authenticated admin flows because authorization is enforced server-side by `requireAdmin`."
     },
     {
       "slug": "services",
