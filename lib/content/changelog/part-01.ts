@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-RESOURCES-LAUNCHER-ADMIN-DISTRIBUTION",
+    "version": "resources-launcher-admin@1.1.0",
+    "date": 1789257600000,
+    "kind": "feature",
+    "title": "SvelteKit Resources Launcher Admin distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/resources-launcher-admin — [before: resources-launcher-admin mixed its portable resource model, mock/live adapter and reorder behavior into a React/Lucide host seam, had no native Svelte distribution, and the catalog left Lucide unversioned] → [after: React/Next remains the default Lucide/shadcn renderer while Svelte/SvelteKit gets native CRUD over the exact same portable resource adapter, icon-name catalog, normalization, sorting, management gate, and reorder core].",
+    "groups": [
+      {
+        "heading": "One injected launcher core, native framework surfaces",
+        "bullets": [
+          "The framework-neutral core owns Resource/ResourceInput, the mock/live adapter, stable resourcesApi, configure/read state, icon-name catalog, normalization, deterministic sorting, and adjacent reorder semantics.",
+          "The Svelte 5 distribution preserves add/edit/delete/reload/reorder/read-only management behavior without React, Next, Lucide, or shadcn runtime imports; React keeps the appshell descriptor and Lucide resolver.",
+          "Public preview: https://resource.rahmanef.com/preview/slices/resources-launcher-admin now mounts canonical preview.tsx; the default React catalog pins lucide-react@^0.400.0."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-PROFILE-DISTRIBUTION",
     "version": "profile@1.1.0",
     "date": 1789257600000,

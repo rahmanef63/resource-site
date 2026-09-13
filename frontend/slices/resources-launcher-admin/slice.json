@@ -1,46 +1,118 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "resources-launcher-admin",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "category": "os",
   "kind": "ui",
   "title": "Resources Admin — curated icon-launcher CRUD",
-  "description": "An owner-gated admin app for a curated icon-launcher: add / edit / remove / reorder links (label, lucide icon NAME, url, group, order) that open in a new tab. The backend is INJECTED via a small ResourcesAdapter (list / upsert / remove / canManage): point configureResources at your store (Convex, REST, …) or keep the bundled in-memory mock so the whole CRUD — including reorder — is interactive with zero backend. Icons are stored as lucide NAME strings and resolved to components client-side, so the same data drives a public launcher surface.",
+  "description": "Owner-gated curated launcher CRUD with one framework-neutral ResourcesAdapter/core. React/Next remains the default Lucide + shadcn surface; Svelte 5/SvelteKit gets native add/edit/remove/reorder UI over the same mock/live adapter, resource model, icon-name catalog, normalization, sorting, and permission state. The backend stays injected via configureResources (list/upsert/remove/canManage), so zero-backend mock mode remains fully interactive.",
   "namespace": "@/features/resources-launcher-admin",
   "frontend": {
     "slicePath": "frontend/slices/resources-launcher-admin",
-    "configExport": "resourcesLauncherAdminConfig"
+    "configExport": "resourcesLauncherAdminConfig",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/resources-launcher-admin-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/resources-launcher-admin/lib/core.ts"
+          ]
+        }
+      }
+    }
   },
   "deps": {
-    "npm": ["lucide-react"],
-    "shadcn": ["button", "input", "label", "scroll-area", "native-select"],
+    "npm": [
+      "lucide-react@^0.400.0"
+    ],
+    "shadcn": [
+      "button",
+      "input",
+      "label",
+      "scroll-area",
+      "native-select"
+    ],
     "env": [],
-    "peers": []
+    "peers": [],
+    "sharedFiles": [
+      "frontend/slices/resources-launcher-admin/lib/core.ts"
+    ]
   },
-  "registers": ["registry"],
-  "audit": ["bp:ui-consistency"],
+  "registers": [
+    "registry"
+  ],
+  "audit": [
+    "bp:ui-consistency"
+  ],
   "license": "MIT",
-  "tags": ["launcher", "links", "bookmarks", "admin", "crud", "icons", "ui"],
-  "previews": [],
+  "tags": [
+    "launcher",
+    "links",
+    "bookmarks",
+    "admin",
+    "crud",
+    "icons",
+    "ui"
+  ],
+  "previews": [
+    {
+      "component": "ResourcesAdmin",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "mock-crud",
+          "title": "Mock CRUD",
+          "description": "Bundled mock adapter with add/edit/delete/reorder enabled"
+        }
+      ],
+      "seed": "Three canonical mock resources from the shared resources core"
+    }
+  ],
   "contract": {
     "requires": {
       "auth": "none",
       "deps": [
-        { "npm": "react", "range": "^19" },
-        { "npm": "lucide-react", "range": "^0.400.0" }
+        {
+          "npm": "react",
+          "range": "^19"
+        },
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
       ]
     },
     "provides": {
       "tools": [],
       "routes": [],
-      "components": ["ResourcesAdmin"],
+      "components": [
+        "ResourcesAdmin"
+      ],
       "hooks": [],
-      "utils": ["configureResources", "resourcesAdminApp", "resolveIcon"],
+      "utils": [
+        "configureResources",
+        "resourcesApi",
+        "readResourcesState",
+        "sortResources",
+        "swapResourceOrder",
+        "resolveIcon"
+      ],
       "tables": []
     },
     "generalization": {
       "level": "portable",
-      "forbiddenTerms": ["rahmanef"],
+      "forbiddenTerms": [
+        "rahmanef"
+      ],
       "requiredProps": []
     }
   }

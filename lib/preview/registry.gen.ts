@@ -38,6 +38,7 @@ export const PREVIEW_REGISTRY: Record<string, () => Promise<{ default: SlicePrev
   "publisher-clean-html": () => import("@/features/publisher-clean-html/preview"),
   "quicklinks": () => import("@/features/quicklinks/preview"),
   "rbac-roles": () => import("@/features/rbac-roles/preview"),
+  "resources-launcher-admin": () => import("@/features/resources-launcher-admin/preview"),
   "sections": () => import("@/features/sections/preview"),
   "selection": () => import("@/features/selection/preview"),
   "site-setup-wizard": () => import("@/features/site-setup-wizard/preview"),

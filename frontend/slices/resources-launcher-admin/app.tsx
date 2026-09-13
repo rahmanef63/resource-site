@@ -7,6 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ResourceEditor } from "./components/resource-editor";
 import { resolveIcon } from "./lib/icons";
 import { useResourcesApi, type Resource } from "./lib/host";
+import { swapResourceOrder } from "./lib/core";
 
 // Default export so an os-shell can lazy-load this as a window app. Admin CRUD
 // over a curated icon-launcher: add / edit / remove / reorder links that open in
@@ -22,8 +23,7 @@ export default function ResourcesAdmin() {
     setLoading(true);
     try {
       setCanManage((await api.canManage()) && api.canWrite);
-      const list = await api.list();
-      setRows([...list].sort((a, b) => a.order - b.order));
+      setRows(await api.list());
     } finally {
       setLoading(false);
     }
@@ -38,14 +38,11 @@ export default function ResourcesAdmin() {
     void reload();
   }
 
-  // Reorder by swapping the order value with the adjacent row, then upsert both.
   async function move(i: number, dir: -1 | 1) {
-    const j = i + dir;
-    if (j < 0 || j >= rows.length) return;
-    const a = rows[i];
-    const b = rows[j];
-    await api.upsert({ ...a, order: b.order });
-    await api.upsert({ ...b, order: a.order });
+    const swap = swapResourceOrder(rows, i, dir);
+    if (!swap) return;
+    await api.upsert(swap[0]);
+    await api.upsert(swap[1]);
     void reload();
   }
 

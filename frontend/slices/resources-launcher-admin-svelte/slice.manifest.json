@@ -1,0 +1,23 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "resources-launcher-admin-svelte",
+  "version": "1.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add resources-launcher-admin --framework sveltekit",
+    "consumerPath": "slices/resources-launcher-admin"
+  },
+  "files": [
+    "README.md",
+    "app.svelte",
+    "components/ResourceEditor.svelte",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": ["frontend/slices/resources-launcher-admin/lib/core.ts"],
+    "external": ["svelte"]
+  }
+}

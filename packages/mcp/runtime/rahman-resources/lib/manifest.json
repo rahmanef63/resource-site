@@ -205,12 +205,12 @@
       "slug": "resources-launcher-admin",
       "title": "Resources Admin — curated icon-launcher CRUD",
       "category": "os",
-      "description": "An owner-gated admin app for a curated icon-launcher: add / edit / remove / reorder links (label, lucide icon NAME, url, group, order) that open in a new tab. The backend is INJECTED via a small ResourcesAdapter (list/upsert/remove/canManage): point configureResources at your store, or keep the bundled in-memory mock so the whole CRUD — including reorder — is interactive with zero backend. Icons are stored as lucide NAME strings and resolved client-side, so the same data drives a public launcher surface.",
+      "description": "Owner-gated curated launcher CRUD over one framework-neutral ResourcesAdapter/core. React/Next remains the default Lucide + shadcn surface; Svelte 5/SvelteKit gets native add/edit/remove/reorder UI over the same mock/live adapter, resource model, icon-name catalog, normalization, sorting, and permission state. Backend wiring stays injected through configureResources (list/upsert/remove/canManage).",
       "source": "rahmanef63/os-vps",
       "install": "npx rahman-resources add resources-launcher-admin",
       "npmPackages": [],
       "exampleCode": "\"use client\";\nimport { ResourcesAdmin } from \"@/features/resources-launcher-admin\";\n\nexport default function ResourcesAdminDemo() {\n  // Unwired -> in-memory mock; configureResources for a real backend.\n  return <div className=\"h-dvh w-full\"><ResourcesAdmin /></div>;\n}",
-      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A curated icon-launcher admin (CRUD + reorder). Fully client-side; backend optional.\n\nSTEP 1 — Install. `npx rr add resources-launcher-admin`. Ensure `@/features/resources-launcher-admin` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: `npx shadcn@latest add button input label scroll-area native-select`.\n\nSTEP 3 — Mount. `<ResourcesAdmin />` in a height-bearing box — unwired it runs on an in-memory mock store (add / edit / remove / reorder all live). Or register `resourcesAdminApp` in an appshell manifest.\n\nSTEP 4 — Real backend. `configureResources({ mode:\"live\", list, upsert, remove, canManage })` — list returns rows { id, label, icon, url, group, order }; upsert takes the same minus id to insert (pass id to patch); canManage gates the editor + reorder. Icons are lucide NAME strings resolved via resolveIcon.",
+      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A curated icon-launcher admin (CRUD + reorder). Fully client-side; backend optional.\n\nSTEP 1 — Install. `npx rr add resources-launcher-admin`. Ensure `@/features/resources-launcher-admin` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — React deps. npm: `lucide-react@^0.400.0`. shadcn: `npx shadcn@latest add button input label scroll-area native-select`. SvelteKit: `npx rr add resources-launcher-admin --framework sveltekit` installs only `svelte@^5` + the shared portable core.\n\nSTEP 3 — Mount. `<ResourcesAdmin />` in a height-bearing box — unwired it runs on an in-memory mock store (add / edit / remove / reorder all live). Or register `resourcesAdminApp` in an appshell manifest.\n\nSTEP 4 — Real backend. `configureResources({ mode:\"live\", list, upsert, remove, canManage })` — list returns rows { id, label, icon, url, group, order }; upsert takes the same minus id to insert (pass id to patch); canManage gates the editor + reorder. Icons are lucide NAME strings resolved via resolveIcon.",
       "tags": [
         "launcher",
         "links",
@@ -1941,19 +1941,35 @@
       "title": "Resources Admin — curated icon-launcher CRUD",
       "category": "os",
       "kind": "ui",
-      "version": "1.0.0",
-      "description": "An owner-gated admin app for a curated icon-launcher: add / edit / remove / reorder links (label, lucide icon NAME, url, group, order) that open in a new tab. The backend is INJECTED via a small ResourcesAdapter (list/upsert/remove/canManage): point configureResources at your store, or keep the bundled in-memory mock so the whole CRUD — including reorder — is interactive with zero backend. Icons are stored as lucide NAME strings and resolved client-side, so the same data drives a public launcher surface.",
+      "version": "1.1.0",
+      "description": "Owner-gated curated launcher CRUD over one framework-neutral ResourcesAdapter/core. React/Next remains the default Lucide + shadcn surface; Svelte 5/SvelteKit gets native add/edit/remove/reorder UI over the same mock/live adapter, resource model, icon-name catalog, normalization, sorting, and permission state. Backend wiring stays injected through configureResources (list/upsert/remove/canManage).",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/resources-launcher-admin",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/resources-launcher-admin"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/resources-launcher-admin-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/resources-launcher-admin/lib/core.ts"
+            ]
+          }
         }
       },
       "convexPaths": [],
       "npm": [
-        "lucide-react"
+        "lucide-react@^0.400.0"
       ],
       "shadcn": [
         "button",
@@ -1964,7 +1980,9 @@
       ],
       "env": [],
       "peers": [],
-      "sharedFiles": [],
+      "sharedFiles": [
+        "frontend/slices/resources-launcher-admin/lib/core.ts"
+      ],
       "providers": [],
       "tags": [
         "launcher",
@@ -1975,7 +1993,7 @@
         "icons",
         "ui"
       ],
-      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A curated icon-launcher admin (CRUD + reorder). Fully client-side; backend optional.\n\nSTEP 1 — Install. `npx rr add resources-launcher-admin`. Ensure `@/features/resources-launcher-admin` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: `npx shadcn@latest add button input label scroll-area native-select`.\n\nSTEP 3 — Mount. `<ResourcesAdmin />` in a height-bearing box — unwired it runs on an in-memory mock store (add / edit / remove / reorder all live). Or register `resourcesAdminApp` in an appshell manifest.\n\nSTEP 4 — Real backend. `configureResources({ mode:\"live\", list, upsert, remove, canManage })` — list returns rows { id, label, icon, url, group, order }; upsert takes the same minus id to insert (pass id to patch); canManage gates the editor + reorder. Icons are lucide NAME strings resolved via resolveIcon."
+      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A curated icon-launcher admin (CRUD + reorder). Fully client-side; backend optional.\n\nSTEP 1 — Install. `npx rr add resources-launcher-admin`. Ensure `@/features/resources-launcher-admin` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — React deps. npm: `lucide-react@^0.400.0`. shadcn: `npx shadcn@latest add button input label scroll-area native-select`. SvelteKit: `npx rr add resources-launcher-admin --framework sveltekit` installs only `svelte@^5` + the shared portable core.\n\nSTEP 3 — Mount. `<ResourcesAdmin />` in a height-bearing box — unwired it runs on an in-memory mock store (add / edit / remove / reorder all live). Or register `resourcesAdminApp` in an appshell manifest.\n\nSTEP 4 — Real backend. `configureResources({ mode:\"live\", list, upsert, remove, canManage })` — list returns rows { id, label, icon, url, group, order }; upsert takes the same minus id to insert (pass id to patch); canManage gates the editor + reorder. Icons are lucide NAME strings resolved via resolveIcon."
     },
     {
       "slug": "profile",

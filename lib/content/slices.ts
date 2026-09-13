@@ -513,14 +513,14 @@ export default function HtmlStudioDemo() {
     title: "Resources Admin — curated icon-launcher CRUD",
     category: "os",
     kind: "ui",
-    version: "1.0.0",
+    version: "1.1.0",
     tagline: "Owner-gated CRUD for a curated icon-launcher — add/edit/remove/reorder links that open in a new tab, backend injected.",
     description:
-      "An owner-gated admin app for a curated icon-launcher: add / edit / remove / reorder links (label, lucide icon NAME, url, group, order) that open in a new tab. The backend is INJECTED via a small ResourcesAdapter (list/upsert/remove/canManage): point configureResources at your store, or keep the bundled in-memory mock so the whole CRUD — including reorder — is interactive with zero backend. Icons are stored as lucide NAME strings and resolved client-side, so the same data drives a public launcher surface.",
+      "Owner-gated curated launcher CRUD over one framework-neutral ResourcesAdapter/core. React/Next remains the default Lucide + shadcn surface; Svelte 5/SvelteKit gets native add/edit/remove/reorder UI over the same mock/live adapter, resource model, icon-name catalog, normalization, sorting, and permission state. Backend wiring stays injected through configureResources (list/upsert/remove/canManage).",
     source: "rahmanef63/os-vps",
     slicePath: "frontend/slices/resources-launcher-admin",
     convexPaths: [],
-    npm: ["lucide-react"],
+    npm: ["lucide-react@^0.400.0"],
     shadcn: ["button", "input", "label", "scroll-area", "native-select"],
     env: [],
     peers: [],
@@ -534,7 +534,7 @@ export default function HtmlStudioDemo() {
 
 STEP 1 — Install. \`npx rr add resources-launcher-admin\`. Ensure \`@/features/resources-launcher-admin\` resolves and Tailwind scans the slice folder.
 
-STEP 2 — Deps. npm: \`lucide-react\`. shadcn: \`npx shadcn@latest add button input label scroll-area native-select\`.
+STEP 2 — React deps. npm: \`lucide-react@^0.400.0\`. shadcn: \`npx shadcn@latest add button input label scroll-area native-select\`. SvelteKit: \`npx rr add resources-launcher-admin --framework sveltekit\` installs only \`svelte@^5\` + the shared portable core.
 
 STEP 3 — Mount. \`<ResourcesAdmin />\` in a height-bearing box — unwired it runs on an in-memory mock store (add / edit / remove / reorder all live). Or register \`resourcesAdminApp\` in an appshell manifest.
 

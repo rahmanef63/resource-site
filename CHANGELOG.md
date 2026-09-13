@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — SvelteKit Resources Launcher Admin distribution
+<!-- public-changelog:SVELTE-RESOURCES-LAUNCHER-ADMIN-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/resources-launcher-admin
+- Preview: https://resource.rahmanef.com/preview/slices/resources-launcher-admin
+- [before: `resources-launcher-admin` mixed its portable resource model, mock/live adapter and reorder behavior into a React/Lucide host seam, had no native Svelte distribution, and the catalog left Lucide unversioned] → [after: React/Next remains the default Lucide/shadcn renderer while Svelte/SvelteKit gets native CRUD over the exact same portable resource adapter, icon-name catalog, normalization, sorting, management gate, and reorder core]
+- Stored icon names remain framework-neutral; React resolves them through Lucide while Svelte renders them without importing React, Next, Lucide, or shadcn.
+
 ### 2026-09-13 — SvelteKit Profile distribution
 <!-- public-changelog:SVELTE-PROFILE-DISTRIBUTION -->
 

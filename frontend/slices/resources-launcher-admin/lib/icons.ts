@@ -1,7 +1,3 @@
-// Launcher icons — lucide icon NAME → component map. A resource stores one of
-// these names in `icon`; the admin select offers them and the launcher resolves
-// the name to a component client-side. Unknown name falls back to Link. Keep
-// tiny + generic (no brand glyphs — lucide dropped those anyway).
 import {
   Link,
   Globe,
@@ -17,6 +13,7 @@ import {
   Briefcase,
   type LucideIcon,
 } from "lucide-react";
+import { RESOURCE_ICON_NAMES } from "./core";
 
 export const RESOURCE_ICONS: Record<string, LucideIcon> = {
   Link,
@@ -33,9 +30,8 @@ export const RESOURCE_ICONS: Record<string, LucideIcon> = {
   Work: Briefcase,
 };
 
-export const ICON_NAMES = Object.keys(RESOURCE_ICONS);
+export const ICON_NAMES = [...RESOURCE_ICON_NAMES];
 
-/** Resolve a stored icon NAME to a lucide component (Link fallback). */
 export function resolveIcon(name: string): LucideIcon {
   return RESOURCE_ICONS[name] ?? Link;
 }

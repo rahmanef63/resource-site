@@ -1,5 +1,12 @@
 # resources-launcher-admin changelog
 
+## 1.1.0 — 2026-09-13
+
+- Added one framework-neutral `lib/core.ts` for resource models, mock/live adapter state, icon-name catalog, input normalization, sorting and reorder semantics.
+- React/Next remains the default Lucide + shadcn renderer and preserves `configureResources`, `useResourcesApi`, `ResourcesAdmin`, `resourcesAdminApp`, and icon resolver APIs.
+- Added native Svelte 5/SvelteKit CRUD using the exact same adapter/core with no React, Next, Lucide or shadcn runtime imports.
+- Public preview now mounts canonical `preview.tsx`; default Lucide dependency is pinned to `lucide-react@^0.400.0`.
+
 ## 1.0.0 — 2026-06-30
 
 - Lifted from os-vps (the rahmanef-com web-OS). Self-contained host seam

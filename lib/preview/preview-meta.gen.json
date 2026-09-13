@@ -1127,6 +1127,25 @@
     ]
   },
   {
+    "slug": "resources-launcher-admin",
+    "title": "Resources Admin — curated icon-launcher CRUD",
+    "category": "os",
+    "previews": [
+      {
+        "component": "ResourcesAdmin",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "mock-crud",
+            "title": "Mock CRUD",
+            "description": "Bundled mock adapter with add/edit/delete/reorder enabled"
+          }
+        ],
+        "seed": "Three canonical mock resources from the shared resources core"
+      }
+    ]
+  },
+  {
     "slug": "sections",
     "title": "Sections — composable marketing/landing sections",
     "category": "content",

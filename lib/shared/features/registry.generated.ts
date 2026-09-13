@@ -158,7 +158,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...resourcesLauncherAdminConfig,
     importPath: "@/features/resources-launcher-admin/config",
-    version: "1.0.0",
+    version: "1.1.0",
   },
   {
     ...seoConfig,

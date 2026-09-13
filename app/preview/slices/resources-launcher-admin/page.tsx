@@ -1,12 +1,21 @@
-import { ResourcesAdmin } from "@/features/resources-launcher-admin";
+"use client";
 
-// Live preview: the curated icon-launcher CRUD on the in-memory mock store.
-// Real backend: configureResources({ mode:"live", list, upsert, remove, canManage }).
+import preview from "@/features/resources-launcher-admin/preview";
+import { PreviewSection, SlicePreviewLayout } from "@/components/slice-previews/preview-layout";
 
-export default function ResourcesLauncherAdminPreview() {
+const ResourcesAdminPreview = preview.ResourcesAdmin;
+
+export default function Page() {
   return (
-    <div className="h-dvh w-full">
-      <ResourcesAdmin />
-    </div>
+    <SlicePreviewLayout
+      title="Resources Admin"
+      kind="ui"
+      description="Curated launcher CRUD over the canonical injected resource adapter and mock store."
+      sourceUrl="https://github.com/rahmanef63/resource-site/tree/main/frontend/slices/resources-launcher-admin"
+    >
+      <PreviewSection title="Mock CRUD" hint="add · edit · delete · reorder">
+        <ResourcesAdminPreview variant={{ scenario: "mock-crud" }} />
+      </PreviewSection>
+    </SlicePreviewLayout>
   );
 }
