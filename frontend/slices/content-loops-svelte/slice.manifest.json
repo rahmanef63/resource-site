@@ -1,0 +1,31 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "content-loops-svelte",
+  "version": "0.2.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add content-loops --framework sveltekit",
+    "consumerPath": "slices/content-loops"
+  },
+  "files": [
+    "README.md",
+    "components/ContentLoop.svelte",
+    "config.ts",
+    "index.ts",
+    "lib/store.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/content-loops/lib/types.ts",
+      "frontend/slices/content-loops/lib/registry.ts",
+      "frontend/slices/content-loops/lib/mock-source.ts",
+      "frontend/slices/content-loops/lib/pagination.ts",
+      "frontend/slices/content-loops/lib/variants.ts"
+    ],
+    "external": [
+      "svelte"
+    ]
+  }
+}

@@ -250,6 +250,42 @@ describe("framework-aware slice distribution", () => {
     expect(svelteResult.stdout).not.toContain("npx shadcn@latest add");
   });
 
+  it("keeps content-loops on React by default and selects its native SvelteKit distribution", () => {
+    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "content-loops");
+    const target = mkTarget();
+
+    expect(slice.slicePath).toBe("frontend/slices/content-loops");
+    expect(slice.defaultFramework).toBe("react-next");
+    const svelte = slice.frameworks["svelte-sveltekit"];
+    expect(svelte.path).toBe("frontend/slices/content-loops-svelte");
+    expect(svelte.aliases).toEqual(["svelte", "sveltekit"]);
+    expect(svelte.deps.npm).toEqual(["svelte@^5"]);
+    expect(svelte.deps.shadcn).toEqual([]);
+    expect(svelte.deps.sharedFiles).toEqual([
+      "frontend/slices/content-loops/lib/types.ts",
+      "frontend/slices/content-loops/lib/registry.ts",
+      "frontend/slices/content-loops/lib/mock-source.ts",
+      "frontend/slices/content-loops/lib/pagination.ts",
+      "frontend/slices/content-loops/lib/variants.ts",
+    ]);
+
+    const defaultResult = runCli("add", "content-loops", "--target", target, "--dry-run");
+    expect(defaultResult.status).toBe(0);
+    expect(defaultResult.stdout).toContain("frontend/slices/content-loops →");
+    expect(defaultResult.stdout).toContain("shadcn: button");
+
+    const svelteResult = runCli("add", "content-loops", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteResult.status).toBe(0);
+    expect(svelteResult.stdout).toContain("frontend/slices/content-loops-svelte →");
+    expect(svelteResult.stdout).toContain("frontend/slices/content-loops/lib/pagination.ts →");
+    expect(svelteResult.stdout).toContain("frontend/slices/content-loops/lib/variants.ts →");
+    expect(svelteResult.stdout).toContain("svelte@^5");
+    expect(svelteResult.stdout).not.toContain("npx shadcn@latest add");
+    expect(svelteResult.stdout).not.toContain("react");
+  });
+
   it("keeps quicklinks on React by default and selects its native SvelteKit distribution", () => {
     execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));

@@ -1,15 +1,38 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "content-loops",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "category": "content",
   "kind": "ui",
   "title": "Content Loops",
-  "description": "A data-source-driven repeater. Register pluggable LoopEntitySource backends (each declares fields + an async fetch returning { items, totalItems }), then drop <ContentLoop source sourceId filters orderBy variants={[A, B]} /> to render a child component per item, round-robining items across variants (item i -> variants[i % n]). Ships the source registry (namespaced ids, no shadowing), createMockLoopSource so it runs env-free, none/infinite pagination via useLoopPagination (Load more button), and a generic LoopItem field-bag. Write your own source that fetches from Convex/REST and register it — the contract is identical to the mock. Harvested + decoupled from the Instatic CMS base.loop engine (publisher / page-tree / entryStack machinery stripped to props).",
+  "description": "A data-source-driven repeater with one framework-neutral source registry, mock source, async pagination controller, and round-robin variant selector. React remains the default UI; Svelte 5/SvelteKit adds a native snippet-based repeater over the exact same core, preserving sourceId lookup, filters/order, none/infinite pagination, load-more accumulation, and error/loading/empty states.",
   "namespace": "@/features/content-loops",
   "frontend": {
     "slicePath": "frontend/slices/content-loops",
-    "configExport": "contentLoopsFeature"
+    "configExport": "contentLoopsFeature",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/content-loops-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/content-loops/lib/types.ts",
+            "frontend/slices/content-loops/lib/registry.ts",
+            "frontend/slices/content-loops/lib/mock-source.ts",
+            "frontend/slices/content-loops/lib/pagination.ts",
+            "frontend/slices/content-loops/lib/variants.ts"
+          ]
+        }
+      }
+    }
   },
   "convex": {
     "tablesExport": "",
@@ -64,7 +87,9 @@
       ],
       "utils": [
         "loopSourceRegistry",
-        "createMockLoopSource"
+        "createMockLoopSource",
+        "createLoopPaginationController",
+        "loopVariantIndex"
       ],
       "hooks": [
         "useLoopPagination",

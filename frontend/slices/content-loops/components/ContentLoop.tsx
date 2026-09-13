@@ -9,6 +9,7 @@ import { createElement, type ElementType, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { loopSourceRegistry } from "../lib/registry";
 import type { LoopEntitySource, LoopItem } from "../lib/types";
+import { loopVariantIndex } from "../lib/variants";
 import { useLoopPagination } from "../hooks/use-loop-pagination";
 
 export interface LoopVariantProps {
@@ -96,7 +97,7 @@ export function ContentLoop({
   }
 
   const children = items.map((item, index) => {
-    const Variant = variants[index % variants.length];
+    const Variant = variants[loopVariantIndex(index, variants.length)];
     return <Variant key={item.id} item={item} index={index} />;
   });
 

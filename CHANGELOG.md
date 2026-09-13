@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — SvelteKit Content Loops distribution
+<!-- public-changelog:SVELTE-CONTENT-LOOPS-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/content-loops
+- Preview: https://resource.rahmanef.com/preview/slices/content-loops
+- [before: `content-loops` kept async pagination and variant selection inside the React adapter and had no native Svelte distribution] → [after: React/Next remains the default while Svelte/SvelteKit gets a native snippet-based repeater over the exact same source registry, pagination controller, and round-robin helper]
+- The public preview route now mounts the canonical `preview.tsx` module so none/infinite pagination can be verified without duplicating demo data.
+
 ### 2026-09-13 — SvelteKit Quicklinks distribution
 <!-- public-changelog:SVELTE-QUICKLINKS-DISTRIBUTION -->
 

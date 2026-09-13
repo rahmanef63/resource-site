@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-CONTENT-LOOPS-DISTRIBUTION",
+    "version": "content-loops@0.2.0",
+    "date": 1789257600000,
+    "kind": "feature",
+    "title": "SvelteKit Content Loops distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/content-loops — [before: content-loops kept async pagination and variant selection inside the React adapter and had no native Svelte distribution] → [after: React/Next remains the default while Svelte/SvelteKit gets a native snippet-based repeater over the exact same source registry, pagination controller, and round-robin helper].",
+    "groups": [
+      {
+        "heading": "One loop engine, two UI adapters",
+        "bullets": [
+          "The canonical core now owns source types, namespaced registry behavior, mock source, async pagination state, and deterministic variant indexing for both React and Svelte.",
+          "The Svelte 5 distribution adds a readable store and snippet-based ContentLoop UI; five canonical core files are delivered through verified sharedFiles with no React/shadcn dependency.",
+          "Public preview: https://resource.rahmanef.com/preview/slices/content-loops mounts the canonical preview module and exposes none/infinite pagination modes."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-QUICKLINKS-DISTRIBUTION",
     "version": "quicklinks@1.1.0",
     "date": 1789257600000,

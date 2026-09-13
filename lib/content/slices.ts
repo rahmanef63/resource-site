@@ -2063,7 +2063,7 @@ const nav = [
     title: "Content Loops",
     category: "content",
     kind: "ui",
-    version: "0.1.0",
+    version: "0.2.0",
     tagline: "Data-source-driven repeater: register pluggable sources, render one component per item, round-robin across variants, none/infinite pagination — no backend required.",
     description: "A data-source-driven repeater harvested from the Instatic CMS base.loop engine, decoupled from its publisher / page-tree / entryStack machinery into a plain React slice. Register pluggable LoopEntitySource backends (each declares display fields + an async fetch returning { items, totalItems }); drop <ContentLoop source|sourceId filters orderBy variants={[A, B]} /> to render one component per item, round-robining items across variants so alternating / featured layouts need no per-item branching. Ships a namespaced source registry (ids must be 'ns.name', so consumer sources can't shadow each other), createMockLoopSource for env-free previews + tests, and none/infinite pagination via useLoopPagination (a shadcn Load more button accumulates pageSize chunks). LoopItem.fields is a generic resolved-value bag — variants read item.fields.title directly, no second lookup. UI-only: no Convex tables shipped; point a source's fetch at Convex/REST when you have a backend. First slice of the feature-harvest ULTRAPLAN (docs/feature-harvest) and a dependency of the planned site-templates-engine + visual-page-canvas.",
     source: "rahman-resources",

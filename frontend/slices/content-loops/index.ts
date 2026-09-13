@@ -6,6 +6,13 @@ export type {
   LoopVariantProps,
 } from "./components/ContentLoop";
 export { loopSourceRegistry } from "./lib/registry";
+export {
+  createLoopPaginationController,
+  type LoopPaginationController,
+  type LoopPaginationOptions,
+  type LoopPaginationSnapshot,
+} from "./lib/pagination";
+export { loopVariantIndex } from "./lib/variants";
 export { createMockLoopSource, type MockLoopSourceOptions } from "./lib/mock-source";
 export {
   useLoopPagination,

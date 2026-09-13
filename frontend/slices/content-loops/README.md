@@ -1,26 +1,29 @@
 # Content Loops
 
-A data-source-driven **repeater**. Pick a source, render one component per item,
-round-robin items across variants. Harvested + decoupled from the Instatic CMS
-`base.loop` engine — the publisher / page-tree / entryStack machinery is stripped
-to props, so this is a plain React + injected-source slice.
+A data-source-driven repeater. Register a pluggable `LoopEntitySource`, fetch
+items through one framework-neutral pagination controller, then render one
+variant per item in deterministic round-robin order.
+
+React/Next remains the default distribution. Svelte 5/SvelteKit uses the exact
+same types, registry, mock source, pagination controller, and variant selector.
 
 ```bash
 npx rr add content-loops
+npx rr add content-loops --framework sveltekit
 ```
 
-## Use it
+## React / Next (default)
 
 ```tsx
 import { ContentLoop, createMockLoopSource } from "@/features/content-loops";
 
-const source = createMockLoopSource(); // swap for your own (below)
+const source = createMockLoopSource();
 
 <ContentLoop
   source={source}
   pagination="infinite"
   pageSize={6}
-  className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+  className="grid gap-4 sm:grid-cols-2"
   variants={[
     ({ item }) => <Card title={String(item.fields.title)} />,
     ({ item }) => <FeaturedCard title={String(item.fields.title)} />,
@@ -28,49 +31,48 @@ const source = createMockLoopSource(); // swap for your own (below)
 />;
 ```
 
+## Svelte 5 / SvelteKit
+
+```svelte
+<script lang="ts">
+  import { ContentLoop, createMockLoopSource } from "@/features/content-loops-svelte";
+  const source = createMockLoopSource();
+</script>
+
+{#snippet card(item, index)}
+  <article>{index + 1}. {String(item.fields.title)}</article>
+{/snippet}
+
+<ContentLoop {source} pagination="infinite" pageSize={6} variants={[card]} />
+```
+
 - `variants` round-robin: item `i` renders `variants[i % variants.length]`.
-- `pagination="none"` renders up to `limit`; `"infinite"` adds a **Load more** button.
-- Pass `source` inline, or register it and pass `sourceId`.
+- `pagination="none"` fetches one page capped by `limit`.
+- `pagination="infinite"` accumulates `pageSize` chunks behind Load more.
+- Pass `source` inline or register a namespaced source and pass `sourceId`.
+- Loading, error, empty, filters, ordering, and direction semantics are shared.
 
 ## Write your own source
-
-A source is just an id + fields + an async `fetch`. The contract is identical to
-the mock — point `fetch` at Convex, REST, or anything:
 
 ```ts
 import { loopSourceRegistry, type LoopEntitySource } from "@/features/content-loops";
 
 const postsSource: LoopEntitySource = {
-  id: "blog.posts", // MUST be namespaced "namespace.name"
+  id: "blog.posts",
   label: "Blog posts",
-  fields: [
-    { id: "title", label: "Title" },
-    { id: "cover", label: "Cover", format: "media" },
-  ],
+  fields: [{ id: "title", label: "Title" }],
   orderByOptions: [{ id: "publishedAt", label: "Newest" }],
   async fetch({ filters, orderBy, direction, limit, offset }) {
     const { rows, total } = await fetchMyPosts({ filters, orderBy, direction, limit, offset });
     return {
-      items: rows.map((r) => ({ id: r._id, fields: { title: r.title, cover: r.coverUrl } })),
+      items: rows.map((row) => ({ id: row._id, fields: { title: row.title } })),
       totalItems: total,
     };
   },
 };
 
 loopSourceRegistry.registerOrReplace(postsSource);
-// then: <ContentLoop sourceId="blog.posts" variants={[...]} />
 ```
 
-`LoopItem.fields` holds **resolved** values (resolve media paths / author names
-inside `fetch`), so variants are a one-line lookup: `item.fields.title`.
-
-## What it ships
-
-| Export | What |
-|---|---|
-| `<ContentLoop>` | the repeater component |
-| `useLoopPagination` / `useLoopItems` | resolve items (with / without load-more) |
-| `loopSourceRegistry` | register sources by namespaced id |
-| `createMockLoopSource` | synthetic source so it runs env-free |
-
-UI-only, no Convex. Add a backend source when you have one.
+Source ids must be namespaced (`namespace.name`). `LoopItem.fields` must already
+contain resolved values so render variants never need a second lookup.
