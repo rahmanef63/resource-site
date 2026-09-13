@@ -286,6 +286,42 @@ describe("framework-aware slice distribution", () => {
     expect(svelteResult.stdout).not.toContain("next@^15");
   });
 
+  it("keeps storefront-checkout on React by default and selects native Svelte cart UI over the same cart core", () => {
+    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "storefront-checkout");
+    const target = mkTarget();
+
+    expect(slice.slicePath).toBe("frontend/slices/storefront-checkout");
+    expect(slice.defaultFramework).toBe("react-next");
+    const svelte = slice.frameworks["svelte-sveltekit"];
+    expect(svelte.path).toBe("frontend/slices/storefront-checkout-svelte");
+    expect(svelte.aliases).toEqual(["svelte", "sveltekit"]);
+    expect(svelte.deps.npm).toEqual(["svelte@^5"]);
+    expect(svelte.deps.shadcn).toEqual([]);
+    expect(svelte.deps.sharedFiles).toEqual([
+      "frontend/slices/storefront-checkout/lib/core.ts",
+      "frontend/slices/storefront-checkout/lib/tools.ts",
+    ]);
+
+    const defaultResult = runCli("add", "storefront-checkout", "--target", target, "--dry-run");
+    expect(defaultResult.status).toBe(0);
+    expect(defaultResult.stdout).toContain("frontend/slices/storefront-checkout →");
+    expect(defaultResult.stdout).toContain("lucide-react@^0.400.0");
+    expect(defaultResult.stdout).toContain("shadcn: badge button card separator sheet");
+    expect(defaultResult.stdout).toContain("payment ^0.4");
+
+    const svelteResult = runCli("add", "storefront-checkout", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteResult.status).toBe(0);
+    expect(svelteResult.stdout).toContain("frontend/slices/storefront-checkout-svelte →");
+    expect(svelteResult.stdout).toContain("frontend/slices/storefront-checkout/lib/core.ts →");
+    expect(svelteResult.stdout).toContain("frontend/slices/storefront-checkout/lib/tools.ts →");
+    expect(svelteResult.stdout).toContain("svelte@^5");
+    expect(svelteResult.stdout).toContain("payment ^0.4");
+    expect(svelteResult.stdout).not.toContain("lucide-react");
+    expect(svelteResult.stdout).not.toContain("shadcn:");
+  });
+
   it("keeps notifications-center on React by default and selects native Svelte inbox UI over the same adapter core", () => {
     execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));

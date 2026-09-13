@@ -1,20 +1,42 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "storefront-checkout",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "category": "content",
   "kind": "ui",
-  "title": "Storefront Checkout \u2014 guest cart + checkout composition",
-  "description": "Guest-friendly shopping cart for catalog storefronts: CartProvider context with localStorage persistence (survives reload, no login needed), CartWidget header button with count badge + slide-over sheet (qty steppers, subtotal, checkout CTA), and CheckoutSummary order panel. Props-driven R3 \u2014 zero Convex imports; the host resolves numeric prices from its own catalog before add() and MUST re-price server-side at checkout (client subtotal is display-only). Pairs with payment or payment for the actual payment step; see HOST-SETUP.md for the full catalog \u2192 cart \u2192 place-order \u2192 instructions flow proven on wirausaha-os.",
+  "title": "Storefront Checkout — guest cart + checkout composition",
+  "description": "Guest-friendly persisted cart with one framework-neutral cart store, native React and Svelte UI adapters, and display-only client totals that the host must re-price server-side at checkout. React/Next remains default; Svelte/SvelteKit reuses the same item, quantity, persistence, count/subtotal, IDR-format, and agent-tool semantics.",
   "namespace": "@/features/storefront-checkout",
   "registers": [],
   "audit": [],
   "frontend": {
     "slicePath": "frontend/slices/storefront-checkout",
-    "configExport": ""
+    "configExport": "",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/storefront-checkout-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/storefront-checkout/lib/core.ts",
+            "frontend/slices/storefront-checkout/lib/tools.ts"
+          ]
+        }
+      }
+    }
   },
   "deps": {
-    "npm": [],
+    "npm": [
+      "lucide-react@^0.400.0"
+    ],
     "shadcn": [
       "badge",
       "button",
@@ -28,7 +50,7 @@
         "slug": "payment",
         "range": "^0.4",
         "optional": true,
-        "reason": "Payment step \u2014 checkout page composes DokuDirectForm + DokuPaymentInstructions (or swap payment)."
+        "reason": "Payment step — checkout page composes DokuDirectForm + DokuPaymentInstructions (or swap payment)."
       }
     ]
   },
@@ -44,10 +66,10 @@
             "filled"
           ],
           "default": "filled",
-          "description": "Cart contents \u2014 empty state vs two seeded demo items."
+          "description": "Cart contents — empty state vs two seeded demo items."
         }
       ],
-      "seed": "Wrapped in CartProvider (isolated storageKey). Click the cart trigger to open the sheet \u2014 qty steppers, remove, subtotal, checkout CTA."
+      "seed": "Wrapped in CartProvider (isolated storageKey). Click the cart trigger to open the sheet — qty steppers, remove, subtotal, checkout CTA."
     }
   ],
   "contract": {
@@ -65,13 +87,16 @@
         "CheckoutSummary"
       ],
       "utils": [
-        "formatIDR"
+        "formatIDR",
+        "createCartStore"
       ],
       "hooks": [
         "useCart"
       ],
       "types": [
-        "CartItem"
+        "CartItem",
+        "CartSnapshot",
+        "CartStore"
       ]
     }
   }

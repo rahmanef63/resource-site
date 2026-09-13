@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-STOREFRONT-CHECKOUT-DISTRIBUTION",
+    "version": "storefront-checkout@0.3.0",
+    "date": 1789257600000,
+    "kind": "feature",
+    "title": "SvelteKit Storefront Checkout distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/storefront-checkout — [before: storefront-checkout coupled guest-cart state and persistence to React Context, lacked a public preview route, and its catalog omitted the default Lucide dependency] → [after: React/Next remains the default while Svelte/SvelteKit gets native cart/store/checkout UI over the exact same localStorage, quantity, subtotal, formatting, and agent-tool core].",
+    "groups": [
+      {
+        "heading": "One guest-cart engine, native checkout surfaces",
+        "bullets": [
+          "The canonical cart core owns SSR-safe hydrate/persist, storage-key isolation, quantity accumulation/clamp, qty=0 removal, count/subtotal, IDR formatting, and cart actions.",
+          "The Svelte 5 distribution shares the cart core and agent tools without React, Next, Lucide, or shadcn; the optional payment peer remains unchanged.",
+          "Public preview: https://resource.rahmanef.com/preview/slices/storefront-checkout now mounts canonical preview.tsx, and the default React catalog declares lucide-react@^0.400.0."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-NOTIFICATIONS-CENTER-DISTRIBUTION",
     "version": "notifications-center@0.3.0",
     "date": 1789257600000,

@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — SvelteKit Storefront Checkout distribution
+<!-- public-changelog:SVELTE-STOREFRONT-CHECKOUT-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/storefront-checkout
+- Preview: https://resource.rahmanef.com/preview/slices/storefront-checkout
+- [before: `storefront-checkout` coupled guest-cart state and persistence to React Context, lacked a public preview route, and its catalog omitted the default Lucide dependency] → [after: React/Next remains the default while Svelte/SvelteKit gets native cart/store/checkout UI over the exact same localStorage, quantity, subtotal, formatting, and agent-tool core]
+- Client prices remain display-only and must be re-priced server-side; the optional `payment` peer remains the payment boundary.
+
 ### 2026-09-13 — SvelteKit Notifications Center distribution
 <!-- public-changelog:SVELTE-NOTIFICATIONS-CENTER-DISTRIBUTION -->
 

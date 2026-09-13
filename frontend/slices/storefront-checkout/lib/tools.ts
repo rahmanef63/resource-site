@@ -4,9 +4,9 @@
 // checkout — the agent only edits the client cart.
 
 import { defineToolCollection, noArgs, num, obj, str } from "@/shared/agentic";
-import type { CartContextValue } from "./cart";
+import type { CartSnapshot } from "./core";
 
-export type StorefrontCheckoutCtx = CartContextValue;
+export type StorefrontCheckoutCtx = CartSnapshot;
 
 const summary = (ctx: StorefrontCheckoutCtx): string =>
   `${ctx.count} item(s), subtotal ${ctx.subtotal} IDR: ${ctx.items.map((i) => `${i.slug}×${i.qty}`).join(", ") || "empty"}`;

@@ -1,0 +1,27 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "storefront-checkout-svelte",
+  "version": "0.3.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add storefront-checkout --framework sveltekit",
+    "consumerPath": "slices/storefront-checkout"
+  },
+  "files": [
+    "README.md",
+    "components/CartWidget.svelte",
+    "components/CheckoutSummary.svelte",
+    "config.ts",
+    "index.ts",
+    "lib/store.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/storefront-checkout/lib/core.ts",
+      "frontend/slices/storefront-checkout/lib/tools.ts"
+    ],
+    "external": ["svelte"]
+  }
+}

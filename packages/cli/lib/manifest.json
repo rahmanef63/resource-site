@@ -1155,12 +1155,12 @@
       "slug": "storefront-checkout",
       "title": "Storefront Checkout — guest cart + checkout composition",
       "category": "content",
-      "description": "Guest-friendly shopping cart for catalog storefronts. CartProvider holds items in React context with localStorage persistence (anonymous buyers keep their cart across reloads, zero backend). CartWidget is a header trigger with live count badge opening a slide-over Sheet: per-item qty steppers, remove, subtotal, checkout CTA to a host route. CheckoutSummary renders the order panel on the checkout page. Props-driven R3 — no convex/react anywhere; the host resolves a NUMERIC price per catalog item before add() and MUST re-price every line server-side when placing the order (client subtotal is display-only, never the charge). Proven end-to-end on wirausaha-os: catalog → cart → server-priced placeOrder action → DOKU Direct instructions → webhook flips paid (reactive). Pairs with doku-payment ≥0.2 (guest checkout: optional userId + buyer contact, key-guarded actions, guest-readable status query) or midtrans-payment.",
+      "description": "Guest-friendly persisted cart with one framework-neutral cart store. React/Next keeps CartProvider + shadcn/Lucide CartWidget/CheckoutSummary; Svelte/SvelteKit ships a native store, cart sheet, and checkout summary over the same quantity, localStorage, count/subtotal, IDR-format and agent-tool semantics. Client prices remain display-only: the host MUST re-price every line server-side before creating payment. Optional payment peer owns the actual payment step.",
       "source": "wirausaha-os guest-checkout build-out 2026-06-10",
       "install": "npx rahman-resources add storefront-checkout",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add storefront-checkout`. Wrap your public layout once with `<CartProvider storageKey=\"my-shop-cart\">` and mount `<CartWidget checkoutHref=\"/checkout\" />` in the header extras. On product surfaces call `useCart().add({ slug, name, price, priceLabel, emoji })` with a host-resolved NUMERIC price. Build a /checkout route composing `<CheckoutSummary />` + a payment form (doku-payment's DokuDirectForm): its onSubmit calls YOUR Convex place-order action which re-prices each {slug, qty} from your catalog table server-side, generates an unguessable orderId, calls api.features.payment.actions.doku.createDirectPayment, records your domain order row, and returns { ok, orderId, instructions, expiresAt } ({ ok:false, notice } when DOKU creds are unset — surface it in the form and offer a contact fallback). After success render DokuPaymentInstructions + reactive status via api.features.payment.query.getOrderByOrderId. Reference: template-wirausaha-os convex/checkout.ts + slices/checkout/CheckoutPage.tsx.",
+      "agentRecipe": "Run `npx rr add storefront-checkout` (or `--framework sveltekit`). Wrap your public layout once with `<CartProvider storageKey=\"my-shop-cart\">` and mount `<CartWidget checkoutHref=\"/checkout\" />` in the header extras. On product surfaces call `useCart().add({ slug, name, price, priceLabel, emoji })` with a host-resolved NUMERIC price. Build a /checkout route composing `<CheckoutSummary />` + a payment form (doku-payment's DokuDirectForm): its onSubmit calls YOUR Convex place-order action which re-prices each {slug, qty} from your catalog table server-side, generates an unguessable orderId, calls api.features.payment.actions.doku.createDirectPayment, records your domain order row, and returns { ok, orderId, instructions, expiresAt } ({ ok:false, notice } when DOKU creds are unset — surface it in the form and offer a contact fallback). After success render DokuPaymentInstructions + reactive status via api.features.payment.query.getOrderByOrderId. Reference: template-wirausaha-os convex/checkout.ts + slices/checkout/CheckoutPage.tsx.",
       "tags": [
         "ecommerce",
         "cart",
@@ -4390,18 +4390,37 @@
       "title": "Storefront Checkout — guest cart + checkout composition",
       "category": "content",
       "kind": "ui",
-      "version": "0.2.0",
-      "description": "Guest-friendly shopping cart for catalog storefronts. CartProvider holds items in React context with localStorage persistence (anonymous buyers keep their cart across reloads, zero backend). CartWidget is a header trigger with live count badge opening a slide-over Sheet: per-item qty steppers, remove, subtotal, checkout CTA to a host route. CheckoutSummary renders the order panel on the checkout page. Props-driven R3 — no convex/react anywhere; the host resolves a NUMERIC price per catalog item before add() and MUST re-price every line server-side when placing the order (client subtotal is display-only, never the charge). Proven end-to-end on wirausaha-os: catalog → cart → server-priced placeOrder action → DOKU Direct instructions → webhook flips paid (reactive). Pairs with doku-payment ≥0.2 (guest checkout: optional userId + buyer contact, key-guarded actions, guest-readable status query) or midtrans-payment.",
+      "version": "0.3.0",
+      "description": "Guest-friendly persisted cart with one framework-neutral cart store. React/Next keeps CartProvider + shadcn/Lucide CartWidget/CheckoutSummary; Svelte/SvelteKit ships a native store, cart sheet, and checkout summary over the same quantity, localStorage, count/subtotal, IDR-format and agent-tool semantics. Client prices remain display-only: the host MUST re-price every line server-side before creating payment. Optional payment peer owns the actual payment step.",
       "source": "wirausaha-os guest-checkout build-out 2026-06-10",
       "slicePath": "frontend/slices/storefront-checkout",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/storefront-checkout"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/storefront-checkout-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/storefront-checkout/lib/core.ts",
+              "frontend/slices/storefront-checkout/lib/tools.ts"
+            ]
+          }
         }
       },
       "convexPaths": [],
-      "npm": [],
+      "npm": [
+        "lucide-react@^0.400.0"
+      ],
       "shadcn": [
         "badge",
         "button",
@@ -4429,7 +4448,7 @@
         "localStorage",
         "sheet"
       ],
-      "agentRecipe": "Run `npx rr add storefront-checkout`. Wrap your public layout once with `<CartProvider storageKey=\"my-shop-cart\">` and mount `<CartWidget checkoutHref=\"/checkout\" />` in the header extras. On product surfaces call `useCart().add({ slug, name, price, priceLabel, emoji })` with a host-resolved NUMERIC price. Build a /checkout route composing `<CheckoutSummary />` + a payment form (doku-payment's DokuDirectForm): its onSubmit calls YOUR Convex place-order action which re-prices each {slug, qty} from your catalog table server-side, generates an unguessable orderId, calls api.features.payment.actions.doku.createDirectPayment, records your domain order row, and returns { ok, orderId, instructions, expiresAt } ({ ok:false, notice } when DOKU creds are unset — surface it in the form and offer a contact fallback). After success render DokuPaymentInstructions + reactive status via api.features.payment.query.getOrderByOrderId. Reference: template-wirausaha-os convex/checkout.ts + slices/checkout/CheckoutPage.tsx."
+      "agentRecipe": "Run `npx rr add storefront-checkout` (or `--framework sveltekit`). Wrap your public layout once with `<CartProvider storageKey=\"my-shop-cart\">` and mount `<CartWidget checkoutHref=\"/checkout\" />` in the header extras. On product surfaces call `useCart().add({ slug, name, price, priceLabel, emoji })` with a host-resolved NUMERIC price. Build a /checkout route composing `<CheckoutSummary />` + a payment form (doku-payment's DokuDirectForm): its onSubmit calls YOUR Convex place-order action which re-prices each {slug, qty} from your catalog table server-side, generates an unguessable orderId, calls api.features.payment.actions.doku.createDirectPayment, records your domain order row, and returns { ok, orderId, instructions, expiresAt } ({ ok:false, notice } when DOKU creds are unset — surface it in the form and offer a contact fallback). After success render DokuPaymentInstructions + reactive status via api.features.payment.query.getOrderByOrderId. Reference: template-wirausaha-os convex/checkout.ts + slices/checkout/CheckoutPage.tsx."
     },
     {
       "slug": "theme-presets",
