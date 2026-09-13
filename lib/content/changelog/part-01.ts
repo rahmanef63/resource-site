@@ -2,6 +2,24 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "PUBLISHER-CLEAN-HTML-PREVIEW-ROUTE",
+    "version": "publisher-clean-html@preview-route",
+    "date": 1789257600000,
+    "kind": "fix",
+    "title": "Publisher clean HTML public preview route",
+    "body": "Related: https://resource.rahmanef.com/preview/slices/publisher-clean-html — [before: publisher-clean-html declared preview metadata and shipped preview.tsx, but no public preview route mounted that module] → [after: the public preview route reuses the canonical preview module and exposes inline/external CSS modes without duplicating the demo tree].",
+    "groups": [
+      {
+        "heading": "Preview route parity",
+        "bullets": [
+          "The route imports the canonical publisher preview module and passes only the cssEmission variant selection; it does not duplicate the demo registry or node tree.",
+          "The existing PublishPreview iframe and sanitizer/CSP demo remain the only implementation source for the preview behavior."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-PUBLISHER-CLEAN-HTML-DISTRIBUTION",
     "version": "publisher-clean-html@0.2.0",
     "date": 1789257600000,

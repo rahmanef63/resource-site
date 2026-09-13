@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — Publisher clean HTML public preview route
+<!-- public-changelog:PUBLISHER-CLEAN-HTML-PREVIEW-ROUTE -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/preview/slices/publisher-clean-html
+- [before: `publisher-clean-html` declared preview metadata and shipped `preview.tsx`, but no public preview route mounted that module] → [after: the public preview route reuses the canonical preview module and exposes inline/external CSS modes without duplicating the demo tree]
+- The route is a thin host around the existing variant preview; publisher/render/sanitizer demo logic remains single-source.
+
 ### 2026-09-13 — SvelteKit Publisher clean HTML distribution
 <!-- public-changelog:SVELTE-PUBLISHER-CLEAN-HTML-DISTRIBUTION -->
 
