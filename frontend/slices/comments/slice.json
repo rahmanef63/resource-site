@@ -1,10 +1,10 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "comments",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "category": "content",
-  "title": "Comments \u2014 Threaded",
-  "description": "Polymorphic-target threaded comments. Consumer picks `TargetRef = { kind, id, subId? }` (e.g. page+block, blog+slug, task+id). Renderless <CommentsThread> + <CommentsAnchor> wrappers; useComments(bindings, opts) hook returns items + openCount + CRUD + forbiddenWords guard. Adapter pattern \u2014 see contract-negotiations-2026-05-15 \u00a71.",
+  "title": "Comments — Threaded",
+  "description": "Polymorphic-target threaded comments with one framework-neutral state/thread/tool core, renderless React and Svelte adapters, and one canonical Convex backend. React/Next remains default; Svelte/SvelteKit reuses the same TargetRef, nesting, CRUD, forbidden-word, open-count, pathMap, and agent-tool semantics.",
   "namespace": "@/features/comments",
   "kind": "full",
   "convex": {
@@ -16,7 +16,29 @@
   },
   "frontend": {
     "slicePath": "frontend/slices/comments",
-    "configExport": "commentsConfig"
+    "configExport": "commentsConfig",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/comments-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/comments/types/index.ts",
+            "frontend/slices/comments/lib/buildThread.ts",
+            "frontend/slices/comments/lib/state.ts",
+            "frontend/slices/comments/lib/tools.ts"
+          ]
+        }
+      }
+    }
   },
   "deps": {
     "npm": [],
@@ -60,7 +82,7 @@
             "compact"
           ],
           "default": "comfortable",
-          "description": "Row spacing of the thread skin \u2014 airy vs. dense"
+          "description": "Row spacing of the thread skin — airy vs. dense"
         },
         {
           "prop": "resolved",
@@ -106,7 +128,8 @@
         "useComments"
       ],
       "utils": [
-        "buildThread"
+        "buildThread",
+        "createCommentsState"
       ],
       "components": [
         "CommentsThread",

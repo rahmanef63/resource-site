@@ -3,7 +3,7 @@
 // wired — Convex, REST, memory — the agent drives it too.
 
 import { defineToolCollection, bool, obj, str } from "@/shared/agentic";
-import type { CommentsBindings } from "../hooks/useComments";
+import type { CommentsBindings } from "./state";
 
 export type CommentsToolsCtx = CommentsBindings;
 

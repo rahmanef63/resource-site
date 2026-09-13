@@ -1,27 +1,34 @@
-# comments
+# Comments — Threaded
 
-**Comments — Threaded**
-
-Polymorphic-target threaded comments. Consumer picks `TargetRef = { kind, id, subId? }` (e.g. page+block, blog+slug, task+id). Renderless <CommentsThread> + <CommentsAnchor> wrappers; useComments(bindings, opts) hook returns items + openCount + CRUD + forbiddenWords guard. Adapter pattern — see contract-negotiations-2026-05-15 §1.
+Polymorphic-target threaded comments over `TargetRef = { kind, id, subId? }`.
+The slice owns comment ordering, reply nesting, open counts, forbidden-word
+validation, CRUD bindings, agent tools, and a canonical Convex backend while the
+consumer owns the visual skin and target domain.
 
 ## Install
 
 ```bash
 npx rr add comments
+# Svelte 5 / SvelteKit
+npx rr add comments --framework sveltekit
 ```
 
-## Use
+React/Next remains the default distribution. Both frameworks reuse the same
+`Comment` / `TargetRef` types, `buildThread`, `createCommentsState`, agent tools,
+and `convex/features/comments` backend.
 
-- Frontend exports — see [`./index.ts`](./index.ts)
-- Convex schema + queries + mutations — see [`convex/features/comments/`](../../../convex/features/comments/)
-- Dep peers + env + RBAC scopes — see [`./slice.contract.ts`](./slice.contract.ts)
+The React distribution exposes render-prop `CommentsThread` / `CommentsAnchor`
+plus the compatibility `useComments` adapter. The Svelte distribution exposes
+renderless snippet equivalents, so the host can keep its own cards, avatars,
+composer, badges, and navigation.
 
-## Constraints (rr conventions)
+`createCommentsState(bindings, { target, forbiddenWords })` returns sorted flat
+items, nested reply trees, `openCount`, loading state, and CRUD methods. The
+`pathMap` seam on `CommentsAnchor` stays host-defined so page/blog/task routes are
+never hardcoded into this slice.
 
-Follows the full rr rule set — see [`frontend/slices/_templates/example-feature/README.md`](../_templates/example-feature/README.md) for the canonical list. Key gates:
-- shadcn primitives only (`audit:templates`)
-- ≤200 LOC per file (`audit:file-size`)
-- Metadata trio: `slice.json` + `slice.contract.ts` + `slice.manifest.json` (`audit:slices`)
-- Convex public fn require `args:` validator + auth gate
+## Backend boundary
 
-Run `npm run slices:check` before commit; pre-push hook re-runs the chain.
+The Convex feature stores polymorphic target fields and author/reply/resolution
+state. Reads should be wrapped by the host's target-visibility rule; mutations
+require authenticated authors. Pair with `convex-auth` for identity.

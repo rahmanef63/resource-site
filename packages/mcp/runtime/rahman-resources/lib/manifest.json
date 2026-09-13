@@ -3963,7 +3963,7 @@
       "title": "Comments — Threaded",
       "category": "content",
       "kind": "full",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "description": "Polymorphic-target threaded comments. Consumer picks `TargetRef = { kind, id, subId? }` (e.g. page+block, blog+slug, task+id). Reply nesting is real: `parentId` end-to-end + `buildThread(flat) → CommentNode[]` tree (oldest-first, orphan-safe). Renderless <CommentsThread> + <CommentsAnchor> wrappers; useComments(bindings, opts) returns items + `tree` + openCount + CRUD + forbiddenWords guard. Adapter pattern — see contract-negotiations §1.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/comments",
@@ -3971,6 +3971,25 @@
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/comments"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/comments-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/comments/types/index.ts",
+              "frontend/slices/comments/lib/buildThread.ts",
+              "frontend/slices/comments/lib/state.ts",
+              "frontend/slices/comments/lib/tools.ts"
+            ]
+          }
         }
       },
       "convexPaths": [

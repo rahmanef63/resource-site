@@ -1,0 +1,28 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "comments-svelte",
+  "version": "0.4.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add comments --framework sveltekit",
+    "consumerPath": "slices/comments"
+  },
+  "files": [
+    "README.md",
+    "components/CommentsAnchor.svelte",
+    "components/CommentsThread.svelte",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/comments/types/index.ts",
+      "frontend/slices/comments/lib/buildThread.ts",
+      "frontend/slices/comments/lib/state.ts",
+      "frontend/slices/comments/lib/tools.ts"
+    ],
+    "external": ["svelte"]
+  }
+}

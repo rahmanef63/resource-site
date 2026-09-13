@@ -10,6 +10,7 @@ export type {
   CommentsAnchorProps,
 } from "./components";
 export { buildThread } from "./lib/buildThread";
+export { createCommentsState, type CommentsState } from "./lib/state";
 export type { CommentNode } from "./lib/buildThread";
 export type { Comment, TargetRef } from "./types";
 export { commentsTools, type CommentsToolsCtx } from "./lib/tools";

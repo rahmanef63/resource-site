@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-COMMENTS-DISTRIBUTION",
+    "version": "comments@0.4.0",
+    "date": 1789257600000,
+    "kind": "feature",
+    "title": "SvelteKit Comments distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/comments — [before: comments kept portable thread/state behavior behind a React-named adapter and duplicated seeded public preview UI] → [after: React/Next remains the default while Svelte/SvelteKit gets native renderless thread/anchor snippets over the exact same target, state, nesting, tool, and Convex backend semantics].",
+    "groups": [
+      {
+        "heading": "One threaded-comment engine, renderless framework adapters",
+        "bullets": [
+          "createCommentsState now owns chronological ordering, reply-tree construction, open counts, CRUD forwarding, and forbidden-word validation outside either framework.",
+          "The Svelte 5 distribution shares TargetRef/comment types, buildThread, state, agent tools, and the canonical Convex comments backend; only the renderless snippet wrappers differ.",
+          "Public preview: https://resource.rahmanef.com/preview/slices/comments now mounts the canonical preview module instead of maintaining a separate seeded thread implementation."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-RBAC-ROLES-DISTRIBUTION",
     "version": "rbac-roles@0.4.0",
     "date": 1789257600000,

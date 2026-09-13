@@ -1999,7 +1999,7 @@ const nav = [
     title: "Comments — Threaded",
     category: "content",
     kind: "full",
-    version: "0.3.0",
+    version: "0.4.0",
     description: "Polymorphic-target threaded comments. Consumer picks `TargetRef = { kind, id, subId? }` (e.g. page+block, blog+slug, task+id). Reply nesting is real: `parentId` end-to-end + `buildThread(flat) → CommentNode[]` tree (oldest-first, orphan-safe). Renderless <CommentsThread> + <CommentsAnchor> wrappers; useComments(bindings, opts) returns items + `tree` + openCount + CRUD + forbiddenWords guard. Adapter pattern — see contract-negotiations §1.",
     source: "rahmanef63/resource-site",
     slicePath: "frontend/slices/comments",

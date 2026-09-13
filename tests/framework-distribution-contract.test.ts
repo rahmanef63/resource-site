@@ -286,6 +286,43 @@ describe("framework-aware slice distribution", () => {
     expect(svelteResult.stdout).not.toContain("next@^15");
   });
 
+  it("keeps comments on React by default and selects native Svelte renderless adapters over the same thread core", () => {
+    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "comments");
+    const target = mkTarget();
+
+    expect(slice.slicePath).toBe("frontend/slices/comments");
+    expect(slice.defaultFramework).toBe("react-next");
+    const svelte = slice.frameworks["svelte-sveltekit"];
+    expect(svelte.path).toBe("frontend/slices/comments-svelte");
+    expect(svelte.aliases).toEqual(["svelte", "sveltekit"]);
+    expect(svelte.deps.npm).toEqual(["svelte@^5"]);
+    expect(svelte.deps.shadcn).toEqual([]);
+    expect(svelte.deps.sharedFiles).toEqual([
+      "frontend/slices/comments/types/index.ts",
+      "frontend/slices/comments/lib/buildThread.ts",
+      "frontend/slices/comments/lib/state.ts",
+      "frontend/slices/comments/lib/tools.ts",
+    ]);
+
+    const defaultResult = runCli("add", "comments", "--target", target, "--dry-run");
+    expect(defaultResult.status).toBe(0);
+    expect(defaultResult.stdout).toContain("frontend/slices/comments →");
+    expect(defaultResult.stdout).toContain("convex/features/comments → convex/features/comments");
+    expect(defaultResult.stdout).toContain("shadcn: button textarea avatar");
+
+    const svelteResult = runCli("add", "comments", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteResult.status).toBe(0);
+    expect(svelteResult.stdout).toContain("frontend/slices/comments-svelte →");
+    expect(svelteResult.stdout).toContain("convex/features/comments → convex/features/comments");
+    expect(svelteResult.stdout).toContain("frontend/slices/comments/lib/state.ts →");
+    expect(svelteResult.stdout).toContain("svelte@^5");
+    expect(svelteResult.stdout).not.toContain("shadcn: button");
+    expect(svelteResult.stdout).not.toContain("lucide-react");
+    expect(svelteResult.stdout).not.toContain("react@^");
+  });
+
   it("keeps rbac-roles on React by default and selects its native SvelteKit distribution over the same RBAC engine", () => {
     execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));

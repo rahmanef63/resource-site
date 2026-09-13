@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — SvelteKit Comments distribution
+<!-- public-changelog:SVELTE-COMMENTS-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/comments
+- Preview: https://resource.rahmanef.com/preview/slices/comments
+- [before: `comments` kept portable thread/state behavior behind a React-named adapter and duplicated seeded public preview UI] → [after: React/Next remains the default while Svelte/SvelteKit gets native renderless thread/anchor snippets over the exact same target, state, nesting, tool, and Convex backend semantics]
+- `createCommentsState` now owns ordering, nesting, open counts, CRUD forwarding, and forbidden-word validation; the public route hosts canonical `preview.tsx`.
+
 ### 2026-09-13 — SvelteKit RBAC Roles distribution
 <!-- public-changelog:SVELTE-RBAC-ROLES-DISTRIBUTION -->
 

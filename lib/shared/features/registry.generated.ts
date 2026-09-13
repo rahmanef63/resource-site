@@ -98,7 +98,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...commentsConfig,
     importPath: "@/features/comments/config",
-    version: "0.3.0",
+    version: "0.4.0",
   },
   {
     ...convexAuthConfig,
