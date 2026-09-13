@@ -1,0 +1,26 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "selection-svelte",
+  "version": "0.3.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add selection --framework sveltekit",
+    "consumerPath": "slices/selection"
+  },
+  "files": [
+    "README.md",
+    "components/SelectableBlock.svelte",
+    "components/SelectionMarquee.svelte",
+    "components/SelectionProvider.svelte",
+    "index.ts",
+    "lib/context.ts",
+    "lib/marquee.ts",
+    "lib/selection.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [],
+    "external": ["svelte"]
+  }
+}

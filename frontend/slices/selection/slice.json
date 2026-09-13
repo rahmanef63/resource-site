@@ -1,11 +1,11 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "selection",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "category": "ui",
   "kind": "ui",
-  "title": "Selection \u2014 marquee multi-select + bulk actions",
-  "description": "Framework-agnostic multi-selection for any vertical list (Notion-style blocks, table rows, cards). Hold-and-drag on empty space draws a rubber-band rectangle \u2014 AutoCAD-style: drag RIGHT selects only fully-enclosed items (solid ring), drag LEFT selects anything the rectangle touches (dashed green ring). Click an item's edge to select (Shift = range, Cmd/Ctrl = toggle). Selecting activates items with a ring + data-block-selected attribute. Backspace/Delete bulk-deletes, Escape and click-outside clear, and a floating count toolbar offers Delete/Clear. SelectionProvider owns only the id set \u2014 the host owns the data via onBulkDelete(ids). Lifted from notion-page-clone's block-selection slice.",
+  "title": "Selection — marquee multi-select + bulk actions",
+  "description": "Framework-agnostic multi-selection for any vertical list (Notion-style blocks, table rows, cards). Hold-and-drag on empty space draws a rubber-band rectangle — AutoCAD-style: drag RIGHT selects only fully-enclosed items (solid ring), drag LEFT selects anything the rectangle touches (dashed green ring). Click an item edge to select (Shift = range, Cmd/Ctrl = toggle). Selecting activates items with a ring + data-block-selected attribute. Backspace/Delete bulk-deletes, Escape and click-outside clear, and a floating count toolbar offers Delete/Clear. React/Next remains the default distribution; an additive Svelte 5/SvelteKit distribution preserves the same selection, keyboard, bulk-action, and marquee semantics with native controls.",
   "namespace": "@/features/selection",
   "convex": {
     "tablesExport": "",
@@ -14,7 +14,23 @@
   },
   "frontend": {
     "slicePath": "frontend/slices/selection",
-    "configExport": ""
+    "configExport": "",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/selection-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5"
+          ],
+          "shadcn": []
+        }
+      }
+    }
   },
   "deps": {
     "npm": [],
@@ -48,7 +64,7 @@
             "off"
           ],
           "default": "on",
-          "description": "SelectableBlock edge strips \u2014 thin top/bottom click-select bands (on) vs marquee-only canvas nodes (off)."
+          "description": "SelectableBlock edge strips — thin top/bottom click-select bands (on) vs marquee-only canvas nodes (off)."
         }
       ],
       "seed": "4 demo rows inside a SelectionProvider; drag on empty space to marquee-select (drag right = enclose, left = touch), or click an edge. Bulk delete is a no-op."

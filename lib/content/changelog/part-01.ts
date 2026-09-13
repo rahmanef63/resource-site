@@ -2,6 +2,24 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-SELECTION-DISTRIBUTION",
+    "version": "selection@0.3.0",
+    "date": 1789257600000,
+    "kind": "feature",
+    "title": "SvelteKit Selection slice distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/selection — [before: selection shipped only as a React/Next provider + marquee implementation] → [after: React/Next remains the default while an additive Svelte 5 / SvelteKit distribution preserves range/toggle selection, keyboard and bulk actions, selected-state attributes, and AutoCAD-style window/crossing marquee behavior]. Select it explicitly with rr add selection --framework sveltekit (or svelte).",
+    "groups": [
+      {
+        "heading": "Cross-framework selection parity",
+        "bullets": [
+          "The Svelte selection model keeps select-only, toggle, contiguous range, clear, snapshot, and subscribable revision semantics while the provider preserves Escape/Delete/Backspace and click-outside behavior plus optional duplicate/delete actions.",
+          "The marquee keeps the 4px drag threshold, ignores touch and interactive descendants, supports additive Shift/Cmd/Ctrl baselines, and preserves rightward window versus leftward crossing hit-testing without React or react-dom."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-BOOKING-DISTRIBUTION",
     "version": "booking@1.1.0",
     "date": 1789257600000,

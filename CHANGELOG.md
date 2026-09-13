@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — SvelteKit Selection slice distribution
+<!-- public-changelog:SVELTE-SELECTION-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/selection
+- [before: `selection` shipped only as a React/Next provider + marquee implementation] → [after: React/Next remains the default while an additive Svelte 5 / SvelteKit distribution preserves range/toggle selection, keyboard and bulk actions, selected-state attributes, and AutoCAD-style window/crossing marquee behavior]
+- Explicit Svelte installs use `npx rr add selection --framework sveltekit` (or `svelte`) and require only `svelte@^5`; the Svelte distribution uses native controls and no React, `react-dom`, Lucide, or React shadcn dependency.
+
 ### 2026-09-13 — SvelteKit Booking slice distribution
 <!-- public-changelog:SVELTE-BOOKING-DISTRIBUTION -->
 

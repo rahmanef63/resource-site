@@ -212,6 +212,35 @@ describe("framework-aware slice distribution", () => {
     expect(svelteResult.stdout).not.toContain("npx shadcn@latest add");
   });
 
+  it("keeps selection on React by default and selects its SvelteKit source deterministically", () => {
+    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "selection");
+    const target = mkTarget();
+
+    expect(slice.slicePath).toBe("frontend/slices/selection");
+    expect(slice.defaultFramework).toBe("react-next");
+    expect(slice.frameworks).toEqual({
+      "react-next": { path: "frontend/slices/selection" },
+      "svelte-sveltekit": {
+        path: "frontend/slices/selection-svelte",
+        aliases: ["svelte", "sveltekit"],
+        deps: { npm: ["svelte@^5"], shadcn: [] },
+      },
+    });
+
+    const defaultResult = runCli("add", "selection", "--target", target, "--dry-run");
+    expect(defaultResult.status).toBe(0);
+    expect(defaultResult.stdout).toContain("frontend/slices/selection →");
+
+    const svelteResult = runCli("add", "selection", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteResult.status).toBe(0);
+    expect(svelteResult.stdout).toContain("frontend/slices/selection-svelte →");
+    expect(svelteResult.stdout).toContain("svelte@^5");
+    expect(svelteResult.stdout).not.toContain("react-dom");
+    expect(svelteResult.stdout).not.toContain("npx shadcn@latest add");
+  });
+
   it("uses the default framework path and forwards an explicit framework through add", () => {
     installFrameworkFixture();
     const target = mkTarget();
