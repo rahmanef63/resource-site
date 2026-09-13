@@ -34,7 +34,12 @@ describe("html-studio Svelte distribution", () => {
   it("preserves live preview, views, devices, mock persistence, visibility and payload-open semantics", () => {
     const app = readFileSync(path.join(svelteRoot, "app.svelte"), "utf8");
     const core = readFileSync(sharedCore, "utf8");
-    expect(app).toContain("setTimeout(() => (preview = source), 250)");
+    expect(app).toContain("function updateHtml(nextHtml: string)");
+    expect(app).toContain("previewTimer = setTimeout(() => {");
+    expect(app).toContain("preview = nextHtml");
+    expect(app).toContain("onHtmlChange={updateHtml}");
+    expect(app).toContain("onDestroy(() => {");
+    expect(app).not.toContain("$effect(() =>");
     expect(app).toContain('view = $state<View>("split")');
     expect(app).toContain('device = $state<Device>("full")');
     expect(app).toContain("htmlStudioApi.save");
