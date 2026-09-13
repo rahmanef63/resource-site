@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-14 — SvelteKit Platform Admin contract
+<!-- public-changelog:SVELTE-PLATFORM-ADMIN-CONTRACT -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/platform-admin
+- [before: `platform-admin@0.2.0` was labeled full-stack and declared a Convex schema, tables, hooks, routes, UI components, environment requirements, and a synthetic tenant/MRR preview even though the canonical slice only shipped config + agentic tools] → [after: `platform-admin@0.3.0` is a truthful framework-neutral privileged control-plane contract; React/Next remains default and explicit Svelte/SvelteKit reuses the same TypeScript source with zero framework/runtime dependencies]
+- The hardcoded multi-tenant preview is removed; hosts now bind `PlatformAdminCtx.metrics/setFeatureFlag/setTier` and own authentication, authorization, tenancy, persistence, and auditing.
+
 ### 2026-09-14 — SvelteKit Event Tracking contract
 <!-- public-changelog:SVELTE-EVENT-TRACKING-CONTRACT -->
 

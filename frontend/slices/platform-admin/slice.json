@@ -1,60 +1,40 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "platform-admin",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "category": "infra",
-  "title": "Platform Admin \u2014 Multi-Tenant Control Plane",
-  "description": "Multi-tenant control plane for SaaS hosts. Workspace lifecycle ops (list/delete/cascade), per-tenant tier presets (gates + quota), KPI dashboard grid. Consumer-domain bits (which tables to sweep, which KPI sources to read, what tier ladder applies) injected via adapter props \u2014 see contract-negotiations-2026-05-15 \u00a74. superspace canonical reference implementation.",
+  "title": "Platform Admin — Control Plane Contract",
+  "description": "Framework-neutral privileged control-plane tool contract. The host injects metrics, feature-flag, and tenant-tier operations through PlatformAdminCtx and must enforce platform-admin authorization at the server boundary. React/Next remains the default install contract while explicit Svelte/SvelteKit reuses the same TypeScript source; the canonical slice intentionally ships no renderer, persistence schema, or tenant model.",
   "namespace": "@/features/platform-admin",
-  "kind": "full",
-  "convex": {
-    "tablesExport": "platformAdminTables",
-    "schemaPath": "convex/features/platform-admin/_schema.ts",
-    "rootPaths": [
-      "convex/features/platform-admin"
-    ]
-  },
+  "kind": "backend",
   "frontend": {
     "slicePath": "frontend/slices/platform-admin",
-    "configExport": "platformAdminConfig"
+    "configExport": "platformAdminConfig",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/platform-admin",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [],
+          "shadcn": []
+        }
+      }
+    }
   },
   "deps": {
     "npm": [],
     "shadcn": [],
-    "env": [
-      {
-        "name": "PLATFORM_ADMIN_EMAILS",
-        "scope": "convex",
-        "required": true,
-        "description": "Comma-separated list of operator email addresses with platform-admin access."
-      }
-    ],
-    "peers": [
-      {
-        "slug": "convex-auth",
-        "range": "^0.1",
-        "reason": "Actor identity for audit + tier-set ops."
-      },
-      {
-        "slug": "audit-log",
-        "range": "^0.2",
-        "reason": "padmin_audit table feeds through audit-log TenantAdapter."
-      },
-      {
-        "slug": "dashboard-shell",
-        "range": "^0.1",
-        "reason": "Control-plane panels mount inside the dashboard-shell app chrome \u2014 the slice ships no chrome of its own."
-      }
-    ]
+    "env": [],
+    "peers": []
   },
   "registers": [
     "registry"
   ],
-  "audit": [
-    "bp:public-fn-validator",
-    "bp:rbac-gate",
-    "bp:workspace-isolation"
-  ],
+  "audit": [],
   "license": "MIT",
   "tags": [
     "infra",
@@ -65,27 +45,12 @@
   ],
   "contract": {
     "requires": {
-      "auth": "convex",
       "rbac": [
         "platform.workspace.list",
-        "platform.workspace.delete",
-        "platform.user.delete",
+        "platform.feature_flag.set",
         "platform.tier.set"
       ],
-      "env": [
-        "PLATFORM_ADMIN_EMAILS"
-      ],
-      "convex": {
-        "prefix": "padmin_",
-        "tables": [
-          "padmin_audit",
-          "padmin_kpi_snapshot"
-        ]
-      },
-      "deps": [
-        "convex-auth",
-        "audit-log"
-      ]
+      "deps": []
     },
     "provides": {
       "tools": [
@@ -93,30 +58,19 @@
         "platform-admin.feature_flag.set",
         "platform-admin.tier.set"
       ],
-      "routes": [
-        "/platform-admin"
-      ],
-      "hooks": [
-        "usePlatformAdmin",
-        "useTenantHealth"
-      ],
-      "tables": [
-        "padmin_audit",
-        "padmin_kpi_snapshot"
-      ],
-      "components": [
-        "PlatformAdminShell",
-        "TenantHealthCard",
-        "TierSetGate"
-      ]
+      "routes": [],
+      "hooks": [],
+      "tables": [],
+      "components": []
     },
     "generalization": {
       "level": "needs-adapter",
       "requiredProps": [
-        "tenantTablesAdapter",
-        "tierPresets",
-        "kpiSources"
+        "metrics",
+        "setFeatureFlag",
+        "setTier"
       ]
     }
-  }
+  },
+  "previews": []
 }

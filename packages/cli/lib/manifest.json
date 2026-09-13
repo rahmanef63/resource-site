@@ -953,20 +953,20 @@
     },
     {
       "slug": "platform-admin",
-      "title": "Platform Admin — Multi-Tenant Control Plane",
+      "title": "Platform Admin — Control Plane Contract",
       "category": "infra",
-      "description": "Multi-tenant SaaS control plane. Workspace lifecycle ops (list/delete/cascade), per-tenant tier presets (gates + quota), KPI dashboard grid. Consumer-domain bits injected via adapter props (tenantTablesAdapter / tierPresets / kpiSources). Contract-only scaffold; canonical implementation lands via /rr-send from superspace. See docs/contract-negotiations-2026-05-15.md §4.",
+      "description": "Framework-neutral privileged control-plane tool contract. The host injects metrics, feature-flag, and tenant-tier operations through PlatformAdminCtx and owns auth, authorization, tenancy, persistence, and audit enforcement; the canonical slice ships no renderer or Convex schema.",
       "source": "rahmanef63/resource-site",
       "install": "npx rahman-resources add platform-admin",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add platform-admin`. Contract-only scaffold. Wait for superspace /rr-send platform-admin before adopting. Distinct from per-instance `admin` slug.",
+      "agentRecipe": "Run `npx rr add platform-admin` (React/default) or `npx rr add platform-admin --framework sveltekit`. Bind PlatformAdminCtx.metrics/setFeatureFlag/setTier to server-authorized host operations. The slice intentionally does not invent tenant tables, KPI dashboards, routes, or a renderer.",
       "tags": [
         "infra",
         "admin",
-        "multi-tenant",
-        "saas",
-        "platform"
+        "control-plane",
+        "headless",
+        "portable"
       ]
     },
     {
@@ -3950,57 +3950,45 @@
     },
     {
       "slug": "platform-admin",
-      "title": "Platform Admin — Multi-Tenant Control Plane",
+      "title": "Platform Admin — Control Plane Contract",
       "category": "infra",
-      "kind": "full",
-      "version": "0.2.0",
-      "description": "Multi-tenant SaaS control plane. Workspace lifecycle ops (list/delete/cascade), per-tenant tier presets (gates + quota), KPI dashboard grid. Consumer-domain bits injected via adapter props (tenantTablesAdapter / tierPresets / kpiSources). Contract-only scaffold; canonical implementation lands via /rr-send from superspace. See docs/contract-negotiations-2026-05-15.md §4.",
+      "kind": "backend",
+      "version": "0.3.0",
+      "description": "Framework-neutral privileged control-plane tool contract. The host injects metrics, feature-flag, and tenant-tier operations through PlatformAdminCtx and owns auth, authorization, tenancy, persistence, and audit enforcement; the canonical slice ships no renderer or Convex schema.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/platform-admin",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/platform-admin"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/platform-admin",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [],
+            "shadcn": []
+          }
         }
       },
       "convexPaths": [],
       "npm": [],
       "shadcn": [],
-      "env": [
-        {
-          "name": "PLATFORM_ADMIN_EMAILS",
-          "scope": "convex",
-          "required": true,
-          "description": "Comma-separated list of platform admin email addresses."
-        }
-      ],
-      "peers": [
-        {
-          "slug": "convex-auth",
-          "range": "^0.1",
-          "reason": "Actor identity for audit + tier-set ops."
-        },
-        {
-          "slug": "audit-log",
-          "range": "^0.2",
-          "reason": "padmin_audit table feeds through audit-log TenantAdapter."
-        },
-        {
-          "slug": "dashboard-shell",
-          "range": "^0.1",
-          "reason": "Control-plane panels mount inside the dashboard-shell app chrome — no chrome of its own."
-        }
-      ],
+      "env": [],
+      "peers": [],
       "sharedFiles": [],
       "providers": [],
       "tags": [
         "infra",
         "admin",
-        "multi-tenant",
-        "saas",
-        "platform"
+        "control-plane",
+        "headless",
+        "portable"
       ],
-      "agentRecipe": "Run `npx rr add platform-admin`. Contract-only scaffold. Wait for superspace /rr-send platform-admin before adopting. Distinct from per-instance `admin` slug."
+      "agentRecipe": "Run `npx rr add platform-admin` (React/default) or `npx rr add platform-admin --framework sveltekit`. Bind PlatformAdminCtx.metrics/setFeatureFlag/setTier to server-authorized host operations. The slice intentionally does not invent tenant tables, KPI dashboards, routes, or a renderer."
     },
     {
       "slug": "audit-log",

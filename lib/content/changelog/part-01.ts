@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-PLATFORM-ADMIN-CONTRACT",
+    "version": "platform-admin@0.3.0",
+    "date": 1789344000000,
+    "kind": "feature",
+    "title": "SvelteKit Platform Admin contract",
+    "body": "Related: https://resource.rahmanef.com/slices/platform-admin — [before: platform-admin@0.2.0 was labeled full-stack and declared a Convex schema, tables, hooks, routes, UI components, environment requirements, and a synthetic tenant/MRR preview even though the canonical slice only shipped config + agentic tools] → [after: platform-admin@0.3.0 is a truthful framework-neutral privileged control-plane contract; React/Next remains default and explicit Svelte/SvelteKit reuses the same TypeScript source with zero framework/runtime dependencies].",
+    "groups": [
+      {
+        "heading": "One headless control-plane contract for both frameworks",
+        "bullets": [
+          "Removed the nonexistent convex/features/platform-admin contract, fake UI/hook/route/table claims, and synthetic platform-admin preview.",
+          "platformAdminConfig is plain framework-neutral metadata, while agent tools import define/schema modules directly instead of React-coupled shared barrels.",
+          "Hosts bind metrics, setFeatureFlag, and setTier at the server boundary and remain responsible for auth, RBAC, tenancy, persistence, audit logging, and confirmation policy."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-EVENT-TRACKING-CONTRACT",
     "version": "event-tracking@0.2.0",
     "date": 1789344000000,

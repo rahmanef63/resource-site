@@ -4,7 +4,8 @@
 // contract. EVERY method must be bound to an implementation that enforces
 // the platform.* RBAC (requirePermission) — tools only forward.
 
-import { defineToolCollection, bool, noArgs, obj, str } from "@/shared/agentic";
+import { defineToolCollection } from "@/shared/agentic/define";
+import { bool, noArgs, obj, str } from "@/shared/agentic/schema";
 
 export type PlatformAdminCtx = {
   /** KPI / health read-back (server-gated: platform.workspace.list). */
