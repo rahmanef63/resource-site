@@ -974,12 +974,12 @@
       "slug": "audit-log",
       "title": "Audit Log — Workspace Events",
       "category": "infra",
-      "description": "Workspace-scoped audit event recorder. Canonical logAuditEvent helper for mutations + actions; supports entity tracking, before/after diff, IP/user-agent capture.",
+      "description": "Backend-only audit event recorder with framework-neutral TypeScript. createAuditLogger injects tenant/actor identity and preserves action/entity/diff/metadata/IP/user-agent evidence through host bindings; read-only query/export tools remain server-gated. React/Next stays the default contract while explicit Svelte/SvelteKit installs reuse the same source with no duplicate UI or framework runtime dependency.",
       "source": "rahmanef63/resource-site",
       "install": "npx rahman-resources add audit-log",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `rr add audit-log`. Import logAuditEvent from convex/_shared/auditLogger.ts and call inside every workspace-scoped mutation with { action, workspaceId, entityType, entityId, before?, after? }.",
+      "agentRecipe": "Run `npx rr add audit-log` (or `--framework sveltekit`; both copy the same framework-neutral source). Create a logger with `createAuditLogger(tenantAdapter, bindings)` and call it inside server-checked mutations/actions with `{ action, entityType, entityId, diff?, metadata?, ipAddress?, userAgent? }`. TenantAdapter resolves tenant + actor; the consumer binding enforces `audit.write`. Agent tools `audit-log.query` and `audit-log.export` are read-only and the supplied list binding must enforce `audit.read` server-side.",
       "tags": [
         "infra",
         "audit",
@@ -3762,14 +3762,25 @@
       "title": "Audit Log — Workspace Events",
       "category": "infra",
       "kind": "backend",
-      "version": "0.3.0",
-      "description": "Workspace-scoped audit event recorder. Canonical logAuditEvent helper for mutations + actions; supports entity tracking, before/after diff, IP/user-agent capture.",
+      "version": "0.4.0",
+      "description": "Backend-only audit event recorder with framework-neutral TypeScript. createAuditLogger injects tenant/actor identity and preserves action/entity/diff/metadata/IP/user-agent evidence through host bindings; read-only query/export tools remain server-gated. React/Next stays the default contract while explicit Svelte/SvelteKit installs reuse the same source with no duplicate UI or framework runtime dependency.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/audit-log",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/audit-log"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/audit-log",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [],
+            "shadcn": []
+          }
         }
       },
       "convexPaths": [
@@ -3792,7 +3803,7 @@
         "compliance",
         "logging"
       ],
-      "agentRecipe": "Run `rr add audit-log`. Import logAuditEvent from convex/_shared/auditLogger.ts and call inside every workspace-scoped mutation with { action, workspaceId, entityType, entityId, before?, after? }."
+      "agentRecipe": "Run `npx rr add audit-log` (or `--framework sveltekit`; both copy the same framework-neutral source). Create a logger with `createAuditLogger(tenantAdapter, bindings)` and call it inside server-checked mutations/actions with `{ action, entityType, entityId, diff?, metadata?, ipAddress?, userAgent? }`. TenantAdapter resolves tenant + actor; the consumer binding enforces `audit.write`. Agent tools `audit-log.query` and `audit-log.export` are read-only and the supplied list binding must enforce `audit.read` server-side."
     },
     {
       "slug": "comments",

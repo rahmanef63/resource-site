@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "audit-log",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -24,13 +24,9 @@
   },
   "imports": {
     "shared": [
-      "@/components/ui/card",
-      "@/components/ui/badge",
-      "@/components/ui/table"
+      "@/shared/agentic/define",
+      "@/shared/agentic/schema"
     ],
-    "external": [
-      "react",
-      "lucide-react"
-    ]
+    "external": []
   }
 }

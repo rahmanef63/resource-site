@@ -182,6 +182,36 @@ describe("framework-aware slice distribution", () => {
     expect(svelteResult.stdout).not.toContain("npx shadcn@latest add");
   });
 
+  it("keeps audit-log on one framework-neutral backend source for explicit SvelteKit", () => {
+    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "audit-log");
+    const target = mkTarget();
+
+    expect(slice.slicePath).toBe("frontend/slices/audit-log");
+    expect(slice.defaultFramework).toBe("react-next");
+    expect(slice.frameworks).toEqual({
+      "react-next": { path: "frontend/slices/audit-log" },
+      "svelte-sveltekit": {
+        path: "frontend/slices/audit-log",
+        aliases: ["svelte", "sveltekit"],
+        deps: { npm: [], shadcn: [] },
+      },
+    });
+
+    const defaultResult = runCli("add", "audit-log", "--target", target, "--dry-run");
+    expect(defaultResult.status).toBe(0);
+    expect(defaultResult.stdout).toContain("frontend/slices/audit-log →");
+
+    const svelteResult = runCli("add", "audit-log", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteResult.status).toBe(0);
+    expect(svelteResult.stdout).toContain("frontend/slices/audit-log →");
+    expect(svelteResult.stdout).not.toContain("svelte@^5");
+    expect(svelteResult.stdout).not.toContain("react");
+    expect(svelteResult.stdout).not.toContain("lucide-react");
+    expect(svelteResult.stdout).not.toContain("npx shadcn@latest add");
+  });
+
   it("keeps booking on React by default and selects its real SvelteKit UI distribution", () => {
     execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));

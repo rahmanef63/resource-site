@@ -3,7 +3,8 @@
 // no mutation surface — audit logs are written by createAuditLogger, never
 // by an agent.
 
-import { defineToolCollection, num, obj, str } from "@/shared/agentic";
+import { defineToolCollection } from "@/shared/agentic/define";
+import { num, obj, str } from "@/shared/agentic/schema";
 import type { AuditEvent } from "../types";
 
 export type AuditLogCtx = {

@@ -1,9 +1,16 @@
-import { defineFeature } from "@/lib/shared/features/defineFeature"
+type AuditLogRegistryConfig = {
+  slug: string;
+  title: string;
+  category: "infra";
+  routes: unknown[];
+  nav: { label: string; group: "tools"; order: number };
+};
 
-export const auditLogConfig = defineFeature({
+/** Framework-neutral registry metadata for the backend-only audit-log slice. */
+export const auditLogConfig = {
   slug: "audit-log",
   title: "Audit Log — Workspace Events",
   category: "infra",
   routes: [],
   nav: { label: "Audit Log", group: "tools", order: 80 },
-})
+} satisfies AuditLogRegistryConfig;

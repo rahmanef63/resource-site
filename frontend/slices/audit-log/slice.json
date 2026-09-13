@@ -1,10 +1,10 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "audit-log",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "category": "infra",
-  "title": "Audit Log \u2014 Workspace Events",
-  "description": "Workspace-scoped audit event recorder. Canonical logAuditEvent helper for mutations + actions; supports entity tracking, before/after diff, IP/user-agent capture.",
+  "title": "Audit Log — Workspace Events",
+  "description": "Backend-only workspace audit event recorder with framework-neutral TypeScript. createAuditLogger injects tenant/actor identity, preserves entity/diff/metadata/IP/user-agent evidence, and writes through host bindings; agent tools remain read-only query/export surfaces. React/Next remains the default distribution contract while explicit Svelte/SvelteKit installs reuse the same source with no duplicate UI or framework runtime dependency.",
   "namespace": "@/features/audit-log",
   "kind": "backend",
   "convex": {
@@ -16,7 +16,21 @@
   },
   "frontend": {
     "slicePath": "frontend/slices/audit-log",
-    "configExport": "auditLogConfig"
+    "configExport": "auditLogConfig",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/audit-log",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [],
+          "shadcn": []
+        }
+      }
+    }
   },
   "deps": {
     "npm": [],

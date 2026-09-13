@@ -63,7 +63,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...auditLogConfig,
     importPath: "@/features/audit-log/config",
-    version: "0.3.0",
+    version: "0.4.0",
   },
   {
     ...bookingConfig,

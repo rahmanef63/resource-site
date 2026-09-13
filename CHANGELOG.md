@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — SvelteKit Audit Log service distribution
+<!-- public-changelog:SVELTE-AUDIT-LOG-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/audit-log
+- [before: `audit-log` was framework-neutral at runtime but its distribution metadata still advertised React/Lucide/shadcn dependencies and only exposed the default framework contract] → [after: React/Next remains the default while explicit Svelte/SvelteKit installs reuse the same backend-only source with clean framework-neutral config, direct non-React agentic imports, and no invented UI/runtime dependency]
+- Stale agent recipe guidance was also replaced with the canonical `createAuditLogger(tenantAdapter, bindings)` flow and server-enforced `audit.read` / `audit.write` boundaries.
+
 ### 2026-09-13 — SvelteKit File Upload slice distribution
 <!-- public-changelog:SVELTE-FILE-UPLOAD-DISTRIBUTION -->
 

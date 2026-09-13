@@ -2,6 +2,24 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-AUDIT-LOG-DISTRIBUTION",
+    "version": "audit-log@0.4.0",
+    "date": 1789257600000,
+    "kind": "feature",
+    "title": "SvelteKit Audit Log service distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/audit-log — [before: audit-log was framework-neutral at runtime but its distribution metadata still advertised React/Lucide/shadcn dependencies and only exposed the default framework contract] → [after: React/Next remains the default while explicit Svelte/SvelteKit installs reuse the same backend-only source with clean framework-neutral config, direct non-React agentic imports, and no invented UI/runtime dependency].",
+    "groups": [
+      {
+        "heading": "Backend-only framework portability",
+        "bullets": [
+          "The config no longer depends on the React-typed defineFeature helper, and audit tools import narrow framework-neutral agentic modules instead of the React-exporting barrel.",
+          "Manifest and agent recipe drift are corrected: no fake card/badge/table, React or Lucide dependencies, and integrations now use createAuditLogger(tenantAdapter, bindings) with server-enforced audit.read/audit.write boundaries."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-FILE-UPLOAD-DISTRIBUTION",
     "version": "file-upload@0.4.0",
     "date": 1789257600000,

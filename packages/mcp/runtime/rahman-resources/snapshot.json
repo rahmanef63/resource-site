@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "cliVersion": "1.17.0",
-  "aggregateSha256": "085c3706b1f2e9555067da2195080dc2f7da2996f3a8679e214e6ce42f687e52",
+  "aggregateSha256": "66c3465588e5c00bb6babbdaca0487da97c37b6d76fe809ebd86aac7643fc62a",
   "files": {
-    "manifest.json": "b48525de19a9af7e9dfdba7663834eb46365b9c535af94b82b49f10c70c7a209",
+    "manifest.json": "16b5f5d5c448ce4b82c8c6d47517a0bddd954c09d633b92f96d9bca6a5721742",
     "skills.json": "b33fec208df80c0f3d3602470c82b27a065c16b08c4c03761e8ee14eeebd007b",
     "infrastructure-resources.json": "f9b6182bcbd3eadb184c9fcbb724d70eaac612197e19b9284790f421cc925fa7",
     "dna.mjs": "0a0c7d4db73025ea77880d720cfbb29d891c6220bab8fb4ae3421235e5af4c0a",
