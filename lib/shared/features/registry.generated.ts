@@ -143,7 +143,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...quicklinksConfig,
     importPath: "@/features/quicklinks/config",
-    version: "1.0.0",
+    version: "1.1.0",
   },
   {
     ...reelEditorConfig,

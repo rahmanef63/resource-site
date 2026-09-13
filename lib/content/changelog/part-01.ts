@@ -2,6 +2,24 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-QUICKLINKS-DISTRIBUTION",
+    "version": "quicklinks@1.1.0",
+    "date": 1789257600000,
+    "kind": "feature",
+    "title": "SvelteKit Quicklinks distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/quicklinks — [before: quicklinks mixed portable store/URL behavior with React/Lucide host types and had no native Svelte distribution] → [after: React/Next remains the default while Svelte/SvelteKit gets a native grid/store adapter that reuses the exact same framework-neutral quicklinks core].",
+    "groups": [
+      {
+        "heading": "One quicklinks core, two UI adapters",
+        "bullets": [
+          "The canonical core now owns URL normalization, favicon lookup, SSR-safe localStorage hydration, injected-store mutation/subscription, and new-tab opener isolation without importing React or Svelte.",
+          "The Svelte 5 distribution adds only a native tile grid and subscribable adapter, and delivers the canonical core as one verified sharedFiles dependency with no Lucide or shadcn dependency."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "PUBLISHER-CLEAN-HTML-PREVIEW-ROUTE",
     "version": "publisher-clean-html@preview-route",
     "date": 1789257600000,

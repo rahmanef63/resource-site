@@ -1027,12 +1027,12 @@
       "slug": "publisher-clean-html",
       "title": "Publisher — clean HTML",
       "category": "content",
-      "description": "A pure render-to-clean-HTML engine harvested from the Instatic CMS publisher, decoupled from its host caching / loops / visual-components / Layer-C islands. publishPage(tree, registry, options) walks a generic node tree bottom-up: render children, escape every prop by its schema-declared control type (url -> safe-URL, richtext -> DOMPurify, svg -> SVG profile, else HTML-escape), dedup CSS by moduleId (~60-80% shrink), splice author classes + inline styles onto each rendered root, then assemble <!DOCTYPE> + reset + framework + module CSS + a deterministic (sorted) CSP plan. Bring your own ModuleRegistry (each module is a pure render(props, children) -> { html, css? }). Security spine: HTML escape + safe-URL, CSS-value guard (expression()/{}/</), </style RAWTEXT neutraliser, and an injectable DOMPurify seam (configureRichtextSanitizer) that fails closed — without a runtime, richtext strips all tags and SVG returns empty. Stateless, env-free, ZERO npm deps, no Convex. Ships a PublishPreview iframe-srcdoc pane. A Wave-1 leaf of the feature-harvest ULTRAPLAN; a dependency of the planned visual-page-canvas.",
+      "description": "A framework-neutral clean-HTML engine with schema-typed escaping/sanitization, CSS deduplication, inline-style guards and deterministic CSP planning. React/Next remains the default preview distribution; Svelte/SvelteKit adds a native sandboxed preview while reusing all 16 canonical TypeScript core files through verified sharedFiles, so the renderer and security spine are not forked. Richtext/SVG sanitization remains injectable and fail-closed without a configured DOMPurify runtime. Stateless, env-free, no Convex.",
       "source": "rahman-resources",
       "install": "npx rahman-resources add publisher-clean-html",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add publisher-clean-html`. Build a registry: createModuleRegistry([{ id: 'base.body', render: (_p, kids) => ({ html: kids.join('') }) }, { id: 'demo.h', schema: { text: { type: 'text' } }, render: (p) => ({ html: `<h1>${p.text}</h1>`, css: 'h1{font-size:1.5rem}' }) }]). Tree = { rootNodeId, nodes: { [id]: { id, moduleId, props?, children?, classIds?, inlineStyles?, hidden? } } }. const { html } = publishPage(tree, registry, { title, cssEmission: 'inline' }). Preview: <PublishPreview html={html} />. Enable rich HTML/SVG by calling configureRichtextSanitizer(DOMPurify) once — without it, richtext/svg props fail closed (strip/empty). Props escape by schema control type, not key name.",
+      "agentRecipe": "Run `npx rr add publisher-clean-html` for React/Next or add `--framework sveltekit` for the Svelte preview. Build a ModuleRegistry, call publishPage(tree, registry, options), and preview the resulting full HTML document with PublishPreview. Both framework adapters share the exact same renderer/sanitizer/CSP core. Enable rich HTML/SVG by configuring DOMPurify once; without it those paths stay fail-closed.",
       "tags": [
         "content",
         "publisher",
@@ -4001,7 +4001,7 @@
       "category": "content",
       "kind": "ui",
       "version": "0.2.0",
-      "description": "A pure render-to-clean-HTML engine harvested from the Instatic CMS publisher, decoupled from its host caching / loops / visual-components / Layer-C islands. publishPage(tree, registry, options) walks a generic node tree bottom-up: render children, escape every prop by its schema-declared control type (url -> safe-URL, richtext -> DOMPurify, svg -> SVG profile, else HTML-escape), dedup CSS by moduleId (~60-80% shrink), splice author classes + inline styles onto each rendered root, then assemble <!DOCTYPE> + reset + framework + module CSS + a deterministic (sorted) CSP plan. Bring your own ModuleRegistry (each module is a pure render(props, children) -> { html, css? }). Security spine: HTML escape + safe-URL, CSS-value guard (expression()/{}/</), </style RAWTEXT neutraliser, and an injectable DOMPurify seam (configureRichtextSanitizer) that fails closed — without a runtime, richtext strips all tags and SVG returns empty. Stateless, env-free, ZERO npm deps, no Convex. Ships a PublishPreview iframe-srcdoc pane. A Wave-1 leaf of the feature-harvest ULTRAPLAN; a dependency of the planned visual-page-canvas.",
+      "description": "A framework-neutral clean-HTML engine with schema-typed escaping/sanitization, CSS deduplication, inline-style guards and deterministic CSP planning. React/Next remains the default preview distribution; Svelte/SvelteKit adds a native sandboxed preview while reusing all 16 canonical TypeScript core files through verified sharedFiles, so the renderer and security spine are not forked. Richtext/SVG sanitization remains injectable and fail-closed without a configured DOMPurify runtime. Stateless, env-free, no Convex.",
       "source": "rahman-resources",
       "slicePath": "frontend/slices/publisher-clean-html",
       "defaultFramework": "react-next",
@@ -4058,7 +4058,7 @@
         "css-dedup",
         "render"
       ],
-      "agentRecipe": "Run `npx rr add publisher-clean-html`. Build a registry: createModuleRegistry([{ id: 'base.body', render: (_p, kids) => ({ html: kids.join('') }) }, { id: 'demo.h', schema: { text: { type: 'text' } }, render: (p) => ({ html: `<h1>${p.text}</h1>`, css: 'h1{font-size:1.5rem}' }) }]). Tree = { rootNodeId, nodes: { [id]: { id, moduleId, props?, children?, classIds?, inlineStyles?, hidden? } } }. const { html } = publishPage(tree, registry, { title, cssEmission: 'inline' }). Preview: <PublishPreview html={html} />. Enable rich HTML/SVG by calling configureRichtextSanitizer(DOMPurify) once — without it, richtext/svg props fail closed (strip/empty). Props escape by schema control type, not key name."
+      "agentRecipe": "Run `npx rr add publisher-clean-html` for React/Next or add `--framework sveltekit` for the Svelte preview. Build a ModuleRegistry, call publishPage(tree, registry, options), and preview the resulting full HTML document with PublishPreview. Both framework adapters share the exact same renderer/sanitizer/CSP core. Enable rich HTML/SVG by configuring DOMPurify once; without it those paths stay fail-closed."
     },
     {
       "slug": "content-loops",
@@ -5110,7 +5110,7 @@
       "title": "Quicklinks — website shortcuts with favicons",
       "category": "os",
       "kind": "ui",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "A website-shortcut grid: add/remove links with auto favicons (Google s2) and new-tab open. State lives behind an injectable QuicklinksStore — createLocalStore persists to localStorage (SSR-safe hydrate), createMemoryStore suits previews/tests, configureQuicklinks swaps in a host store. Pairs with appshell: the useQuickLinks capability + QuicklinkIcon surface the same links in the dock/Launchpad/mobile grid.",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/quicklinks",
@@ -5118,6 +5118,22 @@
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/quicklinks"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/quicklinks-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/quicklinks/lib/core.ts"
+            ]
+          }
         }
       },
       "convexPaths": [],

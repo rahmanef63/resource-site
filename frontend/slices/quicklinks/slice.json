@@ -1,15 +1,34 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "quicklinks",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "category": "os",
   "kind": "ui",
   "title": "Quicklinks — website shortcuts with favicons",
-  "description": "A grid of user-curated website shortcuts: each quicklink is a URL + label, the favicon tile is derived from the URL (Google s2), and clicking one opens a new native browser tab. SELF-CONTAINED: data lives in an injectable QuicklinksStore — the bundled default persists to localStorage and ships seeded with demo links, or point configureQuicklinks() at a host store (e.g. a shell's settings-managed list). Pairs with the appshell slice's useQuickLinks capability, which renders the same list as dock/launchpad favicon shortcuts.",
+  "description": "A grid of user-curated website shortcuts with one framework-neutral QuicklinksStore + URL/favicon core. The bundled default persists to localStorage with SSR-safe post-mount hydration, while configureQuicklinks() can inject a host store. React/Next remains the default UI; an additive Svelte 5/SvelteKit grid reuses the exact same core and preserves favicon + noopener new-tab behavior.",
   "namespace": "@/features/quicklinks",
   "frontend": {
     "slicePath": "frontend/slices/quicklinks",
-    "configExport": "quicklinksConfig"
+    "configExport": "quicklinksConfig",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/quicklinks-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/quicklinks/lib/core.ts"
+          ]
+        }
+      }
+    }
   },
   "deps": {
     "npm": [
@@ -80,6 +99,7 @@
         "configureQuicklinks",
         "createLocalStore",
         "createMemoryStore",
+        "getQuicklinksStore",
         "faviconUrl",
         "openQuicklink",
         "quicklinksApp"

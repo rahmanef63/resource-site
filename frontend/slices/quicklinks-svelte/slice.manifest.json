@@ -1,32 +1,27 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
-  "slug": "quicklinks",
+  "slug": "quicklinks-svelte",
   "version": "1.1.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
-    "command": "npx rr add quicklinks",
+    "command": "npx rr add quicklinks --framework sveltekit",
     "consumerPath": "slices/quicklinks"
   },
   "files": [
-    "CHANGELOG.md",
     "README.md",
-    "app.tsx",
-    "components/app-frame.tsx",
+    "components/QuicklinksApp.svelte",
     "config.ts",
     "index.ts",
-    "lib/core.ts",
-    "lib/host.ts",
-    "slice.json"
+    "lib/store.ts",
+    "svelte-components.d.ts"
   ],
   "imports": {
     "shared": [
-      "@/components/ui/button",
-      "@/lib/utils"
+      "frontend/slices/quicklinks/lib/core.ts"
     ],
     "external": [
-      "react",
-      "lucide-react"
+      "svelte"
     ]
   }
 }

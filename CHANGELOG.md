@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — SvelteKit Quicklinks distribution
+<!-- public-changelog:SVELTE-QUICKLINKS-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/quicklinks
+- [before: `quicklinks` mixed portable store/URL behavior with React/Lucide host types and had no native Svelte distribution] → [after: React/Next remains the default while Svelte/SvelteKit gets a native grid/store adapter that reuses the exact same framework-neutral quicklinks core]
+- localStorage hydration, injected-store updates, Google s2 favicon derivation, and new-tab opener isolation now stay one canonical core across both framework adapters.
+
 ### 2026-09-13 — Publisher clean HTML public preview route
 <!-- public-changelog:PUBLISHER-CLEAN-HTML-PREVIEW-ROUTE -->
 

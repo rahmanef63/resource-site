@@ -2562,7 +2562,7 @@ export default function StudioDemo() {
     title: "Quicklinks — website shortcuts with favicons",
     category: "os",
     kind: "ui",
-    version: "1.0.0",
+    version: "1.1.0",
     tagline: "Add/remove website shortcuts with favicons; localStorage by default, injectable store for any host.",
     description:
       "A website-shortcut grid: add/remove links with auto favicons (Google s2) and new-tab open. State lives behind an injectable QuicklinksStore — createLocalStore persists to localStorage (SSR-safe hydrate), createMemoryStore suits previews/tests, configureQuicklinks swaps in a host store. Pairs with appshell: the useQuickLinks capability + QuicklinkIcon surface the same links in the dock/Launchpad/mobile grid.",
