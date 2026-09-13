@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — SvelteKit Activity distribution
+<!-- public-changelog:SVELTE-ACTIVITY-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/activity
+- Preview: https://resource.rahmanef.com/preview/slices/activity
+- [before: `activity` exposed its public weekly feed only through React/Next UI even though grouping, copy, formatting, tools, and Convex behavior were portable] → [after: React/Next remains the default while Svelte/SvelteKit gets native feed/item/stats UI over the exact same portable core and canonical Convex backend]
+- Stats ordering/hour rounding now live in one framework-neutral helper, and the public preview route mounts the canonical preview module.
+
 ### 2026-09-13 — SvelteKit Content Loops distribution
 <!-- public-changelog:SVELTE-CONTENT-LOOPS-DISTRIBUTION -->
 

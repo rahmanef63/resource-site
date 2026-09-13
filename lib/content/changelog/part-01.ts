@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-ACTIVITY-DISTRIBUTION",
+    "version": "activity@0.4.0",
+    "date": 1789257600000,
+    "kind": "feature",
+    "title": "SvelteKit Activity distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/activity — [before: activity exposed its public weekly feed only through React/Next UI even though grouping, copy, formatting, tools, and Convex behavior were portable] → [after: React/Next remains the default while Svelte/SvelteKit gets native feed/item/stats UI over the exact same portable core and canonical Convex backend].",
+    "groups": [
+      {
+        "heading": "One activity core and backend, two UI adapters",
+        "bullets": [
+          "The shared core owns activity types, ISO-week grouping, locale-aware formatting, English defaults, stats presentation, feature config, and read-only activity tools.",
+          "The Svelte 5 distribution replaces only the feed/item/stats UI; canonical convex/features/activity schema, public queries, and internal mutations are copied unchanged.",
+          "Public preview: https://resource.rahmanef.com/preview/slices/activity mounts the canonical preview module and exposes with-stats, feed-only, and empty scenarios."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-CONTENT-LOOPS-DISTRIBUTION",
     "version": "content-loops@0.2.0",
     "date": 1789257600000,

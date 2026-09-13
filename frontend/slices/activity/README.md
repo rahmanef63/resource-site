@@ -12,9 +12,21 @@ Public productivity log — lists user-facing activities grouped by ISO week. De
 
 ## Install
 
+React / Next (default):
+
 ```bash
 npx rr add activity
 ```
+
+Svelte 5 / SvelteKit:
+
+```bash
+npx rr add activity --framework sveltekit
+```
+
+The Svelte distribution uses the same Convex activity backend and the same
+portable config/types/format/grouping/defaults/stats/tools core. Only the UI
+layer changes; React, Next, Lucide, and shadcn UI are not installed.
 
 Then in your root Convex schema:
 

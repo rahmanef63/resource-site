@@ -1790,7 +1790,7 @@ const nav = [
     title: "Activity — public productivity log",
     category: "data",
     kind: "full",
-    version: "0.3.0",
+    version: "0.4.0",
     description: "Public-facing weekly activity log. Lists user-facing activities grouped by ISO week with schema.org-friendly markup, designed to maximise SEO so the question 'what is <person> working on this week?' lands here. Convex-backed (schema + queries + unauthenticated mutations); MCP-friendly so AI workflows (Claude / GPT / custom agents) can append entries directly. All user-facing copy + per-category labels + date/time locale are prop-driven (English defaults). Lifted 2026-05-27 from rahmanef.com; 225-LOC view split into view + 2 sub-components + 4 lib helpers for the 200-LOC cap; Indonesian strings + custom primitives stripped; cross-slice auth import dropped (consumer wraps mutations).",
     source: "rahmanef.com",
     slicePath: "frontend/slices/activity",

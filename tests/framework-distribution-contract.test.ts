@@ -250,6 +250,49 @@ describe("framework-aware slice distribution", () => {
     expect(svelteResult.stdout).not.toContain("npx shadcn@latest add");
   });
 
+  it("keeps activity on React by default and selects its native SvelteKit distribution with the same Convex backend", () => {
+    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "activity");
+    const target = mkTarget();
+
+    expect(slice.slicePath).toBe("frontend/slices/activity");
+    expect(slice.defaultFramework).toBe("react-next");
+    const svelte = slice.frameworks["svelte-sveltekit"];
+    expect(svelte.path).toBe("frontend/slices/activity-svelte");
+    expect(svelte.aliases).toEqual(["svelte", "sveltekit"]);
+    expect(svelte.deps.npm).toEqual(["svelte@^5", "convex@^1.17"]);
+    expect(svelte.deps.shadcn).toEqual([]);
+    expect(svelte.deps.sharedFiles).toEqual([
+      "frontend/slices/activity/config.ts",
+      "frontend/slices/activity/lib/types.ts",
+      "frontend/slices/activity/lib/format.ts",
+      "frontend/slices/activity/lib/grouping.ts",
+      "frontend/slices/activity/lib/defaults.ts",
+      "frontend/slices/activity/lib/stats.ts",
+      "frontend/slices/activity/lib/tools.ts",
+    ]);
+
+    const defaultResult = runCli("add", "activity", "--target", target, "--dry-run");
+    expect(defaultResult.status).toBe(0);
+    expect(defaultResult.stdout).toContain("frontend/slices/activity →");
+    expect(defaultResult.stdout).toContain("convex/features/activity →");
+    expect(defaultResult.stdout).toContain("lucide-react");
+    expect(defaultResult.stdout).toContain("next@^15");
+
+    const svelteResult = runCli("add", "activity", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteResult.status).toBe(0);
+    expect(svelteResult.stdout).toContain("frontend/slices/activity-svelte →");
+    expect(svelteResult.stdout).toContain("convex/features/activity →");
+    expect(svelteResult.stdout).toContain("frontend/slices/activity/lib/stats.ts →");
+    expect(svelteResult.stdout).toContain("frontend/slices/activity/lib/tools.ts →");
+    expect(svelteResult.stdout).toContain("svelte@^5");
+    expect(svelteResult.stdout).toContain("convex@^1.17");
+    expect(svelteResult.stdout).not.toContain("lucide-react");
+    expect(svelteResult.stdout).not.toContain("next@^15");
+    expect(svelteResult.stdout).not.toContain("react@^18");
+  });
+
   it("keeps content-loops on React by default and selects its native SvelteKit distribution", () => {
     execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));

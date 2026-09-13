@@ -3,6 +3,7 @@ export { StatsPanel } from "./components/StatsPanel";
 export { ActivityItem } from "./components/ActivityItem";
 export { groupByWeek, isoWeek } from "./lib/grouping";
 export { fmtDate, fmtTime } from "./lib/format";
+export { activityStatItems, type ActivityStatItem } from "./lib/stats";
 export { DEFAULT_COPY, DEFAULT_CATEGORY_LABELS } from "./lib/defaults";
 export type {
   ActivityRow,

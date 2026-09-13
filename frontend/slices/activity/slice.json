@@ -1,15 +1,41 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "activity",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "category": "data",
   "kind": "full",
-  "title": "Activity \u2014 public productivity log",
-  "description": "Public-facing weekly activity log. Lists user-facing activities grouped by ISO week with schema.org-friendly markup, designed to maximise SEO so the question 'what is <person> working on this week?' lands here. Convex-backed (schema + queries + unauthenticated mutations); MCP-friendly so AI workflows (Claude / GPT / custom agents) can append entries directly. All user-facing copy + per-category labels + date/time locale are prop-driven (English defaults). Lifted 2026-05-27 from rahmanef.com; 225-LOC view split + Indonesian strings + custom primitives stripped + auth dropped (consumer wraps).",
+  "title": "Activity — public productivity log",
+  "description": "Public weekly activity log with one portable ISO-week/copy/format/stats/tool core and canonical Convex backend. React/Next remains the default UI; Svelte 5/SvelteKit adds a native feed/item/stats distribution over the same core and backend, preserving locale/copy/category overrides, public visibility filtering, stats semantics, metadata, and safe external links.",
   "namespace": "@/features/activity",
   "frontend": {
     "slicePath": "frontend/slices/activity",
-    "configExport": "activityFeature"
+    "configExport": "activityFeature",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/activity-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5",
+            "convex@^1.17"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/activity/config.ts",
+            "frontend/slices/activity/lib/types.ts",
+            "frontend/slices/activity/lib/format.ts",
+            "frontend/slices/activity/lib/grouping.ts",
+            "frontend/slices/activity/lib/defaults.ts",
+            "frontend/slices/activity/lib/stats.ts",
+            "frontend/slices/activity/lib/tools.ts"
+          ]
+        }
+      }
+    }
   },
   "convex": {
     "tablesExport": "activityTables",
@@ -62,7 +88,7 @@
         {
           "id": "empty",
           "title": "Empty state",
-          "description": "No rows \u2014 empty-title/body fallback renders"
+          "description": "No rows — empty-title/body fallback renders"
         }
       ],
       "seed": "4 static ActivityRow entries across two ISO weeks (display-only); scenario toggles stats + emptiness"
@@ -104,7 +130,8 @@
         "isoWeek",
         "fmtDate",
         "fmtTime",
-        "DEFAULT_COPY"
+        "DEFAULT_COPY",
+        "activityStatItems"
       ],
       "hooks": [],
       "convex": {
