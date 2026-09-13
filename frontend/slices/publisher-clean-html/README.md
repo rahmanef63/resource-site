@@ -9,7 +9,13 @@ islands are left behind; this is the pure render-to-clean-HTML core.
 npx rr add publisher-clean-html
 ```
 
-Stateless, env-free, **zero npm deps**, no Convex.
+React/Next remains the default distribution. Svelte/SvelteKit consumers can install the native preview wrapper plus the exact same canonical publisher core with:
+
+```bash
+npx rr add publisher-clean-html --framework sveltekit
+```
+
+The Svelte variant receives the core through verified framework `sharedFiles`; renderer, sanitization, CSS and CSP logic are not duplicated. Stateless, env-free, and no Convex.
 
 ## Use it
 

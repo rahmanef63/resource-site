@@ -250,6 +250,37 @@ describe("framework-aware slice distribution", () => {
     expect(svelteResult.stdout).not.toContain("npx shadcn@latest add");
   });
 
+  it("keeps publisher-clean-html on React by default and shares its core with SvelteKit", () => {
+    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "publisher-clean-html");
+    const target = mkTarget();
+
+    expect(slice.slicePath).toBe("frontend/slices/publisher-clean-html");
+    expect(slice.defaultFramework).toBe("react-next");
+    const svelte = slice.frameworks["svelte-sveltekit"];
+    expect(svelte.path).toBe("frontend/slices/publisher-clean-html-svelte");
+    expect(svelte.aliases).toEqual(["svelte", "sveltekit"]);
+    expect(svelte.deps.npm).toEqual(["svelte@^5"]);
+    expect(svelte.deps.shadcn).toEqual([]);
+    expect(svelte.deps.sharedFiles).toHaveLength(16);
+    expect(svelte.deps.sharedFiles.every((file: string) => file.startsWith("frontend/slices/publisher-clean-html/lib/"))).toBe(true);
+
+    const defaultResult = runCli("add", "publisher-clean-html", "--target", target, "--dry-run");
+    expect(defaultResult.status).toBe(0);
+    expect(defaultResult.stdout).toContain("frontend/slices/publisher-clean-html →");
+    expect(defaultResult.stdout).not.toContain("svelte@^5");
+
+    const svelteResult = runCli("add", "publisher-clean-html", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteResult.status).toBe(0);
+    expect(svelteResult.stdout).toContain("frontend/slices/publisher-clean-html-svelte →");
+    expect(svelteResult.stdout).toContain("frontend/slices/publisher-clean-html/lib/publish-page.ts →");
+    expect(svelteResult.stdout).toContain("frontend/slices/publisher-clean-html/lib/sanitize/runtime.ts →");
+    expect(svelteResult.stdout).toContain("svelte@^5");
+    expect(svelteResult.stdout).not.toContain("lucide-react");
+    expect(svelteResult.stdout).not.toContain("npx shadcn@latest add");
+  });
+
   it("keeps broadcast-channel-sync on React by default and selects its Svelte store distribution", () => {
     execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));

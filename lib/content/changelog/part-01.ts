@@ -2,6 +2,24 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-PUBLISHER-CLEAN-HTML-DISTRIBUTION",
+    "version": "publisher-clean-html@0.2.0",
+    "date": 1789257600000,
+    "kind": "feature",
+    "title": "SvelteKit Publisher clean HTML distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/publisher-clean-html — [before: publisher-clean-html exposed its preview only through React even though the clean-HTML engine itself was framework-neutral] → [after: React/Next remains the default while Svelte/SvelteKit adds a sandboxed preview and reuses the exact same publisher core through verified sharedFiles].",
+    "groups": [
+      {
+        "heading": "One security core, two preview adapters",
+        "bullets": [
+          "The Svelte 5 preview keeps the iframe sandbox at allow-same-origin without allow-scripts, matching the React preview's no-script boundary.",
+          "All 16 publisher core files are delivered through framework sharedFiles, so renderer, schema-typed sanitization, CSS deduplication and CSP planning are not forked between frameworks."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "FRAMEWORK-SHARED-FILE-FETCH-FIX",
     "version": "site@framework-shared-file-fetch",
     "date": 1789257600000,

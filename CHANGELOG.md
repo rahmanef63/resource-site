@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — SvelteKit Publisher clean HTML distribution
+<!-- public-changelog:SVELTE-PUBLISHER-CLEAN-HTML-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/publisher-clean-html
+- [before: `publisher-clean-html` exposed its preview only through React even though the clean-HTML engine itself was framework-neutral] → [after: React/Next remains the default while Svelte/SvelteKit adds a sandboxed preview and reuses the exact same publisher core through verified `sharedFiles`]
+- The Svelte preview keeps `allow-same-origin` without `allow-scripts`; renderer, sanitization, CSS-dedup and CSP logic stay one canonical TypeScript source.
+
 ### 2026-09-13 — Exact shared-file fetch for framework distributions
 <!-- public-changelog:FRAMEWORK-SHARED-FILE-FETCH-FIX -->
 

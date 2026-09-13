@@ -4000,7 +4000,7 @@
       "title": "Publisher — clean HTML",
       "category": "content",
       "kind": "ui",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "description": "A pure render-to-clean-HTML engine harvested from the Instatic CMS publisher, decoupled from its host caching / loops / visual-components / Layer-C islands. publishPage(tree, registry, options) walks a generic node tree bottom-up: render children, escape every prop by its schema-declared control type (url -> safe-URL, richtext -> DOMPurify, svg -> SVG profile, else HTML-escape), dedup CSS by moduleId (~60-80% shrink), splice author classes + inline styles onto each rendered root, then assemble <!DOCTYPE> + reset + framework + module CSS + a deterministic (sorted) CSP plan. Bring your own ModuleRegistry (each module is a pure render(props, children) -> { html, css? }). Security spine: HTML escape + safe-URL, CSS-value guard (expression()/{}/</), </style RAWTEXT neutraliser, and an injectable DOMPurify seam (configureRichtextSanitizer) that fails closed — without a runtime, richtext strips all tags and SVG returns empty. Stateless, env-free, ZERO npm deps, no Convex. Ships a PublishPreview iframe-srcdoc pane. A Wave-1 leaf of the feature-harvest ULTRAPLAN; a dependency of the planned visual-page-canvas.",
       "source": "rahman-resources",
       "slicePath": "frontend/slices/publisher-clean-html",
@@ -4008,6 +4008,37 @@
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/publisher-clean-html"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/publisher-clean-html-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/publisher-clean-html/lib/class-injection.ts",
+              "frontend/slices/publisher-clean-html/lib/csp-plan.ts",
+              "frontend/slices/publisher-clean-html/lib/css-collector.ts",
+              "frontend/slices/publisher-clean-html/lib/escape-props.ts",
+              "frontend/slices/publisher-clean-html/lib/inline-style.ts",
+              "frontend/slices/publisher-clean-html/lib/module-registry.ts",
+              "frontend/slices/publisher-clean-html/lib/publish-page.ts",
+              "frontend/slices/publisher-clean-html/lib/render-node.ts",
+              "frontend/slices/publisher-clean-html/lib/reset-css.ts",
+              "frontend/slices/publisher-clean-html/lib/sanitize/css-value.ts",
+              "frontend/slices/publisher-clean-html/lib/sanitize/html.ts",
+              "frontend/slices/publisher-clean-html/lib/sanitize/index.ts",
+              "frontend/slices/publisher-clean-html/lib/sanitize/richtext.ts",
+              "frontend/slices/publisher-clean-html/lib/sanitize/runtime.ts",
+              "frontend/slices/publisher-clean-html/lib/sanitize/svg.ts",
+              "frontend/slices/publisher-clean-html/lib/types.ts"
+            ]
+          }
         }
       },
       "convexPaths": [],

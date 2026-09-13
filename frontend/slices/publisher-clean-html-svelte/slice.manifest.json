@@ -1,0 +1,41 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "publisher-clean-html-svelte",
+  "version": "0.2.0",
+  "tier": 2,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add publisher-clean-html --framework sveltekit",
+    "consumerPath": "slices/publisher-clean-html"
+  },
+  "files": [
+    "README.md",
+    "components/PublishPreview.svelte",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/publisher-clean-html/lib/class-injection.ts",
+      "frontend/slices/publisher-clean-html/lib/csp-plan.ts",
+      "frontend/slices/publisher-clean-html/lib/css-collector.ts",
+      "frontend/slices/publisher-clean-html/lib/escape-props.ts",
+      "frontend/slices/publisher-clean-html/lib/inline-style.ts",
+      "frontend/slices/publisher-clean-html/lib/module-registry.ts",
+      "frontend/slices/publisher-clean-html/lib/publish-page.ts",
+      "frontend/slices/publisher-clean-html/lib/render-node.ts",
+      "frontend/slices/publisher-clean-html/lib/reset-css.ts",
+      "frontend/slices/publisher-clean-html/lib/sanitize/css-value.ts",
+      "frontend/slices/publisher-clean-html/lib/sanitize/html.ts",
+      "frontend/slices/publisher-clean-html/lib/sanitize/index.ts",
+      "frontend/slices/publisher-clean-html/lib/sanitize/richtext.ts",
+      "frontend/slices/publisher-clean-html/lib/sanitize/runtime.ts",
+      "frontend/slices/publisher-clean-html/lib/sanitize/svg.ts",
+      "frontend/slices/publisher-clean-html/lib/types.ts"
+    ],
+    "external": [
+      "svelte"
+    ]
+  }
+}
