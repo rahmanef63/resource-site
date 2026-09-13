@@ -11,8 +11,8 @@ import {
 } from "@/components/ui/command";
 import { History } from "lucide-react";
 import { loadHistory, saveHistory, type HistoryEntry } from "../lib/cmdkHistory";
+import { isCommandMenuHotkey, resolvePaletteLabels } from "../lib/core";
 import {
-  DEFAULT_PALETTE_LABELS,
   type CommandGroup as TCommandGroup,
   type CommandPaletteLabels,
 } from "../lib/types";
@@ -72,13 +72,13 @@ export function CommandPalette({
     onQueryChange?.(v);
   };
 
-  const resolved = { ...DEFAULT_PALETTE_LABELS, ...labels };
+  const resolved = resolvePaletteLabels(labels);
   const inputPlaceholder = placeholder ?? resolved.placeholder;
 
   useEffect(() => {
     if (disableHotkey) return;
     const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+      if (isCommandMenuHotkey(e)) {
         e.preventDefault();
         setOpen(!open);
       }

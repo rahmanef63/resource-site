@@ -1,4 +1,4 @@
-# `command-menu` slice — renderless ⌘K palette + search modal
+# `command-menu` slice — portable ⌘K palette + search modal
 
 Generic, renderless command palette. The slice owns:
 
@@ -20,10 +20,14 @@ kitab boundary — wire your own adapter (see below).
 ## Install
 
 ```bash
-npx rahman-resources add command-menu
+# React/Next default
+npx rr add command-menu
+
+# Native Svelte 5 / SvelteKit
+npx rr add command-menu --framework sveltekit
 ```
 
-Brings in `cmdk` and the shadcn `command` + `dialog` primitives if missing.
+The default React distribution brings `cmdk`, `lucide-react`, and shadcn `button`, `command`, and `dialog`. The Svelte distribution brings only `svelte@^5` plus the canonical portable command core + MRU history files; it does not copy React, Next, cmdk, Lucide, or shadcn UI.
 
 ## `CommandPalette` — adapter shape
 
@@ -158,5 +162,11 @@ provide these for the slice to remain portable.
 
 ## Deps
 
-- `cmdk` (npm)
-- shadcn `command`, `dialog`
+React/Next default:
+- `cmdk@^1.0.0`
+- `lucide-react@^0.400.0`
+- shadcn `button`, `command`, `dialog`
+
+Svelte/SvelteKit:
+- `svelte@^5`
+- shared `lib/core.ts` + `lib/cmdkHistory.ts`

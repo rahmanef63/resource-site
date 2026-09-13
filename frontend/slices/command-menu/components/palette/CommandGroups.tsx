@@ -4,6 +4,7 @@ import {
   CommandGroup as CmdGroup,
   CommandItem as CmdItem,
 } from "@/components/ui/command";
+import { visibleCommandGroups } from "../../lib/core";
 import type { CommandGroup, CommandItem } from "../../lib/types";
 
 interface GroupListProps {
@@ -19,17 +20,9 @@ interface GroupListProps {
  *  can declare visibility without inline conditionals at the call site.
  */
 export function CommandGroupList({ groups, query, run }: GroupListProps) {
-  const hasQuery = query.trim().length > 0;
   return (
     <>
-      {groups
-        .filter((g) => {
-          if (g.items.length === 0) return false;
-          if (hasQuery && g.hideOnQuery) return false;
-          if (!hasQuery && g.showOnQueryOnly) return false;
-          return true;
-        })
-        .map((group) => (
+      {visibleCommandGroups(groups, query).map((group) => (
           <CmdGroup key={group.id} heading={group.heading}>
             {group.items.map((item) => (
               <CommandItemRenderer key={item.id} item={item} run={run} />

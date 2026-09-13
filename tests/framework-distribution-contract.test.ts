@@ -1,18 +1,24 @@
 // @vitest-environment node
-import { afterEach, describe, expect, it } from "vitest";
-import { execFileSync, spawnSync } from "node:child_process";
+import { afterAll, afterEach, describe, expect, it } from "vitest";
+import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
-const manifestPath = "packages/cli/lib/manifest.json";
-const originalManifest = readFileSync(manifestPath, "utf8");
+const bundledManifestPath = "packages/cli/lib/manifest.json";
+const originalManifest = readFileSync(bundledManifestPath, "utf8");
+const manifestPath = path.join(
+  os.tmpdir(),
+  `rr-framework-manifest-${process.pid}-${Date.now()}.json`,
+);
+writeFileSync(manifestPath, originalManifest);
 const tempDirs: string[] = [];
 
 function runCli(...args: string[]) {
   return spawnSync(process.execPath, ["packages/cli/bin/cli.js", ...args], {
     cwd: process.cwd(),
     encoding: "utf8",
+    env: { ...process.env, RR_MANIFEST_PATH: manifestPath },
   });
 }
 
@@ -56,9 +62,12 @@ afterEach(() => {
   for (const dir of tempDirs.splice(0)) rmSync(dir, { recursive: true, force: true });
 });
 
+afterAll(() => {
+  rmSync(manifestPath, { force: true });
+});
+
 describe("framework-aware slice distribution", () => {
-  it("generates legacy React/Next framework metadata without changing slicePath", () => {
-    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
+  it("reads legacy React/Next framework metadata without changing slicePath", () => {
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "ai-core");
 
@@ -127,7 +136,6 @@ describe("framework-aware slice distribution", () => {
   });
 
   it("keeps start-here on React by default and selects its SvelteKit source deterministically", () => {
-    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "start-here");
     const target = mkTarget();
@@ -158,7 +166,6 @@ describe("framework-aware slice distribution", () => {
   });
 
   it("keeps seo on the shared service source for explicit SvelteKit without invented UI deps", () => {
-    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "seo");
     const target = mkTarget();
@@ -187,7 +194,6 @@ describe("framework-aware slice distribution", () => {
   });
 
   it("keeps audit-log on one framework-neutral backend source for explicit SvelteKit", () => {
-    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "audit-log");
     const target = mkTarget();
@@ -217,7 +223,6 @@ describe("framework-aware slice distribution", () => {
   });
 
   it("keeps rate-limit on one framework-neutral backend source for explicit SvelteKit", () => {
-    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "rate-limit");
     const target = mkTarget();
@@ -251,7 +256,6 @@ describe("framework-aware slice distribution", () => {
   });
 
   it("keeps marketing-chrome on React by default and selects its native SvelteKit distribution over shared chrome semantics", () => {
-    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "marketing-chrome");
     const target = mkTarget();
@@ -287,7 +291,6 @@ describe("framework-aware slice distribution", () => {
   });
 
   it("keeps storefront-checkout on React by default and selects native Svelte cart UI over the same cart core", () => {
-    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "storefront-checkout");
     const target = mkTarget();
@@ -323,7 +326,6 @@ describe("framework-aware slice distribution", () => {
   });
 
   it("keeps notifications-center on React by default and selects native Svelte inbox UI over the same adapter core", () => {
-    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "notifications-center");
     const target = mkTarget();
@@ -359,7 +361,6 @@ describe("framework-aware slice distribution", () => {
   });
 
   it("keeps comments on React by default and selects native Svelte renderless adapters over the same thread core", () => {
-    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "comments");
     const target = mkTarget();
@@ -396,7 +397,6 @@ describe("framework-aware slice distribution", () => {
   });
 
   it("keeps rbac-roles on React by default and selects its native SvelteKit distribution over the same RBAC engine", () => {
-    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "rbac-roles");
     const target = mkTarget();
@@ -435,7 +435,6 @@ describe("framework-aware slice distribution", () => {
   });
 
   it("keeps ai-core on React by default and selects its native SvelteKit distribution over shared portable cores", () => {
-    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "ai-core");
     const target = mkTarget();
@@ -471,7 +470,6 @@ describe("framework-aware slice distribution", () => {
   });
 
   it("keeps activity on React by default and selects its native SvelteKit distribution with the same Convex backend", () => {
-    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "activity");
     const target = mkTarget();
@@ -514,7 +512,6 @@ describe("framework-aware slice distribution", () => {
   });
 
   it("keeps content-loops on React by default and selects its native SvelteKit distribution", () => {
-    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "content-loops");
     const target = mkTarget();
@@ -550,7 +547,6 @@ describe("framework-aware slice distribution", () => {
   });
 
   it("keeps quicklinks on React by default and selects its native SvelteKit distribution", () => {
-    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "quicklinks");
     const target = mkTarget();
@@ -579,7 +575,6 @@ describe("framework-aware slice distribution", () => {
   });
 
   it("keeps publisher-clean-html on React by default and shares its core with SvelteKit", () => {
-    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "publisher-clean-html");
     const target = mkTarget();
@@ -610,7 +605,6 @@ describe("framework-aware slice distribution", () => {
   });
 
   it("keeps broadcast-channel-sync on React by default and selects its Svelte store distribution", () => {
-    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "broadcast-channel-sync");
     const target = mkTarget();
@@ -640,7 +634,6 @@ describe("framework-aware slice distribution", () => {
   });
 
   it("keeps testimonials on one framework-neutral backend source for explicit SvelteKit", () => {
-    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "testimonials");
     const target = mkTarget();
@@ -671,7 +664,6 @@ describe("framework-aware slice distribution", () => {
   });
 
   it("keeps services on one framework-neutral backend source for explicit SvelteKit", () => {
-    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "services");
     const target = mkTarget();
@@ -705,7 +697,6 @@ describe("framework-aware slice distribution", () => {
   });
 
   it("keeps booking on React by default and selects its real SvelteKit UI distribution", () => {
-    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "booking");
     const target = mkTarget();
@@ -735,7 +726,6 @@ describe("framework-aware slice distribution", () => {
   });
 
   it("keeps selection on React by default and selects its SvelteKit source deterministically", () => {
-    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "selection");
     const target = mkTarget();
@@ -764,7 +754,6 @@ describe("framework-aware slice distribution", () => {
   });
 
   it("keeps file-upload on the real React source by default and selects its SvelteKit source deterministically", () => {
-    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "file-upload");
     const target = mkTarget();
@@ -794,7 +783,6 @@ describe("framework-aware slice distribution", () => {
   });
 
   it("keeps site-setup-wizard on React by default and selects native Svelte onboarding UI over the same wizard core", () => {
-    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "site-setup-wizard");
     const target = mkTarget();
@@ -828,7 +816,6 @@ describe("framework-aware slice distribution", () => {
   });
 
   it("keeps theme-presets on React/next-themes by default and selects native Svelte preset UI over the same tweakcn core", () => {
-    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "theme-presets");
     const target = mkTarget();
@@ -872,7 +859,6 @@ describe("framework-aware slice distribution", () => {
   });
 
   it("keeps system-monitor on React by default and selects native Svelte telemetry UI over the same history core", () => {
-    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "system-monitor");
     const target = mkTarget();
@@ -905,6 +891,41 @@ describe("framework-aware slice distribution", () => {
     expect(svelteResult.stdout).toContain("frontend/slices/system-monitor/lib/palette.ts →");
     expect(svelteResult.stdout).toContain("frontend/slices/system-monitor/lib/tools.ts →");
     expect(svelteResult.stdout).toContain("svelte@^5");
+    expect(svelteResult.stdout).not.toContain("lucide-react");
+    expect(svelteResult.stdout).not.toContain("shadcn:");
+  });
+
+  it("keeps command-menu on React/cmdk by default and selects native Svelte palette UI over the same command core", () => {
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "command-menu");
+    const target = mkTarget();
+
+    expect(slice.slicePath).toBe("frontend/slices/command-menu");
+    expect(slice.defaultFramework).toBe("react-next");
+    const svelte = slice.frameworks["svelte-sveltekit"];
+    expect(svelte.path).toBe("frontend/slices/command-menu-svelte");
+    expect(svelte.aliases).toEqual(["svelte", "sveltekit"]);
+    expect(svelte.deps.npm).toEqual(["svelte@^5"]);
+    expect(svelte.deps.shadcn).toEqual([]);
+    expect(svelte.deps.sharedFiles).toEqual([
+      "frontend/slices/command-menu/lib/core.ts",
+      "frontend/slices/command-menu/lib/cmdkHistory.ts",
+    ]);
+
+    const defaultResult = runCli("add", "command-menu", "--target", target, "--dry-run");
+    expect(defaultResult.status).toBe(0);
+    expect(defaultResult.stdout).toContain("frontend/slices/command-menu →");
+    expect(defaultResult.stdout).toContain("cmdk@^1.0.0");
+    expect(defaultResult.stdout).toContain("lucide-react@^0.400.0");
+    expect(defaultResult.stdout).toContain("shadcn: button command dialog");
+
+    const svelteResult = runCli("add", "command-menu", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteResult.status).toBe(0);
+    expect(svelteResult.stdout).toContain("frontend/slices/command-menu-svelte →");
+    expect(svelteResult.stdout).toContain("frontend/slices/command-menu/lib/core.ts →");
+    expect(svelteResult.stdout).toContain("frontend/slices/command-menu/lib/cmdkHistory.ts →");
+    expect(svelteResult.stdout).toContain("svelte@^5");
+    expect(svelteResult.stdout).not.toContain("cmdk@");
     expect(svelteResult.stdout).not.toContain("lucide-react");
     expect(svelteResult.stdout).not.toContain("shadcn:");
   });

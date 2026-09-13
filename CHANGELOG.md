@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — SvelteKit Command Menu distribution
+<!-- public-changelog:SVELTE-COMMAND-MENU-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/command-menu
+- Preview: https://resource.rahmanef.com/preview/slices/command-menu
+- [before: `command-menu` leaked React render nodes into its shared contracts, duplicated public preview/filtering logic, and its installer catalog omitted Lucide plus the shadcn Button dependency] → [after: React/Next remains the default cmdk/shadcn surface while Svelte/SvelteKit gets native command-palette and search-modal UI over the exact same portable hotkey, group, query, selection, MRU-history, label, and search-state core]
+- The retired `commandMenuTools` API remains retired; this wave does not resurrect deduplicated agent tools.
+
 ### 2026-09-13 — SvelteKit System Monitor distribution
 <!-- public-changelog:SVELTE-SYSTEM-MONITOR-DISTRIBUTION -->
 

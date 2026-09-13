@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-COMMAND-MENU-DISTRIBUTION",
+    "version": "command-menu@0.4.0",
+    "date": 1789257600000,
+    "kind": "feature",
+    "title": "SvelteKit Command Menu distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/command-menu — [before: command-menu leaked React render nodes into its shared contracts, duplicated public preview/filtering logic, and its installer catalog omitted Lucide plus the shadcn Button dependency] → [after: React/Next remains the default cmdk/shadcn surface while Svelte/SvelteKit gets native command-palette and search-modal UI over the exact same portable hotkey, group, query, selection, MRU-history, label, and search-state core].",
+    "groups": [
+      {
+        "heading": "One command/search core, native framework surfaces",
+        "bullets": [
+          "The portable core owns hotkey detection, group visibility/filtering, tracked selection + MRU persistence, label resolution, and generic search view state without React render types.",
+          "The Svelte 5 distribution provides native CommandPalette, CommandGroupList, and SearchModal with keyboard navigation plus optional icon/trailing snippets and no React, Next, cmdk, Lucide, or shadcn runtime imports.",
+          "Public preview: https://resource.rahmanef.com/preview/slices/command-menu mounts canonical preview.tsx; the default React installer now declares cmdk, lucide-react, and shadcn button/command/dialog accurately."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-SYSTEM-MONITOR-DISTRIBUTION",
     "version": "system-monitor@1.3.0",
     "date": 1789257600000,

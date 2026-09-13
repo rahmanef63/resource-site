@@ -1,0 +1,27 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "command-menu-svelte",
+  "version": "0.4.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add command-menu --framework sveltekit",
+    "consumerPath": "slices/command-menu"
+  },
+  "files": [
+    "README.md",
+    "components/CommandGroupList.svelte",
+    "components/CommandPalette.svelte",
+    "components/SearchModal.svelte",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/command-menu/lib/core.ts",
+      "frontend/slices/command-menu/lib/cmdkHistory.ts"
+    ],
+    "external": ["svelte"]
+  }
+}

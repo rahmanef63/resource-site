@@ -4,38 +4,10 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Search, FileText, Clock, Database as DatabaseIcon, Loader2 } from "lucide-react";
-import { DEFAULT_SEARCH_LABELS, type SearchModalLabels } from "../lib/types";
+import { resolveSearchLabels, searchView } from "../lib/core";
+import type { SearchHit, SearchModalBindings, SearchModalLabels } from "../lib/types";
 
-/** Generic, normalized hit shape — the modal only renders these fields,
- *  it does NOT know how the consumer fetched them. */
-export interface SearchHit {
-  id: string;
-  /** Visible row title. Falls back to "Untitled" when blank. */
-  title: string;
-  /** Optional secondary text rendered under the title. */
-  subtitle?: string;
-  /** Optional consumer-rendered icon node (use any icon picker / lucide). */
-  icon?: ReactNode;
-}
-
-/** Bindings exposed by the consumer. Keep generic — no Convex / store /
- *  router types leak through. */
-export interface SearchModalBindings {
-  /** Current loading state for the active query. */
-  isLoading: boolean;
-  /** Page-kind hits for the current query. */
-  pages: SearchHit[];
-  /** Database-kind hits for the current query. */
-  databases: SearchHit[];
-  /** Recent items shown when the query is empty. */
-  recents: SearchHit[];
-  /** Called whenever the query input changes (debouncing is up to consumer). */
-  onQueryChange: (q: string) => void;
-  /** Navigate to a page hit. The modal closes immediately after. */
-  onSelectPage: (hit: SearchHit) => void;
-  /** Navigate to a database hit. The modal closes immediately after. */
-  onSelectDatabase: (hit: SearchHit) => void;
-}
+export type { SearchHit, SearchModalBindings } from "../lib/types";
 
 interface Props {
   open: boolean;
@@ -50,10 +22,10 @@ interface Props {
  *  layout, and empty/loading states. ALL data + navigation flow comes
  *  from the `bindings` prop so the slice is portable. */
 export function SearchModal({ open, onOpenChange, labels, bindings }: Props) {
-  const t = { ...DEFAULT_SEARCH_LABELS, ...labels };
+  const t = resolveSearchLabels(labels);
   const [q, setQ] = useState("");
-  const totalHits = bindings.pages.length + bindings.databases.length;
-  const recent = !q ? bindings.recents.slice(0, 5) : [];
+  const view = searchView(q, bindings);
+  const recent = view.recent;
 
   useEffect(() => { if (!open) setQ(""); }, [open]);
 
@@ -85,7 +57,7 @@ export function SearchModal({ open, onOpenChange, labels, bindings }: Props) {
           <kbd className="text-[10px] text-muted-foreground border border-border rounded px-1.5 py-0.5">{t.escapeHint}</kbd>
         </div>
         <div className="max-h-[420px] overflow-y-auto p-2">
-          {q && !bindings.isLoading && totalHits === 0 && (
+          {view.showNoResults && (
             <div className="px-3 py-8 text-center text-sm text-muted-foreground">{t.noResults(q)}</div>
           )}
           {!q && recent.length > 0 && (
@@ -112,7 +84,7 @@ export function SearchModal({ open, onOpenChange, labels, bindings }: Props) {
               ))}
             </>
           )}
-          {!q && recent.length === 0 && (
+          {view.showEmptyHint && (
             <div className="px-3 py-8 text-center text-sm text-muted-foreground">{t.emptyHint}</div>
           )}
         </div>

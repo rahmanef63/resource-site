@@ -1,11 +1,11 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "command-menu",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "category": "ui",
   "kind": "ui",
   "title": "Command Menu",
-  "description": "Renderless \u2318K command palette + generic search modal. Consumer-supplied groups + onSelect + label bag; slice owns dialog chrome, hotkey, and MRU history. Pulled UP from notion-page-clone's command-palette renderless surface (Wave N+3.7).",
+  "description": "Portable command palette + generic search modal. React/Next remains the default cmdk/shadcn UI while Svelte 5/SvelteKit adds native palette/search surfaces over the same framework-neutral group, hotkey, MRU history, filtering, selection, label, and search-state core.",
   "namespace": "@/features/command-menu",
   "convex": {
     "tablesExport": "",
@@ -14,13 +14,35 @@
   },
   "frontend": {
     "slicePath": "frontend/slices/command-menu",
-    "configExport": "commandMenuConfig"
+    "configExport": "commandMenuConfig",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/command-menu-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/command-menu/lib/core.ts",
+            "frontend/slices/command-menu/lib/cmdkHistory.ts"
+          ]
+        }
+      }
+    }
   },
   "deps": {
     "npm": [
-      "cmdk@^1.0.0"
+      "cmdk@^1.0.0",
+      "lucide-react@^0.400.0"
     ],
     "shadcn": [
+      "button",
       "command",
       "dialog"
     ],
@@ -52,10 +74,10 @@
             "commands"
           ],
           "default": "all",
-          "description": "Which mock command groups the palette renders \u2014 full set (pages + commands) vs commands only."
+          "description": "Which mock command groups the palette renders — full set (pages + commands) vs commands only."
         }
       ],
-      "seed": "Palette rendered inline (open, no \u2318K) over 4-5 mock command items; type to fuzzy-filter. onSelect handlers are no-ops."
+      "seed": "Palette rendered inline (open, no ⌘K) over 4-5 mock command items; type to fuzzy-filter. onSelect handlers are no-ops."
     }
   ],
   "contract": {
@@ -64,6 +86,16 @@
         "CommandPalette",
         "SearchModal",
         "CommandGroupList"
+      ],
+      "utils": [
+        "filterCommandGroups",
+        "visibleCommandGroups",
+        "isCommandMenuHotkey",
+        "runCommandSelection",
+        "searchView",
+        "loadHistory",
+        "saveHistory",
+        "clearHistory"
       ]
     },
     "generalization": {

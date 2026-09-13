@@ -1,4 +1,4 @@
-// Slice public barrel — renderless command-menu surface (kitab v0.2.0).
+// Slice public barrel — React/Next default adapter over the portable command core.
 
 export { commandMenuConfig } from "./config";
 
@@ -24,3 +24,17 @@ export {
   HISTORY_MAX,
   type HistoryEntry,
 } from "./lib/cmdkHistory";
+
+export {
+  filterCommandGroups,
+  isCommandMenuHotkey,
+  resolvePaletteLabels,
+  resolveSearchLabels,
+  runCommandSelection,
+  searchView,
+  visibleCommandGroups,
+  type CommandGroupBase,
+  type CommandItemBase,
+  type SearchBindingsBase,
+  type SearchHitBase,
+} from "./lib/core";

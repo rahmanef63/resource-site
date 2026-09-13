@@ -1434,29 +1434,25 @@ export const calComWebhook = httpAction(async (ctx, req) => {
     title: "Command Menu",
     category: "ui",
     kind: "ui",
-    version: "0.3.0",
+    version: "0.4.0",
     tagline: "Notion-style ⌘K palette + search modal. Consumer supplies groups; slice owns dialog + MRU.",
-    description: "Renderless ⌘K command palette + generic search modal. Consumer supplies CommandGroup[] + onSelect + label bag; slice owns dialog chrome, ⌘K hotkey, MRU history. Pulled UP from notion-page-clone's command-palette renderless surface (Wave N+3.7) — Nosion adapters dropped at the kitab boundary.",
+    description: "Portable command palette + generic search modal. React/Next remains the default cmdk/shadcn UI while Svelte 5/SvelteKit adds native palette/search surfaces over the same framework-neutral group, hotkey, MRU history, filtering, selection, label, and search-state core.",
     source: "notion-page-clone (consumerVersion 0.3.0) + earlier superspace facade",
     docsUrl: "https://cmdk.paco.me",
     install: "npm i cmdk",
     slicePath: "frontend/slices/command-menu",
     convexPaths: [],
-    npm: ["cmdk@^1.0.0"],
-    shadcn: ["command", "dialog"],
+    npm: ["cmdk@^1.0.0", "lucide-react@^0.400.0"],
+    shadcn: ["button", "command", "dialog"],
     env: [],
     peers: [],
     tags: ["ui", "palette", "cmd-k", "navigation", "keyboard", "search", "notion-like"],
     usedBy: ["personal-brand-os", "agency-studio-os", "konsultan-os", "wirausaha-os", "kreator-studio-os", "saas-marketing-os", "riset-kit", "cms-public-storefront"],
     agentRecipe: "Run `npx rr add command-menu`. Wire <CommandPalette groups={...} onHistorySelect={...} labels={...} /> at the dashboard shell. Build groups from your feature registry; each item.onSelect handles navigation. Use <SearchModal bindings={{ pages, databases, recents, isLoading, onQueryChange, onSelectPage, onSelectDatabase }} /> for the search dialog — see slice README.md for adapter shapes.",
     previewPath: "/preview/slices/command-menu",
-    wiring: `import { CommandMenu } from "@/features/command-menu";
+    wiring: `import { CommandPalette } from "@/features/command-menu";
 
-const actions = [
-  { id: "new-post", label: "New post", icon: "Plus", onSelect: () => router.push("/posts/new") },
-];
-
-<CommandMenu actions={actions} />`,
+<CommandPalette groups={groups} onHistorySelect={rerunRecent} labels={labels} />`,
     defaultView: "mobile",
     defaultZoom: 1,
   },

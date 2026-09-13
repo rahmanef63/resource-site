@@ -1,45 +1,36 @@
 {
-  "$schema": "../../../docs/slice.manifest.schema.json",
-  "name": "command-menu",
-  "version": "0.3.0",
-  "description": "Renderless \u2318K command palette + generic search modal pulled UP from notion-page-clone's command-palette portable surface. Consumer supplies groups + onSelect + bindings; slice owns dialog chrome, \u2318K hotkey, MRU history.",
-  "category": "ui",
-  "stability": "beta",
-  "deps": {
-    "shared": [],
-    "slices": [],
-    "convexFeatures": [],
-    "npm": {
-      "cmdk": "^1.0.0"
-    },
-    "env": []
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "command-menu",
+  "version": "0.4.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add command-menu",
+    "consumerPath": "slices/command-menu"
   },
-  "files": {
-    "include": [
-      "**/*"
-    ],
-    "exclude": [
-      "*.test.ts",
-      "*.test.tsx",
-      "*.spec.ts"
-    ]
-  },
-  "permissions": [],
-  "schemaTables": [],
-  "compatibility": {
-    "next": ">=15 <17",
-    "react": "^19",
-    "convex": "^1.36",
-    "tailwind": "4",
-    "auth": "any"
-  },
-  "tags": [
-    "ui",
-    "palette",
-    "cmd-k",
-    "navigation",
-    "keyboard",
-    "search"
+  "files": [
+    "CHANGELOG.md",
+    "README.md",
+    "components/CommandPalette.tsx",
+    "components/SearchModal.tsx",
+    "components/palette/CommandGroups.tsx",
+    "config.ts",
+    "index.ts",
+    "lib/cmdkHistory.ts",
+    "lib/core.ts",
+    "lib/types.ts",
+    "slice.json"
   ],
-  "notes": "Renderless API. CommandPalette accepts `groups: CommandGroup[]` + `onHistorySelect` + `labels`. SearchModal accepts `bindings: SearchModalBindings` + `labels`. Nosion-specific adapters from upstream notion-page-clone were dropped \u2014 see README for adapter patterns."
+  "imports": {
+    "shared": [
+      "@/components/ui/button",
+      "@/components/ui/command",
+      "@/components/ui/dialog"
+    ],
+    "external": [
+      "cmdk",
+      "lucide-react",
+      "react"
+    ]
+  }
 }

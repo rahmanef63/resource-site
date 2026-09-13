@@ -39,7 +39,10 @@ import { pullRawFile } from "../lib/raw-file.mjs";
 
 const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const manifest = require(path.join(__dirname, "../lib/manifest.json"));
+const manifestPath = process.env.RR_MANIFEST_PATH
+  ? path.resolve(process.env.RR_MANIFEST_PATH)
+  : path.join(__dirname, "../lib/manifest.json");
+const manifest = require(manifestPath);
 const skillsInventory = require(path.join(__dirname, "../lib/skills.json"));
 
 const REPO = manifest.repo ?? "rahmanef63/resource-site";
