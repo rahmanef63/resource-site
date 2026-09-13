@@ -1,0 +1,29 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "marketing-chrome-svelte",
+  "version": "0.3.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add marketing-chrome --framework sveltekit",
+    "consumerPath": "slices/marketing-chrome"
+  },
+  "files": [
+    "README.md",
+    "components/BrandMark.svelte",
+    "components/MarketingHeader.svelte",
+    "components/MarketingFooter.svelte",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/marketing-chrome/lib/core.ts",
+      "frontend/slices/marketing-chrome/lib/tools.ts"
+    ],
+    "external": [
+      "svelte"
+    ]
+  }
+}

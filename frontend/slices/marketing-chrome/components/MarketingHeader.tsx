@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { headerShowsInlineNav } from "../lib/core";
 import type { Cta, MarketingHeaderProps } from "../lib/types";
 import { DesktopNav, MobileNav } from "./header-nav";
 import { BrandMark } from "./BrandMark";
@@ -39,7 +40,7 @@ export function MarketingHeader({
   sticky = false,
   className,
 }: MarketingHeaderProps) {
-  const showNav = layout !== "minimal";
+  const showNav = headerShowsInlineNav(layout);
   return (
     <header
       className={cn(

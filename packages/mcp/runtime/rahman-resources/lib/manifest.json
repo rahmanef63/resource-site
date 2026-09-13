@@ -4986,7 +4986,7 @@
       "title": "Marketing Chrome — Header + Footer",
       "category": "ui",
       "kind": "ui",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "description": "MarketingHeader (split | centered | minimal layouts, sticky option, mobile sheet menu) + MarketingFooter (columns | slim layouts, link columns, social icons, legal bar). Brand / nav / CTA / columns all props — no hardcoded content. Lucide stand-ins for brand glyphs; swap a brand icon set post-copy (README).",
       "source": "rr original (extracted from template duplication)",
       "slicePath": "frontend/slices/marketing-chrome",
@@ -4994,10 +4994,29 @@
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/marketing-chrome"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/marketing-chrome-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/marketing-chrome/lib/core.ts",
+              "frontend/slices/marketing-chrome/lib/tools.ts"
+            ]
+          }
         }
       },
       "convexPaths": [],
-      "npm": [],
+      "npm": [
+        "lucide-react@^0.400.0"
+      ],
       "shadcn": [
         "button",
         "sheet",

@@ -14,3 +14,4 @@ export type {
   MarketingFooterProps,
 } from "./lib/types";
 export { marketingChromeTools, type MarketingChromeConfigureCtx } from "./lib/tools";
+export { externalLinkAttrs, headerShowsInlineNav, orderedCtas, SOCIAL_TEXT } from "./lib/core";

@@ -250,6 +250,42 @@ describe("framework-aware slice distribution", () => {
     expect(svelteResult.stdout).not.toContain("npx shadcn@latest add");
   });
 
+  it("keeps marketing-chrome on React by default and selects its native SvelteKit distribution over shared chrome semantics", () => {
+    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "marketing-chrome");
+    const target = mkTarget();
+
+    expect(slice.slicePath).toBe("frontend/slices/marketing-chrome");
+    expect(slice.defaultFramework).toBe("react-next");
+    const svelte = slice.frameworks["svelte-sveltekit"];
+    expect(svelte.path).toBe("frontend/slices/marketing-chrome-svelte");
+    expect(svelte.aliases).toEqual(["svelte", "sveltekit"]);
+    expect(svelte.deps.npm).toEqual(["svelte@^5"]);
+    expect(svelte.deps.shadcn).toEqual([]);
+    expect(svelte.deps.sharedFiles).toEqual([
+      "frontend/slices/marketing-chrome/lib/core.ts",
+      "frontend/slices/marketing-chrome/lib/tools.ts",
+    ]);
+
+    const defaultResult = runCli("add", "marketing-chrome", "--target", target, "--dry-run");
+    expect(defaultResult.status).toBe(0);
+    expect(defaultResult.stdout).toContain("frontend/slices/marketing-chrome →");
+    expect(slice.npm).toContain("lucide-react@^0.400.0");
+    expect(defaultResult.stdout).toContain("shadcn: button sheet separator");
+
+    const svelteResult = runCli("add", "marketing-chrome", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteResult.status).toBe(0);
+    expect(svelteResult.stdout).toContain("frontend/slices/marketing-chrome-svelte →");
+    expect(svelteResult.stdout).toContain("frontend/slices/marketing-chrome/lib/core.ts →");
+    expect(svelteResult.stdout).toContain("frontend/slices/marketing-chrome/lib/tools.ts →");
+    expect(svelteResult.stdout).toContain("svelte@^5");
+    expect(svelteResult.stdout).not.toContain("lucide-react");
+    expect(svelteResult.stdout).not.toContain("shadcn: button");
+    expect(svelteResult.stdout).not.toContain("react@^18");
+    expect(svelteResult.stdout).not.toContain("next@^15");
+  });
+
   it("keeps ai-core on React by default and selects its native SvelteKit distribution over shared portable cores", () => {
     execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));

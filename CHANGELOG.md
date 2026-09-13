@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — SvelteKit Marketing Chrome distribution
+<!-- public-changelog:SVELTE-MARKETING-CHROME-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/marketing-chrome
+- Preview: https://resource.rahmanef.com/preview/slices/marketing-chrome
+- [before: `marketing-chrome` coupled its shared brand/nav/layout type surface to `React.ReactNode` and exposed only React/shadcn/Lucide UI] → [after: React/Next remains the default while Svelte/SvelteKit gets native header/footer/mobile-dialog UI over the exact same framework-neutral chrome contracts and configure tool]
+- The public preview route now reuses canonical `preview.tsx` header/footer seeds instead of duplicating demo data.
+
 ### 2026-09-13 — SvelteKit AI Core distribution
 <!-- public-changelog:SVELTE-AI-CORE-DISTRIBUTION -->
 

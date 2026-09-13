@@ -12,11 +12,8 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import { externalLinkAttrs, orderedCtas } from "../lib/core";
 import type { Cta, NavLink } from "../lib/types";
-
-function linkRel(external?: boolean) {
-  return external ? { target: "_blank", rel: "noreferrer noopener" } : {};
-}
 
 /** Inline desktop nav — anchors styled as muted links. */
 export function DesktopNav({
@@ -33,7 +30,7 @@ export function DesktopNav({
         <a
           key={item.href + item.label}
           href={item.href}
-          {...linkRel(item.external)}
+          {...externalLinkAttrs(item.external)}
           className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
         >
           {item.label}
@@ -55,7 +52,7 @@ export function MobileNav({
   secondaryCta?: Cta;
   brandName: string;
 }) {
-  const ctas = [secondaryCta, cta].filter(Boolean) as Cta[];
+  const ctas = orderedCtas(secondaryCta, cta);
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -77,7 +74,7 @@ export function MobileNav({
             <SheetClose asChild key={item.href + item.label}>
               <a
                 href={item.href}
-                {...linkRel(item.external)}
+                {...externalLinkAttrs(item.external)}
                 className="rounded-md px-2 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
               >
                 {item.label}

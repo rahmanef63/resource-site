@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-MARKETING-CHROME-DISTRIBUTION",
+    "version": "marketing-chrome@0.3.0",
+    "date": 1789257600000,
+    "kind": "feature",
+    "title": "SvelteKit Marketing Chrome distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/marketing-chrome — [before: marketing-chrome coupled its shared brand/nav/layout type surface to React.ReactNode and exposed only React/shadcn/Lucide UI] → [after: React/Next remains the default while Svelte/SvelteKit gets native header/footer/mobile-dialog UI over the exact same framework-neutral chrome contracts and configure tool].",
+    "groups": [
+      {
+        "heading": "Portable chrome contracts, native UI adapters",
+        "bullets": [
+          "Nav security attrs, CTA order, layout visibility, social kinds/text and footer contracts now live in one framework-neutral core; ReactNode stays adapter-local for the React logo.",
+          "The Svelte 5 adapter uses a native modal mobile menu and dependency-free social marks, with no React, Next, Lucide or shadcn dependency.",
+          "Public preview: https://resource.rahmanef.com/preview/slices/marketing-chrome now hosts the canonical preview module instead of repeating seed arrays."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-AI-CORE-DISTRIBUTION",
     "version": "ai-core@0.2.0",
     "date": 1789257600000,
