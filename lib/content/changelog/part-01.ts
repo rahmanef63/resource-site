@@ -2,6 +2,24 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-FILE-UPLOAD-DISTRIBUTION",
+    "version": "file-upload@0.4.0",
+    "date": 1789257600000,
+    "kind": "feature",
+    "title": "SvelteKit File Upload slice distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/file-upload — [before: file-upload pointed default installs at the missing frontend/slices/files path and exposed upload/UI behavior only through React hooks/components] → [after: React/Next remains the default on the real source path while an additive Svelte 5 / SvelteKit distribution preserves FileRef parsing, upload/remove, URL resolution, localStorage demo storage, file chips, upload controls, and bounded file tools]. Select it explicitly with rr add file-upload --framework sveltekit (or svelte).",
+    "groups": [
+      {
+        "heading": "Portable storage adapter parity",
+        "bullets": [
+          "The React default path is corrected to frontend/slices/file-upload, while explicit SvelteKit installs copy a self-contained Svelte 5 distribution with no React, react-dom, Lucide, or React shadcn dependency.",
+          "The Svelte FilesAdapter replaces React-only useUrl hook semantics with resolveUrl plus optional subscribeUrl, preserving live URL invalidation capability while upload/remove/FileRef and dangerous files.remove tool semantics stay bounded."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-SELECTION-DISTRIBUTION",
     "version": "selection@0.3.0",
     "date": 1789257600000,

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "file-upload-svelte",
+  "version": "0.4.0",
+  "tier": 2,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add file-upload --framework sveltekit",
+    "consumerPath": "slices/file-upload"
+  },
+  "files": [
+    "README.md",
+    "adapter/context.ts",
+    "adapter/localStorageAdapter.ts",
+    "adapter/types.ts",
+    "components/FileChip.svelte",
+    "components/FileUploadButton.svelte",
+    "components/FilesAdapterProvider.svelte",
+    "index.ts",
+    "lib/parse.ts",
+    "lib/tools.ts",
+    "lib/upload.ts",
+    "lib/url.ts",
+    "svelte-components.d.ts",
+    "types/index.ts"
+  ],
+  "imports": {
+    "shared": ["@/shared/agentic"],
+    "external": ["svelte"]
+  }
+}

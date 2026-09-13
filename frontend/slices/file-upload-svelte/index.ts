@@ -1,0 +1,10 @@
+export { default as FilesAdapterProvider } from "./components/FilesAdapterProvider.svelte";
+export { default as FileUploadButton } from "./components/FileUploadButton.svelte";
+export { default as FileChip } from "./components/FileChip.svelte";
+export { createLocalStorageFilesAdapter } from "./adapter/localStorageAdapter";
+export type { FilesAdapter, ResolvedFileUrl, FileUrlSubscriber } from "./adapter/types";
+export { parseFileRef, makeStorageRef } from "./lib/parse";
+export { uploadFile, uploadFiles } from "./lib/upload";
+export { watchFileUrl } from "./lib/url";
+export { filesTools, type FilesToolsCtx } from "./lib/tools";
+export type { FileRef, ParsedFileRef } from "./types";

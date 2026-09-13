@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — SvelteKit File Upload slice distribution
+<!-- public-changelog:SVELTE-FILE-UPLOAD-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/file-upload
+- [before: `file-upload` pointed default installs at the missing `frontend/slices/files` path and exposed upload/UI behavior only through React hooks/components] → [after: React/Next remains the default on the real source path while an additive Svelte 5 / SvelteKit distribution preserves FileRef parsing, upload/remove, URL resolution, localStorage demo storage, file chips, upload controls, and bounded file tools]
+- Explicit Svelte installs use `npx rr add file-upload --framework sveltekit` (or `svelte`) and require only `svelte@^5`; the Svelte adapter uses `resolveUrl()` plus optional `subscribeUrl()` instead of leaking React `useUrl()` hook semantics.
+
 ### 2026-09-13 — SvelteKit Selection slice distribution
 <!-- public-changelog:SVELTE-SELECTION-DISTRIBUTION -->
 

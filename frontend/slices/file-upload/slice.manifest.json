@@ -1,10 +1,12 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "file-upload",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "tier": 2,
   "distribution": {
-    "method": "manual"
+    "method": "cli-copy",
+    "command": "npx rr add file-upload",
+    "consumerPath": "slices/file-upload"
   },
   "files": [
     "adapter/context.tsx",
