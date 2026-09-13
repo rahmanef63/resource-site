@@ -225,7 +225,7 @@
       "slug": "profile",
       "title": "Profile — CV + identity card",
       "category": "os",
-      "description": "One owner's identity in two co-located variants, behind one slug. resume: a clean one-column résumé / CV — name, roles, location, contacts, summary, skills, experience (role · org · period + bullets), projects — rendered by <Resume /> off a configureResume() seam, with a Print / PDF button. card: an \"About This Mac\"-style identity card — avatar / monogram, name, roles, outbound links, FAQ accordion — rendered by <AboutProfile /> off a configureAbout() seam. Both render a populated placeholder unwired (zero backend). Install one surface with `npx rr add profile resume|card`, or both with `npx rr add profile`.",
+      "description": "One owner identity in two renderings over one framework-neutral configured-data seam. React/Next remains the default with printable Resume + AboutProfile/appshelly descriptors; Svelte 5/SvelteKit adds native resume/card surfaces over the exact same ResumeProfile/AboutProfile models, placeholder data, configure/read seams, initials, links, FAQ, and Print/PDF behavior.",
       "source": "rahmanef63/os-vps",
       "install": "npx rahman-resources add profile",
       "npmPackages": [],
@@ -1982,19 +1982,35 @@
       "title": "Profile — CV + identity card",
       "category": "os",
       "kind": "ui",
-      "version": "1.0.0",
-      "description": "One owner's identity in two co-located variants, behind one slug. resume: a clean one-column résumé / CV — name, roles, location, contacts, summary, skills, experience (role · org · period + bullets), projects — rendered by <Resume /> off a configureResume() seam, with a Print / PDF button. card: an \"About This Mac\"-style identity card — avatar / monogram, name, roles, outbound links, FAQ accordion — rendered by <AboutProfile /> off a configureAbout() seam. Both render a populated placeholder unwired (zero backend). Install one surface with `npx rr add profile resume|card`, or both with `npx rr add profile`.",
+      "version": "1.1.0",
+      "description": "One owner identity in two renderings over one framework-neutral configured-data seam. React/Next remains the default with printable Resume + AboutProfile/appshelly descriptors; Svelte 5/SvelteKit adds native resume/card surfaces over the exact same ResumeProfile/AboutProfile models, placeholder data, configure/read seams, initials, links, FAQ, and Print/PDF behavior.",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/profile",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/profile"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/profile-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/profile/lib/core.ts"
+            ]
+          }
         }
       },
       "convexPaths": [],
       "npm": [
-        "lucide-react"
+        "lucide-react@^0.400.0"
       ],
       "shadcn": [
         "button",
@@ -2003,7 +2019,9 @@
       ],
       "env": [],
       "peers": [],
-      "sharedFiles": [],
+      "sharedFiles": [
+        "frontend/slices/profile/lib/core.ts"
+      ],
       "providers": [],
       "tags": [
         "resume",

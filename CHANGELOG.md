@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — SvelteKit Profile distribution
+<!-- public-changelog:SVELTE-PROFILE-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/profile
+- Preview: https://resource.rahmanef.com/preview/slices/profile
+- [before: `profile` mixed portable identity models and placeholder/configure state into React/Lucide host adapters, had no native Svelte variant distribution, and its public preview mounted variants directly while the catalog kept Lucide unversioned] → [after: React/Next remains the default with appshell descriptors while Svelte/SvelteKit gets native resume/card variants over the exact same ResumeProfile, AboutProfile, placeholder, configure/read, initials, links, FAQ, and Print/PDF core]
+- Variant-only `resume` / `card` installs in both frameworks carry the shared canonical profile core, so flattening never breaks the data seam.
+
 ### 2026-09-13 — SvelteKit Command Menu distribution
 <!-- public-changelog:SVELTE-COMMAND-MENU-DISTRIBUTION -->
 

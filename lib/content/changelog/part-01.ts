@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-PROFILE-DISTRIBUTION",
+    "version": "profile@1.1.0",
+    "date": 1789257600000,
+    "kind": "feature",
+    "title": "SvelteKit Profile distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/profile — [before: profile mixed portable identity models and placeholder/configure state into React/Lucide host adapters, had no native Svelte variant distribution, and its public preview mounted variants directly while the catalog kept Lucide unversioned] → [after: React/Next remains the default with appshell descriptors while Svelte/SvelteKit gets native resume/card variants over the exact same ResumeProfile, AboutProfile, placeholder, configure/read, initials, links, FAQ, and Print/PDF core].",
+    "groups": [
+      {
+        "heading": "One identity core, two renderings, native framework surfaces",
+        "bullets": [
+          "The framework-neutral core owns ResumeProfile/AboutProfile models, generic placeholder data, configure/read seams, and initials while React hosts retain their appshell descriptor adapters.",
+          "The Svelte 5 distribution preserves printable Resume and AboutProfile/FAQ behavior without React, Next, Lucide, or shadcn runtime imports, including variant-only resume/card installs.",
+          "Public preview: https://resource.rahmanef.com/preview/slices/profile now mounts canonical preview.tsx; the default React catalog pins lucide-react@^0.400.0."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-COMMAND-MENU-DISTRIBUTION",
     "version": "command-menu@0.4.0",
     "date": 1789257600000,

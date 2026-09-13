@@ -1,22 +1,49 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "profile",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "category": "os",
   "kind": "ui",
   "title": "Profile — CV + identity card",
-  "description": "One owner's identity in two renderings, behind one slug. resume: a formal one-column printable CV (summary / skills / experience / projects) with Print/PDF, rendered by <Resume /> off a configureResume() seam. card: a compact \"About This Mac\"-style identity card (avatar / monogram, name, roles, outbound links, FAQ accordion) rendered by <AboutProfile /> off a configureAbout() seam. Both render a populated placeholder unwired — zero backend. Install one surface with `npx rr add profile resume|card`, or both with `npx rr add profile`.",
+  "description": "One owner identity in two renderings over one framework-neutral configured-data seam. React/Next remains the default with printable Resume + AboutProfile/appshelly descriptors; Svelte 5/SvelteKit adds native resume/card surfaces over the exact same ResumeProfile/AboutProfile models, placeholder data, configure/read seams, initials, links, FAQ, and Print/PDF behavior.",
   "namespace": "@/features/profile",
   "variants": {
     "default": "resume",
     "items": [
-      { "id": "resume", "title": "Resume", "description": "Formal one-column printable CV (Resume + configureResume)." },
-      { "id": "card", "title": "Card", "description": "Compact avatar + links + FAQ identity card (AboutProfile + configureAbout)." }
+      {
+        "id": "resume",
+        "title": "Resume",
+        "description": "Formal one-column printable CV (Resume + configureResume)."
+      },
+      {
+        "id": "card",
+        "title": "Card",
+        "description": "Compact avatar + links + FAQ identity card (AboutProfile + configureAbout)."
+      }
     ]
   },
   "frontend": {
     "slicePath": "frontend/slices/profile",
-    "configExport": "profileConfig"
+    "configExport": "profileConfig",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/profile-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/profile/lib/core.ts"
+          ]
+        }
+      }
+    }
   },
   "convex": {
     "tablesExport": "",
@@ -25,7 +52,7 @@
   },
   "deps": {
     "npm": [
-      "lucide-react"
+      "lucide-react@^0.400.0"
     ],
     "shadcn": [
       "button",
@@ -33,7 +60,10 @@
       "avatar"
     ],
     "env": [],
-    "peers": []
+    "peers": [],
+    "sharedFiles": [
+      "frontend/slices/profile/lib/core.ts"
+    ]
   },
   "registers": [],
   "audit": [],
@@ -52,26 +82,71 @@
     "print",
     "ui"
   ],
-  "previews": [],
+  "previews": [
+    {
+      "component": "Resume",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "default",
+          "title": "Resume",
+          "description": "Bundled placeholder CV with print-friendly layout"
+        }
+      ],
+      "seed": "Canonical placeholder ResumeProfile from the shared profile core"
+    },
+    {
+      "component": "AboutProfile",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "default",
+          "title": "Identity card",
+          "description": "Bundled placeholder avatar/links/FAQ card"
+        }
+      ],
+      "seed": "Canonical placeholder AboutProfile from the shared profile core"
+    }
+  ],
   "contract": {
     "requires": {
       "auth": "none",
       "deps": [
-        { "npm": "react", "range": "^19" },
-        { "npm": "lucide-react", "range": "^0.400.0" }
+        {
+          "npm": "react",
+          "range": "^19"
+        },
+        {
+          "npm": "lucide-react",
+          "range": "^0.400.0"
+        }
       ]
     },
     "provides": {
       "tools": [],
       "routes": [],
-      "components": ["Resume", "AboutProfile"],
-      "hooks": ["useResumeProfile", "useAboutProfile"],
-      "utils": ["configureResume", "resumeApp", "configureAbout", "aboutProfileApp"],
+      "components": [
+        "Resume",
+        "AboutProfile"
+      ],
+      "hooks": [
+        "useResumeProfile",
+        "useAboutProfile"
+      ],
+      "utils": [
+        "configureResume",
+        "resumeApp",
+        "configureAbout",
+        "aboutProfileApp"
+      ],
       "tables": []
     },
     "generalization": {
       "level": "portable",
-      "forbiddenTerms": ["rahman", "rahmanef"],
+      "forbiddenTerms": [
+        "rahman",
+        "rahmanef"
+      ],
       "requiredProps": []
     }
   }

@@ -3,19 +3,12 @@
 import { Mail, Link2, ArrowUpRight, MapPin } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useAboutProfile, type AboutLink } from "./lib/host";
+import { initials, type AboutLink } from "@/features/profile/lib/core";
+import { useAboutProfile } from "./lib/host";
 import { FaqList } from "./components/faq-list";
 
 // Default export so an os-shell can lazy-load this as a window app. The whole
 // card is driven by the injected profile (host seam) — mock until configured.
-function initials(name: string): string {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((w) => w[0]?.toUpperCase() ?? "")
-    .join("");
-}
 
 function LinkRow({ label, href }: AboutLink) {
   const Icon = href.startsWith("mailto:") ? Mail : Link2;

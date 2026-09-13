@@ -1015,6 +1015,37 @@
     ]
   },
   {
+    "slug": "profile",
+    "title": "Profile — CV + identity card",
+    "category": "os",
+    "previews": [
+      {
+        "component": "Resume",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "default",
+            "title": "Resume",
+            "description": "Bundled placeholder CV with print-friendly layout"
+          }
+        ],
+        "seed": "Canonical placeholder ResumeProfile from the shared profile core"
+      },
+      {
+        "component": "AboutProfile",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "default",
+            "title": "Identity card",
+            "description": "Bundled placeholder avatar/links/FAQ card"
+          }
+        ],
+        "seed": "Canonical placeholder AboutProfile from the shared profile core"
+      }
+    ]
+  },
+  {
     "slug": "publisher-clean-html",
     "title": "Publisher — clean HTML",
     "category": "content",

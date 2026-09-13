@@ -1,17 +1,57 @@
-import { Resume, AboutProfile } from "@/features/profile";
+"use client";
 
-// Live preview: both variants on the bundled placeholder identity.
-// Real data: configureResume(cv) / configureAbout(card) at boot.
+import * as React from "react";
+import preview from "@/features/profile/preview";
+import {
+  PreviewSection,
+  SlicePreviewLayout,
+} from "@/components/slice-previews/preview-layout";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
-export default function ProfilePreview() {
+const ResumePreview = preview.Resume;
+const CardPreview = preview.AboutProfile;
+type Surface = "resume" | "card" | "both";
+
+export default function Page() {
+  const [surface, setSurface] = React.useState<Surface>("both");
+
   return (
-    <div className="grid h-dvh w-full grid-cols-1 gap-4 overflow-auto p-4 lg:grid-cols-[1fr_minmax(360px,420px)]">
-      <div className="min-h-0 overflow-auto rounded-lg border">
-        <Resume />
+    <SlicePreviewLayout
+      title="Profile"
+      kind="ui"
+      description="One configured identity rendered as a printable CV and a compact avatar + links + FAQ card."
+      sourceUrl="https://github.com/rahmanef63/resource-site/tree/main/frontend/slices/profile"
+      maxWidth="6xl"
+    >
+      <div className="mb-4 inline-flex rounded-md border border-input p-0.5">
+        {(["resume", "card", "both"] as const).map((value) => (
+          <Button
+            key={value}
+            type="button"
+            variant="ghost"
+            onClick={() => setSurface(value)}
+            className={cn(
+              "h-auto rounded px-3 py-1 text-xs",
+              surface === value ? "bg-accent font-medium" : "text-muted-foreground",
+            )}
+          >
+            {value}
+          </Button>
+        ))}
       </div>
-      <div className="min-h-0 overflow-auto rounded-lg border">
-        <AboutProfile />
-      </div>
-    </div>
+
+      {surface !== "card" ? (
+        <PreviewSection title="Resume" hint="configureResume(profile)">
+          <ResumePreview variant={{}} />
+        </PreviewSection>
+      ) : null}
+
+      {surface !== "resume" ? (
+        <PreviewSection title="Identity card" hint="configureAbout(profile)">
+          <CardPreview variant={{}} />
+        </PreviewSection>
+      ) : null}
+    </SlicePreviewLayout>
   );
 }

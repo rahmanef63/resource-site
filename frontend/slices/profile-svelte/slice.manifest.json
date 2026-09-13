@@ -1,0 +1,28 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "profile-svelte",
+  "version": "1.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add profile --framework sveltekit",
+    "consumerPath": "slices/profile"
+  },
+  "files": [
+    "README.md",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts",
+    "variants/card/app.svelte",
+    "variants/card/components/FaqList.svelte",
+    "variants/card/config.ts",
+    "variants/card/index.ts",
+    "variants/resume/app.svelte",
+    "variants/resume/config.ts",
+    "variants/resume/index.ts"
+  ],
+  "imports": {
+    "shared": ["frontend/slices/profile/lib/core.ts"],
+    "external": ["svelte"]
+  }
+}

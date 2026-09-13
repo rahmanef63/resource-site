@@ -1,32 +1,43 @@
 # Profile
 
-One owner's identity in two renderings. Install one surface or both:
+One owner identity in two renderings over one configured-data seam.
 
 ```bash
-npx rr add profile resume   # formal one-column printable CV
-npx rr add profile card      # compact avatar + links + FAQ card
-npx rr add profile           # both — mount the one you want
+# React/Next default
+npx rr add profile
+npx rr add profile resume
+npx rr add profile card
+
+# Native Svelte 5 / SvelteKit
+npx rr add profile --framework sveltekit
+npx rr add profile resume --framework sveltekit
+npx rr add profile card --framework sveltekit
 ```
 
-## resume
+## Shared data core
 
+`frontend/slices/profile/lib/core.ts` owns the portable `ResumeProfile` / `AboutProfile` models, bundled placeholder data, `configureResume`, `configureAbout`, read seams, and initials helper. Both frameworks read the same module singleton; configure it once at app boot from Convex, a CMS, JSON, or any other host source.
+
+## Resume
+
+React:
 ```tsx
 import { Resume, configureResume } from "@/features/profile";
-
 configureResume({ name: "Ada Lovelace", roles: ["Engineer"], /* … */ });
-<Resume />   // unwired → populated placeholder CV; Print/PDF built in
+<Resume />
 ```
 
-## card
+Svelte exports the same `configureResume` seam plus native `<Resume />`. Both preserve contacts, summary, skills, experience, projects, and Print/PDF.
 
+## Card
+
+React:
 ```tsx
 import { AboutProfile, configureAbout } from "@/features/profile";
-
-configureAbout({ name: "Ada Lovelace", roles: ["Engineer"], links: [], faq: [] });
-<AboutProfile />   // unwired → mock identity card + FAQ accordion
+configureAbout({ name: "Ada Lovelace", roles: ["Engineer"], description: "…", links: [], faq: [] });
+<AboutProfile />
 ```
 
-Both are pure UI — no backend. `configureResume` / `configureAbout` inject data
-into a module singleton the components read via `useResumeProfile()` /
-`useAboutProfile()`. Each also ships an appshell `AppDescriptor` (`resumeApp`,
-`aboutProfileApp`) for dock/launcher hosts.
+Svelte exports native `<AboutProfile />` + `<FaqList />` over the same configured data. Both preserve avatar/initials, roles/location, outbound links, and a single-open FAQ.
+
+React/Next additionally keeps `resumeApp` / `aboutProfileApp` appshell descriptors. The Svelte distribution intentionally does not invent an appshell descriptor contract.

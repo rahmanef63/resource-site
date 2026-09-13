@@ -9,3 +9,11 @@ export * from "./variants/resume";
 export * from "./variants/card";
 export { profileConfig } from "./config";
 export type { ProfileConfig } from "./config";
+
+export {
+  createMockAboutProfile,
+  createMockResumeProfile,
+  initials,
+  readAboutProfile,
+  readResumeProfile,
+} from "./lib/core";

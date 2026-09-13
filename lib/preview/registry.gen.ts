@@ -34,6 +34,7 @@ export const PREVIEW_REGISTRY: Record<string, () => Promise<{ default: SlicePrev
   "notion-app": () => import("@/features/notion-app/preview"),
   "portfolio-section": () => import("@/features/portfolio-section/preview"),
   "pricing-page": () => import("@/features/pricing-page/preview"),
+  "profile": () => import("@/features/profile/preview"),
   "publisher-clean-html": () => import("@/features/publisher-clean-html/preview"),
   "quicklinks": () => import("@/features/quicklinks/preview"),
   "rbac-roles": () => import("@/features/rbac-roles/preview"),

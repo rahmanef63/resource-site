@@ -930,6 +930,47 @@ describe("framework-aware slice distribution", () => {
     expect(svelteResult.stdout).not.toContain("shadcn:");
   });
 
+  it("keeps profile on React by default and selects native Svelte resume/card variants over the same profile core", () => {
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "profile");
+    const target = mkTarget();
+
+    expect(slice.slicePath).toBe("frontend/slices/profile");
+    expect(slice.defaultFramework).toBe("react-next");
+    expect(slice.sharedFiles).toEqual(["frontend/slices/profile/lib/core.ts"]);
+    const svelte = slice.frameworks["svelte-sveltekit"];
+    expect(svelte.path).toBe("frontend/slices/profile-svelte");
+    expect(svelte.aliases).toEqual(["svelte", "sveltekit"]);
+    expect(svelte.deps.npm).toEqual(["svelte@^5"]);
+    expect(svelte.deps.shadcn).toEqual([]);
+    expect(svelte.deps.sharedFiles).toEqual(["frontend/slices/profile/lib/core.ts"]);
+
+    const defaultResume = runCli("add", "profile", "resume", "--target", target, "--dry-run");
+    expect(defaultResume.status).toBe(0);
+    expect(defaultResume.stdout).toContain("frontend/slices/profile/variants/resume → frontend/slices/profile");
+    expect(defaultResume.stdout).toContain("frontend/slices/profile/lib/core.ts →");
+    expect(defaultResume.stdout).toContain("lucide-react@^0.400.0");
+    expect(defaultResume.stdout).toContain("shadcn: button scroll-area avatar");
+
+    const svelteResume = runCli("add", "profile", "resume", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteResume.status).toBe(0);
+    expect(svelteResume.stdout).toContain("frontend/slices/profile-svelte/variants/resume → frontend/slices/profile-svelte");
+    expect(svelteResume.stdout).toContain("frontend/slices/profile/lib/core.ts →");
+    expect(svelteResume.stdout).toContain("svelte@^5");
+    expect(svelteResume.stdout).not.toContain("lucide-react");
+    expect(svelteResume.stdout).not.toContain("shadcn:");
+
+    const svelteCard = runCli("add", "profile", "card", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteCard.status).toBe(0);
+    expect(svelteCard.stdout).toContain("frontend/slices/profile-svelte/variants/card → frontend/slices/profile-svelte");
+    expect(svelteCard.stdout).toContain("frontend/slices/profile/lib/core.ts →");
+
+    const svelteAll = runCli("add", "profile", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteAll.status).toBe(0);
+    expect(svelteAll.stdout).toContain("frontend/slices/profile-svelte →");
+    expect(svelteAll.stdout).toContain("frontend/slices/profile/lib/core.ts →");
+  });
+
   it("uses the default framework path and forwards an explicit framework through add", () => {
     installFrameworkFixture();
     const target = mkTarget();
