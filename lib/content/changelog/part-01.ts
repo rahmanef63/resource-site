@@ -2,6 +2,24 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-RATE-LIMIT-DISTRIBUTION",
+    "version": "rate-limit@0.4.0",
+    "date": 1789257600000,
+    "kind": "feature",
+    "title": "SvelteKit Rate Limit service distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/rate-limit — [before: rate-limit was backend-only but its copied config/tools still pulled React-typed helper barrels, canonical metadata used stale hyphenated Convex paths, and explicit Svelte installs were unsupported] → [after: React/Next remains the default while Svelte/SvelteKit reuses the same framework-neutral backend source, canonical paths match convex/features/rate_limit, and installer metadata carries the real Convex dependency plus optional server-key gate].",
+    "groups": [
+      {
+        "heading": "Framework-neutral limiter contract",
+        "bullets": [
+          "The copied config no longer depends on React-typed defineFeature and the agent tools import narrow framework-neutral agentic modules, so explicit SvelteKit installs need neither React nor a Svelte runtime package.",
+          "Convex schema/mutation metadata and docs now use features/rate_limit/mutation consistently; rate-limit.check stays read-only and dangerous rate-limit.reset remains admin-gated and confirmation-bound."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-AUDIT-LOG-DISTRIBUTION",
     "version": "audit-log@0.4.0",
     "date": 1789257600000,

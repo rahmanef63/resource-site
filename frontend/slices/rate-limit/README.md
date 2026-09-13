@@ -1,87 +1,85 @@
 # rate-limit
 
-Convex-backed per-key request counter. Drop-in replacement for an in-memory
-`Map` so a Next.js app can run multiple replicas without each replica owning
-its own bucket. Atomic check-and-increment via a single Convex mutation;
-expired rows pruned by cron.
+Backend-only, framework-neutral Convex rate limiter. It replaces a per-process `Map` with one shared bucket table so multiple app replicas observe the same counters.
 
-## Props / surface
+React/Next remains the default distribution contract:
 
-No React surface — service slice only. Public API is the Convex mutation
-`consume` and the internal cron `_pruneExpired`. Recommended consumer entry
-point is a thin lib wrapper with a fail-open fallback (see [Integration]).
+```bash
+npx rr add rate-limit
+```
+
+Svelte/SvelteKit installs the exact same TypeScript + Convex source—there is no UI to duplicate and no Svelte runtime dependency:
+
+```bash
+npx rr add rate-limit --framework sveltekit
+```
+
+## Runtime contract
 
 | Convex fn | Args | Returns | Notes |
 |---|---|---|---|
-| `consume` (mutation) | `{ key: string, serverKey?: string }` | `{ ok, remaining, resetAt }` | Atomic — Convex serialises mutations against the same row. Limit + window come from the in-code `POLICY` map keyed by the key's prefix (everything before the first `:`); unknown prefixes throw. |
-| `_pruneExpired` (internalMutation) | `{}` | `{ deleted: number }` | Walks expired rows in batches of 1000; wire to a cron. |
+| `features/rate_limit/mutation.consume` | `{ key, serverKey? }` | `{ ok, remaining, resetAt }` | Atomic check-and-increment. Policy is selected by the key prefix and remains server-owned. |
+| `features/rate_limit/mutation._pruneExpired` | `{}` | `{ deleted }` | Internal mutation; prune expired rows on a bounded cron. |
 
-> **Why no `limit`/`windowMs` args?** `consume` is a public mutation —
-> anything the caller can pass, an attacker can pass. Caller-supplied
-> windows let an anonymous caller "consume" with a huge window and bypass
-> the limit entirely. Edit the `POLICY` map in `mutation.ts` to add
-> namespaces.
+The policy map lives in `convex/features/rate_limit/mutation.ts`. Unknown prefixes are rejected. Do not let callers supply their own `limit` or `windowMs` because that would let them weaken policy.
 
-## Convex tables
+`RATE_LIMIT_SERVER_KEY` is optional but recommended for user-facing or security-sensitive namespaces. When configured in Convex, `consume` requires the matching server-side key; when omitted, the mutation logs a warning and remains callable without that extra gate.
 
-| Table | Purpose |
-|---|---|
-| `rateLimits` | One row per `(key)`. Stores `count` + `resetAt`. Indexed `by_key` for lookup and `by_resetAt` for pruning. |
+## Schema
 
-## Permissions
-
-Rate-limit is invoked from unauthenticated API routes before any identity
-is resolved — keying happens by namespace prefix (e.g. `admin-login:<ip>`,
-`mcp:<ip>`). Two abuse vectors and their mitigations:
-
-- **Forged window** — closed unconditionally: limits live in the in-code
-  `POLICY` map, not the args.
-- **Burning a victim's budget** (calling `consume` with someone else's
-  key) — closed when you set the `RATE_LIMIT_SERVER_KEY` env on the Convex
-  deployment. When set, `consume` requires a matching `serverKey` arg
-  (compared constant-time); pass it from your server-side wrapper. Without
-  the env, `consume` accepts anonymous calls — fine for low-stakes keys,
-  set it for anything user-facing.
-
-## Dependencies
-
-- npm: `convex` (peer; provided by host app)
-- kitab slices: none
-- shadcn primitives: none
-- env vars: `RATE_LIMIT_SERVER_KEY` (optional but recommended — see Permissions)
-
-## Integration
+Compose the shipped table fragment into the consumer schema:
 
 ```ts
-// consumer lib wrapper — fail-open on Convex flap
+import { defineSchema } from "convex/server";
+import { rateLimitTables } from "./features/rate_limit/_schema";
+
+export default defineSchema({
+  ...rateLimitTables,
+});
+```
+
+`rateLimits` stores one row per key with `count` and `resetAt`, indexed by `key` and `resetAt`.
+
+## Server-side wrapper
+
+Keep network failure behavior explicit at the application boundary. A typical fail-open wrapper is:
+
+```ts
 import { fetchMutation } from "convex/nextjs";
 import { api } from "@convex/_generated/api";
 
 export async function rateLimit(key: string) {
   try {
-    return await fetchMutation(api.slices.rate_limit.consume, {
+    return await fetchMutation(api.features.rate_limit.mutation.consume, {
       key,
       serverKey: process.env.RATE_LIMIT_SERVER_KEY,
     });
   } catch {
-    // Fail open — do not DoS callers when Convex is unreachable.
     return { ok: true, remaining: 0, resetAt: Date.now() + 60_000 };
   }
 }
 ```
 
-Wire the cron in `convex/crons.ts`:
+Whether fail-open is appropriate is a host policy decision. Security-sensitive boundaries may intentionally fail closed instead.
+
+## Cron
 
 ```ts
+import { cronJobs } from "convex/server";
+import { internal } from "./_generated/api";
+
+const crons = cronJobs();
 crons.interval(
   "rate-limit: prune expired",
   { minutes: 5 },
-  (internal as any)["slices/rate_limit"]._pruneExpired,
+  internal.features.rate_limit.mutation._pruneExpired,
+  {},
 );
+export default crons;
 ```
 
-## Origin
+## Agent tools
 
-Harvested from `rahmanef.com` on `2026-05-15`. Source path:
-`frontend/slices/rate-limit/`. Born to replace the in-memory `Map` at
-`frontend/shared/lib/rate-limit.ts` after the project went multi-replica.
+`rate-limit.check` is read-only. `rate-limit.reset` is marked dangerous and must be bound to an admin-gated reset implementation; confirm before clearing a live bucket.
+
+The slice requires Convex but no React, Svelte, Lucide, or shadcn runtime/UI dependency.

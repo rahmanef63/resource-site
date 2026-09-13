@@ -1,21 +1,31 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "rate-limit",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "category": "infra",
   "kind": "backend",
   "title": "Rate Limit",
-  "description": "Convex-backed per-key request counter. Atomic check-and-increment via `consume` mutation; expired rows pruned by `_pruneExpired` internalMutation wired to a 5-min cron. Replaces single-replica in-memory Map so multi-replica Next deployments share buckets. Caller chooses key namespace (csp:<ip>, mcp:<ip>, oauth_token:<ip>).",
+  "description": "Backend-only Convex per-key request counter with atomic consume, server-owned namespace policy, optional server-key gate, and cron pruning. Runtime/config/tool source is framework-neutral TypeScript: React/Next remains the default distribution contract while explicit Svelte/SvelteKit installs reuse the same source with no duplicate UI or framework runtime dependency.",
   "namespace": "@/features/rate-limit",
   "frontend": {
     "slicePath": "frontend/slices/rate-limit",
-    "configExport": "rateLimitFeature"
+    "configExport": "rateLimitFeature",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/rate-limit",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ]
+      }
+    }
   },
   "convex": {
     "tablesExport": "rateLimitTables",
-    "schemaPath": "convex/features/rate-limit/_schema.ts",
+    "schemaPath": "convex/features/rate_limit/_schema.ts",
     "rootPaths": [
-      "convex/features/rate-limit"
+      "convex/features/rate_limit"
     ]
   },
   "deps": {
@@ -23,7 +33,14 @@
       "convex@^1.16.0"
     ],
     "shadcn": [],
-    "env": [],
+    "env": [
+      {
+        "name": "RATE_LIMIT_SERVER_KEY",
+        "scope": "convex",
+        "required": false,
+        "description": "Optional shared secret for server-only consume calls; recommended for user-facing or security-sensitive rate-limit namespaces."
+      }
+    ],
     "peers": []
   },
   "registers": [],

@@ -212,6 +212,40 @@ describe("framework-aware slice distribution", () => {
     expect(svelteResult.stdout).not.toContain("npx shadcn@latest add");
   });
 
+  it("keeps rate-limit on one framework-neutral backend source for explicit SvelteKit", () => {
+    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "rate-limit");
+    const target = mkTarget();
+
+    expect(slice.slicePath).toBe("frontend/slices/rate-limit");
+    expect(slice.defaultFramework).toBe("react-next");
+    expect(slice.convexPaths).toEqual(["convex/features/rate_limit"]);
+    expect(slice.frameworks).toEqual({
+      "react-next": { path: "frontend/slices/rate-limit" },
+      "svelte-sveltekit": {
+        path: "frontend/slices/rate-limit",
+        aliases: ["svelte", "sveltekit"],
+      },
+    });
+
+    const defaultResult = runCli("add", "rate-limit", "--target", target, "--dry-run");
+    expect(defaultResult.status).toBe(0);
+    expect(defaultResult.stdout).toContain("frontend/slices/rate-limit →");
+    expect(defaultResult.stdout).toContain("convex/features/rate_limit →");
+    expect(defaultResult.stdout).toContain("convex@^1.16.0");
+
+    const svelteResult = runCli("add", "rate-limit", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteResult.status).toBe(0);
+    expect(svelteResult.stdout).toContain("frontend/slices/rate-limit →");
+    expect(svelteResult.stdout).toContain("convex/features/rate_limit →");
+    expect(svelteResult.stdout).toContain("convex@^1.16.0");
+    expect(svelteResult.stdout).not.toContain("svelte@^5");
+    expect(svelteResult.stdout).not.toContain("react");
+    expect(svelteResult.stdout).not.toContain("lucide-react");
+    expect(svelteResult.stdout).not.toContain("npx shadcn@latest add");
+  });
+
   it("keeps booking on React by default and selects its real SvelteKit UI distribution", () => {
     execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));

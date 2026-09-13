@@ -2,7 +2,8 @@
 // destructive state surgery and must be bound to an admin-gated
 // implementation (this slice is rr's own live backend limiter — be careful).
 
-import { defineToolCollection, obj, str } from "@/shared/agentic";
+import { defineToolCollection } from "@/shared/agentic/define";
+import { obj, str } from "@/shared/agentic/schema";
 
 export type RateLimitCtx = {
   check: (key: string) => Promise<{ ok: boolean; remaining: number; resetAt: number }>;
