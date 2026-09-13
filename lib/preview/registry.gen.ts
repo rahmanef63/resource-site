@@ -41,6 +41,7 @@ export const PREVIEW_REGISTRY: Record<string, () => Promise<{ default: SlicePrev
   "selection": () => import("@/features/selection/preview"),
   "site-setup-wizard": () => import("@/features/site-setup-wizard/preview"),
   "storefront-checkout": () => import("@/features/storefront-checkout/preview"),
+  "system-monitor": () => import("@/features/system-monitor/preview"),
   "testimonials-grid": () => import("@/features/testimonials-grid/preview"),
   "theme-presets": () => import("@/features/theme-presets/preview"),
   "user-management": () => import("@/features/user-management/preview"),

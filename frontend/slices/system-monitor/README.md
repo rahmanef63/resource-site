@@ -1,34 +1,29 @@
-# system-monitor — host telemetry dashboard
+# System Monitor
 
-Activity-Monitor-style dashboard: circular CPU / RAM / disk / GPU gauges,
-rolling CPU + network sparklines (glass panels), live process table.
-Polls every 1.5s with a ~40-point history. The process list reflows by pane
-width: wide panes get the grid table, compact panes (≤440px container) get
-two-line touch cards with ≥44px rows on coarse pointers.
+Host telemetry dashboard with React/Next kept as the default distribution and a
+native Svelte 5/SvelteKit distribution over one injected telemetry/history core.
 
-## Mount
-
-```tsx
-import { SystemMonitor } from "@/features/system-monitor";
-
-// Zero wiring → wavy in-browser mock telemetry (the dashboard looks alive)
-<SystemMonitor />
+```bash
+npx rr add system-monitor
+npx rr add system-monitor --framework sveltekit
 ```
 
-Or hand `systemMonitorApp` (lazy `load`) to an appshell-style launcher.
-
-## Host seam (`lib/host.ts`)
+With no host wiring, the bundled wavy mock renders a live dashboard. Inject real
+telemetry with:
 
 ```ts
-import { configureSysmon } from "@/features/system-monitor";
-
-configureSysmon({
-  mode: "live",
-  stats: () => fetch("/api/sys/stats").then((r) => r.json()),
-  // → { cpu:{pct,cores}, mem:{used,total}, disk:{used,total}, net?:{rx,tx}, uptime }
-  processes: () => fetch("/api/sys/processes").then((r) => r.json()),
-  // → [{ pid, name, status, cpu, mem }]
-});
+configureSysmon({ mode: "live", stats, processes });
 ```
 
-Everything else in the slice imports ONLY this seam.
+The framework-neutral core owns the stable telemetry API, zero-backend mock,
+1.5-second polling, ~40-point CPU/network history, GPU mock walk, process rows,
+manual refresh, and stale-write cleanup. React's `useStatsHistory` is a thin
+adapter; Svelte exposes an equivalent readable store.
+
+Both UIs preserve CPU/memory/disk/GPU gauges, CPU/network sparklines, process
+status/CPU/memory readouts, and pane-width reflow to compact touch rows at
+≤440px. Agent tools stay read-only and consume the same injected telemetry API.
+
+`systemMonitorApp` is intentionally React/appshell-specific. Svelte consumers
+mount `SystemMonitor` directly; no fake cross-framework app descriptor is
+invented.

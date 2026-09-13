@@ -1,0 +1,33 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "system-monitor-svelte",
+  "version": "1.3.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add system-monitor --framework sveltekit",
+    "consumerPath": "slices/system-monitor"
+  },
+  "files": [
+    "README.md",
+    "components/CircularGauge.svelte",
+    "components/GaugeGrid.svelte",
+    "components/GlassPanel.svelte",
+    "components/ProcessTable.svelte",
+    "components/Sparkline.svelte",
+    "components/SystemMonitor.svelte",
+    "config.ts",
+    "index.ts",
+    "lib/store.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/system-monitor/lib/core.ts",
+      "frontend/slices/system-monitor/lib/format.ts",
+      "frontend/slices/system-monitor/lib/palette.ts",
+      "frontend/slices/system-monitor/lib/tools.ts"
+    ],
+    "external": ["svelte"]
+  }
+}

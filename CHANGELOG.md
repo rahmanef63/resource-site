@@ -11,6 +11,16 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-13 — SvelteKit System Monitor distribution
+<!-- public-changelog:SVELTE-SYSTEM-MONITOR-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/system-monitor
+- Preview: https://resource.rahmanef.com/preview/slices/system-monitor
+- [before: `system-monitor` mixed telemetry contracts and rolling poll state into React hooks, duplicated its public preview host, and its catalog lacked an explicit Lucide dependency range] → [after: React/Next remains the default while Svelte/SvelteKit gets native gauges, sparklines, and responsive process UI over the exact same injected telemetry, polling/history, formatting, palette, and agent-tool core]
+- The shared core preserves mock/live adapter injection, 1.5-second polling, ~40 history points, manual refresh, process-list fallback, and stale-write cleanup.
+
+
 ### 2026-09-13 — SvelteKit Theme Presets distribution
 <!-- public-changelog:SVELTE-THEME-PRESETS-DISTRIBUTION -->
 

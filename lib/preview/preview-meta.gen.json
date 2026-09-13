@@ -1194,6 +1194,30 @@
     ]
   },
   {
+    "slug": "system-monitor",
+    "title": "System Monitor — host telemetry dashboard",
+    "category": "os",
+    "previews": [
+      {
+        "component": "SystemMonitor",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "wide",
+            "title": "Wide pane",
+            "description": "Full dashboard with grid process table"
+          },
+          {
+            "id": "compact",
+            "title": "Compact pane",
+            "description": "≤440px container reflow with stacked sparkline panels and touch process cards"
+          }
+        ],
+        "seed": "Bundled wavy mock telemetry; no backend required"
+      }
+    ]
+  },
+  {
     "slug": "testimonials-grid",
     "title": "Testimonials Grid",
     "category": "ui",

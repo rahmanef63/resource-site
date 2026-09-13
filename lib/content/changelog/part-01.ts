@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-SYSTEM-MONITOR-DISTRIBUTION",
+    "version": "system-monitor@1.3.0",
+    "date": 1789257600000,
+    "kind": "feature",
+    "title": "SvelteKit System Monitor distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/system-monitor — [before: system-monitor mixed telemetry contracts and rolling poll state into React hooks, duplicated its public preview host, and its catalog lacked an explicit Lucide dependency range] → [after: React/Next remains the default while Svelte/SvelteKit gets native gauges, sparklines, and responsive process UI over the exact same injected telemetry, polling/history, formatting, palette, and agent-tool core].",
+    "groups": [
+      {
+        "heading": "One telemetry engine, native monitoring surfaces",
+        "bullets": [
+          "The framework-neutral core owns the injected mock/live adapter, stable API identity, 1.5-second polling, ~40-point CPU/network history, GPU walk, refresh, process fallback, and stale-write cleanup.",
+          "The Svelte 5 distribution shares core, format, palette, and read-only agent tools while rendering native gauges, sparklines, and compact process cards without React, Next, Lucide, or shadcn imports.",
+          "Public preview: https://resource.rahmanef.com/preview/slices/system-monitor now mounts canonical preview.tsx; the default React installer declares lucide-react@^0.400.0."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-THEME-PRESETS-DISTRIBUTION",
     "version": "theme-presets@0.5.0",
     "date": 1789257600000,

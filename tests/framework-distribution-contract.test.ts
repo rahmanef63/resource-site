@@ -871,6 +871,44 @@ describe("framework-aware slice distribution", () => {
     expect(svelteResult.stdout).not.toContain("shadcn:");
   });
 
+  it("keeps system-monitor on React by default and selects native Svelte telemetry UI over the same history core", () => {
+    execFileSync(process.execPath, ["packages/cli/scripts/gen-manifest.mjs"], { stdio: "pipe" });
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    const slice = manifest.slices.find((entry: { slug: string }) => entry.slug === "system-monitor");
+    const target = mkTarget();
+
+    expect(slice.slicePath).toBe("frontend/slices/system-monitor");
+    expect(slice.defaultFramework).toBe("react-next");
+    const svelte = slice.frameworks["svelte-sveltekit"];
+    expect(svelte.path).toBe("frontend/slices/system-monitor-svelte");
+    expect(svelte.aliases).toEqual(["svelte", "sveltekit"]);
+    expect(svelte.deps.npm).toEqual(["svelte@^5"]);
+    expect(svelte.deps.shadcn).toEqual([]);
+    expect(svelte.deps.sharedFiles).toEqual([
+      "frontend/slices/system-monitor/lib/core.ts",
+      "frontend/slices/system-monitor/lib/format.ts",
+      "frontend/slices/system-monitor/lib/palette.ts",
+      "frontend/slices/system-monitor/lib/tools.ts",
+    ]);
+
+    const defaultResult = runCli("add", "system-monitor", "--target", target, "--dry-run");
+    expect(defaultResult.status).toBe(0);
+    expect(defaultResult.stdout).toContain("frontend/slices/system-monitor →");
+    expect(defaultResult.stdout).toContain("lucide-react@^0.400.0");
+    expect(defaultResult.stdout).toContain("shadcn: scroll-area");
+
+    const svelteResult = runCli("add", "system-monitor", "--target", target, "--framework", "sveltekit", "--dry-run");
+    expect(svelteResult.status).toBe(0);
+    expect(svelteResult.stdout).toContain("frontend/slices/system-monitor-svelte →");
+    expect(svelteResult.stdout).toContain("frontend/slices/system-monitor/lib/core.ts →");
+    expect(svelteResult.stdout).toContain("frontend/slices/system-monitor/lib/format.ts →");
+    expect(svelteResult.stdout).toContain("frontend/slices/system-monitor/lib/palette.ts →");
+    expect(svelteResult.stdout).toContain("frontend/slices/system-monitor/lib/tools.ts →");
+    expect(svelteResult.stdout).toContain("svelte@^5");
+    expect(svelteResult.stdout).not.toContain("lucide-react");
+    expect(svelteResult.stdout).not.toContain("shadcn:");
+  });
+
   it("uses the default framework path and forwards an explicit framework through add", () => {
     installFrameworkFixture();
     const target = mkTarget();

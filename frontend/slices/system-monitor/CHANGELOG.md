@@ -1,5 +1,12 @@
 # system-monitor changelog
 
+## 1.3.0 — 2026-09-13
+
+- Extracted telemetry contracts, zero-backend mock/configure seam, stable API, and polling/history store into framework-neutral `lib/core.ts`.
+- React `useStatsHistory` is now a thin `useSyncExternalStore` adapter; agent tools no longer type-couple to React `useOsApi`.
+- Added native Svelte 5/SvelteKit gauges, sparklines, process grid/cards, polling store, and responsive ≤440px reflow over the same core.
+- Added canonical wide/compact public preview and fixed the default React Lucide dependency declaration.
+
 ## 1.2.1 — 2026-06-10
 
 - Host wiring: app self-registers `systemMonitorTools` bound to the live `useOsApi()` telemetry via `useAgentTools`.

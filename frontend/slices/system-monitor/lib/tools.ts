@@ -4,9 +4,9 @@
 // @/shared/agentic. Ctx = the stable telemetry api from useOsApi().
 
 import { defineToolCollection, noArgs } from "@/shared/agentic";
-import type { useOsApi } from "./host";
+import type { SysMonApi } from "./core";
 
-export type SysMonCtx = ReturnType<typeof useOsApi>;
+export type SysMonCtx = SysMonApi;
 
 const GiB = 1024 ** 3;
 const gb = (n: number) => `${(n / GiB).toFixed(1)}GiB`;
