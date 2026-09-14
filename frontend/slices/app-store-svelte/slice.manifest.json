@@ -1,0 +1,35 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "app-store-svelte",
+  "version": "1.3.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add app-store --framework sveltekit",
+    "consumerPath": "slices/app-store"
+  },
+  "files": [
+    "README.md",
+    "components/AppConsole.svelte",
+    "components/AppStore.svelte",
+    "components/CreateApp.svelte",
+    "components/RuntimeApp.svelte",
+    "index.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/app-store/config.ts",
+      "frontend/slices/app-store/lib/apps-core.ts",
+      "frontend/slices/app-store/lib/create-core.ts",
+      "frontend/slices/app-store/lib/enabled-core.ts",
+      "frontend/slices/app-store/lib/exec-core.ts",
+      "frontend/slices/app-store/lib/glyph-core.ts",
+      "frontend/slices/app-store/lib/runtime-core.ts",
+      "frontend/slices/app-store/lib/store-catalog.ts",
+      "frontend/slices/app-store/lib/system-catalog-core.ts",
+      "frontend/slices/app-store/lib/tools.ts"
+    ],
+    "external": ["svelte"]
+  }
+}

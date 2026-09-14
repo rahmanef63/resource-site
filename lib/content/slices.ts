@@ -748,34 +748,24 @@ export default function BrowserDemo() {
     title: "App Store — install, create + toggle apps",
     category: "os",
     kind: "ui",
-    version: "1.2.1",
-    tagline: "Storefront + Create-App over one localStorage registry; useInstalledApps() feeds any appshell-style launcher.",
+    version: "1.3.0",
+    tagline: "React + Svelte storefront/Create-App over one observable localStorage registry and injected runtime exec seam.",
     description:
-      "The dynamic half of an app registry, in two surfaces. AppStore: a storefront with featured hero, category sidebar, install/uninstall cards for a curated catalog, and toggles that disable built-in apps/shell features (the DISABLED set is persisted so new apps always ship enabled). CreateApp: build a custom app — name, glyph, accent gradient, runtime (html/node/python/shell), entry — with live manifest preview. Both write one localStorage registry; useInstalledApps() turns it into appshell-style descriptors (html apps mount in a sandboxed iframe, command apps in a terminal-style console). The console's shell is INJECTED via configureAppStoreExec (demo echo by default). Self-contained: inspector hooks are inert seams in lib/host.ts; the Create-App flow is bundled in (no cross-slice imports).",
+      "Framework-parity App Store + Create App. React/Next remains the default storefront with Lucide/shadcn chrome, appshell-style dynamic descriptors, and automatic shared-agent tool registration. Explicit Svelte 5/SvelteKit adds native storefront, built-in app/feature toggles, custom-app authoring, sandboxed HTML runtime apps, and command-console runtime apps over the same observable localStorage app registry, disabled-set store, curated catalog, exec adapter, manifest helpers, and self-contained appStoreTools. New built-ins stay enabled by default because only disabled ids persist; command execution is host-injected and uses a safe demo echo until wired.",
     source: "rahmanef63/os-vps",
     slicePath: "frontend/slices/app-store",
     convexPaths: [],
-    npm: ["lucide-react"],
+    npm: ["lucide-react@^0.400.0"],
     shadcn: ["button", "input", "badge", "separator", "scroll-area", "switch", "tooltip"],
     env: [],
     peers: [],
-    tags: ["app-store", "registry", "installer", "dynamic-apps", "launcher", "ui"],
+    tags: ["app-store", "registry", "installer", "dynamic-apps", "launcher", "ui", "svelte", "framework-parity"],
     resourceType: "module",
     maturity: "beta",
     compat: { enhances: ["appshell"] },
     previewPath: "/preview/slices/app-store",
     defaultView: "desktop",
-    agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Storefront + Create-App over a localStorage app registry. Fully client-side.
-
-STEP 1 — Install. \`npx rr add app-store\`. Ensure \`@/features/app-store\` resolves and Tailwind scans the slice folder.
-
-STEP 2 — Deps. npm: \`lucide-react\`. shadcn: \`npx shadcn@latest add button input badge separator scroll-area switch tooltip\`.
-
-STEP 3 — Mount. \`<AppStore />\` (storefront) and/or \`<CreateApp />\` (custom-app builder) — or register \`appStoreApp\` / \`createAppApp\` in an appshell manifest.
-
-STEP 4 — Feed your launcher. \`useInstalledApps()\` returns AppDescriptor[] for everything installed/created (html → sandboxed iframe, command → console); \`useDisabledIds()\` filters your built-in manifest.
-
-STEP 5 — Console exec (optional). \`configureAppStoreExec({ mode:"live", exec:{run} })\` so command/script apps run on a real one-shot shell (auth it like SSH).`,
+    agentRecipe: `React/default: \`npx rr add app-store\`. SvelteKit: \`npx rr add app-store --framework sveltekit\`. Both share the same localStorage app registry, disabled-id store, catalogs, tool contract, and configureAppStoreExec seam. React additionally exports appshell AppDescriptor hooks; Svelte carries no React/Lucide/shadcn/agent runtime and can optionally register appStoreTools through its registerTools(collection, getCtx) prop. Authenticate any live exec endpoint like SSH.`,
     exampleCode: `"use client";
 import { AppStore } from "@/features/app-store";
 

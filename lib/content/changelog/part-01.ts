@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-APP-STORE",
+    "version": "app-store@1.3.0",
+    "date": 1789430400000,
+    "kind": "feature",
+    "title": "SvelteKit App Store distribution + observable portable cores",
+    "body": "Related: https://resource.rahmanef.com/slices/app-store — [before: app-store@1.2.1 was React-only with localStorage/exec state embedded in React hooks and undeclared aggregate agent runtime coupling] → [after: app-store@1.3.0 keeps React default, adds native Svelte 5/SvelteKit storefront/Create-App/runtime surfaces, and shares observable framework-neutral cores].",
+    "groups": [
+      {
+        "heading": "One app registry, two native renderers",
+        "bullets": [
+          "Shared app/disabled stores expose snapshot + subscribe APIs and keep localStorage persistence outside React.",
+          "Exec adapter replacement is observable after mount; both renderers use the same sandbox/runtime and command-output semantics.",
+          "appStoreTools is self-contained; React declares its narrow hook closure while Svelte carries no React/Lucide/shadcn/agent runtime."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-MARKDOWN",
     "version": "markdown@0.4.0",
     "date": 1789430400000,

@@ -47,7 +47,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...appStoreConfig,
     importPath: "@/features/app-store/config",
-    version: "1.2.1",
+    version: "1.3.0",
   },
   {
     ...appshellConfig,

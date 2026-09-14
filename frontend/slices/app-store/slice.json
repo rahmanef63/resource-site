@@ -1,19 +1,47 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "app-store",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "category": "os",
   "kind": "ui",
   "title": "App Store \u2014 install, create + toggle apps",
-  "description": "The dynamic half of an app registry, in two surfaces. AppStore: a storefront with featured hero, category sidebar, install/uninstall cards for a curated catalog, and toggles that disable built-in apps/shell features (the DISABLED set is persisted so new apps always ship enabled). CreateApp: build a custom app \u2014 name, glyph, accent gradient, runtime (html/node/python/shell), entry \u2014 with live manifest preview. Both write one localStorage registry; useInstalledApps() turns it into appshell-style descriptors (html apps mount in a sandboxed iframe, command apps in a terminal-style console). The console's shell is INJECTED via configureAppStoreExec (demo echo by default). Self-contained: inspector hooks are inert seams in lib/host.ts; responsive via slice-local AppFrame/TouchList/useContainer shims \u2014 below ~600px pane width the category rail collapses to a filter-chip row.",
+  "description": "Framework-parity App Store + Create App over one localStorage registry. React/Next remains the default storefront with appshell-style descriptors and automatic agent-tool registration; explicit Svelte 5/SvelteKit adds native storefront, create-app, runtime iframe/command console surfaces over shared observable app/disabled stores, catalog metadata, exec adapter, manifest helpers, and self-contained tool semantics.",
   "namespace": "@/features/app-store",
   "frontend": {
     "slicePath": "frontend/slices/app-store",
-    "configExport": "appStoreConfig"
+    "configExport": "appStoreConfig",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/app-store-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/app-store/config.ts",
+            "frontend/slices/app-store/lib/apps-core.ts",
+            "frontend/slices/app-store/lib/create-core.ts",
+            "frontend/slices/app-store/lib/enabled-core.ts",
+            "frontend/slices/app-store/lib/exec-core.ts",
+            "frontend/slices/app-store/lib/glyph-core.ts",
+            "frontend/slices/app-store/lib/runtime-core.ts",
+            "frontend/slices/app-store/lib/store-catalog.ts",
+            "frontend/slices/app-store/lib/system-catalog-core.ts",
+            "frontend/slices/app-store/lib/tools.ts"
+          ]
+        }
+      }
+    }
   },
   "deps": {
     "npm": [
-      "lucide-react"
+      "lucide-react@^0.400.0"
     ],
     "shadcn": [
       "button",
@@ -24,7 +52,16 @@
       "scroll-area"
     ],
     "env": [],
-    "peers": []
+    "peers": [],
+    "sharedFiles": [
+      "lib/shared/agentic/types.ts",
+      "lib/shared/agentic/define.ts",
+      "lib/shared/agentic/schema.ts",
+      "lib/shared/agentic/prompt.ts",
+      "lib/shared/agentic/registry.ts",
+      "lib/shared/agentic/global-host.ts",
+      "lib/shared/agentic/use-agent-tools.ts"
+    ]
   },
   "registers": [
     "registry"
@@ -39,7 +76,11 @@
     "installer",
     "dynamic-apps",
     "launcher",
-    "ui"
+    "ui",
+    "svelte",
+    "framework-parity",
+    "local-storage",
+    "agent-tools"
   ],
   "previews": [],
   "contract": {

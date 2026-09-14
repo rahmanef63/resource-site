@@ -5,9 +5,7 @@ import { Loader2, Play, Trash2 } from "lucide-react";
 import { useOsApi } from "../lib/host";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import type { AppManifest } from "./runtime-app";
-
-type OutLine = { kind: "out" | "err" | "exit" | "sys"; text: string };
+import { splitConsoleLines, type AppManifest, type ConsoleLine as OutLine } from "../lib/runtime-core";
 
 // Terminal-style runner for installed command/script apps. Calls the one-shot
 // OsApi exec contract; in mock mode the agent returns canned text — surfaced as
@@ -28,13 +26,6 @@ export function AppConsole({ m }: { m: AppManifest }) {
       return merged;
     });
 
-  const toLines = (text: string, kind: OutLine["kind"]): OutLine[] =>
-    text
-      .replace(/\n$/, "")
-      .split("\n")
-      .filter((_, i, a) => !(a.length === 1 && a[0] === ""))
-      .map((text) => ({ kind, text }));
-
   const onRun = async () => {
     if (running || !m.entry) return;
     setRunning(true);
@@ -42,8 +33,8 @@ export function AppConsole({ m }: { m: AppManifest }) {
     try {
       const r = await api.exec.run(m.entry);
       const out: OutLine[] = [];
-      if (r.stdout) out.push(...toLines(r.stdout, "out"));
-      if (r.stderr) out.push(...toLines(r.stderr, "err"));
+      if (r.stdout) out.push(...splitConsoleLines(r.stdout, "out"));
+      if (r.stderr) out.push(...splitConsoleLines(r.stderr, "err"));
       out.push({ kind: "exit", text: `exit ${r.code}` });
       append(out);
     } catch (e) {

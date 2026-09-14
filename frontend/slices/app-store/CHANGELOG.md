@@ -1,5 +1,12 @@
 # app-store changelog
 
+## 1.3.0 — 2026-09-15
+
+- Added native Svelte 5/SvelteKit storefront, Create App, runtime iframe, and command-console surfaces over shared portable cores.
+- Split app registry, disabled-set persistence, exec adapter, runtime helpers, glyph metadata, and system catalog metadata from React wrappers.
+- `appStoreTools` is now self-contained; React auto-registration uses the narrow declared `use-agent-tools` closure while Svelte carries no agent runtime.
+- `configureAppStoreExec()` changes are observable after mount in both renderers.
+
 ## 1.2.1 — 2026-06-10
 
 - Host wiring: app self-registers `appStoreTools` with the live `useApps()` rows via `useAgentTools`.

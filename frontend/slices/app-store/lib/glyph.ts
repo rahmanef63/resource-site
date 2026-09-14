@@ -10,10 +10,8 @@ import {
   Box,
   type LucideIcon,
 } from "lucide-react";
+import { GLYPH_KEYS } from "./glyph-core";
 
-// Stored apps keep an icon as a string key (portable across the persisted row);
-// the shell resolves it to a Lucide component here. Keep in sync with the
-// Create App glyph picker.
 const MAP: Record<string, LucideIcon> = {
   grid: LayoutGrid,
   code: Code,
@@ -25,7 +23,7 @@ const MAP: Record<string, LucideIcon> = {
   cloud: Cloud,
 };
 
-export const GLYPH_KEYS = Object.keys(MAP);
+export { GLYPH_KEYS } from "./glyph-core";
 
 export function glyphIcon(key: string): LucideIcon {
   return MAP[key] ?? Box;

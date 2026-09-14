@@ -21,7 +21,7 @@ import {
   type CatalogApp,
 } from "./lib/store-catalog";
 import { SYSTEM_CATALOG, type SystemEntry } from "./lib/system-catalog";
-import { useAgentTools } from "@/shared/agentic";
+import { useAgentTools } from "@/shared/agentic/use-agent-tools";
 import { setInstalled, useApps } from "./lib/apps-store";
 import { appStoreTools } from "./lib/tools";
 import { setEnabled, useDisabledIds } from "./lib/enabled-store";

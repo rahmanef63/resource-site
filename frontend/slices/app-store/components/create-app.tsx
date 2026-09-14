@@ -9,66 +9,33 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { GLYPH_KEYS } from "../lib/glyph";
+import { APP_GRADIENTS, APP_RUNTIMES, DEFAULT_ENTRY, appManifestJson, slugifyAppName, type AppRuntime } from "../lib/create-core";
 import { createApp } from "../lib/apps-store";
 import { usePublishInspector } from "../lib/host";
 import { cn } from "@/lib/utils";
 import { IconPreview } from "./icon-preview";
 import { GlyphPicker } from "./glyph-picker";
 
-type Runtime = "html" | "node" | "python" | "shell";
-
-const RUNTIMES = [
-  { value: "html" as const, label: "HTML" },
-  { value: "node" as const, label: "Node" },
-  { value: "python" as const, label: "Python" },
-  { value: "shell" as const, label: "Shell" },
-];
-
-const ENTRY: Record<Runtime, string> = {
-  html: "index.html",
-  node: "main.js",
-  python: "app.py",
-  shell: "run.sh",
-};
-
-// CSS gradients for the icon tile. Literal hex is allowed for the swatches.
-const GRADIENTS = [
-  "linear-gradient(160deg,#22d3ee,#0891b2)",
-  "linear-gradient(160deg,#a855f7,#6d28d9)",
-  "linear-gradient(160deg,#f43f5e,#be123c)",
-  "linear-gradient(160deg,#f59e0b,#d97706)",
-  "linear-gradient(160deg,#34d058,#16a34a)",
-  "linear-gradient(160deg,#6366f1,#4338ca)",
-];
-
-const slugify = (s: string) =>
-  s.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-
 // Create App — author a new os-rr app and persist it via Convex. On create the
 // app is installed; the shell's dynamic registry shows it in the dock instantly.
 export default function CreateApp() {
   const [name, setName] = useState("");
-  const [runtime, setRuntime] = useState<Runtime>("html");
-  const [entry, setEntry] = useState(ENTRY.html);
-  const [gradient, setGradient] = useState(GRADIENTS[0]);
-  const [glyph, setGlyph] = useState(GLYPH_KEYS[0]);
+  const [runtime, setRuntime] = useState<AppRuntime>("html");
+  const [entry, setEntry] = useState(DEFAULT_ENTRY.html);
+  const [gradient, setGradient] = useState<string>(APP_GRADIENTS[0]);
+  const [glyph, setGlyph] = useState<string>(GLYPH_KEYS[0]);
   const [created, setCreated] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const slug = useMemo(() => slugify(name) || "untitled", [name]);
+  const slug = useMemo(() => slugifyAppName(name) || "untitled", [name]);
   const manifest = useMemo(
-    () =>
-      JSON.stringify(
-        { appId: slug, title: name.trim() || "New app", runtime, entry, glyph, gradient },
-        null,
-        2,
-      ),
-    [slug, name, runtime, entry, glyph, gradient],
+    () => appManifestJson({ name, runtime, entry, glyph, gradient }),
+    [name, runtime, entry, glyph, gradient],
   );
 
-  const pickRuntime = (r: Runtime) => {
+  const pickRuntime = (r: AppRuntime) => {
     setRuntime(r);
-    setEntry(ENTRY[r]);
+    setEntry(DEFAULT_ENTRY[r]);
   };
 
   // Surface the draft to the shell AI Inspector.
@@ -97,7 +64,7 @@ export default function CreateApp() {
       setTimeout(() => {
         setName("");
         pickRuntime("html");
-        setGradient(GRADIENTS[0]);
+        setGradient(APP_GRADIENTS[0]);
         setGlyph(GLYPH_KEYS[0]);
         setCreated(false);
       }, 1800);
@@ -124,7 +91,7 @@ export default function CreateApp() {
         </Field>
 
         <Field label="Runtime">
-          <Segmented options={RUNTIMES} value={runtime} onChange={pickRuntime} className="w-full" />
+          <Segmented options={APP_RUNTIMES} value={runtime} onChange={pickRuntime} className="w-full" />
         </Field>
 
         <Field label="Entry point">
@@ -137,7 +104,7 @@ export default function CreateApp() {
 
         <Field label="Accent">
           <div className="flex gap-2">
-            {GRADIENTS.map((g) => (
+            {APP_GRADIENTS.map((g) => (
               <Button
                 key={g}
                 type="button"

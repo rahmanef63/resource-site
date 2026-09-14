@@ -2,19 +2,10 @@
 
 import { Boxes, ExternalLink } from "lucide-react";
 import type { AppProps } from "../lib/host";
+import { isHttpUrl, type AppManifest } from "../lib/runtime-core";
 import { AppConsole } from "./app-console";
 
-// Manifest of a dynamic (created/installed) app — baked into the descriptor by
-// useInstalledApps, or passed via window payload.
-export type AppManifest = {
-  title: string;
-  runtime: string;
-  entry: string;
-  source: string;
-};
-
-const isUrl = (s: string) => /^https?:\/\//i.test(s);
-
+// Manifest semantics live in lib/runtime-core.ts so every renderer shares them.
 // Generic host for runtime apps. HTML apps whose entry is a URL render in a
 // sandboxed iframe; non-html apps whose entry is a command/script run live on
 // the VPS via the OsApi exec contract (terminal-style console). Anything else
@@ -30,7 +21,7 @@ export function RuntimeApp({ manifest, payload }: { manifest?: AppManifest } & A
     );
   }
 
-  if (m.runtime === "html" && isUrl(m.entry)) {
+  if (m.runtime === "html" && isHttpUrl(m.entry)) {
     return (
       <iframe
         title={m.title}
@@ -42,7 +33,7 @@ export function RuntimeApp({ manifest, payload }: { manifest?: AppManifest } & A
   }
 
   // Non-html runtime with a command/script entry → run it on the host.
-  if (m.runtime !== "html" && m.entry && !isUrl(m.entry)) {
+  if (m.runtime !== "html" && m.entry && !isHttpUrl(m.entry)) {
     return <AppConsole m={m} />;
   }
 
@@ -68,7 +59,7 @@ export function RuntimeApp({ manifest, payload }: { manifest?: AppManifest } & A
             <dd className="truncate font-mono">{m.entry || "—"}</dd>
           </div>
         </dl>
-        {isUrl(m.entry) && (
+        {isHttpUrl(m.entry) && (
           <a
             href={m.entry}
             target="_blank"

@@ -34,12 +34,15 @@ export const createAppApp: AppDescriptor = {
 // descriptors (RuntimeApp mounts: html → sandboxed iframe, command → console).
 export { useInstalledApps } from "./lib/use-installed-apps";
 export { useApps, setInstalled, createApp, type AppRow } from "./lib/apps-store";
+export { getAppsSnapshot, subscribeApps } from "./lib/apps-core";
 // Owner's disabled built-ins/features; hosts filter their manifest by it.
 export { useDisabledIds } from "./lib/enabled-store";
+export { getDisabledSnapshot, setEnabled, subscribeDisabled } from "./lib/enabled-core";
 
 // Host wiring seam (one-shot exec behind the command-app console).
 export { configureAppStoreExec } from "./lib/host";
 export type { AppStoreExec, ExecResult, AppDescriptor, AppProps } from "./lib/host";
+export type { AppManifest } from "./lib/runtime-core";
 
 export { appStoreConfig } from "./config";
 export type { AppStoreConfig } from "./config";

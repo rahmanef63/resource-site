@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-15 — SvelteKit App Store distribution + observable portable cores
+<!-- public-changelog:SVELTE-APP-STORE -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/app-store
+- Preview: https://resource.rahmanef.com/preview/slices/app-store
+- [before: `app-store@1.2.1` was React-only, embedded localStorage/exec state inside React hooks, and auto tool registration relied on an undeclared aggregate agent runtime] → [after: `app-store@1.3.0` keeps React default, adds native Svelte 5/SvelteKit storefront/Create-App/runtime surfaces, and shares observable framework-neutral registry/disabled/exec/catalog/tool cores]
+- React declares the narrow shared agent-hook closure; Svelte installs only `svelte@^5` plus portable core files and exposes optional host tool registration.
+
 ### 2026-09-15 — SvelteKit Markdown distribution + portable shared grammar
 <!-- public-changelog:SVELTE-MARKDOWN -->
 

@@ -3,7 +3,8 @@
 import { useMemo } from "react";
 import type { AppDescriptor } from "./host";
 import { glyphIcon } from "./glyph";
-import { RuntimeApp, type AppManifest } from "../components/runtime-app";
+import { RuntimeApp } from "../components/runtime-app";
+import type { AppManifest } from "./runtime-core";
 import { useApps } from "./apps-store";
 
 // Turns the owner's installed runtime apps (localStorage) into AppDescriptors
