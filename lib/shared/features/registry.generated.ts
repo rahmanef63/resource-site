@@ -122,7 +122,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...mediaViewerConfig,
     importPath: "@/features/media-viewer/config",
-    version: "1.2.1",
+    version: "1.3.0",
   },
   {
     ...notionAppConfig,

@@ -1,5 +1,12 @@
 # media-viewer changelog
 
+## 1.3.0 — 2026-09-14
+
+- Added native Svelte 5/SvelteKit distribution while keeping React/Next default.
+- Extracted framework-neutral host opener/source and remote payload seams.
+- `mediaViewerTools` is now a self-contained structural tool collection; React auto-registration uses the narrow shared hook closure, while Svelte installs no agentic runtime.
+- Svelte includes image/video/audio/PDF/text sample surfaces, remote media rendering, zoom/navigation/download/editor handoff, and optional host tool registration without React/Lucide/shadcn runtime dependencies.
+
 ## 1.2.1 — 2026-06-10
 
 - Host wiring: the sample gallery builds its `MediaViewerCtx` adapter from component state and self-registers `mediaViewerTools` via `useAgentTools`.

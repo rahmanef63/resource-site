@@ -286,10 +286,10 @@ export default function VideoEditorDemo() {
     title: "Preview — media quick-look",
     category: "os",
     kind: "ui",
-    version: "1.2.1",
+    version: "1.3.0",
     tagline: "Quick-look viewer for image/video/audio/pdf: zoomable stage, transport players, editor handoff — backend optional.",
     description:
-      "A quick-look media viewer in the macOS Preview spirit. Images render on a zoomable (40–300%) checkerboard stage so transparency reads; audio gets a card player with a CSS-bar waveform + transport; video gets play/pause + scrubber + volume; PDFs embed full-bleed and text gets a simple surface. The toolbar carries a type-indicator chip, zoom, Download, Open-in-editor, and prev/next. Two integration seams in lib/host.ts make it portable: configureMediaSource maps fs paths to fetchable URLs (identity by default, so public URLs work with zero wiring) and configureMediaOpener routes the Open-in-editor handoff (image → image-editor, video/audio → reel-editor) to your shell — both inert until set. Launched bare it shows a fully offline sample gallery (inline SVG gradients, simulated A/V playback). Pairs with file-explorer (onOpenFile → MediaViewer payload) and the editors.",
+      "A quick-look media viewer in the macOS Preview spirit. Images render on a zoomable (40–300%) checkerboard stage so transparency reads; audio gets a card player with a CSS-bar waveform + transport; video gets play/pause + scrubber + volume; PDFs embed full-bleed and text gets a simple surface. The toolbar carries a type-indicator chip, zoom, Download, Open-in-editor, and prev/next. Two framework-neutral integration seams in lib/host-core.ts make it portable: configureMediaSource maps fs paths to fetchable URLs (identity by default, so public URLs work with zero wiring) and configureMediaOpener routes the Open-in-editor handoff (image → design-studio, video/audio → reel-editor) to your shell — both inert until set. Launched bare it shows a fully offline sample gallery (inline SVG gradients, simulated A/V playback). Pairs with file-explorer (onOpenFile → MediaViewer payload) and the editors.",
     source: "rahmanef63/os-vps",
     slicePath: "frontend/slices/media-viewer",
     convexPaths: [],

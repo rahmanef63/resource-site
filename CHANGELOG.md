@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-14 — SvelteKit Media Viewer distribution
+<!-- public-changelog:SVELTE-MEDIA-VIEWER -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/media-viewer
+- Preview: https://resource.rahmanef.com/preview/slices/media-viewer
+- [before: `media-viewer@1.2.1` was React-only and its clean installer omitted the shared agentic hook closure used by the mounted gallery] → [after: `media-viewer@1.3.0` keeps React/Next default, adds native Svelte 5/SvelteKit media surfaces over shared portable cores, and declares exact framework-specific installer dependencies]
+- Shared opener/source, remote payload parsing, samples, media helpers, and agentic tools are framework-neutral; Svelte installs no React, Next, Lucide React, shadcn, or agent runtime.
+
 ### 2026-09-14 — Create Your MCP Svelte server portability
 <!-- public-changelog:CREATE-YOUR-MCP-PORTABILITY -->
 

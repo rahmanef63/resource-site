@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { useAgentTools } from "@/shared/agentic";
+import { useAgentTools } from "@/shared/agentic/use-agent-tools";
 import { mediaViewerTools } from "./lib/tools";
 import type { AppProps } from "./lib/host";
 import { openWindow, usePublishInspector } from "./lib/host";

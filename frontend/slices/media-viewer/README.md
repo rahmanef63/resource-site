@@ -1,39 +1,43 @@
 # media-viewer — Preview (media quick-look)
 
-Quick-look viewer for `image | video | audio | pdf | text`:
+Quick-look viewer for `image | video | audio | pdf | text` with native React/Next and Svelte 5/SvelteKit renderers over the same portable media core.
 
-- **Images** — zoomable stage (40–300%) on a checkerboard so transparency reads,
-  dimensions in the inspector chip.
-- **Audio** — card player with CSS-bar waveform + transport.
-- **Video** — play/pause, scrubber, volume.
-- **PDF** — full-bleed embed. **Text** — simple surface.
-- Toolbar: type chip, zoom, Download, Open-in-editor, prev/next.
+- **Images** — zoomable 40–300% stage with checkerboard transparency.
+- **Audio** — deterministic CSS-bar waveform + playback transport.
+- **Video** — play/pause + scrubber in the offline sample gallery; native controls for remote video.
+- **PDF/Text** — PDF embed for remote files, truthful offline fallback surfaces for bundled samples.
+- **Toolbar** — type chip, zoom, download, editor handoff, previous/next.
+- **Remote payload** — `{ path, name, kind }` through the injected media source.
+- **Agentic tools** — `mediaViewerTools` remains framework-neutral; React auto-registers it, Svelte can register it through the optional `registerTools` prop or directly from the export.
 
-## Two ways to mount
+## Install
+
+```bash
+# React/Next default
+npx rr add media-viewer
+
+# Native Svelte 5/SvelteKit
+npx rr add media-viewer --framework sveltekit
+```
+
+## React mount
 
 ```tsx
 import { MediaViewer } from "@/features/media-viewer";
 
-// 1) Sample gallery (offline, no wiring needed)
 <MediaViewer />
-
-// 2) A real file
 <MediaViewer payload={{ path: "/media/clip.mp4", name: "clip.mp4", kind: "video" }} />
 ```
 
-Or hand `mediaViewerApp` (lazy `load`) to an appshell-style launcher.
-
-## Host seams (`lib/host.ts`)
+## Host seams
 
 ```ts
 import { configureMediaSource, configureMediaOpener } from "@/features/media-viewer";
 
-// Resolve fs paths to fetchable URLs (identity by default — public URLs just work)
 configureMediaSource({ rawUrl: (p) => `/api/v1/fs/raw?path=${encodeURIComponent(p)}` });
-
-// Route "Open in Image/Video Editor" to your shell (no-op by default)
-configureMediaOpener((appId, title, _size, payload) => openWindow(appId, title, undefined, payload));
+configureMediaOpener((appId, title, _size, payload) =>
+  openWindow(appId, title, undefined, payload),
+);
 ```
 
-Everything else in the slice imports ONLY this seam — swapping it is the whole
-integration.
+`lib/host-core.ts`, `lib/media.ts`, `lib/remote.ts`, `lib/samples.ts`, and `lib/tools.ts` are framework-neutral. React-only app descriptors/inspector wiring remain in `lib/host.ts` and never ship with the Svelte renderer.

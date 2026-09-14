@@ -1,0 +1,35 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "media-viewer-svelte",
+  "version": "1.3.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add media-viewer --framework sveltekit",
+    "consumerPath": "slices/media-viewer"
+  },
+  "files": [
+    "README.md",
+    "components/AudioPlayer.svelte",
+    "components/ImageView.svelte",
+    "components/MediaStage.svelte",
+    "components/MediaViewer.svelte",
+    "components/RemoteView.svelte",
+    "components/Transport.svelte",
+    "components/VideoPlayer.svelte",
+    "components/ViewerToolbar.svelte",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/media-viewer/lib/host-core.ts",
+      "frontend/slices/media-viewer/lib/media.ts",
+      "frontend/slices/media-viewer/lib/remote.ts",
+      "frontend/slices/media-viewer/lib/samples.ts",
+      "frontend/slices/media-viewer/lib/tools.ts"
+    ],
+    "external": ["svelte"]
+  }
+}

@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-MEDIA-VIEWER",
+    "version": "media-viewer@1.3.0",
+    "date": 1789344000000,
+    "kind": "feature",
+    "title": "SvelteKit Media Viewer distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/media-viewer — [before: media-viewer@1.2.1 was React-only and its installer omitted the mounted gallery's agentic hook closure] → [after: media-viewer@1.3.0 keeps React/Next default, adds native Svelte 5/SvelteKit rendering over shared portable media cores, and declares exact framework-specific dependencies].",
+    "groups": [
+      {
+        "heading": "Native media parity without React leakage",
+        "bullets": [
+          "Svelte ships native image zoom/navigation/download, simulated video/audio playback, PDF/text fallback surfaces, and remote image/video/audio/PDF rendering.",
+          "Host opener/source configuration, remote payload parsing, sample semantics, editor mapping, and mediaViewerTools are framework-neutral; Svelte can register tools through its host without installing the React agent runtime.",
+          "React/default now declares the narrow useAgentTools registry closure that its mounted gallery actually imports, closing an existing clean-install packaging gap."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "CREATE-YOUR-MCP-PORTABILITY",
     "version": "create-your-mcp@0.4.1",
     "date": 1789344000000,

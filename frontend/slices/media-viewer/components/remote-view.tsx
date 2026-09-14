@@ -4,14 +4,14 @@ import { useState } from "react";
 import { ImageIcon, FileText, Film, Music, Pencil } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { openWindow, usePublishInspector } from "../lib/host";
-import { rawUrl } from "../lib/host";
+import { usePublishInspector } from "../lib/host";
+import { openWindow, rawUrl } from "../lib/host-core";
 import { cn } from "@/lib/utils";
 import { editorFor } from "../lib/media";
 import { AppFrame } from "./app-frame";
 
-export type MediaKind = "image" | "video" | "audio" | "pdf";
-export type RemoteFile = { path: string; name: string; kind: MediaKind };
+import type { RemoteFile } from "../lib/remote";
+export { remoteFile, type MediaKind, type RemoteFile } from "../lib/remote";
 
 // Checkerboard stage so transparent/letterboxed media reads clearly.
 const STAGE =
@@ -150,15 +150,4 @@ function FallbackCard({
       )}
     </div>
   );
-}
-
-// Extract a `{ path, name, kind }` remote-file from the window payload.
-export function remoteFile(payload: unknown): RemoteFile | null {
-  if (!payload || typeof payload !== "object") return null;
-  const p = payload as Partial<RemoteFile>;
-  if (typeof p.path !== "string" || !p.path) return null;
-  const kind: MediaKind = (["image", "video", "audio", "pdf"] as const).includes(p.kind as MediaKind)
-    ? (p.kind as MediaKind)
-    : "image";
-  return { path: p.path, name: p.name ?? p.path, kind };
 }
