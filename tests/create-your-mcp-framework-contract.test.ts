@@ -38,7 +38,7 @@ afterEach(() => {
 
 describe("create-your-mcp framework contract", () => {
   it("keeps React default and selects native SvelteKit over one MCP/OAuth core", () => {
-    expect(slice.version).toBe("0.4.0");
+    expect(slice.version).toBe("0.4.1");
     expect(slice.frontend.defaultFramework).toBe("react-next");
     expect(slice.convex.rootPaths).toEqual(["convex/features/create_your_mcp"]);
     expect(slice.deps.npm).toEqual([
@@ -51,6 +51,9 @@ describe("create-your-mcp framework contract", () => {
       aliases: ["svelte", "sveltekit"],
       deps: { npm: ["svelte@^5", "convex@^1.16.0"], shadcn: [] },
     });
+    expect(slice.frontend.frameworks["svelte-sveltekit"].deps.sharedFiles).toContain(
+      "frontend/slices/create-your-mcp/server.ts",
+    );
   });
 
   it("keeps browser barrels free of server-only node modules", () => {

@@ -1,5 +1,10 @@
 # create-your-mcp changelog
 
+## 0.4.1 — 2026-09-14
+
+- Fixed SvelteKit clean-install server closure: the Svelte distribution now copies the shared `frontend/slices/create-your-mcp/server.ts` barrel required by its server entrypoint.
+- No MCP/OAuth behavior changed; this patch closes a packaging gap found by running `svelte-check` against the real CLI output from 0.4.0.
+
 ## 0.4.0 — 2026-09-14
 
 - Added explicit native Svelte 5/SvelteKit distribution while keeping React/Next as the default.

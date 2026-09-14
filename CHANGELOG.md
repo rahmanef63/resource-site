@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-14 — Create Your MCP Svelte server portability
+<!-- public-changelog:CREATE-YOUR-MCP-PORTABILITY -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/create-your-mcp
+- [before: `create-your-mcp@0.4.0` installed native Svelte UI and handler factories but omitted the shared server barrel imported by the Svelte server entrypoint] → [after: `create-your-mcp@0.4.1` includes that server barrel in the Svelte shared-file closure]
+- The packaging gap was found by running `svelte-check` against the real post-push CLI output; MCP/OAuth runtime behavior is unchanged.
+
 ### 2026-09-14 — SvelteKit Create Your MCP distribution
 <!-- public-changelog:CREATE-YOUR-MCP-SVELTE -->
 

@@ -1805,7 +1805,7 @@ const analytics: EventTrackingCtx = {
     title: "Create Your MCP",
     category: "ai",
     kind: "full",
-    version: "0.4.0",
+    version: "0.4.1",
     description: "Framework-parity MCP/OAuth integration: React/Next remains the default admin UI and adapter, while explicit SvelteKit installs native Svelte 5 admin UI plus SvelteKit handler factories over the same OAuth 2.1 + PKCE, JSON-RPC, Convex token backend, scope enforcement, and static MCP_API_KEY fallback. Shared HTTP behavior uses Web Request/Response primitives; host adapters stay thin.",
     source: "rahmanef.com",
     slicePath: "frontend/slices/create-your-mcp",

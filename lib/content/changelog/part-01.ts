@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "CREATE-YOUR-MCP-PORTABILITY",
+    "version": "create-your-mcp@0.4.1",
+    "date": 1789344000000,
+    "kind": "fix",
+    "title": "Create Your MCP Svelte server portability",
+    "body": "Related: https://resource.rahmanef.com/slices/create-your-mcp — [before: create-your-mcp@0.4.0 omitted the shared server barrel imported by its SvelteKit server entrypoint] → [after: create-your-mcp@0.4.1 includes the complete server closure for clean installs].",
+    "groups": [
+      {
+        "heading": "Clean-install server closure",
+        "bullets": [
+          "The SvelteKit distribution now copies frontend/slices/create-your-mcp/server.ts alongside its existing shared MCP/OAuth files.",
+          "Real CLI output is validated with svelte-check so framework parity is proven from consumer files rather than only the source tree.",
+          "MCP, OAuth, PKCE, Convex token, and admin UI behavior are unchanged from 0.4.0."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "CREATE-YOUR-MCP-SVELTE",
     "version": "create-your-mcp@0.4.0",
     "date": 1789344000000,

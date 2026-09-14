@@ -38,3 +38,5 @@ Create `src/routes/api/oauth/token/+server.ts` similarly with `createSvelteKitOa
 The default backend reads `CONVEX_URL`, `NEXT_PUBLIC_CONVEX_URL`, or `PUBLIC_CONVEX_URL` and talks to the shared `convex/features/create_your_mcp` functions. Pass an explicit `backend` to either handler factory when your host owns the Convex client differently.
 
 The Svelte distribution does not import React, Next, `lucide-react`, or React shadcn runtime.
+
+Clean-install packaging includes the shared server barrel used by the SvelteKit server entrypoint, so the handler factories typecheck in a fresh consumer without repository-local files.

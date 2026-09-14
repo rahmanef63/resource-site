@@ -133,3 +133,5 @@ Pass custom tools through `createSvelteKitMcpHandlers({ tools })` or edit the `T
 Shared: auth, hashing, JSON-RPC dispatcher, Web HTTP handlers, Convex HTTP backend, request context, tool types/example, admin row/setup helpers, and `convex/features/create_your_mcp`.
 
 Framework-specific: React/Svelte admin renderers and thin Next/SvelteKit route adapters only.
+
+Clean-install packaging includes the shared server barrel used by the SvelteKit server entrypoint, so the handler factories typecheck in a fresh consumer without repository-local files.
