@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-14 — SvelteKit Motion Kit distribution
+<!-- public-changelog:SVELTE-MOTION-KIT -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/motion-kit
+- [before: `motion-kit@0.1.0` was React-only, duplicating observer/easing behavior inside hooks and depending on React-specific Embla/Radix/Lucide surfaces] → [after: `motion-kit@0.2.0` keeps React/Next default while adding native Svelte 5 Reveal/Stagger/CountUp/Marquee/Carousel/Accordion over one shared observer/easing/CSS contract]
+- Svelte carousel uses Embla core with explicit destroy cleanup; Svelte accordion uses native button/context semantics with no React/Radix/Lucide runtime leakage.
+
 ### 2026-09-14 — SvelteKit Cal.com Booking distribution
 <!-- public-changelog:SVELTE-CAL-COM-BOOKING -->
 

@@ -2,9 +2,10 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { type RevealVariant } from "../lib/core";
 import { useInView } from "./use-in-view";
 
-export type RevealVariant = "fade-up" | "fade" | "fade-left" | "fade-right" | "zoom";
+export type { RevealVariant } from "../lib/core";
 
 /**
  * Scroll-reveal wrapper. Hidden via CSS (`[data-reveal]` in globals.css,

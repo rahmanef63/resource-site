@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-MOTION-KIT",
+    "version": "motion-kit@0.2.0",
+    "date": 1789344000000,
+    "kind": "feature",
+    "title": "SvelteKit Motion Kit distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/motion-kit — [before: motion-kit@0.1.0 was React-only with React-specific carousel/accordion runtime] → [after: motion-kit@0.2.0 keeps React/Next default and adds native Svelte 5 motion, carousel, and accordion surfaces over one shared observer/easing/CSS core].",
+    "groups": [
+      {
+        "heading": "Native Svelte motion parity",
+        "bullets": [
+          "Reveal, Stagger, CountUp, and Marquee share framework-neutral observer/easing helpers plus the canonical globals-motion.css contract.",
+          "Svelte Carousel owns Embla-core lifecycle and destroy cleanup; Previous/Next remain native accessible buttons.",
+          "Svelte Accordion uses native context/state with aria-expanded and aria-controls, with no React, Radix, Lucide, or shadcn runtime leakage."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-CAL-COM-BOOKING",
     "version": "cal-com-booking@0.3.0",
     "date": 1789344000000,

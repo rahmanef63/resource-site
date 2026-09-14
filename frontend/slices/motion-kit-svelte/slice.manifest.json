@@ -1,0 +1,42 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "motion-kit-svelte",
+  "version": "0.2.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add motion-kit --framework sveltekit",
+    "consumerPath": "slices/motion-kit"
+  },
+  "files": [
+    "README.md",
+    "index.ts",
+    "motion/CountUp.svelte",
+    "motion/Marquee.svelte",
+    "motion/Reveal.svelte",
+    "motion/Stagger.svelte",
+    "motion/use-in-view.ts",
+    "ui/Accordion.svelte",
+    "ui/AccordionContent.svelte",
+    "ui/AccordionItem.svelte",
+    "ui/AccordionTrigger.svelte",
+    "ui/Carousel.svelte",
+    "ui/CarouselContent.svelte",
+    "ui/CarouselItem.svelte",
+    "ui/CarouselNext.svelte",
+    "ui/CarouselPrevious.svelte",
+    "ui/accordion-context.ts",
+    "ui/carousel-context.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/motion-kit/globals-motion.css",
+      "frontend/slices/motion-kit/lib/core.ts"
+    ],
+    "external": [
+      "svelte",
+      "embla-carousel"
+    ]
+  }
+}

@@ -1125,12 +1125,12 @@
       "slug": "motion-kit",
       "title": "Motion Kit — scroll reveals, carousel, accordion, micro-interactions",
       "category": "ui",
-      "description": "Zero-dependency scroll-motion layer (IntersectionObserver + CSS) plus an embla carousel and a radix accordion, packaged so any page gets tasteful entrance animations without pulling in a motion library. Ships Reveal (fade-up/fade/fade-left/fade-right/zoom), Stagger (incremental per-child reveal for grids/lists), CountUp (rAF count-to-value with locale formatting; integers), Marquee (infinite logo/brand strip with hover-pause + edge fade), and the useInView hook behind them; plus Carousel (embla, optional Autoplay plugin) and Accordion (radix). All reveal + keyframe motion is gated behind prefers-reduced-motion. Consumers append globals-motion.css to their app/globals.css for the [data-reveal] transitions + accordion/marquee/blob keyframes. Lifted 2026-06-10 from the _templates fleet `_shared/motion` copy — the 8 standalone website templates already ship a byte-identical copy; this rr slice is the SSOT so future scaffolds get it via `npx rr add motion-kit`. Pairs with landing-sections (its renderers consume these primitives).",
+      "description": "Framework-parity motion primitives over one shared observer/easing/CSS core. React/Next remains the default distribution with Embla React + Radix; Svelte 5/SvelteKit adds native Reveal, Stagger, CountUp, Marquee, Embla-core Carousel, and accessible Accordion without React/Lucide/Radix runtime leakage. Reveal/count/marquee/accordion motion is reduced-motion aware, the Svelte carousel explicitly destroys its Embla instance on unmount, and globals-motion.css stays the single style contract.",
       "source": "rahman-resources (lifted from _templates fleet)",
       "install": "npx rahman-resources add motion-kit",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add motion-kit`. Append the contents of `globals-motion.css` to your `app/globals.css` (after `@import \"tailwindcss\";`) — without it `data-reveal` elements stay static and the accordion snaps. Then import from `@/features/motion-kit`: `<Reveal variant=\"fade-up\">`, `<Stagger itemClassName=\"h-full\">{cards}</Stagger>` for grids, `<CountUp value={4800} />` (integers), `<Marquee speed={32}>{logos}</Marquee>`. Carousel: pair with `Autoplay` from embla-carousel-autoplay. Any component consuming a passed render/icon fn AND these hooks must be `\"use client\"`. Hover-lift convention: `transition-[translate,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-lg`.",
+      "agentRecipe": "Run `npx rr add motion-kit` for React/default or `npx rr add motion-kit --framework sveltekit`. Append the copied `globals-motion.css` to the host global stylesheet. Both frameworks expose Reveal/Stagger/CountUp/Marquee + Carousel/Accordion; Svelte uses native Svelte 5 and Embla core with lifecycle cleanup, while React keeps Embla React + Radix. Optional autoplay comes from embla-carousel-autoplay.",
       "tags": [
         "ui",
         "motion",
@@ -1141,7 +1141,8 @@
         "accordion",
         "marquee",
         "countup",
-        "embla"
+        "embla",
+        "svelte"
       ]
     },
     {
@@ -4423,14 +4424,33 @@
       "title": "Motion Kit — scroll reveals, carousel, accordion, micro-interactions",
       "category": "ui",
       "kind": "ui",
-      "version": "0.1.0",
-      "description": "Zero-dependency scroll-motion layer (IntersectionObserver + CSS) plus an embla carousel and a radix accordion, packaged so any page gets tasteful entrance animations without pulling in a motion library. Ships Reveal (fade-up/fade/fade-left/fade-right/zoom), Stagger (incremental per-child reveal for grids/lists), CountUp (rAF count-to-value with locale formatting; integers), Marquee (infinite logo/brand strip with hover-pause + edge fade), and the useInView hook behind them; plus Carousel (embla, optional Autoplay plugin) and Accordion (radix). All reveal + keyframe motion is gated behind prefers-reduced-motion. Consumers append globals-motion.css to their app/globals.css for the [data-reveal] transitions + accordion/marquee/blob keyframes. Lifted 2026-06-10 from the _templates fleet `_shared/motion` copy — the 8 standalone website templates already ship a byte-identical copy; this rr slice is the SSOT so future scaffolds get it via `npx rr add motion-kit`. Pairs with landing-sections (its renderers consume these primitives).",
+      "version": "0.2.0",
+      "description": "Framework-parity motion primitives over one shared observer/easing/CSS core. React/Next remains the default distribution with Embla React + Radix; Svelte 5/SvelteKit adds native Reveal, Stagger, CountUp, Marquee, Embla-core Carousel, and accessible Accordion without React/Lucide/Radix runtime leakage. Reveal/count/marquee/accordion motion is reduced-motion aware, the Svelte carousel explicitly destroys its Embla instance on unmount, and globals-motion.css stays the single style contract.",
       "source": "rahman-resources (lifted from _templates fleet)",
       "slicePath": "frontend/slices/motion-kit",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/motion-kit"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/motion-kit-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5",
+              "embla-carousel@^8.6.0",
+              "embla-carousel-autoplay@^8.6.0"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/motion-kit/globals-motion.css",
+              "frontend/slices/motion-kit/lib/core.ts"
+            ]
+          }
         }
       },
       "convexPaths": [],
@@ -4457,9 +4477,10 @@
         "accordion",
         "marquee",
         "countup",
-        "embla"
+        "embla",
+        "svelte"
       ],
-      "agentRecipe": "Run `npx rr add motion-kit`. Append the contents of `globals-motion.css` to your `app/globals.css` (after `@import \"tailwindcss\";`) — without it `data-reveal` elements stay static and the accordion snaps. Then import from `@/features/motion-kit`: `<Reveal variant=\"fade-up\">`, `<Stagger itemClassName=\"h-full\">{cards}</Stagger>` for grids, `<CountUp value={4800} />` (integers), `<Marquee speed={32}>{logos}</Marquee>`. Carousel: pair with `Autoplay` from embla-carousel-autoplay. Any component consuming a passed render/icon fn AND these hooks must be `\"use client\"`. Hover-lift convention: `transition-[translate,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-lg`."
+      "agentRecipe": "Run `npx rr add motion-kit` for React/default or `npx rr add motion-kit --framework sveltekit`. Append the copied `globals-motion.css` to the host global stylesheet. Both frameworks expose Reveal/Stagger/CountUp/Marquee + Carousel/Accordion; Svelte uses native Svelte 5 and Embla core with lifecycle cleanup, while React keeps Embla React + Radix. Optional autoplay comes from embla-carousel-autoplay."
     },
     {
       "slug": "storefront-checkout",

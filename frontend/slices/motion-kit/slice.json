@@ -1,17 +1,39 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "motion-kit",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "category": "ui",
   "kind": "ui",
-  "title": "Motion Kit — scroll reveals, carousel, accordion, micro-interactions",
-  "description": "Zero-dependency scroll-motion layer (IntersectionObserver + CSS) plus an embla carousel and a radix accordion, packaged so any page gets tasteful entrance animations without a motion library. Ships Reveal (fade-up/fade/fade-left/fade-right/zoom), Stagger (incremental per-child reveal for grids/lists), CountUp (rAF count-to-value with locale formatting), Marquee (infinite logo/brand strip, hover-pause), and the useInView hook behind them; plus Carousel (embla, optional autoplay plugin) and Accordion (radix). All reveal/keyframe motion is gated behind prefers-reduced-motion. Consumers append globals-motion.css to their app/globals.css for the [data-reveal] transitions + accordion/marquee/blob keyframes. This is the canonical motion layer used by all 8 rr website templates (lifted from the fleet _shared/motion copy).",
+  "title": "Motion Kit \u2014 scroll reveals, carousel, accordion, micro-interactions",
+  "description": "Framework-parity motion primitives: shared IntersectionObserver/easing/CSS core plus React/Next default and native Svelte 5/SvelteKit distributions for reveal, stagger, count-up, marquee, Embla carousel, and accessible accordion. Both distributions respect reduced motion; Svelte uses Embla core with explicit destroy cleanup and carries no React/Lucide/Radix runtime.",
   "namespace": "@/features/motion-kit",
   "registers": [],
   "audit": [],
   "frontend": {
     "slicePath": "frontend/slices/motion-kit",
-    "configExport": ""
+    "configExport": "",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/motion-kit-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5",
+            "embla-carousel@^8.6.0",
+            "embla-carousel-autoplay@^8.6.0"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/motion-kit/globals-motion.css",
+            "frontend/slices/motion-kit/lib/core.ts"
+          ]
+        }
+      }
+    }
   },
   "convex": {
     "tablesExport": "",
@@ -38,9 +60,12 @@
       "axes": [
         {
           "prop": "variant",
-          "values": ["fade-up", "zoom"],
+          "values": [
+            "fade-up",
+            "zoom"
+          ],
           "default": "fade-up",
-          "description": "Scroll-reveal entrance — element animates in on first intersection (respects prefers-reduced-motion)."
+          "description": "Scroll-reveal entrance \u2014 element animates in on first intersection (respects prefers-reduced-motion)."
         }
       ],
       "seed": "Scroll the preview frame; wrapped content fades/zooms in once it enters the viewport. Append globals-motion.css for the transitions to take effect."
@@ -63,7 +88,12 @@
         "AccordionTrigger",
         "AccordionContent"
       ],
-      "utils": [],
+      "utils": [
+        "observeInView",
+        "staggerDelay",
+        "countAt",
+        "easeOutCubic"
+      ],
       "hooks": [
         "useInView"
       ],
@@ -71,6 +101,9 @@
         "RevealVariant",
         "CarouselApi"
       ]
+    },
+    "generalization": {
+      "level": "portable"
     }
   }
 }

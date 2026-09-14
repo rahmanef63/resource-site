@@ -1,44 +1,17 @@
 "use client";
 
 import * as React from "react";
+import { observeInView, type InViewOptions } from "../lib/core";
 
-interface Options extends IntersectionObserverInit {
-  /** Reveal once and stop observing (default). `false` re-hides on exit. */
-  once?: boolean;
-}
-
-/**
- * IntersectionObserver hook backing the motion kit. SSR-safe: renders
- * hidden, flips on first intersection. Environments without IO (old
- * embedded webviews, test runners) reveal immediately.
- */
-export function useInView<T extends HTMLElement>({ once = true, ...init }: Options = {}) {
+export function useInView<T extends HTMLElement>(options: InViewOptions = {}) {
   const ref = React.useRef<T | null>(null);
   const [inView, setInView] = React.useState(false);
 
   React.useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (typeof IntersectionObserver === "undefined") {
-      setInView(true);
-      return;
-    }
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setInView(true);
-            if (once) observer.unobserve(entry.target);
-          } else if (!once) {
-            setInView(false);
-          }
-        }
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -8% 0px", ...init },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [once]);
+    const element = ref.current;
+    if (!element) return;
+    return observeInView(element, setInView, options);
+  }, [options.once, options.root, options.rootMargin, options.threshold]);
 
   return { ref, inView };
 }

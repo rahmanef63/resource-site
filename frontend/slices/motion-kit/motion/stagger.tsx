@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { staggerDelay } from "../lib/core";
 import { Reveal, type RevealVariant } from "./reveal";
 
 /**
@@ -34,7 +35,7 @@ export function Stagger({
         <Reveal
           key={i}
           variant={variant}
-          delay={Math.min(i * step, cap)}
+          delay={staggerDelay(i, step, cap)}
           className={itemClassName}
         >
           {child}

@@ -62,3 +62,8 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
   with the reveal transform).
 - Pairs with `landing-sections` (its renderers consume Reveal/Stagger/CountUp/
   Marquee + Carousel/Accordion).
+
+
+## SvelteKit distribution
+
+Use `npx rr add motion-kit --framework sveltekit`. It installs `svelte`, `embla-carousel`, and the autoplay plugin, copies the shared core + motion CSS, and does not install React/Radix/Lucide/shadcn dependencies for this slice.

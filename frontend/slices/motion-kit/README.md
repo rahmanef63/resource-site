@@ -31,3 +31,11 @@ is the SSOT so future scaffolds get it via `npx rr add motion-kit`. When the
 fleet copy changes, update here first, then re-sync the fleet.
 
 Pairs with **landing-sections** (its renderer set consumes these primitives).
+
+## SvelteKit
+
+```bash
+npx rr add motion-kit --framework sveltekit
+```
+
+The Svelte distribution keeps the same component names but is native Svelte 5. Reveal/count/stagger share the canonical observer/easing core and `globals-motion.css`; carousel uses `embla-carousel` core with destroy cleanup; accordion is native/a11y and does not install React Radix/Lucide/shadcn runtime code.

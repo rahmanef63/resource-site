@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { countAt } from "../lib/core";
 import { useInView } from "./use-in-view";
 
 /**
@@ -37,8 +38,7 @@ export function CountUp({
     const start = performance.now();
     const tick = (now: number) => {
       const t = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - t, 3);
-      setDisplay(Math.round(value * eased));
+      setDisplay(countAt(value, t));
       if (t < 1) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
