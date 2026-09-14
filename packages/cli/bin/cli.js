@@ -1326,7 +1326,29 @@ async function resolveLiftPlan(parsed, target, variant, requestedFramework) {
       steps.push({ from: cp, toRel: cp, toAbs: path.join(target, cp) });
     }
     const deps = framework.deps ?? {};
-    const sharedFiles = deps.sharedFiles ?? slice.sharedFiles ?? [];
+    // Variant runtime deps are framework-neutral additions (provider SDKs,
+    // env, peers, shared files). With no selected variant, add-all receives
+    // the union across variants. Renderer-specific shadcn remains governed
+    // by the selected framework/base deps so Svelte never inherits React UI.
+    const variantDeps = variantDef?.deps
+      ? [variantDef.deps]
+      : (variants?.items ?? []).map((item) => item.deps).filter(Boolean);
+    const variantValues = (key) => variantDeps.flatMap((item) => item?.[key] ?? []);
+    const uniqueStrings = (items) => [...new Set(items)];
+    const uniqueObjects = (items, key) => {
+      const seen = new Set();
+      return items.filter((item) => {
+        const id = key(item);
+        if (seen.has(id)) return false;
+        seen.add(id);
+        return true;
+      });
+    };
+
+    const sharedFiles = uniqueStrings([
+      ...(deps.sharedFiles ?? slice.sharedFiles ?? []),
+      ...variantValues("sharedFiles"),
+    ]);
     for (const sharedFile of sharedFiles) {
       steps.push({
         from: sharedFile,
@@ -1335,10 +1357,10 @@ async function resolveLiftPlan(parsed, target, variant, requestedFramework) {
         sharedFile: true,
       });
     }
-    npm.push(...(deps.npm ?? slice.npm ?? []));
+    npm.push(...uniqueStrings([...(deps.npm ?? slice.npm ?? []), ...variantValues("npm")]));
     shadcn.push(...(deps.shadcn ?? slice.shadcn ?? []));
-    env.push(...(deps.env ?? slice.env ?? []));
-    peers.push(...(deps.peers ?? slice.peers ?? []));
+    env.push(...uniqueObjects([...(deps.env ?? slice.env ?? []), ...variantValues("env")], (item) => `${item.name}:${item.scope}`));
+    peers.push(...uniqueObjects([...(deps.peers ?? slice.peers ?? []), ...variantValues("peers")], (item) => `${item.slug}:${item.range}`));
   } else if (parsed.kind === "superspace-local") {
     const SUPERSPACE = process.env.RAHMAN_SUPERSPACE_PATH ?? path.join(process.env.HOME ?? "", "projects/superspace");
     const localFromAbs = path.join(SUPERSPACE, parsed.subPath);

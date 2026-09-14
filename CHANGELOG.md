@@ -11,6 +11,16 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-14 — SvelteKit Payment distributions + variant-scoped runtime deps (CLI 1.18.0)
+<!-- public-changelog:SVELTE-PAYMENT -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/payment
+- Preview: https://resource.rahmanef.com/preview/slices/payment
+- [before: `payment@0.4.0` was React-only; DOKU-only installs still dragged `midtrans-client`/Midtrans env and the shared auth/crypto helpers were not fully declared] → [after: `payment@0.5.0` keeps React/Next default, adds native Svelte 5/SvelteKit DOKU + Midtrans surfaces, and CLI `1.18.0` scopes provider npm/env/shared files to the selected variant]
+- Single-provider installs now copy only that provider action plus shared payment backend support; add-all receives the union. DOKU no longer needs the documented manual deletion of the Midtrans action.
+- HMAC/signature verification, webhook idempotency, amount validation, and provider secrets remain server-side; frontend changes are props-driven renderer parity only.
+
 ### 2026-09-14 — SvelteKit Settings distributions
 <!-- public-changelog:SVELTE-SETTINGS -->
 

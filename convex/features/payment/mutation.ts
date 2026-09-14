@@ -1,6 +1,6 @@
 import { internalMutation, mutation } from "../../_generated/server";
 import { v } from "convex/values";
-import { requireUser } from "../../_shared/auth";
+import { getAuthUserId } from "@convex-dev/auth/server";
 
 export const recordPending = internalMutation({
   args: {
@@ -144,13 +144,14 @@ export const markWebhookProcessed = internalMutation({
 // "client_claimed" instead, so a buyer can't flip their own order to paid
 // from devtools with a fabricated transaction id.
 //
-// Gate: requireUser. Anonymous guest-checkout flows should not use this path
+// Gate: authenticated Convex Auth user. Anonymous guest-checkout flows should not use this path
 // (use the webhook to flip status server-side). If your app needs guest
-// optimistic update, replace requireUser with an order.ownerToken check.
+// optimistic update, replace this auth guard with an order.ownerToken check.
 export const markPaid = mutation({
   args: { orderId: v.string(), providerTransactionId: v.string() },
   handler: async (ctx, { orderId, providerTransactionId }) => {
-    const userId = await requireUser(ctx);
+    const userId = await getAuthUserId(ctx);
+    if (!userId) throw new Error("Tidak terautentikasi");
     const order = await ctx.db
       .query("paymentOrders")
       .withIndex("by_orderId", (q) => q.eq("orderId", orderId))

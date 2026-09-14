@@ -16,6 +16,7 @@ import * as React from "react";
 import { DokuCheckout } from "./providers/doku";
 import { DokuDirectForm } from "./DokuDirectForm";
 import { DokuPaymentInstructions, type PaymentInstructions } from "./DokuPaymentInstructions";
+import type { DokuCheckoutInput, DokuCheckoutResult, DokuDirectInput, DokuDirectResult } from "@/features/payment/lib/contracts";
 
 export interface CheckoutPageCopy {
   heading: string;
@@ -39,6 +40,8 @@ interface CheckoutPageProps {
   allowedChannels?: string[];
   /** Override any subset of the English default strings (i18n). */
   copy?: Partial<CheckoutPageCopy>;
+  onCheckout?: (input: DokuCheckoutInput) => Promise<DokuCheckoutResult>;
+  onDirectSubmit?: (input: DokuDirectInput) => Promise<DokuDirectResult>;
 }
 
 export default function CheckoutPage({
@@ -48,6 +51,8 @@ export default function CheckoutPage({
   callbackUrl,
   allowedChannels,
   copy,
+  onCheckout,
+  onDirectSubmit,
 }: CheckoutPageProps) {
   const c = { ...DEFAULT_COPY, ...copy };
   const id = React.useMemo(() => orderId ?? `ord_${Date.now()}`, [orderId]);
@@ -82,6 +87,7 @@ export default function CheckoutPage({
               customer={customer}
               callbackUrl={callbackUrl}
               paymentMethods={allowedChannels}
+              onCheckout={onCheckout}
             />
           </section>
 
@@ -94,7 +100,8 @@ export default function CheckoutPage({
               orderId={id}
               defaultCustomer={customer}
               allowedChannels={allowedChannels}
-              onSuccess={(r) => setResult(r as never)}
+              onSubmit={onDirectSubmit}
+              onSuccess={(r) => setResult(r)}
             />
           </section>
         </div>

@@ -48,6 +48,19 @@ The CLI:
 2. Detects your package manager (`pnpm` / `yarn` / `bun` / `npm`) and installs the template's npm dependencies.
 3. Prints the agent recipe: what to wire next.
 
+### Slice variants + frameworks
+
+Slices may expose shadcn-style variants and multiple framework renderers:
+
+```bash
+rr add settings account                         # React/Next default
+rr add settings account --framework sveltekit  # native Svelte renderer
+rr add payment doku                            # one provider
+rr add payment                                 # all provider variants
+```
+
+CLI 1.18 adds **per-variant runtime dependencies**. A variant may declare its own `npm`, `env`, `peers`, and repo-root `sharedFiles`; selecting one variant installs only that runtime footprint, while add-all receives the union. Provider-specific Convex roots remain gated by `items[].convex`. Renderer-specific UI dependencies (for example React shadcn primitives versus native Svelte) remain framework-level so a Svelte install never inherits React UI packages.
+
 ## What's included
 
 Every template ships:

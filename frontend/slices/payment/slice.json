@@ -1,31 +1,136 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "payment",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "category": "integrations",
   "kind": "full",
-  "title": "Payment — Indonesia PSP (DOKU · Midtrans)",
-  "description": "Indonesia payment providers behind one slug and ONE shared Convex backend (convex/features/payment discriminates on a `provider` column — paymentOrders + paymentWebhookEvents, unprefixed). Two frontend variants: doku — DOKU Hosted Checkout + Direct channel picker (22-channel registry, HMAC-SHA256 signed REST, dependency-free, server-side env only); midtrans — Midtrans Snap hosted-checkout button + orders history (needs npm midtrans-client + a NEXT_PUBLIC_MIDTRANS_CLIENT_KEY). Install one provider with `npx rr add payment doku|midtrans`, or both with `npx rr add payment`. Either variant copies the shared payment backend. A future `stripe` variant is already reserved in the schema's provider union.",
+  "title": "Payment \u2014 Indonesia PSP (DOKU \u00b7 Midtrans)",
+  "description": "Framework-parity Indonesia payment providers behind one slug and one provider-discriminated Convex backend. React/Next remains default; explicit Svelte 5/SvelteKit adds native DOKU hosted/direct/status/instructions and Midtrans checkout/orders surfaces over shared frontend contracts/tools. Single-provider installs now gate BOTH backend files and runtime deps: doku copies only DOKU action + shared webhook/schema/query/mutation support and DOKU env (no midtrans-client); midtrans copies only Midtrans action + shared webhook/schema/query/mutation support and adds midtrans-client + Midtrans env. Add-all receives the union. HMAC/webhook verification and all provider secrets remain server-side.",
   "namespace": "@/features/payment",
   "variants": {
     "default": "doku",
     "items": [
-      { "id": "doku", "title": "DOKU", "description": "Hosted Checkout + Direct channel picker, HMAC REST, dependency-free." },
-      { "id": "midtrans", "title": "Midtrans", "description": "Snap hosted-checkout button + orders history (needs midtrans-client + next-public key)." }
+      {
+        "id": "doku",
+        "title": "DOKU",
+        "description": "Hosted Checkout + Direct channel picker. DOKU-only action/backend subset; no provider npm SDK.",
+        "convex": [
+          "convex/features/payment/_schema.ts",
+          "convex/features/payment/mutation.ts",
+          "convex/features/payment/query.ts",
+          "convex/features/payment/http.ts",
+          "convex/features/payment/actions/doku.ts",
+          "convex/features/payment/actions/doku_helpers.ts",
+          "convex/features/payment/doku"
+        ],
+        "deps": {
+          "npm": [],
+          "env": [
+            {
+              "name": "DOKU_CLIENT_ID",
+              "scope": "convex",
+              "required": false,
+              "description": "Merchant Client-Id from DOKU dashboard."
+            },
+            {
+              "name": "DOKU_SECRET_KEY",
+              "scope": "convex",
+              "required": false,
+              "description": "HMAC secret for outbound signing + inbound verification."
+            },
+            {
+              "name": "DOKU_IS_PRODUCTION",
+              "scope": "convex",
+              "required": false,
+              "description": "true|false; defaults false (sandbox)."
+            },
+            {
+              "name": "DOKU_NOTIFY_PATH",
+              "scope": "convex",
+              "required": false,
+              "description": "DOKU notification path; defaults /webhooks/doku."
+            }
+          ]
+        }
+      },
+      {
+        "id": "midtrans",
+        "title": "Midtrans",
+        "description": "Snap checkout + orders. Midtrans-only action/backend subset + midtrans-client.",
+        "convex": [
+          "convex/features/payment/_schema.ts",
+          "convex/features/payment/mutation.ts",
+          "convex/features/payment/query.ts",
+          "convex/features/payment/http.ts",
+          "convex/features/payment/actions/midtrans.ts",
+          "convex/features/payment/doku/signature.ts",
+          "convex/features/payment/doku/types.ts"
+        ],
+        "deps": {
+          "npm": [
+            "midtrans-client@^1.4.2"
+          ],
+          "env": [
+            {
+              "name": "MIDTRANS_SERVER_KEY",
+              "scope": "convex",
+              "required": false,
+              "description": "Snap server key."
+            },
+            {
+              "name": "MIDTRANS_CLIENT_KEY",
+              "scope": "next-public",
+              "required": false,
+              "description": "Snap client key (browser)."
+            },
+            {
+              "name": "MIDTRANS_IS_PRODUCTION",
+              "scope": "convex",
+              "required": false,
+              "description": "true|false; defaults false (sandbox)."
+            }
+          ]
+        }
+      }
     ]
   },
   "frontend": {
     "slicePath": "frontend/slices/payment",
-    "configExport": "paymentFeature"
+    "configExport": "paymentFeature",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/payment-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5",
+            "@convex-dev/auth@^0.0.95"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/payment/lib/contracts.ts",
+            "frontend/slices/payment/lib/doku-core.ts",
+            "frontend/slices/payment/lib/tools.ts",
+            "convex/_shared/crypto.ts"
+          ]
+        }
+      }
+    }
   },
   "convex": {
     "tablesExport": "paymentTables",
     "schemaPath": "convex/features/payment/_schema.ts",
-    "rootPaths": ["convex/features/payment"]
+    "rootPaths": [
+      "convex/features/payment"
+    ]
   },
   "deps": {
     "npm": [
-      "midtrans-client@^1.4.2"
+      "@convex-dev/auth@^0.0.95"
     ],
     "shadcn": [
       "badge",
@@ -37,17 +142,20 @@
       "select",
       "skeleton"
     ],
-    "env": [
-      { "name": "DOKU_CLIENT_ID", "scope": "convex", "required": false, "description": "doku variant — Merchant Client-Id from DOKU dashboard." },
-      { "name": "DOKU_SECRET_KEY", "scope": "convex", "required": false, "description": "doku variant — HMAC secret for outbound signing + inbound verification." },
-      { "name": "DOKU_IS_PRODUCTION", "scope": "convex", "required": false, "description": "doku variant — true|false; defaults false (sandbox)." },
-      { "name": "DOKU_NOTIFY_PATH", "scope": "convex", "required": false, "description": "doku variant — path DOKU calls; defaults /webhooks/doku." },
-      { "name": "MIDTRANS_SERVER_KEY", "scope": "convex", "required": false, "description": "midtrans variant — Snap server key." },
-      { "name": "MIDTRANS_CLIENT_KEY", "scope": "next-public", "required": false, "description": "midtrans variant — Snap client key (browser)." },
-      { "name": "MIDTRANS_IS_PRODUCTION", "scope": "convex", "required": false, "description": "midtrans variant — true|false; defaults false (sandbox)." }
-    ],
+    "env": [],
     "peers": [
-      { "slug": "convex-auth", "range": "^0.1", "reason": "Optional — signed-in orders attach userId; GUEST checkout works without auth (buyer contact on the order, status via unguessable orderId).", "optional": true }
+      {
+        "slug": "convex-auth",
+        "range": "^0.1",
+        "reason": "Optional \u2014 signed-in orders attach userId; GUEST checkout works without auth (buyer contact on the order, status via unguessable orderId).",
+        "optional": true
+      }
+    ],
+    "sharedFiles": [
+      "frontend/slices/payment/lib/contracts.ts",
+      "frontend/slices/payment/lib/doku-core.ts",
+      "frontend/slices/payment/lib/tools.ts",
+      "convex/_shared/crypto.ts"
     ]
   },
   "registers": [],
@@ -62,7 +170,10 @@
     "psp",
     "convex",
     "webhook",
-    "integrations"
+    "integrations",
+    "svelte",
+    "framework-parity",
+    "variant-deps"
   ],
   "previews": [],
   "contract": {
@@ -76,12 +187,38 @@
         "midtrans-payment.status",
         "midtrans-payment.refund"
       ],
-      "tables": ["paymentOrders", "paymentWebhookEvents"],
-      "routes": ["/checkout/doku", "/checkout/midtrans", "/midtrans/callback"],
-      "hooks": ["useDokuCheckout", "useMidtransPayment"],
-      "components": ["DokuCheckout", "DokuDirectForm", "CheckoutPage", "MidtransSnap", "MidtransStatusBadge"],
-      "events": ["payment.captured", "payment.failed", "payment.refunded"],
-      "convex": { "tables": ["paymentOrders", "paymentWebhookEvents"], "rbac": [] }
+      "tables": [
+        "paymentOrders",
+        "paymentWebhookEvents"
+      ],
+      "routes": [
+        "/checkout/doku",
+        "/checkout/midtrans",
+        "/midtrans/callback"
+      ],
+      "hooks": [
+        "useDokuCheckout",
+        "useMidtransPayment"
+      ],
+      "components": [
+        "DokuCheckout",
+        "DokuDirectForm",
+        "CheckoutPage",
+        "MidtransSnap",
+        "MidtransStatusBadge"
+      ],
+      "events": [
+        "payment.captured",
+        "payment.failed",
+        "payment.refunded"
+      ],
+      "convex": {
+        "tables": [
+          "paymentOrders",
+          "paymentWebhookEvents"
+        ],
+        "rbac": []
+      }
     },
     "generalization": {
       "level": "portable",

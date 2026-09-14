@@ -26,28 +26,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { DOKU_CHANNELS, GROUP_LABELS, type ChannelGroup } from "../lib/channels";
+import { GROUP_LABELS, groupDokuChannels, type ChannelGroup } from "../lib/channels";
 import { formatIDR } from "../lib/format";
-import type { PaymentInstructions } from "./DokuPaymentInstructions";
-
-export interface DokuDirectInput {
-  orderId?: string;
-  amount: number;
-  channel: string;
-  customer: { name: string; email: string; phone?: string };
-}
-
-export interface DokuDirectResult {
-  /** Present when the submit handler generated the order id server-side. */
-  orderId?: string;
-  instructions: PaymentInstructions;
-  expiresAt?: number;
-}
+import type { DokuDirectInput, DokuDirectResult, PaymentCustomer, PaymentInstructions } from "@/features/payment/lib/contracts";
+export type { DokuDirectInput, DokuDirectResult } from "@/features/payment/lib/contracts";
 
 interface DokuDirectFormProps {
   amount: number;
   orderId?: string;
-  defaultCustomer?: { name?: string; email?: string; phone?: string };
+  defaultCustomer?: Partial<PaymentCustomer>;
   allowedChannels?: string[];
   /** Pass `useAction(api.features.payment.actions.doku.createDirectPayment)`. */
   onSubmit?: (input: DokuDirectInput) => Promise<DokuDirectResult>;
@@ -74,21 +61,7 @@ export function DokuDirectForm({
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
-  const channels = React.useMemo(() => {
-    const filtered = allowedChannels
-      ? DOKU_CHANNELS.filter((c) => allowedChannels.includes(c.id))
-      : DOKU_CHANNELS;
-    const groups: Record<ChannelGroup, typeof DOKU_CHANNELS> = {
-      va: [],
-      qris: [],
-      ewallet: [],
-      card: [],
-      paylater: [],
-      retail: [],
-    };
-    for (const c of filtered) groups[c.group] = [...groups[c.group], c];
-    return groups;
-  }, [allowedChannels]);
+  const channels = React.useMemo(() => groupDokuChannels(allowedChannels), [allowedChannels]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -105,6 +78,10 @@ export function DokuDirectForm({
         channel,
         customer: { name, email, phone: phone || undefined },
       });
+      if ("ok" in res && res.ok === false) {
+        setError(res.notice);
+        return;
+      }
       onSuccess?.({
         orderId: res.orderId ?? orderId,
         channel,

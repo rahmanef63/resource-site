@@ -1,0 +1,39 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "payment-svelte",
+  "version": "0.5.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add payment --framework sveltekit",
+    "consumerPath": "slices/payment-svelte"
+  },
+  "files": [
+    "README.md",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts",
+    "variants/doku/components/CheckoutPage.svelte",
+    "variants/doku/components/DokuDirectForm.svelte",
+    "variants/doku/components/DokuPaymentInstructions.svelte",
+    "variants/doku/components/DokuStatusBadge.svelte",
+    "variants/doku/components/providers/DokuCheckout.svelte",
+    "variants/doku/index.ts",
+    "variants/midtrans/components/CheckoutPage.svelte",
+    "variants/midtrans/components/OrdersPage.svelte",
+    "variants/midtrans/components/providers/MidtransCheckout.svelte",
+    "variants/midtrans/index.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/payment/lib/contracts.ts",
+      "frontend/slices/payment/lib/doku-core.ts",
+      "frontend/slices/payment/lib/tools.ts",
+      "convex/_shared/auth.ts",
+      "convex/_shared/crypto.ts"
+    ],
+    "external": [
+      "svelte"
+    ]
+  }
+}

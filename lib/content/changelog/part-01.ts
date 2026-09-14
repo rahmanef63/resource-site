@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-PAYMENT",
+    "version": "payment@0.5.0 · CLI 1.18.0",
+    "date": 1789344000000,
+    "kind": "feature",
+    "title": "SvelteKit Payment distributions + variant-scoped runtime deps",
+    "body": "Related: https://resource.rahmanef.com/slices/payment — [before: payment@0.4.0 was React-only and DOKU-only installs still dragged Midtrans SDK/env while shared auth/crypto backend helpers were not fully declared] → [after: payment@0.5.0 keeps React/Next default, adds native Svelte 5/SvelteKit DOKU + Midtrans UIs, and CLI 1.18.0 installs provider runtime dependencies/backend actions per selected variant].",
+    "groups": [
+      {
+        "heading": "Provider footprint is now truthful",
+        "bullets": [
+          "DOKU-only installs receive DOKU action/helpers, DOKU env, shared payment schema/query/mutation/webhook support, and the declared convex/_shared/auth + crypto helpers — no midtrans-client and no Midtrans env.",
+          "Midtrans-only installs receive the Midtrans action, midtrans-client, Midtrans env, and the shared webhook dependencies; add-all receives the union.",
+          "React and Svelte share portable contracts/channel helpers/tool collections. Provider secrets, HMAC/signature verification, webhook idempotency, and amount checks remain server-side."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-SETTINGS",
     "version": "settings@1.2.0",
     "date": 1789344000000,

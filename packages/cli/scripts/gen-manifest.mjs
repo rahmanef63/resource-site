@@ -122,6 +122,11 @@ const slices = loadSlices().filter((s) => !ALIASES[s.slug]).map((s) => {
   const hasBackend = (s.convexPaths ?? []).length > 0;
   const inferred = hasFrontend && hasBackend ? "full" : hasBackend ? "backend" : "ui";
   const slicePath = sj?.frontend?.slicePath ?? s.slicePath;
+  // Variant runtime deps (CLI >=1.18) make slice.json the authoritative
+  // dependency source for this slice. Keep legacy catalog deps for older
+  // slices so this capability is additive and does not rewrite manifests.
+  const hasVariantRuntimeDeps = (sj?.variants?.items ?? []).some((item) => item.deps);
+  const baseDeps = hasVariantRuntimeDeps ? (sj?.deps ?? {}) : null;
   return {
     slug: s.slug,
     title: s.title,
@@ -133,10 +138,10 @@ const slices = loadSlices().filter((s) => !ALIASES[s.slug]).map((s) => {
     slicePath,
     ...frameworkDistribution(sj?.frontend, slicePath),
     convexPaths: s.convexPaths ?? [],
-    npm: s.npm ?? [],
-    shadcn: s.shadcn ?? [],
-    env: s.env ?? [],
-    peers: s.peers ?? [],
+    npm: baseDeps ? (baseDeps.npm ?? []) : (s.npm ?? []),
+    shadcn: baseDeps ? (baseDeps.shadcn ?? []) : (s.shadcn ?? []),
+    env: baseDeps ? (baseDeps.env ?? []) : (s.env ?? []),
+    peers: baseDeps ? (baseDeps.peers ?? []) : (s.peers ?? []),
     sharedFiles: sj?.deps?.sharedFiles ?? s.sharedFiles ?? [],
     providers: s.providers ?? [],
     tags: s.tags ?? [],

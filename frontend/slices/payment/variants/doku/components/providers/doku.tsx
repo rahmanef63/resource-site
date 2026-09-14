@@ -31,25 +31,13 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { formatIDR } from "../../lib/format";
-
-export interface DokuCheckoutInput {
-  orderId: string;
-  amount: number;
-  customer: { name: string; email: string; phone?: string };
-  callbackUrl?: string;
-  paymentMethods?: string[];
-}
-
-export interface DokuCheckoutResult {
-  checkoutUrl: string;
-  token?: string;
-  expiresAt?: number;
-}
+import type { DokuCheckoutInput, DokuCheckoutResult, PaymentCustomer } from "@/features/payment/lib/contracts";
+export type { DokuCheckoutInput, DokuCheckoutResult } from "@/features/payment/lib/contracts";
 
 interface DokuCheckoutProps {
   amount: number;
   orderId: string;
-  customer: { name: string; email: string; phone?: string };
+  customer: PaymentCustomer;
   callbackUrl?: string;
   paymentMethods?: string[];
   label?: string;
@@ -84,7 +72,12 @@ export function DokuCheckout({
         callbackUrl,
         paymentMethods,
       });
-      if (!res?.checkoutUrl) throw new Error("No checkout URL returned");
+      if ("ok" in res && res.ok === false) {
+        setError(res.notice);
+        setLoading(false);
+        return;
+      }
+      if (!res.checkoutUrl) throw new Error("No checkout URL returned");
       window.location.href = res.checkoutUrl;
     } catch (e) {
       setError(e instanceof Error ? e.message : "Checkout gagal");

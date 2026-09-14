@@ -1,55 +1,45 @@
-# `midtrans-payment` slice
+# Payment / Midtrans variant
 
-Midtrans Snap checkout + webhook handler + simple order history.
+Midtrans Snap checkout + orders UI over the shared provider-discriminated payment backend.
 
-## Provider extensibility
+## Install
 
-Designed so adding **Doku** (or Stripe, Xendit, etc.) is mechanical:
-
-```
-frontend/slices/midtrans-payment/components/providers/
-├── midtrans.tsx         ← shipped
-└── doku.tsx             ← drop-in sibling
-
-convex/features/payment/action/
-├── midtrans.ts          ← shipped
-└── doku.ts              ← drop-in sibling
+```bash
+npx rr add payment midtrans
+npx rr add payment midtrans --framework sveltekit
 ```
 
-Each provider exposes the same `<*Checkout amount orderId>` and the same
-action signature `createTransaction({ amount, orderId, userId })`. The
-slice's CheckoutPage routes by env (`PAYMENT_PROVIDER=midtrans|doku`) or by
-a per-user preference.
+CLI 1.18+ copies the Midtrans action plus shared payment schema/query/mutation/webhook support, installs `midtrans-client`, and asks only for Midtrans env.
 
-When you add Doku:
-1. `mkdir frontend/slices/midtrans-payment/components/providers && touch doku.tsx`
-2. `mkdir convex/features/payment/action && touch doku.ts`
-3. Bump `slice.json.providers` to `["midtrans","doku"]`.
-4. Bump `version` minor.
+## Env
 
-Or — a cleaner long-term split — publish `doku-payment` as its own slice with
-`peers: [{ slug: "payment-base" }]`. Both forms are valid; pick based on
-overlap (shared types/types.ts → same slice; near-zero overlap → sibling slice).
-
-## Env vars
-
-```
-MIDTRANS_SERVER_KEY=…           # convex (set via `npx convex env set` for self-hosted)
-MIDTRANS_CLIENT_KEY=…           # next-public (NEXT_PUBLIC_MIDTRANS_CLIENT_KEY in .env.local)
-MIDTRANS_IS_PRODUCTION=false    # convex; defaults sandbox
+```text
+MIDTRANS_SERVER_KEY=…
+NEXT_PUBLIC_MIDTRANS_CLIENT_KEY=…
+MIDTRANS_IS_PRODUCTION=false
 ```
 
-## Wiring (consumer)
+The server key remains server-side. The client key is intentionally public for Snap.js.
 
-```ts
-// convex/schema.ts
-import { paymentTables } from "./features/payment/_schema";
-export default defineSchema({ ...paymentTables, /* others */ });
-```
+## UI wiring
+
+`MidtransCheckout` in React and Svelte accepts an injected `onCheckout` action and optional `onPay` Snap bridge:
 
 ```tsx
-// app/checkout/page.tsx
-export { default } from "@/features/midtrans-payment/components/checkout-page";
+<MidtransCheckout
+  amount={150_000}
+  orderId={orderId}
+  onCheckout={createTransaction}
+  onPay={(token) => window.snap.pay(token)}
+/>
 ```
 
-Snap.js loader: drop `<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY} />` in your `app/layout.tsx` head (or use `next/script`).
+If no `onPay` bridge is supplied, a returned `redirectUrl` is used as the hosted fallback. With no action supplied, the slice remains an explicit demo stub rather than pretending a payment occurred.
+
+## Webhook
+
+```ts
+http.route({ path: "/webhooks/midtrans", method: "POST", handler: midtransWebhook });
+```
+
+The webhook verifies Midtrans `signature_key` before mutating payment state.

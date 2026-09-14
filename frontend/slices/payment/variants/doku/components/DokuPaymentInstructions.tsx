@@ -16,16 +16,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { groupVa, timeLeft } from "../lib/format";
 import { CHANNEL_BY_ID } from "../lib/channels";
-
-export interface PaymentInstructions {
-  vaNumber?: string;
-  howToPayUrl?: string;
-  qrString?: string;
-  qrImageUrl?: string;
-  deeplink?: string;
-  webUrl?: string;
-  paymentUrl?: string;
-}
+import type { PaymentInstructions } from "@/features/payment/lib/contracts";
+export type { PaymentInstructions } from "@/features/payment/lib/contracts";
 
 interface Props {
   channel: string;

@@ -54,7 +54,10 @@
     "variants": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["default", "items"],
+      "required": [
+        "default",
+        "items"
+      ],
       "description": "shadcn-style variants. Each item's files live at variants/<id>/; an optional shared/ folder is copied for every variant. `npx rr add <slug> <id>` installs one variant (flattened to slice root); `npx rr add <slug>` installs all + a root index.ts switcher selected via a `variant` prop.",
       "properties": {
         "default": {
@@ -72,15 +75,104 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["id"],
+            "required": [
+              "id"
+            ],
             "properties": {
-              "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
-              "title": { "type": "string" },
-              "description": { "type": "string" },
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9-]*$"
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
               "convex": {
                 "type": "array",
-                "items": { "type": "string" },
+                "items": {
+                  "type": "string"
+                },
                 "description": "Convex root paths for THIS variant. When installing this variant the CLI pulls only these (not the slice-level union). Should be a subset of convex.rootPaths."
+              },
+              "deps": {
+                "type": "object",
+                "additionalProperties": false,
+                "description": "Framework-neutral runtime dependencies for THIS variant. These are merged with the selected framework deps. Use for provider/backend npm packages, env, peers, or repo-root sharedFiles; renderer-specific shadcn stays at slice/framework level.",
+                "properties": {
+                  "npm": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "env": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "name",
+                        "scope"
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "pattern": "^[A-Z][A-Z0-9_]*$"
+                        },
+                        "scope": {
+                          "type": "string",
+                          "enum": [
+                            "convex",
+                            "next-public",
+                            "server"
+                          ]
+                        },
+                        "required": {
+                          "type": "boolean",
+                          "default": true
+                        },
+                        "description": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "peers": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "slug",
+                        "range"
+                      ],
+                      "properties": {
+                        "slug": {
+                          "type": "string"
+                        },
+                        "range": {
+                          "type": "string"
+                        },
+                        "optional": {
+                          "type": "boolean",
+                          "description": "Peer is optional \u2014 slice degrades gracefully without it (e.g. a swappable payment provider)."
+                        },
+                        "reason": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "sharedFiles": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Repo-root shared files (relative to project root) this slice imports \u2014 the CLI copies them alongside the slice on add."
+                  }
+                }
               }
             }
           }
@@ -132,7 +224,7 @@
         "slicePath": {
           "type": "string",
           "pattern": "^(template-base/)?frontend/slices/[a-z0-9_/-]+$",
-          "description": "Legacy React/Next portable home → frontend/slices/<slug>. Foundation home → template-base/frontend/slices/<slug>. When frameworks is omitted this is the implicit react-next path."
+          "description": "Legacy React/Next portable home \u2192 frontend/slices/<slug>. Foundation home \u2192 template-base/frontend/slices/<slug>. When frameworks is omitted this is the implicit react-next path."
         },
         "configExport": {
           "type": "string",
@@ -150,7 +242,9 @@
           "additionalProperties": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["path"],
+            "required": [
+              "path"
+            ],
             "properties": {
               "path": {
                 "type": "string",
@@ -170,11 +264,36 @@
                 "additionalProperties": false,
                 "description": "Selected-framework dependency overrides. Any declared key replaces the corresponding slice-level deps key for this framework.",
                 "properties": {
-                  "npm": { "type": "array", "items": { "type": "string" } },
-                  "shadcn": { "type": "array", "items": { "type": "string" } },
-                  "env": { "type": "array", "items": { "type": "object" } },
-                  "peers": { "type": "array", "items": { "type": "object" } },
-                  "sharedFiles": { "type": "array", "items": { "type": "string" } }
+                  "npm": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "shadcn": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "env": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  },
+                  "peers": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  },
+                  "sharedFiles": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
             }
@@ -250,7 +369,7 @@
               },
               "optional": {
                 "type": "boolean",
-                "description": "Peer is optional — slice degrades gracefully without it (e.g. a swappable payment provider)."
+                "description": "Peer is optional \u2014 slice degrades gracefully without it (e.g. a swappable payment provider)."
               },
               "reason": {
                 "type": "string"
