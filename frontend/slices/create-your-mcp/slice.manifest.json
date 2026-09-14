@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "create-your-mcp",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -9,36 +9,44 @@
     "consumerPath": "slices/create-your-mcp"
   },
   "files": [
+    "CHANGELOG.md",
     "README.md",
     "config.ts",
     "index.ts",
     "lib/auth.ts",
+    "lib/backend.ts",
     "lib/context.ts",
+    "lib/hash.ts",
+    "lib/mcp-http.ts",
+    "lib/oauth-http.ts",
     "lib/server.ts",
     "lib/tools/example.ts",
     "lib/types.ts",
     "routes/mcp.route.ts",
     "routes/oauth-token.route.ts",
+    "server.ts",
     "views/McpAdminView.tsx",
     "views/McpSetupPanel.tsx",
     "views/McpTokenTable.tsx",
     "views/mcp-admin-helpers.ts"
   ],
   "convexFiles": [
-    "convex/features/create-your-mcp/_schema.ts",
-    "convex/features/create-your-mcp/pkce.ts",
-    "convex/features/create-your-mcp/mutation.ts",
-    "convex/features/create-your-mcp/query.ts"
+    "convex/features/create_your_mcp/_pkce.ts",
+    "convex/features/create_your_mcp/_schema.ts",
+    "convex/features/create_your_mcp/mutation.ts",
+    "convex/features/create_your_mcp/query.ts"
   ],
   "imports": {
     "shared": [
       "convex/_shared/auth"
     ],
     "external": [
+      "class-variance-authority",
+      "convex/browser",
       "convex/server",
       "convex/values",
-      "next/server",
-      "node:async_hooks"
+      "node:async_hooks",
+      "react"
     ]
   }
 }

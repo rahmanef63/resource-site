@@ -1181,7 +1181,10 @@ async function runLift(rest) {
   if (plan.shadcn.length > 0) console.log(`  shadcn: ${plan.shadcn.join(" ")}`);
   if (plan.env.length > 0) {
     console.log(`\n  env vars to set:`);
-    for (const e of plan.env) console.log(`    ${e.scope === "next-public" ? "NEXT_PUBLIC_" : ""}${e.name}=…  ${kleur.dim(`(${e.scope})`)}`);
+    for (const e of plan.env) {
+      const envName = e.scope === "next-public" && !e.name.startsWith("NEXT_PUBLIC_") ? `NEXT_PUBLIC_${e.name}` : e.name;
+      console.log(`    ${envName}=…  ${kleur.dim(`(${e.scope})`)}`);
+    }
   }
 
   if (dryRun) {

@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-14 — SvelteKit Create Your MCP distribution
+<!-- public-changelog:CREATE-YOUR-MCP-SVELTE -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/create-your-mcp
+- [before: `create-your-mcp@0.3.0` shipped only React/Next admin UI, Next route templates, stale hyphenated backend docs, undeclared React UI dependencies, and a missing `@/shared/lib/convex-http` route dependency] → [after: `create-your-mcp@0.4.0` keeps React/Next default, adds native Svelte 5/SvelteKit admin + route factories, shares Web Request/Response OAuth/MCP cores, and installs truthful framework dependencies]
+- CLI next-public display now preserves an already-prefixed `NEXT_PUBLIC_SITE_URL` instead of printing `NEXT_PUBLIC_NEXT_PUBLIC_SITE_URL`.
+
 ### 2026-09-14 — OS Terminal clean-install portability
 <!-- public-changelog:OS-TERMINAL-PORTABILITY -->
 

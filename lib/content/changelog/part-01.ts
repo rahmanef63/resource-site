@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "CREATE-YOUR-MCP-SVELTE",
+    "version": "create-your-mcp@0.4.0",
+    "date": 1789344000000,
+    "kind": "feature",
+    "title": "SvelteKit Create Your MCP distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/create-your-mcp — [before: create-your-mcp@0.3.0 was React/Next-only and its route template referenced an undeclared repo-local Convex HTTP helper] → [after: create-your-mcp@0.4.0 adds native Svelte 5/SvelteKit UI and handler factories over shared Web Request/Response OAuth/MCP cores, while React/Next remains default].",
+    "groups": [
+      {
+        "heading": "Framework parity + installer truth",
+        "bullets": [
+          "Svelte admin setup/token UI reuses the same McpTokenRow, setup-field, auth, JSON-RPC, PKCE, and Convex backend semantics without React, Next, lucide-react, or React shadcn runtime.",
+          "Next and SvelteKit route adapters now share framework-neutral MCP/OAuth HTTP handlers and an installed ConvexHttpClient backend instead of @/shared/lib/convex-http.",
+          "Dependency metadata now declares Convex, React cva/button needs, native Svelte dependencies, the create_your_mcp backend path, and CLI env output no longer double-prefixes NEXT_PUBLIC_SITE_URL."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "OS-TERMINAL-PORTABILITY",
     "version": "os-terminal@1.3.1",
     "date": 1789344000000,

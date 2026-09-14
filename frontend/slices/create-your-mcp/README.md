@@ -1,149 +1,135 @@
 # create-your-mcp
 
-Turn any rr-based app into an MCP server that ChatGPT custom apps,
-Claude.ai connectors, Cursor MCP, and other AI clients authenticate to
-via OAuth 2.1 + PKCE.
+Turn an rr app into an MCP server for ChatGPT, Claude, Cursor, and other MCP clients. OAuth 2.1 + PKCE, bearer validation, JSON-RPC dispatch, scope-aware tools, and token persistence live in one shared core; React/Next is the default distribution and SvelteKit is an explicit native Svelte 5 distribution.
 
 ## Install
 
 ```bash
+# React / Next default
 npx rr add create-your-mcp
+
+# Svelte 5 / SvelteKit
+npx rr add create-your-mcp --framework sveltekit
 ```
 
-CLI copies:
+Both install the same Convex backend at `convex/features/create_your_mcp`. The backend requires the `convex-auth` peer because admin list/revoke/code-mint operations call `requireAdmin`.
 
-- `slices/create-your-mcp/` — config, types, lib, route templates, admin view
-- `convex/features/create-your-mcp/` — schema + PKCE + mutations + queries
-
-Compose the schema:
+## Convex schema
 
 ```ts
 // convex/schema.ts
 import { defineSchema } from "convex/server";
-import { createYourMcpTables } from "./features/create-your-mcp/_schema";
+import { createYourMcpTables } from "./features/create_your_mcp/_schema";
 
 export default defineSchema({
   ...createYourMcpTables,
-  // … your other tables
 });
 ```
 
-## Wire the Next.js routes
+The server route backend uses `CONVEX_URL`, `NEXT_PUBLIC_CONVEX_URL`, or `PUBLIC_CONVEX_URL`. You can instead inject a custom `McpBackend`.
 
-Move the two route templates out of the slice into your `app/api/` tree:
+## React / Next routes
+
+Move the default route adapters:
 
 ```bash
-mv slices/create-your-mcp/routes/mcp.route.ts        app/api/mcp/route.ts
-mv slices/create-your-mcp/routes/oauth-token.route.ts app/api/oauth/token/route.ts
+mv frontend/slices/create-your-mcp/routes/mcp.route.ts app/api/mcp/route.ts
+mv frontend/slices/create-your-mcp/routes/oauth-token.route.ts app/api/oauth/token/route.ts
 ```
 
-In `app/api/mcp/route.ts`, replace the placeholder import + `TOOLS` array
-with your real tools and Convex client. Each tool implements `ToolDef`
-from `@/features/create-your-mcp/lib/types`.
+The adapters are thin. Authentication, JSON-RPC, token exchange, and error behavior live in `lib/mcp-http.ts` and `lib/oauth-http.ts`, both based on standard Web `Request` / `Response`.
 
-## Env
+## SvelteKit routes
+
+Create `src/routes/api/mcp/+server.ts`:
+
+```ts
+import { createSvelteKitMcpHandlers } from "../../../../frontend/slices/create-your-mcp-svelte/server";
+
+export const { GET, POST } = createSvelteKitMcpHandlers({
+  serverInfo: { name: "my-app-mcp", version: "1.0.0" },
+  instructions: "Describe your domain, workflow, and tool constraints.",
+});
+```
+
+Create `src/routes/api/oauth/token/+server.ts`:
+
+```ts
+import { createSvelteKitOauthTokenHandlers } from "../../../../../frontend/slices/create-your-mcp-svelte/server";
+export const { GET, POST } = createSvelteKitOauthTokenHandlers();
+```
+
+Pass `backend` to either factory when your host owns Convex setup differently.
+
+## Admin UI
+
+Both framework renderers accept the same data contract:
+
+- `rows: McpTokenRow[] | undefined`
+- `siteUrl: string`
+- `defaultClientId?: string`
+- `onRevoke(id, label)`
+- `setupFields?: SetupField[]`
+
+React exports `McpAdminView` from the default slice. Svelte exports a native `.svelte` `McpAdminView` from `create-your-mcp-svelte`. The host remains responsible for fetching `adminList` and calling `revokeToken` through its authenticated Convex client.
+
+## Environment
 
 | Var | Scope | Required | Notes |
-|---|---|---|---|
-| `MCP_API_KEY` | server | optional | Static bearer for service-account / CI. Min 32 chars. Must match Convex `MCP_API_KEY` env. |
-| `MCP_OAUTH_ALLOWED_HOSTS` | convex | optional | CSV of vendor domains accepted as `redirect_uri` (e.g. `chatgpt.com,claude.ai`). Empty = localhost only. |
-| `MCP_OAUTH_ALLOWED_PATH_PREFIXES` | convex | optional | CSV of path prefixes (e.g. `/aip/,/connector/`). Empty = any path under allowed hosts. |
-| `NEXT_PUBLIC_SITE_URL` | next-public | required | Used in the `WWW-Authenticate` challenge. |
+|---|---|---:|---|
+| `MCP_API_KEY` | server | no | Static bearer for service-account / CI. Min 32 chars. |
+| `MCP_OAUTH_ALLOWED_HOSTS` | Convex | no | CSV redirect host allowlist. Empty = localhost only. |
+| `MCP_OAUTH_ALLOWED_PATH_PREFIXES` | Convex | no | Optional redirect path-prefix allowlist. |
+| `NEXT_PUBLIC_SITE_URL` | host | yes | Public origin for discovery/setup. MCP GET/401 can fall back to request origin. |
 
-Set on both sides:
+The CLI prints `NEXT_PUBLIC_SITE_URL` exactly once; already-prefixed `next-public` names are not prefixed again.
 
-```bash
-# Convex
-npx convex env set MCP_OAUTH_ALLOWED_HOSTS chatgpt.com,claude.ai,cursor.sh
-npx convex env set MCP_OAUTH_ALLOWED_PATH_PREFIXES /aip/,/connector/,/backend-api/,/oauth/
-npx convex env set MCP_API_KEY $(openssl rand -hex 32)
+## OAuth flow
 
-# Next host (Vercel / Dokploy / etc.)
-MCP_API_KEY=<same value>
-NEXT_PUBLIC_SITE_URL=https://your-app.example.com
-```
+1. Client opens `/oauth/authorize` with PKCE S256 parameters.
+2. An authenticated admin approves and Convex mints a five-minute single-use code.
+3. Client posts the code + verifier to `/api/oauth/token`.
+4. Convex deletes the code before issuing a one-year bearer token.
+5. Client calls `/api/mcp` with `Authorization: Bearer …`.
+6. `tools/call` checks any `requiredScope` before invoking the tool.
 
-## Connect an AI client
-
-Mount `<McpAdminView />` somewhere admin-gated (e.g. `app/admin/mcp/page.tsx`).
-The collapsible "Setup an AI client" panel renders copy-buttons for every
-field a connector form asks for.
-
-ChatGPT custom-app flow (same shape for Claude.ai connector + Cursor MCP):
-
-1. ChatGPT → Settings → Connectors → New
-2. Authentication = OAuth
-3. Paste values from the admin view (Server URL, Auth URL, Token URL, Resource, Client ID)
-4. ChatGPT opens `/oauth/authorize?...` — admin sees consent screen, clicks Allow
-5. Convex mints a single-use code (5-min TTL) → ChatGPT exchanges for a bearer (1-year TTL)
-6. Every `tools/call` from ChatGPT hits `/api/mcp` with `Authorization: Bearer <token>`
-
-## Two authentication paths
-
-| Path | When | Notes |
-|---|---|---|
-| OAuth bearer | AI client connectors (ChatGPT, Claude, Cursor) | User-bound. Visible + revocable in the admin view. |
-| `MCP_API_KEY` env | Service accounts, smoke tests, CI scripts | Not visible in the admin view. Rotate by changing the env on both Convex + Next host. |
-
-Both paths flow through `requireAdmin` server-side — Convex mutations
-cannot bypass admin auth either way. The env path is documented as a
-service-account integration pattern, not a security back door.
-
-## Security notes
-
-- **Tokens and auth codes stored as sha256, never in the clear.** The raw
-  bearer is returned to the client exactly once, at mint; the raw code
-  exists only in flight between the consent redirect and the token
-  exchange. A database dump contains no usable credential, and the
-  digest — not the bearer — is what reaches Convex as a function argument.
-- PKCE S256 only (downgrade to "plain" is rejected)
-- Single-use codes — the row is DELETED before the token is minted, so a
-  replay is indistinguishable from an unknown code and the table stays
-  bounded
-- 5-min code TTL, 1-year token TTL (rotate via `revokeToken` on leak)
-- Constant-time compare on the static `MCP_API_KEY` path — that one is a
-  raw string equality check, which hashing does not cover
-- Opaque error collapse on all `invalid_grant` paths — attacker can't
-  distinguish which step (unknown / already redeemed / expired / PKCE /
-  redirect / client) failed
-- Redirect-URI allowlist (env-configured) + path-prefix allowlist for
-  defense-in-depth against open-redirect bounces
-- `userinfo` and `fragment` rejected in redirect_uri
-- HTTPS-only redirects in prod (localhost exception for dev)
-- No token preview in the admin list — there is no stored raw value to
-  preview. Tokens are identified by `label` + `createdAt`.
+`MCP_API_KEY` is a separate service-account path and does not appear in the token table.
 
 ## Add tools
 
 ```ts
-// app/api/mcp/route.ts
-import type { ToolDef } from "@/features/create-your-mcp/lib/types";
-import { getMcpContext } from "@/features/create-your-mcp/lib/context";
+import type { ToolDef } from "./frontend/slices/create-your-mcp/lib/types";
+import { getMcpContext } from "./frontend/slices/create-your-mcp/lib/context";
 
-const blogPostsList: ToolDef = {
-  name: "blog_posts_list",
-  description: "List the most recent blog posts.",
-  inputSchema: {
-    type: "object",
-    properties: { limit: { type: "number", default: 20 } },
-  },
+export const postsList: ToolDef = {
+  name: "posts_list",
+  description: "List posts",
+  inputSchema: { type: "object", properties: {} },
   annotations: { readOnlyHint: true },
   requiredScope: "cms.read",
-  async handler({ limit = 20 }) {
+  async handler() {
     const { token } = getMcpContext();
-    const rows = await convexHttp.query("blog:list", { limit, token });
-    return { content: [{ type: "text", text: JSON.stringify(rows) }] };
+    return { content: [{ type: "text", text: `authenticated: ${Boolean(token)}` }] };
   },
 };
-
-const TOOLS: ToolDef[] = [...exampleTools, blogPostsList];
 ```
 
-Tools with `requiredScope` are gated against the bearer's `scope` claim —
-read-only tokens can't escalate to mutations.
+Pass custom tools through `createSvelteKitMcpHandlers({ tools })` or edit the `TOOLS` list in the Next adapter.
 
-## See also
+## Security contract
 
-- MCP spec: <https://modelcontextprotocol.io/specification/2025-11-25>
-- OAuth 2.1: <https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1>
-- PKCE: <https://datatracker.ietf.org/doc/html/rfc7636>
+- authorization codes and access tokens are stored as SHA-256 digests, never raw credentials;
+- PKCE S256 only;
+- codes are deleted on exchange, so replay becomes an opaque `invalid_grant`;
+- redirect host/path allowlists are env-configured;
+- `userinfo` and URL fragments are rejected;
+- HTTPS redirects are required outside localhost development;
+- static-key comparison is constant-time for equal-length values;
+- admin list/revoke/code mint are gated by Convex `requireAdmin`;
+- scope-tagged tools cannot be called by an OAuth token missing the required scope.
+
+## Shared vs framework-specific
+
+Shared: auth, hashing, JSON-RPC dispatcher, Web HTTP handlers, Convex HTTP backend, request context, tool types/example, admin row/setup helpers, and `convex/features/create_your_mcp`.
+
+Framework-specific: React/Svelte admin renderers and thin Next/SvelteKit route adapters only.

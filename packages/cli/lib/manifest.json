@@ -891,12 +891,12 @@
       "slug": "create-your-mcp",
       "title": "Create Your MCP",
       "category": "ai",
-      "description": "Turn any rr-based app into an MCP server that ChatGPT custom apps, Claude.ai connectors, Cursor MCP, and other AI clients authenticate to. OAuth 2.1 + PKCE flow with code → bearer exchange, env-configured vendor-host allowlist, single-use codes deleted on redemption, 1-year bearer tokens stored as sha256 (the raw value is returned once, at mint), scope-tagged tools, opaque error collapsing, constant-time compare on the static-key path. Static MCP_API_KEY fallback for service-account / CI scripts. Sanitized 2026-05-16 from rahmanef.com's production MCP integration — vendor literals (chatgpt.com / OpenAI paths) replaced with MCP_OAUTH_ALLOWED_HOSTS + MCP_OAUTH_ALLOWED_PATH_PREFIXES env vars so the slice ships portable.",
+      "description": "Framework-parity MCP/OAuth integration: React/Next remains the default admin UI and adapter, while explicit SvelteKit installs native Svelte 5 admin UI plus SvelteKit handler factories over the same OAuth 2.1 + PKCE, JSON-RPC, Convex token backend, scope enforcement, and static MCP_API_KEY fallback. Shared HTTP behavior uses Web Request/Response primitives; host adapters stay thin.",
       "source": "rahmanef.com",
       "install": "npx rahman-resources add create-your-mcp",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add create-your-mcp`. Compose `createYourMcpTables` into root schema. Move `slices/create-your-mcp/routes/mcp.route.ts` → `app/api/mcp/route.ts` and `oauth-token.route.ts` → `app/api/oauth/token/route.ts`. Set MCP_OAUTH_ALLOWED_HOSTS (CSV vendor domains). Mount `<McpAdminView />` at /admin/mcp. Connect ChatGPT/Claude/Cursor via the setup form rendered by the admin view.",
+      "agentRecipe": "Run `npx rr add create-your-mcp` for React/Next or add `--framework sveltekit` for native Svelte 5. Compose `createYourMcpTables` from `convex/features/create_your_mcp/_schema`. Next: move the two route adapters into `app/api`. SvelteKit: create `+server.ts` endpoints from `createSvelteKitMcpHandlers` and `createSvelteKitOauthTokenHandlers`. Mount the framework-native `McpAdminView`, wire adminList/revokeToken through your authenticated Convex client, and set MCP_OAUTH_ALLOWED_HOSTS for remote OAuth redirects.",
       "tags": [
         "ai",
         "mcp",
@@ -906,7 +906,9 @@
         "claude",
         "cursor",
         "convex",
-        "integration"
+        "integration",
+        "svelte",
+        "framework-parity"
       ]
     },
     {
@@ -3798,21 +3800,52 @@
       "title": "Create Your MCP",
       "category": "ai",
       "kind": "full",
-      "version": "0.3.0",
-      "description": "Turn any rr-based app into an MCP server that ChatGPT custom apps, Claude.ai connectors, Cursor MCP, and other AI clients authenticate to. OAuth 2.1 + PKCE flow with code → bearer exchange, env-configured vendor-host allowlist, single-use codes deleted on redemption, 1-year bearer tokens stored as sha256 (the raw value is returned once, at mint), scope-tagged tools, opaque error collapsing, constant-time compare on the static-key path. Static MCP_API_KEY fallback for service-account / CI scripts. Sanitized 2026-05-16 from rahmanef.com's production MCP integration — vendor literals (chatgpt.com / OpenAI paths) replaced with MCP_OAUTH_ALLOWED_HOSTS + MCP_OAUTH_ALLOWED_PATH_PREFIXES env vars so the slice ships portable.",
+      "version": "0.4.0",
+      "description": "Framework-parity MCP/OAuth integration: React/Next remains the default admin UI and adapter, while explicit SvelteKit installs native Svelte 5 admin UI plus SvelteKit handler factories over the same OAuth 2.1 + PKCE, JSON-RPC, Convex token backend, scope enforcement, and static MCP_API_KEY fallback. Shared HTTP behavior uses Web Request/Response primitives; host adapters stay thin.",
       "source": "rahmanef.com",
       "slicePath": "frontend/slices/create-your-mcp",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/create-your-mcp"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/create-your-mcp-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5",
+              "convex@^1.16.0"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/create-your-mcp/views/mcp-admin-helpers.ts",
+              "frontend/slices/create-your-mcp/lib/auth.ts",
+              "frontend/slices/create-your-mcp/lib/backend.ts",
+              "frontend/slices/create-your-mcp/lib/context.ts",
+              "frontend/slices/create-your-mcp/lib/hash.ts",
+              "frontend/slices/create-your-mcp/lib/mcp-http.ts",
+              "frontend/slices/create-your-mcp/lib/oauth-http.ts",
+              "frontend/slices/create-your-mcp/lib/server.ts",
+              "frontend/slices/create-your-mcp/lib/tools/example.ts",
+              "frontend/slices/create-your-mcp/lib/types.ts"
+            ]
+          }
         }
       },
       "convexPaths": [
         "convex/features/create_your_mcp"
       ],
-      "npm": [],
-      "shadcn": [],
+      "npm": [
+        "convex@^1.16.0",
+        "class-variance-authority@^0.7.1"
+      ],
+      "shadcn": [
+        "button"
+      ],
       "env": [
         {
           "name": "MCP_API_KEY",
@@ -3836,7 +3869,7 @@
           "name": "NEXT_PUBLIC_SITE_URL",
           "scope": "next-public",
           "required": true,
-          "description": "Public site origin for WWW-Authenticate challenge."
+          "description": "Public site origin for OAuth/MCP discovery and setup UI; route handlers can fall back to request origin."
         }
       ],
       "peers": [
@@ -3857,9 +3890,11 @@
         "claude",
         "cursor",
         "convex",
-        "integration"
+        "integration",
+        "svelte",
+        "framework-parity"
       ],
-      "agentRecipe": "Run `npx rr add create-your-mcp`. Compose `createYourMcpTables` into root schema. Move `slices/create-your-mcp/routes/mcp.route.ts` → `app/api/mcp/route.ts` and `oauth-token.route.ts` → `app/api/oauth/token/route.ts`. Set MCP_OAUTH_ALLOWED_HOSTS (CSV vendor domains). Mount `<McpAdminView />` at /admin/mcp. Connect ChatGPT/Claude/Cursor via the setup form rendered by the admin view."
+      "agentRecipe": "Run `npx rr add create-your-mcp` for React/Next or add `--framework sveltekit` for native Svelte 5. Compose `createYourMcpTables` from `convex/features/create_your_mcp/_schema`. Next: move the two route adapters into `app/api`. SvelteKit: create `+server.ts` endpoints from `createSvelteKitMcpHandlers` and `createSvelteKitOauthTokenHandlers`. Mount the framework-native `McpAdminView`, wire adminList/revokeToken through your authenticated Convex client, and set MCP_OAUTH_ALLOWED_HOSTS for remote OAuth redirects."
     },
     {
       "slug": "contact-form-resend",

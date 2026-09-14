@@ -61,6 +61,7 @@ export const tokenMatches = (provided: string, expected: string): boolean => {
 export const checkAuth = async (
   headers: Headers,
   findToken: (tokenHash: string) => Promise<FindTokenResult>,
+  staticApiKey = process.env.MCP_API_KEY,
 ): Promise<AuthResult> => {
   const provided = extractBearer(headers);
   if (!provided) return { ok: false };
@@ -85,7 +86,7 @@ export const checkAuth = async (
   }
 
   // Fallback: shared secret from env. Implicit full-scope.
-  const expected = process.env.MCP_API_KEY;
+  const expected = staticApiKey;
   if (expected && expected.length >= 32 && tokenMatches(provided, expected)) {
     return { ok: true, kind: "env", scope: null };
   }

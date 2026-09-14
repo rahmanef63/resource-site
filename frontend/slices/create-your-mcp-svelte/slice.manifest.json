@@ -1,0 +1,43 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "create-your-mcp-svelte",
+  "version": "0.4.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add create-your-mcp --framework sveltekit",
+    "consumerPath": "slices/create-your-mcp"
+  },
+  "files": [
+    "README.md",
+    "config.ts",
+    "index.ts",
+    "routes/mcp.ts",
+    "routes/oauth-token.ts",
+    "server.ts",
+    "svelte-components.d.ts",
+    "views/McpAdminView.svelte",
+    "views/McpSetupPanel.svelte",
+    "views/McpTokenTable.svelte"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/create-your-mcp/views/mcp-admin-helpers.ts",
+      "frontend/slices/create-your-mcp/lib/auth.ts",
+      "frontend/slices/create-your-mcp/lib/backend.ts",
+      "frontend/slices/create-your-mcp/lib/context.ts",
+      "frontend/slices/create-your-mcp/lib/hash.ts",
+      "frontend/slices/create-your-mcp/lib/mcp-http.ts",
+      "frontend/slices/create-your-mcp/lib/oauth-http.ts",
+      "frontend/slices/create-your-mcp/lib/server.ts",
+      "frontend/slices/create-your-mcp/lib/tools/example.ts",
+      "frontend/slices/create-your-mcp/lib/types.ts"
+    ],
+    "external": [
+      "convex/browser",
+      "convex/server",
+      "node:async_hooks",
+      "svelte"
+    ]
+  }
+}
