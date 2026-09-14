@@ -13,9 +13,9 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { PageEntry } from "../types";
+import { createDialogDefaults, type CreateDialogMode } from "../lib/core";
 
-export type CreateDialogMode = { mode: "new" } | { mode: "dup"; source: PageEntry } | null;
+export type { CreateDialogMode } from "../lib/core";
 
 /** Slug + title entry dialog. Powers both "New page" and "Duplicate" flows. */
 export function PageCreateDialog({
@@ -27,11 +27,7 @@ export function PageCreateDialog({
   onClose: () => void;
   onConfirm: (values: { slug: string; title: string }) => void;
 }) {
-  const initial = React.useMemo(() => {
-    if (!dialog) return { slug: "", title: "" };
-    if (dialog.mode === "new") return { slug: "new-page", title: "Untitled" };
-    return { slug: `${dialog.source.slug}-copy`, title: `${dialog.source.title} (copy)` };
-  }, [dialog]);
+  const initial = React.useMemo(() => createDialogDefaults(dialog), [dialog]);
 
   const [slug, setSlug] = React.useState(initial.slug);
   const [title, setTitle] = React.useState(initial.title);

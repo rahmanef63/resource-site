@@ -1,10 +1,7 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import type { PageBlock } from "../types";
 
 /** Read-only renderer for a single PageBlock. Public surface renders this
@@ -19,7 +16,7 @@ export function BlockRenderer({ block }: { block: PageBlock }) {
             {block.sub && <p className="mt-4 text-lg text-muted-foreground">{block.sub}</p>}
             {block.cta && (
               <Button asChild className="mt-6">
-                <Link href={block.cta.href}>{block.cta.label}</Link>
+                <a href={block.cta.href}>{block.cta.label}</a>
               </Button>
             )}
           </div>
@@ -60,7 +57,7 @@ export function BlockRenderer({ block }: { block: PageBlock }) {
             <h2 className="text-3xl font-bold tracking-tight">{block.headline}</h2>
             {block.sub && <p className="mt-3 text-base opacity-80">{block.sub}</p>}
             <Button asChild variant="secondary" className="mt-6">
-              <Link href={block.cta.href}>{block.cta.label}</Link>
+              <a href={block.cta.href}>{block.cta.label}</a>
             </Button>
           </div>
         </section>
@@ -111,13 +108,11 @@ export function BlockRenderer({ block }: { block: PageBlock }) {
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {block.images.map((img, i) => (
                 <div key={i} className="relative aspect-[4/3] w-full overflow-hidden rounded-md">
-                  <Image
+                  <img
                     src={img.src}
                     alt={img.alt}
-                    fill
-                    unoptimized
-                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                    className="object-cover"
+                    className="size-full object-cover"
+                    loading="lazy"
                   />
                 </div>
               ))}
@@ -167,7 +162,7 @@ export function BlockRenderer({ block }: { block: PageBlock }) {
             {block.heading && <h2 className="mb-6 text-center text-2xl font-semibold tracking-tight">{block.heading}</h2>}
             <div className="grid gap-4 sm:grid-cols-3">
               {block.tiers.map((t, i) => (
-                <div key={i} className={cn("rounded-lg border bg-card p-5", t.featured && "border-foreground")}>
+                <div key={i} className={t.featured ? "rounded-lg border border-foreground bg-card p-5" : "rounded-lg border bg-card p-5"}>
                   <p className="text-sm font-semibold">{t.name}</p>
                   <p className="mt-2 text-3xl font-bold">{t.price}<span className="text-sm font-normal text-muted-foreground"> {t.period}</span></p>
                   <ul className="mt-4 space-y-1 text-sm">
@@ -175,7 +170,7 @@ export function BlockRenderer({ block }: { block: PageBlock }) {
                   </ul>
                   {t.cta && (
                     <Button asChild variant={t.featured ? "default" : "outline"} className="mt-4 w-full">
-                      <Link href={t.cta.href}>{t.cta.label}</Link>
+                      <a href={t.cta.href}>{t.cta.label}</a>
                     </Button>
                   )}
                 </div>

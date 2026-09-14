@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-PAGES-CMS",
+    "version": "pages-cms@0.2.0",
+    "date": 1789430400000,
+    "kind": "feature",
+    "title": "SvelteKit Pages CMS distribution + clean-install portability",
+    "body": "Related: https://resource.rahmanef.com/slices/pages-cms — [before: pages-cms@0.1.0 was React-only, installed a repo-only defineFeature import plus undeclared next/* imports, and immediate block reorder could clobber unsaved draft edits] → [after: pages-cms@0.2.0 keeps React self-contained, adds native Svelte 5/SvelteKit admin + public rendering for all 11 block kinds, and shares one reducer/types/core].",
+    "groups": [
+      {
+        "heading": "One page contract, two native renderers",
+        "bullets": [
+          "React no longer requires next/link, next/image, @/lib/utils, or the repo-local defineFeature helper after installation.",
+          "Svelte 5 ships native PagesView, PageEditorView, PageCreateDialog, LocalPagesProvider, block editors, and public renderers with only svelte@^5.",
+          "Draft reorder is now local until Save and editable snapshots ignore updatedAt, preventing false-dirty state and unsaved-edit loss."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-SECTIONS",
     "version": "sections@0.5.0",
     "date": 1789430400000,

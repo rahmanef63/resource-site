@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-15 — SvelteKit Pages CMS distribution + clean-install portability
+<!-- public-changelog:SVELTE-PAGES-CMS -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/pages-cms
+- Preview: https://resource.rahmanef.com/preview/slices/pages-cms
+- [before: `pages-cms@0.1.0` was React-only, installed repo-only `defineFeature` plus undeclared `next/*` imports, and block reorder could overwrite unsaved draft edits] → [after: `pages-cms@0.2.0` keeps React self-contained, adds native Svelte 5/SvelteKit list/editor/renderers for all 11 block kinds, and shares one portable reducer/types/core]
+- Svelte installs only `svelte@^5`; React keeps Lucide + shadcn. Block reorder now remains in the editor draft until Save.
+
 ### 2026-09-15 — SvelteKit Sections distribution + installer portability
 <!-- public-changelog:SVELTE-SECTIONS -->
 

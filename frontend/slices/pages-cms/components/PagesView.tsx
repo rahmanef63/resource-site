@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import { Copy, ExternalLink, Pencil, Plus, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -15,6 +14,7 @@ import {
 } from "@/components/ui/table";
 import { usePagesStore } from "./pages-context";
 import { blankPage, duplicatePage } from "../lib/duplicate";
+import { orderPagesForAdmin, pageHref } from "../lib/core";
 import { PageCreateDialog, type CreateDialogMode } from "./page-create-dialog";
 import type { PageEntry } from "../types";
 
@@ -33,15 +33,7 @@ export function PagesView({
   const { pages, create } = usePagesStore();
   const [dialog, setDialog] = React.useState<CreateDialogMode>(null);
 
-  const ordered = React.useMemo(
-    () =>
-      pages
-        .slice()
-        .sort((a, b) =>
-          a.systemPage === b.systemPage ? a.slug.localeCompare(b.slug) : a.systemPage ? -1 : 1,
-        ),
-    [pages],
-  );
+  const ordered = React.useMemo(() => orderPagesForAdmin(pages), [pages]);
 
   return (
     <div className="space-y-4">
@@ -143,9 +135,9 @@ function PageRow({
       <TableCell>
         <div className="flex items-center justify-end gap-1">
           <Button asChild size="icon" variant="ghost" className="size-7" title="View public">
-            <Link href={`${publicBase}/${page.slug}`} target="_blank">
+            <a href={pageHref(publicBase, page.slug)} target="_blank" rel="noreferrer">
               <ExternalLink className="size-3.5" />
-            </Link>
+            </a>
           </Button>
           <Button
             asChild
@@ -155,9 +147,9 @@ function PageRow({
             title={page.systemPage ? "System pages are read-only" : "Edit"}
             disabled={page.systemPage}
           >
-            <Link href={`${adminBase}/pages/${page.id}`}>
+            <a href={`${adminBase}/pages/${page.id}`}>
               <Pencil className="size-3.5" />
-            </Link>
+            </a>
           </Button>
           <Button
             size="icon"

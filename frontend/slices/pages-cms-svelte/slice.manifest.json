@@ -1,0 +1,42 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "pages-cms-svelte",
+  "version": "0.2.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add pages-cms --framework sveltekit",
+    "consumerPath": "slices/pages-cms"
+  },
+  "files": [
+    "README.md",
+    "components/BlockEditor.svelte",
+    "components/BlockListFields.svelte",
+    "components/BlockRenderer.svelte",
+    "components/BlockRichFields.svelte",
+    "components/BlockSimpleFields.svelte",
+    "components/BlocksRenderer.svelte",
+    "components/LocalPagesProvider.svelte",
+    "components/PageCreateDialog.svelte",
+    "components/PageEditorBlocks.svelte",
+    "components/PageEditorView.svelte",
+    "components/PagesProvider.svelte",
+    "components/PagesView.svelte",
+    "config.ts",
+    "index.ts",
+    "lib/context.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/pages-cms/config.ts",
+      "frontend/slices/pages-cms/types.ts",
+      "frontend/slices/pages-cms/lib/core.ts",
+      "frontend/slices/pages-cms/lib/default-pages.ts",
+      "frontend/slices/pages-cms/lib/duplicate.ts",
+      "frontend/slices/pages-cms/lib/nav-builder.ts",
+      "frontend/slices/pages-cms/lib/reducer.ts"
+    ],
+    "external": ["svelte"]
+  }
+}

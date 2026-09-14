@@ -2,18 +2,13 @@
 
 import * as React from "react";
 import type { PageEntry } from "../types";
+import type { PagesStore } from "../lib/core";
 
 /** Store adapter — your app's provider supplies these handlers from its
  *  own reducer dispatch (or use the bundled `localPagesStore` for a
  *  client-only localStorage store). Keeps the shared admin views
  *  (PagesView / PageEditorView) store-agnostic. */
-export type PagesStore = {
-  pages: PageEntry[];
-  create: (entry: PageEntry) => void;
-  update: (id: string, patch: Partial<Omit<PageEntry, "id" | "createdAt">>) => void;
-  remove: (id: string) => void;
-  reorderBlock: (id: string, from: number, to: number) => void;
-};
+export type { PagesStore } from "../lib/core";
 
 const Ctx = React.createContext<PagesStore | null>(null);
 

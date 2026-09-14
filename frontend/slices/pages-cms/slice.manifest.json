@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "pages-cms",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -29,14 +29,13 @@
     "lib/reducer.ts",
     "lib/duplicate.ts",
     "lib/nav-builder.ts",
-    "lib/default-pages.ts"
+    "lib/default-pages.ts",
+    "lib/core.ts"
   ],
   "imports": {
     "shared": [],
     "external": [
       "lucide-react",
-      "next/link",
-      "next/image",
       "@/components/ui/badge",
       "@/components/ui/button",
       "@/components/ui/table",

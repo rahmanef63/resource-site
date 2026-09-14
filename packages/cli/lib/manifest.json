@@ -1408,12 +1408,12 @@
       "slug": "pages-cms",
       "title": "Pages CMS — block-composed multi-page editor",
       "category": "content",
-      "description": "A small multi-page CMS. PagesView (list + CRUD: create/edit/duplicate/delete/publish) + PageEditorView (metadata form + block editor) + a read-only public BlockRenderer. Pages are composed of 11 block kinds: hero, text, feature-list, cta, logo-cloud, testimonial, video, image-gallery, faq, stats, pricing-table. Ships a localStorage adapter (LocalPagesProvider) + a generic Home/About/Pricing seed so it runs env-free — or wire the bundled pagesReducer + PagesProvider to your own backend (optional Convex copy-source included). Pure UI; no Convex required.",
+      "description": "Framework-parity multi-page CMS over one shared reducer/types/core. React keeps shadcn + Lucide admin surfaces but is now clean-install portable without Next-only imports or repo-only helpers. Svelte 5/SvelteKit adds native PagesView, PageEditorView, all 11 block editors, public renderers, provider and localStorage adapter with no React/Lucide/shadcn leakage. Draft block reordering stays local until Save so unsaved edits are preserved.",
       "source": "rr original (generalized from saas-marketing pages engine)",
       "install": "npx rahman-resources add pages-cms",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add pages-cms`. Wrap your admin surface in <LocalPagesProvider seed={defaultPages()}> (localStorage, zero backend) or supply your own PagesStore via <PagesProvider>. Render <PagesView publicBase adminBase> for the list and <PageEditorView id publicBase adminBase> for the editor route. Public catch-all looks up the page by slug and renders <BlocksRenderer blocks={page.blocks} />. Add block kinds by extending the PageBlock union + emptyBlock + the renderer/editor switches.",
+      "agentRecipe": "Run `npx rr add pages-cms` for React/default or `npx rr add pages-cms --framework sveltekit`. Wrap the surface in LocalPagesProvider for zero-backend localStorage or PagesProvider with your own PagesStore. Mount PagesView for the list, PageEditorView for the editor route, and BlocksRenderer for public pages. Both frameworks share PageBlock, pagesReducer, defaultPages, blank/duplicate helpers and nav derivation.",
       "tags": [
         "content",
         "cms",
@@ -5394,19 +5394,41 @@
       "title": "Pages CMS — block-composed multi-page editor",
       "category": "content",
       "kind": "ui",
-      "version": "0.1.0",
-      "description": "A small multi-page CMS. PagesView (list + CRUD: create/edit/duplicate/delete/publish) + PageEditorView (metadata form + block editor) + a read-only public BlockRenderer. Pages are composed of 11 block kinds: hero, text, feature-list, cta, logo-cloud, testimonial, video, image-gallery, faq, stats, pricing-table. Ships a localStorage adapter (LocalPagesProvider) + a generic Home/About/Pricing seed so it runs env-free — or wire the bundled pagesReducer + PagesProvider to your own backend (optional Convex copy-source included). Pure UI; no Convex required.",
+      "version": "0.2.0",
+      "description": "Framework-parity multi-page CMS over one shared reducer/types/core. React keeps shadcn + Lucide admin surfaces but is now clean-install portable without Next-only imports or repo-only helpers. Svelte 5/SvelteKit adds native PagesView, PageEditorView, all 11 block editors, public renderers, provider and localStorage adapter with no React/Lucide/shadcn leakage. Draft block reordering stays local until Save so unsaved edits are preserved.",
       "source": "rr original (generalized from saas-marketing pages engine)",
       "slicePath": "frontend/slices/pages-cms",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/pages-cms"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/pages-cms-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/pages-cms/config.ts",
+              "frontend/slices/pages-cms/types.ts",
+              "frontend/slices/pages-cms/lib/core.ts",
+              "frontend/slices/pages-cms/lib/default-pages.ts",
+              "frontend/slices/pages-cms/lib/duplicate.ts",
+              "frontend/slices/pages-cms/lib/nav-builder.ts",
+              "frontend/slices/pages-cms/lib/reducer.ts"
+            ]
+          }
         }
       },
       "convexPaths": [],
       "npm": [
-        "lucide-react"
+        "lucide-react@^0.400.0"
       ],
       "shadcn": [
         "badge",
@@ -5433,7 +5455,7 @@
         "builder",
         "basics"
       ],
-      "agentRecipe": "Run `npx rr add pages-cms`. Wrap your admin surface in <LocalPagesProvider seed={defaultPages()}> (localStorage, zero backend) or supply your own PagesStore via <PagesProvider>. Render <PagesView publicBase adminBase> for the list and <PageEditorView id publicBase adminBase> for the editor route. Public catch-all looks up the page by slug and renders <BlocksRenderer blocks={page.blocks} />. Add block kinds by extending the PageBlock union + emptyBlock + the renderer/editor switches."
+      "agentRecipe": "Run `npx rr add pages-cms` for React/default or `npx rr add pages-cms --framework sveltekit`. Wrap the surface in LocalPagesProvider for zero-backend localStorage or PagesProvider with your own PagesStore. Mount PagesView for the list, PageEditorView for the editor route, and BlocksRenderer for public pages. Both frameworks share PageBlock, pagesReducer, defaultPages, blank/duplicate helpers and nav derivation."
     },
     {
       "slug": "feedback-states",

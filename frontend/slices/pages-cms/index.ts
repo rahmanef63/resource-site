@@ -19,6 +19,14 @@ export { pagesReducer } from "./lib/reducer";
 export { duplicatePage, blankPage } from "./lib/duplicate";
 export { buildPageNavItems, type PageNavItem } from "./lib/nav-builder";
 export { defaultPages } from "./lib/default-pages";
+export {
+  editablePageSnapshot,
+  moveBlock,
+  orderPagesForAdmin,
+  pageHref,
+  removeBlock,
+  replaceBlock,
+} from "./lib/core";
 
 // Types
 export {

@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Label } from "@/components/ui/label";
 
@@ -26,12 +25,12 @@ export function Field({
 export function PageNotFound({ adminBase }: { adminBase: string }) {
   return (
     <div className="space-y-3">
-      <Link
+      <a
         href={`${adminBase}/pages`}
         className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
       >
         <ArrowLeft className="size-3" /> Pages
-      </Link>
+      </a>
       <p className="text-sm text-muted-foreground">Page not found.</p>
     </div>
   );
@@ -40,12 +39,12 @@ export function PageNotFound({ adminBase }: { adminBase: string }) {
 export function SystemPageNotice({ adminBase }: { adminBase: string }) {
   return (
     <div className="space-y-3">
-      <Link
+      <a
         href={`${adminBase}/pages`}
         className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
       >
         <ArrowLeft className="size-3" /> Pages
-      </Link>
+      </a>
       <div className="rounded-lg border border-amber-500/40 bg-amber-500/5 p-4 text-sm">
         <p className="font-medium">System page — read-only.</p>
         <p className="mt-1 text-xs text-muted-foreground">

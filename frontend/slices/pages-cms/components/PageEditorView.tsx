@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import { ArrowLeft, ExternalLink, Save } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,6 +17,7 @@ import { PageEditorBlocks } from "./PageEditorBlocks";
 import { Field, PageNotFound, SystemPageNotice } from "./page-editor-helpers";
 import { usePage, usePagesStore } from "./pages-context";
 import { emptyBlock, type PageBlock, type PageBlockKind, type PageEntry } from "../types";
+import { editablePageSnapshot, moveBlock, pageHref, removeBlock as removeBlockAt, replaceBlock as replaceBlockAt } from "../lib/core";
 
 /**
  * Page editor — metadata form + the block editor. A page is composed of
@@ -35,7 +35,7 @@ export function PageEditorView({
   adminBase: string;
 }) {
   const page = usePage(id);
-  const { update, reorderBlock } = usePagesStore();
+  const { update } = usePagesStore();
   const [draft, setDraft] = React.useState<PageEntry | null>(page);
   const [addKind, setAddKind] = React.useState<PageBlockKind>("hero");
 
@@ -47,16 +47,16 @@ export function PageEditorView({
   if (page.systemPage) return <SystemPageNotice adminBase={adminBase} />;
   if (!draft) return null;
 
-  const dirty = JSON.stringify(draft) !== JSON.stringify(page);
+  const dirty = editablePageSnapshot(draft) !== editablePageSnapshot(page);
 
   function patchDraft(patch: Partial<PageEntry>) {
     setDraft((d) => (d ? { ...d, ...patch } : d));
   }
 
   const patchBlock = (idx: number, next: PageBlock) =>
-    setDraft((d) => (d ? { ...d, blocks: d.blocks.map((b, i) => (i === idx ? next : b)) } : d));
+    setDraft((d) => (d ? { ...d, blocks: replaceBlockAt(d.blocks, idx, next) } : d));
   const removeBlock = (idx: number) =>
-    setDraft((d) => (d ? { ...d, blocks: d.blocks.filter((_, i) => i !== idx) } : d));
+    setDraft((d) => (d ? { ...d, blocks: removeBlockAt(d.blocks, idx) } : d));
   const addBlock = () =>
     setDraft((d) => (d ? { ...d, blocks: [...d.blocks, emptyBlock(addKind)] } : d));
 
@@ -74,17 +74,17 @@ export function PageEditorView({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between gap-2">
-        <Link
+        <a
           href={`${adminBase}/pages`}
           className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
         >
           <ArrowLeft className="size-3" /> All pages
-        </Link>
+        </a>
         <div className="flex items-center gap-2">
           <Button asChild variant="outline" size="sm" className="gap-1.5">
-            <Link href={`${publicBase}/${draft.slug}`} target="_blank">
+            <a href={pageHref(publicBase, draft.slug)} target="_blank" rel="noreferrer">
               <ExternalLink className="size-3.5" /> View public
-            </Link>
+            </a>
           </Button>
           <Button size="sm" className="gap-1.5" disabled={!dirty} onClick={saveMeta}>
             <Save className="size-3.5" /> Save{dirty ? " (unsaved)" : ""}
@@ -152,8 +152,8 @@ export function PageEditorView({
         onAdd={addBlock}
         onPatch={patchBlock}
         onRemove={removeBlock}
-        onMoveUp={(i) => reorderBlock(draft.id, i, i - 1)}
-        onMoveDown={(i) => reorderBlock(draft.id, i, i + 1)}
+        onMoveUp={(i) => patchDraft({ blocks: moveBlock(draft.blocks, i, i - 1) })}
+        onMoveDown={(i) => patchDraft({ blocks: moveBlock(draft.blocks, i, i + 1) })}
       />
     </div>
   );
