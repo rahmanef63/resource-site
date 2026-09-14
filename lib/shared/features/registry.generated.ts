@@ -32,7 +32,6 @@ import { resourcesLauncherAdminConfig } from "@/features/resources-launcher-admi
 import { seoConfig } from "@/features/seo/config";
 import { startHereConfig } from "@/features/start-here/config";
 import { systemMonitorConfig } from "@/features/system-monitor/config";
-import { vectorSearchConfig } from "@/features/vector-search/config";
 
 export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
@@ -174,11 +173,6 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
     ...systemMonitorConfig,
     importPath: "@/features/system-monitor/config",
     version: "1.3.0",
-  },
-  {
-    ...vectorSearchConfig,
-    importPath: "@/features/vector-search/config",
-    version: "0.2.0",
   },
 ];
 

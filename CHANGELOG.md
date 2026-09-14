@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-14 — SvelteKit Vector Search contract
+<!-- public-changelog:SVELTE-VECTOR-SEARCH-CONTRACT -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/vector-search
+- [before: `vector-search@0.2.0` shipped a React placeholder page and advertised a nonexistent `convex/features/search` backend, vector table/index, OpenAI environment requirement, shadcn UI, and `@convex-dev/vector-search` dependency that the canonical slice did not contain] → [after: `vector-search@0.3.0` is a truthful framework-neutral `VectorSearchCtx` + tool adapter contract; React/Next remains default and explicit Svelte/SvelteKit reuses the exact same TypeScript source with zero framework/backend/provider runtime claims]
+- Hosts bind query/index/reindex to their own authorized vector backend and own embeddings, credentials, persistence, tenancy, and destructive reindex confirmation policy.
+
 ### 2026-09-14 — SvelteKit AI Router distribution
 <!-- public-changelog:SVELTE-AI-ROUTER -->
 

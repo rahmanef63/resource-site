@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-VECTOR-SEARCH-CONTRACT",
+    "version": "vector-search@0.3.0",
+    "date": 1789344000000,
+    "kind": "feature",
+    "title": "SvelteKit Vector Search contract",
+    "body": "Related: https://resource.rahmanef.com/slices/vector-search — [before: vector-search@0.2.0 shipped a React placeholder page and advertised a nonexistent convex/features/search backend, vector table/index, OpenAI environment requirement, shadcn UI, and @convex-dev/vector-search dependency that the canonical slice did not contain] → [after: vector-search@0.3.0 is a truthful framework-neutral VectorSearchCtx + tool adapter contract; React/Next remains default and explicit Svelte/SvelteKit reuses the exact same TypeScript source with zero framework/backend/provider runtime claims].",
+    "groups": [
+      {
+        "heading": "One headless vector-search adapter for both frameworks",
+        "bullets": [
+          "Removed the React placeholder search page plus nonexistent Convex schema/table/index and embedding-provider dependency claims.",
+          "vectorSearchConfig is plain framework-neutral metadata and vectorSearchTools imports the agentic define/schema modules directly.",
+          "Hosts bind search/index/reindex to an authorized backend and own embeddings, credentials, persistence, tenancy, and confirmation policy."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-AI-ROUTER",
     "version": "ai-router@0.6.0",
     "date": 1789344000000,

@@ -1,74 +1,56 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "vector-search",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "category": "data",
-  "title": "Convex Vector Search",
-  "description": "Embeddings-based search via @convex-dev/vector-search. Embed on insert, query by vector similarity.",
+  "kind": "backend",
+  "title": "Vector Search — Adapter Contract",
+  "description": "Framework-neutral semantic-search adapter contract. The host injects VectorSearchCtx.search/index/reindex and owns the actual vector backend, embedding provider, persistence, credentials, authorization, and reindex policy. The canonical slice ships no renderer or Convex schema. React/Next remains the default install contract and explicit Svelte/SvelteKit reuses the same TypeScript source.",
   "namespace": "@/features/vector-search",
-  "convex": {
-    "tablesExport": "searchTables",
-    "schemaPath": "convex/features/search/_schema.ts",
-    "rootPaths": [
-      "convex/features/search"
-    ]
-  },
   "frontend": {
     "slicePath": "frontend/slices/vector-search",
-    "configExport": "vectorSearchConfig"
+    "configExport": "vectorSearchConfig",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/vector-search",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [],
+          "shadcn": []
+        }
+      }
+    }
   },
   "deps": {
-    "npm": [
-      "@convex-dev/vector-search@^0.0.5"
-    ],
-    "shadcn": [
-      "card",
-      "input"
-    ],
-    "env": [
-      {
-        "name": "OPENAI_API_KEY",
-        "scope": "convex",
-        "required": true,
-        "description": "For text-embedding-3-small."
-      }
-    ],
+    "npm": [],
+    "shadcn": [],
+    "env": [],
     "peers": []
   },
-  "registers": [
-    "registry"
-  ],
-  "audit": [
-    "bp:public-fn-validator"
-  ],
+  "registers": [],
+  "audit": [],
   "license": "MIT",
   "tags": [
     "search",
     "vector",
     "embeddings",
-    "convex"
+    "adapter",
+    "headless",
+    "portable"
   ],
   "previews": [],
   "contract": {
     "requires": {
-      "auth": "convex",
       "rbac": [
         "search.query",
         "search.index",
         "search.reindex"
       ],
-      "env": [
-        "OPENAI_API_KEY"
-      ],
-      "convex": {
-        "prefix": "vector_",
-        "tables": [
-          "vector_search_documents"
-        ]
-      },
-      "deps": [
-        "convex-auth"
-      ]
+      "deps": []
     },
     "provides": {
       "tools": [
@@ -76,18 +58,28 @@
         "vector-search.index",
         "vector-search.reindex"
       ],
-      "tables": [
-        "vector_search_documents"
+      "routes": [],
+      "components": [],
+      "utils": [
+        "VectorSearchCtx"
       ],
-      "routes": [
-        "/search"
-      ],
-      "components": [
-        "SearchPage"
-      ]
+      "hooks": [],
+      "convex": {
+        "tables": [],
+        "rbac": [
+          "search.query",
+          "search.index",
+          "search.reindex"
+        ]
+      }
     },
     "generalization": {
-      "level": "portable"
+      "level": "needs-adapter",
+      "requiredProps": [
+        "search",
+        "index",
+        "reindex"
+      ]
     }
   }
 }

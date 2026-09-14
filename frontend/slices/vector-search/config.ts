@@ -1,9 +1,13 @@
-import { defineFeature } from "@/lib/shared/features/defineFeature";
+export type VectorSearchFeature = {
+  slug: "vector-search";
+  title: "Vector Search — Adapter Contract";
+  category: "data";
+  routes: readonly [];
+};
 
-export const vectorSearchConfig = defineFeature({
+export const vectorSearchConfig: VectorSearchFeature = {
   slug: "vector-search",
-  title: "Convex Vector Search",
+  title: "Vector Search — Adapter Contract",
   category: "data",
-  routes: [{ path: "/search", view: () => import("./components/search-page") }],
-  nav: { label: "Search", group: "data", order: 0 },
-});
+  routes: [],
+};

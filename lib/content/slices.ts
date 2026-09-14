@@ -1312,42 +1312,30 @@ const route = (request) => client.action(api.features.ai.action.callModel, reque
   },
   {
     slug: "vector-search",
-    title: "Convex Vector Search",
+    title: "Vector Search — Adapter Contract",
     category: "data",
-    kind: "full",
-    version: "0.2.0",
-    description: "Embeddings-based search via Convex's built-in vector index. Embed via OpenAI text-embedding-3-small (1536-dim), query via vectorIndex().",
+    kind: "backend",
+    version: "0.3.0",
+    description: "Framework-neutral semantic-search adapter contract. The host injects VectorSearchCtx for query/index/reindex and owns the actual vector backend, embeddings, credentials, persistence, authorization, and reindex policy; RR ships no renderer or Convex schema for this slice.",
     source: "rahmanef63/resource-site",
-    docsUrl: "https://docs.convex.dev/database/vector-search",
-    install: "npm i openai",
     slicePath: "frontend/slices/vector-search",
-    convexPaths: ["convex/features/search"],
-    npm: ["@convex-dev/vector-search@^0.0.5"],
-    shadcn: ["card", "input"],
-    env: [{ name: "OPENAI_API_KEY", scope: "convex", required: true }],
+    convexPaths: [],
+    npm: [],
+    shadcn: [],
+    env: [],
     peers: [],
-    tags: ["search", "vector", "embeddings", "convex", "rag"],
+    tags: ["search", "vector", "embeddings", "adapter", "headless", "portable"],
     usedBy: ["personal-brand-os", "riset-kit"],
-    agentRecipe: "Run `npx rr add vector-search`. Add embedding field + vectorIndex per searchable table. Re-embed on upsert via Convex action. Cache embeddings — don't re-call OpenAI on every read.",
-    previewPath: "/preview/slices/vector-search",
-    wiring: `// convex/features/search/schema.ts
-documents: defineTable({ title, body, embedding: v.array(v.number()) })
-  .vectorIndex("by_embedding", { vectorField: "embedding", dimensions: 1536 }),
+    agentRecipe: "Run `npx rr add vector-search` (React/default) or `npx rr add vector-search --framework sveltekit`. Bind VectorSearchCtx.search/index/reindex to your own authorized vector backend. The slice intentionally does not invent a Convex schema, embedding provider, renderer, or credential requirement.",
+    wiring: `import { vectorSearchTools, type VectorSearchCtx } from "@/features/vector-search";
 
-// convex/features/search/upsert.ts
-const emb = await openai.embeddings.create({ model: "text-embedding-3-small", input: body });
-await ctx.db.insert("documents", { title, body, embedding: emb.data[0].embedding });
+const vectorSearch: VectorSearchCtx = {
+  search: (query, topK) => hostVectorIndex.search(query, topK),
+  index: (text, title) => guardedIndexDocument({ text, title }),
+  reindex: () => guardedReindex(),
+};
 
-// convex/features/search/query.ts
-const queryEmb = await openai.embeddings.create({ model: "text-embedding-3-small", input: q });
-const hits = await ctx.vectorSearch("documents", "by_embedding", { vector: queryEmb.data[0].embedding, limit: 10 });`,
-    defaultView: "tablet",
-    defaultZoom: 0.8,
-    compat: {
-      templates: {
-        "riset-kit": { status: "native", note: "Research kit pakai embedding search untuk konten." },
-      },
-    },
+// Register vectorSearchTools with vectorSearch in your tool host.`,
   },
   {
     slug: "cal-com-booking",
