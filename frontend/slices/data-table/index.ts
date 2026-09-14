@@ -13,3 +13,13 @@ export {
   type DataTableColumnHeaderProps,
 } from "./components/data-table-column-header";
 export { selectionColumn } from "./lib/columns-helpers";
+
+export {
+  DEFAULT_DATA_TABLE_LABELS,
+  dataTableCellPadding,
+  dataTablePageSummary,
+  dataTableRowSummary,
+  resolveDataTableLabels,
+  type DataTableDensity,
+  type DataTableLabels,
+} from "./lib/core";

@@ -62,7 +62,7 @@ const DENSITIES = ["comfortable", "compact"] as const;
 export default function Page() {
   const [density, setDensity] = React.useState<(typeof DENSITIES)[number]>("comfortable");
   return (
-    <SlicePreviewLayout title="Data Table" kind="ui" maxWidth="none">
+    <SlicePreviewLayout title="Data Table" kind="ui" maxWidth="none" description="React/Next remains the default TanStack v8 + shadcn renderer; explicit SvelteKit installs native Svelte 5 on the official TanStack Svelte v9 adapter with the same table behaviors.">
       <PreviewSection title="Live demo" hint={`density="${density}"`}>
         <div className="mb-4 inline-flex rounded-md border border-input p-0.5">
           {DENSITIES.map((v) => (

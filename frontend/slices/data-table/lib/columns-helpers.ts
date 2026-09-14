@@ -4,13 +4,14 @@ import * as React from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  DEFAULT_DATA_TABLE_LABELS,
+  type DataTableLabels,
+} from "./core";
 
-/**
- * Build a checkbox row-selection column. Prepended automatically by
- * `DataTable` when `selectable` is set; exported so consumers can place it
- * manually if they want finer control over column order.
- */
-export function selectionColumn<TData>(): ColumnDef<TData> {
+export function selectionColumn<TData>(
+  labels: Pick<DataTableLabels, "selectAllRows" | "selectRow"> = DEFAULT_DATA_TABLE_LABELS,
+): ColumnDef<TData> {
   return {
     id: "select",
     enableSorting: false,
@@ -24,14 +25,13 @@ export function selectionColumn<TData>(): ColumnDef<TData> {
             : false,
         onCheckedChange: (value: boolean | "indeterminate") =>
           table.toggleAllPageRowsSelected(!!value),
-        "aria-label": "Select all rows",
+        "aria-label": labels.selectAllRows,
       }),
     cell: ({ row }) =>
       React.createElement(Checkbox, {
         checked: row.getIsSelected(),
-        onCheckedChange: (value: boolean | "indeterminate") =>
-          row.toggleSelected(!!value),
-        "aria-label": "Select row",
+        onCheckedChange: (value: boolean | "indeterminate") => row.toggleSelected(!!value),
+        "aria-label": labels.selectRow,
       }),
   };
 }

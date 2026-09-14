@@ -1,0 +1,31 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "data-table-svelte",
+  "version": "0.3.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add data-table --framework sveltekit",
+    "consumerPath": "slices/data-table"
+  },
+  "files": [
+    "README.md",
+    "components/DataTable.svelte",
+    "components/DataTableColumnHeader.svelte",
+    "components/DataTablePagination.svelte",
+    "components/DataTableToolbar.svelte",
+    "config.ts",
+    "index.ts",
+    "lib/table.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/data-table/lib/core.ts"
+    ],
+    "external": [
+      "svelte",
+      "@tanstack/svelte-table"
+    ]
+  }
+}

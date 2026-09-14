@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-14 — SvelteKit Data Table distribution
+<!-- public-changelog:SVELTE-DATA-TABLE -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/data-table
+- Preview: https://resource.rahmanef.com/preview/slices/data-table
+- [before: `data-table@0.2.0` was React-only on TanStack React Table v8 + shadcn] → [after: `data-table@0.3.0` keeps that React default and adds native Svelte 5 sorting/filtering/pagination/selection/visibility/density on the official TanStack Svelte Table v9 adapter]
+- Shared labels, density padding, row summaries, and page summaries live in one framework-neutral core; framework-specific column definitions remain explicit so React is not forced through a major upgrade.
+
 ### 2026-09-14 — Resend Newsletter portability hardening
 <!-- public-changelog:RESEND-NEWSLETTER-PORTABILITY -->
 

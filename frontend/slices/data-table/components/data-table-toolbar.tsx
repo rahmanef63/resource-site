@@ -13,24 +13,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import type { DataTableLabels } from "../lib/core";
 
 export interface DataTableToolbarProps<TData> {
   table: Table<TData>;
-  /** Column id the search input filters. Omit to hide the search box. */
   searchKey?: string;
-  /** Placeholder for the search input. */
   searchPlaceholder?: string;
+  labels: DataTableLabels;
 }
 
-/**
- * Toolbar: a column-bound search input (left) plus a column-visibility
- * dropdown of checkbox toggles (right). Both are driven entirely through the
- * TanStack table instance.
- */
 export function DataTableToolbar<TData>({
   table,
   searchKey,
-  searchPlaceholder = "Search…",
+  searchPlaceholder,
+  labels,
 }: DataTableToolbarProps<TData>) {
   const searchColumn = searchKey ? table.getColumn(searchKey) : undefined;
 
@@ -39,9 +35,9 @@ export function DataTableToolbar<TData>({
       {searchColumn ? (
         <Input
           value={(searchColumn.getFilterValue() as string) ?? ""}
-          onChange={(e) => searchColumn.setFilterValue(e.target.value)}
-          placeholder={searchPlaceholder}
-          aria-label={searchPlaceholder}
+          onChange={(event) => searchColumn.setFilterValue(event.target.value)}
+          placeholder={searchPlaceholder ?? labels.searchPlaceholder}
+          aria-label={searchPlaceholder ?? labels.searchPlaceholder}
           className="h-8 max-w-xs"
         />
       ) : (
@@ -52,15 +48,15 @@ export function DataTableToolbar<TData>({
         <DropdownMenuTrigger asChild>
           <Button type="button" variant="outline" size="sm" className="h-8">
             <SlidersHorizontal className="size-4" />
-            View
+            {labels.view}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-44">
-          <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+          <DropdownMenuLabel>{labels.toggleColumns}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           {table
             .getAllColumns()
-            .filter((c) => c.getCanHide())
+            .filter((column) => column.getCanHide())
             .map((column) => (
               <DropdownMenuCheckboxItem
                 key={column.id}

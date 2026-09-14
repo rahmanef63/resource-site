@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "data-table",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -16,10 +16,13 @@
     "components/data-table-toolbar.tsx",
     "config.ts",
     "index.ts",
-    "lib/columns-helpers.ts"
+    "lib/columns-helpers.ts",
+    "lib/core.ts"
   ],
   "imports": {
-    "shared": [],
+    "shared": [
+      "frontend/slices/data-table/lib/core.ts"
+    ],
     "external": [
       "@tanstack/react-table",
       "lucide-react",

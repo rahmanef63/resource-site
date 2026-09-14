@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-DATA-TABLE",
+    "version": "data-table@0.3.0",
+    "date": 1789344000000,
+    "kind": "feature",
+    "title": "SvelteKit Data Table distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/data-table — [before: data-table@0.2.0 was React-only on TanStack React Table v8 + shadcn] → [after: data-table@0.3.0 keeps that React default and adds native Svelte 5 sorting/filtering/pagination/selection/visibility/density on the official TanStack Svelte Table v9 adapter].",
+    "groups": [
+      {
+        "heading": "Native table parity without a React major upgrade",
+        "bullets": [
+          "React/Next stays on its existing TanStack React Table v8 + shadcn renderer.",
+          "SvelteKit installs @tanstack/svelte-table v9 with native semantic controls and no React, Next, Lucide React, or React shadcn runtime leakage.",
+          "Both renderers share one density/labels/row-summary/page-summary core while keeping framework-local column-definition types explicit."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "RESEND-NEWSLETTER-PORTABILITY",
     "version": "resend-newsletter@0.3.1",
     "date": 1789344000000,

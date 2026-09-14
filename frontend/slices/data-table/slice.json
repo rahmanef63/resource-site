@@ -1,15 +1,35 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "data-table",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "category": "data",
   "kind": "ui",
-  "title": "Data Table \u2014 TanStack + shadcn",
-  "description": "Generic, reusable data table built on TanStack Table v8 + shadcn Table. Pass typed columns and rows; get sorting (clickable headers with indicator), a column-bound toolbar search, Previous/Next pagination with page readout, optional checkbox row selection, and a column-visibility dropdown. Density toggle (compact/comfortable) controls row padding.",
+  "title": "Data Table — TanStack",
+  "description": "Framework-parity data table: React/Next remains default on TanStack React Table v8 + shadcn, while explicit Svelte/SvelteKit installs the official Svelte 5 TanStack Table v9 adapter with native semantic controls. Both surfaces cover sorting, column-bound filtering, pagination, row selection, column visibility, and compact/comfortable density over shared labels/summary semantics.",
   "namespace": "@/features/data-table",
   "frontend": {
     "slicePath": "frontend/slices/data-table",
-    "configExport": "dataTableFeature"
+    "configExport": "dataTableFeature",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/data-table-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5",
+            "@tanstack/svelte-table@^9.2.4"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/data-table/lib/core.ts"
+          ]
+        }
+      }
+    }
   },
   "convex": {
     "tablesExport": "",
@@ -18,7 +38,7 @@
   },
   "deps": {
     "npm": [
-      "@tanstack/react-table@^8.21.0",
+      "@tanstack/react-table@^8.21.3",
       "lucide-react@^0.400.0"
     ],
     "shadcn": [
@@ -29,7 +49,10 @@
       "dropdown-menu"
     ],
     "env": [],
-    "peers": []
+    "peers": [],
+    "sharedFiles": [
+      "frontend/slices/data-table/lib/core.ts"
+    ]
   },
   "registers": [],
   "audit": [],
@@ -40,7 +63,9 @@
     "datagrid",
     "tanstack",
     "sorting",
-    "pagination"
+    "pagination",
+    "svelte",
+    "framework-parity"
   ],
   "previews": [
     {
@@ -91,13 +116,24 @@
         "DataTableColumnHeader"
       ],
       "utils": [
-        "selectionColumn"
+        "selectionColumn",
+        "resolveDataTableLabels",
+        "dataTableCellPadding",
+        "dataTableRowSummary",
+        "dataTablePageSummary"
       ],
       "hooks": [],
       "convex": {
         "tables": [],
         "rbac": []
-      }
+      },
+      "types": [
+        "DataTableDensity",
+        "DataTableLabels"
+      ]
+    },
+    "generalization": {
+      "level": "portable"
     }
   }
 }
