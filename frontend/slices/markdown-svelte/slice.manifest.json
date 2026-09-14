@@ -1,0 +1,42 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "markdown-svelte",
+  "version": "0.4.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add markdown --framework sveltekit",
+    "consumerPath": "slices/markdown"
+  },
+  "files": [
+    "README.md",
+    "components/ChartBlock.svelte",
+    "components/CommentList.svelte",
+    "components/Composer.svelte",
+    "components/Inline.svelte",
+    "components/MarkdownNodes.svelte",
+    "components/MarkdownPage.svelte",
+    "components/MarkdownReader.svelte",
+    "components/MathSpan.svelte",
+    "components/MdNodeView.svelte",
+    "components/MermaidBlock.svelte",
+    "components/ReviewTab.svelte",
+    "components/WriteTab.svelte",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/markdown/config.ts",
+      "frontend/slices/markdown/components/chart-spec.ts",
+      "frontend/slices/markdown/lib/comments.ts",
+      "frontend/slices/markdown/lib/inline-core.ts",
+      "frontend/slices/markdown/lib/page-core.ts",
+      "frontend/slices/markdown/lib/parse.ts",
+      "frontend/slices/markdown/lib/render-core.ts",
+      "frontend/slices/markdown/lib/snippets.ts"
+    ],
+    "external": ["svelte", "katex", "mermaid"]
+  }
+}

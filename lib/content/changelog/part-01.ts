@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-MARKDOWN",
+    "version": "markdown@0.4.0",
+    "date": 1789430400000,
+    "kind": "feature",
+    "title": "SvelteKit Markdown distribution + portable shared grammar",
+    "body": "Related: https://resource.rahmanef.com/slices/markdown — [before: markdown@0.3.1 was React-only and installed Next/repo-local renderer helpers] → [after: markdown@0.4.0 shares parser, tokenizer, comments, tabs, snippets and list grouping across React and native Svelte 5/SvelteKit].",
+    "groups": [
+      {
+        "heading": "Same document semantics, native renderer per framework",
+        "bullets": [
+          "React no longer imports next/link, next/dynamic, @/lib/utils, or the repo-local defineFeature helper.",
+          "Svelte Read/Write/Review supports Mermaid, KaTeX, block comments, tables/toggles/lists, and native SVG bar/line/area/pie charts.",
+          "Svelte dependency closure is svelte + katex + mermaid only; Recharts/Lucide/shadcn stay React-only."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-PAGES-CMS",
     "version": "pages-cms@0.2.0",
     "date": 1789430400000,

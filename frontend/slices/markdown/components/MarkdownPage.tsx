@@ -14,17 +14,16 @@
  *  ```mermaid diagrams and ```chart charts in all surfaces. */
 
 import * as React from "react";
-import { cn } from "@/lib/utils";
+import { cx } from "../lib/classnames";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { parseMarkdown } from "../lib/parse";
+import { MARKDOWN_TAB_LABEL, normalizeMarkdownTabs, type MarkdownTab } from "../lib/page-core";
 import { type MdComment, newCommentId, openCount } from "../lib/comments";
 import { MarkdownReader } from "./MarkdownReader";
 import { WriteTab } from "./WriteTab";
 import { ReviewTab } from "./ReviewTab";
 
-export type MarkdownTab = "read" | "write" | "review";
-
-const TAB_LABEL: Record<MarkdownTab, string> = { read: "Read", write: "Write", review: "Review" };
+export type { MarkdownTab } from "../lib/page-core";
 
 export interface MarkdownPageProps {
   /** Markdown source (controlled when `onContentChange` is set). */
@@ -79,7 +78,7 @@ export function MarkdownPage({
 
   const nodes = React.useMemo(() => parseMarkdown(md), [md]);
   const open = openCount(allComments);
-  const list = tabs.length ? tabs : (["read"] as MarkdownTab[]);
+  const list = normalizeMarkdownTabs(tabs);
 
   const header = title && (
     <header className="mb-4 flex items-center gap-2">
@@ -101,7 +100,7 @@ export function MarkdownPage({
 
   if (list.length === 1) {
     return (
-      <article className={cn("mx-auto w-full max-w-3xl px-4 py-6", className)}>
+      <article className={cx("mx-auto w-full max-w-3xl px-4 py-6", className)}>
         {header}
         {surface(list[0]!)}
       </article>
@@ -109,13 +108,13 @@ export function MarkdownPage({
   }
 
   return (
-    <article className={cn("mx-auto w-full max-w-4xl px-4 py-6", className)}>
+    <article className={cx("mx-auto w-full max-w-4xl px-4 py-6", className)}>
       {header}
       <Tabs defaultValue={list[0]}>
         <TabsList>
           {list.map((tab) => (
             <TabsTrigger key={tab} value={tab} className="text-xs">
-              {TAB_LABEL[tab]}
+              {MARKDOWN_TAB_LABEL[tab]}
               {tab === "review" && open > 0 && (
                 <span className="ml-1 rounded-full bg-amber-500/20 px-1.5 text-[10px] font-semibold text-amber-700 dark:text-amber-400">{open}</span>
               )}

@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-15 — SvelteKit Markdown distribution + portable shared grammar
+<!-- public-changelog:SVELTE-MARKDOWN -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/markdown
+- Preview: https://resource.rahmanef.com/preview/slices/markdown
+- [before: `markdown@0.3.1` was React-only and depended on Next/repo-local helpers in installed source] → [after: `markdown@0.4.0` shares one parser/tokenizer/comments/render core across React and native Svelte 5/SvelteKit]
+- React keeps lazy Recharts; Svelte uses native SVG charts and installs only `svelte`, `katex`, and `mermaid`.
+
 ### 2026-09-15 — SvelteKit Pages CMS distribution + clean-install portability
 <!-- public-changelog:SVELTE-PAGES-CMS -->
 

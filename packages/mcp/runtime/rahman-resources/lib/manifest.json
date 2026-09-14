@@ -1070,12 +1070,12 @@
       "slug": "markdown",
       "title": "Markdown — page container with CRUD tabs + diagrams",
       "category": "content",
-      "description": "Markdown (.md) page container with optional CRUD surfaces. <MarkdownPage content={md} tabs={['read','write','review']}/> — Read renders rich text (headings, lists, todo, GitHub-style callouts, fenced code, KaTeX, tables, images, <details> toggles, inline marks); Write is a raw-source editor with snippet toolbar + live preview; Review overlays block-anchored comments (add/resolve, controlled via onAddComment/onResolveComment or internal fallback). Fenced ```mermaid blocks render as SVG diagrams (dynamic-imported mermaid) and ```chart blocks as recharts bar/line/area/pie from a JSON spec. Self-contained: ships its own parser (parseMarkdown → MdNode[]) + inline renderer, no notion runtime dependency. Sync is by shared grammar: the notion cluster's blocksToMarkdown / markdownToBlocks bridge (@notion/shared/lib/markdown) emits/consumes the exact same markdown this slice parses, so anything readable in the notion block page is readable here and vice-versa. No store, no Convex — comments CRUD is consumer-wired callbacks.",
+      "description": "Framework-parity Markdown page container with Read / Write / Review surfaces over one shared parser, inline tokenizer, comment model, tab model, snippet registry, list grouping and chart-spec parser. React keeps the existing shadcn/Lucide UI, lazy Mermaid/KaTeX and lazy Recharts canvas. Svelte 5/SvelteKit ships native controls and native SVG bar/line/area/pie charts, so it needs only svelte + katex + mermaid and never pulls React/Lucide/shadcn/Recharts. Both render headings, lists/todos, GitHub-style callouts, fenced code, Mermaid, chart fences, KaTeX, tables, images, toggles and inline marks. Same grammar as the notion blocksToMarkdown / markdownToBlocks bridge; no store or Convex required.",
       "source": "rahman-resources",
       "install": "npx rahman-resources add markdown",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add markdown`. Read-only: `<MarkdownReader content={md}/>`. Full surface: `<MarkdownPage content={md} tabs={['read','write','review']} onContentChange={save} comments={list} onAddComment={add} onResolveComment={resolve}/>` (omit callbacks for internal-state demo mode). Diagrams: fence ```mermaid; charts: fence ```chart with { type: bar|line|area|pie, data: [...] }. To bridge from the notion editor call `blocksToMarkdown(page.blocks)` from `@notion/shared/lib/markdown`; reverse with `markdownToBlocks(md)`.",
+      "agentRecipe": "Run `npx rr add markdown` for React/default or `npx rr add markdown --framework sveltekit`. Read-only: MarkdownReader. Full surface: MarkdownPage with read/write/review plus optional content/comment callbacks; omit callbacks for standalone local state. Mermaid and KaTeX lazy-load in both; chart fences use lazy Recharts in React and native SVG in Svelte. The notion blocksToMarkdown/markdownToBlocks bridge speaks the same grammar.",
       "tags": [
         "content",
         "markdown",
@@ -4517,14 +4517,39 @@
       "title": "Markdown — page container with CRUD tabs + diagrams",
       "category": "content",
       "kind": "ui",
-      "version": "0.3.1",
-      "description": "Markdown (.md) page container with optional CRUD surfaces. <MarkdownPage content={md} tabs={['read','write','review']}/> — Read renders rich text (headings, lists, todo, GitHub-style callouts, fenced code, KaTeX, tables, images, <details> toggles, inline marks); Write is a raw-source editor with snippet toolbar + live preview; Review overlays block-anchored comments (add/resolve, controlled via onAddComment/onResolveComment or internal fallback). Fenced ```mermaid blocks render as SVG diagrams (dynamic-imported mermaid) and ```chart blocks as recharts bar/line/area/pie from a JSON spec. Self-contained: ships its own parser (parseMarkdown → MdNode[]) + inline renderer, no notion runtime dependency. Sync is by shared grammar: the notion cluster's blocksToMarkdown / markdownToBlocks bridge (@notion/shared/lib/markdown) emits/consumes the exact same markdown this slice parses, so anything readable in the notion block page is readable here and vice-versa. No store, no Convex — comments CRUD is consumer-wired callbacks.",
+      "version": "0.4.0",
+      "description": "Framework-parity Markdown page container with Read / Write / Review surfaces over one shared parser, inline tokenizer, comment model, tab model, snippet registry, list grouping and chart-spec parser. React keeps the existing shadcn/Lucide UI, lazy Mermaid/KaTeX and lazy Recharts canvas. Svelte 5/SvelteKit ships native controls and native SVG bar/line/area/pie charts, so it needs only svelte + katex + mermaid and never pulls React/Lucide/shadcn/Recharts. Both render headings, lists/todos, GitHub-style callouts, fenced code, Mermaid, chart fences, KaTeX, tables, images, toggles and inline marks. Same grammar as the notion blocksToMarkdown / markdownToBlocks bridge; no store or Convex required.",
       "source": "rahman-resources",
       "slicePath": "frontend/slices/markdown",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/markdown"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/markdown-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5",
+              "katex@^0.16",
+              "mermaid@^11"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/markdown/config.ts",
+              "frontend/slices/markdown/components/chart-spec.ts",
+              "frontend/slices/markdown/lib/comments.ts",
+              "frontend/slices/markdown/lib/inline-core.ts",
+              "frontend/slices/markdown/lib/page-core.ts",
+              "frontend/slices/markdown/lib/parse.ts",
+              "frontend/slices/markdown/lib/render-core.ts",
+              "frontend/slices/markdown/lib/snippets.ts"
+            ]
+          }
         }
       },
       "convexPaths": [],
@@ -4556,7 +4581,7 @@
         "docs",
         "notion-sync"
       ],
-      "agentRecipe": "Run `npx rr add markdown`. Read-only: `<MarkdownReader content={md}/>`. Full surface: `<MarkdownPage content={md} tabs={['read','write','review']} onContentChange={save} comments={list} onAddComment={add} onResolveComment={resolve}/>` (omit callbacks for internal-state demo mode). Diagrams: fence ```mermaid; charts: fence ```chart with { type: bar|line|area|pie, data: [...] }. To bridge from the notion editor call `blocksToMarkdown(page.blocks)` from `@notion/shared/lib/markdown`; reverse with `markdownToBlocks(md)`."
+      "agentRecipe": "Run `npx rr add markdown` for React/default or `npx rr add markdown --framework sveltekit`. Read-only: MarkdownReader. Full surface: MarkdownPage with read/write/review plus optional content/comment callbacks; omit callbacks for standalone local state. Mermaid and KaTeX lazy-load in both; chart fences use lazy Recharts in React and native SVG in Svelte. The notion blocksToMarkdown/markdownToBlocks bridge speaks the same grammar."
     },
     {
       "slug": "notion-app",

@@ -1,7 +1,7 @@
 "use client";
 
 /** recharts renderer for ChartBlock — split into its own module so recharts
- *  (~150kB) is code-split behind next/dynamic and only loaded when a ```chart
+ *  (~150kB) is code-split behind a browser-only dynamic import and only loaded when a ```chart
  *  fence actually renders, not on every markdown page. */
 
 import {

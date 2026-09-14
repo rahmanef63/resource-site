@@ -7,7 +7,7 @@
 
 import * as React from "react";
 import { MessageSquarePlus, Check } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cx } from "../lib/classnames";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import type { MdNode } from "../lib/parse";
@@ -56,14 +56,14 @@ function ReviewNode({ node, anchored, composing, onCompose, onSubmit, onResolve 
 }) {
   const open = anchored.filter((c) => !c.resolved).length;
   return (
-    <div className={cn("group relative rounded-md pr-8", (open > 0 || composing) && "bg-amber-500/5")}>
+    <div className={cx("group relative rounded-md pr-8", (open > 0 || composing) && "bg-amber-500/5")}>
       {/* list items render standalone here; ordinal grouping matters less in review */}
       {renderNodes([node])}
       <Button
         variant="ghost" size="sm" type="button"
         onClick={onCompose}
         aria-label="Add comment"
-        className={cn(
+        className={cx(
           "absolute right-0 top-1 h-6 w-6 p-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100",
           (open > 0 || composing) && "opacity-100 text-amber-600",
         )}
@@ -85,10 +85,10 @@ function CommentList({ items, onResolve }: { items: MdComment[]; onResolve?: (id
   return (
     <ul className="mb-2 space-y-1.5">
       {items.map((c) => (
-        <li key={c.id} className={cn("flex items-start justify-between gap-2 rounded-md bg-muted/40 px-2.5 py-1.5 text-xs", c.resolved && "opacity-50")}>
+        <li key={c.id} className={cx("flex items-start justify-between gap-2 rounded-md bg-muted/40 px-2.5 py-1.5 text-xs", c.resolved && "opacity-50")}>
           <div>
             {c.author && <span className="mr-1.5 font-semibold">{c.author}</span>}
-            <span className={cn(c.resolved && "line-through")}>{c.text}</span>
+            <span className={cx(c.resolved && "line-through")}>{c.text}</span>
           </div>
           {onResolve && !c.resolved && (
             <Button variant="ghost" size="sm" type="button" onClick={() => onResolve(c.id)} aria-label="Resolve" className="h-5 w-5 shrink-0 p-0 text-muted-foreground">

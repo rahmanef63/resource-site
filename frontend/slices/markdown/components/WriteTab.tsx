@@ -10,21 +10,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { parseMarkdown } from "../lib/parse";
 import { renderNodes } from "./MdNodeView";
 
-const SNIPPETS: Array<{ label: string; snippet: string }> = [
-  { label: "H2", snippet: "\n## Heading\n" },
-  { label: "Bold", snippet: "**bold**" },
-  { label: "List", snippet: "\n- item\n" },
-  { label: "Todo", snippet: "\n- [ ] task\n" },
-  { label: "Quote", snippet: "\n> quote\n" },
-  { label: "Callout", snippet: "\n> [!TIP]\n> heads up\n" },
-  { label: "Code", snippet: "\n```ts\n\n```\n" },
-  { label: "Table", snippet: "\n| A | B |\n| --- | --- |\n| 1 | 2 |\n" },
-  { label: "Diagram", snippet: "\n```mermaid\nflowchart LR\n  A --> B\n```\n" },
-  {
-    label: "Chart",
-    snippet: '\n```chart\n{ "type": "bar", "data": [{ "name": "A", "value": 3 }, { "name": "B", "value": 5 }] }\n```\n',
-  },
-];
+import { MARKDOWN_SNIPPETS } from "../lib/snippets";
+
 
 interface Props {
   value: string;
@@ -49,7 +36,7 @@ export function WriteTab({ value, onChange }: Props) {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-wrap gap-1">
-        {SNIPPETS.map((s) => (
+        {MARKDOWN_SNIPPETS.map((s) => (
           <Button key={s.label} variant="outline" size="sm" type="button" className="h-7 px-2 text-xs" onClick={() => insert(s.snippet)}>
             {s.label}
           </Button>

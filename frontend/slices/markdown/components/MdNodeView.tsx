@@ -5,8 +5,9 @@
 
 import * as React from "react";
 import { Check } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cx } from "../lib/classnames";
 import type { MdNode, Align } from "../lib/parse";
+import { groupMarkdownNodes, listItemMargin, type ListNode } from "../lib/render-core";
 import { renderInline } from "../lib/inline";
 import { MathSpan } from "../lib/katex-lazy";
 import { MermaidBlock } from "./MermaidBlock";
@@ -23,45 +24,30 @@ const CALLOUT_STYLE: Record<string, string> = {
 
 const ALIGN_CLASS: Record<Align, string> = { left: "text-left", center: "text-center", right: "text-right" };
 
-const isListItem = (n: MdNode) => n.type === "bullet" || n.type === "numbered" || n.type === "todo";
-
-/** Render a node list, grouping adjacent list items into <ul>/<ol>. */
+/** Render a node list, grouping adjacent list items into semantic <ul>/<ol>. */
 export function renderNodes(nodes: MdNode[]): React.ReactNode {
-  const out: React.ReactNode[] = [];
-  let i = 0;
-  while (i < nodes.length) {
-    const n = nodes[i]!;
-    if (isListItem(n)) {
-      const run: MdNode[] = [];
-      const ordered = n.type === "numbered";
-      while (i < nodes.length && isListItem(nodes[i]!) && (nodes[i]!.type === "numbered") === ordered) {
-        run.push(nodes[i++]!);
-      }
-      const Tag = ordered ? "ol" : "ul";
-      out.push(
-        <Tag key={`l${i}`} className={cn("my-2 space-y-1", ordered ? "list-decimal" : "list-none", "pl-5")}>
-          {run.map((item, k) => <MdListItem key={k} node={item as ListNode} />)}
-        </Tag>,
-      );
-      continue;
-    }
-    out.push(<MdNodeView key={i} node={n} />);
-    i++;
-  }
-  return out;
+  return groupMarkdownNodes(nodes).map((group, index) => {
+    if (group.kind === "node") return <MdNodeView key={index} node={group.node} />;
+    const Tag = group.ordered ? "ol" : "ul";
+    return (
+      <Tag key={index} className={cx("my-2 space-y-1 pl-5", group.ordered ? "list-decimal" : "list-none")}>
+        {group.items.map((item, itemIndex) => <MdListItem key={itemIndex} node={item} />)}
+      </Tag>
+    );
+  });
 }
 
-type ListNode = Extract<MdNode, { type: "bullet" | "numbered" | "todo" }>;
 
 function MdListItem({ node }: { node: ListNode }) {
-  const ml = node.indent ? { marginLeft: `${node.indent * 1.25}rem` } : undefined;
+  const marginLeft = listItemMargin(node.indent);
+  const ml = marginLeft ? { marginLeft } : undefined;
   if (node.type === "todo") {
     return (
       <li style={ml} className="flex items-start gap-2 text-sm leading-relaxed">
-        <span className={cn("mt-0.5 grid size-4 shrink-0 place-items-center rounded border", node.checked ? "border-primary bg-primary text-primary-foreground" : "border-muted-foreground/40")}>
+        <span className={cx("mt-0.5 grid size-4 shrink-0 place-items-center rounded border", node.checked ? "border-primary bg-primary text-primary-foreground" : "border-muted-foreground/40")}>
           {node.checked && <Check className="size-3" />}
         </span>
-        <span className={cn(node.checked && "text-muted-foreground line-through")}>{renderInline(node.text)}</span>
+        <span className={cx(node.checked && "text-muted-foreground line-through")}>{renderInline(node.text)}</span>
       </li>
     );
   }
@@ -73,7 +59,7 @@ export function MdNodeView({ node }: { node: MdNode }): React.ReactNode {
     case "heading": {
       const Tag = `h${node.level}` as keyof React.JSX.IntrinsicElements;
       const size = ["text-3xl", "text-2xl", "text-xl", "text-lg", "text-base", "text-sm"][node.level - 1];
-      return <Tag className={cn("mt-6 mb-2 font-semibold tracking-tight first:mt-0", size)}>{renderInline(node.text)}</Tag>;
+      return <Tag className={cx("mt-6 mb-2 font-semibold tracking-tight first:mt-0", size)}>{renderInline(node.text)}</Tag>;
     }
     case "paragraph":
       return <p className="my-2 text-sm leading-relaxed">{renderInline(node.text)}</p>;
@@ -81,7 +67,7 @@ export function MdNodeView({ node }: { node: MdNode }): React.ReactNode {
       return <blockquote className="my-3 border-l-2 border-border pl-4 text-sm italic text-muted-foreground">{renderInline(node.text)}</blockquote>;
     case "callout":
       return (
-        <div className={cn("my-3 rounded-md border-l-2 px-4 py-3 text-sm", CALLOUT_STYLE[node.kind] ?? CALLOUT_STYLE.default)}>
+        <div className={cx("my-3 rounded-md border-l-2 px-4 py-3 text-sm", CALLOUT_STYLE[node.kind] ?? CALLOUT_STYLE.default)}>
           <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">{node.kind}</span>
           {renderInline(node.text)}
         </div>
@@ -130,11 +116,11 @@ function MdTable({ rows, align }: { rows: string[][]; align: Align[] }) {
     <div className="my-3 overflow-x-auto">
       <table className="w-full border-collapse text-sm">
         <thead>
-          <tr>{head!.map((c, i) => <th key={i} className={cn("border border-border px-3 py-1.5 font-semibold", ALIGN_CLASS[align[i] ?? "left"])}>{renderInline(c)}</th>)}</tr>
+          <tr>{head!.map((c, i) => <th key={i} className={cx("border border-border px-3 py-1.5 font-semibold", ALIGN_CLASS[align[i] ?? "left"])}>{renderInline(c)}</th>)}</tr>
         </thead>
         <tbody>
           {body.map((r, ri) => (
-            <tr key={ri}>{r.map((c, ci) => <td key={ci} className={cn("border border-border px-3 py-1.5", ALIGN_CLASS[align[ci] ?? "left"])}>{renderInline(c)}</td>)}</tr>
+            <tr key={ri}>{r.map((c, ci) => <td key={ci} className={cx("border border-border px-3 py-1.5", ALIGN_CLASS[align[ci] ?? "left"])}>{renderInline(c)}</td>)}</tr>
           ))}
         </tbody>
       </table>

@@ -8,7 +8,7 @@
 "use client";
 
 import * as React from "react";
-import { cn } from "@/lib/utils";
+import { cx } from "../lib/classnames";
 import { parseMarkdown, type MdNode } from "../lib/parse";
 import { renderNodes } from "./MdNodeView";
 
@@ -43,7 +43,7 @@ export function MarkdownReader({
 }: MarkdownReaderProps) {
   const parsed = React.useMemo(() => nodes ?? parseMarkdown(content), [nodes, content]);
   return (
-    <article className={cn("mx-auto w-full px-4 py-6", MAXW[maxWidth], className)}>
+    <article className={cx("mx-auto w-full px-4 py-6", MAXW[maxWidth], className)}>
       {title && (
         <header className="mb-4 flex items-center gap-2">
           {icon && <span className="text-2xl leading-none">{icon}</span>}

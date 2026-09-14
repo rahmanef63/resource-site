@@ -1,30 +1,32 @@
 "use client";
 
-/** Renders a ```chart fence as a recharts chart. The fence body is a JSON
- *  spec:
- *
- *    { "type": "bar" | "line" | "area" | "pie",
- *      "data": [{ "name": "Jan", "value": 12, ... }, ...],
- *      "xKey": "name",          // category key (default "name")
- *      "series": ["value"],     // numeric keys to plot (default: all numbers)
- *      "title": "optional" }
- *
- *  Invalid JSON falls back to the raw text in a code block. recharts (~150kB)
- *  is code-split into ChartCanvas via next/dynamic — it only loads when a valid
- *  chart actually renders, not on every markdown page. Colors come from the
- *  shadcn theme tokens (--chart-1..5). */
-
+/** Lazy chart wrapper. Recharts stays behind a browser-only dynamic import. */
 import * as React from "react";
-import dynamic from "next/dynamic";
-import { parseSpec } from "./chart-spec";
+import { parseSpec, type ChartSpec } from "./chart-spec";
 
-const ChartCanvas = dynamic(() => import("./ChartCanvas").then((m) => m.ChartCanvas), {
-  ssr: false,
-  loading: () => <div className="h-64 w-full animate-pulse rounded bg-muted/40" />,
-});
+type Canvas = React.ComponentType<{ spec: ChartSpec }>;
+let canvasReady: Promise<Canvas> | null = null;
+
+function loadCanvas(): Promise<Canvas> {
+  if (!canvasReady) {
+    canvasReady = import("./ChartCanvas").then((module) => module.ChartCanvas);
+  }
+  return canvasReady;
+}
 
 export function ChartBlock({ text }: { text: string }) {
   const spec = React.useMemo(() => parseSpec(text), [text]);
+  const [Canvas, setCanvas] = React.useState<Canvas | null>(null);
+
+  React.useEffect(() => {
+    if (!spec) return;
+    let alive = true;
+    void loadCanvas().then((component) => {
+      if (alive) setCanvas(() => component);
+    });
+    return () => { alive = false; };
+  }, [spec]);
+
   if (!spec) {
     return (
       <pre className="my-3 overflow-x-auto rounded-md border border-destructive/40 bg-muted/40 p-3 text-xs">
@@ -32,6 +34,7 @@ export function ChartBlock({ text }: { text: string }) {
       </pre>
     );
   }
+
   return (
     <figure className="my-3 rounded-md border border-border bg-background p-3">
       {spec.title && (
@@ -39,7 +42,7 @@ export function ChartBlock({ text }: { text: string }) {
           {spec.title}
         </figcaption>
       )}
-      <ChartCanvas spec={spec} />
+      {Canvas ? <Canvas spec={spec} /> : <div className="h-64 w-full animate-pulse rounded bg-muted/40" />}
     </figure>
   );
 }
