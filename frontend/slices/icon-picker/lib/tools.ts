@@ -1,37 +1,61 @@
-// Agentic tool collection. Catalogue search is pure; pick forwards to the
-// host's onChange (the same seam the picker components use).
-
-import { defineToolCollection, num, obj, str } from "@/shared/agentic";
+import { ALL_EMOJIS } from "./emoji-catalog";
 import { ALL_LUCIDE } from "./lucide-catalog";
 import { ALL_PHOSPHOR } from "./phosphor-catalog";
-import { ALL_EMOJIS } from "./emoji-catalog";
 import { lucideValue, phosphorValue } from "./parse";
 
 export type IconPickerCtx = {
-  /** Apply an IconValue (lucide:<name> / phosphor:<name> / raw emoji). */
   pick: (value: string) => void;
 };
 
-const SETS = { lucide: ALL_LUCIDE, phosphor: ALL_PHOSPHOR, emoji: ALL_EMOJIS } as const;
+type ToolParams = {
+  type: "object";
+  properties: Record<string, unknown>;
+  required: string[];
+  additionalProperties: false;
+};
 
-export const iconPickerTools = defineToolCollection<IconPickerCtx>({
+const schema = (properties: Record<string, unknown>, required: string[] = []): ToolParams => ({
+  type: "object", properties, required, additionalProperties: false,
+});
+const text = (description: string, values?: readonly string[]) => ({
+  type: "string",
+  description,
+  ...(values ? { enum: [...values] } : {}),
+});
+const number = (description: string, min: number, max: number) => ({
+  type: "number", description, minimum: min, maximum: max,
+});
+
+const SETS = {
+  lucide: ALL_LUCIDE,
+  phosphor: ALL_PHOSPHOR,
+  emoji: ALL_EMOJIS,
+} as const;
+
+export const iconPickerTools = {
   namespace: "icon-picker",
-  instructions: "Icon chooser. search by keyword across the icon sets, then pick the exact returned value; do not guess icon names.",
+  instructions:
+    "Icon chooser. Search by keyword across the icon sets, then pick the exact returned value; do not guess icon names.",
   tools: [
     {
       name: "search",
       description: "Search the icon catalogues (lucide, phosphor, emoji).",
-      parameters: obj({
-        "query!": str("search text (icon name substring)"),
-        set: str("catalogue", { enum: ["lucide", "phosphor", "emoji"] }),
-        limit: num("max results (default 20)", { min: 1, max: 100 }),
-      }),
-      run: (_ctx, a) => {
-        const q = (a.query as string).toLowerCase();
-        const max = (a.limit as number | undefined) ?? 20;
-        const sets = a.set ? [a.set as keyof typeof SETS] : (Object.keys(SETS) as Array<keyof typeof SETS>);
-        const hits = sets.flatMap((s) =>
-          SETS[s].filter((n) => n.toLowerCase().includes(q)).slice(0, max).map((n) => `${s}:${n}`),
+      parameters: schema({
+        query: text("search text (icon name substring)"),
+        set: text("catalogue", ["lucide", "phosphor", "emoji"]),
+        limit: number("max results (default 20)", 1, 100),
+      }, ["query"]),
+      run: (_ctx: IconPickerCtx, args: Record<string, unknown>) => {
+        const query = String(args.query).toLowerCase();
+        const max = typeof args.limit === "number" ? args.limit : 20;
+        const keys = args.set
+          ? [String(args.set) as keyof typeof SETS]
+          : (Object.keys(SETS) as Array<keyof typeof SETS>);
+        const hits = keys.flatMap((key) =>
+          SETS[key]
+            .filter((name) => name.toLowerCase().includes(query))
+            .slice(0, max)
+            .map((name) => `${key}:${name}`),
         );
         return hits.slice(0, max).join(", ") || "no matches";
       },
@@ -39,16 +63,20 @@ export const iconPickerTools = defineToolCollection<IconPickerCtx>({
     {
       name: "pick",
       description: "Pick an icon by set + name (applies it via the host's onChange).",
-      parameters: obj({
-        "set!": str("catalogue", { enum: ["lucide", "phosphor", "emoji"] }),
-        "name!": str("icon name (or the emoji character itself)"),
-      }),
-      run: (ctx, a) => {
-        const n = a.name as string;
-        const v = a.set === "lucide" ? lucideValue(n) : a.set === "phosphor" ? phosphorValue(n) : n;
-        ctx.pick(v);
-        return `picked ${v}`;
+      parameters: schema({
+        set: text("catalogue", ["lucide", "phosphor", "emoji"]),
+        name: text("icon name (or the emoji character itself)"),
+      }, ["set", "name"]),
+      run: (ctx: IconPickerCtx, args: Record<string, unknown>) => {
+        const name = String(args.name);
+        const value = args.set === "lucide"
+          ? lucideValue(name)
+          : args.set === "phosphor"
+            ? phosphorValue(name)
+            : name;
+        ctx.pick(value);
+        return `picked ${value}`;
       },
     },
   ],
-});
+};

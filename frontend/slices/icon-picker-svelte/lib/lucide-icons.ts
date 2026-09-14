@@ -1,0 +1,78 @@
+import type { Component } from "svelte";
+import {
+  Home, Star, Heart, Bookmark, Flag, Tag, Settings, HelpCircle,
+  Info, Bell, Eye, EyeOff, Lock, Unlock, Key, Pin,
+  MapPin, Map, Globe, Compass, Award, Crown, Gem, Sparkles,
+  Zap, Flame, Trophy, File, FileText, FileCode, FileImage, FileVideo,
+  FileAudio, FileSpreadsheet, FileArchive, FileQuestion, Files, Folder, FolderOpen, FolderKanban,
+  FolderPlus, FolderTree, Archive, Box, Boxes, Package, Layers, Inbox,
+  Trash, Trash2, Save, Download, Upload, Paperclip, Image, Images,
+  Mail, MailOpen, MessageCircle, MessageSquare, Send, AtSign, Phone, PhoneCall,
+  Video, VideoOff, Mic, MicOff, Volume2, BellRing, Megaphone, Share,
+  Share2, Link, ExternalLink, Rss, Hash, Reply, CheckSquare, Square,
+  ListChecks, ListTodo, ClipboardList, ClipboardCheck, Calendar, CalendarDays, CalendarCheck, Clock,
+  Timer, AlarmClock, Hourglass, BookOpen, Book, Library, Notebook, NotebookPen,
+  StickyNote, PenTool, Pencil, Edit, Edit3, Highlighter, Eraser, Database,
+  Table, Table2, LayoutGrid, LayoutList, List, Kanban, Columns, Rows,
+  BarChart, BarChart2, BarChart3, LineChart, PieChart, TrendingUp, TrendingDown, Activity,
+  Sigma, Calculator, Percent, Binary, Code, Code2, Terminal, Braces,
+  Brackets, GitBranch, GitMerge, GitPullRequest, GitCommit, Server, Cpu, HardDrive,
+  MemoryStick, Bug, Wrench, Hammer, Cog, Workflow, Webhook, Cloud,
+  CloudUpload, CloudDownload, Briefcase, Building, Building2, Store, ShoppingCart, ShoppingBag,
+  CreditCard, Wallet, DollarSign, Coins, Receipt, Banknote, Users, User,
+  UserPlus, UserCheck, UserCog, UserMinus, Contact, Handshake, Target, Goal,
+  Camera, Film, Music, Music2, Music3, Music4, Headphones, Radio,
+  Tv, Tv2, Monitor, Smartphone, Tablet, Laptop, Speaker, Disc,
+  Disc3, Play, Pause, SkipForward, SkipBack, Rewind, FastForward, Sun,
+  Moon, CloudRain, CloudSnow, CloudLightning, Wind, Snowflake, Droplet, Droplets,
+  Leaf, Trees, TreePine, TreeDeciduous, Sprout, Flower, Flower2, Mountain,
+  MountainSnow, Sunrise, Sunset, Rainbow, Tornado, Settings2, Sliders, Filter,
+  Search, ScanSearch, Microscope, Telescope, Ruler, Scissors, Paintbrush, Palette,
+  Pipette, Crop, Wand, Wand2, Magnet, Circle, Triangle, Hexagon,
+  Pentagon, Octagon, Diamond, Spade, Club, Plus, Minus, Check,
+  Asterisk, Slash, Equal, Divide, ArrowUp, ArrowDown, ArrowLeft, ArrowRight,
+  ArrowUpRight, ArrowDownRight, ChevronUp, ChevronDown, ChevronLeft, ChevronRight,
+} from "@lucide/svelte";
+
+export type SvelteIconComponent = Component<Record<string, unknown>>;
+
+export const LUCIDE_SVELTE_ICONS = {
+  Home, Star, Heart, Bookmark, Flag, Tag, Settings, HelpCircle,
+  Info, Bell, Eye, EyeOff, Lock, Unlock, Key, Pin,
+  MapPin, Map, Globe, Compass, Award, Crown, Gem, Sparkles,
+  Zap, Flame, Trophy, File, FileText, FileCode, FileImage, FileVideo,
+  FileAudio, FileSpreadsheet, FileArchive, FileQuestion, Files, Folder, FolderOpen, FolderKanban,
+  FolderPlus, FolderTree, Archive, Box, Boxes, Package, Layers, Inbox,
+  Trash, Trash2, Save, Download, Upload, Paperclip, Image, Images,
+  Mail, MailOpen, MessageCircle, MessageSquare, Send, AtSign, Phone, PhoneCall,
+  Video, VideoOff, Mic, MicOff, Volume2, BellRing, Megaphone, Share,
+  Share2, Link, ExternalLink, Rss, Hash, Reply, CheckSquare, Square,
+  ListChecks, ListTodo, ClipboardList, ClipboardCheck, Calendar, CalendarDays, CalendarCheck, Clock,
+  Timer, AlarmClock, Hourglass, BookOpen, Book, Library, Notebook, NotebookPen,
+  StickyNote, PenTool, Pencil, Edit, Edit3, Highlighter, Eraser, Database,
+  Table, Table2, LayoutGrid, LayoutList, List, Kanban, Columns, Rows,
+  BarChart, BarChart2, BarChart3, LineChart, PieChart, TrendingUp, TrendingDown, Activity,
+  Sigma, Calculator, Percent, Binary, Code, Code2, Terminal, Braces,
+  Brackets, GitBranch, GitMerge, GitPullRequest, GitCommit, Server, Cpu, HardDrive,
+  MemoryStick, Bug, Wrench, Hammer, Cog, Workflow, Webhook, Cloud,
+  CloudUpload, CloudDownload, Briefcase, Building, Building2, Store, ShoppingCart, ShoppingBag,
+  CreditCard, Wallet, DollarSign, Coins, Receipt, Banknote, Users, User,
+  UserPlus, UserCheck, UserCog, UserMinus, Contact, Handshake, Target, Goal,
+  Camera, Film, Music, Music2, Music3, Music4, Headphones, Radio,
+  Tv, Tv2, Monitor, Smartphone, Tablet, Laptop, Speaker, Disc,
+  Disc3, Play, Pause, SkipForward, SkipBack, Rewind, FastForward, Sun,
+  Moon, CloudRain, CloudSnow, CloudLightning, Wind, Snowflake, Droplet, Droplets,
+  Leaf, Trees, TreePine, TreeDeciduous, Sprout, Flower, Flower2, Mountain,
+  MountainSnow, Sunrise, Sunset, Rainbow, Tornado, Settings2, Sliders, Filter,
+  Search, ScanSearch, Microscope, Telescope, Ruler, Scissors, Paintbrush, Palette,
+  Pipette, Crop, Wand, Wand2, Magnet, Circle, Triangle, Hexagon,
+  Pentagon, Octagon, Diamond, Spade, Club, Plus, Minus, Check,
+  Asterisk, Slash, Equal, Divide, ArrowUp, ArrowDown, ArrowLeft, ArrowRight,
+  ArrowUpRight, ArrowDownRight, ChevronUp, ChevronDown, ChevronLeft, ChevronRight,
+} as unknown as Readonly<Record<string, SvelteIconComponent>>;
+
+export const FALLBACK_LUCIDE_SVELTE_ICON = FileText as unknown as SvelteIconComponent;
+
+export function resolveLucideSvelteIcon(name: string): SvelteIconComponent | null {
+  return LUCIDE_SVELTE_ICONS[name] ?? null;
+}

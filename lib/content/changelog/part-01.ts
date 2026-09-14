@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-ICON-PICKER",
+    "version": "icon-picker@0.6.0",
+    "date": 1789430400000,
+    "kind": "feature",
+    "title": "SvelteKit Icon Picker distribution + shared picker stores",
+    "body": "Related: https://resource.rahmanef.com/slices/icon-picker — [before: icon-picker@0.5.0 was React-only and recents/style/pick handlers were coupled to React hooks/transition helpers] → [after: icon-picker@0.6.0 keeps React default, adds native Svelte 5/SvelteKit parity, and shares framework-neutral value/catalog/search/recents/style/handler/tool cores].",
+    "groups": [
+      {
+        "heading": "Same icon contract, native Svelte renderer",
+        "bullets": [
+          "Svelte preserves emoji, Lucide, Phosphor, tint, recents, Twemoji/native, random/clear, keyboard navigation, and smart popover-to-dialog behavior.",
+          "@lucide/svelte aliases keep legacy stored Lucide names valid; phosphor-svelte supplies the fill set.",
+          "Svelte carries no React, Next, shadcn, lucide-react, @phosphor-icons/react, or agent runtime."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-DESIGN-STUDIO",
     "version": "design-studio@1.1.0",
     "date": 1789430400000,

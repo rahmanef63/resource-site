@@ -1,0 +1,43 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "icon-picker-svelte",
+  "version": "0.6.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add icon-picker --framework sveltekit",
+    "consumerPath": "slices/icon-picker-svelte"
+  },
+  "files": [
+    "README.md",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts",
+    "components/DynamicIcon.svelte",
+    "components/IconCell.svelte",
+    "components/IconPicker.svelte",
+    "components/IconPickerInline.svelte",
+    "components/PickerSkeleton.svelte",
+    "lib/lucide-icons.ts",
+    "lib/phosphor-icons.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/icon-picker/lib/colors.ts",
+      "frontend/slices/icon-picker/lib/defaults.ts",
+      "frontend/slices/icon-picker/lib/emoji-catalog.ts",
+      "frontend/slices/icon-picker/lib/emoji-keywords.ts",
+      "frontend/slices/icon-picker/lib/icon-render-config.ts",
+      "frontend/slices/icon-picker/lib/lucide-catalog.ts",
+      "frontend/slices/icon-picker/lib/parse.ts",
+      "frontend/slices/icon-picker/lib/phosphor-catalog.ts",
+      "frontend/slices/icon-picker/lib/picker-handlers.ts",
+      "frontend/slices/icon-picker/lib/recents-core.ts",
+      "frontend/slices/icon-picker/lib/search-haystacks.ts",
+      "frontend/slices/icon-picker/lib/style-core.ts",
+      "frontend/slices/icon-picker/lib/tools.ts",
+      "frontend/slices/icon-picker/lib/twemoji.ts"
+    ],
+    "external": ["svelte", "@lucide/svelte", "phosphor-svelte"]
+  }
+}

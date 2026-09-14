@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-15 — SvelteKit Icon Picker distribution + shared picker stores
+<!-- public-changelog:SVELTE-ICON-PICKER -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/icon-picker
+- Preview: https://resource.rahmanef.com/preview/slices/icon-picker
+- [before: `icon-picker@0.5.0` was React-only and recents/style/pick handlers were coupled to React hooks/transition helpers] → [after: `icon-picker@0.6.0` keeps React default, adds native Svelte 5/SvelteKit parity, and shares framework-neutral value/catalog/search/recents/style/handler/tool cores]
+- Svelte uses `@lucide/svelte` + `phosphor-svelte`, preserves legacy Lucide aliases and the existing stored-value format, and carries no React/Next/shadcn/agent runtime.
+
 ### 2026-09-15 — SvelteKit Design Studio distribution + shared observable canvas core
 <!-- public-changelog:SVELTE-DESIGN-STUDIO -->
 

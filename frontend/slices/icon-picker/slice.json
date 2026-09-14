@@ -1,11 +1,11 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "icon-picker",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "category": "ui",
   "kind": "ui",
   "title": "Icon Picker",
-  "description": "Emoji + lucide + phosphor icon picker with search, 10-color Notion palette, Twemoji/native toggle, recents tracking, smart positioning. Two-tab layout (Emoji|Icon) with sub-variant pills (Native|Twemoji / Lucide|Phosphor fill). One string stores emoji OR `lucide:Name` OR `phosphor:Name` OR with `?c=hex` tint \u2014 backwards-compat with raw-emoji fields. Popover auto-flips on collision and falls back to a centered Dialog when neither side fits. Two variants: Popover (compact trigger) and Inline (full sheet/dialog use).",
+  "description": "Framework-parity emoji + Lucide + Phosphor icon picker. React/Next remains default; native Svelte 5/SvelteKit preserves the same stored-value format, search/catalog/color/random/clear/recents semantics, Twemoji/native preference, keyboard navigation, and smart popover\u2192dialog fallback over shared framework-neutral stores and handlers.",
   "namespace": "@/features/icon-picker",
   "convex": {
     "tablesExport": "",
@@ -14,7 +14,41 @@
   },
   "frontend": {
     "slicePath": "frontend/slices/icon-picker",
-    "configExport": ""
+    "configExport": "",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/icon-picker-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5",
+            "@lucide/svelte@^1.46.0",
+            "phosphor-svelte@^3.1.0"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/icon-picker/lib/colors.ts",
+            "frontend/slices/icon-picker/lib/defaults.ts",
+            "frontend/slices/icon-picker/lib/emoji-catalog.ts",
+            "frontend/slices/icon-picker/lib/emoji-keywords.ts",
+            "frontend/slices/icon-picker/lib/icon-render-config.ts",
+            "frontend/slices/icon-picker/lib/lucide-catalog.ts",
+            "frontend/slices/icon-picker/lib/parse.ts",
+            "frontend/slices/icon-picker/lib/phosphor-catalog.ts",
+            "frontend/slices/icon-picker/lib/picker-handlers.ts",
+            "frontend/slices/icon-picker/lib/recents-core.ts",
+            "frontend/slices/icon-picker/lib/search-haystacks.ts",
+            "frontend/slices/icon-picker/lib/style-core.ts",
+            "frontend/slices/icon-picker/lib/tools.ts",
+            "frontend/slices/icon-picker/lib/twemoji.ts"
+          ]
+        }
+      }
+    }
   },
   "deps": {
     "npm": [
@@ -44,7 +78,9 @@
     "picker",
     "twemoji",
     "notion",
-    "responsive"
+    "responsive",
+    "svelte",
+    "framework-parity"
   ],
   "previews": [
     {

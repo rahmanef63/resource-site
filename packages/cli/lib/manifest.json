@@ -801,12 +801,12 @@
       "slug": "icon-picker",
       "title": "Icon Picker",
       "category": "ui",
-      "description": "Emoji + lucide (outline) + phosphor (fill) icon picker with search, 10-color palette, Twemoji/native toggle, recents tracking, and smart positioning. Two-tab layout (Emoji | Icon) with sub-variant pills (Native | Twemoji / Lucide | Phosphor fill). One string stores emoji OR lucide:Name OR phosphor:Name OR with ?c=hex tint — backwards-compat with raw-emoji fields. Popover auto-flips on collision (caps to Radix `--radix-popover-content-available-height`) and falls back to centered Dialog when neither side fits. Two variants: Popover (compact trigger) and Inline (full sheet/dialog use). Lifted 2026-05-25 from open-silong.",
+      "description": "Framework-parity emoji + Lucide + Phosphor picker. React/Next remains default; native Svelte 5/SvelteKit keeps the same stored-value contract, curated catalogs, search, 10-color tint, recents, Twemoji/native preference, random/clear, keyboard grid navigation, and smart popover-to-dialog fallback over shared framework-neutral stores/handlers. React uses lucide-react + @phosphor-icons/react/shadcn; Svelte uses @lucide/svelte + phosphor-svelte and carries no React/Next/shadcn/agent runtime.",
       "source": "open-silong",
       "install": "npx rahman-resources add icon-picker",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add icon-picker` then `pnpm add @phosphor-icons/react`. parseIconValue() decodes; lucideValue() / phosphorValue() / withColor() build. Storage forms: `lucide:Name?c=hex` (outline) or `phosphor:Name?c=hex` (fill) or raw emoji. Add 'icon: v.string()' to Convex table — no migration needed for existing emoji + lucide fields. <IconPickerPopover> wraps any trigger (auto-flips, falls back to centered Dialog on tight viewports); <IconPickerInline> for sheets/dialogs. <DynamicIcon> renders from parsed value.",
+      "agentRecipe": "React/default: `npx rr add icon-picker`. SvelteKit: append `--framework sveltekit`. Store raw emoji, `lucide:Name`, or `phosphor:Name` with optional `?c=hex`; parse/build helpers are shared. Both renderers share recents/style/search/handler/tool cores. Use IconPicker/IconPickerPopover for smart floating UI, IconPickerInline for an existing sheet/dialog, and DynamicIcon for rendering stored values.",
       "tags": [
         "icon",
         "emoji",
@@ -815,8 +815,9 @@
         "picker",
         "twemoji",
         "notion",
-        "notion-like",
-        "responsive"
+        "responsive",
+        "svelte",
+        "framework-parity"
       ]
     },
     {
@@ -3751,18 +3752,50 @@
       "title": "Icon Picker",
       "category": "ui",
       "kind": "ui",
-      "version": "0.5.0",
-      "description": "Emoji + lucide (outline) + phosphor (fill) icon picker with search, 10-color palette, Twemoji/native toggle, recents tracking, and smart positioning. Two-tab layout (Emoji | Icon) with sub-variant pills (Native | Twemoji / Lucide | Phosphor fill). One string stores emoji OR lucide:Name OR phosphor:Name OR with ?c=hex tint — backwards-compat with raw-emoji fields. Popover auto-flips on collision (caps to Radix `--radix-popover-content-available-height`) and falls back to centered Dialog when neither side fits. Two variants: Popover (compact trigger) and Inline (full sheet/dialog use). Lifted 2026-05-25 from open-silong.",
+      "version": "0.6.0",
+      "description": "Framework-parity emoji + Lucide + Phosphor picker. React/Next remains default; native Svelte 5/SvelteKit keeps the same stored-value contract, curated catalogs, search, 10-color tint, recents, Twemoji/native preference, random/clear, keyboard grid navigation, and smart popover-to-dialog fallback over shared framework-neutral stores/handlers. React uses lucide-react + @phosphor-icons/react/shadcn; Svelte uses @lucide/svelte + phosphor-svelte and carries no React/Next/shadcn/agent runtime.",
       "source": "open-silong",
       "slicePath": "frontend/slices/icon-picker",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/icon-picker"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/icon-picker-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5",
+              "@lucide/svelte@^1.46.0",
+              "phosphor-svelte@^3.1.0"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/icon-picker/lib/colors.ts",
+              "frontend/slices/icon-picker/lib/defaults.ts",
+              "frontend/slices/icon-picker/lib/emoji-catalog.ts",
+              "frontend/slices/icon-picker/lib/emoji-keywords.ts",
+              "frontend/slices/icon-picker/lib/icon-render-config.ts",
+              "frontend/slices/icon-picker/lib/lucide-catalog.ts",
+              "frontend/slices/icon-picker/lib/parse.ts",
+              "frontend/slices/icon-picker/lib/phosphor-catalog.ts",
+              "frontend/slices/icon-picker/lib/picker-handlers.ts",
+              "frontend/slices/icon-picker/lib/recents-core.ts",
+              "frontend/slices/icon-picker/lib/search-haystacks.ts",
+              "frontend/slices/icon-picker/lib/style-core.ts",
+              "frontend/slices/icon-picker/lib/tools.ts",
+              "frontend/slices/icon-picker/lib/twemoji.ts"
+            ]
+          }
         }
       },
       "convexPaths": [],
       "npm": [
+        "lucide-react@^0.400.0",
         "@phosphor-icons/react@^2.1.10"
       ],
       "shadcn": [
@@ -3785,10 +3818,11 @@
         "picker",
         "twemoji",
         "notion",
-        "notion-like",
-        "responsive"
+        "responsive",
+        "svelte",
+        "framework-parity"
       ],
-      "agentRecipe": "Run `npx rr add icon-picker` then `pnpm add @phosphor-icons/react`. parseIconValue() decodes; lucideValue() / phosphorValue() / withColor() build. Storage forms: `lucide:Name?c=hex` (outline) or `phosphor:Name?c=hex` (fill) or raw emoji. Add 'icon: v.string()' to Convex table — no migration needed for existing emoji + lucide fields. <IconPickerPopover> wraps any trigger (auto-flips, falls back to centered Dialog on tight viewports); <IconPickerInline> for sheets/dialogs. <DynamicIcon> renders from parsed value."
+      "agentRecipe": "React/default: `npx rr add icon-picker`. SvelteKit: append `--framework sveltekit`. Store raw emoji, `lucide:Name`, or `phosphor:Name` with optional `?c=hex`; parse/build helpers are shared. Both renderers share recents/style/search/handler/tool cores. Use IconPicker/IconPickerPopover for smart floating UI, IconPickerInline for an existing sheet/dialog, and DynamicIcon for rendering stored values."
     },
     {
       "slug": "activity",

@@ -5,10 +5,11 @@
 ## Install
 
 ```bash
-npx rr add icon-picker
+npx rr add icon-picker                    # React/Next default
+npx rr add icon-picker --framework sveltekit
 ```
 
-Files land at `slices/icon-picker/`. Additional npm dep: `@phosphor-icons/react@^2.1.10`.
+React installs `lucide-react` + `@phosphor-icons/react` and the shadcn popover/dialog primitives. SvelteKit installs native `@lucide/svelte` + `phosphor-svelte` renderers with the same value format, catalogs, search, color, recents, Twemoji preference, keyboard navigation, and smart popover/dialog fallback — no React/Next/shadcn/agent runtime.
 
 ## Usage
 
@@ -85,4 +86,4 @@ the upgrade.
 
 ## Source
 
-Lifted 2026-05-25 from `open-silong/frontend/shared/components/icon-picker/`. Version 0.3.0.
+Lifted 2026-05-25 from `open-silong/frontend/shared/components/icon-picker/`. Current portable version: 0.6.0.

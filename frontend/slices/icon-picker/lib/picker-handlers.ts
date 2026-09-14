@@ -1,9 +1,7 @@
-/** Pick / commit handler factory for IconPickerInline. Extracted so the
- *  component file stays under the 200 LOC cap. */
+/** Framework-neutral pick / commit handlers shared by React and Svelte renderers. */
 
-import * as React from "react";
 import { lucideValue, phosphorValue, parseIconValue, withColor, type IconValue } from "./parse";
-import { pushRecent } from "./recents";
+import { pushRecent } from "./recents-core";
 import { ALL_EMOJIS } from "./emoji-catalog";
 import { ALL_LUCIDE } from "./lucide-catalog";
 import { ALL_PHOSPHOR } from "./phosphor-catalog";
@@ -23,50 +21,44 @@ export interface PickerHandlerDeps {
 }
 
 export interface PickerHandlers {
-  pickEmoji: (e: string) => void;
-  pickLucide: (n: string) => void;
-  pickPhosphor: (n: string) => void;
-  pickRecent: (v: string) => void;
+  pickEmoji: (emoji: string) => void;
+  pickLucide: (name: string) => void;
+  pickPhosphor: (name: string) => void;
+  pickRecent: (value: string) => void;
   pickColor: (hex: string) => void;
   pickRandom: () => void;
   handleClear: () => void;
 }
 
-export function buildPickerHandlers(deps: PickerHandlerDeps & { currentValue: string }): PickerHandlers {
-  const { parsed, tab, iconVariant, currentColor, colorEnabled, onChange, onClear, onSelect, currentValue } = deps;
+export function buildPickerHandlers(
+  deps: PickerHandlerDeps & { currentValue: string },
+): PickerHandlers {
+  const {
+    parsed, tab, iconVariant, currentColor, colorEnabled,
+    onChange, onClear, onSelect, currentValue,
+  } = deps;
 
-  // Commit: fire onChange + close popover synchronously so the user
-  // sees an instant response, then push to recents in a low-priority
-  // transition so the recents-driven re-render doesn't compete with
-  // the close animation. Noop commits (re-picking the active value)
-  // short-circuit — keeps cells from re-rendering for nothing.
-  function commit(nextValue: string) {
+  const commit = (nextValue: string) => {
     if (nextValue === currentValue) {
       onSelect?.();
       return;
     }
     onChange(nextValue);
     onSelect?.();
-    React.startTransition(() => pushRecent(nextValue));
-  }
+    pushRecent(nextValue);
+  };
 
   return {
-    pickEmoji: (e) => commit(withColor(e, undefined)),
-    pickLucide: (n) => commit(lucideValue(n, currentColor)),
-    pickPhosphor: (n) => commit(phosphorValue(n, currentColor)),
-    pickRecent: (v) => {
-      const re = parseIconValue(v);
-      if (re.kind === "empty") return;
-      if (re.color) {
-        if (v === currentValue) { onSelect?.(); return; }
-        onChange(v);
-        onSelect?.();
-        React.startTransition(() => pushRecent(v));
-        return;
-      }
-      if (re.kind === "lucide") commit(lucideValue(re.name, currentColor));
-      else if (re.kind === "phosphor") commit(phosphorValue(re.name, currentColor));
-      else commit(withColor(re.emoji, undefined));
+    pickEmoji: (emoji) => commit(withColor(emoji, undefined)),
+    pickLucide: (name) => commit(lucideValue(name, currentColor)),
+    pickPhosphor: (name) => commit(phosphorValue(name, currentColor)),
+    pickRecent: (value) => {
+      const recent = parseIconValue(value);
+      if (recent.kind === "empty") return;
+      if (recent.color) return commit(value);
+      if (recent.kind === "lucide") return commit(lucideValue(recent.name, currentColor));
+      if (recent.kind === "phosphor") return commit(phosphorValue(recent.name, currentColor));
+      commit(withColor(recent.emoji, undefined));
     },
     pickColor: (hex) => {
       if (!colorEnabled) return;
@@ -75,44 +67,56 @@ export function buildPickerHandlers(deps: PickerHandlerDeps & { currentValue: st
     },
     pickRandom: () => {
       if (tab === "icon") {
-        if (iconVariant === "phosphor") {
-          const n = ALL_PHOSPHOR[Math.floor(Math.random() * ALL_PHOSPHOR.length)];
-          commit(phosphorValue(n, currentColor));
-        } else {
-          const n = ALL_LUCIDE[Math.floor(Math.random() * ALL_LUCIDE.length)];
-          commit(lucideValue(n, currentColor));
-        }
+        const names = iconVariant === "phosphor" ? ALL_PHOSPHOR : ALL_LUCIDE;
+        const name = names[Math.floor(Math.random() * names.length)];
+        commit(iconVariant === "phosphor" ? phosphorValue(name, currentColor) : lucideValue(name, currentColor));
       } else {
-        const e = ALL_EMOJIS[Math.floor(Math.random() * ALL_EMOJIS.length)];
-        commit(withColor(e, undefined));
+        const emoji = ALL_EMOJIS[Math.floor(Math.random() * ALL_EMOJIS.length)];
+        commit(withColor(emoji, undefined));
       }
     },
-    handleClear: () => { onClear?.(); onSelect?.(); },
+    handleClear: () => {
+      onClear?.();
+      onSelect?.();
+    },
   };
 }
 
-export function getSearchPlaceholder(tab: TopTab, iconVariant: IconVariant, iconStyle: "twemoji" | "native"): string {
+export function getSearchPlaceholder(
+  tab: TopTab,
+  iconVariant: IconVariant,
+  iconStyle: "twemoji" | "native",
+): string {
   if (tab === "icon") {
-    return iconVariant === "phosphor" ? "Search phosphor icons (fill)…" : "Search lucide icons (outline)…";
+    return iconVariant === "phosphor"
+      ? "Search phosphor icons (fill)…"
+      : "Search lucide icons (outline)…";
   }
-  return iconStyle === "twemoji" ? "Search emoji (twemoji)…" : "Search emoji (native)…";
+  return iconStyle === "twemoji"
+    ? "Search emoji (twemoji)…"
+    : "Search emoji (native)…";
 }
 
-/** Handle arrow-key navigation over data-icon-cell-index siblings. */
-export function handleGridArrowKey(
-  e: React.KeyboardEvent<HTMLDivElement>,
-  containerRef: React.RefObject<HTMLDivElement | null>,
-): void {
-  if (e.key !== "ArrowRight" && e.key !== "ArrowLeft" && e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
-  const target = e.target as HTMLElement;
-  const idxStr = target.getAttribute("data-icon-cell-index");
-  if (!idxStr) return;
-  const cells = containerRef.current?.querySelectorAll<HTMLElement>("[data-icon-cell-index]");
-  if (!cells || cells.length === 0) return;
-  const idx = Number(idxStr);
-  const delta = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : e.key === "ArrowDown" ? 8 : -8;
-  const next = Math.max(0, Math.min(cells.length - 1, idx + delta));
-  if (next === idx) return;
-  e.preventDefault();
+type KeyboardLike = {
+  key: string;
+  target: EventTarget | null;
+  preventDefault: () => void;
+};
+type ContainerLike = HTMLElement | { current: HTMLElement | null } | null;
+
+/** Arrow-key navigation over cells carrying `data-icon-cell-index`. */
+export function handleGridArrowKey(event: KeyboardLike, containerLike: ContainerLike): void {
+  if (!["ArrowRight", "ArrowLeft", "ArrowUp", "ArrowDown"].includes(event.key)) return;
+  const target = event.target as HTMLElement | null;
+  const indexText = target?.getAttribute?.("data-icon-cell-index");
+  if (!indexText) return;
+  const container = containerLike && "current" in containerLike ? containerLike.current : containerLike;
+  const cells = container?.querySelectorAll<HTMLElement>("[data-icon-cell-index]");
+  if (!cells?.length) return;
+  const index = Number(indexText);
+  const delta = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : event.key === "ArrowDown" ? 8 : -8;
+  const next = Math.max(0, Math.min(cells.length - 1, index + delta));
+  if (next === index) return;
+  event.preventDefault();
   cells[next]?.focus();
 }
