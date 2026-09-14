@@ -11,6 +11,16 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-15 — SvelteKit Admin distribution + exact variant backend gates
+<!-- public-changelog:SVELTE-ADMIN -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/admin
+- Preview: https://resource.rahmanef.com/preview/slices/admin
+- [before: `admin@0.3.0` was React-only and `?section=` state lived in a React hook] → [after: `admin@0.4.0` keeps React default, adds native Svelte 5/SvelteKit shell + console variants, and shares access/catalog/mock/section/stats cores]
+- Variant installs preserve backend/env boundaries: shell pulls `convex/features/admin` + `SUPER_ADMIN_EMAIL`; console pulls `convex/features/admin_console` + `PLATFORM_ADMIN_EMAILS`.
+
+
 ### 2026-09-15 — SvelteKit Browser distribution + shared remote-session core
 <!-- public-changelog:SVELTE-BROWSER -->
 

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "admin-svelte",
+  "version": "0.4.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add admin --framework sveltekit",
+    "consumerPath": "slices/admin-svelte"
+  },
+  "files": [
+    "README.md",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts",
+    "variants/console/components/AccessGate.svelte",
+    "variants/console/components/AdminConsole.svelte",
+    "variants/console/components/sections/AnalyticsDashboard.svelte",
+    "variants/console/components/sections/AuditLogViewer.svelte",
+    "variants/console/components/sections/LeadsInbox.svelte",
+    "variants/console/components/sections/NavConfigManager.svelte",
+    "variants/console/components/sections/SeoHealthPanel.svelte",
+    "variants/console/index.ts",
+    "variants/shell/components/AdminPage.svelte",
+    "variants/shell/index.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/admin/variants/console/lib/access.ts",
+      "frontend/slices/admin/variants/console/lib/mock.ts",
+      "frontend/slices/admin/variants/console/lib/section-core.ts",
+      "frontend/slices/admin/variants/console/lib/sections.ts",
+      "frontend/slices/admin/variants/shell/lib/registry-labels.ts",
+      "frontend/slices/admin/variants/shell/lib/registry-stats.ts",
+      "frontend/slices/admin/variants/shell/lib/registry-types.ts"
+    ],
+    "external": [
+      "svelte"
+    ]
+  }
+}

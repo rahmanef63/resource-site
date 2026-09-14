@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "admin",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -9,9 +9,11 @@
     "consumerPath": "slices/admin"
   },
   "files": [
+    "CHANGELOG.md",
     "README.md",
     "config.ts",
     "index.ts",
+    "slice.json",
     "variants/console/CHANGELOG.md",
     "variants/console/README.md",
     "variants/console/components/AccessGate.tsx",
@@ -26,6 +28,8 @@
     "variants/console/lib/access.ts",
     "variants/console/lib/index.ts",
     "variants/console/lib/mock.ts",
+    "variants/console/lib/nav.ts",
+    "variants/console/lib/section-core.ts",
     "variants/console/lib/sections.ts",
     "variants/console/page.tsx",
     "variants/shell/README.md",
@@ -38,7 +42,23 @@
     "variants/shell/page.tsx"
   ],
   "imports": {
-    "shared": [],
-    "external": []
+    "shared": [
+      "@/components/ui/badge",
+      "@/components/ui/button",
+      "@/components/ui/card",
+      "@/components/ui/input",
+      "@/components/ui/progress",
+      "@/components/ui/scroll-area",
+      "@/components/ui/select",
+      "@/components/ui/sheet",
+      "@/components/ui/table",
+      "@/components/ui/textarea",
+      "@/lib/shared/features/defineFeature",
+      "@/lib/utils"
+    ],
+    "external": [
+      "react",
+      "lucide-react"
+    ]
   }
 }

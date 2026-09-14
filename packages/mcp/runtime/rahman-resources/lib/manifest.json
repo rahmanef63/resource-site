@@ -940,12 +940,12 @@
       "slug": "admin",
       "title": "Admin — generic shell + composed console",
       "category": "infra",
-      "description": "Access-gated admin surfaces behind one slug, in two variants — each pulls ONLY its own convex backend (per-variant convex gating). shell: a HEADLESS minimal generic admin shell — a titled landing region + a portable buildAdminStats(opts) nav-from-registry factory (consumer supplies a SliceRegistryAdapter + queryTable reader) over convex/features/admin; superadmin gate via SUPER_ADMIN_EMAIL. console: the composed admin panel distilled from ~15 project admin panels — a gated two-column shell (AdminConsole) over a 26-section registry (ADMIN_CONSOLE_SECTIONS: observability / identity / ai / content / commerce / config) that mounts OTHER rr slices via a consumer-supplied `components` map (users→user-management, roles→rbac-roles, ai→ai-admin, tenants→platform-admin) plus 5 owned gap sections (Analytics, Audit-log, Nav config, SEO health, Leads/CRM) over convex/features/admin_console (ac_leads + ac_nav_items); gate injected, PLATFORM_ADMIN_EMAILS allowlist. Install one with `npx rr add admin shell|console`, or both with `npx rr add admin`. NOT the multi-tenant control plane — that's the separate `platform-admin` slice (the console's `tenants` section provider).",
+      "description": "Framework-parity access-gated admin surfaces behind one slug. React/Next remains default; native Svelte 5/SvelteKit provides shell + console over the same access rules, 26-section catalog, mock contracts, ?section= deep-link semantics, registry stats core, and Convex backends. shell is the generic AdminPage + buildAdminStats surface over convex/features/admin. console is the composed 26-section AdminConsole with five owned sections and host-injected peer panels over convex/features/admin_console. Svelte injects provider panels as snippets and imports no React/Lucide/shadcn. Variant installs keep backend and env gating exact.",
       "source": "rahmanef63/resource-site",
       "install": "npx rahman-resources add admin",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add admin` for both, or `npx rr add admin shell` / `console` for one — each variant pulls only its own convex backend. shell: mount <AdminPage labels={...} /> + call buildAdminStats({ sliceRegistry, queryTable }) in convex/features/admin/query.ts; lock down with SUPER_ADMIN_EMAIL. console: mount <AdminConsole access={useAdminAccess()} components={{ users: <UsersPanel/>, ... }} /> — owned sections (analytics/audit-log/nav-config/seo-health/leads) render as-is, map each reuse section id to the panel from the peer slice you installed; compose adminConsoleTables into convex/schema.ts and front ac_leads.create with rate-limit; gate via PLATFORM_ADMIN_EMAILS.",
+      "agentRecipe": "React/default: `npx rr add admin shell|console`. SvelteKit: append `--framework sveltekit`. shell reuses resolveAdminLabels/buildAdminStats and pulls only convex/features/admin. console reuses the same access/catalog/URL core, includes five owned panels, and receives provider panels through React components or Svelte snippets; it pulls only convex/features/admin_console. Keep remote/admin routes server-gated; UI access filters are not an authorization boundary.",
       "tags": [
         "infra",
         "admin",
@@ -955,7 +955,9 @@
         "composition",
         "rbac",
         "access-gate",
-        "registry"
+        "registry",
+        "svelte",
+        "framework-parity"
       ]
     },
     {
@@ -4166,21 +4168,45 @@
       "title": "Admin — generic shell + composed console",
       "category": "infra",
       "kind": "full",
-      "version": "0.3.0",
-      "description": "Access-gated admin surfaces behind one slug, in two variants — each pulls ONLY its own convex backend (per-variant convex gating). shell: a HEADLESS minimal generic admin shell — a titled landing region + a portable buildAdminStats(opts) nav-from-registry factory (consumer supplies a SliceRegistryAdapter + queryTable reader) over convex/features/admin; superadmin gate via SUPER_ADMIN_EMAIL. console: the composed admin panel distilled from ~15 project admin panels — a gated two-column shell (AdminConsole) over a 26-section registry (ADMIN_CONSOLE_SECTIONS: observability / identity / ai / content / commerce / config) that mounts OTHER rr slices via a consumer-supplied `components` map (users→user-management, roles→rbac-roles, ai→ai-admin, tenants→platform-admin) plus 5 owned gap sections (Analytics, Audit-log, Nav config, SEO health, Leads/CRM) over convex/features/admin_console (ac_leads + ac_nav_items); gate injected, PLATFORM_ADMIN_EMAILS allowlist. Install one with `npx rr add admin shell|console`, or both with `npx rr add admin`. NOT the multi-tenant control plane — that's the separate `platform-admin` slice (the console's `tenants` section provider).",
+      "version": "0.4.0",
+      "description": "Framework-parity access-gated admin surfaces behind one slug. React/Next remains default; native Svelte 5/SvelteKit provides shell + console over the same access rules, 26-section catalog, mock contracts, ?section= deep-link semantics, registry stats core, and Convex backends. shell is the generic AdminPage + buildAdminStats surface over convex/features/admin. console is the composed 26-section AdminConsole with five owned sections and host-injected peer panels over convex/features/admin_console. Svelte injects provider panels as snippets and imports no React/Lucide/shadcn. Variant installs keep backend and env gating exact.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/admin",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/admin"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/admin-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/admin/variants/console/lib/access.ts",
+              "frontend/slices/admin/variants/console/lib/mock.ts",
+              "frontend/slices/admin/variants/console/lib/section-core.ts",
+              "frontend/slices/admin/variants/console/lib/sections.ts",
+              "frontend/slices/admin/variants/shell/lib/registry-labels.ts",
+              "frontend/slices/admin/variants/shell/lib/registry-stats.ts",
+              "frontend/slices/admin/variants/shell/lib/registry-types.ts"
+            ]
+          }
         }
       },
       "convexPaths": [
         "convex/features/admin",
         "convex/features/admin_console"
       ],
-      "npm": [],
+      "npm": [
+        "lucide-react@^0.400.0"
+      ],
       "shadcn": [
         "badge",
         "button",
@@ -4193,32 +4219,8 @@
         "table",
         "textarea"
       ],
-      "env": [
-        {
-          "name": "SUPER_ADMIN_EMAIL",
-          "scope": "convex",
-          "required": false,
-          "description": "shell variant — single super-admin gate."
-        },
-        {
-          "name": "PLATFORM_ADMIN_EMAILS",
-          "scope": "convex",
-          "required": false,
-          "description": "console variant — comma-separated platform-admin allowlist."
-        }
-      ],
-      "peers": [
-        {
-          "slug": "convex-auth",
-          "range": "^0.1",
-          "reason": "requireAdmin gate uses convex-auth identity."
-        },
-        {
-          "slug": "rbac-roles",
-          "range": "^0.1",
-          "reason": "console section gates are permission tokens resolved by rbac-roles."
-        }
-      ],
+      "env": [],
+      "peers": [],
       "sharedFiles": [],
       "providers": [],
       "tags": [
@@ -4230,9 +4232,11 @@
         "composition",
         "rbac",
         "access-gate",
-        "registry"
+        "registry",
+        "svelte",
+        "framework-parity"
       ],
-      "agentRecipe": "Run `npx rr add admin` for both, or `npx rr add admin shell` / `console` for one — each variant pulls only its own convex backend. shell: mount <AdminPage labels={...} /> + call buildAdminStats({ sliceRegistry, queryTable }) in convex/features/admin/query.ts; lock down with SUPER_ADMIN_EMAIL. console: mount <AdminConsole access={useAdminAccess()} components={{ users: <UsersPanel/>, ... }} /> — owned sections (analytics/audit-log/nav-config/seo-health/leads) render as-is, map each reuse section id to the panel from the peer slice you installed; compose adminConsoleTables into convex/schema.ts and front ac_leads.create with rate-limit; gate via PLATFORM_ADMIN_EMAILS.",
+      "agentRecipe": "React/default: `npx rr add admin shell|console`. SvelteKit: append `--framework sveltekit`. shell reuses resolveAdminLabels/buildAdminStats and pulls only convex/features/admin. console reuses the same access/catalog/URL core, includes five owned panels, and receives provider panels through React components or Svelte snippets; it pulls only convex/features/admin_console. Keep remote/admin routes server-gated; UI access filters are not an authorization boundary.",
       "variants": {
         "default": "console",
         "items": [
@@ -4242,7 +4246,17 @@
             "description": "Minimal generic admin shell (titled card + buildAdminStats).",
             "convex": [
               "convex/features/admin"
-            ]
+            ],
+            "deps": {
+              "env": [
+                {
+                  "name": "SUPER_ADMIN_EMAIL",
+                  "scope": "convex",
+                  "required": false,
+                  "description": "shell variant — single super-admin gate."
+                }
+              ]
+            }
           },
           {
             "id": "console",
@@ -4250,7 +4264,17 @@
             "description": "Composed access-gated 26-section console mounting other rr slices.",
             "convex": [
               "convex/features/admin_console"
-            ]
+            ],
+            "deps": {
+              "env": [
+                {
+                  "name": "PLATFORM_ADMIN_EMAILS",
+                  "scope": "convex",
+                  "required": false,
+                  "description": "console variant — comma-separated platform-admin allowlist."
+                }
+              ]
+            }
           }
         ]
       }

@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-ADMIN",
+    "version": "admin@0.4.0",
+    "date": 1789430400000,
+    "kind": "feature",
+    "title": "SvelteKit Admin distribution + exact variant backend gates",
+    "body": "Related: https://resource.rahmanef.com/slices/admin — [before: admin@0.3.0 was React-only and active-section URL state lived in a React hook] → [after: admin@0.4.0 keeps React default, adds native Svelte 5/SvelteKit shell + console variants, and shares framework-neutral access/catalog/mock/section/stats cores].",
+    "groups": [
+      {
+        "heading": "Two native renderers, same admin contract",
+        "bullets": [
+          "Svelte console includes the five owned panels and accepts provider panels as Svelte snippets without React/Lucide/shadcn leakage.",
+          "Shell and console keep exact per-variant Convex and env selection in both React and Svelte installs.",
+          "UI filtering remains convenience only; server-side requireAdmin stays the authorization boundary."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-BROWSER",
     "version": "browser@1.3.0",
     "date": 1789430400000,

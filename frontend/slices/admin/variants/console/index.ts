@@ -25,3 +25,11 @@ export {
 } from "./lib/sections"
 export { canSeeAdmin, canSeeSection, filterSections, hasPermission, meetsLevel } from "./lib/access"
 export * from "./lib/mock"
+export {
+  ADMIN_SECTION_PARAM,
+  groupSections,
+  normalizeActiveSection,
+  readSectionFromSearch,
+  sectionHref,
+  visibleSectionIds,
+} from "./lib/section-core"

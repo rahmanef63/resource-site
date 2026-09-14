@@ -1,4 +1,9 @@
-# Changelog — admin-console
+# admin-console changelog
+
+## 0.4.0 — 2026-09-15
+
+- Native SvelteKit console parity over the same access/catalog/mock contracts.
+- Shared `section-core.ts` now owns active-section normalization and `?section=` URL semantics for both React and Svelte.
 
 ## 0.1.0 — 2026-07-02
 

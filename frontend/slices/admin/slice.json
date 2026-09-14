@@ -1,11 +1,11 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "admin",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "category": "infra",
   "kind": "full",
-  "title": "Admin — generic shell + composed console",
-  "description": "Access-gated admin surfaces behind one slug, in two variants. shell: a minimal generic single-instance admin shell (a titled card region + a buildAdminStats() factory + SliceAdminLabels) over convex/features/admin — zero composed sections, wire your own. console: the composed multi-section console — an access-gated two-column shell driving a 26-section registry that mounts OTHER rr slices (users → user-management, roles → rbac-roles, analytics/audit, AI → ai-admin, tenants → platform-admin) via a components map, over convex/features/admin_console (ac_leads, ac_nav_items). Install one with `npx rr add admin shell|console`, or both with `npx rr add admin`; each variant pulls ONLY its own convex backend (per-variant convex gating). NOT the multi-tenant control plane — that stays the separate `platform-admin` slice (referenced here as the `tenants` section provider).",
+  "title": "Admin \u2014 generic shell + composed console",
+  "description": "Framework-parity access-gated admin surfaces behind one slug. React/Next remains default; explicit Svelte 5/SvelteKit provides native shell and console renderers over the same access rules, 26-section catalog, mock contracts, registry-driven stats core, and per-variant Convex backends. shell is the minimal generic AdminPage + buildAdminStats surface over convex/features/admin. console is the composed 26-section AdminConsole with five owned sections (analytics, audit log, nav config, SEO health, leads) plus host-injected peer panels over convex/features/admin_console. Variant installs keep backend gating exact: shell pulls only admin, console only admin_console.",
   "namespace": "@/features/admin",
   "variants": {
     "default": "console",
@@ -16,7 +16,17 @@
         "description": "Minimal generic admin shell (titled card + buildAdminStats).",
         "convex": [
           "convex/features/admin"
-        ]
+        ],
+        "deps": {
+          "env": [
+            {
+              "name": "SUPER_ADMIN_EMAIL",
+              "scope": "convex",
+              "required": false,
+              "description": "shell variant \u2014 single super-admin gate."
+            }
+          ]
+        }
       },
       {
         "id": "console",
@@ -24,13 +34,48 @@
         "description": "Composed access-gated 26-section console mounting other rr slices.",
         "convex": [
           "convex/features/admin_console"
-        ]
+        ],
+        "deps": {
+          "env": [
+            {
+              "name": "PLATFORM_ADMIN_EMAILS",
+              "scope": "convex",
+              "required": false,
+              "description": "console variant \u2014 comma-separated platform-admin allowlist."
+            }
+          ]
+        }
       }
     ]
   },
   "frontend": {
     "slicePath": "frontend/slices/admin",
-    "configExport": "adminFeature"
+    "configExport": "adminFeature",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/admin-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/admin/variants/console/lib/access.ts",
+            "frontend/slices/admin/variants/console/lib/mock.ts",
+            "frontend/slices/admin/variants/console/lib/section-core.ts",
+            "frontend/slices/admin/variants/console/lib/sections.ts",
+            "frontend/slices/admin/variants/shell/lib/registry-labels.ts",
+            "frontend/slices/admin/variants/shell/lib/registry-stats.ts",
+            "frontend/slices/admin/variants/shell/lib/registry-types.ts"
+          ]
+        }
+      }
+    }
   },
   "convex": {
     "tablesExport": "",
@@ -41,7 +86,9 @@
     ]
   },
   "deps": {
-    "npm": [],
+    "npm": [
+      "lucide-react@^0.400.0"
+    ],
     "shadcn": [
       "badge",
       "button",
@@ -54,20 +101,7 @@
       "table",
       "textarea"
     ],
-    "env": [
-      {
-        "name": "SUPER_ADMIN_EMAIL",
-        "scope": "convex",
-        "required": false,
-        "description": "shell variant — single super-admin gate."
-      },
-      {
-        "name": "PLATFORM_ADMIN_EMAILS",
-        "scope": "convex",
-        "required": false,
-        "description": "console variant — comma-separated platform-admin allowlist."
-      }
-    ],
+    "env": [],
     "peers": []
   },
   "registers": [],
@@ -81,7 +115,9 @@
     "rbac",
     "sections",
     "dashboard",
-    "infra"
+    "infra",
+    "svelte",
+    "framework-parity"
   ],
   "previews": [],
   "contract": {
