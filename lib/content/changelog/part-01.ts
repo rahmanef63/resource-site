@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "OS-TERMINAL-PORTABILITY",
+    "version": "os-terminal@1.3.1",
+    "date": 1789344000000,
+    "kind": "fix",
+    "title": "OS Terminal clean-install portability",
+    "body": "Related: https://resource.rahmanef.com/slices/os-terminal — [before: os-terminal@1.3.0 selected the right React/Svelte renderer but omitted shared agentic files required by the tool surface] → [after: os-terminal@1.3.1 installs the exact agentic dependency set for each framework].",
+    "groups": [
+      {
+        "heading": "Framework-safe agentic packaging",
+        "bullets": [
+          "React/default now copies the mount-time useAgentTools hook plus its registry/prompt/type chain instead of relying on repository-local files.",
+          "SvelteKit copies no agentic runtime files because osTerminalTools is structurally self-contained; the React hook and aggregate barrel are not part of the Svelte install.",
+          "Terminal command/fs/PTY cores remain unchanged; this is a packaging portability patch discovered by testing the real rr installer output."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-OS-TERMINAL",
     "version": "os-terminal@1.3.0",
     "date": 1789344000000,

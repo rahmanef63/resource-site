@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-14 — OS Terminal clean-install portability
+<!-- public-changelog:OS-TERMINAL-PORTABILITY -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/os-terminal
+- [before: `os-terminal@1.3.0` selected the right React/Svelte renderer but did not copy the shared agentic modules imported by its tool surface] → [after: `os-terminal@1.3.1` declares the React hook/registry chain while Svelte needs no agentic runtime files]
+- The tool collection is self-contained and the React auto-registration hook uses a narrow official module import, so clean Svelte installs remain free of React runtime leakage while `osTerminalTools` stays available.
+
 ### 2026-09-14 — SvelteKit OS Terminal distribution
 <!-- public-changelog:SVELTE-OS-TERMINAL -->
 

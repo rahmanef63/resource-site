@@ -2,7 +2,7 @@
 // audit-allow-hex: terminal glass chrome palette is the slice's design, not themable tokens.
 
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
-import { useAgentTools } from "@/shared/agentic";
+import { useAgentTools } from "@/shared/agentic/use-agent-tools";
 import { useOsApi, usePublishInspector } from "../lib/host";
 import { run, seedFs, NEOFETCH, type Line } from "../lib/commands";
 import { osTerminalTools } from "../lib/tools";

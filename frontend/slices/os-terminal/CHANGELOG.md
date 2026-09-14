@@ -1,5 +1,11 @@
 # os-terminal changelog
 
+## 1.3.1 — 2026-09-14
+
+- Fixed clean-install portability: React/default now declares and installs the agentic hook/registry files it imports.
+- SvelteKit now installs no agentic runtime files: `osTerminalTools` is a self-contained structural collection, while the React-only auto-registration hook stays outside the Svelte dependency graph.
+- Removed the agentic authoring runtime dependency from `osTerminalTools` and narrowed React auto-registration to the official `@/shared/agentic/use-agent-tools` module.
+
 ## 1.3.0 — 2026-09-14
 
 - Added native Svelte 5/SvelteKit exec-shell + interactive-PTY UI over the same command/fs/adapter/PTY cores; React/Next remains default.

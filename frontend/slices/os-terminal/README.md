@@ -6,6 +6,8 @@ React/Next remains the default renderer; explicit SvelteKit installs native
 Svelte 5 UI over the same command, filesystem, adapter, PTY, and agent-tool
 semantics.
 
+Installer metadata also carries the shared agentic modules the slice actually imports. React receives the mount-time hook/registry chain; Svelte receives no agentic runtime files at all because `osTerminalTools` is a self-contained structural collection, so a clean Svelte install cannot acquire React through the agentic layer.
+
 ## React / Next
 
 ```tsx

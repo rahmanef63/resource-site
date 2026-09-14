@@ -639,7 +639,7 @@ export default function StartHereDemo() {
     title: "Terminal — shell emulator with live passthrough + PTY seam",
     category: "os",
     kind: "ui",
-    version: "1.3.0",
+    version: "1.3.1",
     tagline: "Native React + Svelte terminal: mock shell, live exec adapter, and host-injected interactive PTY.",
     description:
       "Framework-parity terminal shell: React/Next remains default and explicit SvelteKit gets native Svelte 5 exec + PTY UI over the same command dispatcher, mock filesystem, live TerminalOsApi, SSE PTY transport, and agentic tools. Mock mode needs zero backend; configureTerminal enables real fs/exec/sys and configurePty injects an interactive transport + VT renderer. Both host-wiring seams are observable after mount.",

@@ -49,3 +49,5 @@ runtime. It intentionally does not export the React/Lucide `osTerminalApp`
 appshell descriptor; Svelte hosts mount `Terminal` directly while sharing the
 same command dispatcher, mock filesystem, terminal adapter, PTY transport, and
 agentic tool collection.
+Clean-install note: `rr add os-terminal --framework sveltekit` copies the shared terminal cores and no agentic runtime files. `osTerminalTools` is self-contained; it does not copy the React `useAgentTools` hook or the aggregate agentic barrel.
+
