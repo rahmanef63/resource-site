@@ -1145,8 +1145,8 @@ http.route({ path: "/webhooks/doku", method: "POST", handler: dokuWebhook });`,
     title: "Resend — Transactional & Newsletter",
     category: "integrations",
     kind: "full",
-    version: "0.3.0",
-    description: "Truthful single-opt-in newsletter slice with adapter-backed React/Next and native Svelte 5 subscribe forms, real Convex subscriber/issue tables, public unsubscribe, admin-gated subscriber listing and campaign scheduling, and an internal Resend delivery worker. The public preview stays unconfigured so it cannot mutate data or send email.",
+    version: "0.3.1",
+    description: "Truthful single-opt-in newsletter slice with adapter-backed React/Next and native Svelte 5 subscribe forms, a self-contained Convex subscriber/issue backend, public unsubscribe, host-authorized list/send adapters, and internal Resend campaign workers. The public preview stays unconfigured so it cannot mutate data or send email.",
     source: "rahmanef63/resource-site",
     docsUrl: "https://resend.com/docs",
     install: "npm i resend",
@@ -1161,7 +1161,7 @@ http.route({ path: "/webhooks/doku", method: "POST", handler: dokuWebhook });`,
     peers: [],
     tags: ["email", "newsletter", "resend", "broadcast", "svelte"],
     usedBy: ["personal-brand-os", "kreator-studio-os", "wirausaha-os"],
-    agentRecipe: "Run `npx rr add resend-newsletter` for React/default or `npx rr add resend-newsletter --framework sveltekit`. Configure the public subscribe adapter before rendering. The bundled Convex backend is single opt-in: subscribe activates immediately; unsubscribe is public/idempotent; list + sendCampaignPublic are admin-gated. RESEND_API_KEY/RESEND_FROM stay server-side and only the internal campaign worker calls Resend.",
+    agentRecipe: "Run `npx rr add resend-newsletter` for React/default or `npx rr add resend-newsletter --framework sveltekit`. Configure the public subscribe adapter before rendering. The bundled Convex backend is single opt-in: subscribe activates immediately and unsubscribe is public/idempotent. List/send remain host-authorized adapters; after host authz call the internal sendCampaign worker. RESEND_API_KEY/RESEND_FROM stay server-side.",
     previewPath: "/preview/slices/resend-newsletter",
     wiring: `// App startup — both React and Svelte use the same public adapter contract
 configureResendNewsletter({
@@ -1170,14 +1170,14 @@ configureResendNewsletter({
 
 // Bundled Convex endpoints
 // mutation.subscribe / mutation.unsubscribe
-// query.listSubscribersPublic (admin)
-// actions.send.sendCampaignPublic (admin → scheduled internal Resend worker)`,
+// listSubscribers/sendBroadcast: host-authenticated adapters
+// internal.actions.send.sendCampaign → scheduled internal Resend worker`,
     defaultView: "tablet",
     defaultZoom: 0.8,
     compat: {
       templates: {
-        "personal-brand-os": { status: "recommended", note: "Public subscribe + admin campaign flow are bundled." },
-        "agency-studio-os": { status: "recommended", note: "Admin-gated campaign scheduling pairs with lead/content workflows." },
+        "personal-brand-os": { status: "recommended", note: "Public subscribe plus a host-authorized campaign seam are bundled." },
+        "agency-studio-os": { status: "recommended", note: "Host-authorized campaign adapters pair with lead/content workflows." },
         "saas-marketing-os": { status: "recommended" },
       },
     },

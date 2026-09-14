@@ -152,7 +152,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...resendNewsletterConfig,
     importPath: "@/features/resend-newsletter/config",
-    version: "0.3.0",
+    version: "0.3.1",
   },
   {
     ...resourcesLauncherAdminConfig,

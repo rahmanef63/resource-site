@@ -1,11 +1,11 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "resend-newsletter",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "category": "integrations",
   "kind": "full",
   "title": "Resend — Transactional & Newsletter",
-  "description": "Truthful single-opt-in newsletter slice with adapter-backed React/Next and native Svelte 5 subscribe forms, a real Convex subscriber/issue backend, public unsubscribe, admin-gated listing/campaign scheduling, and an internal Resend delivery worker. No frontend fake-success timer or unimplemented double-opt-in claim remains.",
+  "description": "Truthful single-opt-in newsletter slice with adapter-backed React/Next and native Svelte 5 subscribe forms, a self-contained Convex subscriber/issue backend, public unsubscribe, host-authorized list/send adapters, and internal Resend campaign workers. No frontend fake-success timer, unimplemented double-opt-in claim, or hidden auth-schema dependency remains.",
   "namespace": "@/features/resend-newsletter",
   "convex": {
     "tablesExport": "newsletterTables",
@@ -88,18 +88,13 @@
   "previews": [],
   "contract": {
     "requires": {
-      "auth": "convex",
-      "rbac": [
-        "newsletter.list-subscribers",
-        "newsletter.send-broadcast"
-      ],
+      "auth": "none",
+      "rbac": [],
       "env": [
         "RESEND_API_KEY",
         "RESEND_FROM"
       ],
-      "deps": [
-        "convex-auth"
-      ]
+      "deps": []
     },
     "provides": {
       "tools": [
@@ -136,7 +131,13 @@
       ]
     },
     "generalization": {
-      "level": "portable"
+      "level": "needs-adapter",
+      "requiredProps": [
+        "subscribe",
+        "unsubscribe",
+        "listSubscribers",
+        "sendBroadcast"
+      ]
     }
   }
 }

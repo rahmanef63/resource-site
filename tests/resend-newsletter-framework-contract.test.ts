@@ -13,7 +13,7 @@ const send = readFileSync(join(root, "convex/features/newsletter/actions/send.ts
 
 describe("resend-newsletter framework contract", () => {
   it("keeps React default and selects native Svelte over shared public core/host", () => {
-    expect(slice.version).toBe("0.3.0");
+    expect(slice.version).toBe("0.3.1");
     expect(slice.frontend.defaultFramework).toBe("react-next");
     expect(slice.frontend.frameworks["svelte-sveltekit"].deps.shadcn).toEqual([]);
     expect(slice.frontend.frameworks["svelte-sveltekit"].deps.sharedFiles).toEqual([
@@ -36,18 +36,24 @@ describe("resend-newsletter framework contract", () => {
       "newsletterSubscribeAttempts",
     ]);
     expect(slice.contract.requires.convex).toBeUndefined();
+    expect(slice.contract.requires.auth).toBe("none");
+    expect(slice.contract.requires.rbac).toEqual([]);
+    expect(slice.contract.requires.deps).toEqual([]);
     expect(JSON.stringify(slice)).not.toContain("newsletter_subscribers");
     expect(JSON.stringify(slice)).not.toContain("newsletter_broadcasts");
     expect(mutation).toContain('status: "active"');
     expect(mutation).toContain("export const unsubscribe = mutation");
-    expect(query).toContain("export const listSubscribersPublic = query");
-    expect(send).toContain("export const sendCampaignPublic = action");
+    expect(query).not.toContain("@convex-dev/auth/server");
+    expect(query).not.toContain("../../_shared/auth");
+    expect(send).toContain("export const sendCampaign = internalAction");
+    expect(send).not.toContain("broadcastPublic");
+    expect(send).not.toContain("sendCampaignPublic");
   });
 
   it("keeps actual email delivery behind the internal Resend worker", () => {
     expect(send).toContain('await import("resend")');
     expect(send).toContain("export const broadcast = internalAction");
-    expect(send).toContain("admin role required");
+    expect(send).not.toContain("getAuthUserId");
     expect(react).not.toContain("resend.emails.send");
     expect(svelte).not.toContain("resend.emails.send");
   });

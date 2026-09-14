@@ -1,7 +1,6 @@
 "use node";
 
-import { getAuthUserId } from "@convex-dev/auth/server";
-import { action, internalAction } from "../../../_generated/server";
+import { internalAction } from "../../../_generated/server";
 import { internal } from "../../../_generated/api";
 import { v } from "convex/values";
 
@@ -9,7 +8,6 @@ const BATCH_SIZE = 8;
 const BATCH_DELAY_MS = 1100;
 const MAX_SUBJECT_LEN = 200;
 const MAX_BODY_LEN = 200_000;
-
 
 export const broadcast = internalAction({
   args: { issueId: v.id("newsletterIssues") },
@@ -53,27 +51,10 @@ export const broadcast = internalAction({
   },
 });
 
-export const broadcastPublic = action({
-  args: { issueId: v.id("newsletterIssues") },
-  returns: v.object({ scheduled: v.boolean(), issueId: v.id("newsletterIssues") }),
-  handler: async (ctx, { issueId }) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) throw new Error("Unauthorized — sign in required");
-    const allowed = await ctx.runQuery(internal.features.newsletter.query.isAdminUser, { userId });
-    if (!allowed) throw new Error("Forbidden — admin role required");
-    await ctx.scheduler.runAfter(0, internal.features.newsletter.actions.send.broadcast, { issueId });
-    return { scheduled: true, issueId };
-  },
-});
-
-export const sendCampaignPublic = action({
+export const sendCampaign = internalAction({
   args: { subject: v.string(), body: v.string() },
   returns: v.object({ scheduled: v.boolean(), issueId: v.id("newsletterIssues") }),
   handler: async (ctx, { subject, body }) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) throw new Error("Unauthorized — sign in required");
-    const allowed = await ctx.runQuery(internal.features.newsletter.query.isAdminUser, { userId });
-    if (!allowed) throw new Error("Forbidden — admin role required");
     const cleanSubject = subject.trim();
     const cleanBody = body.trim();
     if (!cleanSubject || cleanSubject.length > MAX_SUBJECT_LEN) throw new Error("Invalid subject");

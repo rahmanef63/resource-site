@@ -6,7 +6,7 @@ Newsletter subscription UI + Convex subscriber/campaign backend + Resend deliver
 
 - Public subscribe is **single opt-in**: success immediately activates the normalized address.
 - Public unsubscribe is idempotent.
-- Subscriber listing and campaign scheduling are admin-gated through Convex Auth + the existing admin profile/super-admin rule.
+- Subscriber listing and campaign scheduling are host-authorized adapter operations; the bundled backend exposes only internal campaign functions.
 - Campaign delivery is the only path that calls Resend. Tests/previews do not send email.
 - `RESEND_API_KEY` and `RESEND_FROM` are server-only.
 
@@ -41,4 +41,4 @@ export default defineSchema({ ...newsletterTables });
 
 Real tables: `newsletterSubscribers`, `newsletterIssues`, `newsletterSubscribeAttempts`.
 
-Set `RESEND_API_KEY` and `RESEND_FROM`. Use `mutation.subscribe`, `mutation.unsubscribe`, `query.listSubscribersPublic`, and `actions.send.sendCampaignPublic`. The send action validates admin access, creates an issue, and schedules the internal Resend worker.
+Set `RESEND_API_KEY` and `RESEND_FROM`. Use `mutation.subscribe` and `mutation.unsubscribe` directly. For list/send tools, bind your own authenticated server adapters. After host authz, a Convex server action may call `internal.features.newsletter.actions.send.sendCampaign`; the internal worker then schedules Resend delivery.

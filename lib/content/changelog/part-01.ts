@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "RESEND-NEWSLETTER-PORTABILITY",
+    "version": "resend-newsletter@0.3.1",
+    "date": 1789344000000,
+    "kind": "fix",
+    "title": "Resend Newsletter portability hardening",
+    "body": "Related: https://resource.rahmanef.com/slices/resend-newsletter — [before: resend-newsletter@0.3.0 coupled admin list/send endpoints to this repository's Convex Auth, userProfiles, and super-admin helper] → [after: resend-newsletter@0.3.1 is auth-schema-neutral; list/send stay host-authorized adapters and the bundled campaign scheduler is internal-only].",
+    "groups": [
+      {
+        "heading": "Portable authorization boundary",
+        "bullets": [
+          "Removed imports of @convex-dev/auth/server and the repository-specific shared auth/profile helpers from the newsletter backend.",
+          "The shipped backend now exposes public subscribe/unsubscribe plus internal campaign workers; subscriber listing and broadcast authorization belong to the host adapter.",
+          "React and Svelte UI semantics are unchanged, while manifests and tool descriptions now match the actual portable runtime."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-RESEND-NEWSLETTER",
     "version": "resend-newsletter@0.3.0",
     "date": 1789344000000,

@@ -1,5 +1,11 @@
 # Changelog — resend-newsletter
 
+## 0.3.1 — 2026-09-14
+
+- Removed the hidden dependency on this repository's Convex Auth/userProfiles/super-admin schema.
+- Subscriber listing and campaign sending are now explicit host-authorized adapters; the bundled Convex campaign entrypoint is internal-only.
+- Updated manifests, preview, docs, and agent-tool wording so the shipped contract matches the portable runtime.
+
 ## 0.3.0 — 2026-09-14
 
 - Replaced fake frontend success with an explicit adapter-backed real subscribe flow.

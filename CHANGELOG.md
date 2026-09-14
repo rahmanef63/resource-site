@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-14 — Resend Newsletter portability hardening
+<!-- public-changelog:RESEND-NEWSLETTER-PORTABILITY -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/resend-newsletter
+- [before: `resend-newsletter@0.3.0` coupled admin list/send endpoints to this repository's Convex Auth, `userProfiles`, and super-admin helper] → [after: `resend-newsletter@0.3.1` is auth-schema-neutral; list/send stay host-authorized adapters and the bundled campaign scheduler is internal-only]
+- React/Next and native Svelte 5 UI remain unchanged; this patch removes a hidden backend portability dependency without weakening the requirement that broadcast actions be authorized by the host.
+
 ### 2026-09-14 — SvelteKit Resend Newsletter + truthful backend
 <!-- public-changelog:SVELTE-RESEND-NEWSLETTER -->
 

@@ -439,7 +439,7 @@
       "slug": "resend-newsletter",
       "title": "Resend — Transactional & Newsletter",
       "category": "integrations",
-      "description": "Truthful single-opt-in newsletter slice with adapter-backed React/Next and native Svelte 5 subscribe forms, real Convex subscriber/issue tables, public unsubscribe, admin-gated subscriber listing and campaign scheduling, and an internal Resend delivery worker. The public preview stays unconfigured so it cannot mutate data or send email.",
+      "description": "Truthful single-opt-in newsletter slice with adapter-backed React/Next and native Svelte 5 subscribe forms, a self-contained Convex subscriber/issue backend, public unsubscribe, host-authorized list/send adapters, and internal Resend campaign workers. The public preview stays unconfigured so it cannot mutate data or send email.",
       "source": "rahmanef63/resource-site",
       "docsUrl": "https://resend.com/docs",
       "install": "npm i resend",
@@ -447,7 +447,7 @@
         "resend"
       ],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add resend-newsletter` for React/default or `npx rr add resend-newsletter --framework sveltekit`. Configure the public subscribe adapter before rendering. The bundled Convex backend is single opt-in: subscribe activates immediately; unsubscribe is public/idempotent; list + sendCampaignPublic are admin-gated. RESEND_API_KEY/RESEND_FROM stay server-side and only the internal campaign worker calls Resend.",
+      "agentRecipe": "Run `npx rr add resend-newsletter` for React/default or `npx rr add resend-newsletter --framework sveltekit`. Configure the public subscribe adapter before rendering. The bundled Convex backend is single opt-in: subscribe activates immediately and unsubscribe is public/idempotent. List/send remain host-authorized adapters; after host authz call the internal sendCampaign worker. RESEND_API_KEY/RESEND_FROM stay server-side.",
       "tags": [
         "email",
         "newsletter",
@@ -2567,8 +2567,8 @@
       "title": "Resend — Transactional & Newsletter",
       "category": "integrations",
       "kind": "full",
-      "version": "0.3.0",
-      "description": "Truthful single-opt-in newsletter slice with adapter-backed React/Next and native Svelte 5 subscribe forms, real Convex subscriber/issue tables, public unsubscribe, admin-gated subscriber listing and campaign scheduling, and an internal Resend delivery worker. The public preview stays unconfigured so it cannot mutate data or send email.",
+      "version": "0.3.1",
+      "description": "Truthful single-opt-in newsletter slice with adapter-backed React/Next and native Svelte 5 subscribe forms, a self-contained Convex subscriber/issue backend, public unsubscribe, host-authorized list/send adapters, and internal Resend campaign workers. The public preview stays unconfigured so it cannot mutate data or send email.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/resend-newsletter",
       "defaultFramework": "react-next",
@@ -2634,7 +2634,7 @@
         "broadcast",
         "svelte"
       ],
-      "agentRecipe": "Run `npx rr add resend-newsletter` for React/default or `npx rr add resend-newsletter --framework sveltekit`. Configure the public subscribe adapter before rendering. The bundled Convex backend is single opt-in: subscribe activates immediately; unsubscribe is public/idempotent; list + sendCampaignPublic are admin-gated. RESEND_API_KEY/RESEND_FROM stay server-side and only the internal campaign worker calls Resend."
+      "agentRecipe": "Run `npx rr add resend-newsletter` for React/default or `npx rr add resend-newsletter --framework sveltekit`. Configure the public subscribe adapter before rendering. The bundled Convex backend is single opt-in: subscribe activates immediately and unsubscribe is public/idempotent. List/send remain host-authorized adapters; after host authz call the internal sendCampaign worker. RESEND_API_KEY/RESEND_FROM stay server-side."
     },
     {
       "slug": "ai-workspace",

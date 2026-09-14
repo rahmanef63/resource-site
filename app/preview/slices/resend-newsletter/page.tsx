@@ -12,7 +12,7 @@ export default function Page() {
     <SlicePreviewLayout
       title="Resend — Newsletter"
       kind="full"
-      description="Single-opt-in subscribe/unsubscribe + admin-gated subscriber list and campaign scheduling. The preview intentionally leaves the host adapter unconfigured, so it never mutates data or sends email."
+      description="Single-opt-in subscribe/unsubscribe + host-authorized subscriber list and campaign scheduling. The preview intentionally leaves the host adapter unconfigured, so it never mutates data or sends email."
       sourceUrl="https://github.com/rahmanef63/resource-site/tree/main/frontend/slices/resend-newsletter"
     >
       <PreviewSection title="Subscribe form — safe wiring state" hint="No network mutation in the public preview">
@@ -30,19 +30,19 @@ export default function Page() {
         />
       </PreviewSection>
 
-      <PreviewSection title="Admin campaign boundary">
+      <PreviewSection title="Host campaign boundary">
         <div className="grid gap-2 md:grid-cols-3">
           <Card className="p-4">
             <div className="flex items-center gap-2 font-medium"><Users className="size-4" /> Subscribers</div>
-            <p className="mt-2 text-xs text-muted-foreground">Admin-only list from the real `newsletterSubscribers` table.</p>
+            <p className="mt-2 text-xs text-muted-foreground">Bind this tool to your own authenticated server query; the bundled slice does not expose a public list endpoint.</p>
           </Card>
           <Card className="p-4">
             <div className="flex items-center gap-2 font-medium"><ShieldCheck className="size-4" /> Auth gate</div>
-            <p className="mt-2 text-xs text-muted-foreground">Convex Auth + admin/super-admin check runs before campaign scheduling.</p>
+            <p className="mt-2 text-xs text-muted-foreground">Your host owns authz before calling the internal campaign scheduler; no auth schema is hardwired into this slice.</p>
           </Card>
           <Card className="p-4">
             <div className="flex items-center gap-2 font-medium"><Send className="size-4" /> Delivery worker</div>
-            <p className="mt-2 text-xs text-muted-foreground">Only the internal worker imports Resend and calls `emails.send`.</p>
+            <p className="mt-2 text-xs text-muted-foreground">After host authz, internal `sendCampaign` schedules the only worker that imports Resend and calls `emails.send`.</p>
           </Card>
         </div>
       </PreviewSection>

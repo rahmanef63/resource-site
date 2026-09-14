@@ -1,15 +1,13 @@
 {
   "$schema": "../../../docs/slice.manifest.schema.json",
   "name": "resend-newsletter",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Single-opt-in newsletter UI + real Convex subscriber/campaign backend + admin-gated Resend delivery worker.",
   "category": "content",
   "stability": "beta",
   "deps": {
     "shared": [],
-    "slices": [
-      "convex-auth"
-    ],
+    "slices": [],
     "convexFeatures": [
       "newsletter"
     ],
@@ -49,10 +47,7 @@
       "*.test.ts"
     ]
   },
-  "permissions": [
-    "newsletter.list-subscribers",
-    "newsletter.send-broadcast"
-  ],
+  "permissions": [],
   "schemaTables": [
     {
       "name": "newsletterSubscribers",
@@ -83,7 +78,7 @@
     "react": "^19",
     "convex": "^1.36",
     "tailwind": "4",
-    "auth": "convex-auth"
+    "auth": "any"
   },
   "hooks": {
     "postInstall": [
@@ -97,5 +92,5 @@
     "broadcast",
     "single-opt-in"
   ],
-  "notes": "Public subscribe is single opt-in and active immediately. Campaign delivery remains admin-only and is never invoked by tests or previews."
+  "notes": "Public subscribe is single opt-in and unsubscribe is idempotent. List/send remain host-authorized adapters; only internal Convex campaign workers touch Resend."
 }
