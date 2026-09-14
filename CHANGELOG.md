@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-15 — SvelteKit Browser distribution + shared remote-session core
+<!-- public-changelog:SVELTE-BROWSER -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/browser
+- Preview: https://resource.rahmanef.com/preview/slices/browser
+- [before: `browser@1.2.1` was React-only, remote tab/screencast state lived in React hooks, and browserTools depended on the aggregate shared agent runtime] → [after: `browser@1.3.0` keeps React default, adds native Svelte 5/SvelteKit browser chrome, and shares one observable BrowserAdapter/session/screencast/storage/url/tool core]
+- `configureBrowser`/`configureScreencast` changes reconnect mounted sessions; React declares the narrow agent-hook closure while Svelte carries no React/Lucide/shadcn/Next/agent runtime.
+
 ### 2026-09-15 — SvelteKit App Store distribution + observable portable cores
 <!-- public-changelog:SVELTE-APP-STORE -->
 

@@ -1,0 +1,34 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "browser-svelte",
+  "version": "1.3.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add browser --framework sveltekit",
+    "consumerPath": "slices/browser"
+  },
+  "files": [
+    "README.md",
+    "components/AiPanel.svelte",
+    "components/Browser.svelte",
+    "components/ChromeBar.svelte",
+    "components/HistoryPanel.svelte",
+    "components/RemoteView.svelte",
+    "index.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/browser/config.ts",
+      "frontend/slices/browser/lib/demo-browser.ts",
+      "frontend/slices/browser/lib/host-core.ts",
+      "frontend/slices/browser/lib/screencast-core.ts",
+      "frontend/slices/browser/lib/session-core.ts",
+      "frontend/slices/browser/lib/storage-core.ts",
+      "frontend/slices/browser/lib/tools.ts",
+      "frontend/slices/browser/lib/url.ts"
+    ],
+    "external": ["svelte"]
+  }
+}

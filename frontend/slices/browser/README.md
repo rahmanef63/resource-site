@@ -1,60 +1,61 @@
 # browser — remote headless-browser chrome
 
-Browser UI for a remote headless browser: Chrome-style tabs (each tab its own
-remote page), omnibar (search-or-URL), bookmark bar, history (localStorage),
-favicons with globe fallback, an AI agent-activity panel, save-screenshot, and
-a frame viewport that forwards clicks / typing / keys / scroll into the remote
-page (live MJPEG screencast when wired, screenshot polling otherwise).
+Framework-parity multitab browser chrome over one injected remote-browser adapter. React/Next remains default; SvelteKit gets native Svelte 5 chrome over the same transport/session/storage/tool core.
 
-## Mount
+## Default / demo
 
-```tsx
-import { Browser } from "@/features/browser";
+Both distributions work without a backend: the bundled demo adapter paints placeholder pages into a canvas, keeps one state per UI tab, and records a small action log. Screenshot polling drives the viewport unless a screencast stream is configured.
 
-<div className="h-dvh"><Browser /></div>
-// Unwired → an offline canvas demo renderer fakes per-tab viewports and an
-// action log, so the whole chrome works with zero backend.
-```
-
-Or hand `browserApp` (lazy `load`) to an appshell-style launcher.
-
-## Wire a real headless browser (`lib/host.ts`)
-
-Every adapter call carries a `tab` consumer id (`ui-1`, `ui-2`, …) so each UI
-tab drives its own remote page.
+## Real remote browser
 
 ```ts
 import { configureBrowser, configureScreencast } from "@/features/browser";
 
 configureBrowser({
-  state: (tab) => fetch(`/api/browser/state?tab=${tab}`).then((r) => r.json()),   // { url, title }
-  screenshot: (tab) =>
-    fetch(`/api/browser/screenshot?tab=${tab}`).then((r) => (r.ok ? r.blob() : null)),
-  act: (path, body, tab) =>                       // navigate|click|type|key|scroll|back|forward|reload
-    fetch(`/api/browser/${path}?tab=${tab}`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: body === undefined ? undefined : JSON.stringify(body),
-    }).then((r) => r.json().catch(() => ({}))),
-  // Optional (demo fallbacks otherwise):
-  close: (tab) => fetch(`/api/browser/close?tab=${tab}`, { method: "POST" }).then(() => {}),
-  agentLog: () => fetch("/api/browser/agent-log").then((r) => r.json()),          // AgentLogEntry[]
-  saveShot: (tab) =>
-    fetch(`/api/browser/save-shot?tab=${tab}`, { method: "POST" }).then((r) => r.json()), // { path }
+  state: (tab) => fetchState(tab),
+  screenshot: (tab) => fetchScreenshot(tab),
+  act: (path, body, tab) => postAction(path, body, tab),
+  close: (tab) => closeRemoteTab(tab),
+  agentLog: () => readBrowserLog(),
+  saveShot: (tab) => saveRemoteScreenshot(tab),
 });
 
-// Live frames instead of polling (multipart-JPEG / MJPEG stream):
 configureScreencast((tab) => `/api/browser/screencast?tab=${tab}`);
 ```
 
-Hosts with a mock/live server setting can gate the chrome (otherwise it is
-always live on the demo renderer):
+The server route behind that adapter must be authenticated and authorized. Treat it like SSH: a remote browser can contain logged-in sessions and private page data.
+
+## React / Next
+
+```tsx
+import { Browser } from "@/features/browser";
+
+<div className="h-dvh"><Browser /></div>
+```
+
+React keeps Lucide/shadcn chrome, appshell `browserApp`, inspector seam, and automatic `browserTools` registration through the declared narrow agent-hook closure.
+
+## SvelteKit
+
+```bash
+npx rr add browser --framework sveltekit
+```
+
+```svelte
+<script lang="ts">
+  import { Browser } from "@/features/browser";
+</script>
+
+<div class="h-dvh"><Browser /></div>
+```
+
+Svelte installs only `svelte@^5` plus framework-neutral browser core files. It includes multitab strip, omnibar URL/search resolution, bookmarks/history, remote-frame click/type/key/scroll forwarding, live/poll badge, host screenshot save, AI activity log, mode gate, and optional `registerTools(collection, getCtx)` host integration.
+
+## Mode gate
 
 ```ts
 import { configureBrowserMode } from "@/features/browser";
 configureBrowserMode(() => ({ live: settings.server === "live", demo: false }));
 ```
 
-Pair the endpoints with a Playwright service (one persistent context per tab
-renders any site — no `X-Frame-Options` problem). **Auth those routes** — a
-remote browser holds logged-in sessions; treat it like a privileged device.
+`configureBrowser`, `configureScreencast`, and `configureBrowserMode` are observable after mount; the active session reconnects without remounting the renderer.

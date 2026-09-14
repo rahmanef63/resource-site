@@ -10,7 +10,7 @@ import { AiPanel } from "./components/ai-panel";
 import { BookmarkBar } from "./components/bookmark-bar";
 import { HistoryView } from "./components/history-view";
 import { RemoteView } from "./components/remote-view";
-import { useAgentTools } from "@/shared/agentic";
+import { useAgentTools } from "@/shared/agentic/use-agent-tools";
 import { browserTools } from "./lib/tools";
 import { useRemoteBrowser } from "./lib/use-remote-browser";
 import { usePersistent, type Bookmark, type HistoryEntry } from "./lib/storage";

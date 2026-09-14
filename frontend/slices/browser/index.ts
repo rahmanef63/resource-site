@@ -25,6 +25,8 @@ export const browserApp: AppDescriptor = {
 // Host wiring seams (drive a REAL headless browser: Playwright, CDP…):
 // adapter, mock/live mode hook, and the MJPEG screencast stream URL.
 export { configureBrowser, configureBrowserMode, configureScreencast } from "./lib/host";
+export { createBrowserSession, VIEW_H, VIEW_W } from "./lib/session-core";
+export type { BrowserSession, BrowserSnapshot, BrowserTab } from "./lib/session-core";
 export type {
   BrowserAdapter,
   BrowserMode,
@@ -39,4 +41,4 @@ export type { BrowserConfig } from "./config";
 // Agentic tool collection — the slice is not an agent; register this
 // with a host agent (one agent, many slices) via @/shared/agentic.
 export { browserTools } from "./lib/tools";
-export type { BrowserCtx } from "./lib/tools";
+export type { BrowserCtx, BrowserToolCtx } from "./lib/tools";

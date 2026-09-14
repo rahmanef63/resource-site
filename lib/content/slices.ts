@@ -709,32 +709,24 @@ export default function AssistantDemo() {
     title: "Browser — remote headless-browser chrome",
     category: "os",
     kind: "ui",
-    version: "1.2.1",
-    tagline: "Omnibar, bookmarks, history + a screenshot viewport that forwards input — drive any headless Chromium via one adapter.",
+    version: "1.3.0",
+    tagline: "React + Svelte multitab remote-browser chrome over one authenticated host adapter, poll/screencast session core, and tool contract.",
     description:
-      "Full browser chrome for a REMOTE headless browser: omnibar with search-or-URL detection, bookmark bar, history view (localStorage-persisted), favicons with globe fallback, busy states, and a screenshot viewport that forwards clicks/typing/keys/scroll into the remote page. The backend is INJECTED via a small BrowserAdapter (state/screenshot/act): point configureBrowser at a real headless-Chromium service (e.g. Playwright behind an authed route — any site renders, no X-Frame-Options problem) or keep the bundled offline canvas demo renderer that fakes the viewport so the whole chrome works with zero backend. Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
+      "Framework-parity remote-browser chrome. React/Next remains default with Lucide/shadcn chrome, appshell descriptor, inspector seam, and automatic tool registration. Native Svelte 5/SvelteKit adds the same multitab strip, omnibar URL/search, bookmarks/history, remote-frame click/type/key/scroll forwarding, screenshot save, AI activity log, live/poll badge, and mode gate over one shared BrowserAdapter/session/screencast/storage/url/tool core. Unwired, the canvas demo renderer still works offline. Real configureBrowser/configureScreencast routes must be authenticated/authorized like SSH because remote pages can hold logged-in sessions.",
     source: "rahmanef63/os-vps",
     slicePath: "frontend/slices/browser",
     convexPaths: [],
-    npm: ["lucide-react"],
+    npm: ["lucide-react@^0.400.0"],
     shadcn: ["button", "input", "badge", "dropdown-menu", "tooltip", "scroll-area"],
     env: [],
     peers: [],
-    tags: ["browser", "headless", "playwright", "remote", "omnibar", "bookmarks", "ui"],
+    tags: ["browser", "headless", "playwright", "remote", "omnibar", "bookmarks", "ui", "svelte", "framework-parity"],
     resourceType: "module",
     maturity: "beta",
     compat: { enhances: ["appshell"] },
     previewPath: "/preview/slices/browser",
     defaultView: "desktop",
-    agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Remote headless-browser chrome. Demo renderer by default; real backend injected.
-
-STEP 1 — Install. \`npx rr add browser\`. Ensure \`@/features/browser\` resolves and Tailwind scans the slice folder.
-
-STEP 2 — Deps. npm: \`lucide-react\`. shadcn: \`npx shadcn@latest add button input badge dropdown-menu tooltip scroll-area\`.
-
-STEP 3 — Mount. \`<Browser />\` in a height-bearing box — unwired, an offline canvas demo renderer fakes the viewport (omnibar/bookmarks/history all work). Or register \`browserApp\` in an appshell manifest.
-
-STEP 4 — Real headless browser. \`configureBrowser({ state, screenshot, act })\` against a Playwright service: state → { url, title }; screenshot → PNG Blob; act(path, body) handles navigate|click|type|key|scroll|back|forward|reload. AUTH those routes — a remote browser holds logged-in sessions.`,
+    agentRecipe: `React/default: \`npx rr add browser\`. SvelteKit: \`npx rr add browser --framework sveltekit\`. Both share the same BrowserAdapter, multitab session, demo renderer, screenshot polling/MJPEG stream fallback, URL/storage helpers, and browserTools. Configure a real Playwright/CDP adapter only behind authenticated + authorized server routes; remote browser state can contain private logged-in sessions. React auto-registers tools; Svelte exposes optional registerTools(collection, getCtx).`,
     exampleCode: `"use client";
 import { Browser } from "@/features/browser";
 

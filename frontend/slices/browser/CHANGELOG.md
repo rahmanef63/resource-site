@@ -1,5 +1,12 @@
 # browser changelog
 
+## 1.3.0 — 2026-09-15
+
+- Added native Svelte 5/SvelteKit multitab browser chrome over the same injected BrowserAdapter as React.
+- Extracted framework-neutral host, screencast, session, storage, URL, and self-contained tool cores; React `useRemoteBrowser()` is now a thin `useSyncExternalStore` wrapper.
+- `configureBrowser` / `configureScreencast` changes reconnect an already-mounted session; polling remains the fallback when no MJPEG stream is configured.
+- React declares the narrow shared agent-hook closure; Svelte carries no React/Lucide/shadcn/Next/agent runtime.
+
 ## 1.2.1 — 2026-06-10
 
 - Host wiring: `LiveBrowser` self-registers `browserTools` bound to the live `useRemoteBrowser()` state via `useAgentTools`.

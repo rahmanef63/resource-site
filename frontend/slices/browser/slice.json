@@ -1,19 +1,45 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "browser",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "category": "os",
   "kind": "ui",
   "title": "Browser \u2014 remote headless-browser chrome",
-  "description": "Full browser chrome for a REMOTE headless browser: Chrome-style multitab strip (each tab its own remote page), omnibar with search-or-URL detection, bookmark bar, history view (localStorage-persisted), favicons with globe fallback, busy/live badges, an AI agent-activity side panel, save-screenshot action, and a frame viewport that forwards clicks/typing/keys/scroll into the remote page. The backend is INJECTED via a small per-tab BrowserAdapter (state/screenshot/act/close/agentLog/saveShot): point configureBrowser at a real headless-Chromium service (e.g. Playwright behind an authed route \u2014 any site renders, no X-Frame-Options problem), wire a live MJPEG screencast with configureScreencast (poll fallback otherwise), or keep the bundled offline canvas demo renderer that fakes per-tab viewports + an action log so the whole chrome works with zero backend. Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
+  "description": "Framework-parity remote-browser chrome over one injected BrowserAdapter. React/Next remains default with Lucide/shadcn chrome and automatic agent-tool registration; explicit Svelte 5/SvelteKit adds native multitab/omnibar/bookmark/history/AI-log/remote-frame/screenshot surfaces over the same observable browser session, demo renderer, screenshot-poll/MJPEG-screencast fallback, URL/storage helpers, and self-contained browserTools. Remote browser authentication and authorization remain host-owned.",
   "namespace": "@/features/browser",
   "frontend": {
     "slicePath": "frontend/slices/browser",
-    "configExport": "browserConfig"
+    "configExport": "browserConfig",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/browser-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/browser/config.ts",
+            "frontend/slices/browser/lib/demo-browser.ts",
+            "frontend/slices/browser/lib/host-core.ts",
+            "frontend/slices/browser/lib/screencast-core.ts",
+            "frontend/slices/browser/lib/session-core.ts",
+            "frontend/slices/browser/lib/storage-core.ts",
+            "frontend/slices/browser/lib/tools.ts",
+            "frontend/slices/browser/lib/url.ts"
+          ]
+        }
+      }
+    }
   },
   "deps": {
     "npm": [
-      "lucide-react"
+      "lucide-react@^0.400.0"
     ],
     "shadcn": [
       "button",
@@ -25,7 +51,16 @@
       "sheet"
     ],
     "env": [],
-    "peers": []
+    "peers": [],
+    "sharedFiles": [
+      "lib/shared/agentic/types.ts",
+      "lib/shared/agentic/define.ts",
+      "lib/shared/agentic/schema.ts",
+      "lib/shared/agentic/prompt.ts",
+      "lib/shared/agentic/registry.ts",
+      "lib/shared/agentic/global-host.ts",
+      "lib/shared/agentic/use-agent-tools.ts"
+    ]
   },
   "registers": [
     "registry"
@@ -43,22 +78,16 @@
     "tabs",
     "screencast",
     "bookmarks",
-    "ui"
+    "ui",
+    "svelte",
+    "framework-parity",
+    "agent-tools"
   ],
   "previews": [],
   "contract": {
     "requires": {
       "auth": "none",
-      "deps": [
-        {
-          "npm": "react",
-          "range": "^19"
-        },
-        {
-          "npm": "lucide-react",
-          "range": "^0.400.0"
-        }
-      ]
+      "deps": []
     },
     "provides": {
       "tools": [
@@ -83,7 +112,8 @@
         "configureBrowser",
         "configureBrowserMode",
         "configureScreencast",
-        "browserApp"
+        "browserApp",
+        "createBrowserSession"
       ],
       "tables": []
     }

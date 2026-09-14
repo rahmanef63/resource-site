@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-BROWSER",
+    "version": "browser@1.3.0",
+    "date": 1789430400000,
+    "kind": "feature",
+    "title": "SvelteKit Browser distribution + shared remote-session core",
+    "body": "Related: https://resource.rahmanef.com/slices/browser — [before: browser@1.2.1 was React-only, remote tab/screencast state lived in React hooks, and browserTools depended on the aggregate shared agent runtime] → [after: browser@1.3.0 keeps React default, adds native Svelte 5/SvelteKit browser chrome, and shares one observable BrowserAdapter/session/screencast/storage/url/tool core].",
+    "groups": [
+      {
+        "heading": "One remote-browser session, two native renderers",
+        "bullets": [
+          "Svelte covers multitab chrome, omnibar/search, bookmarks/history, frame input, screenshot saving, AI activity log, and live/poll status without React runtime leakage.",
+          "BrowserAdapter and MJPEG screencast configuration reconnect mounted sessions; screenshot polling remains the fallback.",
+          "browserTools is self-contained; React declares its narrow hook closure while remote-browser auth remains server/host owned."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-APP-STORE",
     "version": "app-store@1.3.0",
     "date": 1789430400000,

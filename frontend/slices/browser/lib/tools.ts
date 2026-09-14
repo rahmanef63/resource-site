@@ -1,116 +1,64 @@
-// Agentic tool collection. The slice is NOT an agent — it exports this
-// collection of function-calling tools and ONE shared agent (e.g. the
-// assistant host) drives it alongside other slices' collections via
-// @/shared/agentic. Ctx = the live state from useRemoteBrowser().
+import type { BrowserTab } from "./session-core";
+import type { RemoteState } from "./host-core";
 
-import { defineToolCollection, noArgs, num, obj, str } from "@/shared/agentic";
-import type { useRemoteBrowser } from "./use-remote-browser";
+export type BrowserToolCtx = {
+  state: RemoteState;
+  tabs: BrowserTab[];
+  activeId: number;
+  busy: boolean;
+  navigate: (url: string) => Promise<void> | void;
+  newTab: () => void;
+  closeTab: (id: number) => void;
+  back: () => Promise<void> | void;
+  forward: () => Promise<void> | void;
+  reload: () => Promise<void> | void;
+  scroll: (dy: number) => Promise<void> | void;
+  click: (x: number, y: number) => Promise<void> | void;
+  type: (text: string) => Promise<void> | void;
+  key: (key: string) => Promise<void> | void;
+};
 
-export type BrowserCtx = ReturnType<typeof useRemoteBrowser>;
+export type BrowserCtx = BrowserToolCtx;
 
-const summary = (ctx: BrowserCtx): string =>
-  `url: ${ctx.state?.url || "(blank)"} | title: ${ctx.state?.title || "—"} | tabs: ${ctx.tabs.length} (active ${ctx.activeId}) | busy: ${ctx.busy}`;
+type ToolParams = {
+  type: "object";
+  properties: Record<string, unknown>;
+  required: string[];
+  additionalProperties: false;
+};
 
-export const browserTools = defineToolCollection<BrowserCtx>({
+const noArgs: ToolParams = { type: "object", properties: {}, required: [], additionalProperties: false };
+const textArgs = (name: string, description: string): ToolParams => ({
+  type: "object",
+  properties: { [name]: { type: "string", description } },
+  required: [name],
+  additionalProperties: false,
+});
+const numArgs = (defs: Record<string, string>): ToolParams => ({
+  type: "object",
+  properties: Object.fromEntries(Object.entries(defs).map(([name, description]) => [name, { type: "number", description }])),
+  required: Object.keys(defs),
+  additionalProperties: false,
+});
+
+const summary = (ctx: BrowserToolCtx): string =>
+  `url: ${ctx.state.url || "(blank)"} | title: ${ctx.state.title || "—"} | tabs: ${ctx.tabs.length} (active ${ctx.activeId}) | busy: ${ctx.busy}`;
+
+export const browserTools = {
   namespace: "browser",
-  instructions: "Drives a remote browser tab. read_state first to see the page, then open/navigate; click/type/key act on the live DOM, so re-check state between steps.",
+  instructions: "Drive a remote browser tab. read_state first, then navigate/click/type/key and re-check state between steps.",
   describe: summary,
   tools: [
-    {
-      name: "read_state",
-      description: "Read back the current page url/title, tab count and busy flag.",
-      parameters: noArgs,
-      run: (ctx) => summary(ctx),
-    },
-    {
-      name: "open",
-      description: "Navigate the active tab to a URL.",
-      parameters: obj({ "url!": str("absolute URL") }),
-      run: (ctx, a) => {
-        void ctx.navigate(a.url as string);
-        return `navigating to ${a.url}`;
-      },
-    },
-    {
-      name: "new_tab",
-      description: "Open a new browser tab.",
-      parameters: noArgs,
-      run: (ctx) => {
-        ctx.newTab();
-        return "new tab opened";
-      },
-    },
-    {
-      name: "close_tab",
-      description: "Close a tab by its id.",
-      parameters: obj({ "id!": num("tab id") }),
-      run: (ctx, a) => {
-        ctx.closeTab(a.id as number);
-        return `tab ${a.id} closed`;
-      },
-    },
-    {
-      name: "back",
-      description: "Go back in the active tab's history.",
-      parameters: noArgs,
-      run: (ctx) => {
-        void ctx.back();
-        return "going back";
-      },
-    },
-    {
-      name: "forward",
-      description: "Go forward in the active tab's history.",
-      parameters: noArgs,
-      run: (ctx) => {
-        void ctx.forward();
-        return "going forward";
-      },
-    },
-    {
-      name: "reload",
-      description: "Reload the active tab.",
-      parameters: noArgs,
-      run: (ctx) => {
-        void ctx.reload();
-        return "reloading";
-      },
-    },
-    {
-      name: "scroll",
-      description: "Scroll the page vertically by dy pixels (negative = up).",
-      parameters: obj({ "dy!": num("pixels") }),
-      run: (ctx, a) => {
-        void ctx.scroll(a.dy as number);
-        return `scrolled ${a.dy}px`;
-      },
-    },
-    {
-      name: "click",
-      description: "Click at viewport coordinates.",
-      parameters: obj({ "x!": num("x px"), "y!": num("y px") }),
-      run: (ctx, a) => {
-        void ctx.click(a.x as number, a.y as number);
-        return `clicked ${a.x},${a.y}`;
-      },
-    },
-    {
-      name: "type",
-      description: "Type text into the focused element.",
-      parameters: obj({ "text!": str("text to type") }),
-      run: (ctx, a) => {
-        void ctx.type(a.text as string);
-        return "typed";
-      },
-    },
-    {
-      name: "key",
-      description: "Press a key (e.g. Enter, Tab, Escape).",
-      parameters: obj({ "key!": str("key name") }),
-      run: (ctx, a) => {
-        void ctx.key(a.key as string);
-        return `pressed ${a.key}`;
-      },
-    },
+    { name: "read_state", description: "Read url/title/tab count/busy state.", parameters: noArgs, run: (ctx: BrowserToolCtx) => summary(ctx) },
+    { name: "open", description: "Navigate the active tab to a URL.", parameters: textArgs("url", "absolute URL"), run: (ctx: BrowserToolCtx, a: Record<string, unknown>) => { void ctx.navigate(String(a.url)); return `navigating to ${a.url}`; } },
+    { name: "new_tab", description: "Open a new browser tab.", parameters: noArgs, run: (ctx: BrowserToolCtx) => { ctx.newTab(); return "new tab opened"; } },
+    { name: "close_tab", description: "Close a tab by id.", parameters: numArgs({ id: "tab id" }), run: (ctx: BrowserToolCtx, a: Record<string, unknown>) => { ctx.closeTab(Number(a.id)); return `tab ${a.id} closed`; } },
+    { name: "back", description: "Go back in history.", parameters: noArgs, run: (ctx: BrowserToolCtx) => { void ctx.back(); return "going back"; } },
+    { name: "forward", description: "Go forward in history.", parameters: noArgs, run: (ctx: BrowserToolCtx) => { void ctx.forward(); return "going forward"; } },
+    { name: "reload", description: "Reload the active tab.", parameters: noArgs, run: (ctx: BrowserToolCtx) => { void ctx.reload(); return "reloading"; } },
+    { name: "scroll", description: "Scroll vertically by dy pixels.", parameters: numArgs({ dy: "pixels; negative = up" }), run: (ctx: BrowserToolCtx, a: Record<string, unknown>) => { void ctx.scroll(Number(a.dy)); return `scrolled ${a.dy}px`; } },
+    { name: "click", description: "Click viewport coordinates.", parameters: numArgs({ x: "x px", y: "y px" }), run: (ctx: BrowserToolCtx, a: Record<string, unknown>) => { void ctx.click(Number(a.x), Number(a.y)); return `clicked ${a.x},${a.y}`; } },
+    { name: "type", description: "Type text into the focused element.", parameters: textArgs("text", "text to type"), run: (ctx: BrowserToolCtx, a: Record<string, unknown>) => { void ctx.type(String(a.text)); return "typed"; } },
+    { name: "key", description: "Press a key such as Enter, Tab, Escape.", parameters: textArgs("key", "key name"), run: (ctx: BrowserToolCtx, a: Record<string, unknown>) => { void ctx.key(String(a.key)); return `pressed ${a.key}`; } },
   ],
-});
+};

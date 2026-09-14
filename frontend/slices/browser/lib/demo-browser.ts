@@ -6,7 +6,7 @@
 // button all work with zero backend.
 // audit-allow-hex: canvas 2D fills cannot read CSS theme tokens at draw time.
 
-import type { AgentLogEntry, BrowserAdapter, RemoteState } from "./host";
+import type { AgentLogEntry, BrowserAdapter, RemoteState } from "./host-core";
 
 type TabState = { st: RemoteState; hist: string[] };
 
