@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "code-editor",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -23,6 +23,8 @@
     "components/tab-strip.tsx",
     "config.ts",
     "index.ts",
+    "lib/editor-core.ts",
+    "lib/fs-core.ts",
     "lib/highlight.ts",
     "lib/host.ts",
     "lib/mock-fs.ts",
@@ -42,7 +44,14 @@
       "@/components/ui/scroll-area",
       "@/components/ui/sheet",
       "@/components/ui/textarea",
-      "@/lib/utils"
+      "@/lib/utils",
+      "lib/shared/agentic/define.ts",
+      "lib/shared/agentic/global-host.ts",
+      "lib/shared/agentic/prompt.ts",
+      "lib/shared/agentic/registry.ts",
+      "lib/shared/agentic/schema.ts",
+      "lib/shared/agentic/types.ts",
+      "lib/shared/agentic/use-agent-tools.ts"
     ],
     "external": [
       "lucide-react",

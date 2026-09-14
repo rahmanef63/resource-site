@@ -1,0 +1,34 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "code-editor-svelte",
+  "version": "1.3.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add code-editor --framework sveltekit",
+    "consumerPath": "slices/code-editor"
+  },
+  "files": [
+    "README.md",
+    "components/CodeEditor.svelte",
+    "components/EditorSurface.svelte",
+    "components/FileTree.svelte",
+    "components/NewFilePanel.svelte",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/code-editor/config.ts",
+      "frontend/slices/code-editor/lib/editor-core.ts",
+      "frontend/slices/code-editor/lib/fs-core.ts",
+      "frontend/slices/code-editor/lib/highlight.ts",
+      "frontend/slices/code-editor/lib/mock-fs.ts",
+      "frontend/slices/code-editor/lib/seed.ts",
+      "frontend/slices/code-editor/lib/tools.ts",
+      "frontend/slices/code-editor/lib/util.ts"
+    ],
+    "external": ["svelte"]
+  }
+}

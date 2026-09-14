@@ -341,18 +341,18 @@ export default function PreviewDemo() {
     title: "Code — overlay syntax editor",
     category: "os",
     kind: "ui",
-    version: "1.2.1",
-    tagline: "Lightweight code editor: overlay highlighting, tabs with dirty dots, lazy explorer tree, injectable filesystem.",
+    version: "1.3.0",
+    tagline: "Framework-parity code editor over one observable editor/filesystem core.",
     description:
-      "A lightweight code editor in the VS-Code spirit without the weight: a transparent textarea layered over a highlighted pre (regex tokenizer for JS/TS/JSON/CSS) gives real editing with live syntax color and a line-number gutter; a tab strip tracks dirty buffers with Cmd/Ctrl+S save; a status bar shows path, Ln/Col, tab size, language and save state. The explorer is a lazy per-directory tree — each folder lists on expand, with inline new-file/new-folder affordances — rendered as a rail on desktop and a Sheet on mobile, and the new-file form is a responsive dialog ⇄ bottom drawer. The filesystem is INJECTED via a small CodeFsAdapter (list/read/write/mkdir): point configureCodeFs at a real API or use the bundled writable in-memory mock (seeded sample tree) so it works with zero backend. Writes are best-effort — a read-only host flags the save but keeps the local buffer. Pairs with file-explorer (onOpenFile → payload) and appshell.",
+      "Framework-parity lightweight code editor over one observable editor/filesystem core. React/Next remains default with appshell inspector + automatic tool registration; native Svelte 5/SvelteKit adds explorer, tabs, overlay syntax editing, create/save, status, payload-open handoff, and optional host tool registration over the exact same CodeFsAdapter, writable mock FS, buffers, dirty/save state, highlighter, and tool semantics. Writes stay best-effort — read-only hosts keep the local buffer and surface the failed remote save.",
     source: "rahmanef63/os-vps",
     slicePath: "frontend/slices/code-editor",
     convexPaths: [],
-    npm: ["lucide-react"],
-    shadcn: ["button", "badge", "input", "scroll-area", "sheet", "dialog"],
+    npm: ["lucide-react@^0.400.0"],
+    shadcn: ["button", "badge", "input", "textarea", "scroll-area", "sheet", "dialog"],
     env: [],
     peers: [],
-    tags: ["code", "editor", "syntax-highlight", "ide", "tabs", "file-tree", "ui"],
+    tags: ["code", "editor", "syntax-highlight", "ide", "tabs", "file-tree", "ui", "svelte", "framework-parity"],
     resourceType: "module",
     maturity: "stable",
     compat: { enhances: ["appshell", "file-explorer", "media-viewer"] },
@@ -360,7 +360,7 @@ export default function PreviewDemo() {
     defaultView: "desktop",
     agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A lightweight overlay-highlighting code editor with a lazy explorer tree. Fully client-side; no backend required.
 
-STEP 1 — Install. \`npx rr add code-editor\`. Ensure \`@/features/code-editor\` resolves in tsconfig paths and Tailwind scans the slice folder.
+STEP 1 — Install React/default with \`npx rr add code-editor\`, or native Svelte 5 with \`npx rr add code-editor --framework sveltekit\`. Both reuse one editor/filesystem core.
 
 STEP 2 — Deps. npm: \`lucide-react\`. shadcn: \`npx shadcn@latest add button badge input scroll-area sheet dialog\`.
 

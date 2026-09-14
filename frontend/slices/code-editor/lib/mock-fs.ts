@@ -3,7 +3,7 @@
 // a real adapter. Paths are absolute; "~" resolves to "/".
 
 import { SEED_FILES } from "./seed";
-import type { CodeFsAdapter, FsEntry, FsList } from "./host";
+import type { CodeFsAdapter, FsEntry, FsList } from "./fs-core";
 
 /** Expand "~" and normalise to an absolute path without a trailing slash. */
 function norm(p: string): string {

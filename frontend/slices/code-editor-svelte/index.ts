@@ -1,0 +1,10 @@
+export { default as CodeEditor } from "./components/CodeEditor.svelte";
+export { codeEditorConfig } from "./config";
+export type { CodeEditorConfig } from "./config";
+export { configureCodeFs, getCodeFs } from "../code-editor/lib/fs-core";
+export type { CodeFsAdapter, FsEntry, FsList } from "../code-editor/lib/fs-core";
+export { createMockFs } from "../code-editor/lib/mock-fs";
+export { createEditorCore, createEditorContext } from "../code-editor/lib/editor-core";
+export type { CodeEditorContext, EditorCore, EditorSnapshot, SaveState } from "../code-editor/lib/editor-core";
+export { codeEditorTools } from "../code-editor/lib/tools";
+export type { CodeEditorCtx } from "../code-editor/lib/tools";

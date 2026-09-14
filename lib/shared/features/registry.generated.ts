@@ -87,7 +87,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...codeEditorConfig,
     importPath: "@/features/code-editor/config",
-    version: "1.2.1",
+    version: "1.3.0",
   },
   {
     ...commandMenuConfig,

@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-CODE-EDITOR",
+    "version": "code-editor@1.3.0",
+    "date": 1789344000000,
+    "kind": "feature",
+    "title": "SvelteKit Code Editor distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/code-editor — [before: code-editor@1.2.1 was React-only and its editor state/tools were coupled to React hooks] → [after: code-editor@1.3.0 keeps React/Next default, adds native Svelte 5/SvelteKit editor UI, and shares one observable filesystem/editor/tool core].",
+    "groups": [
+      {
+        "heading": "One editor core, two renderers",
+        "bullets": [
+          "Native Svelte covers explorer, tabs, overlay syntax editing, create/save, status, payload-open handoff, and optional host tool registration.",
+          "React keeps appshell inspector and automatic tool registration through a declared narrow agent-hook installer closure.",
+          "Svelte imports no React, Next, Lucide React, shadcn, or agent runtime."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-PAYMENT",
     "version": "payment@0.5.0 · CLI 1.18.0",
     "date": 1789344000000,

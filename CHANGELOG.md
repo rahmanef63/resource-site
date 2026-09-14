@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-14 — SvelteKit Code Editor distribution
+<!-- public-changelog:SVELTE-CODE-EDITOR -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/code-editor
+- Preview: https://resource.rahmanef.com/preview/slices/code-editor
+- [before: `code-editor@1.2.1` was React-only and its editor state/tools were coupled to React hooks] → [after: `code-editor@1.3.0` keeps React/Next default, adds a native Svelte 5/SvelteKit renderer, and moves FS/editor/tool semantics into one shared observable core]
+- React keeps appshell inspector + automatic tool registration; Svelte installs without React/Lucide/shadcn/agent runtime and exposes optional host tool registration.
+
 ### 2026-09-14 — SvelteKit Payment distributions + variant-scoped runtime deps (CLI 1.18.0)
 <!-- public-changelog:SVELTE-PAYMENT -->
 

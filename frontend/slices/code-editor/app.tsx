@@ -13,7 +13,7 @@ import { EditorSurface } from "./components/editor-surface";
 import { TabStrip } from "./components/tab-strip";
 import { StatusBar } from "./components/status-bar";
 import { NewFileModal } from "./components/new-file-modal";
-import { useAgentTools } from "@/shared/agentic";
+import { useAgentTools } from "@/shared/agentic/use-agent-tools";
 import { codeEditorTools } from "./lib/tools";
 import { useEditor } from "./lib/use-editor";
 import { baseName, langOf } from "./lib/util";

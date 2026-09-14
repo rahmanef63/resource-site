@@ -21,8 +21,12 @@ export const codeEditorApp: AppDescriptor = {
 
 // Host wiring seam (filesystem for the explorer tree + open/save).
 export { configureCodeFs } from "./lib/host";
-export type { CodeFsAdapter, FsEntry, FsList, AppDescriptor, AppProps } from "./lib/host";
+export type { AppDescriptor, AppProps } from "./lib/host";
 export { createMockFs } from "./lib/mock-fs";
+export { getCodeFs } from "./lib/fs-core";
+export type { CodeFsAdapter, FsEntry, FsList } from "./lib/fs-core";
+export { createEditorCore, createEditorContext } from "./lib/editor-core";
+export type { CodeEditorContext, EditorCore, EditorSnapshot, SaveState } from "./lib/editor-core";
 
 export { codeEditorConfig } from "./config";
 export type { CodeEditorConfig } from "./config";

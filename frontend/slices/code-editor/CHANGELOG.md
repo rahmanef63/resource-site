@@ -1,5 +1,13 @@
 # code-editor changelog
 
+## 1.3.0 — 2026-09-14
+
+- Added native Svelte 5/SvelteKit explorer/editor UI while keeping React/Next default.
+- Extracted one observable `editor-core.ts` and stable `fs-core.ts` used by both renderers.
+- Made `codeEditorTools` framework-neutral; Svelte carries no agent runtime, while React now imports the narrow `use-agent-tools` hook and declares its installer closure.
+- Added explicit Svelte shared-file distribution for FS/mock/seed/highlighter/util/tool/config semantics.
+- Preserved payload-open, dirty/save behavior, writable mock FS, syntax highlighting, Cmd/Ctrl+S, and best-effort read-only host handling across frameworks.
+
 ## 1.2.1 — 2026-06-10
 
 - Host wiring: app self-registers `codeEditorTools` bound to the live `useEditor()` state via `useAgentTools` (mount-time, strict-mode safe).
