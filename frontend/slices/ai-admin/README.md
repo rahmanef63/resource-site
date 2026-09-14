@@ -1,33 +1,14 @@
 # ai-admin
 
-Central operator console for the whole AI stack. Plugs into `admin-panel` as an `AI` section with 7 sub-tabs: Providers / Models / Skills / Tools / Agents / Budgets / Audit. Every other ai-* slice reads its registries here at runtime.
+Framework-neutral compile-time contract for a future AI administration surface.
+
+The canonical slice currently ships only TypeScript types and taxonomy/config constants. It does not ship a renderer, persistence implementation, CRUD implementation, or live preview.
 
 ## Install
 
 ```bash
 npx rr add ai-admin
+npx rr add ai-admin --framework sveltekit
 ```
 
-Peers: `convex-auth`, `rbac-roles`, `admin-panel`, `audit-log`.
-
-## Env
-
-| Name | Scope | Required |
-|---|---|---|
-| `AI_ADMIN_ENCRYPTION_KEY` | convex | yes — encrypts provider API keys at rest |
-
-## Tabs
-
-| Tab | Manages |
-|---|---|
-| Providers | API sources (Anthropic / OpenAI / Google / Mistral / Ollama). API keys AES-encrypted via env key. |
-| Models | Per-provider model catalog: capabilities, context window, pricing, active flag. |
-| Skills | Named system prompts + tool defaults + model defaults. SSOT for chatbot / copilot / first-app personas. |
-| Tools | JSON-schema'd function specs + impl wiring (http / convex / shell). Sandbox flag per tool. |
-| Agents | Skill + Model + Tool subset + max-iter. Used by `ai-agent-runner`. |
-| Budgets | Per-workspace cost cap (daily / monthly / hard kill). |
-| Audit | Every AI call: actor, agent, tokens, cost, latency, outcome. Routes through `audit-log` slice. |
-
-## Status
-
-**Scaffold (0.1.0)** — contract + metadata + types + config. Real impl pending. UX target at `/preview/slices/ai-admin`.
+Both install paths copy the same framework-neutral TypeScript source and add no framework runtime dependency.

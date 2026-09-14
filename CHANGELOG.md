@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-14 — SvelteKit AI Admin contract
+<!-- public-changelog:SVELTE-AI-ADMIN-CONTRACT -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/ai-admin
+- [before: `ai-admin@0.3.0` was labeled full-stack and declared a Convex schema, environment requirement, shadcn/runtime imports, eight UI components, and a synthetic admin console preview even though the canonical slice only shipped TypeScript types plus config constants] → [after: `ai-admin@0.4.0` is a truthful framework-neutral compile-time contract; React/Next remains default and explicit Svelte/SvelteKit reuses the exact same TypeScript source with zero framework/runtime dependencies]
+- The synthetic console preview is removed; consumers now get only the real provider/model/skill/tool/agent/budget/audit types and taxonomy, while any renderer, persistence, CRUD, and authorization remain host-owned.
+
 ### 2026-09-14 — SvelteKit Platform Admin contract
 <!-- public-changelog:SVELTE-PLATFORM-ADMIN-CONTRACT -->
 

@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-AI-ADMIN-CONTRACT",
+    "version": "ai-admin@0.4.0",
+    "date": 1789344000000,
+    "kind": "feature",
+    "title": "SvelteKit AI Admin contract",
+    "body": "Related: https://resource.rahmanef.com/slices/ai-admin — [before: ai-admin@0.3.0 was labeled full-stack and declared a Convex schema, environment requirement, shadcn/runtime imports, eight UI components, and a synthetic admin console preview even though the canonical slice only shipped TypeScript types plus config constants] → [after: ai-admin@0.4.0 is a truthful framework-neutral compile-time contract; React/Next remains default and explicit Svelte/SvelteKit reuses the exact same TypeScript source with zero framework/runtime dependencies].",
+    "groups": [
+      {
+        "heading": "One truthful compile-time contract for both frameworks",
+        "bullets": [
+          "Removed nonexistent Convex/env/shadcn/peer/component/runtime claims plus the synthetic AI admin preview.",
+          "aiAdminConfig, tab taxonomy, framework-neutral icon names, suggested permissions, and public AI types are the only shipped runtime-facing surface.",
+          "Explicit SvelteKit install copies the same TypeScript source and adds no Svelte, React, Next, Convex, Lucide, or shadcn dependency; any renderer, persistence, CRUD, and authorization remain host-owned."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-PLATFORM-ADMIN-CONTRACT",
     "version": "platform-admin@0.3.0",
     "date": 1789344000000,

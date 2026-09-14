@@ -1,25 +1,28 @@
 /**
- * ai-admin slice — public barrel.
+ * ai-admin — framework-neutral compile-time contract.
  *
- * Central operator console for the whole AI stack. Plugs into the
- * `admin-panel` slice's ADMIN_SECTIONS registry — the `AI` section
- * surfaces sub-tabs for Providers / Models / Skills / Tools / Agents
- * / Budgets / Audit. Every other ai-* slice reads its registries
- * from here at runtime.
- *
- *   import {
- *     AI_ADMIN_SECTION_ID, AI_ADMIN_TABS, AdminSection,
- *   } from "@/features/ai-admin";
- *
- * Status: scaffold (0.1.0). Real impl pending. UX target at
- * /preview/slices/ai-admin.
+ * The canonical slice intentionally ships types and taxonomy/config constants
+ * only. It does not ship an admin renderer, persistence schema, provider-key
+ * storage, CRUD operations, or authorization implementation.
  */
 
 export type {
-  AIProvider, ProviderStatus, AIModel, ModelCapability,
-  AISkill, AITool, AIAgent, Budget, AuditEntry,
+  AIProvider,
+  ProviderStatus,
+  AIModel,
+  ModelCapability,
+  AISkill,
+  AITool,
+  AIAgent,
+  Budget,
+  AuditEntry,
 } from "./types";
 export {
-  AI_ADMIN_SECTION_ID, AI_ADMIN_TABS, CAPABILITY_ICON, TAB_PERMISSION,
+  aiAdminConfig,
+  AI_ADMIN_SECTION_ID,
+  AI_ADMIN_TABS,
+  CAPABILITY_ICON,
+  TAB_PERMISSION,
+  type AiAdminConfig,
   type AiAdminTabId,
 } from "./config";

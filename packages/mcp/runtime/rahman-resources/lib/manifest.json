@@ -487,25 +487,21 @@
     },
     {
       "slug": "ai-admin",
-      "title": "AI Admin — Console (Instructions · Skills · Tools · Agents · Providers)",
+      "title": "AI Admin — Contract",
       "category": "ai",
-      "description": "Central operator console for the whole AI stack. Every other ai-* feature reads its registries from here. Tabs ordered to match the build-flow:\n\n  1. Providers   — register Anthropic / OpenAI / Google / Mistral / Ollama (API keys AES-encrypted at rest)\n  2. Models      — per-provider catalog (capabilities, context window, pricing)\n  3. Instructions — custom system-prompt library (Claude Projects-style)\n  4. Skills      — named instruction + model default + tool defaults (consumed by chat + studio)\n  5. Tools       — JSON-schema function specs + impl (http / convex / shell) + sandbox flag\n  6. Agents      — skill × model × tools × max-iter (consumed by ai-agents)\n  7. Budgets     — per-workspace cost caps + alerts + hard kill\n  8. Audit       — every AI call: actor / agent / tokens / cost / latency / outcome\n\nIncludes Create-Agent / Create-Skill / Create-Tool / Create-Instruction wizards.",
+      "description": "Framework-neutral compile-time contract for a future AI administration surface. Ships provider/model/skill/tool/agent/budget/audit types plus tab, icon-name, and permission taxonomy; intentionally no renderer, persistence backend, or runtime framework dependency.",
       "source": "rahmanef63/resource-site",
-      "install": "",
+      "install": "npx rr add ai-admin",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add ai-admin`. Adds an `AI` section to the admin-panel ADMIN_SECTIONS registry. Sub-tabs ordered to match build-flow: Providers → Models → Instructions → Skills → Tools → Agents → Budgets → Audit. Includes Create-* wizards for instructions / skills / tools / agents. API keys AES-encrypted via AI_ADMIN_ENCRYPTION_KEY env. The instruction / skill / tool / agent registries are SSOTs consumed by every ai-* consumer slice (chat + studio + agents).",
+      "agentRecipe": "Install ai-admin for the default contract or pass --framework sveltekit. Both copy the same framework-neutral TypeScript source. Use the exported types and taxonomy as host inputs; build any renderer, persistence, and authorization in the consuming app.",
       "tags": [
         "ai",
-        "ai:admin",
-        "instructions",
-        "skills",
-        "tools",
-        "agents",
-        "providers",
-        "models",
-        "budgets",
-        "audit"
+        "admin",
+        "contract",
+        "types",
+        "taxonomy",
+        "headless"
       ]
     },
     {
@@ -2740,82 +2736,46 @@
     },
     {
       "slug": "ai-admin",
-      "title": "AI Admin — Console (Instructions · Skills · Tools · Agents · Providers)",
+      "title": "AI Admin — Contract",
       "category": "ai",
-      "kind": "full",
-      "version": "0.3.0",
-      "description": "Central operator console for the whole AI stack. Every other ai-* feature reads its registries from here. Tabs ordered to match the build-flow:\n\n  1. Providers   — register Anthropic / OpenAI / Google / Mistral / Ollama (API keys AES-encrypted at rest)\n  2. Models      — per-provider catalog (capabilities, context window, pricing)\n  3. Instructions — custom system-prompt library (Claude Projects-style)\n  4. Skills      — named instruction + model default + tool defaults (consumed by chat + studio)\n  5. Tools       — JSON-schema function specs + impl (http / convex / shell) + sandbox flag\n  6. Agents      — skill × model × tools × max-iter (consumed by ai-agents)\n  7. Budgets     — per-workspace cost caps + alerts + hard kill\n  8. Audit       — every AI call: actor / agent / tokens / cost / latency / outcome\n\nIncludes Create-Agent / Create-Skill / Create-Tool / Create-Instruction wizards.",
+      "kind": "backend",
+      "version": "0.4.0",
+      "description": "Framework-neutral compile-time contract for a future AI administration surface. Ships provider/model/skill/tool/agent/budget/audit types plus tab, icon-name, and permission taxonomy; intentionally no renderer, persistence backend, or runtime framework dependency.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/ai-admin",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/ai-admin"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/ai-admin",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [],
+            "shadcn": []
+          }
         }
       },
-      "convexPaths": [
-        "convex/features/ai"
-      ],
+      "convexPaths": [],
       "npm": [],
-      "shadcn": [
-        "card",
-        "button",
-        "badge",
-        "tabs",
-        "table",
-        "dialog",
-        "input",
-        "label",
-        "select",
-        "textarea",
-        "switch",
-        "command"
-      ],
-      "env": [
-        {
-          "name": "AI_ADMIN_ENCRYPTION_KEY",
-          "scope": "convex",
-          "required": true,
-          "description": "Encrypts stored provider API keys at rest."
-        }
-      ],
-      "peers": [
-        {
-          "slug": "convex-auth",
-          "range": "^0.1",
-          "reason": "requireAdmin gate."
-        },
-        {
-          "slug": "rbac-roles",
-          "range": "^0.1",
-          "reason": "Section gated by ai.* permissions (manage_providers, manage_skills, etc)."
-        },
-        {
-          "slug": "admin-panel",
-          "range": "^0.1",
-          "reason": "Lives as a registered admin section."
-        },
-        {
-          "slug": "audit-log",
-          "range": "^0.1",
-          "reason": "Every config change + AI call routes through audit-log."
-        }
-      ],
+      "shadcn": [],
+      "env": [],
+      "peers": [],
       "sharedFiles": [],
       "providers": [],
       "tags": [
         "ai",
-        "ai:admin",
-        "instructions",
-        "skills",
-        "tools",
-        "agents",
-        "providers",
-        "models",
-        "budgets",
-        "audit"
+        "admin",
+        "contract",
+        "types",
+        "taxonomy",
+        "headless"
       ],
-      "agentRecipe": "Run `npx rr add ai-admin`. Adds an `AI` section to the admin-panel ADMIN_SECTIONS registry. Sub-tabs ordered to match build-flow: Providers → Models → Instructions → Skills → Tools → Agents → Budgets → Audit. Includes Create-* wizards for instructions / skills / tools / agents. API keys AES-encrypted via AI_ADMIN_ENCRYPTION_KEY env. The instruction / skill / tool / agent registries are SSOTs consumed by every ai-* consumer slice (chat + studio + agents)."
+      "agentRecipe": "Install ai-admin for the default contract or pass --framework sveltekit. Both copy the same framework-neutral TypeScript source. Use the exported types and taxonomy as host inputs; build any renderer, persistence, and authorization in the consuming app."
     },
     {
       "slug": "ai-router",

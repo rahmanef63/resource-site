@@ -1,11 +1,25 @@
-/** Compile-time config for ai-admin section discovery + defaults. */
+/** Framework-neutral compile-time contract for the future AI admin console. */
 
 import type { ModelCapability } from "./types";
 
-/** Section id registered to admin-panel's ADMIN_SECTIONS registry. */
+export type AiAdminConfig = {
+  slug: "ai-admin";
+  title: "AI Admin — Contract";
+  category: "ai";
+  routes: readonly [];
+};
+
+export const aiAdminConfig: AiAdminConfig = {
+  slug: "ai-admin",
+  title: "AI Admin — Contract",
+  category: "ai",
+  routes: [],
+};
+
+/** Section id reserved for hosts that build an admin renderer around this contract. */
 export const AI_ADMIN_SECTION_ID = "ai";
 
-/** Sub-tabs rendered inside the AI admin section. */
+/** Canonical tab taxonomy for a future host implementation. */
 export const AI_ADMIN_TABS = [
   "providers",
   "models",
@@ -18,7 +32,7 @@ export const AI_ADMIN_TABS = [
 
 export type AiAdminTabId = (typeof AI_ADMIN_TABS)[number];
 
-/** Capability badge icon names (lucide-react). */
+/** Framework-neutral icon names. Hosts choose their own icon renderer. */
 export const CAPABILITY_ICON: Record<ModelCapability, string> = {
   vision: "Eye",
   tools: "Wrench",
@@ -27,7 +41,7 @@ export const CAPABILITY_ICON: Record<ModelCapability, string> = {
   reasoning: "Sparkles",
 };
 
-/** RBAC permission gating each tab. */
+/** Suggested permission names for a future host implementation. */
 export const TAB_PERMISSION: Record<AiAdminTabId, string> = {
   providers: "ai.manage_providers",
   models: "ai.manage_models",
