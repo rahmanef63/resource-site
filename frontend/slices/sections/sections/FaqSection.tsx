@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import {
   Accordion,
   AccordionContent,
@@ -9,8 +8,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
-import { SectionHead } from "@/components/templates/_shared/ui/section-head";
-import { Reveal } from "@/components/templates/_shared/motion";
+import { SectionHead } from "../components/SectionHead";
+import { Reveal } from "../components/motion";
 import {
   cfgArray,
   cfgString,
@@ -72,9 +71,9 @@ export function FaqSection({
       {label && href && (
         <p className="mt-6 text-center text-sm text-muted-foreground">
           {prefix}{" "}
-          <Link href={href} className="font-medium text-foreground underline underline-offset-4">
+          <a href={href} className="font-medium text-foreground underline underline-offset-4">
             {label}
-          </Link>
+          </a>
         </p>
       )}
     </div>

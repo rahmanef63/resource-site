@@ -1,20 +1,9 @@
 "use client";
 
 import * as React from "react";
-import type { LandingSection } from "./types";
+import type { LandingStore } from "./lib/core";
 
-/** Store adapter — every template's StoreProvider wraps with LandingProvider
- *  and supplies these handlers from its own dispatch. Keeps the shared
- *  admin views (LandingView / LandingEditorView) template-agnostic. */
-export type LandingStore = {
-  items: LandingSection[];
-  publicBase: string;
-  adminBase: string;
-  create: (section: LandingSection) => void;
-  update: (id: string, patch: Partial<Omit<LandingSection, "id">>) => void;
-  remove: (id: string) => void;
-};
-
+/** React context adapter around the portable LandingStore contract. */
 const Ctx = React.createContext<LandingStore | null>(null);
 
 export function LandingProvider({
@@ -36,3 +25,5 @@ export function useLandingStore(): LandingStore {
   }
   return ctx;
 }
+
+export type { LandingStore } from "./lib/core";

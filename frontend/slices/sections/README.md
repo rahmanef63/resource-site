@@ -1,188 +1,101 @@
-# landing-sections
+# sections
 
-Admin-editable composition of your public landing page. Ships a generic
-CRUD shell (list + per-row edit dialog + full-page editor) + a pure
-reducer + a per-section wrapper that applies admin-managed background
-images and custom Tailwind tweaks — without forcing any particular
-public renderer on you.
-
-Canonical pattern: every rr website template uses this exact slice to
-let operators compose `/` from the admin without redeploying.
+Canonical admin-editable composition for a public landing page. React/Next is the default distribution; explicit SvelteKit installs native Svelte 5 admin and public renderers over the same framework-neutral core.
 
 ## Install
 
 ```bash
-npx rr add landing-sections
+npx rr add sections
+npx rr add sections --framework sveltekit
 ```
 
-CLI copies the slice into `slices/landing-sections/` in your consumer
-project. You own the files — tweak away.
+## Shared contract
 
-## Surface
+Both renderers use the same:
 
-| Export | Kind | Notes |
-|---|---|---|
-| `LandingView` | component | Admin list — sorted by `order`, row click → edit dialog, up/down reorder arrows, visible-on-`/` toggle. |
-| `LandingEditorView` | component | Full-page editor for a single section. Props: `{ id }`. |
-| `LandingSectionShell` | component | Wraps every public renderer; applies `bgImageUrl` + `section.className`. Props: `{ section, defaultClassName?, children }`. |
-| `LandingProvider` | context provider | Wrap your StoreProvider with `<LandingProvider value={adapter}/>`. |
-| `useLandingStore` | hook | Reads the adapter; admin views call this internally. |
-| `landingReducer` | reducer | Pure reducer for `LANDING_UPSERT` / `LANDING_DELETE`. |
-| `defaultLandingSections()` | factory | Seed array (5 sections) for first run. |
-| `blankSection(lastOrder)` | factory | New-row template (used by the editor). |
-| `LANDING_FIELDS` | schema | `FieldDef<LandingSection>[]` — shared list-dialog + full-page editor schema. |
-| `LandingSection`, `LandingSectionKind`, `LandingAction`, `LandingSlice` | types | Use to type your reducer + store. |
+- `LandingSection` / `LandingSectionKind` types.
+- `LandingStore` adapter (`items`, `publicBase`, `adminBase`, `create`, `update`, `remove`).
+- `landingReducer` with collision-free order shifting.
+- `blankSection`, kind labels/options, reorder helpers, and visibility summary.
+- `LANDING_FIELDS_CORE` editor schema.
+- Config parser used by stats, testimonials, FAQ, pricing, newsletter, and custom sections.
 
-## Wiring (consumer)
+No Convex table is required; persistence belongs to the host store.
 
-The slice intentionally has zero opinion about how your sections
-render publicly. You wire it up in four steps:
+## React / Next
 
-### 1. Fold `landingReducer` into your root reducer
+```tsx
+import { LandingProvider, LandingView, type LandingStore } from "@/features/sections";
 
-```ts
-import { landingReducer, type LandingSlice, type LandingAction } from "@/features/sections";
-
-type State = LandingSlice & { /* …your other slices */ };
-type Action = LandingAction | /* …your other actions */;
-
-export function reducer(state: State, action: Action): State {
-  switch (action.type) {
-    case "LANDING_UPSERT":
-    case "LANDING_DELETE":
-      return { ...state, ...landingReducer(state, action) };
-    /* …other cases */
-    default:
-      return state;
-  }
-}
-```
-
-### 2. Seed `landingSections` in initial State
-
-```ts
-import { defaultLandingSections } from "@/features/sections";
-
-const initialState: State = {
-  landingSections: defaultLandingSections(),
-  // …rest
+const adapter: LandingStore = {
+  items: state.landingSections,
+  publicBase: "/",
+  adminBase: "/admin",
+  create: (section) => dispatch({ type: "LANDING_UPSERT", payload: section }),
+  update: (id, patch) => {
+    const current = state.landingSections.find((item) => item.id === id);
+    if (current) dispatch({ type: "LANDING_UPSERT", payload: { ...current, ...patch } });
+  },
+  remove: (id) => dispatch({ type: "LANDING_DELETE", payload: { id } }),
 };
+
+<LandingProvider value={adapter}>
+  <LandingView />
+</LandingProvider>
 ```
 
-### 3. Wrap your StoreProvider with `<LandingProvider>`
+The React distribution is now self-contained apart from declared npm/shadcn primitives. It no longer requires the repo-internal `templates/_shared` CRUD/motion layer and no longer requires `next` for CTA links.
 
-```tsx
-import { LandingProvider, type LandingStore } from "@/features/sections";
+## Svelte 5 / SvelteKit
 
-export function AppProviders({ children }: { children: React.ReactNode }) {
-  const { state, dispatch } = useStore();
-  const adapter: LandingStore = {
-    items: state.landingSections,
-    publicBase: "/",
-    adminBase: "/admin",
-    create: (section) => dispatch({ type: "LANDING_UPSERT", payload: section }),
-    update: (id, patch) => {
-      const existing = state.landingSections.find((s) => s.id === id);
-      if (!existing) return;
-      dispatch({ type: "LANDING_UPSERT", payload: { ...existing, ...patch } });
-    },
-    remove: (id) => dispatch({ type: "LANDING_DELETE", payload: { id } }),
-  };
-  return <LandingProvider value={adapter}>{children}</LandingProvider>;
-}
+```svelte
+<script lang="ts">
+  import { LandingProvider, LandingView } from "@/features/sections";
+  let store = $state(adapter);
+</script>
+
+<LandingProvider value={store}>
+  <LandingView />
+</LandingProvider>
 ```
 
-### 4. Mount admin routes
+You may also pass `store={adapter}` directly to `LandingView` or `LandingEditorView`. The Svelte distribution depends only on `svelte@^5`; it imports no React, Next, Lucide React, Embla, shadcn, or template-shared runtime.
 
-```tsx
-// app/admin/landing/page.tsx
-import { LandingView } from "@/features/sections";
-export default function Page() { return <LandingView />; }
+## Public renderers
 
-// app/admin/landing/[id]/page.tsx
-import { LandingEditorView } from "@/features/sections";
-export default function Page({ params }: { params: { id: string } }) {
-  return <LandingEditorView id={params.id} />;
-}
+Exports in both frameworks:
+
+- `LandingSectionShell`
+- `StatsSection`
+- `TestimonialsSection`
+- `FaqSection`
+- `PricingSection`
+- `NewsletterSection`
+- `CustomSection`
+
+Each renderer reads `section.config` using the same safe config parser and falls back to props supplied by the host template.
+
+## Reducer wiring
+
+```ts
+import { landingReducer, defaultLandingSections } from "@/features/sections";
+
+const state = { landingSections: defaultLandingSections() };
+const next = landingReducer(state, {
+  type: "LANDING_UPSERT",
+  payload: { ...state.landingSections[0], order: 2 },
+});
 ```
 
-### 5. Public renderer (per-template)
+`LANDING_UPSERT` automatically shifts sibling orders; `LANDING_DELETE` closes the remaining gap.
 
-In your `HomePage`, iterate enabled sections in order and dispatch to
-your own per-template renderer. Wrap each section in
-`<LandingSectionShell>` so admin-edited `bgImageUrl` + `className`
-overlays apply uniformly.
+## React dependencies
 
-```tsx
-import { LandingSectionShell, useStore } from "…";
-
-export function HomePage() {
-  const { state } = useStore();
-  const sections = state.landingSections
-    .filter((s) => s.enabled)
-    .sort((a, b) => a.order - b.order);
-  return (
-    <>
-      {sections.map((s) => (
-        <LandingSectionShell key={s.id} section={s}>
-          <YourRenderer section={s} />
-        </LandingSectionShell>
-      ))}
-    </>
-  );
-}
-```
-
-Inside `YourRenderer`, branch on `section.kind` and render the
-appropriate component. Pass `section.imageUrl`, `section.imageRatio`,
-`section.title`, `section.subtitle`, and `JSON.parse(section.config ?? "{}")`
-to feed your hero / features / pricing / etc. components.
-
-## `kind` → recommended renderer
-
-| `kind` | What it should render |
-|---|---|
-| `hero` | Headline + subtitle + foreground image (use `imageRatio`); honor `config.badge` for eyebrow override. |
-| `features` | 3-6 item grid. `config.columns` may override default. Pair with the `feature-grid` slice. |
-| `pricing` | Tier table. Pair with the `pricing-page` slice; tiers come from your own store. |
-| `blog` | Recent posts grid. `config.limit` caps count. Pair with `blog-section`. |
-| `changelog` | Recent changelog entries. `config.limit` caps count. |
-| `testimonials` | Quote cards. Pair with `testimonials-grid`. |
-| `portfolio` | Case-study grid. Pair with `portfolio-section`. `config.columns` may apply. |
-| `services` | Service band — typically `feature-grid` with `layout="alternating"`. |
-| `stats` | Numeric KPIs strip. |
-| `newsletter` | Email signup form. |
-| `faq` | Accordion. Pair with `faq-section`. |
-| `cta` | Single-action band — headline + button. |
-| `custom` | Escape hatch — render anything; lean on `section.config` JSON for free-form props. |
-
-## CRUD dialog UX
-
-The admin list (LandingView) inherits row-click → edit dialog behavior
-from the `@/components/templates/_shared/crud` layer. That CRUD shell
-is a **sibling dependency** — it must already be installed in your
-consumer (every rr website template ships it). The slice does NOT bundle
-it. If you're starting from a non-rr template, install it manually before
-this slice (it's the same `CrudListView` + `CrudFormView` used by every
-other admin entity).
-
-## Dependencies
-
-- npm: `lucide-react` (icons in CRUD), `next` (peer)
-- shadcn primitives: `badge`, `button`, `dialog`, `input`, `label`,
-  `select`, `switch`, `table`, `textarea`
-- consumer-side peer: `@/components/templates/_shared/crud/*`
-  (`CrudListView`, `CrudFormView`, `types`)
-- consumer-side peer: `@/lib/utils` (`cn` helper — shipped by default
-  in the shadcn-init scaffold)
+- npm: `lucide-react`, `embla-carousel-autoplay`
+- shadcn: `accordion`, `badge`, `button`, `card`, `carousel`, `dialog`, `input`, `switch`, `table`, `textarea`
 
 ## Notes
 
-- No Convex tables — state lives in your existing store. Persistence
-  is consumer's call (localStorage, Convex, anything).
-- Field schema (`LANDING_FIELDS`) is shared between the list-dialog
-  editor and the full-page editor — single source of truth.
-- Up/down reorder swaps `order` values pairwise; you don't need to
-  re-number the whole list.
-- `bgImageUrl` falls back to soft gradient scrim for readability;
-  `LandingSectionShell` handles broken-image hiding via `onError`.
+- `bgImageUrl` and `className` are applied by `LandingSectionShell`.
+- Newsletter persistence is opt-in via `onSubscribe`; without it the renderer is local-only.
+- The canonical CLI slug and source path are both `sections` / `frontend/slices/sections`.

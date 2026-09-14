@@ -5,7 +5,7 @@ import { Check, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { Reveal } from "@/components/templates/_shared/motion";
+import { Reveal } from "../components/motion";
 import { cfgString, parseConfigObject } from "./config";
 import type { LandingSection } from "../types";
 

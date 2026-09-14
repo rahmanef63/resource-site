@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { useInView } from "@/components/templates/_shared/motion/use-in-view";
+import { useInView } from "./motion";
 import type { LandingSection } from "../types";
 
 interface Props {
@@ -24,7 +24,7 @@ export function LandingSectionShell({ section, children, defaultClassName }: Pro
   const hasBg = Boolean(section.bgImageUrl);
   // Scroll reveal: the shell fades up as a unit and doubles as the
   // `.is-inview` scope for any `data-reveal` descendants (motion kit).
-  const { ref, inView } = useInView<HTMLElement>({ threshold: 0.05 });
+  const { ref, visible: inView } = useInView<HTMLElement>();
   return (
     <section
       ref={ref}

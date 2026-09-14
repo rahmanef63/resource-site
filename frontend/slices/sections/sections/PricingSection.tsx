@@ -1,14 +1,13 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { SectionHead } from "@/components/templates/_shared/ui/section-head";
-import { Stagger } from "@/components/templates/_shared/motion";
+import { SectionHead } from "../components/SectionHead";
+import { Stagger } from "../components/motion";
 import {
   cfgArray,
   cfgString,
@@ -87,9 +86,9 @@ export function PricingSection({
                 </ul>
                 {t.ctaHref && (
                   <Button asChild variant={t.featured ? "default" : "outline"} className="w-full">
-                    <Link href={t.ctaHref}>
+                    <a href={t.ctaHref}>
                       {t.ctaLabel ?? "Pilih paket"} <ArrowRight className="size-4" />
-                    </Link>
+                    </a>
                   </Button>
                 )}
               </CardContent>

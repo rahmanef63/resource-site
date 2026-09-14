@@ -1,34 +1,58 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
-  "slug": "landing-sections",
-  "version": "0.4.0",
+  "slug": "sections",
+  "version": "0.5.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
-    "command": "npx rr add landing-sections",
-    "consumerPath": "slices/landing-sections"
+    "command": "npx rr add sections",
+    "consumerPath": "slices/sections"
   },
   "files": [
     "README.md",
+    "components/LandingFieldsForm.tsx",
     "components/LandingSectionShell.tsx",
+    "components/SectionHead.tsx",
+    "components/motion.tsx",
     "config.ts",
     "index.ts",
     "landing-context.tsx",
     "landing-fields.ts",
+    "lib/core.ts",
+    "lib/fields.ts",
     "reducer.ts",
+    "sections/CustomSection.tsx",
+    "sections/FaqSection.tsx",
+    "sections/NewsletterSection.tsx",
+    "sections/PricingSection.tsx",
+    "sections/StatsSection.tsx",
+    "sections/TestimonialsSection.tsx",
+    "sections/config.ts",
+    "sections/index.ts",
     "seed-factory.ts",
+    "slice.json",
     "types.ts",
     "views/LandingEditorView.tsx",
     "views/LandingView.tsx"
   ],
   "imports": {
-    "shared": [],
-    "external": [
-      "@/components/templates/_shared/crud/CrudFormView",
-      "@/components/templates/_shared/crud/CrudListView",
-      "@/components/templates/_shared/crud/types",
+    "shared": [
+      "@/components/ui/accordion",
       "@/components/ui/badge",
+      "@/components/ui/button",
+      "@/components/ui/card",
+      "@/components/ui/carousel",
+      "@/components/ui/dialog",
+      "@/components/ui/input",
+      "@/components/ui/switch",
+      "@/components/ui/table",
+      "@/components/ui/textarea",
       "@/lib/utils"
+    ],
+    "external": [
+      "embla-carousel-autoplay",
+      "lucide-react",
+      "react"
     ]
   }
 }

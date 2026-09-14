@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-15 — SvelteKit Sections distribution + installer portability
+<!-- public-changelog:SVELTE-SECTIONS -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/sections
+- [before: `sections@0.4.0` pointed the CLI at nonexistent `frontend/slices/landing-sections`, was React-only, required repo-internal CRUD/motion helpers, and pulled `next@^15`] → [after: `sections@0.5.0` uses the canonical source path, keeps React self-contained, and adds native Svelte 5/SvelteKit admin + public renderers over one shared reducer/store/schema/config core]
+- React no longer depends on `templates/_shared` or `next/link`; Svelte installs only `svelte@^5` plus framework-neutral core files.
+
 ### 2026-09-14 — SvelteKit Code Editor distribution
 <!-- public-changelog:SVELTE-CODE-EDITOR -->
 

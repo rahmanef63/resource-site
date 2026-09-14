@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { CountUp, Marquee, Stagger } from "@/components/templates/_shared/motion";
+import { CountUp, Marquee, Stagger } from "../components/motion";
 import {
   cfgArray,
   isStatItem,

@@ -1,15 +1,39 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "sections",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "category": "content",
   "kind": "ui",
-  "title": "Sections — composable marketing/landing sections",
-  "description": "Landing-page composition: admin CRUD over the section list PLUS (v0.4.0) a config-driven public section renderer library. Ships a pure reducer (LANDING_UPSERT auto-shifts sibling order; LANDING_DELETE closes the gap) + LandingProvider store adapter + admin LandingView/LandingEditorView built on the shared CRUD primitives, plus a per-section LandingSectionShell (background image + custom Tailwind className overlay + scroll-reveal). NEW: sections/ renderers (StatsSection, TestimonialsSection, FaqSection, PricingSection, NewsletterSection, CustomSection) read `LandingSection.config` JSON over template defaults so content stays dashboard-controlled, plus parse-config helpers (parseConfigBadge/parseConfigField). Sections carry { kind, order, title, subtitle, enabled, imageUrl, imageRatio, bgImageUrl, className, config (JSON) } with up/down reorder arrows. Consumers map each `kind` to a section (shipped for stats/testimonials/pricing/faq/newsletter/custom) or their own renderer wrapped in <LandingSectionShell>. Lifted from the _templates fleet `_shared/landing` (2026-06-11); SSOT for all 7 rr website templates.",
+  "title": "Sections \u2014 composable marketing/landing sections",
+  "description": "Framework-parity canonical landing sections: React stays default with self-contained CRUD/motion renderers, while explicit Svelte 5/SvelteKit installs native admin list/editor plus stats, testimonials, FAQ, pricing, newsletter, custom, and shell renderers over the same reducer, store contract, ordering, field schema, section types, and config parser.",
   "namespace": "@/features/sections",
   "frontend": {
-    "slicePath": "frontend/slices/landing-sections",
-    "configExport": "sectionsFeature"
+    "slicePath": "frontend/slices/sections",
+    "configExport": "sectionsFeature",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/sections-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/sections/types.ts",
+            "frontend/slices/sections/reducer.ts",
+            "frontend/slices/sections/seed-factory.ts",
+            "frontend/slices/sections/lib/core.ts",
+            "frontend/slices/sections/lib/fields.ts",
+            "frontend/slices/sections/sections/config.ts"
+          ]
+        }
+      }
+    }
   },
   "convex": {
     "tablesExport": "",
@@ -19,8 +43,7 @@
   "deps": {
     "npm": [
       "lucide-react@^0.400.0",
-      "embla-carousel-autoplay@^8.6.0",
-      "next@^15"
+      "embla-carousel-autoplay@^8.6.0"
     ],
     "shadcn": [
       "accordion",
@@ -30,14 +53,13 @@
       "carousel",
       "dialog",
       "input",
-      "label",
-      "select",
       "switch",
       "table",
       "textarea"
     ],
     "env": [],
-    "peers": []
+    "peers": [],
+    "sharedFiles": []
   },
   "registers": [],
   "audit": [],
@@ -48,7 +70,9 @@
     "cms",
     "sections",
     "crud",
-    "renderer"
+    "renderer",
+    "svelte",
+    "framework-parity"
   ],
   "previews": [
     {
@@ -84,10 +108,6 @@
         {
           "npm": "embla-carousel-autoplay",
           "range": "^8.6.0"
-        },
-        {
-          "npm": "next",
-          "range": "^15"
         }
       ]
     },
@@ -110,7 +130,13 @@
         "landingReducer",
         "parseConfigBadge",
         "parseConfigField",
-        "parseConfigObject"
+        "parseConfigObject",
+        "LANDING_KIND_LABEL",
+        "LANDING_KIND_OPTIONS",
+        "LANDING_RATIO_OPTIONS",
+        "moveLandingSection",
+        "sortedLandingSections",
+        "visibleLandingCount"
       ],
       "hooks": [
         "useLandingStore"
@@ -118,7 +144,14 @@
       "convex": {
         "tables": [],
         "rbac": []
-      }
+      },
+      "types": [
+        "LandingStore",
+        "LandingFieldDef"
+      ]
+    },
+    "generalization": {
+      "level": "portable"
     }
   }
 }

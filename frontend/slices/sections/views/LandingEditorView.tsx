@@ -1,60 +1,27 @@
 "use client";
 
 import * as React from "react";
-import { CrudFormView } from "@/components/templates/_shared/crud/CrudFormView";
-import type {
-  CrudController,
-  EntityMeta,
-} from "@/components/templates/_shared/crud/types";
+import { Button } from "@/components/ui/button";
+import { LandingFieldsForm } from "../components/LandingFieldsForm";
 import { useLandingStore } from "../landing-context";
-import { LANDING_FIELDS } from "../landing-fields";
+import { blankSection } from "../lib/core";
 import type { LandingSection } from "../types";
-
-const META: EntityMeta = {
-  label: "Section",
-  labelPlural: "Landing sections",
-};
 
 export function LandingEditorView({ id }: { id: string }) {
   const store = useLandingStore();
-  const controller = React.useMemo<CrudController<LandingSection>>(
-    () => ({
-      items: store.items,
-      getId: (s) => s.id,
-      blank: () => blankSection(store.items.at(-1)?.order ?? 0),
-      create: store.create,
-      update: store.update,
-      remove: store.remove,
-    }),
-    [store],
-  );
-  return (
-    <CrudFormView
-      id={id}
-      meta={{
-        ...META,
-        publicHref: () => store.publicBase,
-      }}
-      controller={controller}
-      fields={LANDING_FIELDS}
-      backHref={`${store.adminBase}/landing`}
-    />
-  );
+  const entity = store.items.find((item) => item.id === id);
+  const [draft, setDraft] = React.useState<LandingSection>(() => structuredClone(entity ?? blankSection(store.items.at(-1)?.order ?? 0, id)));
+  React.useEffect(() => setDraft(structuredClone(entity ?? blankSection(store.items.at(-1)?.order ?? 0, id))), [entity, id, store.items]);
+  const positions = React.useMemo(() => Array.from({ length: Math.max(1, store.items.length + (entity ? 0 : 1)) }, (_, i) => i + 1), [entity, store.items.length]);
+
+  function patch(key: keyof LandingSection, value: unknown) { setDraft((current) => ({ ...current, [key]: value } as LandingSection)); }
+  function save() { if (entity) { const { id: _id, ...next } = draft; store.update(draft.id, next); } else store.create(draft); }
+
+  return <div className="mx-auto max-w-3xl space-y-4">
+    <div className="flex flex-wrap items-center justify-between gap-3"><Button asChild variant="outline" size="sm"><a href={`${store.adminBase}/landing`}>← All landing sections</a></Button><Button asChild variant="outline" size="sm"><a href={store.publicBase} target="_blank">View public</a></Button></div>
+    <div className="rounded-lg border bg-card p-4 sm:p-5"><LandingFieldsForm value={draft} onChange={patch} positions={positions} /></div>
+    <div className="flex justify-end"><Button onClick={save}>Save section</Button></div>
+  </div>;
 }
 
-export function blankSection(lastOrder: number): LandingSection {
-  return {
-    id: `ls-${crypto.randomUUID().slice(0, 8)}`,
-    // 1-based: first item is 1, next is 2, etc. (AL-D)
-    order: Math.max(1, Math.floor(lastOrder) + 1),
-    kind: "custom",
-    title: "New section",
-    subtitle: "",
-    enabled: true,
-    imageUrl: "",
-    imageRatio: "16:9",
-    bgImageUrl: "",
-    className: "",
-    config: "",
-  };
-}
+export { blankSection } from "../lib/core";

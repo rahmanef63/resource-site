@@ -9,10 +9,12 @@
  */
 export { sectionsFeature } from "./config";
 export { LandingProvider, useLandingStore, type LandingStore } from "./landing-context";
+export { blankSection, LANDING_KIND_LABEL, LANDING_KIND_OPTIONS, LANDING_RATIO_OPTIONS, moveLandingSection, sortedLandingSections, visibleLandingCount } from "./lib/core";
+export { LANDING_FIELDS_CORE, type LandingFieldDef } from "./lib/fields";
 export { landingReducer } from "./reducer";
 export { defaultLandingSections } from "./seed-factory";
 export { LandingView } from "./views/LandingView";
-export { LandingEditorView, blankSection } from "./views/LandingEditorView";
+export { LandingEditorView } from "./views/LandingEditorView";
 export { LANDING_FIELDS } from "./landing-fields";
 export { LandingSectionShell } from "./components/LandingSectionShell";
 export type { LandingSection, LandingSectionKind, LandingAction, LandingSlice } from "./types";

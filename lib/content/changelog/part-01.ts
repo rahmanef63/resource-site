@@ -2,6 +2,23 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-SECTIONS",
+    "version": "sections@0.5.0",
+    "date": 1789430400000,
+    "kind": "feature",
+    "title": "SvelteKit Sections distribution + installer portability",
+    "body": "Related: https://resource.rahmanef.com/slices/sections — [before: sections@0.4.0 pointed the CLI at nonexistent frontend/slices/landing-sections, was React-only, required repo-internal CRUD/motion helpers, and pulled next@^15] → [after: sections@0.5.0 uses the canonical source path, keeps React self-contained, and adds native Svelte 5/SvelteKit admin + public renderers over one shared reducer/store/schema/config core].",
+    "groups": [{
+      "heading": "One portable landing-section contract",
+      "bullets": [
+        "React keeps the default admin/public surface but owns its CRUD, motion, and section-heading helpers locally.",
+        "Svelte 5 adds native store/context, list/editor, shell, stats, testimonials, FAQ, pricing, newsletter, and custom renderers without React/Next/Lucide/shadcn/Embla runtime leakage.",
+        "Both distributions share ordering, reducer, seed, field schema, section types, and safe config parsing."
+      ]
+    }]
+  },
+
+  {
     "id": "SVELTE-CODE-EDITOR",
     "version": "code-editor@1.3.0",
     "date": 1789344000000,

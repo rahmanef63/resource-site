@@ -12,7 +12,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
-import { SectionHead } from "@/components/templates/_shared/ui/section-head";
+import { SectionHead } from "../components/SectionHead";
 import {
   cfgArray,
   cfgNumber,

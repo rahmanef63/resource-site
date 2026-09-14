@@ -1,11 +1,10 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Reveal } from "@/components/templates/_shared/motion";
+import { Reveal } from "../components/motion";
 import { ASPECT_RATIO_CLASS } from "../types";
 import {
   cfgArray,
@@ -59,9 +58,9 @@ export function CustomSection({
         )}
         {ctaLabel && ctaHref && (
           <Button asChild className="mt-6">
-            <Link href={ctaHref}>
+            <a href={ctaHref}>
               {ctaLabel} <ArrowRight className="size-4" />
-            </Link>
+            </a>
           </Button>
         )}
       </Reveal>

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "sections-svelte",
+  "version": "0.5.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add sections --framework sveltekit",
+    "consumerPath": "slices/sections"
+  },
+  "files": [
+    "README.md",
+    "components/LandingEditorView.svelte",
+    "components/LandingProvider.svelte",
+    "components/LandingSectionShell.svelte",
+    "components/LandingView.svelte",
+    "config.ts",
+    "index.ts",
+    "lib/context.ts",
+    "sections/CustomSection.svelte",
+    "sections/FaqSection.svelte",
+    "sections/NewsletterSection.svelte",
+    "sections/PricingSection.svelte",
+    "sections/StatsSection.svelte",
+    "sections/TestimonialsSection.svelte",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/sections/types.ts",
+      "frontend/slices/sections/reducer.ts",
+      "frontend/slices/sections/seed-factory.ts",
+      "frontend/slices/sections/lib/core.ts",
+      "frontend/slices/sections/lib/fields.ts",
+      "frontend/slices/sections/sections/config.ts"
+    ],
+    "external": ["svelte"]
+  }
+}
