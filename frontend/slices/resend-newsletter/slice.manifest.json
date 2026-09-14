@@ -1,32 +1,34 @@
 {
   "$schema": "../../../docs/slice.manifest.schema.json",
   "name": "resend-newsletter",
-  "version": "0.2.0",
-  "description": "Newsletter subscribe form + admin send-broadcast pipeline via Resend transactional email.",
+  "version": "0.3.0",
+  "description": "Single-opt-in newsletter UI + real Convex subscriber/campaign backend + admin-gated Resend delivery worker.",
   "category": "content",
   "stability": "beta",
   "deps": {
     "shared": [],
-    "slices": [],
+    "slices": [
+      "convex-auth"
+    ],
     "convexFeatures": [
       "newsletter"
     ],
     "npm": {
-      "resend": "^4.0.0"
+      "resend": "^6.12.4"
     },
     "env": [
       {
         "name": "RESEND_API_KEY",
         "required": true,
         "scope": "server",
-        "description": "Resend API key from https://resend.com/api-keys"
+        "description": "Server-only Resend API key."
       },
       {
         "name": "RESEND_FROM",
         "required": true,
         "scope": "server",
         "example": "hello@yourdomain.com",
-        "description": "Verified sender address. Domain must be verified in Resend dashboard."
+        "description": "Verified sender address."
       }
     ]
   },
@@ -48,27 +50,31 @@
     ]
   },
   "permissions": [
-    "newsletter.subscribe",
-    "newsletter.unsubscribe",
-    "newsletter.send-broadcast",
-    "newsletter.list-subscribers"
+    "newsletter.list-subscribers",
+    "newsletter.send-broadcast"
   ],
   "schemaTables": [
     {
-      "name": "newsletter_subscribers",
-      "namespaced": true,
+      "name": "newsletterSubscribers",
+      "namespaced": false,
       "indexes": [
         "by_email",
-        "by_status",
-        "by_workspace"
+        "by_status_subscribedAt"
       ]
     },
     {
-      "name": "newsletter_broadcasts",
-      "namespaced": true,
+      "name": "newsletterIssues",
+      "namespaced": false,
       "indexes": [
-        "by_workspace",
-        "by_workspace_sentAt"
+        "by_status_createdAt"
+      ]
+    },
+    {
+      "name": "newsletterSubscribeAttempts",
+      "namespaced": false,
+      "indexes": [
+        "by_email_time",
+        "by_attemptedAt"
       ]
     }
   ],
@@ -76,13 +82,12 @@
     "next": ">=15 <17",
     "react": "^19",
     "convex": "^1.36",
-    "tailwind": "3||4",
-    "auth": "any"
+    "tailwind": "4",
+    "auth": "convex-auth"
   },
   "hooks": {
     "postInstall": [
-      "echo 'Verify sender domain in Resend dashboard before send-broadcast works.'",
-      "echo 'Optional: set up webhook for bounce/complaint handling.'"
+      "echo 'Verify RESEND_FROM in Resend before scheduling a campaign.'"
     ]
   },
   "tags": [
@@ -90,7 +95,7 @@
     "newsletter",
     "resend",
     "broadcast",
-    "transactional"
+    "single-opt-in"
   ],
-  "notes": "Subscribe form public, send-broadcast admin-only. Schema uses workspace isolation. Double opt-in flow recommended \u2014 add token verification mutation to harden production use."
+  "notes": "Public subscribe is single opt-in and active immediately. Campaign delivery remains admin-only and is never invoked by tests or previews."
 }

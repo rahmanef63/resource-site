@@ -1,0 +1,28 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "resend-newsletter-svelte",
+  "version": "0.3.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add resend-newsletter --framework sveltekit",
+    "consumerPath": "slices/resend-newsletter"
+  },
+  "files": [
+    "README.md",
+    "components/SubscribeForm.svelte",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/resend-newsletter/lib/core.ts",
+      "frontend/slices/resend-newsletter/lib/host.ts",
+      "frontend/slices/resend-newsletter/lib/tools.ts"
+    ],
+    "external": [
+      "svelte"
+    ]
+  }
+}

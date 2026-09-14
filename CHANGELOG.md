@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-14 — SvelteKit Resend Newsletter + truthful backend
+<!-- public-changelog:SVELTE-RESEND-NEWSLETTER -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/resend-newsletter
+- [before: `resend-newsletter@0.2.0` faked frontend success, documented an unimplemented double-opt-in/magic-link flow, and advertised nonexistent `newsletter_subscribers`/`newsletter_broadcasts` tables] → [after: `resend-newsletter@0.3.0` uses a real adapter-backed subscribe flow, truthful single opt-in, the actual three Convex tables, public unsubscribe, admin list/send endpoints, and native Svelte 5 parity]
+- Tests/previews never call Resend; only the internal admin-scheduled worker imports the SDK and sends email.
+
 ### 2026-09-14 — SvelteKit Motion Kit distribution
 <!-- public-changelog:SVELTE-MOTION-KIT -->
 

@@ -1144,52 +1144,42 @@ http.route({ path: "/webhooks/doku", method: "POST", handler: dokuWebhook });`,
     slug: "resend-newsletter",
     title: "Resend — Transactional & Newsletter",
     category: "integrations",
-    kind: "backend",
-    version: "0.2.0",
-    description: "Transactional email + newsletter blast via Resend. Double opt-in flow + audience segmentation. Magic-link delivery for Convex Auth. Bundles the subscribers list backend (subscribe / confirm / unsubscribe / count) — formerly the standalone `subscribers` slice, merged here in v0.1.3.",
+    kind: "full",
+    version: "0.3.0",
+    description: "Truthful single-opt-in newsletter slice with adapter-backed React/Next and native Svelte 5 subscribe forms, real Convex subscriber/issue tables, public unsubscribe, admin-gated subscriber listing and campaign scheduling, and an internal Resend delivery worker. The public preview stays unconfigured so it cannot mutate data or send email.",
     source: "rahmanef63/resource-site",
     docsUrl: "https://resend.com/docs",
-    install: "npm i resend react-email @react-email/components",
+    install: "npm i resend",
     slicePath: "frontend/slices/resend-newsletter",
-    convexPaths: ["convex/features/newsletter", "convex/features/subscribers"],
-    npm: ["resend@^4.0.0"],
-    shadcn: ["button", "card", "input", "label", "textarea"],
+    convexPaths: ["convex/features/newsletter"],
+    npm: ["resend@^6.12.4"],
+    shadcn: ["button", "card", "input", "label"],
     env: [
       { name: "RESEND_API_KEY", scope: "convex", required: true },
       { name: "RESEND_FROM", scope: "convex", required: true },
     ],
     peers: [],
-    tags: ["email", "newsletter", "resend"],
+    tags: ["email", "newsletter", "resend", "broadcast", "svelte"],
     usedBy: ["personal-brand-os", "kreator-studio-os", "wirausaha-os"],
-    agentRecipe: "Run `npx rr add resend-newsletter`. Use Resend Audiences API for newsletter — store subscriber emails in Convex too for segmentation. Double opt-in: subscriber.create with status 'pending' → click link → status 'confirmed'.",
+    agentRecipe: "Run `npx rr add resend-newsletter` for React/default or `npx rr add resend-newsletter --framework sveltekit`. Configure the public subscribe adapter before rendering. The bundled Convex backend is single opt-in: subscribe activates immediately; unsubscribe is public/idempotent; list + sendCampaignPublic are admin-gated. RESEND_API_KEY/RESEND_FROM stay server-side and only the internal campaign worker calls Resend.",
     previewPath: "/preview/slices/resend-newsletter",
-    wiring: `// convex/features/newsletter/subscribe.ts
-import { mutation } from "../../_generated/server";
-import { v } from "convex/values";
-import { Resend } from "resend";
+    wiring: `// App startup — both React and Svelte use the same public adapter contract
+configureResendNewsletter({
+  subscribe: ({ email, website }) => newsletterSubscribeMutation({ email, website }),
+});
 
-export const subscribe = mutation({
-  args: { email: v.string() },
-  handler: async (ctx, { email }) => {
-    const token = crypto.randomUUID();
-    await ctx.db.insert("subscribers", { email, status: "pending", token, createdAt: Date.now() });
-    const resend = new Resend(process.env.RESEND_API_KEY);
-    await resend.emails.send({
-      from: process.env.RESEND_FROM!, to: email,
-      subject: "Konfirmasi langganan",
-      html: \`<a href="\${process.env.SITE_URL}/newsletter/confirm?token=\${token}">Konfirmasi</a>\`,
-    });
-  },
-});`,
+// Bundled Convex endpoints
+// mutation.subscribe / mutation.unsubscribe
+// query.listSubscribersPublic (admin)
+// actions.send.sendCampaignPublic (admin → scheduled internal Resend worker)`,
     defaultView: "tablet",
     defaultZoom: 0.8,
     compat: {
       templates: {
-        "personal-brand-os": { status: "recommended", note: "Newsletter slice already calls Resend Audiences API." },
-        "agency-studio-os": { status: "recommended", note: "Leads → broadcast wired through admin." },
+        "personal-brand-os": { status: "recommended", note: "Public subscribe + admin campaign flow are bundled." },
+        "agency-studio-os": { status: "recommended", note: "Admin-gated campaign scheduling pairs with lead/content workflows." },
         "saas-marketing-os": { status: "recommended" },
       },
-
     },
   },
   // ─────────────────────────────────────────────────────────────

@@ -439,21 +439,21 @@
       "slug": "resend-newsletter",
       "title": "Resend — Transactional & Newsletter",
       "category": "integrations",
-      "description": "Transactional email + newsletter blast via Resend. Double opt-in flow + audience segmentation. Magic-link delivery for Convex Auth. Bundles the subscribers list backend (subscribe / confirm / unsubscribe / count) — formerly the standalone `subscribers` slice, merged here in v0.1.3.",
+      "description": "Truthful single-opt-in newsletter slice with adapter-backed React/Next and native Svelte 5 subscribe forms, real Convex subscriber/issue tables, public unsubscribe, admin-gated subscriber listing and campaign scheduling, and an internal Resend delivery worker. The public preview stays unconfigured so it cannot mutate data or send email.",
       "source": "rahmanef63/resource-site",
       "docsUrl": "https://resend.com/docs",
-      "install": "npm i resend react-email @react-email/components",
+      "install": "npm i resend",
       "npmPackages": [
-        "resend",
-        "react-email",
-        "@react-email/components"
+        "resend"
       ],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add resend-newsletter`. Use Resend Audiences API for newsletter — store subscriber emails in Convex too for segmentation. Double opt-in: subscriber.create with status 'pending' → click link → status 'confirmed'.",
+      "agentRecipe": "Run `npx rr add resend-newsletter` for React/default or `npx rr add resend-newsletter --framework sveltekit`. Configure the public subscribe adapter before rendering. The bundled Convex backend is single opt-in: subscribe activates immediately; unsubscribe is public/idempotent; list + sendCampaignPublic are admin-gated. RESEND_API_KEY/RESEND_FROM stay server-side and only the internal campaign worker calls Resend.",
       "tags": [
         "email",
         "newsletter",
-        "resend"
+        "resend",
+        "broadcast",
+        "svelte"
       ]
     },
     {
@@ -2566,30 +2566,47 @@
       "slug": "resend-newsletter",
       "title": "Resend — Transactional & Newsletter",
       "category": "integrations",
-      "kind": "backend",
-      "version": "0.2.0",
-      "description": "Transactional email + newsletter blast via Resend. Double opt-in flow + audience segmentation. Magic-link delivery for Convex Auth. Bundles the subscribers list backend (subscribe / confirm / unsubscribe / count) — formerly the standalone `subscribers` slice, merged here in v0.1.3.",
+      "kind": "full",
+      "version": "0.3.0",
+      "description": "Truthful single-opt-in newsletter slice with adapter-backed React/Next and native Svelte 5 subscribe forms, real Convex subscriber/issue tables, public unsubscribe, admin-gated subscriber listing and campaign scheduling, and an internal Resend delivery worker. The public preview stays unconfigured so it cannot mutate data or send email.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/resend-newsletter",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/resend-newsletter"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/resend-newsletter-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5",
+              "resend@^6.12.4"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/resend-newsletter/lib/core.ts",
+              "frontend/slices/resend-newsletter/lib/host.ts",
+              "frontend/slices/resend-newsletter/lib/tools.ts"
+            ]
+          }
         }
       },
       "convexPaths": [
-        "convex/features/newsletter",
-        "convex/features/subscribers"
+        "convex/features/newsletter"
       ],
       "npm": [
-        "resend@^4.0.0"
+        "resend@^6.12.4"
       ],
       "shadcn": [
         "button",
         "card",
         "input",
-        "label",
-        "textarea"
+        "label"
       ],
       "env": [
         {
@@ -2604,14 +2621,20 @@
         }
       ],
       "peers": [],
-      "sharedFiles": [],
+      "sharedFiles": [
+        "frontend/slices/resend-newsletter/lib/core.ts",
+        "frontend/slices/resend-newsletter/lib/host.ts",
+        "frontend/slices/resend-newsletter/lib/tools.ts"
+      ],
       "providers": [],
       "tags": [
         "email",
         "newsletter",
-        "resend"
+        "resend",
+        "broadcast",
+        "svelte"
       ],
-      "agentRecipe": "Run `npx rr add resend-newsletter`. Use Resend Audiences API for newsletter — store subscriber emails in Convex too for segmentation. Double opt-in: subscriber.create with status 'pending' → click link → status 'confirmed'."
+      "agentRecipe": "Run `npx rr add resend-newsletter` for React/default or `npx rr add resend-newsletter --framework sveltekit`. Configure the public subscribe adapter before rendering. The bundled Convex backend is single opt-in: subscribe activates immediately; unsubscribe is public/idempotent; list + sendCampaignPublic are admin-gated. RESEND_API_KEY/RESEND_FROM stay server-side and only the internal campaign worker calls Resend."
     },
     {
       "slug": "ai-workspace",

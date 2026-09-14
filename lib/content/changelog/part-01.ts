@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-RESEND-NEWSLETTER",
+    "version": "resend-newsletter@0.3.0",
+    "date": 1789344000000,
+    "kind": "feature",
+    "title": "SvelteKit Resend Newsletter + truthful backend",
+    "body": "Related: https://resource.rahmanef.com/slices/resend-newsletter — [before: resend-newsletter@0.2.0 faked subscribe success, documented an unimplemented double-opt-in flow, and named nonexistent newsletter tables] → [after: resend-newsletter@0.3.0 has real adapter-backed React/Svelte forms, truthful single opt-in, actual Convex tables, public unsubscribe, and admin-gated list/campaign endpoints].",
+    "groups": [
+      {
+        "heading": "Truthful subscription + delivery boundaries",
+        "bullets": [
+          "React fake setTimeout success is gone; both frameworks share one explicit public adapter contract and surface configuration/errors honestly.",
+          "Subscribe now activates immediately, unsubscribe is idempotent, and metadata matches newsletterSubscribers/newsletterIssues/newsletterSubscribeAttempts.",
+          "Subscriber listing and campaign scheduling require admin access; only the internal scheduled worker imports Resend and performs email delivery."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-MOTION-KIT",
     "version": "motion-kit@0.2.0",
     "date": 1789344000000,
