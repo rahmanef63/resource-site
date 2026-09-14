@@ -1,6 +1,6 @@
 // In-memory filesystem model for the os-terminal shell. Path → entries map,
 // plus the cwd-relative path helpers. Kept separate so commands.ts stays small.
-import type { FsEntry, TerminalOsApi } from "./host";
+import type { FsEntry, TerminalOsApi } from "./host-core";
 
 export type LineKind = "sys" | "cmd" | "out" | "err" | "fetch";
 /** `rows` carries live neofetch stats; absent → renderer uses the mock NEOFETCH. */

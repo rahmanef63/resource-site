@@ -4,7 +4,7 @@
 // up in api.fs.list and vice versa. exec/sys return canned demo data.
 // Replace wholesale with configureTerminal({ mode: "live", … }).
 import { seedFs, rekey, type FsModel } from "./fs-model";
-import type { FsEntry, TerminalOsApi } from "./host";
+import type { FsEntry, TerminalOsApi } from "./host-core";
 
 const GiB = 1024 ** 3;
 

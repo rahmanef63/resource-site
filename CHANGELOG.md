@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-14 — SvelteKit OS Terminal distribution
+<!-- public-changelog:SVELTE-OS-TERMINAL -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/os-terminal
+- Preview: https://resource.rahmanef.com/preview/slices/os-terminal
+- [before: `os-terminal@1.2.1` rendered only through React and runtime `configureTerminal` / `configurePty` changes were not observable] → [after: `os-terminal@1.3.0` keeps React/Next default, adds native Svelte 5 exec + PTY UI over shared shell cores, and makes both host-wiring seams observable after mount]
+- Svelte installs no React, Next, Lucide React, shadcn, xterm, or backend runtime; transport and VT rendering remain explicitly host-owned.
+
 ### 2026-09-14 — SvelteKit Data Table distribution
 <!-- public-changelog:SVELTE-DATA-TABLE -->
 

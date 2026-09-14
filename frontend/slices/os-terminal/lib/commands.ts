@@ -3,7 +3,7 @@
 // `cat` hit the real OsApi and surface errors (never silently fall back to the
 // mock model), and host-truth commands (df/ps/whoami/uname/date) pass through
 // to the real shell. The in-memory FsModel only backs demo/mock mode.
-import { fmtGiBPair, fmtUptime } from "./host";
+import { fmtGiBPair, fmtUptime } from "./host-core";
 import { resolve, type Line, type LineKind, type RunCtx } from "./fs-model";
 import { runMutation } from "./commands-fs";
 

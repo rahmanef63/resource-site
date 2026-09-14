@@ -1,5 +1,3 @@
-"use client";
-
 // PTY seam for the rr catalog copy. The slice ships NO byte transport and NO
 // terminal renderer — both are injected by the host via configurePty(); until
 // then app.tsx hides the PTY surface entirely and the exec emulator stays the
@@ -47,10 +45,17 @@ export type PtyScreenFactory = (el: HTMLElement) => Promise<PtyScreen>;
 export type PtyConfig = { transport: PtyTransport; screen: PtyScreenFactory };
 
 let config: PtyConfig | null = null;
+const listeners = new Set<() => void>();
 
 /** Host wiring: inject a transport + renderer; pass null to revert to exec-only. */
 export function configurePty(cfg: PtyConfig | null): void {
   config = cfg;
+  listeners.forEach((listener) => listener());
+}
+
+export function subscribePty(listener: () => void): () => void {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
 }
 
 /** app.tsx only offers the PTY surface when a host wired one. */

@@ -639,32 +639,24 @@ export default function StartHereDemo() {
     title: "Terminal — shell emulator with live passthrough + PTY seam",
     category: "os",
     kind: "ui",
-    version: "1.2.1",
-    tagline: "React terminal: 17 built-ins on an in-memory fs, arrow-key history — wire exec for real one-shot shell passthrough.",
+    version: "1.3.0",
+    tagline: "Native React + Svelte terminal: mock shell, live exec adapter, and host-injected interactive PTY.",
     description:
-      "A React-DOM terminal: monospace glass aesthetic, colored prompt, arrow-key history, red stderr. Built-ins (ls·cd·pwd·cat·mkdir·touch·rm·mv·cp·echo·whoami·date·uname·df·ps·neofetch·help·clear) run against an in-memory FsModel, so it works with ZERO backend. Wire configureTerminal({ mode:\"live\", fs, exec }) and ls/cat read through your real filesystem, file mutations mirror to it, and any unknown command passes through exec.run as a one-shot shell call (stdout/stderr/exit rendered). Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
+      "Framework-parity terminal shell: React/Next remains default and explicit SvelteKit gets native Svelte 5 exec + PTY UI over the same command dispatcher, mock filesystem, live TerminalOsApi, SSE PTY transport, and agentic tools. Mock mode needs zero backend; configureTerminal enables real fs/exec/sys and configurePty injects an interactive transport + VT renderer. Both host-wiring seams are observable after mount.",
     source: "rahmanef63/os-vps",
     slicePath: "frontend/slices/os-terminal",
     convexPaths: [],
-    npm: ["lucide-react"],
-    shadcn: [],
+    npm: ["lucide-react@^0.400.0"],
+    shadcn: ["button"],
     env: [],
     peers: [],
-    tags: ["terminal", "shell", "cli", "emulator", "exec", "ui"],
+    tags: ["terminal", "shell", "cli", "emulator", "exec", "pty", "svelte", "framework-parity", "ui"],
     resourceType: "module",
     maturity: "stable",
     compat: { enhances: ["appshell", "file-explorer"] },
     previewPath: "/preview/slices/os-terminal",
     defaultView: "desktop",
-    agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Shell emulator with optional live passthrough. Fully client-side by default.
-
-STEP 1 — Install. \`npx rr add os-terminal\`. Ensure \`@/features/os-terminal\` resolves and Tailwind scans the slice folder.
-
-STEP 2 — Deps. npm: \`lucide-react\`. No shadcn components required.
-
-STEP 3 — Mount. \`<Terminal />\` in a height-bearing box — mock mode runs entirely on the in-memory FsModel. Or register \`osTerminalApp\` in an appshell manifest.
-
-STEP 4 — Go live. \`configureTerminal({ mode:"live", fs:{list,read,write,mkdir,remove,move,copy}, exec:{run} })\`. In live mode ls/cat read through your fs, mutations mirror, and unknown commands hit exec.run (one-shot; treat the endpoint like SSH).`,
+    agentRecipe: `Run \`npx rr add os-terminal\` for React/default or \`npx rr add os-terminal --framework sveltekit\` for native Svelte 5. Mount <Terminal /> in a height-bearing box; mock mode is zero-backend. Wire configureTerminal({ mode:"live", fs, exec, sys }) for real host truth. Optionally configurePty({ transport, screen }) for an interactive shell; createSsePtyTransport() ships the os-vps SSE transport shape while the host owns the VT renderer. React-only osTerminalApp remains a convenience descriptor and is not invented for Svelte.`,
     exampleCode: `"use client";
 import { Terminal } from "@/features/os-terminal";
 

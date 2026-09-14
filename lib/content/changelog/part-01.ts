@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-OS-TERMINAL",
+    "version": "os-terminal@1.3.0",
+    "date": 1789344000000,
+    "kind": "feature",
+    "title": "SvelteKit OS Terminal distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/os-terminal — [before: os-terminal@1.2.1 rendered only through React and runtime configureTerminal / configurePty changes were not observable] → [after: os-terminal@1.3.0 keeps React/Next default, adds native Svelte 5 exec + PTY UI over shared shell cores, and makes both host-wiring seams observable after mount].",
+    "groups": [
+      {
+        "heading": "One shell core, two native renderers",
+        "bullets": [
+          "TerminalOsApi state moved into framework-neutral host-core.ts and now publishes runtime adapter changes to React and Svelte.",
+          "Native Svelte ships basic exec mode, PTY fallback/retry, touch terminal keys, and the same host-injected SSE transport + VT screen seam.",
+          "Svelte adds no React, Next, Lucide React, shadcn, xterm, or backend runtime dependency; React-only osTerminalApp remains explicit."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-DATA-TABLE",
     "version": "data-table@0.3.0",
     "date": 1789344000000,

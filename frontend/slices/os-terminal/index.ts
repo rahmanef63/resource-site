@@ -22,7 +22,12 @@ export const osTerminalApp: AppDescriptor = {
 };
 
 // Host wiring seam (real fs + one-shot exec + sys stats; flips the slice live).
-export { configureTerminal } from "./lib/host";
+export {
+  configureTerminal,
+  getOsApi,
+  getTerminalMode,
+  subscribeTerminal,
+} from "./lib/host";
 export type {
   TerminalOsApi,
   SysStats,
@@ -34,7 +39,12 @@ export type {
 
 // PTY seam: inject a transport + VT renderer to unlock the interactive shell
 // (live mode only). createSsePtyTransport speaks the os-vps /api/v1/term shape.
-export { configurePty, createSsePtyTransport } from "./lib/use-pty";
+export {
+  configurePty,
+  createSsePtyTransport,
+  hasPty,
+  subscribePty,
+} from "./lib/use-pty";
 export type {
   PtyConfig,
   PtyTransport,

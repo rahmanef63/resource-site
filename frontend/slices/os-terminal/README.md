@@ -1,84 +1,67 @@
-# os-terminal — shell emulator with live passthrough + PTY seam
+# os-terminal
 
-React-DOM terminal: glass monospace look, colored prompt, arrow-key history,
-red stderr, LIVE/MOCK mode banner. Built-ins run on an in-memory FsModel —
-zero backend:
+Framework-parity terminal shell with a zero-backend mock mode, injectable live
+filesystem/one-shot exec adapter, and an optional injected interactive PTY.
+React/Next remains the default renderer; explicit SvelteKit installs native
+Svelte 5 UI over the same command, filesystem, adapter, PTY, and agent-tool
+semantics.
 
-```
-Files:  ls · cd · pwd · cat · mkdir · touch · rm [-r] · mv · cp
-System: clear · echo · whoami · date · uname · df · ps · neofetch · help
-```
-
-## Mount
+## React / Next
 
 ```tsx
 import { Terminal } from "@/features/os-terminal";
 
-<div className="h-96"><Terminal /></div>   // mock mode, fully offline
+export default function Page() {
+  return <div className="h-dvh"><Terminal /></div>;
+}
 ```
 
-Or hand `osTerminalApp` (lazy `load`) to an appshell-style launcher.
+The React renderer uses the slice's shadcn `Button` controls and `lucide-react`
+only for its appshell descriptor. `osTerminalApp` remains a React/Lucide
+appshell convenience export.
 
-## Going live (`configureTerminal`)
+## SvelteKit
 
-```ts
-import { configureTerminal } from "@/features/os-terminal";
-
-configureTerminal({
-  mode: "live",
-  fs: { list, read, write, mkdir, remove, move, copy },  // your fs API
-  exec: { run: (cmd, cwd) => post("/api/exec", { cmd, cwd }) },
-  // → { stdout, stderr, code }
-  sys: { stats },  // bytes + ms — feeds `neofetch`
-});
+```bash
+npx rr add os-terminal --framework sveltekit
 ```
 
-In live mode `ls`/`cat` read through your fs (errors surface honestly), file
-mutations mirror to it, host-truth commands (`df`/`ps`/`whoami`/`uname`/
-`date`) and **any unknown command** pass through `exec.run` as a one-shot
-shell call. Treat that endpoint like SSH — auth it accordingly.
+```svelte
+<script lang="ts">
+  import { Terminal } from "@/features/os-terminal";
+</script>
 
-## Real interactive PTY (`configurePty`, optional)
-
-One-shot exec can't run vim/top/ssh. Inject a byte transport + VT renderer
-and live mode swaps in a real PTY surface (with a touch key bar — Esc/Tab/
-sticky Ctrl·Alt/arrows/^C…/paste — for soft keyboards). The renderer stays in
-YOUR app, so the slice adds no xterm dependency:
-
-```ts
-import { configurePty, createSsePtyTransport } from "@/features/os-terminal";
-
-configurePty({
-  // os-vps wire shape: POST {base}/open|input|resize|close + SSE {base}/stream
-  transport: createSsePtyTransport("/api/v1/term"),
-  screen: async (el) => {
-    const [{ Terminal }, { FitAddon }] = await Promise.all([
-      import("@xterm/xterm"),
-      import("@xterm/addon-fit"),
-    ]);
-    const term = new Terminal({ cursorBlink: true, scrollback: 5000 });
-    const fit = new FitAddon();
-    term.loadAddon(fit);
-    term.open(el);
-    return {
-      get cols() { return term.cols; },
-      get rows() { return term.rows; },
-      write: (b) => term.write(b),
-      onData: (cb) => { term.onData(cb); term.onBinary(cb); },
-      fit: () => fit.fit(),
-      focus: () => term.focus(),
-      dispose: () => term.dispose(),
-    };
-  },
-});
+<div class="h-[32rem]"><Terminal /></div>
 ```
 
-Not configured → the PTY surface stays hidden and live mode keeps the exec
-terminal; if the PTY fails to open, the app shows why and falls back.
+The Svelte distribution contains no React, Next, Lucide React, or React shadcn
+runtime. Svelte hosts mount `Terminal` directly rather than consuming the
+React-specific `osTerminalApp` descriptor.
 
-## Agentic tools (`osTerminalTools`)
+## Mock and live exec
 
-The slice is not an agent — `lib/tools.ts` exports a tool collection
-(`os-terminal.run` / `.cwd` / `.clear`) for the shared agent kit
-(`@/shared/agentic`); register it with your host agent so one agent drives
-many slices.
+Unwired, both renderers use the same writable in-memory filesystem and built-in
+commands. Wire a real host with `configureTerminal({ mode: "live", fs, exec,
+sys })`; `ls/cat` read through the adapter, mutations mirror to it, host-truth
+commands use `exec.run`, and `neofetch` uses `sys.stats`.
+
+`configureTerminal()` is observable. A mode change after mount now re-renders
+both React and Svelte surfaces and resets the working directory to the correct
+root (`~` live, `/` mock).
+
+## Interactive PTY
+
+`configurePty({ transport, screen })` injects both sides of an interactive
+terminal. The slice still bundles no terminal renderer or server backend.
+`createSsePtyTransport()` implements the os-vps POST + SSE wire shape and the
+host supplies a `PtyScreen` (for example an xterm.js wrapper).
+
+PTY configuration is observable after mount. If a live PTY fails to open, both
+framework renderers surface the error and fall back to basic exec mode rather
+than pretending the shell is interactive.
+
+## Agent tools
+
+`osTerminalTools` shares the exact command dispatcher used by the UI. Register
+it with your authorized shared agent host; the Svelte distribution ships the
+same tool collection but does not invent a framework-specific agent runtime.

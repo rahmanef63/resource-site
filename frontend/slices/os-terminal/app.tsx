@@ -1,10 +1,10 @@
 "use client";
 // audit-allow-hex: terminal glass chrome palette is the slice's design, not themable tokens.
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { Button } from "@/components/ui/button";
 import { useOsApi } from "./lib/host";
-import { hasPty } from "./lib/use-pty";
+import { hasPty, subscribePty } from "./lib/use-pty";
 import ExecTerminal from "./components/exec-terminal";
 import PtyTerminal from "./components/pty-terminal";
 
@@ -15,6 +15,7 @@ import PtyTerminal from "./components/pty-terminal";
 // exec terminal so live never regresses below the basic behaviour.
 export default function TerminalApp() {
   const api = useOsApi();
+  const ptyConfigured = useSyncExternalStore(subscribePty, hasPty, hasPty);
   const [ptyError, setPtyError] = useState<string | null>(null);
   // A mode flip (configureTerminal at runtime) re-arms the PTY attempt
   // (render-time state adjustment — the React "derive from prop change" pattern).
@@ -24,12 +25,12 @@ export default function TerminalApp() {
     setPtyError(null);
   }
 
-  if (api.mode === "live" && hasPty() && ptyError === null)
+  if (api.mode === "live" && ptyConfigured && ptyError === null)
     return <PtyTerminal onFallback={setPtyError} />;
 
   return (
     <div className="flex h-full w-full flex-col">
-      {api.mode === "live" && hasPty() && ptyError !== null && (
+      {api.mode === "live" && ptyConfigured && ptyError !== null && (
         <div
           className="flex select-none items-center gap-2 px-2 py-1 text-[11px] font-semibold"
           style={{ color: "#fff", background: "#a14545" }}

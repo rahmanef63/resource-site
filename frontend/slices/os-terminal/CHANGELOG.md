@@ -1,5 +1,12 @@
 # os-terminal changelog
 
+## 1.3.0 — 2026-09-14
+
+- Added native Svelte 5/SvelteKit exec-shell + interactive-PTY UI over the same command/fs/adapter/PTY cores; React/Next remains default.
+- Split framework-neutral TerminalOsApi state into `lib/host-core.ts`; Svelte no longer needs React/Lucide host types.
+- `configureTerminal()` and `configurePty()` now notify subscribers so runtime host wiring actually re-renders both React and Svelte surfaces.
+- Explicit Svelte distribution ships zero React, Next, Lucide React, shadcn, xterm, or backend runtime dependencies.
+
 ## 1.2.1 — 2026-06-10
 
 - Host wiring: `ExecTerminal` self-registers `osTerminalTools` with a live `RunCtx` (fs/cwd/api/clear) via `useAgentTools`.

@@ -1,19 +1,45 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "os-terminal",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "category": "os",
   "kind": "ui",
-  "title": "Terminal \u2014 shell emulator with live passthrough + PTY seam",
-  "description": "A React-DOM terminal: monospace glass aesthetic, colored prompt, arrow-key history, red stderr, mode banner. A built-in command set (ls\u00b7cd\u00b7pwd\u00b7cat\u00b7mkdir\u00b7touch\u00b7rm\u00b7mv\u00b7cp\u00b7echo\u00b7whoami\u00b7date\u00b7uname\u00b7df\u00b7ps\u00b7neofetch\u00b7help\u00b7clear) runs against an in-memory FsModel, so it works with ZERO backend. Wire configureTerminal({ mode:\"live\", fs, exec, sys }) and ls/cat read through your real filesystem, file mutations mirror to it, host-truth commands (df/ps/whoami/uname/date) and any unknown command pass through exec.run as a one-shot shell call (stdout/stderr/exit rendered), and neofetch shows real sys.stats. For a REAL interactive shell (vim/top/tab-completion) wire configurePty({ transport, screen }) \u2014 transport streams PTY bytes (createSsePtyTransport ships the os-vps SSE wire shape) and screen injects your VT renderer (e.g. xterm.js); a touch key bar (Esc/Tab/sticky Ctrl\u00b7Alt/arrows/chords/paste) covers soft keyboards. Self-contained: shell inspector hooks are inert seams and the default OsApi is a mock adapter in lib/host-mock.ts.",
+  "title": "Terminal — shell emulator with live passthrough + PTY seam",
+  "description": "Framework-parity terminal shell: React/Next remains the default renderer, while explicit Svelte/SvelteKit installs native Svelte 5 exec + PTY UI over the same command dispatcher, mock filesystem, live TerminalOsApi, SSE PTY transport, and agentic tools. Mock mode stays zero-backend; configureTerminal({ mode:\"live\", fs, exec, sys }) enables real host truth and configurePty({ transport, screen }) unlocks an injected interactive shell. Terminal/PTy configuration changes are observable after mount in both frameworks.",
   "namespace": "@/features/os-terminal",
   "frontend": {
     "slicePath": "frontend/slices/os-terminal",
-    "configExport": "osTerminalConfig"
+    "configExport": "osTerminalConfig",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/os-terminal-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/os-terminal/config.ts",
+            "frontend/slices/os-terminal/lib/commands.ts",
+            "frontend/slices/os-terminal/lib/commands-fs.ts",
+            "frontend/slices/os-terminal/lib/fs-model.ts",
+            "frontend/slices/os-terminal/lib/host-core.ts",
+            "frontend/slices/os-terminal/lib/host-mock.ts",
+            "frontend/slices/os-terminal/lib/tools.ts",
+            "frontend/slices/os-terminal/lib/use-pty.ts"
+          ]
+        }
+      }
+    }
   },
   "deps": {
     "npm": [
-      "lucide-react"
+      "lucide-react@^0.400.0"
     ],
     "shadcn": [
       "button"
@@ -35,7 +61,9 @@
     "emulator",
     "exec",
     "pty",
-    "ui"
+    "ui",
+    "svelte",
+    "framework-parity"
   ],
   "previews": [],
   "contract": {
@@ -67,7 +95,12 @@
         "configureTerminal",
         "configurePty",
         "createSsePtyTransport",
-        "osTerminalApp"
+        "osTerminalApp",
+        "getOsApi",
+        "getTerminalMode",
+        "subscribeTerminal",
+        "hasPty",
+        "subscribePty"
       ],
       "tables": []
     }

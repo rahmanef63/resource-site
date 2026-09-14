@@ -1,0 +1,34 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "os-terminal-svelte",
+  "version": "1.3.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add os-terminal --framework sveltekit",
+    "consumerPath": "slices/os-terminal"
+  },
+  "files": [
+    "README.md",
+    "components/ExecTerminal.svelte",
+    "components/KeyBar.svelte",
+    "components/PtyTerminal.svelte",
+    "components/Terminal.svelte",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/os-terminal/config.ts",
+      "frontend/slices/os-terminal/lib/commands.ts",
+      "frontend/slices/os-terminal/lib/commands-fs.ts",
+      "frontend/slices/os-terminal/lib/fs-model.ts",
+      "frontend/slices/os-terminal/lib/host-core.ts",
+      "frontend/slices/os-terminal/lib/host-mock.ts",
+      "frontend/slices/os-terminal/lib/tools.ts",
+      "frontend/slices/os-terminal/lib/use-pty.ts"
+    ],
+    "external": ["svelte"]
+  }
+}
