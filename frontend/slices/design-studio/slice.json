@@ -1,19 +1,46 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "design-studio",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "category": "os",
   "kind": "ui",
-  "title": "Design Studio — photo / social design canvas",
-  "description": "Lightweight photo/social studio. Tool rail (move/text/rect/ellipse/sticker with shortcuts), checkerboard canvas with live CSS-filter adjustments + 8 named presets, per-layer clip masks and custom CSS, text/shape/sticker/image/HTML-embed layers, social aspect presets with platform safe-area guides (TikTok/Reels/IG/YouTube), debounced undo+redo, and JSON/HTML export + import (os-rr/layers@1). Fully offline: new image layers pull from bundled SVG data-URI samples; host fs persistence and a real media library inject via configureMediaStudio (lib/host.ts).",
+  "title": "Design Studio \u2014 photo / social design canvas",
+  "description": "Framework-parity layered photo/social design studio. React/Next remains the default renderer; native Svelte 5/SvelteKit provides the same offline canvas workflow over shared framework-neutral layer/document model, observable undo/redo store, scene state, filters, masks, social safe areas, JSON/HTML import-export, bundled image samples, and injected host/media adapter. Both renderers support image/text/shape/sticker/HTML layers, transforms, filters, masks, custom CSS, aspect presets, safe-area guides, keyboard shortcuts, and host-save when configured.",
   "namespace": "@/features/design-studio",
   "frontend": {
     "slicePath": "frontend/slices/design-studio",
-    "configExport": "designStudioConfig"
+    "configExport": "designStudioConfig",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/design-studio-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/design-studio/config.ts",
+            "frontend/slices/design-studio/lib/filters.ts",
+            "frontend/slices/design-studio/lib/host-core.ts",
+            "frontend/slices/design-studio/lib/masks.ts",
+            "frontend/slices/design-studio/lib/model-core.ts",
+            "frontend/slices/design-studio/lib/samples.ts",
+            "frontend/slices/design-studio/lib/scene-core.ts",
+            "frontend/slices/design-studio/lib/serialize.ts",
+            "frontend/slices/design-studio/lib/studio-core.ts"
+          ]
+        }
+      }
+    }
   },
   "deps": {
     "npm": [
-      "lucide-react"
+      "lucide-react@^0.400.0"
     ],
     "shadcn": [
       "button",
@@ -41,7 +68,9 @@
     "editor",
     "design",
     "social",
-    "ui"
+    "ui",
+    "svelte",
+    "framework-parity"
   ],
   "previews": [
     {
@@ -56,25 +85,16 @@
         {
           "id": "social-story",
           "title": "Social story",
-          "description": "9:16 doc loaded via payload — sticker, masked image, safe-area aspect"
+          "description": "9:16 doc loaded via payload \u2014 sticker, masked image, safe-area aspect"
         }
       ],
-      "seed": "fully offline — gradient tints + bundled SVG data-URI sample images"
+      "seed": "fully offline \u2014 gradient tints + bundled SVG data-URI sample images"
     }
   ],
   "contract": {
     "requires": {
       "auth": "none",
-      "deps": [
-        {
-          "npm": "react",
-          "range": "^19"
-        },
-        {
-          "npm": "lucide-react",
-          "range": "^0.400.0"
-        }
-      ]
+      "deps": []
     },
     "provides": {
       "routes": [],

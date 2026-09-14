@@ -1520,12 +1520,12 @@
       "slug": "design-studio",
       "title": "Design Studio — photo / social design canvas",
       "category": "os",
-      "description": "A layered canvas studio: image/text/shape layers with filters, masks, transforms, safe-area guides and aspect presets (1:1/4:5/9:16/16:9), plus an export modal (download / copy / import JSON). Runs fully offline on bundled gradient-SVG samples. Host wiring is one call: configureMediaStudio({ saveDoc, imageSources }) lights up Save-to-host and feeds real image sources. Self-contained: inspector hooks are inert seams in lib/host.ts.",
+      "description": "Framework-parity layered photo/social editor. React/Next remains default; native Svelte 5/SvelteKit covers the same canvas workflow over shared framework-neutral model/document, observable undo/redo, scene, filter/mask, safe-area, serialization, sample-media, and host-adapter cores. Both renderers support image/text/shape/sticker/HTML layers, transforms, masks/custom CSS, presets, keyboard shortcuts, JSON/HTML import-export, and optional host persistence through configureMediaStudio.",
       "source": "rahmanef63/os-vps",
       "install": "npx rahman-resources add design-studio",
       "npmPackages": [],
       "exampleCode": "\"use client\";\nimport { MediaStudio } from \"@/features/design-studio\";\n\nexport default function StudioDemo() {\n  return <div className=\"h-dvh w-full\"><MediaStudio /></div>;\n}",
-      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Layered canvas editor. Fully client-side; no backend required.\n\nSTEP 1 — Install. `npx rr add design-studio`. Ensure `@/features/design-studio` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: button, dialog, badge, tooltip, scroll-area.\n\nSTEP 3 — Mount. `<MediaStudio />` in a height-bearing box — unwired it edits bundled sample layers. Or register `mediaStudioApp` in an appshell manifest.\n\nSTEP 4 — Host wiring. `configureMediaStudio({ saveDoc, imageSources })` — saveDoc persists the serialized document (enables Save-to-host in the export modal); imageSources supplies image URLs for new layers.",
+      "agentRecipe": "React/default: `npx rr add design-studio`. SvelteKit: `npx rr add design-studio --framework sveltekit`. Both share the same layer/document model, observable undo/redo + scene stores, filters/masks/safe-area data, JSON/HTML serialization, bundled image samples, and configureMediaStudio host adapter. React keeps Lucide/shadcn chrome; Svelte installs only svelte@^5 plus portable core files.",
       "tags": [
         "canvas",
         "editor",
@@ -1533,7 +1533,9 @@
         "filters",
         "export",
         "design",
-        "ui"
+        "ui",
+        "svelte",
+        "framework-parity"
       ]
     },
     {
@@ -5860,19 +5862,43 @@
       "title": "Design Studio — photo / social design canvas",
       "category": "os",
       "kind": "ui",
-      "version": "1.0.0",
-      "description": "A layered canvas studio: image/text/shape layers with filters, masks, transforms, safe-area guides and aspect presets (1:1/4:5/9:16/16:9), plus an export modal (download / copy / import JSON). Runs fully offline on bundled gradient-SVG samples. Host wiring is one call: configureMediaStudio({ saveDoc, imageSources }) lights up Save-to-host and feeds real image sources. Self-contained: inspector hooks are inert seams in lib/host.ts.",
+      "version": "1.1.0",
+      "description": "Framework-parity layered photo/social editor. React/Next remains default; native Svelte 5/SvelteKit covers the same canvas workflow over shared framework-neutral model/document, observable undo/redo, scene, filter/mask, safe-area, serialization, sample-media, and host-adapter cores. Both renderers support image/text/shape/sticker/HTML layers, transforms, masks/custom CSS, presets, keyboard shortcuts, JSON/HTML import-export, and optional host persistence through configureMediaStudio.",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/design-studio",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/design-studio"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/design-studio-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/design-studio/config.ts",
+              "frontend/slices/design-studio/lib/filters.ts",
+              "frontend/slices/design-studio/lib/host-core.ts",
+              "frontend/slices/design-studio/lib/masks.ts",
+              "frontend/slices/design-studio/lib/model-core.ts",
+              "frontend/slices/design-studio/lib/samples.ts",
+              "frontend/slices/design-studio/lib/scene-core.ts",
+              "frontend/slices/design-studio/lib/serialize.ts",
+              "frontend/slices/design-studio/lib/studio-core.ts"
+            ]
+          }
         }
       },
       "convexPaths": [],
       "npm": [
-        "lucide-react"
+        "lucide-react@^0.400.0"
       ],
       "shadcn": [
         "button",
@@ -5892,9 +5918,11 @@
         "filters",
         "export",
         "design",
-        "ui"
+        "ui",
+        "svelte",
+        "framework-parity"
       ],
-      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Layered canvas editor. Fully client-side; no backend required.\n\nSTEP 1 — Install. `npx rr add design-studio`. Ensure `@/features/design-studio` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: button, dialog, badge, tooltip, scroll-area.\n\nSTEP 3 — Mount. `<MediaStudio />` in a height-bearing box — unwired it edits bundled sample layers. Or register `mediaStudioApp` in an appshell manifest.\n\nSTEP 4 — Host wiring. `configureMediaStudio({ saveDoc, imageSources })` — saveDoc persists the serialized document (enables Save-to-host in the export modal); imageSources supplies image URLs for new layers."
+      "agentRecipe": "React/default: `npx rr add design-studio`. SvelteKit: `npx rr add design-studio --framework sveltekit`. Both share the same layer/document model, observable undo/redo + scene stores, filters/masks/safe-area data, JSON/HTML serialization, bundled image samples, and configureMediaStudio host adapter. React keeps Lucide/shadcn chrome; Svelte installs only svelte@^5 plus portable core files."
     },
     {
       "slug": "quicklinks",

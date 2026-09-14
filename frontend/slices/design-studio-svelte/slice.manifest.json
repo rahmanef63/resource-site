@@ -1,0 +1,37 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "design-studio-svelte",
+  "version": "1.1.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add design-studio --framework sveltekit",
+    "consumerPath": "slices/design-studio-svelte"
+  },
+  "files": [
+    "README.md",
+    "components/CanvasStage.svelte",
+    "components/ExportPanel.svelte",
+    "components/LayerView.svelte",
+    "components/MediaStudio.svelte",
+    "components/SidePanel.svelte",
+    "index.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/design-studio/config.ts",
+      "frontend/slices/design-studio/lib/filters.ts",
+      "frontend/slices/design-studio/lib/host-core.ts",
+      "frontend/slices/design-studio/lib/masks.ts",
+      "frontend/slices/design-studio/lib/model-core.ts",
+      "frontend/slices/design-studio/lib/samples.ts",
+      "frontend/slices/design-studio/lib/scene-core.ts",
+      "frontend/slices/design-studio/lib/serialize.ts",
+      "frontend/slices/design-studio/lib/studio-core.ts"
+    ],
+    "external": [
+      "svelte"
+    ]
+  }
+}

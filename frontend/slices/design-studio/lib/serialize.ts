@@ -9,7 +9,7 @@ import {
   type Layer,
   type LayerDoc,
   type LayerKind,
-} from "./model";
+} from "./model-core";
 
 function esc(s: unknown): string {
   return String(s == null ? "" : s).replace(

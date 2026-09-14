@@ -31,3 +31,9 @@ export type { LayerDoc, Layer } from "./lib/model";
 
 export { designStudioConfig } from "./config";
 export type { DesignStudioConfig } from "./config";
+
+// Portable cores shared by React and Svelte renderers.
+export { createStudioStore } from "./lib/studio-core";
+export { createSceneStore } from "./lib/scene-core";
+export { buildHTML, importFile } from "./lib/serialize";
+export * from "./lib/model-core";

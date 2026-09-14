@@ -107,7 +107,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...designStudioConfig,
     importPath: "@/features/design-studio/config",
-    version: "1.0.0",
+    version: "1.1.0",
   },
   {
     ...htmlStudioConfig,

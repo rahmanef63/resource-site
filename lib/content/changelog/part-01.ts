@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-DESIGN-STUDIO",
+    "version": "design-studio@1.1.0",
+    "date": 1789430400000,
+    "kind": "feature",
+    "title": "SvelteKit Design Studio distribution + shared observable canvas core",
+    "body": "Related: https://resource.rahmanef.com/slices/design-studio — [before: design-studio@1.0.0 was React-only with state in React hooks and Lucide mixed into the model] → [after: design-studio@1.1.0 keeps React default, adds native Svelte 5/SvelteKit parity, and shares portable model/state/scene/host/serialization cores].",
+    "groups": [
+      {
+        "heading": "One canvas contract, two native renderers",
+        "bullets": [
+          "Svelte covers canvas placement/dragging, layers/transforms, masks/custom CSS, filters/aspect/safe-area, keyboard shortcuts, and JSON/HTML import-export.",
+          "React useStudio/useScene delegate to the same observable stores used by Svelte.",
+          "Svelte installs only svelte@^5 plus portable core/data files; host persistence and bundled offline samples are shared."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-ADMIN",
     "version": "admin@0.4.0",
     "date": 1789430400000,

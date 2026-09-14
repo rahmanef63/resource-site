@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { Badge } from "@/components/ui/badge";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { nextImageSource, type AppProps } from "./lib/host";
+import { nextImageSource, type AppProps } from "./lib/host-core";
 import { useStudio } from "./lib/use-studio";
 import { useScene } from "./lib/use-scene";
 import { useKeyboard } from "./lib/use-keyboard";

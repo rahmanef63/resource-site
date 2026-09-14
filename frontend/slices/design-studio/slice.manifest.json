@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "design-studio",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -29,23 +29,26 @@
     "config.ts",
     "index.ts",
     "lib/filters.ts",
+    "lib/host-core.ts",
     "lib/host.ts",
     "lib/masks.ts",
+    "lib/model-core.ts",
     "lib/model.ts",
     "lib/samples.ts",
+    "lib/scene-core.ts",
     "lib/serialize.ts",
+    "lib/studio-core.ts",
     "lib/use-export.ts",
     "lib/use-inspector.ts",
     "lib/use-keyboard.ts",
     "lib/use-scene.ts",
     "lib/use-studio.ts",
+    "preview.tsx",
     "slice.json"
   ],
   "imports": {
     "shared": [
-      "@/shared/ui/FilePicker"
-    ],
-    "external": [
+      "@/shared/ui/FilePicker",
       "@/components/ui/badge",
       "@/components/ui/button",
       "@/components/ui/dialog",
@@ -54,9 +57,11 @@
       "@/components/ui/switch",
       "@/components/ui/textarea",
       "@/components/ui/tooltip",
-      "@/lib/utils",
-      "lucide-react",
-      "react"
+      "@/lib/utils"
+    ],
+    "external": [
+      "react",
+      "lucide-react"
     ]
   }
 }

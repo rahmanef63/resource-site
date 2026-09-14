@@ -2430,32 +2430,24 @@ const analytics: EventTrackingCtx = {
     title: "Design Studio — photo / social design canvas",
     category: "os",
     kind: "ui",
-    version: "1.0.0",
-    tagline: "Standalone canvas studio: layers, filters, masks, transforms, aspect presets, export modal — fully offline demo.",
+    version: "1.1.0",
+    tagline: "React + Svelte layered design studio over one observable canvas/document core — fully offline until a host adapter is wired.",
     description:
-      "A layered canvas studio: image/text/shape layers with filters, masks, transforms, safe-area guides and aspect presets (1:1/4:5/9:16/16:9), plus an export modal (download / copy / import JSON). Runs fully offline on bundled gradient-SVG samples. Host wiring is one call: configureMediaStudio({ saveDoc, imageSources }) lights up Save-to-host and feeds real image sources. Self-contained: inspector hooks are inert seams in lib/host.ts.",
+      "Framework-parity layered photo/social editor. React/Next remains default; native Svelte 5/SvelteKit covers the same canvas workflow over shared framework-neutral model/document, observable undo/redo, scene, filter/mask, safe-area, serialization, sample-media, and host-adapter cores. Both renderers support image/text/shape/sticker/HTML layers, transforms, masks/custom CSS, presets, keyboard shortcuts, JSON/HTML import-export, and optional host persistence through configureMediaStudio.",
     source: "rahmanef63/os-vps",
     slicePath: "frontend/slices/design-studio",
     convexPaths: [],
-    npm: ["lucide-react"],
+    npm: ["lucide-react@^0.400.0"],
     shadcn: ["button", "dialog", "badge", "tooltip", "scroll-area"],
     env: [],
     peers: [],
-    tags: ["canvas", "editor", "layers", "filters", "export", "design", "ui"],
+    tags: ["canvas", "editor", "layers", "filters", "export", "design", "ui", "svelte", "framework-parity"],
     resourceType: "module",
     maturity: "beta",
     compat: { enhances: ["appshell"] },
     previewPath: "/preview/slices/design-studio",
     defaultView: "desktop",
-    agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Layered canvas editor. Fully client-side; no backend required.
-
-STEP 1 — Install. \`npx rr add design-studio\`. Ensure \`@/features/design-studio\` resolves and Tailwind scans the slice folder.
-
-STEP 2 — Deps. npm: \`lucide-react\`. shadcn: button, dialog, badge, tooltip, scroll-area.
-
-STEP 3 — Mount. \`<MediaStudio />\` in a height-bearing box — unwired it edits bundled sample layers. Or register \`mediaStudioApp\` in an appshell manifest.
-
-STEP 4 — Host wiring. \`configureMediaStudio({ saveDoc, imageSources })\` — saveDoc persists the serialized document (enables Save-to-host in the export modal); imageSources supplies image URLs for new layers.`,
+    agentRecipe: `React/default: \`npx rr add design-studio\`. SvelteKit: \`npx rr add design-studio --framework sveltekit\`. Both share the same layer/document model, observable undo/redo + scene stores, filters/masks/safe-area data, JSON/HTML serialization, bundled image samples, and configureMediaStudio host adapter. React keeps Lucide/shadcn chrome; Svelte installs only svelte@^5 plus portable core files.`,
     exampleCode: `"use client";
 import { MediaStudio } from "@/features/design-studio";
 

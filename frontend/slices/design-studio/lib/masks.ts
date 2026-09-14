@@ -88,7 +88,7 @@ export function suggestPlatform(aspect: string): SafePlatform {
 }
 
 // Turn a "k: v; k2: v2" CSS string into a React style object (camelCased keys).
-export function parseCss(css?: string): React.CSSProperties {
+export function parseCss(css?: string): Record<string, string> {
   const out: Record<string, string> = {};
   if (!css) return out;
   for (const decl of String(css).split(";")) {
@@ -99,5 +99,5 @@ export function parseCss(css?: string): React.CSSProperties {
     if (!k || !v) continue;
     out[k.replace(/-([a-z])/g, (_, c) => c.toUpperCase())] = v;
   }
-  return out as React.CSSProperties;
+  return out;
 }

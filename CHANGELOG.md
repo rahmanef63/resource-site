@@ -11,6 +11,16 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-15 — SvelteKit Design Studio distribution + shared observable canvas core
+<!-- public-changelog:SVELTE-DESIGN-STUDIO -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/design-studio
+- Preview: https://resource.rahmanef.com/preview/slices/design-studio
+- [before: `design-studio@1.0.0` was React-only with layer/scene history tied to React hooks and Lucide mixed into the model] → [after: `design-studio@1.1.0` keeps React default, adds native Svelte 5/SvelteKit parity, and shares framework-neutral model/document, observable undo/redo, scene, host, filter/mask, and serialization cores]
+- Svelte installs only `svelte@^5` plus portable core/data files while preserving offline samples and optional host persistence.
+
+
 ### 2026-09-15 — SvelteKit Admin distribution + exact variant backend gates
 <!-- public-changelog:SVELTE-ADMIN -->
 

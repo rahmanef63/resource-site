@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import type { Adjustments } from "./filters";
 import { buildDoc, downloadText, type Layer } from "./model";
 import { buildHTML, importFile } from "./serialize";
-import { canSaveToHost, saveDocToHost } from "./host";
+import { canSaveToHost, saveDocToHost } from "./host-core";
 import type { ExportTab } from "../components/export-modal";
 
 const MIME: Record<ExportTab, string> = {
