@@ -1,11 +1,12 @@
 import type { ComponentType } from "react";
-import { User, SlidersHorizontal, Bell, TriangleAlert } from "lucide-react";
+import { Bell, SlidersHorizontal, TriangleAlert, User } from "lucide-react";
+import {
+  SETTINGS_SECTION_CORE,
+  settingsSectionsToNavCore,
+  type SettingsSectionId,
+} from "./nav-core";
 
-export type SettingsSectionId =
-  | "profile"
-  | "preferences"
-  | "notifications"
-  | "danger-zone";
+export type { SettingsSectionId } from "./nav-core";
 
 export type SettingsNavIcon = ComponentType<{ className?: string }>;
 
@@ -15,13 +16,17 @@ export interface SettingsNavSection {
   icon: SettingsNavIcon;
 }
 
-/** The fixed section catalog — also drives the built-in rail. */
-export const SETTINGS_SECTIONS: readonly SettingsNavSection[] = [
-  { id: "profile", label: "Profile", icon: User },
-  { id: "preferences", label: "Preferences", icon: SlidersHorizontal },
-  { id: "notifications", label: "Notifications", icon: Bell },
-  { id: "danger-zone", label: "Danger zone", icon: TriangleAlert },
-];
+const ICONS: Record<SettingsSectionId, SettingsNavIcon> = {
+  profile: User,
+  preferences: SlidersHorizontal,
+  notifications: Bell,
+  "danger-zone": TriangleAlert,
+};
+
+/** React icon-enhanced catalog over the shared framework-neutral section order. */
+export const SETTINGS_SECTIONS: readonly SettingsNavSection[] = SETTINGS_SECTION_CORE.map(
+  (section) => ({ ...section, icon: ICONS[section.id] }),
+);
 
 export interface SettingsNavItem {
   id: string;
@@ -38,17 +43,6 @@ export interface SettingsNavGroup {
   items: SettingsNavItem[];
 }
 
-/**
- * Map the settings sections onto nav groups, shaped for the `dashboard-shell`
- * slice's `nav` prop (structural — no import between slices). Use it with
- * `<SettingsShell nav={false}>` so the sections drive the ONE app sidebar
- * instead of adding a second rail next to it.
- *
- * Settings has no group axis (unlike the admin console's 26 sections), so this
- * always returns exactly one group. `dockCount` sections (in catalog order) are
- * flagged for the mobile dock, and `activeId` marks the current one (button
- * items have no href to match on); omit it to leave `active` unset.
- */
 export function settingsSectionsToNav(
   onSelect: (id: SettingsSectionId) => void,
   opts: {
@@ -58,23 +52,13 @@ export function settingsSectionsToNav(
     groupLabel?: string;
   } = {},
 ): SettingsNavGroup[] {
-  const {
-    activeId,
-    // 3, not 4: dashboard-shell appends a "Menu" button, and 5 labels in one
-    // max-w-md dock row truncate hard at 360px.
-    dockCount = 3,
-    sections = SETTINGS_SECTIONS,
-    groupLabel = "Settings",
-  } = opts;
-
-  const items: SettingsNavItem[] = sections.map((s, i) => ({
-    id: s.id,
-    label: s.label,
-    icon: s.icon,
-    onSelect: () => onSelect(s.id),
-    dock: i < dockCount,
-    active: activeId === undefined ? undefined : s.id === activeId,
+  const sections = opts.sections ?? SETTINGS_SECTIONS;
+  const groups = settingsSectionsToNavCore(sections, onSelect, opts);
+  return groups.map((group) => ({
+    ...group,
+    items: group.items.map((item) => ({
+      ...item,
+      icon: sections.find((section) => section.id === item.id)?.icon ?? User,
+    })),
   }));
-
-  return [{ id: "settings", label: groupLabel, items }];
 }

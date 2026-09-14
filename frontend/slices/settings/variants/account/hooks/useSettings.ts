@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import type { SettingsAdapter, SettingsValues } from "../lib/adapter";
+import { mergeSettingsValues } from "../lib/core";
 
 export interface UseSettingsResult {
   /** Current values, or `null` until the initial `load()` resolves. */
@@ -43,11 +44,7 @@ export function useSettings(adapter: SettingsAdapter): UseSettingsResult {
       const prev = values;
       setValues((cur) =>
         cur
-          ? {
-              profile: { ...cur.profile, ...patch.profile },
-              preferences: { ...cur.preferences, ...patch.preferences },
-              notifications: { ...cur.notifications, ...patch.notifications },
-            }
+          ? mergeSettingsValues(cur, patch)
           : cur,
       );
       try {

@@ -1,5 +1,10 @@
 # shell-settings changelog
 
+## 1.2.0 — 2026-09-14
+
+- React/Next remains the default; native Svelte 5/SvelteKit parity is now available through the shared settings contract.
+- Framework-neutral core/tool semantics are shared instead of duplicated across renderers.
+
 ## 1.0.0 — 2026-06-10
 
 - Lifted from os-vps (Topside), near-verbatim — the slice was already

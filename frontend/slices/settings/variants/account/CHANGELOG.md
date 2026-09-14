@@ -1,5 +1,10 @@
 # Changelog — settings-page
 
+## 1.2.0 — 2026-09-14
+
+- React/Next remains the default; native Svelte 5/SvelteKit parity is now available through the shared settings contract.
+- Framework-neutral core/tool semantics are shared instead of duplicated across renderers.
+
 ## 1.1.0 — 2026-08-03
 
 - `SettingsShell` optional `nav` prop (default `true` — unchanged two-column

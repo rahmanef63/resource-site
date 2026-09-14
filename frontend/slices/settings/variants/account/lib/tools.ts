@@ -1,7 +1,3 @@
-// Agentic tool collection. Ctx = the live useSettings() result, so the agent
-// edits exactly what the form edits (optimistic save + rollback included).
-
-import { defineToolCollection, noArgs, obj, str } from "@/shared/agentic";
 import type { SettingsValues } from "./adapter";
 
 export type SettingsPageCtx = {
@@ -9,26 +5,56 @@ export type SettingsPageCtx = {
   save: (patch: Partial<SettingsValues>) => Promise<void>;
 };
 
-export const settingsPageTools = defineToolCollection<SettingsPageCtx>({
+type ObjectSchema = {
+  type: "object";
+  properties: Record<string, unknown>;
+  required: string[];
+  additionalProperties: false;
+};
+
+const noArgs: ObjectSchema = {
+  type: "object",
+  properties: {},
+  required: [],
+  additionalProperties: false,
+};
+
+const setArgs: ObjectSchema = {
+  type: "object",
+  properties: {
+    patch: {
+      type: "string",
+      description: "partial SettingsValues as JSON",
+    },
+  },
+  required: ["patch"],
+  additionalProperties: false,
+};
+
+const describe = (ctx: SettingsPageCtx): string =>
+  ctx.values ? `settings loaded: ${JSON.stringify(ctx.values)}` : "settings loading";
+
+/** Framework-neutral structural tool collection; register it with any compatible host. */
+export const settingsPageTools = {
   namespace: "settings-page",
   instructions: "App settings. get before set; set persists immediately.",
-  describe: (ctx) => (ctx.values ? `settings loaded: ${JSON.stringify(ctx.values)}` : "settings loading"),
+  describe,
   tools: [
     {
       name: "get",
       description: "Read the current settings values (profile, preferences, notifications).",
       parameters: noArgs,
-      run: (ctx) => (ctx.values ? JSON.stringify(ctx.values) : "still loading"),
+      run: (ctx: SettingsPageCtx) => (ctx.values ? JSON.stringify(ctx.values) : "still loading"),
     },
     {
       name: "set",
-      description: "Save a settings patch (JSON, partial SettingsValues — e.g. {\"preferences\":{\"theme\":\"dark\"}}).",
-      parameters: obj({ "patch!": str("partial SettingsValues as JSON") }),
-      run: async (ctx, a) => {
-        const patch = JSON.parse(a.patch as string) as Partial<SettingsValues>;
+      description: "Save a settings patch encoded as partial SettingsValues JSON.",
+      parameters: setArgs,
+      run: async (ctx: SettingsPageCtx, args: Record<string, unknown>) => {
+        const patch = JSON.parse(String(args.patch)) as Partial<SettingsValues>;
         await ctx.save(patch);
         return `saved: ${JSON.stringify(patch)}`;
       },
     },
   ],
-});
+};

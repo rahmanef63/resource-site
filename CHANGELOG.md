@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-14 — SvelteKit Settings distributions
+<!-- public-changelog:SVELTE-SETTINGS -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/settings
+- Preview: https://resource.rahmanef.com/preview/slices/settings
+- [before: `settings@1.1.0` exposed account/appearance only through React and `settingsPageTools` imported an undeclared shared agent runtime] → [after: `settings@1.2.0` keeps React/Next default, adds native Svelte 5/SvelteKit account + appearance renderers, and shares adapter/merge/nav/tool/type cores without React leakage]
+- Account parity includes async load/save, optimistic rollback, controlled navigation, notifications, danger-zone, and optional tool registration; appearance parity preserves injected style/theme/accent/wallpaper/shell/display settings.
+
 ### 2026-09-14 — SvelteKit Media Viewer distribution
 <!-- public-changelog:SVELTE-MEDIA-VIEWER -->
 

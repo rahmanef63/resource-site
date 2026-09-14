@@ -34,3 +34,18 @@ export {
   type SettingsNavGroup,
   type SettingsNavIcon,
 } from "./lib/nav";
+
+export {
+  mergeSettingsValues,
+  settingsProfileInitials,
+  SETTINGS_DENSITIES,
+  SETTINGS_LANGUAGES,
+  SETTINGS_THEMES,
+} from "./lib/core";
+export {
+  SETTINGS_SECTION_CORE,
+  settingsSectionsToNavCore,
+  type SettingsSectionCore,
+  type SettingsNavItemCore,
+  type SettingsNavGroupCore,
+} from "./lib/nav-core";

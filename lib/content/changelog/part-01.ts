@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-SETTINGS",
+    "version": "settings@1.2.0",
+    "date": 1789344000000,
+    "kind": "feature",
+    "title": "SvelteKit Settings distributions",
+    "body": "Related: https://resource.rahmanef.com/slices/settings — [before: settings@1.1.0 exposed account/appearance only through React and settingsPageTools pulled an undeclared shared agent runtime] → [after: settings@1.2.0 keeps React/Next default, adds native Svelte 5/SvelteKit account + appearance renderers, and shares portable adapter/merge/nav/tool/type cores].",
+    "groups": [
+      {
+        "heading": "Adapter parity without renderer leakage",
+        "bullets": [
+          "Account Svelte preserves async adapter load/save, optimistic merge + rollback, controlled/internal navigation, immediate notification toggles, danger-zone confirmation, and optional settingsPageTools registration.",
+          "Appearance Svelte renders only injected style/theme/accent/wallpaper/shell/display groups and exports generic section, row, segmented, and accent primitives.",
+          "Svelte depends only on svelte@^5; React/Lucide/shadcn remain confined to the default React distribution, while settingsPageTools is now self-contained."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-MEDIA-VIEWER",
     "version": "media-viewer@1.3.0",
     "date": 1789344000000,

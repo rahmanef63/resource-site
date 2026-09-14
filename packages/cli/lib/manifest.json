@@ -102,7 +102,7 @@
       "slug": "media-viewer",
       "title": "Preview — media quick-look",
       "category": "os",
-      "description": "A quick-look media viewer in the macOS Preview spirit. Images render on a zoomable (40–300%) checkerboard stage so transparency reads; audio gets a card player with a CSS-bar waveform + transport; video gets play/pause + scrubber + volume; PDFs embed full-bleed and text gets a simple surface. The toolbar carries a type-indicator chip, zoom, Download, Open-in-editor, and prev/next. Two integration seams in lib/host.ts make it portable: configureMediaSource maps fs paths to fetchable URLs (identity by default, so public URLs work with zero wiring) and configureMediaOpener routes the Open-in-editor handoff (image → image-editor, video/audio → reel-editor) to your shell — both inert until set. Launched bare it shows a fully offline sample gallery (inline SVG gradients, simulated A/V playback). Pairs with file-explorer (onOpenFile → MediaViewer payload) and the editors.",
+      "description": "A quick-look media viewer in the macOS Preview spirit. Images render on a zoomable (40–300%) checkerboard stage so transparency reads; audio gets a card player with a CSS-bar waveform + transport; video gets play/pause + scrubber + volume; PDFs embed full-bleed and text gets a simple surface. The toolbar carries a type-indicator chip, zoom, Download, Open-in-editor, and prev/next. Two framework-neutral integration seams in lib/host-core.ts make it portable: configureMediaSource maps fs paths to fetchable URLs (identity by default, so public URLs work with zero wiring) and configureMediaOpener routes the Open-in-editor handoff (image → design-studio, video/audio → reel-editor) to your shell — both inert until set. Launched bare it shows a fully offline sample gallery (inline SVG gradients, simulated A/V playback). Pairs with file-explorer (onOpenFile → MediaViewer payload) and the editors.",
       "source": "rahmanef63/os-vps",
       "install": "npx rahman-resources add media-viewer",
       "npmPackages": [],
@@ -1706,7 +1706,7 @@
       "category": "os",
       "kind": "ui",
       "version": "1.3.0",
-      "description": "A quick-look media viewer in the macOS Preview spirit. Images render on a zoomable (40–300%) checkerboard stage so transparency reads; audio gets a card player with a CSS-bar waveform + transport; video gets play/pause + scrubber + volume; PDFs embed full-bleed and text gets a simple surface. The toolbar carries a type-indicator chip, zoom, Download, Open-in-editor, and prev/next. Two integration seams in lib/host.ts make it portable: configureMediaSource maps fs paths to fetchable URLs (identity by default, so public URLs work with zero wiring) and configureMediaOpener routes the Open-in-editor handoff (image → image-editor, video/audio → reel-editor) to your shell — both inert until set. Launched bare it shows a fully offline sample gallery (inline SVG gradients, simulated A/V playback). Pairs with file-explorer (onOpenFile → MediaViewer payload) and the editors.",
+      "description": "A quick-look media viewer in the macOS Preview spirit. Images render on a zoomable (40–300%) checkerboard stage so transparency reads; audio gets a card player with a CSS-bar waveform + transport; video gets play/pause + scrubber + volume; PDFs embed full-bleed and text gets a simple surface. The toolbar carries a type-indicator chip, zoom, Download, Open-in-editor, and prev/next. Two framework-neutral integration seams in lib/host-core.ts make it portable: configureMediaSource maps fs paths to fetchable URLs (identity by default, so public URLs work with zero wiring) and configureMediaOpener routes the Open-in-editor handoff (image → design-studio, video/audio → reel-editor) to your shell — both inert until set. Launched bare it shows a fully offline sample gallery (inline SVG gradients, simulated A/V playback). Pairs with file-explorer (onOpenFile → MediaViewer payload) and the editors.",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/media-viewer",
       "defaultFramework": "react-next",
@@ -5433,7 +5433,7 @@
       "title": "Settings — account + appearance shells",
       "category": "ui",
       "kind": "ui",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "description": "Two settings surfaces behind one slug, each adapter-driven so the slice owns no data. account: SettingsShell two-column surface (nav collapses to a Select on mobile) — Profile (avatar/name/email/bio), Preferences (theme/language/density), Notifications (switch rows), Danger zone (AlertDialog-confirmed delete) over an ASYNC SettingsAdapter { load, save(patch) } with optimistic save + rollback; createMemoryAdapter ships for demos. appearance: AppearancePanel (style/mode/accent/wallpaper/reduce-transparency/display) over a SYNC per-setting AppearanceAdapter, plus the generic SettingsSection / SettingsRow / Segmented / AccentSwatches primitives you compose custom panels from. Install one surface with `npx rr add settings account|appearance`, or both with `npx rr add settings`.",
       "source": "rr original",
       "slicePath": "frontend/slices/settings",
@@ -5441,6 +5441,26 @@
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/settings"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/settings-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/settings/variants/account/lib/adapter.ts",
+              "frontend/slices/settings/variants/account/lib/core.ts",
+              "frontend/slices/settings/variants/account/lib/nav-core.ts",
+              "frontend/slices/settings/variants/account/lib/tools.ts",
+              "frontend/slices/settings/variants/appearance/lib/types.ts"
+            ]
+          }
         }
       },
       "convexPaths": [],

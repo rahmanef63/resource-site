@@ -1,0 +1,39 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "settings-svelte",
+  "version": "1.2.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add settings --framework sveltekit",
+    "consumerPath": "slices/settings-svelte"
+  },
+  "files": [
+    "README.md",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts",
+    "variants/account/components/SettingsShell.svelte",
+    "variants/account/components/sections/DangerZone.svelte",
+    "variants/account/components/sections/NotificationsSection.svelte",
+    "variants/account/components/sections/PreferencesSection.svelte",
+    "variants/account/components/sections/ProfileSection.svelte",
+    "variants/account/index.ts",
+    "variants/appearance/components/AccentSwatches.svelte",
+    "variants/appearance/components/AppearancePanel.svelte",
+    "variants/appearance/components/Segmented.svelte",
+    "variants/appearance/components/SettingsRow.svelte",
+    "variants/appearance/components/SettingsSection.svelte",
+    "variants/appearance/index.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/settings/variants/account/lib/adapter.ts",
+      "frontend/slices/settings/variants/account/lib/core.ts",
+      "frontend/slices/settings/variants/account/lib/nav-core.ts",
+      "frontend/slices/settings/variants/account/lib/tools.ts",
+      "frontend/slices/settings/variants/appearance/lib/types.ts"
+    ],
+    "external": ["svelte"]
+  }
+}

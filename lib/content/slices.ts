@@ -2397,7 +2397,7 @@ const analytics: EventTrackingCtx = {
     title: "Settings — account + appearance shells",
     category: "ui",
     kind: "ui",
-    version: "1.1.0",
+    version: "1.2.0",
     tagline: "Two adapter-driven settings shells — account (async load+save) and appearance (sync per-setting) — the slice owns no data.",
     description: "Two settings surfaces behind one slug, each adapter-driven so the slice owns no data. account: SettingsShell two-column surface (nav collapses to a Select on mobile) — Profile (avatar/name/email/bio), Preferences (theme/language/density), Notifications (switch rows), Danger zone (AlertDialog-confirmed delete) over an ASYNC SettingsAdapter { load, save(patch) } with optimistic save + rollback; createMemoryAdapter ships for demos. appearance: AppearancePanel (style/mode/accent/wallpaper/reduce-transparency/display) over a SYNC per-setting AppearanceAdapter, plus the generic SettingsSection / SettingsRow / Segmented / AccentSwatches primitives you compose custom panels from. Install one surface with `npx rr add settings account|appearance`, or both with `npx rr add settings`.",
     source: "rr original",
