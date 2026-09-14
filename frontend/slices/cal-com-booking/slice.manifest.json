@@ -1,8 +1,8 @@
 {
   "$schema": "../../../docs/slice.manifest.schema.json",
   "name": "cal-com-booking",
-  "version": "0.2.0",
-  "description": "Embedded Cal.com booking widget (React embed) + Convex HTTP webhook receiver that mirrors bookings into a workspace-scoped table for downstream automations.",
+  "version": "0.3.0",
+  "description": "Cal.com inline embed plus a Convex webhook mirror. React uses @calcom/embed-react; explicit SvelteKit uses native Svelte 5 over the shared vanilla embed loader.",
   "category": "data",
   "stability": "beta",
   "deps": {
@@ -12,20 +12,14 @@
       "bookings"
     ],
     "npm": {
-      "@calcom/embed-react": "^1.5.0"
+      "@calcom/embed-react": "^1.5.3"
     },
     "env": [
-      {
-        "name": "NEXT_PUBLIC_CALCOM_USERNAME",
-        "required": true,
-        "scope": "public",
-        "description": "Cal.com username (or team/event slug) rendered into the embed src."
-      },
       {
         "name": "CALCOM_WEBHOOK_SECRET",
         "required": true,
         "scope": "server",
-        "description": "Shared secret used to verify Cal.com webhook HMAC signature in convex/features/bookings/http.ts."
+        "description": "Server-only shared value used to verify Cal.com webhook signatures."
       }
     ]
   },
@@ -47,20 +41,14 @@
       "*.test.ts"
     ]
   },
-  "permissions": [
-    "bookings.view",
-    "bookings.cancel",
-    "bookings.reschedule"
-  ],
+  "permissions": [],
   "schemaTables": [
     {
-      "name": "cal_com_booking_bookings",
-      "namespaced": true,
+      "name": "bookings",
+      "namespaced": false,
       "indexes": [
-        "by_workspace",
-        "by_workspace_calBookingId",
-        "by_workspace_startsAt",
-        "by_workspace_status"
+        "by_calBookingId",
+        "by_startsAt"
       ]
     }
   ],
@@ -76,7 +64,8 @@
     "scheduling",
     "cal-com",
     "bookings",
-    "webhook"
+    "webhook",
+    "svelte"
   ],
-  "notes": "Webhook handler lives at convex/features/bookings/http.ts and must verify HMAC via CALCOM_WEBHOOK_SECRET before insert. Existing table name 'bookings' should be migrated to namespaced 'cal_com_booking_bookings' on consumer adoption."
+  "notes": "The bundled Convex feature only verifies and mirrors webhook events into bookings. list/cancel/reschedule agent tools are host-injected adapters and require separate authorized Cal API bindings."
 }

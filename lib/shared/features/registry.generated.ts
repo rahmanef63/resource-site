@@ -82,7 +82,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...calComBookingConfig,
     importPath: "@/features/cal-com-booking/config",
-    version: "0.2.0",
+    version: "0.3.0",
   },
   {
     ...codeEditorConfig,

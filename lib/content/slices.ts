@@ -1342,42 +1342,29 @@ const vectorSearch: VectorSearchCtx = {
     title: "Cal.com Booking",
     category: "data",
     kind: "full",
-    version: "0.2.0",
-    description: "Embedded Cal.com booking widget + webhook receiver to mirror bookings into Convex.",
+    version: "0.3.0",
+    description: "Cal.com inline booking UI with a real Convex webhook mirror. React/Next stays default via @calcom/embed-react; SvelteKit uses native Svelte 5 over the shared vanilla embed loader. The bundled backend mirrors webhook events into the real bookings table; list/cancel/reschedule remain host-injected tool adapters.",
     source: "rahmanef63/resource-site",
-    docsUrl: "https://cal.com/docs/integrations/web-app/embed",
+    docsUrl: "https://cal.com/embed",
     install: "npm i @calcom/embed-react",
     slicePath: "frontend/slices/cal-com-booking",
     convexPaths: ["convex/features/bookings"],
-    npm: ["@calcom/embed-react@^1.5.0"],
-    shadcn: ["card"],
+    npm: ["@calcom/embed-react@^1.5.3"],
+    shadcn: [],
     env: [
-      { name: "NEXT_PUBLIC_CALCOM_USERNAME", scope: "next-public", required: true },
       { name: "CALCOM_WEBHOOK_SECRET", scope: "convex", required: true },
     ],
     peers: [],
-    tags: ["data", "scheduling", "cal-com", "bookings"],
+    tags: ["data", "scheduling", "cal-com", "bookings", "webhook", "svelte"],
     usedBy: ["personal-brand-os", "konsultan-os"],
-    agentRecipe: "Run `npx rr add cal-com-booking`. Embed Cal.com via @calcom/embed-react di halaman services. Configure webhook di Cal.com dashboard → POST ke /api/cal-webhook → upsert booking di Convex.",
+    agentRecipe: "Run `npx rr add cal-com-booking` for React/default or `npx rr add cal-com-booking --framework sveltekit`. Pass an explicit calLink and optional calOrigin. Wire the bundled webhook mirror to the real bookings table; bind list/cancel/reschedule tools separately to host APIs.",
     previewPath: "/preview/slices/cal-com-booking",
-    wiring: `// app/(public)/booking/page.tsx
-import { getCalApi } from "@calcom/embed-react";
-useEffect(() => {
-  (async () => {
-    const cal = await getCalApi();
-    cal("ui", { theme: "light" });
-  })();
-}, []);
-<Cal calLink={\`\${process.env.NEXT_PUBLIC_CALCOM_USERNAME}/diskusi-30m\`} />
+    wiring: `// React / Next
+import { CalEmbed } from "@/features/cal-com-booking";
+<CalEmbed calLink="team/event-type" />
 
-// convex/features/bookings/webhook.ts
-export const calComWebhook = httpAction(async (ctx, req) => {
-  // verify X-Cal-Signature-256 with CALCOM_WEBHOOK_SECRET
-  const { triggerEvent, payload } = await req.json();
-  if (triggerEvent === "BOOKING_CREATED") {
-    await ctx.runMutation(internal.features.bookings.mutations.create, payload);
-  }
-});`,
+// SvelteKit uses the same public CalEmbed component name.
+// The bundled Convex feature is a signed webhook mirror only.`,
     defaultView: "mobile",
     defaultZoom: 1,
     compat: {

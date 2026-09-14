@@ -11,6 +11,13 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-14 — SvelteKit Cal.com Booking distribution
+<!-- public-changelog:SVELTE-CAL-COM-BOOKING -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/cal-com-booking
+- [before: `cal-com-booking@0.2.0` used a placeholder and had no Svelte distribution] → [after: `cal-com-booking@0.3.0` has real React and native Svelte embed surfaces over the actual bookings mirror]
+
 ### 2026-09-14 — SvelteKit Vector Search contract
 <!-- public-changelog:SVELTE-VECTOR-SEARCH-CONTRACT -->
 

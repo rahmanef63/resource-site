@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-CAL-COM-BOOKING",
+    "version": "cal-com-booking@0.3.0",
+    "date": 1789344000000,
+    "kind": "feature",
+    "title": "SvelteKit Cal.com Booking distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/cal-com-booking — [before: cal-com-booking@0.2.0 used a placeholder and had no Svelte distribution] → [after: cal-com-booking@0.3.0 has real React and native Svelte embed surfaces over the actual bookings mirror].",
+    "groups": [
+      {
+        "heading": "Real embed parity",
+        "bullets": [
+          "React remains the default distribution with an explicit calLink input.",
+          "Svelte 5 mounts Cal through the shared vanilla embed loader without React runtime leakage.",
+          "Backend metadata now points at the real bookings table; operational tools remain host adapters."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-VECTOR-SEARCH-CONTRACT",
     "version": "vector-search@0.3.0",
     "date": 1789344000000,

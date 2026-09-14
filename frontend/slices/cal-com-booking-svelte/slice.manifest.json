@@ -1,0 +1,27 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "cal-com-booking-svelte",
+  "version": "0.3.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add cal-com-booking --framework sveltekit",
+    "consumerPath": "slices/cal-com-booking"
+  },
+  "files": [
+    "README.md",
+    "components/CalEmbed.svelte",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/cal-com-booking/lib/embed-core.ts",
+      "frontend/slices/cal-com-booking/lib/tools.ts"
+    ],
+    "external": [
+      "svelte"
+    ]
+  }
+}
