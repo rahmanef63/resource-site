@@ -1,0 +1,25 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "ai-router-svelte",
+  "version": "0.6.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add ai-router --framework sveltekit",
+    "consumerPath": "slices/ai-router"
+  },
+  "files": [
+    "README.md",
+    "components/ChatFab.svelte",
+    "index.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/ai-router/config.ts",
+      "frontend/slices/ai-router/lib/core.ts",
+      "frontend/slices/ai-router/lib/tools.ts"
+    ],
+    "external": ["svelte", "convex", "ai", "@openrouter/ai-sdk-provider"]
+  }
+}

@@ -1,10 +1,10 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "ai-router",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "category": "ai",
-  "title": "AI Router \u2014 Backend Provider Proxy",
-  "description": "Tier-routed LLM access via OpenRouter \u2014 nano (Haiku) for classification, mid (Sonnet) for chat, flagship (Opus) for deep reasoning. Per-call usage log.",
+  "title": "AI Router — OpenRouter Tier Proxy",
+  "description": "Authenticated tier-routed LLM access through one Convex action and OpenRouter. The ChatFab is transport-injected over a shared request/result core: unconfigured hosts return an explicit notice instead of a fake reply. React/Next remains default; SvelteKit ships native Svelte 5 UI over the same core and Convex backend.",
   "namespace": "@/features/ai-router",
   "convex": {
     "tablesExport": "aiTables",
@@ -15,21 +15,50 @@
   },
   "frontend": {
     "slicePath": "frontend/slices/ai-router",
-    "configExport": "aiRouterConfig"
+    "configExport": "aiRouterConfig",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/ai-router-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5",
+            "convex@^1.17",
+            "ai@^4.0.0",
+            "@openrouter/ai-sdk-provider@^0.0.5"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/ai-router/config.ts",
+            "frontend/slices/ai-router/lib/core.ts",
+            "frontend/slices/ai-router/lib/tools.ts"
+          ]
+        }
+      }
+    }
   },
   "deps": {
     "npm": [
+      "convex@^1.17",
       "ai@^4.0.0",
-      "@openrouter/ai-sdk-provider@^0.0.5"
+      "@openrouter/ai-sdk-provider@^0.0.5",
+      "lucide-react@^0.400.0"
     ],
     "shadcn": [
-      "button"
+      "button",
+      "card",
+      "input"
     ],
     "env": [
       {
         "name": "OPENROUTER_API_KEY",
         "scope": "convex",
-        "required": true
+        "required": true,
+        "description": "Server-side OpenRouter key used only by the Convex action."
       }
     ],
     "peers": []
@@ -45,45 +74,63 @@
     "ai",
     "llm",
     "openrouter",
-    "tier-routing"
+    "tier-routing",
+    "chat"
   ],
-  "previews": [],
+  "previews": [
+    {
+      "component": "ChatFab",
+      "kind": "scenarios",
+      "scenarios": [
+        {
+          "id": "demo-transport",
+          "title": "Injected preview transport",
+          "description": "ChatFab renders a clearly labeled deterministic preview adapter."
+        },
+        {
+          "id": "unconfigured",
+          "title": "Unconfigured host",
+          "description": "No transport: the shared core returns an explicit wiring notice instead of a fake reply."
+        }
+      ],
+      "seed": "Preview-only route adapter; no OpenRouter request is made."
+    }
+  ],
   "contract": {
     "requires": {
       "auth": "convex",
-      "rbac": [
-        "ai.invoke",
-        "ai.view-usage"
-      ],
       "env": [
         "OPENROUTER_API_KEY"
       ],
-      "convex": {
-        "prefix": "ai_router_",
-        "tables": [
-          "ai_router_usage",
-          "ai_router_calls"
-        ]
-      },
-      "deps": [
-        "convex-auth"
-      ]
+      "deps": []
     },
     "provides": {
       "tools": [
         "ai-router.route"
       ],
-      "tables": [
-        "ai_router_usage",
-        "ai_router_calls"
+      "routes": [],
+      "components": [
+        "ChatFab"
       ],
-      "events": [
-        "ai.invoked",
-        "ai.usage.logged"
-      ]
+      "utils": [
+        "AI_ROUTER_TIERS",
+        "routePrompt",
+        "greetingMessage",
+        "userMessage",
+        "assistantMessage"
+      ],
+      "convex": {
+        "tables": [
+          "aiUsage"
+        ],
+        "rbac": []
+      }
     },
     "generalization": {
-      "level": "needs-adapter"
+      "level": "needs-adapter",
+      "requiredProps": [
+        "route"
+      ]
     }
   }
 }

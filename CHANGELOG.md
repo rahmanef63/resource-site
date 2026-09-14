@@ -11,6 +11,14 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-14 — SvelteKit AI Router distribution
+<!-- public-changelog:SVELTE-AI-ROUTER -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/ai-router
+- [before: `ai-router@0.5.0` advertised nonexistent `ai_router_usage` / `ai_router_calls` tables, let the paid Convex action run without an identity guard, and ChatFab fabricated a stub success when no transport was wired] → [after: `ai-router@0.6.0` uses the real authenticated `aiUsage` backend, one shared request/result/message core, native Svelte 5 ChatFab parity, explicit unconfigured notices, and a canonical preview adapter that never calls OpenRouter]
+- React/Next remains default; explicit SvelteKit installs native UI plus the same core/config/tools and the same Convex backend without Lucide or shadcn.
+
 ### 2026-09-14 — SvelteKit AI Admin contract
 <!-- public-changelog:SVELTE-AI-ADMIN-CONTRACT -->
 

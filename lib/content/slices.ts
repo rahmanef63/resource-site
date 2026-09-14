@@ -1278,47 +1278,34 @@ export const subscribe = mutation({
   },
   {
     slug: "ai-router",
-    title: "AI Router — Backend Provider Proxy",
+    title: "AI Router — OpenRouter Tier Proxy",
     category: "ai",
-    kind: "backend",
-    version: "0.5.0",
-    description: "Backend infrastructure (no UI). Single proxy that every other ai-* feature calls. Tier-routed — nano (Haiku) for classification, mid (Sonnet) for chat, flagship (Opus) for deep reasoning. Per-call usage log + cost guard. Works with direct provider keys or OpenRouter umbrella.\n\nNot something you mount — installed automatically as a peer when you add ai-workspace.",
+    kind: "full",
+    version: "0.6.0",
+    description: "Authenticated tier-routed LLM access through one Convex action and OpenRouter. Ships a transport-injected ChatFab: React/Next remains default and SvelteKit gets native Svelte 5 UI over the same request/result core and the same aiUsage backend. Unconfigured hosts return an explicit notice instead of a fake reply.",
     source: "rahmanef63/resource-site",
     docsUrl: "https://sdk.vercel.ai/docs",
-    install: "npm i ai @openrouter/ai-sdk-provider",
+    install: "npx rr add ai-router",
     slicePath: "frontend/slices/ai-router",
     convexPaths: ["convex/features/ai"],
-    npm: ["ai@^4.0.0", "@openrouter/ai-sdk-provider@^0.0.5"],
-    shadcn: ["button"],
+    npm: ["convex@^1.17", "ai@^4.0.0", "@openrouter/ai-sdk-provider@^0.0.5", "lucide-react@^0.400.0"],
+    shadcn: ["button", "card", "input"],
     env: [{ name: "OPENROUTER_API_KEY", scope: "convex", required: true }],
     peers: [],
-    tags: ["ai", "ai:backend", "tier-routing", "cost-guard"],
+    tags: ["ai", "llm", "openrouter", "tier-routing", "chat"],
     usedBy: ["personal-brand-os"],
-    agentRecipe: "Run `npx rr add ai-router`. Wrap every AI call through ai-router. Tiers: nano = quick classification (spam-flag, headline-suggest), mid = chat / draft, flagship = methodology-review / deep-think. Token usage logs to ai_usage table for the cost dashboard.",
+    agentRecipe: "Run `npx rr add ai-router` or add `--framework sveltekit`. Bind ChatFab.route to api.features.ai.action.callModel. The action requires auth, keeps the provider key server-only, returns a notice when unavailable, and logs successful usage to aiUsage.",
     previewPath: "/preview/slices/ai-router",
-    wiring: `// convex/features/ai/router.ts
-import { action } from "../../_generated/server";
-import { v } from "convex/values";
-
-export const complete = action({
-  args: { tier: v.union(v.literal("nano"), v.literal("mid"), v.literal("flagship")), messages: v.array(v.any()) },
-  handler: async (ctx, { tier, messages }) => {
-    const model = { nano: "claude-haiku-4-5", mid: "claude-sonnet-4-6", flagship: "claude-opus-4-7" }[tier];
-    const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: { Authorization: \`Bearer \${process.env.OPENROUTER_API_KEY}\`, "Content-Type": "application/json" },
-      body: JSON.stringify({ model, messages }),
-    });
-    return res.json();
-  },
-});`,
+    wiring: `// consumer adapter
+const route = (request) => client.action(api.features.ai.action.callModel, request);
+<ChatFab route={route} tier="mid" feature="support-chat" />`,
     defaultView: "desktop",
     defaultZoom: 0.7,
     compat: {
       templates: {
         "personal-brand-os": { status: "recommended" },
         "kreator-studio-os": { status: "recommended" },
-        "saas-marketing-os": { status: "warn", note: "Only needed if site uses ai-workspace chat search mode." },
+        "saas-marketing-os": { status: "warn", note: "Only needed when the product exposes an authenticated AI surface." },
       },
       enhances: ["ai-workspace", "ai-admin"],
     },

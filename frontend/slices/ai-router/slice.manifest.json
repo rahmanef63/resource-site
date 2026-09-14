@@ -1,81 +1,26 @@
 {
-  "$schema": "../../../docs/slice.manifest.schema.json",
-  "name": "ai-router",
-  "version": "0.5.0",
-  "description": "Tier-routed LLM access via OpenRouter \u2014 nano (Haiku) for classification, mid (Sonnet) for chat, flagship (Opus) for deep reasoning. Per-call usage log.",
-  "category": "ai",
-  "stability": "beta",
-  "deps": {
-    "shared": [],
-    "slices": [],
-    "convexFeatures": [
-      "ai"
-    ],
-    "npm": {
-      "ai": "^4.0.0",
-      "@openrouter/ai-sdk-provider": "^0.0.5"
-    },
-    "env": [
-      {
-        "name": "OPENROUTER_API_KEY",
-        "required": true,
-        "scope": "server",
-        "description": "OpenRouter API key. Get from https://openrouter.ai/keys"
-      }
-    ]
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "ai-router",
+  "version": "0.6.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add ai-router",
+    "consumerPath": "slices/ai-router"
   },
-  "files": {
-    "include": [
-      "**/*"
-    ],
-    "exclude": [
-      "*.test.ts",
-      "*.test.tsx",
-      "*.spec.ts"
-    ]
-  },
-  "convexFiles": {
-    "include": [
-      "**/*.ts"
-    ],
-    "exclude": [
-      "*.test.ts"
-    ]
-  },
-  "permissions": [
-    "ai.invoke",
-    "ai.view-usage"
+  "files": [
+    "README.md",
+    "components/chat-fab.tsx",
+    "config.ts",
+    "index.ts",
+    "lib/core.ts",
+    "lib/tools.ts"
   ],
-  "schemaTables": [
-    {
-      "name": "ai_router_usage",
-      "namespaced": true,
-      "indexes": [
-        "by_workspace",
-        "by_workspace_createdAt"
-      ]
-    },
-    {
-      "name": "ai_router_calls",
-      "namespaced": true,
-      "indexes": [
-        "by_workspace",
-        "by_workspace_status"
-      ]
-    }
-  ],
-  "compatibility": {
-    "next": ">=15 <17",
-    "react": "^19",
-    "convex": "^1.36",
-    "tailwind": "4",
-    "auth": "any"
-  },
-  "tags": [
-    "ai",
-    "llm",
-    "openrouter",
-    "tier-routing"
-  ],
-  "notes": "Migrate consumer Convex schema to use ai_router_* table names. Existing 'ai' feature name kept for backward compat in convexFeatures field."
+  "imports": {
+    "shared": [
+      "lib/shared/agentic/define.ts",
+      "lib/shared/agentic/schema.ts"
+    ],
+    "external": ["react", "lucide-react", "convex", "ai", "@openrouter/ai-sdk-provider"]
+  }
 }

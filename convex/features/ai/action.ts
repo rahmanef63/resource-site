@@ -11,9 +11,9 @@ const TIER_TO_MODEL = {
 } as const;
 
 /**
- * Key-guarded like its sibling `aiChat/chat`: returns `{ ok:false, notice }`
- * when OPENROUTER_API_KEY is unset so fresh clones degrade instead of
- * throwing. NOTE: public action driving paid spend — if you compose the
+ * Auth + key guarded: the action requires an authenticated Convex identity and
+ * returns `{ ok:false, notice }` when auth/provider configuration is missing,
+ * before any paid provider call. If you compose the
  * rate-limit slice, gate this with
  * `ctx.runMutation(internal.features.rate_limit.mutation.consume, { key: "ai:" + callerId })`
  * before the model call (not imported here to avoid a hard peer coupling).
@@ -28,6 +28,11 @@ export const callModel = action({
     ctx,
     { feature, prompt, tier },
   ): Promise<{ ok: boolean; text?: string; notice?: string }> => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      return { ok: false, notice: "Sign in to use AI Router." };
+    }
+
     const key = process.env.OPENROUTER_API_KEY;
     if (!key) {
       return {

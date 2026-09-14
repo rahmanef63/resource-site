@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-AI-ROUTER",
+    "version": "ai-router@0.6.0",
+    "date": 1789344000000,
+    "kind": "feature",
+    "title": "SvelteKit AI Router distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/ai-router — [before: ai-router@0.5.0 advertised nonexistent ai_router_usage / ai_router_calls tables, let the paid Convex action run without an identity guard, and ChatFab fabricated a stub success when no transport was wired] → [after: ai-router@0.6.0 uses the real authenticated aiUsage backend, one shared request/result/message core, native Svelte 5 ChatFab parity, explicit unconfigured notices, and a canonical preview adapter that never calls OpenRouter].",
+    "groups": [
+      {
+        "heading": "One authenticated router contract across React and Svelte",
+        "bullets": [
+          "React ChatFab and native Svelte ChatFab now share the same portable route/message core and injected transport contract.",
+          "The paid Convex action requires an authenticated identity before provider access and logs successful usage to the real aiUsage table.",
+          "The public preview is a thin canonical ChatFab host with a labeled local preview adapter; it never performs a provider request."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-AI-ADMIN-CONTRACT",
     "version": "ai-admin@0.4.0",
     "date": 1789344000000,

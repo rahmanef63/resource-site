@@ -81,6 +81,30 @@
     ]
   },
   {
+    "slug": "ai-router",
+    "title": "AI Router — OpenRouter Tier Proxy",
+    "category": "ai",
+    "previews": [
+      {
+        "component": "ChatFab",
+        "kind": "scenarios",
+        "scenarios": [
+          {
+            "id": "demo-transport",
+            "title": "Injected preview transport",
+            "description": "ChatFab renders a clearly labeled deterministic preview adapter."
+          },
+          {
+            "id": "unconfigured",
+            "title": "Unconfigured host",
+            "description": "No transport: the shared core returns an explicit wiring notice instead of a fake reply."
+          }
+        ],
+        "seed": "Preview-only route adapter; no OpenRouter request is made."
+      }
+    ]
+  },
+  {
     "slug": "appshell",
     "title": "AppShell — Desktop + Mobile OS Shell",
     "category": "os",

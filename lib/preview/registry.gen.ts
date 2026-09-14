@@ -6,6 +6,7 @@ export const PREVIEW_REGISTRY: Record<string, () => Promise<{ default: SlicePrev
   "activity": () => import("@/features/activity/preview"),
   "admin-panel": () => import("@/components/templates/_shared/previews/admin-panel.preview"),
   "ai-core": () => import("@/features/ai-core/preview"),
+  "ai-router": () => import("@/features/ai-router/preview"),
   "appshell": () => import("@/features/appshell/preview"),
   "blog-section": () => import("@/features/blog-section/preview"),
   "changelog-feed": () => import("@/features/changelog-feed/preview"),

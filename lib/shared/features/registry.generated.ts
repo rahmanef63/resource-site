@@ -43,7 +43,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...aiRouterConfig,
     importPath: "@/features/ai-router/config",
-    version: "0.5.0",
+    version: "0.6.0",
   },
   {
     ...appStoreConfig,

@@ -1,95 +1,66 @@
 "use client";
 
-// Floating chat button + popover panel.
-//
-// Two backends, auto-selected at runtime:
-//   • When the shared agentic model seam is wired (`configureAgentStream`),
-//     the FAB drives the GLOBAL tool registry — every slice that called
-//     `useAgentTools` is callable through this one chat (one agent, many
-//     slices). No props needed.
-//   • Otherwise it answers with `stubReply` so the widget ships inert into
-//     consumer templates and never needs a key at build/prerender time.
-//
-// Usage in your app/layout.tsx:
-//   import { ChatFab } from "@/features/ai-router/components/chat-fab";
-//   <ChatFab tier="mid" />
-
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Bot, Send, X } from "lucide-react";
-import {
-  isAgentStreamConfigured,
-  runAgentLoop,
-  globalToolRegistry,
-  type AgentMsg,
-} from "@/shared/agentic";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import {
+  assistantMessage,
+  greetingMessage,
+  routePrompt,
+  userMessage,
+  type AiRouterMessage,
+  type AiRouterRoute,
+  type RouteTier,
+} from "../lib/core";
 
-type Tier = "nano" | "mid" | "flagship";
-type Message = { id: string; role: "user" | "assistant"; content: string };
+export type ChatFabProps = {
+  route?: AiRouterRoute;
+  feature?: string;
+  tier?: RouteTier;
+  greeting?: string;
+  title?: string;
+  placeholder?: string;
+};
 
 export function ChatFab({
+  route,
+  feature = "chat-fab",
   tier = "mid",
   greeting = "Hi — how can I help you?",
   title = "Chat",
   placeholder = "Type a message…",
-}: {
-  tier?: Tier;
-  /** First assistant message (English default — override for i18n). */
-  greeting?: string;
-  /** Panel header label. */
-  title?: string;
-  /** Composer input placeholder. */
-  placeholder?: string;
-}) {
+}: ChatFabProps) {
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    { id: "greet", role: "assistant", content: greeting },
-  ]);
+  const [messages, setMessages] = useState<AiRouterMessage[]>(() => [greetingMessage(greeting)]);
   const [input, setInput] = useState("");
   const [pending, setPending] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (open && scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
+    if (open && scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [messages, open]);
 
   async function send() {
     const prompt = input.trim();
     if (!prompt || pending) return;
-    const userMsg: Message = { id: `u-${Date.now()}`, role: "user", content: prompt };
-    setMessages((m) => [...m, userMsg]);
+    const stamp = Date.now();
+    setMessages((current) => [...current, userMessage(`u-${stamp}`, prompt)]);
     setInput("");
     setPending(true);
 
     try {
-      let text: string;
-      if (isAgentStreamConfigured()) {
-        // Anthropic requires the first message to be `user`; drop the leading
-        // cosmetic greeting (and any assistant msg before the first user turn).
-        const msgs: AgentMsg[] = [];
-        for (const m of messages) {
-          if (msgs.length === 0 && m.role !== "user") continue;
-          msgs.push({ role: m.role, text: m.content });
-        }
-        msgs.push({ role: "user", text: prompt });
-        const res = await runAgentLoop(msgs, globalToolRegistry(), {}, 6);
-        text = res.text || "(no response)";
-      } else {
-        text = await stubReply(prompt);
-      }
-      setMessages((m) => [...m, { id: `a-${Date.now()}`, role: "assistant", content: text }]);
-    } catch (err) {
-      setMessages((m) => [
-        ...m,
+      const result = await routePrompt(route, { feature, tier, prompt });
+      setMessages((current) => [...current, assistantMessage(`a-${stamp}`, result)]);
+    } catch (error) {
+      setMessages((current) => [
+        ...current,
         {
-          id: `err-${Date.now()}`,
+          id: `err-${stamp}`,
           role: "assistant",
-          content: `(error) ${err instanceof Error ? err.message : "unknown"}`,
+          content: `(error) ${error instanceof Error ? error.message : "unknown"}`,
         },
       ]);
     } finally {
@@ -120,41 +91,29 @@ export function ChatFab({
             {tier}
           </span>
         </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setOpen(false)}
-          aria-label="Close chat"
-          className="size-6 rounded text-muted-foreground hover:bg-accent/40 hover:text-foreground"
-        >
+        <Button variant="ghost" size="icon" onClick={() => setOpen(false)} aria-label="Close chat" className="size-6">
           <X className="size-4" />
         </Button>
       </header>
       <CardContent ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto p-3">
-        {messages.map((m) => (
+        {messages.map((message) => (
           <div
-            key={m.id}
+            key={message.id}
             className={cn(
               "max-w-[85%] rounded-lg px-3 py-2 text-sm",
-              m.role === "user"
-                ? "ml-auto bg-foreground text-background"
-                : "bg-muted text-foreground",
+              message.role === "user" ? "ml-auto bg-foreground text-background" : "bg-muted text-foreground",
             )}
           >
-            {m.content}
+            {message.content}
           </div>
         ))}
-        {pending && (
-          <div className="max-w-[85%] rounded-lg bg-muted px-3 py-2 text-sm text-muted-foreground">
-            …
-          </div>
-        )}
+        {pending && <div className="max-w-[85%] rounded-lg bg-muted px-3 py-2 text-sm text-muted-foreground">…</div>}
       </CardContent>
       <footer className="flex gap-2 border-t border-border/60 p-2">
         <Input
           value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send()}
+          onChange={(event) => setInput(event.target.value)}
+          onKeyDown={(event) => event.key === "Enter" && !event.shiftKey && send()}
           placeholder={placeholder}
           className="flex-1 text-sm"
           disabled={pending}
@@ -166,9 +125,4 @@ export function ChatFab({
       </footer>
     </Card>
   );
-}
-
-async function stubReply(prompt: string): Promise<string> {
-  await new Promise((r) => setTimeout(r, 400));
-  return `(stub) Received: "${prompt.slice(0, 80)}${prompt.length > 80 ? "…" : ""}". Wire ChatFab to api.features.ai.actions.callModel for real responses.`;
 }
