@@ -1,0 +1,8 @@
+<script lang="ts">
+  import type {Database,DatabaseViewConfig,Page} from "@/features/notion-ui/variants/database/types"; import {bucketByDate} from "@/features/notion-ui/variants/database/lib/viewData"; import {dateProp} from "../../lib/view-core";
+  let {db,view,rows,onOpenRow}= $props<{db:Database;view:DatabaseViewConfig;rows:Page[];onOpenRow?:(id:string)=>void}>();
+  let prop=$derived(dateProp(db,view)),buckets=$derived(prop?bucketByDate(rows,prop):new Map<string,Page[]>());
+  let anchor=$derived(new Date()); let y=$derived(anchor.getFullYear()),m=$derived(anchor.getMonth()),first=$derived(new Date(y,m,1).getDay()),days=$derived(new Date(y,m+1,0).getDate());
+  const key=(d:number)=>`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+</script>
+<div class="p-3"><header class="mb-2 text-sm font-semibold">{new Date(y,m,1).toLocaleDateString(undefined,{month:"long",year:"numeric"})}</header>{#if !prop}<p class="rounded border p-4 text-xs text-muted-foreground">Add a date property to use Calendar.</p>{:else}<div class="grid grid-cols-7 border-l border-t text-xs">{#each ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"] as d (d)}<div class="border-b border-r bg-muted/30 p-2 font-medium">{d}</div>{/each}{#each Array(first) as _,i (`b${i}`)}<div class="min-h-24 border-b border-r bg-muted/10"></div>{/each}{#each Array(days) as _,i (i)}{@const day=i+1}<div class="min-h-24 border-b border-r p-1"><strong class="text-[10px]">{day}</strong><div class="mt-1 space-y-1">{#each buckets.get(key(day))??[] as row (row.id)}<button class="block w-full truncate rounded bg-muted px-1.5 py-1 text-left text-[10px]" onclick={()=>onOpenRow?.(row.id)}>{row.title||"Untitled"}</button>{/each}</div></div>{/each}</div>{/if}</div>

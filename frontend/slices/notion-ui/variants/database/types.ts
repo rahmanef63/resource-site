@@ -27,14 +27,14 @@ export type {
   Page,
   Property,
   PropertyType,
-  PropertyTypeMeta,
   PropertyValue,
   RollupAggregate,
   SelectOption,
-} from "@/features/notion-ui/shared";
+} from "@/features/notion-ui/shared/types";
+export type { PropertyTypeMeta } from "@/features/notion-ui/shared/property-type-meta";
 
 export {
   PROPERTY_TYPE_META,
   PROPERTY_TYPES_USER_ADDABLE,
   PROPERTY_TYPES_CSV_IMPORTABLE,
-} from "@/features/notion-ui/shared";
+} from "@/features/notion-ui/shared/property-type-meta";

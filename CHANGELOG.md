@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-15 — SvelteKit Notion UI distributions
+<!-- public-changelog:SVELTE-NOTION-UI -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/notion-ui
+- Preview: https://resource.rahmanef.com/preview/slices/notion-ui
+- [before: `notion-ui@0.24.0` exposed page/database/sidebar primitives only through React/Next, its portable domain types still carried React type coupling, and Svelte consumers would inherit renderer-only dnd-kit/Recharts/Lucide/shadcn dependencies] → [after: `notion-ui@0.25.0` keeps React/Next default, adds native Svelte 5/SvelteKit page/database/sidebar distributions, makes block/sidebar/database cores framework-neutral, and selects renderer-specific dependency closures]
+- Svelte database covers all 11 view kinds over the same filter/sort/formula/aggregate/CSV/JSON engines; page keeps block CRUD + slash/markdown transforms + native reorder; sidebar keeps tree collapse/rename/CRUD + drag reparent without React runtime.
+
 ### 2026-09-15 — SvelteKit Notion App distribution + shared block editor cores
 <!-- public-changelog:SVELTE-NOTION-APP -->
 

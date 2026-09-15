@@ -1,0 +1,5 @@
+<script lang="ts">
+  import type {Database,DatabaseViewConfig,Page} from "@/features/notion-ui/variants/database/types"; import {chartBuckets} from "../../lib/view-core";
+  let {db,view,rows}= $props<{db:Database;view:DatabaseViewConfig;rows:Page[]}>(); let data=$derived(chartBuckets(rows,db,view)); let max=$derived(Math.max(1,...data.map((d)=>d.value)));
+</script>
+<div class="p-4"><header class="mb-4"><h4 class="text-sm font-semibold">{view.chartTitle||view.name}</h4><p class="text-[10px] text-muted-foreground">{view.chartKind||"bar"} · {rows.length} rows</p></header>{#if data.length===0}<p class="text-xs text-muted-foreground">No chart data.</p>{:else}<div class="space-y-2">{#each data as item (item.label)}<div class="grid grid-cols-[110px_1fr_40px] items-center gap-2 text-xs"><span class="truncate">{item.label}</span><div class="h-6 rounded bg-muted/40"><div class="h-full rounded bg-foreground/75" style={`width:${Math.max(3,item.value/max*100)}%`}></div></div><strong class="text-right tabular-nums">{item.value}</strong></div>{/each}</div>{/if}</div>

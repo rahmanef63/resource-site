@@ -1,9 +1,8 @@
 /** notion-shell domain types — portable subset of nosion's domain. */
 
-import type { ReactNode } from "react";
-import type { Block } from "./block-types";
+import type { Block } from "./block-core";
 
-export type { Block, BlockType, BlockRenderers, BlockRendererProps } from "./block-types";
+export type { Block, BlockType } from "./block-core";
 
 /** Structural cover value — a raw URL/CSS string OR a rich cover object
  *  (colour / gradient / texture / upload / link / unsplash + focal point).
@@ -180,4 +179,5 @@ export interface Database {
   locked?: boolean;
 }
 
-export type ActionsSlot = ReactNode;
+/** Framework-neutral slot placeholder; renderer layers may refine this to their native child type. */
+export type ActionsSlot = unknown;

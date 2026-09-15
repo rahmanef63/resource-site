@@ -15,7 +15,7 @@
  *  free of React imports + DOM I/O so it can be unit-tested headless
  *  if we ever bring tests over from open-silong.
  */
-import type { Block, BlockType } from "../types";
+import type { Block, BlockType } from "@/features/notion-ui/shared/block-core";
 import { MARKDOWN_TRIGGERS } from "./markdownTriggers";
 
 export type BlockInputDecision =

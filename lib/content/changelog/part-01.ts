@@ -2,6 +2,16 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-NOTION-UI",
+    "version": "notion-ui@0.25.0",
+    "date": 1789430400000,
+    "kind": "feature",
+    "title": "SvelteKit Notion UI distributions",
+    "body": "Related: https://resource.rahmanef.com/slices/notion-ui — Preview: https://resource.rahmanef.com/preview/slices/notion-ui — [before: notion-ui@0.24.0 was React/Next-only and its portable domain/tree surfaces still carried renderer coupling] → [after: notion-ui@0.25.0 keeps React default, adds native Svelte 5/SvelteKit page/database/sidebar variants, shares framework-neutral cores, and declares renderer-specific dependency closures].",
+    "groups": [{"heading":"Three controlled surfaces, two native renderers","bullets":["Svelte page reuses block/input/catalog semantics and native drag reorder.","Svelte database renders all 11 view kinds over the same filter/sort/formula/aggregate/CSV/JSON engines.","Svelte sidebar reuses tree projection helpers without dnd-kit runtime."]}]
+  },
+
+  {
     "id": "SVELTE-NOTION-APP",
     "version": "notion-app@1.2.0",
     "date": 1789430400000,

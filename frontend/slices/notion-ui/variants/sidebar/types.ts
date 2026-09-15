@@ -1,21 +1,6 @@
 import type { ReactNode } from "react";
-
-/** Lightweight page descriptor the sidebar tree is built from. The host owns
- *  the data; the sidebar only needs these four fields + sibling order (the
- *  array order of `pages`). Fully decoupled from notion-shell's domain types
- *  so the sidebar is reusable on its own. */
-export interface NotionSidebarPage {
-  id: string;
-  title: string;
-  icon: string;
-  parentId: string | null;
-}
-
-/** A page flattened into render order with its tree depth. */
-export interface FlatPage extends NotionSidebarPage {
-  depth: number;
-  childCount: number;
-}
+import type { NotionSidebarPage, FlatPage } from "./lib/types-core";
+export type { NotionSidebarPage, FlatPage } from "./lib/types-core";
 
 export interface NotionSidebarProps {
   pages: NotionSidebarPage[];

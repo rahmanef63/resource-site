@@ -3,8 +3,15 @@
  *  project a drag's horizontal offset onto a target depth + parent (the
  *  canonical @dnd-kit sortable-tree algorithm, trimmed). */
 
-import { arrayMove } from "@dnd-kit/sortable";
-import type { NotionSidebarPage, FlatPage } from "../types";
+import type { NotionSidebarPage, FlatPage } from "./types-core";
+
+function arrayMove<T>(items: T[], from: number, to: number): T[] {
+  const next = [...items];
+  if (from < 0 || to < 0 || from >= next.length || to >= next.length) return next;
+  const [item] = next.splice(from, 1);
+  next.splice(to, 0, item!);
+  return next;
+}
 
 interface TNode { page: NotionSidebarPage; children: TNode[] }
 

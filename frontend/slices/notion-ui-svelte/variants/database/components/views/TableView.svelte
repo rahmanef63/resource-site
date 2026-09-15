@@ -1,0 +1,10 @@
+<script lang="ts">
+  import type { Database,DatabaseViewConfig,Page,PropertyValue } from "@/features/notion-ui/variants/database/types";
+  import { computeCalc } from "@/features/notion-ui/variants/database/lib/calcAggregate";
+  import PropertyCell from "../PropertyCell.svelte"; import { visibleProps } from "../../lib/view-core";
+  let {db,view,rows,readOnly=false,pages=[],onRowUpdate,onRowRemove,onOpenRow}= $props<{db:Database;view:DatabaseViewConfig;rows:Page[];readOnly?:boolean;pages?:Page[];onRowUpdate?:(rowId:string,propId:string,value:PropertyValue)=>void;onRowRemove?:(rowId:string)=>void;onOpenRow?:(id:string)=>void}>();
+  let props=$derived(visibleProps(db,view));
+</script>
+<div class="overflow-x-auto"><table class="min-w-full border-collapse text-xs"><thead><tr class="bg-muted/30"><th class="min-w-48 border-b p-2 text-left font-medium">Name</th>{#each props as prop (prop.id)}<th class="min-w-36 border-b p-2 text-left font-medium">{prop.name}</th>{/each}<th class="w-10 border-b"></th></tr></thead><tbody>
+{#each rows as row (row.id)}<tr class="group hover:bg-muted/20"><td class="border-b p-1"><button class="w-full truncate px-1.5 py-1 text-left font-medium" onclick={()=>onOpenRow?.(row.id)}>{row.icon} {row.title||"Untitled"}</button></td>{#each props as prop (prop.id)}<td class="border-b p-1"><PropertyCell {prop} value={row.rowProps?.[prop.id]} {row} {db} {pages} {readOnly} onChange={(v)=>onRowUpdate?.(row.id,prop.id,v)}/></td>{/each}<td class="border-b p-1">{#if !readOnly&&onRowRemove}<button class="size-6 rounded opacity-0 hover:bg-muted group-hover:opacity-100" onclick={()=>onRowRemove?.(row.id)}>×</button>{/if}</td></tr>{/each}
+</tbody>{#if view.tableCalcs}<tfoot><tr><td class="p-2 text-muted-foreground">{rows.length} rows</td>{#each props as prop (prop.id)}<td class="p-2 text-muted-foreground">{view.tableCalcs?.[prop.id]&&view.tableCalcs[prop.id]!=="none"?computeCalc(rows,prop,view.tableCalcs[prop.id] ?? "none"):""}</td>{/each}<td></td></tr></tfoot>{/if}</table></div>

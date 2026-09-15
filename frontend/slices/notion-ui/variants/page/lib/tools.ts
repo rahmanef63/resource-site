@@ -2,7 +2,8 @@
 // presentational: the HOST (e.g. a page-builder agent surface) owns the props
 // and applies the merge-patch; the tool never touches slice internals.
 
-import { defineToolCollection, obj, str, bool } from "@/shared/agentic";
+import { defineToolCollection } from "@/shared/agentic/define";
+import { obj, str, bool } from "@/shared/agentic/schema";
 
 export type NotionShellConfigureCtx = {
   /** Merge-apply a props patch onto the rendered Notion page shell. */

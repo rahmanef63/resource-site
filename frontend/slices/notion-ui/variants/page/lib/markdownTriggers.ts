@@ -7,7 +7,7 @@
  *  sync so the inline-trigger UX matches across the product + the rr
  *  demo.
  */
-import type { Block, BlockType } from "../types";
+import type { Block, BlockType } from "@/features/notion-ui/shared/block-core";
 
 export const MARKDOWN_TRIGGERS: Record<string, { type: BlockType; patch?: Partial<Block> }> = {
   "# ":    { type: "h1" },
