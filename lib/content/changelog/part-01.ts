@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-DASHBOARD-SHELL-DISTRIBUTION",
+    "version": "dashboard-shell@1.3.0",
+    "date": 1789430400000,
+    "kind": "feature",
+    "title": "SvelteKit Dashboard Shell distribution",
+    "body": "Related: https://resource.rahmanef.com/slices/dashboard-shell — Preview: https://resource.rahmanef.com/preview/slices/dashboard-shell — [before: dashboard-shell@1.2.0 rendered only through React/Next/shadcn, mixed React rendering types into the nav model, duplicated the public demo route, and its installer catalog omitted the existing Vaul/drawer dependency] → [after: dashboard-shell@1.3.0 keeps React/Next as default while adding native Svelte 5/SvelteKit rail/topbar/dock/tile-drawer parity over one framework-neutral nav core, with corrected framework-specific dependencies and a canonical preview host].",
+    "groups": [
+      {
+        "heading": "One nav SSOT, native framework chrome",
+        "bullets": [
+          "Framework-neutral core types plus isActive/flattenNav/deriveDock/activeTitle are shared by React and Svelte rather than duplicating navigation semantics.",
+          "Native Svelte DashboardShell, DashboardSidebar, MobileDock, and MobileMenuDrawer use $app/state, $derived, snippets, keyed lists, and CSS breakpoints with no React/Lucide/Vaul/shadcn runtime.",
+          "React installer metadata now includes its real Vaul/drawer dependency, and the public preview route renders the canonical preview module instead of a second nav demo."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-REEL-EDITOR",
     "version": "reel-editor@1.3.0",
     "date": 1789430400000,

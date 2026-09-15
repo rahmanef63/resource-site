@@ -650,13 +650,13 @@
       "slug": "dashboard-shell",
       "title": "Dashboard Shell — one responsive shell + mobile dock",
       "category": "ui",
-      "description": "THE dashboard chrome — one shell, three faces. Desktop: collapsible rail (shadcn Sidebar, ⌘B, cookie-persisted) + topbar. Mobile: NO sidebar at all — a bottom dock plus a thumbnail-tile menu drawer (drill-down one level for sub-items). Every face renders from ONE `nav` prop (groups → items → one level of sub-items), so the dock is derived, not a second nav to keep in sync — flag `dock: true` on the items you want down there, or let it take the first few. Slots for everything project-specific: sidebarHeader (workspace switcher), sidebarFooter (user menu), actions (search/notifications), topbar (full replace), secondary (narrow contextual column = the old three-column 'advanced' archetype). The dock is CSS (`md:hidden`); the rail + trigger read `isMobile` from shadcn's own useSidebar() — one breakpoint source, no second media query. Zero backend: `activePath` drives it from state, otherwise it reads usePathname(). Merged 2026-08-03 from the superspace facade + appshell's cockpit shell + the template `_shared` admin chrome.",
+      "description": "One responsive dashboard chrome over one nav SSOT. React/Next remains the default shadcn rail + topbar + mobile dock/tile-drawer distribution. Explicit Svelte 5/SvelteKit adds native DashboardShell, DashboardSidebar, MobileDock, and MobileMenuDrawer over the same framework-neutral active-path, dock-derivation, and active-title core; Svelte uses `$app/state`, `$derived`, keyed lists, snippets, and CSS breakpoints with no React/Lucide/Vaul/shadcn runtime dependency.",
       "source": "superspace",
       "docsUrl": "",
       "install": "",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add dashboard-shell` (needs shadcn `sidebar` + `drawer` installed). Wrap app/(dashboard)/layout.tsx in <DashboardShell brand nav>. `nav` is the SSOT: [{ id, label?, items: [{ id, label, href|onSelect, icon?, badge?, exact?, dock?, items? }] }]. Mobile dock derives from it (dock:true items, else the first `dockMax` — a Menu button opening the tile drawer is appended; the rail is never rendered under md). Slots: sidebarHeader (workspace-shell switcher), sidebarFooter (user menu), actions (topbar right side, e.g. FullWidthToggle), topbar (full replace / null), secondary (contextual column). Pass activePath to drive it from state instead of the router. Helpers exported: isActive / deriveDock / activeItem / activeTitle / flattenNav.",
+      "agentRecipe": "Run `npx rr add dashboard-shell` for the React/Next default or `npx rr add dashboard-shell --framework sveltekit` for native Svelte 5/SvelteKit. Both share one nav/core contract (`isActive`, `deriveDock`, `activeItem`, `activeTitle`, `flattenNav`). React uses shadcn Sidebar/Drawer + Lucide/Vaul; Svelte uses `$app/state`, runes/snippets, CSS breakpoints, and no React/shadcn runtime. The same `nav` drives desktop rail, mobile dock, and tile drawer.",
       "tags": [
         "ui",
         "layout",
@@ -3490,22 +3490,43 @@
       "title": "Dashboard Shell — one responsive shell + mobile dock",
       "category": "ui",
       "kind": "ui",
-      "version": "1.2.0",
-      "description": "THE dashboard chrome — one shell, three faces. Desktop: collapsible rail (shadcn Sidebar, ⌘B, cookie-persisted) + topbar. Mobile: NO sidebar at all — a bottom dock plus a thumbnail-tile menu drawer (drill-down one level for sub-items). Every face renders from ONE `nav` prop (groups → items → one level of sub-items), so the dock is derived, not a second nav to keep in sync — flag `dock: true` on the items you want down there, or let it take the first few. Slots for everything project-specific: sidebarHeader (workspace switcher), sidebarFooter (user menu), actions (search/notifications), topbar (full replace), secondary (narrow contextual column = the old three-column 'advanced' archetype). The dock is CSS (`md:hidden`); the rail + trigger read `isMobile` from shadcn's own useSidebar() — one breakpoint source, no second media query. Zero backend: `activePath` drives it from state, otherwise it reads usePathname(). Merged 2026-08-03 from the superspace facade + appshell's cockpit shell + the template `_shared` admin chrome.",
+      "version": "1.3.0",
+      "description": "One responsive dashboard chrome over one nav SSOT. React/Next remains the default shadcn rail + topbar + mobile dock/tile-drawer distribution. Explicit Svelte 5/SvelteKit adds native DashboardShell, DashboardSidebar, MobileDock, and MobileMenuDrawer over the same framework-neutral active-path, dock-derivation, and active-title core; Svelte uses `$app/state`, `$derived`, keyed lists, snippets, and CSS breakpoints with no React/Lucide/Vaul/shadcn runtime dependency.",
       "source": "superspace",
       "slicePath": "frontend/slices/dashboard-shell",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/dashboard-shell"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/dashboard-shell-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5",
+              "@sveltejs/kit@^2.12.0"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/dashboard-shell/config.ts",
+              "frontend/slices/dashboard-shell/lib/core-types.ts",
+              "frontend/slices/dashboard-shell/lib/nav.ts"
+            ]
+          }
         }
       },
       "convexPaths": [],
       "npm": [
-        "lucide-react"
+        "lucide-react@^0.400.0",
+        "vaul@^1.0.0"
       ],
       "shadcn": [
         "sidebar",
+        "drawer",
         "button",
         "separator",
         "sheet",
@@ -3524,7 +3545,7 @@
         "responsive",
         "shell"
       ],
-      "agentRecipe": "Run `npx rr add dashboard-shell` (needs shadcn `sidebar` + `drawer` installed). Wrap app/(dashboard)/layout.tsx in <DashboardShell brand nav>. `nav` is the SSOT: [{ id, label?, items: [{ id, label, href|onSelect, icon?, badge?, exact?, dock?, items? }] }]. Mobile dock derives from it (dock:true items, else the first `dockMax` — a Menu button opening the tile drawer is appended; the rail is never rendered under md). Slots: sidebarHeader (workspace-shell switcher), sidebarFooter (user menu), actions (topbar right side, e.g. FullWidthToggle), topbar (full replace / null), secondary (contextual column). Pass activePath to drive it from state instead of the router. Helpers exported: isActive / deriveDock / activeItem / activeTitle / flattenNav."
+      "agentRecipe": "Run `npx rr add dashboard-shell` for the React/Next default or `npx rr add dashboard-shell --framework sveltekit` for native Svelte 5/SvelteKit. Both share one nav/core contract (`isActive`, `deriveDock`, `activeItem`, `activeTitle`, `flattenNav`). React uses shadcn Sidebar/Drawer + Lucide/Vaul; Svelte uses `$app/state`, runes/snippets, CSS breakpoints, and no React/shadcn runtime. The same `nav` drives desktop rail, mobile dock, and tile drawer."
     },
     {
       "slug": "full-width-toggle",

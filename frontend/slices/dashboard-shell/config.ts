@@ -1,9 +1,15 @@
-import { defineFeature } from "@/lib/shared/features/defineFeature"
+export type DashboardShellFeature = {
+  slug: "dashboard-shell";
+  title: "Dashboard Shell — one responsive shell + mobile dock";
+  category: "ui";
+  kind: "ui";
+  routes: readonly [];
+};
 
-export const dashboardShellConfig = defineFeature({
+export const dashboardShellConfig: DashboardShellFeature = {
   slug: "dashboard-shell",
   title: "Dashboard Shell — one responsive shell + mobile dock",
   category: "ui",
   kind: "ui",
   routes: [],
-})
+};

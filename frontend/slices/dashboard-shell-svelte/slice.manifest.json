@@ -1,0 +1,33 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "dashboard-shell-svelte",
+  "version": "1.3.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add dashboard-shell --framework sveltekit",
+    "consumerPath": "slices/dashboard-shell"
+  },
+  "files": [
+    "README.md",
+    "components/DashboardShell.svelte",
+    "components/DashboardSidebar.svelte",
+    "components/MobileDock.svelte",
+    "components/MobileMenuDrawer.svelte",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts",
+    "types.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/dashboard-shell/config.ts",
+      "frontend/slices/dashboard-shell/lib/core-types.ts",
+      "frontend/slices/dashboard-shell/lib/nav.ts"
+    ],
+    "external": [
+      "svelte",
+      "@sveltejs/kit"
+    ]
+  }
+}

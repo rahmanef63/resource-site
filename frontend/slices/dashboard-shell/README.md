@@ -11,7 +11,11 @@ sync and a phone never gets a sheet-shaped copy of the desktop list.
 ## Install
 
 ```bash
+# React / Next default
 npx rr add dashboard-shell
+
+# Native Svelte 5 / SvelteKit
+npx rr add dashboard-shell --framework sveltekit
 ```
 
 ## Use
@@ -71,3 +75,9 @@ Helpers are exported too — `isActive`, `deriveDock`, `activeItem`,
   for the breakpoint, no second media query of our own.
 
 Run `npm run slices:check` before commit.
+
+## SvelteKit distribution
+
+The SvelteKit variant preserves the same one-nav contract and mobile model: desktop rail + topbar; mobile dock + thumbnail-tile drawer with one-level drill-down. It reuses `isActive`, `deriveDock`, `activeItem`, `activeTitle`, and `flattenNav` from the canonical framework-neutral core.
+
+Svelte-specific rendering uses snippets for icons/logo/slots, `$app/state` for the route fallback, `$derived` for pathname/title/dock computation, keyed `{#each}` blocks, and CSS breakpoints. It does not install React, Next, Lucide, Vaul, or shadcn.

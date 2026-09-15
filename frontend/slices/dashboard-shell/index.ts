@@ -7,3 +7,5 @@ export {
 } from "./components/mobile-menu-drawer";
 export { activeItem, activeTitle, deriveDock, flattenNav, isActive } from "./lib/nav";
 export type { Brand, NavGroup, NavIcon, NavItem } from "./lib/types";
+
+export type { BrandCore, NavGroupCore, NavItemCore } from "./lib/core-types";

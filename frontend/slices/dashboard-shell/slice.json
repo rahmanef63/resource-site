@@ -1,11 +1,11 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "dashboard-shell",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "category": "ui",
   "kind": "ui",
   "title": "Dashboard Shell — one responsive shell + mobile dock",
-  "description": "The single dashboard chrome: persistent collapsible rail + topbar on desktop; on mobile there is NO sidebar at all — the same nav ships as a bottom dock plus a MobileMenuDrawer of thumbnail TILES (drill-down one level for sub-items), so a phone never gets a sheet-shaped copy of the desktop list. ONE `nav` prop (groups → items → one level of sub-items) is the SSOT for all three faces — flag `dock: true` on the items you want docked, or it takes the first few. Slots for everything project-specific: sidebarHeader (workspace switcher), sidebarFooter (user menu), actions (search/notifications), topbar (full replace), secondary (narrow contextual column = the old three-column 'advanced' archetype). Breakpoints are shadcn's Sidebar hook plus a `md:hidden` dock — no viewport measuring in your code, no hydration flash. Zero backend: pass `activePath` to drive it from state, or let it read usePathname().",
+  "description": "One responsive dashboard shell with a single nav SSOT. React/Next stays the default shadcn rail + topbar + mobile dock/tile-drawer distribution. Explicit Svelte/SvelteKit gets native rail/topbar/dock/tile-drawer UI over the same framework-neutral nav matching, dock derivation, and active-title core; Svelte uses CSS breakpoints and $app/state instead of React/shadcn/vaul.",
   "namespace": "@/features/dashboard-shell",
   "convex": {
     "tablesExport": "",
@@ -14,12 +14,34 @@
   },
   "frontend": {
     "slicePath": "frontend/slices/dashboard-shell",
-    "configExport": "dashboardShellConfig"
+    "configExport": "dashboardShellConfig",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/dashboard-shell-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5",
+            "@sveltejs/kit@^2.12.0"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/dashboard-shell/config.ts",
+            "frontend/slices/dashboard-shell/lib/core-types.ts",
+            "frontend/slices/dashboard-shell/lib/nav.ts"
+          ]
+        }
+      }
+    }
   },
   "deps": {
     "npm": [
-      "lucide-react",
-      "vaul"
+      "lucide-react@^0.400.0",
+      "vaul@^1.0.0"
     ],
     "shadcn": [
       "button",
@@ -84,7 +106,8 @@
       "components": [
         "DashboardShell",
         "DashboardSidebar",
-        "MobileDock"
+        "MobileDock",
+        "MobileMenuDrawer"
       ],
       "hooks": []
     },

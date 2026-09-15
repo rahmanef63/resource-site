@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-15 — SvelteKit Dashboard Shell distribution
+<!-- public-changelog:SVELTE-DASHBOARD-SHELL-DISTRIBUTION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/dashboard-shell
+- Preview: https://resource.rahmanef.com/preview/slices/dashboard-shell
+- [before: `dashboard-shell@1.2.0` rendered only through React/Next/shadcn, mixed React rendering types into the nav model, duplicated the public demo route, and its installer catalog omitted the existing Vaul/drawer dependency] → [after: `dashboard-shell@1.3.0` keeps React/Next as default while adding native Svelte 5/SvelteKit rail/topbar/dock/tile-drawer parity over one framework-neutral nav core, with corrected framework-specific dependencies and a canonical preview host]
+- Native Svelte uses `$app/state`, `$derived`, snippets, keyed lists, CSS breakpoints, no `$effect`, and is gated by the official Svelte autofixer plus compiler.
+
 ### 2026-09-15 — SvelteKit Reel Editor distribution + shared media/history core
 <!-- public-changelog:SVELTE-REEL-EDITOR -->
 
