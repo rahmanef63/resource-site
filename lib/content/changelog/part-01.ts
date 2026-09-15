@@ -2,6 +2,16 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "APPSHELL-1-7-1-HYDRATION",
+    "version": "appshell@1.7.1",
+    "date": 1789430400000,
+    "kind": "fix",
+    "title": "AppShell hydration-safe external store + assetless wallpapers",
+    "body": "Related: https://resource.rahmanef.com/slices/appshell — Preview: https://resource.rahmanef.com/preview/slices/appshell — [before: appshell@1.7.0 could hydrate against a mutable focused-window snapshot and referenced unshipped wallpaper SVGs] → [after: appshell@1.7.1 uses deterministic SSR snapshots and self-contained CSS wallpaper presets].",
+    "groups": [{"heading":"Production hydration receipt","bullets":["Shell external-store hooks now expose stable server snapshots instead of reading mutable live state during hydration.","Wallpaper presets no longer request project-local /wallpapers/*.svg assets; lifted consumers are self-contained.","A regression test reproduces the Finder → Welcome pre-hydration store change and requires deterministic SSR output."]}]
+  },
+
+  {
     "id": "SVELTE-APPSHELL",
     "version": "appshell@1.7.0",
     "date": 1789430400000,

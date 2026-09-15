@@ -22,7 +22,7 @@ function dryRun(framework?: string) {
 
 describe("appshell dual-framework contract", () => {
   it("keeps React default and declares the SvelteKit distribution", () => {
-    expect(slice.version).toBe("1.7.0");
+    expect(slice.version).toBe("1.7.1");
     expect(slice.frontend.defaultFramework).toBe("react-next");
     expect(slice.frontend.frameworks["svelte-sveltekit"]).toMatchObject({
       path: "frontend/slices/appshell-svelte",
@@ -54,6 +54,12 @@ describe("appshell dual-framework contract", () => {
     ].join("\n");
     for (const token of ["macos", "windows", "ios", "android", "Quick Look", "Clipboard", "Keyboard shortcuts", "Locked"]) expect(source).toContain(token);
     expect(read("frontend/slices/appshell-svelte/components/WindowFrame.svelte")).toContain("snapZoneAt");
+  });
+
+  it("keeps wallpaper presets self-contained with no missing public asset dependency", () => {
+    const css = read("frontend/slices/appshell/appshell-wallpapers.css");
+    expect(css).not.toContain("/wallpapers/");
+    for (const preset of ["wp-aurora", "wp-win11", "wp-material", "wp-ios"]) expect(css).toContain(preset);
   });
 
   it("keeps the shared Svelte closure framework-neutral", () => {

@@ -11,6 +11,16 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-15 — AppShell hydration-safe external store + assetless wallpapers
+<!-- public-changelog:APPSHELL-1-7-1-HYDRATION -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/appshell
+- Preview: https://resource.rahmanef.com/preview/slices/appshell
+- [before: `appshell@1.7.0` could hydrate a late Radix/menu subtree against a mutable focused-window snapshot and referenced `/wallpapers/*.svg` assets that are not shipped by the slice] → [after: `appshell@1.7.1` uses deterministic SSR snapshots for shell hooks and self-contained CSS wallpaper presets, eliminating the live hydration mismatch and public-asset 404s]
+- Added a regression contract proving SSR still renders the idle shell label even if the mutable client store has already focused a window before hydration.
+
+
 ### 2026-09-15 — SvelteKit AppShell distribution + shared OS runtime cores
 <!-- public-changelog:SVELTE-APPSHELL -->
 

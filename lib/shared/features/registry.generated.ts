@@ -52,7 +52,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...appshellConfig,
     importPath: "@/features/appshell/config",
-    version: "1.7.0",
+    version: "1.7.1",
   },
   {
     ...assistantConfig,
