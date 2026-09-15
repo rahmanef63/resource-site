@@ -12,6 +12,8 @@ import {
 } from "@/lib/content/resources";
 import { features, stack } from "@/lib/content/sections";
 import { site } from "@/lib/content/site";
+import { getSliceFrameworkSupport } from "@/lib/content/slice-framework-support";
+import { sliceInstallCommand } from "@/lib/content/framework-matrix";
 
 /**
  * /api/knowledge — JSON catalog consumed by AI agents, MCP, llms.txt
@@ -111,6 +113,13 @@ export function GET(req: NextRequest) {
       convexPaths: s.convexPaths,
       tags: s.tags ?? [],
       install: s.install ?? `npx rahman-resources add ${s.slug}`,
+      installs: {
+        next: { npm: sliceInstallCommand(s.slug, "react-next", "npm"), bun: sliceInstallCommand(s.slug, "react-next", "bun") },
+        svelte: getSliceFrameworkSupport(s.slug).some((f) => f.id === "svelte-sveltekit")
+          ? { npm: sliceInstallCommand(s.slug, "svelte-sveltekit", "npm"), bun: sliceInstallCommand(s.slug, "svelte-sveltekit", "bun") }
+          : null,
+      },
+      frameworks: getSliceFrameworkSupport(s.slug),
       previewPath: s.previewPath,
     })),
     layouts: layouts.map((l) => ({

@@ -15,6 +15,7 @@ import { isHidden } from "@/lib/content/hidden-slugs";
 import { SLICE_CATEGORY_LABEL, SLICE_CATEGORY_ORDER } from "@/lib/content/taxonomy";
 import { Badge } from "@/components/ui/badge";
 import { CatalogCard } from "@/components/site/catalog/catalog-card";
+import { DocCard } from "@/components/site/doc-primitives";
 import { RecentlyUpdatedBadge } from "@/components/site/recently-updated-badge";
 import { type CatalogSearchItem } from "@/components/site/catalog/catalog-search";
 import { CatalogHero } from "@/components/site/catalog/catalog-hero";
@@ -23,6 +24,7 @@ import { IframeThumbnail } from "@/components/site/catalog/iframe-thumbnail";
 import { MockThumbnail } from "@/components/site/catalog/mock-thumbnail";
 import { UseWideLayout } from "@/components/site/use-wide-layout";
 import { getLatestUpdate } from "@/lib/content/changelog-helpers";
+import { getFrameworkCoverage, getSliceFrameworkSupport } from "@/lib/content/slice-framework-support";
 import { FAMILY_LABEL, familyOfSlug } from "./family-map";
 
 export const metadata = {
@@ -48,9 +50,11 @@ function stripVersion(npmSpec: string): string {
 
 export default function SlicesPage() {
   const slices = allSlices.filter((s) => !isHidden(s.slug));
+  const coverage = getFrameworkCoverage();
 
   const items: CatalogSearchItem[] = slices.map((s) => {
     const Icon = CATEGORY_ICON[s.category] ?? Layers;
+    const frameworkSupport = getSliceFrameworkSupport(s.slug);
     const accents = s.providers?.length
       ? s.providers
       : (s.npm ?? []).slice(0, 3).map((p) => stripVersion(p));
@@ -72,12 +76,15 @@ export default function SlicesPage() {
           tags={s.tags}
           cornerBadge={<RecentlyUpdatedBadge slug={s.slug} kind="slice" variant="card" />}
           meta={
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-1.5">
               <Badge variant="secondary" className="text-[9px]">v{s.version}</Badge>
-              {s.peers && s.peers.length > 0 && (
-                <span className="text-[10px]">
-                  peers: {s.peers.map((p) => p.slug).join(", ")}
-                </span>
+              {frameworkSupport.some((item) => item.id === "react-next") && (
+                <Badge variant="outline" className="text-[9px]">Next</Badge>
+              )}
+              {frameworkSupport.some((item) => item.id === "svelte-sveltekit") ? (
+                <Badge variant="outline" className="text-[9px]">Svelte</Badge>
+              ) : (
+                <Badge variant="outline" className="text-[9px] text-muted-foreground">React-only legacy</Badge>
               )}
             </div>
           }
@@ -112,9 +119,9 @@ export default function SlicesPage() {
         title="Slices"
         subtitle={
           <>
-            Tier-3 portable vertical slices. Each slice ships a frontend half +
-            a Convex backend half. Lift one folder, drop it into any compatible
-            project. See{" "}
+            Portable feature units with an explicit renderer contract. {coverage.svelte} catalog slices
+            ship both Next.js/React and SvelteKit/Svelte 5 distributions; {coverage.reactOnly} legacy
+            compatibility entries remain React-only and are labeled as such. See{" "}
             <Link href="/docs" className="underline hover:text-foreground">
               slice architecture
             </Link>{" "}
@@ -125,9 +132,23 @@ export default function SlicesPage() {
         secondaryCta={{ label: "Grand Tour", href: "/tour" }}
         commands={[
           "npx rahman-resources add <slug>",
-          "npx rahman-resources lift rahman:<slug>",
+          "bunx rahman-resources add <slug> --framework sveltekit",
         ]}
       />
+
+      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+        {[
+          ["Next.js / React", `${coverage.catalog}/${coverage.catalog} catalog entries`],
+          ["SvelteKit / Svelte 5", `${coverage.svelte}/${coverage.catalog} catalog entries`],
+          ["npm", "npx + npm install"],
+          ["Bun", "bunx + bun install"],
+        ].map(([label, value]) => (
+          <DocCard key={label} className="px-3 py-2.5">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{label}</p>
+            <p className="mt-1 text-sm font-medium">{value}</p>
+          </DocCard>
+        ))}
+      </div>
 
       <CatalogTabs
         items={items}

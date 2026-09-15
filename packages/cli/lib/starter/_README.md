@@ -1,60 +1,43 @@
 # __APP_NAME__
 
-Scaffolded with [`rahman-resources`](https://www.npmjs.com/package/rahman-resources) — Next 16 + React 19 + Convex + Tailwind 4 + shadcn/ui.
+Scaffolded with [`rahman-resources`](https://www.npmjs.com/package/rahman-resources) — Next.js 16 + React 19 + Convex + Tailwind CSS 4 + shadcn/ui.
 
 ## Setup
 
 ```bash
-npm install --legacy-peer-deps
-cp .env.example .env.local           # fill NEXT_PUBLIC_CONVEX_URL etc.
-npx convex dev --once                 # generates convex/_generated
+# npm
+npm install --legacy-peer-deps --include=dev
+npm run typecheck
+npm run lint
 npm run dev
+
+# or Bun
+bun install
+bun run typecheck
+bun run lint
+bun run dev
 ```
+
+Copy `.env.example` to `.env.local` when wiring Convex and other browser-visible values. The CLI records your package manager in `rr.json` and can auto-detect npm/Bun later.
 
 ## Add a slice
 
-Browse the live showcase — the [Grand Tour](https://resource.rahmanef.com/tour) —
-where every slice is mounted live with its `add` command. Then:
-
 ```bash
-npx rahman-resources list
-npx rahman-resources info <slug>
-npx rahman-resources add landing-sections .    # marketing sections (hero/pricing/faq/blog…)
-npx rahman-resources add ai-chat .             # AI chat workbench
-npx rahman-resources add appshell .            # windowed web-OS shell
+# React/Next default
+npx rahman-resources@latest add appshell
+
+# same project using Bun as the package manager
+bunx rahman-resources@latest add appshell --package-manager bun
 ```
 
-> rr is a **slice picker**: each `add` copies files into `slices/<slug>/`, which
-> you own and edit. The showcase at `/tour` is Convex-free (localStorage demo
-> adapters); your app wires the slice into your own backend.
+Browse the [Slices catalog](https://resource.rahmanef.com/slices) for renderer/dependency details. Canonical active slices also expose SvelteKit distributions, but full-app Next templates remain Next-specific until explicitly ported.
 
-## Deploy — Vercel + Convex Cloud
+## Convex
 
-`vercel.json` sets `buildCommand: npm run build:auto`, which adapts to your env:
-
-| `CONVEX_DEPLOY_KEY` | What `build:auto` runs |
-|---|---|
-| **set** | `setup-auth` (one-time `@convex-dev/auth` keys) → `convex deploy --cmd 'next build'` — deploys functions to Convex Cloud, codegens `convex/_generated`, and injects `NEXT_PUBLIC_CONVEX_URL` into the build. |
-| **unset** | plain `next build` — zero-config deploy of the scaffold as-is (no backend wired yet). |
-
-So a fresh deploy is green either way: set `CONVEX_DEPLOY_KEY` in Vercel for the
-full Cloud-backed app, or leave it unset to ship the static scaffold first.
-
-> **Self-hosted (Docker/Dokploy):** commit `convex/_generated` so the container
-> typecheck/build runs without codegen — see `.gitignore`. (Vercel + Convex Cloud
-> needs no commit; `build:auto` codegens during deploy.)
+Run `npx convex dev --once` or `bunx convex dev --once` after configuring your deployment. The scaffold keeps generated Convex types available for production builds and slices add their own declared backend roots.
 
 ## Hard rules
 
-- **NO Clerk.** Auth = `@convex-dev/auth`.
-- **shadcn primitives only** — no raw `<dialog>`, `<input type=date|file>`.
-- Use `proxy.ts` (not `middleware.ts`) on Next 16.
-
-## Stack
-
-| | |
-|---|---|
-| Framework | Next.js 16 (App Router + cacheComponents) |
-| UI | React 19 + Tailwind 4 + shadcn |
-| Backend | Convex (Cloud or self-hosted) |
-| Auth | `@convex-dev/auth` (Password provider by default) |
+- Auth = `@convex-dev/auth` when auth is enabled.
+- Use `proxy.ts`, not legacy `middleware.ts`, on Next 16.
+- Keep renderer-specific UI dependencies explicit; portable slice cores stay framework-neutral.

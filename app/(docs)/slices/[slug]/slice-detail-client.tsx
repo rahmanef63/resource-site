@@ -1,5 +1,4 @@
 "use client";
-
 import * as React from "react";
 import { ExternalLink, FileCode, Info, Package, Play, SquareStack, Terminal } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,7 +12,9 @@ import previewMeta from "@/lib/preview/preview-meta.gen.json";
 import { getDemoUrl } from "@/lib/content/template-subdomains";
 import type { SliceFile } from "@/lib/slice-files";
 import type { SliceEntry } from "@/lib/content/slices";
+import type { SliceFrameworkSupport } from "@/lib/content/slice-framework-support";
 import { DetailsTab } from "./details-tab";
+import { FrameworkSourceSummary } from "@/components/site/framework-comparison";
 import { useRelatedGroups } from "./use-related-groups";
 
 interface Props {
@@ -21,9 +22,9 @@ interface Props {
   codeFiles?: SliceFile[];
   sourceHref: string;
   installCommand: string;
+  frameworkSupport: SliceFrameworkSupport[];
 }
 
-/** Slugs with a variant preview in the generated registry (VP wave). */
 const PREVIEW_SLUGS = new Set(
   (previewMeta as Array<{ slug: string }>).map((m) => m.slug),
 );
@@ -42,6 +43,7 @@ export function SliceDetailClient({
   codeFiles,
   sourceHref,
   installCommand,
+  frameworkSupport,
 }: Props) {
   const demoUrl = getDemoUrl(slice.slug);
   const relatedGroups = useRelatedGroups(slice);
@@ -68,6 +70,7 @@ export function SliceDetailClient({
               sourceHref={sourceHref}
               wiring={slice.wiring}
               variants={slice.variants}
+              frameworkSupport={frameworkSupport}
             />
           )
         : undefined,
@@ -98,6 +101,7 @@ export function SliceDetailClient({
               relatedGroups={relatedGroups}
               sourceHref={sourceHref}
               installCommand={installCommand}
+              frameworkSupport={frameworkSupport}
             />
           ),
         },
@@ -109,7 +113,7 @@ export function SliceDetailClient({
         path: slice.slicePath ?? "",
       },
     });
-  }, [slice, codeFiles, sourceHref, relatedGroups, installCommand, demoUrl]);
+  }, [slice, codeFiles, sourceHref, relatedGroups, installCommand, demoUrl, frameworkSupport]);
 
   useFeatureManifest(manifest);
   return null;
@@ -123,6 +127,7 @@ function CodeTab({
   sourceHref,
   wiring,
   variants,
+  frameworkSupport,
 }: {
   slug: string;
   slicePath: string;
@@ -131,8 +136,9 @@ function CodeTab({
   sourceHref: string;
   wiring?: string;
   variants?: { title: string; desc: string }[];
+  frameworkSupport: SliceFrameworkSupport[];
 }) {
-  const cliCmd = `npx rahman-resources add ${slug} my-app`;
+  const cliCmd = `npx rahman-resources add ${slug}`;
   return (
     <div className="h-full space-y-4 overflow-auto p-4">
       <ShowcaseCard
@@ -170,18 +176,14 @@ function CodeTab({
       )}
 
       {dependencies.length > 0 && (
-        <ShowcaseCard
-          icon={Package}
-          label={`Dependencies (${dependencies.length})`}
-          variant="code"
-        >
-          <CodeBlock
-            code={`pnpm add ${dependencies.join(" ")}`}
-            language="bash"
-            filename="install.sh"
-          />
+        <ShowcaseCard icon={Package} label={`Default React dependencies (${dependencies.length})`} variant="code">
+          <CodeBlock code={`npm install ${dependencies.join(" ")}\n# Bun\nbun add ${dependencies.join(" ")}`} language="bash" filename="dependencies.sh" />
         </ShowcaseCard>
       )}
+
+      <ShowcaseCard icon={Terminal} label="Framework sources" variant="static">
+        <FrameworkSourceSummary support={frameworkSupport} />
+      </ShowcaseCard>
 
       {codeFiles && codeFiles.length > 0 ? (
         <SliceCodeViewer slug={slug} rootPath={slicePath} files={codeFiles} />

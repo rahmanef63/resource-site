@@ -14,15 +14,10 @@ import {
 } from "@/lib/build/command-builder";
 import { collectWarnings } from "@/lib/build/compat";
 import { useFeatureContext, useFeatureManifest } from "@/components/site/feature-context";
-import { ThreeColumnLayoutAdvanced } from "@/components/previews/three-column/ThreeColumnLayout";
 import { type TemplateOption } from "./template-picker";
 import { type FeatureOption } from "./feature-picker";
-import { LivePreview } from "./live-preview";
-import { SlicePreviews } from "./variant-preview";
-import { AiAssistant } from "./ai-assistant";
-import { CommandOutput } from "./command-output";
-import { InputsPanel } from "./inputs-panel";
 import { type ParsedRr } from "./existing-rr-uploader";
+import { BuilderCenter } from "./builder-center";
 
 /** Sentinel "Existing project" template option — picking it switches the
  *  Project tab into rr.json upload mode and the right panel emits add-commands
@@ -88,6 +83,11 @@ export function BuildShell() {
     if (!rr || !isExistingMode(sel)) return;
     setSel((s) => ({
       ...s,
+      project: {
+        ...s.project,
+        framework: rr.framework === "sveltekit" ? "svelte-sveltekit" : "react-next",
+        packageManager: rr.packageManager === "bun" ? "bun" : "npm",
+      },
       slices: Array.from(new Set([...(rr.slices ?? []).map((sl) => sl.slug), ...s.slices])),
       skills: Array.from(new Set([...(rr.skills ?? []).map((s2) => s2.slug), ...s.skills])),
     }));
@@ -163,85 +163,4 @@ export function BuildShell() {
   }, []);
 
   return null;
-}
-
-// ─── Inner nested 3-col canvas ────────────────────────────────────────────
-
-function BuilderCenter({
-  sel, setSel,
-  rr, setRr,
-  templates, featureOptions,
-  toggleFeature, toggleSlice, toggleSkill,
-  commandBlocks, filename, warnings,
-}: {
-  sel: BuildSelection;
-  setSel: React.Dispatch<React.SetStateAction<BuildSelection>>;
-  rr: ParsedRr | null;
-  setRr: (rr: ParsedRr | null) => void;
-  templates: TemplateOption[];
-  featureOptions: FeatureOption[];
-  toggleFeature: (slug: string) => void;
-  toggleSlice: (slug: string) => void;
-  toggleSkill: (slug: string) => void;
-  commandBlocks: import("@/lib/build/command-builder").CommandBlock[];
-  filename: string;
-  warnings: import("@/lib/build/compat").CompatWarning[];
-}) {
-  const tplMeta = templates.find((t) => t.slug === sel.template) ?? null;
-
-  const innerLeft = (
-    <InputsPanel
-      templates={templates}
-      featureOptions={featureOptions}
-      sel={sel}
-      setSel={setSel}
-      rr={rr}
-      setRr={setRr}
-      toggleFeature={toggleFeature}
-      toggleSlice={toggleSlice}
-      toggleSkill={toggleSkill}
-    />
-  );
-
-  const innerCenter = (
-    <div className="h-full overflow-auto p-3 sm:p-4">
-      <LivePreview
-        templateSlug={sel.template}
-        publicPath={tplMeta?.previewPath}
-        adminPath={tplMeta?.adminPreviewPath}
-        defaultSurface={tplMeta?.defaultSurface}
-      />
-      {/* VP wave — per-slice variant previews (generated registry, localStorage demo data) */}
-      <SlicePreviews selected={sel.slices} />
-      {/* VP wave — AI assistant: function-calls the dynamic slice tool surface */}
-      <AiAssistant />
-    </div>
-  );
-
-  const innerRight = (
-    <div className="h-full overflow-auto p-3">
-      <CommandOutput blocks={commandBlocks} filename={filename} warnings={warnings} />
-    </div>
-  );
-
-  return (
-    <div className="min-h-0 flex-1 h-full">
-      <ThreeColumnLayoutAdvanced
-        left={innerLeft}
-        center={innerCenter}
-        right={innerRight}
-        leftLabel="Inputs"
-        rightLabel="Command"
-        leftWidth={320}
-        rightWidth={340}
-        centerMinWidth={320}
-        showCollapseButtons
-        resizable
-        persistState
-        storageKey="builder-inner-v2"
-        tone="feature"
-        className="h-full"
-      />
-    </div>
-  );
 }

@@ -271,7 +271,7 @@ Source: ${repoBase("components/previews/hero-carousel")}
 ## Files
 \`\`\`bash
 cp -r ~/projects/resource-site/components/previews/hero-carousel components/hero-carousel
-pnpm add next  # next/image required
+npm install next  # or: bun add next — next/image required
 \`\`\`
 
 ## Wire

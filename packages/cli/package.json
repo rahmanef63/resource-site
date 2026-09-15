@@ -1,7 +1,7 @@
 {
   "name": "rahman-resources",
-  "version": "1.18.0",
-  "description": "Rahman Resources (rr) \u2014 shadcn-style installer for vertical slices. `npx resources add <slug>` copies slice into your project's `slices/<slug>/`. You own the files.",
+  "version": "1.19.0",
+  "description": "Rahman Resources (rr) \u2014 dual-framework Next.js/React + SvelteKit/Svelte slice installer and base scaffolder with npm and Bun support.",
   "type": "module",
   "license": "MIT",
   "author": "Rahman <casadezian@gmail.com>",
@@ -20,6 +20,8 @@
     "bin",
     "lib",
     "!lib/**/*.test.mjs",
+    "!lib/**/*.test.ts",
+    "!lib/**/*.test.tsx",
     "README.md"
   ],
   "engines": {
@@ -48,6 +50,10 @@
     "template",
     "installer",
     "nextjs",
-    "convex"
+    "convex",
+    "svelte",
+    "sveltekit",
+    "bun",
+    "react"
   ]
 }

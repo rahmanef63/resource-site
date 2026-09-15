@@ -12,10 +12,14 @@
 import { ConvexAuthProvider } from "@convex-dev/auth/react";
 import { ConvexReactClient, ConvexProvider } from "convex/react";
 import { ConvexHttpClient } from "convex/browser";
-import { useEffect, useState, type ReactNode } from "react";
+import { useState, useSyncExternalStore, type ReactNode } from "react";
 
 export function ConvexClientProvider({ children }: { children: ReactNode }) {
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
   const [convex] = useState(() => {
     // Always construct a client so `useQuery` ALWAYS has a ConvexProvider above
     // it and can never throw "Could not find Convex client". If the env var is
@@ -34,7 +38,6 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
     return client;
   });
 
-  useEffect(() => setMounted(true), []);
   // Outer ConvexProvider ALWAYS supplies the client, so `useQuery` can never
   // throw "Could not find Convex client" — during SSR/prerender, during the
   // mount transition, or under the auth provider. ConvexAuthProvider nests

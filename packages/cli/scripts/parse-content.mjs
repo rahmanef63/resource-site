@@ -116,7 +116,7 @@ export const loadFeatures = () => {
 
 export function parseNpmPackages(install) {
   if (!install || install.trim().startsWith("//")) return [];
-  const m = install.match(/(?:npm\s+i(?:nstall)?|pnpm\s+add|yarn\s+add)\s+(.+?)(?:$|;|&&)/);
+  const m = install.match(/(?:npm\s+i(?:nstall)?|pnpm\s+add|yarn\s+add|bun\s+add)\s+(.+?)(?:$|;|&&)/);
   if (!m) return [];
   return m[1]
     .split(/\s+/)

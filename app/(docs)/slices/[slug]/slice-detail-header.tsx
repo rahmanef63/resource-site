@@ -15,6 +15,7 @@ import { RecentlyUpdatedBadge } from "@/components/site/recently-updated-badge";
 import { MaturityBadge } from "@/components/site/maturity-badge";
 import { getDemoUrl } from "@/lib/content/template-subdomains";
 import type { SliceEntry } from "@/lib/content/slices";
+import type { SliceFrameworkSupport } from "@/lib/content/slice-framework-support";
 
 const KIND_CLASS = {
   ui: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300",
@@ -28,12 +29,14 @@ export function SliceDetailHeader({
   installCommand,
   prev,
   next,
+  frameworkSupport,
 }: {
   slice: SliceEntry;
   siteUrl: string;
   installCommand: string;
   prev?: { slug: string; title: string } | null;
   next?: { slug: string; title: string } | null;
+  frameworkSupport: SliceFrameworkSupport[];
 }) {
   const demoUrl = getDemoUrl(slice.slug);
   return (
@@ -63,6 +66,12 @@ export function SliceDetailHeader({
             </Badge>
           )}
           <MaturityBadge status={slice.maturity} />
+          {frameworkSupport.some((item) => item.id === "react-next") && (
+            <Badge variant="outline" className="rounded-full text-[10px]">Next.js</Badge>
+          )}
+          {frameworkSupport.some((item) => item.id === "svelte-sveltekit") && (
+            <Badge variant="outline" className="rounded-full text-[10px]">SvelteKit</Badge>
+          )}
           <RecentlyUpdatedBadge slug={slice.slug} kind="slice" />
         </div>
         <h1 className="flex items-center gap-2 truncate text-lg font-semibold tracking-tight">

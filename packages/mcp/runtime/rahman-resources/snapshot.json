@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "cliVersion": "1.18.0",
+  "cliVersion": "1.19.0",
   "aggregateSha256": "733c9ac9a1f42c5ce3d777beea23d4a73b07801c49c4b7777473b1540cd78f03",
   "files": {
     "manifest.json": "4deea132c0a785d09c3d20afe2137dbd7b7536d2ab8ad7a4e289219bbea7e2d6",

@@ -7,6 +7,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 
 export type ParsedRr = {
+  framework?: string;
+  packageManager?: string;
   template?: { slug: string };
   features?: { slug: string }[];
   slices?: { slug: string }[];
@@ -84,6 +86,8 @@ export function ExistingRrUploader({ onParsed }: { onParsed: (rr: ParsedRr | nul
         <div className="rounded-md border bg-muted/30 p-2 text-[11px]">
           <p className="font-medium">Detected:</p>
           <ul className="mt-1 space-y-0.5">
+            <li>framework: <Badge variant="outline" className="rounded-full text-[9px]">{parsed.framework ?? "next-16"}</Badge></li>
+            <li>package manager: <Badge variant="outline" className="rounded-full text-[9px]">{parsed.packageManager ?? "npm"}</Badge></li>
             <li>
               template: {parsed.template?.slug ? <Badge variant="outline" className="rounded-full text-[9px]">{parsed.template.slug}</Badge> : <span className="text-muted-foreground">none</span>}
             </li>

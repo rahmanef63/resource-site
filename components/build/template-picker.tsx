@@ -11,6 +11,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
+import type { PublicFrameworkId } from "@/lib/content/framework-matrix";
 
 export type TemplateOption = {
   slug: string;
@@ -31,10 +32,12 @@ export function TemplatePicker({
   templates,
   selected,
   onSelect,
+  framework,
 }: {
   templates: TemplateOption[];
   selected: string | null;
   onSelect: (slug: string | null) => void;
+  framework: PublicFrameworkId;
 }) {
   return (
     <section className="space-y-1">
@@ -60,7 +63,8 @@ export function TemplatePicker({
       <ul className="space-y-1">
         {templates.map((t) => {
           const on = selected === t.slug;
-          const disabled = t.status === "coming-soon";
+          const nextOnly = framework === "svelte-sveltekit" && t.category !== "existing";
+          const disabled = t.status === "coming-soon" || nextOnly;
           return (
             <li key={t.slug}>
               <div
@@ -88,6 +92,7 @@ export function TemplatePicker({
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-xs font-medium">{t.title}</span>
                   </span>
+                  {nextOnly && <Badge variant="outline" className="rounded-full text-[9px]">Next only</Badge>}
                   {t.status && t.status !== "stable" && (
                     <Badge
                       variant="outline"
@@ -112,6 +117,7 @@ export function TemplatePicker({
                     </AccordionTrigger>
                     <AccordionContent className="pt-1 pb-2">
                       <p className="text-[11px] text-muted-foreground">{t.description}</p>
+                      {nextOnly && <p className="mt-1 text-[10px] text-muted-foreground">Switch Project → Framework to Next.js to use full-app templates.</p>}
                       <div className="mt-2 flex items-center gap-3">
                         <Link
                           href={`/layouts/${t.slug}`}

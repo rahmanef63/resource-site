@@ -4,84 +4,63 @@ Scaffolder + template installer for the [Rahman Resources kitab](https://github.
 
 ## Quick start
 
+Choose framework and package manager independently:
+
 ```bash
-npx rahman-resources init my-app
-cd my-app
-cp .env.example .env.local         # fill NEXT_PUBLIC_CONVEX_URL
-npm install --legacy-peer-deps
-npx convex dev --once               # generates convex/_generated
-npm run dev
+# Next.js + React with npm (default)
+npx rahman-resources init my-app --framework react-next --package-manager npm
+
+# SvelteKit + Svelte 5 with Bun
+bunx rahman-resources init my-app --framework sveltekit --package-manager bun
 ```
 
-`init` ships a minimal Next 16 + React 19 + Convex + Tailwind 4 + shadcn/ui skeleton (~18 files). Then drop in any layout/recipe/feature with `add`.
+Then install slices explicitly for the selected renderer:
+
+```bash
+# React/Next default
+npx rahman-resources add appshell
+
+# SvelteKit
+npx rahman-resources add appshell --framework sveltekit
+
+# SvelteKit through Bun
+bunx rahman-resources add appshell --framework sveltekit --package-manager bun
+```
+
+`init` ships one of two bases: **Next.js 16 + React 19 + Tailwind 4 + Convex + shadcn/ui**, or **SvelteKit 2 + Svelte 5 + Tailwind 4 + Convex**. Full-app templates remain Next.js-specific; the canonical active slice catalog is dual-framework.
 
 ## Commands
 
 ```bash
-npx rahman-resources init <app-name>             # scaffold fresh project
-npx rahman-resources add <slug> [target-dir]     # drop in a layout/recipe/feature
-npx rahman-resources list [layouts|recipes|features]
+npx rahman-resources init <app-name> [--framework react-next|sveltekit] [--package-manager npm|bun]
+npx rahman-resources add <slug> [target-dir] [--framework <id>] [--package-manager npm|bun]
+npx rahman-resources list [layouts|recipes|features|skills|slices]
 npx rahman-resources info <slug>
 ```
 
-### Inspect a template
+### Package-manager resolution
 
-```bash
-npx rahman-resources info personal-brand-os
-```
-
-### Install into a project
-
-```bash
-# fresh
-npx rahman-resources init my-app
-cd my-app && npx rahman-resources add personal-brand-os .
-
-# existing
-cd existing-app
-npx rahman-resources add personal-brand-os .
-```
-
-The CLI:
-
-1. Pulls only the folders listed for that template (via [`tiged`](https://github.com/tiged/tiged)) — no full clone.
-2. Detects your package manager (`pnpm` / `yarn` / `bun` / `npm`) and installs the template's npm dependencies.
-3. Prints the agent recipe: what to wire next.
+For existing projects the CLI resolves the package manager from, in order: explicit `--package-manager`, `package.json#packageManager`, `rr.json#packageManager`, then lockfiles (`bun.lock`/`bun.lockb`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`). npm and Bun are first-class documented paths; pnpm/yarn detection remains for backwards compatibility.
 
 ### Slice variants + frameworks
 
-Slices may expose shadcn-style variants and multiple framework renderers:
-
 ```bash
 rr add settings account                         # React/Next default
-rr add settings account --framework sveltekit  # native Svelte renderer
-rr add payment doku                            # one provider
+rr add settings account --framework sveltekit  # native/shared Svelte distribution
+rr add payment doku                            # one provider variant
 rr add payment                                 # all provider variants
 ```
 
-CLI 1.18 adds **per-variant runtime dependencies**. A variant may declare its own `npm`, `env`, `peers`, and repo-root `sharedFiles`; selecting one variant installs only that runtime footprint, while add-all receives the union. Provider-specific Convex roots remain gated by `items[].convex`. Renderer-specific UI dependencies (for example React shadcn primitives versus native Svelte) remain framework-level so a Svelte install never inherits React UI packages.
+CLI 1.19 adds dual-framework base scaffolding, npm/Bun-aware command execution, modern `bun.lock` detection, framework-aware public env names (`NEXT_PUBLIC_*` vs SvelteKit `PUBLIC_*`), and records each installed slice framework in `rr.json`. Per-variant runtime dependencies from 1.18 remain intact.
 
-## What's included
+## What is portable
 
-Every template ships:
+- **Canonical active slices:** Next.js/React default + explicit SvelteKit/Svelte 5 distribution.
+- **Framework-neutral backend/service slices:** both framework selections reuse the same TypeScript source.
+- **Full-app templates/layouts:** Next.js-specific until a layout explicitly declares a Svelte counterpart.
+- **Package managers:** npm and Bun are both valid for fresh scaffolds and slice installs.
 
-- The page route(s) under `app/`
-- The slice components under `components/templates/<slug>/`
-- A drop-in Convex backend slice under `convex/templates/<slug>/` (where applicable)
-
-Schema files are written to `convex/templates/<slug>/schema.ts` — merge into your existing `convex/schema.ts` or move it up.
-
-## Templates (current)
-
-Run `npx rahman-resources list` to see the live catalog. Highlights:
-
-| Slug | Category | What |
-|---|---|---|
-| `personal-brand-os` | website-template | Public site + admin dashboard for solo brand |
-| `dashboard-three-column` | dashboard | Resizable left/main/right with drawer fallback |
-| `dashboard-mobile-dock` | dashboard | Native-feel mobile dock + desktop sidebar |
-| `cms-public-storefront` | cms | E-commerce / blog storefront |
-| `landing-*` | marketing | Hero/bento/masonry/kinetic landings |
+Run `rahman-resources list` for the live catalog instead of relying on a hardcoded template list.
 
 ## DNA Graph
 

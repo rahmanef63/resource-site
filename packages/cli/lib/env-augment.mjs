@@ -20,7 +20,7 @@ import kleur from "kleur";
  * @param {{ slug: string, env?: Array<{ name: string, scope?: string, required?: boolean, description?: string }> }} slice
  * @param {string} target  absolute path to consumer project root
  */
-export function augmentConsumerEnv(slice, target) {
+export function augmentConsumerEnv(slice, target, framework = "react-next") {
   const envList = Array.isArray(slice?.env) ? slice.env : [];
   if (envList.length === 0) {
     return;
@@ -36,7 +36,7 @@ export function augmentConsumerEnv(slice, target) {
     console.log(
       kleur.dim(
         `    Required env for ${slice.slug}: ${envList
-          .map((e) => prefixName(e))
+          .map((e) => prefixName(e, framework))
           .join(", ")}`,
       ),
     );
@@ -46,13 +46,13 @@ export function augmentConsumerEnv(slice, target) {
   const existing = readFileSync(envFile, "utf8");
   const present = parseExistingNames(existing);
 
-  const missing = envList.filter((e) => !present.has(prefixName(e)));
+  const missing = envList.filter((e) => !present.has(prefixName(e, framework)));
   if (missing.length === 0) {
     console.log(kleur.dim(`  (no new env to add to .env.example)`));
     return;
   }
 
-  const block = renderBlock(slice.slug, missing);
+  const block = renderBlock(slice.slug, missing, framework);
   const sep = existing.length === 0 || existing.endsWith("\n") ? "" : "\n";
   writeFileSync(envFile, existing + sep + block, "utf8");
 
@@ -64,7 +64,7 @@ export function augmentConsumerEnv(slice, target) {
   for (const e of missing) {
     console.log(
       kleur.dim(
-        `    + ${prefixName(e)}${e.required ? "" : "  (optional)"}`,
+        `    + ${prefixName(e, framework)}${e.required ? "" : "  (optional)"}`,
       ),
     );
   }
@@ -72,12 +72,12 @@ export function augmentConsumerEnv(slice, target) {
 
 // ─── helpers ──────────────────────────────────────────────────────────────
 
-function prefixName(e) {
-  // `scope: "next-public"` means the consumer reads it via `process.env` on
-  // the client, so it needs the NEXT_PUBLIC_ prefix to be exposed.
-  return e.scope === "next-public" && !e.name.startsWith("NEXT_PUBLIC_")
-    ? `NEXT_PUBLIC_${e.name}`
-    : e.name;
+function prefixName(e, framework) {
+  if (e.scope !== "next-public") return e.name;
+  const base = e.name.replace(/^NEXT_PUBLIC_/, "").replace(/^PUBLIC_/, "");
+  return framework === "svelte-sveltekit" || framework === "sveltekit" || framework === "svelte"
+    ? `PUBLIC_${base}`
+    : `NEXT_PUBLIC_${base}`;
 }
 
 function parseExistingNames(text) {
@@ -94,12 +94,12 @@ function parseExistingNames(text) {
   return set;
 }
 
-function renderBlock(slug, entries) {
+function renderBlock(slug, entries, framework) {
   const lines = [];
   lines.push("");
   lines.push(`# ─── ${slug} ───`);
   for (const e of entries) {
-    const name = prefixName(e);
+    const name = prefixName(e, framework);
     const tag =
       e.required === false ? "optional" : e.required ? "required" : null;
     const meta = [e.scope, tag].filter(Boolean).join(", ");

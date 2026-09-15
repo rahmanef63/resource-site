@@ -7,6 +7,7 @@
 
 import type { BuildSelection } from "./types";
 import { slices as sliceCatalog } from "@/lib/content/slices";
+import { getFrameworkProfile, rrExec } from "@/lib/content/framework-matrix";
 
 export type CommandBlock = {
   /** Heading shown above the code block. */
@@ -32,7 +33,9 @@ export function buildCommands(sel: BuildSelection, parsedRr?: ParsedRrLike): Com
 export function buildInitCommand(sel: BuildSelection): CommandBlock {
   const { project, template, features, slices: selectedSlices, skills } = sel;
   const app = sanitize(project.appName) || "my-app";
-  const parts = [`npx rahman-resources@latest init ${app}`];
+  const runner = rrExec(project.packageManager);
+  const framework = getFrameworkProfile(project.framework);
+  const parts = [`${runner} rahman-resources@latest init ${app}`, `--framework ${framework.cliValue}`, `--package-manager ${project.packageManager}`];
   if (template && template !== EXISTING_PROJECT_SLUG) parts.push(`--template ${template}`);
   if (features.length) parts.push(`--features ${features.join(",")}`);
   if (skills.length) parts.push(`--skills ${skills.join(",")}`);
@@ -43,7 +46,10 @@ export function buildInitCommand(sel: BuildSelection): CommandBlock {
   if (ordered.length > 0) {
     lines.push("");
     lines.push(`cd ${app}`);
-    for (const slug of ordered) lines.push(`npx rahman-resources@latest add ${slug}`);
+    for (const slug of ordered) {
+      const fw = project.framework === "svelte-sveltekit" ? " --framework sveltekit" : "";
+      lines.push(`${runner} rahman-resources@latest add ${slug}${fw} --package-manager ${project.packageManager}`);
+    }
   }
 
   return { heading: "One-shot scaffold", script: lines.join("\n") };
@@ -79,6 +85,8 @@ export function buildAgentPrompt(sel: BuildSelection): CommandBlock {
   if (sel.features.length) lines.push(`Features: ${sel.features.join(", ")}`);
   if (sel.slices.length) lines.push(`Slices: ${sel.slices.join(", ")}`);
   if (sel.skills.length) lines.push(`Claude Skills: ${sel.skills.join(", ")}`);
+  lines.push(`Framework: ${getFrameworkProfile(sel.project.framework).accent}`);
+  lines.push(`Package manager: ${sel.project.packageManager}`);
   if (sel.project.brandName) lines.push(`Brand: ${sel.project.brandName}`);
   if (sel.project.ownerEmail) lines.push(`Owner email: ${sel.project.ownerEmail}`);
   lines.push("", "Run:");
@@ -89,6 +97,8 @@ export function buildAgentPrompt(sel: BuildSelection): CommandBlock {
 }
 
 type ParsedRrLike = {
+  framework?: string;
+  packageManager?: string;
   template?: { slug: string };
   features?: { slug: string }[];
   slices?: { slug: string }[];
@@ -101,6 +111,9 @@ type ParsedRrLike = {
  * NEW additions (no-ops are skipped).
  */
 export function buildAddCommands(sel: BuildSelection, parsedRr?: ParsedRrLike): CommandBlock {
+  const runner = rrExec(sel.project.packageManager);
+  const frameworkArg = sel.project.framework === "svelte-sveltekit" ? " --framework sveltekit" : "";
+  const pmArg = ` --package-manager ${sel.project.packageManager}`;
   const haveTemplate = parsedRr?.template?.slug;
   const haveFeatures = new Set((parsedRr?.features ?? []).map((f) => f.slug));
   const haveSlices = new Set((parsedRr?.slices ?? []).map((s) => s.slug));
@@ -115,18 +128,18 @@ export function buildAddCommands(sel: BuildSelection, parsedRr?: ParsedRrLike): 
   // (Assumes the project hasn't already declared one.)
   // We never emit "add _existing" — that's the sentinel, not a slug.
   if (sel.template && sel.template !== EXISTING_PROJECT_SLUG && !haveTemplate) {
-    lines.push(`npx rahman-resources@latest add ${sel.template}`);
+    lines.push(`${runner} rahman-resources@latest add ${sel.template}${pmArg}`);
   }
   for (const f of sel.features) {
-    if (!haveFeatures.has(f)) lines.push(`npx rahman-resources@latest add ${f}`);
+    if (!haveFeatures.has(f)) lines.push(`${runner} rahman-resources@latest add ${f}${pmArg}`);
   }
   // Slices in peer-aware order, only the missing ones.
   const missingSlices = topoSortSlices(sel.slices.filter((s) => !haveSlices.has(s)));
   for (const slug of missingSlices) {
-    lines.push(`npx rahman-resources@latest add ${slug}`);
+    lines.push(`${runner} rahman-resources@latest add ${slug}${frameworkArg}${pmArg}`);
   }
   for (const s of sel.skills) {
-    if (!haveSkills.has(s)) lines.push(`npx rahman-resources@latest add-skill ${s}`);
+    if (!haveSkills.has(s)) lines.push(`${runner} rahman-resources@latest add-skill ${s}`);
   }
   if (lines.length === 2) lines.push("# (no new items selected — your rr.json already covers them)");
   return { heading: "Add to existing project", script: lines.join("\n") };

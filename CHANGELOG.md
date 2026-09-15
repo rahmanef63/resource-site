@@ -11,6 +11,19 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-15 — Framework comparison layouts + npm/Bun dual-runtime CLI
+<!-- public-changelog:FRAMEWORK-NPM-BUN-CLI-1-19 -->
+
+**CLI / Site:**
+- Related: https://resource.rahmanef.com/installation
+- Related: https://resource.rahmanef.com/slices
+- Related: https://resource.rahmanef.com/stack
+- Related: https://resource.rahmanef.com/build
+- [before: CLI `1.18.0` scaffolded only the Next.js base, Bun support depended on legacy lockfile detection, public docs mixed Next-only assumptions with hardcoded pnpm/npm snippets, and slice pages hid renderer-specific dependency/install differences] → [after: CLI `1.19.0` scaffolds either Next.js/React or SvelteKit/Svelte 5, treats npm and Bun as first-class package-manager paths, records framework/package-manager state in `rr.json`, maps public env prefixes per renderer, and the catalog/Installation/Stack/Builder expose one DRY comparison model]
+- The SvelteKit starter is production-buildable with Svelte 5 Runes, Tailwind 4 and Convex; full-app layout/template parity remains explicitly Next.js-only until a layout declares its own Svelte renderer.
+- The catalog truthfully distinguishes 66 dual-framework canonical distributions from 6 React-only legacy compatibility entries instead of presenting them as equivalent.
+
+
 ### 2026-09-15 — AppShell hydration-safe external store + assetless wallpapers
 <!-- public-changelog:APPSHELL-1-7-1-HYDRATION -->
 

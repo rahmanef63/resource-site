@@ -2,8 +2,8 @@ export const site = {
   name: "Rahman Resources",
   shortName: "rmnr",
   description:
-    "Reusable Next.js + Convex + shadcn vertical-slice catalog. Copy-first. Production-grade.",
-  tagline: "Rahman's library of Next.js templates.",
+    "Dual-framework Next.js/React + SvelteKit/Svelte vertical-slice catalog with Convex, npm and Bun install paths. Copy-first. Production-grade.",
+  tagline: "Rahman's dual-framework slice library for Next.js and SvelteKit.",
   url: "https://resource.rahmanef.com",
   repo: "https://github.com/rahmanef63/resource-site",
   author: "Rahman",

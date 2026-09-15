@@ -14,6 +14,7 @@ export const DEFAULT_RR = {
   $schema: SCHEMA_URL,
   version: 1,
   framework: "next-16",
+  packageManager: "npm",
   style: "shadcn-new-york",
   rsc: true,
   tailwind: { config: "tailwind.config.ts", css: "app/globals.css" },
@@ -68,6 +69,31 @@ export function writeRr(rr, targetDir = process.cwd()) {
 
 export function buildRr(opts = {}) {
   const rr = JSON.parse(JSON.stringify(DEFAULT_RR));
+  rr.packageManager = opts.packageManager ?? "npm";
+  if (opts.framework === "sveltekit") {
+    rr.framework = "sveltekit";
+    rr.style = "svelte-native";
+    rr.rsc = false;
+    rr.tailwind = { config: "", css: "src/app.css" };
+    rr.aliases = {
+      components: "@/components",
+      ui: "@/components/ui",
+      shared: "@/shared",
+      templates: "@/templates",
+      slices: "@/features",
+      features: "@/features",
+      convex: "@/convex",
+      lib: "@/lib",
+      hooks: "@/lib",
+    };
+    rr.layout = {
+      kind: "vertical-slice",
+      publicRoute: "src/routes",
+      adminRoute: "src/routes/admin",
+      sliceRoot: "frontend/slices",
+    };
+    rr.auth = { provider: "none" };
+  }
   if (opts.template) {
     rr.template = { slug: opts.template, version: opts.templateVersion ?? "main" };
   }
@@ -99,9 +125,10 @@ export function addSlice(rr, slug, opts = {}) {
     if (opts.version) existing.version = opts.version;
     if (opts.category) existing.category = opts.category;
     if (opts.variant) existing.variant = opts.variant;
+    if (opts.framework) existing.framework = opts.framework;
     return rr;
   }
-  rr.slices.push({ slug, version: opts.version ?? "main", category: opts.category, addedAt: today(), ...(opts.variant ? { variant: opts.variant } : {}) });
+  rr.slices.push({ slug, version: opts.version ?? "main", category: opts.category, addedAt: today(), ...(opts.variant ? { variant: opts.variant } : {}), ...(opts.framework ? { framework: opts.framework } : {}) });
   return rr;
 }
 

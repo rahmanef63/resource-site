@@ -2,6 +2,16 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "FRAMEWORK-NPM-BUN-CLI-1-19",
+    "version": "cli@1.19.0",
+    "date": 1789430400000,
+    "kind": "feature",
+    "title": "Framework comparison layouts + npm/Bun dual-runtime CLI",
+    "body": "Related: https://resource.rahmanef.com/installation — Slices: https://resource.rahmanef.com/slices — Stack: https://resource.rahmanef.com/stack — Builder: https://resource.rahmanef.com/build — [before: CLI 1.18.0 scaffolded only Next.js, Bun handling was incomplete, and public framework/package-manager guidance drifted across surfaces] → [after: CLI 1.19.0 scaffolds Next.js/React or SvelteKit/Svelte 5, supports npm/Bun explicitly, records renderer/package-manager state, and drives catalog/detail/Installation/Stack/Builder comparison from shared contracts].",
+    "groups": [{"heading":"One environment contract across CLI and UI","bullets":["Fresh SvelteKit scaffolds use Svelte 5, Tailwind 4 and Convex; fresh Next scaffolds stay the default and their dependency baseline is synchronized to the active repo stack.","Modern bun.lock plus package.json#packageManager and rr.json#packageManager are recognized before legacy lockfile fallbacks.","Slice detail pages show exact Next/Svelte source/dependency/install differences with npm and Bun commands; framework-neutral slices are labeled shared-core instead of fake native duplicates.","Catalog coverage is explicit: 66 Svelte-capable canonical entries and 6 React-only compatibility entries; full-app layouts remain Next-specific until explicitly ported."]}]
+  },
+
+  {
     "id": "APPSHELL-1-7-1-HYDRATION",
     "version": "appshell@1.7.1",
     "date": 1789430400000,

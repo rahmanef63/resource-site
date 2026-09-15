@@ -7,7 +7,7 @@
     "dev": "next dev --turbo --port 3000",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "convex:dev": "convex dev",
     "convex:codegen": "convex dev --once",
@@ -15,29 +15,31 @@
     "smoke": "node scripts/smoke-test.mjs"
   },
   "dependencies": {
-    "@auth/core": "^0.37.0",
-    "@convex-dev/auth": "^0.0.84",
+    "@auth/core": "^0.41.3",
+    "@convex-dev/auth": "^0.0.95",
     "jose": "^5.9.6",
-    "@radix-ui/react-label": "^2.1.0",
-    "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-label": "^2.1.8",
+    "@radix-ui/react-slot": "^1.2.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "convex": "^1.18.0",
-    "lucide-react": "^0.460.0",
-    "next": "^16.0.0",
-    "next-themes": "^0.4.4",
+    "convex": "^1.45.0",
+    "lucide-react": "^1.16.0",
+    "next": "^16.3.4",
+    "next-themes": "^0.4.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "sonner": "^1.7.1",
-    "tailwind-merge": "^2.5.5"
+    "sonner": "^2.0.7",
+    "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.0",
     "@types/node": "^22.10.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "postcss": "^8.5.0",
+    "postcss": "^8.5.28",
     "tailwindcss": "^4.0.0",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "eslint": "^9",
+    "eslint-config-next": "^16.3.4"
   }
 }

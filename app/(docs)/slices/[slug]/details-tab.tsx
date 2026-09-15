@@ -20,6 +20,8 @@ import { Button } from "@/components/ui/button";
 import { RelatedFeatures, type RelatedGroup } from "@/components/site/related-features";
 import { DocCard } from "@/components/site/doc-primitives";
 import type { SliceEntry } from "@/lib/content/slices";
+import type { SliceFrameworkSupport } from "@/lib/content/slice-framework-support";
+import { FrameworkComparison } from "@/components/site/framework-comparison";
 import { buildSliceAgentPrompt } from "@/lib/slice-agent-prompt";
 import { HeroStrip } from "./hero-strip";
 import { BentoMetadata } from "./bento-metadata";
@@ -30,11 +32,13 @@ export function DetailsTab({
   relatedGroups,
   sourceHref,
   installCommand,
+  frameworkSupport,
 }: {
   slice: SliceEntry;
   relatedGroups: RelatedGroup[];
   sourceHref: string;
   installCommand: string;
+  frameworkSupport: SliceFrameworkSupport[];
 }) {
   const agentPrompt = slice.agentRecipe ? buildSliceAgentPrompt(slice) : "";
 
@@ -48,6 +52,8 @@ export function DetailsTab({
           description={slice.description}
           agentPrompt={agentPrompt}
         />
+
+        <FrameworkComparison slug={slice.slug} support={frameworkSupport} />
 
         <BentoMetadata slice={slice} />
 

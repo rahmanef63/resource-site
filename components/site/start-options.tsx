@@ -14,19 +14,15 @@ import { CodeBlock } from "./code-block";
 import { InstallWithAgent } from "./install-with-agent";
 import { RepoLink } from "./repo-link";
 
-const CLI = `# Fresh Next 16 + React 19 + Tailwind 4 + Convex + shadcn app
-npx rahman-resources@latest init my-app
+const CLI = `# Next.js + React (npm)
+npx rahman-resources@latest init my-app --framework react-next --package-manager npm
 
-# …pre-bake every shadcn primitive:
-npx rahman-resources@latest init my-app --with-shadcn-all
+# SvelteKit + Svelte 5 (Bun)
+bunx rahman-resources@latest init my-app --framework sveltekit --package-manager bun
 
-# …or pre-load a full-app template:
-npx rahman-resources@latest init my-app --template personal-brand-os
-
+# Add a slice explicitly for SvelteKit
 cd my-app
-cp .env.example .env.local      # fill NEXT_PUBLIC_CONVEX_URL
-npx convex dev --once           # generate convex/_generated
-npm run dev                     # http://localhost:3000`;
+bunx rahman-resources@latest add appshell --framework sveltekit --package-manager bun`;
 
 function TriggerHead({
   icon: Icon,
@@ -139,14 +135,12 @@ export function StartOptions({
 
       <AccordionItem value="builder" className={ITEM_CLS}>
         <AccordionTrigger>
-          <TriggerHead icon={Layers} title="Build with the visual builder" hint="Pick template + features + skills → npx command" />
+          <TriggerHead icon={Layers} title="Build with the visual builder" hint="Pick framework + npm/Bun + slices → exact command" />
         </AccordionTrigger>
         <AccordionContent className="space-y-3">
           <p className="text-sm text-muted-foreground">
-            Compose a bundle in the Bundle Builder — choose a template, add features and
-            skills, and it emits the exact{" "}
-            <code className="rounded bg-muted px-1 font-mono text-xs">npx rahman-resources</code>{" "}
-            command.
+            Compose a bundle in the Bundle Builder — choose Next.js or SvelteKit, npm or Bun,
+            then add slices and skills. It emits the exact installer command for that environment.
           </p>
           <div className={CTA_ROW}>
             <Button asChild size="sm" className="gap-1.5">

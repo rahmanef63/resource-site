@@ -7,7 +7,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 
 import { ProjectForm } from "./project-form";
 
-const base = { appName: "my-app", brandName: "", ownerEmail: "" };
+const base = { appName: "my-app", brandName: "", ownerEmail: "", framework: "react-next" as const, packageManager: "npm" as const };
 
 function renderForm(value: Partial<typeof base>) {
   cleanup();

@@ -94,8 +94,8 @@ export default function AgentsPage() {
       <DocCard className="flex items-center gap-3 border-dashed bg-card/40 p-4">
         <Bot className="size-5 shrink-0 text-muted-foreground" />
         <p className="text-sm text-muted-foreground">
-          Slices work standalone. Layouts assume Next 16 + React 19 + Tailwind 4 + Convex
-          self-hosted + <code className="font-mono text-xs">@convex-dev/auth</code>.
+          Canonical slices expose Next.js and SvelteKit distributions. Full-app layouts remain
+          Next 16 + React 19 specific and declare their own Convex/auth requirements.
         </p>
       </DocCard>
 

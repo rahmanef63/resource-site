@@ -16,9 +16,12 @@ import { writeRr, buildRr } from "./rr.mjs";
 export function runPostInit(targetDir, opts = {}) {
   const out = { changed: [], skipped: [] };
 
-  patchComponentsJson(targetDir, out);
+  const isSvelte = opts.framework === "sveltekit";
+  if (!isSvelte) patchComponentsJson(targetDir, out);
+  else out.skipped.push("components.json (not used by native SvelteKit starter)");
   writeRrJson(targetDir, opts, out);
-  patchTsconfig(targetDir, out);
+  if (!isSvelte) patchTsconfig(targetDir, out);
+  else out.skipped.push("tsconfig.json paths (SvelteKit kit.alias is canonical)");
 
   return out;
 }
@@ -55,6 +58,8 @@ function writeRrJson(targetDir, opts, out) {
     features: opts.features,
     skills: opts.skills,
     templateVersion: opts.templateVersion,
+    framework: opts.framework,
+    packageManager: opts.packageManager,
   });
   writeRr(rr, targetDir);
   out.changed.push("rr.json (created)");

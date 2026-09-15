@@ -128,7 +128,8 @@ export function buildAgentPrompt({
     lines.push("");
     lines.push("```bash");
     lines.push(`cd ${projectName}`);
-    lines.push(`pnpm add ${dependencies.join(" ")}`);
+    lines.push(`npm install ${dependencies.join(" ")}`);
+    lines.push(`# or: bun add ${dependencies.join(" ")}`);
     lines.push("```");
     lines.push("");
   }

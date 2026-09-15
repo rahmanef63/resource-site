@@ -9,7 +9,8 @@
   "properties": {
     "$schema": { "type": "string" },
     "version": { "type": "integer", "minimum": 1 },
-    "framework": { "type": "string", "enum": ["next-16", "next-15", "vite", "remix"] },
+    "framework": { "type": "string", "enum": ["next-16", "next-15", "sveltekit", "vite", "remix"] },
+    "packageManager": { "type": "string", "enum": ["npm", "bun", "pnpm", "yarn"], "description": "Preferred package manager recorded by rr init." },
     "style": { "type": "string", "default": "shadcn-new-york" },
     "rsc": { "type": "boolean", "default": true },
     "tailwind": {
@@ -75,6 +76,7 @@
           "version": { "type": "string" },
           "category": { "type": "string" },
           "variant": { "type": "string", "description": "Installed variant id, when added with `add <slug> <variant>`." },
+          "framework": { "type": "string", "enum": ["react-next", "svelte-sveltekit"], "description": "Framework distribution installed for this slice." },
           "addedAt": { "type": "string", "format": "date" }
         }
       }

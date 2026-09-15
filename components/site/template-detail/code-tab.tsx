@@ -28,8 +28,8 @@ export function CodeTab({
   const repo = "resource-site";
   const branch = "main";
   const pulls = pullPaths && pullPaths.length > 0 ? pullPaths : [`cookbook/layouts/${slug}`];
-  const initCmd = `npx rahman-resources init my-app\ncd my-app`;
-  const cliCmd = `npx rahman-resources add ${slug} my-app`;
+  const initCmd = `# npm\nnpx rahman-resources init my-app --framework react-next --package-manager npm\n\n# Bun\nbunx rahman-resources init my-app --framework react-next --package-manager bun\n\ncd my-app`;
+  const cliCmd = `# npm\nnpx rahman-resources add ${slug} my-app --package-manager npm\n\n# Bun\nbunx rahman-resources add ${slug} my-app --package-manager bun`;
   const degitCmd = pulls
     .map((p) => `npx tiged --force ${owner}/${repo}/${p}#${branch} my-app/${p}`)
     .join("\n");
@@ -84,7 +84,7 @@ export function CodeTab({
           variant="code"
         >
           <CodeBlock
-            code={`pnpm add ${dependencies.join(" ")}`}
+            code={`npm install ${dependencies.join(" ")}\n# Bun\nbun add ${dependencies.join(" ")}`}
             language="bash"
             filename="install.sh"
           />

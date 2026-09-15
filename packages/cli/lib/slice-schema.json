@@ -187,6 +187,10 @@
       "type": "string",
       "minLength": 10
     },
+    "agentRecipe": {
+      "type": "string",
+      "description": "Optional concise install/wiring guidance carried into generated CLI/catalog metadata."
+    },
     "namespace": {
       "type": "string",
       "pattern": "^@/features/[a-z0-9][a-z0-9-]*$",

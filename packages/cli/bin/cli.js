@@ -3,7 +3,7 @@
 // Aliases: `rahman-resources`, `resources`, `rr` (all run this file).
 // Usage:
 //   npx rr init <app-name> [--template <slug>] [--features a,b] [--skills x,y] [--with-shadcn-all]
-//   npx rr add <slug> [target-dir] [--framework <id>] [--at root|preview] [--with-shadcn-all]
+//   npx rr add <slug> [target-dir] [--framework <id>] [--package-manager npm|bun] [--at root|preview]
 //   npx rr add-skill <slug> [target-dir]
 //   npx rr scaffold-slice <slug> [--category <cat>] [--target <dir>]
 //   npx rr list [layouts|recipes|features|skills|slices]
@@ -36,6 +36,14 @@ import { runUpdate as runUpdate3Way } from "./update.mjs";
 import { runMigrate } from "./migrate.mjs";
 import { augmentConsumerEnv } from "../lib/env-augment.mjs";
 import { pullRawFile } from "../lib/raw-file.mjs";
+import {
+  addDependenciesSpec,
+  detectPackageManager,
+  installAllSpec,
+  normalizePackageManager,
+  packageExecutor,
+  runScriptText,
+} from "../lib/package-manager.mjs";
 
 const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -123,12 +131,13 @@ ${kleur.bold("Rahman Resources (rr)")} — shadcn-style installer for vertical s
 ${kleur.dim("Bins: rahman-resources / resources / rr (all run this CLI).")}
 
 ${kleur.bold("Usage:")}
-  npx rr init <app-name> [--template <slug>] [--features a,b] [--skills x,y]
+  npx rr init <app-name> [--framework react-next|sveltekit] [--package-manager npm|bun]
+                         [--template <slug>] [--features a,b] [--skills x,y]
                          [--no-install] [--with-shadcn-reinit] [--with-shadcn-all]
-  npx rr add <slug> [target-dir] [--framework <id>] [--at root|preview] [--with-shadcn-all]
+  npx rr add <slug> [target-dir] [--framework <id>] [--package-manager npm|bun] [--at root|preview]
   npx rr add-skill <slug> [target-dir]
   npx rr scaffold-slice <slug> [--category <cat>] [--target <dir>]
-  npx rr lift <source>:<path> [--framework <id>] [--target <dir>] [--dry-run]
+  npx rr lift <source>:<path> [--framework <id>] [--package-manager npm|bun] [--target <dir>] [--dry-run]
   npx rr publish-slice <local-slice-dir> [--open-pr]
   npx rr list [layouts|recipes|features|skills|slices]
   npx rr info <slug>
@@ -140,14 +149,16 @@ ${kleur.bold("Usage:")}
   npx rr mcp
 
 ${kleur.bold("Init flags:")}
-  --no-install            skip 'npm install' step (faster scaffolds; you run it manually)
+  --framework <id>        base scaffold: react-next (default) or sveltekit
+  --package-manager <pm>  npm (default) or bun; pnpm/yarn remain detected for existing projects
+  --no-install            skip dependency install step (you run it manually)
   --with-shadcn-reinit    delete starter components.json + run 'npx shadcn init -y -d' (canonical shadcn flow)
   --with-shadcn-all       run 'npx shadcn add --all' instead of the per-template list
                           (heavy; ~50 components — use only if you'll customize beyond the template)
 
 ${kleur.bold("Add flags:")}
-  --framework <id>       install a declared framework distribution (default: slice default,
-                         or legacy react-next); unsupported values list available frameworks
+  --framework <id>       install a declared framework distribution (default: react-next)
+  --package-manager <pm> npm or bun override; existing projects otherwise auto-detect their manager
   --dry-run              show the selected slice distribution without writing files
   --at root               install template AT app/(public)/ + app/admin/ (default — rewrites
                           /preview/<slug> path constants in nav-config/robots/sitemap)
@@ -159,10 +170,11 @@ ${kleur.bold("Add flags:")}
 
 ${kleur.bold("Examples:")}
   npx rr init my-app
-  npx rr init my-app --template personal-brand-os --skills frontend-design,mcp-builder
+  bunx rr init my-app --framework sveltekit --package-manager bun
+  npx rr init my-app --skills frontend-design,mcp-builder
   npx rr init my-app --no-install
-  npx rr add personal-brand-os . --at root
-  npx rr add personal-brand-os . --with-shadcn-all
+  npx rr add appshell
+  bunx rr add appshell --framework sveltekit --package-manager bun
   npx rr add-skill webapp-testing
   npx rr list skills
 
@@ -176,7 +188,7 @@ ${kleur.dim("Consumer's components/ui/ + lib/utils.ts (shadcn) are never touched
 
 // Flags that take a value (`--flag x`). Anything else is boolean, so a boolean
 // flag placed before a positional no longer swallows that positional.
-const VALUE_FLAGS = new Set(["target", "template", "category", "at", "skills", "features", "variant", "framework"]);
+const VALUE_FLAGS = new Set(["target", "template", "category", "at", "skills", "features", "variant", "framework", "package-manager"]);
 
 function parseFlags(rest) {
   const positional = [];
@@ -198,6 +210,14 @@ function parseFlags(rest) {
 function csv(s) {
   if (!s || s === true) return [];
   return String(s).split(",").map((x) => x.trim()).filter(Boolean);
+}
+
+function normalizeInitFramework(value) {
+  if (!value || value === true) return "react-next";
+  const key = String(value).trim().toLowerCase();
+  if (["react-next", "next", "nextjs", "react"].includes(key)) return "react-next";
+  if (["svelte-sveltekit", "sveltekit", "svelte"].includes(key)) return "sveltekit";
+  throw new Error(`Unsupported init framework "${value}". Available: react-next, sveltekit.`);
 }
 
 // Walk up looking for the kitab repo root (`packages/` + `package.json`).
@@ -376,108 +396,108 @@ async function runInit(rest) {
   const { positional, flags } = parseFlags(rest);
   const [appName] = positional;
   if (!appName || appName.startsWith("-")) {
-    throw new Error("Usage: rahman-resources init <app-name> [--template slug] [--features a,b] [--skills x,y]");
+    throw new Error("Usage: rahman-resources init <app-name> [--framework react-next|sveltekit] [--package-manager npm|bun]");
   }
   const slug = appName.replace(/[^a-z0-9-_]/gi, "-").toLowerCase();
   const target = path.resolve(process.cwd(), appName);
-  if (existsSync(target)) {
-    throw new Error(`Directory already exists: ${target}`);
-  }
+  if (existsSync(target)) throw new Error(`Directory already exists: ${target}`);
 
   const features = csv(flags.features);
   const skills = csv(flags.skills);
   const template = typeof flags.template === "string" ? flags.template : null;
+  const framework = normalizeInitFramework(flags.framework);
+  const pm = normalizePackageManager(flags["package-manager"]) ?? "npm";
+  const svelte = framework === "sveltekit";
 
-  if (template && !findEntry(template)) {
-    throw new Error(`Unknown template: ${template}. Run 'list layouts' to see available.`);
+  if (template && !findEntry(template)) throw new Error(`Unknown template: ${template}. Run 'list layouts' to see available.`);
+  for (const skill of skills) if (!findSkill(skill)) throw new Error(`Unknown skill: ${skill}. Run 'list skills' to see available.`);
+  for (const feature of features) if (!findEntry(feature)) throw new Error(`Unknown feature: ${feature}. Run 'list features' to see available.`);
+
+  if (svelte && template) {
+    throw new Error(`Full-app templates are currently Next.js-only. Use 'rr init ${appName} --framework sveltekit' for the SvelteKit base, then add active slices with '--framework sveltekit'.`);
   }
-  for (const s of skills) {
-    if (!findSkill(s)) throw new Error(`Unknown skill: ${s}. Run 'list skills' to see available.`);
+  if (svelte && features.length) {
+    throw new Error("Legacy --features scaffold additions are Next.js-only. Use the canonical slice catalog with 'rr add <slug> --framework sveltekit'.");
   }
-  for (const f of features) {
-    if (!findEntry(f)) throw new Error(`Unknown feature: ${f}. Run 'list features' to see available.`);
+  if (svelte && (flags["with-shadcn-reinit"] || flags["with-shadcn-all"])) {
+    throw new Error("--with-shadcn-* flags target the React shadcn/ui starter and are not used by the native SvelteKit base.");
   }
 
-  console.log(kleur.bold(`\n→ Scaffolding ${kleur.cyan(slug)} (Next 16 + Convex + shadcn)\n`));
+  const label = svelte ? "SvelteKit 2 + Svelte 5 + Tailwind 4 + Convex" : "Next 16 + React 19 + Tailwind 4 + Convex + shadcn";
+  console.log(kleur.bold(`\n→ Scaffolding ${kleur.cyan(slug)} (${label}; ${pm})\n`));
 
-  const starter = path.join(__dirname, "../lib/starter");
+  const starter = path.join(__dirname, svelte ? "../lib/starter-svelte" : "../lib/starter");
   if (!existsSync(starter)) throw new Error(`Starter not found at ${starter}`);
-
   process.stdout.write(`  copying starter ... `);
   copyStarterTree(starter, target, appName, slug);
   console.log(kleur.green("ok"));
 
   const skipInstall = !!flags["no-install"];
   const reinitShadcn = !!flags["with-shadcn-reinit"];
-
   if (!skipInstall) {
-    console.log(kleur.bold(`\n→ Installing dependencies (npm install --legacy-peer-deps)\n`));
-    try {
-      await runShell("npm", ["install", "--legacy-peer-deps"], target);
-    } catch (err) {
-      console.log(kleur.yellow(`  ⚠ npm install failed (${err.message}). You can rerun manually.`));
-    }
+    const spec = installAllSpec(pm);
+    console.log(kleur.bold(`\n→ Installing dependencies via ${kleur.cyan(pm)}\n`));
+    try { await runShell(spec.cmd, spec.args, target); }
+    catch (err) { console.log(kleur.yellow(`  ⚠ ${pm} install failed (${err.message}). You can rerun manually.`)); }
   } else {
-    console.log(kleur.dim(`\n  (skipping npm install — --no-install)`));
+    console.log(kleur.dim(`\n  (skipping dependency install — --no-install)`));
   }
 
-  if (reinitShadcn && !skipInstall) {
+  if (!svelte && reinitShadcn && !skipInstall) {
     console.log(kleur.bold(`\n→ Re-running shadcn init (--with-shadcn-reinit)\n`));
     try {
-      // Remove pre-baked components.json so shadcn writes a fresh one — post-init re-applies our aliases.
       const cjPath = path.join(target, "components.json");
       if (existsSync(cjPath)) writeFileSync(cjPath + ".bak", readFileSync(cjPath, "utf8"));
-      await runShell("npx", ["shadcn@latest", "init", "--yes", "--defaults"], target);
-    } catch (err) {
-      console.log(kleur.yellow(`  ⚠ shadcn init failed (${err.message}). Continuing.`));
-    }
-  } else if (!skipInstall) {
+      await runPackageExecutor(pm, "shadcn@latest", ["init", "--yes", "--defaults"], target);
+    } catch (err) { console.log(kleur.yellow(`  ⚠ shadcn init failed (${err.message}). Continuing.`)); }
+  } else if (!svelte && !skipInstall) {
     console.log(kleur.dim(`\n  (skipping shadcn init — starter already pre-configured. Pass --with-shadcn-reinit to force re-init.)`));
   }
 
   process.stdout.write(`\n  post-init restructure ... `);
-  const post = runPostInit(target, { template, features, skills });
+  const post = runPostInit(target, {
+    template, features, skills,
+    framework: svelte ? "sveltekit" : "next-16",
+    packageManager: pm,
+  });
   console.log(kleur.green("ok"));
   for (const c of post.changed) console.log(`    ${kleur.green("+")} ${c}`);
-  for (const s of post.skipped) console.log(`    ${kleur.dim("-")} ${kleur.dim(s)}`);
+  for (const item of post.skipped) console.log(`    ${kleur.dim("-")} ${kleur.dim(item)}`);
 
   if (template) {
     console.log(kleur.bold(`\n→ Pulling template ${kleur.cyan(template)}\n`));
     const t = findEntry(template).entry;
-    for (const p of t.pullPaths ?? []) {
-      const dest = path.join(target, p);
-      process.stdout.write(`  ${kleur.dim(p)} ... `);
-      await pull(p, dest);
+    for (const pullPath of t.pullPaths ?? []) {
+      const dest = path.join(target, pullPath);
+      process.stdout.write(`  ${kleur.dim(pullPath)} ... `);
+      await pull(pullPath, dest);
       console.log(kleur.green("ok"));
     }
-    if (!skipInstall) {
-      await maybeRunShadcnAdd(t, target, !!flags["with-shadcn-all"]);
-    } else {
-      console.log(kleur.dim(`\n  (skipping shadcn add — --no-install)`));
-    }
-    // Strip the placeholder app/page.tsx — the template owns the root route.
+    if (!skipInstall) await maybeRunShadcnAdd(t, target, !!flags["with-shadcn-all"], pm);
+    else console.log(kleur.dim(`\n  (skipping shadcn add — --no-install)`));
     const placeholder = path.join(target, "app", "page.tsx");
-    if (existsSync(placeholder)) {
-      try { rmSync(placeholder); console.log(`  ${kleur.dim("removed placeholder")} app/page.tsx`); } catch {}
-    }
+    if (existsSync(placeholder)) { try { rmSync(placeholder); console.log(`  ${kleur.dim("removed placeholder")} app/page.tsx`); } catch {} }
   }
 
-  if (!skipInstall) {
-    await runOfflineConvexCodegen(target);
-  }
+  if (!skipInstall) await runOfflineConvexCodegen(target, pm);
 
   if (skills.length) {
     console.log(kleur.bold(`\n→ Pulling ${skills.length} Claude skill(s)\n`));
-    for (const s of skills) await installSkill(s, target);
+    for (const skill of skills) await installSkill(skill, target);
   }
 
   console.log(`\n${kleur.green("✓")} Done. ${kleur.bold(slug)} scaffolded.\n`);
   console.log(`${kleur.bold("Next:")}`);
   console.log(`  cd ${appName}`);
-  console.log(`  cp .env.example .env.local   ${kleur.dim("# fill NEXT_PUBLIC_CONVEX_URL")}`);
-  if (skipInstall) console.log(`  npm install --legacy-peer-deps`);
-  console.log(`  npx convex dev --once         ${kleur.dim("# generates convex/_generated")}`);
-  console.log(`  npm run dev\n`);
+  if (svelte) console.log(`  cp .env.example .env          ${kleur.dim("# fill PUBLIC_CONVEX_URL when needed")}`);
+  else console.log(`  cp .env.example .env.local   ${kleur.dim("# fill NEXT_PUBLIC_CONVEX_URL")}`);
+  if (skipInstall) {
+    const spec = installAllSpec(pm);
+    console.log(`  ${[spec.cmd, ...spec.args].join(" ")}`);
+  }
+  console.log(`  ${packageExecutor(pm)} convex dev --once ${kleur.dim("# generates convex/_generated")}`);
+  if (svelte) console.log(`  ${runScriptText(pm, "check")} ${kleur.dim("# Svelte + TypeScript diagnostics")}`);
+  console.log(`  ${runScriptText(pm, "dev")}\n`);
 }
 
 // Spawn a child process inheriting stdio, resolves on exit 0.
@@ -510,6 +530,7 @@ async function runAdd(rest) {
   const variantIds = (entry.variants?.items ?? []).map((v) => v.id);
   let variant = typeof flags.variant === "string" ? flags.variant : undefined;
   const framework = typeof flags.framework === "string" ? flags.framework : undefined;
+  const packageManager = typeof flags["package-manager"] === "string" ? flags["package-manager"] : undefined;
   let targetArg = typeof flags.target === "string" ? flags.target : ".";
   for (const p of restPos) {
     if (!variant && variantIds.includes(p)) variant = p;
@@ -573,19 +594,20 @@ async function runAdd(rest) {
       ...(targetArg !== "." ? ["--target", targetArg] : []),
       ...(variant ? ["--variant", variant] : []),
       ...(framework ? ["--framework", framework] : []),
+      ...(packageManager ? ["--package-manager", packageManager] : []),
       ...(flags["dry-run"] ? ["--dry-run"] : []),
     ]);
     // Augment consumer .env.example with this slice's env requirements.
     // Idempotent — re-running `add` does not duplicate entries.
     try {
-      augmentConsumerEnv(entry, target);
+      augmentConsumerEnv(entry, target, framework ?? readProjectFramework(target));
     } catch (err) {
       console.error(kleur.yellow(`  ⚠ env augment skipped: ${err.message ?? err}`));
     }
     return;
   }
   if (kind === "layout") return addLayout(entry, target, targetArg, flags);
-  if (kind === "feature") return addFeature(entry, target, targetArg);
+  if (kind === "feature") return addFeature(entry, target, targetArg, flags);
   if (kind === "recipe") return addRecipe(entry);
 }
 
@@ -654,7 +676,7 @@ async function addLayout(t, target, targetArg, flags = {}) {
   }
 
   if (t.dependencies?.length) {
-    const pm = detectPM(target);
+    const pm = detectPM(target, flags["package-manager"]);
     console.log(kleur.bold(`\n→ Installing dependencies via ${kleur.cyan(pm)}\n`));
     if (!hasPackageJson(target)) {
       console.log(kleur.yellow(`  ${target}/package.json not found — skipping install.`));
@@ -664,7 +686,7 @@ async function addLayout(t, target, targetArg, flags = {}) {
     }
   }
 
-  await maybeRunShadcnAdd(t, target, !!flags["with-shadcn-all"]);
+  await maybeRunShadcnAdd(t, target, !!flags["with-shadcn-all"], flags["package-manager"]);
 
   if (at === "root") {
     promoteToRoot(t, target);
@@ -686,7 +708,7 @@ async function addLayout(t, target, targetArg, flags = {}) {
 // they have no Convex auth context. Postmortem 1.2: the workaround is to
 // generate types locally with a dummy admin key + typecheck disabled, then
 // commit `convex/_generated/` so the Docker build can typecheck against it.
-async function runOfflineConvexCodegen(target) {
+async function runOfflineConvexCodegen(target, pm = detectPM(target)) {
   const convexDir = path.join(target, "convex");
   if (!existsSync(convexDir)) return;
   const generated = path.join(convexDir, "_generated");
@@ -697,9 +719,10 @@ async function runOfflineConvexCodegen(target) {
   console.log(kleur.bold(`\n→ Generating convex/_generated (offline)\n`));
   try {
     await new Promise((resolve, reject) => {
+      const executor = packageExecutorParts(pm);
       const ps = spawn(
-        "npx",
-        ["convex", "codegen", "--typecheck=disable"],
+        executor.cmd,
+        [...executor.args, "convex", "codegen", "--typecheck=disable"],
         {
           cwd: target,
           stdio: "inherit",
@@ -715,20 +738,25 @@ async function runOfflineConvexCodegen(target) {
       ps.on("exit", (code) => (code === 0 ? resolve() : reject(new Error(`convex codegen exited ${code}`))));
     });
   } catch (err) {
-    console.log(kleur.yellow(`  ⚠ codegen failed (${err.message}). Run later: CONVEX_SELF_HOSTED_URL=http://localhost:3210 CONVEX_SELF_HOSTED_ADMIN_KEY="x|x" npx convex codegen --typecheck=disable`));
+    if (existsSync(generated)) {
+      console.log(kleur.dim(`  convex/_generated emitted; deployment-state sync was unavailable (${err.message}). Continuing with local types.`));
+      return;
+    }
+    console.log(kleur.yellow(`  ⚠ codegen failed (${err.message}). Run later: CONVEX_SELF_HOSTED_URL=http://localhost:3210 CONVEX_SELF_HOSTED_ADMIN_KEY="x|x" ${packageExecutor(pm)} convex codegen --typecheck=disable`));
   }
 }
 
 // ─── shadcn auto-add ──────────────────────────────────────────────────────
 
-async function maybeRunShadcnAdd(t, target, all) {
+async function maybeRunShadcnAdd(t, target, all, pmOverride) {
+  const pm = detectPM(target, pmOverride);
   if (!hasPackageJson(target)) {
     console.log(kleur.dim(`\n  (skipping shadcn add — no package.json in target)`));
     return;
   }
   const componentsJson = path.join(target, "components.json");
   if (!existsSync(componentsJson)) {
-    console.log(kleur.yellow(`\n  ⚠ components.json missing — run 'npx shadcn init' first, then re-add.`));
+    console.log(kleur.yellow(`\n  ⚠ components.json missing — initialize your shadcn host first, then re-add.`));
     return;
   }
   const list = all ? ["--all"] : (t.shadcnComponents ?? []);
@@ -739,9 +767,9 @@ async function maybeRunShadcnAdd(t, target, all) {
   console.log(kleur.bold(`\n→ Installing shadcn components ${all ? "(--all)" : `(${list.length})`}\n`));
   console.log(kleur.dim(`  ${list.join(" ")}\n`));
   try {
-    await runShell("npx", ["shadcn@latest", "add", ...list, "--yes", "--overwrite"], target);
+    await runPackageExecutor(pm, "shadcn@latest", ["add", ...list, "--yes", "--overwrite"], target);
   } catch (err) {
-    console.log(kleur.yellow(`  ⚠ shadcn add failed (${err.message}). Run manually: npx shadcn@latest add ${list.join(" ")}`));
+    console.log(kleur.yellow(`  ⚠ shadcn add failed (${err.message}). Run manually: ${packageExecutor(pm)} shadcn@latest add ${list.join(" ")}`));
   }
 }
 
@@ -834,7 +862,7 @@ function rewritePreviewPaths(target, slug) {
   }
 }
 
-async function addFeature(t, target, targetArg) {
+async function addFeature(t, target, targetArg, flags = {}) {
   console.log(
     kleur.bold(`\n→ Adding feature ${kleur.cyan(t.title)} `) +
     kleur.dim(`[SLICE — drop-in feature]`) +
@@ -843,7 +871,7 @@ async function addFeature(t, target, targetArg) {
   if (!t.npmPackages || t.npmPackages.length === 0) {
     console.log(kleur.dim(`  No npm packages to install (${t.install}).`));
   } else {
-    const pm = detectPM(target);
+    const pm = detectPM(target, flags["package-manager"]);
     if (!hasPackageJson(target)) {
       console.log(kleur.yellow(`  ${target}/package.json not found — skipping install.`));
       console.log(kleur.dim(`  Run later: cd ${targetArg} && ${pm} ${pm === "npm" ? "install" : "add"} ${t.npmPackages.join(" ")}`));
@@ -1164,6 +1192,7 @@ async function runLift(rest) {
   const dryRun = !!flags["dry-run"];
   const variant = typeof flags.variant === "string" ? flags.variant : undefined;
   const framework = typeof flags.framework === "string" ? flags.framework : undefined;
+  const packageManager = typeof flags["package-manager"] === "string" ? flags["package-manager"] : undefined;
 
   const parsed = parseLiftSource(src);
   console.log(kleur.bold(`\n→ Lift ${kleur.cyan(src)}${framework ? kleur.blue(` [${framework}]`) : ""}${variant ? kleur.magenta(` :${variant}`) : ""} ${dryRun ? kleur.yellow("(dry-run)") : ""}\n`));
@@ -1182,7 +1211,7 @@ async function runLift(rest) {
   if (plan.env.length > 0) {
     console.log(`\n  env vars to set:`);
     for (const e of plan.env) {
-      const envName = e.scope === "next-public" && !e.name.startsWith("NEXT_PUBLIC_") ? `NEXT_PUBLIC_${e.name}` : e.name;
+      const envName = publicEnvName(e, plan.framework);
       console.log(`    ${envName}=…  ${kleur.dim(`(${e.scope})`)}`);
     }
   }
@@ -1213,12 +1242,12 @@ async function runLift(rest) {
   }
 
   if (plan.npm.length > 0 && hasPackageJson(target)) {
-    const pm = detectPM(target);
+    const pm = detectPM(target, packageManager);
     console.log(kleur.bold(`\n→ Installing ${plan.npm.length} npm dep(s) via ${kleur.cyan(pm)}\n`));
     await runPM(pm, plan.npm, target);
   }
   if (plan.shadcn.length > 0 && hasPackageJson(target)) {
-    await maybeRunShadcnAdd({ slug: parsed.slug ?? "lifted", shadcnComponents: plan.shadcn }, target, false);
+    await maybeRunShadcnAdd({ slug: parsed.slug ?? "lifted", shadcnComponents: plan.shadcn }, target, false, packageManager);
   }
 
   // Register the slice in the consumer's rr.json (if present).
@@ -1226,7 +1255,7 @@ async function runLift(rest) {
     const slice = (manifest.slices ?? []).find((s) => s.slug === parsed.slug);
     if (slice) {
       const rr = readRr(target);
-      rrAddSlice(rr, parsed.slug, { version: slice.version, category: slice.category, variant });
+      rrAddSlice(rr, parsed.slug, { version: slice.version, category: slice.category, variant, framework: plan.framework });
       writeRr(rr, target);
       console.log(kleur.dim(`  rr.json: slices += ${parsed.slug}@${slice.version}${variant ? `:${variant}` : ""}`));
     }
@@ -1280,6 +1309,7 @@ async function resolveLiftPlan(parsed, target, variant, requestedFramework) {
   const npm = [];
   const shadcn = [];
   const env = [];
+  let selectedFramework;
 
   if (parsed.kind === "rahman") {
     const slice = (manifest.slices ?? []).find((s) => s.slug === parsed.slug);
@@ -1287,6 +1317,7 @@ async function resolveLiftPlan(parsed, target, variant, requestedFramework) {
       throw new Error(`Slice not found in manifest: ${parsed.slug}. Run 'list slices'.`);
     }
     const framework = resolveSliceFramework(slice, requestedFramework);
+    selectedFramework = framework.name;
     const slicePath = framework.path;
     // Variant install (shadcn-style): copy only variants/<id>/ (flattened into
     // the slice root so imports resolve at @/features/<slug> exactly like a
@@ -1383,7 +1414,7 @@ async function resolveLiftPlan(parsed, target, variant, requestedFramework) {
       githubSubPath: parsed.subPath,
     });
   }
-  return { steps, peers, npm, shadcn, env };
+  return { steps, peers, npm, shadcn, env, framework: selectedFramework };
 }
 
 function copyLocalTree(srcDir, destDir) {
@@ -1543,11 +1574,8 @@ async function pullFromRepo(repo, subPath, branch, dest) {
   );
 }
 
-function detectPM(target) {
-  if (existsSync(path.join(target, "pnpm-lock.yaml"))) return "pnpm";
-  if (existsSync(path.join(target, "yarn.lock"))) return "yarn";
-  if (existsSync(path.join(target, "bun.lockb"))) return "bun";
-  return "npm";
+function detectPM(target, explicit) {
+  return detectPackageManager(target, explicit);
 }
 
 function hasPackageJson(target) {
@@ -1555,12 +1583,31 @@ function hasPackageJson(target) {
 }
 
 function runPM(pm, deps, cwd) {
-  const args = pm === "npm" ? ["install", ...deps] : ["add", ...deps];
-  return new Promise((resolve, reject) => {
-    const ps = spawn(pm, args, { cwd, stdio: "inherit", shell: true });
-    ps.on("error", reject);
-    ps.on("exit", (code) => (code === 0 ? resolve() : reject(new Error(`${pm} ${args[0]} exited ${code}`))));
-  });
+  const spec = addDependenciesSpec(pm, deps);
+  return runShell(spec.cmd, spec.args, cwd);
+}
+
+function packageExecutorParts(pm) {
+  if (pm === "bun") return { cmd: "bunx", args: [] };
+  if (pm === "pnpm") return { cmd: "pnpm", args: ["dlx"] };
+  if (pm === "yarn") return { cmd: "yarn", args: ["dlx"] };
+  return { cmd: "npx", args: [] };
+}
+
+function runPackageExecutor(pm, pkg, args, cwd) {
+  const executor = packageExecutorParts(pm);
+  return runShell(executor.cmd, [...executor.args, pkg, ...args], cwd);
+}
+
+function readProjectFramework(target) {
+  if (!rrExists(target)) return "react-next";
+  try { return readRr(target).framework === "sveltekit" ? "svelte-sveltekit" : "react-next"; } catch { return "react-next"; }
+}
+
+function publicEnvName(e, framework) {
+  if (e.scope !== "next-public") return e.name;
+  const base = e.name.replace(/^NEXT_PUBLIC_/, "").replace(/^PUBLIC_/, "");
+  return framework === "svelte-sveltekit" ? `PUBLIC_${base}` : `NEXT_PUBLIC_${base}`;
 }
 
 function indent(s, n) {

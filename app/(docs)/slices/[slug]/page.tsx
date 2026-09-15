@@ -4,6 +4,7 @@ import { isHidden } from "@/lib/content/hidden-slugs";
 import { resolveSlugAlias } from "@/lib/content/slice-aliases";
 import { readSliceFiles } from "@/lib/slice-files";
 import { site } from "@/lib/content/site";
+import { getSliceFrameworkSupport } from "@/lib/content/slice-framework-support";
 import { SliceDetailHeader } from "./slice-detail-header";
 import { SliceDetailClient } from "./slice-detail-client";
 
@@ -37,6 +38,7 @@ export default async function SliceDetailPage({ params }: { params: Promise<{ sl
 
   const sourceHref = `https://github.com/rahmanef63/resource-site/tree/main/${slice.slicePath}`;
   const installCommand = slice.install ?? `npx rahman-resources add ${slice.slug}`;
+  const frameworkSupport = getSliceFrameworkSupport(slice.slug);
 
   // Pre-read slice source files server-side so the Code tab in the
   // manifest can show contents without an API roundtrip.
@@ -50,12 +52,14 @@ export default async function SliceDetailPage({ params }: { params: Promise<{ sl
         installCommand={installCommand}
         prev={prev ? { slug: prev.slug, title: prev.title } : null}
         next={next ? { slug: next.slug, title: next.title } : null}
+        frameworkSupport={frameworkSupport}
       />
       <SliceDetailClient
         slice={slice}
         codeFiles={codeFiles}
         sourceHref={sourceHref}
         installCommand={installCommand}
+        frameworkSupport={frameworkSupport}
       />
     </>
   );

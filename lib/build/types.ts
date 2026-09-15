@@ -1,5 +1,7 @@
 // Shared types for the Bundle Builder UI.
 
+import type { PublicFrameworkId, PublicPackageManager } from "@/lib/content/framework-matrix";
+
 export type BuildMode = "new" | "existing";
 
 export type BuildSelection = {
@@ -19,6 +21,8 @@ export type ProjectForm = {
   appName: string;
   brandName: string;
   ownerEmail: string;
+  framework: PublicFrameworkId;
+  packageManager: PublicPackageManager;
 };
 
 export const EMPTY_SELECTION: BuildSelection = {
@@ -26,5 +30,5 @@ export const EMPTY_SELECTION: BuildSelection = {
   features: [],
   slices: [],
   skills: [],
-  project: { appName: "my-app", brandName: "", ownerEmail: "" },
+  project: { appName: "my-app", brandName: "", ownerEmail: "", framework: "react-next", packageManager: "npm" },
 };
