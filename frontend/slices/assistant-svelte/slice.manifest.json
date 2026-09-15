@@ -1,0 +1,41 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "assistant-svelte",
+  "version": "1.2.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add assistant --framework sveltekit",
+    "consumerPath": "slices/assistant-svelte"
+  },
+  "files": [
+    "README.md",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts",
+    "components/Assistant.svelte",
+    "components/AutomationForm.svelte",
+    "components/ChatPanel.svelte",
+    "components/GlyphTile.svelte",
+    "components/ItemForm.svelte",
+    "components/LibraryView.svelte"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/assistant/lib/agentic-host.ts",
+      "frontend/slices/assistant/lib/chat-core.ts",
+      "frontend/slices/assistant/lib/presets.ts",
+      "frontend/slices/assistant/lib/store-core.ts",
+      "frontend/slices/assistant/lib/stream-core.ts",
+      "frontend/slices/assistant/lib/tools.ts",
+      "frontend/slices/assistant/lib/types.ts",
+      "lib/shared/agentic/agent-loop.ts",
+      "lib/shared/agentic/global-host.ts",
+      "lib/shared/agentic/host.ts",
+      "lib/shared/agentic/prompt.ts",
+      "lib/shared/agentic/registry.ts",
+      "lib/shared/agentic/types.ts"
+    ],
+    "external": ["svelte", "@lucide/svelte"]
+  }
+}

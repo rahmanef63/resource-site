@@ -294,12 +294,12 @@
       "slug": "assistant",
       "title": "Assistant — agent workspace with streaming chat",
       "category": "os",
-      "description": "A full agent workspace: streaming chat with typing deltas and graceful error notes, plus a library where users CREATE and manage agents (persona, avatar gradient, system prompt), skills, and automations (trigger + schedule forms) — all persisted in localStorage, no backend. Preset agents/skills ship as starting points. The model is INJECTED: configureAssistantStream takes any (messages) => AsyncIterable<string> — your SSE endpoint, the AI SDK, an agent loop — and until wired a typing demo stream keeps the whole UI working offline. Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
+      "description": "Framework-parity agent workspace with streaming chat, tool-calling, and a local library of agents, skills, and ordered automations. React/Next remains default; native Svelte 5/SvelteKit reuses the same observable localStorage store, preset data, persona/history builder, demo stream fallback, global tool registry, shared runAgentLoop function-calling core, static/live tool catalog, and automation semantics. No backend or model key is bundled: configureAgentStream injects the consumer model bridge. Svelte carries no React/Next/shadcn/use-agent-tools runtime.",
       "source": "rahmanef63/os-vps",
       "install": "npx rahman-resources add assistant",
       "npmPackages": [],
       "exampleCode": "\"use client\";\nimport { Assistant } from \"@/features/assistant\";\n\nexport default function AssistantDemo() {\n  // Unwired -> typing demo stream. configureAssistantStream for a real LLM.\n  return <div className=\"h-dvh w-full\"><Assistant /></div>;\n}",
-      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Agent workspace with streaming chat. Fully client-side; model injected.\n\nSTEP 1 — Install. `npx rr add assistant`. Ensure `@/features/assistant` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: `npx shadcn@latest add button input textarea tabs badge scroll-area dropdown-menu dialog select switch`.\n\nSTEP 3 — Mount. `<Assistant />` in a height-bearing box. Unwired, a typing demo stream answers so the UI works offline; agents/skills/automations persist in localStorage.\n\nSTEP 4 — Wire a model. `configureAssistantStream(async function* (messages) { ...yield text deltas... })` — SSE endpoint, AI SDK, or an agent loop. Throw Error(\"no_api_key\") / Error(\"unauthorized\") for the chat's friendly error notes.",
+      "agentRecipe": "React/default: run `npx rr add assistant`; SvelteKit: append `--framework sveltekit`. Mount <Assistant/> in a height-bearing container. Agents, skills and automations persist in localStorage through one shared observable store. Unwired chat uses a typing demo stream. Wire one real backend with configureAgentStream(fn); the same shared runAgentLoop drives every registered slice ToolCollection through registerAssistantTools. The Svelte distribution installs only non-React agentic core files and @lucide/svelte.",
       "tags": [
         "ai",
         "assistant",
@@ -307,7 +307,10 @@
         "agents",
         "streaming",
         "automations",
-        "ui"
+        "tool-calling",
+        "ui",
+        "svelte",
+        "framework-parity"
       ]
     },
     {
@@ -2292,19 +2295,48 @@
       "title": "Assistant — agent workspace with streaming chat",
       "category": "os",
       "kind": "ui",
-      "version": "1.1.1",
-      "description": "A full agent workspace: streaming chat with typing deltas and graceful error notes, plus a library where users CREATE and manage agents (persona, avatar gradient, system prompt), skills, and automations (trigger + schedule forms) — all persisted in localStorage, no backend. Preset agents/skills ship as starting points. The model is INJECTED: configureAssistantStream takes any (messages) => AsyncIterable<string> — your SSE endpoint, the AI SDK, an agent loop — and until wired a typing demo stream keeps the whole UI working offline. Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
+      "version": "1.2.0",
+      "description": "Framework-parity agent workspace with streaming chat, tool-calling, and a local library of agents, skills, and ordered automations. React/Next remains default; native Svelte 5/SvelteKit reuses the same observable localStorage store, preset data, persona/history builder, demo stream fallback, global tool registry, shared runAgentLoop function-calling core, static/live tool catalog, and automation semantics. No backend or model key is bundled: configureAgentStream injects the consumer model bridge. Svelte carries no React/Next/shadcn/use-agent-tools runtime.",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/assistant",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/assistant"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/assistant-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5",
+              "@lucide/svelte@^1.46.0"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/assistant/lib/agentic-host.ts",
+              "frontend/slices/assistant/lib/chat-core.ts",
+              "frontend/slices/assistant/lib/presets.ts",
+              "frontend/slices/assistant/lib/store-core.ts",
+              "frontend/slices/assistant/lib/stream-core.ts",
+              "frontend/slices/assistant/lib/tools.ts",
+              "frontend/slices/assistant/lib/types.ts",
+              "lib/shared/agentic/agent-loop.ts",
+              "lib/shared/agentic/global-host.ts",
+              "lib/shared/agentic/host.ts",
+              "lib/shared/agentic/prompt.ts",
+              "lib/shared/agentic/registry.ts",
+              "lib/shared/agentic/types.ts"
+            ]
+          }
         }
       },
       "convexPaths": [],
       "npm": [
-        "lucide-react"
+        "lucide-react@^0.400.0"
       ],
       "shadcn": [
         "button",
@@ -2320,7 +2352,14 @@
       ],
       "env": [],
       "peers": [],
-      "sharedFiles": [],
+      "sharedFiles": [
+        "lib/shared/agentic/types.ts",
+        "lib/shared/agentic/host.ts",
+        "lib/shared/agentic/agent-loop.ts",
+        "lib/shared/agentic/prompt.ts",
+        "lib/shared/agentic/registry.ts",
+        "lib/shared/agentic/global-host.ts"
+      ],
       "providers": [],
       "tags": [
         "ai",
@@ -2329,9 +2368,12 @@
         "agents",
         "streaming",
         "automations",
-        "ui"
+        "tool-calling",
+        "ui",
+        "svelte",
+        "framework-parity"
       ],
-      "agentRecipe": "Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Agent workspace with streaming chat. Fully client-side; model injected.\n\nSTEP 1 — Install. `npx rr add assistant`. Ensure `@/features/assistant` resolves and Tailwind scans the slice folder.\n\nSTEP 2 — Deps. npm: `lucide-react`. shadcn: `npx shadcn@latest add button input textarea tabs badge scroll-area dropdown-menu dialog select switch`.\n\nSTEP 3 — Mount. `<Assistant />` in a height-bearing box. Unwired, a typing demo stream answers so the UI works offline; agents/skills/automations persist in localStorage.\n\nSTEP 4 — Wire a model. `configureAssistantStream(async function* (messages) { ...yield text deltas... })` — SSE endpoint, AI SDK, or an agent loop. Throw Error(\"no_api_key\") / Error(\"unauthorized\") for the chat's friendly error notes."
+      "agentRecipe": "React/default: run `npx rr add assistant`; SvelteKit: append `--framework sveltekit`. Mount <Assistant/> in a height-bearing container. Agents, skills and automations persist in localStorage through one shared observable store. Unwired chat uses a typing demo stream. Wire one real backend with configureAgentStream(fn); the same shared runAgentLoop drives every registered slice ToolCollection through registerAssistantTools. The Svelte distribution installs only non-React agentic core files and @lucide/svelte."
     },
     {
       "slug": "browser",

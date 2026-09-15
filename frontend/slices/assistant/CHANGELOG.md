@@ -1,5 +1,13 @@
 # assistant changelog
 
+## 1.2.0 — 2026-09-15
+
+- Added native Svelte 5/SvelteKit Chat, Agents, Skills, Automations, and create/edit flows.
+- Extracted one observable localStorage store core shared by React and Svelte; React `useAIStore` is now a thin `useSyncExternalStore` wrapper.
+- Extracted shared stream/chat cores for persona injection, BYOK model wiring, tool-call narration, demo fallback, errors, and automation prompts.
+- React now imports the exact non-UI agentic core instead of the aggregate barrel; installer metadata declares that closure explicitly.
+- Svelte installs only non-React agentic core files plus `@lucide/svelte`, with no React/Next/shadcn/`use-agent-tools` runtime.
+
 ## 1.1.1 — 2026-06-10
 
 - Central host now IS the shared global host: `getAssistantRegistry()`/`registerAssistantTools` delegate to `@/shared/agentic` `globalToolRegistry`/`registerGlobalTools`, so apps that self-register via `useAgentTools` show up in the assistant chat/catalog automatically. Re-registering a namespace rebinds its ctx (remount-safe).

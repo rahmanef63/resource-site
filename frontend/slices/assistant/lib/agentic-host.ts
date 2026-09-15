@@ -1,32 +1,18 @@
-"use client";
-
-// Central host plumbing — the assistant is THE aggregation point. Hosts
-// register each installed slice's ToolCollection here once; the chat then
-// drives the union of all registered tools through the ONE shared agent
-// loop (@/shared/agentic). A slice is never an agent — it only contributes
-// a collection of function-calling tools bound to its own live state.
+// Central host plumbing — assistant is the aggregation point. Slices register
+// ToolCollections against the shared global registry; both React and Svelte
+// assistant renderers drive that same registry through the shared agent loop.
 
 import {
   globalToolRegistry,
   registerGlobalTools,
-  type ToolCollection,
-  type ToolRegistry,
-} from "@/shared/agentic";
+} from "@/shared/agentic/global-host";
+import type { ToolCollection } from "@/shared/agentic/types";
+import type { ToolRegistry } from "@/shared/agentic/registry";
 
-/**
- * The assistant-wide registry (a ToolHost) the chat loop runs against.
- * This IS the shared global host — apps that self-register at mount via
- * `useAgentTools` (any slice may import `@/shared/agentic`) land here too.
- */
 export function getAssistantRegistry(): ToolRegistry {
   return globalToolRegistry();
 }
 
-/**
- * Host wiring: register a slice's tool collection (e.g. `imageEditorTools`)
- * with a thunk returning its live ctx. Safe in React effects (strict-mode
- * double mount); re-registering a namespace rebinds its ctx getter.
- */
 export function registerAssistantTools<Ctx>(
   collection: ToolCollection<Ctx>,
   getCtx: () => Ctx,

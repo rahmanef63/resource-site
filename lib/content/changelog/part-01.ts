@@ -21,6 +21,25 @@ export const entries: ChangelogEntry[] = [
   },
 
   {
+    "id": "SVELTE-ASSISTANT",
+    "version": "assistant@1.2.0",
+    "date": 1789430400000,
+    "kind": "feature",
+    "title": "SvelteKit Assistant distribution + shared agent/store core",
+    "body": "Related: https://resource.rahmanef.com/slices/assistant — [before: assistant@1.1.1 was React-only, local library state lived in React hooks, and chat/model plumbing imported the aggregate agentic barrel] → [after: assistant@1.2.0 keeps React default, adds native Svelte 5/SvelteKit Chat/Agents/Skills/Automations, and shares one observable local store + chat/stream/tool-loop core].",
+    "groups": [
+      {
+        "heading": "One agent workspace contract, two native renderers",
+        "bullets": [
+          "Svelte covers streaming chat, active-agent switching, agents, skills, automations, and create/edit flows over the same localStorage state contract.",
+          "Both renderers run the same global ToolRegistry/runAgentLoop and the same BYOK configureAgentStream seam; unwired mode shares one typing demo fallback.",
+          "Svelte carries only non-React agentic core files and @lucide/svelte; React receives its exact core closure explicitly."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-ICON-PICKER",
     "version": "icon-picker@0.6.0",
     "date": 1789430400000,

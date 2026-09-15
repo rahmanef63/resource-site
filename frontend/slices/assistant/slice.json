@@ -1,19 +1,51 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "assistant",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "category": "os",
   "kind": "ui",
   "title": "Assistant \u2014 agent workspace with streaming chat",
-  "description": "A full agent workspace: streaming chat with typing deltas and graceful error notes, plus a library where users CREATE and manage agents (persona, avatar gradient, system prompt), skills, and automations (trigger + schedule forms) \u2014 all persisted in localStorage, no backend. Preset agents/skills ship as starting points. The model is INJECTED: configureAssistantStream takes any (messages) => AsyncIterable<string> \u2014 your SSE endpoint, the AI SDK, an agent loop \u2014 and until wired a typing demo stream keeps the whole UI working offline. Self-contained: shell inspector hooks are inert seams in lib/host.ts.",
+  "description": "Framework-parity agent workspace with streaming chat, user-managed agents/skills/automations, and one shared function-calling registry. React/Next remains default; native Svelte 5/SvelteKit uses the same observable localStorage store, persona/history builder, streaming demo fallback, shared agent loop, global tool registry, static/live tool catalog, and automation semantics. No backend is bundled; hosts inject one AgentStreamFn. Svelte ships no React/Next/shadcn/use-agent-tools runtime.",
   "namespace": "@/features/assistant",
   "frontend": {
     "slicePath": "frontend/slices/assistant",
-    "configExport": "assistantConfig"
+    "configExport": "assistantConfig",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/assistant-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5",
+            "@lucide/svelte@^1.46.0"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/assistant/lib/agentic-host.ts",
+            "frontend/slices/assistant/lib/chat-core.ts",
+            "frontend/slices/assistant/lib/presets.ts",
+            "frontend/slices/assistant/lib/store-core.ts",
+            "frontend/slices/assistant/lib/stream-core.ts",
+            "frontend/slices/assistant/lib/tools.ts",
+            "frontend/slices/assistant/lib/types.ts",
+            "lib/shared/agentic/agent-loop.ts",
+            "lib/shared/agentic/global-host.ts",
+            "lib/shared/agentic/host.ts",
+            "lib/shared/agentic/prompt.ts",
+            "lib/shared/agentic/registry.ts",
+            "lib/shared/agentic/types.ts"
+          ]
+        }
+      }
+    }
   },
   "deps": {
     "npm": [
-      "lucide-react"
+      "lucide-react@^0.400.0"
     ],
     "shadcn": [
       "badge",
@@ -25,7 +57,15 @@
       "textarea"
     ],
     "env": [],
-    "peers": []
+    "peers": [],
+    "sharedFiles": [
+      "lib/shared/agentic/types.ts",
+      "lib/shared/agentic/host.ts",
+      "lib/shared/agentic/agent-loop.ts",
+      "lib/shared/agentic/prompt.ts",
+      "lib/shared/agentic/registry.ts",
+      "lib/shared/agentic/global-host.ts"
+    ]
   },
   "registers": [
     "registry"
@@ -41,27 +81,22 @@
     "agents",
     "streaming",
     "automations",
-    "ui"
+    "ui",
+    "svelte",
+    "framework-parity",
+    "tool-calling"
   ],
   "previews": [],
   "contract": {
     "requires": {
       "auth": "none",
-      "deps": [
-        {
-          "npm": "react",
-          "range": "^19"
-        },
-        {
-          "npm": "lucide-react",
-          "range": "^0.400.0"
-        }
-      ]
+      "deps": []
     },
     "provides": {
       "routes": [],
       "components": [
-        "Assistant"
+        "Assistant",
+        "ChatPanel"
       ],
       "hooks": [],
       "utils": [
@@ -69,7 +104,9 @@
         "getAssistantRegistry",
         "configureAgentStream",
         "configureAssistantStream",
-        "assistantApp"
+        "assistantApp",
+        "assistantStoreActions",
+        "runAssistantTurn"
       ],
       "tables": []
     }

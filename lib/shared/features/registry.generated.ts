@@ -57,7 +57,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...assistantConfig,
     importPath: "@/features/assistant/config",
-    version: "1.1.1",
+    version: "1.2.0",
   },
   {
     ...auditLogConfig,

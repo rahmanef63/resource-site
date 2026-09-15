@@ -1,4 +1,4 @@
-import type { AnthropicTool } from "@/shared/agentic";
+import type { AnthropicTool } from "@/shared/agentic/types";
 import { getAssistantRegistry } from "./agentic-host";
 import type { Agent, Skill, Tool, ToolGroup } from "./types";
 

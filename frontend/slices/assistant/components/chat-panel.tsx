@@ -9,31 +9,20 @@ import {
   useState,
 } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  isAgentStreamConfigured,
-  runAgentLoop,
-  type AgentMsg,
-} from "@/shared/agentic";
-import { getAssistantRegistry } from "../lib/agentic-host";
-import { streamReply, type WireMsg } from "../lib/host";
-import { toolById } from "../lib/tools";
 import type { Agent, Automation } from "../lib/types";
-import { MessageBubble, type ChatMessage } from "./message-bubble";
+import { MessageBubble } from "./message-bubble";
+import type { ChatMessage } from "../lib/types";
+import {
+  ASSISTANT_SUGGESTED,
+  assistantErrorText,
+  automationDemoMessage,
+  automationPrompt,
+  nextChatId,
+  runAssistantTurn,
+} from "../lib/chat-core";
+import { isAgentStreamConfigured } from "@/shared/agentic/host";
 import { ChatComposer } from "./chat-composer";
 import { EmptyState } from "./empty-state";
-
-const SUGGESTED = ["Show system stats", "List /home", "Restart a service"];
-
-function errText(err: unknown): string {
-  const code = err instanceof Error ? err.message : "";
-  if (code === "no_api_key")
-    return "No Anthropic API key set. Add one in Settings → AI, or set ANTHROPIC_API_KEY on the server.";
-  if (code === "unauthorized") return "Session expired — sign in again.";
-  return "Couldn't reach the assistant. Try again.";
-}
-
-let seq = 0;
-const nextId = () => `m${Date.now()}-${seq++}`;
 
 export type ChatHandle = { runSteps: (auto: Automation, agent?: Agent) => void };
 
@@ -60,17 +49,8 @@ export const ChatPanel = forwardRef<
     async (text: string) => {
       if (streaming) return;
       const a = agentRef.current;
-      const userMsg: ChatMessage = { id: nextId(), role: "user", text };
-      const replyId = nextId();
-      // Persona is sent as a leading system-style user line; the rest is the
-      // real turn history. Same WireMsg[] shape streamReply already accepts.
-      const wire: WireMsg[] = [];
-      if (a.persona.trim())
-        wire.push({ role: "user", text: `[System — you are ${a.name}] ${a.persona}` });
-      wire.push(
-        ...messages.map((m) => ({ role: m.role, text: m.text })),
-        { role: "user", text },
-      );
+      const userMsg: ChatMessage = { id: nextChatId(), role: "user", text };
+      const replyId = nextChatId();
       setMessages((prev) => [
         ...prev,
         userMsg,
@@ -82,19 +62,9 @@ export const ChatPanel = forwardRef<
           prev.map((m) => (m.id === replyId ? { ...m, text: m.text + chunk } : m)),
         );
       try {
-        if (isAgentStreamConfigured()) {
-          // Real function-calling loop over every registered slice collection.
-          const history: AgentMsg[] = wire.map((w) => ({ role: w.role, text: w.text }));
-          await runAgentLoop(history, getAssistantRegistry(), {
-            onDelta: append,
-            onTool: (name, _input, outcome) =>
-              append(`\n\n⚙ ${name} ${outcome.ok ? "✓" : "✗"} ${outcome.result.slice(0, 200)}\n\n`),
-          });
-        } else {
-          for await (const token of streamReply(wire)) append(token);
-        }
+        await runAssistantTurn(a, messages, text, { onDelta: append });
       } catch (err) {
-        const note = errText(err);
+        const note = assistantErrorText(err);
         setMessages((prev) =>
           prev.map((m) => (m.id === replyId ? { ...m, text: note } : m)),
         );
@@ -109,22 +79,12 @@ export const ChatPanel = forwardRef<
   // function-calling task; unwired they narrate into the thread as before.
   useImperativeHandle(ref, () => ({
     runSteps(auto, runAgent) {
-      const lines = auto.steps.map((s, i) => {
-        const t = toolById(s.tool);
-        return `  ${i + 1}. ${t?.name ?? s.tool}${s.argText ? ` — ${s.argText}` : ""}`;
-      });
       if (isAgentStreamConfigured()) {
-        void send(
-          `Run the automation “${auto.name}” by calling these tools in order, ` +
-            `one at a time:\n${lines.join("\n") || "  (no steps)"}`,
-        );
+        void send(automationPrompt(auto));
         return;
       }
-      const body =
-        `Running automation “${auto.name}” as ${(runAgent ?? agentRef.current).name}:\n` +
-        (lines.join("\n") || "  (no steps)") +
-        "\n\n(Steps logged — no real execution in this build.)";
-      setMessages((prev) => [...prev, { id: nextId(), role: "assistant", text: body }]);
+      const body = automationDemoMessage(auto, runAgent ?? agentRef.current);
+      setMessages((prev) => [...prev, { id: nextChatId(), role: "assistant", text: body }]);
     },
   }));
 
@@ -135,7 +95,7 @@ export const ChatPanel = forwardRef<
       </div>
       {messages.length === 0 ? (
         <div className="flex-1 overflow-y-auto">
-          <EmptyState prompts={SUGGESTED} onPick={send} />
+          <EmptyState prompts={[...ASSISTANT_SUGGESTED]} onPick={send} />
         </div>
       ) : (
         <ScrollArea className="flex-1">

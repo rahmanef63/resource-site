@@ -3,13 +3,7 @@
 import { Sparkles, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export type ChatRole = "user" | "assistant";
-
-export type ChatMessage = {
-  id: string;
-  role: ChatRole;
-  text: string;
-};
+import type { ChatMessage } from "../lib/types";
 
 // One chat row: user messages align right (primary bubble), assistant messages
 // align left with a Sparkles avatar. All colour via theme tokens, never hex.

@@ -20,6 +20,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 - [before: `file-explorer@1.6.0` was React-only, navigation history lived in React state, and tool registration depended on the aggregate agentic runtime] → [after: `file-explorer@1.7.0` keeps React default, adds native Svelte 5/SvelteKit CRUD/preview/properties parity, and shares framework-neutral history, filesystem operations, file-kind, adapter, and tool cores]
 - React declares its exact FilePicker/agent-hook closure; Svelte installs only `svelte@^5` plus portable filesystem core files and no React/Next/Lucide/shadcn/agent runtime.
 
+### 2026-09-15 — SvelteKit Assistant distribution + shared agent/store core
+<!-- public-changelog:SVELTE-ASSISTANT -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/assistant
+- Preview: https://resource.rahmanef.com/preview/slices/assistant
+- [before: `assistant@1.1.1` was React-only, local library state lived in React hooks, and chat/model plumbing imported the aggregate agentic barrel] → [after: `assistant@1.2.0` keeps React default, adds native Svelte 5/SvelteKit Chat/Agents/Skills/Automations, and shares one observable local store + chat/stream/tool-loop core]
+- React now declares its exact non-UI agentic closure; Svelte installs only the non-React agentic core plus `@lucide/svelte`, with no React/Next/shadcn/`use-agent-tools` runtime.
+
 ### 2026-09-15 — SvelteKit Icon Picker distribution + shared picker stores
 <!-- public-changelog:SVELTE-ICON-PICKER -->
 
