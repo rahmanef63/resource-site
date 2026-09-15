@@ -23,30 +23,22 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-type Msg = { role: "user" | "assistant"; text: string; notice?: boolean };
+import {
+  AI_CHAT_SUGGESTIONS,
+  chatHistory,
+  initialChatMessage,
+  type AiChatMessage,
+  type AiChatSend,
+  type AiChatSendResult,
+} from "../core";
 
-export type AiChatSendResult = { ok: boolean; text?: string; notice?: string };
-export type AiChatSend = (args: {
-  prompt: string;
-  history: Array<{ role: "user" | "assistant"; content: string }>;
-}) => Promise<AiChatSendResult>;
-
-const SUGGESTIONS = [
-  "Apa saja layanan yang ditawarkan?",
-  "Bagaimana cara mulai kerja sama?",
-  "Berapa estimasi harga & waktunya?",
-];
+export type { AiChatSend, AiChatSendResult } from "../core";
 
 export function AiChatFab({ brand = "kami", chat }: { brand?: string; chat?: AiChatSend }) {
   const [open, setOpen] = React.useState(false);
   const [text, setText] = React.useState("");
   const [pending, setPending] = React.useState(false);
-  const [msgs, setMsgs] = React.useState<Msg[]>([
-    {
-      role: "assistant",
-      text: `Hai 👋 aku asisten ${brand}. Tanya apa saja soal layanan, harga, atau cara mulai.`,
-    },
-  ]);
+  const [msgs, setMsgs] = React.useState<AiChatMessage[]>([initialChatMessage(brand)]);
   const scrollRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
@@ -57,9 +49,7 @@ export function AiChatFab({ brand = "kami", chat }: { brand?: string; chat?: AiC
     const question = q.trim();
     if (!question || pending) return;
     setText("");
-    const history = msgs
-      .filter((m) => !m.notice)
-      .map((m) => ({ role: m.role, content: m.text }));
+    const history = chatHistory(msgs);
     setMsgs((m) => [...m, { role: "user", text: question }]);
     if (!chat) {
       setMsgs((m) => [
@@ -140,7 +130,7 @@ export function AiChatFab({ brand = "kami", chat }: { brand?: string; chat?: AiC
             )}
             {msgs.length <= 1 && (
               <div className="flex flex-wrap gap-2 pt-1">
-                {SUGGESTIONS.map((s) => (
+                {AI_CHAT_SUGGESTIONS.map((s) => (
                   <Button
                     key={s}
                     type="button"

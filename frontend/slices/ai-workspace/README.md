@@ -25,3 +25,15 @@ Only the `chat` variant pulls a Convex backend (per-variant convex gating).
 
 Merged 2026-07-04 from the former `ai-chat` + `ai-studio` + `ai-agents` slices
 (all three old slugs alias here). Studio/agents views lifted from superspace.
+
+## Framework distributions
+
+React/Next remains the default. Native Svelte 5/SvelteKit is available per variant:
+
+```bash
+npx rr add ai-workspace chat --framework sveltekit
+npx rr add ai-workspace studio --framework sveltekit
+npx rr add ai-workspace agents --framework sveltekit
+```
+
+Dependency gates are exact: only `chat` installs `convex/features/aiChat`, `ai`, `@ai-sdk/anthropic`, and `ANTHROPIC_API_KEY`. `studio` and `agents` are frontend-only scaffolds. The previous unused OpenAI package/key and Google key are no longer declared.

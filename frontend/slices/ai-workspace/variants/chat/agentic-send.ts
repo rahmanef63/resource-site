@@ -6,8 +6,9 @@
 //
 // Requires the shared model seam (configureAgentStream) to be wired.
 
-import { runAgentLoop, type AgentMsg, type ToolHost } from "@/shared/agentic";
-import type { AiChatSend } from "./components/AiChatFab";
+import { runAgentLoop } from "@/shared/agentic/agent-loop";
+import type { AgentMsg, ToolHost } from "@/shared/agentic/types";
+import type { AiChatSend } from "./core";
 
 export function createAgenticChatSend(
   host: ToolHost,

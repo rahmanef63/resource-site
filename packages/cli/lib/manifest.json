@@ -481,17 +481,13 @@
       "slug": "ai-workspace",
       "title": "AI Workspace — chat · studio · agents",
       "category": "ai",
-      "description": "Three AI surfaces as shadcn-style variants — `npx rr add ai-workspace <variant>` for one, or `npx rr add ai-workspace` for all + a switcher. Only the chat variant pulls a Convex backend (per-variant convex gating).\n\n  • chat — floating <AiChatFab /> + createAgenticChatSend: real function-calling over any ToolHost (@/shared/agentic), key-guarded, over convex/features/aiChat.\n  • studio — <AiStudioPage /> single-prompt generation canvas (variation grid + version tree, Suno / Midjourney / Lovable pattern) + aiStudioTools so a shared agent can drive generations.\n  • agents — <AiAgentsPage /> autonomous-worker run dashboard + createAgentRunner(host) which drives the shared function-calling loop and records each tool_use as a RunStep trace.\n\nUse cases: support chatbot in a marketing site, AI generation product (image / code / text / audio), background workers (nightly audits, scheduled crawls, moderation). studio + agents are frontend-only — wire your own persistence.",
+      "description": "Framework-parity AI workspace with chat, studio, and agents variants. React/Next remains default; native Svelte 5/SvelteKit mirrors all three over shared chat/generation/runner/tool cores. Variant installs are exact: only chat pulls convex/features/aiChat + ai + @ai-sdk/anthropic + ANTHROPIC_API_KEY; studio and agents remain frontend-only and provider-free.",
       "source": "rahmanef63/resource-site",
       "docsUrl": "https://sdk.vercel.ai/docs",
-      "install": "npm i ai @ai-sdk/anthropic @ai-sdk/openai",
-      "npmPackages": [
-        "ai",
-        "@ai-sdk/anthropic",
-        "@ai-sdk/openai"
-      ],
+      "install": "npx rr add ai-workspace <chat|studio|agents> [--framework sveltekit]",
+      "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add ai-workspace <chat|studio|agents>` for one surface, or `npx rr add ai-workspace` for all. chat: mount <AiChatFab chat={useAction(api.features.aiChat.action.chat)} />. studio: mount <AiStudioPage /> + drive via aiStudioTools. agents: mount <AiAgentsPage /> + trigger via createAgentRunner(host).",
+      "agentRecipe": "Run `npx rr add ai-workspace <chat|studio|agents>` for React/default or append `--framework sveltekit`; omit the variant for all three. chat alone pulls the Convex aiChat backend + Anthropic runtime/key. studio and agents are frontend-only scaffolds. Wire chat via AiChatFab chat callback, studio via aiStudioTools, and agents via createAgentRunner(host).",
       "tags": [
         "ai",
         "ai:chatbot",
@@ -503,7 +499,10 @@
         "generation",
         "async",
         "traces",
-        "multimodal"
+        "multimodal",
+        "svelte",
+        "framework-parity",
+        "variant-gated"
       ]
     },
     {
@@ -3061,23 +3060,34 @@
       "title": "AI Workspace — chat · studio · agents",
       "category": "ai",
       "kind": "full",
-      "version": "0.3.0",
-      "description": "Three AI surfaces as shadcn-style variants — `npx rr add ai-workspace <variant>` for one, or `npx rr add ai-workspace` for all + a switcher. Only the chat variant pulls a Convex backend (per-variant convex gating).\n\n  • chat — floating <AiChatFab /> + createAgenticChatSend: real function-calling over any ToolHost (@/shared/agentic), key-guarded, over convex/features/aiChat.\n  • studio — <AiStudioPage /> single-prompt generation canvas (variation grid + version tree, Suno / Midjourney / Lovable pattern) + aiStudioTools so a shared agent can drive generations.\n  • agents — <AiAgentsPage /> autonomous-worker run dashboard + createAgentRunner(host) which drives the shared function-calling loop and records each tool_use as a RunStep trace.\n\nUse cases: support chatbot in a marketing site, AI generation product (image / code / text / audio), background workers (nightly audits, scheduled crawls, moderation). studio + agents are frontend-only — wire your own persistence.",
+      "version": "0.4.0",
+      "description": "Framework-parity AI workspace with chat, studio, and agents variants. React/Next remains default; native Svelte 5/SvelteKit mirrors all three over shared chat/generation/runner/tool cores. Variant installs are exact: only chat pulls convex/features/aiChat + ai + @ai-sdk/anthropic + ANTHROPIC_API_KEY; studio and agents remain frontend-only and provider-free.",
       "source": "rahmanef63/resource-site",
       "slicePath": "frontend/slices/ai-workspace",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/ai-workspace"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/ai-workspace-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5"
+            ],
+            "shadcn": []
+          }
         }
       },
       "convexPaths": [
         "convex/features/aiChat"
       ],
       "npm": [
-        "ai@^4.0.0",
-        "@ai-sdk/anthropic@^0.0.50",
-        "@ai-sdk/openai@^0.0.60"
+        "lucide-react@^0.400.0"
       ],
       "shadcn": [
         "avatar",
@@ -3095,45 +3105,8 @@
         "textarea",
         "tooltip"
       ],
-      "env": [
-        {
-          "name": "ANTHROPIC_API_KEY",
-          "scope": "convex",
-          "required": false
-        },
-        {
-          "name": "OPENAI_API_KEY",
-          "scope": "convex",
-          "required": false
-        },
-        {
-          "name": "GOOGLE_GENERATIVE_AI_API_KEY",
-          "scope": "convex",
-          "required": false
-        }
-      ],
-      "peers": [
-        {
-          "slug": "convex-auth",
-          "range": "^0.1",
-          "reason": "chat/studio/agents ownership requires an authenticated user."
-        },
-        {
-          "slug": "ai-router",
-          "range": "^0.1",
-          "reason": "Routes provider calls through the tiered proxy."
-        },
-        {
-          "slug": "ai-admin",
-          "range": "^0.1",
-          "reason": "Reads instructions / skills / tools / models / agent defs from the ai-admin registry."
-        },
-        {
-          "slug": "vector-search",
-          "range": "^0.1",
-          "reason": "Optional — chat RAG mode pulls workspace embeddings."
-        }
-      ],
+      "env": [],
+      "peers": [],
       "sharedFiles": [],
       "providers": [],
       "tags": [
@@ -3147,9 +3120,12 @@
         "generation",
         "async",
         "traces",
-        "multimodal"
+        "multimodal",
+        "svelte",
+        "framework-parity",
+        "variant-gated"
       ],
-      "agentRecipe": "Run `npx rr add ai-workspace <chat|studio|agents>` for one surface, or `npx rr add ai-workspace` for all. chat: mount <AiChatFab chat={useAction(api.features.aiChat.action.chat)} />. studio: mount <AiStudioPage /> + drive via aiStudioTools. agents: mount <AiAgentsPage /> + trigger via createAgentRunner(host).",
+      "agentRecipe": "Run `npx rr add ai-workspace <chat|studio|agents>` for React/default or append `--framework sveltekit`; omit the variant for all three. chat alone pulls the Convex aiChat backend + Anthropic runtime/key. studio and agents are frontend-only scaffolds. Wire chat via AiChatFab chat callback, studio via aiStudioTools, and agents via createAgentRunner(host).",
       "variants": {
         "default": "chat",
         "items": [
@@ -3159,19 +3135,60 @@
             "description": "Floating assistant FAB with real function-calling over any ToolHost.",
             "convex": [
               "convex/features/aiChat"
-            ]
+            ],
+            "deps": {
+              "npm": [
+                "ai@^4.0.0",
+                "@ai-sdk/anthropic@^0.0.50"
+              ],
+              "env": [
+                {
+                  "name": "ANTHROPIC_API_KEY",
+                  "scope": "convex",
+                  "required": false,
+                  "description": "chat variant — enables the bundled aiChat action; when unset it returns a configuration notice."
+                }
+              ],
+              "sharedFiles": [
+                "frontend/slices/ai-workspace/variants/chat/core.ts",
+                "frontend/slices/ai-workspace/variants/chat/agentic-send.ts",
+                "lib/shared/agentic/agent-loop.ts",
+                "lib/shared/agentic/host.ts",
+                "lib/shared/agentic/types.ts"
+              ]
+            }
           },
           {
             "id": "studio",
             "title": "Studio",
             "description": "Single-prompt generation canvas + agentic generate tool.",
-            "convex": []
+            "convex": [],
+            "deps": {
+              "sharedFiles": [
+                "frontend/slices/ai-workspace/variants/studio/types.ts",
+                "frontend/slices/ai-workspace/variants/studio/stub.ts",
+                "frontend/slices/ai-workspace/variants/studio/tools.ts",
+                "lib/shared/agentic/define.ts",
+                "lib/shared/agentic/schema.ts",
+                "lib/shared/agentic/types.ts"
+              ]
+            }
           },
           {
             "id": "agents",
             "title": "Agents",
             "description": "Autonomous-worker run dashboard + createAgentRunner loop.",
-            "convex": []
+            "convex": [],
+            "deps": {
+              "sharedFiles": [
+                "frontend/slices/ai-workspace/variants/agents/types.ts",
+                "frontend/slices/ai-workspace/variants/agents/runner.ts",
+                "frontend/slices/ai-workspace/variants/agents/views/demo.ts",
+                "lib/shared/agentic/agent-loop.ts",
+                "lib/shared/agentic/host.ts",
+                "lib/shared/agentic/types.ts"
+              ]
+            }
           }
         ]
       }

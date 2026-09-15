@@ -3,7 +3,8 @@
 // the user's behalf. The ctx is an injectable thunk: bind it to your
 // GeneratorBindings implementation (Convex, ai-router, …).
 
-import { defineToolCollection, obj, str } from "@/shared/agentic";
+import { defineToolCollection } from "@/shared/agentic/define";
+import { obj, str } from "@/shared/agentic/schema";
 import type { OutputKind } from "./types";
 
 export type AiStudioCtx = {

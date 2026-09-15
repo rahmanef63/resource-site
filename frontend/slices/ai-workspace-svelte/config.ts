@@ -1,4 +1,3 @@
-/** Framework-neutral feature metadata; self-contained for CLI installs. */
 export const aiWorkspaceFeature = {
   slug: "ai-workspace",
   title: "AI Workspace — chat · studio · agents",

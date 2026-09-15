@@ -1,0 +1,14 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "ai-workspace-svelte",
+  "version": "0.4.0",
+  "tier": 3,
+  "distribution": { "method": "cli-copy", "command": "npx rr add ai-workspace --framework sveltekit", "consumerPath": "slices/ai-workspace" },
+  "files": [
+    "README.md", "config.ts", "index.ts", "svelte-components.d.ts",
+    "variants/chat/index.ts", "variants/chat/components/AiChatFab.svelte",
+    "variants/studio/index.ts", "variants/studio/components/AiStudioPage.svelte", "variants/studio/components/VersionTree.svelte",
+    "variants/agents/index.ts", "variants/agents/components/AiAgentsPage.svelte", "variants/agents/components/AgentTabs.svelte", "variants/agents/components/RunTrace.svelte"
+  ],
+  "imports": { "shared": [], "external": ["svelte"] }
+}

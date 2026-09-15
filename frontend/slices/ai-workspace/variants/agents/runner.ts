@@ -6,7 +6,8 @@
 // aggregating many slices' collections) and records each tool_use as a
 // RunStep so AgentRunTrace/AgentQueue can render live traces.
 
-import { runAgentLoop, type AgentMsg, type ToolHost } from "@/shared/agentic";
+import { runAgentLoop } from "@/shared/agentic/agent-loop";
+import type { AgentMsg, ToolHost } from "@/shared/agentic/types";
 import type { AgentRun, RunStep } from "./types";
 
 export type StartRunOpts = {

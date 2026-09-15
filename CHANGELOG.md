@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-15 — SvelteKit AI Workspace distributions + exact variant gates
+<!-- public-changelog:SVELTE-AI-WORKSPACE -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/ai-workspace
+- Preview: https://resource.rahmanef.com/preview/slices/ai-workspace
+- [before: `ai-workspace@0.3.0` rendered only through React/Next/shadcn, chat message semantics lived inside React, aggregate agentic imports obscured the portable closure, and every install declared unused OpenAI/Google credentials plus provider packages even for frontend-only studio/agents] → [after: `ai-workspace@0.4.0` keeps React/Next as default, adds native Svelte 5/SvelteKit chat/studio/agents parity over shared chat/generation/runner/tool cores, narrows agentic imports, and gates Convex + `ai` + Anthropic + `ANTHROPIC_API_KEY` to chat only]
+- `studio` and `agents` remain provider-free frontend scaffolds in both frameworks; add-all receives the truthful union, while per-variant installs no longer request unused OpenAI/Google configuration.
+
 ### 2026-09-15 — SvelteKit User Management distribution + shared member view core
 <!-- public-changelog:SVELTE-USER-MANAGEMENT -->
 

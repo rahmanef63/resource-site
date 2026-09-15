@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-AI-WORKSPACE",
+    "version": "ai-workspace@0.4.0",
+    "date": 1789430400000,
+    "kind": "feature",
+    "title": "SvelteKit AI Workspace distributions + exact variant gates",
+    "body": "Related: https://resource.rahmanef.com/slices/ai-workspace — Preview: https://resource.rahmanef.com/preview/slices/ai-workspace — [before: ai-workspace@0.3.0 was React/Next only with React-local chat semantics, aggregate agentic imports, and broad provider/env declarations] → [after: ai-workspace@0.4.0 keeps React default, adds native Svelte 5/SvelteKit chat/studio/agents parity, shares portable cores, narrows agentic closure, and gates Convex/AI/Anthropic runtime to chat only].",
+    "groups": [
+      {
+        "heading": "Three native surfaces, exact dependency boundaries",
+        "bullets": [
+          "Chat shares one message/history contract and one function-calling loop; only chat installs convex/features/aiChat, ai, @ai-sdk/anthropic, and ANTHROPIC_API_KEY.",
+          "Studio preserves the local four-variation/version-tree scaffold plus aiStudioTools without provider SDKs or model keys; Agents preserves queue/trace scaffolding plus createAgentRunner(host) with the same boundary.",
+          "Unused @ai-sdk/openai, OPENAI_API_KEY, and GOOGLE_GENERATIVE_AI_API_KEY declarations were removed because no bundled runtime consumes them."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-USER-MANAGEMENT",
     "version": "user-management@0.8.0",
     "date": 1789430400000,
