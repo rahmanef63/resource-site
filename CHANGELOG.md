@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-15 — SvelteKit User Management distribution + shared member view core
+<!-- public-changelog:SVELTE-USER-MANAGEMENT -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/user-management
+- Preview: https://resource.rahmanef.com/preview/slices/user-management
+- [before: `user-management@0.7.0` shipped only the React/Next/shadcn administration UI, member filtering/sorting lived inside a React hook, its existing `lucide-react` import was missing from installer metadata, and part of the source metadata pointed at a non-existent hyphenated Convex path] → [after: `user-management@0.8.0` keeps React/Next as default, adds native Svelte 5/SvelteKit Members/Invites/Roles/Teams/Access parity, shares one framework-neutral permission/member-view/tool core, declares renderer-specific dependencies truthfully, and points both frameworks at `convex/features/user_management`]
+- The Svelte distribution carries no React/Next/shadcn/Lucide runtime; both frameworks keep authorization in the same permission-gated Convex backend.
+
 ### 2026-09-15 — SvelteKit Convex Auth distribution + shared AuthFlow core
 <!-- public-changelog:SVELTE-CONVEX-AUTH -->
 

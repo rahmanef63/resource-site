@@ -753,12 +753,12 @@
       "slug": "user-management",
       "title": "User Management",
       "category": "auth",
-      "description": "Full superspace-parity user management, props-driven + RBAC-agnostic. <UserManagementPanel> tabs Members + Roles + Teams + Access: member table (search / filter / sort, inline role dropdown, soft-remove), InviteDialog (with an optional 'propagate to sub-workspaces' toggle — same / step-down role strategy) + PendingInvites, a RolesPanel (custom roles via permission matrix; system roles read-only), a TeamsPanel (named user groups), and an AccessMatrix (users × tenants grid with inline role assignment). All permission-gated. You pass `roles` + `currentPerms` + the permission catalog (resolved from rbac-roles) + callbacks; the slice imports no other slice's frontend. Convex ships um_members + um_invites + um_teams + um_team_members + um_tenant_links + member / invite / team / hierarchy endpoints + getAccessMatrix (gated via rbac-roles' requirePermission); roles CRUD reuses rbac-roles'. The hierarchy is a generic edge tree — rr never owns the tenant entities. P0–P4c: the complete user-management epic.",
+      "description": "Framework-parity user administration for members, hierarchy-aware invites, custom roles, teams, and the cross-tenant access matrix. React/Next remains the default shadcn renderer; native Svelte 5/SvelteKit reuses the same framework-neutral types, RBAC checks, members query/sort core, agent tools, and Convex backend. Authorization stays server-side in the bundled permission-gated Convex functions.",
       "source": "superspace",
       "install": "npx rahman-resources add user-management",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add user-management` (pulls rbac-roles + convex-auth). Frontend: <MembersPanel members={useQuery(api[\"features/user_management/query\"].listMembers,{tenantId})} roles={ROLE_PRESETS.map(r=>({slug:r.slug,name:r.name,color:r.color}))} currentPerms={actorPerms} onUpdateRole={useMutation(...updateMemberRole)} onRemove={useMutation(...removeMember)} onInvite={openInvite} />. Wire roles + currentPerms from rbac-roles at the app level — the slice itself imports no other slice. Convex: spread userManagementTables; listMembers/mutations gate via rbac-roles requirePermission.",
+      "agentRecipe": "Run `npx rr add user-management` for React/default or append `--framework sveltekit` for native Svelte; both pull rbac-roles + convex-auth. Frontend: <MembersPanel members={useQuery(api[\"features/user_management/query\"].listMembers,{tenantId})} roles={ROLE_PRESETS.map(r=>({slug:r.slug,name:r.name,color:r.color}))} currentPerms={actorPerms} onUpdateRole={useMutation(...updateMemberRole)} onRemove={useMutation(...removeMember)} onInvite={openInvite} />. Wire roles + currentPerms from rbac-roles at the app level — the slice itself imports no other slice. Convex: spread userManagementTables; listMembers/mutations gate via rbac-roles requirePermission.",
       "tags": [
         "user-management",
         "members",
@@ -767,7 +767,9 @@
         "team",
         "admin",
         "convex",
-        "no-clerk"
+        "no-clerk",
+        "svelte",
+        "framework-parity"
       ]
     },
     {
@@ -3780,20 +3782,45 @@
       "title": "User Management",
       "category": "auth",
       "kind": "full",
-      "version": "0.7.0",
-      "description": "Full superspace-parity user management, props-driven + RBAC-agnostic. <UserManagementPanel> tabs Members + Roles + Teams + Access: member table (search / filter / sort, inline role dropdown, soft-remove), InviteDialog (with an optional 'propagate to sub-workspaces' toggle — same / step-down role strategy) + PendingInvites, a RolesPanel (custom roles via permission matrix; system roles read-only), a TeamsPanel (named user groups), and an AccessMatrix (users × tenants grid with inline role assignment). All permission-gated. You pass `roles` + `currentPerms` + the permission catalog (resolved from rbac-roles) + callbacks; the slice imports no other slice's frontend. Convex ships um_members + um_invites + um_teams + um_team_members + um_tenant_links + member / invite / team / hierarchy endpoints + getAccessMatrix (gated via rbac-roles' requirePermission); roles CRUD reuses rbac-roles'. The hierarchy is a generic edge tree — rr never owns the tenant entities. P0–P4c: the complete user-management epic.",
+      "version": "0.8.0",
+      "description": "Framework-parity user administration for members, hierarchy-aware invites, custom roles, teams, and the cross-tenant access matrix. React/Next remains the default shadcn renderer; native Svelte 5/SvelteKit reuses the same framework-neutral types, RBAC checks, members query/sort core, agent tools, and Convex backend. Authorization stays server-side in the bundled permission-gated Convex functions.",
       "source": "superspace",
       "slicePath": "frontend/slices/user-management",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/user-management"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/user-management-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/user-management/types.ts",
+              "frontend/slices/user-management/access-types.ts",
+              "frontend/slices/user-management/lib/can.ts",
+              "frontend/slices/user-management/lib/members-core.ts",
+              "frontend/slices/user-management/lib/tools.ts",
+              "lib/shared/agentic/define.ts",
+              "lib/shared/agentic/schema.ts",
+              "lib/shared/agentic/types.ts"
+            ]
+          }
         }
       },
       "convexPaths": [
         "convex/features/user_management"
       ],
-      "npm": [],
+      "npm": [
+        "lucide-react@^0.400.0"
+      ],
       "shadcn": [
         "avatar",
         "badge",
@@ -3822,7 +3849,11 @@
           "reason": "Member identity (name/email/avatar) joined from the users table."
         }
       ],
-      "sharedFiles": [],
+      "sharedFiles": [
+        "lib/shared/agentic/define.ts",
+        "lib/shared/agentic/schema.ts",
+        "lib/shared/agentic/types.ts"
+      ],
       "providers": [],
       "tags": [
         "user-management",
@@ -3832,9 +3863,11 @@
         "team",
         "admin",
         "convex",
-        "no-clerk"
+        "no-clerk",
+        "svelte",
+        "framework-parity"
       ],
-      "agentRecipe": "Run `npx rr add user-management` (pulls rbac-roles + convex-auth). Frontend: <MembersPanel members={useQuery(api[\"features/user_management/query\"].listMembers,{tenantId})} roles={ROLE_PRESETS.map(r=>({slug:r.slug,name:r.name,color:r.color}))} currentPerms={actorPerms} onUpdateRole={useMutation(...updateMemberRole)} onRemove={useMutation(...removeMember)} onInvite={openInvite} />. Wire roles + currentPerms from rbac-roles at the app level — the slice itself imports no other slice. Convex: spread userManagementTables; listMembers/mutations gate via rbac-roles requirePermission."
+      "agentRecipe": "Run `npx rr add user-management` for React/default or append `--framework sveltekit` for native Svelte; both pull rbac-roles + convex-auth. Frontend: <MembersPanel members={useQuery(api[\"features/user_management/query\"].listMembers,{tenantId})} roles={ROLE_PRESETS.map(r=>({slug:r.slug,name:r.name,color:r.color}))} currentPerms={actorPerms} onUpdateRole={useMutation(...updateMemberRole)} onRemove={useMutation(...removeMember)} onInvite={openInvite} />. Wire roles + currentPerms from rbac-roles at the app level — the slice itself imports no other slice. Convex: spread userManagementTables; listMembers/mutations gate via rbac-roles requirePermission."
     },
     {
       "slug": "admin-panel",

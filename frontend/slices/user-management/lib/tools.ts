@@ -4,7 +4,8 @@
 // `members.manage` / `members.invite` via your backend's requirePermission);
 // the tool layer never bypasses authz — it only forwards.
 
-import { defineToolCollection, noArgs, obj, str } from "@/shared/agentic";
+import { defineToolCollection } from "@/shared/agentic/define";
+import { noArgs, obj, str } from "@/shared/agentic/schema";
 import type { Member, MemberStatus } from "../types";
 
 export type UserManagementCtx = {

@@ -1,0 +1,44 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "user-management-svelte",
+  "version": "0.8.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add user-management --framework sveltekit",
+    "consumerPath": "slices/user-management"
+  },
+  "files": [
+    "README.md",
+    "components/AccessMatrix.svelte",
+    "components/InviteDialog.svelte",
+    "components/MemberRowActions.svelte",
+    "components/MembersPanel.svelte",
+    "components/MembersTable.svelte",
+    "components/MembersToolbar.svelte",
+    "components/PendingInvites.svelte",
+    "components/RoleChip.svelte",
+    "components/RoleEditor.svelte",
+    "components/RolePermissionGrid.svelte",
+    "components/RolesPanel.svelte",
+    "components/TeamDetail.svelte",
+    "components/TeamsPanel.svelte",
+    "components/UserManagementPanel.svelte",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/user-management/types.ts",
+      "frontend/slices/user-management/access-types.ts",
+      "frontend/slices/user-management/lib/can.ts",
+      "frontend/slices/user-management/lib/members-core.ts",
+      "frontend/slices/user-management/lib/tools.ts",
+      "lib/shared/agentic/define.ts",
+      "lib/shared/agentic/schema.ts",
+      "lib/shared/agentic/types.ts"
+    ],
+    "external": ["svelte"]
+  }
+}

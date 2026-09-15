@@ -1,8 +1,8 @@
 {
   "$schema": "../../../docs/slice.manifest.schema.json",
   "name": "user-management",
-  "version": "0.7.0",
-  "description": "Full superspace-parity user management (P0\u2013P4c): UserManagementPanel tabs Members + Roles + Teams + Access. Member table, invites (with hierarchy propagation), roles admin (permission matrix), teams, generic tenant-hierarchy tree, and a cross-tenant AccessMatrix (users \u00d7 tenants). All permission-gated. Props-driven + RBAC-agnostic; pair with rbac-roles + convex-auth.",
+  "version": "0.8.0",
+  "description": "Dual-framework members/invites/roles/teams/access administration with one permission-gated Convex backend. React/Next is default; SvelteKit installs the native Svelte renderer and shared framework-neutral cores.",
   "category": "auth",
   "stability": "experimental",
   "deps": {
@@ -15,7 +15,9 @@
       "user-management",
       "rbac-roles"
     ],
-    "npm": {},
+    "npm": {
+      "lucide-react": "^0.400.0"
+    },
     "env": []
   },
   "files": {
@@ -103,5 +105,5 @@
     "convex",
     "no-clerk"
   ],
-  "notes": "0.6.0 (2026-05-31): P4c \u2014 cross-tenant AccessMatrix (users \u00d7 tenants grid, inline role assign; convex hierarchy/getAccessMatrix walks root + descendants). Completes the superspace-parity epic. 0.5.0: P4b \u2014 tenant hierarchy + propagating invites. Generic um_tenant_links edge tree (rr never owns the tenant entities). convex/features/user-management/hierarchy/{query,mutation}: linkTenant/unlinkTenant + sendHierarchyInvite (same | decreasing role strategy, BFS descendants) + listChildTenants/getDescendantTenants. InviteDialog gains an optional propagate toggle (allowPropagate prop). 0.4.0: P4a \u2014 teams (um_teams + um_team_members; TeamsPanel + TeamDetail; createTeam/removeTeam/addTeamMember/removeTeamMember + listTeams, gated members.manage). UserManagementPanel gains an optional Teams tab. 0.3.0: P3 \u2014 roles admin (UserManagementPanel tabs; RolesPanel + RoleEditor + RolePermissionGrid create/edit/delete custom roles, system roles read-only). Roles CRUD reuses rbac-roles' listRoles/upsertRole/removeRole \u2014 no new convex here. 0.2.0: invite flow (um_invites). 0.1.0: members table. RBAC-agnostic by design \u2014 the slice imports no other slice's frontend; roles + resolved permissions + permission catalog are passed as props (wire from rbac-roles at the app level). Full-parity extras (P4: hierarchy/teams/access-matrix) follow."
+  "notes": "0.8.0 (2026-09-15): native Svelte 5/SvelteKit distribution over shared permission, members-view and tool cores; React remains default. Corrects the canonical Convex backend path to convex/features/user_management and declares the existing lucide-react dependency. 0.6.0 (2026-05-31): P4c \u2014 cross-tenant AccessMatrix (users \u00d7 tenants grid, inline role assign; convex hierarchy/getAccessMatrix walks root + descendants). Completes the superspace-parity epic. 0.5.0: P4b \u2014 tenant hierarchy + propagating invites. Generic um_tenant_links edge tree (rr never owns the tenant entities). convex/features/user-management/hierarchy/{query,mutation}: linkTenant/unlinkTenant + sendHierarchyInvite (same | decreasing role strategy, BFS descendants) + listChildTenants/getDescendantTenants. InviteDialog gains an optional propagate toggle (allowPropagate prop). 0.4.0: P4a \u2014 teams (um_teams + um_team_members; TeamsPanel + TeamDetail; createTeam/removeTeam/addTeamMember/removeTeamMember + listTeams, gated members.manage). UserManagementPanel gains an optional Teams tab. 0.3.0: P3 \u2014 roles admin (UserManagementPanel tabs; RolesPanel + RoleEditor + RolePermissionGrid create/edit/delete custom roles, system roles read-only). Roles CRUD reuses rbac-roles' listRoles/upsertRole/removeRole \u2014 no new convex here. 0.2.0: invite flow (um_invites). 0.1.0: members table. RBAC-agnostic by design \u2014 the slice imports no other slice's frontend; roles + resolved permissions + permission catalog are passed as props (wire from rbac-roles at the app level). Full-parity extras (P4: hierarchy/teams/access-matrix) follow."
 }

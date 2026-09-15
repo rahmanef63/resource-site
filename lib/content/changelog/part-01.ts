@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-USER-MANAGEMENT",
+    "version": "user-management@0.8.0",
+    "date": 1789430400000,
+    "kind": "feature",
+    "title": "SvelteKit User Management distribution + shared member view core",
+    "body": "Related: https://resource.rahmanef.com/slices/user-management — Preview: https://resource.rahmanef.com/preview/slices/user-management — [before: user-management@0.7.0 was React/Next only, member view state was React-hook coupled, lucide-react was undeclared, and source metadata used a non-existent hyphenated Convex path] → [after: user-management@0.8.0 keeps React default, adds native Svelte 5/SvelteKit Members/Invites/Roles/Teams/Access parity, shares permission/member-view/tool cores, declares renderer deps truthfully, and uses convex/features/user_management].",
+    "groups": [
+      {
+        "heading": "One admin contract, two native renderers",
+        "bullets": [
+          "Svelte covers search/filter/sort, role changes/removal, pending invites + hierarchy propagation, custom role permission editing, teams, and the cross-tenant access matrix.",
+          "React and Svelte share the same data contracts, permission matcher, deterministic member-view core, agent tools, and permission-gated Convex backend.",
+          "Svelte installs only svelte@^5 plus portable shared files; React now declares its existing lucide-react dependency and the agentic tool closure is narrowed to framework-neutral modules."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-CONVEX-AUTH",
     "version": "convex-auth@0.5.0",
     "date": 1789430400000,

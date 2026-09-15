@@ -22,6 +22,7 @@ export {
 } from "./access-types";
 export { useMembersView, type MembersView, type SortKey } from "./hooks/useMembersView";
 export { can, matchPermission } from "./lib/can";
+export { deriveMembersView, nextSort, type MembersViewInput, type SortDir } from "./lib/members-core";
 export {
   DEFAULT_MEMBERS_LABELS, DEFAULT_ROLES_LABELS, DEFAULT_TEAMS_LABELS,
   type Member, type MemberStatus, type RoleOption, type MembersLabels,
