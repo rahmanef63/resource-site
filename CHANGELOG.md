@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-15 — SvelteKit File Explorer distribution + shared filesystem cores
+<!-- public-changelog:SVELTE-FILE-EXPLORER -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/file-explorer
+- Preview: https://resource.rahmanef.com/preview/slices/file-explorer
+- [before: `file-explorer@1.6.0` was React-only, navigation history lived in React state, and tool registration depended on the aggregate agentic runtime] → [after: `file-explorer@1.7.0` keeps React default, adds native Svelte 5/SvelteKit CRUD/preview/properties parity, and shares framework-neutral history, filesystem operations, file-kind, adapter, and tool cores]
+- React declares its exact FilePicker/agent-hook closure; Svelte installs only `svelte@^5` plus portable filesystem core files and no React/Next/Lucide/shadcn/agent runtime.
+
 ### 2026-09-15 — SvelteKit Icon Picker distribution + shared picker stores
 <!-- public-changelog:SVELTE-ICON-PICKER -->
 

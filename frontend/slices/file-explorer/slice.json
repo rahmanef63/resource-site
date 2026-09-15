@@ -1,19 +1,50 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "file-explorer",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "category": "os",
   "kind": "full",
   "title": "File Explorer \u2014 Tree + CRUD + Preview + Properties",
-  "description": "A complete, backend-agnostic file explorer: a directory tree sidebar, breadcrumb navigation with history, grid and list views, full CRUD (new folder, rename, move, copy, delete/Trash), drag-and-drop upload and move (files AND folders, structure preserved), an inline preview lightbox (image / audio / video / pdf / text), file download, a Properties editor (edit the text body plus metadata: a custom icon glyph, an endpoint URL, and arbitrary key/values), a right-click context menu, multi-select (cmd/shift), and keyboard shortcuts. Storage is pluggable via an injectable FileExplorerAdapter (host fs / S3 / Convex / your own); the bundled in-memory mock is a real filesystem with bytes, so preview, upload, download, and editing all work with zero backend.",
+  "description": "Framework-parity backend-agnostic file explorer. React/Next remains default; native Svelte 5/SvelteKit provides location sidebar, history + breadcrumbs, grid/list sorting, multi-select, CRUD/clipboard/trash, drag/drop upload, inline image/audio/video/PDF/text preview, editable text + metadata properties, and optional function-calling tool registration over the same FileExplorerAdapter. The bundled in-memory mock keeps real bytes; live REST and structural Convex adapter factories stay portable. Svelte installs no React, Next, Lucide React, shadcn, shared FilePicker, or agent runtime.",
   "namespace": "@/features/file-explorer",
   "frontend": {
     "slicePath": "frontend/slices/file-explorer",
-    "configExport": "fileExplorerConfig"
+    "configExport": "fileExplorerConfig",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/file-explorer-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/file-explorer/adapter/convex.ts",
+            "frontend/slices/file-explorer/adapter/live.ts",
+            "frontend/slices/file-explorer/adapter/mock-blobs.ts",
+            "frontend/slices/file-explorer/adapter/mock-tree.ts",
+            "frontend/slices/file-explorer/adapter/mock.ts",
+            "frontend/slices/file-explorer/adapter/types.ts",
+            "frontend/slices/file-explorer/lib/file-kinds.ts",
+            "frontend/slices/file-explorer/lib/format.ts",
+            "frontend/slices/file-explorer/lib/history-core.ts",
+            "frontend/slices/file-explorer/lib/ops-core.ts",
+            "frontend/slices/file-explorer/lib/read-drop.ts",
+            "frontend/slices/file-explorer/lib/tools.ts",
+            "frontend/slices/file-explorer/lib/types.ts"
+          ]
+        }
+      }
+    }
   },
   "deps": {
     "npm": [
-      "lucide-react"
+      "lucide-react@^0.400.0"
     ],
     "shadcn": [
       "button",
@@ -25,7 +56,17 @@
       "dialog"
     ],
     "env": [],
-    "peers": []
+    "peers": [],
+    "sharedFiles": [
+      "components/shared/ui/FilePicker.tsx",
+      "lib/shared/agentic/types.ts",
+      "lib/shared/agentic/define.ts",
+      "lib/shared/agentic/schema.ts",
+      "lib/shared/agentic/prompt.ts",
+      "lib/shared/agentic/registry.ts",
+      "lib/shared/agentic/global-host.ts",
+      "lib/shared/agentic/use-agent-tools.ts"
+    ]
   },
   "registers": [],
   "audit": [
@@ -45,7 +86,9 @@
     "preview",
     "properties",
     "adapter",
-    "ui"
+    "ui",
+    "svelte",
+    "framework-parity"
   ],
   "previews": [
     {
@@ -74,16 +117,7 @@
   "contract": {
     "requires": {
       "auth": "none",
-      "deps": [
-        {
-          "npm": "react",
-          "range": "^18"
-        },
-        {
-          "npm": "lucide-react",
-          "range": "^0.400.0"
-        }
-      ]
+      "deps": []
     },
     "provides": {
       "tools": [
@@ -98,14 +132,15 @@
       ],
       "routes": [],
       "components": [
-        "FileExplorer",
-        "FileExplorerAdapterProvider"
+        "FileExplorer"
       ],
-      "hooks": [
-        "useFsAdapter"
-      ],
+      "hooks": [],
       "utils": [
-        "createMockAdapter"
+        "createMockAdapter",
+        "createLiveAdapter",
+        "createConvexAdapter",
+        "createFsHistory",
+        "createFileOperations"
       ],
       "tables": []
     }

@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-FILE-EXPLORER",
+    "version": "file-explorer@1.7.0",
+    "date": 1789430400000,
+    "kind": "feature",
+    "title": "SvelteKit File Explorer distribution + shared filesystem cores",
+    "body": "Related: https://resource.rahmanef.com/slices/file-explorer — [before: file-explorer@1.6.0 was React-only with history in React state and aggregate agentic coupling] → [after: file-explorer@1.7.0 keeps React default, adds native Svelte 5/SvelteKit parity, and shares portable history/operations/file-kind/adapter/tool cores].",
+    "groups": [
+      {
+        "heading": "One filesystem contract, two native renderers",
+        "bullets": [
+          "Svelte covers history/breadcrumbs, grid/list sorting, multi-select, CRUD/clipboard/trash, drag-drop upload, media/text/PDF preview, editable properties, and optional tool registration.",
+          "React keeps its shadcn/Lucide surface and exact shared FilePicker/agent-hook closure while Svelte carries no React runtime UI dependencies.",
+          "Authorization and path bounds remain backend responsibilities; readonly mode and UI filtering are convenience only."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-ICON-PICKER",
     "version": "icon-picker@0.6.0",
     "date": 1789430400000,

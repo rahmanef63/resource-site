@@ -771,47 +771,24 @@ export default function StoreDemo() {
     title: "File Explorer — Tree + CRUD + Preview + Properties",
     category: "os",
     kind: "full",
-    version: "1.6.0",
-    tagline: "Backend-agnostic file manager: directory tree sidebar, breadcrumb nav, grid/list views, full CRUD.",
+    version: "1.7.0",
+    tagline: "React + Svelte file manager over one injectable filesystem adapter — CRUD, history, upload, preview, properties, and tools.",
     description:
-      "A complete, portable file-directory explorer: a collapsible folder TREE sidebar (lazy-loaded per dir), a responsive BREADCRUMB that auto-collapses to a dropdown, grid + list views with sort, multi-select, a right-click context menu, drag-and-drop (internal move + external file/folder upload), inline rename, and full CRUD (new folder, rename, cut/copy/paste, move, delete/trash, empty trash). The filesystem backend is INJECTED via a small FileExplorerAdapter (list/mkdir/remove/move/copy/upload/usage/rawUrl) — point it at a real API or use the bundled createMockAdapter() (a writable in-memory tree) so it works with zero backend. Opening a file fires an onOpenFile(path, entry) callback you wire to your own viewer/editor. Self-contained: imports only @/components/ui/* + @/lib/utils. Ported from os-vps (Topside) files manager. Pairs with appshell as the file-dir counterpart to a notion-style sidebar.",
+      "Framework-parity backend-neutral file explorer. React/Next remains default; native Svelte 5/SvelteKit covers location sidebar, back/forward + breadcrumbs, grid/list sorting, multi-select, create/rename/move/copy/cut/paste/trash/delete, drag/drop upload, image/audio/video/PDF/text preview, editable body + metadata properties, storage usage, and optional function-calling tools over the same FileExplorerAdapter. Bundled mock/live/structural-Convex adapters are shared; Svelte carries no React/Next/Lucide React/shadcn/FilePicker/agent runtime.",
     source: "rahmanef63/os-vps",
     slicePath: "frontend/slices/file-explorer",
     convexPaths: [],
-    npm: ["lucide-react"],
+    npm: ["lucide-react@^0.400.0"],
     shadcn: ["button", "input", "scroll-area", "separator", "dropdown-menu", "sheet", "dialog"],
     env: [],
     peers: [],
-    tags: ["files", "file-manager", "explorer", "tree", "breadcrumb", "crud", "sidebar", "ui"],
+    tags: ["files", "file-manager", "explorer", "tree", "breadcrumb", "crud", "sidebar", "ui", "svelte", "framework-parity"],
     resourceType: "module",
     maturity: "stable",
     compat: { enhances: ["appshell"] },
     previewPath: "/preview/slices/file-explorer",
     defaultView: "desktop",
-    agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. The slice is self-contained — imports only @/components/ui/* + @/lib/utils (cn). The filesystem backend is injected; nothing is hardcoded.
-
-STEP 1 — Install. \`npx rr add file-explorer\`. Ensure \`@/features/file-explorer\` resolves in tsconfig paths and Tailwind's content globs scan the slice folder.
-
-STEP 2 — shadcn + npm. \`npx shadcn@latest add button input scroll-area separator dropdown-menu sheet\`. npm: lucide-react.
-
-STEP 3 — Mount it. Drop it in with NO adapter prop — it falls back to the backend configured in lib/backend.ts (the writable in-memory mock by default), so it works out of the box with realistic seed data and full CRUD:
-\`\`\`tsx
-"use client";
-import { FileExplorer } from "@/features/file-explorer";
-export default function Page() {
-  return (
-    <div className="h-dvh">
-      <FileExplorer rootLabel="Files" onOpenFile={(path) => console.log("open", path)} />
-    </div>
-  );
-}
-\`\`\`
-
-STEP 4 — The backend switch (ONE file). Go to a real filesystem without touching any component: edit \`slices/file-explorer/lib/backend.ts\` and set \`FILE_EXPLORER_BACKEND = "mock" | "live" | "convex"\` (or set env \`NEXT_PUBLIC_FILE_EXPLORER_BACKEND\`). "live" = REST host fs (os-vps /api/v1/fs shape, base via NEXT_PUBLIC_FILES_API_URL — see adapter/live.ts). "convex" = self-hosted Convex fs functions, PREPARED but inert until you wire your generated client + api in the switch (see adapter/convex.ts; the slice imports nothing from @convex so the build stays green even without Convex). You can still pass \`adapter={…}\` to override per-instance.
-
-STEP 5 — Custom adapter. Implement FileExplorerAdapter: { mode: "live"|"mock"|"readonly", list(path), mkdir(path), remove(path), move(from,to), copy(from,to), upload(dest,files), usage(), rawUrl(path), write?(path,content) }. \`list\` returns { path, entries:[{name,kind,size,ext?}], roots?, parent? }. Set mode:"readonly" to show an inline notice instead of mutating. \`rawUrl(path)\` returns a bytes URL for image thumbnails (return "" to fall back to icons).
-
-The container owns the box — render <FileExplorer> inside something with a height (h-dvh / h-full). It self-provides its adapter context; no extra provider needed.`,
+    agentRecipe: `React/default: \`npx rr add file-explorer\`. SvelteKit: \`npx rr add file-explorer --framework sveltekit\`. Both share the FileExplorerAdapter, writable mock/live/Convex adapter factories, history/operations/file-kind cores, preview/property semantics, and fileExplorerTools. React keeps shadcn/Lucide and auto-registers tools through the narrow agent hook; Svelte installs only svelte@^5 plus portable adapter/core files and can optionally register tools via its registerTools prop. Inject a real filesystem adapter for production and keep authorization/server path bounds in that backend — UI mode/read-only checks are convenience, not a security boundary.`,
     exampleCode: `"use client";
 import { FileExplorer } from "@/features/file-explorer";
 

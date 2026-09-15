@@ -1,0 +1,10 @@
+export { default as FileExplorer } from "./components/FileExplorer.svelte";
+export { fileExplorerConfig, type FileExplorerSvelteConfig } from "./config";
+export { createMockAdapter, type Tree } from "@/features/file-explorer/adapter/mock";
+export { createLiveAdapter, type LiveAdapterOptions } from "@/features/file-explorer/adapter/live";
+export { createConvexAdapter, type ConvexLike, type FsFunctionRefs } from "@/features/file-explorer/adapter/convex";
+export type { FileExplorerAdapter, FsEntry, FsList, FsRoot, FsUsage, UploadFile, UploadResult } from "@/features/file-explorer/adapter/types";
+export { createFsHistory } from "@/features/file-explorer/lib/history-core";
+export { createFileOperations, TRASH_PATH } from "@/features/file-explorer/lib/ops-core";
+export { fileExplorerTools, type FileExplorerCtx } from "@/features/file-explorer/lib/tools";
+export { fileKind, fileGlyph, previewKind, appForFile, isImage, type FileKind, type PreviewKind } from "@/features/file-explorer/lib/file-kinds";

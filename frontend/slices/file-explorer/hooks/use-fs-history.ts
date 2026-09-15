@@ -1,42 +1,20 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useRef, useSyncExternalStore } from "react";
+import { createFsHistory } from "../lib/history-core";
 
-// Back/forward navigation history for the current path — a linear stack with a
-// cursor (Finder/browser style). `navigate` truncates any forward entries.
+// React wrapper over the framework-neutral history core. Every hook instance
+// owns its own browser-style stack while Svelte/other renderers can subscribe
+// to the same core directly.
 export function useFsHistory(start: string) {
-  const [path, setPath] = useState(start);
-  const [history, setHistory] = useState<string[]>([start]);
-  const [cursor, setCursor] = useState(0);
-
-  const navigate = useCallback(
-    (next: string) => {
-      setHistory((h) => {
-        const trimmed = h.slice(0, cursor + 1);
-        setCursor(trimmed.length);
-        return [...trimmed, next];
-      });
-      setPath(next);
-    },
-    [cursor],
-  );
-  const goBack = useCallback(() => {
-    if (cursor === 0) return;
-    setCursor(cursor - 1);
-    setPath(history[cursor - 1]);
-  }, [cursor, history]);
-  const goForward = useCallback(() => {
-    if (cursor >= history.length - 1) return;
-    setCursor(cursor + 1);
-    setPath(history[cursor + 1]);
-  }, [cursor, history]);
-
+  const coreRef = useRef<ReturnType<typeof createFsHistory> | null>(null);
+  if (!coreRef.current) coreRef.current = createFsHistory(start);
+  const core = coreRef.current;
+  const state = useSyncExternalStore(core.subscribe, core.getSnapshot, core.getSnapshot);
   return {
-    path,
-    navigate,
-    goBack,
-    goForward,
-    canBack: cursor > 0,
-    canForward: cursor < history.length - 1,
+    ...state,
+    navigate: core.navigate,
+    goBack: core.goBack,
+    goForward: core.goForward,
   };
 }

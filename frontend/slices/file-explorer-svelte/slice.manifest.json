@@ -1,0 +1,42 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "file-explorer-svelte",
+  "version": "1.7.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add file-explorer --framework sveltekit",
+    "consumerPath": "slices/file-explorer-svelte"
+  },
+  "files": [
+    "README.md",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts",
+    "components/ContextMenu.svelte",
+    "components/EntryList.svelte",
+    "components/FileExplorer.svelte",
+    "components/PreviewModal.svelte",
+    "components/PropertiesModal.svelte",
+    "components/Sidebar.svelte",
+    "components/Toolbar.svelte"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/file-explorer/adapter/convex.ts",
+      "frontend/slices/file-explorer/adapter/live.ts",
+      "frontend/slices/file-explorer/adapter/mock-blobs.ts",
+      "frontend/slices/file-explorer/adapter/mock-tree.ts",
+      "frontend/slices/file-explorer/adapter/mock.ts",
+      "frontend/slices/file-explorer/adapter/types.ts",
+      "frontend/slices/file-explorer/lib/file-kinds.ts",
+      "frontend/slices/file-explorer/lib/format.ts",
+      "frontend/slices/file-explorer/lib/history-core.ts",
+      "frontend/slices/file-explorer/lib/ops-core.ts",
+      "frontend/slices/file-explorer/lib/read-drop.ts",
+      "frontend/slices/file-explorer/lib/tools.ts",
+      "frontend/slices/file-explorer/lib/types.ts"
+    ],
+    "external": ["svelte"]
+  }
+}

@@ -14,7 +14,7 @@ import { FileDetails } from "./file-details";
 import { FileStatusBar } from "./file-status-bar";
 import { UploadInput } from "./upload-input";
 import type { FilePickerHandle } from "@/shared/ui/FilePicker";
-import { useAgentTools } from "@/shared/agentic";
+import { useAgentTools } from "@/shared/agentic/use-agent-tools";
 import { fileExplorerTools } from "../lib/tools";
 import { useFiles } from "../hooks/use-files";
 import { useFileSelection } from "../hooks/use-file-selection";

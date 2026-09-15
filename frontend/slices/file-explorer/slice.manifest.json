@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "file-explorer",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -10,6 +10,7 @@
   },
   "files": [
     "CHANGELOG.md",
+    "README.md",
     "adapter/context.tsx",
     "adapter/convex.ts",
     "adapter/index.ts",
@@ -48,8 +49,11 @@
     "index.ts",
     "lib/backend.ts",
     "lib/errors.ts",
+    "lib/file-kinds.ts",
     "lib/format.ts",
+    "lib/history-core.ts",
     "lib/icons.ts",
+    "lib/ops-core.ts",
     "lib/read-drop.ts",
     "lib/tools.ts",
     "lib/types.ts",
@@ -57,16 +61,14 @@
   ],
   "imports": {
     "shared": [
-      "@/components/ui/button",
-      "@/components/ui/input",
-      "@/components/ui/scroll-area",
-      "@/components/ui/separator",
-      "@/components/ui/dropdown-menu",
-      "@/components/ui/sheet",
-      "@/components/ui/dialog",
-      "@/shared/ui/FilePicker",
-      "@/shared/agentic",
-      "@/lib/utils"
+      "components/shared/ui/FilePicker.tsx",
+      "lib/shared/agentic/types.ts",
+      "lib/shared/agentic/define.ts",
+      "lib/shared/agentic/schema.ts",
+      "lib/shared/agentic/prompt.ts",
+      "lib/shared/agentic/registry.ts",
+      "lib/shared/agentic/global-host.ts",
+      "lib/shared/agentic/use-agent-tools.ts"
     ],
     "external": [
       "react",

@@ -1,92 +1,54 @@
-// Agentic tool collection. The slice is NOT an agent — it exports this
-// collection of function-calling tools and ONE shared agent (e.g. the
-// assistant host) drives it alongside other slices' collections via
-// @/shared/agentic. Ctx = the live UseFiles state from useFiles().
+// Framework-neutral function-calling collection. The slice is not an agent;
+// React may auto-register it with the shared host while Svelte/other hosts can
+// bind the same collection to any structurally compatible explorer context.
 
-import { arr, defineToolCollection, noArgs, obj, str } from "@/shared/agentic";
-import type { UseFiles } from "../hooks/use-files";
+import type { FsEntry } from "../adapter/types";
 
-export type FileExplorerCtx = UseFiles;
+type Params = {
+  type: "object";
+  properties: Record<string, unknown>;
+  required: string[];
+  additionalProperties: false;
+};
+const schema = (properties: Record<string, unknown> = {}, required: string[] = []): Params => ({
+  type: "object", properties, required, additionalProperties: false,
+});
+const text = (description: string) => ({ type: "string", description });
+const namesParam = { type: "array", description: "entry names", items: text("name") };
 
-const names = (a: Record<string, unknown>): string[] => (a.names as string[]) ?? [];
-
-const summary = (ctx: FileExplorerCtx): string => {
-  const list = (ctx.entries ?? [])
-    .map((e) => `${e.name}${e.kind === "dir" ? "/" : ""}`)
-    .join(", ");
-  return `cwd ${ctx.path} (${ctx.api.mode}) | entries: ${list || "empty"}${ctx.error ? ` | notice: ${ctx.error}` : ""}`;
+export type FileExplorerCtx = {
+  path: string;
+  entries: FsEntry[] | null;
+  mode?: "mock" | "live" | "readonly";
+  error?: string | null;
+  navigate: (path: string) => void;
+  mkdir: (name?: string) => Promise<string | null | undefined>;
+  rename: (from: string, to: string) => Promise<unknown>;
+  move: (names: string[], dest: string) => Promise<unknown>;
+  trash: (names: string[]) => Promise<unknown>;
+  remove: (names: string[]) => Promise<unknown>;
+  emptyTrash: () => Promise<unknown>;
 };
 
-export const fileExplorerTools = defineToolCollection<FileExplorerCtx>({
+const names = (a: Record<string, unknown>): string[] => Array.isArray(a.names) ? a.names.map(String) : [];
+const summary = (ctx: FileExplorerCtx): string => {
+  const list = (ctx.entries ?? []).map((e) => `${e.name}${e.kind === "dir" ? "/" : ""}`).join(", ");
+  return `cwd ${ctx.path} (${ctx.mode ?? "adapter"}) | entries: ${list || "empty"}${ctx.error ? ` | notice: ${ctx.error}` : ""}`;
+};
+
+export const fileExplorerTools = {
   namespace: "file-explorer",
-  instructions: "File manager. navigate/list to locate a path before mutating; trash is recoverable, remove and empty_trash are permanent, confirm first.",
+  instructions:
+    "File manager. navigate/list to locate a path before mutating; trash is recoverable, remove and empty_trash are permanent, confirm first.",
   describe: summary,
   tools: [
-    {
-      name: "list",
-      description: "List the current directory's entries (trailing / marks folders).",
-      parameters: noArgs,
-      run: (ctx) => summary(ctx),
-    },
-    {
-      name: "navigate",
-      description: "Change the working directory.",
-      parameters: obj({ "path!": str("directory path") }),
-      run: (ctx, a) => {
-        ctx.navigate(a.path as string);
-        return `cwd → ${a.path}`;
-      },
-    },
-    {
-      name: "mkdir",
-      description: "Create a folder in the current directory.",
-      parameters: obj({ "name!": str("folder name") }),
-      run: async (ctx, a) => `created folder "${await ctx.mkdir(a.name as string)}"`,
-    },
-    {
-      name: "rename",
-      description: "Rename an entry in the current directory.",
-      parameters: obj({ "from!": str("current name"), "to!": str("new name") }),
-      run: async (ctx, a) => {
-        await ctx.rename(a.from as string, a.to as string);
-        return `renamed ${a.from} → ${a.to}`;
-      },
-    },
-    {
-      name: "move",
-      description: "Move entries from the current directory into a destination folder.",
-      parameters: obj({ "names!": arr("entry names", str("name")), "dest!": str("destination path") }),
-      run: async (ctx, a) => {
-        await ctx.move(names(a), a.dest as string);
-        return `moved ${names(a).length} item(s) → ${a.dest}`;
-      },
-    },
-    {
-      name: "trash",
-      description: "Move entries from the current directory into the Trash.",
-      parameters: obj({ "names!": arr("entry names", str("name")) }),
-      run: async (ctx, a) => {
-        await ctx.trash(names(a));
-        return `trashed ${names(a).length} item(s)`;
-      },
-    },
-    {
-      name: "remove",
-      description: "Permanently delete entries from the current directory (no Trash).",
-      parameters: obj({ "names!": arr("entry names", str("name")) }),
-      run: async (ctx, a) => {
-        await ctx.remove(names(a));
-        return `deleted ${names(a).length} item(s)`;
-      },
-    },
-    {
-      name: "empty_trash",
-      description: "Permanently delete everything in the Trash.",
-      parameters: noArgs,
-      run: async (ctx) => {
-        await ctx.emptyTrash();
-        return "trash emptied";
-      },
-    },
+    { name: "list", description: "List the current directory entries.", parameters: schema(), run: (ctx: FileExplorerCtx) => summary(ctx) },
+    { name: "navigate", description: "Change the working directory.", parameters: schema({ path: text("directory path") }, ["path"]), run: (ctx: FileExplorerCtx, a: Record<string, unknown>) => { ctx.navigate(String(a.path)); return `cwd → ${String(a.path)}`; } },
+    { name: "mkdir", description: "Create a folder in the current directory.", parameters: schema({ name: text("folder name") }, ["name"]), run: async (ctx: FileExplorerCtx, a: Record<string, unknown>) => `created folder "${await ctx.mkdir(String(a.name))}"` },
+    { name: "rename", description: "Rename an entry in the current directory.", parameters: schema({ from: text("current name"), to: text("new name") }, ["from", "to"]), run: async (ctx: FileExplorerCtx, a: Record<string, unknown>) => { await ctx.rename(String(a.from), String(a.to)); return `renamed ${String(a.from)} → ${String(a.to)}`; } },
+    { name: "move", description: "Move entries into a destination folder.", parameters: schema({ names: namesParam, dest: text("destination path") }, ["names", "dest"]), run: async (ctx: FileExplorerCtx, a: Record<string, unknown>) => { const list = names(a); await ctx.move(list, String(a.dest)); return `moved ${list.length} item(s) → ${String(a.dest)}`; } },
+    { name: "trash", description: "Move entries into the Trash.", parameters: schema({ names: namesParam }, ["names"]), run: async (ctx: FileExplorerCtx, a: Record<string, unknown>) => { const list = names(a); await ctx.trash(list); return `trashed ${list.length} item(s)`; } },
+    { name: "remove", description: "Permanently delete entries from the current directory.", parameters: schema({ names: namesParam }, ["names"]), run: async (ctx: FileExplorerCtx, a: Record<string, unknown>) => { const list = names(a); await ctx.remove(list); return `deleted ${list.length} item(s)`; } },
+    { name: "empty_trash", description: "Permanently delete everything in the Trash.", parameters: schema(), run: async (ctx: FileExplorerCtx) => { await ctx.emptyTrash(); return "trash emptied"; } },
   ],
-});
+};
