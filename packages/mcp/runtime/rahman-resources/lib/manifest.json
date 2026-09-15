@@ -1134,12 +1134,12 @@
       "slug": "notion-app",
       "title": "Notion App — Block Editor",
       "category": "content",
-      "description": "Nested vertical slice (slice-of-slices) housing the full notion-page-clone block editor. Mount <PageEditor pageId/> inside <EditorAdapterProvider adapter/> — with `{}` it is a working plain-text/markdown block editor (slash menu, markdown triggers `# - > [] etc.`, dnd-kit drag with column layouts, per-block toolbar with turn-into/color/duplicate, per-block undo, paste-markdown import); host capabilities light up per optional adapter: data (block+page CRUD), selection (multi-select), comments (per-block popover), ai (Ask-AI panel), database (render + picker), mention (@-typeahead), page (nav/uploads/covers). Cluster-private shared layer under @notion/* — vendored block/page/database model, uid, inline markdown, page→md/html export. Pure convex block helpers (_blocks/_blockOps, unit-tested) ship in convex/features/notion. Same markdown grammar as the standalone `markdown` slice (blocksToMarkdown/markdownToBlocks bridge).",
+      "description": "Framework-parity Notion-style block editor. React/Next remains default with dnd-kit/shadcn and rich optional host capabilities; native Svelte 5/SvelteKit reuses the same page/block model, EditorDataAdapter CRUD seam, markdown bridge, block catalog/history semantics, and notion tool collection for title + block CRUD, slash/markdown transforms, todo/list/headings/quote/callout/code/equation/media/table/toggle/layout blocks, reorder, undo/redo, Markdown import/export and child pages without React/Next/dnd-kit/Lucide/shadcn/Sonner runtime.",
       "source": "notion-page-clone",
       "install": "npx rahman-resources add notion-app",
       "npmPackages": [],
       "exampleCode": "",
-      "agentRecipe": "Run `npx rr add notion-app`. Wire the `@notion/*` path alias to `./slices/notion-app/*` in tsconfig. Minimal mount: `<EditorAdapterProvider adapter={{ data }}><PageEditor pageId={id}/></EditorAdapterProvider>` where `data` implements EditorDataAdapter (block+page CRUD over your store — see lib/dataAdapter.ts; a localStorage reference impl lives in the rr preview). Add capabilities incrementally: `selection` for multi-select, `comments` for per-block threads, `database.renderDatabase` to mount your database renderer inside database blocks, `mention.search` for @-typeahead, `page.navigateToPage`/`uploadFile` for nav + media. Convex hosts: copy convex/features/notion (_blocks/_blockOps are pure, unit-tested array ops) and keep handlers thin.",
+      "agentRecipe": "React/default: `npx rr add notion-app` (legacy alias `notion` remains). SvelteKit: `npx rr add notion-app --framework sveltekit`. Both use the same EditorDataAdapter page/block CRUD contract and convex/features/notion helpers. React mounts `<EditorAdapterProvider><PageEditor/></EditorAdapterProvider>` for the full rich capability surface; Svelte mounts `<PageEditor pageId data />` and accepts optional navigation/tool registration. Keep authz in the host/backend adapter.",
       "tags": [
         "content",
         "notion",
@@ -5096,25 +5096,61 @@
       "title": "Notion App — Block Editor",
       "category": "content",
       "kind": "full",
-      "version": "1.1.1",
-      "description": "Nested vertical slice (slice-of-slices) housing the full notion-page-clone block editor. Mount <PageEditor pageId/> inside <EditorAdapterProvider adapter/> — with `{}` it is a working plain-text/markdown block editor (slash menu, markdown triggers `# - > [] etc.`, dnd-kit drag with column layouts, per-block toolbar with turn-into/color/duplicate, per-block undo, paste-markdown import); host capabilities light up per optional adapter: data (block+page CRUD), selection (multi-select), comments (per-block popover), ai (Ask-AI panel), database (render + picker), mention (@-typeahead), page (nav/uploads/covers). Cluster-private shared layer under @notion/* — vendored block/page/database model, uid, inline markdown, page→md/html export. Pure convex block helpers (_blocks/_blockOps, unit-tested) ship in convex/features/notion. Same markdown grammar as the standalone `markdown` slice (blocksToMarkdown/markdownToBlocks bridge).",
+      "version": "1.2.0",
+      "description": "Framework-parity Notion-style block editor. React/Next remains default with dnd-kit/shadcn and rich optional host capabilities; native Svelte 5/SvelteKit reuses the same page/block model, EditorDataAdapter CRUD seam, markdown bridge, block catalog/history semantics, and notion tool collection for title + block CRUD, slash/markdown transforms, todo/list/headings/quote/callout/code/equation/media/table/toggle/layout blocks, reorder, undo/redo, Markdown import/export and child pages without React/Next/dnd-kit/Lucide/shadcn/Sonner runtime.",
       "source": "notion-page-clone",
-      "slicePath": "frontend/slices/notion",
+      "slicePath": "frontend/slices/notion-app",
       "defaultFramework": "react-next",
       "frameworks": {
         "react-next": {
-          "path": "frontend/slices/notion"
+          "path": "frontend/slices/notion-app"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/notion-app-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5",
+              "katex@^0.16.47"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/notion-app/shared/types/index.ts",
+              "frontend/slices/notion-app/shared/types/block.ts",
+              "frontend/slices/notion-app/shared/types/blocks.ts",
+              "frontend/slices/notion-app/shared/types/property.ts",
+              "frontend/slices/notion-app/shared/types/database.ts",
+              "frontend/slices/notion-app/shared/lib/uid.ts",
+              "frontend/slices/notion-app/shared/lib/markdown/index.ts",
+              "frontend/slices/notion-app/shared/lib/markdown/fromMarkdown.ts",
+              "frontend/slices/notion-app/shared/lib/markdown/toMarkdown.ts",
+              "frontend/slices/notion-app/slices/editor/lib/dataAdapter.ts",
+              "frontend/slices/notion-app/slices/editor/lib/page-core.ts",
+              "frontend/slices/notion-app/slices/editor/lib/block-catalog.ts",
+              "frontend/slices/notion-app/slices/editor/lib/history-core.ts",
+              "frontend/slices/notion-app/slices/editor/lib/markdownTriggers.ts",
+              "frontend/slices/notion-app/slices/editor/lib/turnInto.ts",
+              "frontend/slices/notion-app/lib/tools.ts",
+              "lib/shared/agentic/define.ts",
+              "lib/shared/agentic/schema.ts",
+              "lib/shared/agentic/types.ts"
+            ]
+          }
         }
       },
       "convexPaths": [
         "convex/features/notion"
       ],
       "npm": [
-        "sonner@^2",
-        "@dnd-kit/core@^6",
-        "@dnd-kit/sortable@^10",
-        "@dnd-kit/utilities@^3",
-        "katex@^0.16"
+        "sonner@^2.0.7",
+        "@dnd-kit/core@^6.3.1",
+        "@dnd-kit/sortable@^10.0.0",
+        "@dnd-kit/utilities@^3.2.2",
+        "katex@^0.16.47",
+        "lucide-react@^1.16.0"
       ],
       "shadcn": [
         "button",
@@ -5128,7 +5164,13 @@
       ],
       "env": [],
       "peers": [],
-      "sharedFiles": [],
+      "sharedFiles": [
+        "components/shared/ui/FilePicker.tsx",
+        "lib/shared/features/defineFeature.ts",
+        "lib/shared/agentic/define.ts",
+        "lib/shared/agentic/schema.ts",
+        "lib/shared/agentic/types.ts"
+      ],
       "providers": [],
       "tags": [
         "content",
@@ -5140,7 +5182,7 @@
         "drag-drop",
         "adapter-seam"
       ],
-      "agentRecipe": "Run `npx rr add notion-app`. Wire the `@notion/*` path alias to `./slices/notion-app/*` in tsconfig. Minimal mount: `<EditorAdapterProvider adapter={{ data }}><PageEditor pageId={id}/></EditorAdapterProvider>` where `data` implements EditorDataAdapter (block+page CRUD over your store — see lib/dataAdapter.ts; a localStorage reference impl lives in the rr preview). Add capabilities incrementally: `selection` for multi-select, `comments` for per-block threads, `database.renderDatabase` to mount your database renderer inside database blocks, `mention.search` for @-typeahead, `page.navigateToPage`/`uploadFile` for nav + media. Convex hosts: copy convex/features/notion (_blocks/_blockOps are pure, unit-tested array ops) and keep handlers thin."
+      "agentRecipe": "React/default: `npx rr add notion-app` (legacy alias `notion` remains). SvelteKit: `npx rr add notion-app --framework sveltekit`. Both use the same EditorDataAdapter page/block CRUD contract and convex/features/notion helpers. React mounts `<EditorAdapterProvider><PageEditor/></EditorAdapterProvider>` for the full rich capability surface; Svelte mounts `<PageEditor pageId data />` and accepts optional navigation/tool registration. Keep authz in the host/backend adapter."
     },
     {
       "slug": "sections",

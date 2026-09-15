@@ -1,12 +1,12 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
-  "slug": "notion",
-  "version": "1.1.1",
+  "slug": "notion-app",
+  "version": "1.2.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
-    "command": "npx rr add notion",
-    "consumerPath": "slices/notion"
+    "command": "npx rr add notion-app",
+    "consumerPath": "slices/notion-app"
   },
   "files": [
     "README.md",
@@ -139,20 +139,31 @@
     "slices/editor/page-editor/ordinals.ts",
     "slices/editor/row-properties/AddPropertyMenu.tsx",
     "slices/editor/row-properties/PropertyNameCell.tsx",
-    "slices/editor/row-properties/PropertyRow.tsx"
+    "slices/editor/row-properties/PropertyRow.tsx",
+    "slices/editor/lib/page-core.ts",
+    "slices/editor/lib/block-catalog.ts",
+    "slices/editor/lib/history-core.ts",
+    "shared/lib/inlineCore.ts"
   ],
   "imports": {
     "shared": [
       "@/components/ui/button",
       "@/components/ui/dropdown-menu",
-      "@/components/ui/popover"
+      "@/components/ui/popover",
+      "components/shared/ui/FilePicker.tsx",
+      "lib/shared/features/defineFeature.ts",
+      "lib/shared/agentic/define.ts",
+      "lib/shared/agentic/schema.ts",
+      "lib/shared/agentic/types.ts"
     ],
     "external": [
       "react",
       "lucide-react",
       "sonner",
       "@dnd-kit/core",
-      "katex"
+      "katex",
+      "@dnd-kit/sortable",
+      "@dnd-kit/utilities"
     ]
   }
 }

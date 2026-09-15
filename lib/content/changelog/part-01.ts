@@ -2,6 +2,16 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-NOTION-APP",
+    "version": "notion-app@1.2.0",
+    "date": 1789430400000,
+    "kind": "feature",
+    "title": "SvelteKit Notion App distribution + shared block editor cores",
+    "body": "Related: https://resource.rahmanef.com/slices/notion-app — Preview: https://resource.rahmanef.com/preview/slices/notion-app — [before: notion-app@1.1.1 was React/Next-only with React-coupled catalog/history plus legacy path and incomplete installer closure] → [after: notion-app@1.2.0 keeps React default, adds native Svelte 5/SvelteKit over shared page/block/adapter/markdown/tool cores, canonicalizes notion-app metadata and preserves the notion alias].",
+    "groups": [{"heading":"One block model, two native renderers","bullets":["Svelte reuses EditorDataAdapter plus the same markdown trigger/turn-into/page model and Convex notion helpers.","Block catalog and text history are now portable SSOTs also consumed by React.","Svelte installs without React, Next, dnd-kit, Lucide React, shadcn or Sonner runtime."]}]
+  },
+
+  {
     "id": "SVELTE-IMAGE-EDITOR",
     "version": "image-editor@2.2.0",
     "date": 1789430400000,

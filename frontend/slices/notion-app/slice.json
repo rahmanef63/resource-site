@@ -1,23 +1,62 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "notion-app",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "category": "content",
   "title": "Notion App — Block Editor",
-  "description": "Nested vertical slice (slice-of-slices) housing the notion-page-clone block editor as rr's rich-text content engine. Mount <PageEditor pageId> inside <EditorAdapterProvider adapter> — with `{}` it's a working plain-text/markdown block editor (slash menu, markdown triggers, drag, per-block toolbar, undo); host capabilities (data CRUD, selection, comments, AI, databases, mentions, page nav/uploads) light up per optional adapter. Cluster-private shared layer under @notion/* (vendored block/page/database model, uid, inline + page markdown/html export). Pure convex block helpers ship in convex/features/notion (_blocks/_blockOps). 182 tests.",
+  "description": "Framework-parity Notion-style block editor over one page/block model, markdown bridge, adapter CRUD contract and tool collection. React/Next remains default with dnd-kit, shadcn and rich optional host render adapters; native Svelte 5/SvelteKit provides title + block CRUD, slash/markdown transforms, lists/todos/headings/quote/callout/code/equation/media/table/toggle/layout blocks, drag/button reorder, undo/redo, Markdown import/export, child pages and optional tool/navigation wiring without React/Next/dnd-kit/Lucide/shadcn/Sonner runtime.",
   "namespace": "@/features/notion-app",
   "kind": "full",
   "frontend": {
-    "slicePath": "frontend/slices/notion",
-    "configExport": "notionAppConfig"
+    "slicePath": "frontend/slices/notion-app",
+    "configExport": "notionAppConfig",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/notion-app-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5",
+            "katex@^0.16.47"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/notion-app/shared/types/index.ts",
+            "frontend/slices/notion-app/shared/types/block.ts",
+            "frontend/slices/notion-app/shared/types/blocks.ts",
+            "frontend/slices/notion-app/shared/types/property.ts",
+            "frontend/slices/notion-app/shared/types/database.ts",
+            "frontend/slices/notion-app/shared/lib/uid.ts",
+            "frontend/slices/notion-app/shared/lib/markdown/index.ts",
+            "frontend/slices/notion-app/shared/lib/markdown/fromMarkdown.ts",
+            "frontend/slices/notion-app/shared/lib/markdown/toMarkdown.ts",
+            "frontend/slices/notion-app/slices/editor/lib/dataAdapter.ts",
+            "frontend/slices/notion-app/slices/editor/lib/page-core.ts",
+            "frontend/slices/notion-app/slices/editor/lib/block-catalog.ts",
+            "frontend/slices/notion-app/slices/editor/lib/history-core.ts",
+            "frontend/slices/notion-app/slices/editor/lib/markdownTriggers.ts",
+            "frontend/slices/notion-app/slices/editor/lib/turnInto.ts",
+            "frontend/slices/notion-app/lib/tools.ts",
+            "lib/shared/agentic/define.ts",
+            "lib/shared/agentic/schema.ts",
+            "lib/shared/agentic/types.ts"
+          ]
+        }
+      }
+    }
   },
   "deps": {
     "npm": [
-      "sonner",
-      "@dnd-kit/core",
-      "@dnd-kit/sortable",
-      "@dnd-kit/utilities",
-      "katex"
+      "sonner@^2.0.7",
+      "@dnd-kit/core@^6.3.1",
+      "@dnd-kit/sortable@^10.0.0",
+      "@dnd-kit/utilities@^3.2.2",
+      "katex@^0.16.47",
+      "lucide-react@^1.16.0"
     ],
     "shadcn": [
       "button",
@@ -30,7 +69,14 @@
       "skeleton"
     ],
     "env": [],
-    "peers": []
+    "peers": [],
+    "sharedFiles": [
+      "components/shared/ui/FilePicker.tsx",
+      "lib/shared/features/defineFeature.ts",
+      "lib/shared/agentic/define.ts",
+      "lib/shared/agentic/schema.ts",
+      "lib/shared/agentic/types.ts"
+    ]
   },
   "registers": [
     "registry"
@@ -41,7 +87,9 @@
     "notion",
     "editor",
     "block-editor",
-    "rich-text"
+    "rich-text",
+    "svelte",
+    "framework-parity"
   ],
   "previews": [
     {
@@ -87,10 +135,15 @@
         "syncedBlocks",
         "layoutAdapter",
         "listOrdinals",
-        "blockSpecs"
+        "blockSpecs",
+        "createPageEditorCore",
+        "BLOCK_CATALOG",
+        "searchBlocks"
       ],
       "hooks": [],
-      "components": []
+      "components": [
+        "PageEditor"
+      ]
     }
   }
 }

@@ -1,0 +1,15 @@
+// @vitest-environment node
+import { readFileSync, readdirSync } from "node:fs";
+import { join } from "node:path";
+import { spawnSync } from "node:child_process";
+import { compile } from "svelte/compiler";
+import { describe, expect, it } from "vitest";
+const root=process.cwd(); const slice=JSON.parse(readFileSync(join(root,"frontend/slices/notion-app/slice.json"),"utf8"));
+function walk(dir:string,suffix:string):string[]{return readdirSync(dir,{withFileTypes:true}).flatMap(e=>{const p=join(dir,e.name);return e.isDirectory()?walk(p,suffix):p.endsWith(suffix)?[p]:[]})}
+function dry(framework?:string){const args=["packages/cli/bin/cli.js","add","notion-app","--target",`/tmp/rr-notion-${framework??"react"}-dry`,`--dry-run`];if(framework)args.push("--framework",framework);return spawnSync(process.execPath,args,{cwd:root,encoding:"utf8"});}
+describe("notion-app framework distribution",()=>{
+ it("canonicalizes metadata while preserving React default",()=>{expect(slice.version).toBe("1.2.0");expect(slice.frontend.slicePath).toBe("frontend/slices/notion-app");expect(slice.frontend.defaultFramework).toBe("react-next");expect(slice.frontend.frameworks["svelte-sveltekit"].path).toBe("frontend/slices/notion-app-svelte");});
+ it("keeps native Svelte renderer-clean and compiler-clean",()=>{const dir=join(root,"frontend/slices/notion-app-svelte");const files=walk(dir,".svelte");const source=files.concat(walk(dir,".ts")).map(f=>readFileSync(f,"utf8")).join("\n");expect(files.length).toBe(6);for(const bad of ['from "react"','from "next','@dnd-kit/','lucide-react','@/components/ui/','sonner'])expect(source).not.toContain(bad);for(const f of files){const src=readFileSync(f,"utf8");for(const generate of ["client","server"] as const)expect(compile(src,{filename:f,generate,dev:true}).warnings).toEqual([]);}});
+ it("selects truthful React and Svelte CLI closures",()=>{const react=dry();expect(react.status,react.stderr).toBe(0);for(const dep of ["lucide-react@^1.16.0","@dnd-kit/core@^6.3.1","sonner@^2.0.7"])expect(react.stdout).toContain(dep);expect(react.stdout).toContain("components/shared/ui/FilePicker.tsx");expect(react.stdout).toContain("convex/features/notion");const svelte=dry("sveltekit");expect(svelte.status,svelte.stderr).toBe(0);expect(svelte.stdout).toContain("frontend/slices/notion-app-svelte → frontend/slices/notion-app-svelte");expect(svelte.stdout).toContain("npm: svelte@^5 katex@^0.16.47");expect(svelte.stdout).toContain("convex/features/notion");for(const bad of ["lucide-react","@dnd-kit/","sonner@","shadcn:","FilePicker"])expect(svelte.stdout).not.toContain(bad);});
+ it("shares portable block catalog/history with React instead of duplicating them",()=>{const specs=readFileSync(join(root,"frontend/slices/notion-app/slices/editor/blockSpecs.ts"),"utf8");const history=readFileSync(join(root,"frontend/slices/notion-app/slices/editor/hooks/useBlockHistory.ts"),"utf8");expect(specs).toContain('BLOCK_CATALOG');expect(history).toContain('createTextHistory');});
+});

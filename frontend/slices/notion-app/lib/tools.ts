@@ -3,7 +3,8 @@
 // small injectable page contract the host binds to its PageAdapter /
 // workspace store.
 
-import { defineToolCollection, obj, str } from "@/shared/agentic";
+import { defineToolCollection } from "@/shared/agentic/define";
+import { obj, str } from "@/shared/agentic/schema";
 
 export type NotionToolsCtx = {
   /** Each resolves to a short readback (page id / title / matches). */

@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-15 — SvelteKit Notion App distribution + shared block editor cores
+<!-- public-changelog:SVELTE-NOTION-APP -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/notion-app
+- Preview: https://resource.rahmanef.com/preview/slices/notion-app
+- [before: `notion-app@1.1.1` rendered only through React/Next/dnd-kit/shadcn, block labels/history were React-coupled, `slice.json` still pointed at the legacy `frontend/slices/notion` path, and React installer closure omitted several real dependencies] → [after: `notion-app@1.2.0` keeps React/Next default, adds native Svelte 5/SvelteKit over the same page/block model + EditorDataAdapter + markdown/tool cores, canonicalizes the `notion-app` path/manifest while preserving alias `notion`, and declares exact framework-specific dependencies]
+- Svelte provides title/block CRUD, slash + markdown transforms, todo/list/headings/quote/callout/code/equation/media/table/toggle/layout blocks, native reorder, undo/redo, Markdown import/export, child pages and optional tools/navigation without React/Next/dnd-kit/Lucide/shadcn/Sonner runtime.
+
 ### 2026-09-15 — SvelteKit Image Editor distribution + shared raster command/history core
 <!-- public-changelog:SVELTE-IMAGE-EDITOR -->
 

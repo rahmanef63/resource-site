@@ -1,0 +1,21 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "notion-app-svelte",
+  "version": "1.2.0",
+  "tier": 3,
+  "distribution": { "method": "cli-copy", "command": "npx rr add notion-app --framework sveltekit", "consumerPath": "slices/notion-app" },
+  "files": [
+    "README.md", "config.ts", "index.ts", "svelte-components.d.ts",
+    "components/BlockRow.svelte", "components/PageEditor.svelte", "components/PageToolbar.svelte",
+    "components/SlashMenu.svelte", "components/SpecialBlock.svelte", "components/TextBlock.svelte"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/notion-app/shared/types/index.ts", "frontend/slices/notion-app/shared/types/block.ts", "frontend/slices/notion-app/shared/types/blocks.ts", "frontend/slices/notion-app/shared/types/property.ts", "frontend/slices/notion-app/shared/types/database.ts",
+      "frontend/slices/notion-app/shared/lib/uid.ts", "frontend/slices/notion-app/shared/lib/markdown/index.ts", "frontend/slices/notion-app/shared/lib/markdown/fromMarkdown.ts", "frontend/slices/notion-app/shared/lib/markdown/toMarkdown.ts",
+      "frontend/slices/notion-app/slices/editor/lib/dataAdapter.ts", "frontend/slices/notion-app/slices/editor/lib/page-core.ts", "frontend/slices/notion-app/slices/editor/lib/block-catalog.ts", "frontend/slices/notion-app/slices/editor/lib/history-core.ts", "frontend/slices/notion-app/slices/editor/lib/markdownTriggers.ts", "frontend/slices/notion-app/slices/editor/lib/turnInto.ts",
+      "frontend/slices/notion-app/lib/tools.ts", "lib/shared/agentic/define.ts", "lib/shared/agentic/schema.ts", "lib/shared/agentic/types.ts"
+    ],
+    "external": ["svelte", "katex"]
+  }
+}
