@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { slices } from "@/lib/content/slices";
+import { getFrameworkCoverage } from "@/lib/content/slice-framework-support";
 import { site } from "@/lib/content/site";
 
 export function Hero() {
+  const coverage = getFrameworkCoverage();
   return (
     <section className="relative overflow-hidden">
       <div
@@ -21,12 +22,12 @@ export function Hero() {
         </Link>
         <h1 className="mt-6 text-balance text-5xl font-bold tracking-tight md:text-7xl">
           Rahman Resources for your
-          <br className="hidden sm:inline" /> next Next app.
+          <br className="hidden sm:inline" /> next app.
         </h1>
         <p className="mt-6 max-w-2xl text-balance text-lg text-muted-foreground">
-          {slices.length} production-grade slices — copy-first,
-          handed to you with shadcn primitives, Convex self-hosted, Tailwind 4 and TypeScript
-          strict. {site.description.split(".")[0]}.
+          {coverage.svelte} canonical slices ship for Next.js/React and SvelteKit/Svelte 5 —
+          copy-first, renderer-aware, npm/Bun-ready, with Tailwind 4, TypeScript strict and
+          optional Convex. {site.description.split(".")[0]}.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Button asChild size="lg">
