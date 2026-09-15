@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, type RefObject } from "react";
-import type { WinId } from "../lib/types";
+import type { WinId } from "../lib/types-core";
+import { motionReduced, registerExitAnimator, WINDOW_EXIT_FALLBACK_MS, type ExitKind } from "../lib/window-exit-core";
+export { requestExit, registerExitAnimator, motionReduced, type ExitKind } from "../lib/window-exit-core";
 
 // Exit + geometry choreography for desktop window frames.
 //
@@ -17,48 +19,7 @@ import type { WinId } from "../lib/types";
 // guarantees the store never wedges mid-exit. Shells that never mount a frame
 // (mobile) have no animator, so they keep today's instant behavior.
 
-export type ExitKind = "close" | "minimize";
-type ExitAnimator = (kind: ExitKind, done: () => void) => void;
-
-const EXIT_FALLBACK_MS = 400;
-const animators = new Map<WinId, ExitAnimator>();
-const exiting = new Set<WinId>();
-
-// Same contract as the globals.css kill-switches: `.reduce-motion` = manual
-// off, `.force-motion` = manual on, else the OS prefers-reduced-motion pref.
-function motionReduced(): boolean {
-  if (typeof document === "undefined") return true; // SSR / tests: no motion
-  const root = document.documentElement;
-  if (root.classList.contains("reduce-motion")) return true;
-  if (root.classList.contains("force-motion")) return false;
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
-
-/** Store seam: try to hand the exit for `id` to its registered animator.
- *  Returns true when the commit was deferred (animator will run it on
- *  animationend / the fallback timer); false = caller commits instantly. */
-export function requestExit(id: WinId, kind: ExitKind, commit: () => void): boolean {
-  const animate = animators.get(id);
-  if (!animate || exiting.has(id) || motionReduced()) return false;
-  exiting.add(id);
-  let done = false;
-  const finish = () => {
-    if (done) return; // animationend + fallback both land here — commit once
-    done = true;
-    exiting.delete(id);
-    commit();
-  };
-  setTimeout(finish, EXIT_FALLBACK_MS); // hard cap — state never wedges
-  animate(kind, finish);
-  return true;
-}
-
-export function registerExitAnimator(id: WinId, fn: ExitAnimator): () => void {
-  animators.set(id, fn);
-  return () => {
-    animators.delete(id);
-  };
-}
+const EXIT_FALLBACK_MS = WINDOW_EXIT_FALLBACK_MS;
 
 // The dock renders each pinned app's icon as `aria-label={app.title}` inside
 // `role="toolbar" aria-label="Dock"` (dock.tsx/dock-parts.tsx — read-only

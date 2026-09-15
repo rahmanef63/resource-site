@@ -1,4 +1,4 @@
-import type { ShellState, WindowState, WinId } from "./types";
+import type { ShellState, WindowState, WinId } from "./types-core";
 
 // Module-level external store, held in a mutable `M` object (not a rebindable
 // `let`) so the action functions in store.ts can mutate ONE shared instance

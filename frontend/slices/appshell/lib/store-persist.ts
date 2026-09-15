@@ -1,4 +1,4 @@
-import type { WindowState, WinId, PersistedWindow } from "./types";
+import type { WindowState, WinId, PersistedWindow } from "./types-core";
 import { M, emit } from "./store-state";
 
 // Persistence half of the store: snapshot (serialize) + the two restores.

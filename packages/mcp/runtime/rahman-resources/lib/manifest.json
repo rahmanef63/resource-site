@@ -2815,7 +2815,7 @@
       "title": "AppShell — Desktop + Mobile OS Shell",
       "category": "os",
       "kind": "full",
-      "version": "1.6.0",
+      "version": "1.7.0",
       "description": "Generic, brand-free OS-style shell framework. One <AppShell manifest> wrapper provider gives a project a macOS-style window manager (drag/snap/maximize, dock, menu bar, Spotlight) AND an iOS-style mobile surface (home pager, app library, control center, widgets), driven entirely by a manifest: brand, apps, features, surface regions, capabilities, persistence, keymap. Five shell features (search, inspector, notifications, control-center, widgets) are bundled as defineFeature() contributions inside the slice and mount via named <Slot>s. Responsiveness is a single ResponsiveProvider + 4 DRY primitives (AppFrame, MasterDetail, ResponsiveToolbar, TouchList). Imports nothing project-specific — the consumer injects data/auth/AI through manifest.capabilities. Lifted from os-vps (Topside).",
       "source": "rahmanef63/os-vps",
       "slicePath": "frontend/slices/appshell",
@@ -2823,6 +2823,57 @@
       "frameworks": {
         "react-next": {
           "path": "frontend/slices/appshell"
+        },
+        "svelte-sveltekit": {
+          "path": "frontend/slices/appshell-svelte",
+          "aliases": [
+            "svelte",
+            "sveltekit"
+          ],
+          "deps": {
+            "npm": [
+              "svelte@^5"
+            ],
+            "shadcn": [],
+            "sharedFiles": [
+              "frontend/slices/appshell/appshell.css",
+              "frontend/slices/appshell/appshell-focus.css",
+              "frontend/slices/appshell/appshell-materials.css",
+              "frontend/slices/appshell/appshell-spinner.css",
+              "frontend/slices/appshell/appshell-wallpapers.css",
+              "frontend/slices/appshell/lib/types-core.ts",
+              "frontend/slices/appshell/lib/window-exit-core.ts",
+              "frontend/slices/appshell/lib/store-state.ts",
+              "frontend/slices/appshell/lib/store-geometry.ts",
+              "frontend/slices/appshell/lib/store-panels.ts",
+              "frontend/slices/appshell/lib/store-persist.ts",
+              "frontend/slices/appshell/lib/store.ts",
+              "frontend/slices/appshell/lib/window-title.ts",
+              "frontend/slices/appshell/lib/commands-core.ts",
+              "frontend/slices/appshell/lib/badges-core.ts",
+              "frontend/slices/appshell/lib/toast-core.ts",
+              "frontend/slices/appshell/lib/activity-core.ts",
+              "frontend/slices/appshell/lib/clipboard-core.ts",
+              "frontend/slices/appshell/lib/share-core.ts",
+              "frontend/slices/appshell/lib/quick-look-core.ts",
+              "frontend/slices/appshell/lib/lock-core.ts",
+              "frontend/slices/appshell/lib/shortcuts-core.ts",
+              "frontend/slices/appshell/lib/focus-mode-core.ts",
+              "frontend/slices/appshell/lib/inspector-core.ts",
+              "frontend/slices/appshell/lib/recents-core.ts",
+              "frontend/slices/appshell/lib/spaces-core.ts",
+              "frontend/slices/appshell/lib/window-tabs-core.ts",
+              "frontend/slices/appshell/lib/layouts-core.ts",
+              "frontend/slices/appshell/lib/profiles-core.ts",
+              "frontend/slices/appshell/lib/tools.ts",
+              "frontend/slices/appshell/registry/shell-core.ts",
+              "frontend/slices/appshell/registry/chrome-kit.ts",
+              "frontend/slices/appshell/registry/chrome-kit-data.ts",
+              "lib/shared/agentic/define.ts",
+              "lib/shared/agentic/schema.ts",
+              "lib/shared/agentic/types.ts"
+            ]
+          }
         }
       },
       "convexPaths": [],

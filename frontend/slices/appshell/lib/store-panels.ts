@@ -1,4 +1,4 @@
-import type { WinId, SnapZone } from "./types";
+import type { WinId, SnapZone } from "./types-core";
 import { M, emit } from "./store-state";
 
 // UI-panel toggles + the snap-pulse listener machinery, split out of store.ts

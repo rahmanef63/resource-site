@@ -2,6 +2,16 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-APPSHELL",
+    "version": "appshell@1.7.0",
+    "date": 1789430400000,
+    "kind": "feature",
+    "title": "SvelteKit AppShell distribution + shared OS runtime cores",
+    "body": "Related: https://resource.rahmanef.com/slices/appshell — Preview: https://resource.rahmanef.com/preview/slices/appshell — [before: appshell@1.6.0 was React/Next-only with several portable stores mixed with React hooks] → [after: appshell@1.7.0 keeps React default, adds native Svelte macOS/Windows/iOS/Android surfaces and shares framework-neutral window/runtime cores].",
+    "groups": [{"heading":"One OS state model, two native renderers","bullets":["Window geometry, snap, Spaces, layouts/profiles, commands, notifications, badges, clipboard/share, lock and inspector now expose portable cores.","Svelte renders macOS/Windows floating windows and iOS/Android fullscreen home-grid shells without React runtime dependencies.","Consumer brand, apps and extension slots remain injected; the shell still owns no project-specific business data."]}]
+  },
+
+  {
     "id": "SVELTE-NOTION-UI",
     "version": "notion-ui@0.25.0",
     "date": 1789430400000,

@@ -1,0 +1,8 @@
+<script lang="ts">
+  import { onMount } from "svelte"; import AppIcon from "./AppIcon.svelte";
+  import { openWindow, setLauncherOpen, shellStore } from "../../appshell/lib/store"; import type { AppDescriptor } from "../types";
+  let { apps }:{apps:AppDescriptor[]}=$props();let version=$state(0),q=$state("");onMount(()=>shellStore.subscribe(()=>version++));let open=$derived((version,shellStore.getLauncherOpen()));let shown=$derived(apps.filter(a=>!a.noDock&&(!q||`${a.title} ${a.tags?.join(" ")??""}`.toLowerCase().includes(q.toLowerCase()))));
+  function launch(a:AppDescriptor){openWindow(a.id,a.title,a.defaultSize,undefined,{multi:a.multi});setLauncherOpen(false)}
+</script>
+{#if open}<div class="veil" role="presentation" onclick={()=>setLauncherOpen(false)}><dialog open class="launcher" aria-label="Applications" onclick={e=>e.stopPropagation()} onkeydown={e=>e.stopPropagation()}><input aria-label="Search applications" placeholder="Search apps" bind:value={q}/><div class="grid">{#each shown as app (app.id)}<AppIcon {app} onclick={()=>launch(app)}/>{/each}</div></dialog></div>{/if}
+<style>.veil{position:absolute;inset:0;z-index:900;display:grid;place-items:center;background:#0006;backdrop-filter:blur(18px)}.launcher{width:min(720px,90vw);max-height:78vh;overflow:auto;border:1px solid #ffffff44;border-radius:24px;padding:22px;background:#121212cc;color:white;box-shadow:0 30px 90px #0008}.launcher input{width:100%;box-sizing:border-box;margin-bottom:20px;border:0;border-radius:12px;padding:11px 14px;background:#ffffff18;color:white}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:20px}</style>

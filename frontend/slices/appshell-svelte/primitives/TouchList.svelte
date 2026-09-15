@@ -1,0 +1,1 @@
+<script lang="ts">import type{Snippet}from"svelte";let{children,className=""}:{children:Snippet;className?:string}=$props();</script><div class={`list ${className}`}>{@render children()}</div><style>.list{display:grid}.list{--touch-row-min:44px}</style>

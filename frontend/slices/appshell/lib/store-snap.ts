@@ -1,4 +1,4 @@
-import type { WinId, SnapZone } from "./types";
+import type { WinId, SnapZone } from "./types-core";
 import { M, patch } from "./store-state";
 import { GAP, workArea, snapRect, setChromeInsets } from "./store-geometry";
 

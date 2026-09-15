@@ -1,0 +1,3 @@
+<script lang="ts">import type{Snippet}from"svelte";export type ToolbarItem={id:string;label:string;onclick?:()=>void;disabled?:boolean};let{items=[],leading,trailing}:{items?:ToolbarItem[];leading?:Snippet;trailing?:Snippet}=$props();</script>
+<nav>{#if leading}{@render leading()}{/if}{#each items as item(item.id)}<button disabled={item.disabled} onclick={item.onclick}>{item.label}</button>{/each}<span></span>{#if trailing}{@render trailing()}{/if}</nav>
+<style>nav{display:flex;min-height:44px;align-items:center;gap:6px;padding:5px 8px}nav span{flex:1}button{border:0;border-radius:8px;padding:7px 10px;background:var(--muted,#eee);color:inherit}@media(max-width:640px){nav{overflow-x:auto}button{white-space:nowrap}}</style>

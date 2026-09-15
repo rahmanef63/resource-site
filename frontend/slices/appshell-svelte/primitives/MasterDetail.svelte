@@ -1,0 +1,3 @@
+<script lang="ts">import type{Snippet}from"svelte";let{master,detail,selected=true,className=""}:{master:Snippet;detail:Snippet;selected?:boolean;className?:string}=$props();</script>
+<div class={`md ${className}`} class:selected><aside>{@render master()}</aside><main>{@render detail()}</main></div>
+<style>.md{display:grid;height:100%;grid-template-columns:minmax(14rem,20rem) minmax(0,1fr)}.md aside{border-right:1px solid var(--border,#ddd);overflow:auto}.md main{overflow:auto}@media(max-width:700px){.md{display:block}.md aside,.md main{height:100%}.md.selected aside{display:none}.md:not(.selected) main{display:none}}</style>

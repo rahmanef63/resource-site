@@ -2,57 +2,10 @@ import type { ComponentType } from "react";
 import type { IconType } from "./icon";
 import type { WidgetOption } from "./widget-types";
 
-export type WinId = string;
-
-export type Rect = { x: number; y: number; w: number; h: number };
-
-export type WindowState = {
-  id: WinId;
-  app: string;
-  title: string;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  z: number;
-  minimized: boolean;
-  maximized: boolean;
-  /** Saved rect for restore from maximize/snap. */
-  prevRect?: Rect;
-  /** The zone this window is snapped to. Kept so a shell switch (different
-   *  chrome insets) can re-tile snapped/maximized windows into the new work
-   *  area instead of leaving frozen geometry. Cleared on free move/resize. */
-  snapZone?: SnapZone;
-  /** Optional context handed to the app component (e.g. a file path to open). */
-  payload?: unknown;
-  /** Always-on-top: rendered above the regular stack (PiP-style). */
-  pinned?: boolean;
-  /** Virtual desktop this window lives on (default 1). */
-  spaceId?: number;
-  /** Tab group — members render as ONE tabbed frame (top-z member shows). */
-  groupId?: string;
-};
+export type { WinId, Rect, WindowState, ShellState, SnapZone, PersistedWindow } from "./types-core";
 
 /** Props every app component receives. `payload` is whatever opened the window. */
 export type AppProps = { payload?: unknown };
-
-export type SnapZone =
-  | "left" | "right" | "top"
-  | "tl" | "tr" | "bl" | "br"
-  // tiling presets: thirds (left/right ⅓ and ⅔ columns)
-  | "l13" | "l23" | "r13" | "r23";
-
-export type ShellState = {
-  windows: Record<WinId, WindowState>;
-  order: WinId[];
-  focused: WinId | null;
-  /** Active virtual desktop (Spaces) — windows on other spaces stay hidden. */
-  activeSpace: number;
-  launcherOpen: boolean;
-  spotlightOpen: boolean;
-  inspectorOpen: boolean;
-  notificationCenterOpen: boolean;
-};
 
 /** App Store category — groups apps in the store + docs. */
 export type AppCategory =
@@ -140,9 +93,3 @@ export type AppMenuItem =
       onSelect?: () => void;
       disabled?: boolean;
     };
-
-/** Serialisable slice of a window persisted to Convex (no z/focus churn). */
-export type PersistedWindow = Pick<
-  WindowState,
-  "id" | "app" | "title" | "x" | "y" | "w" | "h" | "minimized" | "maximized" | "pinned" | "spaceId" | "groupId"
->;

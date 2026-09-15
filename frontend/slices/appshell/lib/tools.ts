@@ -4,7 +4,8 @@
 // @/shared/agentic. Shell state is the module-level external store, so the
 // ctx is empty — every tool acts on the singleton action functions.
 
-import { defineToolCollection, noArgs, num, obj, str } from "@/shared/agentic";
+import { defineToolCollection } from "@/shared/agentic/define";
+import { noArgs, num, obj, str } from "@/shared/agentic/schema";
 import {
   closeWindow,
   focusApp,
@@ -15,9 +16,9 @@ import {
   shellStore,
   toggleMaximize,
 } from "./store";
-import { applyProfile, listProfiles, saveProfile } from "./profiles";
-import { setActiveSpace } from "./spaces";
-import { toast } from "./toast";
+import { applyProfile, listProfiles, saveProfile } from "./profiles-core";
+import { setActiveSpace } from "./spaces-core";
+import { toast } from "./toast-core";
 
 export type AppshellCtx = Record<string, never>;
 

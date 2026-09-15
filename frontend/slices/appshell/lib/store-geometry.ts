@@ -1,4 +1,4 @@
-import type { Rect, SnapZone } from "./types";
+import type { Rect, SnapZone } from "./types-core";
 
 // Window-manager geometry — PURE (no store access), so it lives apart from the
 // stateful store. Window coords are relative to the desktop surface, which

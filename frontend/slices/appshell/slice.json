@@ -1,15 +1,69 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "appshell",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "category": "os",
   "kind": "full",
-  "title": "AppShell — Desktop + Mobile OS Shell",
-  "description": "Generic, brand-free OS-style shell framework. One <AppShell manifest> wrapper provider gives a project a SWITCHABLE multi-shell OS — macOS, Windows 11, Android (Material-You), iOS, plus consumer-registered shells (register a single-pane cockpit with registerShell(); a route-based dashboard is the separate dashboard-shell slice) — over ONE shared window store, driven entirely by a manifest (brand, apps, features, surface regions, capabilities, persistence, keymap). Features (search/⌘K with a dynamic command registry, quick-look, clipboard history, share sheet, shortcut cheat-sheet, lock screen, widgets incl. a desktop wallpaper-layer stack, control-center, inspector, notifications with actions + app badges) plug in via extension points; window manager covers snap halves/quadrants/thirds, always-on-top, virtual desktops (Spaces), window tabs, saved layouts, session profiles, cross-app drag & drop, focus mode and document.title sync. Responsiveness is a single provider + shared primitives. Imports no apps or brand strings — the consumer injects everything.",
+  "title": "AppShell \u2014 Desktop + Mobile OS Shell",
+  "description": "Generic, brand-free, switchable OS shell with React/Next as the default renderer and a native Svelte 5/SvelteKit distribution over the same window/store/geometry/command/notification/profile core. Both render macOS, Windows 11, iOS and Android-style surfaces; windows share drag/resize/snap, Spaces, tabs, layouts/profiles, command palette, notifications/badges, clipboard/share, Quick Look, lock screen and inspector contracts. Consumer apps/brand/feature slots stay injected \u2014 no project-specific routes, credentials or data are embedded.",
   "namespace": "@/features/appshell",
   "frontend": {
     "slicePath": "frontend/slices/appshell",
-    "configExport": "appshellConfig"
+    "configExport": "appshellConfig",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/appshell-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/appshell/appshell.css",
+            "frontend/slices/appshell/appshell-focus.css",
+            "frontend/slices/appshell/appshell-materials.css",
+            "frontend/slices/appshell/appshell-spinner.css",
+            "frontend/slices/appshell/appshell-wallpapers.css",
+            "frontend/slices/appshell/lib/types-core.ts",
+            "frontend/slices/appshell/lib/window-exit-core.ts",
+            "frontend/slices/appshell/lib/store-state.ts",
+            "frontend/slices/appshell/lib/store-geometry.ts",
+            "frontend/slices/appshell/lib/store-panels.ts",
+            "frontend/slices/appshell/lib/store-persist.ts",
+            "frontend/slices/appshell/lib/store.ts",
+            "frontend/slices/appshell/lib/window-title.ts",
+            "frontend/slices/appshell/lib/commands-core.ts",
+            "frontend/slices/appshell/lib/badges-core.ts",
+            "frontend/slices/appshell/lib/toast-core.ts",
+            "frontend/slices/appshell/lib/activity-core.ts",
+            "frontend/slices/appshell/lib/clipboard-core.ts",
+            "frontend/slices/appshell/lib/share-core.ts",
+            "frontend/slices/appshell/lib/quick-look-core.ts",
+            "frontend/slices/appshell/lib/lock-core.ts",
+            "frontend/slices/appshell/lib/shortcuts-core.ts",
+            "frontend/slices/appshell/lib/focus-mode-core.ts",
+            "frontend/slices/appshell/lib/inspector-core.ts",
+            "frontend/slices/appshell/lib/recents-core.ts",
+            "frontend/slices/appshell/lib/spaces-core.ts",
+            "frontend/slices/appshell/lib/window-tabs-core.ts",
+            "frontend/slices/appshell/lib/layouts-core.ts",
+            "frontend/slices/appshell/lib/profiles-core.ts",
+            "frontend/slices/appshell/lib/tools.ts",
+            "frontend/slices/appshell/registry/shell-core.ts",
+            "frontend/slices/appshell/registry/chrome-kit.ts",
+            "frontend/slices/appshell/registry/chrome-kit-data.ts",
+            "lib/shared/agentic/define.ts",
+            "lib/shared/agentic/schema.ts",
+            "lib/shared/agentic/types.ts"
+          ]
+        }
+      }
+    }
   },
   "deps": {
     "npm": [
@@ -46,7 +100,10 @@
     "mobile",
     "responsive",
     "framework",
-    "ui"
+    "ui",
+    "svelte",
+    "sveltekit",
+    "framework-parity"
   ],
   "previews": [
     {
@@ -56,7 +113,7 @@
         {
           "id": "sidebar-collapsed",
           "title": "Sidebar collapsed",
-          "description": "AppFrame body with the rail hidden — content spans the full pane."
+          "description": "AppFrame body with the rail hidden \u2014 content spans the full pane."
         },
         {
           "id": "sidebar-expanded",
@@ -69,7 +126,7 @@
           "description": "AppFrame header + toolbar rows above the sidebar/content body."
         }
       ],
-      "seed": "Scaled-down shell chrome in a fixed-height card — AppFrame header/toolbar/body composed with a mock sidebar + content list (no window manager, no providers)."
+      "seed": "Scaled-down shell chrome in a fixed-height card \u2014 AppFrame header/toolbar/body composed with a mock sidebar + content list (no window manager, no providers)."
     }
   ],
   "contract": {
@@ -127,5 +184,6 @@
       ],
       "tables": []
     }
-  }
+  },
+  "agentRecipe": "Run `npx rr add appshell` for the React/Next default or append `--framework sveltekit` for native Svelte 5. Both render macOS, Windows, iOS and Android shells over the same window state, geometry, snap/space/layout/profile, commands, notifications, clipboard/share, lock and inspector cores. Supply a manifest with brand + app descriptors; Svelte app descriptors lazy-load Svelte components while React app descriptors keep the existing React loader contract."
 }

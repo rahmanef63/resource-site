@@ -12,7 +12,7 @@
    Relationship to ShellDescriptor (registry/shells.tsx): a kit decorates a
    registered shell 1:1 by `id`. The shell still owns `render`; the kit owns the
    declarative skin/metaphor data the chrome refactor will read. */
-import type { ShellId, ShellSurface } from "./shells";
+import type { ShellId, ShellSurface } from "./shell-core";
 import { BUILTIN_CHROME_KITS } from "./chrome-kit-data";
 
 export { BUILTIN_CHROME_KITS } from "./chrome-kit-data";

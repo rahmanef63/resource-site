@@ -11,6 +11,16 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-15 — SvelteKit AppShell distribution + shared OS runtime cores
+<!-- public-changelog:SVELTE-APPSHELL -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/appshell
+- Preview: https://resource.rahmanef.com/preview/slices/appshell
+- [before: `appshell@1.6.0` rendered the multi-OS shell only through React/Next and several command/notification/window stores mixed portable state with React hooks] → [after: `appshell@1.7.0` keeps React/Next default, adds a native Svelte 5/SvelteKit renderer for macOS, Windows, iOS and Android surfaces, and moves window/domain/commands/badges/toasts/clipboard/share/lock/inspector/spaces/layout/profile state into shared framework-neutral cores]
+- Svelte includes floating window drag/resize/snap, Spaces, macOS dock/menu bar, Windows taskbar/start, iOS/Android home/fullscreen/recents, app launcher, command palette, notifications, badges, inspector, clipboard, Quick Look, share, lock screen, shortcut help, persistence and shell switching without React/Lucide/shadcn/vaul runtime.
+
+
 ### 2026-09-15 — SvelteKit Notion UI distributions
 <!-- public-changelog:SVELTE-NOTION-UI -->
 

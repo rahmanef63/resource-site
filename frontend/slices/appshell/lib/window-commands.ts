@@ -4,7 +4,7 @@ import { registerCommands } from "./commands";
 import { shellStore, patch } from "./store-state";
 import { snapWindow } from "./store";
 import { toast } from "./toast";
-import type { SnapZone, WinId } from "./types";
+import type { SnapZone, WinId } from "./types-core";
 
 // Window-management commands — pin (always-on-top) + tiling presets, exposed
 // through the dynamic command registry so every shell's palette gets them.

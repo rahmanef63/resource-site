@@ -1,8 +1,8 @@
-import type { WindowState, WinId, PersistedWindow, SnapZone } from "./types";
+import type { WindowState, WinId, PersistedWindow, SnapZone } from "./types-core";
 import { M, emit, patch, topZ } from "./store-state";
 import { GAP, workArea, snapRect, snapZoneAt, setChromeInsets, spawnRect } from "./store-geometry";
 import { snapListeners } from "./store-panels";
-import { requestExit } from "../hooks/use-window-exit";
+import { requestExit } from "./window-exit-core";
 
 // Public store barrel: window lifecycle + UI-panel actions. State + listeners
 // live in store-state (`M`); pure geometry in store-geometry; panel toggles in
