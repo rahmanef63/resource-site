@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "glass-desktop",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -97,6 +97,7 @@
     "hooks/use-timer.test.ts",
     "hooks/use-timer.ts",
     "index.ts",
+    "lib/layout-core.ts",
     "lib/seeds/calendar-2.seed.ts",
     "lib/seeds/calendar.seed.ts",
     "lib/seeds/finance-analytics-2.seed.ts",
@@ -113,7 +114,10 @@
     "lib/seeds/utilities.seed.ts",
     "lib/seeds/weather-2.seed.ts",
     "lib/seeds/weather.seed.ts",
+    "lib/widget-catalog.ts",
+    "lib/widget-display.ts",
     "lib/widget-registry.ts",
+    "react-types.ts",
     "types.ts",
     "utils/format.test.ts",
     "utils/format.ts",

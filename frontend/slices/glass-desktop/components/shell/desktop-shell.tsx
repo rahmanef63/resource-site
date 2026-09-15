@@ -19,6 +19,8 @@ import type { LayoutStore } from "@/features/glass-desktop/types";
 import { LucentTheme } from "@/features/glass-desktop/components/engine/lucent-theme";
 
 export interface DesktopShellProps {
+  /** Initial space when no persisted space exists. */
+  initialSpace?: 0 | 1;
   /** Brand shown in the menu bar. Portability prop — no hardcoded consumer. */
   brand?: { name: string; glyph?: React.ReactNode };
   /** Layout persistence adapter (defaults to the localStorage adapter). */
@@ -29,13 +31,13 @@ export interface DesktopShellProps {
  * The Lucent glass desktop chrome. Full-bleed h-dvh, single outer element; the
  * wallpaper, spaces and menu bar layer inside it by z-index only.
  */
-export function DesktopShell({ brand, store }: DesktopShellProps) {
+export function DesktopShell({ initialSpace = 0, brand, store }: DesktopShellProps) {
   const [editing, setEditing] = useState(false);
   const toggleEditing = useCallback(() => setEditing((v) => !v), []);
   const [pickerOpen, setPickerOpen] = useState(false);
   // Active space is owned by SpacePager but shared via the same persisted key,
   // so "Add widget" targets the space the user is actually looking at.
-  const [activeSpace] = usePersistentState<0 | 1>(STORAGE.space, 0);
+  const [activeSpace] = usePersistentState<0 | 1>(STORAGE.space, initialSpace);
   // One layout store for the whole desktop — both spaces read the same state.
   const layout = useLayout({ store });
 
@@ -64,6 +66,7 @@ export function DesktopShell({ brand, store }: DesktopShellProps) {
 
           <div className="relative min-h-0 flex-1" style={{ zIndex: Z.widget }}>
             <SpacePager
+              initialSpace={initialSpace}
               spaces={[
                 <WidgetCanvas
                   key={0}

@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-GLASS-DESKTOP",
+    "version": "glass-desktop@0.2.0",
+    "date": 1789430400000,
+    "kind": "feature",
+    "title": "SvelteKit Lucent Desktop engine + shared 47-widget layout core",
+    "body": "Related: https://resource.rahmanef.com/slices/glass-desktop — Preview: https://resource.rahmanef.com/preview/slices/glass-desktop — [before: glass-desktop@0.1.0 was React/Next-only source with React-coupled registry/layout semantics and no public CLI catalog entry] → [after: glass-desktop@0.2.0 is publicly installable, keeps React default, adds native Svelte 5/SvelteKit, and shares one 47-widget catalog plus grid/layout/storage engine].",
+    "groups": [
+      {
+        "heading": "One desktop engine, two native renderers",
+        "bullets": [
+          "The portable catalog is the SSOT for all 47 widget ids/families/sizes/titles; React composes it with specialized React components while Svelte renders the same descriptors natively.",
+          "Both frameworks share dense grid packing, add/remove/resize/move/reset semantics, the 50-instance two-space default seed, and the LayoutStore/localStorage contract.",
+          "The old full/backend classification and stale installer dependencies were corrected; Svelte installs only svelte@^5 plus portable desktop core files."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-AI-WORKSPACE",
     "version": "ai-workspace@0.4.0",
     "date": 1789430400000,

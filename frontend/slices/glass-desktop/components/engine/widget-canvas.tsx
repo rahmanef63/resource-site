@@ -8,6 +8,7 @@
 import { useCallback, useRef } from "react";
 import { widgetRegistry } from "@/features/glass-desktop/lib/widget-registry";
 import { GRID, SIZE_CELLS, Z } from "@/features/glass-desktop/config/constants";
+import { resolveWidgetSize } from "@/features/glass-desktop/lib/layout-core";
 import { cellToPx, packLayout, type Pinned } from "@/features/glass-desktop/utils/grid";
 import { WidgetShell } from "@/features/glass-desktop/components/engine/widget-shell";
 import { WidgetErrorBoundary } from "@/features/glass-desktop/components/engine/widget-error-boundary";
@@ -18,11 +19,7 @@ import { cn } from "@/lib/utils";
 
 const SIZE_CYCLE: WidgetSize[] = ["SP", "S", "WP", "W", "L"];
 
-function resolveSize(inst: WidgetInstance): WidgetSize {
-  const override = inst.props?.size;
-  if (typeof override === "string" && override in SIZE_CELLS) return override as WidgetSize;
-  return widgetRegistry[inst.widgetId]?.size ?? "S";
-}
+
 
 export interface WidgetCanvasProps {
   space: 0 | 1;
@@ -40,7 +37,7 @@ export function WidgetCanvas({ space, instances, editMode = false, onMove, onRem
     .filter((i) => i.space === space)
     .map((inst) => {
       const def = widgetRegistry[inst.widgetId];
-      const size = resolveSize(inst);
+      const size = resolveWidgetSize(inst);
       return { inst, def, size, cells: SIZE_CELLS[size] };
     });
 

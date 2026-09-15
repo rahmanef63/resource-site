@@ -16,14 +16,16 @@ import { usePersistentState } from "@/features/glass-desktop/hooks/use-persisten
 type SpaceIndex = 0 | 1;
 
 export interface SpacePagerProps {
+  /** Initial space used when persistence is empty. */
+  initialSpace?: SpaceIndex;
   /** The two space canvases, in order. Index 0 shows first. */
   spaces: readonly [ReactNode, ReactNode];
 }
 
 const SPACE_LABELS = ["Today", "System & work"] as const;
 
-export function SpacePager({ spaces }: SpacePagerProps) {
-  const [space, setSpace] = usePersistentState<SpaceIndex>(STORAGE.space, 0);
+export function SpacePager({ initialSpace = 0, spaces }: SpacePagerProps) {
+  const [space, setSpace] = usePersistentState<SpaceIndex>(STORAGE.space, initialSpace);
 
   const go = useCallback(
     (next: SpaceIndex) => setSpace(next),

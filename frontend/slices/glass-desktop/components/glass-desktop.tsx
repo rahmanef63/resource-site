@@ -22,8 +22,7 @@ export interface GlassDesktopProps {
  * add / remove / resize / drag-configurable and persist to localStorage.
  * `gallery` swaps in a captioned grid of every registered widget.
  */
-export function GlassDesktop({ brand, store, gallery }: GlassDesktopProps) {
-  // TODO(rr): thread initialSpace into SpacePager's default (persisted space wins today).
+export function GlassDesktop({ initialSpace = 0, brand, store, gallery }: GlassDesktopProps) {
   if (gallery) return <WidgetGallery />;
-  return <DesktopShell brand={brand} store={store} />;
+  return <DesktopShell initialSpace={initialSpace} brand={brand} store={store} />;
 }

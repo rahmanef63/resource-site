@@ -1,0 +1,41 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "glass-desktop-svelte",
+  "version": "0.2.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add glass-desktop --framework sveltekit",
+    "consumerPath": "slices/glass-desktop"
+  },
+  "files": [
+    "README.md",
+    "components/GlassDesktop.svelte",
+    "components/MenuBar.svelte",
+    "components/SpacePager.svelte",
+    "components/WidgetCanvas.svelte",
+    "components/WidgetCard.svelte",
+    "components/WidgetContent.svelte",
+    "components/WidgetGallery.svelte",
+    "components/WidgetPicker.svelte",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/glass-desktop/types.ts",
+      "frontend/slices/glass-desktop/config/constants.ts",
+      "frontend/slices/glass-desktop/config/default-layout.seed.ts",
+      "frontend/slices/glass-desktop/config/theme.css",
+      "frontend/slices/glass-desktop/lib/widget-catalog.ts",
+      "frontend/slices/glass-desktop/lib/widget-display.ts",
+      "frontend/slices/glass-desktop/lib/layout-core.ts",
+      "frontend/slices/glass-desktop/utils/grid.ts",
+      "frontend/slices/glass-desktop/utils/storage.ts"
+    ],
+    "external": [
+      "svelte"
+    ]
+  }
+}

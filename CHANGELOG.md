@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-15 — SvelteKit Lucent Desktop engine + shared 47-widget layout core
+<!-- public-changelog:SVELTE-GLASS-DESKTOP -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/glass-desktop
+- Preview: https://resource.rahmanef.com/preview/slices/glass-desktop
+- [before: `glass-desktop@0.1.0` lived only as React/Next source, duplicated widget metadata inside the React registry, kept layout mutations in a React hook, declared stale dependency/kind metadata, and was missing from the public catalog/CLI entirely] → [after: `glass-desktop@0.2.0` is a public installable UI slice with React/Next default plus a native Svelte 5/SvelteKit Lucent Desktop engine over one shared 47-widget catalog, grid/layout core, seed, display semantics, and LayoutStore persistence contract]
+- React retains the 47 specialized widget components; Svelte renders all 47 catalog entries through native data-driven Lucent cards while preserving the same two-space add/remove/resize/move/reset/persistence engine, picker, gallery, and injected storage/brand seams.
+
 ### 2026-09-15 — SvelteKit AI Workspace distributions + exact variant gates
 <!-- public-changelog:SVELTE-AI-WORKSPACE -->
 

@@ -1,0 +1,12 @@
+<script lang="ts">
+  import { onMount } from "svelte";
+  import { MENUBAR_H } from "../../glass-desktop/config/constants";
+  let { brand = { name: "Lucent" }, editing = false, onEdit, onAdd, onReset }: { brand?: {name:string;glyph?:string}; editing?:boolean; onEdit:()=>void; onAdd:()=>void; onReset:()=>void } = $props();
+  let menu = $state(false); let now=$state(new Date());
+  let clock=$derived(new Intl.DateTimeFormat("en-GB",{hour:"2-digit",minute:"2-digit",hour12:false}).format(now));
+  onMount(()=>{const id=window.setInterval(()=>now=new Date(),30000); return()=>window.clearInterval(id)});
+</script>
+<header style:height={`${MENUBAR_H}px`}><span class="brand"><span class="glyph">{brand.glyph ?? "◇"}</span>{brand.name}</span><div class="menu"><button type="button" aria-expanded={menu} onclick={() => menu=!menu}>Widgets</button>{#if menu}<div class="popover"><button type="button" onclick={() => {onEdit();menu=false}}>{editing ? "✓ " : ""}Edit layout</button><button type="button" onclick={() => {onAdd();menu=false}}>Add widget…</button><hr/><button type="button" class="danger" onclick={() => {onReset();menu=false}}>Reset layout</button></div>{/if}</div><div class="status"><span aria-label="Wi-Fi">◒</span><span aria-label="Battery">▰</span><span>{clock}</span></div></header>
+<style>
+header{position:relative;z-index:40;box-sizing:border-box;display:flex;align-items:center;gap:.35rem;padding:0 .75rem;border-bottom:1px solid var(--color-hairline);background:linear-gradient(var(--color-glass-hi),var(--color-glass-lo));backdrop-filter:blur(var(--blur-glass)) saturate(140%);color:var(--color-ink-mid);font:500 .75rem var(--font-ui)}.brand{display:flex;gap:.45rem;align-items:center;color:var(--color-ink-hi);font-weight:650;font-size:.85rem}.glyph{color:var(--color-accent-blue)}button{border:0;background:transparent;color:inherit;font:inherit;border-radius:.45rem;padding:.28rem .5rem;cursor:pointer}button:hover{background:var(--color-hairline)}.status{margin-left:auto;display:flex;align-items:center;gap:.75rem;font-family:var(--font-numeric)}.menu{position:relative}.popover{position:absolute;top:calc(100% + .4rem);left:0;width:12rem;padding:.35rem;border:1px solid var(--color-hairline);border-radius:.75rem;background:var(--color-glass-solid);box-shadow:var(--shadow-widget);display:grid;z-index:60}.popover button{text-align:left}.popover hr{width:100%;border:0;border-top:1px solid var(--color-hairline)}.danger{color:var(--color-accent-coral)}
+</style>

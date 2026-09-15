@@ -1,32 +1,81 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "glass-desktop",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "category": "os",
-  "kind": "full",
+  "kind": "ui",
   "title": "Lucent Desktop",
   "description": "Interactive dark-glass desktop: a configurable widget canvas (add / remove / resize / drag / reorder, persisted) across two spaces, with glass chrome. Widgets are registry-composed (one component + one registry entry + one seed row). Runs on a localStorage LayoutStore adapter, swappable for Convex. Props: initialSpace (0|1), store (LayoutStore), brand ({ name, glyph? }) — no hardcoded consumer URLs/env/roles. Storage namespace: rr:glass-desktop:v1.",
   "namespace": "@/features/glass-desktop",
   "frontend": {
-    "slicePath": "frontend/slices/glass-desktop"
+    "slicePath": "frontend/slices/glass-desktop",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/glass-desktop-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/glass-desktop/types.ts",
+            "frontend/slices/glass-desktop/config/constants.ts",
+            "frontend/slices/glass-desktop/config/default-layout.seed.ts",
+            "frontend/slices/glass-desktop/config/theme.css",
+            "frontend/slices/glass-desktop/lib/widget-catalog.ts",
+            "frontend/slices/glass-desktop/lib/widget-display.ts",
+            "frontend/slices/glass-desktop/lib/layout-core.ts",
+            "frontend/slices/glass-desktop/utils/grid.ts",
+            "frontend/slices/glass-desktop/utils/storage.ts"
+          ]
+        }
+      }
+    }
   },
   "deps": {
-    "npm": ["lucide-react", "clsx", "tailwind-merge"],
-    "shadcn": ["button", "switch", "checkbox", "slider", "dropdown-menu", "input", "tooltip", "sonner", "dialog"],
+    "npm": [
+      "lucide-react@^0.400.0",
+      "sonner@^2.0.7",
+      "clsx@^2.1.1",
+      "tailwind-merge@^3.5.0"
+    ],
+    "shadcn": [
+      "button",
+      "checkbox",
+      "dialog",
+      "dropdown-menu",
+      "input",
+      "scroll-area",
+      "slider",
+      "toggle"
+    ],
     "env": [],
     "peers": []
   },
   "registers": [],
   "audit": [],
   "license": "MIT",
-  "tags": ["shell", "desktop", "widgets", "glass", "os"],
+  "tags": [
+    "shell",
+    "desktop",
+    "widgets",
+    "glass",
+    "os"
+  ],
   "previews": [],
   "contract": {
     "requires": {
       "auth": "none"
     },
     "provides": {
-      "components": ["GlassDesktop"],
+      "components": [
+        "GlassDesktop"
+      ],
       "hooks": [],
       "tools": [],
       "routes": [],

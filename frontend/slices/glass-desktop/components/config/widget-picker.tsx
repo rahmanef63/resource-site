@@ -17,11 +17,8 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { SIZE_CELLS } from "@/features/glass-desktop/config/constants";
 import { widgetRegistry } from "@/features/glass-desktop/lib/widget-registry";
-import type {
-  WidgetDef,
-  WidgetFamily,
-  WidgetRegistry,
-} from "@/features/glass-desktop/types";
+import type { WidgetFamily } from "@/features/glass-desktop/types";
+import type { WidgetDef, WidgetRegistry } from "@/features/glass-desktop/react-types";
 
 const FAMILY_LABEL: Record<WidgetFamily, string> = {
   time: "Time",
