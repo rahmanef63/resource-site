@@ -112,15 +112,15 @@ function TabTrigger({
   disabled?: boolean;
 }) {
   return (
-    <TabsTrigger value={value} disabled={disabled} className="h-7 gap-1 px-1.5 text-[10px]">
+    <TabsTrigger value={value} disabled={disabled} className="h-10 gap-1 px-2 text-[11px] sm:h-9">
       <span className={cn("flex items-center gap-1", disabled && "opacity-60")}>{icon} {label}</span>
       {count != null && count > 0 && (
-        <Badge variant="secondary" className="h-3.5 rounded-full px-1 text-[9px]">
+        <Badge variant="secondary" className="h-4 rounded-full px-1.5 text-[9px]">
           {countTotal != null ? `${count}/${countTotal}` : count}
         </Badge>
       )}
       {badge && (
-        <Badge variant="secondary" className="h-3.5 rounded-full px-1 text-[9px]">{badge}</Badge>
+        <Badge variant="secondary" className="h-4 rounded-full px-1.5 text-[9px]">{badge}</Badge>
       )}
     </TabsTrigger>
   );

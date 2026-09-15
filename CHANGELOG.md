@@ -11,6 +11,18 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-15 — Public frontend UI/UX audit + interaction-density pass
+<!-- public-changelog:FRONTEND-UX-AUDIT-20260915 -->
+
+**Site:**
+- Related: https://resource.rahmanef.com/
+- Related: https://resource.rahmanef.com/slices
+- Related: https://resource.rahmanef.com/build
+- Related: https://resource.rahmanef.com/agents
+- [before: public pages mixed narrow and wide content widths, mobile gutters consumed too much space, catalog cards/filters and preview/Builder controls used inconsistent 24–32px interaction targets, and focus/heading hierarchy varied across surfaces] → [after: shared DocsShell/PageHeader/Catalog primitives use one responsive width/type/spacing rhythm, high-frequency controls have larger touch targets and visible focus states, catalog metadata is less noisy, and the homepage/detail/Builder/Agents flows share calmer card and navigation hierarchy]
+- Desktop, tablet, and mobile audit covers homepage, Docs, Slices, slice detail, Installation, Stack, Builder, Agents, Changelog, and Tour; production verification requires no horizontal overflow, no console/page errors, and no failed HTTP responses.
+
+
 ### 2026-09-15 — Framework comparison layouts + npm/Bun dual-runtime CLI
 <!-- public-changelog:FRAMEWORK-NPM-BUN-CLI-1-19 -->
 

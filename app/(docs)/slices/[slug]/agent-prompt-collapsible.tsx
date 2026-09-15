@@ -24,7 +24,7 @@ export function AgentPromptCollapsible({
         label="AI install prompt"
         actions={
           <>
-            <Button asChild variant="ghost" size="sm" className="h-7 gap-1 px-2 text-xs">
+            <Button asChild variant="ghost" size="sm" className="h-9 gap-1 px-3 text-xs">
               <Link href={`/agents/${slug}`}>Dedicated page</Link>
             </Button>
             <CollapsibleTrigger asChild>

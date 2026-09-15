@@ -37,7 +37,7 @@ export function PreviewBlock({
           type="button"
           onClick={() => setTab("preview")}
           className={cn(
-            "inline-flex h-7 items-center gap-1.5 rounded-md px-2.5 text-xs font-medium transition-colors",
+            "inline-flex h-9 items-center gap-1.5 rounded-md px-3 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50",
             tab === "preview"
               ? "bg-accent text-foreground"
               : "text-muted-foreground hover:text-foreground",
@@ -49,7 +49,7 @@ export function PreviewBlock({
           type="button"
           onClick={() => setTab("code")}
           className={cn(
-            "inline-flex h-7 items-center gap-1.5 rounded-md px-2.5 text-xs font-medium transition-colors",
+            "inline-flex h-9 items-center gap-1.5 rounded-md px-3 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50",
             tab === "code"
               ? "bg-accent text-foreground"
               : "text-muted-foreground hover:text-foreground",

@@ -46,7 +46,8 @@ type Props = {
  * so consumers don't need to fork the component.
  *
  * Pairs with `<IframeThumbnail>` — thumbnail is `pointer-events-none`
- * (preview only); this button opens the interactive surface.
+ * (preview only); this button opens the interactive surface. Catalog cards use
+ * a stretched detail link so this remains an independent interactive control.
  */
 export function LivePreviewButton({
   src,
@@ -68,16 +69,11 @@ export function LivePreviewButton({
           type="button"
           size="sm"
           variant="secondary"
-          onClick={(e) => {
-            // Block parent <Link> so the trigger doesn't navigate when
-            // user just wants to peek interactively in-place.
-            e.preventDefault();
-            e.stopPropagation();
-          }}
+          onClick={(e) => e.stopPropagation()}
           className={cn(
-            "absolute bottom-2 right-2 z-10 h-7 gap-1.5 rounded-full px-2.5 text-[11px] font-medium",
-            "bg-background/90 text-foreground shadow-sm backdrop-blur",
-            "opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100",
+            "absolute bottom-2 right-2 z-20 h-10 gap-1.5 rounded-full px-3 text-xs font-medium sm:h-8",
+            "bg-background/95 text-foreground shadow-sm backdrop-blur",
+            "opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100 focus-visible:opacity-100",
             "hover:bg-background",
             triggerClassName,
           )}

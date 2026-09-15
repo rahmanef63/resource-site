@@ -37,7 +37,8 @@ export function ProjectForm({ value, onChange }: { value: ProjectFormShape; onCh
             type="button"
             size="sm"
             variant={value.framework === item.id ? "default" : "outline"}
-            className="h-auto min-h-9 flex-1 justify-start px-2 py-1.5 text-left"
+            aria-pressed={value.framework === item.id}
+            className="h-auto min-h-11 flex-1 justify-start px-3 py-2 text-left"
             onClick={() => patch({ framework: item.id })}
           >
             <span><span className="block text-[11px] font-semibold">{item.label}</span><span className="block text-[9px] opacity-70">{item.renderer}</span></span>
@@ -52,7 +53,8 @@ export function ProjectForm({ value, onChange }: { value: ProjectFormShape; onCh
             type="button"
             size="sm"
             variant={value.packageManager === item.id ? "default" : "outline"}
-            className="h-8 flex-1 text-xs"
+            aria-pressed={value.packageManager === item.id}
+            className="h-10 flex-1 text-xs"
             onClick={() => patch({ packageManager: item.id })}
           >
             {item.label}
@@ -62,14 +64,14 @@ export function ProjectForm({ value, onChange }: { value: ProjectFormShape; onCh
 
       <div className="space-y-2">
         <Field label="App name" hint="becomes folder + slug">
-          <Input value={value.appName} onChange={(e) => patch({ appName: e.target.value })} placeholder="my-app" className="h-8" aria-describedby={appNameDiffers ? "app-name-note" : undefined} />
+          <Input value={value.appName} onChange={(e) => patch({ appName: e.target.value })} placeholder="my-app" className="h-10" aria-describedby={appNameDiffers ? "app-name-note" : undefined} />
           {appNameDiffers && <p id="app-name-note" className="text-[10px] text-amber-700 dark:text-amber-300">will be scaffolded as <code className="font-mono">{sanitized || "my-app"}</code></p>}
         </Field>
         <Field label="Brand name" hint="optional project copy">
-          <Input value={value.brandName} onChange={(e) => patch({ brandName: e.target.value })} placeholder="Atelier Studio" className="h-8" />
+          <Input value={value.brandName} onChange={(e) => patch({ brandName: e.target.value })} placeholder="Atelier Studio" className="h-10" />
         </Field>
         <Field label="Owner email" hint="optional contact metadata">
-          <Input type="email" value={value.ownerEmail} onChange={(e) => patch({ ownerEmail: e.target.value })} placeholder="halo@example.com" className="h-8" aria-invalid={emailInvalid || undefined} aria-describedby={emailInvalid ? "owner-email-error" : undefined} />
+          <Input type="email" value={value.ownerEmail} onChange={(e) => patch({ ownerEmail: e.target.value })} placeholder="halo@example.com" className="h-10" aria-invalid={emailInvalid || undefined} aria-describedby={emailInvalid ? "owner-email-error" : undefined} />
           {emailInvalid && <p id="owner-email-error" className="text-[10px] text-red-600 dark:text-red-400">doesn&apos;t look like a valid email</p>}
         </Field>
       </div>

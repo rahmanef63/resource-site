@@ -43,7 +43,7 @@ export function CopyPageButton({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className="h-8 gap-1.5">
+        <Button variant="outline" size="sm" className="h-10 gap-1.5 sm:h-8">
           {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
           Copy Page
           <ChevronDown className="size-3.5 opacity-60" />

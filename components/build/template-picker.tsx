@@ -53,7 +53,7 @@ export function TemplatePicker({
           <button
             type="button"
             onClick={() => onSelect(null)}
-            className="text-[10px] text-muted-foreground hover:text-foreground"
+            className="inline-flex min-h-8 items-center rounded-md px-2 text-[10px] text-muted-foreground hover:bg-accent/40 hover:text-foreground"
           >
             clear
           </button>
@@ -77,8 +77,9 @@ export function TemplatePicker({
                 <button
                   type="button"
                   disabled={disabled}
+                  aria-pressed={on}
                   onClick={() => onSelect(on ? null : t.slug)}
-                  className="flex w-full items-center gap-2 px-2.5 py-1.5 text-left disabled:cursor-not-allowed"
+                  className="flex min-h-11 w-full items-center gap-2 px-3 py-2 text-left disabled:cursor-not-allowed"
                 >
                   <span
                     aria-hidden
@@ -112,7 +113,7 @@ export function TemplatePicker({
 
                 <Accordion type="single" collapsible className="px-2.5 pb-1">
                   <AccordionItem value={t.slug} className="border-0">
-                    <AccordionTrigger className="py-1 text-[10px] uppercase tracking-wider text-muted-foreground hover:no-underline">
+                    <AccordionTrigger className="min-h-9 py-1 text-[10px] uppercase tracking-wider text-muted-foreground hover:no-underline">
                       details
                     </AccordionTrigger>
                     <AccordionContent className="pt-1 pb-2">

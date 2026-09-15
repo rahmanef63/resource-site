@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Search, X } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { CatalogSearchItem } from "./catalog-search";
 
@@ -23,7 +23,7 @@ export function SearchRow({
   trailing?: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+    <div role="search" aria-label="Catalog search and sort" className="flex flex-col gap-3 sm:flex-row sm:items-center">
       <div className="relative flex-1">
         <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
         <input
@@ -31,14 +31,15 @@ export function SearchRow({
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder={placeholder}
-          className="h-9 w-full rounded-md border border-border bg-background pl-9 pr-9 text-sm outline-none transition placeholder:text-muted-foreground focus:border-foreground"
+          aria-label={placeholder}
+          className="h-11 w-full rounded-md border border-border bg-background pl-9 pr-11 text-sm outline-none transition placeholder:text-muted-foreground focus:border-ring focus:ring-[3px] focus:ring-ring/20"
         />
         {q && (
           <button
             type="button"
             onClick={() => setQ("")}
             aria-label="Clear"
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1 text-muted-foreground hover:bg-accent/40 hover:text-foreground"
+            className="absolute right-1.5 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-md text-muted-foreground hover:bg-accent/40 hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
           >
             <X className="size-3.5" />
           </button>
@@ -73,31 +74,33 @@ export function TagRow({
       {allTags.map((t) => {
         const on = activeTags.has(t);
         return (
-          <button
+          <Button
             key={t}
             type="button"
+            size="sm"
+            variant={on ? "default" : "outline"}
             onClick={() => toggleTag(t)}
             aria-pressed={on}
-            className={cn("transition", on ? "" : "opacity-70 hover:opacity-100")}
+            className={cn(
+              "min-h-9 rounded-full px-3 text-[11px] sm:min-h-8",
+              !on && "text-muted-foreground",
+            )}
           >
-            <Badge
-              variant={on ? "default" : "outline"}
-              className="cursor-pointer rounded-full text-[10px]"
-            >
-              {t}
-              {on && <X className="ml-0.5 size-2.5" />}
-            </Badge>
-          </button>
+            {t}
+            {on && <X className="size-3" />}
+          </Button>
         );
       })}
       {activeTags.size > 0 && (
-        <button
+        <Button
           type="button"
+          size="sm"
+          variant="ghost"
           onClick={clearAll}
-          className="text-[10px] text-muted-foreground hover:text-foreground"
+          className="min-h-9 rounded-full px-3 text-[11px] text-muted-foreground sm:min-h-8"
         >
-          clear
-        </button>
+          Clear
+        </Button>
       )}
     </div>
   );

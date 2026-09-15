@@ -136,9 +136,9 @@ export function CatalogTabs({
       {searchRow}
       {tagRow}
       <Tabs value={tab} onValueChange={setTab} className="gap-4">
-        <div className="overflow-x-auto">
-          <TabsList variant="line" className="h-9">
-            <TabsTrigger value="all">
+        <div className="-mx-1 overflow-x-auto px-1 pb-1">
+          <TabsList variant="line" className="h-11 min-w-max">
+            <TabsTrigger value="all" className="min-h-10 px-3">
               All{" "}
               <span className="ml-1 text-[10px] text-muted-foreground">
                 ({filtered.length})
@@ -147,7 +147,7 @@ export function CatalogTabs({
             {activeGroupOrder.map((g) => {
               const count = filtered.filter((it) => it.group === g).length;
               return (
-                <TabsTrigger key={g} value={g}>
+                <TabsTrigger key={g} value={g} className="min-h-10 px-3">
                   {groupLabel?.[g] ?? g}
                   <span className="ml-1 text-[10px] text-muted-foreground">
                     ({count})

@@ -2,6 +2,16 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "FRONTEND-UX-AUDIT-20260915",
+    "version": "site@frontend-ux-audit",
+    "date": 1789430400000,
+    "kind": "fix",
+    "title": "Public frontend UI/UX audit + interaction-density pass",
+    "body": "Related: https://resource.rahmanef.com/ — Slices: https://resource.rahmanef.com/slices — Builder: https://resource.rahmanef.com/build — Agents: https://resource.rahmanef.com/agents — [before: public surfaces mixed content widths, mobile gutters, dense controls and uneven focus/heading hierarchy] → [after: shared shell/header/catalog primitives establish responsive width/type/spacing rhythm, larger high-frequency interaction targets, clearer focus states and calmer card metadata].",
+    "groups": [{"heading":"One public interaction hierarchy","bullets":["DocsShell and PageHeader now own the standard responsive content width, gutters, line length and title hierarchy used by docs surfaces.","Catalog search/filter/tabs/cards, slice detail controls, Builder selectors, Agents rows and navbar actions use larger targets and explicit keyboard focus treatment.","Homepage gutters/card states and Changelog heading semantics were aligned with the same public-site system instead of one-off page styling."]}]
+  },
+
+  {
     "id": "FRAMEWORK-NPM-BUN-CLI-1-19",
     "version": "cli@1.19.0",
     "date": 1789430400000,

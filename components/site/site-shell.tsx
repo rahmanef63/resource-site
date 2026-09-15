@@ -14,8 +14,16 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="relative flex min-h-screen flex-col">
+      <a
+        href="#main-content"
+        className="fixed left-4 top-2 z-[100] -translate-y-16 rounded-md bg-background px-3 py-2 text-sm font-medium shadow-lg ring-1 ring-border transition-transform focus:translate-y-0 focus:outline-none focus:ring-[3px] focus:ring-ring/50"
+      >
+        Skip to content
+      </a>
       <TopNavbar />
-      <main className="flex-1">{children}</main>
+      <main id="main-content" tabIndex={-1} className="flex-1 outline-none">
+        {children}
+      </main>
     </div>
   );
 }

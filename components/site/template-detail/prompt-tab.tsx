@@ -34,7 +34,7 @@ export function PromptTab({
         actions={
           <>
             <InstallWithAgent prompt={composed} size="sm" />
-            <Button asChild variant="ghost" size="sm" className="h-7 gap-1 px-2 text-xs">
+            <Button asChild variant="ghost" size="sm" className="h-9 gap-1 px-3 text-xs">
               <a
                 href={`/api/knowledge?${kind}=${slug}`}
                 target="_blank"

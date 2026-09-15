@@ -39,7 +39,7 @@ export function SortSelect({
 }) {
   return (
     <Select value={value} onValueChange={(v) => onChange(v as SortMode)}>
-      <SelectTrigger aria-label="Sort" className="h-9 w-[168px] gap-1.5 text-sm">
+      <SelectTrigger aria-label="Sort" className="h-11 w-full gap-1.5 text-sm sm:w-[168px]">
         <ArrowUpDown className="size-3.5 shrink-0 text-muted-foreground" />
         <SelectValue />
       </SelectTrigger>

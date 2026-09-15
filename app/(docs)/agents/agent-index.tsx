@@ -28,8 +28,8 @@ function PromptRow({
   openLabel: string;
 }) {
   return (
-    <div className="group flex items-center justify-between gap-2 rounded-md border bg-card px-3 py-2 text-sm transition-colors hover:border-foreground/30 hover:bg-accent/30">
-      <Link href={href} className="min-w-0 flex-1">
+    <div className="group flex items-center justify-between gap-2 rounded-lg border border-border/70 bg-card px-2.5 py-2 text-sm transition-colors hover:border-foreground/20 hover:bg-accent/20">
+      <Link href={href} className="flex min-h-11 min-w-0 flex-1 flex-col justify-center rounded-md px-1 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50">
         <span className="block truncate font-medium transition-colors group-hover:text-primary">
           {title}
         </span>
@@ -39,7 +39,7 @@ function PromptRow({
       </Link>
       <div className="flex shrink-0 items-center gap-1">
         {copy}
-        <Button asChild variant="ghost" size="sm">
+        <Button asChild variant="ghost" size="icon-lg">
           <Link href={href} aria-label={openLabel}>
             {openIcon}
           </Link>
@@ -90,7 +90,7 @@ export function AgentIndex() {
                 prompt={buildSliceAgentPrompt(s)}
                 label="Copy"
                 variant="ghost"
-                size="sm"
+                size="lg"
               />
             }
           />
@@ -115,7 +115,7 @@ export function AgentIndex() {
                 })}
                 label="Copy"
                 variant="ghost"
-                size="sm"
+                size="lg"
               />
             }
           />

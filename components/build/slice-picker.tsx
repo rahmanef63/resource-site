@@ -64,7 +64,7 @@ export function SlicePicker({
                     onClick={() => onToggle(s.slug)}
                     aria-pressed={on}
                     className={cn(
-                      "group flex items-start gap-2 rounded-md border px-3 py-2 text-left transition",
+                      "group flex min-h-11 items-start gap-2 rounded-md border px-3 py-2.5 text-left transition",
                       on
                         ? "border-blue-500/40 bg-blue-500/5"
                         : "border-border/60 bg-card hover:bg-accent/30",

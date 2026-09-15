@@ -34,8 +34,8 @@ export function FeatureBarOpenButton({
     <Button
       asChild
       variant="ghost"
-      size="icon"
-      className="size-6"
+      size="icon-sm"
+      className="size-10 sm:size-8"
       title="Open full page in new tab"
     >
       <a href={href} target="_blank" rel="noreferrer" aria-label="Open full page">

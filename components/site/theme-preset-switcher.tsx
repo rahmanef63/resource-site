@@ -69,7 +69,7 @@ export function ThemePresetSwitcher({
           size="icon"
           aria-label="Tema dan preset warna"
           className={cn(
-            size === "mobile" && "h-11 w-11",
+            size === "mobile" ? "size-11" : "size-10 sm:size-9",
             "gap-1.5",
             triggerClassName,
           )}

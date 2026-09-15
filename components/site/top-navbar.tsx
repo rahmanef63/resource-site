@@ -83,7 +83,7 @@ export function TopNavbar() {
         <div className="flex items-center gap-6">
           <Link
             href="/"
-            className="group/brand flex items-center gap-2 text-foreground transition-opacity hover:opacity-100"
+            className="group/brand flex min-h-10 items-center gap-2 rounded-md text-foreground transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
             aria-label={site.name}
           >
             <BrandMark />
@@ -135,12 +135,12 @@ export function TopNavbar() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
-            className="inline-flex h-9 items-center gap-1.5 rounded-md px-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            className="inline-flex size-10 items-center justify-center rounded-md text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
           >
             <Github className="size-4" />
           </Link>
           <ThemePresetSwitcher />
-          <Button asChild size="sm" className="hidden gap-1 sm:inline-flex">
+          <Button asChild size="default" className="hidden gap-1 sm:inline-flex">
             <Link href="/agents">
               <Plus className="size-3.5" />
               New
@@ -148,7 +148,7 @@ export function TopNavbar() {
           </Button>
           <Button
             variant="ghost"
-            size="icon"
+            size="icon-lg"
             className="lg:hidden"
             aria-label="Menu"
             onClick={() => setMenuOpen(true)}

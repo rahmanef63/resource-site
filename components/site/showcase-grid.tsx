@@ -18,15 +18,15 @@ export function ShowcaseGrid({ kind }: { kind: "layouts" | "slices" }) {
 
   return (
     <section className="border-b py-20">
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="mb-10 flex items-end justify-between">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-8 flex items-end justify-between gap-4 sm:mb-10">
           <div>
-            <h2 className="text-3xl font-bold tracking-tight">{heading}</h2>
+            <h2 className="text-2xl font-semibold tracking-[-0.02em] sm:text-3xl">{heading}</h2>
             <p className="mt-2 text-muted-foreground">{sub}</p>
           </div>
           <Link
             href={`/${kind}`}
-            className="hidden items-center gap-1 text-sm text-muted-foreground hover:text-foreground sm:inline-flex"
+            className="hidden min-h-10 items-center gap-1 rounded-md px-2 text-sm text-muted-foreground hover:bg-accent/30 hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 sm:inline-flex"
           >
             View all
             <ArrowUpRight className="size-4" />
@@ -34,8 +34,8 @@ export function ShowcaseGrid({ kind }: { kind: "layouts" | "slices" }) {
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {items.slice(0, 6).map((item) => (
-            <Link key={item.slug} href={`/${kind}/${item.slug}`}>
-              <Card className="group h-full transition hover:border-primary/40 hover:shadow-sm">
+            <Link key={item.slug} href={`/${kind}/${item.slug}`} className="rounded-xl focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50">
+              <Card className="group h-full border-border/70 transition-[border-color,box-shadow] hover:border-foreground/20 hover:shadow-sm">
                 <CardHeader>
                   <div className="flex items-start justify-between gap-3">
                     <CardTitle className="text-base">{item.title}</CardTitle>

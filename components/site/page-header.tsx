@@ -2,7 +2,7 @@ import * as React from "react";
 
 /**
  * Canonical header for non-catalog docs pages — eyebrow → title → description.
- * Matches CatalogHero's title treatment (`text-3xl font-bold tracking-tight`)
+ * Matches CatalogHero's responsive title treatment and shared readable line length
  * so content pages and catalog pages read as one family. Width + padding are
  * owned by DocsShell; this component never sets its own container.
  */
@@ -37,14 +37,18 @@ export function PageHeader({
     );
   }
   return (
-    <div className="space-y-3">
+    <header className="space-y-2.5">
       {eyebrow && (
-        <p className="text-sm font-medium text-muted-foreground">{eyebrow}</p>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+          {eyebrow}
+        </p>
       )}
-      <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
+      <h1 className="text-3xl font-semibold tracking-[-0.025em] sm:text-4xl">{title}</h1>
       {description && (
-        <p className="text-base text-muted-foreground">{description}</p>
+        <p className="max-w-3xl text-sm leading-6 text-muted-foreground sm:text-base sm:leading-7">
+          {description}
+        </p>
       )}
-    </div>
+    </header>
   );
 }

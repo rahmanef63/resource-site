@@ -25,9 +25,9 @@ export function HeroStrip({
         </code>
         <CopyButton value={installCommand} size="icon" className="h-7 w-7 shrink-0" />
         {agentPrompt && (
-          <InstallWithAgent prompt={agentPrompt} label="AI install" size="sm" />
+          <InstallWithAgent prompt={agentPrompt} label="AI install" />
         )}
-        <Button asChild variant="ghost" size="sm" className="h-7 gap-1 px-2 text-xs">
+        <Button asChild variant="ghost" size="sm" className="h-9 gap-1 px-3 text-xs">
           <a href={sourceHref} target="_blank" rel="noreferrer">
             Source <ExternalLink className="size-3" />
           </a>

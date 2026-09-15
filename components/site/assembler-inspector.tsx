@@ -23,7 +23,7 @@ export function AssemblerInspector() {
         <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
           Assemble
         </p>
-        <Button variant="ghost" size="sm" className="h-6 gap-1 px-2 text-[11px]" onClick={resetSelections}>
+        <Button variant="ghost" size="sm" className="h-8 gap-1 px-2.5 text-[11px]" onClick={resetSelections}>
           <RefreshCcw className="size-3" /> Reset
         </Button>
       </header>

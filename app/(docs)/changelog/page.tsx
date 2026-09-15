@@ -43,6 +43,7 @@ async function ChangelogPaged({
 
   return (
     <>
+      <h1 className="sr-only">Changelog</h1>
       <ChangelogFeedSection
         eyebrow="Release notes"
         title="Changelog"
@@ -63,16 +64,16 @@ function Pager({ page, totalPages }: { page: number; totalPages: number }) {
   return (
     <nav
       aria-label="Changelog pages"
-      className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-6 pb-20"
+      className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 pb-16 sm:px-6 sm:pb-20"
     >
       {page > 1 ? (
-        <Button asChild variant="outline" size="sm">
+        <Button asChild variant="outline" size="default">
           <Link href={href(page - 1)}>
             <ChevronLeft className="size-4" /> Newer
           </Link>
         </Button>
       ) : (
-        <Button variant="outline" size="sm" disabled>
+        <Button variant="outline" size="default" disabled>
           <ChevronLeft className="size-4" /> Newer
         </Button>
       )}
@@ -82,13 +83,13 @@ function Pager({ page, totalPages }: { page: number; totalPages: number }) {
       </span>
 
       {page < totalPages ? (
-        <Button asChild variant="outline" size="sm">
+        <Button asChild variant="outline" size="default">
           <Link href={href(page + 1)}>
             Older <ChevronRight className="size-4" />
           </Link>
         </Button>
       ) : (
-        <Button variant="outline" size="sm" disabled>
+        <Button variant="outline" size="default" disabled>
           Older <ChevronRight className="size-4" />
         </Button>
       )}

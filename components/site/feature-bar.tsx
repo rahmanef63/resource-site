@@ -73,7 +73,7 @@ export function FeatureBar() {
   const canRotate = currentPreset.canRotate !== false;
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-2 border-b bg-muted/30 px-3 py-1.5">
+    <div className="flex flex-wrap items-center justify-between gap-2 border-b bg-muted/30 px-3 py-2">
       <div className="flex items-center gap-0.5 rounded-md border bg-background p-0.5">
         {tabs.map((t) => {
           const Icon = t.icon;
@@ -81,9 +81,11 @@ export function FeatureBar() {
           return (
             <button
               key={t.id}
+              type="button"
+              aria-pressed={on}
               onClick={() => setActiveTab(t.id)}
               className={cn(
-                "inline-flex h-6 items-center gap-1.5 rounded px-2.5 text-[11px] font-medium transition-colors",
+                "inline-flex h-10 items-center gap-1.5 rounded-md px-3 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 sm:h-8",
                 on
                   ? "bg-accent text-foreground"
                   : "text-muted-foreground hover:text-foreground",
@@ -102,7 +104,7 @@ export function FeatureBar() {
             value={previewView}
             onValueChange={(v) => setPreviewView(v as PreviewView)}
           >
-            <SelectTrigger className="h-7 w-[200px] gap-1.5 text-xs">
+            <SelectTrigger className="h-10 w-[200px] gap-1.5 text-xs sm:h-9">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -139,7 +141,7 @@ export function FeatureBar() {
 
           <Button
             variant="ghost" size="icon"
-            className={cn("size-6", previewOrientation === "landscape" && "bg-accent text-foreground")}
+            className={cn("size-10 sm:size-8", previewOrientation === "landscape" && "bg-accent text-foreground")}
             onClick={togglePreviewOrientation}
             disabled={!canRotate}
             aria-label="Rotate device"
@@ -152,7 +154,7 @@ export function FeatureBar() {
           {!isSplit && (
             <div className="flex items-center gap-1">
               <Button
-                variant="ghost" size="icon" className="size-6"
+                variant="ghost" size="icon-sm" className="size-10 sm:size-8"
                 onClick={() => setPreviewZoom(Math.max(0.4, +(previewZoom - 0.1).toFixed(2)))}
                 aria-label="Zoom out"
               >
@@ -161,11 +163,13 @@ export function FeatureBar() {
               <input
                 type="range" min={40} max={150} step={5}
                 value={Math.round(previewZoom * 100)}
+                aria-label="Preview zoom"
+                aria-valuetext={`${Math.round(previewZoom * 100)}%`}
                 onChange={(e) => setPreviewZoom(Number(e.target.value) / 100)}
-                className="h-1 w-20 cursor-pointer accent-foreground"
+                className="h-10 w-20 cursor-pointer accent-foreground"
               />
               <Button
-                variant="ghost" size="icon" className="size-6"
+                variant="ghost" size="icon-sm" className="size-10 sm:size-8"
                 onClick={() => setPreviewZoom(Math.min(1.5, +(previewZoom + 0.1).toFixed(2)))}
                 aria-label="Zoom in"
               >
@@ -182,7 +186,7 @@ export function FeatureBar() {
       <div className="flex items-center gap-1">
         <FeatureBarOpenButton activeTab={activeTab} manifest={manifest} />
         <Button
-          variant="ghost" size="icon" className="size-6"
+          variant="ghost" size="icon-sm" className="size-10 sm:size-8"
           onClick={() => window.dispatchEvent(new Event("rresource:refresh-preview"))}
           aria-label="Refresh preview"
           title="Refresh preview"
