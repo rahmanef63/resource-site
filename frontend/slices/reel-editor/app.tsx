@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { useAgentTools } from "@/shared/agentic";
+import { useAgentTools } from "@/shared/agentic/use-agent-tools";
 import { reelEditorTools } from "./lib/tools";
 import { useHistory } from "./lib/history";
 import { useClipDrag } from "./lib/use-clip-drag";

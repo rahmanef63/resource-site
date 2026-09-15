@@ -1,5 +1,13 @@
 # Changelog — reel-editor
 
+## 1.3.0 — 2026-09-15
+
+- Added native Svelte 5/SvelteKit editor parity over the same composition, Canvas draw/export, MediaCache/audio, AI, settings/draft and filesystem cores.
+- Extracted observable framework-neutral history and filesystem host cores; React wrappers now delegate to them.
+- Moved sample/probe import semantics into `import-core.ts`; moved AI message seed/types into `ai-core.ts`.
+- `reelEditorTools` is now self-contained; React uses the narrow agent hook while Svelte carries no agent runtime.
+- React distribution now declares its exact FilePicker/agent-hook closure and versioned Lucide/resizable/Sonner dependencies.
+
 ## 1.2.1 — 2026-06-10
 
 - Host wiring: the orchestrator self-registers `reelEditorTools` bound to the live `useHistory()` api via `useAgentTools`. `HELLO` seed moved next to `AiMessage` in `components/ai-panel.tsx`.

@@ -1,7 +1,7 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
   "slug": "reel-editor",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "tier": 3,
   "distribution": {
     "method": "cli-copy",
@@ -42,6 +42,7 @@
     "components/transport.tsx",
     "config.ts",
     "index.ts",
+    "lib/ai-core.ts",
     "lib/ai-edit.ts",
     "lib/anim-presets.ts",
     "lib/composition.ts",
@@ -49,8 +50,11 @@
     "lib/draw-adjust.ts",
     "lib/draw-text.ts",
     "lib/draw.ts",
+    "lib/history-core.ts",
     "lib/history.ts",
+    "lib/host-core.ts",
     "lib/host.ts",
+    "lib/import-core.ts",
     "lib/keyframes.ts",
     "lib/layout.ts",
     "lib/media-audio.ts",
@@ -71,5 +75,23 @@
     "lib/use-shortcuts.ts",
     "lib/waveform.ts",
     "slice.json"
-  ]
+  ],
+  "imports": {
+    "shared": [
+      "components/shared/ui/FilePicker.tsx",
+      "lib/shared/agentic/types.ts",
+      "lib/shared/agentic/define.ts",
+      "lib/shared/agentic/schema.ts",
+      "lib/shared/agentic/prompt.ts",
+      "lib/shared/agentic/registry.ts",
+      "lib/shared/agentic/global-host.ts",
+      "lib/shared/agentic/use-agent-tools.ts"
+    ],
+    "external": [
+      "react",
+      "lucide-react",
+      "react-resizable-panels",
+      "sonner"
+    ]
+  }
 }

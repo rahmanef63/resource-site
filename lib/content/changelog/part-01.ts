@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-REEL-EDITOR",
+    "version": "reel-editor@1.3.0",
+    "date": 1789430400000,
+    "kind": "feature",
+    "title": "SvelteKit Reel Editor distribution + shared media/history core",
+    "body": "Related: https://resource.rahmanef.com/slices/reel-editor — [before: reel-editor@1.2.1 was React-only with history/fs state in React hooks and aggregate agentic coupling] → [after: reel-editor@1.3.0 keeps React default, adds native Svelte 5/SvelteKit parity, and shares history/filesystem/media/AI/draw/export/tool cores].",
+    "groups": [
+      {
+        "heading": "One NLE core, two native renderers",
+        "bullets": [
+          "Svelte covers preview/playback, layered timeline, inspector, media/files import, AI commands, keyboard shortcuts, autosave/settings, undo/redo and WebM export.",
+          "Preview and export use the same drawFrame + MediaCache + renderToWebM path as React, avoiding renderer drift.",
+          "React keeps resizable/shadcn/Sonner/Lucide and narrow agent-hook wiring; Svelte carries no React runtime UI dependencies."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-FILE-EXPLORER",
     "version": "file-explorer@1.7.0",
     "date": 1789430400000,

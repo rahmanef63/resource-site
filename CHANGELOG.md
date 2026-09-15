@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-15 — SvelteKit Reel Editor distribution + shared media/history core
+<!-- public-changelog:SVELTE-REEL-EDITOR -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/reel-editor
+- Preview: https://resource.rahmanef.com/preview/slices/reel-editor
+- [before: `reel-editor@1.2.1` was React-only, undo/redo and host filesystem state lived in React hooks, and tools depended on the aggregate agent runtime] → [after: `reel-editor@1.3.0` keeps React default, adds native Svelte 5/SvelteKit timeline/editor parity, and shares framework-neutral history, filesystem, media-import, AI, Canvas draw/export and tool cores]
+- Svelte uses the same `drawFrame()`/`MediaCache`/`renderToWebM()` path as React preview/export and installs no React/Next/Lucide/shadcn/Sonner/resizable-panels/agent runtime.
+
 ### 2026-09-15 — SvelteKit File Explorer distribution + shared filesystem cores
 <!-- public-changelog:SVELTE-FILE-EXPLORER -->
 

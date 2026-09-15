@@ -1,0 +1,50 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "reel-editor-svelte",
+  "version": "1.3.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add reel-editor --framework sveltekit",
+    "consumerPath": "slices/reel-editor-svelte"
+  },
+  "files": [
+    "README.md",
+    "index.ts",
+    "svelte-components.d.ts",
+    "components/AiPanel.svelte",
+    "components/FilesPanel.svelte",
+    "components/Inspector.svelte",
+    "components/PreviewStage.svelte",
+    "components/ReelEditor.svelte",
+    "components/RenderOverlay.svelte",
+    "components/SettingsPanel.svelte",
+    "components/Timeline.svelte",
+    "components/Toolbar.svelte"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/reel-editor/config.ts",
+      "frontend/slices/reel-editor/lib/ai-core.ts",
+      "frontend/slices/reel-editor/lib/ai-edit.ts",
+      "frontend/slices/reel-editor/lib/composition.ts",
+      "frontend/slices/reel-editor/lib/draft.ts",
+      "frontend/slices/reel-editor/lib/draw-adjust.ts",
+      "frontend/slices/reel-editor/lib/draw-text.ts",
+      "frontend/slices/reel-editor/lib/draw.ts",
+      "frontend/slices/reel-editor/lib/history-core.ts",
+      "frontend/slices/reel-editor/lib/host-core.ts",
+      "frontend/slices/reel-editor/lib/import-core.ts",
+      "frontend/slices/reel-editor/lib/keyframes.ts",
+      "frontend/slices/reel-editor/lib/media-audio.ts",
+      "frontend/slices/reel-editor/lib/media-cache.ts",
+      "frontend/slices/reel-editor/lib/media-probe.ts",
+      "frontend/slices/reel-editor/lib/media-sync.ts",
+      "frontend/slices/reel-editor/lib/mock-timeline.ts",
+      "frontend/slices/reel-editor/lib/render.ts",
+      "frontend/slices/reel-editor/lib/settings.ts",
+      "frontend/slices/reel-editor/lib/tools.ts"
+    ],
+    "external": ["svelte"]
+  }
+}

@@ -6,11 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { AI_SUGGESTIONS } from "../lib/ai-edit";
+import { AI_HELLO as HELLO, type AiMessage } from "../lib/ai-core";
 
-export type AiMessage = { role: "user" | "ai"; text: string };
-
-// First message in a fresh AI log (the app orchestrator's seed).
-export const HELLO: AiMessage = { role: "ai", text: "Tell me what to change. Try “make it vertical”, “fade in”, “split here”, “punch in”, or “add title Sale”." };
+export { HELLO };
+export type { AiMessage };
 
 // AI edit panel: chat-style log + suggestion chips + one-line command input.
 export function AiPanel({

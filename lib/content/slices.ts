@@ -231,42 +231,24 @@ export default function ImageEditorDemo() {
     title: "Reel — video timeline editor",
     category: "os",
     kind: "ui",
-    version: "1.2.1",
-    tagline: "In-browser NLE: layered multi-track timeline, keyframes, transitions, color grading, realtime WebM export with mixed audio.",
+    version: "1.3.0",
+    tagline: "React + Svelte in-browser NLE over one composition/media/render core — timeline, keyframes, AI edits and realtime WebM export.",
     description:
-      "A complete in-browser video editor. Real media clips (image/video/audio) on a layered multi-track timeline — the top row renders frontmost, with ▲▼ reorder and per-track lock/hide/mute. ONE Canvas-2D draw path is shared by the live preview and the realtime MediaRecorder exporter, so what you see is exactly what renders (WebM with real mixed audio: per-clip volume/fades/auto-duck through a streaming audio graph). Per-clip trim/speed (0.25–4×)/reverse, dissolve/wipe/slide transitions via clip overlap, keyframes (opacity/scale/x/y/rotation) with easing + one-click In/Out animation presets, text styling with preset grid, color grading + vignette, filmstrip thumbnails + real waveforms, snapping, split/duplicate. The workspace is config-driven: 6 resizable layout presets (react-resizable-panels v4) incl. quick-import files-pane layouts, plus custom composition size. Drafts auto-save to localStorage. Self-contained: toasts via sonner, the files pane runs on an injectable fs adapter (configureReelFs; in-memory mock by default), and shell hooks (inspector/activity) are inert seams in lib/host.ts.",
+      "Framework-parity in-browser video editor. React/Next remains default with the existing resizable workspace; native Svelte 5/SvelteKit reuses the same immutable composition model, observable undo/redo history, Canvas-2D draw path shared by preview and WebM export, MediaCache/audio graph, keyframes/transitions, AI edit transforms, local draft/settings, filesystem seam and realtime MediaRecorder exporter. The Svelte renderer covers playback, layered timeline, track controls, clip inspector, local/sample/filesystem import, AI commands, keyboard shortcuts, autosave/settings and WebM export without React/Next/Lucide React/shadcn/Sonner/resizable-panels/agent runtime.",
     source: "rahmanef63/os-vps",
     slicePath: "frontend/slices/reel-editor",
     convexPaths: [],
-    npm: ["lucide-react", "react-resizable-panels", "sonner"],
+    npm: ["lucide-react@^1.16.0", "react-resizable-panels@^4.11.1", "sonner@^2.0.7"],
     shadcn: ["button", "input", "slider", "tooltip", "dialog", "dropdown-menu", "resizable", "sheet", "sonner"],
     env: [],
     peers: [],
-    tags: ["video", "video-editor", "timeline", "nle", "keyframes", "transitions", "webm", "canvas", "ui"],
+    tags: ["video", "video-editor", "timeline", "nle", "keyframes", "transitions", "webm", "canvas", "ui", "svelte", "framework-parity"],
     resourceType: "module",
     maturity: "beta",
     compat: { enhances: ["appshell", "file-explorer", "image-editor"] },
     previewPath: "/preview/slices/reel-editor",
     defaultView: "desktop",
-    agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. An in-browser video timeline editor with realtime WebM export. Fully client-side; no backend required.
-
-STEP 1 — Install. \`npx rr add reel-editor\`. Ensure \`@/features/reel-editor\` resolves in tsconfig paths and Tailwind scans the slice folder.
-
-STEP 2 — Deps. npm: \`lucide-react react-resizable-panels sonner\`. shadcn: \`npx shadcn@latest add button input slider tooltip dialog dropdown-menu resizable sheet sonner\`. Mount \`<Toaster />\` (sonner) once in your root layout.
-
-STEP 3 — Mount. Render in a height-bearing box:
-\`\`\`tsx
-"use client";
-import { ReelEditor } from "@/features/reel-editor";
-export default function Page() {
-  return <div className="h-dvh"><ReelEditor /></div>;
-}
-\`\`\`
-Or register the \`reelEditorApp\` descriptor in an appshell manifest for windowed hosts.
-
-STEP 4 — Files pane backend (optional). The quick-import pane ships with an in-memory mock. Wire a real filesystem with \`configureReelFs({ list, mkdir, rawUrl })\` — list/mkdir mirror a simple fs API, rawUrl resolves a listed path to a fetchable media URL.
-
-STEP 5 — Export. The Render button records the live canvas + mixed audio to WebM via MediaRecorder in realtime (duration = composition length). Users can also import local media via the file picker — object URLs, no upload needed.`,
+    agentRecipe: `React/default: \`npx rr add reel-editor\`. SvelteKit: \`npx rr add reel-editor --framework sveltekit\`. Both reuse the same composition/history/draw/media/audio/AI/settings/filesystem/export cores. React keeps the resizable shadcn workspace, Sonner, Lucide and automatic tool registration; Svelte installs only svelte@^5 + portable cores and accepts optional registerTools. Wire production file access through configureReelFs({ list, mkdir, rawUrl }); enforce path authorization and signed/media access on that backend. Render/export remains client-side MediaRecorder WebM using the same drawFrame() path as preview.`,
     exampleCode: `"use client";
 import { ReelEditor } from "@/features/reel-editor";
 
