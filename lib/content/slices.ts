@@ -171,46 +171,24 @@ export const slices: SliceEntry[] = [
     title: "Image Editor — layered raster editor",
     category: "os",
     kind: "ui",
-    version: "2.1.1",
+    version: "2.2.0",
     tagline: "Layered raster editor: layers, transform, paint, filters, layer styles, 1-click background removal, AI command registry, export.",
     description:
-      "A Photoshop-style raster image editor built on Konva. Layers panel (reorder, opacity, visibility, lock, 16 blend modes), free transform (move/scale/rotate/flip via a Transformer), image + text + shape + paint layers, brush & eraser with size/opacity/hardness, non-destructive adjustments + filters, canvas resize/aspect presets, and LAYER STYLES: stroke, drop shadow, outer glow, clipping mask. One-click BACKGROUND REMOVAL runs fully in-browser via @imgly/background-removal (free, no API key — downloads a small ONNX model on first use). Undo/redo, zoom/pan, shortcuts, PNG/JPG/WebP export. v2 adds an AI FUNCTION-CALLING layer: every editor operation is a named, schema'd command (EDITOR_COMMANDS registry + useEditorCommands binding) driven by an in-editor chat; the streaming bridge is injectable via configureAgentStream(fn) and everything except the chat works without it. A headless server barrel (server.ts) runs commands against documents with no DOM. Image I/O via props (initialImage / onSave).",
+      "Framework-parity layered raster editor. React/Next remains default with react-konva; native Svelte 5/SvelteKit uses Konva directly over the same document/layer model, unified doc+paint history, command registry, project IO, masks, adjustments/styles, background removal and stage export semantics. Svelte includes move/transform, brush/eraser/mask painting, eyedropper, zoom/pan, text/shape/paint/adjustment layers, layers/properties panels, image/project IO, background removal, export and optional host-injected AI with no React/Next/react-konva/Lucide/shadcn/FilePicker/agent runtime.",
     source: "rahmanef63/os-vps",
     slicePath: "frontend/slices/image-editor",
     convexPaths: [],
-    npm: ["lucide-react", "konva", "react-konva", "@imgly/background-removal", "class-variance-authority", "radix-ui"],
-    shadcn: ["button", "input", "label", "separator", "select", "scroll-area", "switch", "dropdown-menu", "tooltip", "resizable", "popover"],
+    npm: ["@imgly/background-removal@^1.7.0", "konva@^10.3.0", "lucide-react@^1.16.0", "react-konva@^19.2.4"],
+    shadcn: ["button", "input", "label", "separator", "select", "scroll-area", "switch", "dropdown-menu", "tooltip", "resizable", "popover", "slider", "tabs"],
     env: [],
     peers: [],
-    tags: ["image-editor", "photoshop", "canvas", "konva", "layers", "filters", "background-removal", "paint", "ai", "ui"],
+    tags: ["image-editor", "photoshop", "canvas", "konva", "layers", "filters", "background-removal", "paint", "ai", "ui", "svelte", "framework-parity"],
     resourceType: "module",
     maturity: "beta",
     compat: { enhances: ["appshell", "file-explorer"] },
     previewPath: "/preview/slices/image-editor",
     defaultView: "desktop",
-    agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui + Konva. A layered raster image editor. Image I/O is via props; background removal runs in-browser (no backend).
-
-STEP 1 — Install. \`npx rr add image-editor\`. Ensure \`@/features/image-editor\` resolves in tsconfig paths and Tailwind scans the slice folder.
-
-STEP 2 — Deps. npm: \`konva react-konva @imgly/background-removal lucide-react\`. shadcn: \`npx shadcn@latest add button input slider select tabs scroll-area separator tooltip label switch popover\`.
-
-STEP 3 — Mount. It is fully self-contained; the Konva stage is loaded client-only (next/dynamic ssr:false) inside the slice, so just render it in a height-bearing box:
-\`\`\`tsx
-"use client";
-import { ImageEditor } from "@/features/image-editor";
-export default function Page() {
-  return (
-    <div className="h-dvh">
-      <ImageEditor onSave={(dataUrl) => console.log(dataUrl)} />
-    </div>
-  );
-}
-\`\`\`
-Props: \`initialImage?\` (data/object/remote URL opened on mount), \`width?\`/\`height?\` (blank canvas size, default 1080²), \`onSave?(dataUrl)\` (fires from the Save button with a PNG data URL; omit to hide Save), \`className?\`.
-
-STEP 4 — Background removal. The "Remove BG" button calls removeImageBackground() from @imgly/background-removal — free, in-browser, no key. First run downloads a small model to the browser cache, then runs locally via WASM. You can also import \`removeImageBackground(src) => Promise<pngDataUrl>\` directly.
-
-STEP 5 — Export. PNG/JPG/WebP at 1×/2×/3× via the Export tab, or call \`exportStage(stage, {...})\` / \`stageToDataURL(stage, {...})\`. The container owns the box — render inside h-dvh / h-full.`,
+    agentRecipe: `React/default: \`npx rr add image-editor\`. SvelteKit: \`npx rr add image-editor --framework sveltekit\`. Both share the same layered document, command registry, doc+paint history, project format, adjustment/style/mask semantics, background-removal and Konva stage export contract. React keeps react-konva/shadcn and automatic agent wiring; Svelte uses Konva directly and accepts optional runAssistant/registerTools. Keep AI/model transport and file authorization in the host; the editor UI is not an authorization boundary.`,
     exampleCode: `"use client";
 import { ImageEditor } from "@/features/image-editor";
 

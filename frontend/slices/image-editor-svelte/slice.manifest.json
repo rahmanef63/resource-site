@@ -1,0 +1,57 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "image-editor-svelte",
+  "version": "2.2.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add image-editor --framework sveltekit",
+    "consumerPath": "slices/image-editor-svelte"
+  },
+  "files": [
+    "README.md",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts",
+    "components/AiPanel.svelte",
+    "components/BrushPanel.svelte",
+    "components/CanvasStage.svelte",
+    "components/ImageEditor.svelte",
+    "components/LayersPanel.svelte",
+    "components/PropertiesPanel.svelte",
+    "components/ToolRail.svelte",
+    "components/TopBar.svelte"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/image-editor/commands/adjust.commands.ts",
+      "frontend/slices/image-editor/commands/document.commands.ts",
+      "frontend/slices/image-editor/commands/export.commands.ts",
+      "frontend/slices/image-editor/commands/invoke.ts",
+      "frontend/slices/image-editor/commands/layer.commands.ts",
+      "frontend/slices/image-editor/commands/registry.ts",
+      "frontend/slices/image-editor/commands/schema.ts",
+      "frontend/slices/image-editor/commands/style.commands.ts",
+      "frontend/slices/image-editor/commands/tool.commands.ts",
+      "frontend/slices/image-editor/commands/transform.commands.ts",
+      "frontend/slices/image-editor/commands/types.ts",
+      "frontend/slices/image-editor/lib/assistant-core.ts",
+      "frontend/slices/image-editor/lib/bbox.ts",
+      "frontend/slices/image-editor/lib/bg-removal.ts",
+      "frontend/slices/image-editor/lib/editor-core.ts",
+      "frontend/slices/image-editor/lib/export.ts",
+      "frontend/slices/image-editor/lib/history-core.ts",
+      "frontend/slices/image-editor/lib/konva-helpers.ts",
+      "frontend/slices/image-editor/lib/konva-native.ts",
+      "frontend/slices/image-editor/lib/mask-core.ts",
+      "frontend/slices/image-editor/lib/model.ts",
+      "frontend/slices/image-editor/lib/project-core.ts",
+      "frontend/slices/image-editor/lib/types.ts"
+    ],
+    "external": [
+      "svelte",
+      "konva",
+      "@imgly/background-removal"
+    ]
+  }
+}

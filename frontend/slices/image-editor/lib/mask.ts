@@ -2,20 +2,8 @@
 
 import { useCallback } from "react";
 import type { Layer } from "./types";
-
-// A layer mask is a DOC-ALIGNED alpha buffer (opaque white = visible, transparent
-// = hidden), stored in the editor's canvas map under this key. The masked layer
-// is rendered through it via destination-in compositing (see masked-group.tsx).
-export const maskKey = (id: string) => `${id}::mask`;
-
-// Fresh mask = fully opaque (nothing hidden yet).
-export function initMaskCanvas(c: HTMLCanvasElement) {
-  const ctx = c.getContext("2d");
-  if (!ctx) return;
-  ctx.clearRect(0, 0, c.width, c.height);
-  ctx.fillStyle = "#ffffff";
-  ctx.fillRect(0, 0, c.width, c.height);
-}
+import { initMaskCanvas, maskKey } from "./mask-core";
+export { initMaskCanvas, maskKey } from "./mask-core";
 
 type Ops = {
   canvasFor: (id: string, w: number, h: number) => HTMLCanvasElement;

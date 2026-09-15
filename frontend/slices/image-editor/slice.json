@@ -1,24 +1,65 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "image-editor",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "category": "os",
   "kind": "ui",
-  "title": "Image Editor \u2014 layered raster editor",
-  "description": "Embeddable, layer-based raster image editor (Konva): layers with blend modes + layer styles (shadow/glow/stroke), transforms, crop/resize/aspect presets, paint brushes, adjustments, text layers with fonts, free in-browser background removal (@imgly), PNG/JPEG/WebP export, an AI function-calling command registry (every operation is a schema'd command) with in-editor chat, and a headless server barrel (server.ts) to run commands against documents without a DOM. The AI bridge is injectable via configureAgentStream \u2014 without wiring, everything except the AI chat works.",
+  "title": "Image Editor — layered raster editor",
+  "description": "Framework-parity layered raster image editor. React/Next remains default with react-konva; native Svelte 5/SvelteKit uses Konva directly over the same document model, command registry, unified doc+paint history, project IO, filters/styles/masks, background-removal and export stage semantics. Svelte includes move/transform, brush/eraser/mask painting, eyedropper, zoom/pan, text/shape/paint/adjustment layers, properties/layers, autosave/open/save, image import/export, background removal, command tools and optional host-injected AI without React/Next/react-konva/Lucide/shadcn/FilePicker/shared agent runtime.",
   "namespace": "@/features/image-editor",
   "frontend": {
     "slicePath": "frontend/slices/image-editor",
-    "configExport": "imageEditorConfig"
+    "configExport": "imageEditorConfig",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/image-editor-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5",
+            "konva@^10.3.0",
+            "@imgly/background-removal@^1.7.0"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/image-editor/commands/adjust.commands.ts",
+            "frontend/slices/image-editor/commands/document.commands.ts",
+            "frontend/slices/image-editor/commands/export.commands.ts",
+            "frontend/slices/image-editor/commands/invoke.ts",
+            "frontend/slices/image-editor/commands/layer.commands.ts",
+            "frontend/slices/image-editor/commands/registry.ts",
+            "frontend/slices/image-editor/commands/schema.ts",
+            "frontend/slices/image-editor/commands/style.commands.ts",
+            "frontend/slices/image-editor/commands/tool.commands.ts",
+            "frontend/slices/image-editor/commands/transform.commands.ts",
+            "frontend/slices/image-editor/commands/types.ts",
+            "frontend/slices/image-editor/lib/assistant-core.ts",
+            "frontend/slices/image-editor/lib/bbox.ts",
+            "frontend/slices/image-editor/lib/bg-removal.ts",
+            "frontend/slices/image-editor/lib/editor-core.ts",
+            "frontend/slices/image-editor/lib/export.ts",
+            "frontend/slices/image-editor/lib/history-core.ts",
+            "frontend/slices/image-editor/lib/konva-helpers.ts",
+            "frontend/slices/image-editor/lib/konva-native.ts",
+            "frontend/slices/image-editor/lib/mask-core.ts",
+            "frontend/slices/image-editor/lib/model.ts",
+            "frontend/slices/image-editor/lib/project-core.ts",
+            "frontend/slices/image-editor/lib/types.ts"
+          ]
+        }
+      }
+    }
   },
   "deps": {
     "npm": [
-      "lucide-react",
-      "konva",
-      "react-konva",
-      "@imgly/background-removal",
-      "class-variance-authority",
-      "radix-ui"
+      "@imgly/background-removal@^1.7.0",
+      "konva@^10.3.0",
+      "lucide-react@^1.16.0",
+      "react-konva@^19.2.4"
     ],
     "shadcn": [
       "button",
@@ -31,10 +72,24 @@
       "dropdown-menu",
       "tooltip",
       "resizable",
-      "popover"
+      "popover",
+      "slider",
+      "tabs"
     ],
     "env": [],
-    "peers": []
+    "peers": [],
+    "sharedFiles": [
+      "components/shared/ui/FilePicker.tsx",
+      "lib/shared/agentic/types.ts",
+      "lib/shared/agentic/host.ts",
+      "lib/shared/agentic/agent-loop.ts",
+      "lib/shared/agentic/define.ts",
+      "lib/shared/agentic/schema.ts",
+      "lib/shared/agentic/prompt.ts",
+      "lib/shared/agentic/registry.ts",
+      "lib/shared/agentic/global-host.ts",
+      "lib/shared/agentic/use-agent-tools.ts"
+    ]
   },
   "registers": [
     "registry"
@@ -50,7 +105,9 @@
     "konva",
     "editor",
     "ai",
-    "ui"
+    "ui",
+    "svelte",
+    "framework-parity"
   ],
   "previews": [
     {
@@ -60,12 +117,12 @@
         {
           "id": "square",
           "title": "Square canvas",
-          "description": "640\u00d7360 blank document \u2014 full editor chrome (tool rail, layers, adjust)."
+          "description": "640×360 blank document — full editor chrome (tool rail, layers, adjust)."
         },
         {
           "id": "wide",
           "title": "Wide canvas",
-          "description": "960\u00d7360 blank document for a banner-style layout."
+          "description": "960×360 blank document for a banner-style layout."
         }
       ],
       "seed": "blank Konva doc sized per scenario; client-only stage, autosaves to localStorage, no server/fs"
@@ -74,54 +131,19 @@
   "contract": {
     "requires": {
       "auth": "none",
-      "deps": [
-        {
-          "npm": "react",
-          "range": "^19"
-        },
-        {
-          "npm": "konva",
-          "range": "^10"
-        },
-        {
-          "npm": "react-konva",
-          "range": "^19"
-        },
-        {
-          "npm": "@imgly/background-removal",
-          "range": "^1.6.0"
-        },
-        {
-          "npm": "lucide-react",
-          "range": "^0.400.0"
-        },
-        {
-          "npm": "class-variance-authority",
-          "range": "^0.7"
-        },
-        {
-          "npm": "radix-ui",
-          "range": "^1"
-        }
-      ]
+      "deps": []
     },
     "provides": {
       "routes": [],
       "components": [
-        "ImageEditor",
-        "EditorProvider"
+        "ImageEditor"
       ],
-      "hooks": [
-        "useEditor",
-        "useEditorCommands"
-      ],
+      "hooks": [],
       "utils": [
-        "blankDoc",
-        "createLayer",
-        "removeImageBackground",
-        "runEditorAgent",
-        "configureAgentStream",
-        "EDITOR_COMMANDS"
+        "createBrowserEditor",
+        "invokeEditorCommand",
+        "buildProject",
+        "parseProject"
       ],
       "tables": [],
       "tools": [

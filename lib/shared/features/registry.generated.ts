@@ -117,7 +117,7 @@ export const REGISTERED_SLICES: RegisteredSlice[] = [
   {
     ...imageEditorConfig,
     importPath: "@/features/image-editor/config",
-    version: "2.1.1",
+    version: "2.2.0",
   },
   {
     ...mediaViewerConfig,

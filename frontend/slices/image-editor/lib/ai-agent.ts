@@ -1,4 +1,5 @@
-import { runAgentLoop, type AgentMsg, type AnthropicTool, type ToolHost } from "@/shared/agentic";
+import { runAgentLoop } from "@/shared/agentic/agent-loop";
+import type { AgentMsg, AnthropicTool, ToolHost } from "@/shared/agentic/types";
 import type { ToolInvocation, ToolOutcome } from "../commands/use-editor-commands";
 
 export type AgentEvents = {

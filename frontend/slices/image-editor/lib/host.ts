@@ -13,13 +13,13 @@ export {
   isAgentStreamConfigured,
   streamAgentTurn,
   type AgentStreamFn,
-} from "@/shared/agentic";
+} from "@/shared/agentic/host";
 export type {
   AnthropicTool as AiTool,
   ToolUse as AiToolUse,
   AgentMsg,
   AgentTurn,
-} from "@/shared/agentic";
+} from "@/shared/agentic/types";
 
 // Hidden-input file picker primitive (audit:templates forbids raw native file
 // inputs in slice source — the picker owns it outside the slice).

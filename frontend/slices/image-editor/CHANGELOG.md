@@ -1,5 +1,13 @@
 # Changelog — image-editor
 
+## 2.2.0 — 2026-09-15
+
+- Added native Svelte 5/SvelteKit layered image editor using Konva directly over the same document/command/history/project/export semantics as React.
+- Extracted framework-neutral unified doc+paint history, mask/project cores, structural command types/invoke helper, observable browser editor state and native Konva renderer core.
+- Svelte adds move/transform, brush/eraser/mask painting, eyedropper, zoom/pan, layer/properties editing, image/project IO, background removal, export and optional host-injected AI.
+- React aggregate agent imports are narrowed to exact modules and the installer declares its FilePicker/agent closure explicitly.
+- Svelte installs no React/Next/react-konva/Lucide/shadcn/FilePicker/shared agent runtime.
+
 ## 2.1.1 — 2026-06-10
 
 - Host wiring: the editor Shell now self-registers `imageEditorTools` on the shared global host via `useAgentTools` (mount-time, live ctx) — any agent UI (assistant) can drive the editor with zero page wiring.

@@ -1,34 +1,21 @@
-# image-editor — layered raster editor
+# image-editor
 
-Embeddable, layer-based image editor built on Konva. Consumed as a LIBRARY
-slice: import `{ ImageEditor }` (or the store/model pieces) from the barrel —
-it is not an app descriptor by itself (os-vps mounts it via media-studio).
+Layered raster editor with native React and Svelte 5 distributions over one document, command, history, project and Konva render contract.
 
-## Capabilities
+## Install
 
-- Layers: raster/text/shape, blend modes, opacity, layer styles
-  (drop shadow / outer glow / stroke), reorder, lock/hide.
-- Edit: transforms, crop, resize, aspect presets, paint brushes,
-  adjustments (per-layer), text with font choices.
-- Background removal: free, fully in-browser (`@imgly/background-removal`,
-  lazy-loaded ONNX model).
-- Export: PNG / JPEG / WebP via `exportStage` / `stageToDataURL`.
-- **AI function-calling**: every editor operation is a named, schema'd
-  command (`commands/registry.ts`); `useEditorCommands` binds them to the
-  live store and the in-editor chat drives them through the host AI stream.
-- **Headless**: `server.ts` barrel runs the command registry against a doc
-  with no DOM (used by API routes / CLI flows). Render = open the doc in
-  the real editor.
+```bash
+# React / Next default
+npx rr add image-editor
 
-## Integration seam
+# Svelte 5 / SvelteKit
+npx rr add image-editor --framework sveltekit
+```
 
-The ONLY host service used is the AI streaming bridge, and it is
-**injectable**: call `configureAgentStream(fn)` (exported from the barrel)
-at app startup to wire your backend (SSE route, Vercel AI SDK, claude-api…).
-Without wiring, the in-editor AI chat shows a "not configured" error and
-every other editor feature works untouched. UI primitives come from
-`@/components/ui/*` (shadcn) + `@/lib/utils` (`cn`); the slice also ships
-its own `ui/` variants (slider/tabs) where the editor needs bespoke
-behavior.
+React keeps the existing `react-konva` + shadcn UI. Svelte uses `konva` directly and reuses the same `Doc`/layer model, editor command registry, unified doc+paint undo history, project autosave/open/save format, masks, adjustments/styles, background removal, and stage export semantics.
 
-See `ARCHITECTURE.md` for the full design.
+The Svelte renderer includes move/transform, brush/eraser, mask editing, eyedropper, zoom/pan, text/shape/paint/adjustment layers, layers/properties panels, image import/export, project IO, background removal, command tools, and an optional host-injected AI runner. It carries no React, Next, react-konva, Lucide React, shadcn, FilePicker, or shared agent runtime.
+
+## AI runner
+
+Svelte does not fake an AI backend. Pass `runAssistant` to `ImageEditor` if your host can call a model. The runner receives the current readback, the same `EDITOR_TOOLS`, and an `invoke()` function that executes the shared command registry. Without it the AI panel shows a wiring notice while every local editor feature stays usable.

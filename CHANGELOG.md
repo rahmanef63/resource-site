@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-15 — SvelteKit Image Editor distribution + shared raster command/history core
+<!-- public-changelog:SVELTE-IMAGE-EDITOR -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/image-editor
+- Preview: https://resource.rahmanef.com/preview/slices/image-editor
+- [before: `image-editor@2.1.1` was React/react-konva-only, its command/history/project state was coupled to the React renderer, and the React installer metadata omitted two shadcn primitives it actually imports] → [after: `image-editor@2.2.0` keeps React/Next as default, adds native Svelte 5/SvelteKit over direct Konva, shares structural command/history/project/mask/editor render cores, and declares exact framework-specific dependencies]
+- Svelte covers layers, move/transform, brush/eraser/masks, adjustments/styles, image/project IO, background removal, export and optional host-injected AI without React/Next/react-konva/Lucide/shadcn/FilePicker/shared-agent runtime.
+
 ### 2026-09-15 — SvelteKit Lucent Desktop engine + shared 47-widget layout core
 <!-- public-changelog:SVELTE-GLASS-DESKTOP -->
 

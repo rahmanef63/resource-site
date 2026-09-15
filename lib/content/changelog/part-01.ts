@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-IMAGE-EDITOR",
+    "version": "image-editor@2.2.0",
+    "date": 1789430400000,
+    "kind": "feature",
+    "title": "SvelteKit Image Editor distribution + shared raster command/history core",
+    "body": "Related: https://resource.rahmanef.com/slices/image-editor — Preview: https://resource.rahmanef.com/preview/slices/image-editor — [before: image-editor@2.1.1 was React/react-konva-only with renderer-coupled command/history/project state and incomplete React primitive metadata] → [after: image-editor@2.2.0 keeps React default, adds native Svelte 5/Konva parity, shares structural command/history/project/mask/editor/render cores, and declares exact framework dependencies].",
+    "groups": [
+      {
+        "heading": "One raster model, two native renderers",
+        "bullets": [
+          "Svelte covers layers, move/transform, brush/eraser/masks, adjustments/styles, image/project IO, background removal and export using Konva directly.",
+          "AI transport is explicitly host-injected; the shared local command registry remains usable without a model.",
+          "React keeps react-konva/shadcn plus the exact FilePicker/agent closure; Svelte carries no React runtime dependencies."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-GLASS-DESKTOP",
     "version": "glass-desktop@0.2.0",
     "date": 1789430400000,
