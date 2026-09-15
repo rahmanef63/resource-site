@@ -2,6 +2,25 @@ import type { ChangelogEntry } from "@/features/changelog-feed";
 
 export const entries: ChangelogEntry[] = [
   {
+    "id": "SVELTE-CONVEX-AUTH",
+    "version": "convex-auth@0.5.0",
+    "date": 1789430400000,
+    "kind": "feature",
+    "title": "SvelteKit Convex Auth distribution + shared AuthFlow core",
+    "body": "Related: https://resource.rahmanef.com/slices/convex-auth — Preview: https://resource.rahmanef.com/preview/slices/convex-auth — [before: convex-auth@0.4.0 exposed React/Next UI only and provider/FormData orchestration lived inside a React hook] → [after: convex-auth@0.5.0 keeps React/Next default, adds native Svelte 5/SvelteKit AuthCard + SignInPage, and shares one framework-neutral AuthFlow/labels/validation contract].",
+    "groups": [
+      {
+        "heading": "Official adapter where available, explicit host seam where not",
+        "bullets": [
+          "React useAuthFlow is now a thin adapter over @convex-dev/auth/react and the shared createAuthFlow core.",
+          "Native Svelte covers password sign-in/sign-up, Google, magic-link, anonymous, GitHub callback, and phone callback UI without React/Next/shadcn/Lucide runtime.",
+          "Svelte SignInPage requires an injected AuthFlow because @convex-dev/auth 0.0.x exposes React/Next adapters but no official Svelte adapter; backend provider/env behavior is unchanged."
+        ]
+      }
+    ]
+  },
+
+  {
     "id": "SVELTE-DASHBOARD-SHELL-DISTRIBUTION",
     "version": "dashboard-shell@1.3.0",
     "date": 1789430400000,

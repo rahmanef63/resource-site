@@ -1,0 +1,37 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-manifest-schema.json",
+  "slug": "convex-auth-svelte",
+  "version": "0.5.0",
+  "tier": 3,
+  "distribution": {
+    "method": "cli-copy",
+    "command": "npx rr add convex-auth --framework sveltekit",
+    "consumerPath": "slices/convex-auth"
+  },
+  "files": [
+    "README.md",
+    "components/AuthCard.svelte",
+    "components/MagicLinkForm.svelte",
+    "components/PasswordBlock.svelte",
+    "components/PhoneForm.svelte",
+    "components/SignInPage.svelte",
+    "config.ts",
+    "index.ts",
+    "svelte-components.d.ts",
+    "types.ts"
+  ],
+  "imports": {
+    "shared": [
+      "frontend/slices/convex-auth/lib/index.ts",
+      "frontend/slices/convex-auth/lib/labels.ts",
+      "frontend/slices/convex-auth/lib/flow-core.ts",
+      "frontend/slices/convex-auth/types/core.ts"
+    ],
+    "external": [
+      "svelte",
+      "@convex-dev/auth",
+      "@auth/core",
+      "resend"
+    ]
+  }
+}

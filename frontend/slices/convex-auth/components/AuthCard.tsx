@@ -28,10 +28,9 @@ import {
   type PasswordMode, type PasswordSubmit,
 } from "./auth-card-blocks";
 import { DEFAULT_LABELS } from "../lib/labels";
-import type { AuthResult, SignInLabels } from "../types";
+import type { AuthMethod, AuthResult, SignInLabels } from "../types";
+export type { AuthMethod } from "../types";
 
-export type AuthMethod =
-  | "google" | "github" | "magic-link" | "password" | "phone" | "anonymous";
 
 const ok: () => Promise<AuthResult> = async () => ({ ok: true });
 

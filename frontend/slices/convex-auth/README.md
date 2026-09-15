@@ -1,5 +1,12 @@
 # `convex-auth` slice
 
+
+## Framework distributions
+
+- **React/Next (default):** `npx rr add convex-auth` — uses the official `@convex-dev/auth/react` adapter through the thin `useAuthFlow()` hook.
+- **SvelteKit:** `npx rr add convex-auth --framework sveltekit` — native Svelte 5 AuthCard/SignInPage using the same labels, validation helpers and `AuthFlow` core. Supply the SignInPage `flow` from your host integration; `@convex-dev/auth@0.0.95` does not expose an official Svelte client adapter.
+
+Secrets and provider configuration remain in the bundled Convex backend; never put JWT, OAuth secret, or Resend keys in the browser.
 Multi-provider authentication on top of `@convex-dev/auth`. Ships a
 production `<SignInPage>` + the backend wiring for **Password** (PBKDF2,
 self-hosted-friendly), **Anonymous** (guest), **Google OAuth**, and

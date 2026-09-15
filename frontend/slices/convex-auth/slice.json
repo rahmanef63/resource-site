@@ -1,10 +1,10 @@
 {
   "$schema": "https://resource.rahmanef.com/slice-schema.json",
   "slug": "convex-auth",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "category": "auth",
-  "title": "Convex Auth \u2014 Multi-Provider Sign-in",
-  "description": "@convex-dev/auth with Password (PBKDF2-SHA256 100k, self-hosted-friendly), Anonymous (guest), Google OAuth, and Resend magic-link. Ships a production SignInPage plus a presentational, props-driven AuthCard (v0.3) \u2014 pick methods (google, github, magic-link, password signin/signup, phone OTP, anonymous) and render the card anywhere; handlers default to a mock so it works with zero wiring. i18n via labels. No Clerk.",
+  "title": "Convex Auth — Multi-Provider Sign-in",
+  "description": "Framework-parity Convex Auth slice: React/Next stays default with the official @convex-dev/auth React adapter; native Svelte 5/SvelteKit adds AuthCard + SignInPage over the same labels, validation and framework-neutral AuthFlow core. Because @convex-dev/auth exposes React/Next adapters but no Svelte adapter, Svelte SignInPage requires an explicit host-supplied AuthFlow instead of emulating undocumented session internals. Backend Password, Anonymous, Google OAuth and Resend magic-link behavior stays unchanged.",
   "namespace": "@/features/convex-auth",
   "convex": {
     "tablesExport": "authTablesExt",
@@ -15,13 +15,39 @@
   },
   "frontend": {
     "slicePath": "frontend/slices/convex-auth",
-    "configExport": "convexAuthConfig"
+    "configExport": "convexAuthConfig",
+    "defaultFramework": "react-next",
+    "frameworks": {
+      "svelte-sveltekit": {
+        "path": "frontend/slices/convex-auth-svelte",
+        "aliases": [
+          "svelte",
+          "sveltekit"
+        ],
+        "deps": {
+          "npm": [
+            "svelte@^5",
+            "@convex-dev/auth@^0.0.95",
+            "@auth/core@^0.37.4",
+            "resend@^4.0.0"
+          ],
+          "shadcn": [],
+          "sharedFiles": [
+            "frontend/slices/convex-auth/lib/index.ts",
+            "frontend/slices/convex-auth/lib/labels.ts",
+            "frontend/slices/convex-auth/lib/flow-core.ts",
+            "frontend/slices/convex-auth/types/core.ts"
+          ]
+        }
+      }
+    }
   },
   "deps": {
     "npm": [
-      "@convex-dev/auth@^0.0.92",
+      "@convex-dev/auth@^0.0.95",
       "@auth/core@^0.37.4",
-      "resend@^4.0.0"
+      "resend@^4.0.0",
+      "lucide-react@^0.400.0"
     ],
     "shadcn": [
       "button",
@@ -81,7 +107,9 @@
     "google",
     "anonymous",
     "no-clerk",
-    "pbkdf2"
+    "pbkdf2",
+    "svelte",
+    "framework-parity"
   ],
   "previews": [
     {
@@ -151,7 +179,8 @@
         "auth_verifiers"
       ],
       "components": [
-        "SignInPage"
+        "SignInPage",
+        "AuthCard"
       ],
       "hooks": [
         "useAuthFlow"
@@ -159,7 +188,16 @@
       "helpers": [
         "extractAuthError",
         "validatePassword",
-        "looksLikeAutofillBug"
+        "looksLikeAutofillBug",
+        "createAuthFlow",
+        "createMockAuthFlow"
+      ],
+      "types": [
+        "AuthFlow",
+        "AuthMethod",
+        "AuthProvider",
+        "AuthResult",
+        "SignInLabels"
       ]
     },
     "generalization": {

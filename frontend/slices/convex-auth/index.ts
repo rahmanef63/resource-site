@@ -1,6 +1,6 @@
 // Slice public barrel — re-exports only.
 
-export { AuthCard, type AuthCardProps, type AuthMethod } from "./components/AuthCard";
+export { AuthCard, type AuthCardProps } from "./components/AuthCard";
 export { default as SignInPage } from "./components/sign-in-page";
 export { useAuthFlow } from "./hooks";
 export {
@@ -10,6 +10,7 @@ export {
 } from "./lib";
 export { DEFAULT_LABELS } from "./lib/labels";
 export type {
+  AuthMethod,
   AuthProvider,
   AuthResult,
   PasswordCredentials,
@@ -17,4 +18,5 @@ export type {
   SignInLabels,
   SignInPageProps,
 } from "./types";
+export { createAuthFlow, createMockAuthFlow, type AuthFlow } from "./lib/flow-core";
 export { convexAuthTools, type ConvexAuthConfigureCtx } from "./lib/tools";

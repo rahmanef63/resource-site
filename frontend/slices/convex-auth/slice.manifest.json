@@ -1,18 +1,21 @@
 {
   "$schema": "../../../docs/slice.manifest.schema.json",
   "name": "convex-auth",
-  "version": "0.4.0",
-  "description": "@convex-dev/auth multi-provider sign-in: Password (PBKDF2-SHA256 100k, self-hosted-friendly), Anonymous (guest), Google OAuth, Resend magic-link. Ships a production <SignInPage> with i18n + prop-driven provider list. No Clerk.",
+  "version": "0.5.0",
+  "description": "Framework-parity Convex Auth backend + React/Next UI. React uses the official @convex-dev/auth adapter; Svelte installs through the canonical slice framework contract and injects the shared AuthFlow explicitly.",
   "category": "auth",
   "stability": "beta",
   "deps": {
     "shared": [],
     "slices": [],
-    "convexFeatures": ["auth"],
+    "convexFeatures": [
+      "auth"
+    ],
     "npm": {
-      "@convex-dev/auth": "^0.0.92",
+      "@convex-dev/auth": "^0.0.95",
       "@auth/core": "^0.37.4",
-      "resend": "^4.0.0"
+      "resend": "^4.0.0",
+      "lucide-react": "^0.400.0"
     },
     "env": [
       {
@@ -54,12 +57,21 @@
     ]
   },
   "files": {
-    "include": ["**/*"],
-    "exclude": ["*.test.ts", "*.test.tsx"]
+    "include": [
+      "**/*"
+    ],
+    "exclude": [
+      "*.test.ts",
+      "*.test.tsx"
+    ]
   },
   "convexFiles": {
-    "include": ["**/*.ts"],
-    "exclude": ["*.test.ts"]
+    "include": [
+      "**/*.ts"
+    ],
+    "exclude": [
+      "*.test.ts"
+    ]
   },
   "permissions": [
     "auth.sign-in",
@@ -70,22 +82,35 @@
     {
       "name": "auth_users",
       "namespaced": true,
-      "indexes": ["by_email", "by_external_id"]
+      "indexes": [
+        "by_email",
+        "by_external_id"
+      ]
     },
     {
       "name": "auth_accounts",
       "namespaced": true,
-      "indexes": ["by_provider", "by_provider_account_id", "by_user"]
+      "indexes": [
+        "by_provider",
+        "by_provider_account_id",
+        "by_user"
+      ]
     },
     {
       "name": "auth_sessions",
       "namespaced": true,
-      "indexes": ["by_user", "by_token"]
+      "indexes": [
+        "by_user",
+        "by_token"
+      ]
     },
     {
       "name": "auth_verifiers",
       "namespaced": true,
-      "indexes": ["by_user", "by_identifier"]
+      "indexes": [
+        "by_user",
+        "by_identifier"
+      ]
     }
   ],
   "compatibility": {
@@ -108,6 +133,16 @@
       }
     ]
   },
-  "tags": ["auth", "convex-auth", "password", "magic-link", "oauth", "google", "anonymous", "pbkdf2", "no-clerk"],
-  "notes": "0.2.0 (2026-05-17): lifted production SignInPage from CareerPack. Backend (convex/features/auth/auth.ts) already shipped Password + Anonymous + Google + PBKDF2-SHA256 100k crypto; this release fills in the frontend with login/register tabs, Google + Anonymous buttons, and i18n-via-props. PBKDF2 (not Scrypt) because Scrypt times out behind reverse proxies that gate WebSocket actions (e.g. Dokploy). Pre-migration note still applies: if migrating from Clerk, reuse the same Google client ID/secret so the OAuth `sub` join preserves identity."
+  "tags": [
+    "auth",
+    "convex-auth",
+    "password",
+    "magic-link",
+    "oauth",
+    "google",
+    "anonymous",
+    "pbkdf2",
+    "no-clerk"
+  ],
+  "notes": "0.5.0 (2026-09-15): React remains default; extracted framework-neutral AuthFlow orchestration and added native Svelte 5 AuthCard + host-injected SignInPage. Svelte does not emulate @convex-dev/auth internals because the package exports React/Next adapters only. Backend providers/env stay unchanged."
 }

@@ -11,6 +11,15 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-09-15 — SvelteKit Convex Auth distribution + shared AuthFlow core
+<!-- public-changelog:SVELTE-CONVEX-AUTH -->
+
+**Slices:**
+- Related: https://resource.rahmanef.com/slices/convex-auth
+- Preview: https://resource.rahmanef.com/preview/slices/convex-auth
+- [before: `convex-auth@0.4.0` exposed React/Next UI only and provider/FormData orchestration lived inside a React hook] → [after: `convex-auth@0.5.0` keeps React/Next default, adds native Svelte 5/SvelteKit AuthCard + SignInPage, and shares one framework-neutral AuthFlow/labels/validation contract]
+- `@convex-dev/auth` has official React/Next exports but no Svelte adapter, so Svelte production wiring is explicitly host-injected rather than reimplementing undocumented session internals. React dependency metadata now includes its real Lucide dependency and aligns Auth to `^0.0.95`.
+
 ### 2026-09-15 — SvelteKit Dashboard Shell distribution
 <!-- public-changelog:SVELTE-DASHBOARD-SHELL-DISTRIBUTION -->
 

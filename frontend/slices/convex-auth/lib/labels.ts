@@ -2,7 +2,7 @@
 // `labels` prop (partial merge). Keep keys flat so a `{...DEFAULT, ...override}`
 // spread is enough; no deep merge.
 
-import type { SignInLabels } from "../types";
+import type { SignInLabels } from "../types/core";
 
 export const DEFAULT_LABELS: SignInLabels = {
   // Layout
