@@ -18,3 +18,9 @@ it("adds the landing canonical without canonicalising nested docs to home", () =
   expect(readFileSync("app/page.tsx", "utf8")).toContain("canonical: site.url");
   expect(readFileSync("app/layout.tsx", "utf8")).not.toContain("canonical: site.url");
 });
+
+it("keeps the footer wordmark readable through the current theme tokens", () => {
+  const footer = readFileSync("components/site/site-footer.tsx", "utf8");
+  expect(footer).toContain('className="font-semibold text-foreground">{site.name}</span>');
+  expect(footer).not.toContain("dark:block");
+});
