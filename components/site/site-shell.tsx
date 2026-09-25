@@ -3,6 +3,7 @@
 import * as React from "react";
 import { usePathname } from "next/navigation";
 import { TopNavbar } from "./top-navbar";
+import { SiteFooter } from "./site-footer";
 
 const BARE_PREFIXES = ["/preview", "/admin", "/admin-login"];
 
@@ -24,6 +25,8 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
       <main id="main-content" tabIndex={-1} className="flex-1 outline-none">
         {children}
       </main>
+      {/* Project authorship belongs on this owned site's landing page, not exported templates. */}
+      {pathname === "/" ? <SiteFooter /> : null}
     </div>
   );
 }

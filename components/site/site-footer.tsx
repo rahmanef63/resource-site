@@ -31,7 +31,7 @@ export function SiteFooter() {
           />
         </Link>
         <p>
-          Built by{" "}
+          Project by{" "}
           <a
             href={site.authorUrl}
             target="_blank"
@@ -40,7 +40,7 @@ export function SiteFooter() {
           >
             {site.author}
           </a>
-          . Self-hosted on Dokploy via si-coder.
+          . Explore the author’s background and portfolio.
         </p>
         <div className="flex items-center gap-4">
           <a

@@ -6,7 +6,7 @@ export const site = {
   tagline: "Rahman's dual-framework slice library for Next.js and SvelteKit.",
   url: "https://resource.rahmanef.com",
   repo: "https://github.com/rahmanef63/resource-site",
-  author: "Rahman",
+  author: "Rahman Fakhru",
   authorUrl: "https://rahmanef.com",
   links: {
     github: "https://github.com/rahmanef63/resource-site",
