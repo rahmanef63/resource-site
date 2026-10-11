@@ -15,6 +15,8 @@ export const metadata: Metadata = {
   description: site.description,
   metadataBase: new URL(site.url),
   manifest: "/manifest.webmanifest",
+  applicationName: site.name,
+  publisher: site.publisher,
   icons: {
     icon: [
       { url: "/brand-assets/favicon.svg", type: "image/svg+xml" },

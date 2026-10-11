@@ -21,7 +21,7 @@ export function Hero() {
           <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
         </Link>
         <h1 className="mt-6 text-balance text-4xl font-semibold tracking-[-0.035em] sm:text-5xl md:text-6xl lg:text-7xl">
-          Rahman Resources for your
+          {site.name} for your
           <br className="hidden sm:inline" /> next app.
         </h1>
         <p className="mt-5 max-w-2xl text-balance text-base leading-7 text-muted-foreground sm:text-lg">

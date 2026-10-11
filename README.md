@@ -1,3 +1,13 @@
+# Manef Resource
+
+Resource is a product of [Manef](https://manef.dev), created by Rahman Fakhru.
+Canonical product URL: https://resource.manef.dev.
+The existing repository and the published `rahman-resources`, `resources`, and
+`rahman-resources-mcp` package identities are retained for compatibility.
+Migration procedure and verification: [docs/manef-migration.md](docs/manef-migration.md).
+
+---
+
 # resource.rahmanef.com — public site
 
 Public showcase for the [Rahman Resources](https://github.com/rahmanef63/resources) monorepo (`rr`).
