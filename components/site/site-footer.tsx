@@ -17,7 +17,16 @@ export function SiteFooter() {
           <span className="font-semibold text-foreground">{site.name}</span>
         </Link>
         <p>
-          Project by{" "}
+          A product by{" "}
+          <a
+            href={site.publisherUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium text-foreground hover:underline"
+          >
+            {site.publisher}
+          </a>
+          . Created by{" "}
           <a
             href={site.authorUrl}
             target="_blank"
@@ -26,7 +35,7 @@ export function SiteFooter() {
           >
             {site.author}
           </a>
-          . Explore the author’s background and portfolio.
+          .
         </p>
         <div className="flex items-center gap-4">
           <a

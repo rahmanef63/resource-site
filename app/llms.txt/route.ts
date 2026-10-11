@@ -16,6 +16,7 @@ async function buildBody() {
   lines.push("");
   lines.push(`Site: ${site.url}`);
   lines.push(`Repo: ${site.repo}`);
+  lines.push(`Product by: ${site.publisher} (${site.publisherUrl})`);
   lines.push(`Author: ${site.author} (${site.authorUrl})`);
   lines.push("");
   lines.push("## Stack");
