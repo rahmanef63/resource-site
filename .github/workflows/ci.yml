@@ -41,6 +41,11 @@ jobs:
       - name: install
         run: npm ci --legacy-peer-deps --no-audit --no-fund
 
+      # Root tests invoke CLI subprocesses, which import the CLI package's
+      # own dependencies (for example kleur).
+      - name: install CLI test dependencies
+        run: npm ci --prefix packages/cli --no-audit --no-fund
+
       - name: typecheck
         run: npm run typecheck
 

@@ -12,6 +12,7 @@
  */
 
 import Anthropic from "@anthropic-ai/sdk";
+import { builderBodySchema, readAiJson } from "@/lib/ai-request";
 import { extractIp, rateLimit } from "@/lib/rate-limit-memory";
 import {
   buildBuilderTools,
@@ -37,11 +38,6 @@ user discover slices, preview them, and compose an install bundle.
 - When they have picked slices, call compose_bundle and relay the commands.
 - Be terse. Plain text only, no markdown headings.`;
 
-interface ChatMessage {
-  role: "user" | "assistant";
-  content: string;
-}
-
 export async function POST(req: Request) {
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) {
@@ -61,19 +57,12 @@ export async function POST(req: Request) {
     );
   }
 
-  let body: { messages?: ChatMessage[] };
-  try {
-    body = await req.json();
-  } catch {
-    return Response.json({ error: "invalid JSON body" }, { status: 400 });
-  }
-  const history = (Array.isArray(body.messages) ? body.messages : [])
-    .filter(
-      (m) =>
-        (m.role === "user" || m.role === "assistant") &&
-        typeof m.content === "string",
-    )
-    .slice(-20);
+  const json = await readAiJson(req);
+  if (!json.ok) return json.response;
+  const parsed = builderBodySchema.safeParse(json.value);
+  if (!parsed.success)
+    return Response.json({ error: "invalid chat request" }, { status: 400 });
+  const history = parsed.data.messages.slice(-20);
   if (history.some((m) => m.content.length > MAX_MESSAGE_CHARS)) {
     return Response.json({ error: "message too long" }, { status: 413 });
   }

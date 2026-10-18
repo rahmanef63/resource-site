@@ -17,20 +17,18 @@
  */
 
 import Anthropic from "@anthropic-ai/sdk";
+import { agentBodySchema, readAiJson } from "@/lib/ai-request";
 import { extractIp, rateLimit } from "@/lib/rate-limit-memory";
-import { BASE_AGENT_SYSTEM, type AgentMsg, type AnthropicTool, type ToolUse } from "@/shared/agentic";
+import { BASE_AGENT_SYSTEM, type AgentMsg, type ToolUse } from "@/shared/agentic";
 
 const MODEL = process.env.RR_AGENT_MODEL ?? "claude-sonnet-4-6";
 const MAX_TURN_MESSAGES = 60;
-const MAX_BODY_CHARS = 200_000;
 const RATE = { limit: 20, windowMs: 10 * 60_000 };
 
 // rr's own preview desktop demo. The base rules are the shared, copy-safe
 // custom instruction (lib/shared/agentic/prompt.ts); a real BYOK consumer
 // sends its own `system` (e.g. registry.systemPrompt()) in the request body.
 const SYSTEM = `${BASE_AGENT_SYSTEM}\n\nContext: you are inside Rahman OS, a web desktop; the open apps expose the tools.`;
-
-type Body = { messages?: AgentMsg[]; tools?: AnthropicTool[]; system?: string };
 
 /** Shared AgentMsg[] → Anthropic MessageParam[]. */
 function toAnthropic(messages: AgentMsg[]): Anthropic.MessageParam[] {
@@ -108,20 +106,14 @@ export async function POST(req: Request) {
     );
   }
 
-  const raw = await req.text();
-  if (raw.length > MAX_BODY_CHARS)
-    return Response.json({ error: "payload too large" }, { status: 413 });
-  let body: Body;
-  try {
-    body = JSON.parse(raw) as Body;
-  } catch {
-    return Response.json({ error: "invalid JSON body" }, { status: 400 });
-  }
-
-  const history = (body.messages ?? []).slice(-MAX_TURN_MESSAGES);
+  const json = await readAiJson(req);
+  if (!json.ok) return json.response;
+  const parsed = agentBodySchema.safeParse(json.value);
+  if (!parsed.success)
+    return Response.json({ error: "invalid agent request" }, { status: 400 });
+  const body = parsed.data;
+  const history = body.messages.slice(-MAX_TURN_MESSAGES);
   const tools = body.tools ?? [];
-  if (!Array.isArray(history) || history.length === 0)
-    return Response.json({ error: "messages required" }, { status: 400 });
 
   const client = new Anthropic({ apiKey: key });
   const messages = toAnthropic(history);
