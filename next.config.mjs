@@ -56,6 +56,7 @@ const nextConfig = {
     ],
     serverActions: {
       allowedOrigins: [
+        "resource.manef.dev",
         "resource.rahmanef.com",
         "localhost:3000",
       ],

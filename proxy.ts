@@ -9,7 +9,7 @@
 //
 // What it does NOT do:
 //   - Touch rahmanef.com (Rahman's personal site — different deployment)
-//   - Touch resource.rahmanef.com (rr main canonical site)
+//   - Rewrite resource.manef.dev; the legacy Resource host redirects separately.
 //   - Rewrite /_next/* (Next.js assets)
 //   - Rewrite /api/* (route handlers stay accessible per subdomain)
 //   - Rewrite /favicon.ico, /robots.txt, /sitemap.xml, /llms.txt
@@ -17,6 +17,7 @@
 // Single source of truth for the subdomain map: lib/content/template-subdomains.ts.
 
 import { NextRequest, NextResponse } from "next/server";
+import { canonicalResourceUrl, legacyResourceRedirect } from "@/lib/site-routing";
 import { resolveDemoSlug, getExternalDemoUrl } from "@/lib/content/template-subdomains";
 
 // Paths the proxy must NEVER rewrite — Next.js internals + APIs +
@@ -36,11 +37,19 @@ const PASSTHROUGH_EXACT = new Set([
 ]);
 
 export default function proxy(request: NextRequest) {
+  const legacyTarget = legacyResourceRedirect(request.nextUrl);
+  if (legacyTarget) return NextResponse.redirect(legacyTarget, 308);
+
   const host = request.headers.get("host");
   const slug = resolveDemoSlug(host);
 
   // Not a demo subdomain — pass through.
-  if (!slug) return NextResponse.next();
+  if (!slug) {
+    const response = NextResponse.next();
+    const canonical = canonicalResourceUrl(request.nextUrl);
+    if (canonical) response.headers.set("Link", `<${canonical.href}>; rel="canonical"`);
+    return response;
+  }
 
   // Published external demo → redirect the WHOLE subdomain to the deployed
   // Vercel app (it serves its own assets/API). Offloads demo traffic from rr;

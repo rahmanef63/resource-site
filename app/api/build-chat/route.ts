@@ -29,7 +29,7 @@ const MAX_LOOPS = 6;
 const RATE = { limit: 10, windowMs: 10 * 60_000 };
 const MAX_MESSAGE_CHARS = 4_000;
 
-const SYSTEM = `You are the Rahman Resources bundle-builder assistant. Help the
+const SYSTEM = `You are the Manef Resource bundle-builder assistant. Help the
 user discover slices, preview them, and compose an install bundle.
 - Use list_slices / get_slice to look things up — never invent slugs.
 - When the user wants to SEE a slice, call preview_slice (the widget renders

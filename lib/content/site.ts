@@ -1,10 +1,13 @@
 export const site = {
-  name: "Rahman Resources",
-  shortName: "rmnr",
+  name: "Manef Resource",
+  shortName: "Resource",
   description:
     "Dual-framework Next.js/React + SvelteKit/Svelte vertical-slice catalog with Convex, npm and Bun install paths. Copy-first. Production-grade.",
-  tagline: "Rahman's dual-framework slice library for Next.js and SvelteKit.",
-  url: "https://resource.rahmanef.com",
+  tagline: "A Manef product: reusable slices for Next.js and SvelteKit.",
+  url: "https://resource.manef.dev",
+  legacyUrl: "https://resource.rahmanef.com",
+  publisher: "Manef",
+  publisherUrl: "https://manef.dev",
   repo: "https://github.com/rahmanef63/resource-site",
   author: "Rahman Fakhru",
   authorUrl: "https://rahmanef.com",

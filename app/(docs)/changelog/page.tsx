@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 
 export const metadata = {
   title: "Changelog",
-  description: "Release history for the Rahman Resources CLI + MCP + slices.",
+  description: "Release history for the Manef Resource CLI + MCP + slices.",
 };
 
 /**
