@@ -146,7 +146,7 @@ npx rahman-resources update <slug> --rr-path P    # point at an rr.json outside 
 
 The engine emits a `MergeReport` with per-element outcomes (`auto-merged`, `consumer-wins-clean`, `kitab-wins-clean`, `conflict`, `identical`), a summary, and `driftAfterMerge` (0-100). When the merge is clean it also produces a ready-to-write `mergedSnapshot`.
 
-Conflicts surface a `conflictHint` describing why (e.g. _"kitab dropped `paymentOrders`; consumer still relies on it"_). Re-sync activity is appended as a `3-way-merge` lineage entry, and the consumer's `drift_score` is updated so `rr graph` reflects reality.
+Conflicts surface a `conflictHint` describing why (e.g. _"kitab dropped `paymentOrders`; consumer still relies on it"_). Re-sync activity is appended as a `3-way-merge` lineage entry, and the consumer's `drift_score` is updated so `npx rahman-resources graph` reflects reality.
 
 See [docs/bidir-sync.md](../../docs/bidir-sync.md) for the full algorithm + drift-score formula.
 
@@ -165,7 +165,7 @@ Step kinds: `convex-schema-{add,drop,rename}-table`, `env-{add,remove}`, `rbac-{
 
 Rename detection: when the new contract declares `migrationFrom: { "<old-version>": "<marker>" }`, the planner pairs single-sided table additions/removals positionally and emits a single reversible `convex-schema-rename-table` step instead of a destructive drop+add. The marker string is opaque — only its presence matters. See [docs/migration-planner.md](../../docs/migration-planner.md) for the full algorithm and the DOKU rename proof.
 
-On `--write-files` the CLI appends a DNA lineage entry (`transforms: ["migration-applied", "<step-ids>"]`) so `rr graph` reflects the migration.
+On `--write-files` the CLI appends a DNA lineage entry (`transforms: ["migration-applied", "<step-ids>"]`) so `npx rahman-resources graph` reflects the migration.
 
 ## Updating the manifest
 
