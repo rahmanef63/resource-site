@@ -8,19 +8,22 @@ import { InstallWithAgent } from "@/components/site/install-with-agent";
 import { buildAgentPrompt } from "@/lib/agent-prompt";
 import { PageHeader } from "@/components/site/page-header";
 import { site } from "@/lib/content/site";
+import { getFrameworkCoverage } from "@/lib/content/slice-framework-support";
 
 export const metadata = { title: "Installation" };
+
+const coverage = getFrameworkCoverage();
 
 const FRAMEWORKS = [
   {
     title: "Next.js + React",
     badge: "default",
-    body: "Full-app scaffold with Next.js 16, React 19, Tailwind 4, Convex and shadcn/ui. Existing full-app templates target this path.",
+    body: `Full-app scaffold with Next.js 16, React 19, Tailwind 4, Convex and shadcn/ui. All ${coverage.catalog} catalog slices install on this path; existing full-app templates target it too.`,
   },
   {
     title: "SvelteKit + Svelte",
     badge: "native",
-    body: "SvelteKit 2 + Svelte 5 Runes, Tailwind 4, convex-svelte and adapter-node. Add any of the 66 canonical active slices with --framework sveltekit.",
+    body: `SvelteKit 2 + Svelte 5 Runes, Tailwind 4, convex-svelte and adapter-node. Add any of the ${coverage.svelte} Svelte-capable catalog slices with --framework sveltekit (${coverage.reactOnly} legacy entries stay React-only).`,
   },
 ] as const;
 

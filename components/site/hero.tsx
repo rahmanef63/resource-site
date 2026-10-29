@@ -25,8 +25,8 @@ export function Hero() {
           <br className="hidden sm:inline" /> next app.
         </h1>
         <p className="mt-5 max-w-2xl text-balance text-base leading-7 text-muted-foreground sm:text-lg">
-          {coverage.svelte} canonical slices ship for Next.js/React and SvelteKit/Svelte 5 —
-          copy-first, renderer-aware, npm/Bun-ready, with Tailwind 4, TypeScript strict and
+          {coverage.catalog} slices for Next.js/React · {coverage.svelte} also ship a native
+          SvelteKit renderer — copy-first, npm/Bun-ready, with Tailwind 4, TypeScript strict and
           optional Convex. {site.description.split(".")[0]}.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
