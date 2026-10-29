@@ -67,11 +67,12 @@ if (dirty) {
 }
 
 // (b) branch + up to date ---------------------------------------------------
+// A dry run mutates nothing, so a branch/upstream mismatch only warns there.
 step("checking branch");
 const branch = git("rev-parse", "--abbrev-ref", "HEAD");
 if (branch !== "main") {
-  if (!ALLOW_BRANCH) die(`must release from main (on "${branch}"); pass --allow-branch to override`);
-  warn(`--allow-branch: releasing from "${branch}" instead of main.`);
+  if (!ALLOW_BRANCH && !DRY) die(`must release from main (on "${branch}"); pass --allow-branch to override`);
+  warn(`releasing from "${branch}" instead of main${DRY ? " (dry run, nothing is committed)" : ""}.`);
 }
 
 let behind = "";
@@ -83,8 +84,8 @@ try {
   behind = "origin/main is not available locally";
 }
 if (behind) {
-  if (!ALLOW_BRANCH) die(`${behind}; run "git fetch origin" and rebase/merge before releasing`);
-  warn(`--allow-branch: ${behind}.`);
+  if (!ALLOW_BRANCH && !DRY) die(`${behind}; run "git fetch origin" and rebase/merge before releasing`);
+  warn(`${behind}${DRY ? " (dry run, nothing is committed)" : ""}.`);
 }
 
 // (c) gates ----------------------------------------------------------------
