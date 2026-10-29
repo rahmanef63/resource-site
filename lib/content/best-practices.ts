@@ -640,13 +640,13 @@ export const BEST_PRACTICES: BestPracticeSection[] = [
       {
         title: "TEMPLATE = full-app scaffold",
         tier: "P1",
-        rule: "A TEMPLATE (catalog: `lib/content/layouts.ts`) is a whole-app starter. Install `npx rr add <template-slug>` — defaults to `--at root` (routes promoted to `app/(public)/` + `app/admin/`, `/preview/<slug>` constants auto-rewritten). `--at preview` only for sandbox demos.",
+        rule: "A TEMPLATE (catalog: `lib/content/layouts.ts`) is a whole-app starter. Install `npx rahman-resources add <template-slug>` — defaults to `--at root` (routes promoted to `app/(public)/` + `app/admin/`, `/preview/<slug>` constants auto-rewritten). `--at preview` only for sandbox demos.",
         why: "Templates do NOT ship slice metadata — they're monolithic scaffolds you fork.",
       },
       {
         title: "SLICE = drop-in vertical feature",
         tier: "P1",
-        rule: "A SLICE (catalog: `lib/content/slices.ts`) is one self-contained feature. `npx rr add <slice-slug>` copies into `slices/<slug>/` (+ optional `convex/features/<slug>/`) with the metadata pair. Variants: `add <slug> <variant>` flattens one; `add <slug>` copies all + switcher prop.",
+        rule: "A SLICE (catalog: `lib/content/slices.ts`) is one self-contained feature. `npx rahman-resources add <slice-slug>` copies into `slices/<slug>/` (+ optional `convex/features/<slug>/`) with the metadata pair. Variants: `add <slug> <variant>` flattens one; `add <slug>` copies all + switcher prop.",
         why: "The metadata pair is what makes a slice composable + auditable.",
       },
       {
@@ -657,12 +657,12 @@ export const BEST_PRACTICES: BestPracticeSection[] = [
       {
         title: "Lift = sanitize first (slice path only)",
         tier: "P1",
-        rule: "Strip consumer URLs, env names, role enums, table coupling → replace with props / env-configured allowlists. `npx rr lift` is operator-manual.",
+        rule: "Strip consumer URLs, env names, role enums, table coupling → replace with props / env-configured allowlists. `npx rahman-resources lift` is operator-manual.",
       },
       {
         title: "MCP connectors via create-your-mcp",
         tier: "P1",
-        rule: "Add ChatGPT / Claude / Cursor connector support via `npx rr add create-your-mcp` — never hand-roll OAuth/PKCE.",
+        rule: "Add ChatGPT / Claude / Cursor connector support via `npx rahman-resources add create-your-mcp` — never hand-roll OAuth/PKCE.",
       },
     ],
   },

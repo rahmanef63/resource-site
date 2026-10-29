@@ -11,6 +11,7 @@ const SOURCES = [
   "lib/agent-prompt.ts",
   "lib/slice-agent-prompt.ts",
   "lib/content/slices.ts",
+  "lib/content/best-practices.ts",
   "lib/preview/ai-tools.ts",
   "lib/templates/configs.ts",
   "components/site/features-grid.tsx",
