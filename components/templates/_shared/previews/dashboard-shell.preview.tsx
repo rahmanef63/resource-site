@@ -1,6 +1,6 @@
 "use client";
 
-/** Variant preview (VP wave) — rr-internal, stripped on `rr add`.
+/** Variant preview (VP wave) — rr-internal, stripped on `npx rahman-resources add`.
  *  template-base is tsc-excluded; this file imports ONLY site-compiled code
  *  (the slice's real implementation lives at components/templates/_shared/ui,
  *  which all 8 OS templates mount in production). */

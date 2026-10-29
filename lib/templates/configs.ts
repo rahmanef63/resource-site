@@ -92,7 +92,7 @@ Source: ${repoBase("cookbook/layouts/" + slug)}
 
 ## Files to copy
 \`\`\`bash
-npx rr add dashboard-shell        # the shell itself (rail + mobile dock)
+npx rahman-resources add dashboard-shell        # the shell itself (rail + mobile dock)
 cp -r ~/projects/resource-site/cookbook/layouts/${slug}/* slices/dashboard-shell/
 \`\`\`
 

@@ -188,7 +188,7 @@ export const slices: SliceEntry[] = [
     compat: { enhances: ["appshell", "file-explorer"] },
     previewPath: "/preview/slices/image-editor",
     defaultView: "desktop",
-    agentRecipe: `React/default: \`npx rr add image-editor\`. SvelteKit: \`npx rr add image-editor --framework sveltekit\`. Both share the same layered document, command registry, doc+paint history, project format, adjustment/style/mask semantics, background-removal and Konva stage export contract. React keeps react-konva/shadcn and automatic agent wiring; Svelte uses Konva directly and accepts optional runAssistant/registerTools. Keep AI/model transport and file authorization in the host; the editor UI is not an authorization boundary.`,
+    agentRecipe: `React/default: \`npx rahman-resources add image-editor\`. SvelteKit: \`npx rahman-resources add image-editor --framework sveltekit\`. Both share the same layered document, command registry, doc+paint history, project format, adjustment/style/mask semantics, background-removal and Konva stage export contract. React keeps react-konva/shadcn and automatic agent wiring; Svelte uses Konva directly and accepts optional runAssistant/registerTools. Keep AI/model transport and file authorization in the host; the editor UI is not an authorization boundary.`,
     exampleCode: `"use client";
 import { ImageEditor } from "@/features/image-editor";
 
@@ -226,7 +226,7 @@ export default function ImageEditorDemo() {
     compat: { enhances: ["appshell", "file-explorer", "image-editor"] },
     previewPath: "/preview/slices/reel-editor",
     defaultView: "desktop",
-    agentRecipe: `React/default: \`npx rr add reel-editor\`. SvelteKit: \`npx rr add reel-editor --framework sveltekit\`. Both reuse the same composition/history/draw/media/audio/AI/settings/filesystem/export cores. React keeps the resizable shadcn workspace, Sonner, Lucide and automatic tool registration; Svelte installs only svelte@^5 + portable cores and accepts optional registerTools. Wire production file access through configureReelFs({ list, mkdir, rawUrl }); enforce path authorization and signed/media access on that backend. Render/export remains client-side MediaRecorder WebM using the same drawFrame() path as preview.`,
+    agentRecipe: `React/default: \`npx rahman-resources add reel-editor\`. SvelteKit: \`npx rahman-resources add reel-editor --framework sveltekit\`. Both reuse the same composition/history/draw/media/audio/AI/settings/filesystem/export cores. React keeps the resizable shadcn workspace, Sonner, Lucide and automatic tool registration; Svelte installs only svelte@^5 + portable cores and accepts optional registerTools. Wire production file access through configureReelFs({ list, mkdir, rawUrl }); enforce path authorization and signed/media access on that backend. Render/export remains client-side MediaRecorder WebM using the same drawFrame() path as preview.`,
     exampleCode: `"use client";
 import { ReelEditor } from "@/features/reel-editor";
 
@@ -265,7 +265,7 @@ export default function VideoEditorDemo() {
     defaultView: "desktop",
     agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A quick-look media viewer (image/video/audio/pdf/text). Fully client-side; no backend required.
 
-STEP 1 — Install. \`npx rr add media-viewer\`. Ensure \`@/features/media-viewer\` resolves in tsconfig paths and Tailwind scans the slice folder.
+STEP 1 — Install. \`npx rahman-resources add media-viewer\`. Ensure \`@/features/media-viewer\` resolves in tsconfig paths and Tailwind scans the slice folder.
 
 STEP 2 — Deps. npm: \`lucide-react\`. shadcn: \`npx shadcn@latest add button badge separator tooltip slider\`.
 
@@ -320,7 +320,7 @@ export default function PreviewDemo() {
     defaultView: "desktop",
     agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A lightweight overlay-highlighting code editor with a lazy explorer tree. Fully client-side; no backend required.
 
-STEP 1 — Install React/default with \`npx rr add code-editor\`, or native Svelte 5 with \`npx rr add code-editor --framework sveltekit\`. Both reuse one editor/filesystem core.
+STEP 1 — Install React/default with \`npx rahman-resources add code-editor\`, or native Svelte 5 with \`npx rahman-resources add code-editor --framework sveltekit\`. Both reuse one editor/filesystem core.
 
 STEP 2 — Deps. npm: \`lucide-react\`. shadcn: \`npx shadcn@latest add button badge input scroll-area sheet dialog\`.
 
@@ -375,7 +375,7 @@ export default function CodeDemo() {
     defaultView: "desktop",
     agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Host telemetry dashboard. Fully client-side; no backend required.
 
-STEP 1 — Install. \`npx rr add system-monitor\`. Ensure \`@/features/system-monitor\` resolves and Tailwind scans the slice folder.
+STEP 1 — Install. \`npx rahman-resources add system-monitor\`. Ensure \`@/features/system-monitor\` resolves and Tailwind scans the slice folder.
 
 STEP 2 — Deps. npm: \`lucide-react\`. shadcn: \`npx shadcn@latest add scroll-area\`.
 
@@ -414,7 +414,7 @@ export default function MonitorDemo() {
     defaultView: "desktop",
     agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A booking request form + owner inbox. Fully client-side; backend optional.
 
-STEP 1 — Install. \`npx rr add booking\`. Ensure \`@/features/booking\` resolves and Tailwind scans the slice folder.
+STEP 1 — Install. \`npx rahman-resources add booking\`. Ensure \`@/features/booking\` resolves and Tailwind scans the slice folder.
 
 STEP 2 — Deps. npm: \`lucide-react\`. shadcn: \`npx shadcn@latest add button input textarea scroll-area\`.
 
@@ -453,9 +453,9 @@ export default function BookingDemo() {
     defaultView: "desktop",
     agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A sandboxed HTML/CSS/JS studio: editor + live iframe preview + saved pages. Fully client-side; backend optional.
 
-STEP 1 — Install. \`npx rr add html-studio\`. Ensure \`@/features/html-studio\` resolves and Tailwind scans the slice folder.
+STEP 1 — Install. \`npx rahman-resources add html-studio\`. Ensure \`@/features/html-studio\` resolves and Tailwind scans the slice folder.
 
-STEP 2 — React deps. npm: \`lucide-react@^0.400.0\`. shadcn: \`npx shadcn@latest add button input textarea scroll-area\`. SvelteKit: \`npx rr add html-studio --framework sveltekit\` installs only \`svelte@^5\` + the shared portable core.
+STEP 2 — React deps. npm: \`lucide-react@^0.400.0\`. shadcn: \`npx shadcn@latest add button input textarea scroll-area\`. SvelteKit: \`npx rahman-resources add html-studio --framework sveltekit\` installs only \`svelte@^5\` + the shared portable core.
 
 STEP 3 — Mount. \`<HtmlStudio />\` in a height-bearing box — unwired it runs on an in-memory mock (editor + live sandboxed preview + saved list all live). Pass \`payload={{ slug }}\` to open a page, or register \`htmlStudioApp\` in an appshell manifest.
 
@@ -492,9 +492,9 @@ export default function HtmlStudioDemo() {
     defaultView: "desktop",
     agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A curated icon-launcher admin (CRUD + reorder). Fully client-side; backend optional.
 
-STEP 1 — Install. \`npx rr add resources-launcher-admin\`. Ensure \`@/features/resources-launcher-admin\` resolves and Tailwind scans the slice folder.
+STEP 1 — Install. \`npx rahman-resources add resources-launcher-admin\`. Ensure \`@/features/resources-launcher-admin\` resolves and Tailwind scans the slice folder.
 
-STEP 2 — React deps. npm: \`lucide-react@^0.400.0\`. shadcn: \`npx shadcn@latest add button input label scroll-area native-select\`. SvelteKit: \`npx rr add resources-launcher-admin --framework sveltekit\` installs only \`svelte@^5\` + the shared portable core.
+STEP 2 — React deps. npm: \`lucide-react@^0.400.0\`. shadcn: \`npx shadcn@latest add button input label scroll-area native-select\`. SvelteKit: \`npx rahman-resources add resources-launcher-admin --framework sveltekit\` installs only \`svelte@^5\` + the shared portable core.
 
 STEP 3 — Mount. \`<ResourcesAdmin />\` in a height-bearing box — unwired it runs on an in-memory mock store (add / edit / remove / reorder all live). Or register \`resourcesAdminApp\` in an appshell manifest.
 
@@ -524,8 +524,8 @@ export default function ResourcesAdminDemo() {
     env: [],
     peers: [],
     variants: [
-      { title: "resume", desc: "npx rr add profile resume — one-column printable CV (Resume + configureResume)." },
-      { title: "card", desc: "npx rr add profile card — compact avatar + links + FAQ identity card (AboutProfile + configureAbout)." },
+      { title: "resume", desc: "npx rahman-resources add profile resume — one-column printable CV (Resume + configureResume)." },
+      { title: "card", desc: "npx rahman-resources add profile card — compact avatar + links + FAQ identity card (AboutProfile + configureAbout)." },
     ],
     tags: ["resume", "cv", "profile", "portfolio", "about", "identity", "bio", "card", "links", "faq", "print", "ui"],
     resourceType: "module",
@@ -535,7 +535,7 @@ export default function ResourcesAdminDemo() {
     defaultView: "desktop",
     agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Two identity renderers driven by injected data. Fully client-side; no backend required.
 
-STEP 1 — Install. \`npx rr add profile\` for both, or \`npx rr add profile resume\` / \`card\` for one. Ensure \`@/features/profile\` resolves and Tailwind scans the slice folder.
+STEP 1 — Install. \`npx rahman-resources add profile\` for both, or \`npx rahman-resources add profile resume\` / \`card\` for one. Ensure \`@/features/profile\` resolves and Tailwind scans the slice folder.
 
 STEP 2 — Deps. npm: \`lucide-react\`. shadcn: \`npx shadcn@latest add button scroll-area avatar\`.
 
@@ -579,7 +579,7 @@ export default function ProfileDemo() {
     defaultView: "desktop",
     agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. A guided onboarding tour that renders your live app catalog as a path of stages. Fully client-side; the catalog is injected.
 
-STEP 1 — Install. \`npx rr add start-here\`. Ensure \`@/features/start-here\` resolves and Tailwind scans the slice folder.
+STEP 1 — Install. \`npx rahman-resources add start-here\`. Ensure \`@/features/start-here\` resolves and Tailwind scans the slice folder.
 
 STEP 2 — Deps. npm: \`lucide-react\`. shadcn: \`npx shadcn@latest add button scroll-area\`.
 
@@ -616,7 +616,7 @@ export default function StartHereDemo() {
     compat: { enhances: ["appshell", "file-explorer"] },
     previewPath: "/preview/slices/os-terminal",
     defaultView: "desktop",
-    agentRecipe: `Run \`npx rr add os-terminal\` for React/default or \`npx rr add os-terminal --framework sveltekit\` for native Svelte 5. Mount <Terminal /> in a height-bearing box; mock mode is zero-backend. Wire configureTerminal({ mode:"live", fs, exec, sys }) for real host truth. Optionally configurePty({ transport, screen }) for an interactive shell; createSsePtyTransport() ships the os-vps SSE transport shape while the host owns the VT renderer. React-only osTerminalApp remains a convenience descriptor and is not invented for Svelte.`,
+    agentRecipe: `Run \`npx rahman-resources add os-terminal\` for React/default or \`npx rahman-resources add os-terminal --framework sveltekit\` for native Svelte 5. Mount <Terminal /> in a height-bearing box; mock mode is zero-backend. Wire configureTerminal({ mode:"live", fs, exec, sys }) for real host truth. Optionally configurePty({ transport, screen }) for an interactive shell; createSsePtyTransport() ships the os-vps SSE transport shape while the host owns the VT renderer. React-only osTerminalApp remains a convenience descriptor and is not invented for Svelte.`,
     exampleCode: `"use client";
 import { Terminal } from "@/features/os-terminal";
 
@@ -647,7 +647,7 @@ export default function TerminalDemo() {
     compat: { enhances: ["appshell", "ai-workspace"] },
     previewPath: "/preview/slices/assistant",
     defaultView: "desktop",
-    agentRecipe: `React/default: run \`npx rr add assistant\`; SvelteKit: append \`--framework sveltekit\`. Mount <Assistant/> in a height-bearing container. Agents, skills and automations persist in localStorage through one shared observable store. Unwired chat uses a typing demo stream. Wire one real backend with configureAgentStream(fn); the same shared runAgentLoop drives every registered slice ToolCollection through registerAssistantTools. The Svelte distribution installs only non-React agentic core files and @lucide/svelte.`,
+    agentRecipe: `React/default: run \`npx rahman-resources add assistant\`; SvelteKit: append \`--framework sveltekit\`. Mount <Assistant/> in a height-bearing container. Agents, skills and automations persist in localStorage through one shared observable store. Unwired chat uses a typing demo stream. Wire one real backend with configureAgentStream(fn); the same shared runAgentLoop drives every registered slice ToolCollection through registerAssistantTools. The Svelte distribution installs only non-React agentic core files and @lucide/svelte.`,
     exampleCode: `"use client";
 import { Assistant } from "@/features/assistant";
 
@@ -678,7 +678,7 @@ export default function AssistantDemo() {
     compat: { enhances: ["appshell"] },
     previewPath: "/preview/slices/browser",
     defaultView: "desktop",
-    agentRecipe: `React/default: \`npx rr add browser\`. SvelteKit: \`npx rr add browser --framework sveltekit\`. Both share the same BrowserAdapter, multitab session, demo renderer, screenshot polling/MJPEG stream fallback, URL/storage helpers, and browserTools. Configure a real Playwright/CDP adapter only behind authenticated + authorized server routes; remote browser state can contain private logged-in sessions. React auto-registers tools; Svelte exposes optional registerTools(collection, getCtx).`,
+    agentRecipe: `React/default: \`npx rahman-resources add browser\`. SvelteKit: \`npx rahman-resources add browser --framework sveltekit\`. Both share the same BrowserAdapter, multitab session, demo renderer, screenshot polling/MJPEG stream fallback, URL/storage helpers, and browserTools. Configure a real Playwright/CDP adapter only behind authenticated + authorized server routes; remote browser state can contain private logged-in sessions. React auto-registers tools; Svelte exposes optional registerTools(collection, getCtx).`,
     exampleCode: `"use client";
 import { Browser } from "@/features/browser";
 
@@ -709,7 +709,7 @@ export default function BrowserDemo() {
     compat: { enhances: ["appshell"] },
     previewPath: "/preview/slices/app-store",
     defaultView: "desktop",
-    agentRecipe: `React/default: \`npx rr add app-store\`. SvelteKit: \`npx rr add app-store --framework sveltekit\`. Both share the same localStorage app registry, disabled-id store, catalogs, tool contract, and configureAppStoreExec seam. React additionally exports appshell AppDescriptor hooks; Svelte carries no React/Lucide/shadcn/agent runtime and can optionally register appStoreTools through its registerTools(collection, getCtx) prop. Authenticate any live exec endpoint like SSH.`,
+    agentRecipe: `React/default: \`npx rahman-resources add app-store\`. SvelteKit: \`npx rahman-resources add app-store --framework sveltekit\`. Both share the same localStorage app registry, disabled-id store, catalogs, tool contract, and configureAppStoreExec seam. React additionally exports appshell AppDescriptor hooks; Svelte carries no React/Lucide/shadcn/agent runtime and can optionally register appStoreTools through its registerTools(collection, getCtx) prop. Authenticate any live exec endpoint like SSH.`,
     exampleCode: `"use client";
 import { AppStore } from "@/features/app-store";
 
@@ -740,7 +740,7 @@ export default function StoreDemo() {
     compat: { enhances: ["appshell"] },
     previewPath: "/preview/slices/file-explorer",
     defaultView: "desktop",
-    agentRecipe: `React/default: \`npx rr add file-explorer\`. SvelteKit: \`npx rr add file-explorer --framework sveltekit\`. Both share the FileExplorerAdapter, writable mock/live/Convex adapter factories, history/operations/file-kind cores, preview/property semantics, and fileExplorerTools. React keeps shadcn/Lucide and auto-registers tools through the narrow agent hook; Svelte installs only svelte@^5 plus portable adapter/core files and can optionally register tools via its registerTools prop. Inject a real filesystem adapter for production and keep authorization/server path bounds in that backend — UI mode/read-only checks are convenience, not a security boundary.`,
+    agentRecipe: `React/default: \`npx rahman-resources add file-explorer\`. SvelteKit: \`npx rahman-resources add file-explorer --framework sveltekit\`. Both share the FileExplorerAdapter, writable mock/live/Convex adapter factories, history/operations/file-kind cores, preview/property semantics, and fileExplorerTools. React keeps shadcn/Lucide and auto-registers tools through the narrow agent hook; Svelte installs only svelte@^5 plus portable adapter/core files and can optionally register tools via its registerTools prop. Inject a real filesystem adapter for production and keep authorization/server path bounds in that backend — UI mode/read-only checks are convenience, not a security boundary.`,
     exampleCode: `"use client";
 import { FileExplorer } from "@/features/file-explorer";
 
@@ -781,8 +781,8 @@ export default function FileExplorerDemo() {
     previewPath: "/preview/slices/glass-desktop",
     defaultView: "desktop",
     defaultZoom: 0.55,
-    install: "npx rr add glass-desktop",
-    agentRecipe: "Run `npx rr add glass-desktop` for React/Next or `npx rr add glass-desktop --framework sveltekit` for native Svelte 5. Mount <GlassDesktop /> full-bleed, optionally pass brand/initialSpace and a custom LayoutStore; use gallery mode to inspect the full 47-widget catalog.",
+    install: "npx rahman-resources add glass-desktop",
+    agentRecipe: "Run `npx rahman-resources add glass-desktop` for React/Next or `npx rahman-resources add glass-desktop --framework sveltekit` for native Svelte 5. Mount <GlassDesktop /> full-bleed, optionally pass brand/initialSpace and a custom LayoutStore; use gallery mode to inspect the full 47-widget catalog.",
   },
   {
     slug: "appshell",
@@ -807,7 +807,7 @@ export default function FileExplorerDemo() {
     defaultView: "desktop",
     agentRecipe: `Stack required: Next 16 (App Router) + React 19 + Tailwind 4 + shadcn/ui. The slice is self-contained — it imports only @/components/ui/* + @/lib/utils (cn); everything project-specific arrives via the manifest. Follow ALL steps; the ⚠ ones are where installs break.
 
-STEP 1 — Install. \`npx rr add appshell\` (alias \`npx rahman-resources add appshell\`). It copies to your slices dir. Ensure \`@/features/appshell\` resolves in tsconfig paths (point it at that dir), and that Tailwind's content globs SCAN the slice folder (else the shell renders unstyled).
+STEP 1 — Install. \`npx rahman-resources add appshell\` (the \`rr\` CLI). It copies to your slices dir. Ensure \`@/features/appshell\` resolves in tsconfig paths (point it at that dir), and that Tailwind's content globs SCAN the slice folder (else the shell renders unstyled).
 
 STEP 2 — shadcn + npm deps. Add any missing shadcn primitives: \`npx shadcn@latest add button tooltip scroll-area sheet drawer dialog alert-dialog dropdown-menu\`. npm: lucide-react class-variance-authority clsx tailwind-merge vaul.
 
@@ -984,7 +984,7 @@ export default async function Page({ params }: { params: Promise<{ slug?: string
     peers: [],
     tags: ["auth", "convex", "password", "magic-link", "google", "anonymous", "no-clerk", "pbkdf2", "svelte", "framework-parity"],
     usedBy: ["personal-brand-os", "wirausaha-os", "konsultan-os"],
-    agentRecipe: "Run `rr add convex-auth` for React/Next or `rr add convex-auth --framework sveltekit` for native Svelte. React uses @convex-dev/auth/react. Svelte SignInPage requires a host-supplied AuthFlow because the upstream package has no official Svelte adapter. Keep JWT/OAuth/Resend env server-side.",
+    agentRecipe: "Run `npx rahman-resources add convex-auth` for React/Next or `npx rahman-resources add convex-auth --framework sveltekit` for native Svelte. React uses @convex-dev/auth/react. Svelte SignInPage requires a host-supplied AuthFlow because the upstream package has no official Svelte adapter. Keep JWT/OAuth/Resend env server-side.",
     previewPath: "/preview/slices/convex-auth",
     defaultView: "mobile",
     defaultZoom: 1,
@@ -1038,12 +1038,12 @@ export default convexAuthNextjsMiddleware();`,
     peers: [{ slug: "convex-auth", range: "^0.1", reason: "Order ownership requires authenticated user (guest checkout works without)." }],
     providers: ["doku", "midtrans"],
     variants: [
-      { title: "doku", desc: "npx rr add payment doku — Hosted Checkout + Direct channel picker, HMAC REST, dependency-free." },
-      { title: "midtrans", desc: "npx rr add payment midtrans — Snap hosted-modal button + orders (needs midtrans-client + next-public key)." },
+      { title: "doku", desc: "npx rahman-resources add payment doku — Hosted Checkout + Direct channel picker, HMAC REST, dependency-free." },
+      { title: "midtrans", desc: "npx rahman-resources add payment midtrans — Snap hosted-modal button + orders (needs midtrans-client + next-public key)." },
     ],
     tags: ["payment", "checkout", "indonesia", "doku", "midtrans", "snap", "qris", "virtual-account", "ewallet", "psp", "svelte", "framework-parity"],
     usedBy: ["personal-brand-os", "konsultan-os", "wirausaha-os", "kreator-studio-os", "riset-kit", "agency-studio-os", "cms-public-storefront"],
-    agentRecipe: "Install one provider with rr add payment doku|midtrans, or both with rr add payment; append --framework sveltekit for native Svelte. CLI 1.18 gates provider action/npm/env while retaining shared payment schema/query/mutation/webhook support. DOKU injects checkout/direct actions and keeps HMAC secrets server-side. Midtrans injects createTransaction + optional Snap onPay bridge; only the client key is browser-visible.",
+    agentRecipe: "Install one provider with npx rahman-resources add payment doku|midtrans, or both with npx rahman-resources add payment; append --framework sveltekit for native Svelte. CLI 1.18 gates provider action/npm/env while retaining shared payment schema/query/mutation/webhook support. DOKU injects checkout/direct actions and keeps HMAC secrets server-side. Midtrans injects createTransaction + optional Snap onPay bridge; only the client key is browser-visible.",
     previewPath: "/preview/slices/payment",
     wiring: `// app/checkout/page.tsx
 export { default } from "@/features/payment/components/checkout-page";
@@ -1089,7 +1089,7 @@ http.route({ path: "/webhooks/doku", method: "POST", handler: dokuWebhook });`,
     peers: [],
     tags: ["email", "newsletter", "resend", "broadcast", "svelte"],
     usedBy: ["personal-brand-os", "kreator-studio-os", "wirausaha-os"],
-    agentRecipe: "Run `npx rr add resend-newsletter` for React/default or `npx rr add resend-newsletter --framework sveltekit`. Configure the public subscribe adapter before rendering. The bundled Convex backend is single opt-in: subscribe activates immediately and unsubscribe is public/idempotent. List/send remain host-authorized adapters; after host authz call the internal sendCampaign worker. RESEND_API_KEY/RESEND_FROM stay server-side.",
+    agentRecipe: "Run `npx rahman-resources add resend-newsletter` for React/default or `npx rahman-resources add resend-newsletter --framework sveltekit`. Configure the public subscribe adapter before rendering. The bundled Convex backend is single opt-in: subscribe activates immediately and unsubscribe is public/idempotent. List/send remain host-authorized adapters; after host authz call the internal sendCampaign worker. RESEND_API_KEY/RESEND_FROM stay server-side.",
     previewPath: "/preview/slices/resend-newsletter",
     wiring: `// App startup — both React and Svelte use the same public adapter contract
 configureResendNewsletter({
@@ -1138,7 +1138,7 @@ configureResendNewsletter({
     description: "Framework-parity AI workspace with chat, studio, and agents variants. React/Next remains default; native Svelte 5/SvelteKit mirrors all three over shared chat/generation/runner/tool cores. Variant installs are exact: only chat pulls convex/features/aiChat + ai + @ai-sdk/anthropic + ANTHROPIC_API_KEY; studio and agents remain frontend-only and provider-free.",
     source: "rahmanef63/resource-site",
     docsUrl: "https://sdk.vercel.ai/docs",
-    install: "npx rr add ai-workspace <chat|studio|agents> [--framework sveltekit]",
+    install: "npx rahman-resources add ai-workspace <chat|studio|agents> [--framework sveltekit]",
     slicePath: "frontend/slices/ai-workspace",
     convexPaths: ["convex/features/aiChat"],
     npm: ["lucide-react@^0.400.0"],
@@ -1152,7 +1152,7 @@ configureResendNewsletter({
       { title: "studio", desc: "Single-prompt generation canvas + agentic generate tool. Frontend-only." },
       { title: "agents", desc: "Autonomous-worker run dashboard + createAgentRunner loop. Frontend-only." },
     ],
-    agentRecipe: "Run `npx rr add ai-workspace <chat|studio|agents>` for React/default or append `--framework sveltekit`; omit the variant for all three. chat alone pulls the Convex aiChat backend + Anthropic runtime/key. studio and agents are frontend-only scaffolds. Wire chat via AiChatFab chat callback, studio via aiStudioTools, and agents via createAgentRunner(host).",
+    agentRecipe: "Run `npx rahman-resources add ai-workspace <chat|studio|agents>` for React/default or append `--framework sveltekit`; omit the variant for all three. chat alone pulls the Convex aiChat backend + Anthropic runtime/key. studio and agents are frontend-only scaffolds. Wire chat via AiChatFab chat callback, studio via aiStudioTools, and agents via createAgentRunner(host).",
     previewPath: "/preview/slices/ai-workspace",
     defaultSurface: "public",
     defaultView: "desktop",
@@ -1174,7 +1174,7 @@ configureResendNewsletter({
     version: "0.4.0",
     description: "Framework-neutral compile-time contract for a future AI administration surface. Ships provider/model/skill/tool/agent/budget/audit types plus tab, icon-name, and permission taxonomy; intentionally no renderer, persistence backend, or runtime framework dependency.",
     source: "rahmanef63/resource-site",
-    install: "npx rr add ai-admin",
+    install: "npx rahman-resources add ai-admin",
     slicePath: "frontend/slices/ai-admin",
     convexPaths: [],
     npm: [],
@@ -1194,7 +1194,7 @@ configureResendNewsletter({
     description: "Authenticated tier-routed LLM access through one Convex action and OpenRouter. Ships a transport-injected ChatFab: React/Next remains default and SvelteKit gets native Svelte 5 UI over the same request/result core and the same aiUsage backend. Unconfigured hosts return an explicit notice instead of a fake reply.",
     source: "rahmanef63/resource-site",
     docsUrl: "https://sdk.vercel.ai/docs",
-    install: "npx rr add ai-router",
+    install: "npx rahman-resources add ai-router",
     slicePath: "frontend/slices/ai-router",
     convexPaths: ["convex/features/ai"],
     npm: ["convex@^1.17", "ai@^4.0.0", "@openrouter/ai-sdk-provider@^0.0.5", "lucide-react@^0.400.0"],
@@ -1203,7 +1203,7 @@ configureResendNewsletter({
     peers: [],
     tags: ["ai", "llm", "openrouter", "tier-routing", "chat"],
     usedBy: ["personal-brand-os"],
-    agentRecipe: "Run `npx rr add ai-router` or add `--framework sveltekit`. Bind ChatFab.route to api.features.ai.action.callModel. The action requires auth, keeps the provider key server-only, returns a notice when unavailable, and logs successful usage to aiUsage.",
+    agentRecipe: "Run `npx rahman-resources add ai-router` or add `--framework sveltekit`. Bind ChatFab.route to api.features.ai.action.callModel. The action requires auth, keeps the provider key server-only, returns a notice when unavailable, and logs successful usage to aiUsage.",
     previewPath: "/preview/slices/ai-router",
     wiring: `// consumer adapter
 const route = (request) => client.action(api.features.ai.action.callModel, request);
@@ -1235,7 +1235,7 @@ const route = (request) => client.action(api.features.ai.action.callModel, reque
     peers: [],
     tags: ["search", "vector", "embeddings", "adapter", "headless", "portable"],
     usedBy: ["personal-brand-os", "riset-kit"],
-    agentRecipe: "Run `npx rr add vector-search` (React/default) or `npx rr add vector-search --framework sveltekit`. Bind VectorSearchCtx.search/index/reindex to your own authorized vector backend. The slice intentionally does not invent a Convex schema, embedding provider, renderer, or credential requirement.",
+    agentRecipe: "Run `npx rahman-resources add vector-search` (React/default) or `npx rahman-resources add vector-search --framework sveltekit`. Bind VectorSearchCtx.search/index/reindex to your own authorized vector backend. The slice intentionally does not invent a Convex schema, embedding provider, renderer, or credential requirement.",
     wiring: `import { vectorSearchTools, type VectorSearchCtx } from "@/features/vector-search";
 
 const vectorSearch: VectorSearchCtx = {
@@ -1266,7 +1266,7 @@ const vectorSearch: VectorSearchCtx = {
     peers: [],
     tags: ["data", "scheduling", "cal-com", "bookings", "webhook", "svelte"],
     usedBy: ["personal-brand-os", "konsultan-os"],
-    agentRecipe: "Run `npx rr add cal-com-booking` for React/default or `npx rr add cal-com-booking --framework sveltekit`. Pass an explicit calLink and optional calOrigin. Wire the bundled webhook mirror to the real bookings table; bind list/cancel/reschedule tools separately to host APIs.",
+    agentRecipe: "Run `npx rahman-resources add cal-com-booking` for React/default or `npx rahman-resources add cal-com-booking --framework sveltekit`. Pass an explicit calLink and optional calOrigin. Wire the bundled webhook mirror to the real bookings table; bind list/cancel/reschedule tools separately to host APIs.",
     previewPath: "/preview/slices/cal-com-booking",
     wiring: `// React / Next
 import { CalEmbed } from "@/features/cal-com-booking";
@@ -1304,7 +1304,7 @@ import { CalEmbed } from "@/features/cal-com-booking";
     peers: [],
     tags: ["ui", "palette", "cmd-k", "navigation", "keyboard", "search", "notion-like"],
     usedBy: ["personal-brand-os", "agency-studio-os", "konsultan-os", "wirausaha-os", "kreator-studio-os", "saas-marketing-os", "riset-kit", "cms-public-storefront"],
-    agentRecipe: "Run `npx rr add command-menu`. Wire <CommandPalette groups={...} onHistorySelect={...} labels={...} /> at the dashboard shell. Build groups from your feature registry; each item.onSelect handles navigation. Use <SearchModal bindings={{ pages, databases, recents, isLoading, onQueryChange, onSelectPage, onSelectDatabase }} /> for the search dialog — see slice README.md for adapter shapes.",
+    agentRecipe: "Run `npx rahman-resources add command-menu`. Wire <CommandPalette groups={...} onHistorySelect={...} labels={...} /> at the dashboard shell. Build groups from your feature registry; each item.onSelect handles navigation. Use <SearchModal bindings={{ pages, databases, recents, isLoading, onQueryChange, onSelectPage, onSelectDatabase }} /> for the search dialog — see slice README.md for adapter shapes.",
     previewPath: "/preview/slices/command-menu",
     wiring: `import { CommandPalette } from "@/features/command-menu";
 
@@ -1330,7 +1330,7 @@ import { CalEmbed } from "@/features/cal-com-booking";
     peers: [],
     tags: ["ui", "motion", "animation", "marquee", "framer-motion"],
     usedBy: ["personal-brand-os", "agency-studio-os", "kreator-studio-os", "saas-marketing-os"],
-    agentRecipe: "Run `npx rr add motion-primitives`. Each primitive is independently importable from @/features/motion-primitives. Use marquee for logo strips, kinetic-heading for hero text, magnetic for CTA buttons, cursor-spotlight for hover-reveal panels, stat-counter for animated numbers, reading-progress for blog top bar, grain for film texture, lightbox for image gallery.",
+    agentRecipe: "Run `npx rahman-resources add motion-primitives`. Each primitive is independently importable from @/features/motion-primitives. Use marquee for logo strips, kinetic-heading for hero text, magnetic for CTA buttons, cursor-spotlight for hover-reveal panels, stat-counter for animated numbers, reading-progress for blog top bar, grain for film texture, lightbox for image gallery.",
     previewPath: "/preview/slices/motion-primitives",
     wiring: `import { Marquee, KineticHeading, Magnetic } from "@/features/motion-primitives";
 
@@ -1358,7 +1358,7 @@ import { CalEmbed } from "@/features/cal-com-booking";
     peers: [],
     tags: ["ui", "dialog", "modal", "sheet", "responsive", "primitive"],
     usedBy: ["personal-brand-os", "agency-studio-os", "konsultan-os", "wirausaha-os", "kreator-studio-os", "saas-marketing-os", "riset-kit", "cms-public-storefront"],
-    agentRecipe: "Run `npx rr add responsive-dialog`. Drop-in for shadcn Dialog. Use <ResponsiveDialog><ResponsiveDialogTrigger>…</ResponsiveDialogTrigger><ResponsiveDialogContent>…</ResponsiveDialogContent></ResponsiveDialog>. On mobile renders as Sheet sliding from bottom; on desktop as centered Dialog. Threshold via useMediaQuery('(min-width: 768px)').",
+    agentRecipe: "Run `npx rahman-resources add responsive-dialog`. Drop-in for shadcn Dialog. Use <ResponsiveDialog><ResponsiveDialogTrigger>…</ResponsiveDialogTrigger><ResponsiveDialogContent>…</ResponsiveDialogContent></ResponsiveDialog>. On mobile renders as Sheet sliding from bottom; on desktop as centered Dialog. Threshold via useMediaQuery('(min-width: 768px)').",
     previewPath: "/preview/slices/responsive-dialog",
     defaultView: "tablet",
     defaultZoom: 0.85,
@@ -1405,7 +1405,7 @@ import { CalEmbed } from "@/features/cal-com-booking";
     tags: ["ui", "layout", "dashboard", "sidebar", "dock", "responsive", "shell"],
     usedBy: ["personal-brand-os", "agency-studio-os", "konsultan-os", "wirausaha-os", "kreator-studio-os", "riset-kit", "cms-public-storefront"],
     agentRecipe:
-      "Run `npx rr add dashboard-shell` for the React/Next default or `npx rr add dashboard-shell --framework sveltekit` for native Svelte 5/SvelteKit. Both share one nav/core contract (`isActive`, `deriveDock`, `activeItem`, `activeTitle`, `flattenNav`). React uses shadcn Sidebar/Drawer + Lucide/Vaul; Svelte uses `$app/state`, runes/snippets, CSS breakpoints, and no React/shadcn runtime. The same `nav` drives desktop rail, mobile dock, and tile drawer.",
+      "Run `npx rahman-resources add dashboard-shell` for the React/Next default or `npx rahman-resources add dashboard-shell --framework sveltekit` for native Svelte 5/SvelteKit. Both share one nav/core contract (`isActive`, `deriveDock`, `activeItem`, `activeTitle`, `flattenNav`). React uses shadcn Sidebar/Drawer + Lucide/Vaul; Svelte uses `$app/state`, runes/snippets, CSS breakpoints, and no React/shadcn runtime. The same `nav` drives desktop rail, mobile dock, and tile drawer.",
     previewPath: "/preview/slices/dashboard-shell",
     defaultView: "desktop",
     defaultZoom: 0.6,
@@ -1439,7 +1439,7 @@ const nav = [
       "Page-container width preference with contained, wide, and full modes. Persists per device in localStorage, synchronizes same-tab and cross-tab changes, and ships a toggle plus container wrapper. React/Next remains the default distribution; Svelte 5 / SvelteKit is available explicitly with --framework sveltekit.",
     source: "rr original",
     docsUrl: "",
-    install: "npx rr add full-width-toggle",
+    install: "npx rahman-resources add full-width-toggle",
     slicePath: "frontend/slices/full-width-toggle",
     convexPaths: [],
     npm: ["lucide-react@^0.400.0"],
@@ -1448,7 +1448,7 @@ const nav = [
     peers: [],
     tags: ["ui", "layout", "preference", "localstorage", "dashboard"],
     agentRecipe:
-      "Run `npx rr add full-width-toggle` for the React/Next default, or `npx rr add full-width-toggle --framework sveltekit` for Svelte 5/SvelteKit. Place <FullWidthToggle variant=\"icon|button|segment\" /> in an app-shell action slot and wrap page content in <WidthContainer as=\"main\">. Storage key is `layout:widthMode`; modes are contained, wide, and full, with same-tab plus cross-tab sync.",
+      "Run `npx rahman-resources add full-width-toggle` for the React/Next default, or `npx rahman-resources add full-width-toggle --framework sveltekit` for Svelte 5/SvelteKit. Place <FullWidthToggle variant=\"icon|button|segment\" /> in an app-shell action slot and wrap page content in <WidthContainer as=\"main\">. Storage key is `layout:widthMode`; modes are contained, wide, and full, with same-tab plus cross-tab sync.",
     previewPath: "/preview/slices/full-width-toggle",
     defaultView: "desktop",
     defaultZoom: 0.7,
@@ -1480,7 +1480,7 @@ const nav = [
     peers: [],
     tags: ["ui", "layout", "three-column", "sidebar", "inspector", "panel-section", "responsive", "resizable"],
     usedBy: [],
-    agentRecipe: "Run `npx rr add three-column`. <ThreeColumnLayoutAdvanced preset=\"feature\" storageKey persistState left={…PanelSection…} center={…PanelSection unstyled…} right={…PanelSection…} leftFooter centerFooter rightFooter />. Center column SHOULD pass `unstyled` to drop sidebar tokens — body is content surface. `storageKey` MUST differ per slice or persisted widths collide.",
+    agentRecipe: "Run `npx rahman-resources add three-column`. <ThreeColumnLayoutAdvanced preset=\"feature\" storageKey persistState left={…PanelSection…} center={…PanelSection unstyled…} right={…PanelSection…} leftFooter centerFooter rightFooter />. Center column SHOULD pass `unstyled` to drop sidebar tokens — body is content surface. `storageKey` MUST differ per slice or persisted widths collide.",
     previewPath: "/preview/three-column-trio",
     defaultView: "desktop",
     defaultZoom: 0.7,
@@ -1503,7 +1503,7 @@ const nav = [
     peers: [],
     tags: ["realtime", "cross-tab", "broadcast-channel", "demo-pattern"],
     usedBy: ["personal-brand-os"],
-    agentRecipe: "Run `npx rr add broadcast-channel-sync` for React/Next or add `--framework sveltekit` for the Svelte store adapter. Use this for same-origin tab/iframe mirroring, not durable server data; production persistence still belongs in Convex or another backend.",
+    agentRecipe: "Run `npx rahman-resources add broadcast-channel-sync` for React/Next or add `--framework sveltekit` for the Svelte store adapter. Use this for same-origin tab/iframe mirroring, not durable server data; production persistence still belongs in Convex or another backend.",
     previewPath: "/preview/slices/broadcast-channel-sync",
     wiring: `// React: useBroadcastSync("rr:counter", 0)
 // Svelte: createBroadcastSyncStore("rr:counter", 0)
@@ -1540,7 +1540,7 @@ const nav = [
     peers: [{ slug: "convex-auth", range: "^0.1", reason: "RBAC checks resolve the authed user via getAuthUserId." }],
     tags: ["rbac", "auth", "permissions", "roles", "authorization", "no-clerk", "convex"],
     usedBy: ["personal-brand-os", "konsultan-os", "wirausaha-os"],
-    agentRecipe: "Run `npx rr add rbac-roles`. Frontend: import { PermissionGate, usePermissions, RoleBadge, PermissionMatrix, resolvePermissions, ROLE_PRESETS } from \"@/features/rbac-roles\". Feed usePermissions/PermissionGate the actor's resolved permission list (from your membership query or resolvePermissions(roleSlug)). Convex: spread rbacRolesTables into your schema, call seedSystemRoles({tenantId}) once, gate privileged fns with requirePermission(ctx, tenantId, \"members.manage\"). Set PLATFORM_ADMIN_EMAILS for superadmins. Add the user-management slice for the members/invites UI (provides um_members).",
+    agentRecipe: "Run `npx rahman-resources add rbac-roles`. Frontend: import { PermissionGate, usePermissions, RoleBadge, PermissionMatrix, resolvePermissions, ROLE_PRESETS } from \"@/features/rbac-roles\". Feed usePermissions/PermissionGate the actor's resolved permission list (from your membership query or resolvePermissions(roleSlug)). Convex: spread rbacRolesTables into your schema, call seedSystemRoles({tenantId}) once, gate privileged fns with requirePermission(ctx, tenantId, \"members.manage\"). Set PLATFORM_ADMIN_EMAILS for superadmins. Add the user-management slice for the members/invites UI (provides um_members).",
     previewPath: "/preview/slices/rbac-roles",
     defaultView: "desktop",
     defaultZoom: 0.7,
@@ -1565,7 +1565,7 @@ const nav = [
     ],
     tags: ["user-management", "members", "rbac", "auth", "team", "admin", "convex", "no-clerk", "svelte", "framework-parity"],
     usedBy: [],
-    agentRecipe: "Run `npx rr add user-management` for React/default or append `--framework sveltekit` for native Svelte; both pull rbac-roles + convex-auth. Frontend: <MembersPanel members={useQuery(api[\"features/user_management/query\"].listMembers,{tenantId})} roles={ROLE_PRESETS.map(r=>({slug:r.slug,name:r.name,color:r.color}))} currentPerms={actorPerms} onUpdateRole={useMutation(...updateMemberRole)} onRemove={useMutation(...removeMember)} onInvite={openInvite} />. Wire roles + currentPerms from rbac-roles at the app level — the slice itself imports no other slice. Convex: spread userManagementTables; listMembers/mutations gate via rbac-roles requirePermission.",
+    agentRecipe: "Run `npx rahman-resources add user-management` for React/default or append `--framework sveltekit` for native Svelte; both pull rbac-roles + convex-auth. Frontend: <MembersPanel members={useQuery(api[\"features/user_management/query\"].listMembers,{tenantId})} roles={ROLE_PRESETS.map(r=>({slug:r.slug,name:r.name,color:r.color}))} currentPerms={actorPerms} onUpdateRole={useMutation(...updateMemberRole)} onRemove={useMutation(...removeMember)} onInvite={openInvite} />. Wire roles + currentPerms from rbac-roles at the app level — the slice itself imports no other slice. Convex: spread userManagementTables; listMembers/mutations gate via rbac-roles requirePermission.",
     previewPath: "/preview/slices/user-management",
     defaultView: "desktop",
     defaultZoom: 0.8,
@@ -1589,7 +1589,7 @@ const nav = [
     ],
     tags: ["admin", "owner", "platform", "rbac", "instrumentation", "panel"],
     usedBy: ["personal-brand-os"],
-    agentRecipe: "Run `npx rr add admin-panel`. Wrap pages with <AdminPage workspaceId tier>. AccessGate hides UI for non-admins, AdminShell renders 2-col layout with sidebar filtered by tier+perms. ADMIN_SECTIONS in config.ts is SSOT (17 entries). Personal-brand-os = tier 'solo' = owner sees everything.",
+    agentRecipe: "Run `npx rahman-resources add admin-panel`. Wrap pages with <AdminPage workspaceId tier>. AccessGate hides UI for non-admins, AdminShell renders 2-col layout with sidebar filtered by tier+perms. ADMIN_SECTIONS in config.ts is SSOT (17 entries). Personal-brand-os = tier 'solo' = owner sees everything.",
     previewPath: "/preview/slices/admin-panel",
     defaultView: "desktop",
     defaultZoom: 0.65,
@@ -1610,7 +1610,7 @@ const nav = [
     peers: [],
     tags: ["events", "analytics", "instrumentation", "portable", "headless"],
     usedBy: ["personal-brand-os"],
-    agentRecipe: "Run `npx rr add event-tracking` (React/default) or `npx rr add event-tracking --framework sveltekit`. Bind EventTrackingCtx.track/query/funnel to your analytics transport; enforce authorization on query/funnel at the server boundary. The slice intentionally does not invent a UI or persistence backend.",
+    agentRecipe: "Run `npx rahman-resources add event-tracking` (React/default) or `npx rahman-resources add event-tracking --framework sveltekit`. Bind EventTrackingCtx.track/query/funnel to your analytics transport; enforce authorization on query/funnel at the server boundary. The slice intentionally does not invent a UI or persistence backend.",
     wiring: `import { eventTrackingTools, type EventTrackingCtx } from "@/features/event-tracking";
 
 const analytics: EventTrackingCtx = {
@@ -1638,7 +1638,7 @@ const analytics: EventTrackingCtx = {
     peers: [],
     tags: ["icon", "emoji", "lucide", "phosphor", "picker", "twemoji", "notion", "responsive", "svelte", "framework-parity"],
     usedBy: ["personal-brand-os"],
-    agentRecipe: "React/default: `npx rr add icon-picker`. SvelteKit: append `--framework sveltekit`. Store raw emoji, `lucide:Name`, or `phosphor:Name` with optional `?c=hex`; parse/build helpers are shared. Both renderers share recents/style/search/handler/tool cores. Use IconPicker/IconPickerPopover for smart floating UI, IconPickerInline for an existing sheet/dialog, and DynamicIcon for rendering stored values.",
+    agentRecipe: "React/default: `npx rahman-resources add icon-picker`. SvelteKit: append `--framework sveltekit`. Store raw emoji, `lucide:Name`, or `phosphor:Name` with optional `?c=hex`; parse/build helpers are shared. Both renderers share recents/style/search/handler/tool cores. Use IconPicker/IconPickerPopover for smart floating UI, IconPickerInline for an existing sheet/dialog, and DynamicIcon for rendering stored values.",
     previewPath: "/preview/slices/icon-picker",
     defaultView: "tablet",
     defaultZoom: 0.9,
@@ -1659,7 +1659,7 @@ const analytics: EventTrackingCtx = {
     peers: [],
     tags: ["activity", "productivity", "log", "now-page", "feed", "mcp", "seo", "personal-brand"],
     usedBy: ["rahmanef.com"],
-    agentRecipe: "Run `npx rr add activity`. Spread `activityTables` into your root Convex schema. Wrap the unauthenticated `create`/`update`/`remove` `internalMutation`s with your auth model (see README Install section). Render `<ActivityFeed rows={await fetchQuery(api.activity.listPublic)} stats={await fetchQuery(api.activity.statsThisWeek)} />`. Override `copy`, `categoryLabels`, `locale` per consumer. MCP integration: map `activity_create` tool → your wrapped `create` mutation.",
+    agentRecipe: "Run `npx rahman-resources add activity`. Spread `activityTables` into your root Convex schema. Wrap the unauthenticated `create`/`update`/`remove` `internalMutation`s with your auth model (see README Install section). Render `<ActivityFeed rows={await fetchQuery(api.activity.listPublic)} stats={await fetchQuery(api.activity.statsThisWeek)} />`. Override `copy`, `categoryLabels`, `locale` per consumer. MCP integration: map `activity_create` tool → your wrapped `create` mutation.",
     previewPath: undefined,
     defaultView: "desktop",
     defaultZoom: 0.85,
@@ -1680,7 +1680,7 @@ const analytics: EventTrackingCtx = {
     peers: [],
     tags: ["infra", "rate-limit", "convex", "backend", "throttle"],
     usedBy: [],
-    agentRecipe: "Run `npx rr add rate-limit` (or `--framework sveltekit`; both copy the same framework-neutral source). Compose `rateLimitTables` from `convex/features/rate_limit/_schema` into `convex/schema.ts`, add the namespace to the server-owned POLICY map, call `api.features.rate_limit.mutation.consume({ key, serverKey })` from server handlers, and wire `internal.features.rate_limit.mutation._pruneExpired` into `convex/crons.ts`. Set RATE_LIMIT_SERVER_KEY for sensitive namespaces and choose fail-open versus fail-closed behavior explicitly in the host wrapper.",
+    agentRecipe: "Run `npx rahman-resources add rate-limit` (or `--framework sveltekit`; both copy the same framework-neutral source). Compose `rateLimitTables` from `convex/features/rate_limit/_schema` into `convex/schema.ts`, add the namespace to the server-owned POLICY map, call `api.features.rate_limit.mutation.consume({ key, serverKey })` from server handlers, and wire `internal.features.rate_limit.mutation._pruneExpired` into `convex/crons.ts`. Set RATE_LIMIT_SERVER_KEY for sensitive namespaces and choose fail-open versus fail-closed behavior explicitly in the host wrapper.",
     previewPath: undefined,
     defaultView: "desktop",
     defaultZoom: 1,
@@ -1701,7 +1701,7 @@ const analytics: EventTrackingCtx = {
     peers: [{ slug: "convex-auth", range: "^0.1", reason: "requireAdmin uses getAuthUserId from @convex-dev/auth." }],
     tags: ["content", "testimonials", "convex", "backend", "marketing"],
     usedBy: [],
-    agentRecipe: "Run `npx rr add testimonials` (or `--framework sveltekit`). Compose `testimonialsTables` into the root schema. Read from `api.features.testimonials.query.listAll` / `get` through the host Convex client; call `create` / `update` / `remove` only through authenticated admin flows because authorization is enforced server-side by `requireAdmin`.",
+    agentRecipe: "Run `npx rahman-resources add testimonials` (or `--framework sveltekit`). Compose `testimonialsTables` into the root schema. Read from `api.features.testimonials.query.listAll` / `get` through the host Convex client; call `create` / `update` / `remove` only through authenticated admin flows because authorization is enforced server-side by `requireAdmin`.",
     previewPath: "/preview/slices/testimonials",
     defaultView: "desktop",
     defaultZoom: 1,
@@ -1722,7 +1722,7 @@ const analytics: EventTrackingCtx = {
     peers: [{ slug: "convex-auth", range: "^0.1", reason: "requireAdmin uses getAuthUserId from @convex-dev/auth." }],
     tags: ["content", "services", "convex", "backend", "marketing", "agency"],
     usedBy: [],
-    agentRecipe: "Run `npx rr add services` (or `--framework sveltekit`). Compose `servicesTables` into the root schema. Read from `api.features.services.query.listAll` / `get` through the host Convex client; call `create` / `update` / `remove` only through authenticated admin flows because authorization is enforced server-side by `requireAdmin`.",
+    agentRecipe: "Run `npx rahman-resources add services` (or `--framework sveltekit`). Compose `servicesTables` into the root schema. Read from `api.features.services.query.listAll` / `get` through the host Convex client; call `create` / `update` / `remove` only through authenticated admin flows because authorization is enforced server-side by `requireAdmin`.",
     previewPath: "/preview/slices/services",
     defaultView: "desktop",
     defaultZoom: 1,
@@ -1748,7 +1748,7 @@ const analytics: EventTrackingCtx = {
     peers: [{ slug: "convex-auth", range: "^0.1", reason: "requireAdmin uses getAuthUserId from @convex-dev/auth." }],
     tags: ["ai", "mcp", "oauth", "pkce", "chatgpt", "claude", "cursor", "convex", "integration", "svelte", "framework-parity"],
     usedBy: [],
-    agentRecipe: "Run `npx rr add create-your-mcp` for React/Next or add `--framework sveltekit` for native Svelte 5. Compose `createYourMcpTables` from `convex/features/create_your_mcp/_schema`. Next: move the two route adapters into `app/api`. SvelteKit: create `+server.ts` endpoints from `createSvelteKitMcpHandlers` and `createSvelteKitOauthTokenHandlers`. Mount the framework-native `McpAdminView`, wire adminList/revokeToken through your authenticated Convex client, and set MCP_OAUTH_ALLOWED_HOSTS for remote OAuth redirects.",
+    agentRecipe: "Run `npx rahman-resources add create-your-mcp` for React/Next or add `--framework sveltekit` for native Svelte 5. Compose `createYourMcpTables` from `convex/features/create_your_mcp/_schema`. Next: move the two route adapters into `app/api`. SvelteKit: create `+server.ts` endpoints from `createSvelteKitMcpHandlers` and `createSvelteKitOauthTokenHandlers`. Mount the framework-native `McpAdminView`, wire adminList/revokeToken through your authenticated Convex client, and set MCP_OAUTH_ALLOWED_HOSTS for remote OAuth redirects.",
     previewPath: "/preview/slices/create-your-mcp",
     defaultView: "desktop",
     defaultZoom: 0.75,
@@ -1769,7 +1769,7 @@ const analytics: EventTrackingCtx = {
     peers: [{ slug: "convex-auth", range: "^0.1", reason: "Optional — anonymous submission works without auth." }],
     tags: ["form", "email", "resend", "convex"],
     usedBy: [],
-    agentRecipe: "Run `npx rr add contact-form-resend`. Wire contactMessages.send mutation in convex/. Server emails via Resend from form@yourdomain.com. Always validate inputs with Zod or v.* server-side. Anonymous allowed.",
+    agentRecipe: "Run `npx rahman-resources add contact-form-resend`. Wire contactMessages.send mutation in convex/. Server emails via Resend from form@yourdomain.com. Always validate inputs with Zod or v.* server-side. Anonymous allowed.",
     previewPath: "/preview/slices/contact-form-resend",
     defaultView: "mobile",
     defaultZoom: 1,
@@ -1796,12 +1796,12 @@ const analytics: EventTrackingCtx = {
       { slug: "rbac-roles", range: "^0.1", reason: "console section gates are permission tokens resolved by rbac-roles." },
     ],
     variants: [
-      { title: "shell", desc: "React: npx rr add admin shell. Svelte: add --framework sveltekit. Generic AdminPage + buildAdminStats; convex/features/admin only." },
-      { title: "console", desc: "React: npx rr add admin console. Svelte: add --framework sveltekit. Composed 26-section console; convex/features/admin_console only." },
+      { title: "shell", desc: "React: npx rahman-resources add admin shell. Svelte: add --framework sveltekit. Generic AdminPage + buildAdminStats; convex/features/admin only." },
+      { title: "console", desc: "React: npx rahman-resources add admin console. Svelte: add --framework sveltekit. Composed 26-section console; convex/features/admin_console only." },
     ],
     tags: ["infra", "admin", "console", "shell", "dashboard", "composition", "rbac", "access-gate", "registry", "svelte", "framework-parity"],
     usedBy: [],
-    agentRecipe: "React/default: `npx rr add admin shell|console`. SvelteKit: append `--framework sveltekit`. shell reuses resolveAdminLabels/buildAdminStats and pulls only convex/features/admin. console reuses the same access/catalog/URL core, includes five owned panels, and receives provider panels through React components or Svelte snippets; it pulls only convex/features/admin_console. Keep remote/admin routes server-gated; UI access filters are not an authorization boundary.",
+    agentRecipe: "React/default: `npx rahman-resources add admin shell|console`. SvelteKit: append `--framework sveltekit`. shell reuses resolveAdminLabels/buildAdminStats and pulls only convex/features/admin. console reuses the same access/catalog/URL core, includes five owned panels, and receives provider panels through React components or Svelte snippets; it pulls only convex/features/admin_console. Keep remote/admin routes server-gated; UI access filters are not an authorization boundary.",
     previewPath: "/preview/slices/admin",
     defaultView: "desktop",
     defaultZoom: 0.62,
@@ -1822,7 +1822,7 @@ const analytics: EventTrackingCtx = {
     peers: [],
     tags: ["infra", "admin", "control-plane", "headless", "portable"],
     usedBy: [],
-    agentRecipe: "Run `npx rr add platform-admin` (React/default) or `npx rr add platform-admin --framework sveltekit`. Bind PlatformAdminCtx.metrics/setFeatureFlag/setTier to server-authorized host operations. The slice intentionally does not invent tenant tables, KPI dashboards, routes, or a renderer.",
+    agentRecipe: "Run `npx rahman-resources add platform-admin` (React/default) or `npx rahman-resources add platform-admin --framework sveltekit`. Bind PlatformAdminCtx.metrics/setFeatureFlag/setTier to server-authorized host operations. The slice intentionally does not invent tenant tables, KPI dashboards, routes, or a renderer.",
   },
   {
     slug: "audit-log",
@@ -1840,7 +1840,7 @@ const analytics: EventTrackingCtx = {
     peers: [{ slug: "convex-auth", range: "^0.1", reason: "Event actor resolved via authenticated user." }],
     tags: ["infra", "audit", "compliance", "logging"],
     usedBy: [],
-    agentRecipe: "Run `npx rr add audit-log` (or `--framework sveltekit`; both copy the same framework-neutral source). Create a logger with `createAuditLogger(tenantAdapter, bindings)` and call it inside server-checked mutations/actions with `{ action, entityType, entityId, diff?, metadata?, ipAddress?, userAgent? }`. TenantAdapter resolves tenant + actor; the consumer binding enforces `audit.write`. Agent tools `audit-log.query` and `audit-log.export` are read-only and the supplied list binding must enforce `audit.read` server-side.",
+    agentRecipe: "Run `npx rahman-resources add audit-log` (or `--framework sveltekit`; both copy the same framework-neutral source). Create a logger with `createAuditLogger(tenantAdapter, bindings)` and call it inside server-checked mutations/actions with `{ action, entityType, entityId, diff?, metadata?, ipAddress?, userAgent? }`. TenantAdapter resolves tenant + actor; the consumer binding enforces `audit.write`. Agent tools `audit-log.query` and `audit-log.export` are read-only and the supplied list binding must enforce `audit.read` server-side.",
     previewPath: "/preview/slices/audit-log",
     defaultView: "desktop",
     defaultZoom: 0.7,
@@ -1861,7 +1861,7 @@ const analytics: EventTrackingCtx = {
     peers: [{ slug: "convex-auth", range: "^0.1", reason: "Comment author identity from convex-auth." }],
     tags: ["content", "social", "comments", "threaded", "annotations"],
     usedBy: [],
-    agentRecipe: "Run `rr add comments`. Wire Convex bindings ({ list, create, update, resolve, remove }) then use <CommentsThread target={{ kind, id, subId? }} bindings={bindings} forbiddenWords={[...]}>{render-prop}</CommentsThread> OR <CommentsAnchor target=... bindings=... pathMap={(t)=>...}>. v0.2.0 polymorphic — pick `kind` literal per host domain.",
+    agentRecipe: "Run `npx rahman-resources add comments`. Wire Convex bindings ({ list, create, update, resolve, remove }) then use <CommentsThread target={{ kind, id, subId? }} bindings={bindings} forbiddenWords={[...]}>{render-prop}</CommentsThread> OR <CommentsAnchor target=... bindings=... pathMap={(t)=>...}>. v0.2.0 polymorphic — pick `kind` literal per host domain.",
     previewPath: "/preview/slices/comments",
     defaultView: "mobile",
     defaultZoom: 1,
@@ -1882,7 +1882,7 @@ const analytics: EventTrackingCtx = {
     peers: [{ slug: "convex-auth", range: "^0.1", reason: "Cost guard + requireAdmin gates use convex-auth user identity." }],
     tags: ["content", "seo", "ai", "anthropic", "metadata-generator"],
     usedBy: [],
-    agentRecipe: "Run `rr add seo`. Call seo.generate from server actions or admin mutations with `personaContext` describing your brand voice (or rely on the generic default). Cost guard rate-limits per-user within 24h via callsInWindow query.",
+    agentRecipe: "Run `npx rahman-resources add seo`. Call seo.generate from server actions or admin mutations with `personaContext` describing your brand voice (or rely on the generic default). Cost guard rate-limits per-user within 24h via callsInWindow query.",
     previewPath: "/preview/slices/seo",
     defaultView: "tablet",
     defaultZoom: 0.8,
@@ -1904,7 +1904,7 @@ const analytics: EventTrackingCtx = {
     peers: [],
     tags: ["content", "publisher", "html", "static-export", "sanitization", "csp", "css-dedup", "render"],
     usedBy: [],
-    agentRecipe: "Run `npx rr add publisher-clean-html` for React/Next or add `--framework sveltekit` for the Svelte preview. Build a ModuleRegistry, call publishPage(tree, registry, options), and preview the resulting full HTML document with PublishPreview. Both framework adapters share the exact same renderer/sanitizer/CSP core. Enable rich HTML/SVG by configuring DOMPurify once; without it those paths stay fail-closed.",
+    agentRecipe: "Run `npx rahman-resources add publisher-clean-html` for React/Next or add `--framework sveltekit` for the Svelte preview. Build a ModuleRegistry, call publishPage(tree, registry, options), and preview the resulting full HTML document with PublishPreview. Both framework adapters share the exact same renderer/sanitizer/CSP core. Enable rich HTML/SVG by configuring DOMPurify once; without it those paths stay fail-closed.",
     previewPath: "/preview/slices/publisher-clean-html",
     defaultView: "desktop",
     defaultZoom: 1,
@@ -1926,7 +1926,7 @@ const analytics: EventTrackingCtx = {
     peers: [],
     tags: ["content", "loop", "repeater", "list", "data-source", "pagination", "variants"],
     usedBy: [],
-    agentRecipe: "Run `npx rr add content-loops`. Env-free demo: createMockLoopSource() then <ContentLoop source={s} pagination='infinite' pageSize={6} variants={[CardA, CardB]} /> — variants round-robin (item i -> variants[i % n]). Real source: implement LoopEntitySource { id: 'blog.posts' (namespaced 'ns.name'), fields, async fetch({ filters, orderBy, direction, limit, offset }) returns { items, totalItems } }, call loopSourceRegistry.registerOrReplace(source), then <ContentLoop sourceId='blog.posts' variants={[...]} />. item.fields holds RESOLVED values — resolve media/author inside fetch.",
+    agentRecipe: "Run `npx rahman-resources add content-loops`. Env-free demo: createMockLoopSource() then <ContentLoop source={s} pagination='infinite' pageSize={6} variants={[CardA, CardB]} /> — variants round-robin (item i -> variants[i % n]). Real source: implement LoopEntitySource { id: 'blog.posts' (namespaced 'ns.name'), fields, async fetch({ filters, orderBy, direction, limit, offset }) returns { items, totalItems } }, call loopSourceRegistry.registerOrReplace(source), then <ContentLoop sourceId='blog.posts' variants={[...]} />. item.fields holds RESOLVED values — resolve media/author inside fetch.",
     previewPath: "/preview/slices/content-loops",
     defaultView: "desktop",
     defaultZoom: 1,
@@ -1948,7 +1948,7 @@ const analytics: EventTrackingCtx = {
     peers: [],
     tags: ["content", "markdown", "reader", "editor", "review", "comments", "mermaid", "chart", "rich-text", "docs", "notion-sync"],
     usedBy: [],
-    agentRecipe: "Run `npx rr add markdown` for React/default or `npx rr add markdown --framework sveltekit`. Read-only: MarkdownReader. Full surface: MarkdownPage with read/write/review plus optional content/comment callbacks; omit callbacks for standalone local state. Mermaid and KaTeX lazy-load in both; chart fences use lazy Recharts in React and native SVG in Svelte. The notion blocksToMarkdown/markdownToBlocks bridge speaks the same grammar.",
+    agentRecipe: "Run `npx rahman-resources add markdown` for React/default or `npx rahman-resources add markdown --framework sveltekit`. Read-only: MarkdownReader. Full surface: MarkdownPage with read/write/review plus optional content/comment callbacks; omit callbacks for standalone local state. Mermaid and KaTeX lazy-load in both; chart fences use lazy Recharts in React and native SVG in Svelte. The notion blocksToMarkdown/markdownToBlocks bridge speaks the same grammar.",
     previewPath: "/preview/slices/markdown",
     defaultView: "desktop",
     defaultZoom: 1,
@@ -1970,7 +1970,7 @@ const analytics: EventTrackingCtx = {
     peers: [],
     tags: ["content", "notion", "editor", "block-editor", "rich-text", "slash-menu", "drag-drop", "adapter-seam"],
     usedBy: [],
-    agentRecipe: "React/default: `npx rr add notion-app` (legacy alias `notion` remains). SvelteKit: `npx rr add notion-app --framework sveltekit`. Both use the same EditorDataAdapter page/block CRUD contract and convex/features/notion helpers. React mounts `<EditorAdapterProvider><PageEditor/></EditorAdapterProvider>` for the full rich capability surface; Svelte mounts `<PageEditor pageId data />` and accepts optional navigation/tool registration. Keep authz in the host/backend adapter.",
+    agentRecipe: "React/default: `npx rahman-resources add notion-app` (legacy alias `notion` remains). SvelteKit: `npx rahman-resources add notion-app --framework sveltekit`. Both use the same EditorDataAdapter page/block CRUD contract and convex/features/notion helpers. React mounts `<EditorAdapterProvider><PageEditor/></EditorAdapterProvider>` for the full rich capability surface; Svelte mounts `<PageEditor pageId data />` and accepts optional navigation/tool registration. Keep authz in the host/backend adapter.",
   },
   {
     slug: "sections",
@@ -1989,7 +1989,7 @@ const analytics: EventTrackingCtx = {
     peers: [],
     tags: ["admin", "landing", "cms", "sections", "crud", "renderer", "svelte", "framework-parity"],
     usedBy: ["saas-marketing-os", "personal-brand", "agency-studio", "konsultan-os", "kreator-studio", "wirausaha-os", "riset-kit"],
-    agentRecipe: "Run `npx rr add sections` for React/default or `npx rr add sections --framework sveltekit`. Wire a LandingStore adapter ({items, publicBase, adminBase, create, update, remove}), then mount LandingView/LandingEditorView directly or through LandingProvider. Fold landingReducer into your host store and seed with defaultLandingSections(). Public pages map enabled LandingSection rows to the shipped stats/testimonials/pricing/faq/newsletter/custom renderers (or host renderers for hero/features/blog/etc.) inside LandingSectionShell. Both frameworks share the reducer, ordering, field schema, types and config parser. React is self-contained apart from declared npm/shadcn primitives; Svelte needs only svelte@^5.",
+    agentRecipe: "Run `npx rahman-resources add sections` for React/default or `npx rahman-resources add sections --framework sveltekit`. Wire a LandingStore adapter ({items, publicBase, adminBase, create, update, remove}), then mount LandingView/LandingEditorView directly or through LandingProvider. Fold landingReducer into your host store and seed with defaultLandingSections(). Public pages map enabled LandingSection rows to the shipped stats/testimonials/pricing/faq/newsletter/custom renderers (or host renderers for hero/features/blog/etc.) inside LandingSectionShell. Both frameworks share the reducer, ordering, field schema, types and config parser. React is self-contained apart from declared npm/shadcn primitives; Svelte needs only svelte@^5.",
   },
   {
     slug: "motion-kit",
@@ -2008,8 +2008,7 @@ const analytics: EventTrackingCtx = {
     peers: [],
     tags: ["ui", "motion", "animation", "scroll", "reveal", "carousel", "accordion", "marquee", "countup", "embla", "svelte"],
     usedBy: ["saas-marketing-os", "personal-brand", "agency-studio", "konsultan-os", "kreator-studio", "wirausaha-os", "riset-kit", "notion-page-clone"],
-    agentRecipe: "Run `npx rr add motion-kit` for React/default or `npx rr add motion-kit --framework sveltekit`. Append the copied `globals-motion.css` to the host global stylesheet. Both frameworks expose Reveal/Stagger/CountUp/Marquee + Carousel/Accordion; Svelte uses native Svelte 5 and Embla core with lifecycle cleanup, while React keeps Embla React + Radix. Optional autoplay comes from embla-carousel-autoplay.",
-    previewPath: "/preview/slices/motion-kit",
+    agentRecipe: "Run `npx rahman-resources add motion-kit` for React/default or `npx rahman-resources add motion-kit --framework sveltekit`. Append the copied `globals-motion.css` to the host global stylesheet. Both frameworks expose Reveal/Stagger/CountUp/Marquee + Carousel/Accordion; Svelte uses native Svelte 5 and Embla core with lifecycle cleanup, while React keeps Embla React + Radix. Optional autoplay comes from embla-carousel-autoplay.",
     defaultView: "desktop",
   },
   {
@@ -2035,7 +2034,7 @@ const analytics: EventTrackingCtx = {
     ],
     tags: ["ecommerce", "cart", "checkout", "guest", "storefront", "payment", "localStorage", "sheet"],
     usedBy: ["wirausaha-os"],
-    agentRecipe: "Run `npx rr add storefront-checkout` (or `--framework sveltekit`). Wrap your public layout once with `<CartProvider storageKey=\"my-shop-cart\">` and mount `<CartWidget checkoutHref=\"/checkout\" />` in the header extras. On product surfaces call `useCart().add({ slug, name, price, priceLabel, emoji })` with a host-resolved NUMERIC price. Build a /checkout route composing `<CheckoutSummary />` + a payment form (doku-payment's DokuDirectForm): its onSubmit calls YOUR Convex place-order action which re-prices each {slug, qty} from your catalog table server-side, generates an unguessable orderId, calls api.features.payment.actions.doku.createDirectPayment, records your domain order row, and returns { ok, orderId, instructions, expiresAt } ({ ok:false, notice } when DOKU creds are unset — surface it in the form and offer a contact fallback). After success render DokuPaymentInstructions + reactive status via api.features.payment.query.getOrderByOrderId. Reference: template-wirausaha-os convex/checkout.ts + slices/checkout/CheckoutPage.tsx.",
+    agentRecipe: "Run `npx rahman-resources add storefront-checkout` (or `--framework sveltekit`). Wrap your public layout once with `<CartProvider storageKey=\"my-shop-cart\">` and mount `<CartWidget checkoutHref=\"/checkout\" />` in the header extras. On product surfaces call `useCart().add({ slug, name, price, priceLabel, emoji })` with a host-resolved NUMERIC price. Build a /checkout route composing `<CheckoutSummary />` + a payment form (doku-payment's DokuDirectForm): its onSubmit calls YOUR Convex place-order action which re-prices each {slug, qty} from your catalog table server-side, generates an unguessable orderId, calls api.features.payment.actions.doku.createDirectPayment, records your domain order row, and returns { ok, orderId, instructions, expiresAt } ({ ok:false, notice } when DOKU creds are unset — surface it in the form and offer a contact fallback). After success render DokuPaymentInstructions + reactive status via api.features.payment.query.getOrderByOrderId. Reference: template-wirausaha-os convex/checkout.ts + slices/checkout/CheckoutPage.tsx.",
     previewPath: "/preview/slices/storefront-checkout",
     defaultView: "desktop",
     defaultZoom: 0.9,
@@ -2057,7 +2056,7 @@ const analytics: EventTrackingCtx = {
     peers: [],
     tags: ["ui", "theme", "tweakcn", "color", "preset", "switcher", "popover", "next-themes", "svelte", "sveltekit"],
     usedBy: [],
-    agentRecipe: "React/Next: `npx rr add theme-presets`, mount `<ThemeProviders>` or `<ThemePresetProvider>` inside next-themes and use `<ThemePresetSwitcher />`. SvelteKit: `npx rr add theme-presets --framework sveltekit`; mount `<ThemeProviders>` for preset + light/dark/system context, then `<ThemePresetSwitcher />`, optional `<ThemeColorSync />`, and `<SaveSiteDefaultButton onSave={...} />`. Both distributions share visitor > site > host default resolution, registry-data.json, CSS injection, grouping/swatches, preview/restore and agent tools. Tailwind 4 globals must map `--color-*` directly from runtime variables (see README/HOST-SETUP).",
+    agentRecipe: "React/Next: `npx rahman-resources add theme-presets`, mount `<ThemeProviders>` or `<ThemePresetProvider>` inside next-themes and use `<ThemePresetSwitcher />`. SvelteKit: `npx rahman-resources add theme-presets --framework sveltekit`; mount `<ThemeProviders>` for preset + light/dark/system context, then `<ThemePresetSwitcher />`, optional `<ThemeColorSync />`, and `<SaveSiteDefaultButton onSave={...} />`. Both distributions share visitor > site > host default resolution, registry-data.json, CSS injection, grouping/swatches, preview/restore and agent tools. Tailwind 4 globals must map `--color-*` directly from runtime variables (see README/HOST-SETUP).",
     previewPath: "/preview/slices/theme-presets",
     defaultView: "desktop",
     defaultZoom: 0.9,
@@ -2079,7 +2078,7 @@ const analytics: EventTrackingCtx = {
     peers: [],
     tags: ["ui", "onboarding", "wizard", "setup", "first-run", "branding", "theme", "clone-to-own", "templates"],
     usedBy: ["personal-brand-os"],
-    agentRecipe: "Run `npx rr add site-setup-wizard`. Show from your admin gate when `setup.status().onboarded === false`: `<OnboardingWizard onDone={...} save={(f) => settingsUpsert(f)} seedSample={() => seedSample({})} seeded={status?.seeded} ImageField={ImageField} presetOptions={presets} onPresetPreview={(n) => preview(n)} />`. `save` receives Partial<OnboardingFields> + `markOnboarded: true` — back it with a `settings.upsert` mutation that patches only provided fields. Theme bridge (optional): with the theme-presets slice installed build `presetOptions` from `groupTweakcnPresets(registry.items)` + `tweakcnSwatches(p)` and pass `useThemePreset().preview` as `onPresetPreview` — the picker then live-previews while the user browses and `Lewati setup` reverts via `onPresetPreview(null)`. Omit `presetOptions` to hide the picker entirely; omit `ImageField` to hide logo/favicon upload. Full wiring recipe in the slice's HOST-SETUP.md.",
+    agentRecipe: "Run `npx rahman-resources add site-setup-wizard`. Show from your admin gate when `setup.status().onboarded === false`: `<OnboardingWizard onDone={...} save={(f) => settingsUpsert(f)} seedSample={() => seedSample({})} seeded={status?.seeded} ImageField={ImageField} presetOptions={presets} onPresetPreview={(n) => preview(n)} />`. `save` receives Partial<OnboardingFields> + `markOnboarded: true` — back it with a `settings.upsert` mutation that patches only provided fields. Theme bridge (optional): with the theme-presets slice installed build `presetOptions` from `groupTweakcnPresets(registry.items)` + `tweakcnSwatches(p)` and pass `useThemePreset().preview` as `onPresetPreview` — the picker then live-previews while the user browses and `Lewati setup` reverts via `onPresetPreview(null)`. Omit `presetOptions` to hide the picker entirely; omit `ImageField` to hide logo/favicon upload. Full wiring recipe in the slice's HOST-SETUP.md.",
     previewPath: "/preview/slices/site-setup-wizard",
     defaultView: "desktop",
     defaultZoom: 0.9,
@@ -2101,7 +2100,7 @@ const analytics: EventTrackingCtx = {
     peers: [],
     tags: ["data", "upload", "files", "storage", "adapter", "portable", "notion-like"],
     usedBy: [],
-    agentRecipe: "Default React/Next: run `npx rr add file-upload`, wrap with `<FilesAdapterProvider adapter={...}>`, then use `<FileUploadButton>` / `<FileChip>` and the React hooks. Svelte/SvelteKit: run `npx rr add file-upload --framework sveltekit`, wrap with the Svelte `<FilesAdapterProvider>`, and implement `FilesAdapter` with upload + remove + resolveUrl plus optional subscribeUrl for live invalidation. The bundled localStorage adapter is demo-only; production hosts can target Convex/S3/GCS/R2. The dangerous `files.remove` tool remains server-checked and requires confirmation.",
+    agentRecipe: "Default React/Next: run `npx rahman-resources add file-upload`, wrap with `<FilesAdapterProvider adapter={...}>`, then use `<FileUploadButton>` / `<FileChip>` and the React hooks. Svelte/SvelteKit: run `npx rahman-resources add file-upload --framework sveltekit`, wrap with the Svelte `<FilesAdapterProvider>`, and implement `FilesAdapter` with upload + remove + resolveUrl plus optional subscribeUrl for live invalidation. The bundled localStorage adapter is demo-only; production hosts can target Convex/S3/GCS/R2. The dangerous `files.remove` tool remains server-checked and requires confirmation.",
     previewPath: "/preview/slices/file-upload",
     defaultView: "desktop",
     defaultZoom: 0.9,
@@ -2123,7 +2122,7 @@ const analytics: EventTrackingCtx = {
     peers: [],
     tags: ["ui", "selection", "marquee", "rubber-band", "multi-select", "bulk", "notion", "blocks", "list"],
     usedBy: ["notion-page-clone-os"],
-    agentRecipe: "Run `npx rr add selection`. Zero deps (react-dom only). Wrap your list area in `<SelectionProvider onBulkDelete={(ids) => removeMany(ids)}>`, give the surface a `position: relative` div with a ref, drop `<SelectionMarquee containerRef={ref} />` inside it, and wrap each item in `<SelectableBlock id={item.id} orderedIds={allIds}>…</SelectableBlock>`. Hold-drag on empty space to rubber-band: drag RIGHT = window (only fully-enclosed, solid ring), drag LEFT = crossing (anything touched, dashed green). Edge-click an item to pick it (Shift = range, Cmd/Ctrl = toggle). Backspace/Delete bulk-deletes (focus outside a contentEditable), Escape + click-outside clear, floating `N selected · Delete · Clear` toolbar. Read state anywhere via `useSelection()`. The slice owns ONLY the id set — you own the data + the delete. Works on table rows / cards too, not just notion blocks.",
+    agentRecipe: "Run `npx rahman-resources add selection`. Zero deps (react-dom only). Wrap your list area in `<SelectionProvider onBulkDelete={(ids) => removeMany(ids)}>`, give the surface a `position: relative` div with a ref, drop `<SelectionMarquee containerRef={ref} />` inside it, and wrap each item in `<SelectableBlock id={item.id} orderedIds={allIds}>…</SelectableBlock>`. Hold-drag on empty space to rubber-band: drag RIGHT = window (only fully-enclosed, solid ring), drag LEFT = crossing (anything touched, dashed green). Edge-click an item to pick it (Shift = range, Cmd/Ctrl = toggle). Backspace/Delete bulk-deletes (focus outside a contentEditable), Escape + click-outside clear, floating `N selected · Delete · Clear` toolbar. Read state anywhere via `useSelection()`. The slice owns ONLY the id set — you own the data + the delete. Works on table rows / cards too, not just notion blocks.",
     previewPath: "/preview/slices/selection",
     defaultView: "desktop",
     defaultZoom: 1,
@@ -2144,14 +2143,14 @@ const analytics: EventTrackingCtx = {
     shadcn: ["button", "checkbox", "dialog", "dropdown-menu", "input", "popover", "select", "separator", "sheet", "switch", "toggle-group", "tooltip"],
     env: [],
     variants: [
-      { title: "page", desc: "npx rr add notion-ui page — page + block editor (NotionPage/NotionBlock, SlashMenu, renderers)." },
-      { title: "database", desc: "npx rr add notion-ui database — 11-view database (NotionDatabase, filter/sort/group, formula, CSV/JSON)." },
-      { title: "sidebar", desc: "npx rr add notion-ui sidebar — tree-nav sidebar (NotionSidebar, dnd reorder/reparent)." },
+      { title: "page", desc: "npx rahman-resources add notion-ui page — page + block editor (NotionPage/NotionBlock, SlashMenu, renderers)." },
+      { title: "database", desc: "npx rahman-resources add notion-ui database — 11-view database (NotionDatabase, filter/sort/group, formula, CSV/JSON)." },
+      { title: "sidebar", desc: "npx rahman-resources add notion-ui sidebar — tree-nav sidebar (NotionSidebar, dnd reorder/reparent)." },
     ],
     peers: [],
     tags: ["ui", "notion", "notion-like", "database", "table", "board", "list", "gallery", "calendar", "feed", "chart", "dashboard", "form", "map", "timeline", "gantt", "kanban", "views", "filter", "sort", "property", "files", "person", "formula", "timestamp", "unique-id", "csv", "json", "import", "export", "template", "data", "backup", "primitive", "optional", "embeddable", "svelte", "framework-parity"],
     usedBy: ["notion-page-clone-os"],
-    agentRecipe: "React/default: `npx rr add notion-ui <page|database|sidebar>`; append `--framework sveltekit` for native Svelte 5. Omit the variant to install all three. Both frameworks share the same Block/Page/Property/Database domain model and pure database/tree engines; data stays host-owned through callbacks. Svelte database renders table, board, list, gallery, calendar, feed, chart, dashboard, form, map and timeline without React/dnd-kit/Recharts/Lucide/shadcn runtime.",
+    agentRecipe: "React/default: `npx rahman-resources add notion-ui <page|database|sidebar>`; append `--framework sveltekit` for native Svelte 5. Omit the variant to install all three. Both frameworks share the same Block/Page/Property/Database domain model and pure database/tree engines; data stays host-owned through callbacks. Svelte database renders table, board, list, gallery, calendar, feed, chart, dashboard, form, map and timeline without React/dnd-kit/Recharts/Lucide/shadcn runtime.",
     previewPath: "/preview/slices/notion-ui",
     defaultView: "desktop",
     defaultZoom: 1,
@@ -2174,7 +2173,7 @@ const analytics: EventTrackingCtx = {
     peers: [],
     tags: ["ui", "image", "picker", "wallpaper", "cover", "upload", "unsplash", "gallery", "reposition", "files", "primitive", "portable", "dialog"],
     usedBy: ["notion-page-clone-os"],
-    agentRecipe: "Run `npx rr add image-picker` for React/Next or `npx rr add image-picker --framework sveltekit` for native Svelte 5. The headline component is `<ImagePickerButton label=\"Change image\" onChange={(img)=>save(img)} onUpload={…} searchUnsplash={…} />` — ONE button that opens the 4-tab dialog (gallery / upload / link / Unsplash). For a reposition-able cover/hero band use `<ImageBanner image={value} onChange={save} resolvedUrl={…} onUpload={…} searchUnsplash={…} />` (also passable to notion-shell's `<NotionPage coverSlot={…} />`). Inject the backend: `onUpload` = the `files` slice's useFileUpload().upload (returns a FileRef); resolve upload images for display with `resolvedUrl` = files useFileUrl(parseFileRef(imageRef(parseImage(value))).storageId). `searchUnsplash` = `unsplashSearchVia('/api/unsplash')` — add a server route that proxies api.unsplash.com with UNSPLASH_ACCESS_KEY (never expose the key client-side). Ships a curated Unsplash + gallery fallback so it works with zero wiring. ImageValue = { type, value, positionY?, metadata? }; parseImage handles legacy string values.",
+    agentRecipe: "Run `npx rahman-resources add image-picker` for React/Next or `npx rahman-resources add image-picker --framework sveltekit` for native Svelte 5. The headline component is `<ImagePickerButton label=\"Change image\" onChange={(img)=>save(img)} onUpload={…} searchUnsplash={…} />` — ONE button that opens the 4-tab dialog (gallery / upload / link / Unsplash). For a reposition-able cover/hero band use `<ImageBanner image={value} onChange={save} resolvedUrl={…} onUpload={…} searchUnsplash={…} />` (also passable to notion-shell's `<NotionPage coverSlot={…} />`). Inject the backend: `onUpload` = the `files` slice's useFileUpload().upload (returns a FileRef); resolve upload images for display with `resolvedUrl` = files useFileUrl(parseFileRef(imageRef(parseImage(value))).storageId). `searchUnsplash` = `unsplashSearchVia('/api/unsplash')` — add a server route that proxies api.unsplash.com with UNSPLASH_ACCESS_KEY (never expose the key client-side). Ships a curated Unsplash + gallery fallback so it works with zero wiring. ImageValue = { type, value, positionY?, metadata? }; parseImage handles legacy string values.",
     previewPath: "/preview/slices/image-picker",
     defaultView: "desktop",
     defaultZoom: 1,
@@ -2199,7 +2198,7 @@ const analytics: EventTrackingCtx = {
     ],
     tags: ["ui", "navigation", "workspace", "menu", "shell", "convex", "rbac"],
     usedBy: ["personal-brand-os", "agency-studio-os", "konsultan-os", "wirausaha-os", "saas-marketing-os"],
-    agentRecipe: "Run `npx rr add workspace-shell`. Tables prefixed `workspaceShell_*` (menuSets, menuItems, itemComponents, wsAssignments, userAssignments, rolePerms, navContext). Mount `<NavContextProvider workspaceId={wsId}>` inside your auth provider; use `useNavContext(wsId)` to read `{workspace, menuSet, source, effectiveMenuItems, setMenuSet, forkMenuSet}`. Drop-in `<WorkspaceSwitcher canFork />` in sidebar header. Tiered RBAC: `menus.manage` for workspace-default editing, `menus.fork` for user-personal copy. Resolver chain: user cache → user assignment → workspace default → none. Pair with audit-log slice for context-switch / fork events (graceful try/catch if absent). Effective items query applies role filter via workspaceShell_rolePerms (no rolePerms → show all, pre-RBAC compat).",
+    agentRecipe: "Run `npx rahman-resources add workspace-shell`. Tables prefixed `workspaceShell_*` (menuSets, menuItems, itemComponents, wsAssignments, userAssignments, rolePerms, navContext). Mount `<NavContextProvider workspaceId={wsId}>` inside your auth provider; use `useNavContext(wsId)` to read `{workspace, menuSet, source, effectiveMenuItems, setMenuSet, forkMenuSet}`. Drop-in `<WorkspaceSwitcher canFork />` in sidebar header. Tiered RBAC: `menus.manage` for workspace-default editing, `menus.fork` for user-personal copy. Resolver chain: user cache → user assignment → workspace default → none. Pair with audit-log slice for context-switch / fork events (graceful try/catch if absent). Effective items query applies role filter via workspaceShell_rolePerms (no rolePerms → show all, pre-RBAC compat).",
     previewPath: "/preview/slices/workspace-shell",
     defaultView: "desktop",
     defaultZoom: 0.85,
@@ -2220,7 +2219,7 @@ const analytics: EventTrackingCtx = {
     peers: [{ slug: "seo", range: "^0.2", reason: "Library item SEO override fields reuse the seo slice's metadata shape so the surface matches blog/projects rows." }],
     tags: ["library", "resources", "prompts", "snippets", "moodboard", "downloads", "attribution", "seo", "personal-brand"],
     usedBy: [],
-    agentRecipe: "Run `npx rr add seo` (peer) then `npx rr add library` for React/Next or `npx rr add library --framework sveltekit` for native Svelte 5. Spread `seoTables` + `libraryTables` into your root Convex schema. Wrap the unauthenticated CRUD `internalMutation`s with your auth model (see README Install). Render `<LibraryIndex items={await fetchQuery(api.library.listPublic)} />` and `<LibraryDetail item={await fetchQuery(api.library.getBySlug, { slug })} />`. Pass `onUpvote` to enable voting (consumer-owned backend); override `copy` + `kindLabels` per consumer.",
+    agentRecipe: "Run `npx rahman-resources add seo` (peer) then `npx rahman-resources add library` for React/Next or `npx rahman-resources add library --framework sveltekit` for native Svelte 5. Spread `seoTables` + `libraryTables` into your root Convex schema. Wrap the unauthenticated CRUD `internalMutation`s with your auth model (see README Install). Render `<LibraryIndex items={await fetchQuery(api.library.listPublic)} />` and `<LibraryDetail item={await fetchQuery(api.library.getBySlug, { slug })} />`. Pass `onUpvote` to enable voting (consumer-owned backend); override `copy` + `kindLabels` per consumer.",
     previewPath: "/preview/slices/library",
     defaultView: "desktop",
     defaultZoom: 0.85,
@@ -2244,7 +2243,7 @@ const analytics: EventTrackingCtx = {
     peers: [],
     tags: ["data", "table", "datagrid", "tanstack", "sorting", "pagination", "svelte", "framework-parity"],
     usedBy: [],
-    agentRecipe: "Run `npx rr add data-table` for React/default (TanStack React Table v8 + shadcn) or `npx rr add data-table --framework sveltekit` for native Svelte 5 + @tanstack/svelte-table v9. Each framework owns its column-definition type; both expose sorting, column search, pagination, selection, visibility, density, and shared label/summary semantics.",
+    agentRecipe: "Run `npx rahman-resources add data-table` for React/default (TanStack React Table v8 + shadcn) or `npx rahman-resources add data-table --framework sveltekit` for native Svelte 5 + @tanstack/svelte-table v9. Each framework owns its column-definition type; both expose sorting, column search, pagination, selection, visibility, density, and shared label/summary semantics.",
     previewPath: "/preview/slices/data-table",
     defaultView: "desktop",
     defaultZoom: 0.75,
@@ -2266,7 +2265,7 @@ const analytics: EventTrackingCtx = {
     peers: [],
     tags: ["content", "cms", "pages", "blocks", "editor", "builder", "basics"],
     usedBy: [],
-    agentRecipe: "Run `npx rr add pages-cms` for React/default or `npx rr add pages-cms --framework sveltekit`. Wrap the surface in LocalPagesProvider for zero-backend localStorage or PagesProvider with your own PagesStore. Mount PagesView for the list, PageEditorView for the editor route, and BlocksRenderer for public pages. Both frameworks share PageBlock, pagesReducer, defaultPages, blank/duplicate helpers and nav derivation.",
+    agentRecipe: "Run `npx rahman-resources add pages-cms` for React/default or `npx rahman-resources add pages-cms --framework sveltekit`. Wrap the surface in LocalPagesProvider for zero-backend localStorage or PagesProvider with your own PagesStore. Mount PagesView for the list, PageEditorView for the editor route, and BlocksRenderer for public pages. Both frameworks share PageBlock, pagesReducer, defaultPages, blank/duplicate helpers and nav derivation.",
     previewPath: "/preview/slices/pages-cms",
     defaultView: "desktop",
     defaultZoom: 0.6,
@@ -2278,7 +2277,7 @@ const analytics: EventTrackingCtx = {
     kind: "ui",
     version: "0.2.1",
     tagline: "The \"no real content yet\" family — skeletons + spinners and 404/500/403 + zero-data, in two installable variants.",
-    description: "Two co-located placeholder surfaces behind one slug. loading: a configurable LoadingSkeleton over the shadcn Skeleton (kind presets text / card / list / table / form / page / block, overridable count + columns) plus a spinner LoadingState (inline / block / overlay) for in-flight work. empty: a configurable EmptyState over the shadcn Empty (404 / 500 / 403 / no-results / empty-list / first-use, overridable icon/title/copy/actions) plus an ErrorPage full-page wrapper for app/not-found.tsx and app/error.tsx. Install one surface with `npx rr add feedback-states loading|empty`, or both with `npx rr add feedback-states`. Replaces ad-hoc animate-pulse divs, hand-rolled Loader2 spans, and one-off error pages.",
+    description: "Two co-located placeholder surfaces behind one slug. loading: a configurable LoadingSkeleton over the shadcn Skeleton (kind presets text / card / list / table / form / page / block, overridable count + columns) plus a spinner LoadingState (inline / block / overlay) for in-flight work. empty: a configurable EmptyState over the shadcn Empty (404 / 500 / 403 / no-results / empty-list / first-use, overridable icon/title/copy/actions) plus an ErrorPage full-page wrapper for app/not-found.tsx and app/error.tsx. Install one surface with `npx rahman-resources add feedback-states loading|empty`, or both with `npx rahman-resources add feedback-states`. Replaces ad-hoc animate-pulse divs, hand-rolled Loader2 spans, and one-off error pages.",
     source: "rr original",
     slicePath: "frontend/slices/feedback-states",
     convexPaths: [],
@@ -2287,12 +2286,12 @@ const analytics: EventTrackingCtx = {
     env: [],
     peers: [],
     variants: [
-      { title: "loading", desc: "npx rr add feedback-states loading — LoadingSkeleton (7 kinds) + LoadingState (inline/block/overlay)." },
-      { title: "empty", desc: "npx rr add feedback-states empty — EmptyState (6 kinds) + ErrorPage full-page wrapper." },
+      { title: "loading", desc: "npx rahman-resources add feedback-states loading — LoadingSkeleton (7 kinds) + LoadingState (inline/block/overlay)." },
+      { title: "empty", desc: "npx rahman-resources add feedback-states empty — EmptyState (6 kinds) + ErrorPage full-page wrapper." },
     ],
     tags: ["loading", "skeleton", "spinner", "empty-state", "404", "500", "403", "error-page", "fallback", "placeholder", "basics"],
     usedBy: [],
-    agentRecipe: "Run `npx rr add feedback-states` for both, or `npx rr add feedback-states loading` / `empty` for one surface. loading: <LoadingSkeleton kind=\"table\" count={8} /> mirrors streamed content, kind=\"page\" drops into route loading.tsx, <LoadingState variant=\"inline|block|overlay\" /> for in-flight work. empty: <EmptyState kind=\"no-results\" /> in zero-data spots, <ErrorPage kind=\"404\" /> in app/not-found.tsx and kind=\"500\" in app/error.tsx. Every preset overridable per use.",
+    agentRecipe: "Run `npx rahman-resources add feedback-states` for both, or `npx rahman-resources add feedback-states loading` / `empty` for one surface. loading: <LoadingSkeleton kind=\"table\" count={8} /> mirrors streamed content, kind=\"page\" drops into route loading.tsx, <LoadingState variant=\"inline|block|overlay\" /> for in-flight work. empty: <EmptyState kind=\"no-results\" /> in zero-data spots, <ErrorPage kind=\"404\" /> in app/not-found.tsx and kind=\"500\" in app/error.tsx. Every preset overridable per use.",
     previewPath: "/preview/slices/feedback-states",
     defaultView: "tablet",
     defaultZoom: 0.8,
@@ -2314,7 +2313,7 @@ const analytics: EventTrackingCtx = {
     peers: [],
     tags: ["header", "footer", "navbar", "marketing", "navigation", "chrome", "basics"],
     usedBy: [],
-    agentRecipe: "Run `npx rr add marketing-chrome`. Feed MarketingHeader { brand, nav[], cta, layout } and MarketingFooter { brand, columns[], social[], legal[], layout }. Header layout split is the default marketing pattern; footer columns for full sites, slim for single-pagers.",
+    agentRecipe: "Run `npx rahman-resources add marketing-chrome`. Feed MarketingHeader { brand, nav[], cta, layout } and MarketingFooter { brand, columns[], social[], legal[], layout }. Header layout split is the default marketing pattern; footer columns for full sites, slim for single-pagers.",
     previewPath: "/preview/slices/marketing-chrome",
     defaultView: "desktop",
     defaultZoom: 0.7,
@@ -2326,7 +2325,7 @@ const analytics: EventTrackingCtx = {
     kind: "ui",
     version: "1.2.0",
     tagline: "Two adapter-driven settings shells — account (async load+save) and appearance (sync per-setting) — the slice owns no data.",
-    description: "Two settings surfaces behind one slug, each adapter-driven so the slice owns no data. account: SettingsShell two-column surface (nav collapses to a Select on mobile) — Profile (avatar/name/email/bio), Preferences (theme/language/density), Notifications (switch rows), Danger zone (AlertDialog-confirmed delete) over an ASYNC SettingsAdapter { load, save(patch) } with optimistic save + rollback; createMemoryAdapter ships for demos. appearance: AppearancePanel (style/mode/accent/wallpaper/reduce-transparency/display) over a SYNC per-setting AppearanceAdapter, plus the generic SettingsSection / SettingsRow / Segmented / AccentSwatches primitives you compose custom panels from. Install one surface with `npx rr add settings account|appearance`, or both with `npx rr add settings`.",
+    description: "Two settings surfaces behind one slug, each adapter-driven so the slice owns no data. account: SettingsShell two-column surface (nav collapses to a Select on mobile) — Profile (avatar/name/email/bio), Preferences (theme/language/density), Notifications (switch rows), Danger zone (AlertDialog-confirmed delete) over an ASYNC SettingsAdapter { load, save(patch) } with optimistic save + rollback; createMemoryAdapter ships for demos. appearance: AppearancePanel (style/mode/accent/wallpaper/reduce-transparency/display) over a SYNC per-setting AppearanceAdapter, plus the generic SettingsSection / SettingsRow / Segmented / AccentSwatches primitives you compose custom panels from. Install one surface with `npx rahman-resources add settings account|appearance`, or both with `npx rahman-resources add settings`.",
     source: "rr original",
     slicePath: "frontend/slices/settings",
     convexPaths: [],
@@ -2335,12 +2334,12 @@ const analytics: EventTrackingCtx = {
     env: [],
     peers: [],
     variants: [
-      { title: "account", desc: "npx rr add settings account — SettingsShell over an async load+save adapter (profile/preferences/notifications/danger-zone), or feed the sections to your app sidebar with settingsSectionsToNav + <SettingsShell nav={false}>." },
-      { title: "appearance", desc: "npx rr add settings appearance — AppearancePanel over a sync per-setting adapter + Section/Row/Segmented primitives." },
+      { title: "account", desc: "npx rahman-resources add settings account — SettingsShell over an async load+save adapter (profile/preferences/notifications/danger-zone), or feed the sections to your app sidebar with settingsSectionsToNav + <SettingsShell nav={false}>." },
+      { title: "appearance", desc: "npx rahman-resources add settings appearance — AppearancePanel over a sync per-setting adapter + Section/Row/Segmented primitives." },
     ],
     tags: ["settings", "preferences", "account", "appearance", "theme", "adapter", "shell", "primitives", "ui", "basics"],
     usedBy: [],
-    agentRecipe: "Run `npx rr add settings` for both, or `npx rr add settings account` / `appearance` for one. account: implement SettingsAdapter { load, save } over your backend (Convex query + mutation), pass to <SettingsShell adapter>; save gets per-section partial patches (shallow-merge server-side); onDeleteAccount wires the danger zone. Already have a dashboard sidebar? Feed it settingsSectionsToNav(setSection, { activeId }) and render <SettingsShell nav={false} active onNavigate> so there is ONE nav, not two. appearance: build an AppearanceAdapter (per-setting SegSetting values) from your appearance store, pass to <AppearancePanel appearance>; or compose custom panels from <SettingsSection>/<SettingsRow>/<Segmented>/<AccentSwatches>.",
+    agentRecipe: "Run `npx rahman-resources add settings` for both, or `npx rahman-resources add settings account` / `appearance` for one. account: implement SettingsAdapter { load, save } over your backend (Convex query + mutation), pass to <SettingsShell adapter>; save gets per-section partial patches (shallow-merge server-side); onDeleteAccount wires the danger zone. Already have a dashboard sidebar? Feed it settingsSectionsToNav(setSection, { activeId }) and render <SettingsShell nav={false} active onNavigate> so there is ONE nav, not two. appearance: build an AppearanceAdapter (per-setting SegSetting values) from your appearance store, pass to <AppearancePanel appearance>; or compose custom panels from <SettingsSection>/<SettingsRow>/<Segmented>/<AccentSwatches>.",
     previewPath: "/preview/slices/settings",
     defaultView: "desktop",
     defaultZoom: 0.75,
@@ -2362,7 +2361,7 @@ const analytics: EventTrackingCtx = {
     peers: [],
     tags: ["notifications", "inbox", "bell", "unread", "toast", "basics"],
     usedBy: [],
-    agentRecipe: "Run `npx rr add notifications-center` (or `--framework sveltekit`). Bind your host feed through NotificationsAdapter, or start with createMemoryNotificationsAdapter(seed). The shared state core sorts newest-first and exposes unread + mark/dismiss/clear semantics; use surface=\"sheet\" for mobile-heavy apps.",
+    agentRecipe: "Run `npx rahman-resources add notifications-center` (or `--framework sveltekit`). Bind your host feed through NotificationsAdapter, or start with createMemoryNotificationsAdapter(seed). The shared state core sorts newest-first and exposes unread + mark/dismiss/clear semantics; use surface=\"sheet\" for mobile-heavy apps.",
     previewPath: "/preview/slices/notifications-center",
     defaultView: "desktop",
     defaultZoom: 0.8,
@@ -2392,7 +2391,7 @@ const analytics: EventTrackingCtx = {
     compat: { enhances: ["appshell"] },
     previewPath: "/preview/slices/design-studio",
     defaultView: "desktop",
-    agentRecipe: `React/default: \`npx rr add design-studio\`. SvelteKit: \`npx rr add design-studio --framework sveltekit\`. Both share the same layer/document model, observable undo/redo + scene stores, filters/masks/safe-area data, JSON/HTML serialization, bundled image samples, and configureMediaStudio host adapter. React keeps Lucide/shadcn chrome; Svelte installs only svelte@^5 plus portable core files.`,
+    agentRecipe: `React/default: \`npx rahman-resources add design-studio\`. SvelteKit: \`npx rahman-resources add design-studio --framework sveltekit\`. Both share the same layer/document model, observable undo/redo + scene stores, filters/masks/safe-area data, JSON/HTML serialization, bundled image samples, and configureMediaStudio host adapter. React keeps Lucide/shadcn chrome; Svelte installs only svelte@^5 plus portable core files.`,
     exampleCode: `"use client";
 import { MediaStudio } from "@/features/design-studio";
 
@@ -2424,7 +2423,7 @@ export default function StudioDemo() {
     defaultView: "desktop",
     agentRecipe: `Stack: Next 16 + React 19 + Tailwind 4 + shadcn/ui. Website shortcut grid. Fully client-side; no backend required.
 
-STEP 1 — Install. \`npx rr add quicklinks\`. Ensure \`@/features/quicklinks\` resolves and Tailwind scans the slice folder.
+STEP 1 — Install. \`npx rahman-resources add quicklinks\`. Ensure \`@/features/quicklinks\` resolves and Tailwind scans the slice folder.
 
 STEP 2 — Deps. npm: \`lucide-react\`. shadcn: button.
 

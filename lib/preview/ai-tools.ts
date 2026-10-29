@@ -82,7 +82,7 @@ export function buildBuilderTools(): Anthropic.Tool[] {
     {
       name: "compose_bundle",
       description:
-        "Compose selected slices into install commands (npx rr add …) plus compatibility warnings.",
+        "Compose selected slices into install commands (npx rahman-resources add …) plus compatibility warnings.",
       input_schema: {
         type: "object",
         properties: {

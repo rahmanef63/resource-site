@@ -10,7 +10,7 @@ function stripVer(spec: string): string {
 
 /** Per-slice AI install prompt — copyable to Claude / Cursor / Codex.
  *  Lighter than the multi-step buildAgentPrompt: one slice = one
- *  `npx rr add` line + dep summary + agentRecipe verbatim. The CLI
+ *  `npx rahman-resources add` line + dep summary + agentRecipe verbatim. The CLI
  *  itself handles the actual file copy + env augmentation, so the
  *  prompt's job is to tell the agent WHY + WHAT TO WIRE after install. */
 export function buildSliceAgentPrompt(slice: SliceEntry): string {
@@ -29,7 +29,7 @@ export function buildSliceAgentPrompt(slice: SliceEntry): string {
   lines.push("");
   lines.push("```bash");
   lines.push(slice.install ?? `npx rahman-resources add ${slice.slug}`);
-  lines.push("# alias: npx rr add " + slice.slug);
+  lines.push("# short alias once installed: rr add " + slice.slug);
   lines.push("```");
   lines.push("");
   lines.push(
