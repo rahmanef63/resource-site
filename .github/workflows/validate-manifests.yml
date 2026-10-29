@@ -1,7 +1,28 @@
 name: Validate Slice Manifests
 
+# Gated on push to main and on PRs. Path filter keeps the job off PRs that
+# cannot possibly change a slice manifest (docs, app-only edits, ...).
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - "frontend/slices/**"
+      - "template-base/**"
+      - "packages/cli/**"
+      - "lib/content/**"
+      - "scripts/validation/**"
+      - ".github/workflows/validate-manifests.yml"
+  push:
+    branches: [main]
+    paths:
+      - "frontend/slices/**"
+      - "template-base/**"
+      - "packages/cli/**"
+      - "lib/content/**"
+      - "scripts/validation/**"
+      - ".github/workflows/validate-manifests.yml"
+
 permissions:
   contents: read
 

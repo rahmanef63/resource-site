@@ -2,6 +2,19 @@ name: CI
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [main]
+    # Docs-only changes cannot break typecheck/lint/test/slices/build.
+    # If these checks become *required* in branch protection, a filtered-out
+    # run leaves the PR "pending" forever — see .github/workflows/README.md.
+    paths-ignore:
+      - "docs/**"
+      - "**.md"
+  push:
+    # Deliberately UNFILTERED: main is the deploy source of truth, so every
+    # merge gets a full gate even when it only touched docs.
+    branches: [main]
+
 permissions:
   contents: read
 
