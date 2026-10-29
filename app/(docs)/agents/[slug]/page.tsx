@@ -9,6 +9,7 @@ import { PageHeader } from "@/components/site/page-header";
 import { slices, getSlice } from "@/lib/content/slices";
 import { layouts, getLayout } from "@/lib/content/layouts";
 import { site } from "@/lib/content/site";
+import { buildPageMetadata } from "@/lib/seo";
 import {
   buildLayoutAgentPrompt,
   buildSliceAgentPrompt,
@@ -21,13 +22,20 @@ export function generateStaticParams() {
   ];
 }
 
+/** Unknown slugs call `notFound()` here instead of returning a
+ *  "not found" title, so the metadata stage never advertises a missing page.
+ *  (Under `cacheComponents` the HTTP status still comes from the streamed
+ *  shell — a real 404 needs the check in `proxy`.) */
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const slice = getSlice(slug);
-  if (slice) return { title: `${slice.title} — AI prompt` };
-  const layout = getLayout(slug);
-  if (layout) return { title: `${layout.title} — AI prompt` };
-  return { title: "AI prompt not found" };
+  const layout = slice ? null : getLayout(slug);
+  if (!slice && !layout) notFound();
+  return buildPageMetadata({
+    title: `${slice?.title ?? layout!.title} — AI prompt`,
+    description: slice?.description ?? layout!.description,
+    path: `/agents/${slug}`,
+  });
 }
 
 export default async function AgentPromptPage({ params }: { params: Promise<{ slug: string }> }) {
