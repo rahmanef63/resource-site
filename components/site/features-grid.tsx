@@ -3,7 +3,7 @@ import { features } from "@/lib/content/sections";
 
 /**
  * Dogfood — uses the canonical `feature-grid` slice that templates ship via
- * `npx rr add feature-grid`. Single SSOT so the rr site shows the same
+ * `npx rahman-resources add feature-grid`. Single SSOT so the rr site shows the same
  * primitive consumers install.
  */
 export function FeaturesGrid() {

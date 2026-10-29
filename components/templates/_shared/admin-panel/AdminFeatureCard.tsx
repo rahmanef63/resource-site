@@ -44,7 +44,7 @@ export function AdminFeatureCard({ block }: { block: FeatureBlock }) {
             </code>{" "}
             slice (already in the rr catalog — installable via{" "}
             <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px]">
-              npx rr add {block.poweredBy}
+              npx rahman-resources add {block.poweredBy}
             </code>
             ).
           </p>

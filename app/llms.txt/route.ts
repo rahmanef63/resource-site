@@ -42,14 +42,14 @@ async function buildBody() {
   lines.push("## Slices");
   lines.push("");
   lines.push(
-    "Drop-in vertical features. Each ships the metadata pair (`slice.json`, with an embedded `contract` block, + `slice.manifest.json`). Install with `npx rr add <slug>` — CLI auto-augments env, installs deps, and copies into `frontend/slices/<slug>/` (+ optional `convex/features/<slug>/`).",
+    "Drop-in vertical features. Each ships the metadata pair (`slice.json`, with an embedded `contract` block, + `slice.manifest.json`). Install with `npx rahman-resources add <slug>` — CLI auto-augments env, installs deps, and copies into `frontend/slices/<slug>/` (+ optional `convex/features/<slug>/`).",
   );
   lines.push("");
   for (const s of visibleSlices) {
     lines.push(`### ${s.title}`);
     lines.push(`- slug: \`${s.slug}\`  kind: \`${s.kind}\`  category: \`${s.category}\``);
     lines.push(`- ${s.description}`);
-    lines.push(`- install: \`npx rr add ${s.slug}\``);
+    lines.push(`- install: \`npx rahman-resources add ${s.slug}\``);
     lines.push(`- detail: ${site.url}/slices/${s.slug}`);
     lines.push(`- prompt: ${site.url}/agents/${s.slug}`);
     if (s.agentRecipe) {

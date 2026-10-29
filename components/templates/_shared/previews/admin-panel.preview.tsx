@@ -1,6 +1,6 @@
 "use client";
 
-/** Variant preview (VP wave) — rr-internal, stripped on `rr add`.
+/** Variant preview (VP wave) — rr-internal, stripped on `npx rahman-resources add`.
  *  template-base is tsc-excluded; this file imports ONLY site-compiled code
  *  (the panel's real overview + section blocks live at
  *  components/templates/_shared/admin-panel, mounted by every OS template). */

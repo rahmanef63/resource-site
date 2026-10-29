@@ -45,7 +45,7 @@ export default function Page() {
       kind="full"
       description="Two Indonesia PSP variants over one shared backend (convex/features/payment, provider-discriminated). Pick a provider — same paymentOrders table, different gateway."
     >
-      <PreviewSection title="Provider" hint="npx rr add payment doku | midtrans">
+      <PreviewSection title="Provider" hint="npx rahman-resources add payment doku | midtrans">
         <div className="flex flex-wrap gap-2">
           <Chip active={provider === "doku"} onClick={() => setProvider("doku")} label="DOKU (Hosted + Direct)" />
           <Chip active={provider === "midtrans"} onClick={() => setProvider("midtrans")} label="Midtrans (Snap)" />

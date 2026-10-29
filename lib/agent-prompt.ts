@@ -79,8 +79,8 @@ export function buildAgentPrompt({
     "Option A — `rr` CLI (recommended; auto-detects TEMPLATE vs SLICE, auto-augments `.env.example`, auto-installs deps):",
   );
   lines.push("```bash");
-  lines.push(`npx rr add ${layoutSlug ?? "<slug>"} ${projectName}`);
-  lines.push("# alias of: npx rahman-resources add ...");
+  lines.push(`npx rahman-resources add ${layoutSlug ?? "<slug>"} ${projectName}`);
+  lines.push("# short alias once installed: rr add ... (same package)");
   lines.push("```");
   lines.push("");
   lines.push("Option B — degit (no .git history, fastest manual path):");
