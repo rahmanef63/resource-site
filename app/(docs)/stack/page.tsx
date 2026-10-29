@@ -4,12 +4,14 @@ import { Badge } from "@/components/ui/badge";
 import { DocCard } from "@/components/site/doc-primitives";
 import { PageHeader } from "@/components/site/page-header";
 import { stack } from "@/lib/content/sections";
+import { getFrameworkCoverage } from "@/lib/content/slice-framework-support";
 
 export const metadata = { title: "Stack" };
 
 const GROUPS = ["Frameworks", "Shared foundation", "UI libraries", "Package managers", "Delivery"] as const;
 
 export default function StackPage() {
+  const coverage = getFrameworkCoverage();
   return (
     <div className="space-y-8">
       <PageHeader
@@ -19,7 +21,11 @@ export default function StackPage() {
       />
 
       <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-        <Metric label="Canonical slices" value="66 / 66" note="Next + Svelte" />
+        <Metric
+          label="Canonical slices"
+          value={`${coverage.catalog} / ${coverage.svelte}`}
+          note={`${coverage.catalog} catalog slices · ${coverage.svelte} also ship SvelteKit`}
+        />
         <Metric label="Default" value="Next.js + React" note="full-app templates" />
         <Metric label="Alternate" value="SvelteKit + Svelte 5" note="native slice renderer" />
         <Metric label="Package managers" value="npm + Bun" note="npx / bunx" />

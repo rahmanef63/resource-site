@@ -3,10 +3,8 @@ import {
   Workflow,
   Rocket,
   ShieldCheck,
-  Wand2,
   GitBranch,
   Component,
-  PackagePlus,
 } from "lucide-react";
 
 export const features = [
@@ -44,19 +42,7 @@ export const features = [
     icon: GitBranch,
     title: "Self-hosted Convex + @convex-dev/auth",
     description:
-      "No Clerk. Self-hosted Convex backend in the same docker-compose. Postgres-backed for prod.",
-  },
-  {
-    icon: Wand2,
-    title: "Auto-generated Slice Docs",
-    description:
-      "Per-slice DEPS.md, CONTRACT.md, STATUS.md, USAGE.md generated from imports + defineFeature config.",
-  },
-  {
-    icon: PackagePlus,
-    title: "Cookbook + Recipes",
-    description:
-      "8 layout variants and 8 feature drop-ins (block editor, command palette, db views, comments, ...) ready to mount.",
+      "No Clerk. Self-hosted Convex backend in the same docker-compose with @convex-dev/auth. SQLite by default at /convex/data; Postgres or MySQL is an opt-in POSTGRES_URL / MYSQL_URL override.",
   },
 ];
 

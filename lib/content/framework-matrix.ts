@@ -31,7 +31,7 @@ export const FRAMEWORK_PROFILES: readonly FrameworkProfile[] = [
     renderer: "Svelte 5",
     default: false,
     accent: "SvelteKit + Svelte",
-    note: "Explicit distribution with SvelteKit 2, Svelte 5, adapter-node and convex-svelte. All 66 canonical active slices support this path; six legacy compatibility entries remain React-only.",
+    note: "Explicit distribution with SvelteKit 2, Svelte 5, adapter-node and convex-svelte. 66 of the 72 catalog entries support this path; six legacy compatibility entries remain React-only.",
   },
 ] as const;
 
