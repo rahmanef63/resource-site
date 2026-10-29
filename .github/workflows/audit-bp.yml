@@ -1,24 +1,34 @@
-name: audit-bp
+name: audit-bp (advisory)
 
-# Runs the audit-bp KPI scan on every PR. Fails when TOTAL > 0.
+# ADVISORY SIGNAL — NOT A MERGE GATE.
 #
-# The audit-bp skill lives at ~/.agents/skills/audit-bp on developer machines
-# but is NOT published as a public GitHub repo. To work around this we:
-#   1. Attempt to clone the skill (placeholder URL — kept for forward compat
-#      so when/if the skill is open-sourced the workflow upgrades for free).
-#   2. If the clone fails, fall back to an INLINE simplified KPI scan that
-#      replicates the 5 P0 metrics the full script tracks:
-#        - raw_anchor          (raw <a href="..."> in src — non-protocol)
-#        - raw_img             (raw <img ...> in src)
-#        - unbounded_collect   (.collect() in convex mutation files)
-#        - convex_public_no_validator (public Convex fn without args validator)
-#        - server_action_no_auth (use server file without auth helper)
+# The full `audit-bp` skill is private: it lives at `~/.agents/skills/audit-bp`
+# on developer machines and is not published anywhere cloneable. There is no
+# public URL to fetch, so nothing here tries to clone one.
 #
-# The fallback is intentionally conservative: it may UNDER-count vs the full
-# audit-bp.sh, but it never false-positives in a way that blocks valid PRs.
+# What this workflow does instead: an INLINE simplified KPI scan over the
+# changed files only, covering 5 mechanical P0 metrics:
+#   - raw <a href="...">      in app/components/frontend source
+#   - raw <img ...>           in app/components/frontend source
+#   - unbounded .collect()    in convex mutation files
+#   - convex public fn        without an `args` validator
+#   - `use server` file       without an auth helper
+#
+# It under-counts relative to the real skill (grep-level, changed files only),
+# which is exactly why it is advisory: findings are reported as a PR comment
+# and in the job summary, and the job never fails the build. Deep review still
+# requires the private skill locally.
+#
+# Do not describe this workflow as "gated" or "score >= 80 to ship" anywhere.
+# The blocking checks live in ci.yml and validate-manifests.yml.
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
 permissions:
   contents: read
   pull-requests: write
@@ -28,10 +38,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  audit-bp:
-    name: audit-bp KPI scan
+  kpi-scan:
+    name: kpi-scan (advisory)
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 5
+    # Advisory only: never block a merge on a grep-level approximation.
+    continue-on-error: true
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -42,55 +54,28 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: "npm"
-          cache-dependency-path: package-lock.json
 
-      - name: install
-        run: npm ci --legacy-peer-deps --no-audit --no-fund
-
-      - name: fetch audit-bp skill (with inline fallback)
-        id: fetch-skill
+      - name: run inline KPI scan (advisory)
+        id: scan
+        env:
+          BASE_REF: ${{ github.base_ref }}
         run: |
           set +e
-          mkdir -p "$HOME/.agents/skills"
-          # Placeholder — the audit-bp skill is not public yet. If/when it is
-          # published, replace the URL below. The OR-arm always succeeds.
-          git clone --depth=1 \
-            https://github.com/rahmanef/skill-audit-bp.git \
-            "$HOME/.agents/skills/audit-bp" 2>/dev/null
-          if [ -f "$HOME/.agents/skills/audit-bp/scripts/audit-bp.sh" ]; then
-            echo "mode=full" >> "$GITHUB_OUTPUT"
-            chmod +x "$HOME/.agents/skills/audit-bp/scripts/audit-bp.sh"
+          # Diff base: PR target branch when available, else the previous
+          # commit on main, else the last 15 commits (shallow-history safety).
+          if [ -n "$BASE_REF" ] && git rev-parse --verify "origin/$BASE_REF" >/dev/null 2>&1; then
+            RANGE="origin/$BASE_REF...HEAD"
+          elif git rev-parse --verify HEAD~1 >/dev/null 2>&1; then
+            RANGE="HEAD~1 HEAD"
           else
-            echo "mode=fallback" >> "$GITHUB_OUTPUT"
-            echo "audit-bp skill not reachable — using inline fallback"
+            RANGE="HEAD~15 HEAD"
           fi
-          exit 0
+          echo "diff range: $RANGE"
 
-      - name: run audit-bp (full skill)
-        id: audit-full
-        if: steps.fetch-skill.outputs.mode == 'full'
-        run: |
-          set +e
-          bash "$HOME/.agents/skills/audit-bp/scripts/audit-bp.sh" --changed --json > audit-bp.json
-          code=$?
-          cat audit-bp.json
-          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
-          # Don't fail the step here — comment-step needs the artifact.
-          exit 0
-
-      - name: run audit-bp (inline fallback)
-        id: audit-fallback
-        if: steps.fetch-skill.outputs.mode == 'fallback'
-        run: |
-          set +e
-          # Inline simplified KPI grep — see workflow comment header for scope.
-          # Build file list from the PR's diff range; fall back to last 15 commits.
-          FILES=$( ( git diff --name-only "origin/${{ github.base_ref }}...HEAD" 2>/dev/null \
-                    || git diff --name-only HEAD~15 HEAD 2>/dev/null ) \
-                  | grep -E '\.(ts|tsx|js|jsx|mjs|cjs)$' \
-                  | grep -vE '(node_modules|_generated|\.next|/dist/|/build/|\.test\.|\.spec\.)' \
-                  || true )
+          FILES=$( git diff --name-only $RANGE 2>/dev/null \
+                    | grep -E '\.(ts|tsx|js|jsx|mjs|cjs)$' \
+                    | grep -vE '(node_modules|_generated|\.next|/dist/|/build/|\.test\.|\.spec\.)' \
+                    || true )
 
           count_raw_anchor=0
           count_raw_img=0
@@ -102,19 +87,19 @@ jobs:
             [ -f "$f" ] || continue
             case "$f" in
               frontend/*|components/*|app/*)
-                t=$(grep -cE '<a[[:space:]]+href=' "$f" 2>/dev/null || echo 0)
-                p=$(grep -cE '<a[[:space:]]+href=(["'\'']|\{`)(mailto|tel|sms|ftp):' "$f" 2>/dev/null || echo 0)
-                b=$(grep -cE '<a[[:space:]][^>]*target=["'\'']_blank' "$f" 2>/dev/null || echo 0)
-                h=$(( t - p - b )); [ "$h" -lt 0 ] && h=0
+                t=$(grep -cE '<a[[:space:]]+href=' "$f" 2>/dev/null || true)
+                p=$(grep -cE '<a[[:space:]]+href=(["'\'']|\{`)(mailto|tel|sms|ftp):' "$f" 2>/dev/null || true)
+                b=$(grep -cE '<a[[:space:]][^>]*target=["'\'']_blank' "$f" 2>/dev/null || true)
+                h=$(( ${t:-0} - ${p:-0} - ${b:-0} )); [ "$h" -lt 0 ] && h=0
                 count_raw_anchor=$(( count_raw_anchor + h ))
-                i=$(grep -cE '<img[[:space:]]' "$f" 2>/dev/null || echo 0)
-                count_raw_img=$(( count_raw_img + i ))
+                i=$(grep -cE '<img[[:space:]]' "$f" 2>/dev/null || true)
+                count_raw_img=$(( count_raw_img + ${i:-0} ))
                 ;;
             esac
             case "$f" in
               convex/features/*/mutations.ts|convex/features/*/api/mutations.ts)
-                c=$(grep -cE '\.collect\(\)' "$f" 2>/dev/null || echo 0)
-                count_unbounded_collect=$(( count_unbounded_collect + c ))
+                c=$(grep -cE '\.collect\(\)' "$f" 2>/dev/null || true)
+                count_unbounded_collect=$(( count_unbounded_collect + ${c:-0} ))
                 ;;
             esac
             case "$f" in
@@ -149,21 +134,37 @@ jobs:
           cat > audit-bp.json <<JSON
           {
             "scope": "changed",
-            "mode": "fallback",
+            "mode": "inline-advisory",
             "raw_anchor_count": $count_raw_anchor,
             "raw_img_count": $count_raw_img,
             "unbounded_collect_count": $count_unbounded_collect,
             "convex_public_no_validator_count": $count_convex_no_validator,
             "server_action_no_auth_count": $count_server_action_no_auth,
-            "total": $total,
-            "exit": $([ $total -eq 0 ] && echo 0 || echo 1)
+            "total": $total
           }
           JSON
           cat audit-bp.json
-          echo "exit_code=$([ $total -eq 0 ] && echo 0 || echo 1)" >> "$GITHUB_OUTPUT"
+          echo "total=$total" >> "$GITHUB_OUTPUT"
           exit 0
 
-      - name: post PR summary
+      - name: job summary
+        if: always()
+        run: |
+          {
+            echo "### audit-bp inline KPI scan (advisory)"
+            echo
+            echo "Not a merge gate. Under-counts vs the private skill; no score threshold is enforced."
+            echo
+            if [ -f audit-bp.json ]; then
+              echo '```json'
+              cat audit-bp.json
+              echo '```'
+            else
+              echo "_scan produced no output_"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: post PR summary (advisory)
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v7
         with:
@@ -172,7 +173,6 @@ jobs:
             let payload = {};
             try {
               const raw = fs.readFileSync('audit-bp.json', 'utf8');
-              // The "full" mode wraps JSON in a `audit-bp.kpi { ... }` envelope.
               const m = raw.match(/\{[\s\S]*\}/);
               if (m) payload = JSON.parse(m[0]);
             } catch (e) {
@@ -180,26 +180,22 @@ jobs:
               return;
             }
             const total = payload.total ?? 'n/a';
-            const mode = payload.mode || 'full';
             const rows = [
-              ['raw <a href=...>',          payload.raw_anchor_count],
-              ['raw <img ...>',             payload.raw_img_count],
-              ['unbounded .collect()',      payload.unbounded_collect_count],
-              ['convex public no validator', payload.convex_public_no_validator_count],
-              ['server action no auth',     payload.server_action_no_auth_count],
+              ['raw <a href=...>',            payload.raw_anchor_count],
+              ['raw <img ...>',               payload.raw_img_count],
+              ['unbounded .collect()',        payload.unbounded_collect_count],
+              ['convex public no validator',  payload.convex_public_no_validator_count],
+              ['server action no auth',       payload.server_action_no_auth_count],
             ].filter(([_, v]) => v !== undefined);
-            const verdict = total === 0 ? 'CLEAN' : 'FINDINGS';
             const body = [
-              `### audit-bp (${mode} mode) — ${verdict}`,
+              `### audit-bp inline KPI scan — advisory (${total === 0 ? 'no findings' : 'findings'})`,
               ``,
               `| metric | count |`,
               `|---|---:|`,
               ...rows.map(([k, v]) => `| ${k} | ${v} |`),
               `| **TOTAL** | **${total}** |`,
               ``,
-              total === 0
-                ? '_All mechanical KPIs zero. Phase-3 deep read still recommended._'
-                : '_Findings present — see workflow logs for full breakdown._',
+              `_Advisory only — does not block merge. The full audit-bp skill is private and not reproducible in CI; run it locally for a real score._`,
             ].join('\n');
             await github.rest.issues.createComment({
               issue_number: context.issue.number,
@@ -207,21 +203,3 @@ jobs:
               repo: context.repo.repo,
               body,
             });
-
-      - name: fail when total > 0
-        run: |
-          # Re-parse the JSON the previous steps emitted and exit 1 on findings.
-          total=$(node -e "
-            const fs=require('fs');
-            try {
-              const raw=fs.readFileSync('audit-bp.json','utf8');
-              const m=raw.match(/\{[\s\S]*\}/);
-              const j=m?JSON.parse(m[0]):{};
-              console.log(j.total ?? 0);
-            } catch (e) { console.log(0); }
-          ")
-          echo "audit-bp total: $total"
-          if [ "$total" != "0" ]; then
-            echo "audit-bp: findings present — failing workflow"
-            exit 1
-          fi

@@ -40,6 +40,7 @@
     "modify:slice": "node scripts/features/modify-slice.mjs",
     "manifest:sync": "node packages/cli/scripts/gen-manifest.mjs",
     "test": "NODE_ENV=test vitest run",
+    "ci:local": "node scripts/ci-local.mjs",
     "test:watch": "NODE_ENV=test vitest",
     "e2e": "npm run build && playwright test",
     "e2e:only": "playwright test",
