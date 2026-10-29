@@ -45,10 +45,10 @@ For existing projects the CLI resolves the package manager from, in order: expli
 ### Slice variants + frameworks
 
 ```bash
-rr add settings account                         # React/Next default
-rr add settings account --framework sveltekit  # native/shared Svelte distribution
-rr add payment doku                            # one provider variant
-rr add payment                                 # all provider variants
+npx rahman-resources add settings account                         # React/Next default
+npx rahman-resources add settings account --framework sveltekit  # native/shared Svelte distribution
+npx rahman-resources add payment doku                            # one provider variant
+npx rahman-resources add payment                                 # all provider variants
 ```
 
 CLI 1.19 adds dual-framework base scaffolding, npm/Bun-aware command execution, modern `bun.lock` detection, framework-aware public env names (`NEXT_PUBLIC_*` vs SvelteKit `PUBLIC_*`), and records each installed slice framework in `rr.json`. Per-variant runtime dependencies from 1.18 remain intact.
@@ -72,7 +72,7 @@ Each DNA file has three sections:
 - `lineage[]` — `{ from, to?, at, transforms[], actor? }` rows recording every harvest hop. `from`/`to` use `<sourceRepo>:<path>` syntax (e.g. `superspace:frontend/slices/auth` → `kitab:0.1.0`). Transforms are tags like `alias-rewrite`, `clerk-strip`, `namespace-rename`.
 - `consumers{}` — keyed by consumer name (notion, superspace, careerpack, content, rahmanef, cescadesigns). Each entry records `adopted_at`, `version`, `drift_score` (0-100), and optionally `last_synced_at`.
 
-### `rr graph` command
+### `graph` command
 
 ```bash
 npx rahman-resources graph                  # ASCII summary + adoption matrix across all slices
@@ -126,9 +126,9 @@ Transitive deps are pulled in automatically (BFS with proper visited-set; throws
 
 Pass `--strict` to either `compose` or `add` to flip into CI-gate behavior: every warning is elevated to a blocker, and uncontracted slugs are rejected with `missing-dep`. Use this in CI; use the default for day-to-day operator runs where most slices still ship without contracts.
 
-### Pre-flight gate on `rr add`
+### Pre-flight gate on `add`
 
-`rr add <slug>` runs the same solver against `[slug]` before any file copy. If any blocker conflicts surface, `add` aborts and prints the proof. Pass `--force` to skip the gate (a warning is logged), or `--strict` to enforce strict-mode checking.
+`npx rahman-resources add <slug>` runs the same solver against `[slug]` before any file copy. If any blocker conflicts surface, `add` aborts and prints the proof. Pass `--force` to skip the gate (a warning is logged), or `--strict` to enforce strict-mode checking.
 
 A full algorithm walkthrough with worked examples lives in [`docs/compose-solver.md`](../../docs/compose-solver.md).
 
@@ -146,13 +146,13 @@ npx rahman-resources update <slug> --rr-path P    # point at an rr.json outside 
 
 The engine emits a `MergeReport` with per-element outcomes (`auto-merged`, `consumer-wins-clean`, `kitab-wins-clean`, `conflict`, `identical`), a summary, and `driftAfterMerge` (0-100). When the merge is clean it also produces a ready-to-write `mergedSnapshot`.
 
-Conflicts surface a `conflictHint` describing why (e.g. _"kitab dropped `paymentOrders`; consumer still relies on it"_). Re-sync activity is appended as a `3-way-merge` lineage entry, and the consumer's `drift_score` is updated so `rr graph` reflects reality.
+Conflicts surface a `conflictHint` describing why (e.g. _"kitab dropped `paymentOrders`; consumer still relies on it"_). Re-sync activity is appended as a `3-way-merge` lineage entry, and the consumer's `drift_score` is updated so `npx rahman-resources graph` reflects reality.
 
 See [docs/bidir-sync.md](../../docs/bidir-sync.md) for the full algorithm + drift-score formula.
 
 ## Migration Planner
 
-When a slice contract changes shape between versions, `rr migrate` generates a concrete, risk-scored migration plan — Convex schema deltas, env adds, RBAC patches — including ready-to-paste artifacts and ready-to-write `convex/migrations/*.ts` files.
+When a slice contract changes shape between versions, `npx rahman-resources migrate` generates a concrete, risk-scored migration plan — Convex schema deltas, env adds, RBAC patches — including ready-to-paste artifacts and ready-to-write `convex/migrations/*.ts` files.
 
 ```bash
 npx rahman-resources migrate <slug> --from <v1> [--to <v2>]              # ASCII plan
@@ -165,19 +165,34 @@ Step kinds: `convex-schema-{add,drop,rename}-table`, `env-{add,remove}`, `rbac-{
 
 Rename detection: when the new contract declares `migrationFrom: { "<old-version>": "<marker>" }`, the planner pairs single-sided table additions/removals positionally and emits a single reversible `convex-schema-rename-table` step instead of a destructive drop+add. The marker string is opaque — only its presence matters. See [docs/migration-planner.md](../../docs/migration-planner.md) for the full algorithm and the DOKU rename proof.
 
-On `--write-files` the CLI appends a DNA lineage entry (`transforms: ["migration-applied", "<step-ids>"]`) so `rr graph` reflects the migration.
+On `--write-files` the CLI appends a DNA lineage entry (`transforms: ["migration-applied", "<step-ids>"]`) so `npx rahman-resources graph` reflects the migration.
 
 ## Updating the manifest
 
-The manifest is generated from `site/lib/content/layouts.ts`. To regenerate:
+The manifest is generated from the site catalog. To regenerate:
 
 ```bash
-cd packages/cli
-node scripts/gen-manifest.mjs
+npm run manifest:sync          # from repo root
 ```
 
-`prepublishOnly` runs this automatically before `npm publish`.
+`prepublishOnly` runs the validation suite (`sync-skills`, `validate`, slice
+catalog parity, structure) before `npm publish`.
+
+## Release
+
+Publishing is scripted so the npm tarball cannot drift from the repo:
+
+```bash
+node scripts/release-cli.mjs --dry-run          # all gates, no commit/tag
+node scripts/release-cli.mjs --bump patch       # bump + commit + tag cli-v<version>
+```
+
+The script requires a clean `main` matching `origin/main` (`--allow-dirty` /
+`--allow-branch` override with warnings) and hard-stops on a stale manifest, a
+catalog mismatch, or a tarball containing `*.test.*`, `node_modules`, or `.env`.
+It prints — but never runs — `git push origin main --follow-tags`,
+`npm publish --workspace packages/cli`, and `npm view rahman-resources version`.
 
 ## License
 
-MIT
+MIT. See [LICENSE](../../LICENSE). Security reports: [SECURITY.md](../../SECURITY.md).
