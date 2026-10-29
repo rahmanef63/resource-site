@@ -148,16 +148,18 @@ if (DRY) {
 }
 
 step(`bumping ${pkg.version} → ${next}`);
-pkg.version = next;
-writeFileSync(PKG_FILE, `${JSON.stringify(pkg, null, 2)}\n`);
+// Replace only the version literal so the rest of the file stays byte-identical
+// (JSON.stringify would re-escape non-ASCII like the description's em dash).
+const pkgText = readFileSync(PKG_FILE, "utf8");
+const versionRe = new RegExp(`("version":\\s*")${pkg.version.replace(/\./g, "\\.")}(")`);
+if (!versionRe.test(pkgText)) die(`could not rewrite "version": "${pkg.version}" in ${PKG_FILE}`);
+writeFileSync(PKG_FILE, pkgText.replace(versionRe, `$1${next}$2`));
 
-if (git("status", "--porcelain")) {
-  warn("tree changed during bumps; committing only the package.json change.");
-  git("add", PKG_FILE);
-  git("commit", "-m", `chore(cli): release v${next}`);
-} else {
-  console.log("  version unchanged, nothing to commit");
+if (ALLOW_DIRTY) {
+  warn("--allow-dirty: committing only the version bump; other changes stay uncommitted.");
 }
+git("add", PKG_FILE);
+git("commit", "-m", `chore(cli): release v${next}`);
 git("tag", "-a", `cli-v${next}`, "-m", `rahman-resources v${next}`);
 
 console.log(`\n✔ released rahman-resources v${next} locally (commit + tag).`);
