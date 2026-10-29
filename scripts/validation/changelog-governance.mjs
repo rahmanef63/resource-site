@@ -7,7 +7,14 @@ export const RETROFIT_IDS = new Set([
   "SVELTE-FULL-WIDTH-TOGGLE-DISTRIBUTION",
 ]);
 
-export const RELATED_PREFIX = "Related: https://resource.rahmanef.com/";
+// Both hosts are legitimate in historical entries: the site moved to
+// resource.manef.dev and the legacy host 308s to it. New entries should use
+// the canonical host, so accept either instead of forcing the dead one.
+export const RELATED_PREFIXES = [
+  "Related: https://resource.rahmanef.com/",
+  "Related: https://resource.manef.dev/",
+];
+export const RELATED_PREFIX = RELATED_PREFIXES[0];
 export const TRANSFORM_RE = /\[before:\s*([^\]]+)\]\s*→\s*\[after:\s*([^\]]+)\]/;
 
 export const PUBLIC_CHANGELOG_CUTOFF = "2026-09-09";
@@ -23,7 +30,7 @@ export const isGovernanceDate = (date) => {
   return date >= GOVERNANCE_START_DATE;
 };
 
-export const relatedMissing = (text) => !text.includes(RELATED_PREFIX);
+export const relatedMissing = (text) => !RELATED_PREFIXES.some((p) => text.includes(p));
 
 export const transformationMissing = (text) => {
   const match = text.match(TRANSFORM_RE);

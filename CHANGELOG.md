@@ -11,6 +11,34 @@ the user-facing handle (`npx rahman-resources@x.y.z`).
 
 ## [Unreleased]
 
+### 2026-10-29 — Truthfulness wave: install path, catalog counts, real gates, hard 404s
+<!-- public-changelog:TRUTHFULNESS-WAVE-20261029 -->
+
+Related: https://resource.manef.dev/installation — Slices: https://resource.manef.dev/slices — Best practice: https://resource.manef.dev/best-practice
+
+[before: docs told readers to run `npx rr` (an unrelated npm package), the catalog size read 66/69/72 in different places, two advertised feature cards had no implementation, `init` produced a tree that failed `next build`, unknown slugs returned 200, /admin returned 200 + a meta refresh, every page shared the homepage social card, and all workflows were workflow_dispatch-only] → [after: every install hint is `npx rahman-resources`, counts derive from one helper, `init` writes types-only Convex stubs and builds with zero credentials, the proxy returns real 404/307 statuses, per-page social metadata ships, and CI runs on pull_request + push to main with audit-bp labelled advisory]
+
+**CLI:**
+- `rr init` now writes types-only `convex/_generated/{server,api,dataModel}.d.ts` stubs when `convex codegen` cannot run (no deployment, 401, offline CI), so a fresh scaffold typechecks and builds with zero credentials. Real codegen output still wins: existing files are never overwritten. New `packages/cli/lib/convex-fallback.mjs` + tests.
+- Verified on a bare scaffold: `npx tsc --noEmit` → 0 diagnostics, `npm run lint` → 0 errors, `next build` → 0.
+- Starter keeps `lint: eslint .` (Next 16 removed `next lint`) and patched auth ranges (`@auth/core ^0.41.3`, `@convex-dev/auth ^0.0.95`).
+
+**Site:**
+- Every user-facing install hint now says `npx rahman-resources add …`. `npx rr` resolved on npm to an unrelated 2022 package and failed with "could not determine executable to run"; it is gone from `lib/**`, `app/**` and `components/**`, guarded by `tests/docs-install-command.test.ts`.
+- One truthful catalog count: hero, `/installation` and `/stack` derive from `getFrameworkCoverage()` (`72` slices, `66` Svelte-capable) instead of hardcoded `66`. Removed the dead `motion-kit` previewPath; every advertised preview route now resolves.
+- Dropped two feature cards that had no implementation behind them ("Auto-generated Slice Docs", "Cookbook + Recipes") and corrected "Postgres-backed for prod" to SQLite-by-default with an opt-in `POSTGRES_URL`/`MYSQL_URL` override.
+- `/slices/<unknown>` and `/agents/<unknown>` return a real **404** (previously 200 with a "not found" body). Under `cacheComponents` a body-level `notFound()` streams a 200 shell first, so the check moved to `proxy.ts` using the generated CLI manifest.
+- `/admin/**` without a valid session is a real **307** to `/admin-login` (previously 200 + a 1-second meta refresh). The proxy verifies the signed session; the layout guard remains as defence in depth.
+- `/admin-login` is a server component with `robots: { index: false }` and is disallowed in `robots.txt`.
+- Slice and agent pages emit their own `og:title` / `og:description` / `og:url` via the new `lib/seo.ts` (previously every page shared the homepage card).
+
+**CI:**
+- `ci.yml` and `validate-manifests.yml` run on `pull_request` and `push` to `main` (previously `workflow_dispatch` only, i.e. no gate at all). `push` is unfiltered; PR runs skip docs-only changes.
+- `audit-bp.yml` is now explicitly advisory (`continue-on-error`, `kpi-scan (advisory)`) and no longer pretends to clone a private skill from a placeholder URL. `.github/workflows/README.md` documents what blocks a merge and how to run it locally (`npm run ci:local`).
+
+**Repo:**
+- Added the missing `LICENSE` (MIT) and `SECURITY.md`, plus `scripts/release-cli.mjs` — a gated, dry-runnable release path (clean tree, manifest in sync, tarball has no tests/env/node_modules, version bump, tag, printed publish steps).
+
 ### 2026-09-15 — Public frontend UI/UX audit + interaction-density pass
 <!-- public-changelog:FRONTEND-UX-AUDIT-20260915 -->
 
