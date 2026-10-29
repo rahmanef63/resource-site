@@ -1,26 +1,35 @@
 import { notFound, redirect } from "next/navigation";
 import { slices, getSlice } from "@/lib/content/slices";
 import { isHidden } from "@/lib/content/hidden-slugs";
-import { resolveSlugAlias } from "@/lib/content/slice-aliases";
+import { SLUG_ALIASES, resolveSlugAlias } from "@/lib/content/slice-aliases";
 import { readSliceFiles } from "@/lib/slice-files";
 import { site } from "@/lib/content/site";
 import { getSliceFrameworkSupport } from "@/lib/content/slice-framework-support";
+import { buildPageMetadata } from "@/lib/seo";
 import { SliceDetailHeader } from "./slice-detail-header";
 import { SliceDetailClient } from "./slice-detail-client";
 
 export function generateStaticParams() {
-  return slices.map((s) => ({ slug: s.slug }));
+  // Aliases are enumerated so their `redirect()` runs from a prerendered
+  // entry instead of a cold dynamic render.
+  return [
+    ...slices.map((s) => ({ slug: s.slug })),
+    ...Object.keys(SLUG_ALIASES).map((slug) => ({ slug })),
+  ];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  // A retired slug still needs a redirect, not a share card.
+  const alias = resolveSlugAlias(slug);
+  if (alias) redirect(`/slices/${alias}`);
   const slice = getSlice(slug);
-  if (!slice) return { title: "Slice not found" };
-  return {
+  if (!slice) notFound();
+  return buildPageMetadata({
     title: `${slice.title} — Slice`,
     description: slice.description,
-    alternates: { canonical: `${site.url}/slices/${slice.slug}` },
-  };
+    path: `/slices/${slice.slug}`,
+  });
 }
 
 export default async function SliceDetailPage({ params }: { params: Promise<{ slug: string }> }) {

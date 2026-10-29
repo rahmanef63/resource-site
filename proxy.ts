@@ -19,6 +19,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { canonicalResourceUrl, legacyResourceRedirect } from "@/lib/site-routing";
 import { resolveDemoSlug, getExternalDemoUrl } from "@/lib/content/template-subdomains";
+import { SESSION_COOKIE, readSession } from "@/lib/admin-auth";
+import manifest from "@/packages/cli/lib/manifest.json";
+import aliases from "@/lib/content/slice-aliases.json";
 
 // Paths the proxy must NEVER rewrite — Next.js internals + APIs +
 // well-known root files (sitemap/robots/og/etc).
@@ -36,12 +39,59 @@ const PASSTHROUGH_EXACT = new Set([
   "/manifest.webmanifest",
 ]);
 
+/** Slugs that resolve to a real page. Read from the generated CLI manifest
+ *  (not lib/content/slices.ts, which pulls every slice component into the
+ *  edge bundle) plus the retired-slug aliases that still redirect. */
+const KNOWN_SLICE_SLUGS = new Set<string>([
+  ...(manifest.slices as { slug: string }[]).map((s) => s.slug),
+  ...Object.keys(aliases as Record<string, string>),
+]);
+
+/** Under `cacheComponents` a `notFound()` raised inside a page body streams a
+ *  200 shell before the status line is written, so detail routes cannot
+ *  produce a real 404 on their own. Resolve the existence question here,
+ *  before rendering, and rewrite to the not-found page with a 404 status. */
+function rewriteNotFound(request: NextRequest): NextResponse {
+  const url = request.nextUrl.clone();
+  url.pathname = "/_not-found";
+  return NextResponse.rewrite(url, { status: 404 });
+}
+
 export default function proxy(request: NextRequest) {
   const legacyTarget = legacyResourceRedirect(request.nextUrl);
   if (legacyTarget) return NextResponse.redirect(legacyTarget, 308);
 
   const host = request.headers.get("host");
   const slug = resolveDemoSlug(host);
+  const resourcePath = request.nextUrl.pathname;
+
+  // The guards below describe the resource site itself. A demo subdomain has
+  // its own /admin and /slices-shaped paths that are rewritten further down,
+  // so it must not go through them.
+  if (!slug) {
+    // Unauthenticated admin access must be a real redirect, not a prerendered
+    // 200 shell patched with a `__next-page-redirect` meta refresh — the
+    // layout's own redirect() cannot set a status once PPR has flushed the
+    // shell. Verify the signed session here; the layout keeps its guard as
+    // defence in depth for anything that bypasses the proxy.
+    if (
+      (resourcePath === "/admin" || resourcePath.startsWith("/admin/")) &&
+      !readSession(request.cookies.get(SESSION_COOKIE)?.value)
+    ) {
+      const login = request.nextUrl.clone();
+      login.pathname = "/admin-login";
+      return NextResponse.redirect(login, 307);
+    }
+
+    const sliceMatch = /^\/slices\/([^/]+)\/?$/.exec(resourcePath);
+    if (sliceMatch && !KNOWN_SLICE_SLUGS.has(sliceMatch[1])) return rewriteNotFound(request);
+    const agentMatch = /^\/agents\/([^/]+)\/?$/.exec(resourcePath);
+    if (agentMatch && !KNOWN_SLICE_SLUGS.has(agentMatch[1])) return rewriteNotFound(request);
+    if (/^\/(?:slices|agents)\/.+\/.+$/.test(resourcePath)) {
+      // Nested paths under a detail route never exist.
+      return rewriteNotFound(request);
+    }
+  }
 
   // Not a demo subdomain — pass through.
   if (!slug) {
