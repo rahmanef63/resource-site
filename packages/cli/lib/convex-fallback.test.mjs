@@ -29,12 +29,10 @@ function scaffold() {
   return { project: path.join(root, "my-app"), r };
 }
 
-// The end-to-end case spawns the real CLI, which imports kleur + tiged from
-// packages/cli/node_modules. A root `npm ci` does not install them (there are
-// no npm workspaces), so on a bare checkout the spawn fails with
-// ERR_MODULE_NOT_FOUND — a test-infrastructure gap, not a product bug.
-// ponytail: skip when the CLI's own deps are absent; add `npm ci` in
-// packages/cli to the test job, or declare workspaces, to make it always run.
+// The end-to-end case spawns the real CLI, which imports kleur + tiged.
+// Both are declared in the root devDependencies, so a normal `npm ci` makes
+// this run; the guard stays so a partial install skips loudly instead of
+// failing with a misleading ERR_MODULE_NOT_FOUND.
 const CLI_DEPS_PRESENT = ["kleur", "tiged"].every((dep) =>
   [path.resolve(__dirname, "../node_modules", dep), path.resolve(__dirname, "../../../node_modules", dep)].some(existsSync),
 );
