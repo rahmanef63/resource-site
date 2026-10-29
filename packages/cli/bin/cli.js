@@ -35,6 +35,7 @@ import { runCompose, preflight as composePreflight } from "./compose.mjs";
 import { runUpdate as runUpdate3Way } from "./update.mjs";
 import { runMigrate } from "./migrate.mjs";
 import { augmentConsumerEnv } from "../lib/env-augment.mjs";
+import { hasConvexGenerated, writeConvexFallback } from "../lib/convex-fallback.mjs";
 import { pullRawFile } from "../lib/raw-file.mjs";
 import {
   addDependenciesSpec,
@@ -479,7 +480,7 @@ async function runInit(rest) {
     if (existsSync(placeholder)) { try { rmSync(placeholder); console.log(`  ${kleur.dim("removed placeholder")} app/page.tsx`); } catch {} }
   }
 
-  if (!skipInstall) await runOfflineConvexCodegen(target, pm);
+  await runOfflineConvexCodegen(target, pm, skipInstall);
 
   if (skills.length) {
     console.log(kleur.bold(`\n→ Pulling ${skills.length} Claude skill(s)\n`));
@@ -708,41 +709,47 @@ async function addLayout(t, target, targetArg, flags = {}) {
 // they have no Convex auth context. Postmortem 1.2: the workaround is to
 // generate types locally with a dummy admin key + typecheck disabled, then
 // commit `convex/_generated/` so the Docker build can typecheck against it.
-async function runOfflineConvexCodegen(target, pm = detectPM(target)) {
+async function runOfflineConvexCodegen(target, pm = detectPM(target), skipInstall = false) {
   const convexDir = path.join(target, "convex");
   if (!existsSync(convexDir)) return;
-  const generated = path.join(convexDir, "_generated");
-  if (existsSync(generated)) {
+  if (hasConvexGenerated(convexDir)) {
     console.log(kleur.dim(`\n  (convex/_generated already present — skipping codegen)`));
     return;
   }
-  console.log(kleur.bold(`\n→ Generating convex/_generated (offline)\n`));
-  try {
-    await new Promise((resolve, reject) => {
-      const executor = packageExecutorParts(pm);
-      const ps = spawn(
-        executor.cmd,
-        [...executor.args, "convex", "codegen", "--typecheck=disable"],
-        {
-          cwd: target,
-          stdio: "inherit",
-          shell: true,
-          env: {
-            ...process.env,
-            CONVEX_SELF_HOSTED_URL: "http://localhost:3210",
-            CONVEX_SELF_HOSTED_ADMIN_KEY: "x|x",
+  if (!skipInstall) {
+    console.log(kleur.bold(`\n→ Generating convex/_generated (offline)\n`));
+    try {
+      await new Promise((resolve, reject) => {
+        const executor = packageExecutorParts(pm);
+        const ps = spawn(
+          executor.cmd,
+          [...executor.args, "convex", "codegen", "--typecheck=disable"],
+          {
+            cwd: target,
+            stdio: "inherit",
+            shell: true,
+            env: {
+              ...process.env,
+              CONVEX_SELF_HOSTED_URL: "http://localhost:3210",
+              CONVEX_SELF_HOSTED_ADMIN_KEY: "x|x",
+            },
           },
-        },
-      );
-      ps.on("error", reject);
-      ps.on("exit", (code) => (code === 0 ? resolve() : reject(new Error(`convex codegen exited ${code}`))));
-    });
-  } catch (err) {
-    if (existsSync(generated)) {
-      console.log(kleur.dim(`  convex/_generated emitted; deployment-state sync was unavailable (${err.message}). Continuing with local types.`));
-      return;
+        );
+        ps.on("error", reject);
+        ps.on("exit", (code) => (code === 0 ? resolve() : reject(new Error(`convex codegen exited ${code}`))));
+      });
+    } catch (err) {
+      if (hasConvexGenerated(convexDir)) {
+        console.log(kleur.dim(`  convex/_generated emitted; deployment-state sync was unavailable (${err.message}). Continuing with local types.`));
+        return;
+      }
+      console.log(kleur.yellow(`  ⚠ codegen failed (${err.message}).`));
     }
-    console.log(kleur.yellow(`  ⚠ codegen failed (${err.message}). Run later: CONVEX_SELF_HOSTED_URL=http://localhost:3210 CONVEX_SELF_HOSTED_ADMIN_KEY="x|x" ${packageExecutor(pm)} convex codegen --typecheck=disable`));
+  }
+  if (hasConvexGenerated(convexDir)) return;
+  const written = writeConvexFallback(convexDir);
+  if (written.length) {
+    console.log(kleur.yellow(`  ⚠ convex/_generated stubs written (types only). Run 'npx convex dev' to generate the real ones.`));
   }
 }
 
