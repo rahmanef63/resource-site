@@ -1,5 +1,10 @@
 import React from 'react';
-import { Accordion } from '@/components/ui';
+import {
+  Accordion as UiAccordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui';
 
 interface AccordionWidgetProps {
   items?: Array<{
@@ -12,6 +17,9 @@ interface AccordionWidgetProps {
   className?: string;
 }
 
+/** Thin wrapper over the shadcn accordion. Radix drives the item list through
+ *  children, not an `items` prop, and `collapsible` is only valid for
+ *  `type="single"` — passing it on `multiple` is a type error. */
 export const AccordionWidget: React.FC<AccordionWidgetProps> = ({
   items = [
     { value: 'item-1', title: 'Is it accessible?', content: 'Yes. It adheres to the WAI-ARIA design pattern.' },
@@ -22,12 +30,20 @@ export const AccordionWidget: React.FC<AccordionWidgetProps> = ({
   collapsible = true,
   className,
 }) => {
-  return (
-    <Accordion
-      items={items}
-      type={type}
-      collapsible={collapsible}
-      className={className}
-    />
+  const items_ = items.map((item) => (
+    <AccordionItem key={item.value} value={item.value}>
+      <AccordionTrigger>{item.title}</AccordionTrigger>
+      <AccordionContent>{item.content}</AccordionContent>
+    </AccordionItem>
+  ));
+
+  return type === 'single' ? (
+    <UiAccordion type="single" collapsible={collapsible} className={className}>
+      {items_}
+    </UiAccordion>
+  ) : (
+    <UiAccordion type="multiple" className={className}>
+      {items_}
+    </UiAccordion>
   );
 };

@@ -50,8 +50,16 @@
     "**/*.d.ts",
     ".next/types/**/*.ts"
   ],
-  "exclude": [
+    "exclude": [
     "node_modules",
+    // workspace-shell scaffold is not buildable: its committed convex/_generated
+    // predates the workspaceShell_* tables, and mutations.ts imports
+    // ../../workspace/permissions which this template does not ship. Excluded so
+    // the copy-source typecheck stays meaningful; delete this line once the
+    // scaffold is regenerated against a real deployment.
+    "convex/features/workspaceShell",
+    "frontend/slices/workspace-shell",
+
     "**/*.legacy",
     "archive",
     "frontend/slices/notion/app-fragments"

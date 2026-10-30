@@ -59,7 +59,7 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { ToggleGroup } from "@/components/ui/toggle-group"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
 // ============================================================================
 // Types
@@ -302,10 +302,15 @@ export function ViewToolbar({
                             type="single"
                             value={currentView}
                             onValueChange={(value) => typeof value === 'string' && value && onViewChange?.(value as ViewMode)}
-                            options={toggleGroupOptions}
                             size="sm"
                             className="border rounded-lg p-0.5"
-                        />
+                        >
+                            {toggleGroupOptions.map((option) => (
+                                <ToggleGroupItem key={option.value} value={option.value} aria-label={option.label}>
+                                    {option.icon}
+                                </ToggleGroupItem>
+                            ))}
+                        </ToggleGroup>
                     ) : (
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>

@@ -20,7 +20,7 @@ export const resizableManifest: WidgetConfig = {
     const p = props as any;
     return (
       <ResizablePanelGroup
-        direction={p.direction ?? 'horizontal'}
+        orientation={p.direction ?? 'horizontal'}
         className={`min-h-[200px] max-w-full rounded-lg border ${p.className ?? ''}`}
       >
         <ResizablePanel defaultSize={p.defaultLeftSize ?? 50}>

@@ -17,13 +17,25 @@ export interface ButtonProps {
   className?: string
 }
 
+/** shadcn Button has no `primary` variant; the studio schema kept one from an
+ *  older design system. Map it to `default` here so stored schemas keep
+ *  rendering instead of failing the typecheck. */
+function ButtonAdapter({ variant, ...props }: ButtonProps) {
+  return (
+    <ShadcnButton
+      variant={variant === "primary" ? "default" : variant}
+      {...props}
+    />
+  )
+}
+
 export const ButtonWrapper: ComponentWrapper<ButtonProps> = createComponent<ButtonProps>({
   id: "button",
   name: "Button",
   displayName: "Button",
   description: "Displays a button or a component that looks like a button",
   category: "buttons",
-  component: ShadcnButton,
+  component: ButtonAdapter,
 
   defaults: {
     variant: "default",

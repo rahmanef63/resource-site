@@ -1,5 +1,5 @@
 import React from 'react';
-import { ToggleGroup } from '@/components/ui';
+import { ToggleGroup as UiToggleGroup, ToggleGroupItem } from '@/components/ui';
 
 interface ToggleGroupWidgetProps {
   type?: 'single' | 'multiple';
@@ -15,6 +15,8 @@ interface ToggleGroupWidgetProps {
   className?: string;
 }
 
+/** Radix drives toggle items through children; `options` is this widget's own
+ *  convenience shape. `onValueChange` also narrows to string on single. */
 export const ToggleGroupWidget: React.FC<ToggleGroupWidgetProps> = ({
   type = 'single',
   value = '',
@@ -28,15 +30,34 @@ export const ToggleGroupWidget: React.FC<ToggleGroupWidgetProps> = ({
   variant = 'default',
   className,
 }) => {
-  return (
-    <ToggleGroup
-      type={type}
-      value={value}
-      onValueChange={onValueChange}
-      options={options}
+  const items = options.map((option) => (
+    <ToggleGroupItem key={option.value} value={option.value} aria-label={option.label}>
+      {option.icon}
+      {option.label}
+    </ToggleGroupItem>
+  ));
+
+  return type === 'single' ? (
+    <UiToggleGroup
+      type="single"
+      value={typeof value === 'string' ? value : ''}
+      onValueChange={(next) => onValueChange?.(next)}
       size={size}
       variant={variant}
       className={className}
-    />
+    >
+      {items}
+    </UiToggleGroup>
+  ) : (
+    <UiToggleGroup
+      type="multiple"
+      value={Array.isArray(value) ? value : []}
+      onValueChange={(next) => onValueChange?.(next)}
+      size={size}
+      variant={variant}
+      className={className}
+    >
+      {items}
+    </UiToggleGroup>
   );
 };

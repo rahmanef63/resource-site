@@ -3,9 +3,10 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 import {
+  Group,
   Panel,
-  PanelGroup,
-  PanelResizeHandle,
+  Separator,
+  useDefaultLayout,
 } from "react-resizable-panels"
 import { GripVertical, X, Maximize2, Minimize2, Copy } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -67,7 +68,7 @@ function SplitResizeHandle({
   className?: string
 }) {
   return (
-    <PanelResizeHandle
+    <Separator
       className={cn(
         "group relative flex items-center justify-center",
         "transition-colors duration-200",
@@ -90,7 +91,7 @@ function SplitResizeHandle({
       >
         <GripVertical className="h-3 w-3" />
       </div>
-    </PanelResizeHandle>
+    </Separator>
   )
 }
 
@@ -237,11 +238,17 @@ export function SplitView({
   // Calculate default sizes
   const defaultSize = 100 / panes.length
 
+  // v4 replaced `autoSaveId` with this hook: it returns the initial
+  // `defaultLayout` plus an `onLayoutChanged` callback that persists it.
+  // `persistKey` becomes the group id so multiple split views stay separate.
+  const layout = useDefaultLayout({ id: persistKey ?? "split-view" })
+
   return (
-    <PanelGroup
-      direction={direction}
+    <Group
+      orientation={direction}
       className={cn("h-full", className)}
-      autoSaveId={persistKey}
+      defaultLayout={layout.defaultLayout}
+      onLayoutChanged={layout.onLayoutChanged}
     >
       {panes.map((pane, index) => (
         <React.Fragment key={pane.id}>
@@ -268,7 +275,7 @@ export function SplitView({
           )}
         </React.Fragment>
       ))}
-    </PanelGroup>
+    </Group>
   )
 }
 

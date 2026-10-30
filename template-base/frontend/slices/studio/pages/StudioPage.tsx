@@ -573,7 +573,7 @@ const StudioLayoutInner: React.FC<StudioLayoutInnerProps> = ({ workspaceId: _wor
                 )}
                 {/* Split view: Canvas (left) + Preview (right) */}
                 {activeView === 'split-preview' && (
-                    <ResizablePanelGroup direction="horizontal" className="h-full">
+                    <ResizablePanelGroup orientation="horizontal" className="h-full">
                         <ResizablePanel defaultSize={50} minSize={25}>
                             <Card className="h-full overflow-hidden border-0 rounded-none border-r border-border">
                                 {renderCanvas()}
@@ -589,7 +589,7 @@ const StudioLayoutInner: React.FC<StudioLayoutInnerProps> = ({ workspaceId: _wor
                 )}
                 {/* Split view: Canvas (left) + JSON (right) */}
                 {activeView === 'split-json' && (
-                    <ResizablePanelGroup direction="horizontal" className="h-full">
+                    <ResizablePanelGroup orientation="horizontal" className="h-full">
                         <ResizablePanel defaultSize={50} minSize={25}>
                             <Card className="h-full overflow-hidden border-0 rounded-none border-r border-border">
                                 {renderCanvas()}
