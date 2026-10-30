@@ -129,8 +129,8 @@ jobs:
         with:
           node-version: "22"
       - run: npm install --legacy-peer-deps --no-audit --no-fund
-      - name: audit (high)
-        run: npm audit --audit-level=high --omit=dev
+      - name: audit (high, documented allowlist)
+        run: node scripts/security-audit.mjs
       - name: audit cli (high)
         working-directory: packages/cli
         run: npm install --no-audit --no-fund && npm audit --audit-level=high --omit=dev

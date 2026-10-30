@@ -50,7 +50,8 @@
     "shots:capture": "node scripts/capture-shots.mjs",
     "deploy:convex": "node scripts/deploy-convex-functions.mjs",
     "mcp:runtime:sync": "node packages/mcp/scripts/sync-runtime.mjs",
-    "mcp:runtime:check": "node packages/mcp/scripts/sync-runtime.mjs --check"
+    "mcp:runtime:check": "node packages/mcp/scripts/sync-runtime.mjs --check",
+    "security:audit": "node scripts/security-audit.mjs"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.81",
@@ -151,6 +152,9 @@
   },
   "overrides": {
     "dompurify": "^3.4.17",
-    "follow-redirects": "^1.16.1"
+    "follow-redirects": "^1.16.1",
+    "@imgly/background-removal": {
+      "zod": "^4.6.7"
+    }
   }
 }

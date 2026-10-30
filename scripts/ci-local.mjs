@@ -10,7 +10,7 @@
 
 import { spawnSync } from "node:child_process";
 
-const GATES = ["typecheck", "lint", "test", "slices:check", "build"];
+const GATES = ["typecheck", "lint", "test", "slices:check", "security:audit", "build"];
 
 for (const [i, gate] of GATES.entries()) {
   const label = `[${i + 1}/${GATES.length}] npm run ${gate}`;
