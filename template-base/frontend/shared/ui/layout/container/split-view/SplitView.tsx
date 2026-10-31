@@ -185,6 +185,12 @@ export function SplitView({
 }: SplitViewProps) {
   const [maximizedPane, setMaximizedPane] = React.useState<string | null>(null)
 
+  // v4 replaced `autoSaveId` with this hook: it returns the initial
+  // `defaultLayout` plus an `onLayoutChanged` callback that persists it.
+  // `persistKey` becomes the group id so multiple split views stay separate.
+  // Declared before the early returns below so the hook order is stable.
+  const layout = useDefaultLayout({ id: persistKey ?? "split-view" })
+
   // Handle pane maximization
   const handleMaximize = React.useCallback((paneId: string) => {
     setMaximizedPane((current) => (current === paneId ? null : paneId))
@@ -238,10 +244,6 @@ export function SplitView({
   // Calculate default sizes
   const defaultSize = 100 / panes.length
 
-  // v4 replaced `autoSaveId` with this hook: it returns the initial
-  // `defaultLayout` plus an `onLayoutChanged` callback that persists it.
-  // `persistKey` becomes the group id so multiple split views stay separate.
-  const layout = useDefaultLayout({ id: persistKey ?? "split-view" })
 
   return (
     <Group

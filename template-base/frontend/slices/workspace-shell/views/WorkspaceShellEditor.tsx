@@ -2,7 +2,8 @@
 
 import * as React from "react"
 import { useSearchParams, useRouter, usePathname } from "next/navigation"
-import { FeatureShell, type ShellTabItem } from "@/frontend/shared/ui/layout/feature-shell/FeatureShell"
+import { FeatureShell } from "@/frontend/shared/ui/layout/feature-shell/FeatureShell"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Building2, Layers, Settings } from "lucide-react"
 import { TreeTab } from "./TreeTab"
 import { MenusTab } from "./MenusTab"
@@ -28,6 +29,10 @@ function isValidTab(v: string | null): v is TabKey {
  * URL routing: ?tab=<key>. Default = menus (most useful first).
  * Header renders the live switcher so the user can swap workspace/menuSet
  * context without leaving the editor.
+ *
+ * FeatureShell takes `children` only — it has no `tabs` prop (verified against
+ * its exported FeatureShellProps). The tab bar is the shadcn `Tabs` primitive,
+ * matching the pattern ReportsPage already uses.
  */
 export function WorkspaceShellEditor({ workspaceId }: WorkspaceShellEditorProps) {
   const router = useRouter()
@@ -45,48 +50,48 @@ export function WorkspaceShellEditor({ workspaceId }: WorkspaceShellEditorProps)
     [router, pathname, searchParams],
   )
 
-  const tabs: ShellTabItem[] = React.useMemo(
-    () => [
-      {
-        value: "menus",
-        label: "Menus",
-        icon: Layers,
-        content: <MenusTab workspaceId={workspaceId} />,
-      },
-      {
-        value: "tree",
-        label: "Workspace tree",
-        icon: Building2,
-        content: <TreeTab />,
-      },
-      {
-        value: "settings",
-        label: "Settings",
-        icon: Settings,
-        content: <SettingsTab workspaceId={workspaceId} />,
-      },
-    ],
-    [workspaceId],
-  )
-
   return (
-    <FeatureShell
-      featureId="workspace-shell"
-      tabs={tabs}
-      activeTab={activeTab}
-      onTabChange={handleTabChange}
-    >
-      {/* Header KPI / switcher area above tab bar */}
-      <div className="px-4 py-3 border-b bg-background">
-        <div className="flex items-center justify-between gap-4 flex-wrap">
-          <div className="space-y-0.5">
-            <h1 className="text-lg font-semibold">Workspace Shell</h1>
-            <p className="text-xs text-muted-foreground">
-              Manage navigation context, menu sets, and workspace tree.
-            </p>
+    <FeatureShell featureId="workspace-shell" padding={false}>
+      <div className="flex h-full flex-col">
+        {/* Header KPI / switcher area above tab bar */}
+        <div className="px-4 py-3 border-b bg-background">
+          <div className="flex items-center justify-between gap-4 flex-wrap">
+            <div className="space-y-0.5">
+              <h1 className="text-lg font-semibold">Workspace Shell</h1>
+              <p className="text-xs text-muted-foreground">
+                Manage navigation context, menu sets, and workspace tree.
+              </p>
+            </div>
+            <WorkspaceSwitcher canFork={true} compact />
           </div>
-          <WorkspaceSwitcher canFork={true} compact />
         </div>
+
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="flex-1 space-y-4 p-4">
+          <TabsList className="flex w-full max-w-md justify-evenly">
+            <TabsTrigger value="menus">
+              <Layers className="mr-2 size-4" aria-hidden="true" />
+              Menus
+            </TabsTrigger>
+            <TabsTrigger value="tree">
+              <Building2 className="mr-2 size-4" aria-hidden="true" />
+              Workspace tree
+            </TabsTrigger>
+            <TabsTrigger value="settings">
+              <Settings className="mr-2 size-4" aria-hidden="true" />
+              Settings
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="menus" className="min-h-0">
+            <MenusTab workspaceId={workspaceId} />
+          </TabsContent>
+          <TabsContent value="tree" className="min-h-0">
+            <TreeTab />
+          </TabsContent>
+          <TabsContent value="settings" className="min-h-0">
+            <SettingsTab workspaceId={workspaceId} />
+          </TabsContent>
+        </Tabs>
       </div>
     </FeatureShell>
   )

@@ -68,6 +68,7 @@ export const ROLE_TEMPLATES: readonly RoleTemplate[] = [
       PERMS.CREATE_CONVERSATIONS,
       PERMS.MANAGE_CONVERSATIONS,
       PERMS.VIEW_WORKSPACE,
+      PERMS.MENUS_FORK,
       PERMS.COMMUNICATIONS_VIEW,
       // Feature-level permissions
       PERMS.CALENDAR_VIEW, PERMS.CALENDAR_MANAGE,
@@ -123,6 +124,7 @@ export const ROLE_TEMPLATES: readonly RoleTemplate[] = [
       PERMS.CREATE_CONVERSATIONS,
       PERMS.MANAGE_CONVERSATIONS,
       PERMS.VIEW_WORKSPACE,
+      PERMS.MENUS_FORK,
       PERMS.COMMUNICATIONS_VIEW,
       // Feature-level permissions
       PERMS.CALENDAR_VIEW, PERMS.CALENDAR_MANAGE,
@@ -168,6 +170,7 @@ export const ROLE_TEMPLATES: readonly RoleTemplate[] = [
       PERMS.DOCUMENTS_EDIT,
       PERMS.CREATE_CONVERSATIONS,
       PERMS.VIEW_WORKSPACE,
+      PERMS.MENUS_FORK,
       PERMS.COMMUNICATIONS_VIEW,
       // Feature-level permissions (staff can contribute to all features)
       PERMS.CALENDAR_VIEW, PERMS.CALENDAR_MANAGE,
@@ -204,6 +207,7 @@ export const ROLE_TEMPLATES: readonly RoleTemplate[] = [
     workspacePermissions: [
       PERMS.CREATE_CONVERSATIONS,
       PERMS.VIEW_WORKSPACE,
+      PERMS.MENUS_FORK,
       PERMS.COMMUNICATIONS_VIEW,
       PERMS.SEARCH_VIEW,
       PERMS.NOTIFICATIONS_VIEW,
@@ -222,6 +226,7 @@ export const ROLE_TEMPLATES: readonly RoleTemplate[] = [
     isDefault: false,
     workspacePermissions: [
       PERMS.VIEW_WORKSPACE,
+      PERMS.MENUS_FORK,
       PERMS.SEARCH_VIEW,
     ],
     cmsPermissions: ["settings.view"],

@@ -6,7 +6,7 @@
     "dev": "next dev --hostname 0.0.0.0 --port 3000",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest",
     "test:ui": "vitest --ui",
@@ -31,10 +31,10 @@
     "validate:features": "tsx scripts/validation/features.ts",
     "validate:feature-naming": "tsx scripts/validation/feature-naming.ts",
     "sync:all": "pnpm run sync:features && pnpm run syncagent:all && pnpm run generate:registry && pnpm run generate:init-imports && pnpm run generate:previews && pnpm run generate:manifest && pnpm run generate:slice-docs && pnpm run validate:bundles",
-    "audit:bp": "echo 'audit:bp is operator-only — install /use-audit-bp skill first, or run npm run typecheck && npm run lint locally'",
-    "audit:bp:full": "echo 'audit:bp:full is operator-only — install /use-audit-bp skill first'",
-    "audit:features": "echo 'audit:features is operator-only — install /use-audit-bp skill first'",
-    "audit:features:md": "echo 'audit:features:md is operator-only — install /use-audit-bp skill first'",
+    "audit:bp": "echo 'audit:bp is operator-only \u2014 install /use-audit-bp skill first, or run npm run typecheck && npm run lint locally'",
+    "audit:bp:full": "echo 'audit:bp:full is operator-only \u2014 install /use-audit-bp skill first'",
+    "audit:features": "echo 'audit:features is operator-only \u2014 install /use-audit-bp skill first'",
+    "audit:features:md": "echo 'audit:features:md is operator-only \u2014 install /use-audit-bp skill first'",
     "precommit": "pnpm run lint && pnpm run validate:slice-structure && pnpm run typecheck && pnpm test"
   },
   "dependencies": {
@@ -124,6 +124,7 @@
     "zustand": "^5.0.13"
   },
   "devDependencies": {
+    "@next/eslint-plugin-next": "^16.4.3",
     "@tailwindcss/postcss": "^4.0.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
@@ -134,12 +135,16 @@
     "@vitejs/plugin-react": "^6.0.1",
     "@vitest/ui": "^4.1.5",
     "autoprefixer": "^10.5.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.4.3",
+    "eslint-plugin-react-hooks": "^7.1.1",
     "happy-dom": "^20.9.0",
     "jsdom": "^29.1.1",
     "postcss": "^8.5.14",
     "tailwindcss": "^4.0.0",
     "tsx": "^4.21.0",
     "typescript": "^5.6.0",
+    "typescript-eslint": "^8.72.1",
     "vitest": "^4.1.5"
   }
 }

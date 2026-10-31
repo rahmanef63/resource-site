@@ -20,7 +20,6 @@ export default defineFeature({
     component: "WorkspaceShellPage",
     category: "administration",
     order: 5,
-    layout: "three-column",
   },
 
   technical: {

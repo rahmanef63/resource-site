@@ -77,8 +77,8 @@ async function loadFeatureEntries(): Promise<FeatureEntry[]> {
     const absolutePath = path.join(ROOT_DIR, normalizedPath)
     const moduleUrl = pathToFileURL(absolutePath).href
 
-    const module = await import(moduleUrl)
-    const feature = module.default as FeatureConfig | undefined
+    const mod = await import(moduleUrl)
+    const feature = mod.default as FeatureConfig | undefined
 
     if (!feature) {
       throw new Error(`Feature config at ${normalizedPath} does not have a default export`)

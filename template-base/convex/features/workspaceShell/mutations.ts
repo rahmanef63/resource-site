@@ -12,7 +12,7 @@ import { v } from "convex/values";
 import { mutation } from "../../_generated/server";
 import { ensureUser, requirePermission, requireActiveMembership } from "../../auth/helpers";
 import { logAuditEvent } from "../../shared/audit";
-import { PERMS } from "../../workspace/permissions";
+import { PERMS } from "../../lib/rbac/perms";
 
 async function safeAudit(ctx: any, payload: any) {
   try {

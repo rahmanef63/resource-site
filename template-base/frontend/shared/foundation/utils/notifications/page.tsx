@@ -113,6 +113,12 @@ export default function NotificationsPage({ workspaceId }: NotificationsPageProp
   const markAllAsRead = useMutation(api.features.notifications.mutations.markAllAsRead)
   const deleteNotification = useMutation(api.features.notifications.mutations.deleteNotification)
 
+  // Hooks must run in the same order on every render — this effect was below
+  // the `!workspaceId` early return, so the hook count changed between renders.
+  React.useEffect(() => {
+    setSelectedIds([])
+  }, [activeTab])
+
   if (!workspaceId) {
     return (
       <div className="flex h-full items-center justify-center">
@@ -168,10 +174,6 @@ export default function NotificationsPage({ workspaceId }: NotificationsPageProp
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
     )
   }
-
-  React.useEffect(() => {
-    setSelectedIds([])
-  }, [activeTab])
 
   const handleOpenNotificationTarget = () => {
     window.dispatchEvent(new Event("close-notifications"))

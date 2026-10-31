@@ -128,10 +128,10 @@ export class RegistryLoader implements IRegistryLoader {
   ): Promise<AnyWrapper | null> {
     try {
       // Dynamic import
-      const module: RegistryModule = await import(filePath)
+      const mod: RegistryModule = await import(filePath)
 
       // Try different export patterns
-      const wrapper = this.extractWrapperFromModule(module, expectedType)
+      const wrapper = this.extractWrapperFromModule(mod, expectedType)
 
       if (!wrapper) {
         throw new RegistryLoadError(

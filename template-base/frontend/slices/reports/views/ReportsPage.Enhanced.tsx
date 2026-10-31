@@ -19,6 +19,10 @@ export default function ReportsPage({ workspaceId }: ReportsPageProps) {
     slug: "reports",
   })
 
+  // Queries must run before any conditional return — this one sat below the
+  // FeatureNotReady early exit, so the hook count changed with feature state.
+  const reports = useQuery(api.features.reports.queries.list, { workspaceId })
+
   const isReady = menuItem?.metadata?.isReady !== false
   const status = menuItem?.metadata?.status || "stable"
   const expectedRelease = menuItem?.metadata?.expectedRelease
@@ -37,8 +41,6 @@ export default function ReportsPage({ workspaceId }: ReportsPageProps) {
       />
     )
   }
-
-  const reports = useQuery(api.features.reports.queries.list, { workspaceId })
 
   return (
     <div className="flex h-full flex-col gap-4 p-6">

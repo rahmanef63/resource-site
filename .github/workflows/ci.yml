@@ -80,7 +80,7 @@ jobs:
           NEXT_TELEMETRY_DISABLED: "1"
 
   template-base-typecheck:
-    name: typecheck (template-base copy-source)
+    name: typecheck + lint (template-base copy-source)
     runs-on: ubuntu-latest
     timeout-minutes: 10
     defaults:
@@ -97,6 +97,8 @@ jobs:
         run: npm ci --legacy-peer-deps --no-audit --no-fund
       - name: typecheck
         run: npx tsc --noEmit
+      - name: lint
+        run: npm run lint
 
   cli-prepublish:
     name: CLI prepublish gate

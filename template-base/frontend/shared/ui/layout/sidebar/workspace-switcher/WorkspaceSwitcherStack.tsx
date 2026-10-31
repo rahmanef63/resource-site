@@ -40,7 +40,7 @@ import {
 } from "lucide-react"
 import type { Id, Doc } from "@convex/_generated/dataModel"
 import { useWorkspaceContext } from "@/frontend/shared/foundation/provider/WorkspaceProvider"
-import { useIsGuestMode, useGuestWorkspaceContext } from "@/frontend/shared/foundation/provider/GuestWorkspaceProvider"
+import { useIsGuestMode, useGuestWorkspaceContextOptional } from "@/frontend/shared/foundation/provider/GuestWorkspaceProvider"
 import { DEFAULT_WORKSPACE_COLOR } from "@/frontend/shared/constants/colors"
 import { cn } from "@/lib/utils"
 
@@ -57,44 +57,31 @@ const WORKSPACE_TYPE_ICONS: Record<string, React.ElementType> = {
  * Hook that works with both WorkspaceProvider (authenticated) and GuestWorkspaceProvider (guest mode)
  */
 function useUnifiedWorkspaceContext() {
+  // Both hooks must run on every render, unconditionally — they were inside
+  // `if` + `try` blocks, so the hook count changed with the mode. The optional
+  // guest hook returns null instead of throwing, which removes the try/catch.
   const isGuestMode = useIsGuestMode()
+  const guestContext = useGuestWorkspaceContextOptional()
+  const realContext = useWorkspaceContext()
 
-  // Guest context
-  let guestContext: ReturnType<typeof useGuestWorkspaceContext> | null = null
-  try {
-    if (isGuestMode) {
-      guestContext = useGuestWorkspaceContext()
-    }
-  } catch {
-    // Not in guest mode
-  }
+  const activeGuest = isGuestMode ? guestContext : null
 
-  // Real context
-  let realContext: ReturnType<typeof useWorkspaceContext> | null = null
-  try {
-    if (!isGuestMode) {
-      realContext = useWorkspaceContext()
-    }
-  } catch {
-    // Not in real mode
-  }
-
-  if (guestContext) {
+  if (activeGuest) {
     return {
-      workspaceId: guestContext.workspaceId as Id<"workspaces"> | null,
-      setWorkspaceId: (id: Id<"workspaces"> | null) => guestContext!.setWorkspaceId(id as string | null),
-      workspaces: guestContext.workspaces as any[],
-      currentWorkspace: guestContext.currentWorkspace as any,
-      mainWorkspace: guestContext.mainWorkspace as any,
-      isMainWorkspace: guestContext.isMainWorkspace,
-      childWorkspaces: guestContext.childWorkspaces as any[],
-      siblingWorkspaces: guestContext.siblingWorkspaces as any[],
-      workspacePath: guestContext.workspacePath as any[],
+      workspaceId: activeGuest.workspaceId as Id<"workspaces"> | null,
+      setWorkspaceId: (id: Id<"workspaces"> | null) => activeGuest.setWorkspaceId(id as string | null),
+      workspaces: activeGuest.workspaces as any[],
+      currentWorkspace: activeGuest.currentWorkspace as any,
+      mainWorkspace: activeGuest.mainWorkspace as any,
+      isMainWorkspace: activeGuest.isMainWorkspace,
+      childWorkspaces: activeGuest.childWorkspaces as any[],
+      siblingWorkspaces: activeGuest.siblingWorkspaces as any[],
+      workspacePath: activeGuest.workspacePath as any[],
       isGuestMode: true,
     }
   }
 
-  if (realContext) {
+  if (realContext && !isGuestMode) {
     return {
       workspaceId: realContext.workspaceId,
       setWorkspaceId: realContext.setWorkspaceId,

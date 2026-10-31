@@ -7,6 +7,9 @@ export const PERMS = {
   INVITE_MEMBERS: "invite_members",
   MANAGE_ROLES: "manage_roles",
   MANAGE_MENUS: "manage_menus",
+  // Forking a menu set only creates a *personal* copy the caller owns; it does
+  // not touch the workspace default. Granted to every workspace member.
+  MENUS_FORK: "menus_fork",
   MANAGE_INVITATIONS: "manage_invitations",
 
   DOCUMENTS_CREATE: "documents.create",
